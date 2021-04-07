@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Operations on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Operations/</link>
+    <description>Recent content in Operations on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 10 Jul 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Operations/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K GitOps</title>
+      <link>https://camel.apache.org/blog/2023/07/camel-k-gitops/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/07/camel-k-gitops/</guid>
+      <description>In this blog post we&amp;rsquo;ll be talking about GitOps and we&amp;rsquo;ll provide some approach that we hope can help you understand better how you can do such kind of operations togheter with Camel K. As we&amp;rsquo;re talking about processes, all the discussion we&amp;rsquo;re going to provide can be different in each company, environment and according the set of tools you&amp;rsquo;re using.&#xA;The idea of the blog is to show the possibilities offered by Camel K in order to help you understand better how you can adapt your own tools and process to Camel K deployment model.</description>
+    </item>
+    <item>
+      <title>How to configure a Maven proxy in Camel K</title>
+      <link>https://camel.apache.org/blog/2023/06/camel-k-maven-proxy/</link>
+      <pubDate>Mon, 12 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/06/camel-k-maven-proxy/</guid>
+      <description>One of the main effort we&amp;rsquo;re putting in Camel K version 2 is to have a enterprise grade building system. Not that Camel K version 1 has not this capability, but some of the key features are not very explicit. So I thought that, while waiting for Camel K version 2 release, where we&amp;rsquo;re making all this configuration explicit, I can share some tip on how to improve the capacity to build and have a production enterprise ready environment also in Camel K 1.</description>
+    </item>
+  </channel>
+</rss>

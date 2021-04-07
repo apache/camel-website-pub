@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Karavan on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Karavan/</link>
+    <description>Recent content in Karavan on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 30 Sep 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Karavan/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Karavan 4.8.0</title>
+      <link>https://camel.apache.org/blog/2024/09/camel-karavan-4.8.0/</link>
+      <pubDate>Mon, 30 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/camel-karavan-4.8.0/</guid>
+      <description>We’re excited to announce the release of Apache Camel Karavan 4.8.0, the ultimate toolkit for efficient and accelerated integration development with Apache Camel. This version is fully synchronized with the latest Apache Camel Framework 4.8.0, ensuring seamless compatibility and allowing you to take advantage of the newest features for an optimized development experience.&#xA;What&amp;rsquo;s New in Apache Camel Karavan 4.8.0? Our latest release brings a slew of improvements aimed at making your integration development more efficient and intuitive.</description>
+    </item>
+    <item>
+      <title>Karavan 4.7.0: Unleashing Flexibility</title>
+      <link>https://camel.apache.org/blog/2024/07/camel-karavan-4.7.0/</link>
+      <pubDate>Mon, 29 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/camel-karavan-4.7.0/</guid>
+      <description>We&amp;rsquo;re thrilled to announce the release of Apache Camel Karavan 4.7.0, your ultimate toolkit for streamlined and expedited integration development using Apache Camel! This new version is meticulously aligned with the latest Apache Camel Framework 4.7.0, ensuring seamless compatibility and enabling you to leverage the newest features for an enhanced development experience.&#xA;What&amp;rsquo;s New in Apache Camel Karavan 4.7.0? Our latest release brings a slew of improvements aimed at making your integration development more efficient and intuitive.</description>
+    </item>
+    <item>
+      <title>Karavan 4.6.0: Hidden gems</title>
+      <link>https://camel.apache.org/blog/2024/05/camel-karavan-4.6.0/</link>
+      <pubDate>Tue, 28 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/05/camel-karavan-4.6.0/</guid>
+      <description>We&amp;rsquo;re announcing the release of Apache Camel Karavan 4.6.0, your ultimate toolkit for streamlined and expedited integration development using Apache Camel!&#xA;This new version is aligned with the latest Apache Camel Framework 4.6.0, ensuring compatibility and leveraging the newest features.&#xA;While this release may seem modest, it introduces a series of subtle enhancements aimed at simplifying the daily tasks of integrators. These improvements, though minor at first glance, are designed to reduce the need for frequent documentation lookups, thereby saving significant time and effort in larger projects.</description>
+    </item>
+    <item>
+      <title>Karavan 4.5.0: Hidden gems</title>
+      <link>https://camel.apache.org/blog/2024/04/camel-karavan-4.5.0/</link>
+      <pubDate>Thu, 18 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/04/camel-karavan-4.5.0/</guid>
+      <description>We&amp;rsquo;re announcing the release of Apache Camel Karavan 4.5.0, your ultimate toolkit for streamlined and expedited integration development using Apache Camel!&#xA;This new version is aligned with the latest Apache Camel Framework 4.5.0, ensuring compatibility and leveraging the newest features.&#xA;While this release may seem modest, it introduces a series of subtle enhancements aimed at simplifying the daily tasks of integrators. These improvements, though minor at first glance, are designed to reduce the need for frequent documentation lookups, thereby saving significant time and effort in larger projects.</description>
+    </item>
+    <item>
+      <title>Karavan 4.4.0: Beauty is variable</title>
+      <link>https://camel.apache.org/blog/2024/03/camel-karavan-4.4.0/</link>
+      <pubDate>Mon, 04 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/03/camel-karavan-4.4.0/</guid>
+      <description>There should have been an AI-generated image of animated camels in a setting vaguely related to the plot of this post. But I think we have already had enough of them ;-)&#xA;We are announcing the Apache Camel Karavan 4.4.0, your one-stop shop for simplified and accelerated integration development with Apache Camel! This release packs a punch with a plethora of improvements, making your integration journey smoother and more efficient than ever.</description>
+    </item>
+    <item>
+      <title>Karavan 4.1.0: We need more Kamelets</title>
+      <link>https://camel.apache.org/blog/2023/11/camel-karavan-4.1.0/</link>
+      <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/11/camel-karavan-4.1.0/</guid>
+      <description>Apache Camel Karavan 4.1.0 has been launched!&#xA;Custom Kamelets Development With this release, Apache Camel Karavan is featuring the addition of Custom Kamelet Developmenet.&#xA;Kamelets allows users to connect to external systems via a simplified interface, hiding all the low level details about how those connections are implemented.&#xA;Furthermore, apart from simplifying connections, Kamelets can package reusable integration logic, making it easily deployable in various projects.&#xA;With this release, Karavan now offers full-fledged Kamelet development support right at your fingertips:</description>
+    </item>
+    <item>
+      <title>Karavan 4.0.0: One size fits all</title>
+      <link>https://camel.apache.org/blog/2023/09/camel-karavan-4.0.0/</link>
+      <pubDate>Mon, 25 Sep 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/09/camel-karavan-4.0.0/</guid>
+      <description>We are delighted to unveil Apache Camel Karavan 4.0.0. This release introduces a range of new features, enhancements and updates, making integration development more versatile and user-friendly.&#xA;Here are the key highlights of this release:&#xA;Enhanced Platform Support With this release, Apache Camel Karavan expands its compatibility across multiple platforms, offering developers greater flexibility in integration deployment. Karavan 4.0.0 is now compatible with the following platforms:&#xA;Docker (New!) - The primary benefit of utilizing Docker is to reduce infrastructure complexity, thereby speed-up platform utilization and accelerating adoption.</description>
+    </item>
+    <item>
+      <title>Karavan 3.21.0: Developer Performance Accelerator</title>
+      <link>https://camel.apache.org/blog/2023/07/camel-karavan-3.21.0/</link>
+      <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/07/camel-karavan-3.21.0/</guid>
+      <description>In this blog post, we are excited to announce the latest updates and improvements in Apache Camel Karavan. This version brings significant improvements focused on developer productivity in the Karavan Cloud Application.&#xA;Let&amp;rsquo;s dive into the details and explore what&amp;rsquo;s new!&#xA;What&amp;rsquo;s new Karavan CLI To simplify the installation of Karavan Cloud Application on Kubernetes, we have introduced the Karavan CLI. This command-line interface allows you to effortlessly install Karavan and generate resource YAML files.</description>
+    </item>
+    <item>
+      <title>Karavan 3.20.1 Preview Release</title>
+      <link>https://camel.apache.org/blog/2023/04/camel-karavan-3.20.1/</link>
+      <pubDate>Mon, 10 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/04/camel-karavan-3.20.1/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.&#xA;New features In this release we continue to make developers&amp;rsquo; lives easy.&#xA;Hybrid Developer Experience Starting from this release, developers can work on the same repository from the Karavan application as well as with Karavan VS Code extension.</description>
+    </item>
+    <item>
+      <title>Karavan 3.20.0 Preview Release</title>
+      <link>https://camel.apache.org/blog/2023/02/camel-karavan-3.20.0/</link>
+      <pubDate>Sun, 05 Feb 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/02/camel-karavan-3.20.0/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.&#xA;Developers can use Karavan in their local development environment by installing Karavan extension in VS Code or Eclipse Che and run their services using JBang powered camel CLI with camel-main or export and run it with canonical Camel Runtimes.</description>
+    </item>
+    <item>
+      <title>Karavan Introduction in 4 minutes</title>
+      <link>https://camel.apache.org/blog/2023/01/karavan-intro/</link>
+      <pubDate>Mon, 09 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/karavan-intro/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel, which makes integration easy and fun through the visualization of pipelines, integration with runtimes and package, image build and deployment to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.</description>
+    </item>
+    <item>
+      <title>Karavan Roadmap 2023</title>
+      <link>https://camel.apache.org/blog/2022/10/camel-karavan-roadmap/</link>
+      <pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/camel-karavan-roadmap/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;Apache Camel Karavan is celebrating its first anniversary. October 4, 2021 a new repository was created and the first prototype of Karavan Designer was pushed there.&#xA;Today we have the Karavan VS Code extension and Cloud-native application for Kubernetes/OpenShift.</description>
+    </item>
+    <item>
+      <title>Karavan Preview Release 3.18.3</title>
+      <link>https://camel.apache.org/blog/2022/09/camel-karavan-3.18.3/</link>
+      <pubDate>Mon, 19 Sep 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/09/camel-karavan-3.18.3/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;What&amp;rsquo;s new in Karavan 3.18.3?&#xA;SSO/Keycloak integration Karavan cloud-native application comes with three authentication types supported:&#xA;Public Public API. No authentication requires.&#xA;kind: Deployment ... image: ghcr.io/apache/camel-karavan:3.18.3 Basic Authentication with build-in admin user. Password configured in karavan Secrets</description>
+    </item>
+  </channel>
+</rss>

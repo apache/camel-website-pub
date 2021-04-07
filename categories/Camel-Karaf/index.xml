@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Camel Karaf on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Camel-Karaf/</link>
+    <description>Recent content in Camel Karaf on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 16 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Camel-Karaf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Karaf 4.8.5 Released</title>
+      <link>https://camel.apache.org/blog/2025/03/camel-karaf-release-4.8.5/</link>
+      <pubDate>Sun, 16 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/03/camel-karaf-release-4.8.5/</guid>
+      <description>Camel Karaf 4.8.5 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.9.0 Released</title>
+      <link>https://camel.apache.org/blog/2025/01/camel-karaf-release-4.9.0/</link>
+      <pubDate>Thu, 30 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/01/camel-karaf-release-4.9.0/</guid>
+      <description>Camel Karaf 4.9.0 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.8.2 Released</title>
+      <link>https://camel.apache.org/blog/2025/01/camel-karaf-release-4.8.2/</link>
+      <pubDate>Wed, 29 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/01/camel-karaf-release-4.8.2/</guid>
+      <description>Camel Karaf 4.8.2 release</description>
+    </item>
+  </channel>
+</rss>

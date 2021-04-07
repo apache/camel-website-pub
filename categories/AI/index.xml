@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI on Apache Camel</title>
+    <link>https://camel.apache.org/categories/AI/</link>
+    <description>Recent content in AI on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 24 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/AI/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel AI: Inference via Model Serving #2: TensorFlow Serving</title>
+      <link>https://camel.apache.org/blog/2025/02/camel-tensorflow-serving/</link>
+      <pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/02/camel-tensorflow-serving/</guid>
+      <description>Introduction As noted in the previous article, the recent release of Apache Camel 4.10 LTS introduced three new AI model serving components into its supported component family. 1&#xA;TorchServe component TensorFlow Serving component KServe component Previously we wrote about the TorchServe component, this time we introduce the TensorFlow Serving component.&#xA;TensorFlow Serving component TensorFlow Serving is the serving feature provided by the popular machine learning framework TensorFlow. By using the Camel TensorFlow Serving component, you can invoke AI models deployed on the TensorFlow Serving model servers through their gRPC Client APIs.</description>
+    </item>
+    <item>
+      <title>Toward better data extraction with structured output</title>
+      <link>https://camel.apache.org/blog/2025/02/langchain-structured-output/</link>
+      <pubDate>Fri, 14 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/02/langchain-structured-output/</guid>
+      <description>Introduction This has been several blog posts now where we have learned about how to use generative AI for data extraction from a Camel route. Starting from the initial inception, we have then focused a lot on how to best combine Camel and Quarkus LangChain4j. In this blog post, we will reap the benefit of this great combination to improve the accuracy of our data extraction almost for free. Almost for free really?</description>
+    </item>
+    <item>
+      <title>Apache Camel AI: Inference via Model Serving #1: TorchServe</title>
+      <link>https://camel.apache.org/blog/2025/02/camel-torchserve/</link>
+      <pubDate>Thu, 13 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/02/camel-torchserve/</guid>
+      <description>Introduction In the just released Apache Camel 4.10 LTS, AI-related components have been further enhanced. Among others, three new components related to AI model serving have been added. 1&#xA;TorchServe component TensorFlow Serving component KServe component My previous article Apache Camel AI: Leverage power of AI with DJL component demonstrated how the DJL component can be used to perform AI model inference within the Camel routes. Starting from 4.10, in addition to the in-route inference by DJL, these new components will allow the Camel routes to invoke external model servers to perform inference.</description>
+    </item>
+    <item>
+      <title>Resolving LangChain4j AI services by name</title>
+      <link>https://camel.apache.org/blog/2025/01/langchain4j-bean-name/</link>
+      <pubDate>Fri, 17 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/01/langchain4j-bean-name/</guid>
+      <description>Introduction In a previous blog post related to Artificial Intelligence with Camel, we introduced the resolution of AI services by interface. This feature brings Camel and Quarkus LangChain4j closer than ever so that it takes less code to invoke a LangChain4j AI service from a route. In this blog post, we would like to introduce a related feature that should be released in the next Camel Quarkus version. This time, we&amp;rsquo;ll do the same kind of operation, except that we will resolve the bean by its name.</description>
+    </item>
+    <item>
+      <title>Resolving LangChain4j AI services by interface</title>
+      <link>https://camel.apache.org/blog/2024/12/langchain4j-bean-interface/</link>
+      <pubDate>Fri, 20 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/12/langchain4j-bean-interface/</guid>
+      <description>Introduction In a recent series of Artificial Intelligence related blog posts, we have learned about the Camel Quarkus LangChain4j extension. It offers possibilities to implement new AI related scenarios like data extraction. The underlying implementation of Quarkus LangChain4j seems to offer interesting abstractions that, for instance make it possible to switch between Large Language Models quite simply. We have also started to see some improvements when it comes to invoking AI services thanks to camel bean binding and annotations.</description>
+    </item>
+    <item>
+      <title>Avoiding model lock in while building an AI Camel route</title>
+      <link>https://camel.apache.org/blog/2024/11/langchain4j-granite3/</link>
+      <pubDate>Fri, 15 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/11/langchain4j-granite3/</guid>
+      <description>Introduction In a previous blog post, we have seen how Camel parameter binding annotations could be used in conjunction with LangChain4J AI services to easily create Camel routes using Large Language Models. All this work is best reflected in a Camel Quarkus example. While building this example, poor care was taken about the choice of the LLM as this was not the initial priority. Thinking a bit more, this situation is a great opportunity to experience the switch of an LLM inside of a Camel application.</description>
+    </item>
+    <item>
+      <title>Using Camel annotations with LangChain4j high level api available in next Camel Quarkus release</title>
+      <link>https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/</link>
+      <pubDate>Thu, 10 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/</guid>
+      <description>Introduction In a previous blog post, we have seen how Camel could be used to transform raw unstructured text into structured Java objects. The shown example actually uses the LangChain4j high level API where a Java interface will handle the interactions needed with the underlying Large Language Model. However, at this time, a Quarkus LangChain4j issue prevented the usage of the Camel parameter binding annotations. This issue will be fixed in the next Camel Quarkus release, so let&amp;rsquo;s see how it will work.</description>
+    </item>
+    <item>
+      <title>Unstructured data extraction with Apache Camel Quarkus and LangChain4j</title>
+      <link>https://camel.apache.org/blog/2024/09/data-extraction-example/</link>
+      <pubDate>Mon, 16 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/data-extraction-example/</guid>
+      <description>This blog post shows a concrete example of transforming raw unstructured text into structured Java objects with Camel Quarkus and Quarkus LangChain4j.&#xA;Introduction Following previous experiments about unstructured data extraction, some directions were given about how a large language model could be setup to transform unstructured data into its structured counterpart. In this blog post, we will see a ready to use example that could serve as a starting point to create your own Camel route performing data extraction.</description>
+    </item>
+    <item>
+      <title>Unlocking Efficient Data Processing with the Chunking DSL</title>
+      <link>https://camel.apache.org/blog/2024/09/chunking-dsl/</link>
+      <pubDate>Fri, 06 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/chunking-dsl/</guid>
+      <description>Chunking is a crucial aspect of data processing that can significantly impact retrieval quality, query latency, costs, and even the accuracy of Large Language Model (LLM) outputs. In this blog post, we&amp;rsquo;ll explore what chunking is, its importance, and how the new Chunking DSL in Apache Camel 4.8.0 improves data processing workflows.&#xA;The Problem with Traditional Chunking Approaches Before Camel 4.8.0, applications using Camel would have to implement custom chunking logic or rely on external libraries.</description>
+    </item>
+    <item>
+      <title>Apache Camel AI: Leverage power of AI with DJL component</title>
+      <link>https://camel.apache.org/blog/2024/09/camel-ai-examples/</link>
+      <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/camel-ai-examples/</guid>
+      <description>Apache Camel AI is a set of components that allow various AI-related technologies to be integrated with Camel.&#xA;Nowadays, LLMs such as OpenAI ChatGPT and Meta Llama are gaining a lot of attention, and many frameworks and tools are exploring ways to utilise them. Camel AI also includes the LangChain4j component suite, and there are already blog posts about how you can utilise LLMs using LangChain4j in the Camel Blog:</description>
+    </item>
+    <item>
+      <title>Experimenting extraction from unstructured data with Apache Camel and LangChain4j</title>
+      <link>https://camel.apache.org/blog/2024/07/data-extraction-first-experiment/</link>
+      <pubDate>Fri, 19 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/data-extraction-first-experiment/</guid>
+      <description>This blog is based on experiments done about extracting structured data into its structured counterpart. More precisely, in this post, we&amp;rsquo;ll give directions about how to convert a conversation transcript into a Java object.&#xA;Introduction Reading articles like this over the net, it seems that folks have a lot of unstructured data at the disposal while not being able to take advantage on it. So probably, in the future we might expect to deal more and more with unstructured data extraction in integration flow.</description>
+    </item>
+    <item>
+      <title>Integrate your AI models effortlessly with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/</link>
+      <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/</guid>
+      <description>This blog shows how Apache Camel can help integrate multiple systems with an AI model, in particular, the camel-whatsapp component is used to build a chat on WhatsApp; so that a user can easily communicate with the LLM (large Language Model) via WhatsApp.&#xA;Overview The objective is the following, I&amp;rsquo;d like to have specific conversations about some topic, in this case, how to contribute to Apache Camel, with an LLM via WhatsApp.</description>
+    </item>
+  </channel>
+</rss>

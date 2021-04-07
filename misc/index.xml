@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Miscellaneous on Apache Camel</title>
+    <link>https://camel.apache.org/misc/</link>
+    <description>Recent content in Miscellaneous on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="https://camel.apache.org/misc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://camel.apache.org/.well-known/security.txt</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/.well-known/security.txt</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Acknowledgments</title>
+      <link>https://camel.apache.org/acknowledgments/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/acknowledgments/</guid>
+      <description>Many thanks to the following organizations for helping the Camel project.&#xA;YourKit GmbH kindly provide free licenses for the YourKit Java Profiler to open source projects. YourKit Java Profiler is primarily used to investigate performance and memory leak issues reported in Apache Camel.&#xA;Netlify kindly provides pull request builds, checks and previews for this website.&#xA;Zulip kindly hosts the official Apache Camel chat rooms.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Features on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Features/</link>
+    <description>Recent content in Features on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 26 Nov 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Features/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Rise and Fall of the Performance Monsters</title>
+      <link>https://camel.apache.org/blog/2023/11/camel-4-performance-improvements-2/</link>
+      <pubDate>Sun, 26 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/11/camel-4-performance-improvements-2/</guid>
+      <description>Introduction Apache Camel has always been committed to delivering top-notch performance. As the development of Camel 4 progressed, so did the dedication to enhancing its performance. In this blog post, we&amp;rsquo;ll explore the advances made in the pursuit of efficiency, focusing on key improvements introduced between Camel 4.1 and 4.2, with a few important improvements for the upcoming 4.3.&#xA;Camel 4.1: A Leap Forward in Type Conversion One of the notable enhancements in Camel 4.</description>
+    </item>
+    <item>
+      <title>Camel K Observability: Micrometer Metrics</title>
+      <link>https://camel.apache.org/blog/2023/08/camel-k-micrometer/</link>
+      <pubDate>Thu, 03 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/08/camel-k-micrometer/</guid>
+      <description>We already explained how to take monitor your Integrations in the previous blog post about monitoring operations on Camel K. The good news is there are only a few changes with the move to Micrometer Metrics.&#xA;From Microprofile to Micrometer Camel K 2.0 was the occasion to move from one technology (Microprofile) to another (Micrometer) for the Prometheus trait configuration implementation.&#xA;The reason is the deprecation notice from Quarkus Microprile&amp;rsquo;s implementation in favor of using Micrometer Metrics.</description>
+    </item>
+    <item>
+      <title>Change Data Capture with Apache Camel and Debezium</title>
+      <link>https://camel.apache.org/blog/2023/05/camel-debezium-quarkus/</link>
+      <pubDate>Wed, 31 May 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/05/camel-debezium-quarkus/</guid>
+      <description>In this article, we will explore how to use Debezium and Apache Camel in conjunction with Quarkus to build a reactive application efficiently and send real-time changes from a database to a destination, such as webservice or message queue or another database.&#xA;What is Debezium? Debezium is a distributed, event-driven data change platform used to capture data changes in database systems and send them to other systems in real time so that applications can respond to all database insertions, updates and deletions made by other applications.</description>
+    </item>
+    <item>
+      <title>Hunting performance monsters on the back of a Camel</title>
+      <link>https://camel.apache.org/blog/2023/05/camel-4-performance-improvements/</link>
+      <pubDate>Thu, 25 May 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/05/camel-4-performance-improvements/</guid>
+      <description>Introduction We are thrilled to share the remarkable advancements in the performance of Apache Camel 4, achieved through our diligent efforts in addressing a critical JVM issue (JDK-8180450). In this article, we will delve into the details of our investigation, the tools employed, and the subsequent optimizations that have propelled Apache Camel 4 to new heights of speed and efficiency.&#xA;Identifying the Performance Challenge The JVM issue JDK-8180450, known for its potential performance penalties during type checking, became our focal point.</description>
+    </item>
+    <item>
+      <title>Camel Micrometer Observation: Observability with Micrometer</title>
+      <link>https://camel.apache.org/blog/2023/04/camel-observation/</link>
+      <pubDate>Tue, 04 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/04/camel-observation/</guid>
+      <description>The Spring Observability Team has added native observability support for Spring Applications with Spring Framework 6 and Spring Boot 3. You can read more about the feature in the Spring blog where the Micrometer team explains what Observability and Micrometer Observation projects are. This blog post will explain how to set up Micrometer Observation and how you can add observability to your Camel projects.&#xA;Setting up the ObservationRegistry The following snippet of code shows how to set up basic metrics and tracing capabilities for an ObservationRegistry.</description>
+    </item>
+    <item>
+      <title>Camel K Observability: Distributed Tracing</title>
+      <link>https://camel.apache.org/blog/2023/03/camel-k-telemetry/</link>
+      <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/03/camel-k-telemetry/</guid>
+      <description>Tracing is an important approach for controlling and monitoring the experience of users, it allows us to gather more information about an integration&amp;rsquo;s performance.&#xA;Camel K has been providing support for distributed tracing using OpenTracing since long time. At the beginning of 2022, the CNCF announced that they were archiving the OpenTracing project in favor of the OpenTelemetry project. OpenTelemetry is the latest solution created by merging OpenTracing and OpenCensus. As a result, we decided in Camel K 1.</description>
+    </item>
+    <item>
+      <title>Camel K Operations: monitoring</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</link>
+      <pubDate>Tue, 05 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</guid>
+      <description>Camel K offers a wide list of operations you can execute once your Integration has been deployed (likely in a production environment). When we talk about operations, the most typical question we got is &amp;ldquo;How to monitor a Camel K Integration?&amp;rdquo;. Fortunately, we have all the ingredients needed to let you manage this operation as smooth as possible. I&amp;rsquo;ll walk you through the different tools and configuration needed in this blog post.</description>
+    </item>
+    <item>
+      <title>Introducing the Resume API v2</title>
+      <link>https://camel.apache.org/blog/2022/03/resume-api-v2/</link>
+      <pubDate>Tue, 22 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/resume-api-v2/</guid>
+      <description>The need to process larger quantities of data has been a growing concern and necessity within our community. For the last few releases we have been working to create mechanisms to simplify how our users can consume data at scale.&#xA;Although Camel is no stranger to consuming data at scale, recent trends in computing and systems architecture introduce the need for behaviors that improve agility, speed and scalability when doing so.</description>
+    </item>
+    <item>
+      <title>Good bye camel-testcontainers! Hello Camel&#39;s test-infra</title>
+      <link>https://camel.apache.org/blog/2022/02/camel-test-infra/</link>
+      <pubDate>Wed, 16 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/02/camel-test-infra/</guid>
+      <description>For Camel 3.16.0 we are removing the deprecated container-based test modules and replacing them with a new set of modules called Camel test-infra.&#xA;They continue to support container-based tests via TestContainers, however they abstract the underlying test infrastructure.&#xA;One of the great benefits for our project is that they allow us to more easily switch from container-based tests, to external instances. Previously, we would need to create a new test or implement a more complex design if we wanted to test both a container instance and an external service instance (i.</description>
+    </item>
+    <item>
+      <title>Upcoming changes to the consumer on Kafka component</title>
+      <link>https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/</link>
+      <pubDate>Fri, 24 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/</guid>
+      <description>We recently started to review, investigate and fix reliability issues with the Kafka component. As part of that, we refactored the code to avoid problematic concurrency patterns, remove calls to deprecated Kafka client code and simplify the overall maintainability of the code. This led to many changes in the internal implementation of the component, which we will talk about in this blog post.&#xA;Motivation The ground work related to these changes can be traced back to the following set of issues reported on our Jira.</description>
+    </item>
+    <item>
+      <title>Camel &#43; JBang: bringing the world of Java scripting to Camel</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-jbang/</link>
+      <pubDate>Mon, 26 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/07/camel-jbang/</guid>
+      <description>Bringing the world of Java scripting to Camel</description>
+    </item>
+    <item>
+      <title>Camel K 1.5 - New configuration settings</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/</link>
+      <pubDate>Tue, 20 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/</guid>
+      <description>Camel K version 1.5 is out. And with it, a new way of providing configuration and resources to your Integration. We have worked on a deep code refactoring in order to harmonize the existing configuration settings and add new ones to exploit the power of camel-quarkus runtime, which has become the main way to materialize an Integration.&#xA;We added new features that will simplify your developer life. We also added new checks that will give you useful tips when using a feature in a wrong way.</description>
+    </item>
+    <item>
+      <title>New Camel K Logging Features</title>
+      <link>https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/</link>
+      <pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/</guid>
+      <description>New Camel K Logging Features for Camel K 1.5</description>
+    </item>
+    <item>
+      <title>Camel-AWS-S3 - New Streaming upload feature</title>
+      <link>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</link>
+      <pubDate>Tue, 20 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</guid>
+      <description>The S3 Streaming upload feature will arrive on Camel 3.10.0</description>
+    </item>
+  </channel>
+</rss>

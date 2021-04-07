@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Outreachy on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Outreachy/</link>
+    <description>Recent content in Outreachy on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 29 Mar 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Outreachy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Outreachy Internship Contributions Open</title>
+      <link>https://camel.apache.org/blog/2022/03/Outreachy-May2022/</link>
+      <pubDate>Tue, 29 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/Outreachy-May2022/</guid>
+      <description>Two years after its first participation to the Outreachy initiative, the Camel community is excited to support Outreachy&amp;rsquo;s mission once again this year.&#xA;Outreachy is a diversity initiative of the Software Freedom Conservancy, that aims at supporting people subject to systemic bias, and impacted by under-representation in the technology industry. It runs a bi-yearly internships program in open source and open science, where interships are paid and remote.&#xA;We are thrilled to propose the following projects for the next Outreachy May 2022 period:</description>
+    </item>
+    <item>
+      <title>Outreachy update</title>
+      <link>https://camel.apache.org/blog/2020/03/Outreachy-May2020-Update/</link>
+      <pubDate>Mon, 30 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/03/Outreachy-May2020-Update/</guid>
+      <description>The Apache Camel community is excited to have such a great response and effort already put in by the Outreachy applicants. We are grateful to all that contributed with code, ideas, helping others and being a part of our community.&#xA;We received similar inquiries from several applicants, asking help with the timeline for the final application, intern selection criteria and similar. To help answer this and to be transparent to all involved, so each individual can reflect and make informed decisions, here are some of our thoughts.</description>
+    </item>
+    <item>
+      <title>Outreachy internship contributions open</title>
+      <link>https://camel.apache.org/blog/2020/03/Outreachy-May2020/</link>
+      <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/03/Outreachy-May2020/</guid>
+      <description>This year in addition to the Google Summer of Code we&amp;rsquo;re participating in the Outreachy internship program as well.&#xA;For those that might not be aware of the Outreachy, Outreachy is a paid, remote internship program. Outreachy&amp;rsquo;s goal is to support people from groups underrepresented in tech. They help newcomers to free software and open source make their first contributions.&#xA;Apache Camel is looking for contributions to the website you&amp;rsquo;re reading this blog post on.</description>
+    </item>
+  </channel>
+</rss>
