@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Videos on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Videos/</link>
+    <description>Recent content in Videos on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 07 Dec 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Videos/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Debugging Camel Quarkus native application in VS Code</title>
+      <link>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</link>
+      <pubDate>Thu, 07 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</guid>
+      <description>Prerequisites Visual Studio Code GraalVM for JDK 20+ Maven 3.9.3+ Extension Pack for Apache Camel by Red Hat Step-by-Step These steps provide a structured approach to generating, setting up, building, and debugging a Camel Quarkus native application within the VS Code environment.&#xA;Generate Example Camel Route in VS Code Workspace Within your clean VS Code workspace, initiate the creation of an exemplary Camel route using the command Camel: Create a Camel Route using Java DSL.</description>
+    </item>
+    <item>
+      <title>Three Apache Camel JBang Videos</title>
+      <link>https://camel.apache.org/blog/2023/10/jbang-video/</link>
+      <pubDate>Wed, 18 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/jbang-video/</guid>
+      <description>For the past year, we have worked on Camel JBang, that is becoming ready to be more widespread known among Camel users.&#xA;In this blog I just want to quickly refer to a number of recent video recordings of Camel JBang in action.&#xA;Apache Camel 4.0 with Camel JBang MQTT demo - by Claus, How to quickly build a Camel prototype with MQTT using Docker Camel JBang - Run Camel as Script using JBang by Jasvinder, with first impressions of Camel JBang Apache Camel JBang - Reload quickly running Camel via copy/paste - by Claus, a poor man&amp;rsquo;s iPaaS with Apache Camel Karavan and Camel JBang </description>
+    </item>
+    <item>
+      <title>Karavan Introduction in 4 minutes</title>
+      <link>https://camel.apache.org/blog/2023/01/karavan-intro/</link>
+      <pubDate>Mon, 09 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/karavan-intro/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel, which makes integration easy and fun through the visualization of pipelines, integration with runtimes and package, image build and deployment to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.</description>
+    </item>
+    <item>
+      <title>How to quickly run 16 years old Camel 1.0 route today</title>
+      <link>https://camel.apache.org/blog/2022/12/quarkus-insights/</link>
+      <pubDate>Fri, 16 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/quarkus-insights/</guid>
+      <description>A few weeks ago I presented Camel JBang at the Quarkus Insights show and one of the demos I did was to quickly run Camel 1.0 route copied with the latest Camel.&#xA;This is a 4-minute recording of that demo.&#xA;If you want to see more, then I recommend to watch the Quarkus Insight session.</description>
+    </item>
+    <item>
+      <title>Camel presented at Quarkus Insights</title>
+      <link>https://camel.apache.org/blog/2022/12/run2007today/</link>
+      <pubDate>Mon, 12 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/run2007today/</guid>
+      <description>Apache Camel was recently showcased at the Quarkus Insights show (#110).&#xA;The session runs 1 hour and 10 minutes, where Peter first give an overview of Apache Camel, then Claus presents the latest update on Camel JBang, and with live demos. And the last 40 minutes is focused on Camel Quarkus where Zineb shows a live coded demo.&#xA;The recording can be watched from YouTube.</description>
+    </item>
+    <item>
+      <title>Content Based Routing with Camel, Drools, Quarkus, Kogito, AtlasMap and Apache Kafka!</title>
+      <link>https://camel.apache.org/blog/2022/10/ContentBasedRoutingWithCamelDroolsQuarkusKogitoAltasMapApacheKafka/</link>
+      <pubDate>Mon, 10 Oct 2022 11:56:35 +0200</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/ContentBasedRoutingWithCamelDroolsQuarkusKogitoAltasMapApacheKafka/</guid>
+      <description>In this post I want to share with you how to implement a complete, end-to-end Content Based Routing solution using Apache Camel, AtlasMap and Quarkus as a developer platform, including: Drools DMN Engine, Kogito. Apache Kafka is used in this solution as a message broker.&#xA;Content based routing overview Here is the Enterprise Integration Pattern (EIP) diagram of the flow, annotated with some details of the components used:&#xA;The focus of this solution is routing healthcare-related messages; for this demo example, messages are routed accordingly to the following decision table rules:</description>
+    </item>
+    <item>
+      <title>Author-led Training on Apache Camel</title>
+      <link>https://camel.apache.org/blog/2022/08/pluralsight-training/</link>
+      <pubDate>Wed, 31 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/08/pluralsight-training/</guid>
+      <description>Announcing Author-led Training on Camel I&amp;rsquo;m happy to announce the release of a new course on Apache Camel at Pluralsight. The course, &amp;ldquo;Fundamentals of Integration with Apache Camel&amp;rdquo;, by Michael Hoffman, is intended to help you learn the foundations of Camel as well as how to apply it at an enterprise scale. Demonstrations are provided for implementing ETL, Event-Driven Architecture with RabbitMQ and Kafka, and finally, serverless with Camel-K. Please note, Pluralsight is a paid subscription service.</description>
+    </item>
+    <item>
+      <title>Karavan Serverless mode</title>
+      <link>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</link>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</guid>
+      <description>Karavan Serverless What&amp;rsquo;s new in Karavan preview release 0.0.8? In addition to VSCode extension and Standalone application, Karavan could be deployed in Serverless mode alongside Camel-K on Kubernetes. Karavan Serverless gets and applies Integration Custom Resources directly from/to Kubernetes.&#xA;Try Karavan Serverless mode on Minikube Install Minikube&#xA;Install Camel-K&#xA;Install Karavan serverless&#xA;git clone --depth 1 https://github.com/apache/camel-karavan cd camel-karavan/karavan-demo/serverless kubectl apply -k karavan -n default Get Karavan URL&#xA;minikube service camel-karavan --url The output should be like the following:</description>
+    </item>
+    <item>
+      <title>Webinar Integrate Systems in the Age of Camel and Quarkus</title>
+      <link>https://camel.apache.org/blog/2021/05/CamelWebinar/</link>
+      <pubDate>Fri, 28 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/CamelWebinar/</guid>
+      <description>Yesterday Claus Ibsen presented a webinar where he covered all the latest innovations with Apache Camel with focus on Camel Quarkus, Camel K, and Kamelets. This trio is a powerful combination that takes Camel to another level, which allows non developers and IT professionals, to manage and bind systems together without any Camel knowledge.&#xA;Kamelets being the Apache Camel solution for an app store experience with integration software.&#xA;The webinar is online on youtube and the slides is here.</description>
+    </item>
+    <item>
+      <title>What&#39;s new with Apache Camel 3 webinar</title>
+      <link>https://camel.apache.org/blog/2020/06/whatsnew-camel-3-webinar/</link>
+      <pubDate>Thu, 11 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/06/whatsnew-camel-3-webinar/</guid>
+      <description>Apache Camel is a leading open source integration framework that has been around for more than a decade.&#xA;With the release of Apache Camel 3, the Camel family has been extended to include a full range of projects that are tailored to popular platforms including Spring Boot, Quarkus, Kafka, Kubernetes, and others; creating an ecosystem.&#xA;Claus Ibsen and Andrea Cosentino presented What&amp;rsquo;s new in Camel 3, focusing on the most innovative Camel projects at the DevNation Tech Talk on June 5th.</description>
+    </item>
+    <item>
+      <title>How to quickly run 100 Camels with Apache Camel, Quarkus and GraalVM</title>
+      <link>https://camel.apache.org/blog/2020/04/100Camels/</link>
+      <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/04/100Camels/</guid>
+      <description>Today I continue me practice on youtube and recorded a 10 minute video on creating a new Camel and Quarkus project that includes Rest and HTTP services with health checks and metrics out of the box.&#xA;Then comparing the memory usage of running the example in JVM mode vs native compiled with GraalVM. Then showing for the finale how to quickly run 100 instances of the example each on their own TCP port and how quick Camel are to startup and service the first requests faster than you can type and click.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Transformation on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Transformation/</link>
+    <description>Recent content in Transformation on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 04 Dec 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Transformation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel 4 Data Types</title>
+      <link>https://camel.apache.org/blog/2023/12/camel-data-types/</link>
+      <pubDate>Mon, 04 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel-data-types/</guid>
+      <description>Since Camel 4, users are able to apply data types to their individual Camel routes in order to transform the processed message content in a declarative way. The data type functionality has been added on top of the well-known Transformer EIP that is a part of Apache Camel since the beginning.&#xA;This post gives a short introduction to the concept of data types and continues with several examples that show how to use those data types in Camel for instance as a form of Camel route contracts.</description>
+    </item>
+  </channel>
+</rss>

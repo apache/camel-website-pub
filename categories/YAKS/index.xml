@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>YAKS on Apache Camel</title>
+    <link>https://camel.apache.org/categories/YAKS/</link>
+    <description>Recent content in YAKS on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 31 Jan 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/YAKS/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Testing Camel K with YAKS</title>
+      <link>https://camel.apache.org/blog/2023/01/camel-k-yaks/</link>
+      <pubDate>Tue, 31 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/camel-k-yaks/</guid>
+      <description>This post describes the steps to test a Camel K integration with YAKS both locally and on the Kubernetes platform.&#xA;What is YAKS? YAKS is an Open Source test automation platform that leverages Behavior Driven Development concepts for running tests locally and on Cloud infrastructure (e.g. Kubernetes or OpenShift). This means that the testing tool is able to run your tests both as local tests and natively on Kubernetes. The framework is specifically designed to verify Serverless and Microservice applications and aims for integration testing with the application under test up and running in a production-like environment.</description>
+    </item>
+  </channel>
+</rss>

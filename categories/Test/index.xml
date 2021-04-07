@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Test on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Test/</link>
+    <description>Recent content in Test on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 31 Jan 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Test/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Testing Camel K with YAKS</title>
+      <link>https://camel.apache.org/blog/2023/01/camel-k-yaks/</link>
+      <pubDate>Tue, 31 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/camel-k-yaks/</guid>
+      <description>This post describes the steps to test a Camel K integration with YAKS both locally and on the Kubernetes platform.&#xA;What is YAKS? YAKS is an Open Source test automation platform that leverages Behavior Driven Development concepts for running tests locally and on Cloud infrastructure (e.g. Kubernetes or OpenShift). This means that the testing tool is able to run your tests both as local tests and natively on Kubernetes. The framework is specifically designed to verify Serverless and Microservice applications and aims for integration testing with the application under test up and running in a production-like environment.</description>
+    </item>
+    <item>
+      <title>How to test an Integration for Camel K</title>
+      <link>https://camel.apache.org/blog/2022/11/camel-k-jbang/</link>
+      <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/11/camel-k-jbang/</guid>
+      <description>Testing is probably one of those operations we use to repeat most of the time while building any application. Applications in Camel world are no difference. With the advent of Camel JBang, we have a unified place that can be used to perform our testing/fine tuning locally before moving to a higher environment.&#xA;During the last years of development, we have noticed that testing or fine tuning an integration directly connected to a Cloud Native environment can result a bit cumbersome.</description>
+    </item>
+  </channel>
+</rss>

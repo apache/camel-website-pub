@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI on Apache Camel</title>
+    <link>https://camel.apache.org/categories/AI/</link>
+    <description>Recent content in AI on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 19 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/AI/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Integrate your AI models effortlessly with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/</link>
+      <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/</guid>
+      <description>This blog shows how Apache Camel can help integrate multiple systems with an AI model, in particular, the camel-whatsapp component is used to build a chat on WhatsApp; so that a user can easily communicate with the LLM (large Language Model) via WhatsApp.&#xA;Overview The objective is the following, I&amp;rsquo;d like to have specific conversations about some topic, in this case, how to contribute to Apache Camel, with an LLM via WhatsApp.</description>
+    </item>
+  </channel>
+</rss>
