@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Quarkus on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Quarkus/</link>
+    <description>Recent content in Quarkus on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 10 Oct 2022 11:56:35 +0200</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Quarkus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Content Based Routing with Camel, Drools, Quarkus, Kogito, AtlasMap and Apache Kafka!</title>
+      <link>https://camel.apache.org/blog/2022/10/ContentBasedRoutingWithCamelDroolsQuarkusKogitoAltasMapApacheKafka/</link>
+      <pubDate>Mon, 10 Oct 2022 11:56:35 +0200</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/ContentBasedRoutingWithCamelDroolsQuarkusKogitoAltasMapApacheKafka/</guid>
+      <description>In this post I want to share with you how to implement a complete, end-to-end Content Based Routing solution using Apache Camel, AtlasMap and Quarkus as a developer platform, including: Drools DMN Engine, Kogito. Apache Kafka is used in this solution as a message broker.&#xA;Content based routing overview Here is the Enterprise Integration Pattern (EIP) diagram of the flow, annotated with some details of the components used:&#xA;The focus of this solution is routing healthcare-related messages; for this demo example, messages are routed accordingly to the following decision table rules:</description>
+    </item>
+  </channel>
+</rss>

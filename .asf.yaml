@@ -17,3 +17,14 @@
 
 publish:
   whoami: asf-site
+github:
+  labels:
+    - camel
+    - website
+  enabled_merge_buttons:
+    squash:  false
+    merge:   false
+    rebase:  false
+  dependabot_alerts:  false
+  dependabot_updates: false
+  protected_branches: ~

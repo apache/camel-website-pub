@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI on Apache Camel</title>
+    <link>https://camel.apache.org/categories/AI/</link>
+    <description>Recent content in AI on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 10 Oct 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/AI/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Camel annotations with LangChain4j high level api available in next Camel Quarkus release</title>
+      <link>https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/</link>
+      <pubDate>Thu, 10 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/</guid>
+      <description>Introduction In a previous blog post, we have seen how Camel could be used to transform raw unstructured text into structured Java objects. The shown example actually uses the LangChain4j high level API where a Java interface will handle the interactions needed with the underlying Large Language Model. However, at this time, a Quarkus LangChain4j issue prevented the usage of the Camel parameter binding annotations. This issue will be fixed in the next Camel Quarkus release, so let&amp;rsquo;s see how it will work.</description>
+    </item>
+    <item>
+      <title>Unstructured data extraction with Apache Camel Quarkus and LangChain4j</title>
+      <link>https://camel.apache.org/blog/2024/09/data-extraction-example/</link>
+      <pubDate>Mon, 16 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/data-extraction-example/</guid>
+      <description>This blog post shows a concrete example of transforming raw unstructured text into structured Java objects with Camel Quarkus and Quarkus LangChain4j.&#xA;Introduction Following previous experiments about unstructured data extraction, some directions were given about how a large language model could be setup to transform unstructured data into its structured counterpart. In this blog post, we will see a ready to use example that could serve as a starting point to create your own Camel route performing data extraction.</description>
+    </item>
+    <item>
+      <title>Unlocking Efficient Data Processing with the Chunking DSL</title>
+      <link>https://camel.apache.org/blog/2024/09/chunking-dsl/</link>
+      <pubDate>Fri, 06 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/chunking-dsl/</guid>
+      <description>Chunking is a crucial aspect of data processing that can significantly impact retrieval quality, query latency, costs, and even the accuracy of Large Language Model (LLM) outputs. In this blog post, we&amp;rsquo;ll explore what chunking is, its importance, and how the new Chunking DSL in Apache Camel 4.8.0 improves data processing workflows.&#xA;The Problem with Traditional Chunking Approaches Before Camel 4.8.0, applications using Camel would have to implement custom chunking logic or rely on external libraries.</description>
+    </item>
+    <item>
+      <title>Apache Camel AI: Leverage power of AI with DJL component</title>
+      <link>https://camel.apache.org/blog/2024/09/camel-ai-examples/</link>
+      <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/camel-ai-examples/</guid>
+      <description>Apache Camel AI is a set of components that allow various AI-related technologies to be integrated with Camel.&#xA;Nowadays, LLMs such as OpenAI ChatGPT and Meta Llama are gaining a lot of attention, and many frameworks and tools are exploring ways to utilise them. Camel AI also includes the LangChain4j component suite, and there are already blog posts about how you can utilise LLMs using LangChain4j in the Camel Blog:</description>
+    </item>
+    <item>
+      <title>Experimenting extraction from unstructured data with Apache Camel and LangChain4j</title>
+      <link>https://camel.apache.org/blog/2024/07/data-extraction-first-experiment/</link>
+      <pubDate>Fri, 19 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/data-extraction-first-experiment/</guid>
+      <description>This blog is based on experiments done about extracting structured data into its structured counterpart. More precisely, in this post, we&amp;rsquo;ll give directions about how to convert a conversation transcript into a Java object.&#xA;Introduction Reading articles like this over the net, it seems that folks have a lot of unstructured data at the disposal while not being able to take advantage on it. So probably, in the future we might expect to deal more and more with unstructured data extraction in integration flow.</description>
+    </item>
+    <item>
+      <title>Integrate your AI models effortlessly with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/</link>
+      <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/</guid>
+      <description>This blog shows how Apache Camel can help integrate multiple systems with an AI model, in particular, the camel-whatsapp component is used to build a chat on WhatsApp; so that a user can easily communicate with the LLM (large Language Model) via WhatsApp.&#xA;Overview The objective is the following, I&amp;rsquo;d like to have specific conversations about some topic, in this case, how to contribute to Apache Camel, with an LLM via WhatsApp.</description>
+    </item>
+  </channel>
+</rss>

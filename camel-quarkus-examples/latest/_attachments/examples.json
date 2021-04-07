@@ -1,0 +1,127 @@
+[
+  {
+    "title": "Artemis to ElasticSearch",
+    "description": "Shows how the message is consumed from the Apache Artemis broker using MQTT protocol, transformed and loaded into ElasticSearch",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/artemis-elasticsearch"
+  },
+  {
+    "title": "Camel Quarkus CXF SOAP example",
+    "description": "Shows how to use Camel CXF SOAP component.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/cxf-soap"
+  },
+  {
+    "title": "Custom `main()`",
+    "description": "Shows how to start Camel from a custom `main()` method",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/timer-log-main"
+  },
+  {
+    "title": "Deploying a Camel Route in AWS Lambda ",
+    "description": "Shows how to deploy a Camel Quarkus route as an AWS Lambda function",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/aws-lambda"
+  },
+  {
+    "title": "Extract, Transform and Load between two databases",
+    "description": "Shows how to extract, transform and load between two databases",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/jdbc-datasource"
+  },
+  {
+    "title": "FHIR",
+    "description": "Shows how to use Camel FHIR with Quarkus.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/fhir"
+  },
+  {
+    "title": "File consumer with Bindy \u0026 FTP",
+    "description": "Shows how to consume CSV files, marshal \u0026 unmarshal the data and send it onwards via FTP",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/file-bindy-ftp"
+  },
+  {
+    "title": "HTTP with vanilla JAX-RS or with Camel `platform-http` component",
+    "description": "Shows how to create HTTP endpoints using either the RESTEasy",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/http-log"
+  },
+  {
+    "title": "Health",
+    "description": "Shows how to use Camel health-checks with Quarkus.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/health"
+  },
+  {
+    "title": "JMS and JPA",
+    "description": "Shows how to run a Camel Quarkus application that supports JTA transactions on three external transactional resources: a database (MySQL), a messaging broker (Artemis) and a simulated XAResource which can demonstrate the commit, rollback and crash recovery.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/jms-jpa"
+  },
+  {
+    "title": "JPA idempotent repository",
+    "description": "Shows how to consume a message only once, even when the message is delivered multiple times",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/jpa-idempotent-repository"
+  },
+  {
+    "title": "JTA and JPA",
+    "description": "Shows how to run a Camel Quarkus application that supports JTA transactions on two external transactional resources: a database (MySQL) and a simulate XAResource which can demonstrate the commit, rollback and crash recovery.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/jta-jpa"
+  },
+  {
+    "title": "Kafka example ",
+    "description": "Shows how to produce and consume messages in a Kafka topic, using Strimzi Operator",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/kafka"
+  },
+  {
+    "title": "Kamelet Chuck Norris",
+    "description": "Shows how you can build a simple Kamelet and use with your Camel applications.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/kamelet-chucknorris"
+  },
+  {
+    "title": "Leader election in Kubernetes: A Camel Quarkus Master example",
+    "description": "Shows how to use Camel master component.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/cluster-leader-election"
+  },
+  {
+    "title": "Message Bridge",
+    "description": "Shows how to configure AMQ and IBM MQ clients to use the connection pooling and XA transactions.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/message-bridge"
+  },
+  {
+    "title": "Observability",
+    "description": "Demonstrates how to add support for metrics, health checks and distributed tracing",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/observability"
+  },
+  {
+    "title": "OpenAPI Contract First",
+    "description": "Shows how to run with Contract First OpenAPI.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/openapi-contract-first"
+  },
+  {
+    "title": "Platform HTTP security with Keycloak",
+    "description": "Shows how to secure platform HTTP with Keycloak",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/platform-http-security-keycloak"
+  },
+  {
+    "title": "REST with Jackson",
+    "description": "Demonstrates how to create a REST service using the Camel REST DSL and Jackson.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/rest-json"
+  },
+  {
+    "title": "Saga and LRA",
+    "description": "Shows how to use saga and lra",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/saga"
+  },
+  {
+    "title": "Timer Hello World",
+    "description": "Uses the Camel timer component to output a Hello world message to the console",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/timer-log"
+  },
+  {
+    "title": "Tokenize a CSV file",
+    "description": "Shows how to define a Camel route in XML for tokenizing a CSV a file.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/file-split-log-xml"
+  },
+  {
+    "title": "Unstructured Data Extraction with LangChain4j",
+    "description": "Shows how to convert unstructured text data to structured Java objects helped with a Large Language Model and LangChain4j",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/data-extract-langchain4j"
+  },
+  {
+    "title": "Vertx-Websocket Chat",
+    "description": "Shows how to configure a WebSocket server and interact with connected peers.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/vertx-websocket-chat"
+  }
+]

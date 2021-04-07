@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://camel.apache.org/camel-core/advanced-camel-core-guides/index.html</loc>
+<lastmod>2024-10-23T13:19:51.264Z</lastmod>
+</url>
+<url>
+<loc>https://camel.apache.org/camel-core/contributing/building.html</loc>
+<lastmod>2024-10-23T13:19:51.264Z</lastmod>
+</url>
+<url>
+<loc>https://camel.apache.org/camel-core/contributing/expectations.html</loc>
+<lastmod>2024-10-23T13:19:51.264Z</lastmod>
+</url>
+<url>
+<loc>https://camel.apache.org/camel-core/contributing/index.html</loc>
+<lastmod>2024-10-23T13:19:51.264Z</lastmod>
+</url>
+<url>
+<loc>https://camel.apache.org/camel-core/contributing/testing-camel.html</loc>
+<lastmod>2024-10-23T13:19:51.264Z</lastmod>
+</url>
+<url>
+<loc>https://camel.apache.org/camel-core/getting-started/index.html</loc>
+<lastmod>2024-10-23T13:19:51.264Z</lastmod>
+</url>
+<url>
+<loc>https://camel.apache.org/camel-core/reference/index.html</loc>
+<lastmod>2024-10-23T13:19:51.264Z</lastmod>
+</url>
+<url>
+<loc>https://camel.apache.org/camel-core/working-with-camel-core/index.html</loc>
+<lastmod>2024-10-23T13:19:51.264Z</lastmod>
+</url>
+</urlset>

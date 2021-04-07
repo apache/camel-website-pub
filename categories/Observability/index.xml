@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Observability on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Observability/</link>
+    <description>Recent content in Observability on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 04 Apr 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Observability/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Micrometer Observation: Observability with Micrometer</title>
+      <link>https://camel.apache.org/blog/2023/04/camel-observation/</link>
+      <pubDate>Tue, 04 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/04/camel-observation/</guid>
+      <description>The Spring Observability Team has added native observability support for Spring Applications with Spring Framework 6 and Spring Boot 3. You can read more about the feature in the Spring blog where the Micrometer team explains what Observability and Micrometer Observation projects are. This blog post will explain how to set up Micrometer Observation and how you can add observability to your Camel projects.&#xA;Setting up the ObservationRegistry The following snippet of code shows how to set up basic metrics and tracing capabilities for an ObservationRegistry.</description>
+    </item>
+  </channel>
+</rss>

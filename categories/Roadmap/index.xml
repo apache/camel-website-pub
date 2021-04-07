@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Roadmap on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Roadmap/</link>
+    <description>Recent content in Roadmap on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 07 Aug 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Roadmap/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K 2.4.0</title>
+      <link>https://camel.apache.org/blog/2024/08/camel-k-2-4/</link>
+      <pubDate>Wed, 07 Aug 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/08/camel-k-2-4/</guid>
+      <description>© Seattle Art Museum&#xA;Apache Camel community is happy to announce the general availability of Camel K 2.4.0. We have released many new features and several works aimed to have a stable version, above all when using the so called &amp;ldquo;Sourceless&amp;rdquo; Integrations.&#xA;Default security settings The first important change we&amp;rsquo;ve introduced is the default setting of security configuration in Kubernetes (SecurityContext). We&amp;rsquo;ve worked to introduce this both in the operator and in every application deployed after your Integration.</description>
+    </item>
+    <item>
+      <title>Camel K 2.3.0</title>
+      <link>https://camel.apache.org/blog/2024/04/camel-k-2-3/</link>
+      <pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/04/camel-k-2-3/</guid>
+      <description>© Sir John Soane’s Museum London&#xA;Apache Camel community is happy to announce the general availability of Camel K 2.3.0. This release version contains several fix which are increasing the operator stability and a few hidden changes which are making the software more modular, therefore future feature development quicker and independent from the Camel runtime chosen.&#xA;First of all, we have changed the default runtime to Camel K Runtime version 3.</description>
+    </item>
+    <item>
+      <title>Camel K 2.2</title>
+      <link>https://camel.apache.org/blog/2024/01/camel-k-2-2/</link>
+      <pubDate>Mon, 08 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/01/camel-k-2-2/</guid>
+      <description>Apache Camel community is happy to announce the general availability of Camel K 2.2.0. This release has slipped finally in 2024 but here we are with a lot of new exciting developments.&#xA;Enable source less Integrations This is the first step to onboard any Camel runtime. You may already have a process that build your application and containerize it in a container registry. From now on you can reference such container and use the operator to start that application without requiring the Integration to contain the source code:</description>
+    </item>
+    <item>
+      <title>Camel 2023 in Numbers</title>
+      <link>https://camel.apache.org/blog/2024/01/2023-numbers/</link>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/01/2023-numbers/</guid>
+      <description>It&amp;rsquo;s the time of the year when we take a look back at 2023, and compile a brief summary (by numbers) of the Apache Camel project(s).&#xA;You can find previous year 2022 numbers here.&#xA;Camel 2023 in Numbers Number of Camel Core releases in 2023: 33&#xA;Number of Camel Quarkus releases in 2023: 13&#xA;Number of Camel K releases in 2023: 7&#xA;Number of Camel Kafka Connector releases in 2023: 5</description>
+    </item>
+    <item>
+      <title>Apache Camel 3 - Last year of support</title>
+      <link>https://camel.apache.org/blog/2023/12/camel3ending/</link>
+      <pubDate>Wed, 27 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel3ending/</guid>
+      <description>We have just released Apache Camel 3.22 as the last new minor release of Camel 3.x.&#xA;This marks the end of new development of Camel 3, and there are no more releases planned.&#xA;Camel 3.14 and 3.20 reached end of life by end of 2023. And therefore, the only supported releases of Camel 3.x are as follows:&#xA;Version Supported Until 3.21.x Jun 2024 3.22.x Dec 2024 Camel 3.21.x is supported first half of 2024, and Camel 3.</description>
+    </item>
+    <item>
+      <title>Camel K 2.1</title>
+      <link>https://camel.apache.org/blog/2023/10/camel-k-2-1/</link>
+      <pubDate>Mon, 23 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/camel-k-2-1/</guid>
+      <description>Apache Camel community is happy to announce the general availability of Camel K 2.1. We have worked on the introduction of a lot of new exciting feature that will further simplify the deployment and management of Camel application on Kubernetes. Let&amp;rsquo;s see what you should expect from this release.&#xA;Default Camel 4 runtime As Camel 4 is out since some time already, we&amp;rsquo;ve moved our default runtime to Camel K Runtime version 3.</description>
+    </item>
+    <item>
+      <title>Camel 4 on Camel K</title>
+      <link>https://camel.apache.org/blog/2023/09/camel-4-on-camel-k/</link>
+      <pubDate>Tue, 19 Sep 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/09/camel-4-on-camel-k/</guid>
+      <description>This blog announce the availability of Camel K Runtime version 3.2.0 which will gives you the possibility to run Camel 4 workloads on Kubernetes with Camel K.&#xA;Release details Apache Camel K Runtime 3.2.0 Apache Camel Quarkus 3.2.0 Apache Camel 4.0.0 How to run Camel 4 with Camel K If you are on Camel K 2.0, this is quite straightforward. If you recall, one of the major feature of version 2 is the ability to run any Camel K runtime.</description>
+    </item>
+    <item>
+      <title>Camel K 2.0</title>
+      <link>https://camel.apache.org/blog/2023/07/camel-k-2-0/</link>
+      <pubDate>Mon, 24 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/07/camel-k-2-0/</guid>
+      <description>© 2023, RoadTrafficSigns.com&#xA;With a great level of excitement, on behalf of Apache Camel community, I&amp;rsquo;m proud to announce the general availability of Camel K 2.0. It&amp;rsquo;s been a long ride since the beginning of 2023 when we announced the desire to work on an heavy refactoring in order to introduce new shining features and be able to run the future Camel 4 runtimes.&#xA;This is the first important milestone reached, and we thought that the work done so far is already mature to see general availability.</description>
+    </item>
+    <item>
+      <title>Camel K 2023 Roadmap</title>
+      <link>https://camel.apache.org/blog/2023/02/camel-k-roadmap-2023/</link>
+      <pubDate>Mon, 06 Feb 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/02/camel-k-roadmap-2023/</guid>
+      <description>Signpost png from pngtree.com/&#xA;We&amp;rsquo;re in 2023 since a while (just if nobody has noticed yet&amp;hellip;) and we&amp;rsquo;ve taken the month of January to think about how to move Camel K development forward. We had a very good discussion about the new features we&amp;rsquo;d like to see during this year and this blog is trying to resume those ideas collected. I am going to do my best to resume everybody&amp;rsquo;s comments in a shared view in order to inspire any contributor to understand the direction we&amp;rsquo;re willing to take.</description>
+    </item>
+    <item>
+      <title>Camel K 2022 roadmap - retrospective</title>
+      <link>https://camel.apache.org/blog/2023/01/ck_2022_results/</link>
+      <pubDate>Mon, 09 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/ck_2022_results/</guid>
+      <description>(c) @TivadarDanka&#xA;2023 has come, and with that it is time to make a little retrospective on the work we have completed in 2022 in Camel K project. We are already collecting ideas to submit to the community for 2023 in order to define the new roadmap. Stay tuned, more is coming shortly&amp;hellip;&#xA;Camel K 2022 roadmap update It&amp;rsquo;s been a long ride and here a short resume of what we accomplished during the last year in Camel K project.</description>
+    </item>
+    <item>
+      <title>Roadmap to Camel 4</title>
+      <link>https://camel.apache.org/blog/2023/01/camel4roadmap/</link>
+      <pubDate>Wed, 04 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/camel4roadmap/</guid>
+      <description>Apache Camel 4 is on the way for 1st half in 2023.&#xA;The need for Camel 4 is mainly driven by Java open source projects migrating from javax to jakarta APIs and to keep up with popular runtimes such as Spring Boot and Quarkus.&#xA;Primary Goals Migrate from javax -&amp;gt; jakarta (JEE 10) Java 17 as minimum Spring Framework 6 Spring Boot 3 Quarkus 3 Release Goals Release only what is ready (JEE10 / Java17) This means that Camel components that are not ready (yet) will be dropped in a release until they are ready.</description>
+    </item>
+    <item>
+      <title>Camel 2022 in Numbers</title>
+      <link>https://camel.apache.org/blog/2023/01/2022-Numbers/</link>
+      <pubDate>Tue, 03 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/2022-Numbers/</guid>
+      <description>It&amp;rsquo;s the time of the year when we take a look back at 2022, and compile a brief summary (by numbers) of the Apache Camel project(s).&#xA;Camel 2022 in Numbers Number of Camel Core releases in 2022: 19&#xA;Number of Camel Quarkus releases in 2022: 15&#xA;Number of Camel K releases in 2022: 11&#xA;Number of Camel Kafka Connector releases in 2022: 4&#xA;Number of commits in 2022: 6162 [1]</description>
+    </item>
+    <item>
+      <title>Camel K 2022 Roadmap</title>
+      <link>https://camel.apache.org/blog/2022/03/camel-k-roadmap-2022/</link>
+      <pubDate>Tue, 01 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/camel-k-roadmap-2022/</guid>
+      <description>Signpost png from pngtree.com/&#xA;During the last weeks we&amp;rsquo;ve been asked questions around the direction we&amp;rsquo;re willing to take on the future development of Camel K. I think it would be good to have some blog in order to let the community understand where our efforts are going. It will be useful for every Camel K user and Camel K developer, as a guide for the future development of the project.</description>
+    </item>
+    <item>
+      <title>Java 8 to be dropped by end of 2021</title>
+      <link>https://camel.apache.org/blog/2021/09/eol-java8/</link>
+      <pubDate>Wed, 22 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/09/eol-java8/</guid>
+      <description>All Camel projects will drop support for Java 8 by end of 2021.&#xA;The next LTS release Camel 3.14, scheduled for December 2021, will be the last release to support Java 8.&#xA;In light of this we will extend the support period of Camel 3.14 from 1 year to 2 years. This means Camel 3.14 will reach its end of life (EOL) at end of December 2023.</description>
+    </item>
+    <item>
+      <title>Apache Camel 2020 Release Schedule</title>
+      <link>https://camel.apache.org/blog/2020/03/LTS-Release-Schedule/</link>
+      <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/03/LTS-Release-Schedule/</guid>
+      <description>The Apache Camel project is moving to release schedule with Long Term Support (LTS) and non-LTS releases.&#xA;The plan is to have 2 yearly LTS releases and then non-LTS releases in between.&#xA;This allows the Camel project to innovate and move much faster in non-LTS releases.&#xA;And as well to offer production stable branches (LTS) where end users can stay on for a longer period of time and get CVEs and important/critical bug fixes only.</description>
+    </item>
+    <item>
+      <title>Camel 2019 in Numbers</title>
+      <link>https://camel.apache.org/blog/2019/12/2019-Numbers/</link>
+      <pubDate>Tue, 31 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2019/12/2019-Numbers/</guid>
+      <description>It&amp;rsquo;s the time of the year where we take a look back at 2019, and compile a brief summary of the Apache Camel project.&#xA;The big news of 2019 was the much anticipated release of Apache Camel 3.&#xA;Family of projects It was also in 2019 that the Camel project became a family of projects by introducing:&#xA;Camel K Camel Quarkus Making Apache Camel a trilogy. But it does not stop there; in early 2020 three will become five when we release:</description>
+    </item>
+    <item>
+      <title>Apache Camel Kafka Connector: Introducing the latest project in the ecosystem</title>
+      <link>https://camel.apache.org/blog/2019/12/Camel-Kafka-connector-intro/</link>
+      <pubDate>Sat, 14 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2019/12/Camel-Kafka-connector-intro/</guid>
+      <description>The Apache Camel community introduces a new subproject in the ecosystem: Camel-Kafka-Connector. This project born as a PoC exploring the possibility of leveraging the Apache Camel components as Kafka source and sink connectors. The main idea behind the project is reusing the Camel Components&amp;rsquo; flexibility in a simple way, through a configuration file mixing Kafka Connect configuration and Camel route definitions and options.&#xA;What is Kafka Connect? It is an Apache Kafka&amp;rsquo;s framework that defines a standardized way to stream data in and out a kafka broker.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3 is only 2 months away</title>
+      <link>https://camel.apache.org/blog/2019/10/Camel3-2monthsaway/</link>
+      <pubDate>Wed, 02 Oct 2019 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2019/10/Camel3-2monthsaway/</guid>
+      <description>The Camel team is busy working on the last set of work for Apache Camel 3. Today the 2nd release candidate was built and published on a staging repository for early adopters to give it a try.&#xA;As I am busy myself then I just wanted to write a short blog post to keep the community posted that Apache Camel 3 is on the way, and that we expect it to be released by end of this year (sometime in November or December).</description>
+    </item>
+  </channel>
+</rss>

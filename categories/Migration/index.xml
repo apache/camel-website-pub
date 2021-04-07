@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Migration on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Migration/</link>
+    <description>Recent content in Migration on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 04 Oct 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Migration/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Easier migration with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2024/10/camel-upgrade-recipes-release-4.8.0/</link>
+      <pubDate>Fri, 04 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/10/camel-upgrade-recipes-release-4.8.0/</guid>
+      <description>This blog post introduces a Camel Upgrade Recipes project and shows an example of its usage.&#xA;Introduction Migrating Apache Camel code can often be a tedious and error-prone process, especially when it involves repetitive tasks like renaming classes, updating method signatures, or adapting to new Camel API changes. To address this need, Camel Upgrade Recipes project based on OpenRewrite was developed. The project is not designed to provide fully automated migration but rather to assist with manual migrations, making them more efficient and less error-prone.</description>
+    </item>
+  </channel>
+</rss>
