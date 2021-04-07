@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Camel K on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Camel-K/</link>
+    <description>Recent content in Camel K on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 07 Aug 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Camel-K/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K 2.4.0</title>
+      <link>https://camel.apache.org/blog/2024/08/camel-k-2-4/</link>
+      <pubDate>Wed, 07 Aug 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/08/camel-k-2-4/</guid>
+      <description>© Seattle Art Museum&#xA;Apache Camel community is happy to announce the general availability of Camel K 2.4.0. We have released many new features and several works aimed to have a stable version, above all when using the so called &amp;ldquo;Sourceless&amp;rdquo; Integrations.&#xA;Default security settings The first important change we&amp;rsquo;ve introduced is the default setting of security configuration in Kubernetes (SecurityContext). We&amp;rsquo;ve worked to introduce this both in the operator and in every application deployed after your Integration.</description>
+    </item>
+    <item>
+      <title>Camel K 2.3.0</title>
+      <link>https://camel.apache.org/blog/2024/04/camel-k-2-3/</link>
+      <pubDate>Mon, 08 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/04/camel-k-2-3/</guid>
+      <description>© Sir John Soane’s Museum London&#xA;Apache Camel community is happy to announce the general availability of Camel K 2.3.0. This release version contains several fix which are increasing the operator stability and a few hidden changes which are making the software more modular, therefore future feature development quicker and independent from the Camel runtime chosen.&#xA;First of all, we have changed the default runtime to Camel K Runtime version 3.</description>
+    </item>
+    <item>
+      <title>Camel K runtimes with Knative</title>
+      <link>https://camel.apache.org/blog/2024/04/sourceless-ck-springboot/</link>
+      <pubDate>Tue, 02 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/04/sourceless-ck-springboot/</guid>
+      <description>In the last 2.2.0 version release, Camel K added an interesting feature that gave the users the possibility to build their Camel application externally and run via the operator with certain limitations. In this blog we&amp;rsquo;re trying to analyze those limitations and provide some example that will show you how to possibly leverage this feature.&#xA;What is a &amp;ldquo;sourceless&amp;rdquo; Integration? With a great effort of creativity (sarcasm), we have named this feature as &amp;ldquo;sourceless&amp;rdquo; Integration.</description>
+    </item>
+    <item>
+      <title>Camel K 2.2</title>
+      <link>https://camel.apache.org/blog/2024/01/camel-k-2-2/</link>
+      <pubDate>Mon, 08 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/01/camel-k-2-2/</guid>
+      <description>Apache Camel community is happy to announce the general availability of Camel K 2.2.0. This release has slipped finally in 2024 but here we are with a lot of new exciting developments.&#xA;Enable source less Integrations This is the first step to onboard any Camel runtime. You may already have a process that build your application and containerize it in a container registry. From now on you can reference such container and use the operator to start that application without requiring the Integration to contain the source code:</description>
+    </item>
+    <item>
+      <title>Camel K 2.1</title>
+      <link>https://camel.apache.org/blog/2023/10/camel-k-2-1/</link>
+      <pubDate>Mon, 23 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/camel-k-2-1/</guid>
+      <description>Apache Camel community is happy to announce the general availability of Camel K 2.1. We have worked on the introduction of a lot of new exciting feature that will further simplify the deployment and management of Camel application on Kubernetes. Let&amp;rsquo;s see what you should expect from this release.&#xA;Default Camel 4 runtime As Camel 4 is out since some time already, we&amp;rsquo;ve moved our default runtime to Camel K Runtime version 3.</description>
+    </item>
+    <item>
+      <title>Camel 4 on Camel K</title>
+      <link>https://camel.apache.org/blog/2023/09/camel-4-on-camel-k/</link>
+      <pubDate>Tue, 19 Sep 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/09/camel-4-on-camel-k/</guid>
+      <description>This blog announce the availability of Camel K Runtime version 3.2.0 which will gives you the possibility to run Camel 4 workloads on Kubernetes with Camel K.&#xA;Release details Apache Camel K Runtime 3.2.0 Apache Camel Quarkus 3.2.0 Apache Camel 4.0.0 How to run Camel 4 with Camel K If you are on Camel K 2.0, this is quite straightforward. If you recall, one of the major feature of version 2 is the ability to run any Camel K runtime.</description>
+    </item>
+    <item>
+      <title>Camel K Observability: Micrometer Metrics</title>
+      <link>https://camel.apache.org/blog/2023/08/camel-k-micrometer/</link>
+      <pubDate>Thu, 03 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/08/camel-k-micrometer/</guid>
+      <description>We already explained how to take monitor your Integrations in the previous blog post about monitoring operations on Camel K. The good news is there are only a few changes with the move to Micrometer Metrics.&#xA;From Microprofile to Micrometer Camel K 2.0 was the occasion to move from one technology (Microprofile) to another (Micrometer) for the Prometheus trait configuration implementation.&#xA;The reason is the deprecation notice from Quarkus Microprile&amp;rsquo;s implementation in favor of using Micrometer Metrics.</description>
+    </item>
+    <item>
+      <title>Camel K 2.0</title>
+      <link>https://camel.apache.org/blog/2023/07/camel-k-2-0/</link>
+      <pubDate>Mon, 24 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/07/camel-k-2-0/</guid>
+      <description>© 2023, RoadTrafficSigns.com&#xA;With a great level of excitement, on behalf of Apache Camel community, I&amp;rsquo;m proud to announce the general availability of Camel K 2.0. It&amp;rsquo;s been a long ride since the beginning of 2023 when we announced the desire to work on an heavy refactoring in order to introduce new shining features and be able to run the future Camel 4 runtimes.&#xA;This is the first important milestone reached, and we thought that the work done so far is already mature to see general availability.</description>
+    </item>
+    <item>
+      <title>Camel K GitOps</title>
+      <link>https://camel.apache.org/blog/2023/07/camel-k-gitops/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/07/camel-k-gitops/</guid>
+      <description>In this blog post we&amp;rsquo;ll be talking about GitOps and we&amp;rsquo;ll provide some approach that we hope can help you understand better how you can do such kind of operations togheter with Camel K. As we&amp;rsquo;re talking about processes, all the discussion we&amp;rsquo;re going to provide can be different in each company, environment and according the set of tools you&amp;rsquo;re using.&#xA;The idea of the blog is to show the possibilities offered by Camel K in order to help you understand better how you can adapt your own tools and process to Camel K deployment model.</description>
+    </item>
+    <item>
+      <title>How to configure a Maven proxy in Camel K</title>
+      <link>https://camel.apache.org/blog/2023/06/camel-k-maven-proxy/</link>
+      <pubDate>Mon, 12 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/06/camel-k-maven-proxy/</guid>
+      <description>One of the main effort we&amp;rsquo;re putting in Camel K version 2 is to have a enterprise grade building system. Not that Camel K version 1 has not this capability, but some of the key features are not very explicit. So I thought that, while waiting for Camel K version 2 release, where we&amp;rsquo;re making all this configuration explicit, I can share some tip on how to improve the capacity to build and have a production enterprise ready environment also in Camel K 1.</description>
+    </item>
+    <item>
+      <title>Camel K Observability: Distributed Tracing</title>
+      <link>https://camel.apache.org/blog/2023/03/camel-k-telemetry/</link>
+      <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/03/camel-k-telemetry/</guid>
+      <description>Tracing is an important approach for controlling and monitoring the experience of users, it allows us to gather more information about an integration&amp;rsquo;s performance.&#xA;Camel K has been providing support for distributed tracing using OpenTracing since long time. At the beginning of 2022, the CNCF announced that they were archiving the OpenTracing project in favor of the OpenTelemetry project. OpenTelemetry is the latest solution created by merging OpenTracing and OpenCensus. As a result, we decided in Camel K 1.</description>
+    </item>
+    <item>
+      <title>Camel K 1.12 release</title>
+      <link>https://camel.apache.org/blog/2023/02/camel-k-release-1-12/</link>
+      <pubDate>Mon, 27 Feb 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/02/camel-k-release-1-12/</guid>
+      <description>Image (c): Camel Vectors by Vecteezy&#xA;Although we&amp;rsquo;re already in Camel K 2.0 mode, we had not forgotten to bring new fresh features on version 1. Camel K 1.12.0 has just been released and it brings a lot of new interesting upgrades and features. This may be the last release of Camel K 1 major version as we aim to have a release of Camel K 2 during half of this year.</description>
+    </item>
+    <item>
+      <title>Camel K 2023 Roadmap</title>
+      <link>https://camel.apache.org/blog/2023/02/camel-k-roadmap-2023/</link>
+      <pubDate>Mon, 06 Feb 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/02/camel-k-roadmap-2023/</guid>
+      <description>Signpost png from pngtree.com/&#xA;We&amp;rsquo;re in 2023 since a while (just if nobody has noticed yet&amp;hellip;) and we&amp;rsquo;ve taken the month of January to think about how to move Camel K development forward. We had a very good discussion about the new features we&amp;rsquo;d like to see during this year and this blog is trying to resume those ideas collected. I am going to do my best to resume everybody&amp;rsquo;s comments in a shared view in order to inspire any contributor to understand the direction we&amp;rsquo;re willing to take.</description>
+    </item>
+    <item>
+      <title>Testing Camel K with YAKS</title>
+      <link>https://camel.apache.org/blog/2023/01/camel-k-yaks/</link>
+      <pubDate>Tue, 31 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/camel-k-yaks/</guid>
+      <description>This post describes the steps to test a Camel K integration with YAKS both locally and on the Kubernetes platform.&#xA;What is YAKS? YAKS is an Open Source test automation platform that leverages Behavior Driven Development concepts for running tests locally and on Cloud infrastructure (e.g. Kubernetes or OpenShift). This means that the testing tool is able to run your tests both as local tests and natively on Kubernetes. The framework is specifically designed to verify Serverless and Microservice applications and aims for integration testing with the application under test up and running in a production-like environment.</description>
+    </item>
+    <item>
+      <title>Camel K 2022 roadmap - retrospective</title>
+      <link>https://camel.apache.org/blog/2023/01/ck_2022_results/</link>
+      <pubDate>Mon, 09 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/ck_2022_results/</guid>
+      <description>(c) @TivadarDanka&#xA;2023 has come, and with that it is time to make a little retrospective on the work we have completed in 2022 in Camel K project. We are already collecting ideas to submit to the community for 2023 in order to define the new roadmap. Stay tuned, more is coming shortly&amp;hellip;&#xA;Camel K 2022 roadmap update It&amp;rsquo;s been a long ride and here a short resume of what we accomplished during the last year in Camel K project.</description>
+    </item>
+    <item>
+      <title>Camel K 1.11 release</title>
+      <link>https://camel.apache.org/blog/2022/12/camel-k-release-1.11/</link>
+      <pubDate>Thu, 15 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/camel-k-release-1.11/</guid>
+      <description>Hey Camel K riders, there is a new Camel K 1.11.0 release, there is no big new feature, as we focused on fixing bug, improving current features, updating dependencies and maintain our release cadence, since our 1.10 release, three months ago.&#xA;As usual let&amp;rsquo;s start by acknowledging the tech stack on top of Camel K and the new exciting versions our fellows have baked:&#xA;Apache Camel K Runtime 1.16.0 Apache Camel Quarkus 2.</description>
+    </item>
+    <item>
+      <title>How to test an Integration for Camel K</title>
+      <link>https://camel.apache.org/blog/2022/11/camel-k-jbang/</link>
+      <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/11/camel-k-jbang/</guid>
+      <description>Testing is probably one of those operations we use to repeat most of the time while building any application. Applications in Camel world are no difference. With the advent of Camel JBang, we have a unified place that can be used to perform our testing/fine tuning locally before moving to a higher environment.&#xA;During the last years of development, we have noticed that testing or fine tuning an integration directly connected to a Cloud Native environment can result a bit cumbersome.</description>
+    </item>
+    <item>
+      <title>Camel K CICD</title>
+      <link>https://camel.apache.org/blog/2022/10/camel-k-cicd/</link>
+      <pubDate>Thu, 06 Oct 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/camel-k-cicd/</guid>
+      <description>In Camel K version 10, we&amp;rsquo;ve released the CLI `promote feature that provides Camel K an opinionated way of promoting an Integration through the stages of software development. This feature unlock the possibility to combine Camel K with external tooling and let the user develop according to any automated release process. We always ear about CI/CD (Continuous Integration/Continuous Delivery and/or Deployment), and in this blog we&amp;rsquo;re going to see how to make it for any Camel K integration.</description>
+    </item>
+    <item>
+      <title>Camel K 1.10 release</title>
+      <link>https://camel.apache.org/blog/2022/09/camel-k-release-1-10/</link>
+      <pubDate>Mon, 05 Sep 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/09/camel-k-release-1-10/</guid>
+      <description>It&amp;rsquo;s been a long ride to bring our beloved Camel (K) from 1.9.0 to 1.10.0. We&amp;rsquo;re particularly happy as we had the time to introduce many features and enhancements that we had planned in our 2022 roadmap back at the beginning of the year.&#xA;As usual let&amp;rsquo;s start by acknowledging the tech stack on top of Camel K and the new exciting versions our fellows have baked:&#xA;Apache Camel K Runtime 1.</description>
+    </item>
+    <item>
+      <title>Camel K Operations: monitoring</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</link>
+      <pubDate>Tue, 05 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</guid>
+      <description>Camel K offers a wide list of operations you can execute once your Integration has been deployed (likely in a production environment). When we talk about operations, the most typical question we got is &amp;ldquo;How to monitor a Camel K Integration?&amp;rdquo;. Fortunately, we have all the ingredients needed to let you manage this operation as smooth as possible. I&amp;rsquo;ll walk you through the different tools and configuration needed in this blog post.</description>
+    </item>
+    <item>
+      <title>Optimizing Camel-K Integration Build Time</title>
+      <link>https://camel.apache.org/blog/2022/06/Optimizing-Camel-K-Integration-Build-Time/</link>
+      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/06/Optimizing-Camel-K-Integration-Build-Time/</guid>
+      <description>The Integration is the resource which represents the actual Camel application and building a container image that packages the integration within an elevated cloud platform (be it locally in a Minikube or K8s hosted cluster to Openshift clusters) takes ample amount of time.&#xA;Enhancing the Camel-K Integration build time Our goal was to reduce overhead and improve user experience. We were able to narrow down the major contributors that had a significant influence on the integration build time.</description>
+    </item>
+    <item>
+      <title>Camel K 1.9 release</title>
+      <link>https://camel.apache.org/blog/2022/04/camel-k-release-1-9/</link>
+      <pubDate>Thu, 28 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/04/camel-k-release-1-9/</guid>
+      <description>Attention, attention: time for a new exciting Camel K release! On behalf of Camel K community I am happy to announce the latest 1.9.0. Camel K release.&#xA;As usual let&amp;rsquo;s use this blog to share with you the new stack of exciting technology we&amp;rsquo;ll be using in this version:&#xA;Apache Camel K Runtime 1.13.0 Apache Camel Quarkus 2.8.0 Apache Camel 3.16.0 Apache Camel Kamelets 0.8.0 Thanks to Apache Camel, Camel Quarkus and Kamelet Catalog contributors for the great efforts they&amp;rsquo;ve put in those new releases as well.</description>
+    </item>
+    <item>
+      <title>Camel K 2022 Roadmap</title>
+      <link>https://camel.apache.org/blog/2022/03/camel-k-roadmap-2022/</link>
+      <pubDate>Tue, 01 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/camel-k-roadmap-2022/</guid>
+      <description>Signpost png from pngtree.com/&#xA;During the last weeks we&amp;rsquo;ve been asked questions around the direction we&amp;rsquo;re willing to take on the future development of Camel K. I think it would be good to have some blog in order to let the community understand where our efforts are going. It will be useful for every Camel K user and Camel K developer, as a guide for the future development of the project.</description>
+    </item>
+    <item>
+      <title>Camel K 1.8 release</title>
+      <link>https://camel.apache.org/blog/2022/01/camel-k-release-1-8/</link>
+      <pubDate>Wed, 26 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/01/camel-k-release-1-8/</guid>
+      <description>Image copyright: stockunlimited&#xA;Time for a new release! Time for Camel K 1.8 version. Keep reading to discover what&amp;rsquo;s new in Camel K!&#xA;This is the set of technologies on which Camel K 1.8 is based:&#xA;Apache Camel K Runtime 1.11.0 Apache Camel Quarkus 2.6.0 Apache Camel 3.14.0 Apache Camel Kamelets 0.7.0 As usual, thanks to Apache Camel, Camel Quarkus and Kamelet Catalog contributors for the great efforts they&amp;rsquo;ve put in those new releases as well.</description>
+    </item>
+    <item>
+      <title>Camel meets KEDA</title>
+      <link>https://camel.apache.org/blog/2022/01/camel-keda/</link>
+      <pubDate>Fri, 21 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/01/camel-keda/</guid>
+      <description>NOTE: this post has first appeared in the author&amp;rsquo;s blog.&#xA;KEDA (Kubernetes Event Driven Autoscalers) is a fantastic project (currently CNCF incubating) that provides Kubernetes-based autoscalers to help applications to scale out according to the number of incoming events when they are listening to several kinds of event sources. In Camel K we&amp;rsquo;ve long supported Knative for providing a similar functionality for integrations that are triggered by HTTP calls, so supporting KEDA was something planned since long time, because it enables full autoscaling from a wider collection of sources.</description>
+    </item>
+    <item>
+      <title>Karavan Serverless mode</title>
+      <link>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</link>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</guid>
+      <description>Karavan Serverless What&amp;rsquo;s new in Karavan preview release 0.0.8? In addition to VSCode extension and Standalone application, Karavan could be deployed in Serverless mode alongside Camel-K on Kubernetes. Karavan Serverless gets and applies Integration Custom Resources directly from/to Kubernetes.&#xA;Try Karavan Serverless mode on Minikube Install Minikube&#xA;Install Camel-K&#xA;Install Karavan serverless&#xA;git clone --depth 1 https://github.com/apache/camel-karavan cd camel-karavan/karavan-demo/serverless kubectl apply -k karavan -n default Get Karavan URL&#xA;minikube service camel-karavan --url The output should be like the following:</description>
+    </item>
+    <item>
+      <title>Camel K 1.7 release</title>
+      <link>https://camel.apache.org/blog/2021/11/camel-k-release-1-7/</link>
+      <pubDate>Thu, 18 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/camel-k-release-1-7/</guid>
+      <description>Today we&amp;rsquo;re happy to announce a new major release for Camel K: Camel K 1.7 version, quite a big leap from latest 1.6 we released a couple of months ago. Keep reading to discover what&amp;rsquo;s new in Camel K!&#xA;First of all, let&amp;rsquo;s highlight the set of technologies on which Camel K 1.7 is based:&#xA;Apache Camel K Runtime 1.10.0 Apache Camel Quarkus 2.4.0 Apache Camel 3.12.0 Apache Camel Kamelets 0.</description>
+    </item>
+    <item>
+      <title>Low Code Camel</title>
+      <link>https://camel.apache.org/blog/2021/11/low-code-camel/</link>
+      <pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/low-code-camel/</guid>
+      <description>Apache Camel is a project in constant transformation. Anyone knows that Camel has been able to adapt to any new kinds of protocols and systems that have emerged in the past 15 years. But it&amp;rsquo;s not only that: Camel is also able to adapt to any new ways of dealing with integration problems in the cloud era. While Camel K represented a fundamental shift towards a new approach to cloud-native integration, &amp;ldquo;Kamelets&amp;rdquo; are driving a deeper transformation towards &amp;ldquo;low code&amp;rdquo; development.</description>
+    </item>
+    <item>
+      <title>Managing Kamelet event sources with kn</title>
+      <link>https://camel.apache.org/blog/2021/10/managing-kamelets-with-kn/</link>
+      <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/10/managing-kamelets-with-kn/</guid>
+      <description>The latest community version of the Knative client v0.26 includes a new kn plugin for managing Kamelets as Knative event sources (GitHub: knative-sandbox/kamelet-plugin-source-kamelet). With the new plugin users of the kn tooling can directly list the available Kamelet sources and bind these Kamelets to Knative resources such as brokers, channels or services.&#xA;The Kamelets facilitate a whole new world of event source possibilities allowing users to connect to external services (AWS, Twitter, Telegram, Postgres) as part of Knative eventing.</description>
+    </item>
+    <item>
+      <title>Camel K 1.6 release</title>
+      <link>https://camel.apache.org/blog/2021/09/camel-k-release-1-6/</link>
+      <pubDate>Thu, 09 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/09/camel-k-release-1-6/</guid>
+      <description>We&amp;rsquo;re happy to announce Camel K 1.6 version release. About two months after releasing the previous version (1.5), we&amp;rsquo;re now glad to provide you some new exciting features and a few fixes on bugs that we discovered along the way.&#xA;This is the new set of technologies on which Camel K 1.6 is depending:&#xA;Apache Camel K Runtime 1.9.0 Apache Camel Quarkus 2.2.0 Apache Camel 3.11.1 Apache Camel Kamelets 0.4.0 New Camel Quarkus version We have a set of new exciting dependencies that we leverage.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Tooling support for Apache Camel K 0.0.26</title>
+      <link>https://camel.apache.org/blog/2021/07/VSCode-CamelK-0.0.26/</link>
+      <pubDate>Tue, 27 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/07/VSCode-CamelK-0.0.26/</guid>
+      <description>A new release of VS Code Tooling support for Apache Camel K 0.0.26 is available. It notably includes compatibility with Camel K 1.5.0 and Code Lenses.&#xA;Compatibility with Camel K 1.5.0 The Camel K binary provided by default is now 1.5.0. The commands are using the new API.&#xA;Note: It is working too with Camel K 1.4.0 productized by Red Hat. The needed features were backported.&#xA;Code Lenses A Code Lens is an information provided inside text editor.</description>
+    </item>
+    <item>
+      <title>Camel K 1.5 - New configuration settings</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/</link>
+      <pubDate>Tue, 20 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/</guid>
+      <description>Camel K version 1.5 is out. And with it, a new way of providing configuration and resources to your Integration. We have worked on a deep code refactoring in order to harmonize the existing configuration settings and add new ones to exploit the power of camel-quarkus runtime, which has become the main way to materialize an Integration.&#xA;We added new features that will simplify your developer life. We also added new checks that will give you useful tips when using a feature in a wrong way.</description>
+    </item>
+    <item>
+      <title>Camel K 1.5 release</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-k-release-1-5/</link>
+      <pubDate>Tue, 13 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/07/camel-k-release-1-5/</guid>
+      <description>Camel K 1.5 version is public since a few days. We&amp;rsquo;re proud to announce this new release containing enhancements and fixes. We&amp;rsquo;ve worked hard to fix the most important issues discovered with an eye on stabilization and performances. This new release is based on Camel Quarkus 2.0 and Apache Camel 3.11.&#xA;Let&amp;rsquo;s find out what&amp;rsquo;s new in Camel K 1.5!&#xA;New Camel Quarkus and Quarkus versions Camel Quarkus runtime has become the building block on which the Integration is materialized.</description>
+    </item>
+    <item>
+      <title>Kamelet tooling support for Camel URI</title>
+      <link>https://camel.apache.org/blog/2021/05/KameletToolingSupportInCamelURI/</link>
+      <pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/KameletToolingSupportInCamelURI/</guid>
+      <description>Kamelets (Kamel route snippets) are a new concept introduced in Camel K that allow users to connect to external systems via a simplified interface, hiding all the low level details about how those connections are implemented. There are several ways to consume them. One of them is as standard Camel Components. In this case, completion is provided to fill the template id and the parameter names. It is currently based on a fixed set of Kamelets provided by a snapshot of the kamelet catalog.</description>
+    </item>
+    <item>
+      <title>How to Java debug a Camel K integration in VS Code - second iteration</title>
+      <link>https://camel.apache.org/blog/2021/05/JavaDebuggingInVSCode-iteration2/</link>
+      <pubDate>Mon, 17 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/JavaDebuggingInVSCode-iteration2/</guid>
+      <description>Camel K is providing a new feature to Java debug deployed integrations. Before VS Code Tooling for Apache Camel K 0.0.25, more complex steps were required to leverage the VS Code Java debugging capabilities as explained in this previous blogpost.&#xA;I recorded a video which is following the steps in this blogpost.&#xA;Requirements VS Code Extension Pack for Apache Camel with VS Code Tooling for Apache Camel K 0.0.25+ Camel K deployed to a cluster.</description>
+    </item>
+    <item>
+      <title>New Camel K Logging Features</title>
+      <link>https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/</link>
+      <pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/</guid>
+      <description>New Camel K Logging Features for Camel K 1.5</description>
+    </item>
+    <item>
+      <title>Apache Camel K 1.4.0 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2021/04/camel-k-140-Whatsnew/</link>
+      <pubDate>Tue, 20 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/04/camel-k-140-Whatsnew/</guid>
+      <description>Apache Camel K 1.4.0 has just been released!&#xA;This is a new major release of Camel K with an improved stability over previous versions, but also adding new features that simplify the overall user experience.&#xA;It is based on Camel 3.9.0 and Camel-Quarkus 1.8.1, providing all improvements that they bring, plus much more. In this blog post, we&amp;rsquo;re going to describe the most important changes.&#xA;Embedded Kamelet catalog Camel K 1.</description>
+    </item>
+    <item>
+      <title>Kamelet Catalog</title>
+      <link>https://camel.apache.org/blog/2021/02/Kamelet-Catalog/</link>
+      <pubDate>Wed, 24 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/02/Kamelet-Catalog/</guid>
+      <description>We&amp;rsquo;re starting a new initiative at Apache Camel to create a community-driven catalog of reusable Kamelets (Camel route snipp_ets_, i.e. connectors) that can be used to stream data from/to external systems into any platform powered by Apache Camel.&#xA;The &amp;ldquo;Apache Camel Kamelet catalog&amp;rdquo; is available here and it already contains a collection of useful Kamelets: we would like to extend it with help of the community.&#xA;Kamelets are currently supported out-of-the-box by the Apache Camel K project and we&amp;rsquo;re working to support them also in Camel core, so that they can run eventually in any Apache Camel subproject, like Camel Kafka Connector (but also camel-quarkus, camel-spring-boot, &amp;hellip;).</description>
+    </item>
+    <item>
+      <title>How to Java debug a Camel K integration in VS Code with Camel K 1.3.0</title>
+      <link>https://camel.apache.org/blog/2021/01/DebugInVSCodeWithCamelK1.3.0/</link>
+      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/01/DebugInVSCodeWithCamelK1.3.0/</guid>
+      <description>UPDATED ON 17 May 2021: More recent related content available in this blogpost.&#xA;Camel K 1.3.0 is providing a new feature to Java debug deployed integrations. Even if Camel K 1.3.0 is not fully compatible with VS Code Tooling for Apache Camel K extension, it remains possible to leverage the VS Code Java debugging capabilities.&#xA;I recorded a video which is following the steps in this blogpost. I let you choose your preferred way to discover how to java debug your Camel K integration in VS Code.</description>
+    </item>
+    <item>
+      <title>Camel K 1.2.0 Released</title>
+      <link>https://camel.apache.org/blog/2020/10/camel-k-release-1.2.0/</link>
+      <pubDate>Mon, 12 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/10/camel-k-release-1.2.0/</guid>
+      <description>Apache Camel K 1.2.0 has been released!&#xA;This version introduces some important features that will play an increasingly bigger role in future releases of Camel K.&#xA;Quarkus as default runtime Camel K 1.2.0 uses camel-quarkus 1.1.0 (Quarkus 1.8.0.Final) as runtime, but Quarkus is no longer an optional runtime for Camel K: Quarkus is now the default runtime.&#xA;This means that users no longer need to enable Quarkus explicitly when running their integrations (using kamel run -t quarkus.</description>
+    </item>
+    <item>
+      <title>Camel K 1.0 is here</title>
+      <link>https://camel.apache.org/blog/2020/06/camel-k-release-1.0.0/</link>
+      <pubDate>Mon, 08 Jun 2020 17:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/blog/2020/06/camel-k-release-1.0.0/</guid>
+      <description>Apache Camel K has made a lot of progress since its inception and we&amp;rsquo;re now proud to announce the 1.0 release. We&amp;rsquo;ve been working hard in the past months to add more awesome features to Camel K, but also to improve stability and performance. This post contains a list of cool stuff that you&amp;rsquo;ll find in the 1.0 GA release.&#xA;First of all, if you&amp;rsquo;re living under a rock and it&amp;rsquo;s the first time you hear about Camel K, you can read some introductory blog posts here (1 - introducing camel k, 2 - camel k on knative) or look at the Apache Camel website that contains a Camel K section with a lot of material that is automatically generated from the Github repository.</description>
+    </item>
+  </channel>
+</rss>

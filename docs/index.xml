@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Documentation on Apache Camel</title>
+    <link>https://camel.apache.org/docs/</link>
+    <description>Recent content in Documentation on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="https://camel.apache.org/docs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building</title>
+      <link>https://camel.apache.org/docs/building/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/docs/building/</guid>
+      <description>To learn how to build Camel, please check the documentation specific to the project you want to build:&#xA;Camel Core Camel K Camel Kafka Connector Camel Karaf Camel Quarkus Camel Spring Boot </description>
+    </item>
+    <item>
+      <title>Sources</title>
+      <link>https://camel.apache.org/docs/sources/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/docs/sources/</guid>
+      <description>Using GitHub The source code is mirrored to GitHub, so you can also check out the source code from GitHub, if you are familiar with using GitHub.&#xA;By using GitHub, you can submit pull requests to the project using the standard GitHub way.&#xA;https://github.com/apache/camel/ Checking out from git git clone https://gitbox.apache.org/repos/asf/camel.git Only project developers can commit to git via this method. SSH must be installed on your client machine. Enter your site password when prompted.</description>
+    </item>
+  </channel>
+</rss>

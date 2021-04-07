@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Howtos on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Howtos/</link>
+    <description>Recent content in Howtos on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 02 Apr 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Howtos/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K runtimes with Knative</title>
+      <link>https://camel.apache.org/blog/2024/04/sourceless-ck-springboot/</link>
+      <pubDate>Tue, 02 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/04/sourceless-ck-springboot/</guid>
+      <description>In the last 2.2.0 version release, Camel K added an interesting feature that gave the users the possibility to build their Camel application externally and run via the operator with certain limitations. In this blog we&amp;rsquo;re trying to analyze those limitations and provide some example that will show you how to possibly leverage this feature.&#xA;What is a &amp;ldquo;sourceless&amp;rdquo; Integration? With a great effort of creativity (sarcasm), we have named this feature as &amp;ldquo;sourceless&amp;rdquo; Integration.</description>
+    </item>
+    <item>
+      <title>Camel 4 Data Types</title>
+      <link>https://camel.apache.org/blog/2023/12/camel-data-types/</link>
+      <pubDate>Mon, 04 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel-data-types/</guid>
+      <description>Since Camel 4, users are able to apply data types to their individual Camel routes in order to transform the processed message content in a declarative way. The data type functionality has been added on top of the well-known Transformer EIP that is a part of Apache Camel since the beginning.&#xA;This post gives a short introduction to the concept of data types and continues with several examples that show how to use those data types in Camel for instance as a form of Camel route contracts.</description>
+    </item>
+    <item>
+      <title>Migrating to Apache Camel 4</title>
+      <link>https://camel.apache.org/blog/2023/10/migrate4/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/migrate4/</guid>
+      <description>Apache Camel 4 was released a few months back. This blog post is a general guideline for Camel users that are seeking information how to migrate from Camel 2 or 3.&#xA;We plan to launch a series of blog posts in the near future with more specific details on migrating, such as migrating from Camel Karaf to Camel 4 on Spring Boot or Quarkus.&#xA;Apache Camel 4.0 is a fork of Camel 3.</description>
+    </item>
+    <item>
+      <title>Camel K GitOps</title>
+      <link>https://camel.apache.org/blog/2023/07/camel-k-gitops/</link>
+      <pubDate>Mon, 10 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/07/camel-k-gitops/</guid>
+      <description>In this blog post we&amp;rsquo;ll be talking about GitOps and we&amp;rsquo;ll provide some approach that we hope can help you understand better how you can do such kind of operations togheter with Camel K. As we&amp;rsquo;re talking about processes, all the discussion we&amp;rsquo;re going to provide can be different in each company, environment and according the set of tools you&amp;rsquo;re using.&#xA;The idea of the blog is to show the possibilities offered by Camel K in order to help you understand better how you can adapt your own tools and process to Camel K deployment model.</description>
+    </item>
+    <item>
+      <title>How to configure a Maven proxy in Camel K</title>
+      <link>https://camel.apache.org/blog/2023/06/camel-k-maven-proxy/</link>
+      <pubDate>Mon, 12 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/06/camel-k-maven-proxy/</guid>
+      <description>One of the main effort we&amp;rsquo;re putting in Camel K version 2 is to have a enterprise grade building system. Not that Camel K version 1 has not this capability, but some of the key features are not very explicit. So I thought that, while waiting for Camel K version 2 release, where we&amp;rsquo;re making all this configuration explicit, I can share some tip on how to improve the capacity to build and have a production enterprise ready environment also in Camel K 1.</description>
+    </item>
+    <item>
+      <title>Testing Camel K with YAKS</title>
+      <link>https://camel.apache.org/blog/2023/01/camel-k-yaks/</link>
+      <pubDate>Tue, 31 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/camel-k-yaks/</guid>
+      <description>This post describes the steps to test a Camel K integration with YAKS both locally and on the Kubernetes platform.&#xA;What is YAKS? YAKS is an Open Source test automation platform that leverages Behavior Driven Development concepts for running tests locally and on Cloud infrastructure (e.g. Kubernetes or OpenShift). This means that the testing tool is able to run your tests both as local tests and natively on Kubernetes. The framework is specifically designed to verify Serverless and Microservice applications and aims for integration testing with the application under test up and running in a production-like environment.</description>
+    </item>
+    <item>
+      <title>How to test an Integration for Camel K</title>
+      <link>https://camel.apache.org/blog/2022/11/camel-k-jbang/</link>
+      <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/11/camel-k-jbang/</guid>
+      <description>Testing is probably one of those operations we use to repeat most of the time while building any application. Applications in Camel world are no difference. With the advent of Camel JBang, we have a unified place that can be used to perform our testing/fine tuning locally before moving to a higher environment.&#xA;During the last years of development, we have noticed that testing or fine tuning an integration directly connected to a Cloud Native environment can result a bit cumbersome.</description>
+    </item>
+    <item>
+      <title>Camel K CICD</title>
+      <link>https://camel.apache.org/blog/2022/10/camel-k-cicd/</link>
+      <pubDate>Thu, 06 Oct 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/camel-k-cicd/</guid>
+      <description>In Camel K version 10, we&amp;rsquo;ve released the CLI `promote feature that provides Camel K an opinionated way of promoting an Integration through the stages of software development. This feature unlock the possibility to combine Camel K with external tooling and let the user develop according to any automated release process. We always ear about CI/CD (Continuous Integration/Continuous Delivery and/or Deployment), and in this blog we&amp;rsquo;re going to see how to make it for any Camel K integration.</description>
+    </item>
+    <item>
+      <title>Author-led Training on Apache Camel</title>
+      <link>https://camel.apache.org/blog/2022/08/pluralsight-training/</link>
+      <pubDate>Wed, 31 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/08/pluralsight-training/</guid>
+      <description>Announcing Author-led Training on Camel I&amp;rsquo;m happy to announce the release of a new course on Apache Camel at Pluralsight. The course, &amp;ldquo;Fundamentals of Integration with Apache Camel&amp;rdquo;, by Michael Hoffman, is intended to help you learn the foundations of Camel as well as how to apply it at an enterprise scale. Demonstrations are provided for implementing ETL, Event-Driven Architecture with RabbitMQ and Kafka, and finally, serverless with Camel-K. Please note, Pluralsight is a paid subscription service.</description>
+    </item>
+    <item>
+      <title>Karavan Serverless mode</title>
+      <link>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</link>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</guid>
+      <description>Karavan Serverless What&amp;rsquo;s new in Karavan preview release 0.0.8? In addition to VSCode extension and Standalone application, Karavan could be deployed in Serverless mode alongside Camel-K on Kubernetes. Karavan Serverless gets and applies Integration Custom Resources directly from/to Kubernetes.&#xA;Try Karavan Serverless mode on Minikube Install Minikube&#xA;Install Camel-K&#xA;Install Karavan serverless&#xA;git clone --depth 1 https://github.com/apache/camel-karavan cd camel-karavan/karavan-demo/serverless kubectl apply -k karavan -n default Get Karavan URL&#xA;minikube service camel-karavan --url The output should be like the following:</description>
+    </item>
+    <item>
+      <title>The Camel: mocking more than ever helped by Quarkus friend</title>
+      <link>https://camel.apache.org/blog/2020/10/mocking-beans-with-camel-quarkus/</link>
+      <pubDate>Sat, 31 Oct 2020 17:02:10 +0200</pubDate>
+      <guid>https://camel.apache.org/blog/2020/10/mocking-beans-with-camel-quarkus/</guid>
+      <description>Even implementing a simple stateless micro-service, one could face situations where testing becomes hard. A lot of tools and techniques could help, but having something at hand quickly is very handy. In this post, I&amp;rsquo;m introducing a Quarkus feature that plays nice with Camel in order to mock beans for test purpose.&#xA;Camel and Quarkus together for mocking beans It&amp;rsquo;s long known that Camel offers great support for Java beans. Every time a developer needs custom code, this feature comes to the rescue.</description>
+    </item>
+    <item>
+      <title>Command line utility with Camel Quarkus</title>
+      <link>https://camel.apache.org/blog/2020/07/command-line-utility-with-camel-quarkus/</link>
+      <pubDate>Wed, 15 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/07/command-line-utility-with-camel-quarkus/</guid>
+      <description>Camel and Camel Quarkus are typically used to create integration applications that run as long living processes, a.k.a. daemons or services. In this blog post, we are going to explain a slightly different use case: using Camel Quarkus in programs that exit by themselves after performing some desired tasks.&#xA;Where can this be useful? The enterprise is full of scheduled batch processing. Say, some system exports some sort of reports daily at 4 a.</description>
+    </item>
+  </channel>
+</rss>

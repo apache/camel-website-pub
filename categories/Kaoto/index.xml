@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kaoto on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Kaoto/</link>
+    <description>Recent content in Kaoto on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 20 Sep 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Kaoto/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kaoto v2.2 release</title>
+      <link>https://camel.apache.org/blog/2024/09/kaoto-release-2.2.0/</link>
+      <pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/kaoto-release-2.2.0/</guid>
+      <description>Following the Apache Camel 4.8 release, we are happy to announce the release of Kaoto 2.2 with many improvements to enhance the user experience.&#xA;This time, the theme was to improve the visualizations and the user experience in the Canvas, as well as to provide more flexibility to the users. Read on to discover the key highlights of this release and how they can improve your workflow with Kaoto.</description>
+    </item>
+    <item>
+      <title>Kaoto v2.1 release</title>
+      <link>https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/</guid>
+      <description>After the previous 2.0 GA release, we are happy to announce the release of Kaoto 2.1, packed with exciting new features, bug fixes, and various improvements to enhance the user experience.&#xA;This update introduces the capability to choose your preferred Runtime version among other notable upgrades. Read on to discover the key highlights of this release and how they can improve your workflow with Kaoto. New Features Catalog: Empower users to pick a runtime and specific version to display the right components with their precise configurations.</description>
+    </item>
+    <item>
+      <title>Kaoto v2.0 release</title>
+      <link>https://camel.apache.org/blog/2024/06/kaoto-release-2.0.0/</link>
+      <pubDate>Mon, 10 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/06/kaoto-release-2.0.0/</guid>
+      <description>After previously releasing 3 technical previews, we are thrilled to finally announce the release of Kaoto 2.0, marking the first big release after the project aligned to be much closer to Apache Camel. What is Kaoto? Kaoto, short for Kamel Orchestration Tool, is a low-code and no-code integration designer that allows users to create and edit integrations based on Apache Camel. It is extendable, flexible, and adaptable to various use cases, making it a versatile tool for integration projects.</description>
+    </item>
+    <item>
+      <title>Kaoto v2.0 TP1 release</title>
+      <link>https://camel.apache.org/blog/2024/01/kaoto/</link>
+      <pubDate>Fri, 26 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/01/kaoto/</guid>
+      <description>Introducing Kaoto 2.0 (Tech Preview) - A New Chapter for the Kaoto Project We are thrilled to announce the first tech preview release of Kaoto 2.0, marking a significant milestone in the evolution of the Kaoto project.&#xA;Kaoto is a no-code / low-code editor for Apache Camel integrations, which lets you create and edit your routes in a graphical way.&#xA;Highlights A lot of effort has been put into bringing the Kaoto project closer to Apache Camel.</description>
+    </item>
+  </channel>
+</rss>

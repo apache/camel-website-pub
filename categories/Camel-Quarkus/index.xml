@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Camel Quarkus on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Camel-Quarkus/</link>
+    <description>Recent content in Camel Quarkus on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 26 Sep 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Camel-Quarkus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Quarkus 3.15.0 Released</title>
+      <link>https://camel.apache.org/blog/2024/09/camel-quarkus-release-3.15.0/</link>
+      <pubDate>Thu, 26 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/camel-quarkus-release-3.15.0/</guid>
+      <description>Camel Quarkus 3.15.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.14.0 Released</title>
+      <link>https://camel.apache.org/blog/2024/08/camel-quarkus-release-3.14.0/</link>
+      <pubDate>Wed, 28 Aug 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/08/camel-quarkus-release-3.14.0/</guid>
+      <description>Camel Quarkus 3.14.0 release</description>
+    </item>
+    <item>
+      <title>How to Camel Debug a Camel Quarkus route deployed on OpenShift from VS Code</title>
+      <link>https://camel.apache.org/blog/2024/08/camel-quarkus-remote-debug-to-openshift-from-vscode/</link>
+      <pubDate>Tue, 06 Aug 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/08/camel-quarkus-remote-debug-to-openshift-from-vscode/</guid>
+      <description>How to Camel Debug a Camel Quarkus route deployed on OpenShift from VS Code&#xA;Requirements This how-to will not cover in details the following points, it is assumed that it is installed/preconfigured:&#xA;VS Code with the Extension Pack for Apache Camel with a folder opened Active connection to an OpenShift cluster JBang available on Command-Line Interface (CLI) Maven available on CLI Note that this tutorial was made with the following versions:</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.13.0 Released</title>
+      <link>https://camel.apache.org/blog/2024/07/camel-quarkus-release-3.13.0/</link>
+      <pubDate>Wed, 31 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/camel-quarkus-release-3.13.0/</guid>
+      <description>Camel Quarkus 3.13.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.8.3 LTS Released</title>
+      <link>https://camel.apache.org/blog/2024/07/camel-quarkus-release-3.8.3/</link>
+      <pubDate>Mon, 08 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/camel-quarkus-release-3.8.3/</guid>
+      <description>Camel Quarkus 3.8.3 LTS release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.12.0 Released</title>
+      <link>https://camel.apache.org/blog/2024/06/camel-quarkus-release-3.12.0/</link>
+      <pubDate>Thu, 27 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/06/camel-quarkus-release-3.12.0/</guid>
+      <description>Camel Quarkus 3.12.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.11.0 Released</title>
+      <link>https://camel.apache.org/blog/2024/05/camel-quarkus-release-3.11.0/</link>
+      <pubDate>Thu, 30 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/05/camel-quarkus-release-3.11.0/</guid>
+      <description>Camel Quarkus 3.11.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.8.2 LTS Released</title>
+      <link>https://camel.apache.org/blog/2024/05/camel-quarkus-release-3.8.2/</link>
+      <pubDate>Fri, 03 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/05/camel-quarkus-release-3.8.2/</guid>
+      <description>Camel Quarkus 3.8.2 LTS release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.10.0 Released</title>
+      <link>https://camel.apache.org/blog/2024/04/camel-quarkus-release-3.10.0/</link>
+      <pubDate>Tue, 30 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/04/camel-quarkus-release-3.10.0/</guid>
+      <description>Camel Quarkus 3.10.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.9.0 Released</title>
+      <link>https://camel.apache.org/blog/2024/03/camel-quarkus-release-3.9.0/</link>
+      <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/03/camel-quarkus-release-3.9.0/</guid>
+      <description>Camel Quarkus 3.9.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.8.1 LTS Released</title>
+      <link>https://camel.apache.org/blog/2024/03/camel-quarkus-release-3.8.1/</link>
+      <pubDate>Tue, 19 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/03/camel-quarkus-release-3.8.1/</guid>
+      <description>Camel Quarkus 3.8.1 LTS release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.8.0 LTS Released</title>
+      <link>https://camel.apache.org/blog/2024/02/camel-quarkus-release-3.8.0/</link>
+      <pubDate>Wed, 28 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/02/camel-quarkus-release-3.8.0/</guid>
+      <description>Camel Quarkus 3.8.0 LTS release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.7.0 Released</title>
+      <link>https://camel.apache.org/blog/2024/01/camel-quarkus-release-3.7.0/</link>
+      <pubDate>Wed, 31 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/01/camel-quarkus-release-3.7.0/</guid>
+      <description>Camel Quarkus 3.7.0 release</description>
+    </item>
+    <item>
+      <title>Debugging Camel Quarkus native application in VS Code</title>
+      <link>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</link>
+      <pubDate>Thu, 07 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</guid>
+      <description>Prerequisites Visual Studio Code GraalVM for JDK 20+ Maven 3.9.3+ Extension Pack for Apache Camel by Red Hat Step-by-Step These steps provide a structured approach to generating, setting up, building, and debugging a Camel Quarkus native application within the VS Code environment.&#xA;Generate Example Camel Route in VS Code Workspace Within your clean VS Code workspace, initiate the creation of an exemplary Camel route using the command Camel: Create a Camel Route using Java DSL.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.2.3 Released</title>
+      <link>https://camel.apache.org/blog/2023/12/camel-quarkus-release-3.2.3/</link>
+      <pubDate>Tue, 05 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel-quarkus-release-3.2.3/</guid>
+      <description>Camel Quarkus 3.2.3 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.6.0 Released</title>
+      <link>https://camel.apache.org/blog/2023/11/camel-quarkus-release-3.6.0/</link>
+      <pubDate>Wed, 29 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/11/camel-quarkus-release-3.6.0/</guid>
+      <description>Camel Quarkus 3.6.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.2.2 Released</title>
+      <link>https://camel.apache.org/blog/2023/11/camel-quarkus-release-3.2.2/</link>
+      <pubDate>Wed, 08 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/11/camel-quarkus-release-3.2.2/</guid>
+      <description>The second patch release of the 3.2.x LTS stream bringing Camel 4.0.2</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.5.0 Released</title>
+      <link>https://camel.apache.org/blog/2023/10/camel-quarkus-release-3.5.0/</link>
+      <pubDate>Wed, 25 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/camel-quarkus-release-3.5.0/</guid>
+      <description>Camel Quarkus 3.5.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.2.1 Released</title>
+      <link>https://camel.apache.org/blog/2023/10/camel-quarkus-release-3.2.1/</link>
+      <pubDate>Mon, 09 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/camel-quarkus-release-3.2.1/</guid>
+      <description>The first patch release of the 3.2.x LTS stream bringing Camel 4.0.1</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.4.0 Released</title>
+      <link>https://camel.apache.org/blog/2023/09/camel-quarkus-release-3.4.0/</link>
+      <pubDate>Thu, 21 Sep 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/09/camel-quarkus-release-3.4.0/</guid>
+      <description>Camel Quarkus 3.4.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.2.0 Released</title>
+      <link>https://camel.apache.org/blog/2023/09/camel-quarkus-release-3.2.0/</link>
+      <pubDate>Fri, 15 Sep 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/09/camel-quarkus-release-3.2.0/</guid>
+      <description>Camel Quarkus 3.2.0 is the first final 3.x major release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.0.0-M2 Released</title>
+      <link>https://camel.apache.org/blog/2023/05/camel-quarkus-release-3.0.0-M2/</link>
+      <pubDate>Mon, 29 May 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/05/camel-quarkus-release-3.0.0-M2/</guid>
+      <description>Camel Quarkus 3.0.0-M2 is the second iteration towards a new 3.0.0 major release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.13.3 Released</title>
+      <link>https://camel.apache.org/blog/2023/04/camel-quarkus-release-2.13.3/</link>
+      <pubDate>Mon, 24 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/04/camel-quarkus-release-2.13.3/</guid>
+      <description>Camel Quarkus 2.13.3 brings Quarkus 2.13.7.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.0.0-M1 Released</title>
+      <link>https://camel.apache.org/blog/2023/03/camel-quarkus-release-3.0.0-M1/</link>
+      <pubDate>Fri, 24 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/03/camel-quarkus-release-3.0.0-M1/</guid>
+      <description>Camel Quarkus 3.0.0-M1 is the first iteration towards a new 3.0.0 major release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.16.0 Released</title>
+      <link>https://camel.apache.org/blog/2023/01/camel-quarkus-release-2.16.0/</link>
+      <pubDate>Wed, 25 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/camel-quarkus-release-2.16.0/</guid>
+      <description>Camel Quarkus 2.16.0 brings Quarkus 2.16.0.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.13.2 Released</title>
+      <link>https://camel.apache.org/blog/2023/01/camel-quarkus-release-2.13.2/</link>
+      <pubDate>Tue, 24 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/camel-quarkus-release-2.13.2/</guid>
+      <description>Camel Quarkus 2.13.2 brings Quarkus 2.13.5.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.15.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/12/camel-quarkus-release-2.15.0/</link>
+      <pubDate>Fri, 16 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/camel-quarkus-release-2.15.0/</guid>
+      <description>Camel Quarkus 2.15.0 is released and aligns with Quarkus 2.15.0.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.14.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/11/camel-quarkus-release-2.14.0/</link>
+      <pubDate>Thu, 10 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/11/camel-quarkus-release-2.14.0/</guid>
+      <description>Camel Quarkus 2.14.0 is released and aligns with Camel 3.19.0 and Quarkus 2.14.0.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.13.1 Released</title>
+      <link>https://camel.apache.org/blog/2022/11/camel-quarkus-release-2.13.1/</link>
+      <pubDate>Mon, 07 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/11/camel-quarkus-release-2.13.1/</guid>
+      <description>Camel Quarkus 2.13.1 brings Quarkus 2.7.6.Final, Camel 3.14.4</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.13.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/09/camel-quarkus-release-2.13.0/</link>
+      <pubDate>Thu, 29 Sep 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/09/camel-quarkus-release-2.13.0/</guid>
+      <description>Camel Quarkus 2.13.0 is released and aligns with Camel 3.18.2 and Quarkus 2.13.0.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.12.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/09/camel-quarkus-release-2.12.0/</link>
+      <pubDate>Thu, 01 Sep 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/09/camel-quarkus-release-2.12.0/</guid>
+      <description>Camel Quarkus 2.12.0 is released and aligns with Camel 3.18.1 and Quarkus 2.12.0.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.11.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.11.0/</link>
+      <pubDate>Wed, 27 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.11.0/</guid>
+      <description>Camel Quarkus 2.11.0 is released and aligns with Camel 3.18.0 and Quarkus 2.11.1.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.7.2 Released</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</link>
+      <pubDate>Mon, 04 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</guid>
+      <description>Camel Quarkus 2.7.2 brings Quarkus 2.7.6.Final, Camel 3.14.4</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.10.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/06/camel-quarkus-release-2.10.0/</link>
+      <pubDate>Thu, 23 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/06/camel-quarkus-release-2.10.0/</guid>
+      <description>Camel Quarkus 2.10.0 brings Quarkus 2.10.0.Final, Camel 3.17.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.9.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/05/camel-quarkus-release-2.9.0/</link>
+      <pubDate>Wed, 11 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/05/camel-quarkus-release-2.9.0/</guid>
+      <description>Camel Quarkus 2.9.0 brings Quarkus 2.9.0.Final, Camel 3.16.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.8.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/04/camel-quarkus-release-2.8.0/</link>
+      <pubDate>Tue, 12 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/04/camel-quarkus-release-2.8.0/</guid>
+      <description>Camel Quarkus 2.8.0 brings Quarkus 2.8.0.Final, Camel 3.16.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.7.0 Released</title>
+      <link>https://camel.apache.org/blog/2022/02/camel-quarkus-release-2.7.0/</link>
+      <pubDate>Wed, 02 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/02/camel-quarkus-release-2.7.0/</guid>
+      <description>Camel Quarkus 2.7.0 brings Quarkus 2.7.0.Final, Camel 3.14.1</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.6.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/12/camel-quarkus-release-2.6.0/</link>
+      <pubDate>Thu, 23 Dec 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/12/camel-quarkus-release-2.6.0/</guid>
+      <description>Camel Quarkus 2.6.0 brings Quarkus 2.6, Camel 3.14 and JFR native support</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.5.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/11/camel-quarkus-release-2.5.0/</link>
+      <pubDate>Fri, 26 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/camel-quarkus-release-2.5.0/</guid>
+      <description>Camel Quarkus 2.5.0 brings Quarkus 2.5, Camel 3.13, better test coverage and documentation</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.4.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/11/camel-quarkus-release-2.4.0/</link>
+      <pubDate>Fri, 12 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/camel-quarkus-release-2.4.0/</guid>
+      <description>Camel Quarkus 2.4.0 brings Quarkus 2.4, better test coverage and documentation</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.3.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/10/camel-quarkus-release-2.3.0/</link>
+      <pubDate>Fri, 08 Oct 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/10/camel-quarkus-release-2.3.0/</guid>
+      <description>Camel Quarkus 2.3.0 brings Quarkus 2.3 and better test coverage</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.2.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/09/camel-quarkus-release-2.2.0/</link>
+      <pubDate>Wed, 01 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/09/camel-quarkus-release-2.2.0/</guid>
+      <description>Camel Quarkus 2.2.0 brings Quarkus 2.2, better test coverage and documentation</description>
+    </item>
+    <item>
+      <title>Deploying a Camel Route in AWS Lambda using Quarkus</title>
+      <link>https://camel.apache.org/blog/2021/08/DeployingCamelRouteInAWSLambda/</link>
+      <pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/08/DeployingCamelRouteInAWSLambda/</guid>
+      <description>Do you fancy running camel route as functions in AWS Lambda. Well I did a small Proof Of Concept to test this and the results were interesting. Thanks to the Quarkus and Camel-Quarkus communities for their efforts to make this technically possible.&#xA;You can find the working sample in the Camel Quarkus Examples github repo&#xA;#Deploying a Camel Route in AWS Lambda : A Camel Quarkus example&#xA;This project uses the following framework</description>
+    </item>
+    <item>
+      <title>Getting Further With Camel on Quarkus at Apache CON @HOME 2021</title>
+      <link>https://camel.apache.org/blog/2021/08/GettingFurtherWithCamelQuarkusIntro/</link>
+      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/08/GettingFurtherWithCamelQuarkusIntro/</guid>
+      <description>I will have the pleasure to cast a new demonstration explaining further development tips for Camel Quarkus at Apache CON @HOME 2021. Some details still remain to be polished, however I can already share with you the preview below: This live coding presentation will be split in 2 parts.&#xA;First part where we step into the shoes of a day to day Camel Quarkus developer The idea is really to implement a typical Camel route on a local machine.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.1.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-quarkus-release-2.1.0/</link>
+      <pubDate>Fri, 30 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/07/camel-quarkus-release-2.1.0/</guid>
+      <description>Camel Quarkus 2.1.0 brings Quarkus 2.1.0.Final</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 2.0.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/06/camel-quarkus-release-2.0.0/</link>
+      <pubDate>Wed, 30 Jun 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/06/camel-quarkus-release-2.0.0/</guid>
+      <description>Camel Quarkus 2.0.0 brings Quarkus 2.0.0.Final and Camel 3.11.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.8.1 Released</title>
+      <link>https://camel.apache.org/blog/2021/04/camel-quarkus-release-1.8.1/</link>
+      <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/04/camel-quarkus-release-1.8.1/</guid>
+      <description>The patch release 1.8.1 of Camel Quarkus brings 14 improvements and fixes.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.8.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/03/camel-quarkus-release-1.8.0/</link>
+      <pubDate>Wed, 31 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/03/camel-quarkus-release-1.8.0/</guid>
+      <description>The highlights of Camel Quarkus 1.8.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.7.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/02/camel-quarkus-release-1.7.0/</link>
+      <pubDate>Wed, 24 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/02/camel-quarkus-release-1.7.0/</guid>
+      <description>The highlights of Camel Quarkus 1.7.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus Configuration Tips</title>
+      <link>https://camel.apache.org/blog/2021/01/camel-quarkus-configuration-tips/</link>
+      <pubDate>Fri, 29 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/01/camel-quarkus-configuration-tips/</guid>
+      <description>Some tips related to configuration in Camel Quarkus</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.6.0 Released</title>
+      <link>https://camel.apache.org/blog/2021/01/camel-quarkus-release-1.6.0/</link>
+      <pubDate>Thu, 21 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/01/camel-quarkus-release-1.6.0/</guid>
+      <description>The highlights of Camel Quarkus 1.6.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.5.0 Released</title>
+      <link>https://camel.apache.org/blog/2020/12/camel-quarkus-release-1.5.0/</link>
+      <pubDate>Fri, 18 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/12/camel-quarkus-release-1.5.0/</guid>
+      <description>The highlights of Camel Quarkus 1.5.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.4.0 Released</title>
+      <link>https://camel.apache.org/blog/2020/11/camel-quarkus-release-1.4.0/</link>
+      <pubDate>Mon, 23 Nov 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/11/camel-quarkus-release-1.4.0/</guid>
+      <description>Apache Camel Quarkus 1.4.0 has been released!&#xA;We continue to integrate with the latest Camel and Quarkus releases, whilst adding new features and fixing bugs.&#xA;For a full overview of the changes see the 1.4.0 milestone details.&#xA;Here are some of the highlights.&#xA;Major component upgrades Quarkus 1.10.0 New extensions As ever, we added some new extensions and enhanced existing ones with native support.&#xA;1 new JVM only extension was added:</description>
+    </item>
+    <item>
+      <title>The Camel: mocking more than ever helped by Quarkus friend</title>
+      <link>https://camel.apache.org/blog/2020/10/mocking-beans-with-camel-quarkus/</link>
+      <pubDate>Sat, 31 Oct 2020 17:02:10 +0200</pubDate>
+      <guid>https://camel.apache.org/blog/2020/10/mocking-beans-with-camel-quarkus/</guid>
+      <description>Even implementing a simple stateless micro-service, one could face situations where testing becomes hard. A lot of tools and techniques could help, but having something at hand quickly is very handy. In this post, I&amp;rsquo;m introducing a Quarkus feature that plays nice with Camel in order to mock beans for test purpose.&#xA;Camel and Quarkus together for mocking beans It&amp;rsquo;s long known that Camel offers great support for Java beans. Every time a developer needs custom code, this feature comes to the rescue.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.2.0 and 1.3.0 Released</title>
+      <link>https://camel.apache.org/blog/2020/10/camel-quarkus-release-1.2.0-and-1.3.0/</link>
+      <pubDate>Tue, 20 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/10/camel-quarkus-release-1.2.0-and-1.3.0/</guid>
+      <description>The highlights of Camel Quarkus 1.2.0 and 1.3.0</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.1.0 Released</title>
+      <link>https://camel.apache.org/blog/2020/09/camel-quarkus-release-1.1.0/</link>
+      <pubDate>Mon, 14 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/09/camel-quarkus-release-1.1.0/</guid>
+      <description>Apache Camel Quarkus 1.1.0 has been released!&#xA;We continue to integrate with the latest Camel and Quarkus releases, whilst adding new features and fixing bugs.&#xA;For a full overview of the changes see the 1.1.0 milestone details.&#xA;Here are some of the highlights.&#xA;Major component upgrades Camel 3.5.0 Quarkus 1.8.0 New extensions We added a whopping 174 new extensions in this release! This is because Camel Quarkus will shortly become the only and default runtime in our sibling project Camel K.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.0.1 Released</title>
+      <link>https://camel.apache.org/blog/2020/08/camel-quarkus-release-1.0.1/</link>
+      <pubDate>Mon, 31 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/08/camel-quarkus-release-1.0.1/</guid>
+      <description>Enjoy the first maintenance release in the 1.0.x branch of Camel Quarkus!&#xA;What&amp;rsquo;s inside Highlights:&#xA;Camel 3.4.3 Quarkus 1.7.1 Details:&#xA;All changes since 1.0.0 What&amp;rsquo;s next? Camel Quarkus 1.1.0 will be released shortly after Camel 3.5.0. We will possibly release some candidate releases (CRs) depending on the availability of Camel 3.5.0 CRs.&#xA;To get an idea which new extensions are coming, look for the extensions having since = 1.1.0 in the list of extensions.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.0.0 Released</title>
+      <link>https://camel.apache.org/blog/2020/08/camel-quarkus-release-1.0.0/</link>
+      <pubDate>Mon, 10 Aug 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/08/camel-quarkus-release-1.0.0/</guid>
+      <description>Walk through the highlights of the first stable release: Developer joy, Camel component coverage, Bootstrap, CDI, native mode and more!</description>
+    </item>
+    <item>
+      <title>Command line utility with Camel Quarkus</title>
+      <link>https://camel.apache.org/blog/2020/07/command-line-utility-with-camel-quarkus/</link>
+      <pubDate>Wed, 15 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/07/command-line-utility-with-camel-quarkus/</guid>
+      <description>Camel and Camel Quarkus are typically used to create integration applications that run as long living processes, a.k.a. daemons or services. In this blog post, we are going to explain a slightly different use case: using Camel Quarkus in programs that exit by themselves after performing some desired tasks.&#xA;Where can this be useful? The enterprise is full of scheduled batch processing. Say, some system exports some sort of reports daily at 4 a.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.0.0-CR3 Released</title>
+      <link>https://camel.apache.org/blog/2020/07/camel-quarkus-release-1.0.0-CR3/</link>
+      <pubDate>Tue, 07 Jul 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/07/camel-quarkus-release-1.0.0-CR3/</guid>
+      <description>We are pleased to announce the release 1.0.0-CR3 of Camel Quarkus. Camel Quarkus brings the outstanding integration capabilities of Apache Camel to Quarkus - the toolkit for writing subatomically small and supersonically fast Java, Kotlin and Scala applications.&#xA;Here are some highlights of Camel Quarkus 1.0.0-CR3.&#xA;New extensions The following new extensions were added:&#xA;AWS 2 Athena Component DSL JOLT JTA OpenApi Java Tika Vert.x The following extensions added native mode support:</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 1.0.0-CR2 Released</title>
+      <link>https://camel.apache.org/blog/2020/06/camel-quarkus-release-1.0.0-CR2/</link>
+      <pubDate>Tue, 02 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/06/camel-quarkus-release-1.0.0-CR2/</guid>
+      <description>We are pleased to announce the release 1.0.0-CR2 of Camel Quarkus. Camel Quarkus brings the outstanding integration capabilities of Apache Camel to Quarkus - the toolkit for writing subatomically small and supersonically fast Java, Kotlin and Scala applications.&#xA;So what is new in Camel Quarkus 1.0.0-CR2?&#xA;New bits While we do not have any new extensions this time, the following extensions were promoted from JVM-only to JVM+native:&#xA;REST OpenApi Avro data format MongoDB GridFS Debezium PostgreSQL Debezium MySQL All supported bits can be seen in the List of Camel Quarkus extensions.</description>
+    </item>
+  </channel>
+</rss>

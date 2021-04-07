@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tooling on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Tooling/</link>
+    <description>Recent content in Tooling on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 30 Sep 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Tooling/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Karavan 4.8.0</title>
+      <link>https://camel.apache.org/blog/2024/09/camel-karavan-4.8.0/</link>
+      <pubDate>Mon, 30 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/camel-karavan-4.8.0/</guid>
+      <description>We’re excited to announce the release of Apache Camel Karavan 4.8.0, the ultimate toolkit for efficient and accelerated integration development with Apache Camel. This version is fully synchronized with the latest Apache Camel Framework 4.8.0, ensuring seamless compatibility and allowing you to take advantage of the newest features for an optimized development experience.&#xA;What&amp;rsquo;s New in Apache Camel Karavan 4.8.0? Our latest release brings a slew of improvements aimed at making your integration development more efficient and intuitive.</description>
+    </item>
+    <item>
+      <title>Kaoto v2.2 release</title>
+      <link>https://camel.apache.org/blog/2024/09/kaoto-release-2.2.0/</link>
+      <pubDate>Fri, 20 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/kaoto-release-2.2.0/</guid>
+      <description>Following the Apache Camel 4.8 release, we are happy to announce the release of Kaoto 2.2 with many improvements to enhance the user experience.&#xA;This time, the theme was to improve the visualizations and the user experience in the Canvas, as well as to provide more flexibility to the users. Read on to discover the key highlights of this release and how they can improve your workflow with Kaoto.</description>
+    </item>
+    <item>
+      <title>How to Camel Debug a Camel Spring Boot route deployed on OpenShift from VS Code</title>
+      <link>https://camel.apache.org/blog/2024/08/camel-springboot-remote-debug-to-openshift-from-vscode/</link>
+      <pubDate>Mon, 12 Aug 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/08/camel-springboot-remote-debug-to-openshift-from-vscode/</guid>
+      <description>How to Camel Debug a Camel Spring Boot route deployed on OpenShift from VS Code&#xA;Requirements This how-to will not cover in details the following points, it is assumed that it is installed/preconfigured:&#xA;VS Code with the Extension Pack for Apache Camel with a folder opened Active connection to an OpenShift cluster JBang available on Command-Line Interface (CLI) Maven available on CLI Note that this tutorial was made with the following versions:</description>
+    </item>
+    <item>
+      <title>How to Camel Debug a Camel Quarkus route deployed on OpenShift from VS Code</title>
+      <link>https://camel.apache.org/blog/2024/08/camel-quarkus-remote-debug-to-openshift-from-vscode/</link>
+      <pubDate>Tue, 06 Aug 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/08/camel-quarkus-remote-debug-to-openshift-from-vscode/</guid>
+      <description>How to Camel Debug a Camel Quarkus route deployed on OpenShift from VS Code&#xA;Requirements This how-to will not cover in details the following points, it is assumed that it is installed/preconfigured:&#xA;VS Code with the Extension Pack for Apache Camel with a folder opened Active connection to an OpenShift cluster JBang available on Command-Line Interface (CLI) Maven available on CLI Note that this tutorial was made with the following versions:</description>
+    </item>
+    <item>
+      <title>Karavan 4.7.0: Unleashing Flexibility</title>
+      <link>https://camel.apache.org/blog/2024/07/camel-karavan-4.7.0/</link>
+      <pubDate>Mon, 29 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/camel-karavan-4.7.0/</guid>
+      <description>We&amp;rsquo;re thrilled to announce the release of Apache Camel Karavan 4.7.0, your ultimate toolkit for streamlined and expedited integration development using Apache Camel! This new version is meticulously aligned with the latest Apache Camel Framework 4.7.0, ensuring seamless compatibility and enabling you to leverage the newest features for an enhanced development experience.&#xA;What&amp;rsquo;s New in Apache Camel Karavan 4.7.0? Our latest release brings a slew of improvements aimed at making your integration development more efficient and intuitive.</description>
+    </item>
+    <item>
+      <title>Kaoto v2.1 release</title>
+      <link>https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/</link>
+      <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/</guid>
+      <description>After the previous 2.0 GA release, we are happy to announce the release of Kaoto 2.1, packed with exciting new features, bug fixes, and various improvements to enhance the user experience.&#xA;This update introduces the capability to choose your preferred Runtime version among other notable upgrades. Read on to discover the key highlights of this release and how they can improve your workflow with Kaoto. New Features Catalog: Empower users to pick a runtime and specific version to display the right components with their precise configurations.</description>
+    </item>
+    <item>
+      <title>Kaoto v2.0 release</title>
+      <link>https://camel.apache.org/blog/2024/06/kaoto-release-2.0.0/</link>
+      <pubDate>Mon, 10 Jun 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/06/kaoto-release-2.0.0/</guid>
+      <description>After previously releasing 3 technical previews, we are thrilled to finally announce the release of Kaoto 2.0, marking the first big release after the project aligned to be much closer to Apache Camel. What is Kaoto? Kaoto, short for Kamel Orchestration Tool, is a low-code and no-code integration designer that allows users to create and edit integrations based on Apache Camel. It is extendable, flexible, and adaptable to various use cases, making it a versatile tool for integration projects.</description>
+    </item>
+    <item>
+      <title>Karavan 4.6.0: Hidden gems</title>
+      <link>https://camel.apache.org/blog/2024/05/camel-karavan-4.6.0/</link>
+      <pubDate>Tue, 28 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/05/camel-karavan-4.6.0/</guid>
+      <description>We&amp;rsquo;re announcing the release of Apache Camel Karavan 4.6.0, your ultimate toolkit for streamlined and expedited integration development using Apache Camel!&#xA;This new version is aligned with the latest Apache Camel Framework 4.6.0, ensuring compatibility and leveraging the newest features.&#xA;While this release may seem modest, it introduces a series of subtle enhancements aimed at simplifying the daily tasks of integrators. These improvements, though minor at first glance, are designed to reduce the need for frequent documentation lookups, thereby saving significant time and effort in larger projects.</description>
+    </item>
+    <item>
+      <title>Karavan 4.5.0: Hidden gems</title>
+      <link>https://camel.apache.org/blog/2024/04/camel-karavan-4.5.0/</link>
+      <pubDate>Thu, 18 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/04/camel-karavan-4.5.0/</guid>
+      <description>We&amp;rsquo;re announcing the release of Apache Camel Karavan 4.5.0, your ultimate toolkit for streamlined and expedited integration development using Apache Camel!&#xA;This new version is aligned with the latest Apache Camel Framework 4.5.0, ensuring compatibility and leveraging the newest features.&#xA;While this release may seem modest, it introduces a series of subtle enhancements aimed at simplifying the daily tasks of integrators. These improvements, though minor at first glance, are designed to reduce the need for frequent documentation lookups, thereby saving significant time and effort in larger projects.</description>
+    </item>
+    <item>
+      <title>Karavan 4.4.0: Beauty is variable</title>
+      <link>https://camel.apache.org/blog/2024/03/camel-karavan-4.4.0/</link>
+      <pubDate>Mon, 04 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/03/camel-karavan-4.4.0/</guid>
+      <description>There should have been an AI-generated image of animated camels in a setting vaguely related to the plot of this post. But I think we have already had enough of them ;-)&#xA;We are announcing the Apache Camel Karavan 4.4.0, your one-stop shop for simplified and accelerated integration development with Apache Camel! This release packs a punch with a plethora of improvements, making your integration journey smoother and more efficient than ever.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Apache Camel 0.16.0</title>
+      <link>https://camel.apache.org/blog/2024/03/language-support-release-0.16.0/</link>
+      <pubDate>Mon, 04 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/03/language-support-release-0.16.0/</guid>
+      <description>There is a new release of VS Code extension Language Support for Apache Camel 0.16.0.&#xA;Available at Visual Studio Marketplace and Open VSX Registry.&#xA;This blog post is covering changes made during multiple releases. Latest blog posted changes were for Language Support for Apache Camel v0.9.0. But all listed below is available in latest published v0.16.0 extension release.&#xA;What&amp;rsquo;s changed Embedded Language Server for Apache Camel 1.18.0. Updated default Camel Quarkus Catalog from 2.</description>
+    </item>
+    <item>
+      <title>Kaoto v2.0 TP1 release</title>
+      <link>https://camel.apache.org/blog/2024/01/kaoto/</link>
+      <pubDate>Fri, 26 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/01/kaoto/</guid>
+      <description>Introducing Kaoto 2.0 (Tech Preview) - A New Chapter for the Kaoto Project We are thrilled to announce the first tech preview release of Kaoto 2.0, marking a significant milestone in the evolution of the Kaoto project.&#xA;Kaoto is a no-code / low-code editor for Apache Camel integrations, which lets you create and edit your routes in a graphical way.&#xA;Highlights A lot of effort has been put into bringing the Kaoto project closer to Apache Camel.</description>
+    </item>
+    <item>
+      <title>Hawtio v3 release and Camel CLI</title>
+      <link>https://camel.apache.org/blog/2024/01/hawtio-v3/</link>
+      <pubDate>Fri, 12 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/01/hawtio-v3/</guid>
+      <description>The Hawtio development team is really excited to announce the general availability of Hawtio 3.0.0 to the Apache Camel community!&#xA;Hawtio is a classic tool for managing Java/JVM applications with a web UI. It has long been a core favourite among Java and Camel engineers as a web GUI management console for Java and Camel applications. However, it was based on stale JavaScript frameworks 1, which made further enhancements and maintenance difficult.</description>
+    </item>
+    <item>
+      <title>Debugging Camel Quarkus native application in VS Code</title>
+      <link>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</link>
+      <pubDate>Thu, 07 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</guid>
+      <description>Prerequisites Visual Studio Code GraalVM for JDK 20+ Maven 3.9.3+ Extension Pack for Apache Camel by Red Hat Step-by-Step These steps provide a structured approach to generating, setting up, building, and debugging a Camel Quarkus native application within the VS Code environment.&#xA;Generate Example Camel Route in VS Code Workspace Within your clean VS Code workspace, initiate the creation of an exemplary Camel route using the command Camel: Create a Camel Route using Java DSL.</description>
+    </item>
+    <item>
+      <title>Karavan 4.1.0: We need more Kamelets</title>
+      <link>https://camel.apache.org/blog/2023/11/camel-karavan-4.1.0/</link>
+      <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/11/camel-karavan-4.1.0/</guid>
+      <description>Apache Camel Karavan 4.1.0 has been launched!&#xA;Custom Kamelets Development With this release, Apache Camel Karavan is featuring the addition of Custom Kamelet Developmenet.&#xA;Kamelets allows users to connect to external systems via a simplified interface, hiding all the low level details about how those connections are implemented.&#xA;Furthermore, apart from simplifying connections, Kamelets can package reusable integration logic, making it easily deployable in various projects.&#xA;With this release, Karavan now offers full-fledged Kamelet development support right at your fingertips:</description>
+    </item>
+    <item>
+      <title>New release of VS Code Tooling for Camel K 0.0.36</title>
+      <link>https://camel.apache.org/blog/2023/11/vscode-camelk-release-0.0.36/</link>
+      <pubDate>Tue, 07 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/11/vscode-camelk-release-0.0.36/</guid>
+      <description>There is a new release of VS Code extension Tooling for Apache Camel K 0.0.36. Available at Visual Studio Marketplace and Open VSX Registry.&#xA;The list of new features is short but they are very important and required important rewrite. Here they are:&#xA;Compatibility with Camel K 2 It is the first version compatible with Camel K 2.x stream.&#xA;It is picking by default Camel K 2.1.&#xA;Java standalone file support on Windows The support of standalone Camel Route written with Java DSL is now available (and tested) on Windows.</description>
+    </item>
+    <item>
+      <title>Karavan 4.0.0: One size fits all</title>
+      <link>https://camel.apache.org/blog/2023/09/camel-karavan-4.0.0/</link>
+      <pubDate>Mon, 25 Sep 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/09/camel-karavan-4.0.0/</guid>
+      <description>We are delighted to unveil Apache Camel Karavan 4.0.0. This release introduces a range of new features, enhancements and updates, making integration development more versatile and user-friendly.&#xA;Here are the key highlights of this release:&#xA;Enhanced Platform Support With this release, Apache Camel Karavan expands its compatibility across multiple platforms, offering developers greater flexibility in integration deployment. Karavan 4.0.0 is now compatible with the following platforms:&#xA;Docker (New!) - The primary benefit of utilizing Docker is to reduce infrastructure complexity, thereby speed-up platform utilization and accelerating adoption.</description>
+    </item>
+    <item>
+      <title>Karavan 3.21.0: Developer Performance Accelerator</title>
+      <link>https://camel.apache.org/blog/2023/07/camel-karavan-3.21.0/</link>
+      <pubDate>Tue, 11 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/07/camel-karavan-3.21.0/</guid>
+      <description>In this blog post, we are excited to announce the latest updates and improvements in Apache Camel Karavan. This version brings significant improvements focused on developer productivity in the Karavan Cloud Application.&#xA;Let&amp;rsquo;s dive into the details and explore what&amp;rsquo;s new!&#xA;What&amp;rsquo;s new Karavan CLI To simplify the installation of Karavan Cloud Application on Kubernetes, we have introduced the Karavan CLI. This command-line interface allows you to effortlessly install Karavan and generate resource YAML files.</description>
+    </item>
+    <item>
+      <title>New releases of VS Code Extensions: Language Support 0.9.0, Debug Adapter 0.8.0, Tooling for Camel K 0.0.34</title>
+      <link>https://camel.apache.org/blog/2023/07/multi-release-vscode-extensions/</link>
+      <pubDate>Wed, 05 Jul 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/07/multi-release-vscode-extensions/</guid>
+      <description>There are new releases of 3 VS Code extensions:&#xA;Language support for Apache Camel 0.9.0 Debug Adapter for Apache Camel 0.8.0 Tooling for Apache Camel K 0.0.34 Version upgrades Notable Camel related version upgrades:&#xA;Update Kamelet Catalog from 3.20.4 to 3.21.0 Update default Camel Catalog version from 3.20.5 to 3.21.0 Update default Camel version used for Camel JBang from 3.20.5 to 3.21.0 Update default Camel K runtime version from v1.11.0 to v1.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Camel 0.8.0</title>
+      <link>https://camel.apache.org/blog/2023/06/language-support-0.8.0-release/</link>
+      <pubDate>Wed, 07 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/06/language-support-0.8.0-release/</guid>
+      <description>There is a new release of VS Code extension Language support for Apache Camel 0.8.0&#xA;Available at Visual Studio Marketplace and Open VSX Registry.&#xA;What&amp;rsquo;s changed Minimal version of Visual Studio Code to run this extension is 1.76.0 Deprecate features related to Camel Kafka Connector Update default Camel Catalog version from 3.20.3 to 3.20.5 Update default Camel JBang version from 3.20.3 to 3.20.5 Update Kamelet Catalog from 3.20.2 to 3.20.4 New features Command to create a Camel route with Java DSL and XML DSL With next release there is an addition of new VS Code commands Camel: Create a Camel Route using Java DSL and Camel: Create a Camel Route using XML DSL.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Debug Adapter for Apache Camel 0.7.0</title>
+      <link>https://camel.apache.org/blog/2023/06/debug-adapter-0.7.0-release/</link>
+      <pubDate>Mon, 05 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/06/debug-adapter-0.7.0-release/</guid>
+      <description>There is a new release of VS Code extension Debug Adapter for Apache Camel 0.7.0&#xA;Available at Visual Studio Marketplace and Open VSX Registry.&#xA;What&amp;rsquo;s changed Minimal version of Visual Studio Code to run this extension is 1.76.0 Bump default Camel JBang version to 3.20.5 New features Contextual Menu Added missing Contextual Menu item, to allow users execute Run Camel Application with JBang from right-click on integration file.&#xA;Codelens Added missing Codelens item, to allow users execute Camel Run with JBang from codelenses inside opened integration file.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Debug Adapter for Apache Camel 0.6.0</title>
+      <link>https://camel.apache.org/blog/2023/04/debug-adapter-0.6.0-release/</link>
+      <pubDate>Mon, 24 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/04/debug-adapter-0.6.0-release/</guid>
+      <description>There is a new release of VS Code extension Debug Adapter for Apache Camel 0.6.0&#xA;Available at Visual Studio Marketplace and Open VSX Registry.&#xA;What&amp;rsquo;s changed In this release there is a new label Run Camel Application with JBang and Debug for command to start and attach the Camel debugger.&#xA;Currently all available extension commands are grouped under Camel category&#xA;Camel commands are available only in case there is a valid Camel file opened in editor</description>
+    </item>
+    <item>
+      <title>Karavan 3.20.1 Preview Release</title>
+      <link>https://camel.apache.org/blog/2023/04/camel-karavan-3.20.1/</link>
+      <pubDate>Mon, 10 Apr 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/04/camel-karavan-3.20.1/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.&#xA;New features In this release we continue to make developers&amp;rsquo; lives easy.&#xA;Hybrid Developer Experience Starting from this release, developers can work on the same repository from the Karavan application as well as with Karavan VS Code extension.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Camel 0.7.0</title>
+      <link>https://camel.apache.org/blog/2023/03/language-support-0.7.0-release/</link>
+      <pubDate>Fri, 31 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/03/language-support-0.7.0-release/</guid>
+      <description>There is a new release of VS Code extension Language support for Apache Camel 0.7.0&#xA;Available at Visual Studio Marketplace and Open VSX Registry.&#xA;Camel versions upgrades Update default Camel Catalog version from 3.20.0 to 3.20.3 Update Kamelet Catalog from 0.10.0 to 3.20.2 Update Camel Quarkus Catalog from 2.15.0 to 2.16.0 New features Command to create a Camel route with Yaml DSL With new release there is an addition of a new vscode command Camel: Create a Camel Route using Yaml DSL.</description>
+    </item>
+    <item>
+      <title>Karavan 3.20.0 Preview Release</title>
+      <link>https://camel.apache.org/blog/2023/02/camel-karavan-3.20.0/</link>
+      <pubDate>Sun, 05 Feb 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/02/camel-karavan-3.20.0/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.&#xA;Developers can use Karavan in their local development environment by installing Karavan extension in VS Code or Eclipse Che and run their services using JBang powered camel CLI with camel-main or export and run it with canonical Camel Runtimes.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Camel 0.6.0 and Tooling for Camel K 0.0.33</title>
+      <link>https://camel.apache.org/blog/2023/01/vscode-camelk-0.0.33-language-0.6.0-releases/</link>
+      <pubDate>Tue, 03 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/vscode-camelk-0.0.33-language-0.6.0-releases/</guid>
+      <description>There are new releases of two VS Code extensions:&#xA;VS Code Language support for Apache Camel 0.6.0 Microsoft Marketplace Open VSX Markeptlace VS Code Tooling for Apache Camel K 0.0.33 Microsoft Marketplace Open VSX Marketplace Camel versions upgrades Update default Camel Catalog version from 3.18.2 to 3.20.0 (which is an LTS) Update Kamelet Catalog from 0.9.0 to 0.10.0 Update Camel Quarkus Catalog from 2.13.0 to 2.15.0 Update default Camel K runtime and kamel CLI version to v1.</description>
+    </item>
+    <item>
+      <title>Camel Textual Route debugging in Sublime</title>
+      <link>https://camel.apache.org/blog/2022/10/Sublimedap/</link>
+      <pubDate>Mon, 17 Oct 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/Sublimedap/</guid>
+      <description>Few days before it became easier to provide debug adapter support inside Emacs -See this blog post. It is now time to use Camel Debug Adapter in Sublimecamel-tooling/camel-dap-client-sublime.&#xA;Sublime Debug Adapter client for Apache Camel Prerequisites Camel version 3.18+ camel-debug is available on the classpath have JMX enabled How to configure Sublime In a ~/.config/sublime-text/Packages/Debugger/modules/adapters/camel.py file:&#xA;from __future__ import annotations from ..typecheck import * from .import util from .. import dap from .</description>
+    </item>
+    <item>
+      <title>Karavan Roadmap 2023</title>
+      <link>https://camel.apache.org/blog/2022/10/camel-karavan-roadmap/</link>
+      <pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/camel-karavan-roadmap/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;Apache Camel Karavan is celebrating its first anniversary. October 4, 2021 a new repository was created and the first prototype of Karavan Designer was pushed there.&#xA;Today we have the Karavan VS Code extension and Cloud-native application for Kubernetes/OpenShift.</description>
+    </item>
+    <item>
+      <title>Camel Textual Route debugging in Emacs</title>
+      <link>https://camel.apache.org/blog/2022/10/Emacsdap/</link>
+      <pubDate>Fri, 07 Oct 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/Emacsdap/</guid>
+      <description>A month before it became easier to provide debug adapter support inside Vim -See this blog post. It is now time to use Camel Debug Adapter in Emacscamel-tooling/camel-dap-client-emacs.&#xA;EMACS Debug Adapter client for Apache Camel How to debug Camel with emacs I just got the debug integration for camel in emacs running using (https://emacs-lsp.github.io/dap-mode/page/adding-debug-server/). In order to not forget the config, I decided to quickly compile this readme.&#xA;Prerequisites Camel version 3.</description>
+    </item>
+    <item>
+      <title>New release of VS Code AtlasMap 0.2.1</title>
+      <link>https://camel.apache.org/blog/2022/09/vscode-atlasmap-release-0.2.1/</link>
+      <pubDate>Thu, 22 Sep 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/09/vscode-atlasmap-release-0.2.1/</guid>
+      <description>A new version of VS Code AtlasMap 0.2.1 has been released.&#xA;It brings a new feature to allow custom placement of AtlasMap files in any directory inside the workspace.&#xA;New features Create a new AtlasMap Data Transformation at a custom location inside workspace New addition to the Create AtlasMap file action which allows users to place files in their desired location inside the workspace.&#xA;What&amp;rsquo;s next? Provide your feedback and ideas!</description>
+    </item>
+    <item>
+      <title>Karavan Preview Release 3.18.3</title>
+      <link>https://camel.apache.org/blog/2022/09/camel-karavan-3.18.3/</link>
+      <pubDate>Mon, 19 Sep 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/09/camel-karavan-3.18.3/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;What&amp;rsquo;s new in Karavan 3.18.3?&#xA;SSO/Keycloak integration Karavan cloud-native application comes with three authentication types supported:&#xA;Public Public API. No authentication requires.&#xA;kind: Deployment ... image: ghcr.io/apache/camel-karavan:3.18.3 Basic Authentication with build-in admin user. Password configured in karavan Secrets</description>
+    </item>
+    <item>
+      <title>Camel Textual Route debugging in Vim</title>
+      <link>https://camel.apache.org/blog/2022/09/vimdap/</link>
+      <pubDate>Wed, 14 Sep 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/09/vimdap/</guid>
+      <description>A month before it became easier to provide language support inside Vim, Neovim using coc.nvim -See this blog post. It is now time to use Camel Debug Adapter in Vimcamel-tooling/camel-dap-client-vim.&#xA;VIM Debug Adapter client for Apache Camel I just got the debug integration for camel in vim running using vimspector.&#xA;Install Install the vimspector using vim-plug plugin manager.&#xA;Inside .vimrc file:&#xA;Plug &#39;puremourning/vimspector&#39;&#xA;:PlugInstall&#xA;How to get Camel Debug Adapter server.</description>
+    </item>
+    <item>
+      <title>Karavan Preview Release 3.18</title>
+      <link>https://camel.apache.org/blog/2022/08/camel-karavan-3.18.1/</link>
+      <pubDate>Fri, 19 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/08/camel-karavan-3.18.1/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;Karavan Visual Designer for Integrations supports:&#xA;Enterprise Integration Patterns DSL REST DSL OpenAPI to REST DSL generator Beans and dependencies All Kamelets source/sink/action All Components consumer/producer Integration CRD (*.yaml with kind:Integration) and plain yaml routes Karavan integrates with the following Camel Runtimes:</description>
+    </item>
+    <item>
+      <title>Apache Camel IDEA Plugin 0.8.13 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2022/08/camel-idea-plugin-release-0.8.13/</link>
+      <pubDate>Wed, 17 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/08/camel-idea-plugin-release-0.8.13/</guid>
+      <description>Apache Camel IDEA Plugin 0.8.13 has just been released.&#xA;In this release, we mainly focused on improving the Camel Debugger user experience thanks to a set of improvements that we will cover in this blog post.&#xA;Camel Debugger UX Enable the Camel Debugger seamlessly In this version, in the case of the Standalone/Main and Spring Boot runtimes, it is now possible to enable the Camel Debugger seamlessly when launching a Camel application or a test by using respectively the Java Launcher or the JUnit Launcher as shown below:</description>
+    </item>
+    <item>
+      <title>LSP-camel extension for camells integration with sublime text to enable Apache Camel Language Server</title>
+      <link>https://camel.apache.org/blog/2022/08/sublime-editor/</link>
+      <pubDate>Tue, 16 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/08/sublime-editor/</guid>
+      <description>Two weeks before it became easier to provide language support inside coc.nvim -See this blog post. It is now the case for sublime, thanks to camells.&#xA;It is an extension for camells to enable Apache Camel language server support.&#xA;Camel Language Server Support Demo For instance, code completion for XML with Camel DSL. The capabilities are based on the Camel Language Server.&#xA;For instance, code completion for JAVA with Camel DSL.</description>
+    </item>
+    <item>
+      <title>How to use Camel textual Route Debugger with Unit test in VS Code - Updated with Camel 3.18</title>
+      <link>https://camel.apache.org/blog/2022/07/HowToUseCamelRouteTextualDebuggerWithUnitTest/</link>
+      <pubDate>Tue, 26 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/HowToUseCamelRouteTextualDebuggerWithUnitTest/</guid>
+      <description>Textual debug for Camel routes allows to set breakpoints at Route definition. It is convenient to leverage this feature with a Unit test.&#xA;Last month, I published a blogpost but it had several limitations listed. Most of them have been fixed. This article is an updated version that will explain how it is possible to configure the project and the VS Code IDE for that. Similar functionality should be possible with other IDEs but not covered in this article.</description>
+    </item>
+    <item>
+      <title>Released version 0.4.0 of VS Code Language Support for Apache Camel</title>
+      <link>https://camel.apache.org/blog/2022/07/vscode-camel-language-support-0.4.0-release/</link>
+      <pubDate>Mon, 25 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/vscode-camel-language-support-0.4.0-release/</guid>
+      <description>Release 0.4.0 This new release adds a new completion to add Camel K Modeline to new files. It also brings updates on the default Camel catalogs and brings support for the productized classic Camel catalog.&#xA;Insert Camel K Modeline completion This completion allows you to add Camel K Modeline at the beginning of your Camel files.&#xA;Improved support for the productized version The support for the productized version has been improved.</description>
+    </item>
+    <item>
+      <title>An extension for coc.nvim to enable Apache Camel Language Server</title>
+      <link>https://camel.apache.org/blog/2022/07/coc-nvim-camel-lsp/</link>
+      <pubDate>Fri, 15 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/coc-nvim-camel-lsp/</guid>
+      <description>Two weeks before it became easier to provide language support inside emacs -See this blog post. It is now the case for vim, thanks to coc.camel.&#xA;It is an extension for coc.nvim to enable Apache Camel language server support.&#xA;Camel Language Server Support Demo For instance, code completion for XML with Camel DSL. The capabilities are based on the Camel Language Server.&#xA;For instance, code completion for JAVA with Camel DSL.</description>
+    </item>
+    <item>
+      <title>Camel Designer&#39;s new mapping system</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-designer-jbang/</link>
+      <pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/camel-designer-jbang/</guid>
+      <description>\&#xA;A new input mapping system has been added to Camel Designer. But what that even means ?!?&#xA;Well, better to be seen, but if explained, it&amp;rsquo;s an effort to provide a more intuitive configuration system for Camel route steps. On one hand, it simplifies the view of a route by compacting route steps, and on the other hand, it provides an easy drag-and-drop mapping ability to map process variables to activity inputs.</description>
+    </item>
+    <item>
+      <title>How to use Camel textual Route Debugger with Unit test in VS Code</title>
+      <link>https://camel.apache.org/blog/2022/06/HowToUseCamelRouteTextualDebuggerWithUnitTest/</link>
+      <pubDate>Wed, 22 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/06/HowToUseCamelRouteTextualDebuggerWithUnitTest/</guid>
+      <description>EDIT: I recommend to read this new article if using Camel 3.18+.&#xA;Textual debug for Camel routes allows to set breakpoints at Route definition. It is convenient to leverage this feature with a Unit test.&#xA;This article will explain how it is possible to configure the project and the VS Code IDE for that. Similar functionality should be possible with other IDEs but not covered in this article.&#xA;Requirements In this article, we will focus on using VS Code IDE.</description>
+    </item>
+    <item>
+      <title>Client implementation of the Apache Camel Language Server Protocol for Emacs</title>
+      <link>https://camel.apache.org/blog/2022/06/emacs/</link>
+      <pubDate>Thu, 09 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/06/emacs/</guid>
+      <description>Text Editing capabilities of Camel URI with Camel XML DSL The capabilities are based on the Camel Language Server.&#xA;For instance, code completion of Camel URI with Camel XML Dsl:&#xA;Diagnostic of Camel URI attribute value with Camel XML Dsl:&#xA;Diagnostic of Camel URI attribute name with Camel XML Dsl:&#xA;How to configure Emacs? For the convenience to have all the Emacs configuration in one directory, should use ~/.emacs.d/init.el In a ~/.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Debug Adapter for Apache Camel 0.3.0</title>
+      <link>https://camel.apache.org/blog/2022/05/release-vscode-debug-adapter-0.3.0/</link>
+      <pubDate>Tue, 17 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/05/release-vscode-debug-adapter-0.3.0/</guid>
+      <description>Textual debug for Camel routes allows to set breakpoints at Route definition.&#xA;The new release of VS Code Debug Adapter for Apache Camel 0.3.0 improves guidance to start the debug session and provide support for conditional breakpoint.&#xA;Guidance to start the debug session improvements Codelens and contextual menu In previous release, the command Start camel Application with JBang and debug was provided in the command palette. This command is now also available closer in the User UI.</description>
+    </item>
+    <item>
+      <title>How to start a Camel Quarkus application with Textual debug for Camel routes in VS Code with a single launch configuration</title>
+      <link>https://camel.apache.org/blog/2022/05/start-camel-quarkus-application-with-camel-textual-debug-in-vscode/</link>
+      <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/05/start-camel-quarkus-application-with-camel-textual-debug-in-vscode/</guid>
+      <description>Textual debug for Camel routes allows to set breakpoints at Route definition.&#xA;I previously blogged how to use Camel Route textual debugger targeting Camel Main or Camel JBang. In this blogpost, I will describe the process for a Camel Quarkus application. I&amp;rsquo;m using VS Code as example but similar pattern is possible in other IDEs.&#xA;Please note that it is working only with Quarkus in JVM mode and not Native mode.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Debug Adapter for Apache Camel 0.2.0</title>
+      <link>https://camel.apache.org/blog/2022/05/vscode-extension-release-debug-0.2.0/</link>
+      <pubDate>Wed, 04 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/05/vscode-extension-release-debug-0.2.0/</guid>
+      <description>Textual debug for Camel routes allows to set breakpoints at Route definition.&#xA;The new release of VS Code Debug Adapter for Apache Camel 0.2.0 improves guidance to start the debug session and provide a JBang-based command to start Camel application and attach Camel Textual debugger in a single action.&#xA;Command to start with Jbang and Camel debug The command Start camel Application with JBang and debug allows a straightforward &amp;ldquo;start and debug&amp;rdquo; with a single action for simple cases.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language support for Apache Camel 0.3.0</title>
+      <link>https://camel.apache.org/blog/2022/05/vscode-extensions-release-language-0.3.0/</link>
+      <pubDate>Tue, 03 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/05/vscode-extensions-release-language-0.3.0/</guid>
+      <description>Release 0.3.0 This new release contains the following upgrades:&#xA;Camel Quarkus Catalog from 2.7.0 to 2.8.0 Default Camel Catalog version from 3.15.0 to 3.16.0 Kamelet Catalog from 0.7.1 to 0.8.0 What&amp;rsquo;s next You can submit your enhancement requests on the VS Code Language support for Apache Camel or in the Red Hat Jira.</description>
+    </item>
+    <item>
+      <title>Start a Camel Main application with Textual debug for Camel routes in Eclipse from a single launch configuration</title>
+      <link>https://camel.apache.org/blog/2022/04/start-camel-application-with-camel-textual-debug-in-eclipse/</link>
+      <pubDate>Tue, 19 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/04/start-camel-application-with-camel-textual-debug-in-eclipse/</guid>
+      <description>Textual debug for Camel routes allows to set breakpoints at Route definition.&#xA;The Debug Adapter for Apache Camel latest release 0.1.1 supports JMX connection. It opens the possibility to start a Camel application with Camel textual route debugging activated in a single Launch Group configuration. I blogged how to achieve similar functionalities in VS Code last week. Let&amp;rsquo;s see the different configurations required to achieve it with Eclipse Debug Adapter for Camel client.</description>
+    </item>
+    <item>
+      <title>VS Code AtlasMap integrated in Camel-Designer</title>
+      <link>https://camel.apache.org/blog/2022/04/camel-designer-atlasmap/</link>
+      <pubDate>Tue, 19 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/04/camel-designer-atlasmap/</guid>
+      <description>\&#xA;The latest release of the VS Code Camel Designer extension integrates VS Code AtlasMap. Explore how both can help you to accelerate productivity in Camel.&#xA;Two visual tools for Camel integrated in VS Code \&#xA;AtlasMap is a great visual data mapping tool that enables users to define data transformations that Camel can process at runtime.&#xA;The 0.1.0 release of the VSCode extension for AtlasMap introduced a series of improvements that allowed a better user experience when creating and editing AtlasMap definitions.</description>
+    </item>
+    <item>
+      <title>Karavan Designer Preview Release 0.0.14</title>
+      <link>https://camel.apache.org/blog/2022/04/camel-karavan-0.0.14/</link>
+      <pubDate>Mon, 18 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/04/camel-karavan-0.0.14/</guid>
+      <description>What&amp;rsquo;s going on with Apache Camel Karavan?&#xA;Karavan is progressing! The following cool stuff was done since the last post:&#xA;REST API With the aid of the new clean REST DSL in Camel 3.16 Karavan can help to design REST API. Starting from version 0.0.13 Karavan requires Camel 3.16+ runtime&#xA;User Interface improvements New theme Karavan comes with the new theme aligned to VSCode build-in theme.&#xA;New VS Code view Karavan comes with the new VS Code view to manage integrations.</description>
+    </item>
+    <item>
+      <title>Start a Camel Main application with Textual debug for Camel routes in VS Code with a single launch configuration</title>
+      <link>https://camel.apache.org/blog/2022/04/start-camel-application-with-camel-textual-debug-in-vscode/</link>
+      <pubDate>Thu, 14 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/04/start-camel-application-with-camel-textual-debug-in-vscode/</guid>
+      <description>Textual debug for Camel routes allows to set breakpoints at Route definition.&#xA;The Debug Adapter for Apache Camel VS Code extension latest release 0.1.1 supports JMX connection. It opens the possibility to start a Camel application with Camel textual route debugging activated in a single VS Code launch configuration. I thought it would be a five minutes effort but it was a several hours search to configure a not-yet-perfect solution. I hope that sharing the current state will save you few hours!</description>
+    </item>
+    <item>
+      <title>Textual debug for Camel routes in VS Code release 0.1.1</title>
+      <link>https://camel.apache.org/blog/2022/04/camel-textual-debug-0.1.0/</link>
+      <pubDate>Fri, 08 Apr 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/04/camel-textual-debug-0.1.0/</guid>
+      <description>Textual debug for Camel routes allows to set breakpoints at Route definition. A first release based on Debug Adapter Server for Apache Camel has been announced last month. The new release 0.1.1 is coming with two new features: the support of JMX connection and the update of variable values.&#xA;New Features JMX Connection support It might sound very technical but it has a tremendous functional impact. It simplifies a lot the launch of the debugger as there is no more the requirement to grab the pid.</description>
+    </item>
+    <item>
+      <title>Beans and dependencies in Karavan</title>
+      <link>https://camel.apache.org/blog/2022/02/camel-karavan-0.0.12/</link>
+      <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/02/camel-karavan-0.0.12/</guid>
+      <description>Beans and dependencies New Karavan preview release comes with Beans and dependencies configuration. Get it as a Standalone application or install VS Code extension from the Marketplace.&#xA;Bean Configuration New Beans tab to configure Beans:&#xA;Dependencies Configuration Configure Dependencies to access Beans outside Camel:&#xA;DSL Bean mapping How to map Bean to DSL: just select from the list.&#xA;Component Bean mapping How to map Bean to Component: just select from the list.</description>
+    </item>
+    <item>
+      <title>VS Code Language support for Camel release 0.1.5</title>
+      <link>https://camel.apache.org/blog/2022/02/vscode-camel-language-0.1.5-release/</link>
+      <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/02/vscode-camel-language-0.1.5-release/</guid>
+      <description>A new release of VS Code Language support for Camel is available! This is the version 0.1.5. It comes with improvement in connected mode and several Camel versions upgrades.&#xA;Connected mode hint For components which proposes connected mode, there is now a little hint on hover to help user to know that more completion is available with a configured connection to an instance.&#xA;For reminder, the components leveraging this kind of feature are kafka, knative and kubernetes-*.</description>
+    </item>
+    <item>
+      <title>Textual debug for Camel routes in VS Code, Eclipse Desktop and more</title>
+      <link>https://camel.apache.org/blog/2022/02/camel-textual-debug-eclipse-vscode/</link>
+      <pubDate>Wed, 09 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/02/camel-textual-debug-eclipse-vscode/</guid>
+      <description>Textual debug for Camel routes was announced in IntelliJ few weeks ago. It is now available in VS Code and Eclipse desktop with dedicated extensions.&#xA;Scope The Camel Textual Route debugger is working locally. The debugger must be running on the same machine than the Camel application to debug. It is attaching to a running Camel route written in Java using the PID (Other Camel DSLs should work but have not been tested yet).</description>
+    </item>
+    <item>
+      <title>Karavan Designer Preview Release 0.0.10</title>
+      <link>https://camel.apache.org/blog/2022/02/camel-karavan-0.0.10/</link>
+      <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/02/camel-karavan-0.0.10/</guid>
+      <description>An important milestone in Apache Apache Camel Karavan Designer development.&#xA;New Look and Feel Current release comes with new redesigned interface for Standalone application and VS Code extension (light and dark mode).&#xA;Connectivity Camel Kamelets 0.7.0 Camel Components 3.15 New supported DSLs We continue to add more DSL elements. New in this release:&#xA;Do Try - Do Catch - Do Finally Circuit Breaker Do Switch (new in Camel 3.15) Dynamic Router (new in Camel 3.</description>
+    </item>
+    <item>
+      <title>Camel Debugger For IntelliJ</title>
+      <link>https://camel.apache.org/blog/2021/12/camelDebuggerForIntelliJ/</link>
+      <pubDate>Wed, 29 Dec 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/12/camelDebuggerForIntelliJ/</guid>
+      <description>The recent release of the Apache Camel plugin for IntelliJ version v0.8.0 includes the first tech preview of the Camel Route Debugger. The debugger is currently available on Maven-based Camel projects and routes defined in the XML DSL. The minimum recommended Camel version is 3.15.0-SNAPSHOT (older versions also may work, but the functionality is limited).&#xA;Features The first tech preview includes the following features:&#xA;Breakpoints inside Camel routes in XML DSL;</description>
+    </item>
+    <item>
+      <title>How to have textual Yaml editing support in VS Code for Camel Yaml files</title>
+      <link>https://camel.apache.org/blog/2021/12/yamlTagSupportInVSCode/</link>
+      <pubDate>Wed, 08 Dec 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/12/yamlTagSupportInVSCode/</guid>
+      <description>Camel provides possibilities to define Integrations using Yaml language. It is the language often used for people dealing with Kubernetes/OpenShift. This language doesn&amp;rsquo;t have the same maturity than xml or java but there are tooling that can help a lot. Given that yaml specification doesn&amp;rsquo;t allow self-described yaml metadata, several conventions are introduced to provide edition support of Yaml files. This article will focus on Camel Yaml files, both plain Yaml and Custom Resource Definitions (CRD) inside VS Code.</description>
+    </item>
+    <item>
+      <title>New releases of VS Code Language Support for Apache Camel 0.1.2 and Tooling for Apache Camel K 0.0.28</title>
+      <link>https://camel.apache.org/blog/2021/12/vscode-releases/</link>
+      <pubDate>Mon, 06 Dec 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/12/vscode-releases/</guid>
+      <description>New releases of VS Code Language support for Apache Camel 0.1.2 and VS Code Tooling for Apache Camel K 0.0.28 are available. It includes several version upgrades.&#xA;Version upgrades The default Kamel binary used has been upgraded from 1.6.0 to 1.7.0.&#xA;The language support contains these upgrades:&#xA;Default Camel Catalog version from 3.12.0 to 3.13.0 Kamelet Catalog from 0.4.0 to 0.5.0 Camel Quarkus Catalog from 2.3.0 to 2.4.0 Camel K trait Catalog from 1.</description>
+    </item>
+    <item>
+      <title>New release of VS Code AtlasMap 0.1.0</title>
+      <link>https://camel.apache.org/blog/2021/11/vscode-atlasmap-release-0.1.0/</link>
+      <pubDate>Fri, 26 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/vscode-atlasmap-release-0.1.0/</guid>
+      <description>A new release of VS Code AtlasMap 0.1.0 is available. It includes a new development flow closer to a classical VS Code development flow.&#xA;New features Create a new AtlasMap Data Transformation A new command is available in the command palette to create a new AtlasMap Data Transformation.&#xA;Open AtlasMap UI for AtlasMap Data Transformation from workspace It is now possible to click on an *.adm file from the VS Code explorer.</description>
+    </item>
+    <item>
+      <title>Karavan Serverless mode</title>
+      <link>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</link>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</guid>
+      <description>Karavan Serverless What&amp;rsquo;s new in Karavan preview release 0.0.8? In addition to VSCode extension and Standalone application, Karavan could be deployed in Serverless mode alongside Camel-K on Kubernetes. Karavan Serverless gets and applies Integration Custom Resources directly from/to Kubernetes.&#xA;Try Karavan Serverless mode on Minikube Install Minikube&#xA;Install Camel-K&#xA;Install Karavan serverless&#xA;git clone --depth 1 https://github.com/apache/camel-karavan cd camel-karavan/karavan-demo/serverless kubectl apply -k karavan -n default Get Karavan URL&#xA;minikube service camel-karavan --url The output should be like the following:</description>
+    </item>
+    <item>
+      <title>Low Code Camel</title>
+      <link>https://camel.apache.org/blog/2021/11/low-code-camel/</link>
+      <pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/low-code-camel/</guid>
+      <description>Apache Camel is a project in constant transformation. Anyone knows that Camel has been able to adapt to any new kinds of protocols and systems that have emerged in the past 15 years. But it&amp;rsquo;s not only that: Camel is also able to adapt to any new ways of dealing with integration problems in the cloud era. While Camel K represented a fundamental shift towards a new approach to cloud-native integration, &amp;ldquo;Kamelets&amp;rdquo; are driving a deeper transformation towards &amp;ldquo;low code&amp;rdquo; development.</description>
+    </item>
+    <item>
+      <title>Karavan Designer VS Code extension Preview Release</title>
+      <link>https://camel.apache.org/blog/2021/10/camel-karavan-preview-release/</link>
+      <pubDate>Thu, 28 Oct 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/10/camel-karavan-preview-release/</guid>
+      <description>The first preview release of Apache Camel Karavan Designer VS Code extension is available.&#xA;Karavan: Integration Designer for Apache Camel The motivation behind the creation of the Karavan Designer was to make the Apache Camel framework accessible for Non-Java Developers and Citizen-Integrators. Karavan simplifies integration with Camel-K: just create an integration pipeline using visual builder and deploy generated resources to Kubernetes or Openshift.&#xA;Integration demo on Youtube: from design with Karavan to running on Openshift in 5 minutes.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Apache Camel 0.1.0</title>
+      <link>https://camel.apache.org/blog/2021/10/vscode-camel-language-support-release-0.1.0/</link>
+      <pubDate>Tue, 19 Oct 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/10/vscode-camel-language-support-release-0.1.0/</guid>
+      <description>A new release of VS Code Language Support for Apache Camel 0.1.0 is available. It includes upgrade of Camel catalogs, removal of Java 8 as runtime for embedded Language Server, connected mode completion for Kubernetes and Knative and folding of choice in Java.&#xA;Removal of Java 8 as runtime for embedded Language Server The removal of Java 8 as runtime for embedded Language Server allowed the upgrade of Camel Quarkus Catalog and some test dependencies.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Apache Camel 0.0.35</title>
+      <link>https://camel.apache.org/blog/2021/09/vscode-camel-language-support-release-0.0.35/</link>
+      <pubDate>Thu, 02 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/09/vscode-camel-language-support-release-0.0.35/</guid>
+      <description>A new release of VS Code Language Support for Apache Camel 0.0.35 is available. It includes upgrade of default Camel catalog, deprecation of Java 8 as runtime for embedded Language Server, folding of Camel routes in Java editor, status bar improvement.&#xA;Camel version upgrade The default Camel catalog has been upgraded from 3.11.0 to 3.11.1.&#xA;Deprecation of Java 8 as runtime for embedded Language Server The deprecation of Java 8 as runtime for embedded Language Server will allow to upgrade Camel Quarkus Catalog in upcoming release.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Tooling support for Apache Camel K 0.0.26</title>
+      <link>https://camel.apache.org/blog/2021/07/VSCode-CamelK-0.0.26/</link>
+      <pubDate>Tue, 27 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/07/VSCode-CamelK-0.0.26/</guid>
+      <description>A new release of VS Code Tooling support for Apache Camel K 0.0.26 is available. It notably includes compatibility with Camel K 1.5.0 and Code Lenses.&#xA;Compatibility with Camel K 1.5.0 The Camel K binary provided by default is now 1.5.0. The commands are using the new API.&#xA;Note: It is working too with Camel K 1.4.0 productized by Red Hat. The needed features were backported.&#xA;Code Lenses A Code Lens is an information provided inside text editor.</description>
+    </item>
+    <item>
+      <title>Kamelet tooling support for Camel URI</title>
+      <link>https://camel.apache.org/blog/2021/05/KameletToolingSupportInCamelURI/</link>
+      <pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/KameletToolingSupportInCamelURI/</guid>
+      <description>Kamelets (Kamel route snippets) are a new concept introduced in Camel K that allow users to connect to external systems via a simplified interface, hiding all the low level details about how those connections are implemented. There are several ways to consume them. One of them is as standard Camel Components. In this case, completion is provided to fill the template id and the parameter names. It is currently based on a fixed set of Kamelets provided by a snapshot of the kamelet catalog.</description>
+    </item>
+    <item>
+      <title>How to Java debug a Camel K integration in VS Code - second iteration</title>
+      <link>https://camel.apache.org/blog/2021/05/JavaDebuggingInVSCode-iteration2/</link>
+      <pubDate>Mon, 17 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/JavaDebuggingInVSCode-iteration2/</guid>
+      <description>Camel K is providing a new feature to Java debug deployed integrations. Before VS Code Tooling for Apache Camel K 0.0.25, more complex steps were required to leverage the VS Code Java debugging capabilities as explained in this previous blogpost.&#xA;I recorded a video which is following the steps in this blogpost.&#xA;Requirements VS Code Extension Pack for Apache Camel with VS Code Tooling for Apache Camel K 0.0.25+ Camel K deployed to a cluster.</description>
+    </item>
+    <item>
+      <title>Diagramming Camel routes with PlantUML</title>
+      <link>https://camel.apache.org/blog/2021/05/plantuml-diagram/</link>
+      <pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/plantuml-diagram/</guid>
+      <description>Hello Camel riders!&#xA;I created a tool which allows to draw a PlantUML activity diagram from a running Camel context (not at design time).&#xA;The above image shows what kind of diagram you can expect.&#xA;I find it useful when I need to have a overall view of interactions between all the routes and endpoints, or to have a visual representation for better understanding and documentation.&#xA;You can find all the details on the public GitHub repository.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Apache Camel 0.0.32 and VS Code Tooling for Camel K 0.0.24</title>
+      <link>https://camel.apache.org/blog/2021/05/vscode-camel-release/</link>
+      <pubDate>Mon, 03 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/vscode-camel-release/</guid>
+      <description>A new release of VS Code Language Support for Apache Camel 0.0.32 is available. It includes upgrade of Camel catalogs, connected mode for Kafka topic completion and dependencies support for Camel K Java integration file.&#xA;Camel version upgrades The default Camel catalog has been upgraded from 3.8.0 to 3.9.0.&#xA;The Camel Quarkus catalog has been upgraded from 1.7.0 to 1.8.1.&#xA;The Camel Kafka Connector catalog has been upgraded from 0.8.0 to 0.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Apache Camel 0.0.31</title>
+      <link>https://camel.apache.org/blog/2021/03/VSCode-LanguageSupport-0.0.31/</link>
+      <pubDate>Tue, 02 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/03/VSCode-LanguageSupport-0.0.31/</guid>
+      <description>A new release of VS Code Language Support for Apache Camel 0.0.31 is available. It includes upgrade of Camel catalogs and catalog runtime provider selection setting.&#xA;Camel Catalogs upgrades The default Camel catalog has been upgraded from 3.7.0 to 3.8.0.&#xA;The Camel Kafka Connector catalog has been upgraded from 0.7.0 to 0.8.0.&#xA;The Camel Quarkus catalog is provided with version 1.7.0.&#xA;Runtime provider setting Depending on the runtime used, the Camel components can have subtle differences, or even not be compatible.</description>
+    </item>
+    <item>
+      <title>How to Java debug a Camel K integration in VS Code with Camel K 1.3.0</title>
+      <link>https://camel.apache.org/blog/2021/01/DebugInVSCodeWithCamelK1.3.0/</link>
+      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/01/DebugInVSCodeWithCamelK1.3.0/</guid>
+      <description>UPDATED ON 17 May 2021: More recent related content available in this blogpost.&#xA;Camel K 1.3.0 is providing a new feature to Java debug deployed integrations. Even if Camel K 1.3.0 is not fully compatible with VS Code Tooling for Apache Camel K extension, it remains possible to leverage the VS Code Java debugging capabilities.&#xA;I recorded a video which is following the steps in this blogpost. I let you choose your preferred way to discover how to java debug your Camel K integration in VS Code.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Apache Camel 0.0.30</title>
+      <link>https://camel.apache.org/blog/2021/01/VSCode-LanguageSupport-0.0.30/</link>
+      <pubDate>Tue, 05 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/01/VSCode-LanguageSupport-0.0.30/</guid>
+      <description>A new release of VS Code Language Support for Apache Camel 0.0.30 is available. It includes upgrade of Camel catalogs and Camel Kafka Connector related improvements.&#xA;Camel Catalogs upgrades The default Camel catalog has been upgraded from 3.6.0 to 3.7.0.&#xA;The Camel Kafka Connector catalog has been upgraded from 0.6.0 to 0.7.0.&#xA;Camel Kafka Connector related improvements Completion for Basic Configuration Some properties are not part of the Camel catalog material, neither of the Kafka Connect framework and applies to all Camel Kafka connectors.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Apache Camel 0.0.29</title>
+      <link>https://camel.apache.org/blog/2020/12/VSCode-LanguageSupport-0.0.29/</link>
+      <pubDate>Thu, 03 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/12/VSCode-LanguageSupport-0.0.29/</guid>
+      <description>A new release of VS Code Language Support for Apache Camel 0.0.29 is available. It includes an interesting set of new features and two important bugfixes.&#xA;API based components support Camel has several API based components which are source code generated from external API. In 3.6.0, finer grained information is available through additional metadata (Camel catalog). This release is leveraging these metadata to propose improved completion, documentation and validation for these APU based components.</description>
+    </item>
+    <item>
+      <title>New release of VS Code Language Support for Apache Camel 0.0.28</title>
+      <link>https://camel.apache.org/blog/2020/10/VSCode-LanguageSupport-0.0.28/</link>
+      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/10/VSCode-LanguageSupport-0.0.28/</guid>
+      <description>A new release of VS Code Language Support for Apache Camel 0.0.28 is available. It includes an interesting set of new features.&#xA;Camel 3.6.0 upgrade Camel 3.6.0 catalog is now provided by default. The 3.6.0 version is also leveraged internally.&#xA;Camel Kafka Connector Properties file improvements Previously, the support for Camel Kafka Connector was limited to Camel URI in camel.(sink|source).url property value. This release adds support for the list of properties provided for each parameter instead of using a potentially long Camel URI.</description>
+    </item>
+    <item>
+      <title>Upgrading to Camel 3.0.0 with Windup</title>
+      <link>https://camel.apache.org/blog/2020/09/windup/</link>
+      <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/09/windup/</guid>
+      <description>We&amp;rsquo;ll show you how Windup can help you plan and estimate your upgrade to Camel 3</description>
+    </item>
+    <item>
+      <title>Language Support for Apache Camel - VS Code extension 0.0.20</title>
+      <link>https://camel.apache.org/blog/2019/12/LanguageSupportTooling-0.0.20/</link>
+      <pubDate>Mon, 16 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2019/12/LanguageSupportTooling-0.0.20/</guid>
+      <description>During the past months, several noticeable new features have been added to improve the developer experience of application based on Apache Camel. These updates are available in the 0.0.20 release of Visual Studio (VS) Code extension.&#xA;Before going into the list of updates in detail, I want to note that I mentioned in the title the VS Code Extension release because VS Code extension is covering the broader set of new features.</description>
+    </item>
+  </channel>
+</rss>

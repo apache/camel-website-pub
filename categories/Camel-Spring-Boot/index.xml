@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Camel Spring Boot on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Camel-Spring-Boot/</link>
+    <description>Recent content in Camel Spring Boot on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 12 Aug 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Camel-Spring-Boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Camel Debug a Camel Spring Boot route deployed on OpenShift from VS Code</title>
+      <link>https://camel.apache.org/blog/2024/08/camel-springboot-remote-debug-to-openshift-from-vscode/</link>
+      <pubDate>Mon, 12 Aug 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/08/camel-springboot-remote-debug-to-openshift-from-vscode/</guid>
+      <description>How to Camel Debug a Camel Spring Boot route deployed on OpenShift from VS Code&#xA;Requirements This how-to will not cover in details the following points, it is assumed that it is installed/preconfigured:&#xA;VS Code with the Extension Pack for Apache Camel with a folder opened Active connection to an OpenShift cluster JBang available on Command-Line Interface (CLI) Maven available on CLI Note that this tutorial was made with the following versions:</description>
+    </item>
+    <item>
+      <title>Integrate your AI models effortlessly with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/</link>
+      <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/</guid>
+      <description>This blog shows how Apache Camel can help integrate multiple systems with an AI model, in particular, the camel-whatsapp component is used to build a chat on WhatsApp; so that a user can easily communicate with the LLM (large Language Model) via WhatsApp.&#xA;Overview The objective is the following, I&amp;rsquo;d like to have specific conversations about some topic, in this case, how to contribute to Apache Camel, with an LLM via WhatsApp.</description>
+    </item>
+  </channel>
+</rss>

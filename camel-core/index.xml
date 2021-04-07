@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Apache Camel Core on Apache Camel</title>
+    <link>https://camel.apache.org/camel-core/</link>
+    <description>Recent content in Apache Camel Core on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="https://camel.apache.org/camel-core/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

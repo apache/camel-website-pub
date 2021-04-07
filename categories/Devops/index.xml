@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Devops on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Devops/</link>
+    <description>Recent content in Devops on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Aug 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K Observability: Micrometer Metrics</title>
+      <link>https://camel.apache.org/blog/2023/08/camel-k-micrometer/</link>
+      <pubDate>Thu, 03 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/08/camel-k-micrometer/</guid>
+      <description>We already explained how to take monitor your Integrations in the previous blog post about monitoring operations on Camel K. The good news is there are only a few changes with the move to Micrometer Metrics.&#xA;From Microprofile to Micrometer Camel K 2.0 was the occasion to move from one technology (Microprofile) to another (Micrometer) for the Prometheus trait configuration implementation.&#xA;The reason is the deprecation notice from Quarkus Microprile&amp;rsquo;s implementation in favor of using Micrometer Metrics.</description>
+    </item>
+    <item>
+      <title>Camel K Observability: Distributed Tracing</title>
+      <link>https://camel.apache.org/blog/2023/03/camel-k-telemetry/</link>
+      <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/03/camel-k-telemetry/</guid>
+      <description>Tracing is an important approach for controlling and monitoring the experience of users, it allows us to gather more information about an integration&amp;rsquo;s performance.&#xA;Camel K has been providing support for distributed tracing using OpenTracing since long time. At the beginning of 2022, the CNCF announced that they were archiving the OpenTracing project in favor of the OpenTelemetry project. OpenTelemetry is the latest solution created by merging OpenTracing and OpenCensus. As a result, we decided in Camel K 1.</description>
+    </item>
+    <item>
+      <title>Camel K CICD</title>
+      <link>https://camel.apache.org/blog/2022/10/camel-k-cicd/</link>
+      <pubDate>Thu, 06 Oct 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/camel-k-cicd/</guid>
+      <description>In Camel K version 10, we&amp;rsquo;ve released the CLI `promote feature that provides Camel K an opinionated way of promoting an Integration through the stages of software development. This feature unlock the possibility to combine Camel K with external tooling and let the user develop according to any automated release process. We always ear about CI/CD (Continuous Integration/Continuous Delivery and/or Deployment), and in this blog we&amp;rsquo;re going to see how to make it for any Camel K integration.</description>
+    </item>
+  </channel>
+</rss>

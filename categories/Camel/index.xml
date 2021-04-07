@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Camel on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Camel/</link>
+    <description>Recent content in Camel on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 10 Oct 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Camel/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Camel annotations with LangChain4j high level api available in next Camel Quarkus release</title>
+      <link>https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/</link>
+      <pubDate>Thu, 10 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/</guid>
+      <description>Introduction In a previous blog post, we have seen how Camel could be used to transform raw unstructured text into structured Java objects. The shown example actually uses the LangChain4j high level API where a Java interface will handle the interactions needed with the underlying Large Language Model. However, at this time, a Quarkus LangChain4j issue prevented the usage of the Camel parameter binding annotations. This issue will be fixed in the next Camel Quarkus release, so let&amp;rsquo;s see how it will work.</description>
+    </item>
+    <item>
+      <title>Easier migration with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2024/10/camel-upgrade-recipes-release-4.8.0/</link>
+      <pubDate>Fri, 04 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/10/camel-upgrade-recipes-release-4.8.0/</guid>
+      <description>This blog post introduces a Camel Upgrade Recipes project and shows an example of its usage.&#xA;Introduction Migrating Apache Camel code can often be a tedious and error-prone process, especially when it involves repetitive tasks like renaming classes, updating method signatures, or adapting to new Camel API changes. To address this need, Camel Upgrade Recipes project based on OpenRewrite was developed. The project is not designed to provide fully automated migration but rather to assist with manual migrations, making them more efficient and less error-prone.</description>
+    </item>
+    <item>
+      <title>Unstructured data extraction with Apache Camel Quarkus and LangChain4j</title>
+      <link>https://camel.apache.org/blog/2024/09/data-extraction-example/</link>
+      <pubDate>Mon, 16 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/data-extraction-example/</guid>
+      <description>This blog post shows a concrete example of transforming raw unstructured text into structured Java objects with Camel Quarkus and Quarkus LangChain4j.&#xA;Introduction Following previous experiments about unstructured data extraction, some directions were given about how a large language model could be setup to transform unstructured data into its structured counterpart. In this blog post, we will see a ready to use example that could serve as a starting point to create your own Camel route performing data extraction.</description>
+    </item>
+    <item>
+      <title>Modernizing Camel&#39;s Test Support Code: What You Need to Know</title>
+      <link>https://camel.apache.org/blog/2024/09/modernizing-test-support/</link>
+      <pubDate>Wed, 11 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/modernizing-test-support/</guid>
+      <description>The first law of software complexity says that &amp;ldquo;a well-designed system will degrade into a badly designed system over time&amp;rdquo;. This law can be ruthless for open source projects receiving hundreds of contributions every month.&#xA;That&amp;rsquo;s why projects must refactor code, evaluate APIs, review tests, and modernize code to leverage the latest and greatest features from Java.&#xA;Camel Test Support One area in Camel that has had little attention until recently was our test support code.</description>
+    </item>
+    <item>
+      <title>Unlocking Efficient Data Processing with the Chunking DSL</title>
+      <link>https://camel.apache.org/blog/2024/09/chunking-dsl/</link>
+      <pubDate>Fri, 06 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/chunking-dsl/</guid>
+      <description>Chunking is a crucial aspect of data processing that can significantly impact retrieval quality, query latency, costs, and even the accuracy of Large Language Model (LLM) outputs. In this blog post, we&amp;rsquo;ll explore what chunking is, its importance, and how the new Chunking DSL in Apache Camel 4.8.0 improves data processing workflows.&#xA;The Problem with Traditional Chunking Approaches Before Camel 4.8.0, applications using Camel would have to implement custom chunking logic or rely on external libraries.</description>
+    </item>
+    <item>
+      <title>Apache Camel AI: Leverage power of AI with DJL component</title>
+      <link>https://camel.apache.org/blog/2024/09/camel-ai-examples/</link>
+      <pubDate>Wed, 04 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/camel-ai-examples/</guid>
+      <description>Apache Camel AI is a set of components that allow various AI-related technologies to be integrated with Camel.&#xA;Nowadays, LLMs such as OpenAI ChatGPT and Meta Llama are gaining a lot of attention, and many frameworks and tools are exploring ways to utilise them. Camel AI also includes the LangChain4j component suite, and there are already blog posts about how you can utilise LLMs using LangChain4j in the Camel Blog:</description>
+    </item>
+    <item>
+      <title>Experimenting extraction from unstructured data with Apache Camel and LangChain4j</title>
+      <link>https://camel.apache.org/blog/2024/07/data-extraction-first-experiment/</link>
+      <pubDate>Fri, 19 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/data-extraction-first-experiment/</guid>
+      <description>This blog is based on experiments done about extracting structured data into its structured counterpart. More precisely, in this post, we&amp;rsquo;ll give directions about how to convert a conversation transcript into a Java object.&#xA;Introduction Reading articles like this over the net, it seems that folks have a lot of unstructured data at the disposal while not being able to take advantage on it. So probably, in the future we might expect to deal more and more with unstructured data extraction in integration flow.</description>
+    </item>
+    <item>
+      <title>The Rise and Fall of the Performance Monsters</title>
+      <link>https://camel.apache.org/blog/2023/11/camel-4-performance-improvements-2/</link>
+      <pubDate>Sun, 26 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/11/camel-4-performance-improvements-2/</guid>
+      <description>Introduction Apache Camel has always been committed to delivering top-notch performance. As the development of Camel 4 progressed, so did the dedication to enhancing its performance. In this blog post, we&amp;rsquo;ll explore the advances made in the pursuit of efficiency, focusing on key improvements introduced between Camel 4.1 and 4.2, with a few important improvements for the upcoming 4.3.&#xA;Camel 4.1: A Leap Forward in Type Conversion One of the notable enhancements in Camel 4.</description>
+    </item>
+    <item>
+      <title>Change Data Capture with Apache Camel and Debezium</title>
+      <link>https://camel.apache.org/blog/2023/05/camel-debezium-quarkus/</link>
+      <pubDate>Wed, 31 May 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/05/camel-debezium-quarkus/</guid>
+      <description>In this article, we will explore how to use Debezium and Apache Camel in conjunction with Quarkus to build a reactive application efficiently and send real-time changes from a database to a destination, such as webservice or message queue or another database.&#xA;What is Debezium? Debezium is a distributed, event-driven data change platform used to capture data changes in database systems and send them to other systems in real time so that applications can respond to all database insertions, updates and deletions made by other applications.</description>
+    </item>
+    <item>
+      <title>Hunting performance monsters on the back of a Camel</title>
+      <link>https://camel.apache.org/blog/2023/05/camel-4-performance-improvements/</link>
+      <pubDate>Thu, 25 May 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/05/camel-4-performance-improvements/</guid>
+      <description>Introduction We are thrilled to share the remarkable advancements in the performance of Apache Camel 4, achieved through our diligent efforts in addressing a critical JVM issue (JDK-8180450). In this article, we will delve into the details of our investigation, the tools employed, and the subsequent optimizations that have propelled Apache Camel 4 to new heights of speed and efficiency.&#xA;Identifying the Performance Challenge The JVM issue JDK-8180450, known for its potential performance penalties during type checking, became our focal point.</description>
+    </item>
+    <item>
+      <title>Load properties from Vault/Secrets cloud services: introducing Camel Context automatic refresh on secrets updates</title>
+      <link>https://camel.apache.org/blog/2022/12/camel-context-reloading-secret-refresh/</link>
+      <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/camel-context-reloading-secret-refresh/</guid>
+      <description>Starting from Camel 3.19.0 we have four cloud services supported for loading properties as secrets:&#xA;AWS Secret Manager Google Cloud Secret Manager Azure Key Vault Hashicorp Vault One of the problems we faced in the development was related to finding a way to automatically refresh the secret value on the secrets update.&#xA;The main players in the cloud game are providing solutions based on their services: AWS provides multiple ways to be notified about secret updates and secret rotations through AWS Cloudtrail or AWS Cloud events, GCP leverages Google Pubsub to deliver messages with events related to secret, while Azure provides multiple ways of getting notified about events related to a vault in the Azure Key Vault service, mostly by using Azure Eventgrid as an intermediate service.</description>
+    </item>
+    <item>
+      <title>Load properties from Vault/Secrets cloud services: an update</title>
+      <link>https://camel.apache.org/blog/2022/07/secrets-properties-functions-part-2/</link>
+      <pubDate>Tue, 26 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/07/secrets-properties-functions-part-2/</guid>
+      <description>In Camel 3.16.0 we introduced the ability to load properties from vault and use them in the Camel context.&#xA;This post aims to show the updates and improvements we&amp;rsquo;ve done in the last two releases.&#xA;Supported Services In 3.16.0 we&amp;rsquo;re supporting two of the main services available in the cloud space:&#xA;AWS Secret Manager Google Cloud Secret Manager In 3.19.0, to be released, we&amp;rsquo;re going to have four services available:</description>
+    </item>
+    <item>
+      <title>Top 10 features of Camel 3.x</title>
+      <link>https://camel.apache.org/blog/2022/06/camel3x-top10-features/</link>
+      <pubDate>Thu, 16 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/06/camel3x-top10-features/</guid>
+      <description>At the end of 2019 Camel 3 arrived. Some main features were modularization of the core and support for Java 11. A bunch of other changes were mentioned in Claus Ibsen&amp;rsquo;s blog:&#xA;Apache Camel 3 What&amp;rsquo;s New (top 10)&#xA;In this blog, we focus on the top 10 of features that arrived since the 3.0 release. As an overview, but also to give some attention to features not everyone is aware of.</description>
+    </item>
+    <item>
+      <title>Camel 3.16.0 new feature: Load properties from Vault/Secrets cloud services</title>
+      <link>https://camel.apache.org/blog/2022/03/secrets-properties-functions/</link>
+      <pubDate>Thu, 24 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/secrets-properties-functions/</guid>
+      <description>In the last weeks, together with Claus, we&amp;rsquo;ve been working on a new feature: loading properties from Vault/Secrets cloud services.&#xA;It will arrive with Camel 3.16.0, currently on vote and to be released by the end of this week (24/3).&#xA;This post introduces the new features and provide some examples.&#xA;Secrets Management in Camel In the past there were many discussions around the possibility of managing secrets in Camel through Vault Services.</description>
+    </item>
+    <item>
+      <title>Camel 3 Release Stats</title>
+      <link>https://camel.apache.org/blog/2022/03/camel-release-stats/</link>
+      <pubDate>Wed, 23 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/camel-release-stats/</guid>
+      <description>Many developers know that Apache Camel is one of the most active Apache projects. Consider the top 3 Apache Code Authors in 2021:&#xA;Andrea Cosentino: 4,447 commits (352,346 insertions, 399,815 deletions) Claus Ibsen: 2,974 commits (555,245 insertions, 567,896 deletions) Mark Thomas: 2,509 commits (186,889 insertions, 117,182 deletions) The first two places are occupied by Camel committers. In 2021 the Camel project also reached the second place when it&amp;rsquo;s about the number of commits (9541), just behind Superset.</description>
+    </item>
+    <item>
+      <title>Introducing the Resume API v2</title>
+      <link>https://camel.apache.org/blog/2022/03/resume-api-v2/</link>
+      <pubDate>Tue, 22 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/resume-api-v2/</guid>
+      <description>The need to process larger quantities of data has been a growing concern and necessity within our community. For the last few releases we have been working to create mechanisms to simplify how our users can consume data at scale.&#xA;Although Camel is no stranger to consuming data at scale, recent trends in computing and systems architecture introduce the need for behaviors that improve agility, speed and scalability when doing so.</description>
+    </item>
+    <item>
+      <title>Good bye camel-testcontainers! Hello Camel&#39;s test-infra</title>
+      <link>https://camel.apache.org/blog/2022/02/camel-test-infra/</link>
+      <pubDate>Wed, 16 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/02/camel-test-infra/</guid>
+      <description>For Camel 3.16.0 we are removing the deprecated container-based test modules and replacing them with a new set of modules called Camel test-infra.&#xA;They continue to support container-based tests via TestContainers, however they abstract the underlying test infrastructure.&#xA;One of the great benefits for our project is that they allow us to more easily switch from container-based tests, to external instances. Previously, we would need to create a new test or implement a more complex design if we wanted to test both a container instance and an external service instance (i.</description>
+    </item>
+    <item>
+      <title>Upcoming changes to the consumer on Kafka component</title>
+      <link>https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/</link>
+      <pubDate>Fri, 24 Sep 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/</guid>
+      <description>We recently started to review, investigate and fix reliability issues with the Kafka component. As part of that, we refactored the code to avoid problematic concurrency patterns, remove calls to deprecated Kafka client code and simplify the overall maintainability of the code. This led to many changes in the internal implementation of the component, which we will talk about in this blog post.&#xA;Motivation The ground work related to these changes can be traced back to the following set of issues reported on our Jira.</description>
+    </item>
+    <item>
+      <title>Camel &#43; JBang: bringing the world of Java scripting to Camel</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-jbang/</link>
+      <pubDate>Mon, 26 Jul 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/07/camel-jbang/</guid>
+      <description>Bringing the world of Java scripting to Camel</description>
+    </item>
+    <item>
+      <title>Camel-AWS-S3 - New Streaming upload feature</title>
+      <link>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</link>
+      <pubDate>Tue, 20 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</guid>
+      <description>The S3 Streaming upload feature will arrive on Camel 3.10.0</description>
+    </item>
+    <item>
+      <title>New committers to Apache Camel</title>
+      <link>https://camel.apache.org/blog/2020/12/NewCommitters/</link>
+      <pubDate>Tue, 15 Dec 2020 10:40:19 +0100</pubDate>
+      <guid>https://camel.apache.org/blog/2020/12/NewCommitters/</guid>
+      <description>We&amp;rsquo;re happy to announce that our little caravan has been enriched by two new committers. The Camel project warmly welcomes Jiri Ondrusek and Jeremy Ross.&#xA;Jiri Ondrusek&amp;rsquo;s has been contributing to Camel, Camel Spring Boot, and Camel Quarkus for a while now, and Jeremy Ross has been doing stellar work on the Salesforce component, his expertise in Salesforce will help us keep up with frequent changes made on that platform.</description>
+    </item>
+    <item>
+      <title>Introducing Camel-AWS2-Eventbridge component</title>
+      <link>https://camel.apache.org/blog/2020/10/camel-aws2-eventbridge-intro/</link>
+      <pubDate>Sat, 17 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/10/camel-aws2-eventbridge-intro/</guid>
+      <description>In Camel 3.6.0 we will introduce the camel-aws2-eventbridge among others new cool components. The aim of this blog post is showing what you can do with the Eventbridge AWS Service and the related camel component.&#xA;What is AWS Eventbridge? The definition from the AWS official website is the following:&#xA;Amazon EventBridge is a serverless event bus that makes it easy to connect applications together using data from your own applications, integrated Software-as-a-Service (SaaS) applications, and AWS services.</description>
+    </item>
+  </channel>
+</rss>
