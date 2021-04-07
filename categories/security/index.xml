@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>security on Apache Camel</title>
+    <link>https://camel.apache.org/categories/security/</link>
+    <description>Recent content in security on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 13 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel and CVE-2021-44228 (log4j)</title>
+      <link>https://camel.apache.org/blog/2021/12/log4j2/</link>
+      <pubDate>Mon, 13 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/12/log4j2/</guid>
+      <description>Apache Camel is NOT using log4j for production Apache Camel does not directly depend on Log4j 2, so we are not affected by CVE-2021-44228.
+If you explicitly added the Log4j 2 dependency to your own applications, make sure to upgrade.
+Apache Camel is using log4j for testing itself Apache Camel does use log4j during testing itself, and therefore you can find that we have been using log4j v2.13.3 release in our latest LTS releases Camel 3.</description>
+    </item>
+    
+  </channel>
+</rss>

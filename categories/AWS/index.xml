@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AWS on Apache Camel</title>
+    <link>https://camel.apache.org/categories/AWS/</link>
+    <description>Recent content in AWS on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 26 Aug 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/AWS/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Deploying a Camel Route in AWS Lambda using Quarkus</title>
+      <link>https://camel.apache.org/blog/2021/08/DeployingCamelRouteInAWSLambda/</link>
+      <pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/08/DeployingCamelRouteInAWSLambda/</guid>
+      <description>Do you fancy running camel route as functions in AWS Lambda. Well I did a small Proof Of Concept to test this and the results were interesting. Thanks to the Quarkus and Camel-Quarkus communities for their efforts to make this technically possible.
+You can find the working sample in the Camel Quarkus Examples github repo
+#Deploying a Camel Route in AWS Lambda : A Camel Quarkus example
+This project uses the following framework</description>
+    </item>
+    
+  </channel>
+</rss>

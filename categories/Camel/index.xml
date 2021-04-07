@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Camel on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Camel/</link>
+    <description>Recent content in Camel on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 16 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Camel/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Top 10 features of Camel 3.x</title>
+      <link>https://camel.apache.org/blog/2022/06/camel3x-top10-features/</link>
+      <pubDate>Thu, 16 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/06/camel3x-top10-features/</guid>
+      <description>At the end of 2019 Camel 3 arrived. Some main features were modularization of the core and support for Java 11. A bunch of other changes were mentioned in Claus Ibsen&amp;rsquo;s blog:
+Apache Camel 3 What&amp;rsquo;s New (top 10)
+In this blog, we focus on the top 10 of features that arrived since the 3.0 release. As an overview, but also to give some attention to features not everyone is aware of.</description>
+    </item>
+    
+    <item>
+      <title>Camel 3.16.0 new feature: Load properties from Vault/Secrets cloud services</title>
+      <link>https://camel.apache.org/blog/2022/03/secrets-properties-functions/</link>
+      <pubDate>Thu, 24 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/03/secrets-properties-functions/</guid>
+      <description>In the last weeks, together with Claus, we&amp;rsquo;ve been working on a new feature: loading properties from Vault/Secrets cloud services.
+It will arrive with Camel 3.16.0, currently on vote and to be released by the end of this week (24&amp;frasl;3).
+This post introduces the new features and provide some examples.
+Secrets Management in Camel In the past there were many discussions around the possibility of managing secrets in Camel through Vault Services.</description>
+    </item>
+    
+    <item>
+      <title>Camel 3 Release Stats</title>
+      <link>https://camel.apache.org/blog/2022/03/camel-release-stats/</link>
+      <pubDate>Wed, 23 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/03/camel-release-stats/</guid>
+      <description>Many developers know that Apache Camel is one of the most active Apache projects. Consider the top 3 Apache Code Authors in 2021:
+ Andrea Cosentino: 4,447 commits (352,346 insertions, 399,815 deletions) Claus Ibsen: 2,974 commits (555,245 insertions, 567,896 deletions) Mark Thomas: 2,509 commits (186,889 insertions, 117,182 deletions)  The first two places are occupied by Camel committers. In 2021 the Camel project also reached the second place when it&amp;rsquo;s about the number of commits (9541), just behind Superset.</description>
+    </item>
+    
+    <item>
+      <title>Introducing the Resume API v2</title>
+      <link>https://camel.apache.org/blog/2022/03/resume-api-v2/</link>
+      <pubDate>Tue, 22 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/03/resume-api-v2/</guid>
+      <description>The need to process larger quantities of data has been a growing concern and necessity within our community. For the last few releases we have been working to create mechanisms to simplify how our users can consume data at scale.
+Although Camel is no stranger to consuming data at scale, recent trends in computing and systems architecture introduce the need for behaviors that improve agility, speed and scalability when doing so.</description>
+    </item>
+    
+    <item>
+      <title>Good bye camel-testcontainers! Hello Camel&#39;s test-infra</title>
+      <link>https://camel.apache.org/blog/2022/02/camel-test-infra/</link>
+      <pubDate>Wed, 16 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/02/camel-test-infra/</guid>
+      <description>For Camel 3.16.0 we are removing the deprecated container-based test modules and replacing them with a new set of modules called Camel test-infra.
+They continue to support container-based tests via TestContainers, however they abstract the underlying test infrastructure.
+One of the great benefits for our project is that they allow us to more easily switch from container-based tests, to external instances. Previously, we would need to create a new test or implement a more complex design if we wanted to test both a container instance and an external service instance (i.</description>
+    </item>
+    
+    <item>
+      <title>Upcoming changes to the consumer on Kafka component</title>
+      <link>https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/</link>
+      <pubDate>Fri, 24 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/</guid>
+      <description>We recently started to review, investigate and fix reliability issues with the Kafka component. As part of that, we refactored the code to avoid problematic concurrency patterns, remove calls to deprecated Kafka client code and simplify the overall maintainability of the code. This led to many changes in the internal implementation of the component, which we will talk about in this blog post.
+Motivation The ground work related to these changes can be traced back to the following set of issues reported on our Jira.</description>
+    </item>
+    
+    <item>
+      <title>Camel &#43; JBang: bringing the world of Java scripting to Camel</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-jbang/</link>
+      <pubDate>Mon, 26 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/07/camel-jbang/</guid>
+      <description>Bringing the world of Java scripting to Camel</description>
+    </item>
+    
+    <item>
+      <title>Camel-AWS-S3 - New Streaming upload feature</title>
+      <link>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</link>
+      <pubDate>Tue, 20 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</guid>
+      <description>The S3 Streaming upload feature will arrive on Camel 3.10.0</description>
+    </item>
+    
+    <item>
+      <title>New committers to Apache Camel</title>
+      <link>https://camel.apache.org/blog/2020/12/NewCommitters/</link>
+      <pubDate>Tue, 15 Dec 2020 10:40:19 +0100</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2020/12/NewCommitters/</guid>
+      <description>We&amp;rsquo;re happy to announce that our little caravan has been enriched by two new committers. The Camel project warmly welcomes Jiri Ondrusek and Jeremy Ross.
+Jiri Ondrusek&amp;rsquo;s has been contributing to Camel, Camel Spring Boot, and Camel Quarkus for a while now, and Jeremy Ross has been doing stellar work on the Salesforce component, his expertise in Salesforce will help us keep up with frequent changes made on that platform.</description>
+    </item>
+    
+    <item>
+      <title>Introducing Camel-AWS2-Eventbridge component</title>
+      <link>https://camel.apache.org/blog/2020/10/camel-aws2-eventbridge-intro/</link>
+      <pubDate>Sat, 17 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2020/10/camel-aws2-eventbridge-intro/</guid>
+      <description>In Camel 3.6.0 we will introduce the camel-aws2-eventbridge among others new cool components. The aim of this blog post is showing what you can do with the Eventbridge AWS Service and the related camel component.
+What is AWS Eventbridge? The definition from the AWS official website is the following:
+Amazon EventBridge is a serverless event bus that makes it easy to connect applications together using data from your own applications, integrated Software-as-a-Service (SaaS) applications, and AWS services.</description>
+    </item>
+    
+  </channel>
+</rss>

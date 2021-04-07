@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>EIP on Apache Camel</title>
+    <link>https://camel.apache.org/categories/EIP/</link>
+    <description>Recent content in EIP on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 14 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/EIP/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Dynamic Router EIP Component</title>
+      <link>https://camel.apache.org/blog/2022/01/dynamic-router-eip-component/</link>
+      <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/01/dynamic-router-eip-component/</guid>
+      <description>Apache Camel 3.15.0 introduces a new Dynamic Router EIP component. Although Camel core includes a Dynamic Router processor, I wanted a Dynamic Router implementation that was much closer, and more adherent, to the EIP specification.
+The Dynamic Router as a &amp;ldquo;glue&amp;rdquo; component, not a messaging server It is important to note that, while this implementation of the Dynamic Router is a component, it is not meant to be a component for some type of messaging system (like JMS, etc.</description>
+    </item>
+    
+  </channel>
+</rss>

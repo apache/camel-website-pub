@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Features on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Features/</link>
+    <description>Recent content in Features on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 22 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Features/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introducing the Resume API v2</title>
+      <link>https://camel.apache.org/blog/2022/03/resume-api-v2/</link>
+      <pubDate>Tue, 22 Mar 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/03/resume-api-v2/</guid>
+      <description>The need to process larger quantities of data has been a growing concern and necessity within our community. For the last few releases we have been working to create mechanisms to simplify how our users can consume data at scale.
+Although Camel is no stranger to consuming data at scale, recent trends in computing and systems architecture introduce the need for behaviors that improve agility, speed and scalability when doing so.</description>
+    </item>
+    
+    <item>
+      <title>Good bye camel-testcontainers! Hello Camel&#39;s test-infra</title>
+      <link>https://camel.apache.org/blog/2022/02/camel-test-infra/</link>
+      <pubDate>Wed, 16 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/02/camel-test-infra/</guid>
+      <description>For Camel 3.16.0 we are removing the deprecated container-based test modules and replacing them with a new set of modules called Camel test-infra.
+They continue to support container-based tests via TestContainers, however they abstract the underlying test infrastructure.
+One of the great benefits for our project is that they allow us to more easily switch from container-based tests, to external instances. Previously, we would need to create a new test or implement a more complex design if we wanted to test both a container instance and an external service instance (i.</description>
+    </item>
+    
+    <item>
+      <title>Upcoming changes to the consumer on Kafka component</title>
+      <link>https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/</link>
+      <pubDate>Fri, 24 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/</guid>
+      <description>We recently started to review, investigate and fix reliability issues with the Kafka component. As part of that, we refactored the code to avoid problematic concurrency patterns, remove calls to deprecated Kafka client code and simplify the overall maintainability of the code. This led to many changes in the internal implementation of the component, which we will talk about in this blog post.
+Motivation The ground work related to these changes can be traced back to the following set of issues reported on our Jira.</description>
+    </item>
+    
+    <item>
+      <title>Camel &#43; JBang: bringing the world of Java scripting to Camel</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-jbang/</link>
+      <pubDate>Mon, 26 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/07/camel-jbang/</guid>
+      <description>Bringing the world of Java scripting to Camel</description>
+    </item>
+    
+    <item>
+      <title>Camel K 1.5 - New configuration settings</title>
+      <link>https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/</link>
+      <pubDate>Tue, 20 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/</guid>
+      <description>Camel K version 1.5 is out. And with it, a new way of providing configuration and resources to your Integration. We have worked on a deep code refactoring in order to harmonize the existing configuration settings and add new ones to exploit the power of camel-quarkus runtime, which has become the main way to materialize an Integration.
+We added new features that will simplify your developer life. We also added new checks that will give you useful tips when using a feature in a wrong way.</description>
+    </item>
+    
+    <item>
+      <title>New Camel K Logging Features</title>
+      <link>https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/</link>
+      <pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/</guid>
+      <description>New Camel K Logging Features for Camel K 1.5</description>
+    </item>
+    
+    <item>
+      <title>Camel-AWS-S3 - New Streaming upload feature</title>
+      <link>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</link>
+      <pubDate>Tue, 20 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</guid>
+      <description>The S3 Streaming upload feature will arrive on Camel 3.10.0</description>
+    </item>
+    
+  </channel>
+</rss>

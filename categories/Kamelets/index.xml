@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kamelets on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Kamelets/</link>
+    <description>Recent content in Kamelets on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 08 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Kamelets/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Low Code Camel</title>
+      <link>https://camel.apache.org/blog/2021/11/low-code-camel/</link>
+      <pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/11/low-code-camel/</guid>
+      <description>Apache Camel is a project in constant transformation. Anyone knows that Camel has been able to adapt to any new kinds of protocols and systems that have emerged in the past 15 years. But it&amp;rsquo;s not only that: Camel is also able to adapt to any new ways of dealing with integration problems in the cloud era. While Camel K represented a fundamental shift towards a new approach to cloud-native integration, &amp;ldquo;Kamelets&amp;rdquo; are driving a deeper transformation towards &amp;ldquo;low code&amp;rdquo; development.</description>
+    </item>
+    
+    <item>
+      <title>Managing Kamelet event sources with kn</title>
+      <link>https://camel.apache.org/blog/2021/10/managing-kamelets-with-kn/</link>
+      <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2021/10/managing-kamelets-with-kn/</guid>
+      <description>The latest community version of the Knative client v0.26 includes a new kn plugin for managing Kamelets as Knative event sources (GitHub: knative-sandbox/kamelet-plugin-source-kamelet). With the new plugin users of the kn tooling can directly list the available Kamelet sources and bind these Kamelets to Knative resources such as brokers, channels or services.
+The Kamelets facilitate a whole new world of event source possibilities allowing users to connect to external services (AWS, Twitter, Telegram, Postgres) as part of Knative eventing.</description>
+    </item>
+    
+  </channel>
+</rss>
