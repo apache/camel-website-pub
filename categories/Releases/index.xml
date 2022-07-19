@@ -6,7 +6,28 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Releases/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 06 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RELEASE 3.18.0</title>
+      <link>https://camel.apache.org/blog/2022/07/RELEASE-3.18.0/</link>
+      <pubDate>Wed, 06 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/07/RELEASE-3.18.0/</guid>
+      <description>The Camel community announces the immediate availability of Camel 3.18.0, a new LTS release with 117 new features, improvements and fixes.
+The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.
+Many thanks to all who made this release possible.
+On behalf of the Camel PMC, Gregor Zurowski</description>
+    </item>
+    
+    <item>
+      <title>Camel Quarkus 2.7.2 Released</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</link>
+      <pubDate>Mon, 04 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</guid>
+      <description>Camel Quarkus 2.7.2 brings Quarkus 2.7.6.Final, Camel 3.14.4</description>
+    </item>
+    
     <item>
       <title>RELEASE 3.14.4</title>
       <link>https://camel.apache.org/blog/2022/06/RELEASE-3.14.4/</link>

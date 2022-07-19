@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/blog/2022/07/07/</loc>
+    <loc>https://camel.apache.org/blog/2022/07/coc-nvim-camel-lsp/</loc>
     <lastmod>2022-07-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/</loc>
@@ -14,14 +14,38 @@
     <loc>https://camel.apache.org/categories/Tooling/</loc>
     <lastmod>2022-07-15T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/blog/2022/07/RELEASE-3.18.0/</loc>
+    <lastmod>2022-07-06T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/releases/release-3.18.0/</loc>
+    <lastmod>2022-07-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
     <lastmod>2022-07-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2022-07-06T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/categories/Camel-K/</loc>
+    <lastmod>2022-07-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</loc>
+    <lastmod>2022-07-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Features/</loc>
+    <lastmod>2022-07-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Camel-Quarkus/</loc>
+    <lastmod>2022-07-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</loc>
+    <lastmod>2022-07-04T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/releases/q-2.7.2/</loc>
     <lastmod>2022-07-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2022/07/camel-designer-jbang/</loc>
+    <lastmod>2022-07-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2022/06/RELEASE-3.14.4/</loc>
     <lastmod>2022-06-30T00:00:00+00:00</lastmod>
@@ -29,20 +53,11 @@
     <loc>https://camel.apache.org/releases/release-3.14.4/</loc>
     <lastmod>2022-06-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
-    <lastmod>2022-06-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Camel-K/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2022/06/Optimizing-Camel-K-Integration-Build-Time/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-2.10.0/</loc>
     <lastmod>2022-06-23T10:00:00+01:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Camel-Quarkus/</loc>
-    <lastmod>2022-06-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2022/06/camel-quarkus-release-2.10.0/</loc>
     <lastmod>2022-06-23T00:00:00+00:00</lastmod>
@@ -163,9 +178,6 @@
   </url><url>
     <loc>https://camel.apache.org/blog/2022/03/camel-release-stats/</loc>
     <lastmod>2022-03-23T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Features/</loc>
-    <lastmod>2022-03-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2022/03/resume-api-v2/</loc>
     <lastmod>2022-03-22T00:00:00+00:00</lastmod>

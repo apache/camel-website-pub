@@ -6,7 +6,16 @@
     <description>Recent content in Camel K on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Camel-K/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 05 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Camel-K/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K Operations: monitoring</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</link>
+      <pubDate>Tue, 05 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</guid>
+      <description>Camel K offers a wide list of operations you can execute once your Integration has been deployed (likely in a production environment). When we talk about operations, the most typical question we got is &amp;ldquo;How to monitor a Camel K Integration?&amp;rdquo;. Fortunately, we have all the ingredients needed to let you manage this operation as smooth as possible. I&amp;rsquo;ll walk you through the different tools and configuration needed in this blog post.</description>
+    </item>
+    
     <item>
       <title>Optimizing Camel-K Integration Build Time</title>
       <link>https://camel.apache.org/blog/2022/06/Optimizing-Camel-K-Integration-Build-Time/</link>

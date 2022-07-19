@@ -6,7 +6,16 @@
     <description>Recent content in Camel Quarkus on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Camel-Quarkus/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 04 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/categories/Camel-Quarkus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Quarkus 2.7.2 Released</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</link>
+      <pubDate>Mon, 04 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</guid>
+      <description>Camel Quarkus 2.7.2 brings Quarkus 2.7.6.Final, Camel 3.14.4</description>
+    </item>
+    
     <item>
       <title>Camel Quarkus 2.10.0 Released</title>
       <link>https://camel.apache.org/blog/2022/06/camel-quarkus-release-2.10.0/</link>

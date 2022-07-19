@@ -9,14 +9,26 @@
     <lastBuildDate>Fri, 15 Jul 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>An extension for coc.nvim to enable Apache Camel Language Server</title>
-      <link>https://camel.apache.org/blog/2022/07/07/</link>
+      <link>https://camel.apache.org/blog/2022/07/coc-nvim-camel-lsp/</link>
       <pubDate>Fri, 15 Jul 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://camel.apache.org/blog/2022/07/07/</guid>
+      <guid>https://camel.apache.org/blog/2022/07/coc-nvim-camel-lsp/</guid>
       <description>Two weeks before it became easier to provide language support inside emacs -See this blog post. It is now the case for vim, thanks to coc.camel.
 It is an extension for coc.nvim to enable Apache Camel language server support.
 Camel Language Server Support Demo For instance, code completion for XML with Camel DSL. The capabilities are based on the Camel Language Server.
 For instance, code completion for JAVA with Camel DSL.</description>
+    </item>
+    
+    <item>
+      <title>RELEASE 3.18.0</title>
+      <link>https://camel.apache.org/blog/2022/07/RELEASE-3.18.0/</link>
+      <pubDate>Wed, 06 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/07/RELEASE-3.18.0/</guid>
+      <description>The Camel community announces the immediate availability of Camel 3.18.0, a new LTS release with 117 new features, improvements and fixes.
+The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.
+Many thanks to all who made this release possible.
+On behalf of the Camel PMC, Gregor Zurowski</description>
     </item>
     
     <item>
@@ -29,12 +41,40 @@ For instance, code completion for JAVA with Camel DSL.</description>
     </item>
     
     <item>
+      <title>Camel K Operations: monitoring</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</link>
+      <pubDate>Tue, 05 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/</guid>
+      <description>Camel K offers a wide list of operations you can execute once your Integration has been deployed (likely in a production environment). When we talk about operations, the most typical question we got is &amp;ldquo;How to monitor a Camel K Integration?&amp;rdquo;. Fortunately, we have all the ingredients needed to let you manage this operation as smooth as possible. I&amp;rsquo;ll walk you through the different tools and configuration needed in this blog post.</description>
+    </item>
+    
+    <item>
+      <title>Camel Quarkus 2.7.2 Released</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</link>
+      <pubDate>Mon, 04 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/</guid>
+      <description>Camel Quarkus 2.7.2 brings Quarkus 2.7.6.Final, Camel 3.14.4</description>
+    </item>
+    
+    <item>
       <title>New LTS Camel Quarkus release 2.7.2</title>
       <link>https://camel.apache.org/releases/q-2.7.2/</link>
       <pubDate>Mon, 04 Jul 2022 00:00:00 +0000</pubDate>
       
       <guid>https://camel.apache.org/releases/q-2.7.2/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Camel Designer&#39;s new mapping system</title>
+      <link>https://camel.apache.org/blog/2022/07/camel-designer-jbang/</link>
+      <pubDate>Fri, 01 Jul 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://camel.apache.org/blog/2022/07/camel-designer-jbang/</guid>
+      <description>A new input mapping system has been added to Camel Designer. But what that even means ?!?
+Well, better to be seen, but if explained, it&amp;rsquo;s an effort to provide a more intuitive configuration system for Camel route steps. On one hand, it simplifies the view of a route by compacting route steps, and on the other hand, it provides an easy drag-and-drop mapping ability to map process variables to activity inputs.</description>
     </item>
     
     <item>

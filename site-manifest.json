@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1657874880156,
+  "generated": 1658220083978,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8133,6 +8133,12 @@
               "path": "azure-eventhubs-source.adoc",
               "url": "/camel-kamelets/next/azure-eventhubs-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/azure-eventhubs-source.svg\" alt=\"azure eventhubs source\"></span> Azure Eventhubs Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "azure-functions-sink.adoc",
+              "url": "/camel-kamelets/next/azure-functions-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/azure-functions-sink.svg\" alt=\"azure functions sink\"></span> Azure Function Sink"
             },
             {
               "module": "ROOT",
@@ -27869,6 +27875,12 @@
               "path": "hwcloud-summary.adoc",
               "url": "/components/next/hwcloud-summary.html",
               "title": "Huawei Cloud"
+            },
+            {
+              "module": "ROOT",
+              "path": "hyperledger-aries-component.adoc",
+              "url": "/components/next/hyperledger-aries-component.html",
+              "title": "Aries"
             },
             {
               "module": "ROOT",
