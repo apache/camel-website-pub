@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1729689553905,
+  "generated": 1729767347149,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -18043,12 +18043,6 @@
             },
             {
               "module": "others",
-              "path": "knative-http.adoc",
-              "url": "/components/next/others/knative-http.html",
-              "title": "Knative Http"
-            },
-            {
-              "module": "others",
               "path": "langchain4j-tokenizer.adoc",
               "url": "/components/next/others/langchain4j-tokenizer.html",
               "title": "LangChain4j Tokenizer"
@@ -19414,6 +19408,12 @@
               "path": "knative-component.adoc",
               "url": "/components/next/knative-component.html",
               "title": "Knative"
+            },
+            {
+              "module": "ROOT",
+              "path": "knative-http-component.adoc",
+              "url": "/components/next/knative-http-component.html",
+              "title": "Knative Http"
             },
             {
               "module": "ROOT",

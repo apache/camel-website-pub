@@ -3,10 +3,19 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2024-10-21T00:00:00+00:00</lastmod>
+    <lastmod>2024-10-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Camel/</loc>
+    <lastmod>2024-10-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
-    <lastmod>2024-10-21T00:00:00+00:00</lastmod>
+    <lastmod>2024-10-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2024/10/modernizing-test-code-how-to/</loc>
+    <lastmod>2024-10-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Test/</loc>
+    <lastmod>2024-10-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.4.4/</loc>
     <lastmod>2024-10-21T00:00:00+00:00</lastmod>
@@ -21,9 +30,6 @@
     <lastmod>2024-10-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/AI/</loc>
-    <lastmod>2024-10-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Camel/</loc>
     <lastmod>2024-10-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/k-runtime-3.8.1/</loc>
@@ -87,9 +93,6 @@
     <lastmod>2024-09-14T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2024/09/modernizing-test-support/</loc>
-    <lastmod>2024-09-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Test/</loc>
     <lastmod>2024-09-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2024/09/chunking-dsl/</loc>

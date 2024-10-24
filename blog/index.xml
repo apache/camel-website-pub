@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Oct 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 24 Oct 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Modernizing Camel&#39;s Test Support Code: How To</title>
+      <link>https://camel.apache.org/blog/2024/10/modernizing-test-code-how-to/</link>
+      <pubDate>Thu, 24 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/10/modernizing-test-code-how-to/</guid>
+      <description>Earlier I wrote a blog post about a multi-release effort to clean up some of the legacy test code for Camel 4. In this blog post, I will dive into more details about how to adjust your code to use the modernized interfaces.&#xA;New Interfaces Camel 4.9 will introduce two new interfaces to CamelTestSupport that will help users adjust their code and will help us with future maintenance of the test support code.</description>
+    </item>
     <item>
       <title>RELEASE 4.4.4</title>
       <link>https://camel.apache.org/blog/2024/10/RELEASE-4.4.4/</link>
