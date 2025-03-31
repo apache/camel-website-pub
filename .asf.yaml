@@ -24,7 +24,7 @@ github:
     - website
   enabled_merge_buttons:
     squash:  false
-    merge:   false
+    merge:   true
     rebase:  false
   dependabot_alerts:  false
   dependabot_updates: false
