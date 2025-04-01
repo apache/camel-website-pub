@@ -6,8 +6,15 @@
     <description>Recent content in Camel K on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 24 Jun 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Camel-K/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K 2.7.0</title>
+      <link>https://camel.apache.org/blog/2025/06/camel-k-2-7/</link>
+      <pubDate>Tue, 24 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/06/camel-k-2-7/</guid>
+      <description>Apache Camel community is happy to announce the general availability of Camel K 2.7.0. We have a lot of new exciting features we want to share within this release.&#xA;Build from GIT The coolest feature we&amp;rsquo;ve added to Camel K 2.7.0 is the possibility to build directly from a Git repository. This is adding more flexibility and independence to your prototyping and building process. You can provide the operator a Git repository where your project is hosted, and, from there onward, let the operator taking care of building (testing included!</description>
+    </item>
     <item>
       <title>Camel K 2.6.0</title>
       <link>https://camel.apache.org/blog/2025/02/camel-k-2-6/</link>

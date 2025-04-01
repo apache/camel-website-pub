@@ -6,8 +6,407 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 31 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 14 Jul 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kamelets 4.13.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.13.0/</link>
+      <pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.13.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Apache Camel 4.13 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/07/camel413-whatsnew/</link>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/07/camel413-whatsnew/</guid>
+      <description>Apache Camel 4.13 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core We have made management possible for BackOff, ForegroundTask, and BackgroundTask which are used as internal tasks to perform repetitive tasks, usually related to re-connection or recovery. Some of the Came components uses these features, and other components has native recovery built-in from the underlying library.</description>
+    </item>
+    <item>
+      <title>Release 4.13.0</title>
+      <link>https://camel.apache.org/releases/release-4.13.0/</link>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.13.0/</guid>
+      <description>This release is the new Camel 4.13.0 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.13.0</title>
+      <link>https://camel.apache.org/blog/2025/07/RELEASE-4.13.0/</link>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/07/RELEASE-4.13.0/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.13.0 release with 90 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.20.2 Released</title>
+      <link>https://camel.apache.org/blog/2025/07/camel-quarkus-3.20.2/</link>
+      <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/07/camel-quarkus-3.20.2/</guid>
+      <description>Camel Quarkus 3.20.2 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.20.2</title>
+      <link>https://camel.apache.org/releases/q-3.20.2/</link>
+      <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.20.2/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.15.4 Released</title>
+      <link>https://camel.apache.org/blog/2025/07/camel-quarkus-release-3.15.4/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/07/camel-quarkus-release-3.15.4/</guid>
+      <description>Camel Quarkus 3.15.4 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.15.4</title>
+      <link>https://camel.apache.org/releases/q-3.15.4/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.15.4/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.10.6</title>
+      <link>https://camel.apache.org/releases/kamelets-4.10.6/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.10.6/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.8.8</title>
+      <link>https://camel.apache.org/releases/kamelets-4.8.8/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.8.8/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.12.1</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.12.1/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.12.1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.10.6</title>
+      <link>https://camel.apache.org/releases/release-4.10.6/</link>
+      <pubDate>Fri, 27 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.10.6/</guid>
+      <description>This release is the new Camel 4.10.6 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.10.6</title>
+      <link>https://camel.apache.org/blog/2025/06/RELEASE-4.10.6/</link>
+      <pubDate>Fri, 27 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/06/RELEASE-4.10.6/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.10.6 LTS patch release with 15 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.10.5 Released</title>
+      <link>https://camel.apache.org/blog/2025/06/camel-karaf-release-4.10.5/</link>
+      <pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/06/camel-karaf-release-4.10.5/</guid>
+      <description>Camel Karaf 4.10.5 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.10.5</title>
+      <link>https://camel.apache.org/releases/karaf-4.10.5/</link>
+      <pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.10.5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.8.8</title>
+      <link>https://camel.apache.org/releases/release-4.8.8/</link>
+      <pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.8.8/</guid>
+      <description>This release is the new Camel 4.8.8 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.8.8</title>
+      <link>https://camel.apache.org/blog/2025/06/RELEASE-4.8.8/</link>
+      <pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/06/RELEASE-4.8.8/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.8.8 LTS patch release with 19 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.24.0 Released</title>
+      <link>https://camel.apache.org/blog/2025/06/camel-quarkus-release-3.24.0/</link>
+      <pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/06/camel-quarkus-release-3.24.0/</guid>
+      <description>Camel Quarkus 3.24.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.24.0</title>
+      <link>https://camel.apache.org/releases/q-3.24.0/</link>
+      <pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.24.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel K 2.7.0</title>
+      <link>https://camel.apache.org/blog/2025/06/camel-k-2-7/</link>
+      <pubDate>Tue, 24 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/06/camel-k-2-7/</guid>
+      <description>Apache Camel community is happy to announce the general availability of Camel K 2.7.0. We have a lot of new exciting features we want to share within this release.&#xA;Build from GIT The coolest feature we&amp;rsquo;ve added to Camel K 2.7.0 is the possibility to build directly from a Git repository. This is adding more flexibility and independence to your prototyping and building process. You can provide the operator a Git repository where your project is hosted, and, from there onward, let the operator taking care of building (testing included!</description>
+    </item>
+    <item>
+      <title>Camel-K 2.7.0</title>
+      <link>https://camel.apache.org/releases/k-2.7.0/</link>
+      <pubDate>Tue, 24 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/k-2.7.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.10.5</title>
+      <link>https://camel.apache.org/releases/kamelets-4.10.5/</link>
+      <pubDate>Tue, 17 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.10.5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.10.5</title>
+      <link>https://camel.apache.org/releases/release-4.10.5/</link>
+      <pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.10.5/</guid>
+      <description>This release is the new Camel 4.10.5 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.10.5</title>
+      <link>https://camel.apache.org/blog/2025/06/RELEASE-4.10.5/</link>
+      <pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/06/RELEASE-4.10.5/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.10.5 LTS patch release with 24 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Kamelets 4.12.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.12.0/</link>
+      <pubDate>Mon, 02 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.12.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Apache Camel 4.12 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/05/camel412-whatsnew/</link>
+      <pubDate>Fri, 30 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/05/camel412-whatsnew/</guid>
+      <description>Apache Camel 4.12 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core The camel-xml-io XML DSL now has a generated XSD Schema that is independent of the classic Camel Spring XSD. This allows tooling and end users to use this schema instead and ensure the schema matches exactly the capabilities of the camel-ml-io XML DSL.</description>
+    </item>
+    <item>
+      <title>Release 4.12.0</title>
+      <link>https://camel.apache.org/releases/release-4.12.0/</link>
+      <pubDate>Thu, 29 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.12.0/</guid>
+      <description>This release is the new Camel 4.12.0 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.12.0</title>
+      <link>https://camel.apache.org/blog/2025/05/RELEASE-4.12.0/</link>
+      <pubDate>Thu, 29 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/05/RELEASE-4.12.0/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.12.0 release with 183 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.23.0 Released</title>
+      <link>https://camel.apache.org/blog/2025/05/camel-quarkus-release-3.23.0/</link>
+      <pubDate>Mon, 26 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/05/camel-quarkus-release-3.23.0/</guid>
+      <description>Camel Quarkus 3.23.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.23.0</title>
+      <link>https://camel.apache.org/releases/q-3.23.0/</link>
+      <pubDate>Mon, 26 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.23.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.8.7</title>
+      <link>https://camel.apache.org/releases/release-4.8.7/</link>
+      <pubDate>Fri, 09 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.8.7/</guid>
+      <description>This release is the new Camel 4.8.7 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.8.7</title>
+      <link>https://camel.apache.org/blog/2025/05/RELEASE-4.8.7/</link>
+      <pubDate>Fri, 09 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/05/RELEASE-4.8.7/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.8.7 LTS patch release with 17 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.20.1 Released</title>
+      <link>https://camel.apache.org/blog/2025/05/camel-quarkus-3.20.1/</link>
+      <pubDate>Tue, 06 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/05/camel-quarkus-3.20.1/</guid>
+      <description>Camel Quarkus 3.20.1 release</description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.12.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.12.0/</link>
+      <pubDate>Tue, 06 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.12.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.10.4</title>
+      <link>https://camel.apache.org/releases/kamelets-4.10.4/</link>
+      <pubDate>Mon, 05 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.10.4/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.20.1</title>
+      <link>https://camel.apache.org/releases/q-3.20.1/</link>
+      <pubDate>Sun, 04 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.20.1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.22.0 Released</title>
+      <link>https://camel.apache.org/blog/2025/04/camel-quarkus-release-3.22.0/</link>
+      <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/camel-quarkus-release-3.22.0/</guid>
+      <description>Camel Quarkus 3.22.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.22.0</title>
+      <link>https://camel.apache.org/releases/q-3.22.0/</link>
+      <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.22.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kaoto v2.5 release</title>
+      <link>https://camel.apache.org/blog/2025/04/kaoto-release-2.5.0/</link>
+      <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/kaoto-release-2.5.0/</guid>
+      <description>Following the Apache Camel 4.11.0 release, we&amp;rsquo;re happy to announce the release of Kaoto 2.5.&#xA;What’s New in Kaoto 2.5? We&amp;rsquo;re thrilled to announce the release of Kaoto 2.5, bringing new features, improvements, and bug fixes to enhance your integration experience.&#xA;With significant improvements to the UI, expanded support for Camel XML, and new export and documentation tools, Kaoto continues to evolve as the go-to low-code integration editor for Apache Camel.</description>
+    </item>
+    <item>
+      <title>Release 4.10.4</title>
+      <link>https://camel.apache.org/releases/release-4.10.4/</link>
+      <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.10.4/</guid>
+      <description>This release is the new Camel 4.10.4 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.10.4</title>
+      <link>https://camel.apache.org/blog/2025/04/RELEASE-4.10.4/</link>
+      <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/RELEASE-4.10.4/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.10.4 LTS patch release with 44 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Kafka Connector release 4.11.0</title>
+      <link>https://camel.apache.org/releases/ckc-4.11.0/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/ckc-4.11.0/</guid>
+      <description>This release is the new Camel Kafka Connector 4.11.0 release.</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.10.3 Released</title>
+      <link>https://camel.apache.org/blog/2025/04/camel-karaf-release-4.10.3/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/camel-karaf-release-4.10.3/</guid>
+      <description>Camel Karaf 4.10.3 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.8.6 Released</title>
+      <link>https://camel.apache.org/blog/2025/04/camel-karaf-release-4.8.6/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/camel-karaf-release-4.8.6/</guid>
+      <description>Camel Karaf 4.8.6 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.10.3</title>
+      <link>https://camel.apache.org/releases/karaf-4.10.3/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.10.3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.8.6</title>
+      <link>https://camel.apache.org/releases/karaf-4.8.6/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.8.6/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.11.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.11.0/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.11.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Kafka Connector release 4.10.3</title>
+      <link>https://camel.apache.org/releases/ckc-4.10.3/</link>
+      <pubDate>Wed, 09 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/ckc-4.10.3/</guid>
+      <description>This release is the new Camel Kafka Connector 4.10.3 release.</description>
+    </item>
+    <item>
+      <title>Kamelets 4.11.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.11.0/</link>
+      <pubDate>Tue, 08 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.11.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Apache Camel 4.11 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/04/camel411-whatsnew/</link>
+      <pubDate>Sat, 05 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/camel411-whatsnew/</guid>
+      <description>Apache Camel 4.11 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core The component verifier extension has been deprecated. This functionality has not been in use for many years, and we will start to deprecate more of these unused features in camel-core going forward.&#xA;Recipient List, Split and Multicast EIP In parallel processing mode, you can also enable synchronous=true to force these EIPs to process the sub-tasks using the upper bounds of the thread-pool.</description>
+    </item>
+    <item>
+      <title>Kamelets 4.10.3</title>
+      <link>https://camel.apache.org/releases/kamelets-4.10.3/</link>
+      <pubDate>Thu, 03 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.10.3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.11.0</title>
+      <link>https://camel.apache.org/releases/release-4.11.0/</link>
+      <pubDate>Thu, 03 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.11.0/</guid>
+      <description>This release is the new Camel 4.11.0 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.11.0</title>
+      <link>https://camel.apache.org/blog/2025/04/RELEASE-4.11.0/</link>
+      <pubDate>Thu, 03 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/RELEASE-4.11.0/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.11.0 release with 136 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Apache Camel AI: Inference via Model Serving #3: KServe</title>
+      <link>https://camel.apache.org/blog/2025/04/camel-kserve/</link>
+      <pubDate>Wed, 02 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/camel-kserve/</guid>
+      <description>Introduction In the previous blog posts (camel-tensorflow-serving and camel-torchserve), we discussed the recent release of Apache Camel 4.10 LTS, which introduced three new AI model serving components. 1&#xA;TorchServe component TensorFlow Serving component KServe component We previously wrote about the TorchServe and TensorFlow Serving components. This post introduces the KServe component, concluding the series.&#xA;KServe Component KServe is a platform for serving AI models on Kubernetes. KServe defines an API protocol enabling clients to perform health checks, retrieve metadata, and run inference on model servers.</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2025-30177</title>
+      <link>https://camel.apache.org/security/CVE-2025-30177.html</link>
+      <pubDate>Tue, 01 Apr 2025 07:30:42 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2025-30177.html</guid>
+      <description>Camel-Undertow Message Header Injection via Improper Filtering</description>
+    </item>
+    <item>
+      <title>Release 4.8.6</title>
+      <link>https://camel.apache.org/releases/release-4.8.6/</link>
+      <pubDate>Tue, 01 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.8.6/</guid>
+      <description>This release is the new Camel 4.8.6 release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.8.6</title>
+      <link>https://camel.apache.org/blog/2025/04/RELEASE-4.8.6/</link>
+      <pubDate>Tue, 01 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/RELEASE-4.8.6/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.8.6 LTS patch release with 6 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
     <item>
       <title>Release 4.10.3</title>
       <link>https://camel.apache.org/releases/release-4.10.3/</link>
@@ -34,6 +433,13 @@
       <link>https://camel.apache.org/releases/q-3.20.0/</link>
       <pubDate>Wed, 26 Mar 2025 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/releases/q-3.20.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel-K Runtime release 3.15.3</title>
+      <link>https://camel.apache.org/releases/k-runtime-3.15.3/</link>
+      <pubDate>Mon, 24 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/k-runtime-3.15.3/</guid>
       <description></description>
     </item>
     <item>
@@ -5781,7 +6187,7 @@
       <link>https://camel.apache.org/community/articles/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/articles/</guid>
-      <description>Camel Videos Apache Camel and ActiveMQ at UPS May 2024 where UPS presented their use of Apache Camel and ActiveMQ on OpenShift processing tens of billions messages a day. Quarkus Insights #110: Quarkiverse Extension Spotlight of Apache Camel November 2022 where Apache Camel was presented on the Quarkus webcast (1h session). Cloud Native My Camel: from Low Code to Pro Code, inject Serverless &amp;amp; Cloud Native Goodness by Michael Costello from June 2022, 45-min session on low-code Apache Camel, Camel K and demo with Karavan, the Camel UI designer.</description>
+      <description>Camel Videos Enterprise Integration Is Dead! Long Live AI-Driven Integration with Apache Camel from Devoxx UK in May 2025 where Markus and Bruno shows firrst hand how Camel, powered by AI, is quietly reinventing how we connect the enterprise. Apache Camel and ActiveMQ at UPS May 2024 where UPS presented their use of Apache Camel and ActiveMQ on OpenShift processing tens of billions messages a day. Quarkus Insights #110: Quarkiverse Extension Spotlight of Apache Camel November 2022 where Apache Camel was presented on the Quarkus webcast (1h session).</description>
     </item>
     <item>
       <title>Books</title>
@@ -5844,7 +6250,7 @@
       <link>https://camel.apache.org/community/team/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/team/</guid>
-      <description>This page lists who we are. By all means add yourself to the list. Let&amp;rsquo;s sort it in alphabetical order&#xA;Committers Name ID Organisation Aaron Mulder ammulder Chariot Solutions Akitoshi Yoshida ay SAP Andrea Cosentino acosentino Red Hat Antonin Stefanutti astefanutti Red Hat Babak Vahdat bvahdat Cyberlogic Consulting GmbH Ben O&amp;rsquo;Day boday Initek Consulting Bilgin Ibryam bibryam Bob Paulin bob Bruce Snyder bsnyder Charles Moulliard cmoulliard Red Hat Christian Mueller cmueller Amazon Web Services Christian Posta ceposta Solo Christian Schneider cschneider Claus Ibsen davsclaus Red Hat Colm O hEigeartaigh coheigea Talend David Jencks djencks IBM Daniel Kulp dkulp Talend Denis Istomin distomin Dmitry Volodin dmvolod T-Systems RUS Federico Mariani croway Red Hat Franz Forsthofer forsthofer SAP Freeman Fang ffang Red Hat Gary Tully gtully Red Hat Gert Vanthienen gertv Gregor Zurowski gzurowski Independent consultant Guillaume Nodet gnodet Red Hat Hadrian Zbarcea hadrian Henryk Konsek hekonsek Hiram Chirino chirino Red Hat Ioannis Canellos iocanel Red Hat Jacek Laskowski jlaskowski James Carman jcarman Savoir Technologies Jan Bednar janbednar CGI IT Czech Republic Jean-Baptiste Onofré jbonofre Jeff Genender jgenender Savoir Technologies Jeremy Ross jeremyross Elevation Solutions Johan Edstrom joed Savoir Technologies John Poth Red Hat Jonathan Anstey janstey Red Hat James Netherton Red Hat James Strachan jstrachan Karen Lease klease Luca Burgazzoli lburgazzoli Red Hat Marat Gubaidullin mgubaidullin Talisman Cloud Martin Krasser krasserm Nicky Sandhu nsandhu Nicola Ferraro nicolaferraro Redpanda Onder Sezgin onders Omar Al-Safi oalsafi Otavio Rodolfo Piske orpiske Red Hat Quinn Stevenson quinn Raul Kripalani raulk Pascal Schumacher pascalschumacher Pasquale Congiusti pcongiusti Red Hat Peter Palaga ppalaga Red Hat Rhuan Rocha rhuanrocha Digibee Rich Newcomb rnewcomb Richard Kettelerij rickette Avisi BV Rob Davies rajdavies Roman Kalukiewicz romkal Scott England-Sullivan sully6768 Red Hat Stan Lewis slewis Red Hat Tadayoshi Sato tsato Red Hat Thomas Diesler tdiesler Red Hat Tom Cunningham cunningt Red Hat Tomohisa Igarashi igarashitm Red Hat Tracy Snell tjsnell Juice Labs Willem Jiang ningjiang Huawei William Tam wtam Red Hat Zineb Bendhiba zbendhiba Red Hat Zheng Feng zhfeng Red Hat Zoran Regvart zregvart Contributors If you have been contributing to the Apache Camel project, and you want your name added to the list below.</description>
+      <description>This page lists who we are. By all means add yourself to the list. Let&amp;rsquo;s sort it in alphabetical order&#xA;Committers Name ID Organisation Aaron Mulder ammulder Chariot Solutions Akitoshi Yoshida ay SAP Andrea Cosentino acosentino IBM Antonin Stefanutti astefanutti Red Hat Babak Vahdat bvahdat Cyberlogic Consulting GmbH Ben O&amp;rsquo;Day boday Initek Consulting Bilgin Ibryam bibryam Bob Paulin bob Bruce Snyder bsnyder Charles Moulliard cmoulliard IBM Christian Mueller cmueller Amazon Web Services Christian Posta ceposta Solo Christian Schneider cschneider Claus Ibsen davsclaus IBM Colm O hEigeartaigh coheigea Talend David Jencks djencks IBM Daniel Kulp dkulp Talend Denis Istomin distomin Dmitry Volodin dmvolod T-Systems RUS Federico Mariani croway IBM Franz Forsthofer forsthofer SAP Freeman Fang ffang IBM Gary Tully gtully IBM Gert Vanthienen gertv Gregor Zurowski gzurowski Independent consultant Guillaume Nodet gnodet IBM Hadrian Zbarcea hadrian Henryk Konsek hekonsek Hiram Chirino chirino Red Hat Ioannis Canellos iocanel IBM Jacek Laskowski jlaskowski James Carman jcarman Savoir Technologies Jan Bednar janbednar CGI IT Czech Republic Jean-Baptiste Onofré jbonofre Jeff Genender jgenender Savoir Technologies Jeremy Ross jeremyross Elevation Solutions Johan Edstrom joed Savoir Technologies John Poth IBM Jonathan Anstey janstey IBM James Netherton IBM James Strachan jstrachan Karen Lease klease Luca Burgazzoli lburgazzoli Red Hat Marat Gubaidullin mgubaidullin Talisman Cloud Martin Krasser krasserm Nicky Sandhu nsandhu Nicola Ferraro nicolaferraro Redpanda Onder Sezgin onders Omar Al-Safi oalsafi Otavio Rodolfo Piske orpiske IBM Quinn Stevenson quinn Raul Kripalani raulk Pascal Schumacher pascalschumacher Pasquale Congiusti pcongiusti IBM Peter Palaga ppalaga IBM Rhuan Rocha rhuanrocha Digibee Rich Newcomb rnewcomb Richard Kettelerij rickette Avisi BV Rob Davies rajdavies Roman Kalukiewicz romkal Scott England-Sullivan sully6768 Red Hat Stan Lewis slewis Red Hat Tadayoshi Sato tsato IBM Thomas Diesler tdiesler IBM Tom Cunningham cunningt IBM Tomohisa Igarashi igarashitm IBM Tracy Snell tjsnell Juice Labs Willem Jiang ningjiang Huawei William Tam wtam Red Hat Zineb Bendhiba zbendhiba IBM Zheng Feng zhfeng IBM Zoran Regvart zregvart Contributors If you have been contributing to the Apache Camel project, and you want your name added to the list below.</description>
     </item>
     <item>
       <title>User Stories</title>

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1743407380356,
+  "generated": 1752480370764,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -68,7 +68,7 @@
     {
       "name": "camel-k",
       "title": "Camel K",
-      "latest": "2.6.x",
+      "latest": "2.7.x",
       "versions": [
         {
           "version": "next",
@@ -556,13 +556,19 @@
               "module": "ROOT",
               "path": "pipes/pipes.adoc",
               "url": "/camel-k/next/pipes/pipes.html",
-              "title": "Running an Pipe"
+              "title": "Running a Pipe"
             },
             {
               "module": "ROOT",
               "path": "pipes/promoting.adoc",
               "url": "/camel-k/next/pipes/promoting.html",
               "title": "Promoting Pipes across environments"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/build-from-git.adoc",
+              "url": "/camel-k/next/running/build-from-git.html",
+              "title": "Build project hosted in a Git repository"
             },
             {
               "module": "ROOT",
@@ -867,13 +873,14 @@
           ]
         },
         {
-          "version": "2.6.x",
-          "url": "/camel-k/2.6.x/index.html",
+          "version": "2.7.x",
+          "displayVersion": "2.7.x (LTS)",
+          "url": "/camel-k/2.7.x/index.html",
           "pages": [
             {
               "module": "ROOT",
               "path": "apis/camel-k.adoc",
-              "url": "/camel-k/2.6.x/apis/camel-k.html",
+              "url": "/camel-k/2.7.x/apis/camel-k.html",
               "title": "Camel K API",
               "attributes": {
                 "page-aliases": "camel.adoc"
@@ -881,800 +888,788 @@
             },
             {
               "module": "ROOT",
-              "path": "apis/java.adoc",
-              "url": "/camel-k/2.6.x/apis/java.html",
-              "title": "Java API"
-            },
-            {
-              "module": "ROOT",
-              "path": "apis/kamelets.adoc",
-              "url": "/camel-k/2.6.x/apis/kamelets.html",
-              "title": "Kamelets API"
-            },
-            {
-              "module": "ROOT",
               "path": "architecture/architecture.adoc",
-              "url": "/camel-k/2.6.x/architecture/architecture.html",
+              "url": "/camel-k/2.7.x/architecture/architecture.html",
               "title": "Architecture"
             },
             {
               "module": "ROOT",
               "path": "architecture/cr/build.adoc",
-              "url": "/camel-k/2.6.x/architecture/cr/build.html",
+              "url": "/camel-k/2.7.x/architecture/cr/build.html",
               "title": "Build"
             },
             {
               "module": "ROOT",
               "path": "architecture/cr/camel-catalog.adoc",
-              "url": "/camel-k/2.6.x/architecture/cr/camel-catalog.html",
+              "url": "/camel-k/2.7.x/architecture/cr/camel-catalog.html",
               "title": "CamelCatalog"
             },
             {
               "module": "ROOT",
               "path": "architecture/cr/integration-kit.adoc",
-              "url": "/camel-k/2.6.x/architecture/cr/integration-kit.html",
+              "url": "/camel-k/2.7.x/architecture/cr/integration-kit.html",
               "title": "IntegrationKit"
             },
             {
               "module": "ROOT",
               "path": "architecture/cr/integration-platform.adoc",
-              "url": "/camel-k/2.6.x/architecture/cr/integration-platform.html",
+              "url": "/camel-k/2.7.x/architecture/cr/integration-platform.html",
               "title": "IntegrationPlatform"
             },
             {
               "module": "ROOT",
               "path": "architecture/cr/integration.adoc",
-              "url": "/camel-k/2.6.x/architecture/cr/integration.html",
+              "url": "/camel-k/2.7.x/architecture/cr/integration.html",
               "title": "Integration"
             },
             {
               "module": "ROOT",
               "path": "architecture/incremental-image.adoc",
-              "url": "/camel-k/2.6.x/architecture/incremental-image.html",
+              "url": "/camel-k/2.7.x/architecture/incremental-image.html",
               "title": "Incremental image"
             },
             {
               "module": "ROOT",
               "path": "architecture/kamelets.adoc",
-              "url": "/camel-k/2.6.x/architecture/kamelets.html",
+              "url": "/camel-k/2.7.x/architecture/kamelets.html",
               "title": "Kamelets architecture in Camel K"
             },
             {
               "module": "ROOT",
               "path": "architecture/operator.adoc",
-              "url": "/camel-k/2.6.x/architecture/operator.html",
+              "url": "/camel-k/2.7.x/architecture/operator.html",
               "title": "Operator"
             },
             {
               "module": "ROOT",
               "path": "architecture/runtime.adoc",
-              "url": "/camel-k/2.6.x/architecture/runtime.html",
+              "url": "/camel-k/2.7.x/architecture/runtime.html",
               "title": "Runtime"
             },
             {
               "module": "ROOT",
               "path": "architecture/traits.adoc",
-              "url": "/camel-k/2.6.x/architecture/traits.html",
+              "url": "/camel-k/2.7.x/architecture/traits.html",
               "title": "Traits"
             },
             {
               "module": "ROOT",
               "path": "concepts/dependencies.adoc",
-              "url": "/camel-k/2.6.x/concepts/dependencies.html",
+              "url": "/camel-k/2.7.x/concepts/dependencies.html",
               "title": "Camel dependencies matrix"
             },
             {
               "module": "ROOT",
               "path": "concepts/overview.adoc",
-              "url": "/camel-k/2.6.x/concepts/overview.html",
+              "url": "/camel-k/2.7.x/concepts/overview.html",
               "title": "What is Camel K"
             },
             {
               "module": "ROOT",
               "path": "concepts/releases.adoc",
-              "url": "/camel-k/2.6.x/concepts/releases.html",
+              "url": "/camel-k/2.7.x/concepts/releases.html",
               "title": "Releases"
             },
             {
               "module": "ROOT",
               "path": "configuration/base-image.adoc",
-              "url": "/camel-k/2.6.x/configuration/base-image.html",
+              "url": "/camel-k/2.7.x/configuration/base-image.html",
               "title": "Base image"
             },
             {
               "module": "ROOT",
               "path": "configuration/build-time-properties.adoc",
-              "url": "/camel-k/2.6.x/configuration/build-time-properties.html",
+              "url": "/camel-k/2.7.x/configuration/build-time-properties.html",
               "title": "Build time properties"
             },
             {
               "module": "ROOT",
               "path": "configuration/camel-properties.adoc",
-              "url": "/camel-k/2.6.x/configuration/camel-properties.html",
+              "url": "/camel-k/2.7.x/configuration/camel-properties.html",
               "title": "Runtime properties"
             },
             {
               "module": "ROOT",
               "path": "configuration/configuration.adoc",
-              "url": "/camel-k/2.6.x/configuration/configuration.html",
+              "url": "/camel-k/2.7.x/configuration/configuration.html",
               "title": "Configure Integrations"
             },
             {
               "module": "ROOT",
               "path": "configuration/dependencies.adoc",
-              "url": "/camel-k/2.6.x/configuration/dependencies.html",
+              "url": "/camel-k/2.7.x/configuration/dependencies.html",
               "title": "Dependencies and Component Resolution"
             },
             {
               "module": "ROOT",
               "path": "configuration/quarkus-native.adoc",
-              "url": "/camel-k/2.6.x/configuration/quarkus-native.html",
+              "url": "/camel-k/2.7.x/configuration/quarkus-native.html",
               "title": "Run Quarkus native applications"
             },
             {
               "module": "ROOT",
               "path": "configuration/runtime-config.adoc",
-              "url": "/camel-k/2.6.x/configuration/runtime-config.html",
+              "url": "/camel-k/2.7.x/configuration/runtime-config.html",
               "title": "Runtime configuration"
             },
             {
               "module": "ROOT",
               "path": "configuration/runtime-resources.adoc",
-              "url": "/camel-k/2.6.x/configuration/runtime-resources.html",
+              "url": "/camel-k/2.7.x/configuration/runtime-resources.html",
               "title": "Runtime resources"
             },
             {
               "module": "ROOT",
               "path": "configuration/runtime-version.adoc",
-              "url": "/camel-k/2.6.x/configuration/runtime-version.html",
+              "url": "/camel-k/2.7.x/configuration/runtime-version.html",
               "title": "Choose a Camel runtime version"
             },
             {
               "module": "ROOT",
               "path": "contributing/developers.adoc",
-              "url": "/camel-k/2.6.x/contributing/developers.html",
+              "url": "/camel-k/2.7.x/contributing/developers.html",
               "title": "Contributing to Camel K"
             },
             {
               "module": "ROOT",
               "path": "contributing/e2e.adoc",
-              "url": "/camel-k/2.6.x/contributing/e2e.html",
+              "url": "/camel-k/2.7.x/contributing/e2e.html",
               "title": "End To End local integration test"
             },
             {
               "module": "ROOT",
               "path": "contributing/local-development.adoc",
-              "url": "/camel-k/2.6.x/contributing/local-development.html",
+              "url": "/camel-k/2.7.x/contributing/local-development.html",
               "title": "Local development environment"
             },
             {
               "module": "ROOT",
               "path": "contributing/local-execution.adoc",
-              "url": "/camel-k/2.6.x/contributing/local-execution.html",
+              "url": "/camel-k/2.7.x/contributing/local-execution.html",
               "title": "Running operator as a local process"
             },
             {
               "module": "ROOT",
               "path": "contributing/remote-debugging.adoc",
-              "url": "/camel-k/2.6.x/contributing/remote-debugging.html",
+              "url": "/camel-k/2.7.x/contributing/remote-debugging.html",
               "title": "Remote Debugging Camel-K"
             },
             {
               "module": "ROOT",
               "path": "index.adoc",
-              "url": "/camel-k/2.6.x/index.html",
+              "url": "/camel-k/2.7.x/index.html",
               "title": "Apache Camel K"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/advanced.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/advanced.html",
+              "url": "/camel-k/2.7.x/installation/advanced/advanced.html",
               "title": "Camel K Operator fine tuning"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/build-config.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/build-config.html",
+              "url": "/camel-k/2.7.x/installation/advanced/build-config.html",
               "title": "Build configuration"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/http-proxy.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/http-proxy.html",
+              "url": "/camel-k/2.7.x/installation/advanced/http-proxy.html",
               "title": "HTTP Proxy"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/jdk-version.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/jdk-version.html",
+              "url": "/camel-k/2.7.x/installation/advanced/jdk-version.html",
               "title": "Choose your JDK version"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/maven-proxy.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/maven-proxy.html",
+              "url": "/camel-k/2.7.x/installation/advanced/maven-proxy.html",
               "title": "Run a Maven Proxy"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/maven.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/maven.html",
+              "url": "/camel-k/2.7.x/installation/advanced/maven.html",
               "title": "Configuring Maven"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/multi.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/multi.html",
+              "url": "/camel-k/2.7.x/installation/advanced/multi.html",
               "title": "Multiple Operators and Selective Upgrades"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/network.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/network.html",
+              "url": "/camel-k/2.7.x/installation/advanced/network.html",
               "title": "Components topology"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/offline.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/offline.html",
+              "url": "/camel-k/2.7.x/installation/advanced/offline.html",
               "title": "Camel K offline"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/platform-architecture.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/platform-architecture.html",
+              "url": "/camel-k/2.7.x/installation/advanced/platform-architecture.html",
               "title": "Platform architecture"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/pruning-registry.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/pruning-registry.html",
+              "url": "/camel-k/2.7.x/installation/advanced/pruning-registry.html",
               "title": "Pruning unused images from container registry"
             },
             {
               "module": "ROOT",
               "path": "installation/advanced/resources.adoc",
-              "url": "/camel-k/2.6.x/installation/advanced/resources.html",
+              "url": "/camel-k/2.7.x/installation/advanced/resources.html",
               "title": "Infrastructure Pods and Resource Management"
             },
             {
               "module": "ROOT",
               "path": "installation/installation.adoc",
-              "url": "/camel-k/2.6.x/installation/installation.html",
+              "url": "/camel-k/2.7.x/installation/installation.html",
               "title": "Installation"
             },
             {
               "module": "ROOT",
               "path": "installation/integrationplatform.adoc",
-              "url": "/camel-k/2.6.x/installation/integrationplatform.html",
+              "url": "/camel-k/2.7.x/installation/integrationplatform.html",
               "title": "Configure an IntegrationPlatform"
             },
             {
               "module": "ROOT",
               "path": "installation/knative.adoc",
-              "url": "/camel-k/2.6.x/installation/knative.html",
+              "url": "/camel-k/2.7.x/installation/knative.html",
               "title": "Knative configuration"
             },
             {
               "module": "ROOT",
               "path": "installation/platform/gke.adoc",
-              "url": "/camel-k/2.6.x/installation/platform/gke.html",
+              "url": "/camel-k/2.7.x/installation/platform/gke.html",
               "title": "Installing Camel K on Google Kubernetes Engine (GKE)"
             },
             {
               "module": "ROOT",
               "path": "installation/platform/iks.adoc",
-              "url": "/camel-k/2.6.x/installation/platform/iks.html",
+              "url": "/camel-k/2.7.x/installation/platform/iks.html",
               "title": "Installing Camel K on IBM Kubernetes Service (IKS)"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/registry-secret.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/registry-secret.html",
+              "url": "/camel-k/2.7.x/installation/registry/registry-secret.html",
               "title": "Configuring a secret for the container registry"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/registry.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/registry.html",
+              "url": "/camel-k/2.7.x/installation/registry/registry.html",
               "title": "Configuring Registry"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/special/docker-desktop.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/special/docker-desktop.html",
+              "url": "/camel-k/2.7.x/installation/registry/special/docker-desktop.html",
               "title": "Configure a registry on Docker Desktop"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/special/gcr.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/special/gcr.html",
+              "url": "/camel-k/2.7.x/installation/registry/special/gcr.html",
               "title": "Configuring a Gcr.io Registry"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/special/github.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/special/github.html",
+              "url": "/camel-k/2.7.x/installation/registry/special/github.html",
               "title": "Configuring a Github Packages Registry"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/special/icr.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/special/icr.html",
+              "url": "/camel-k/2.7.x/installation/registry/special/icr.html",
               "title": "Configuring a Namespace on IBM Container Registry (ICR)"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/special/kind.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/special/kind.html",
+              "url": "/camel-k/2.7.x/installation/registry/special/kind.html",
               "title": "Configuring a local registry on Kind"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/special/minikube.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/special/minikube.html",
+              "url": "/camel-k/2.7.x/installation/registry/special/minikube.html",
               "title": "Configuring registry on Minikube"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/special/openshift.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/special/openshift.html",
+              "url": "/camel-k/2.7.x/installation/registry/special/openshift.html",
               "title": "Configuring Openshift registry"
             },
             {
               "module": "ROOT",
               "path": "installation/registry/special/own.adoc",
-              "url": "/camel-k/2.6.x/installation/registry/special/own.html",
+              "url": "/camel-k/2.7.x/installation/registry/special/own.html",
               "title": "Run your own container registry"
             },
             {
               "module": "ROOT",
               "path": "installation/uninstalling.adoc",
-              "url": "/camel-k/2.6.x/installation/uninstalling.html",
+              "url": "/camel-k/2.7.x/installation/uninstalling.html",
               "title": "Uninstalling Camel K"
             },
             {
               "module": "ROOT",
               "path": "installation/upgrade.adoc",
-              "url": "/camel-k/2.6.x/installation/upgrade.html",
+              "url": "/camel-k/2.7.x/installation/upgrade.html",
               "title": "Upgrade Camel K"
             },
             {
               "module": "ROOT",
               "path": "kamelets/kamelets-distribution.adoc",
-              "url": "/camel-k/2.6.x/kamelets/kamelets-distribution.html",
+              "url": "/camel-k/2.7.x/kamelets/kamelets-distribution.html",
               "title": "Kamelets Distribution"
             },
             {
               "module": "ROOT",
               "path": "kamelets/kamelets-user.adoc",
-              "url": "/camel-k/2.6.x/kamelets/kamelets-user.html",
+              "url": "/camel-k/2.7.x/kamelets/kamelets-user.html",
               "title": "How to configure a Kamelet"
             },
             {
               "module": "ROOT",
               "path": "kamelets/kamelets.adoc",
-              "url": "/camel-k/2.6.x/kamelets/kamelets.html",
+              "url": "/camel-k/2.7.x/kamelets/kamelets.html",
               "title": "Kamelets"
             },
             {
               "module": "ROOT",
               "path": "kamelets/keda.adoc",
-              "url": "/camel-k/2.6.x/kamelets/keda.html",
+              "url": "/camel-k/2.7.x/kamelets/keda.html",
               "title": "KEDA (Kubernetes Event-Driven Autoscaling)"
             },
             {
               "module": "ROOT",
               "path": "languages/groovy.adoc",
-              "url": "/camel-k/2.6.x/languages/groovy.html",
+              "url": "/camel-k/2.7.x/languages/groovy.html",
               "title": "Writing Integrations in Groovy"
             },
             {
               "module": "ROOT",
               "path": "languages/java.adoc",
-              "url": "/camel-k/2.6.x/languages/java.html",
+              "url": "/camel-k/2.7.x/languages/java.html",
               "title": "Writing Integrations in Java"
             },
             {
               "module": "ROOT",
               "path": "languages/languages.adoc",
-              "url": "/camel-k/2.6.x/languages/languages.html",
+              "url": "/camel-k/2.7.x/languages/languages.html",
               "title": "Languages"
             },
             {
               "module": "ROOT",
               "path": "languages/xml.adoc",
-              "url": "/camel-k/2.6.x/languages/xml.html",
+              "url": "/camel-k/2.7.x/languages/xml.html",
               "title": "Writing Integrations in XML"
             },
             {
               "module": "ROOT",
               "path": "languages/yaml.adoc",
-              "url": "/camel-k/2.6.x/languages/yaml.html",
+              "url": "/camel-k/2.7.x/languages/yaml.html",
               "title": "Writing Integrations in YAML"
             },
             {
               "module": "ROOT",
               "path": "observability/logging.adoc",
-              "url": "/camel-k/2.6.x/observability/logging.html",
+              "url": "/camel-k/2.7.x/observability/logging.html",
               "title": "Camel K Logging"
             },
             {
               "module": "ROOT",
               "path": "observability/logging/integration.adoc",
-              "url": "/camel-k/2.6.x/observability/logging/integration.html",
+              "url": "/camel-k/2.7.x/observability/logging/integration.html",
               "title": "Camel K Integration Logging"
             },
             {
               "module": "ROOT",
               "path": "observability/logging/operator.adoc",
-              "url": "/camel-k/2.6.x/observability/logging/operator.html",
+              "url": "/camel-k/2.7.x/observability/logging/operator.html",
               "title": "Camel K Operator Logging"
             },
             {
               "module": "ROOT",
               "path": "observability/monitoring.adoc",
-              "url": "/camel-k/2.6.x/observability/monitoring.html",
+              "url": "/camel-k/2.7.x/observability/monitoring.html",
               "title": "Camel K Monitoring"
             },
             {
               "module": "ROOT",
               "path": "observability/monitoring/integration.adoc",
-              "url": "/camel-k/2.6.x/observability/monitoring/integration.html",
+              "url": "/camel-k/2.7.x/observability/monitoring/integration.html",
               "title": "Camel K Integration Monitoring"
             },
             {
               "module": "ROOT",
               "path": "observability/monitoring/operator-sops.adoc",
-              "url": "/camel-k/2.6.x/observability/monitoring/operator-sops.html",
+              "url": "/camel-k/2.7.x/observability/monitoring/operator-sops.html",
               "title": "Standard Operating Procedures"
             },
             {
               "module": "ROOT",
               "path": "observability/monitoring/operator.adoc",
-              "url": "/camel-k/2.6.x/observability/monitoring/operator.html",
+              "url": "/camel-k/2.7.x/observability/monitoring/operator.html",
               "title": "Camel K Operator Monitoring"
             },
             {
               "module": "ROOT",
               "path": "pipeline/external.adoc",
-              "url": "/camel-k/2.6.x/pipeline/external.html",
+              "url": "/camel-k/2.7.x/pipeline/external.html",
               "title": "Full fledged Pipeline"
             },
             {
               "module": "ROOT",
               "path": "pipeline/pipeline.adoc",
-              "url": "/camel-k/2.6.x/pipeline/pipeline.html",
+              "url": "/camel-k/2.7.x/pipeline/pipeline.html",
               "title": "Build Pipeline"
             },
             {
               "module": "ROOT",
               "path": "pipes/bind-cli.adoc",
-              "url": "/camel-k/2.6.x/pipes/bind-cli.html",
+              "url": "/camel-k/2.7.x/pipes/bind-cli.html",
               "title": "Bind Pipes with kamel CLI"
             },
             {
               "module": "ROOT",
               "path": "pipes/error-handler.adoc",
-              "url": "/camel-k/2.6.x/pipes/error-handler.html",
+              "url": "/camel-k/2.7.x/pipes/error-handler.html",
               "title": "Pipes Error Handler"
             },
             {
               "module": "ROOT",
               "path": "pipes/pipes.adoc",
-              "url": "/camel-k/2.6.x/pipes/pipes.html",
-              "title": "Running an Pipe"
+              "url": "/camel-k/2.7.x/pipes/pipes.html",
+              "title": "Running a Pipe"
             },
             {
               "module": "ROOT",
               "path": "pipes/promoting.adoc",
-              "url": "/camel-k/2.6.x/pipes/promoting.html",
+              "url": "/camel-k/2.7.x/pipes/promoting.html",
               "title": "Promoting Pipes across environments"
             },
             {
               "module": "ROOT",
+              "path": "running/build-from-git.adoc",
+              "url": "/camel-k/2.7.x/running/build-from-git.html",
+              "title": "Build project hosted in a Git repository"
+            },
+            {
+              "module": "ROOT",
               "path": "running/promoting.adoc",
-              "url": "/camel-k/2.6.x/running/promoting.html",
+              "url": "/camel-k/2.7.x/running/promoting.html",
               "title": "Promoting Integrations across environments"
             },
             {
               "module": "ROOT",
               "path": "running/running-cli.adoc",
-              "url": "/camel-k/2.6.x/running/running-cli.html",
+              "url": "/camel-k/2.7.x/running/running-cli.html",
               "title": "Camel K CLI: kamel"
             },
             {
               "module": "ROOT",
               "path": "running/running.adoc",
-              "url": "/camel-k/2.6.x/running/running.html",
+              "url": "/camel-k/2.7.x/running/running.html",
               "title": "Running an Integration"
             },
             {
               "module": "ROOT",
               "path": "running/self-managed.adoc",
-              "url": "/camel-k/2.6.x/running/self-managed.html",
+              "url": "/camel-k/2.7.x/running/self-managed.html",
               "title": "Self Managed Build Integrations"
             },
             {
               "module": "ROOT",
               "path": "running/synthetic.adoc",
-              "url": "/camel-k/2.6.x/running/synthetic.html",
+              "url": "/camel-k/2.7.x/running/synthetic.html",
               "title": "Synthtetic Integrations"
             },
             {
               "module": "ROOT",
               "path": "scaling/binding.adoc",
-              "url": "/camel-k/2.6.x/scaling/binding.html",
+              "url": "/camel-k/2.7.x/scaling/binding.html",
               "title": "Camel K Pipe Scaling"
             },
             {
               "module": "ROOT",
               "path": "scaling/integration.adoc",
-              "url": "/camel-k/2.6.x/scaling/integration.html",
+              "url": "/camel-k/2.7.x/scaling/integration.html",
               "title": "Camel K Integration Scaling"
             },
             {
               "module": "ROOT",
               "path": "troubleshooting/debugging.adoc",
-              "url": "/camel-k/2.6.x/troubleshooting/debugging.html",
+              "url": "/camel-k/2.7.x/troubleshooting/debugging.html",
               "title": "Debugging Camel K Integrations"
             },
             {
               "module": "ROOT",
               "path": "troubleshooting/troubleshooting.adoc",
-              "url": "/camel-k/2.6.x/troubleshooting/troubleshooting.html",
+              "url": "/camel-k/2.7.x/troubleshooting/troubleshooting.html",
               "title": "Troubleshooting Camel K Integrations"
             },
             {
               "module": "traits",
               "path": "3scale.adoc",
-              "url": "/camel-k/2.6.x/traits/3scale.html",
+              "url": "/camel-k/2.7.x/traits/3scale.html",
               "title": "3scale Trait"
             },
             {
               "module": "traits",
               "path": "affinity.adoc",
-              "url": "/camel-k/2.6.x/traits/affinity.html",
+              "url": "/camel-k/2.7.x/traits/affinity.html",
               "title": "Affinity Trait"
             },
             {
               "module": "traits",
               "path": "aws-secrets-manager.adoc",
-              "url": "/camel-k/2.6.x/traits/aws-secrets-manager.html",
+              "url": "/camel-k/2.7.x/traits/aws-secrets-manager.html",
               "title": "Aws Secrets Manager Trait"
             },
             {
               "module": "traits",
               "path": "azure-key-vault.adoc",
-              "url": "/camel-k/2.6.x/traits/azure-key-vault.html",
+              "url": "/camel-k/2.7.x/traits/azure-key-vault.html",
               "title": "Azure Key Vault Trait"
             },
             {
               "module": "traits",
               "path": "builder.adoc",
-              "url": "/camel-k/2.6.x/traits/builder.html",
+              "url": "/camel-k/2.7.x/traits/builder.html",
               "title": "Builder Trait"
             },
             {
               "module": "traits",
               "path": "camel.adoc",
-              "url": "/camel-k/2.6.x/traits/camel.html",
+              "url": "/camel-k/2.7.x/traits/camel.html",
               "title": "Camel Trait"
             },
             {
               "module": "traits",
               "path": "container.adoc",
-              "url": "/camel-k/2.6.x/traits/container.html",
+              "url": "/camel-k/2.7.x/traits/container.html",
               "title": "Container Trait"
             },
             {
               "module": "traits",
               "path": "cron.adoc",
-              "url": "/camel-k/2.6.x/traits/cron.html",
+              "url": "/camel-k/2.7.x/traits/cron.html",
               "title": "Cron Trait"
             },
             {
               "module": "traits",
               "path": "deployer.adoc",
-              "url": "/camel-k/2.6.x/traits/deployer.html",
+              "url": "/camel-k/2.7.x/traits/deployer.html",
               "title": "Deployer Trait"
             },
             {
               "module": "traits",
               "path": "deployment.adoc",
-              "url": "/camel-k/2.6.x/traits/deployment.html",
+              "url": "/camel-k/2.7.x/traits/deployment.html",
               "title": "Deployment Trait"
             },
             {
               "module": "traits",
               "path": "environment.adoc",
-              "url": "/camel-k/2.6.x/traits/environment.html",
+              "url": "/camel-k/2.7.x/traits/environment.html",
               "title": "Environment Trait"
             },
             {
               "module": "traits",
               "path": "gc.adoc",
-              "url": "/camel-k/2.6.x/traits/gc.html",
+              "url": "/camel-k/2.7.x/traits/gc.html",
               "title": "Gc Trait"
             },
             {
               "module": "traits",
               "path": "gcp-secret-manager.adoc",
-              "url": "/camel-k/2.6.x/traits/gcp-secret-manager.html",
+              "url": "/camel-k/2.7.x/traits/gcp-secret-manager.html",
               "title": "Gcp Secret Manager Trait"
             },
             {
               "module": "traits",
               "path": "hashicorp-vault.adoc",
-              "url": "/camel-k/2.6.x/traits/hashicorp-vault.html",
+              "url": "/camel-k/2.7.x/traits/hashicorp-vault.html",
               "title": "Hashicorp Vault Trait"
             },
             {
               "module": "traits",
               "path": "health.adoc",
-              "url": "/camel-k/2.6.x/traits/health.html",
+              "url": "/camel-k/2.7.x/traits/health.html",
               "title": "Health Trait"
             },
             {
               "module": "traits",
               "path": "ingress.adoc",
-              "url": "/camel-k/2.6.x/traits/ingress.html",
+              "url": "/camel-k/2.7.x/traits/ingress.html",
               "title": "Ingress Trait"
             },
             {
               "module": "traits",
               "path": "istio.adoc",
-              "url": "/camel-k/2.6.x/traits/istio.html",
+              "url": "/camel-k/2.7.x/traits/istio.html",
               "title": "Istio Trait"
             },
             {
               "module": "traits",
               "path": "jolokia.adoc",
-              "url": "/camel-k/2.6.x/traits/jolokia.html",
+              "url": "/camel-k/2.7.x/traits/jolokia.html",
               "title": "Jolokia Trait"
             },
             {
               "module": "traits",
               "path": "jvm.adoc",
-              "url": "/camel-k/2.6.x/traits/jvm.html",
+              "url": "/camel-k/2.7.x/traits/jvm.html",
               "title": "Jvm Trait"
             },
             {
               "module": "traits",
               "path": "kamelets.adoc",
-              "url": "/camel-k/2.6.x/traits/kamelets.html",
+              "url": "/camel-k/2.7.x/traits/kamelets.html",
               "title": "Kamelets Trait"
             },
             {
               "module": "traits",
               "path": "keda.adoc",
-              "url": "/camel-k/2.6.x/traits/keda.html",
+              "url": "/camel-k/2.7.x/traits/keda.html",
               "title": "Keda Trait"
             },
             {
               "module": "traits",
               "path": "knative-service.adoc",
-              "url": "/camel-k/2.6.x/traits/knative-service.html",
+              "url": "/camel-k/2.7.x/traits/knative-service.html",
               "title": "Knative Service Trait"
             },
             {
               "module": "traits",
               "path": "knative.adoc",
-              "url": "/camel-k/2.6.x/traits/knative.html",
+              "url": "/camel-k/2.7.x/traits/knative.html",
               "title": "Knative Trait"
             },
             {
               "module": "traits",
               "path": "logging.adoc",
-              "url": "/camel-k/2.6.x/traits/logging.html",
+              "url": "/camel-k/2.7.x/traits/logging.html",
               "title": "Logging Trait"
             },
             {
               "module": "traits",
               "path": "master.adoc",
-              "url": "/camel-k/2.6.x/traits/master.html",
+              "url": "/camel-k/2.7.x/traits/master.html",
               "title": "Master Trait"
             },
             {
               "module": "traits",
               "path": "mount.adoc",
-              "url": "/camel-k/2.6.x/traits/mount.html",
+              "url": "/camel-k/2.7.x/traits/mount.html",
               "title": "Mount Trait"
             },
             {
               "module": "traits",
               "path": "openapi.adoc",
-              "url": "/camel-k/2.6.x/traits/openapi.html",
+              "url": "/camel-k/2.7.x/traits/openapi.html",
               "title": "Openapi Trait"
             },
             {
               "module": "traits",
               "path": "owner.adoc",
-              "url": "/camel-k/2.6.x/traits/owner.html",
+              "url": "/camel-k/2.7.x/traits/owner.html",
               "title": "Owner Trait"
             },
             {
               "module": "traits",
               "path": "pdb.adoc",
-              "url": "/camel-k/2.6.x/traits/pdb.html",
+              "url": "/camel-k/2.7.x/traits/pdb.html",
               "title": "Pdb Trait"
             },
             {
               "module": "traits",
               "path": "platform.adoc",
-              "url": "/camel-k/2.6.x/traits/platform.html",
+              "url": "/camel-k/2.7.x/traits/platform.html",
               "title": "Platform Trait"
             },
             {
               "module": "traits",
               "path": "pod.adoc",
-              "url": "/camel-k/2.6.x/traits/pod.html",
+              "url": "/camel-k/2.7.x/traits/pod.html",
               "title": "Pod Trait"
             },
             {
               "module": "traits",
               "path": "prometheus.adoc",
-              "url": "/camel-k/2.6.x/traits/prometheus.html",
+              "url": "/camel-k/2.7.x/traits/prometheus.html",
               "title": "Prometheus Trait"
             },
             {
               "module": "traits",
               "path": "pull-secret.adoc",
-              "url": "/camel-k/2.6.x/traits/pull-secret.html",
+              "url": "/camel-k/2.7.x/traits/pull-secret.html",
               "title": "Pull Secret Trait"
             },
             {
               "module": "traits",
               "path": "quarkus.adoc",
-              "url": "/camel-k/2.6.x/traits/quarkus.html",
+              "url": "/camel-k/2.7.x/traits/quarkus.html",
               "title": "Quarkus Trait"
             },
             {
               "module": "traits",
               "path": "resume.adoc",
-              "url": "/camel-k/2.6.x/traits/resume.html",
+              "url": "/camel-k/2.7.x/traits/resume.html",
               "title": "Resume Trait"
             },
             {
               "module": "traits",
               "path": "route.adoc",
-              "url": "/camel-k/2.6.x/traits/route.html",
+              "url": "/camel-k/2.7.x/traits/route.html",
               "title": "Route Trait"
             },
             {
               "module": "traits",
               "path": "security-context.adoc",
-              "url": "/camel-k/2.6.x/traits/security-context.html",
+              "url": "/camel-k/2.7.x/traits/security-context.html",
               "title": "Security Context Trait"
             },
             {
               "module": "traits",
-              "path": "service-binding.adoc",
-              "url": "/camel-k/2.6.x/traits/service-binding.html",
-              "title": "Service Binding Trait"
-            },
-            {
-              "module": "traits",
               "path": "service.adoc",
-              "url": "/camel-k/2.6.x/traits/service.html",
+              "url": "/camel-k/2.7.x/traits/service.html",
               "title": "Service Trait"
             },
             {
               "module": "traits",
               "path": "telemetry.adoc",
-              "url": "/camel-k/2.6.x/traits/telemetry.html",
+              "url": "/camel-k/2.7.x/traits/telemetry.html",
               "title": "Telemetry Trait"
             },
             {
               "module": "traits",
               "path": "toleration.adoc",
-              "url": "/camel-k/2.6.x/traits/toleration.html",
+              "url": "/camel-k/2.7.x/traits/toleration.html",
               "title": "Toleration Trait"
             },
             {
               "module": "traits",
               "path": "traits.adoc",
-              "url": "/camel-k/2.6.x/traits/traits.html",
+              "url": "/camel-k/2.7.x/traits/traits.html",
               "title": "Traits"
             }
           ]
@@ -3182,6 +3177,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/connectors/camel-kafka-apicurio-registry-not-secured-source-kafka-source-connector.adoc",
+              "url": "/camel-kafka-connector/next/reference/connectors/camel-kafka-apicurio-registry-not-secured-source-kafka-source-connector.html",
+              "title": "camel-kafka-apicurio-registry-not-secured-source-kafka-connector source configuration"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/connectors/camel-kafka-azure-schema-registry-sink-kafka-sink-connector.adoc",
               "url": "/camel-kafka-connector/next/reference/connectors/camel-kafka-azure-schema-registry-sink-kafka-sink-connector.html",
               "title": "camel-kafka-azure-schema-registry-sink-kafka-connector sink configuration"
@@ -3599,6 +3600,18 @@
               "path": "reference/connectors/camel-snowflake-source-kafka-source-connector.adoc",
               "url": "/camel-kafka-connector/next/reference/connectors/camel-snowflake-source-kafka-source-connector.html",
               "title": "camel-snowflake-source-kafka-connector source configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/connectors/camel-solr-sink-kafka-sink-connector.adoc",
+              "url": "/camel-kafka-connector/next/reference/connectors/camel-solr-sink-kafka-sink-connector.html",
+              "title": "camel-solr-sink-kafka-connector sink configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/connectors/camel-solr-source-kafka-source-connector.adoc",
+              "url": "/camel-kafka-connector/next/reference/connectors/camel-solr-source-kafka-source-connector.html",
+              "title": "camel-solr-source-kafka-connector source configuration"
             },
             {
               "module": "ROOT",
@@ -5158,1347 +5171,6 @@
               "title": "Remove Headers"
             }
           ]
-        },
-        {
-          "version": "4.8.x",
-          "url": "/camel-kafka-connector/4.8.x/index.html",
-          "pages": [
-            {
-              "module": "ROOT",
-              "path": "contributor-guide/index.adoc",
-              "url": "/camel-kafka-connector/4.8.x/contributor-guide/index.html",
-              "title": "Contributing to Camel-Kafka-connector"
-            },
-            {
-              "module": "ROOT",
-              "path": "contributor-guide/release-guide.adoc",
-              "url": "/camel-kafka-connector/4.8.x/contributor-guide/release-guide.html",
-              "title": "Apache Camel Kafka Connect release process",
-              "attributes": {
-                "page-aliases": "release-guide.adoc"
-              }
-            },
-            {
-              "module": "ROOT",
-              "path": "contributor-guide/testing.adoc",
-              "url": "/camel-kafka-connector/4.8.x/contributor-guide/testing.html",
-              "title": "Testing the Camel Kafka Connector"
-            },
-            {
-              "module": "ROOT",
-              "path": "contributor-guide/troubleshooting.adoc",
-              "url": "/camel-kafka-connector/4.8.x/contributor-guide/troubleshooting.html",
-              "title": "Troubleshooting the Camel Kafka Connector"
-            },
-            {
-              "module": "ROOT",
-              "path": "index.adoc",
-              "url": "/camel-kafka-connector/4.8.x/index.html",
-              "title": "Camel Kafka Connector"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-bedrock-agent-runtime-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-bedrock-agent-runtime-sink-kafka-sink-connector.html",
-              "title": "camel-aws-bedrock-agent-runtime-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-bedrock-text-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-bedrock-text-sink-kafka-sink-connector.html",
-              "title": "camel-aws-bedrock-text-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-cloudtrail-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-cloudtrail-source-kafka-source-connector.html",
-              "title": "camel-aws-cloudtrail-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-cloudwatch-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-cloudwatch-sink-kafka-sink-connector.html",
-              "title": "camel-aws-cloudwatch-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-ddb-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-ddb-sink-kafka-sink-connector.html",
-              "title": "camel-aws-ddb-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-ddb-streams-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-ddb-streams-source-kafka-source-connector.html",
-              "title": "camel-aws-ddb-streams-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-ec2-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-ec2-sink-kafka-sink-connector.html",
-              "title": "camel-aws-ec2-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-eventbridge-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-eventbridge-sink-kafka-sink-connector.html",
-              "title": "camel-aws-eventbridge-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-kinesis-firehose-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-kinesis-firehose-sink-kafka-sink-connector.html",
-              "title": "camel-aws-kinesis-firehose-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-kinesis-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-kinesis-sink-kafka-sink-connector.html",
-              "title": "camel-aws-kinesis-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-kinesis-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-kinesis-source-kafka-source-connector.html",
-              "title": "camel-aws-kinesis-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-lambda-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-lambda-sink-kafka-sink-connector.html",
-              "title": "camel-aws-lambda-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-redshift-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-redshift-sink-kafka-sink-connector.html",
-              "title": "camel-aws-redshift-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-redshift-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-redshift-source-kafka-source-connector.html",
-              "title": "camel-aws-redshift-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-s3-event-based-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-s3-event-based-source-kafka-source-connector.html",
-              "title": "camel-aws-s3-event-based-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-s3-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-s3-sink-kafka-sink-connector.html",
-              "title": "camel-aws-s3-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-s3-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-s3-source-kafka-source-connector.html",
-              "title": "camel-aws-s3-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-s3-streaming-upload-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-s3-streaming-upload-sink-kafka-sink-connector.html",
-              "title": "camel-aws-s3-streaming-upload-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-secrets-manager-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-secrets-manager-sink-kafka-sink-connector.html",
-              "title": "camel-aws-secrets-manager-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-ses-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-ses-sink-kafka-sink-connector.html",
-              "title": "camel-aws-ses-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-sns-fifo-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-sns-fifo-sink-kafka-sink-connector.html",
-              "title": "camel-aws-sns-fifo-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-sns-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-sns-sink-kafka-sink-connector.html",
-              "title": "camel-aws-sns-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-sqs-batch-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-sqs-batch-sink-kafka-sink-connector.html",
-              "title": "camel-aws-sqs-batch-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-sqs-fifo-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-sqs-fifo-sink-kafka-sink-connector.html",
-              "title": "camel-aws-sqs-fifo-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-sqs-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-sqs-sink-kafka-sink-connector.html",
-              "title": "camel-aws-sqs-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-sqs-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-sqs-source-kafka-source-connector.html",
-              "title": "camel-aws-sqs-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws-timestream-query-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws-timestream-query-sink-kafka-sink-connector.html",
-              "title": "camel-aws-timestream-query-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws2-iam-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws2-iam-kafka-sink-connector.html",
-              "title": "camel-aws2-iam-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-aws2-kms-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-aws2-kms-kafka-sink-connector.html",
-              "title": "camel-aws2-kms-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-cosmosdb-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-cosmosdb-sink-kafka-sink-connector.html",
-              "title": "camel-azure-cosmosdb-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-cosmosdb-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-cosmosdb-source-kafka-source-connector.html",
-              "title": "camel-azure-cosmosdb-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-eventhubs-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-eventhubs-sink-kafka-sink-connector.html",
-              "title": "camel-azure-eventhubs-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-eventhubs-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-eventhubs-source-kafka-source-connector.html",
-              "title": "camel-azure-eventhubs-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-functions-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-functions-sink-kafka-sink-connector.html",
-              "title": "camel-azure-functions-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-servicebus-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-servicebus-sink-kafka-sink-connector.html",
-              "title": "camel-azure-servicebus-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-servicebus-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-servicebus-source-kafka-source-connector.html",
-              "title": "camel-azure-servicebus-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-blob-append-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-blob-append-sink-kafka-sink-connector.html",
-              "title": "camel-azure-storage-blob-append-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-blob-changefeed-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-blob-changefeed-source-kafka-source-connector.html",
-              "title": "camel-azure-storage-blob-changefeed-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-blob-event-based-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-blob-event-based-source-kafka-source-connector.html",
-              "title": "camel-azure-storage-blob-event-based-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-blob-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-blob-sink-kafka-sink-connector.html",
-              "title": "camel-azure-storage-blob-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-blob-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-blob-source-kafka-source-connector.html",
-              "title": "camel-azure-storage-blob-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-datalake-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-datalake-sink-kafka-sink-connector.html",
-              "title": "camel-azure-storage-datalake-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-datalake-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-datalake-source-kafka-source-connector.html",
-              "title": "camel-azure-storage-datalake-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-files-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-files-sink-kafka-sink-connector.html",
-              "title": "camel-azure-storage-files-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-files-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-files-source-kafka-source-connector.html",
-              "title": "camel-azure-storage-files-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-queue-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-queue-sink-kafka-sink-connector.html",
-              "title": "camel-azure-storage-queue-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-azure-storage-queue-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-azure-storage-queue-source-kafka-source-connector.html",
-              "title": "camel-azure-storage-queue-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-beer-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-beer-source-kafka-source-connector.html",
-              "title": "camel-beer-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-bitcoin-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-bitcoin-source-kafka-source-connector.html",
-              "title": "camel-bitcoin-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-cassandra-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-cassandra-sink-kafka-sink-connector.html",
-              "title": "camel-cassandra-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-cassandra-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-cassandra-source-kafka-source-connector.html",
-              "title": "camel-cassandra-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-ceph-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-ceph-sink-kafka-sink-connector.html",
-              "title": "camel-ceph-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-ceph-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-ceph-source-kafka-source-connector.html",
-              "title": "camel-ceph-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-chuck-norris-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-chuck-norris-source-kafka-source-connector.html",
-              "title": "camel-chuck-norris-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-coffee-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-coffee-source-kafka-source-connector.html",
-              "title": "camel-coffee-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-couchbase-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-couchbase-sink-kafka-sink-connector.html",
-              "title": "camel-couchbase-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-counter-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-counter-source-kafka-source-connector.html",
-              "title": "camel-counter-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-cron-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-cron-source-kafka-source-connector.html",
-              "title": "camel-cron-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-cxf-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-cxf-kafka-sink-connector.html",
-              "title": "camel-cxf-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-cxf-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-cxf-kafka-source-connector.html",
-              "title": "camel-cxf-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-cxfrs-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-cxfrs-kafka-sink-connector.html",
-              "title": "camel-cxfrs-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-cxfrs-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-cxfrs-kafka-source-connector.html",
-              "title": "camel-cxfrs-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-dropbox-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-dropbox-sink-kafka-sink-connector.html",
-              "title": "camel-dropbox-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-dropbox-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-dropbox-source-kafka-source-connector.html",
-              "title": "camel-dropbox-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-earthquake-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-earthquake-source-kafka-source-connector.html",
-              "title": "camel-earthquake-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-elasticsearch-index-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-elasticsearch-index-sink-kafka-sink-connector.html",
-              "title": "camel-elasticsearch-index-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-elasticsearch-search-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-elasticsearch-search-source-kafka-source-connector.html",
-              "title": "camel-elasticsearch-search-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-exec-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-exec-sink-kafka-sink-connector.html",
-              "title": "camel-exec-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-fhir-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-fhir-sink-kafka-sink-connector.html",
-              "title": "camel-fhir-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-fhir-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-fhir-source-kafka-source-connector.html",
-              "title": "camel-fhir-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-file-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-file-kafka-sink-connector.html",
-              "title": "camel-file-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-file-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-file-kafka-source-connector.html",
-              "title": "camel-file-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-file-watch-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-file-watch-source-kafka-source-connector.html",
-              "title": "camel-file-watch-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-ftp-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-ftp-sink-kafka-sink-connector.html",
-              "title": "camel-ftp-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-ftp-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-ftp-source-kafka-source-connector.html",
-              "title": "camel-ftp-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-ftps-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-ftps-sink-kafka-sink-connector.html",
-              "title": "camel-ftps-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-ftps-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-ftps-source-kafka-source-connector.html",
-              "title": "camel-ftps-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-commit-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-github-commit-source-kafka-source-connector.html",
-              "title": "camel-github-commit-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-event-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-github-event-source-kafka-source-connector.html",
-              "title": "camel-github-event-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-pullrequest-comment-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-github-pullrequest-comment-source-kafka-source-connector.html",
-              "title": "camel-github-pullrequest-comment-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-pullrequest-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-github-pullrequest-source-kafka-source-connector.html",
-              "title": "camel-github-pullrequest-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-tag-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-github-tag-source-kafka-source-connector.html",
-              "title": "camel-github-tag-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-bigquery-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-bigquery-sink-kafka-sink-connector.html",
-              "title": "camel-google-bigquery-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-calendar-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-calendar-source-kafka-source-connector.html",
-              "title": "camel-google-calendar-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-functions-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-functions-sink-kafka-sink-connector.html",
-              "title": "camel-google-functions-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-mail-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-mail-source-kafka-source-connector.html",
-              "title": "camel-google-mail-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-pubsub-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-pubsub-sink-kafka-sink-connector.html",
-              "title": "camel-google-pubsub-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-pubsub-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-pubsub-source-kafka-source-connector.html",
-              "title": "camel-google-pubsub-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-sheets-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-sheets-sink-kafka-sink-connector.html",
-              "title": "camel-google-sheets-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-sheets-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-sheets-source-kafka-source-connector.html",
-              "title": "camel-google-sheets-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-storage-event-based-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-storage-event-based-source-kafka-source-connector.html",
-              "title": "camel-google-storage-event-based-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-storage-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-storage-sink-kafka-sink-connector.html",
-              "title": "camel-google-storage-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-google-storage-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-google-storage-source-kafka-source-connector.html",
-              "title": "camel-google-storage-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-graphql-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-graphql-sink-kafka-sink-connector.html",
-              "title": "camel-graphql-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-http-secured-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-http-secured-sink-kafka-sink-connector.html",
-              "title": "camel-http-secured-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-http-secured-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-http-secured-source-kafka-source-connector.html",
-              "title": "camel-http-secured-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-http-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-http-sink-kafka-sink-connector.html",
-              "title": "camel-http-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-http-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-http-source-kafka-source-connector.html",
-              "title": "camel-http-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-https-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-https-kafka-sink-connector.html",
-              "title": "camel-https-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-infinispan-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-infinispan-sink-kafka-sink-connector.html",
-              "title": "camel-infinispan-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-infinispan-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-infinispan-source-kafka-source-connector.html",
-              "title": "camel-infinispan-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jdbc-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jdbc-kafka-sink-connector.html",
-              "title": "camel-jdbc-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-amqp-10-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jms-amqp-10-sink-kafka-sink-connector.html",
-              "title": "camel-jms-amqp-10-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-amqp-10-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jms-amqp-10-source-kafka-source-connector.html",
-              "title": "camel-jms-amqp-10-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-apache-artemis-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jms-apache-artemis-sink-kafka-sink-connector.html",
-              "title": "camel-jms-apache-artemis-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-apache-artemis-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jms-apache-artemis-source-kafka-source-connector.html",
-              "title": "camel-jms-apache-artemis-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-ibm-mq-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jms-ibm-mq-sink-kafka-sink-connector.html",
-              "title": "camel-jms-ibm-mq-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-ibm-mq-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jms-ibm-mq-source-kafka-source-connector.html",
-              "title": "camel-jms-ibm-mq-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-pooled-apache-artemis-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jms-pooled-apache-artemis-sink-kafka-sink-connector.html",
-              "title": "camel-jms-pooled-apache-artemis-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-pooled-apache-artemis-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-jms-pooled-apache-artemis-source-kafka-source-connector.html",
-              "title": "camel-jms-pooled-apache-artemis-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-apicurio-registry-not-secured-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-apicurio-registry-not-secured-sink-kafka-sink-connector.html",
-              "title": "camel-kafka-apicurio-registry-not-secured-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-azure-schema-registry-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-azure-schema-registry-sink-kafka-sink-connector.html",
-              "title": "camel-kafka-azure-schema-registry-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-azure-schema-registry-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-azure-schema-registry-source-kafka-source-connector.html",
-              "title": "camel-kafka-azure-schema-registry-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-batch-apicurio-registry-not-secured-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-batch-apicurio-registry-not-secured-source-kafka-source-connector.html",
-              "title": "camel-kafka-batch-apicurio-registry-not-secured-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-batch-apicurio-registry-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-batch-apicurio-registry-source-kafka-source-connector.html",
-              "title": "camel-kafka-batch-apicurio-registry-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-batch-azure-schema-registry-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-batch-azure-schema-registry-source-kafka-source-connector.html",
-              "title": "camel-kafka-batch-azure-schema-registry-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-batch-not-secured-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-batch-not-secured-source-kafka-source-connector.html",
-              "title": "camel-kafka-batch-not-secured-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-batch-scram-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-batch-scram-source-kafka-source-connector.html",
-              "title": "camel-kafka-batch-scram-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-batch-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-batch-source-kafka-source-connector.html",
-              "title": "camel-kafka-batch-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-batch-ssl-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-batch-ssl-source-kafka-source-connector.html",
-              "title": "camel-kafka-batch-ssl-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-not-secured-apicurio-registry-json-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-not-secured-apicurio-registry-json-source-kafka-source-connector.html",
-              "title": "camel-kafka-not-secured-apicurio-registry-json-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-not-secured-apicurio-registry-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-not-secured-apicurio-registry-sink-kafka-sink-connector.html",
-              "title": "camel-kafka-not-secured-apicurio-registry-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-not-secured-apicurio-registry-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-not-secured-apicurio-registry-source-kafka-source-connector.html",
-              "title": "camel-kafka-not-secured-apicurio-registry-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-not-secured-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-not-secured-sink-kafka-sink-connector.html",
-              "title": "camel-kafka-not-secured-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-not-secured-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-not-secured-source-kafka-source-connector.html",
-              "title": "camel-kafka-not-secured-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-scram-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-scram-sink-kafka-sink-connector.html",
-              "title": "camel-kafka-scram-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-scram-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-scram-source-kafka-source-connector.html",
-              "title": "camel-kafka-scram-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-sink-kafka-sink-connector.html",
-              "title": "camel-kafka-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-source-kafka-source-connector.html",
-              "title": "camel-kafka-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-ssl-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-ssl-sink-kafka-sink-connector.html",
-              "title": "camel-kafka-ssl-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kafka-ssl-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kafka-ssl-source-kafka-source-connector.html",
-              "title": "camel-kafka-ssl-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kubernetes-namespaces-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kubernetes-namespaces-source-kafka-source-connector.html",
-              "title": "camel-kubernetes-namespaces-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kubernetes-nodes-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kubernetes-nodes-source-kafka-source-connector.html",
-              "title": "camel-kubernetes-nodes-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-kubernetes-pods-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-kubernetes-pods-source-kafka-source-connector.html",
-              "title": "camel-kubernetes-pods-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-log-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-log-sink-kafka-sink-connector.html",
-              "title": "camel-log-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mail-imap-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mail-imap-source-kafka-source-connector.html",
-              "title": "camel-mail-imap-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mail-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mail-sink-kafka-sink-connector.html",
-              "title": "camel-mail-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mariadb-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mariadb-sink-kafka-sink-connector.html",
-              "title": "camel-mariadb-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mariadb-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mariadb-source-kafka-source-connector.html",
-              "title": "camel-mariadb-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-minio-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-minio-sink-kafka-sink-connector.html",
-              "title": "camel-minio-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-minio-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-minio-source-kafka-source-connector.html",
-              "title": "camel-minio-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mongodb-changes-stream-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mongodb-changes-stream-source-kafka-source-connector.html",
-              "title": "camel-mongodb-changes-stream-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mongodb-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mongodb-sink-kafka-sink-connector.html",
-              "title": "camel-mongodb-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mongodb-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mongodb-source-kafka-source-connector.html",
-              "title": "camel-mongodb-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mqtt-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mqtt-sink-kafka-sink-connector.html",
-              "title": "camel-mqtt-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mqtt-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mqtt-source-kafka-source-connector.html",
-              "title": "camel-mqtt-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mqtt5-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mqtt5-sink-kafka-sink-connector.html",
-              "title": "camel-mqtt5-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mqtt5-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mqtt5-source-kafka-source-connector.html",
-              "title": "camel-mqtt5-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mysql-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mysql-sink-kafka-sink-connector.html",
-              "title": "camel-mysql-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-mysql-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-mysql-source-kafka-source-connector.html",
-              "title": "camel-mysql-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-nats-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-nats-sink-kafka-sink-connector.html",
-              "title": "camel-nats-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-nats-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-nats-source-kafka-source-connector.html",
-              "title": "camel-nats-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-netty-http-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-netty-http-kafka-sink-connector.html",
-              "title": "camel-netty-http-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-netty-http-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-netty-http-kafka-source-connector.html",
-              "title": "camel-netty-http-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-netty-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-netty-kafka-sink-connector.html",
-              "title": "camel-netty-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-netty-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-netty-kafka-source-connector.html",
-              "title": "camel-netty-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-opensearch-index-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-opensearch-index-sink-kafka-sink-connector.html",
-              "title": "camel-opensearch-index-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-opensearch-search-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-opensearch-search-source-kafka-source-connector.html",
-              "title": "camel-opensearch-search-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-oracle-database-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-oracle-database-sink-kafka-sink-connector.html",
-              "title": "camel-oracle-database-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-oracle-database-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-oracle-database-source-kafka-source-connector.html",
-              "title": "camel-oracle-database-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-postgresql-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-postgresql-sink-kafka-sink-connector.html",
-              "title": "camel-postgresql-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-postgresql-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-postgresql-source-kafka-source-connector.html",
-              "title": "camel-postgresql-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-pulsar-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-pulsar-sink-kafka-sink-connector.html",
-              "title": "camel-pulsar-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-pulsar-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-pulsar-source-kafka-source-connector.html",
-              "title": "camel-pulsar-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-redis-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-redis-sink-kafka-sink-connector.html",
-              "title": "camel-redis-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-redis-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-redis-source-kafka-source-connector.html",
-              "title": "camel-redis-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-rest-openapi-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-rest-openapi-sink-kafka-sink-connector.html",
-              "title": "camel-rest-openapi-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-salesforce-composite-upsert-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-salesforce-composite-upsert-sink-kafka-sink-connector.html",
-              "title": "camel-salesforce-composite-upsert-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-salesforce-create-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-salesforce-create-sink-kafka-sink-connector.html",
-              "title": "camel-salesforce-create-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-salesforce-delete-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-salesforce-delete-sink-kafka-sink-connector.html",
-              "title": "camel-salesforce-delete-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-salesforce-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-salesforce-source-kafka-source-connector.html",
-              "title": "camel-salesforce-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-salesforce-update-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-salesforce-update-sink-kafka-sink-connector.html",
-              "title": "camel-salesforce-update-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-scp-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-scp-sink-kafka-sink-connector.html",
-              "title": "camel-scp-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-sftp-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-sftp-sink-kafka-sink-connector.html",
-              "title": "camel-sftp-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-sftp-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-sftp-source-kafka-source-connector.html",
-              "title": "camel-sftp-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-sjms2-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-sjms2-kafka-sink-connector.html",
-              "title": "camel-sjms2-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-sjms2-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-sjms2-kafka-source-connector.html",
-              "title": "camel-sjms2-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-slack-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-slack-sink-kafka-sink-connector.html",
-              "title": "camel-slack-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-slack-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-slack-source-kafka-source-connector.html",
-              "title": "camel-slack-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-snowflake-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-snowflake-sink-kafka-sink-connector.html",
-              "title": "camel-snowflake-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-snowflake-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-snowflake-source-kafka-source-connector.html",
-              "title": "camel-snowflake-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-splunk-hec-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-splunk-hec-sink-kafka-sink-connector.html",
-              "title": "camel-splunk-hec-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-splunk-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-splunk-sink-kafka-sink-connector.html",
-              "title": "camel-splunk-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-splunk-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-splunk-source-kafka-source-connector.html",
-              "title": "camel-splunk-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-spring-rabbitmq-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-spring-rabbitmq-sink-kafka-sink-connector.html",
-              "title": "camel-spring-rabbitmq-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-spring-rabbitmq-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-spring-rabbitmq-source-kafka-source-connector.html",
-              "title": "camel-spring-rabbitmq-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-sqlserver-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-sqlserver-sink-kafka-sink-connector.html",
-              "title": "camel-sqlserver-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-sqlserver-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-sqlserver-source-kafka-source-connector.html",
-              "title": "camel-sqlserver-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-ssh-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-ssh-sink-kafka-sink-connector.html",
-              "title": "camel-ssh-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-ssh-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-ssh-source-kafka-source-connector.html",
-              "title": "camel-ssh-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-syslog-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-syslog-kafka-sink-connector.html",
-              "title": "camel-syslog-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-syslog-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-syslog-kafka-source-connector.html",
-              "title": "camel-syslog-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-telegram-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-telegram-sink-kafka-sink-connector.html",
-              "title": "camel-telegram-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-telegram-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-telegram-source-kafka-source-connector.html",
-              "title": "camel-telegram-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-timer-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-timer-source-kafka-source-connector.html",
-              "title": "camel-timer-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-twitter-directmessage-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-twitter-directmessage-source-kafka-source-connector.html",
-              "title": "camel-twitter-directmessage-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-twitter-search-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-twitter-search-source-kafka-source-connector.html",
-              "title": "camel-twitter-search-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-twitter-timeline-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-twitter-timeline-source-kafka-source-connector.html",
-              "title": "camel-twitter-timeline-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-webhook-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-webhook-source-kafka-source-connector.html",
-              "title": "camel-webhook-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-wttrin-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/connectors/camel-wttrin-source-kafka-source-connector.html",
-              "title": "camel-wttrin-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/index.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/index.html",
-              "title": "Supported connectors and documentation"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/transformers/fieldsToHeaders.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/transformers/fieldsToHeaders.html",
-              "title": "FieldsToHeaders"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/transformers/index.adoc",
-              "url": "/camel-kafka-connector/4.8.x/reference/transformers/index.html",
-              "title": "Single Message Transformations"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/aggregation.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/aggregation.html",
-              "title": "Aggregation"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/basic-concepts.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/basic-concepts.html",
-              "title": "Basic Concepts"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/basic-configuration.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/basic-configuration.html",
-              "title": "Basic Configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/extending-connector/archetype-apicurio-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/extending-connector/archetype-apicurio-connector.html",
-              "title": "Apicurio connector Archetypes"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/extending-connector/archetype-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/extending-connector/archetype-connector.html",
-              "title": "Archetypes"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/extending-connector/archetype-dataformat-connector.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/extending-connector/archetype-dataformat-connector.html",
-              "title": "Dataformat connector Archetypes"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/extending-connector/index.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/extending-connector/index.html",
-              "title": "Archetypes"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/getting-started/getting-started-with-packages.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/getting-started/getting-started-with-packages.html",
-              "title": "Getting started with packages"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/getting-started/try-it-out-locally.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/getting-started/try-it-out-locally.html",
-              "title": "Try it out locally"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/getting-started/try-it-out-on-kubernetes.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/getting-started/try-it-out-on-kubernetes.html",
-              "title": "Try it out on Kubernetes"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/getting-started/try-it-out-on-openshift-with-strimzi.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/getting-started/try-it-out-on-openshift-with-strimzi.html",
-              "title": "Try it out on OpenShift with Strimzi"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/idempotency.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/idempotency.html",
-              "title": "Idempotency"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/index.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/index.html",
-              "title": "Getting Started"
-            },
-            {
-              "module": "ROOT",
-              "path": "user-guide/remove-headers.adoc",
-              "url": "/camel-kafka-connector/4.8.x/user-guide/remove-headers.html",
-              "title": "Remove Headers"
-            }
-          ]
         }
       ]
     },
@@ -6808,12 +5480,6 @@
             },
             {
               "module": "ROOT",
-              "path": "beer-source.adoc",
-              "url": "/camel-kamelets/next/beer-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/beer-source.svg\" alt=\"beer source\"></span> Beer Source"
-            },
-            {
-              "module": "ROOT",
               "path": "bitcoin-source.adoc",
               "url": "/camel-kamelets/next/bitcoin-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/bitcoin-source.svg\" alt=\"bitcoin source\"></span> Bitcoin Source"
@@ -6859,12 +5525,6 @@
               "path": "chunk-template-action.adoc",
               "url": "/camel-kamelets/next/chunk-template-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/chunk-template-action.svg\" alt=\"chunk template action\"></span> Chunk Template Action"
-            },
-            {
-              "module": "ROOT",
-              "path": "coffee-source.adoc",
-              "url": "/camel-kamelets/next/coffee-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/coffee-source.svg\" alt=\"coffee source\"></span> Coffee Source"
             },
             {
               "module": "ROOT",
@@ -6996,7 +5656,7 @@
               "module": "ROOT",
               "path": "fhir-source.adoc",
               "url": "/camel-kamelets/next/fhir-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/fhir-source.svg\" alt=\"fhir source\"></span> Fhir Source"
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/fhir-source.svg\" alt=\"fhir source\"></span> FHIR Source"
             },
             {
               "module": "ROOT",
@@ -7702,6 +6362,18 @@
             },
             {
               "module": "ROOT",
+              "path": "pqc-kem-action.adoc",
+              "url": "/camel-kamelets/next/pqc-kem-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/pqc-kem-action.svg\" alt=\"pqc kem action\"></span> PQC Key Encapsulation/Decapsulation Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "pqc-signature-action.adoc",
+              "url": "/camel-kamelets/next/pqc-signature-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/pqc-signature-action.svg\" alt=\"pqc signature action\"></span> PQC Signature Action"
+            },
+            {
+              "module": "ROOT",
               "path": "predicate-filter-action.adoc",
               "url": "/camel-kamelets/next/predicate-filter-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/predicate-filter-action.svg\" alt=\"predicate filter action\"></span> Predicate Filter Action"
@@ -7855,6 +6527,18 @@
               "path": "snowflake-source.adoc",
               "url": "/camel-kamelets/next/snowflake-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/snowflake-source.svg\" alt=\"snowflake source\"></span> Snowflake Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "solr-sink.adoc",
+              "url": "/camel-kamelets/next/solr-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/solr-sink.svg\" alt=\"solr sink\"></span> Solr Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "solr-source.adoc",
+              "url": "/camel-kamelets/next/solr-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/solr-source.svg\" alt=\"solr source\"></span> Solr Source"
             },
             {
               "module": "ROOT",
@@ -11266,6 +9950,12 @@
             },
             {
               "module": "ROOT",
+              "path": "migration-guide/3.23.0.adoc",
+              "url": "/camel-quarkus/next/migration-guide/3.23.0.html",
+              "title": "Camel Quarkus 3.23.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
               "path": "migration-guide/index.adoc",
               "url": "/camel-quarkus/next/migration-guide/index.html",
               "title": "Camel Quarkus Migration And Upgrade Guides"
@@ -11866,6 +10556,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/debezium-oracle.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/debezium-oracle.html",
+              "title": "Debezium Oracle Connector"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/debezium-postgres.adoc",
               "url": "/camel-quarkus/next/reference/extensions/debezium-postgres.html",
               "title": "Debezium PostgresSQL Connector",
@@ -11887,6 +10583,12 @@
               "path": "reference/extensions/debug.adoc",
               "url": "/camel-quarkus/next/reference/extensions/debug.html",
               "title": "Debug"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/dfdl.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/dfdl.html",
+              "title": "DFDL"
             },
             {
               "module": "ROOT",
@@ -11959,12 +10661,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/etcd3.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/etcd3.html",
-              "title": "Etcd3"
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/exec.adoc",
               "url": "/camel-quarkus/next/reference/extensions/exec.html",
               "title": "Exec",
@@ -12031,6 +10727,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/fory.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/fory.html",
+              "title": "Fory"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/freemarker.adoc",
               "url": "/camel-quarkus/next/reference/extensions/freemarker.html",
               "title": "Freemarker"
@@ -12043,12 +10745,6 @@
               "attributes": {
                 "page-aliases": "extensions/ftp.adoc"
               }
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/fury.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/fury.html",
-              "title": "Fury"
             },
             {
               "module": "ROOT",
@@ -12232,6 +10928,12 @@
               "path": "reference/extensions/huaweicloud-smn.adoc",
               "url": "/camel-quarkus/next/reference/extensions/huaweicloud-smn.html",
               "title": "SimpleNotification"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ibm-secrets-manager.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/ibm-secrets-manager.html",
+              "title": "IBM Secrets Manager"
             },
             {
               "module": "ROOT",
@@ -12877,6 +11579,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/opentelemetry2.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/opentelemetry2.html",
+              "title": "Opentelemetry2"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/optaplanner.adoc",
               "url": "/camel-quarkus/next/reference/extensions/optaplanner.html",
               "title": "OptaPlanner"
@@ -12934,6 +11642,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/pqc.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/pqc.html",
+              "title": "PQC Algorithms"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/printer.adoc",
               "url": "/camel-quarkus/next/reference/extensions/printer.html",
               "title": "Printer"
@@ -12961,6 +11675,12 @@
               "path": "reference/extensions/pulsar.adoc",
               "url": "/camel-quarkus/next/reference/extensions/pulsar.html",
               "title": "Pulsar"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/python.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/python.html",
+              "title": "Python"
             },
             {
               "module": "ROOT",
@@ -13327,6 +12047,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/telemetry-dev.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/telemetry-dev.html",
+              "title": "Telemetry Dev"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/threadpoolfactory-vertx.adoc",
               "url": "/camel-quarkus/next/reference/extensions/threadpoolfactory-vertx.html",
               "title": "ThreadPoolFactory Vert.x",
@@ -13426,6 +12152,12 @@
               "path": "reference/extensions/weather.adoc",
               "url": "/camel-quarkus/next/reference/extensions/weather.html",
               "title": "Weather"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/weaviate.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/weaviate.html",
+              "title": "weaviate"
             },
             {
               "module": "ROOT",
@@ -13852,6 +12584,12 @@
               "path": "migration-guide/3.2.0.adoc",
               "url": "/camel-quarkus/3.20.x/migration-guide/3.2.0.html",
               "title": "Camel Quarkus 3.2.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.20.2.adoc",
+              "url": "/camel-quarkus/3.20.x/migration-guide/3.20.2.html",
+              "title": "Camel Quarkus 3.20.2 Migration Guide"
             },
             {
               "module": "ROOT",
@@ -19115,9 +17853,9 @@
             },
             {
               "module": "dataformats",
-              "path": "fury-dataformat.adoc",
-              "url": "/components/next/dataformats/fury-dataformat.html",
-              "title": "Fury"
+              "path": "fory-dataformat.adoc",
+              "url": "/components/next/dataformats/fory-dataformat.html",
+              "title": "Fory"
             },
             {
               "module": "dataformats",
@@ -20201,6 +18939,12 @@
             },
             {
               "module": "others",
+              "path": "jandex.adoc",
+              "url": "/components/next/others/jandex.html",
+              "title": "Jandex"
+            },
+            {
+              "module": "others",
               "path": "jasypt.adoc",
               "url": "/components/next/others/jasypt.html",
               "title": "Jasypt"
@@ -20396,6 +19140,12 @@
               "path": "shiro.adoc",
               "url": "/components/next/others/shiro.html",
               "title": "Shiro"
+            },
+            {
+              "module": "others",
+              "path": "spring-cloud-config.adoc",
+              "url": "/components/next/others/spring-cloud-config.html",
+              "title": "Spring Cloud Config"
             },
             {
               "module": "others",
@@ -20924,6 +19674,12 @@
               "path": "cxfrs-component.adoc",
               "url": "/components/next/cxfrs-component.html",
               "title": "CXF-RS"
+            },
+            {
+              "module": "ROOT",
+              "path": "dapr-component.adoc",
+              "url": "/components/next/dapr-component.html",
+              "title": "Dapr"
             },
             {
               "module": "ROOT",
@@ -21971,6 +20727,12 @@
             },
             {
               "module": "ROOT",
+              "path": "oauth-component.adoc",
+              "url": "/components/next/oauth-component.html",
+              "title": "OAuth"
+            },
+            {
+              "module": "ROOT",
               "path": "olingo2-component.adoc",
               "url": "/components/next/olingo2-component.html",
               "title": "Olingo2"
@@ -22100,6 +20862,12 @@
               "path": "plc4x-component.adoc",
               "url": "/components/next/plc4x-component.html",
               "title": "PLC4X"
+            },
+            {
+              "module": "ROOT",
+              "path": "pqc-component.adoc",
+              "url": "/components/next/pqc-component.html",
+              "title": "PQC Algorithms"
             },
             {
               "module": "ROOT",
@@ -22544,6 +21312,12 @@
               "path": "weather-component.adoc",
               "url": "/components/next/weather-component.html",
               "title": "Weather"
+            },
+            {
+              "module": "ROOT",
+              "path": "weaviate-component.adoc",
+              "url": "/components/next/weaviate-component.html",
+              "title": "weaviate"
             },
             {
               "module": "ROOT",
@@ -34090,6 +32864,18 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-4x-upgrade-guide-4_13.adoc",
+              "url": "/manual/camel-4x-upgrade-guide-4_13.html",
+              "title": "Apache Camel 4.x Upgrade Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-4x-upgrade-guide-4_14.adoc",
+              "url": "/manual/camel-4x-upgrade-guide-4_14.html",
+              "title": "Apache Camel 4.x Upgrade Guide"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-4x-upgrade-guide-4_2.adoc",
               "url": "/manual/camel-4x-upgrade-guide-4_2.html",
               "title": "Apache Camel 4.x Upgrade Guide"
@@ -34633,6 +33419,12 @@
               "path": "stream-caching.adoc",
               "url": "/manual/stream-caching.html",
               "title": "Stream caching"
+            },
+            {
+              "module": "ROOT",
+              "path": "template-engines.adoc",
+              "url": "/manual/template-engines.html",
+              "title": "Template engines"
             },
             {
               "module": "ROOT",

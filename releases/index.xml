@@ -6,8 +6,232 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 31 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 14 Jul 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kamelets 4.13.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.13.0/</link>
+      <pubDate>Mon, 14 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.13.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.13.0</title>
+      <link>https://camel.apache.org/releases/release-4.13.0/</link>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.13.0/</guid>
+      <description>This release is the new Camel 4.13.0 release.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.20.2</title>
+      <link>https://camel.apache.org/releases/q-3.20.2/</link>
+      <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.20.2/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.15.4</title>
+      <link>https://camel.apache.org/releases/q-3.15.4/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.15.4/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.10.6</title>
+      <link>https://camel.apache.org/releases/kamelets-4.10.6/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.10.6/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.8.8</title>
+      <link>https://camel.apache.org/releases/kamelets-4.8.8/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.8.8/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.12.1</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.12.1/</link>
+      <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.12.1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.10.6</title>
+      <link>https://camel.apache.org/releases/release-4.10.6/</link>
+      <pubDate>Fri, 27 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.10.6/</guid>
+      <description>This release is the new Camel 4.10.6 release.</description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.10.5</title>
+      <link>https://camel.apache.org/releases/karaf-4.10.5/</link>
+      <pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.10.5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.8.8</title>
+      <link>https://camel.apache.org/releases/release-4.8.8/</link>
+      <pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.8.8/</guid>
+      <description>This release is the new Camel 4.8.8 release.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.24.0</title>
+      <link>https://camel.apache.org/releases/q-3.24.0/</link>
+      <pubDate>Wed, 25 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.24.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel-K 2.7.0</title>
+      <link>https://camel.apache.org/releases/k-2.7.0/</link>
+      <pubDate>Tue, 24 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/k-2.7.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.10.5</title>
+      <link>https://camel.apache.org/releases/kamelets-4.10.5/</link>
+      <pubDate>Tue, 17 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.10.5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.10.5</title>
+      <link>https://camel.apache.org/releases/release-4.10.5/</link>
+      <pubDate>Tue, 03 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.10.5/</guid>
+      <description>This release is the new Camel 4.10.5 release.</description>
+    </item>
+    <item>
+      <title>Kamelets 4.12.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.12.0/</link>
+      <pubDate>Mon, 02 Jun 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.12.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.12.0</title>
+      <link>https://camel.apache.org/releases/release-4.12.0/</link>
+      <pubDate>Thu, 29 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.12.0/</guid>
+      <description>This release is the new Camel 4.12.0 release.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.23.0</title>
+      <link>https://camel.apache.org/releases/q-3.23.0/</link>
+      <pubDate>Mon, 26 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.23.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.8.7</title>
+      <link>https://camel.apache.org/releases/release-4.8.7/</link>
+      <pubDate>Fri, 09 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.8.7/</guid>
+      <description>This release is the new Camel 4.8.7 release.</description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.12.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.12.0/</link>
+      <pubDate>Tue, 06 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.12.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.10.4</title>
+      <link>https://camel.apache.org/releases/kamelets-4.10.4/</link>
+      <pubDate>Mon, 05 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.10.4/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.20.1</title>
+      <link>https://camel.apache.org/releases/q-3.20.1/</link>
+      <pubDate>Sun, 04 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.20.1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.22.0</title>
+      <link>https://camel.apache.org/releases/q-3.22.0/</link>
+      <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.22.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.10.4</title>
+      <link>https://camel.apache.org/releases/release-4.10.4/</link>
+      <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.10.4/</guid>
+      <description>This release is the new Camel 4.10.4 release.</description>
+    </item>
+    <item>
+      <title>Camel Kafka Connector release 4.11.0</title>
+      <link>https://camel.apache.org/releases/ckc-4.11.0/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/ckc-4.11.0/</guid>
+      <description>This release is the new Camel Kafka Connector 4.11.0 release.</description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.10.3</title>
+      <link>https://camel.apache.org/releases/karaf-4.10.3/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.10.3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.8.6</title>
+      <link>https://camel.apache.org/releases/karaf-4.8.6/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.8.6/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.11.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.11.0/</link>
+      <pubDate>Thu, 17 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.11.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Kafka Connector release 4.10.3</title>
+      <link>https://camel.apache.org/releases/ckc-4.10.3/</link>
+      <pubDate>Wed, 09 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/ckc-4.10.3/</guid>
+      <description>This release is the new Camel Kafka Connector 4.10.3 release.</description>
+    </item>
+    <item>
+      <title>Kamelets 4.11.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.11.0/</link>
+      <pubDate>Tue, 08 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.11.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.10.3</title>
+      <link>https://camel.apache.org/releases/kamelets-4.10.3/</link>
+      <pubDate>Thu, 03 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.10.3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.11.0</title>
+      <link>https://camel.apache.org/releases/release-4.11.0/</link>
+      <pubDate>Thu, 03 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.11.0/</guid>
+      <description>This release is the new Camel 4.11.0 release.</description>
+    </item>
+    <item>
+      <title>Release 4.8.6</title>
+      <link>https://camel.apache.org/releases/release-4.8.6/</link>
+      <pubDate>Tue, 01 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.8.6/</guid>
+      <description>This release is the new Camel 4.8.6 release.</description>
+    </item>
     <item>
       <title>Release 4.10.3</title>
       <link>https://camel.apache.org/releases/release-4.10.3/</link>
@@ -20,6 +244,13 @@
       <link>https://camel.apache.org/releases/q-3.20.0/</link>
       <pubDate>Wed, 26 Mar 2025 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/releases/q-3.20.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel-K Runtime release 3.15.3</title>
+      <link>https://camel.apache.org/releases/k-runtime-3.15.3/</link>
+      <pubDate>Mon, 24 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/k-runtime-3.15.3/</guid>
       <description></description>
     </item>
     <item>
