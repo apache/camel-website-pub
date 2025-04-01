@@ -17,7 +17,6 @@
 
 publish:
   whoami: asf-site
-
 github:
   labels:
     - camel

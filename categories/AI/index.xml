@@ -6,8 +6,15 @@
     <description>Recent content in AI on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 02 Apr 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/AI/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel AI: Inference via Model Serving #3: KServe</title>
+      <link>https://camel.apache.org/blog/2025/04/camel-kserve/</link>
+      <pubDate>Wed, 02 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/camel-kserve/</guid>
+      <description>Introduction In the previous blog posts (camel-tensorflow-serving and camel-torchserve), we discussed the recent release of Apache Camel 4.10 LTS, which introduced three new AI model serving components. 1&#xA;TorchServe component TensorFlow Serving component KServe component We previously wrote about the TorchServe and TensorFlow Serving components. This post introduces the KServe component, concluding the series.&#xA;KServe Component KServe is a platform for serving AI models on Kubernetes. KServe defines an API protocol enabling clients to perform health checks, retrieve metadata, and run inference on model servers.</description>
+    </item>
     <item>
       <title>Apache Camel AI: Inference via Model Serving #2: TensorFlow Serving</title>
       <link>https://camel.apache.org/blog/2025/02/camel-tensorflow-serving/</link>

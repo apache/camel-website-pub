@@ -1,5 +1,10 @@
 [
   {
+    "title": "AMQP",
+    "description": "Shows how to produce and consume messages to an ActiveMQ Artemis broker using AMQP.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/amqp"
+  },
+  {
     "title": "Artemis to ElasticSearch",
     "description": "Shows how the message is consumed from the Apache Artemis broker using MQTT protocol, transformed and loaded into ElasticSearch",
     "link": "https://github.com/apache/camel-quarkus-examples/tree/main/artemis-elasticsearch"
@@ -8,6 +13,11 @@
     "title": "Camel Quarkus CXF SOAP example",
     "description": "Shows how to use Camel CXF SOAP component.",
     "link": "https://github.com/apache/camel-quarkus-examples/tree/main/cxf-soap"
+  },
+  {
+    "title": "Communication with Netty over TCP",
+    "description": "Shows how to use TCP communication with Netty using a custom codec to encode and decode the data over the wire.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/netty-custom-correlation"
   },
   {
     "title": "Custom `main()`",
@@ -105,6 +115,11 @@
     "link": "https://github.com/apache/camel-quarkus-examples/tree/main/saga"
   },
   {
+    "title": "Send and receive messages from Redis",
+    "description": "Shows how to produce and consume messages from Redis, using both basic operations and pub/sub messaging.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/spring-redis"
+  },
+  {
     "title": "Timer Hello World",
     "description": "Uses the Camel timer component to output a Hello world message to the console",
     "link": "https://github.com/apache/camel-quarkus-examples/tree/main/timer-log"
@@ -118,6 +133,11 @@
     "title": "Unstructured Data Extraction with LangChain4j",
     "description": "Shows how to convert unstructured text data to structured Java objects helped with a Large Language Model and LangChain4j",
     "link": "https://github.com/apache/camel-quarkus-examples/tree/main/data-extract-langchain4j"
+  },
+  {
+    "title": "Upload a file to an AWS S3 bucket",
+    "description": "Shows how to produce and consume messages to an aws2-s3 bucket.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/aws2-s3"
   },
   {
     "title": "Vertx-Websocket Chat",
