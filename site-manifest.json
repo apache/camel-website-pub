@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1752480370764,
+  "generated": 1753096392774,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -9803,6 +9803,15 @@
             },
             {
               "module": "ROOT",
+              "path": "contributor-guide/create-new-dev-ui-page.adoc",
+              "url": "/camel-quarkus/next/contributor-guide/create-new-dev-ui-page.html",
+              "title": "Create a new Dev UI page",
+              "attributes": {
+                "page-aliases": "create-new-dev-ui.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
               "path": "contributor-guide/create-new-example.adoc",
               "url": "/camel-quarkus/next/contributor-guide/create-new-example.html",
               "title": "Create a new example project",
@@ -17892,6 +17901,12 @@
               "path": "index.adoc",
               "url": "/components/next/dataformats/index.html",
               "title": "Data Formats"
+            },
+            {
+              "module": "dataformats",
+              "path": "iso8583-dataformat.adoc",
+              "url": "/components/next/dataformats/iso8583-dataformat.html",
+              "title": "ISO-8583"
             },
             {
               "module": "dataformats",
@@ -32957,6 +32972,12 @@
               "path": "camel-jbang-kubernetes.adoc",
               "url": "/manual/camel-jbang-kubernetes.html",
               "title": "Camel Kubernetes plugin"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-test.adoc",
+              "url": "/manual/camel-jbang-test.html",
+              "title": "Camel Testing plugin"
             },
             {
               "module": "ROOT",

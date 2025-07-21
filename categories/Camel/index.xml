@@ -6,8 +6,15 @@
     <description>Recent content in Camel on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Apr 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 21 Jul 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Camel/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Prototyping E2E scenarios with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2025/07/camel-jbang-infra/</link>
+      <pubDate>Mon, 21 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/07/camel-jbang-infra/</guid>
+      <description>Introduction In this blog post, we&amp;rsquo;ll explore how Apache Camel JBang&amp;rsquo;s Infrastructure Command can help you rapidly prototype end-to-end integration scenarios and adapt to changing requirements. We&amp;rsquo;ll walk through a realistic development scenario where requirements evolve over time, demonstrating how Camel&amp;rsquo;s flexibility makes it an ideal choice for proof-of-concept development.&#xA;Camel JBang Infrastructure: Your Prototyping Toolkit We already know and love Camel JBang (if you don&amp;rsquo;t, check out Claus Ibsen&amp;rsquo;s YouTube channel for excellent tutorials).</description>
+    </item>
     <item>
       <title>Apache Camel AI: Inference via Model Serving #3: KServe</title>
       <link>https://camel.apache.org/blog/2025/04/camel-kserve/</link>

@@ -68,7 +68,7 @@
       <link>https://camel.apache.org/community/user-stories/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/user-stories/</guid>
-      <description>This page is intended as a place to collect user stories and feedback on Apache Camel. If you are using or have tried Apache Camel please add an entry or comment; or post to the mailing list.&#xA;Company, Product, or Project Description Alpakka Alpakka uses Apache Camel to implement additional messaging interfaces for actors. Any Camel component can be used to send and receive messages from Akka actors. For details, refer to the documentation of the extension module.</description>
+      <description>This page is intended as a place to collect user stories and feedback on Apache Camel. If you are using or have tried Apache Camel please add an entry or comment; or post to the mailing list.&#xA;Company, Product, or Project Description 314e Corporation At 314e Corporation, Apache Camel is the powerhouse behind our SaaS-based healthcare integration engine &amp;lsquo;ZSegment&amp;rsquo;. It quietly runs 10K–20K messages per second, connecting EHRs, labs, payers and more in real-time.</description>
     </item>
   </channel>
 </rss>

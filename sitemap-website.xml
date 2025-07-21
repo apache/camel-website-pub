@@ -2,8 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2025-07-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Camel/</loc>
+    <lastmod>2025-07-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/E2E/</loc>
+    <lastmod>2025-07-21T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/</loc>
-    <lastmod>2025-07-14T00:00:00+00:00</lastmod>
+    <lastmod>2025-07-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Infrastructure/</loc>
+    <lastmod>2025-07-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/07/camel-jbang-infra/</loc>
+    <lastmod>2025-07-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.13.0/</loc>
     <lastmod>2025-07-14T00:00:00+00:00</lastmod>
@@ -12,9 +27,6 @@
     <lastmod>2025-07-14T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2025/07/camel413-whatsnew/</loc>
-    <lastmod>2025-07-08T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2025-07-08T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.13.0/</loc>
@@ -195,9 +207,6 @@
     <lastmod>2025-04-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2025/04/camel-kserve/</loc>
-    <lastmod>2025-04-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Camel/</loc>
     <lastmod>2025-04-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2025-30177.html</loc>
