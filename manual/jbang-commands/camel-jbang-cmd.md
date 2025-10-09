@@ -1,0 +1,41 @@
+# camel cmd
+
+Performs commands in the running Camel integrations, such as start/stop route, or change logging levels.
+
+## Usage
+
+```bash
+camel cmd [options]
+```
+
+## Subcommands
+
+ 
+| Subcommand | Description |
+| --- | --- |
+| [browse](camel-jbang-cmd-browse.md) | Browse pending messages on endpoints |
+| [disable-processor](camel-jbang-cmd-disable-processor.md) | Disable Camel processor |
+| [enable-processor](camel-jbang-cmd-enable-processor.md) | Enable Camel processor |
+| [gc](camel-jbang-cmd-gc.md) | Trigger Java Memory Garbage Collector |
+| [load](camel-jbang-cmd-load.md) | Loads new source files into an existing Camel |
+| [logger](camel-jbang-cmd-logger.md) | List or change logging levels |
+| [receive](camel-jbang-cmd-receive.md) | Receive and dump messages from remote endpoints |
+| [reload](camel-jbang-cmd-reload.md) | Trigger reloading Camel |
+| [reset-stats](camel-jbang-cmd-reset-stats.md) | Reset performance statistics |
+| [resume-route](camel-jbang-cmd-resume-route.md) | Resume Camel routes |
+| [route-structure](camel-jbang-cmd-route-structure.md) | Dump Camel route structure |
+| [send](camel-jbang-cmd-send.md) | Send messages to endpoints |
+| [start-group](camel-jbang-cmd-start-group.md) | Start Camel route groups |
+| [start-route](camel-jbang-cmd-start-route.md) | Start Camel routes |
+| [stop-group](camel-jbang-cmd-stop-group.md) | Stop Camel route groups |
+| [stop-route](camel-jbang-cmd-stop-route.md) | Stop Camel routes |
+| [stub](camel-jbang-cmd-stub.md) | Browse stub endpoints |
+| [suspend-route](camel-jbang-cmd-suspend-route.md) | Suspend Camel routes |
+| [thread-dump](camel-jbang-cmd-thread-dump.md) | List threads in a running Camel integration |
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

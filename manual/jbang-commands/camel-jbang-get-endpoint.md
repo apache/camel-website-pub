@@ -1,0 +1,25 @@
+# camel get endpoint
+
+Get usage of Camel endpoints
+
+## Usage
+
+```bash
+camel get endpoint [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--filter` | Filter endpoints by URI |  | String |
+| `--filter-direction` | Filter by direction (in or out) |  | String |
+| `--filter-total` | Filter endpoints that must be higher than the given usage |  | long |
+| `--json` | Output in JSON Format |  | boolean |
+| `--limit` | Filter endpoints by limiting to the given number of rows |  | int |
+| `--short-uri` | List endpoint URI without query parameters (short) |  | boolean |
+| `--sort` | Sort by pid, name, age or total | pid | String |
+| `--watch` | Execute periodically and showing output fullscreen |  | boolean |
+| `--wide-uri` | List endpoint URI in full details |  | boolean |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

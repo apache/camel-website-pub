@@ -1,0 +1,25 @@
+# Kamelets Distribution
+
+The Camel K opinionated way of Kamelets distribution is to expect them available on the cluster. You typically develop a Kamelet and then release it in the Integration namespace or the operator namespace. Alternatively you can also deliver them into any other namespace.
+
+There is not a prescribed way how to release the Kamelets on the cluster. It can vary based on each company process. What’s important for the operator, is that they are available when running the Integrations.
+
+## Apache Kamelets catalog
+
+When you install Camel K, you typically got bundled a series of Kamelets which are coming from the [Apache Kamelet Catalog](../../../camel-kamelets/4.18.x/index.md). This is a facility that will let you immediately use a wide set of connector-style resources to interact with any event source and sink.
+
+> **Note**
+> the version we bundle depends directly on the default Camel version used. To avoid potential breaking compatibility issues, Apache Kamelets catalog bundling is deprecated and may disappear in future releases
+
+## Kamelets as a dependency
+
+You may find situations where you want to bundle a Kamelet in a dependency (ie, one or more external catalog containing the Kamelets spec) and use the same approach of distributing Kamelets as done in Camel core. As Kamelets are a Camel thing, then, you can use such dependency and let the runtime use the Kamelets available in the classpath. As an example, you will be able to run:
+
+```bash
+kamel bind my-source log-sink -d github:squakez/acme-kamelets-catalog -d camel:timer
+```
+
+If you use this approach you will need to provide the Integration all the dependencies used in your Kamelet spec as the operator is not (yet) able to scan the Kamelet spec.
+
+> **Note**
+> this dependency limitation is likely to disappear in future versions.

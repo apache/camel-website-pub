@@ -1,0 +1,21 @@
+# camel transform route
+
+Transform Camel routes to XML or YAML format
+
+## Usage
+
+```bash
+camel transform route [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--format` | Output format (xml, yaml), if only yaml files are provided, the format defaults to xml and vice versa |  | String |
+| `--ignore-loading-error` | Whether to ignore route loading and compilation errors (use this with care!) |  | boolean |
+| `--output` | File or directory to store transformed files. If none provide then output is printed to console. Use clipboard as name to copy content into clipboard. |  | String |
+| `--resolve-placeholders` | Whether to resolve property placeholders in the dumped output | false | boolean |
+| `--uri-as-parameters` | Whether to expand URIs into separated key/value parameters (only in use for YAML format) | true | boolean |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

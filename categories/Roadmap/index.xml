@@ -6,8 +6,36 @@
     <description>Recent content in Roadmap on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 13 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Roadmap/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K 2.10.0</title>
+      <link>https://camel.apache.org/blog/2026/04/camel-k-2-10/</link>
+      <pubDate>Mon, 13 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/camel-k-2-10/</guid>
+      <description>© Smithsonian Magazine&#xA;Here a new fresh release of Camel K: version 2.10.0 is ready to go. We&amp;rsquo;ve worked to several improvements around the GitOps and Git features introduced lately. We&amp;rsquo;ve stabilized a few bugs discovered and upgraded dependencies as well.&#xA;GitOps Pipe We&amp;rsquo;ve worked to make sure the Camel GitOps is available not only for Integrations but also for Pipes. The principle is exactly the same. You need to configure the gitops trait on the Pipe you want to include in your GitOps flow and the operator will be in charge to provide a PR on the Git repository with the Pipe custom resource.</description>
+    </item>
+    <item>
+      <title>Apache Camel 2025 Download Statistics</title>
+      <link>https://camel.apache.org/blog/2026/02/2025-downloads/</link>
+      <pubDate>Mon, 09 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/2025-downloads/</guid>
+      <description>In 2025, Apache Camel&amp;rsquo;s adoption continued to surge, as shown by monthly download statistics from Maven Central.&#xA;The graph below tracks downloads over the last 12 months (December 2024 to December 2025). It starts at approximately 29 million downloads in December 2024 and shows steady overall growth, with some fluctuations along the way. Monthly figures rose progressively, reaching peaks around 47 million in July and over 50 million in October, before settling at about 44.</description>
+    </item>
+    <item>
+      <title>Camel 2025 in Numbers</title>
+      <link>https://camel.apache.org/blog/2026/01/2025-numbers/</link>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/2025-numbers/</guid>
+      <description>It&amp;rsquo;s the time of the year when we take a look back at 2025, and compile a brief summary (by numbers) of the Apache Camel project(s).&#xA;You can find previous year 2024 numbers here.&#xA;Camel 2025 in Numbers Number of Camel Core / Camel Spring Boot releases in 2025: 25&#xA;Number of Camel Quarkus releases in 2025: 18&#xA;Number of Camel Karavan releases in 2025: 3&#xA;Number of Camel K releases in 2025: 5</description>
+    </item>
+    <item>
+      <title>Camel K 2.9.0</title>
+      <link>https://camel.apache.org/blog/2025/12/camel-k-2-9/</link>
+      <pubDate>Tue, 23 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/12/camel-k-2-9/</guid>
+      <description>© ‘Camel Caravan’ by D.Damdinsuren&#xA;Last release of 2025! A present just in time for those celebrating Christmas. And this time, a very big package you&amp;rsquo;ll be happy to open! Camel K version 2.9.0 is bringing a lot of new features, improved traits and a new shiny GitOps operator assisted strategy. Let&amp;rsquo;s unfold it together.&#xA;GitOps operator side During 2025 we have introduced several enhancements around GitOps. We had introduced the possibility to use a Kustomize based overlay structure already in the kamel promote CLI.</description>
+    </item>
     <item>
       <title>Camel K 2.8.0</title>
       <link>https://camel.apache.org/blog/2025/09/camel-k-2-8/</link>

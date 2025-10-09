@@ -1,0 +1,157 @@
+# Tracer
+
+Camel’s tracer is used for logging message details during routing, where you can see the route path of each message as they happen. Details of the message is also logged such as the message body, and headers.
+
+> **Tip**
+> There is an alternative tracer that captures the messages in a [Backlog Tracer](backlog-tracer.md) for on-demand tracing. For example tools, Camel JBang, Hawtio and others are using this.
+
+## Enabling Tracing
+
+The logging tracing is easily enabled by setting a single flag.
+
+-   Java
+    
+-   Spring XML
+    
+-   Application Properties
+    
+
+You enable tracing on the `CamelContext`:
+
+```java
+context.setTracing(true);
+```
+
+```xml
+<camelContext trace="true" xmlns="http://activemq.apache.org/camel/schema/spring">
+...
+</camelContext>
+```
+
+For example when using Spring Boot or Quarkus
+
+```properties
+camel.main.tracing = true
+```
+
+### Setting Tracing in Standby mode
+
+By default, Camel optimizes and opt-out tracing. Therefore, you would either have to enable tracing from the startup, or turn on standby mode, to allow tracing to be enabled later during runtime.
+
+To set tracing in standby mode you can do:
+
+-   Java
+    
+-   Spring XML
+    
+-   Application Properties
+    
+
+```java
+context.setTracingStandby(true);
+```
+
+```xml
+<camelContext trace="standby" xmlns="http://activemq.apache.org/camel/schema/spring">
+...
+</camelContext>
+```
+
+For example when using Spring Boot or Quarkus
+
+```properties
+camel.main.tracing-standby = true
+```
+
+If tracer is in standby mode, then tracing is made available, and can be enabled later during runtime. This requires to either use JMX or Java to turn on the tracing:
+
+For example in Java:
+
+```java
+Tracer tracer = context.getTracer();
+tracer.setEnabled(true);
+```
+
+### Trace Logging Formatting
+
+The tracer formats the execution of exchanges to log lines. They are logged at `INFO` level in the log category: `org.apache.camel.Tracing`.
+
+The message information from the Exchange is formatted using `ExchangeFormatter` and the default implementation has many options you can configure accordingly to the [javadoc](https://www.javadoc.io/doc/org.apache.camel/camel-support/latest/org/apache/camel/support/processor/DefaultExchangeFormatter.md).
+
+The tracer outputs the logging with a prefix with the following information:
+
+-   arrow - (direction whether input or output)
+    
+-   routeId - the current route
+    
+-   label - the current EIP node
+    
+
+This output is assembled using the following default format:
+
+```text
+%-4.4s [%-12.12s] [%-33.33s]
+```
+
+The default format can be customized using, for example to use wider columns:
+
+-   Java
+    
+-   Spring XML
+    
+-   Application Properties
+    
+
+```java
+context.setTracingLoggingFormat("%-4.4s [%-30.30s] [%-50.50s]");
+```
+
+```xml
+<camelContext trace="true" traceLoggingFormat="%-4.4s [%-30.30s] [%-50.50s]">
+...
+</camelContext>
+```
+
+```properties
+camel.main.tracing-logging-format = %-4.4s [%-30.30s] [%-50.50s]
+```
+
+### Configuring maximum length of message body
+
+When you run Camel with logging, it will log the messages and its content from time to time.
+
+As some messages can contain very big payloads Camel will by default clip the log message and only show the first 1000 chars.
+
+You will see this in the log as:
+
+```log
+DEBUG ProducerCache                  - >>>> Endpoint[direct:start] Exchange[Message: 01234567890123456789... [Body clipped after 20 chars, total length is 1000]]
+```
+
+-   Java
+    
+-   Application Properties
+    
+
+In Java you can set the maximum length as a global option.
+
+```java
+context.getGlobalOptions().put(Exchange.LOG_DEBUG_BODY_MAX_CHARS, "500");
+```
+
+You can also set the limit in `application.properties`.
+
+```properties
+camel.main.globalOptions[CamelLogDebugBodyMaxChars] = 500
+```
+
+> **Note**
+> You can customize the limit when Camel clips the body in the log. You can use a limit of 0 to disable limit, so the entire body is shown. Setting a negative value, such as -1, means the message body is not logged at all.
+
+## See Also
+
+-   [Backlog Tracer](backlog-tracer.md)
+    
+-   [Debugger](debugger.md)
+    
+-   [Backlog Debugger](backlog-debugger.md)

@@ -1,0 +1,321 @@
+# Camel GitOps
+
+Once your build is complete, you can configure the operator to run an opinionated GitOps strategy. Camel K has a built-in feature which allow the operator to push a branch on a given Git repository with the latest Integration or Pipe candidate release built. In order to set the context, this would be the scenario:
+
+1.  The dev operator builds the application from Git source
+    
+2.  The dev operator push the container image
+    
+3.  The operator creates a branch into a Git repo with the Integration custom resource pinned with the container image just built
+    
+4.  (Optional) there could be a gateway such as a Pull Request to control the changes pushed are good to go
+    
+5.  A CICD tool (eg, ArgoCD) will be watching the repo and be notified when a change Integration is ready for a given environment (eg, production)
+    
+6.  The production operator will immediately start the Integration as it was a self managed Integration (it directly holds the container image) which does not require any build
+    
+
+The feature is based on Kustomize and can be entirely configured via `gitops` trait.
+
+> **Note**
+> the work described here is influenced by ["The Path to GitOps"](https://developers.redhat.com/e-books/path-gitops) book.
+
+## GitOps overlays
+
+The operator can create a Kustomize based overlay structure in order to simplify the creation of a **GitOps based deployment** process. Let’s pretend we want to create a GitOps pipeline for two environments, as an example, **staging** and **production**. We need to configure the trait with the following configuration:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: sample
+spec:
+...
+  traits:
+    camel:
+      properties:
+      - my-env=dev
+    container:
+      requestMemory: 256Mi
+    gitops:
+      enabled: true
+      url: https://github.com/my-org/my-camel-apps.git
+      secret: my-gh-token
+      branchPush: cicd-listener
+      overlays:
+        - staging
+        - production
+```
+
+> **Note**
+> There are more options to configure on the `gitops` trait. Feel free to have a look and learn on the trait documentation page directly.
+
+The same trait can be used on a Pipe:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Pipe
+metadata:
+  name: timer-to-log
+spec:
+  source:
+    uri: timer:foo
+  sink:
+    uri: log:bar
+  traits:
+    gitops:
+      enabled: true
+      url: https://github.com/my-org/my-camel-apps.git
+      secret: my-gh-token
+      overlays:
+        - staging
+        - production
+```
+
+> **Note**
+> When used with a Pipe, the `url` and `secret` trait parameters are required.
+
+As soon as the build is completed, the operator will prepare the commit with the overlays. For an Integration, the structure would be like the following directory tree:
+
+```bash
+/integrations/
+├── all
+│   └── overlays
+│       ├── production
+│       │   └── kustomization.yaml
+│       └── staging
+│           └── kustomization.yaml
+└── sample
+    ├── base
+    │   ├── integration.yaml
+    │   └── kustomization.yaml
+    ├── overlays
+    │   ├── production
+    │   │   ├── kustomization.yaml
+    │   │   └── patch-integration.yaml
+    │   └── staging
+    │       ├── kustomization.yaml
+    │       └── patch-integration.yaml
+    └── routes
+        └── XYZ.java
+```
+
+The above structure could be used directly with `kubectl` (eg, `kubectl apply -k /tmp/integrations/sample/overlays/production`) or any CICD capable of running a similar deployment strategy.
+
+For a Pipe, the structure is similar but uses `pipe.yaml` and `patch-pipe.yaml` instead:
+
+```bash
+/pipes/
+├── all
+│   └── overlays
+│       ├── production
+│       │   └── kustomization.yaml
+│       └── staging
+│           └── kustomization.yaml
+└── timer-to-log
+    ├── base
+    │   ├── pipe.yaml
+    │   └── kustomization.yaml
+    └── overlays
+        ├── production
+        │   ├── kustomization.yaml
+        │   └── patch-pipe.yaml
+        └── staging
+            ├── kustomization.yaml
+            └── patch-pipe.yaml
+```
+
+The important thing to notice is that the **base** resource (Integration or Pipe) is adding the container image that we’ve just built and any other trait which is required for the application to run correctly (and without the need to be rebuilt) on another environment:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: test
+spec:
+...
+  traits:
+    camel:
+      runtimeVersion: 3.15.3
+      properties:
+      - my-env=dev
+    container:
+      image: 10.110.254.179/camel-k/camel-k-kit-d4taqhk20aus73c0o74g@sha256:9d95d940291be22743c24fe5f2c973752e0e3953989d84936c57d81e6f179914
+      requestMemory: 256Mi
+    jvm:
+      classpath: dependencies/*:dependencies/app/*:dependencies/lib/boot/*:dependencies/lib/main/*:dependencies/quarkus/*
+```
+
+What’s cool is that each `patch-integration.yaml` (hence, each overlay) can be configured with different trait configuration (for example, resources configuration, replicas, …​). The tool will create a first empty configuration for those traits that are configuring deployment aspects, but won’t override any existing overlay, so that you can change them directly in the git repository without the risk the operator to override them. Every new build, it will only change the `container.image` and any other configuration which is not explicitly defined in the overlay.
+
+For example, your "production" overlay patch may be in this case:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: test
+spec:
+  traits:
+    camel:
+      properties:
+      - my-env=prod
+    container:
+      requestMemory: 2Gi
+```
+
+At next build, the patch won’t change. So, you can safely trust your CICD that will release correctly, just refreshing the container image with the newest candidate release image.
+
+### Manual gateway
+
+As you’re pushing the changes on a branch, you may want to use the branch and create Pull Request, Merge Request or any other merging strategy used by the git implementation of your choice. This is a clever way to introduce a gateway and have some approval methodology that has to be reviewed by a human operator. As git does not mandate a standard approach for this feature, you will need to implement a strategy on your own. If you’re using GitHub, you may, for example have GitHub Action to automate the creation of a PR each time a new commit happen on a given branch.
+
+### Running Camel with ArgoCD
+
+argo-cd.readthedocs.io\[ArgoCD\] is one of the most popular CICD choices around. Once you have stored the project in a Git repository, if you’re using a CICD technology like ArgoCD you can run your **production** pipeline as:
+
+```bash
+argocd app create my-sample-prod --repo https://git-server/repo/integrations/sample.git --path integrations/sample/overlays/production --dest-server https://kubernetes.default.svc --dest-namespace prod
+```
+
+From this moment onward any change can be performed on the repository and it will be automatically refreshed by the CICD pipeline accordingly.
+
+> **Note**
+> any other CICD technology can be adopted using the Git repository as source.
+
+### Separated cluster
+
+The GitOps feature makes it possible to have a physical separated cluster for each environment. You may have a build only cluster only which is the one where the operator performs the build of the Camel applications. Then you have a testing environment where your QA team is validating the application and finally a separated cluster for running production workloads. All automated and in sync without the need to rebuild the application. They have to use the same container registry or you need to adopt some registry synchronization tooling to maintain in sync the repository.
+
+### Single repository for multiple Camel applications
+
+You can have a single repository that will contain "all" your Integrations. If you have noticed, the Integrations will be added to an `integrations` root directory (you can configure it if you need). This is on purpose, as you may want a single repo with all your Kubernetes resources and some CICD just watching at them. So, the `integrations` will contain all your Integrations built and ready to run.
+
+Let’s have a look again at the tree structure:
+
+```bash
+/integrations/
+├── all
+│   └── overlays
+│       ├── production
+│       │   └── kustomization.yaml
+│       └── staging
+│           └── kustomization.yaml
+└── sample1
+    ...
+    ├── overlays
+    │   ├── production
+            ...
+    │   └── staging
+            ...
+└── sample2
+    ...
+│   └── overlays
+│       ├── production
+        ...
+│       └── staging
+        ...
+```
+
+Notice the `all` directory which contains the same overlays structure as the Integrations. The `kustomization.yaml` contains a list of all the Integrations provided in this repository:
+
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: production
+resources:
+- ../../../sample-1/overlays/production/
+- ../../../sample-2/overlays/production/
+```
+
+Your single repository containing all Integrations can be therefore referenced in a unique CICD. In the case of ArgoCD, it would be something like:
+
+```bash
+argocd app create my-integrations-prod --repo https://git-server/repo/integrations.git --path integrations/all/overlays/production --dest-server https://kubernetes.default.svc --dest-namespace prod
+```
+
+This pipeline is in charge to control **all** your Integration in a single place, which could be something you really want to achieve if you have a large number of Integrations that you want to synchronize in a single place.
+
+> **Note**
+> this is the approach suggested in ["The Path to GitOps"](https://developers.redhat.com/e-books/path-gitops) book.
+
+### Push to the same repository you’ve used to build
+
+If you’re building application from Git and you want to push the changes back to the same repository, then, you don’t need to configure the Git repository for `gitops` trait. If nothing is specified, the trait will get the configuration from `.spec.git` Integration. This approach may be good when you want to have a single repository containing all aspects of an application. In this case we suggest to use a directory named `ci` or `cicd` as a convention to store your GitOps configuration.
+
+> **Note**
+> This does not apply to Pipes, which must always specify the `url` on the `gitops` trait.
+
+### Chain of GitOps environments
+
+By default, the `gitops` trait will delete the trait configuration when creating the overlays. This is done in order to avoid a circular infinite push loop. In general, you don’t need the trait in your overlays, unless you have some more complex GitOps chaining methodology. If you have a cascading GitOps mechanisms, you can include the configuration in the `patch-integration.yaml`. We can imagine a build which trigger a QA execution. And then, the QA execution may trigger a Production overlay execution. You can use the patch in each different step and configure the `gitops` trait accordingly.
+
+The above description would turn into something like:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: sample
+spec:
+...
+  traits:
+    camel:
+      properties:
+      - my-env=dev
+...
+    gitops:
+      enabled: true
+      url: https://github.com/my-org/my-camel-apps.git
+      secret: my-gh-token
+      branchPush: cicd-listener-test
+      overlays:
+        - testing
+```
+
+Then, once the operator has built and pushed the change on the GitOps repo, you can configure your "testing" `patch-integration.yaml` overlay adding the `gitops` trait:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: test
+spec:
+  traits:
+    camel:
+      properties:
+      - my-env=test
+    gitops:
+      enabled: true
+      url: https://github.com/my-org/my-camel-apps.git
+      secret: my-gh-token
+      branchPush: cicd-listener-prod
+      overlays:
+        - production
+```
+
+When the "testing" pipeline executes, it will push further a "production" overlay that can be the final stage of your process. With this strategy you can create a chain of pipelines each of them controlling the next step (ideally with some gateway to control the flow).
+
+### Predetermined configuration
+
+The operator will add a patch configuration for any of the following trait configuration found in the source base Integration:
+
+-   Affinity configuration
+    
+-   Camel properties
+    
+-   Container resources
+    
+-   Environment variables
+    
+-   JVM options
+    
+-   Mount configuration
+    
+-   Toleration configuration
+    
+
+These are the traits that are executed at deployment time. However, you can add any trait you want. Only mind that the "build" traits or in general traits executed in any phase before "Deploy", won’t take any effect.
+
+> **Note**
+> feel free to ask to add any further configuration you require.

@@ -1,0 +1,23 @@
+# Stomp
+
+JVM since1.1.0 Nativeunsupported
+
+Send and rececive messages to/from STOMP (Simple Text Oriented Messaging Protocol) compliant message brokers.
+
+## What’s inside
+
+-   [Stomp component](../../../../components/4.14.x/stomp-component.md), URI syntax: `stomp:destination`
+    
+
+Please refer to the above link for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-stomp</artifactId>
+</dependency>
+```
+
+Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.

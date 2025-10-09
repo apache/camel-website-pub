@@ -1,0 +1,262 @@
+# Huawei Distributed Message Service (DMS)
+
+**Since Camel 3.12**
+
+**Only producer is supported**
+
+Huawei Cloud Distributed Message Service (DMS) component allows you to integrate with [DMS](https://www.huaweicloud.com/intl/en-us/product/dms.md) provided by Huawei Cloud.
+
+Maven users will need to add the following dependency to their `pom.xml` for this component:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-huaweicloud-dms</artifactId>
+    <version>x.x.x</version>
+    <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+## URI Format
+
+hwcloud-dms:operation\[?options\]
+
+## Configuring Options
+
+Camel components are configured on two separate levels:
+
+-   component level
+    
+-   endpoint level
+    
+
+### Configuring Component Options
+
+At the component level, you set general and shared configurations that are, then, inherited by the endpoints. It is the highest configuration level.
+
+For example, a component may have security settings, credentials for authentication, urls for network connection and so forth.
+
+Some components only have a few options, and others may have many. Because components typically have pre-configured defaults that are commonly used, then you may often only need to configure a few options on a component; or none at all.
+
+You can configure components using:
+
+-   the [Component DSL](../../manual/component-dsl.md).
+    
+-   in a configuration file (`application.properties`, `*.yaml` files, etc).
+    
+-   directly in the Java code.
+    
+
+### Configuring Endpoint Options
+
+You usually spend more time setting up endpoints because they have many options. These options help you customize what you want the endpoint to do. The options are also categorized into whether the endpoint is used as a consumer (_from_), as a producer (_to_), or both.
+
+Configuring endpoints is most often done directly in the endpoint URI as _path_ and _query_ parameters. You can also use the [Endpoint DSL](../../manual/Endpoint-dsl.md) and [DataFormat DSL](../../manual/dataformat-dsl.md) as a _type safe_ way of configuring endpoints and data formats in Java.
+
+A good practice when configuring options is to use [Property Placeholders](../../manual/using-propertyplaceholder.md).
+
+Property placeholders provide a few benefits:
+
+-   They help prevent using hardcoded urls, port numbers, sensitive information, and other settings.
+    
+-   They allow externalizing the configuration from the code.
+    
+-   They help the code to become more flexible and reusable.
+    
+
+The following two sections list all the options, firstly for the component followed by the endpoint.
+
+## Component Options
+
+The Huawei Distributed Message Service (DMS) component supports 2 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+
+## Endpoint Options
+
+The Huawei Distributed Message Service (DMS) endpoint is configured using URI syntax:
+
+hwcloud-dms:operation
+
+With the following _path_ and _query_ parameters:
+
+### Path Parameters (1 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **operation** (producer) | **Required** Operation to be performed. |  | String |
+
+### Query Parameters (29 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **accessKey** (producer) | **Required** Access key for the cloud user. |  | String |
+| **accessUser** (producer) | The username of a RabbitMQ instance. This option is mandatory when creating a RabbitMQ instance. |  | String |
+| **availableZones** (producer) | A comma separated String of Availability Zones. This option is mandatory when creating an instance and it cannot be an empty array. |  | String |
+| **endpoint** (producer) | DMS url. Carries higher precedence than region parameter based client initialization. |  | String |
+| **engine** (producer) | 
+The message engine. Either kafka or rabbitmq. If the parameter is not specified, all instances will be queried.
+
+Enum values:
+
+-   kafka
+    
+-   rabbitmq
+    
+
+
+
+
+
+ |  | String |
+| **engineVersion** (producer) | The version of the message engine. This option is mandatory when creating an instance. |  | String |
+| **ignoreSslVerification** (producer) | Ignore SSL verification. | false | boolean |
+| **instanceId** (producer) | The id of the instance. This option is mandatory when deleting or querying an instance. |  | String |
+| **kafkaManagerPassword** (producer) | The password for logging in to the Kafka Manager. This option is mandatory when creating a Kafka instance. |  | String |
+| **kafkaManagerUser** (producer) | The username for logging in to the Kafka Manager. This option is mandatory when creating a Kafka instance. |  | String |
+| **name** (producer) | The name of the instance for creating and updating an instance. This option is mandatory when creating an instance. |  | String |
+| **partitionNum** (producer) | The maximum number of partitions in a Kafka instance. This option is mandatory when creating a Kafka instance. |  | int |
+| **password** (producer) | The password of a RabbitMQ instance. This option is mandatory when creating a RabbitMQ instance. |  | String |
+| **productId** (producer) | The product ID. This option is mandatory when creating an instance. |  | String |
+| **projectId** (producer) | **Required** Cloud project ID. |  | String |
+| **proxyHost** (producer) | Proxy server ip/hostname. |  | String |
+| **proxyPassword** (producer) | Proxy authentication password. |  | String |
+| **proxyPort** (producer) | Proxy server port. |  | int |
+| **proxyUser** (producer) | Proxy authentication user. |  | String |
+| **region** (producer) | **Required** DMS service region. |  | String |
+| **secretKey** (producer) | **Required** Secret key for the cloud user. |  | String |
+| **securityGroupId** (producer) | The security group which the instance belongs to. This option is mandatory when creating an instance. |  | String |
+| **serviceKeys** (producer) | Configuration object for cloud service authentication. |  | ServiceKeys |
+| **specification** (producer) | The baseline bandwidth of a Kafka instance. This option is mandatory when creating a Kafka instance. |  | String |
+| **storageSpace** (producer) | The message storage space. This option is mandatory when creating an instance. |  | int |
+| **storageSpecCode** (producer) | The storage I/O specification. This option is mandatory when creating an instance. |  | String |
+| **subnetId** (producer) | The subnet ID. This option is mandatory when creating an instance. |  | String |
+| **vpcId** (producer) | The VPC ID. This option is mandatory when creating an instance. |  | String |
+| **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+
+## Usage
+
+### Message properties evaluated by the DMS producer
+
+  
+| Header | Type | Description |
+| --- | --- | --- |
+| `CamelHwCloudDmsOperation` | `String` | Name of operation to invoke |
+| `CamelHwCloudDmsEngine` | `String` | The message engine. Either kafka or rabbitmq |
+| `CamelHwCloudDmsInstanceId` | `String` | Instance ID to invoke operation on |
+| `CamelHwCloudDmsName` | `String` | The name of the instance for creating and updating an instance |
+| `CamelHwCloudDmsEngineVersion` | `String` | The version of the message engine |
+| `CamelHwCloudDmsSpecification` | `String` | The baseline bandwidth of a Kafka instance |
+| `CamelHwCloudDmsStorageSpace` | `int` | The message storage space |
+| `CamelHwCloudDmsPartitionNum` | `int` | The maximum number of partitions in a Kafka instance |
+| `CamelHwCloudDmsAccessUser` | `String` | The username of a RabbitMQ instance |
+| `CamelHwCloudDmsPassword` | `String` | The password of a RabbitMQ instance |
+| `CamelHwCloudDmsVpcId` | `String` | The VPC ID |
+| `CamelHwCloudDmsSecurityGroupId` | `String` | The security group which the instance belongs to |
+| `CamelHwCloudDmsSubnetId` | `String` | The subnet ID |
+| `CamelHwCloudDmsAvailableZones` | `List<String>` | The ID of an available zone |
+| `CamelHwCloudDmsProductId` | `String` | The product ID |
+| `CamelHwCloudDmsKafkaManagerUser` | `String` | The username for logging in to the Kafka Manager |
+| `CamelHwCloudDmsKafkaManagerPassword` | `String` | The password for logging in to the Kafka Manager |
+| `CamelHwCloudDmsStorageSpecCode` | `String` | The storage I/O specification |
+
+If any of the above properties are set, they will override their corresponding query parameter.
+
+### Message properties set by the DMS producer
+
+  
+| Header | Type | Description |
+| --- | --- | --- |
+| `CamelHwCloudDmsInstanceDeleted` | `boolean` | Set as `true` when the deleteInstance operation is successful |
+| `CamelHwCloudDmsInstanceUpdated` | `boolean` | Set as `true` when the updateInstance operation is successful |
+
+### List of Supported DMS Operations
+
+-   createInstance
+    
+-   deleteInstance
+    
+-   listInstances
+    
+-   queryInstance
+    
+-   updateInstance
+    
+
+### Create Instance
+
+To create an instance, you can pass the parameters through the endpoint, the exchange properties, and the exchange body as a CreateInstanceRequestBody object or a valid JSON String representation of it. Refer to this for the [Kafka parameters](https://support.huaweicloud.com/en-us/api-kafka/kafka-api-180514002.md) and the [RabbitMQ parameters](https://support.huaweicloud.com/en-us/api-rabbitmq/rabbitmq-api-180514002.md). If you choose to pass these parameters through the endpoint or through exchange properties, you can only input the mandatory parameters shown in those links. If you would like to have access to all the parameters, you must pass a CreateInstanceRequestBody object or a valid JSON String representation of it through the exchange body, as shown below:
+
+```java
+from("direct:triggerRoute")
+ .setBody(new CreateInstanceRequestBody().withName("new-instance").withDescription("description").with*) // add remaining options
+ .to("hwcloud-dms:createInstance?region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
+```
+
+```java
+from("direct:triggerRoute")
+ .setBody("{\"name\":\"new-instance\",\"description\":\"description\"}") // add remaining options
+ .to("hwcloud-dms:createInstance?region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
+```
+
+### Update Instance
+
+To update an instance, you must pass the parameters through the exchange body as an UpdateInstanceRequestBody or a valid JSON String representation of it. Refer to this for the [Kafka parameters](https://support.huaweicloud.com/en-us/api-kafka/kafka-api-180514004.md) and the [RabbitMQ parameters](https://support.huaweicloud.com/en-us/api-rabbitmq/rabbitmq-api-180514004.md). An example of how to do this is shown below:
+
+```java
+from("direct:triggerRoute")
+ .setBody(new UpdateInstanceRequestBody().withName("new-instance").withDescription("description").with*) // add remaining options
+ .to("hwcloud-dms:updateInstance?instanceId=******&region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
+```
+
+```java
+from("direct:triggerRoute")
+ .setBody("{\"name\":\"new-instance\",\"description\":\"description\"}") // add remaining options
+ .to("hwcloud-dms:updateInstance?instanceId=******&region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
+```
+
+### Using ServiceKey Configuration Bean
+
+Access key and secret keys are required to authenticate against cloud DMS service. You can avoid having them being exposed and scattered over in your endpoint uri by wrapping them inside a bean of class `org.apache.camel.component.huaweicloud.common.models.ServiceKeys`. Add it to the registry and let Camel look it up by referring the object via endpoint query parameter `serviceKeys`.
+
+Check the following code snippets:
+
+```xml
+<bean id="myServiceKeyConfig" class="org.apache.camel.component.huaweicloud.common.models.ServiceKeys">
+   <property name="accessKey" value="your_access_key" />
+   <property name="secretKey" value="your_secret_key" />
+</bean>
+```
+
+```java
+from("direct:triggerRoute")
+ .to("hwcloud-dms:listInstances?region=cn-north-4&serviceKeys=#myServiceKeyConfig")
+```
+
+## Spring Boot Auto-Configuration
+
+When using hwcloud-dms with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+
+```xml
+<dependency>
+  <groupId>org.apache.camel.springboot</groupId>
+  <artifactId>camel-huaweicloud-dms-starter</artifactId>
+  <version>x.x.x</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+The component supports 3 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **camel.component.hwcloud-dms.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| **camel.component.hwcloud-dms.enabled** | Whether to enable auto configuration of the hwcloud-dms component. This is enabled by default. |  | Boolean |
+| **camel.component.hwcloud-dms.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |

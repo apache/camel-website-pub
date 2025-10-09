@@ -1,0 +1,28 @@
+# camel catalog transformer
+
+List data type transformers from the Camel Catalog
+
+## Usage
+
+```bash
+camel catalog transformer [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--camel-version` | To use a different Camel version than the default version |  | String |
+| `--display-gav` | Display Maven GAV instead of name | false | boolean |
+| `--download` | Whether to allow automatic downloading JAR dependencies (over the internet) | true | boolean |
+| `--filter` | Filter by name or description |  | String |
+| `--json` | Output in JSON Format |  | boolean |
+| `--quarkus-group-id` | Quarkus Platform Maven groupId | io.quarkus.platform | String |
+| `--quarkus-version` | Quarkus Platform version | RuntimeType.QUARKUS\_VERSION | String |
+| `--repo,--repos` | Additional maven repositories for download on-demand (Use commas to separate multiple repositories) |  | String |
+| `--runtime` | Runtime (camel-main, spring-boot, quarkus) |  | RuntimeType |
+| `--since-after` | Filter by version more recent (inclusive) |  | String |
+| `--since-before` | Filter by version older (inclusive) |  | String |
+| `--sort` | Sort by name, support-level, or description | name | String |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

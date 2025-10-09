@@ -1,0 +1,173 @@
+# Enrich
+
+Camel supports the [Content Enricher](http://www.enterpriseintegrationpatterns.com/DataEnricher.md) from the [EIP patterns](enterprise-integration-patterns.md).
+
+![image](_images/eip/DataEnricher.gif)
+
+In Camel the Content Enricher can be done in several ways:
+
+-   Using [Enrich](#) EIP or [Poll Enrich](pollEnrich-eip.md) EIP
+    
+-   Using a [Message Translator](message-translator.md)
+    
+-   Using a [Processor](../../../manual/processor.md) with the enrichment programmed in Java
+    
+-   Using a [Bean](bean-eip.md) EIP with the enrichment programmed in Java
+    
+
+The most natural Camel approach is using [Enrich](#) EIP, which comes as two kinds:
+
+-   [Enrich](#) EIP - This is the most common content enricher that uses a `Producer` to obtain the data. It is usually used for [Request Reply](requestReply-eip.md) messaging, for instance to invoke an external web service.
+    
+-   [Poll Enrich](pollEnrich-eip.md) EIP - Uses a [Polling Consumer](polling-consumer.md) to obtain the additional data. It is usually used for [Event Message](event-message.md) messaging, for instance to read a file or download a [FTP](../ftp-component.md) file.
+    
+
+> **Note**
+> This page documents the Enrich EIP.
+
+The Enrich eip supports 9 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **expression** | **Required** Expression that computes the endpoint uri to use as the resource endpoint to enrich from. |  | ExpressionDefinition |
+| **aggregationStrategy** | Sets the AggregationStrategy to be used to merge the reply from the external service, into a single outgoing message. By default Camel will use the reply from the external service as outgoing message. |  | AggregationStrategy |
+| **aggregationStrategyMethodName** | This option can be used to explicit declare the method name to use, when using POJOs as the AggregationStrategy. |  | String |
+| **aggregationStrategyMethodAllowNull** | If this option is false then the aggregate method is not used if there was no data to enrich. If this option is true then null values is used as the oldExchange (when no data to enrich), when using POJOs as the AggregationStrategy. |  | String |
+| **aggregateOnException** | If this option is false then the aggregate method is not used if there was an exception thrown while trying to retrieve the data to enrich from the resource. Setting this option to true allows end users to control what to do if there was an exception in the aggregate method. For example to suppress the exception or set a custom message body etc. | false | Boolean |
+| **shareUnitOfWork** | Shares the org.apache.camel.spi.UnitOfWork with the parent and the resource exchange. Enrich will by default not share unit of work between the parent exchange and the resource exchange. This means the resource exchange has its own individual unit of work. | false | Boolean |
+| **cacheSize** | Sets the maximum size used by the org.apache.camel.spi.ProducerCache which is used to cache and reuse producer when uris are reused. Beware that when using dynamic endpoints then it affects how well the cache can be utilized. If each dynamic endpoint is unique then its best to turn of caching by setting this to -1, which allows Camel to not cache both the producers and endpoints; they are regarded as prototype scoped and will be stopped and discarded after use. This reduces memory usage as otherwise producers/endpoints are stored in memory in the caches. However if there are a high degree of dynamic endpoints that have been used before, then it can benefit to use the cache to reuse both producers and endpoints and therefore the cache size can be set accordingly or rely on the default size (1000). If there is a mix of unique and used before dynamic endpoints, then setting a reasonable cache size can help reduce memory usage to avoid storing too many non frequent used producers. |  | Integer |
+| **ignoreInvalidEndpoint** | Ignore the invalidate endpoint exception when try to create a producer with that endpoint. | false | Boolean |
+| **allowOptimisedComponents** | Whether to allow components to optimise enricher if they are org.apache.camel.spi.SendDynamicAware . | true | Boolean |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **description** | Sets the description of this node. |  | DescriptionDefinition |
+
+## Content enrichment using Enrich EIP
+
+Enrich EIP is the most common content enricher that uses a `Producer` to obtain the data.
+
+The content enricher (`enrich`) retrieves additional data from a _resource endpoint_ in order to enrich an incoming message (contained in the _original exchange_).
+
+An `AggregationStrategy` is used to combine the original exchange and the _resource exchange_. The first parameter of the `AggregationStrategy.aggregate(Exchange, Exchange)` method corresponds to the original exchange, the second parameter the resource exchange.
+
+Here’s an example for implementing an `AggregationStrategy`, which merges the two data together as a `String` with colon separator:
+
+```java
+public class ExampleAggregationStrategy implements AggregationStrategy {
+
+    public Exchange aggregate(Exchange newExchange, Exchange oldExchange) {
+        // this is just an example, for real-world use-cases the
+        // aggregation strategy would be specific to the use-case
+
+        if (newExchange == null) {
+            return oldExchange;
+        }
+        Object oldBody = oldExchange.getIn().getBody();
+        Object newBody = newExchange.getIn().getBody();
+        oldExchange.getIn().setBody(oldBody + ":" + newBody);
+        return oldExchange;
+    }
+
+}
+```
+
+You then use the `AggregationStrategy` with the `enrich` in the Java DSL as shown:
+
+```java
+AggregationStrategy aggregationStrategy = ...
+
+from("direct:start")
+  .enrich("http:remoteserver/foo", aggregationStrategy)
+  .to("mock:result");
+```
+
+In the example Camel will call the http endpoint to collect some data, that will then be merged with the original message using the `AggregationStrategy`.
+
+In XML DSL you use `enrich` as follows:
+
+```xml
+<bean id="myStrategy" class="com.foo.ExampleAggregationStrategy"/>
+
+<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+  <route>
+    <from uri="direct:start"/>
+    <enrich aggregationStrategy="myStrategy">
+      <constant>http:remoteserver/foo</constant>
+    </enrich>
+    <to uri="mock:result"/>
+  </route>
+</camelContext>
+```
+
+### Aggregation Strategy is optional
+
+The aggregation strategy is optional. If not provided then Camel will just use the result exchange as the result.
+
+The following example:
+
+```java
+from("direct:start")
+  .enrich("http:remoteserver/foo")
+  .to("direct:result");
+```
+
+And in XML:
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <enrich>
+        <constant>http:remoteserver/foo</constant>
+    </enrich>
+    <to uri="mock:result"/>
+</route>
+```
+
+Would be the same as using `to`:
+
+```java
+from("direct:start")
+  .to("http:remoteserver/foo")
+  .to("direct:result");
+```
+
+### Using dynamic uris
+
+Both `enrich` and `pollEnrich` supports using dynamic uris computed based on information from the current Exchange. For example to enrich from a HTTP endpoint where the header with key orderId is used as part of the content-path of the HTTP url:
+
+```java
+from("direct:start")
+  .enrich().simple("http:myserver/${header.orderId}/order")
+  .to("direct:result");
+```
+
+And in XML DSL:
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <enrich>
+    <simple>http:myserver/${header.orderId}/order</simple>
+  </enrich>
+  <to uri="direct:result"/>
+</route>
+```
+
+> **Tip**
+> See the `cacheSize` option for more details on _how much cache_ to use depending on how many or few unique endpoints are used.
+
+### Using out of the box Aggregation Strategies
+
+The `org.apache.camel.builder.AggregationStrategies` is a builder that can be used for creating commonly used aggregation strategies without having to create a class.
+
+For example the `ExampleAggregationStrategy` from previously can be built as follows:
+
+```java
+AggregationStrategy agg = AggregationStrategies.string(":");
+```
+
+There are many other possibilities with the `AggregationStrategies` builder, and for more details see the [AggregationStrategies javadoc](https://www.javadoc.io/static/org.apache.camel/camel-core-model/3.12.0/org/apache/camel/builder/AggregationStrategies.md).
+
+## See More
+
+See [Poll Enrich](pollEnrich-eip.md) EIP

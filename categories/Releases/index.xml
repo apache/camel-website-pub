@@ -6,8 +6,218 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Oct 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 13 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K 2.10.0</title>
+      <link>https://camel.apache.org/blog/2026/04/camel-k-2-10/</link>
+      <pubDate>Mon, 13 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/camel-k-2-10/</guid>
+      <description>© Smithsonian Magazine&#xA;Here a new fresh release of Camel K: version 2.10.0 is ready to go. We&amp;rsquo;ve worked to several improvements around the GitOps and Git features introduced lately. We&amp;rsquo;ve stabilized a few bugs discovered and upgraded dependencies as well.&#xA;GitOps Pipe We&amp;rsquo;ve worked to make sure the Camel GitOps is available not only for Integrations but also for Pipes. The principle is exactly the same. You need to configure the gitops trait on the Pipe you want to include in your GitOps flow and the operator will be in charge to provide a PR on the Git repository with the Pipe custom resource.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.18.1</title>
+      <link>https://camel.apache.org/blog/2026/03/RELEASE-4.18.1/</link>
+      <pubDate>Fri, 27 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/RELEASE-4.18.1/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.18.1 LTS release with 51 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.33.0 Released</title>
+      <link>https://camel.apache.org/blog/2026/03/camel-quarkus-3.33.0/</link>
+      <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/camel-quarkus-3.33.0/</guid>
+      <description>Camel Quarkus 3.33.0 release</description>
+    </item>
+    <item>
+      <title>Kaoto v2.10 release</title>
+      <link>https://camel.apache.org/blog/2026/03/kaoto-release-2.10.0/</link>
+      <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/kaoto-release-2.10.0/</guid>
+      <description>What&amp;rsquo;s New in Kaoto 2.10? Kaoto 2.10 represents a major leap forward in visual integration design, now powered by Apache Camel 4.18.0. This release bridges the gap between API-first design and integration development with full REST DSL and OpenAPI support, while significantly expanding DataMapper capabilities to handle complex multi-file schemas. Combined with production-ready drag-and-drop functionality, building sophisticated integrations has never been more intuitive.&#xA;Here are the key highlights of this release: REST DSL Support with OpenAPI Integration Kaoto 2.</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.14.5 Released</title>
+      <link>https://camel.apache.org/blog/2026/03/camel-karaf-4.14.5/</link>
+      <pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/camel-karaf-4.14.5/</guid>
+      <description>Camel Karaf 4.14.5 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.27.3 Released</title>
+      <link>https://camel.apache.org/blog/2026/03/camel-quarkus-3.27.3/</link>
+      <pubDate>Fri, 06 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/camel-quarkus-3.27.3/</guid>
+      <description>Camel Quarkus 3.27.3 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.32.0 Released</title>
+      <link>https://camel.apache.org/blog/2026/02/camel-quarkus-3.32.0/</link>
+      <pubDate>Mon, 23 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel-quarkus-3.32.0/</guid>
+      <description>Camel Quarkus 3.32.0 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.8.9 Released</title>
+      <link>https://camel.apache.org/blog/2026/02/camel-karaf-release-4.8.9/</link>
+      <pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel-karaf-release-4.8.9/</guid>
+      <description>Camel Karaf 4.8.9 release</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.18 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/02/camel418-whatsnew/</link>
+      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel418-whatsnew/</guid>
+      <description>Apache Camel 4.18 LTS has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Added the possibility to add note(s) to EIPs. This is intended for developer notes or other kind of notes, that is convention to have at the source code. The note has no impaction on the running Camel. Another use case is to build tutorials with half complete code, and have note(s) that describe what to do.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.18.0</title>
+      <link>https://camel.apache.org/blog/2026/02/RELEASE-4.18.0/</link>
+      <pubDate>Tue, 17 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/RELEASE-4.18.0/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.18.0 LTS release with 174 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>RELEASE 4.14.5</title>
+      <link>https://camel.apache.org/blog/2026/02/RELEASE-4.14.5/</link>
+      <pubDate>Fri, 13 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/RELEASE-4.14.5/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.14.5 patch release with 21 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>RELEASE 4.10.9</title>
+      <link>https://camel.apache.org/blog/2026/02/RELEASE-4.10.9/</link>
+      <pubDate>Thu, 12 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/RELEASE-4.10.9/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.10.9 LTS patch release with 7 bug fixes and improvements. Please note that this is the last patch release for the 4.10.x branch.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.31.0 Released</title>
+      <link>https://camel.apache.org/blog/2026/01/camel-quarkus-3.31.0/</link>
+      <pubDate>Wed, 28 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel-quarkus-3.31.0/</guid>
+      <description>Camel Quarkus 3.31.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.20.4 Released</title>
+      <link>https://camel.apache.org/blog/2026/01/camel-quarkus-3.20.4/</link>
+      <pubDate>Mon, 19 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel-quarkus-3.20.4/</guid>
+      <description>Camel Quarkus 3.20.4 release</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.17 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/01/camel417-whatsnew/</link>
+      <pubDate>Tue, 13 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel417-whatsnew/</guid>
+      <description>Apache Camel 4.17 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core We have marked up important headers in various EIPs and components for tooling and troubleshooting assistance.&#xA;If you have the need to trigger only once and are using a timer such as timer:tick?repeatCount=1, then we have added the once component to trigger only once on startup, and made it much easier to pre configure the message body and headers as needed.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.17.0</title>
+      <link>https://camel.apache.org/blog/2026/01/RELEASE-4.17.0/</link>
+      <pubDate>Mon, 12 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/RELEASE-4.17.0/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.17.0 release with 160 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>RELEASE 4.14.4</title>
+      <link>https://camel.apache.org/blog/2026/01/RELEASE-4.14.4/</link>
+      <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/RELEASE-4.14.4/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.14.4 patch release with 10 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.27.2 Released</title>
+      <link>https://camel.apache.org/blog/2026/01/camel-quarkus-3.27.2/</link>
+      <pubDate>Thu, 08 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel-quarkus-3.27.2/</guid>
+      <description>Camel Quarkus 3.27.2 release</description>
+    </item>
+    <item>
+      <title>RELEASE 4.14.3</title>
+      <link>https://camel.apache.org/blog/2026/01/RELEASE-4.14.3/</link>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/RELEASE-4.14.3/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.14.3 patch release with 29 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel K 2.9.0</title>
+      <link>https://camel.apache.org/blog/2025/12/camel-k-2-9/</link>
+      <pubDate>Tue, 23 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/12/camel-k-2-9/</guid>
+      <description>© ‘Camel Caravan’ by D.Damdinsuren&#xA;Last release of 2025! A present just in time for those celebrating Christmas. And this time, a very big package you&amp;rsquo;ll be happy to open! Camel K version 2.9.0 is bringing a lot of new features, improved traits and a new shiny GitOps operator assisted strategy. Let&amp;rsquo;s unfold it together.&#xA;GitOps operator side During 2025 we have introduced several enhancements around GitOps. We had introduced the possibility to use a Kustomize based overlay structure already in the kamel promote CLI.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.10.8</title>
+      <link>https://camel.apache.org/blog/2025/12/RELEASE-4.10.8/</link>
+      <pubDate>Sat, 13 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/12/RELEASE-4.10.8/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.10.8 LTS patch release with 23 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.30.0 Released</title>
+      <link>https://camel.apache.org/blog/2025/11/camel-quarkus-3.30.0/</link>
+      <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/camel-quarkus-3.30.0/</guid>
+      <description>Camel Quarkus 3.30.0 release</description>
+    </item>
+    <item>
+      <title>Kaoto v2.8 release</title>
+      <link>https://camel.apache.org/blog/2025/11/kaoto-release-2.8.0/</link>
+      <pubDate>Tue, 11 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/kaoto-release-2.8.0/</guid>
+      <description>What&amp;rsquo;s New in Kaoto 2.8? This release represents a major step forward in DataMapper maturity, with extensive XML Schema support improvements, better visual feedback, and numerous stability fixes. We&amp;rsquo;ve also enhanced the canvas experience with contextual menus and improved the forms system for better configuration management.&#xA;Here are the key highlights of this release: DataMapper XML Schema Support Enhancements Kaoto 2.8 brings improvements to XML Schema handling in the DataMapper:</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.16 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/11/camel416-whatsnew/</link>
+      <pubDate>Thu, 06 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/camel416-whatsnew/</guid>
+      <description>Apache Camel 4.16 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core You can now add note(s) to EIPs in the DSL. The notes have no impact on running Camel, but makes it consistent to include code comments or other notes that are valuable for developers for maintaining. You can of course still use code comments, but note make them available for Camel tooling.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.16.0</title>
+      <link>https://camel.apache.org/blog/2025/11/RELEASE-4.16.0/</link>
+      <pubDate>Wed, 05 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/RELEASE-4.16.0/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.16.0 release with 123 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.27.1 Released</title>
+      <link>https://camel.apache.org/blog/2025/11/camel-quarkus-3.27.1/</link>
+      <pubDate>Mon, 03 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/camel-quarkus-3.27.1/</guid>
+      <description>Camel Quarkus 3.27.1 release</description>
+    </item>
+    <item>
+      <title>RELEASE 4.14.2</title>
+      <link>https://camel.apache.org/blog/2025/11/RELEASE-4.14.2/</link>
+      <pubDate>Sat, 01 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/RELEASE-4.14.2/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.14.2 patch release with 40 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.29.0 Released</title>
+      <link>https://camel.apache.org/blog/2025/10/camel-quarkus-3.29.0/</link>
+      <pubDate>Wed, 29 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/camel-quarkus-3.29.0/</guid>
+      <description>Camel Quarkus 3.29.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.20.3 Released</title>
+      <link>https://camel.apache.org/blog/2025/10/camel-quarkus-3.20.3/</link>
+      <pubDate>Tue, 28 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/camel-quarkus-3.20.3/</guid>
+      <description>Camel Quarkus 3.20.3 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.10.7 Released</title>
+      <link>https://camel.apache.org/blog/2025/10/camel-karaf-release-4.10.7/</link>
+      <pubDate>Sun, 26 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/camel-karaf-release-4.10.7/</guid>
+      <description>Camel Karaf 4.10.7 release</description>
+    </item>
     <item>
       <title>Apache Camel 4.15 What&#39;s New</title>
       <link>https://camel.apache.org/blog/2025/10/camel415-whatsnew/</link>

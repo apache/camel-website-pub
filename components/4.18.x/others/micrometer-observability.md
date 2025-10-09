@@ -1,0 +1,155 @@
+# Micrometer Observability 2
+
+**Since Camel 4.15**
+
+This module is the implementation of the common `camel-telemetry` interface based on [Micrometer Application Observability](https://micrometer.io/) technology. The name used here as `Micrometer Observability 2` is done to distinguish on the existing `camel-observation` component which was based on an older Camel tracing and Micrometer Observability specification. You’re invited to start replacing the older `camel-observation` with this one instead as it may become the default component in future version of Camel.
+
+This component is significantly more difficult to setup than other telemetry components. This is because you will need to configure the tracing mechanism at a low level. If you’re looking for a telemetry component to configure in a simpler fashion you may have a look at the others `camel-telemetry` implementations.
+
+> **Note**
+> this component has slight differences compared to the `camel-observation` and is meant to solve a few inconsistencies identified.
+
+## Micrometer Application Observability framework
+
+Mind that the framework is an abstraction layer, therefore it is expected that the integration developers configure the Registry and the Context Propagation mechanisms (more info in a dedicated chapter later) adding the concrete technology (Opentelemetry, Brave/Zipkin) of choice.
+
+## Configuration
+
+The configuration properties for the component are:
+
+  
+| Option | Default | Description |
+| --- | --- | --- |
+| `excludePatterns` |  | Sets exclude pattern that will disable tracing for those spans that matches the pattern. The variable is a comma separated values of filters to execute (eg, `log*,direct*,setBody*`, …​) |
+| `traceProcessors` | `false` | Setting this to true will create new spans for each Camel Processors. Use the excludePattern property to filter out Processors |
+| `traceHeadersInclusion` | false | Add the generated telemetry `CAMEL_TRACE_ID` and `CAMEL_SPAN_ID` Exchange headers. |
+
+## Spring Boot Auto-Configuration
+
+When using micrometer-observability with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+
+```xml
+<dependency>
+  <groupId>org.apache.camel.springboot</groupId>
+  <artifactId>camel-micrometer-observability-starter</artifactId>
+  <version>x.x.x</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+The component supports 2 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **camel.micrometer.observability.exclude-patterns** | Sets exclude pattern(s) that will disable observability for Camel messages that matches the pattern. Multiple patterns can be separated by comma. |  | String |
+| **camel.micrometer.observability.trace-processors** | Enable tracing for inner Camel processors. | false | Boolean |
+
+### Spring Boot context propagation
+
+The starter is in charge to autoconfigure the component. Additionally you will need to specify the concrete Propagation implementation by adding the dependency you wish to use (for example, `io.micrometer:micrometer-tracing-bridge-otel`, 'io.micrometer:micrometer-tracing-bridge-brave' or any other technology you wish to use). If none is provided, a "no-op" implementation will be defined as default.
+
+## Using with standalone Camel
+
+If you use `camel-main` as standalone Camel, add `camel-micrometer-observability` component in your POM, and setup the proper configuration. Mind that, since the component is a facade to a concrete implementation, you are in charge to provide the configuration programmatically. The minimum required for the component to start is the following snippet of code:
+
+```java
+import org.apache.camel.micrometer.observability.MicrometerObservabilityTracer;
+...
+    @Override
+    public void configure() throws Exception {
+        MicrometerObservabilityTracer myTracer = new MicrometerObservabilityTracer();
+        getContext().getRegistry().bind("myTracer", myTracer);
+        myTracer.init(getContext());
+        ...
+    }
+```
+
+You can run this, for example, directly via Camel JBang using `camel run MyTest.java --dep camel-micrometer-observability`. This basic configuration will start an "in-memory" simple implementation with a "no-op" context propagation. You may want to use this exclusively for development purposes. In order to configure it for a production environment you will need to setup a `Tracer`, an `ObservationRegistry` and a `Propagator`.
+
+If you need to setup the specific component parameters, you may do it directly on the tracer object, for example:
+
+```java
+     myTracer.setTraceProcessors(true);
+     myTracer.setExcludePatterns("log*,to*");
+```
+
+The production configuration vary based on the concrete technology you use (likely, `Opentelemetry` or `Brave/Zipkin`). What you need to do is to include the specific Maven dependency and to bind a concrete implementation for each of the following beans:
+
+-   io.micrometer.tracing.Tracer
+    
+-   io.micrometer.observation.ObservationRegistry
+    
+-   io.micrometer.tracing.propagation.Propagator
+    
+
+### Opentelemetry example
+
+Here it follows an example to configure the component to work with Opentelemetry bridge. First of all, you need to include in your project the dependencies for `io.micrometer:micrometer-tracing-bridge-otel` and `io.opentelemetry:opentelemetry-sdk:x.y.z` (you need to explicitly set the version for the last dependency).
+
+```java
+import org.apache.camel.micrometer.observability.MicrometerObservabilityTracer;
+import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
+import io.micrometer.tracing.otel.bridge.OtelPropagator;
+import io.micrometer.tracing.otel.bridge.OtelTracer;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+//import io.opentelemetry.exporter.zipkin.ZipkinSpanExporter;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
+...
+
+        SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+            // inmemory implementation
+            .addSpanProcessor(SimpleSpanProcessor.create(
+                io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter.create()))
+            // or
+            // .addSpanProcessor(
+            //     BatchSpanProcessor.builder(
+            //         ZipkinSpanExporter.builder()
+            //             .setEndpoint("http://localhost:9411/api/v2/spans")
+            //             .build()
+            //     ).build()
+            // which requires a Zipkin server listening to that port
+            // )
+            .build();
+        ContextPropagators propagators =  ContextPropagators.create(
+                    W3CTraceContextPropagator.getInstance());
+        OpenTelemetrySdk openTelemetry = OpenTelemetrySdk.builder()
+            .setTracerProvider(sdkTracerProvider)
+            .setPropagators(propagators)
+            .build();
+        io.opentelemetry.api.trace.Tracer otelTracer =
+            openTelemetry.getTracer("camel-app");
+        io.micrometer.tracing.Tracer micrometerTracer = new OtelTracer(
+                otelTracer,
+                new OtelCurrentTraceContext(),
+                null);
+        OtelPropagator otelPropagator = new OtelPropagator(propagators, otelTracer);
+        getContext().getRegistry().bind("MicrometerObservabilityTracer", micrometerTracer);
+        getContext().getRegistry().bind("OpentelemetryPropagators", otelPropagator);
+        MicrometerObservabilityTracer myTracer = new MicrometerObservabilityTracer();
+        getContext().getRegistry().bind("myTracer", myTracer);
+        myTracer.init(getContext());
+        ...
+```
+
+> **Note**
+> this is an example that can be used as a reference. It may not work exactly as it is, since, the related dependency can change from version to version. You will need to check in details looking at the concrete implementation documentation.
+
+You can see that the configuration of this component may get a bit difficult, unless you are already familiar with the tracing technology you’re going to implement.
+
+### How to trace
+
+Once the application is instrumented and configured, you can observe the traces produced with the tooling compatible to the concrete implementation you have in place. You are invited to follow the specific documentation of each technology.
+
+### Java Agents
+
+Your application may require a Java agent in order to get the traces generated by the Camel application and push to the tracing server (ie, Opentelemetry based instrumentation). You may need to configure such agent (or any other tool) directly via Java parameters.
+
+### MDC logging
+
+You can leverage the `traceHeadersInclusion` to include the generated `CAMEL_TRACE_ID` and `CAMEL_SPAN_ID` into the Camel Exchange and together with `camel-mdc` you can make those headers available in the MDC context (via `camel.mdc.customHeaders=CAMEL_TRACE_ID,CAMEL_SPAN_ID` configuration). This is the idiomatic way in Camel.
+
+As an alternative, you can add Mapped Diagnostic Context tracing information (ie, `trace_id` and `span_id`) adding the specific [Opentelemetry Logger MDC auto instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/logger-mdc-instrumentation.md). This would be available if you configure the Opentelemetry. The logging configuration depends on the logging framework you’re using.

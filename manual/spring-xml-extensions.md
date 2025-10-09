@@ -1,0 +1,175 @@
+# Spring XML
+
+Using Camel with Spring XML files, is a classic way, of using XML DSL with Camel.
+
+Camel has historically been using Spring XML for a long time. The Spring framework started with XML files as a popular and common configuration for building Spring applications.
+
+The following is an example of what it looks like:
+
+Spring XML Classic
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+    ">
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="direct:a"/>
+            <choice>
+                <when>
+                    <xpath>$foo = 'bar'</xpath>
+                    <to uri="direct:b"/>
+                </when>
+                <when>
+                    <xpath>$foo = 'cheese'</xpath>
+                    <to uri="direct:c"/>
+                </when>
+                <otherwise>
+                    <to uri="direct:d"/>
+                </otherwise>
+            </choice>
+        </route>
+    </camelContext>
+
+</beans>
+```
+
+## Using Spring XML
+
+The following dependency needs to be added to your pom.xml so that Spring XML files can be scanned by Camel:
+
+-   Standalone
+    
+-   Spring Boot
+    
+
+```xml
+ <dependency>
+     <groupId>org.apache.camel</groupId>
+     <artifactId>camel-spring-xml</artifactId>
+ </dependency>
+```
+
+```xml
+ <dependency>
+     <groupId>org.apache.camel.springboot</groupId>
+     <artifactId>camel-spring-boot-xml-starter</artifactId>
+ </dependency>
+```
+
+You can use Spring XML files to specify Camel routes using XML DSL as shown:
+
+```xml
+<camelContext id="camel-A" xmlns="http://camel.apache.org/schema/spring">
+  <route>
+    <from uri="seda:start"/>
+    <to uri="mock:result"/>
+  </route>
+</camelContext>
+```
+
+### Configuring Components and Endpoints
+
+You can configure your Component or [Endpoint](endpoint.md) instances in your Spring XML as follows in this example.
+
+```xml
+<bean id="activemq" class="org.apache.camel.component.activemq.ActiveMQComponent">
+  <property name="connectionFactory">
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+      <property name="brokerURL" value="tcp:someserver:61616"/>
+    </bean>
+  </property>
+</bean>
+
+<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+  <route>
+    <from uri="activemq:cheese"/>
+    <to uri="log:cheese"/>
+  </route>
+</camelContext>
+```
+
+Which allows you to configure a component using any name, but it’s common to use the same name eg (`activemq`). Then you can refer to the component using `activemq:destinationName`.
+
+This works by the Camel lazily fetching components from the Spring context for the scheme name you use for Endpoint [URI](uris.md)s.
+
+## Using Java DSL with Spring XML files
+
+You can use Java Code to define your [RouteBuilder](route-builder.md) implementations. These can be defined as beans in spring and then referenced in your camel context e.g.
+
+```xml
+<bean id="myBuilder" class="com.foo.MyRouteBuilder"/>
+
+<camelContext xmlns="http://camel.apache.org/schema/spring">
+  <routeBuilder ref="myBuilder"/>
+</camelContext>
+```
+
+### Using package scanning
+
+Camel also provides a powerful feature that allows for the automatic discovery and initialization of routes in given packages. This is configured by adding tags to the camel context in your spring context definition, specifying the packages to be recursively searched for RouteBuilder implementations. To use this feature in 1.X, requires a <package></package> tag specifying a comma separated list of packages that should be searched e.g.
+
+```xml
+<camelContext>
+  <packageScan>
+    <package>com.foo</package>
+  </packageScan>
+</camelContext>
+```
+
+This will scan for `RouteBuilder` classes in the _com.foo_ and sub-packages.
+
+You can also filter the classes with includes or excludes such as:
+
+```xml
+<camelContext>
+  <packageScan>
+    <package>com.foo</package>
+    <excludes>**.*Special*</excludes>
+  </packageScan>
+</camelContext>
+```
+
+Which will skip classes that has _Special_ in the name.
+
+Exclude patterns are applied before the include patterns. If no include or exclude patterns are defined then all the Route classes discovered in the packages will be returned.
+
+`?` matches one character `*` matches zero or more characters `**` matches zero or more segments of a fully qualified name
+
+### Using context scanning
+
+You can allow Camel to scan the container context, e.g. the Spring ApplicationContext for route builder instances. This allow you to use the Spring **<component-scan>** feature and have Camel pickup any **`RouteBuilder`** instances which was created by Spring in its scan process.
+
+```xml
+<!-- enable Spring @Component scan -->
+<context:component-scan base-package="org.apache.camel.spring.issues.contextscan"/>
+
+<camelContext xmlns="http://camel.apache.org/schema/spring">
+    <!-- and then let Camel use those @Component scanned route builders -->
+    <contextScan/>
+</camelContext>
+```
+
+This allows you to just annotate your routes using the Spring **`@Component`** and have those routes included by Camel:
+
+```java
+@Component
+public class MyRoute extends RouteBuilder {
+
+    @Override
+    public void configure() throws Exception {
+        from("direct:start")
+            .to("mock:result");
+    }
+}
+```
+
+You can also use the ANT style for inclusion and exclusion, as mentioned above in the package scan section.
+
+## Additional configuration of Spring XML
+
+See more details at [Camel Spring XML Auto Configuration](advanced-configuration-of-camelcontext-using-spring.md) and [Spring Boot classic XML](https://github.com/apache/camel-spring-boot-examples/tree/main/xml-import) example.

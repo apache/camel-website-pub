@@ -1,0 +1,25 @@
+# camel get health
+
+Get health check status of running Camel integrations
+
+## Usage
+
+```bash
+camel get health [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--depth` | Max depth of stack-trace | 1 | int |
+| `--down` | Show only checks which are DOWN |  | boolean |
+| `--json` | Output in JSON Format |  | boolean |
+| `--level` | Level of details: full, or default | default | String |
+| `--live` | Show only liveness checks |  | boolean |
+| `--ready` | Show only readiness checks |  | boolean |
+| `--sort` | Sort by pid, name or age | pid | String |
+| `--trace` | Include stack-traces in error messages | false | boolean |
+| `--watch` | Execute periodically and showing output fullscreen |  | boolean |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

@@ -1,0 +1,107 @@
+# SimpleScheduledRoutePolicy
+
+`SimpleScheduledRoutePolicy` is a [ScheduledRoutePolicy](scheduledroutepolicy.md) that facilitates route activation, de-activation, suspension and resumption of routes based on the [Quartz](../components/4.18.x/quartz-component.md) simple trigger.
+
+## How it works
+
+In order to use a `SimpleScheduledRoutePolicy` it is necessary to instantiate an object of the type `org.apache.camel.routepolicy.quartz.SimpleScheduledRoutePolicy`.
+
+> **Note**
+> All Scheduled route policies share the scheduler created by the Quartz component. In this way, scheduler, jobs and triggers can be managed in a common and consistent way.
+
+### Configuration options
+
+In order to perform a route operation at a given time the following information must be provided.
+
+-   Starting a route
+    
+
+   
+| Parameter Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| routeStartDate | java.util.Date |  | the initial scheduled Date and time for route start |
+| routeStartRepeatCount | int |  | no of times to repeat the job |
+| routeStartRepeatInterval | long |  | the time interval in milliseconds to trigger the next attempt to start the route |
+
+-   Stopping a route
+    
+
+   
+| Parameter Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| routeStopDate | java.util.Date |  | the initial scheduled Date and time for route stop |
+| routeStopRepeatCount | int |  | no of times to repeat the job |
+| routeStopRepeatInterval | long |  | the time interval in milliseconds to trigger the next attempt to stop the route |
+| routeStopGracePeriod | int | 10 seconds | the time period to wait before initiating graceful route stop |
+| routeStopTimeUnit | long | TimeUnit.MILLISECONDS | the time unit for the grace period expressed as java.util.concurrent.TimeUnit |
+
+-   Suspending a route
+    
+
+   
+| Parameter Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| routeSuspendDate | java.util.Date |  | the initial scheduled Date and time for route suspension |
+| routeSuspendRepeatCount | int |  | no of times to repeat the job |
+| routeSuspendRepeatInterval | long |  | the time interval in milliseconds to trigger the next attempt to suspend the route |
+
+-   Resuming a route
+    
+
+   
+| Parameter Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| routeResumeDate | java.util.Date |  | the initial scheduled Date and time for route start |
+| routeResumeRepeatCount | int |  | no of times to repeat the job |
+| routeResumeRepeatInterval | long |  | the time interval in milliseconds to trigger the next attempt to resume the route |
+
+Once the `org.apache.camel.routepolicy.quartz.SimpleScheduledRoutePolicy` is created it can be wired into the camel route as follows.
+
+## Using the SimpleScheduledRoutePolicy
+
+The `SimpleScheduledRoutePolicy` can be used in Java DSL as show:
+
+```java
+SimpleScheduledRoutePolicy policy = new SimpleScheduledRoutePolicy();
+long startTime = System.currentTimeMillis() + 3000L;
+policy.setRouteStartDate(new Date(startTime));
+policy.setRouteStartRepeatCount(1);
+policy.setRouteStartRepeatInterval(3000);
+
+from("direct:start")
+   .routeId("test")
+   .routePolicy(policy)
+   .to("mock:success");
+```
+
+And in Spring XML:
+
+```xml
+<bean id="date" class="org.apache.camel.routepolicy.quartz.SimpleDate"/>
+
+<bean id="startPolicy" class="org.apache.camel.routepolicy.quartz.SimpleScheduledRoutePolicy">
+    <property name="routeStartDate" ref="date"/>
+    <property name="routeStartRepeatCount" value="1"/>
+    <property name="routeStartRepeatInterval" value="3000"/>
+</bean>
+
+<camelContext xmlns="http://camel.apache.org/schema/spring">
+    <route id="myroute" routePolicyRef="startPolicy">
+        <from uri="direct:start"/>
+        <to uri="mock:success"/>
+    </route>
+</camelContext>
+```
+
+## Dependency
+
+Maven users will need to add a `camel-quartz` dependency to their `pom.xml` to avail this capability.
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-quartz</artifactId>
+    <version>x.x.x</version>
+    <!-- use the same version as your Camel core version -->
+</dependency>
+```

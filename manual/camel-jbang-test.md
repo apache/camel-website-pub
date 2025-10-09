@@ -1,0 +1,331 @@
+# Camel Testing plugin
+
+This plugin helps you to write automated tests with Camel JBang. Please make sure to meet these prerequisites for running tests with Camel JBang:
+
+-   Activate the Camel JBang test plugin
+    
+
+The Camel JBang Test functionality is provided as a command plugin. This means you need to enable the `test` plugin first to use the subcommands in Camel JBang.
+
+```bash
+camel plugin add test
+```
+
+You should see the `test` plugin listed as an installed plugin.
+
+```bash
+camel plugin get
+```
+
+```bash
+ NAME    COMMAND    DEPENDENCY                                DESCRIPTION
+ test    test       org.apache.camel:camel-jbang-plugin-test  Manage tests for Camel applications
+```
+
+Now Camel JBang is able to run the subcommands offered by the plugin. You can inspect the help page to see the list of available plugin subcommands.
+
+```bash
+camel test --help
+```
+
+You will see the list of available subcommands for this plugin.
+
+## Initialize tests
+
+The plugin helps you to create automated tests for your Camel integration.
+
+The `init` command creates an empty test file that you can use as a starting point.
+
+```bash
+camel test init route-test.yaml
+```
+
+The command creates an empty test that uses the given test specification language derived from the file name extension. In the example above the test uses YAML as a domain specific language.
+
+The plugin supports the following languages to write automated tests:
+
+-   YAML
+    
+-   Groovy
+    
+-   Java
+    
+-   XML
+    
+-   Cucumber (.feature file extension)
+    
+
+Whatever language you choose, the result will be a new file that represents the test.
+
+> **Note**
+> The plugin automatically uses a `test` subfolder to create and run tests. This is because it is a good design to separate test-scoped and runtime source files.
+
+> **Tip**
+> You do not need to navigate to the `test` subfolder when running the test. The plugin will automatically set the proper working directory for you so you do not have to switch folders all the time.
+
+You can directly run the test and start implementing the test logic.
+
+## Run tests
+
+The test plugin helps you to run the tests with JBang. As usual, there is no need to create a project or set-up dependencies for that. Camel JBang just runs the test locally.
+
+```bash
+camel test run route-test.yaml
+```
+
+You will see the test running and producing some output to the console. At the end you should see a passed test in the test summary. By default, the tests are run with the JUnit Jupiter engine. Please refer to the help page of the `run` command for options and details.
+
+> **Tip**
+> The Camel JBang plugin automatically creates a subfolder `test` and adds the test source files into this folder. This is a way to separate test scoped resources from Camel integration sources.
+
+## Project export
+
+Once you are happy with the Camel integration and the automated test you may want to export these files into a project for further usage after the prototyping phase.
+
+The test plugin is able to participate in the project export in order to also add test scoped resources. When the plugin is active in your local JBang environment it will try to locate the automated tests and its resources (in the `test` subfolder) to add them to the exported project.
+
+Just keep using the normal project export command provided in Camel JBang. The test plugin will automatically add the test resources for you.
+
+```bash
+camel export route.yaml --dir my-export --runtime quarkus
+```
+
+The resulting project export holds the test resources and the required dependencies to run the test. In Maven this will be test-scoped dependencies added to the Maven `pom.xml` and test resources in `src/test/java` and `src/test/resources`.
+
+The tests are now part of the Maven build lifecycle so you can build the project and see the tests being automatically run. Navigate to the project export folder and run the Maven verify lifecycle that includes running integration tests.
+
+```bash
+./mvnw verify
+```
+
+You should see some tests being executed during the Maven build and of course in case a test is failing you will see the Maven build failing, too. Now the automated tests from the prototyping phase with Camel JBang are part of the project for further usage in a CI/CD pipeline for instance.
+
+> **Tip**
+> The project export has created a Java unit test (in `src/test/java`) that runs the test. You can also run the test from your Java IDE with this class. By default, the export uses JUnit Jupiter as a test engine.
+
+## Dependency management
+
+The test plugin is based on the Java test framework [Citrus](https://citrusframework.org/). It uses commands and modules provided by Citrus to run the tests. In fact the Camel test plugin calls Citrus as another JBang command.
+
+The Citrus JBang tooling includes some basic dependencies out of the box, so you are not required to add dependencies prior to running the test. In case you need to add a Citrus module that is not included by default (e.g. support for Kafka or Testcontainers) you can add the additional dependencies to a file called `jbang.properties`.
+
+> **Tip**
+> The property file should be located right next to the test source file, so JBang can find it automatically when running the test.
+
+jbang.properties
+
+```properties
+# Declare required additional dependencies
+run.deps=org.citrusframework:citrus-camel:4.7.0,\
+org.citrusframework:citrus-kafka:4.7.0,\
+org.citrusframework:citrus-testcontainers:4.7.0,\
+org.apache.camel:camel-endpointdsl:4.13.0,\
+org.apache.camel:camel-aws2-s3:4.13.0
+
+# Enable dump of Camel JBang integration output
+run.D=citrus.camel.jbang.dump.integration.output=true
+```
+
+You can add dependencies in the form of Maven GAV style coordinates in the `run.deps` property. JBang will automatically resolve the artifacts and add it to the runtime.
+
+The `jbang.properties` is a good place to add System properties for the Citrus runtime. For instance, the setting `citrus.camel.jbang.dump.integration.output=true` controls the output of the Camel integration and that it should be stored into a file for later analysis.
+
+> **Tip**
+> During the project export the dependencies listed in `jbang.properties` will be added to the Maven POM as test-scoped dependencies.
+
+## Explore test capabilities
+
+The test plugin uses [Citrus](https://citrusframework.org/) as an underlying test framework. Citrus is an Open Source Java test framework that integrates very well with Apache Camel as it provides special test actions to use Camel JBang for instance.
+
+You can also install the [Citrus test framework](https://citrusframework.org/) JBang application to explore the full capabilities.
+
+```bash
+jbang trust add https://github.com/citrusframework/citrus/
+jbang app install citrus@citrusframework/citrus
+```
+
+Usually an automated test of a Camel integration needs to perform these high level steps:
+
+-   Create and prepare required test infrastructure (e.g. start a Kafka message broker, prepare a database)
+    
+-   Start the Camel integration and configure the routes to connect with the infrastructure
+    
+-   Invoke exposed services of the Camel integration that triggers the route logic
+    
+-   Verify the Camel integration outcome (e.g. receive and validate created events on Kafka, verify the entries in a database)
+    
+
+The following sections explore these tasks when writing a test in Citrus. For further details on test capabilities please also read the [Citrus documentation](https://citrusframework.org/citrus/reference/html/).
+
+### Using Camel Infrastructure Services
+
+The Camel JBang `infra` command enables you to start infrastructure services in your test environment. See the list of available services with `camel infra`.
+
+The Citrus test is able to run these infrastructure services as part of the test.
+
+Start Camel infra service
+
+```yaml
+actions:
+  - camel:
+      infra:
+        run:
+          service: postgres
+```
+
+Once the infrastructure service is started Citrus exposes connection settings as test variables. You can use the exposed connection settings to create proper clients that connect to the services.
+
+The exposed connection settings follow a naming pattern that looks like this:
+
+-   CITRUS\_CAMEL\_INFRA\_SERVICE\_<SERVICE\_NAME>\_<PROPERTY\_NAME>
+    
+-   CITRUS\_CAMEL\_INFRA\_SERVICE\_<SERVICE\_NAME>\_<IMPLEMENTATION>\_<PROPERTY\_NAME>
+    
+
+You can then use these test variables in the Camel configuration (e.g. in `application.properties`).
+
+application.properties
+
+```properties
+camel.database.url=${CITRUS_CAMEL_INFRA_POSTGRES_SERVICE_ADDRESS}
+```
+
+Read more about the [Camel infra support in Citrus](https://citrusframework.org/citrus/reference/html/#camel-infra).
+
+### Using Testcontainers
+
+In a similar way to starting Camel infrastructure services you can also use Testcontainers as a form of infrastructure for your test. You may want to start a Testcontainers instance as part of the test.
+
+```yaml
+actions:
+  - testcontainers:
+      start:
+        kafka: {}
+```
+
+Once the Testcontainers instance is started the Citrus test exposes connection settings in the form of test variables. The variable names follow this naming pattern:
+
+-   CITRUS\_TESTCONTAINERS\_<SERVICE\_NAME>\_<PROPERTY\_NAME>
+    
+
+You can reference the test variables in the configuration for the Camel routes (e.g. in `application.properties`).
+
+application.properties
+
+```properties
+camel.kafka.bootstrapServers=${CITRUS_TESTCONTAINERS_KAFKA_BOOTSTRAP_SERVERS}
+```
+
+Read more about the [Testcontainers support in Citrus](https://citrusframework.org/citrus/reference/html/#testcontainers).
+
+### Run the Camel integration
+
+Citrus provides special test actions to run Camel integrations with Camel JBang. The test starts the integration as a separate Camel JBang process. You are able to apply specific configuration to the Camel JBang process such as `application.properties`, system properties and environment variables.
+
+```yaml
+actions:
+  - camel:
+      jbang:
+        run:
+          integration:
+            file: "../route.yaml"
+            systemProperties:
+              file: "application.test.properties"
+```
+
+The test action above runs the Camel integration in the file `route.yaml` and applies some test configuration as application properties.
+
+> **Tip**
+> Note that the file path to the `route.yaml` Camel integration uses a relative path that navigates to the parent folder. This is because usually the tests are located in a subdirectory (e.g. `test`) in order to separate test-scoped resources from runtime resources.
+
+This will start the Camel integration as a Camel JBang process. The test waits for the integration to report a running status. Then the test proceeds with further actions (e.g. invoking the exposed service of the Camel integration).
+
+Read more about the [Camel JBang support in Citrus](https://citrusframework.org/citrus/reference/html/#apache-camel).
+
+### Send/receive messages
+
+Once the Camel integration is up and running the test may trigger the route logic by invoking an exposed service. Citrus is able to send and receive messages with various messaging transports (Kafka, Http, SOAP WebServices, FTP, JMS and many more).
+
+You can send a message to a Kafka topic for instance:
+
+Send message to Kafka topic
+
+```yaml
+actions:
+  - send:
+      endpoint: "kafka:bookings"
+      message:
+        body:
+          data: |
+            { "client": "camel-batch", "product": "Orange", "amount": 200, "price": 1.0, "status": "APPROVAL_REQUIRED" }
+        headers:
+          - name: "citrus_kafka_messageKey"
+            value: "bookings.csv_0"
+```
+
+The message sent may trigger the Camel integration that listens for events on the Kafka topic `bookings`.
+
+In the same way Citrus would be able to invoke an Http service that the Camel integration exposes as a Http platform service.
+
+Invoke Http service
+
+```yaml
+actions:
+  - send:
+      endpoint: "http://localhost:8080/bookings"
+      message:
+        body:
+          data: |
+            { "client": "camel-batch", "product": "Orange", "amount": 200, "price": 1.0, "status": "APPROVAL_REQUIRED" }
+        headers:
+          - name: "Content-Type"
+            value: "application/json"
+```
+
+When receiving messages in the test you can define an expected message content (body and headers).
+
+Validate Kafka event
+
+```yaml
+actions:
+  - receive:
+      endpoint: "kafka:reports"
+      message:
+        body:
+          data: |
+            { "bookings": { "completed": 1, "errors": 0 } }
+```
+
+The test will validate the message according to the expected message content and of course the test will fail in case some elements are not as expected. Citrus as a test framework provides very powerful message validation capabilities for different message formats such as XML, Json, YAML, plaintext and more.
+
+Read more about [message endpoints](https://citrusframework.org/citrus/reference/html/#endpoints) and how to invoke services with [send and receive test actions](https://citrusframework.org/citrus/reference/html/#actions-send) in Citrus.
+
+### Invoke Camel endpoint URIs
+
+Citrus is able to invoke any Camel endpoint URI as part of the test. This way users are able to use any of the Apache Camel components for sending and receiving messages during the test.
+
+Send message to AWS S3 service
+
+```yaml
+actions:
+  - send:
+      endpoint: |
+        camel:aws2-s3:my-bucket?amazonS3Client=#s3Client
+      message:
+        body:
+          data: |
+            Apple,200,1.0
+            Orange,100,1.0
+            Pineapple,100,2.99
+        headers:
+          - name: "CamelAwsS3Key"
+            value: "bookings.csv"
+```
+
+This uses the `aws2-s3` Apache Camel component to create a new file on a S3 bucket.
+
+> **Tip**
+> You can reference beans in the Camel endpoint URI. As an example the URI above uses a bean reference `#s3Client` as a client that connects to the AWS S3 test infrastructure service. The beans can be added to both the Camel context or the Citrus registry.
+
+> **Tip**
+> You can also use Citrus test variables in the Camel endpoint URIs in order to reference dynamic values such as connection settings exposed by test infrastructure.

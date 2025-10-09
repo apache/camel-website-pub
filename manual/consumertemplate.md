@@ -1,0 +1,63 @@
+# ConsumerTemplate
+
+The `ConsumerTemplate` interface allows you to receive message exchanges from endpoints in a variety of different ways to make it easy to work with Camel [Endpoint](endpoint.md) instances from Java code.
+
+It can be configured with a default endpoint if you just want to receive lots of messages to the same endpoint; or you can specify an [Endpoint](endpoint.md) or uri as the first parameter.
+
+The `receiveBody()` method allows you to receive any object to an endpoint easily as shown:
+
+```java
+ConsumerTemplate template = exchange.getContext().createConsumerTemplate();
+
+// recieve from default endpoint
+Object body = template.receiveBody();
+
+// receive from a specific queue
+body = template.receiveBody("activemq:MyQueue");
+```
+
+## Receive modes
+
+The consumer template operates in three modes:
+
+-   **receive** - Consumes from the endpoint, waiting until there is a message (can potentially wait for a long time!).
+    
+-   **receiveNoWait** - Consumes from endpoint, not waiting for a message if none exists.
+    
+-   **receiveTimeout** - Consumes from the endpoint, waiting until there is a response, or the timeout occurs.
+    
+
+In the previous examples then it was the first mode we used (`receiveBody`). For example if there are no messages on the `activemq:MyQueue` then Camel would wait until a message is sent to this queue.
+
+Often you dont want to wait _forever_ so its often a good idea to use a timeout value, such as 5 seconds:
+
+```java
+ConsumerTemplate template = exchange.getContext().createConsumerTemplate();
+
+// receive from a specific queue
+body = template.receiveBody("activemq:MyQueue", 5000);
+```
+
+Here we wait at most 5 seconds for a message to be consumed, if there was no message, then `null` is returned as response.
+
+## Configuring default cache size
+
+You can configure globally the default cache size for both `ProducerTemplate` and `ConsumerTemplate` which will be created or dependency inject by `CamelContext`.
+
+This can be done on the `CamelContext` as a global option as shown in the following Java code:
+
+```java
+getCamelContext().getGlobalOptions().put(Exchange.MAXIMUM_CACHE_POOL_SIZE, "50");
+```
+
+Or in `application.properties`:
+
+```properties
+camel.main.consumerTemplateCacheSize = 50
+```
+
+The default maximum cache size is 1000.
+
+## See Also
+
+See [ProducerTemplate](producertemplate.md)

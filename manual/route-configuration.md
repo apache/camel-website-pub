@@ -1,0 +1,366 @@
+# Route Configuration
+
+Camel 3.12 introduces route configuration which is used for separating configurations from the routes. This can be used in situations such as configuring different error handling across a set of routes. In previous versions of Camel, this was more cumbersome to do, as you would either have to copy the same configuration to a set of routes or rely on global error handling configuration.
+
+Now you can configure a number of route configurations, and then specify on each route which configuration to use (you can use match by ids, wildcards, and regular expression).
+
+The route configuration is supported by all DSLs, so usable by: Java, XML, Groovy and so forth.
+
+In the route configuration, you can set up common strategies for:
+
+-   [Error Handler](error-handler.md)
+    
+-   [OnException EIP](exception-clause.md)
+    
+-   [OnCompletion EIP](oncompletion.md)
+    
+-   [Intercept EIP](../components/4.18.x/eips/intercept.md)
+    
+
+## Route Configuration Builder in Java DSL
+
+With Java DSL you can use `RouteConfigurationBuilder` to specify the configuration as shown below. The builder is similar to [RouteBuilder](route-builder.md) so its usage is similar.
+
+```java
+public class MyJavaErrorHandler extends RouteConfigurationBuilder {
+
+    @Override
+    public void configuration() throws Exception {
+        routeConfiguration("javaError")
+            .onException(Exception.class).handled(true)
+            .log("Java WARN: ${exception.message}");
+    }
+}
+```
+
+> **Note**
+> The `RouteConfigurationBuilder` uses `configuration` as the method where the configuration is coded. This is on purpose, so as not to use the `configure` method which the regular Java DSL `RouteBuilder` uses for coding Camel routes in Java DSL.
+
+In the example above, then there is only one route configuration that has been assigned the ID `_javaError_`. This ID allows us to refer to this configuration later when you want to assign which routes are using the configuration.
+
+This configuration is a basic configuration that just catches and handles all exceptions and logs a WARN message.
+
+### Assigning route configurations to routes
+
+To use this configuration in your routes, then you can assign it with `routeConfigurationId` as shown:
+
+```java
+public class MyJavaRouteBuilder extends RouteBuilder {
+
+    @Override
+    public void configure() throws Exception {
+        from("timer:java?period=2s")
+            // refer to the route configuration by the id to use for this route
+            .routeConfigurationId("javaError")
+            .setBody(method(MyJavaRouteBuilder.class, "randomNumber"))
+            .log("Random number ${body}")
+            .filter(simple("${body} < 30"))
+                .throwException(new IllegalArgumentException("The number is too low"));
+    }
+
+    public static int randomNumber() {
+        return new Random().nextInt(100);
+    }
+}
+```
+
+In the `routeConfigurationId` the configuration to use is specified by the ID, eg `_javaError_`.
+
+Multiple configurations can be assigned (separated by comma), such as:
+
+```java
+.routeConfigurationId("javaError,myAudit")
+```
+
+The route configuration supports matching by:
+
+-   exact ID name. This is the sample we have seen above.
+    
+-   wildcard
+    
+-   regular expression.
+    
+
+Wildcards are text ending with a `*`. They are matched when the configuration ID starts with the specified text followed by any characters. For instance, you can do:
+
+```java
+.routeConfigurationId("java*,myAudit")
+```
+
+Here we use wildcard in `_java*_` which means any configuration whose ID starts with java is a match.
+
+Match by regular expression is just like match by wildcard but using regex instead.
+
+```java
+.routeConfigurationId(".*error.*")
+```
+
+Here we want to match any configuration whose ID contains `_error_`.
+
+### Adding route configurations to CamelContext
+
+Because a `RouteConfigurationBuilder` is also a `RouteBuilder` then you add route configurations the same way for `RouteBuilder` such as using the API on `CamelContext`
+
+```java
+CamelContext context = ...
+// add the route configuration
+context.addRoutes(new MyJavaErrorHandler());
+// add the regular route
+context.addRoutes(new MyJavaRouteBuilder());
+```
+
+If you use Spring Boot, then your Camel routes and route configurations can be auto-discovered by the Spring Boot package scanning. This requires adding the `@Component` annotation to the class.
+
+See more in this Spring Boot example [Routes Configuration Example](https://github.com/apache/camel-spring-boot-examples/tree/main/routes-configuration).
+
+### Route configuration with Endpoint DSL
+
+The [Endpoint DSL](Endpoint-dsl.md) can also be used for route configurations. This requires adding `camel-endpointdsl` JAR to the classpath, and then using `org.apache.camel.builder.endpoint.EndpointRouteConfigurationBuilder`, which offers the _type safe_ DSL for Camel endpoints.
+
+## Default route configurations
+
+Route configurations are either given an explicit unique ID, or the configuration is _nameless_. A _nameless_ configuration is used as default/fallback configuration, for routes which have **NOT** been explicitly assigned route configurations.
+
+Suppose you have one _nameless_ configuration and another named `_retryError_`:
+
+```java
+public class MyJavaErrorHandler extends RouteConfigurationBuilder {
+
+    @Override
+    public void configuration() throws Exception {
+        routeConfiguration()
+            .onException(Exception.class).handled(true)
+            .log("WARN: ${exception.message}");
+
+        routeConfiguration("retryError")
+            .onException(Exception.class).maximumRedeliveries(5);
+    }
+}
+```
+
+And the following two routes:
+
+```java
+   from("file:cheese").routeId("cheese")
+        .to("kafka:cheese");
+
+   from("file:beer").routeId("beer")
+        .routeConfigurationId("retryError")
+        .to("jms:beer");
+```
+
+In the example above, the `_cheese_` route has no route configurations assigned, so the route will use the default configuration, which in case of an exception will log a warning.
+
+The `_beer_` route on the other hand has the route configuration `_retryError_` assigned, and this configuration will in case of an exception retry up to five times and then if still an error then fail and rollback.
+
+If you add more routes, then those routes can also be assigned the `_retryError_` configuration if they should also retry in case of error.
+
+### Route Configuration with Error Handler
+
+Each route configuration can also have a specific error handler configured, as shown below:
+
+```java
+public class MyJavaErrorHandler extends RouteConfigurationBuilder {
+
+    @Override
+    public void configuration() throws Exception {
+        routeConfiguration()
+            .errorHandler(deadLetterChannel("mock:dead"));
+
+        routeConfiguration("retryError")
+            .onException(Exception.class).maximumRedeliveries(5);
+    }
+}
+```
+
+In the example above, the `_nameless_` configuration has an error handler with a dead letter queue. And the route configuration with id `_retryError_` does not, and instead it will attempt to retry the failing message up till five times before giving up (exhausted). Because this route configuration does not have any error handler assigned, then Camel will use the default error handler.
+
+> **Important**
+> Routes that have a local error handler defined, will always use this error handler, instead of the error handler from route configurations. A route can only have one error handler.
+
+## Route Configuration in XML
+
+When using XML DSL, then you can code your route configurations in XML files as shown below:
+
+```xml
+<routeConfiguration id="xmlError">
+    <onException>
+        <exception>java.lang.Exception</exception>
+        <handled><constant>true</constant></handled>
+        <log message="XML WARN: ${exception.message}"/>
+    </onException>
+</routeConfiguration>
+```
+
+And in the XML routes you can assign which configurations to use:
+
+```xml
+<route routeConfigurationId="xmlError">
+    <from uri="timer:xml?period=5s"/>
+    <log message="I am XML"/>
+    <throwException exceptionType="java.lang.Exception" message="Some kind of XML error"/>
+</route>
+```
+
+In this example, the route is assigned the `_xmlError_` route configuration by the exact ID.
+
+## Route Configuration in YAML
+
+When using YAML DSL, then you can code your route configurations in YAML files as shown below:
+
+```yaml
+- routeConfiguration:
+    id: "yamlError"
+    onException:
+    - onException:
+        handled:
+          constant: "true"
+        exception:
+          - "java.lang.Exception"
+        steps:
+          - log:
+              message: "YAML WARN ${exception.message}"
+```
+
+And in the YAML routes you can assign which configurations to use:
+
+```yaml
+- route:
+    # refer to the route configuration by the id to use for this route
+    routeConfigurationId: "yamlError"
+    from:
+      uri: "timer:yaml?period=3s"
+      steps:
+        - setBody:
+            simple: "Timer fired ${header.CamelTimerCounter} times"
+        - to:
+            uri: "log:yaml"
+            parameters:
+              showBodyType: false
+              showExchangePattern: false
+        - throwException:
+            exceptionType: "java.lang.IllegalArgumentException"
+            message: "Error from yaml"
+```
+
+In this example, the route is assigned the `_yamlError_` route configuration by the exact ID.
+
+## Mixing DSLs
+
+Routes and route configuration are not required to use the same language. For example, you can code route configurations in Java, and then use YAML DSL for the routes, and they would work together.
+
+## Route Configuration in classic Spring XML
+
+When using XML DSL with `camel-spring-xml` then you can code your route configurations in `<routeConfigurationContext>` snippets in separate XML files as shown below:
+
+```xml
+<routeConfigurationContext id="myConf" xmlns="http://camel.apache.org/schema/spring">
+    <routeConfiguration id="xmlError">
+        <onException>
+            <exception>java.lang.Exception</exception>
+            <handled><constant>true</constant></handled>
+            <log message="XML WARN: ${exception.message}"/>
+        </onException>
+    </routeConfiguration>
+</routeConfigurationContext>
+```
+
+Then from `<camelContext>` you can refer to these XML snippets by their ids:
+
+```xml
+<camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring">
+
+    <!-- refer to the ID on the context that has the route configurations (see above) -->
+    <routeConfigurationContextRef ref="myConf"/>
+
+    <!-- routes can then assign which configuration to use -->
+    <route routeConfigurationId="xmlError">
+        <from uri="timer:xml?period=5s"/>
+        <log message="I am XML"/>
+        <throwException exceptionType="java.lang.Exception" message="Some kind of XML error"/>
+    </route>
+</camelContext>
+```
+
+In this example, the route is assigned the `_xmlError_` route configuration by the exact ID.
+
+## Packaging route configurations in reusable JARs
+
+You can package common route configurations into JARs which you can then use together with your Camel applications, by adding the JARs as dependencies to the classpath (such as in Maven pom.xml file).
+
+This allows, for example, to use a _common practice_ among your Camel applications.
+
+## Logging Summary
+
+If you set `startup-summary-level=verbose` then Camel will log for each route which route configurations they have been assigned.
+
+This option can be configured via Java API and also in `application.properties` for Camel on Spring Boot, Quarkus, and Camel standalone via `camel-main`
+
+-   Java
+    
+-   Application Properties
+    
+
+```java
+camelContext.setStartupSummaryLevel(StartupSummaryLevel.Verbose);
+```
+
+For example with Spring Boot, Quarkus or Camel Standalone
+
+```properties
+camel.main.startup-summary-level = verbose
+```
+
+## Route Precondition
+
+The route configurations can be included or not according to the result of a test expressed in simple language that is evaluated only once during the initialization phase.
+
+In the next example, the route configuration is only included if the parameter `activate` has been set to `true`.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+routeConfiguration().precondition("{{activate}}")
+    .onException(IllegalArgumentException.class)
+    .handled(true)
+    .log("WARN: ${exception.message}");
+```
+
+```xml
+<routeConfiguration precondition="{{activate}}">
+    <onException>
+        <exception>java.lang.IllegalArgumentException</exception>
+        <handled>
+            <constant>true</constant>
+        </handled>
+        <log message="XML WARN: ${exception.message}"/>
+    </onException>
+</routeConfiguration>
+```
+
+```yaml
+- routeConfiguration:
+    precondition: "{{activate}}"
+    onException:
+    - onException:
+        exception:
+          - "java.lang.IllegalArgumentException"
+        handled:
+          constant: "true"
+        steps:
+          - log:
+              message: "YAML WARN ${exception.message}"
+```
+
+## More Information
+
+See these examples:
+
+-   [Standalone Routes Configuration Example](https://github.com/apache/camel-examples/tree/main/routes-configuration)
+    
+-   [Spring Boot Routes Configuration Example](https://github.com/apache/camel-spring-boot-examples/tree/main/routes-configuration)

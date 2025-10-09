@@ -1,0 +1,72 @@
+# Camel Quarkus CI Builds
+
+## Branches
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">main</td><td class="tableblock halign-left valign-top">Latest releasable work</td></tr><tr><td class="tableblock halign-left valign-top">camel-main</td><td class="tableblock halign-left valign-top">To verify camel-quarkus against the latest Camel SNAPSHOT release</td></tr><tr><td class="tableblock halign-left valign-top">quarkus-main</td><td class="tableblock halign-left valign-top">To verify camel-quarkus against the latest Quarkus SNAPSHOT release</td></tr></tbody></table>
+
+### Branch maintenance
+
+Some scheduled build jobs (mentioned below) run each day to synchronize branches `camel-main` & `quarkus-main` with the latest work from the `main` branch.
+
+Sometimes these jobs fail, and it is necessary to fix any issues and manually rebase the branches. The process for doing this is as follows.
+
+1.  Depending on which branch you’re rebasing, you may want to begin by building the latest Camel `main` or Quarkus `main` branch to avoid pulling in non-deterministic SNAPSHOT artifacts. Otherwise, you can build the branches and activate the relevant SNAPSHOT repositories via Maven profiles `-Papache-snapshots` or `-Poss-snapshots`.
+    
+2.  Checkout the branch you want to work on. E.g. `git checkout camel-main`. Make sure the core component version properties in the root `pom.xml` are set correctly. E.g. `camel.version` the parent version for `camel-dependencies` & `quarkus.version`.
+    
+3.  Ensure your local repository is up-to-date with the remote. `git pull -r`.
+    
+4.  Synchronize the branch with the latest work from the main branch. The 'origin' remote is assumed here, but you can substitute this for whatever reference you want to work with. `git fetch origin main && git rebase origin/main`. You may need to fix up merge conflicts.
+    
+5.  Build the project quickly `mvn clean install -Dquickly -T1C`. Remember to activate any required SNAPSHOT profiles if required.
+    
+6.  Now you can proceed to work on fixing issues and committing the code. Any problems that are found to originate in Camel or Quarkus should be tracked by issues that you create in those projects.
+    
+7.  When pushing changes, it’s likely that you’ll need to 'force push'. I.e. with `--force` or in case others are working simultaneously on the same branch `--force-with-lease`.
+    
+8.  Follow the GitHub CI build to verify that the project builds successfully.
+    
+
+### Quarkus LTS Branch SNAPSHOT Testing
+
+As Quarkus has a regular [LTS patch release cycle](https://github.com/quarkusio/quarkus/wiki#lts-releases), it’s desirable to test the latest Camel Quarkus LTS branch `SNAPSHOT` with its related Quarkus LTS branch `SNAPSHOT`. For convenience, a GitHub workflow exists to perform this testing.
+
+From the list of [GitHub workflows](https://github.com/apache/camel-quarkus/actions), find `Camel Quarkus LTS CI` in the list of pinned workflows on the left side. Next, click the `Run workflow` dropdown and select the Quarkus maintenance branch to test. The `Use workflow from` option can be left as the default. Click `Run workflow` to initiate the build.
+
+Review the build results after the workflow finishes. Investigate any failures and if necessary escalate issues to the Quarkus team.
+
+## Builds
+
+[https://github.com/apache/camel-quarkus/actions?query=workflow%3A%22Camel+Quarkus+CI%22](https://github.com/apache/camel-quarkus/actions?query=workflow%3A%22Camel+Quarkus+CI%22)
+
+## Daily main → camel-main synchronization
+
+[https://github.com/apache/camel-quarkus/actions?query=workflow%3A%22Camel+Quarkus+CI%22+branch%3Acamel-main](https://github.com/apache/camel-quarkus/actions?query=workflow%3A%22Camel+Quarkus+CI%22+branch%3Acamel-main)
+
+This build creates an issue on failure, which can be tracked here:
+
+[https://github.com/apache/camel-quarkus/issues?q=is%3Aopen+is%3Aissue+label%3Abuild%2Fcamel-main](https://github.com/apache/camel-quarkus/issues?q=is%3Aopen+is%3Aissue+label%3Abuild%2Fcamel-main)
+
+## Daily main → quarkus-main synchronization
+
+[https://github.com/apache/camel-quarkus/actions?query=workflow%3A%22Camel+Quarkus+CI%22+branch%3Aquarkus-main](https://github.com/apache/camel-quarkus/actions?query=workflow%3A%22Camel+Quarkus+CI%22+branch%3Aquarkus-main)
+
+This build creates an issue on failure, which can be tracked here:
+
+[https://github.com/apache/camel-quarkus/issues?q=is%3Aopen+is%3Aissue+label%3Abuild%2Fquarkus-main](https://github.com/apache/camel-quarkus/issues?q=is%3Aopen+is%3Aissue+label%3Abuild%2Fquarkus-main)
+
+## Snapshot Deploy Build
+
+[https://ci-builds.apache.org/job/Camel/job/Camel%20Quarkus%20SNAPSHOT%20Deploy/](https://ci-builds.apache.org/job/Camel/job/Camel%20Quarkus%20SNAPSHOT%20Deploy/)
+
+SNAPSHOTs are built and published on push for each branch to:
+
+[https://repository.apache.org/snapshots/](https://repository.apache.org/snapshots/)
+
+## Sonarcloud
+
+[https://ci-builds.apache.org/job/Camel/job/Camel%20Quarkus%20Sonarcloud%20Deploy/](https://ci-builds.apache.org/job/Camel/job/Camel%20Quarkus%20Sonarcloud%20Deploy/)
+
+Analysis results:
+
+[https://sonarcloud.io/project/overview?id=apache\_camel\_quarkus](https://sonarcloud.io/project/overview?id=apache_camel_quarkus)

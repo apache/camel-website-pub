@@ -6,8 +6,22 @@
     <description>Recent content in Kaoto on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 05 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Kaoto/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kaoto v2.10 release</title>
+      <link>https://camel.apache.org/blog/2026/03/kaoto-release-2.10.0/</link>
+      <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/kaoto-release-2.10.0/</guid>
+      <description>What&amp;rsquo;s New in Kaoto 2.10? Kaoto 2.10 represents a major leap forward in visual integration design, now powered by Apache Camel 4.18.0. This release bridges the gap between API-first design and integration development with full REST DSL and OpenAPI support, while significantly expanding DataMapper capabilities to handle complex multi-file schemas. Combined with production-ready drag-and-drop functionality, building sophisticated integrations has never been more intuitive.&#xA;Here are the key highlights of this release: REST DSL Support with OpenAPI Integration Kaoto 2.</description>
+    </item>
+    <item>
+      <title>Kaoto v2.8 release</title>
+      <link>https://camel.apache.org/blog/2025/11/kaoto-release-2.8.0/</link>
+      <pubDate>Tue, 11 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/kaoto-release-2.8.0/</guid>
+      <description>What&amp;rsquo;s New in Kaoto 2.8? This release represents a major step forward in DataMapper maturity, with extensive XML Schema support improvements, better visual feedback, and numerous stability fixes. We&amp;rsquo;ve also enhanced the canvas experience with contextual menus and improved the forms system for better configuration management.&#xA;Here are the key highlights of this release: DataMapper XML Schema Support Enhancements Kaoto 2.8 brings improvements to XML Schema handling in the DataMapper:</description>
+    </item>
     <item>
       <title>Kaoto v2.7 release</title>
       <link>https://camel.apache.org/blog/2025/09/kaoto-release-2.7.0/</link>

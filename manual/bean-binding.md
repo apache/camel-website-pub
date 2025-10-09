@@ -1,0 +1,299 @@
+# Bean Binding
+
+Bean Binding in Camel defines both which methods are invoked and also how the [Message](../components/4.18.x/eips/message.md) is converted into the parameters of the method invoked.
+
+> **Note**
+> This requires to include `camel-bean` as dependency on the classpath.
+
+## Choosing the method to invoke
+
+The binding of a Camel [Message](../components/4.18.x/eips/message.md) to a bean method call can occur in different ways, in the following order of importance:
+
+-   You can qualify parameter types to select exactly which method to use among overloads with the same name (see below for more details).
+    
+-   You can specify parameter values directly in the method option (see below for more details).
+    
+-   you can explicitly specify the method name in the [DSL](dsl.md) or when using [POJO Consuming](pojo-consuming.md) or [POJO Producing](pojo-producing.md).
+    
+-   if the bean has a method annotated with the `@Handler` annotation, then that method is selected.
+    
+-   if the bean can be converted to a [Processor](processor.md) using the [Type Converter](type-converter.md) mechanism, then this is used to process the message. The ActiveMQ component used this mechanism (in Camel 3) to allow any JMS MessageListener to be invoked directly by Camel without having to write any integration glue code. You can use the same mechanism to integrate Camel into any other messaging/remoting frameworks.
+    
+-   the type of the body is used to find a matching method; an error is thrown if a single method cannot be chosen unambiguously.
+    
+-   you can also use `Exchange` as the parameter itself
+    
+-   the return type cannot be `Exchange`. However, you can use `Exchange` as input parameter, and let the method be `void`, or return some other Object type (cannot be `Exchange`).
+    
+-   if the bean class is private (or package-private), interface methods will be preferred since Camel can’t invoke class methods on such beans
+    
+
+In cases when Camel cannot choose a method to invoke, an `AmbiguousMethodCallException` is thrown.
+
+By default, the return value is set in the outbound message body.
+
+## Asynchronous processing
+
+You can return a `CompletionStage` implementation (e.g. `CompletableFuture`) to implement asynchronous processing.
+
+Please be sure to properly complete the CompletionStage with the result or exception, including any timeout handling. Exchange processing would wait for completion and would not impose any timeouts automatically. It’s extremely useful to monitor `org.apache.camel.spi.InflightRepository` for any hanging messages.
+
+Note that completing with `"null"` won’t set out body message body to `null`, but would keep message intact. This is useful to support methods that don’t modify exchange and return `CompletableFuture<Void>`. To set body to null, just add `Exchange` method parameter and directly modify exchange messages.
+
+Examples:
+
+Simple asynchronous processor, modifying message body.
+
+```java
+public CompletableFuture<String> doSomethingAsync(String body)
+```
+
+Composite processor that do not modify exchange
+
+```java
+ public CompletableFuture<Void> doSomethingAsync(String body) {
+     return CompletableFuture.allOf(doA(body), doB(body), doC());
+ }
+```
+
+## Parameter binding
+
+When a method has been chosen for invocation, Camel will bind to the parameters of the method.
+
+The following Camel-specific types are automatically bound:
+
+-   `org.apache.camel.Exchange`
+    
+-   `org.apache.camel.Message`
+    
+-   `org.apache.camel.CamelContext`
+    
+-   `org.apache.camel.TypeConverter`
+    
+-   `org.apache.camel.spi.Registry`
+    
+-   `java.lang.Exception`
+    
+
+So, if you declare any of these types, they will be provided by Camel. **Note that `Exception` will bind to the caught exception in the [Exchange](exchange.md)** - so it’s often usable if you employ a [Bean](../components/4.18.x/bean-component.md) to handle, e.g., an `onException` route.
+
+What is most interesting is that Camel will also try to bind the body of the [Exchange](exchange.md) to the first parameter of the method signature (albeit not any of the types above). So if, for instance, we declare a parameter as `String body`, then Camel will bind the message body to this type. Camel will also automatically convert to the type declared in the method signature.
+
+Let’s review some examples:
+
+Below is a simple method with a body binding. Camel will bind the IN body to the `body` parameter and convert it to a `String`.
+
+```java
+public String doSomething(String body)
+```
+
+In the following sample we got one of the automatically bound types as well. For instance, a `Registry` that we can use to lookup beans.
+
+```java
+public String doSomething(String body, Registry registry)
+```
+
+We can use [Exchange](exchange.md) as well:
+
+```java
+public String doSomething(String body, Exchange exchange)
+```
+
+You can also have multiple types:
+
+```java
+public String doSomething(String body, Exchange exchange, TypeConverter converter)
+```
+
+And imagine you use a [Pojo](../components/4.18.x/bean-component.md) to handle a given custom exception `InvalidOrderException` - we can then bind that as well:
+
+```java
+public String badOrder(String body, InvalidOrderException invalid)
+```
+
+Notice that we can bind to it even if we use a subtype of `java.lang.Exception` as Camel still knows it’s an exception and can bind the cause (if any exists).
+
+So what about headers and other stuff? Well, now it gets a bit tricky. We can use annotations to help us or specify the binding in the method name option.
+
+See the following sections for more detail.
+
+## Binding Annotations
+
+You can use the [Parameter Binding Annotations](parameter-binding-annotations.md) to customize how parameter values are created from the [Message](../components/4.18.x/eips/message.md)
+
+### Examples
+
+For example, a [Bean](../components/4.18.x/eips/bean-eip.md) such as:
+
+```java
+public class Bar {
+    public String doSomething(String body) {
+        // process the in body and return whatever you want
+        return "Bye World";
+    }
+}
+```
+
+Or the Exchange example. Notice that the return type must be **void** when there is only a single parameter of the type `org.apache.camel.Exchange`:
+
+```java
+ public class Bar {
+     public void doSomething(Exchange exchange) {
+         // process the exchange
+         exchange.getIn().setBody("Bye World");
+     }
+ }
+```
+
+### Using @Handler
+
+You can mark a method in your bean with the `@Handler` annotation to indicate that this method should be used for [Bean Binding](#).
+
+This has an advantage as you don’t need to specify a method name in the Camel route, and therefore do not run into problems after renaming the method in an IDE that can’t find all its references.
+
+```java
+public class Bar {
+    @Handler
+    public String doSomething(String body) {
+        // process the in body and return whatever you want
+        return "Bye World";
+    }
+}
+```
+
+## Parameter binding using method option
+
+Camel uses the following rules to determine if it’s a parameter value in the method option
+
+-   The value is either `true` or `false` which denotes a boolean value
+    
+-   The value is a numeric value such as `123` or `7`
+    
+-   The value is a String enclosed with either single or double quotes
+    
+-   The value is null which denotes a `null` value
+    
+-   It can be evaluated using the [Simple](../components/4.18.x/languages/simple-language.md) language, which means you can use, e.g., `${body}`, `${header.foo}` and others [Simple](../components/4.18.x/languages/simple-language.md) tokens. Notice the tokens must be enclosed with `${ }`.
+    
+-   The value ends with `.class` then it’s a type declaration instead - see the next section about specifying types for overloaded methods.
+    
+
+When invoking a [Bean](../components/4.18.x/eips/bean-eip.md) you can instruct Camel to invoke a specific method by providing the method name:
+
+```java
+.bean(OrderService.class, "doSomething")
+```
+
+Here we tell Camel to invoke the `_doSomething_` method. Camel handles the parameters' binding. Now suppose the method has 2 parameters, and the second parameter is a boolean where we want to pass in a true value:
+
+```java
+public void doSomething(String payload, boolean highPriority) {
+    ...
+}
+```
+
+This can be done as follows:
+
+```java
+.bean(OrderService.class, "doSomething(*, true)")
+```
+
+In the example above, we defined the first parameter using the wild card symbol `*`, which tells Camel to bind this parameter to any type, and let Camel figure this out. The second parameter has a fixed value of `true`. Instead of the wildcard symbol, we can instruct Camel to use the message body as shown:
+
+```java
+.bean(OrderService.class, "doSomething(${body}, true)")
+```
+
+The syntax of the parameters is using the [Simple](../components/4.18.x/languages/simple-language.md) language so we have to use `${ }` placeholders in the body to refer to the message body.
+
+If you want to pass in a `null` value, then you can explicitly define this in the method option as shown below:
+
+```java
+.to("bean:orderService?method=doSomething(null, true)")
+```
+
+Specifying `null` as a parameter value instructs Camel to force passing a `null` value.
+
+Besides the message body, you can pass in the message headers as a `java.util.Map`:
+
+```java
+.bean(OrderService.class, "doSomethingWithHeaders(${body}, ${headers})")
+```
+
+You can also pass in other fixed values besides booleans. For example, you can pass in a String and an integer:
+
+```java
+.bean(MyBean.class, "echo('World', 5)")
+```
+
+In the example above, we invoke the echo method with two parameters. The first has the content 'World' (without quotes), and the second has the value of 5. Camel will automatically convert these values to the parameters' types.
+
+Having the power of the [Simple](../components/4.18.x/languages/simple-language.md) language allows us to bind to message headers and other values such as:
+
+```java
+.bean(OrderService.class, "doSomething(${body}, ${header.high})")
+```
+
+You can also use the OGNL support of the [Simple](../components/4.18.x/languages/simple-language.md) expression language. Now suppose the message body is an object that has a method named `asXml`. To invoke the `asXml` method we can do as follows:
+
+```java
+.bean(OrderService.class, "doSomething(${body.asXml}, ${header.high})")
+```
+
+Instead of using `.bean` as shown in the examples above, you may want to use `.to` instead as shown:
+
+```java
+.to("bean:orderService?method=doSomething(${body.asXml}, ${header.high})")
+```
+
+### Using type qualifiers to select among overloaded methods
+
+If you have a [Bean](../components/4.18.x/eips/bean-eip.md) with overloaded methods, you can now specify parameter types (must use `.class` style, e.g. `com.foo.MyClass.class`) in the method name so Camel can match the method you intend to use.
+
+Given the following bean:
+
+```java
+ from("direct:start")
+    .bean(MyBean.class, "hello(String.class)")
+    .to("mock:result");
+```
+
+Then the `MyBean` has 2 overloaded methods with the names `hello` and `times`. So if we want to use the method which has two parameters, we can do as follows in the Camel route:
+
+```java
+from("direct:start")
+    .bean(MyBean.class, "hello(String.class, String.class)")
+    .to("mock:result");
+```
+
+We can also use a `*` as wildcard, so we can just say we want to execute the method with two parameters we do:
+
+```java
+ from("direct:start")
+    .bean(MyBean.class, "hello(*,*)")
+    .to("mock:result");
+```
+
+By default, Camel will match the type name using the simple name, e.g., any leading package name will be disregarded. However, if you want to match using the FQN, then specify the FQN type and Camel will leverage that. So if you have a parameter of type `com.foo.MyOrder` and you want to match against the FQN, and **not** the simple name "MyOrder", then follow this example:
+
+```java
+.bean(OrderService.class, "doSomething(com.foo.MyOrder.class)")
+```
+
+### Declaring parameter type and value
+
+**Available as of Camel 4.0**
+
+Camel 3.x only supports either specifying parameter binding or type per parameter in the method name option. You **cannot** specify both at the same time, such as:
+
+```text
+doSomething(com.foo.MyOrder.class ${body}, boolean ${header.high}, int 123)
+```
+
+However, we have implemented support for this in Camel 4, where you can declare both using _name.class value_ syntax as shown:
+
+```text
+doSomething(com.foo.MyOrder.class ${body}, boolean.class ${header.high}, int.class 123)
+```
+
+Notice that you **MUST** use `name.class` when declaring the type, also for String, int, boolean, etc.

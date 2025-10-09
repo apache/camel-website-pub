@@ -1,0 +1,76 @@
+# Build project hosted in a Git repository
+
+The Camel K operator traditionally run an Integration from a Camel DSL source. There are however use cases where instead of a Camel route, the user wants to provide entirely a Camel project. With the Integration `.spec.git` configuration you can instruct the operator to build and run a new Camel application directly from a project stored in a Git repository.
+
+The project has to be a regular Camel Maven project with no other major constraints. The operator will take care to clone the project, build it and run it as it uses to do with any other Camel application.
+
+> **Note**
+> no intermediate IntegrationKit object will be generated, hence, the project won’t be reused for any incremental builds.
+
+This feature matches very well with the output of Camel JBang (ie, `camel export`), which can be a great tool for local prototyping and testing.
+
+## How to configure it
+
+You can use the `git` specification available in the Integration custom resource:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: sample
+spec:
+  git:
+    url: https://github.com/squakez/sample.git
+    secret: my-secret (optional)
+```
+
+If the project is not public (like it probably happens) you will need to provide the token as expected by the Git technology used. The secret has to be a regular Kubernetes Secret in the same namespace of the Integration.
+
+> **Note**
+> the feature still allows running projects in the `main` branch only.
+
+The operator will start a Build custom resource, whose goal is to build and package the project into a container how it is happening for any other Integration. You can continue to use normally any trait, although certain build traits will be ignored as it also happens in Self Managed Build Integrations.
+
+## CLI
+
+The `kamel` CLI is equipped with a `--git` option that you can use to provide the project repository.
+
+## Specifying Branch, Tag or Commit
+
+By default, Camel K clones the repository’s default branch (usually `main`). You can specify a different branch, tag, or specific commit using either CLI options or YAML configuration:
+
+### Using CLI Options
+
+```bash
+# Clone specific branch
+kamel run --git https://github.com/michalvavrik/sample.git --git-branch feature/xyz
+
+# Clone specific tag
+kamel run --git https://github.com/michalvavrik/sample.git --git-tag v1.2.3
+
+# Clone the project and checkout specific commit (full SHA)
+kamel run --git https://github.com/michalvavrik/sample.git --git-commit f2b9bd064a62263ab53b3bfe6ac2b71e68dba45b
+```
+
+### Using YAML Configuration
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: sample
+spec:
+  git:
+    url: https://github.com/michalvavrik/sample.git
+    # branch: feature/xyz    # Use specific branch
+    # tag: v1.2.3         # Or use specific tag
+    # commit: f2b9bd064a62263ab53b3bfe6ac2b71e68dba45b  # Or use specific commit
+```
+
+## Rebuild
+
+In order to trigger a rebuild of an Integration you will need to `kamel rebuild` or to wipe off the Integration `status` as it normally happens for any other regular Integration.
+
+## Future developments
+
+This feature is in its early stage and will be possibly the base for the future Camel K developments. Feel free to vote or to add your requirement into the [git area issues we are collecting](https://github.com/apache/camel-k/issues?q=is%3Aissue%20state%3Aopen%20label%3Aarea%2Fgit).

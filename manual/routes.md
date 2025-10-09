@@ -1,0 +1,224 @@
+# Routes
+
+In Apache Camel, a _route_ is a set of processing steps that are applied to a message as it travels from a source to a destination. A route typically consists of a series of processing steps that are connected in a linear sequence.
+
+A Camel _route_ is where the integration flow is defined. For example, you can write a Camel route to specify how two systems can be integrated. You can also specify how the data can be manipulated, routed, or mediated between the systems.
+
+The routes are typically defined using a simple, declarative syntax that is easy to read and understand. Camel supports _coding_ routes in different [DSLs](dsl.md) of your choice.
+
+For instance, you could write a _route_ to consume files from an FTP server and send them to an [ActiveMQ](http://activemq.apache.org) messaging system. A _route_ to do so, would look like this:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("ftp:myserver/folder")
+  .to("activemq:queue:cheese");
+```
+
+```xml
+<route>
+  <from uri="ftp:myserver/folder"/>
+  <to uri="activemq:queue:cheese"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp:myserver/folder
+      steps:
+        - to:
+            uri: activemq:queue:cheese
+```
+
+## Naming routes
+
+You can assign names to your routes in Java DSL using `routeId`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+In Java DSL you use `routeId` to declare the name/id of the route.
+
+```java
+from("ftp:myserver/folder").routeId("myRoute")
+  .to("activemq:queue:cheese");
+```
+
+In XML DSL you use `id` in the `<route>` element to declare the name/id of the route.
+
+```xml
+<route id="myRoute">
+  <from uri="ftp:myserver/folder"/>
+  <to uri="activemq:queue:cheese"/>
+</route>
+```
+
+In YAML DSL you use `id` in the `- route` node to declare the name/id of the route.
+
+```yaml
+- route:
+    id: myRoute
+    from:
+      uri: ftp:myserver/folder
+      steps:
+        - to:
+            uri: activemq:queue:cheese
+```
+
+## Route Description and Notes
+
+You can add a description to your routes, for example to provide a short human summary of what the route does.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("ftp:myserver/folder").routeDescription("Routes files from the FTP server to internal messaging system")
+  .to("activemq:queue:cheese");
+```
+
+```xml
+<route description="Routes files from the FTP server to internal messaging system">
+  <from uri="ftp:myserver/folder"/>
+  <to uri="activemq:queue:cheese"/>
+</route>
+```
+
+```yaml
+- route:
+    description: "Routes files from the FTP server to internal messaging system"
+    from:
+      uri: ftp:myserver/folder
+      steps:
+        - to:
+            uri: activemq:cheese
+```
+
+A note (requires **Camel 4.16** onwards) on the other hand is like a _code comments_ for developers or some other kind of information you want to keep. Both the notes and descriptions has no impact at runtime but are read-only information.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("ftp:myserver/folder").routeDescription("Routes files from the FTP server to internal messaging system")
+    .routeNote("The FTP server can be offline from time to time, and if so then just restart Camel")
+  .to("activemq:queue:cheese");
+```
+
+```xml
+<route description="Routes files from the FTP server to internal messaging system"
+       note="The FTP server can be offline from time to time, and if so then just restart Camel">
+  <from uri="ftp:myserver/folder"/>
+  <to uri="activemq:queue:cheese"/>
+</route>
+```
+
+```yaml
+- route:
+    description: "Routes files from the FTP server to internal messaging system"
+    note: "The FTP server can be offline from time to time, and if so then just restart Camel"
+    from:
+      uri: ftp:myserver/folder
+      steps:
+        - to:
+            uri: activemq:cheese
+```
+
+> **Tip**
+> You can also add description and notes to EIP patterns
+
+## Writing Routes in Java using the Java DSL
+
+You can create a route using the Java language by extending the [`RouteBuilder` class](route-builder.md), and implementing the `configure` method.
+
+Here’s an example:
+
+```java
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+        from("direct:a").to("direct:b");
+    }
+};
+```
+
+The code above is an anonymous class, and its more common to create your own class when using Java DSL for example we can create a class called `MyRoute` which then implements the route as follows:
+
+```java
+import org.apache.camel.builder.RouteBuilder;
+
+public class MyRoute extends RouteBuilder {
+
+    @Override
+    public void configure() {
+        from("direct:a").to("direct:b");
+    }
+
+}
+```
+
+As you can see from the code snippet above, Camel uses [URIs](uris.md) to wire endpoints together.
+
+We refer to this way of writing route as using the [Java DSL](java-dsl.md).
+
+## Route Precondition
+
+The routes can be included or not according to the result of a test. You can express the condition for the tests using the simple language. Camel evaluates this condition only once during the initialization phase.
+
+> **Note**
+> When a route is not included due to precondition, then the route is skipped by Camel, and its not possible to include the router later during runtime. If you want to include the route, but not start the route, then you can set `autoStartup=false` on the route. Which allows to start the route later during runtime.
+
+Here’s an example that includes the route only if the parameter `format` has been set to `xml`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:in").precondition("'{{format}}' == 'xml'")
+   .unmarshal().jaxb()
+   .to("direct:out");
+```
+
+```xml
+<route precondition="'{{format}}' == 'xml'">
+  <from uri="direct:in"/>
+  <unmarshal><jaxb/></unmarshal>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    precondition: "'{{format}}' == 'xml'"
+    from:
+      uri: "direct:in"
+      steps:
+        - unmarshal:
+            jaxb: {}
+        - to: "direct:out"
+```
+
+## More Information
+
+Check the [list of supported languages](dsl.md) that you can use for writing Camel routes.

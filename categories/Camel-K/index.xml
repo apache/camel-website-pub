@@ -6,8 +6,29 @@
     <description>Recent content in Camel K on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 13 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Camel-K/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K 2.10.0</title>
+      <link>https://camel.apache.org/blog/2026/04/camel-k-2-10/</link>
+      <pubDate>Mon, 13 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/camel-k-2-10/</guid>
+      <description>© Smithsonian Magazine&#xA;Here a new fresh release of Camel K: version 2.10.0 is ready to go. We&amp;rsquo;ve worked to several improvements around the GitOps and Git features introduced lately. We&amp;rsquo;ve stabilized a few bugs discovered and upgraded dependencies as well.&#xA;GitOps Pipe We&amp;rsquo;ve worked to make sure the Camel GitOps is available not only for Integrations but also for Pipes. The principle is exactly the same. You need to configure the gitops trait on the Pipe you want to include in your GitOps flow and the operator will be in charge to provide a PR on the Git repository with the Pipe custom resource.</description>
+    </item>
+    <item>
+      <title>Camel GitOps on Cloud</title>
+      <link>https://camel.apache.org/blog/2026/02/camel-k-gitops-apps/</link>
+      <pubDate>Tue, 24 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel-k-gitops-apps/</guid>
+      <description>With Camel K version 2.9 we have enhanced the GitOps capability of the operator to run a builtin opinionated GitOps strategy. In this blog we are going to expand with a complete example and show how to enabled with a sample Camel application we build on an environment and we promote to another environment controlled with a gateway.&#xA;The process will be the following: a development team (the &amp;ldquo;citizen integrator&amp;rdquo;?) is in charge to develop and test a given Camel application on a development environment.</description>
+    </item>
+    <item>
+      <title>Camel K 2.9.0</title>
+      <link>https://camel.apache.org/blog/2025/12/camel-k-2-9/</link>
+      <pubDate>Tue, 23 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/12/camel-k-2-9/</guid>
+      <description>© ‘Camel Caravan’ by D.Damdinsuren&#xA;Last release of 2025! A present just in time for those celebrating Christmas. And this time, a very big package you&amp;rsquo;ll be happy to open! Camel K version 2.9.0 is bringing a lot of new features, improved traits and a new shiny GitOps operator assisted strategy. Let&amp;rsquo;s unfold it together.&#xA;GitOps operator side During 2025 we have introduced several enhancements around GitOps. We had introduced the possibility to use a Kustomize based overlay structure already in the kamel promote CLI.</description>
+    </item>
     <item>
       <title>Camel K 2.8.0</title>
       <link>https://camel.apache.org/blog/2025/09/camel-k-2-8/</link>

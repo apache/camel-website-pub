@@ -1,0 +1,64 @@
+# Multiple Operators and Selective Upgrades
+
+It is possible to set up multiple Camel K operators on a cluster to watch resources on namespaces. It’s not possible to configure Camel K this way using OLM (Operator Hub), since OLM prevents two operators from watching the same namespaces, but it’s technically possible to achieve this setup manually.
+
+A typical example is when you need to install multiple global operators in different namespaces in order to have multiple tenants on the cluster working with Camel K. In this multi operator situation Camel K needs to avoid that the same resources on the cluster are managed by more than one operator at the same time. Operators must not contend the integration and the reconciliation because this will most probably result in an error (actual behavior is undefined).
+
+To avoid contention, Camel K uses an operator id for each operator. The operator id must be unique on the cluster and any custom resource (CR) is assigned to a specific operator using an annotation. The assigned operator will be responsible for the reconciliation of the annotated CR and explicitly manages the resource no matter where it lives.
+
+In detail, the Camel K operator supports the environment variable `OPERATOR_ID`. The value is an identifier that can be equal to any string (e.g. `OPERATOR_ID=operator-1`). Once the operator is assigned with an identifier, it will **only reconcile** Camel K custom resources that are assigned to that ID (unannotated resources will be ignored as well).
+
+By default, the Camel K operator is using the id `camel-k`. When installing many operators the instances must use a different operator id. To assign a resource to a specific operator, the user can annotate it with `camel.apache.org/operator.id`. For example:
+
+```yaml
+kind: Integration
+apiVersion: camel.apache.org/v1
+metadata:
+  annotations:
+    camel.apache.org/operator.id: operator-2
+# ...
+```
+
+By default, Camel K custom resources use the default operator id `camel-k` as a value in this annotation. And more precisely the default operator with id `camel-k` and only this specific operator is allowed to also reconcile resources that are missing the operator id annotation.
+
+The annotation can be put on any resource belonging to the "camel.apache.org" group.
+
+> **Note**
+> When a resource creates additional resources in order to proceed with the reconciliation (for example an Integration may create an IntegrationKit, which in turn creates a Build resource), the annotation will be propagated to all resources created in the process, so they’ll be all reconciled by the same operator.
+
+By using the `camel.apache.org/operator.id` annotation, it’s possible to move integrations between two or more operators running different versions of the Camel K platform, i.e. **selectively upgrading or downgrading** them. Just change the annotation on that particula resource to point to a new operator id:
+
+```shell
+kubectl annotate integration timer-to-log camel.apache.org/operator.id=operator-2 --overwrite
+```
+
+## Installation caveat
+
+In order to install more than one operator globally, you may need to change the ClusterRoleBindings to let more than one operator to have the RBAC set consistently. If you use a Kustomize installation approach, for example, you need to execute the following procedure to rename the roles and not conflicting between each other:
+
+```none
+cd /install/base/config/rbac/descoped && kustomize edit set namesuffix -- -$OPERATOR_ID
+```
+
+## Apply custom IntegrationProfile settings
+
+Any running Camel K integration is associated to a shared IntegrationPlatform resource that contains general configuration options. The integration platform is located in the operator namespace and typically uses the same name as the operator id that this platform belongs to. Each Camel K operator uses exactly one single integration platform in a "Ready" state. IntegrationPlatform resources are somewhat "singleton" in a namespace and belong to a single operator instance.
+
+There’s a way to allow customizations regarding the integration configuration. Users may add IntegrationProfile resources to an individual namespace. The profile holds custom integration platform settings for them to be used by integrations. The IntegrationProfile resource allows only a subset of the IntegrationPlatform settings for customization.
+
+The custom IntegrationProfile resource uses the operator id as an annotation to bind its reconciliation to an operator instance. Also, the profile must be explicitly selected by an annotation referencing the integration profile name (any resource belonging to the "camel.apache.org" group can select a particular profile configuration).
+
+To specify which profile should be used for an integration, the resource can be annotated like in the following example:
+
+```yaml
+kind: Integration
+apiVersion: camel.apache.org/v1
+metadata:
+  annotations:
+    camel.apache.org/integration-profile.id: my-profile-name
+# ...
+```
+
+The value of the `camel.apache.org/integration-profile.id` annotation must match the name of an IntegrationProfile custom resource. The profile gets automatically resolved from the annotated resource namespace or from the operator namespace. In case you need to explicitly set the integration profile namespace you can do so with the `camel.apache.org/integration-profile.namespace` annotation.
+
+The selection of a IntegrationProfile enables new configuration scenarios, for example, sharing global configuration options for groups of integrations, or also providing per-operator specific configuration options e.g. when you install multiple global operators in the cluster.

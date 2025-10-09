@@ -1,0 +1,168 @@
+# Graceful Shutdown
+
+Camel supports a pluggable shutdown strategy using `org.apache.camel.spi.ShutdownStrategy`. It’s responsible for shutting down routes in a graceful manner. The other resources will still be handled by [CamelContext](camelcontext.md) to shut down. This leaves the problem at hand with properly shutting down all the routes reliably to the `ShutdownStrategy`.
+
+Camel provides a default strategy in the `org.apache.camel.impl.engine.DefaultShutdownStrategy` which is capable of doing that.
+
+## Default Shutdown Strategy
+
+The default strategy (`DefaultShutdownStrategy`) will gracefully shut down routes:
+
+-   in the reverse order they were started
+    
+-   let pending and current in flight exchanges run to completion before shutting down
+    
+-   using a timeout of 45 seconds (can be configured) which then forces a _hard_ shutdown
+    
+
+The settings are configurable, so you can change the timeout, and whether in case of timeout to force a _hard_ shutdown or ignore.
+
+When shutting down the strategy will output to log the progress:
+
+```log
+2009-12-20 10:56:53,055 [main ] INFO DefaultCamelContext - Apache Camel (CamelContext:camel-1) is stopping
+2009-12-20 10:56:53,056 [main ] INFO DefaultShutdownStrategy - Starting to graceful shutdown routes (timeout 45 seconds)
+2009-12-20 10:56:53,059 [1: ShutdownTask] INFO DefaultShutdownStrategy - Waiting as there are still 5 inflight exchanges to complete before we can shutdown
+2009-12-20 10:56:54,060 [1: ShutdownTask] INFO DefaultShutdownStrategy - Waiting as there are still 4 inflight exchanges to complete before we can shutdown
+2009-12-20 10:56:55,061 [1: ShutdownTask] INFO DefaultShutdownStrategy - Waiting as there are still 3 inflight exchanges to complete before we can shutdown
+2009-12-20 10:56:56,065 [1: ShutdownTask] INFO DefaultShutdownStrategy - Waiting as there are still 2 inflight exchanges to complete before we can shutdown
+2009-12-20 10:56:57,066 [1: ShutdownTask] INFO DefaultShutdownStrategy - Waiting as there are still 1 inflight exchanges to complete before we can shutdown
+2009-12-20 10:56:58,069 [main ] INFO DefaultShutdownStrategy - Graceful shutdown of routes complete in 5 seconds.
+2009-12-20 10:56:58,072 [main ] INFO DefaultInflightRepository - Shutting down with no inflight exchanges.
+2009-12-20 10:56:58,077 [main ] INFO DefaultCamelContext - Apache Camel (CamelContext:camel-1) stopped
+```
+
+Notice how the strategy waits while there are inflight exchanges still being processed before it shut down the routes and after that Camel itself.
+
+### Suppressing logging due to timeout not allowing all inflight messages to complete
+
+If a graceful shutdown could not shutdown cleanly within the given timeout period, then Camel performs a more aggressive shutdown (hard) by forcing routes and thread pools etc to shut down, and the routing engine will reject continue processing [Exchange](exchange.md)(s). If this happens you may see WARN logs about [Exchange](exchange.md)(s) being rejected and other failures due the forced shutdown.
+
+If you do not want to see these logs, you can suppress this by setting the option `suppressLoggingOnTimeout` to true.
+
+-   Java
+    
+-   Application Properties
+    
+
+```java
+context.getShutdownStrategy().setSuppressLoggingOnTimeout(true);
+```
+
+Or in `application.properties`:
+
+```properties
+camel.main.shutdownSuppressLoggingOnTimeout = true
+```
+
+Notice that suppression is _a best effort_ attempt and there may still be some logging from 3rd party libraries, which Camel cannot control.
+
+### Logging inflight exchange information on timeout
+
+If a graceful shutdown could not shutdown cleanly within the given timeout period, then Camel performs a more aggressive shutdown by forcing routes and thread pools etc. to shut down. When the timeout happens, then Camel logs information about the current inflight exchanges, which shows from which route the exchange origins, and where it currently is being routed. For example the logging below, shows that there is 1 inflight exchange, that origins from route1, and currently is still in route1 at the "delay1" node. The elapsed is time in millis how long at the current node (eg delay1) and duration is total time in mills.
+
+If you enable DEBUG logging level on `org.apache.camel.impl.engine.DefaultShutdownStrategy` then it logs the same inflight exchange information during graceful shutdown
+
+```log
+2015-01-12 13:23:23,656 [ - ShutdownTask] INFO DefaultShutdownStrategy -
+There are 1 inflight exchanges: InflightExchange:
+[exchangeId=ID-davsclaus-air-62213-1421065401253-0-3,
+fromRouteId=route1, routeId=route1, nodeId=delay1, elapsed=2007,
+duration=2017]
+```
+
+If you do not want to see these logs, you can turn this off by setting the option logInflightExchangesOnTimeout to false.
+
+-   Java
+    
+-   Application Properties
+    
+
+```java
+context.getShutdownStrategy().setLogInflightExchangesOnTimeout(false);
+```
+
+Or in `application.properties`:
+
+```properties
+camel.main.logInflightExchangesOnTimeout = false
+```
+
+### JMX managed
+
+The `ShutdownStrategy` is JMX aware, so you can manage it from a JMX console. This allows to adjust the strategy at runtime.
+
+> **Tip**
+> The timeout settings can also be changed on the `CamelContextMBean`.
+
+## Controlling ordering of routes
+
+You can configure the order in which routes should be started, and thus also the same order they are being shutdown. See more at [Configuring route startup ordering and autostartup](configuring-route-startup-ordering-and-autostartup.md).
+
+## Fine grained configuration
+
+You can control two areas that influence graceful shutdown in the Camel routing:
+
+-   `ShutdownRoute`
+    
+-   `ShutdownRunningTask`
+    
+
+These options can be configured on two levels: _context_ and _route_. The route level take precedence over context, meaning that if not explicit configured on the route level, then the context level is used.
+
+### ShutdownRoute
+
+This option can control how a given route should act during graceful shutdown. It has two values `Default` and `Defer`. The `Default` is obviously the default option which lets Camel shutdown the route as early as possible. The `Defer` is used to defer shutting down this route to a later stage. This is useful when other routes are dependent upon it. For example an internal route which other routes reuse.
+
+> **Note**
+> It is best to only defer shutting down internal routes only. Public routes should shut down as quickly as possible otherwise it will just keep intake new messages which will delay the shutdown processor. Or even have it timeout if a lot of new messages keep coming in.
+
+### ShutdownRunningTask
+
+This option control how a given route consumer acts during shutdown. Most route consumer will only operate on a single task (message), however the [Batch Consumer](batch-consumer.md) can operate on many messages (in a batch). This option is for batch consumers.
+
+The default value is `CompleteCurrentTaskOnly` which mean that the current _in progress_ task (message) will be completed and then the consumer will shut down. The other option `CompleteAllTasks` allows the consumer to complete all the tasks (messages) before shutting down. For example a [File](../components/4.18.x/file-component.md) consumer will process all the pending files it has picked up before shutting down.
+
+## Stop individual routes
+
+It is possible to stop (will do a gracefully shut down) an individual route using `stopRoute(routeId)` method as shown:
+
+```java
+camelContext.getRouteController().stopRoute(routeId);
+```
+
+> **Tip**
+> Routes can also be stopped via JMX or external tools such as [Hawtio](https://hawt.io/).
+
+### Stopping and marking routes as failed due to an exception
+
+It is possible to stop and fail (will do a gracefully shut down) an individual route using `stopRoute(routeId, cause)` method as shown:
+
+```java
+Exception cause = ...
+camelContext.getRouteController().stopRoute(routeId, cause);
+```
+
+This will stop the route and then mark the route as failed with the caused exception.
+
+> **Note**
+> The Camel [Health Check](health-check.md) detect the route as failed and report it as DOWN. If the route is manually stopped, then the route is not marked as failed, and the [Health Check](health-check.md) will report the status as UNKNOWN.
+
+> **Tip**
+> Routes can also be stopped and failed via JMX or external tools such as [Hawtio](https://hawt.io/).
+
+## Implementing custom component or ShutdownStrategy
+
+If you develop your own Camel component or want to implement your own shutdown strategy then read this section for details.
+
+### ShutdownStrategy
+
+You can implement your own strategy to control the shutdown by implementing the `org.apache.camel.spi.ShutdownStrategy` and the set it on the `CamelContext` using the `setShutdownStrategy` method.
+
+### ShutdownAware
+
+The interface `org.apache.camel.spi.ShutdownAware` is an optional interface consumers can implement to have fine-grained control during shutdown. The `ShutdownStrategy` must be able to deal with consumers which implement this interface. This interface was introduced to cater for in memory consumers such as [SEDA](../components/4.18.x/seda-component.md) which potentially have a number of pending messages on its internal in memory queues. What this allows is to let it control the shutdown process to let it complete its pending messages.
+
+The method `getPendingExchangesSize` should return the number of pending messages which reside on the in memory queues. The method `deferShutdown` should return `true` to defer the shutdown to a later stage, when there are no more pending and inflight messages.
+
+[Batch Consumer](batch-consumer.md) should implement `ShutdownAware` so they properly support the `ShutdownRunningTask` option. See `GenericFileConsumer` for an example.

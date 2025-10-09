@@ -1,0 +1,1264 @@
+# Property placeholders
+
+Camel has extensive support for property placeholders, which can be used _almost anywhere_ in your Camel [routes](routes.md), [endpoints](endpoint.md), [DSL](dsl.md), and [route configuration](route-configuration.md), [bean integration](bean-integration.md) and elsewhere.
+
+Property placeholders are used to define a _placeholder_ instead of the actual value. This is important as you would want to be able to make your applications external configurable, such as values for network addresses, port numbers, authentication credentials, login tokens, and configuration in general.
+
+## Properties component
+
+Camel provides the [Properties](../components/4.18.x/properties-component.md) out of the box from the core, which is responsible for handling and resolving the property placeholders.
+
+See the [Properties](../components/4.18.x/properties-component.md) documentation for how to configure Camel to known from which location(a) to load properties.
+
+## Property placeholder syntax
+
+The value of a Camel property can be obtained by specifying its key name within a property placeholder, using the following syntax: `{{key}}`
+
+For example:
+
+```text
+{{file.uri}}
+```
+
+where `file.uri` is the property key.
+
+Property placeholders can for example be used to specify parts, or all, of an [endpoint uri](uris.md) by embedding one or more placeholders in the URI’s string definition.
+
+For example as shown in the route below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("{{file.uri}}")
+  .to("kafka:{{orderTopic}}");
+```
+
+```xml
+    <route>
+        <from uri="{{file.uri}}"/>
+        <to uri="kafka:{{orderTopic}}"/>
+    </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "{{file.uri}}"
+      steps:
+        - to:
+            uri: "kafka:{{orderTopic}}"
+```
+
+Then the placeholder can be declared in `application.properties`:
+
+```properties
+file.uri = file:/var/orders/inbox?recursive=true
+```
+
+### Using property placeholder with default value
+
+You can specify a default value to use if a property with the key does not exist, where the default value is the text after the colon:
+
+```text
+{{file.url:/some/path}}
+```
+
+In this case the default value is `/some/path`.
+
+### Using optional property placeholders
+
+Camel’s elaborate property placeholder feature supports optional placeholders, which is declared with the `?` (question mark) as prefix in the key name, as shown:
+
+```text
+{{?myBufferSize}}
+```
+
+If a value for the key exists then the value is used, however if the key does not exist, then Camel understands how to handle this. For example when used in [Endpoints](endpoint.md):
+
+```text
+file:foo?bufferSize={{?myBufferSize}}
+```
+
+Then the `bufferSize` option will only be configured in the endpoint, if a placeholder exists. Otherwise, the option will not be set on the endpoint, meaning the endpoint would be _restructured_ as:
+
+```text
+file:foo
+```
+
+Then the option `bufferSize` is not declared, and this would allow Camel to use the standard default value for `bufferSize` (if any exists).
+
+### Reverse a boolean value
+
+If a property placeholder is a boolean value, then it is possible to negate (reverse) the value by using `!` as prefix in the key.
+
+For example given we have this property:
+
+```properties
+integration.ftpEnabled=true
+```
+
+Then this can be used to control which routes should be auto started.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("ftp:....").autoStartup("{{integration.ftpEnabled}}")
+    .to("kafka:cheese");
+
+from("jms:....").autoStartup("{{!integration.ftpEnabled}}")
+    .to("kafka:cheese");
+```
+
+```xml
+<route autoStartup="{{integration.ftpEnabled}}">
+    <from uri="ftp:...."/>
+    <to uri="kafka:cheese"/>
+</route>
+
+<route autoStartup="{{!integration.ftpEnabled}}">
+    <from uri="jms:...."/>
+    <to uri="kafka:cheese"/>
+</route>
+```
+
+```yaml
+- route:
+    autoStartup: "{{integration.ftpEnabled}}"
+    from:
+      uri: ftp:....
+      steps:
+        - to:
+            uri: kafka:cheese
+- route:
+    autoStartup: "{{!integration.ftpEnabled}}"
+    from:
+      uri: jms:....
+      steps:
+        - to:
+            uri: kafka:cheese
+```
+
+In the example above then the FTP route or the JMS route should only be started. So if the FTP is enabled then JMS should be disabled, and vice versa. We can do this be negating the `autoStartup` in the JMS route, by using `!integration.ftpEnabled` as the key.
+
+## Using property placeholders
+
+When using property placeholders in the endpoint [URIs](uris.md) you should use this with the syntax `{{key}}` as shown in this example:
+
+```properties
+cool.end = mock:result
+where = cheese
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{cool.end}}");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="{{cool.end}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{cool.end}}"
+```
+
+A property placeholder may also just be a one part in the endpoint URI.
+
+A common use-case is to use a placeholder for an endpoint option such as the size of the write buffer in the file endpoint:
+
+```properties
+buf = 8192
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("file:outbox?bufferSize={{buf}}");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="file:outbox?bufferSize={{buf}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "file:outbox?bufferSize={{buf}}"
+```
+
+However, the placeholder can be anywhere, so it could also be the name of a mock endpoint
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("mock:{{where}}");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="mock:{{where}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "mock:{{where}}"
+```
+
+In the example above the mock endpoint, is already hardcoded to start with `mock:`, and the `where` placeholder has the value `cheese` so the resolved uri becomes `mock:cheese`.
+
+### Property placeholders referring to other properties (nested placeholders)
+
+You can also have properties with refer to each other such as:
+
+```properties
+cool.foo=result
+cool.concat=mock:{{cool.foo}}
+```
+
+Notice how `cool.concat` refer to another property (above).
+
+You can then use the `cool.concat` placeholder in the Camel routes:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{cool.concat}}");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="{{cool.concat}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{cool.concat}}"
+```
+
+#### Turning off nested placeholders (advanced)
+
+If the placeholder value contains data that interfere with the property placeholder syntax `{{` and `}}` (such as JSon data), you can be then explicit turn off nested placeholder by `?nested=false` in the key name, such as shown:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("elasticsearch:foo?query={{myQuery?nested=false}}");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="elasticsearch:foo?query={{myQuery?nested=false}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "elasticsearch:foo?query={{myQuery?nested=false}}"
+```
+
+In the example above the placeholder _myQuery_ placeholder value is as follows
+
+```properties
+myQuery = {"query":{"match_all":{}}}
+```
+
+Notice how the JSon query ends with `}}` which interfere with the Camel property placeholder syntax.
+
+Nested placeholders can also be turned off globally on the [Properties](../components/4.18.x/properties-component.md) component, such as:
+
+```java
+CamelContext context = ...
+context.getPropertiesComponent().setNestedPlaceholder(false);
+```
+
+In the situation with the JSon query ending with `}}` which clashes with Camels property placeholder syntax, then its also possible to use escaping as explained in the following section.
+
+#### Escaping a property placeholder
+
+The property placeholder can be problematic if the double curly brackets are used by a third party library like for example a query in ElasticSearch of type `{"query":{"match_all":{}}}`.
+
+To work around that it is possible to escape the double curly brackets with a backslash character like for example `\{{ property-name \}}`. This way, it won’t be interpreted as a property placeholder to resolve and will be resolved as `{{ property-name }}`.
+
+The previous example can then use escaping (see how the value ends with `\\}}`)
+
+```properties
+myQuery = {"query":{"match_all":{}\\}}
+```
+
+If for some reason, the backslash character before the double curly brackets must not be interpreted as an escape character, it is possible to add another backslash in front of it to escape it, it will then be seen as a backslash.
+
+### Using property placeholders multiple times
+
+You can of course also use placeholders several times:
+
+```properties
+cool.start=direct:start
+cool.showid=true
+cool.result=result
+```
+
+And in this route we use `cool.start` two times:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("{{cool.start}}")
+    .to("log:{{cool.start}}?showBodyType=false&showExchangeId={{cool.showid}}")
+    .to("mock:{{cool.result}}");
+```
+
+```xml
+<route>
+    <from uri="{{cool.start}}"/>
+    <to uri="log:{{cool.start}}?showBodyType=false&amp;showExchangeId={{cool.showid}}"/>
+    <to uri="mock:{{cool.result}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "log:{{cool.start}}?showBodyType=false&showExchangeId={{cool.showid}}"
+        - to:
+            uri: "mock:{{cool.result}}"
+```
+
+### Using property placeholders with consumer and producer templates
+
+You can also your property placeholders when using [ProducerTemplate](producertemplate.md) for example:
+
+```java
+template.sendBody("{{cool.start}}", "Hello World");
+```
+
+This can also be done when using [ConsumerTemplate](consumertemplate.md), such as:
+
+```java
+Object body = template.receiveBody("{{cool.start}}");
+```
+
+## Resolving property placeholders from Java code
+
+If you need to resolve property placeholder(s) from some Java code, then Camel has two APIs for this:
+
+-   You can use the method `resolveProperty` on the `PropertiesComponent` to resolve a single property from Java code.
+    
+-   Use the method `resolvePropertyPlaceholders` on the `CamelContext` to resolve (one or more) property placeholder(s) in a String.
+    
+
+For example to resolve a placeholder with key foo, you can do:
+
+```java
+Optional<String> prop = camelContext.getPropertiesComponent().resolveProperty("foo");
+if (prop.isPresent()) {
+    String value = prop.get();
+    ....
+}
+```
+
+This API is to lookup a single property and returns a `java.util.Optional` type.
+
+The `CamelContext` have another API which is capable of resolving multiple placeholders, and interpolate placeholders from an input String. Let’s try with an example to explain this:
+
+```java
+String msg = camelContext.resolvePropertyPlaceholders("{{greeting}} Camel user, Camel is {{cool}} dont you think?");
+```
+
+The input string is a text statement which have two placeholders that will be resolved, for example:
+
+```properties
+greeting = Hi
+cool = awesome
+```
+
+Will be resolved to:
+
+```text
+Hi Camel user, Camel is awesome dont you think?
+```
+
+## Resolving property placeholders on cloud
+
+When you are running your Camel application on the cloud you may want to automatically scan any Configmap or Secret as it was an application properties. Given the following Secret:
+
+```yaml
+apiVersion: v1
+data:
+  my-property: Q2FtZWwgNC44
+kind: Secret
+metadata:
+  name: my-secret
+type: Opaque
+```
+
+You can mount it in your Pod container, for instance, under `/etc/camel/conf.d/_secrets/my-secret`. Now, just make your Camel application be aware where to scan your configuration via `camel.main.cloud-properties-location = /etc/camel/conf.d/_secrets/my-secret` application properties. It’s a comma separated value, so, you can add as many Secrets/Configmaps you need.
+
+At runtime, you will be able to read the configuration transparently as `` `{{ my-property }}` `` as you’re doing with the rest of properties.
+
+> **Note**
+> the same configuration works with Configmap.
+
+## Special features for legacy Spring XML files
+
+Apache Camel started decade(s) ago when Spring Framework was heavily used with Spring XML files. This means Camel has special features that apply only to Spring XML.
+
+### Using property placeholders for any kind of attribute in Spring XML files
+
+Previously it was only the `xs:string` type attributes in the XML DSL that support placeholders. For example often a timeout attribute would be a `xs:int` type, and thus you cannot set a string value as the placeholder key. This is now possible using a special placeholder namespace.
+
+In the example below we use the `prop` prefix for the namespace `http://camel.apache.org/schema/placeholder`. Now we can use `prop:` as prefix to configure any kind of XML attributes in Spring XML files.
+
+In the example below we want to use a placeholder for the `stopOnException` option in the [Multicast](../components/4.18.x/eips/multicast-eip.md) EIP. The `stopOnException` is a `xs:boolean` type, so we cannot configure this as:
+
+```xml
+<multicast stopOnException="{{stop}}">
+   ...
+</multicast>
+```
+
+Instead, we must use the `prop:` namespace, so we must add this namespace in the top of the XML file in the `<beans>` tag.
+
+To configure the option we must then use the `prop:optionName` as shown below:
+
+```xml
+<multicast prop:stopOnException="stop">
+  ...
+</multicast>
+```
+
+The complete example is below:
+
+Spring XML
+
+```xml
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:prop="http://camel.apache.org/schema/placeholder"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="damn" class="java.lang.IllegalArgumentException">
+        <constructor-arg index="0" value="Damn"/>
+    </bean>
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <propertyPlaceholder id="properties" location="classpath:myprop.properties"/>
+        <route>
+            <from uri="direct:start"/>
+            <!-- use prop namespace, to define a property placeholder, which maps to option stopOnException={{stop}} -->
+            <multicast prop:stopOnException="stop">
+                <to uri="mock:a"/>
+                <throwException ref="damn"/>
+                <to uri="mock:b"/>
+            </multicast>
+        </route>
+    </camelContext>
+</beans>
+```
+
+In our properties file we have the value defined as:
+
+```properties
+stop = true
+```
+
+### Bridging Camel property placeholders with Spring XML files
+
+> **Note**
+> If you are using Spring Boot then this does not apply. This is only for legacy Camel and Spring applications which are using Spring XML files.
+
+The Spring Framework does not allow third-party frameworks such as Apache Camel to seamless hook into the Spring property placeholder mechanism. However, you can bridge Spring and Camel by declaring a Spring bean with the type `org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer`, which is a Spring `org.springframework.beans.factory.config.PropertyPlaceholderConfigurer` type.
+
+To bridge Spring and Camel you must define a single bean as shown below:
+
+Spring XML
+
+```xml
+<!-- bridge spring property placeholder with Camel -->
+<!-- you must NOT use the <context:property-placeholder at the same time, only this bridge bean -->
+<bean id="bridgePropertyPlaceholder" class="org.apache.camel.spring.spi.BridgePropertyPlaceholderConfigurer">
+  <property name="location" value="classpath:org/apache/camel/component/properties/cheese.properties"/>
+</bean>
+```
+
+You **must not** use the spring `<context:property-placeholder>` namespace at the same time; this is not possible.
+
+After declaring this bean, you can define property placeholders using both the Spring style, and the Camel style within the `<camelContext>` tag as shown below:
+
+Spring XML
+
+```xml
+<!-- a bean that uses Spring property placeholder -->
+<!-- the ${hi} is a spring property placeholder -->
+<bean id="hello" class="org.apache.camel.component.properties.HelloBean">
+  <property name="greeting" value="${hi}"/>
+</bean>
+
+<camelContext xmlns="http://camel.apache.org/schema/spring">
+  <!-- in this route we use Camels property placeholder {{ }} style -->
+  <route>
+    <from uri="direct:{{cool.bar}}"/>
+    <bean ref="hello"/>
+    <to uri="{{cool.end}}"/>
+  </route>
+</camelContext>
+```
+
+Notice how the hello bean is using pure Spring property placeholders using the `${}` notation. And in the Camel routes we use the Camel placeholder notation with `{{key}}`.
+
+## Using property placeholder functions
+
+The [Properties](../components/4.18.x/properties-component.md) component includes the following functions out of the box:
+
+-   `env` - A function to lookup the property from OS environment variables
+    
+-   `sys` - A function to lookup the property from Java JVM system properties
+    
+-   `bean` - A function to lookup the property from the return value of bean’s method (requires `camel-bean` JAR)
+    
+-   `boolean` - A function to evaluate if a property key matches a condition and returns either `true` or `false`
+    
+-   `service` - A function to lookup the property from OS environment variables using the service naming idiom
+    
+-   `service.name` - A function to lookup the property from OS environment variables using the service naming idiom returning the hostname part only
+    
+-   `service.port` - A function to lookup the property from OS environment variables using the service naming idiom returning the port part only
+    
+
+These functions are intended to make it easy to lookup values from the environment, as shown in the example below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .to("{{env:SOMENAME}}")
+  .to("{{sys:MyJvmPropertyName}}");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="{{env:SOMENAME}}"/>
+    <to uri="{{sys:MyJvmPropertyName}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{env:SOMENAME}}"
+        - to:
+            uri: "{{sys:MyJvmPropertyName}}"
+```
+
+You can use default values as well, so if the property does not exist, you can define a default value as shown below, where the default value is a `log:foo` and `log:bar` value.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .to("{{env:SOMENAME:log:foo}}")
+  .to("{{sys:MyJvmPropertyName:log:bar}}");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="{{env:SOMENAME:log:foo}}"/>
+    <to uri="{{sys:MyJvmPropertyName:log:bar}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{env:SOMENAME:log:foo}}"
+        - to:
+            uri: "{{sys:MyJvmPropertyName:log:bar}}"
+```
+
+The boolean function is intended for more flexibility when enabling or disabling EIP options.
+
+For example given we have a property with key `region` that has the value `EMEA`:
+
+```properties
+region = EMEA
+```
+
+We can then configure EIPs whether they are disabled based on this condition as follows:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .choice().disabled("{{boolean:region == 'EMEA'}}")
+        .when(simple("${header.RetryAttempts} == null"))
+            .setProperty("HttpMessageMethod", constant("SET"))
+            .process("SetOriginalMessageProcessor")
+        .end();
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <choice disabled="{{boolean:region == 'EMEA'}}">
+        <when>
+            <simple>${header.RetryAttempts} == null</simple>
+            <setProperty name="HttpMessageMethod">
+                <constant>SET</constant>
+            </setProperty>
+            <process ref="SetOriginalMessageProcessor"/>
+        </when>
+    </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            disabled: "{{boolean:region == 'EMEA'}}"
+            when:
+            - simple: "${header.RetryAttempts} == null"
+              steps:
+              - setProperty:
+                  name: "HttpMessageMethod"
+                  constant: "SET"
+              - process:
+                  ref: "SetOriginalMessageProcessor"
+```
+
+> **Note**
+> Property placeholders can also be used in `application.properties` files, also with the functions such as ENV as shown:
+>
+> ```properties
+> # server name read from ENV and fallback to use localhost as default value
+> myserver = {{env:MY_SERVER_NAME:localhost}}
+> ```
+
+> **Tip**
+> The boolean function uses the [Simple](../components/4.18.x/languages/simple-language.md) language which has many functions and operators to build the condition.
+
+The service function is for looking up a service which is defined using OS environment variables using the service naming idiom, to refer to a service location using `hostname : port`
+
+-   _NAME_**\_SERVICE\_HOST**
+    
+-   _NAME_**\_SERVICE\_PORT**
+    
+
+in other words the service uses `_SERVICE_HOST` and `_SERVICE_PORT` as prefix. So if the service is named FOO, then the OS environment variables should be set as
+
+```bash
+export $FOO_SERVICE_HOST=myserver
+export $FOO_SERVICE_PORT=8888
+```
+
+For example if the FOO service a remote HTTP service, then we can refer to the service in the Camel endpoint uri, and use the HTTP component to make the HTTP call:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .to("http://{{service:FOO}}/myapp");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="http://{{service:FOO}}/myapp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "http://{{service:FOO}}/myapp"
+```
+
+And we can use default values if the service has not been defined, for example to call a service on localhost, maybe for unit testing.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .to("http://{{service:FOO:localhost:8080}}/myapp");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="http://{{service:FOO:localhost:8080}}/myapp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "http://{{service:FOO:localhost:8080}}/myapp"
+```
+
+The bean function (you need to have `camel-bean` JAR on classpath) is for looking up the property from the return value of bean’s method.
+
+Assuming we have registered a bean named 'foo' that has a method called 'bar' that returns a directory name, then we can refer to the bean’s method in the camel endpoint url, and use the file component to poll a directory:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file:{{bean:foo.bar}}")
+  .to("direct:result");
+```
+
+```xml
+<route>
+    <from uri="file:{{bean:foo.bar}}"/>
+    <to uri="direct:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:{{bean:foo.bar}}
+      steps:
+        - to:
+            uri: "direct:result"
+```
+
+> **Important**
+> The method must be a public no-arg method (i.e. no parameters) and return a value such as a String, boolean, int.
+
+### Using Kubernetes property placeholder functions
+
+The `camel-kubernetes` component include the following functions:
+
+-   `configmap` - A function to lookup the string property from Kubernetes ConfigMaps.
+    
+-   `configmap-binary` - A function to lookup the binary property from Kubernetes ConfigMaps.
+    
+-   `secret` - A function to lookup the string property from Kubernetes Secrets.
+    
+-   `secret-binary` - A function to lookup the binary property from Kubernetes Secrets.
+    
+
+The syntax for both functions are:
+
+```text
+configmap:name/key[:defaultValue]
+```
+
+Where the default value is optional, for example the following will lookup `myKey`, and fail if there is no such configmap.
+
+```text
+configmap:mymap/mykey
+```
+
+In this example then it would not fail as a default value is provided:
+
+```text
+configmap:mymap/mykey:123
+```
+
+If the value stored in the configmap is in binary format, so it is stored as `Binary Data`, it will be downloaded in a file, and it returns the absolute path of the file
+
+```text
+configmap-binary:mymap/mybinkey
+```
+
+it returns a path like `/tmp/camel11787545916150467474/mybinkey`
+
+Before the Kubernetes property placeholder functions can be used they need to be configured with either (or both)
+
+-   path - A _mount path_ that must be mounted to the running pod, to load the configmaps or secrets from local disk.
+    
+-   kubernetes client - **Autowired** An `io.fabric8.kubernetes.client.KubernetesClient` instance to use for connecting to the Kubernetes API server.
+    
+
+Camel will first use _mount paths_ (if configured) to lookup, and then fallback to use the `KubernetesClient`.
+
+#### Configuring mount paths for ConfigMaps and Secrets
+
+The configuration of the _mount path_ are used by the given order:
+
+1.  Reading configuration property with keys `camel.kubernetes-config.mount-path-configmaps` and `camel.kubernetes-config.mount-path-secrets`.
+    
+2.  Use JVM system property with key `camel.k.mount-path.configmaps` and `camel.k.mount-path.secrets` (Camel K compatible).
+    
+3.  Use OS ENV variable with key `CAMEL_K_MOUNT_PATH_CONFIGMAPS` and `CAMEL_K_MOUNT_PATH_SECRETS` (Camel K compatible).
+    
+
+For example to use `/etc/camel/resources/` as mount path, you can configure this in the `application.properties`:
+
+```properties
+camel.kubernetes-config.mount-path-configmaps = /etc/camel/myconfig/
+camel.kubernetes-config.mount-path-secrets = /etc/camel/mysecrets/
+```
+
+#### Configuring Kubernetes Client
+
+Camel will autowire the `KubernetesClient` if a single instance of the client exists in the running application (lookup via the [Registry](registry.md)). Otherwise, a new `KubernetesClient` is created. The client can be configured from either
+
+-   Using `camel.kubernetes-config.client.` properties (see below for example)
+    
+-   Attempt to auto-configure itself by a combination of OS Environment variables, reading from `~./kube/config` configuration, and service account token file. For more details see the [https://github.com/fabric8io/kubernetes-client](https://github.com/fabric8io/kubernetes-client) documentation.
+    
+
+You most likely only need to explicit configure the `KubernetesClient` when you want to connect from a local computer to a remote Kubernetes cluster, where you can specify various options, such as the masterUrl and oauthToken as shown:
+
+```properties
+camel.kubernetes-config.client.masterUrl = https://127.0.0.1:50179/
+camel.kubernetes-config.client.oauthToken = eyJhbGciOiJSUzI1NiIsImtpZCI...
+```
+
+> **Tip**
+> The `KubernetesClient` has many options, see the [Kubernetes Client](https://github.com/fabric8io/kubernetes-client) documentation for more information for these options.
+
+If you only use _mount paths_, then it is good practice to disable `KubernetesClient` which can be done by setting enabled to false as show:
+
+```properties
+camel.kubernetes-config.client-enabled = false
+```
+
+When running your Camel applications inside an existing Kubernetes cluster, then you often would not need to explicit configure the `KubernetesClient` and can rely on default settings.
+
+> **Tip**
+> If you use Camel Quarkus, then it is recommended to use their [https://quarkus.io/guides/kubernetes-config](https://quarkus.io/guides/kubernetes-config) which automatic pre-configure the `KubernetesClient` which Camel then will reuse.
+
+#### Using configmap with Kubernetes
+
+Given a configmap named `myconfig` in Kubernetes that has two entries:
+
+```properties
+drink = beer
+first = Carlsberg
+```
+
+Then these values can be used in your Camel routes such as:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .log("What {{configmap:myconfig/drink}} do you want?")
+  .log("I want {{configmap:myconfig/first}}");
+```
+
+```xml
+  <route>
+    <from uri="direct:start"/>
+    <log message="What {{configmap:myconfig/drink}} do you want?"/>
+    <log message="I want {{configmap:myconfig/first}}"/>
+  </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "What {{configmap:myconfig/drink}} do you want?"
+        - log:
+            message: "I want {{configmap:myconfig/first}}"
+```
+
+You can also provide a default value in case a key does not exist, such as `Heiniken` being the default value:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .log("What {{configmap:myconfig/drink}} do you want?")
+  .log("I want {{configmap:myconfig/second:Heineken}}");
+```
+
+```xml
+  <route>
+    <from uri="direct:start"/>
+    <log message="What {{configmap:myconfig/drink}} do you want?"/>
+    <log message="I want {{configmap:myconfig/second:Heineken}}"/>
+  </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "What {{configmap:myconfig/drink}} do you want?"
+        - log:
+            message: "I want {{configmap:myconfig/second:Heineken}}"
+```
+
+#### Using secrets with Kubernetes
+
+Camel reads ConfigMaps from the Kubernetes API Server. And when RBAC is enabled on the cluster, the ServiceAccount that is used to run the application needs to have the proper permissions for such access.
+
+A secret named `mydb` could contain username and passwords to connect to a database such as:
+
+```properties
+myhost = killroy
+myport = 5555
+myuser = scott
+mypass = tiger
+```
+
+This can be used in Camel with for example the Postgres Sink Kamelet:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+String sink =
+"""
+ kamelet:postgresql-sink?serverName={{secret:mydb/myhost}}?
+ &serverPort={{secret:mydb/myport}}
+ &username={{secret:mydb/myuser}}
+ &password={{secret:mydb/mypass}}
+ &databaseName=cities
+ &query=INSERT INTO accounts (username,city) VALUES (:#username,:#city)
+""";
+
+from("direct:rome")
+  .setBody(constant("{ \"username\":\"oscerd\", \"city\":\"Rome\"}"))
+  .to(sink);
+```
+
+```xml
+  <route>
+    <from uri="direct:rome"/>
+    <setBody>
+      <constant>{ "username":"oscerd", "city":"Rome"}</constant>
+    </setBody>
+    <to uri="kamelet:postgresql-sink?serverName={{secret:mydb/myhost}}
+             &amp;serverPort={{secret:mydb/myport}}
+             &amp;username={{secret:mydb/myuser}}
+             &amp;password={{secret:mydb/mypass}}
+             &amp;databaseName=cities
+             &amp;query=INSERT INTO accounts (username,city) VALUES (:#username,:#city)"/>
+  </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct
+      parameters:
+        name: rome
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "{ \"username\":\"oscerd\", \"city\":\"Rome\"}"
+        - to:
+            uri: kamelet
+            parameters:
+              templateId: postgresql-sink
+              serverName: "{{secret:mydb/myhost}}"
+              serverPort: "{{secret:mydb/myport}}"
+              username: "{{secret:mydb/myuser}}"
+              password: "{{secret:mydb/mypass}}"
+              databaseName: 'cities'
+              query: "INSERT INTO accounts (username,city) VALUES (:#username,:#city)"
+```
+
+The postgres-sink Kamelet can also be configured in `application.properties` which reduces the configuration in the route above:
+
+```properties
+camel.component.kamelet.postgresql-sink.databaseName={{secret:mydb/myhost}}
+camel.component.kamelet.postgresql-sink.serverPort={{secret:mydb/myport}}
+camel.component.kamelet.postgresql-sink.username={{secret:mydb/myuser}}
+camel.component.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
+```
+
+Which reduces the route to:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:rome")
+  .setBody(constant("{ \"username\":\"oscerd\", \"city\":\"Rome\"}"))
+  .to("kamelet:postgresql-sink?databaseName=cities&query=INSERT INTO accounts (username,city) VALUES (:#username,:#city)");
+```
+
+```xml
+  <route>
+    <from uri="direct:rome"/>
+    <setBody>
+      <constant>{ "username":"oscerd", "city":"Rome"}</constant>
+    </setBody>
+    <to uri="kamelet:postgresql-sink?databaseName=cities
+             &amp;query=INSERT INTO accounts (username,city) VALUES (:#username,:#city)"/>
+  </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:rome
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "{ \"username\":\"oscerd\", \"city\":\"Rome\"}"
+        - to:
+            uri: kamelet
+            parameters:
+              templateId: postgresql-sink
+              databaseName: cities
+              query: "INSERT INTO accounts (username,city) VALUES (:#username,:#city)"
+```
+
+#### Using configmap or secrets in local-mode
+
+During development, you may want to run in _local mode_ where you do not need acces to a Kubernetes cluster, to lookup the configmap. In the local mode, then Camel will lookup the configmap _keys_ from local properties, eg:
+
+For example the example above with the Postgres kamelet, that was configured using a secret:
+
+```properties
+camel.component.kamelet.postgresql-sink.databaseName={{secret:mydb/myhost}}
+camel.component.kamelet.postgresql-sink.serverPort={{secret:mydb/myport}}
+camel.component.kamelet.postgresql-sink.username={{secret:mydb/myuser}}
+camel.component.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
+```
+
+Now suppose we have a local Postgres database we want to use, then we can turn on _local mode_ and specify the credentials in the same properties file:
+
+```properties
+camel.kubernetes-config.local-mode = true
+mydb/myhost=localhost
+mydb/myport=1234
+mydb/myuser=scott
+mydb/mypass=tiger
+```
+
+> **Note**
+> Notice how the key is prefixed with the name of the secret and a slash, eg `name/key`. This makes it easy to copy/paste from the actual use of the configmap/secret and into the `application.properties` file.
+
+### Using custom property placeholder functions
+
+The [Properties](../components/4.18.x/properties-component.md) component allow to plugin 3rd party functions which can be used during parsing of the property placeholders. These functions are then able to do custom logic to resolve the placeholders, such as looking up in databases, do custom computations, or whatnot. The name of the function becomes the prefix used in the placeholder.
+
+This is best illustrated in the example route below, where we use `beer` as the prefix:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .to("{{beer:FOO}}")
+  .to("{{beer:BAR}}");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="{{beer:FOO}}"/>
+    <to uri="{{beer:BAR}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{beer:FOO}}"
+        - to:
+            uri: "{{beer:BAR}}"
+```
+
+The implementation of the function is only two methods as shown below:
+
+```java
+@org.apache.camel.spi.annotations.PropertiesFunction("beer")
+public class MyBeerFunction implements PropertiesFunction {
+
+    @Override
+    public String getName() {
+        return "beer";
+    }
+
+    @Override
+    public String apply(String remainder) {
+        return "mock:" + remainder.toLowerCase();
+    }
+}
+```
+
+The function must implement the `org.apache.camel.spi.PropertiesFunction` interface. The method `getName` is the name of the function (beer). And the `apply` method is where we implement the custom logic to do. As the sample code is from a unit test, it just returns a value to refer to a mock endpoint.
+
+You also need to have `camel-component-maven-plugin` Maven plugin as part of building the component will then ensure that this custom properties function has necessary source code generated that makes Camel able to automatically discover the function.
+
+> **Note**
+> If the custom properties function need logic to startup and shutdown, then the function can extend `ServiceSupport` and have this logic in `doStart` and `doStop` methods.
+
+> **Tip**
+> For an example see the `camel-base64` component.
+
+## Using third party property sources
+
+The properties component allows to plugin 3rd party sources to load and lookup properties via the `PropertySource` API from camel-api.
+
+The regular `PropertySource` will lookup the property on-demand, for example to lookup values from a backend source such as a database or HashiCorp Vault etc.
+
+A `PropertySource` can define that it supports loading all its properties (by implementing `LoadablePropertiesSource`) from the source at once, for example from file system. This allows Camel properties component to load these properties at once during startup.
+
+For example the `camel-microprofile-config` component is implemented using this. The 3rd-party `PropertySource` can automatically be discovered from classpath when Camel is starting up. This is done by including the file `META-INF/services/org/apache/camel/property-source-factory` which refers to the fully qualified class name of the `PropertySource` implementation.
+
+See [MicroProfile Config](../components/4.18.x/others/microprofile-config.md) component as an example.
+
+You can also register 3rd-party property sources via Java API on the `PropertiesComponent` as shown:
+
+```java
+PropertiesComponent pc = context.getPropertiesComponent();
+pc.addPropertiesSource(myPropertySource);
+```

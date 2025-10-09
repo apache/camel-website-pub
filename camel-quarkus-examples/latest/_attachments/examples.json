@@ -110,6 +110,11 @@
     "link": "https://github.com/apache/camel-quarkus-examples/tree/main/rest-json"
   },
   {
+    "title": "REST with Jackson: A Quarkus based example",
+    "description": "Demonstrates how to use REST (Jackson) endpoints from a Quarkus project and invoke Camel routes.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/quarkus-rest-json"
+  },
+  {
     "title": "Saga and LRA",
     "description": "Shows how to use saga and lra",
     "link": "https://github.com/apache/camel-quarkus-examples/tree/main/saga"
@@ -138,6 +143,11 @@
     "title": "Upload a file to an AWS S3 bucket",
     "description": "Shows how to produce and consume messages to an aws2-s3 bucket.",
     "link": "https://github.com/apache/camel-quarkus-examples/tree/main/aws2-s3"
+  },
+  {
+    "title": "Variables",
+    "description": "Uses the Camel variables which can be configured from application.properties.",
+    "link": "https://github.com/apache/camel-quarkus-examples/tree/main/variables"
   },
   {
     "title": "Vertx-Websocket Chat",

@@ -1,0 +1,38 @@
+# Why did you choose the name Camel?
+
+-   it stands for Concise Application Message Exchange Language (i.e. the Java [DSL](../dsl.md) for routing)
+    
+-   a Camel can carry 4 times the load of other beasts of burden
+    
+-   a Camel can travel for great distances without water; similarly a Camel does not require bucket loads of XML as you can use a pure Java [DSL](../dsl.md)
+    
+-   some members of the team used to love Camel cigarettes!
+    
+-   it’s short, simple and easy to remember name
+    
+-   very fast, even when the going gets tough!
+    
+-   a Camel will never spit on those it loves!
+    
+-   a Camel is not an [evolutionary dead end](http://en.wikipedia.org/wiki/Hybrid_animals#Equid_Hybrids)
+    
+-   a Camel looks really funny when it’s running, like most of the team :smile:
+    
+-   a Camel is a horse designed by committee :smile:
+    
+-   a Camel in Action is really funny
+    
+
+We generated some really cheesy tag lines like:
+
+-   You can go a long way with Camel!
+    
+-   Don’t get the hump get Camel!
+    
+-   No where to evolve to? Get Camel!
+    
+-   One hump or two?
+    
+-   Don’t get lost in a desert of XML config files, get Camel!
+    
+-   It’s not a mirage, it’s a Camel!

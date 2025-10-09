@@ -6,8 +6,29 @@
     <description>Recent content in Security on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Apr 2025 07:30:42 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 18 Feb 2026 09:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-25747</title>
+      <link>https://camel.apache.org/security/CVE-2026-25747.html</link>
+      <pubDate>Wed, 18 Feb 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-25747.html</guid>
+      <description>Apache Camel: Camel-LevelDB: Unsafe Deserialization from LevelDBAggregationRepository</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-23552</title>
+      <link>https://camel.apache.org/security/CVE-2026-23552.html</link>
+      <pubDate>Tue, 17 Feb 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-23552.html</guid>
+      <description>Apache Camel: Camel-Keycloak: Cross-Realm Token Acceptance in KeycloakSecurityPolicy</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2025-66169</title>
+      <link>https://camel.apache.org/security/CVE-2025-66169.html</link>
+      <pubDate>Tue, 13 Jan 2026 07:30:42 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2025-66169.html</guid>
+      <description>Cypher injection vulnerability in Camel-Neo4j component</description>
+    </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2025-30177</title>
       <link>https://camel.apache.org/security/CVE-2025-30177.html</link>

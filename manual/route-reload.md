@@ -1,0 +1,69 @@
+# Route Reload
+
+The route reload functionality in Camel is capable of watching a directory folder for file changes, and then automatic trigger reload of the running routes in the Camel application.
+
+This functionality is intended for development purposes and not for production use.
+
+> **Note**
+> This feature is not supported when using Camel Quarkus, as you should be using the hot-reloading functionality that comes with Quarkus instead. This functionality can also reload Java source code changes and much more.
+
+## Using route reloading
+
+You cannot watch for file changes in the Java classpath. It is only possible to watch for file changes in the file system (i.e., using `file` and not `classpath`).
+
+The route reloading can be configured in Java or with Spring Boot, Quarkus in the following way:
+
+-   Java
+    
+-   Application Properties
+    
+
+```java
+CamelContext context = ...
+
+RouteWatcherReloadStrategy reload = new RouteWatcherReloadStrategy();
+reload.setFolder("myfolder/routes");
+reload.setPattern("*.xml");
+
+context.addService(reload);
+```
+
+And with Spring Boot, Quarkus, Standalone you can configure this in `application.properties:`
+
+```properties
+# turn on route reloading on file changes
+camel.main.routes-reload-enabled = true
+# the base directory to watch
+camel.main.routes-reload-directory = myfolder/routes
+# pattern(s) for files to watch
+camel.main.routes-reload-pattern = *.xml
+```
+
+### Route Reload Options
+
+You can configure the `RouteWatcherReloadStrategy` using the following options:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| `routesReloadDirectory` | Directory to scan for route changes. Camel cannot scan the classpath, so this must be configured to a file directory. Development with Maven as build tool, you can configure the directory to be `src/main/resources` to scan for Camel routes in XML or YAML files. | `src/main/resources/camel` | String |
+| `routesReloadDirectoryRecursive` | Whether the directory to scan should include subdirectories. Depending on the number of sub-directories, then this can cause the JVM to start up slower as Camel uses the JDK file-watch service to scan for file changes. | `false` | boolean |
+| `routesReloadEnabled` | Used for enabling automatic routes reloading. If enabled, then Camel will watch for file changes in the given reload directory, and trigger reloading routes if files are changed. | `false` | boolean |
+| `routesReloadPattern` | Used for inclusive filtering of routes from directories. Typical used for specifying to accept routes in XML or YAML files. The default pattern is \*.yaml,\*.xml Multiple patterns can be specified separated by comma. | `*.yaml,*.xml` | String |
+| `routesReloadRemoveAllRoutes` | When reloading routes should all existing routes be stopped and removed. By default, Camel will stop and remove all existing routes before reloading routes. This ensures that only the reloaded routes will be active. If disabled, then only routes with the same route id are updated, and any existing routes are continued to run. | `true` | boolean |
+
+### Must use route id’s
+
+When using route reload, then it is recommended to assign id’s to your routes, so Camel knows exactly which routes have been updated. This is necessary because Apache Camel must stop the existing routes from running before they can be updated.
+
+And adding new routes is therefore possible as they would have a new unique route id specified.
+
+## See Also
+
+See related [Context Reload](context-reload.md).
+
+See the following examples that come with live reloading enabled:
+
+-   [Standalone XML DSL](https://github.com/apache/camel-examples/tree/main/main-xml)
+    
+-   [Standalone YAML DSL](https://github.com/apache/camel-examples/tree/main/main-yaml)

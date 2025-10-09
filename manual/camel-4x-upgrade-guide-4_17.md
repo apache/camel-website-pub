@@ -1,0 +1,129 @@
+# Apache Camel 4.x Upgrade Guide
+
+This document is for helping you upgrade your Apache Camel application from Camel 4.x to 4.y. For example, if you are upgrading Camel 4.0 to 4.2, then you should follow the guides from both 4.0 to 4.1 and 4.1 to 4.2.
+
+> **Note**
+> [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
+
+## Upgrading Camel 4.16 to 4.17
+
+### camel-core
+
+The `transform` EIP has moved the data-type function to a new specialized `transformDataType` EIP that works across all DSLs (Java, XML and YAML).
+
+For Java DSL that means code should be changed
+
+```java
+from("direct:start")
+    .transform(new DataType("myDataType"))
+    .to("mock:result");
+```
+
+to:
+
+```java
+from("direct:start")
+    .transformDataType(new DataType("myDataType"))
+    .to("mock:result");
+```
+
+#### Custom Camel components
+
+Custom components which has a custom message implementation by extending `DefaultMessage`, which rely on the `populateInitialHeaders` to initialize headers must now add the following method:
+
+```java
+    @Override
+    protected boolean isPopulateHeadersSupported() {
+        return true;
+    }
+```
+
+### camel-cluster
+
+The cluster locking components has been made more tooling friendly for configuration by exposing all their options as metadata.
+
+-   camel-file
+    
+-   camel-consul
+    
+-   camel-infinispan
+    
+-   camel-jgroups-kraft
+    
+-   camel-kubernetes
+    
+-   camel-master
+    
+-   camel-zookeeper
+    
+
+### camel-jbang
+
+The `camel-kamelets-catalog` JAR is now downloaded on-demand. The version of the Kamelets is now specified via `--kamelets-version` option (or via maven dependencies). The following option is no longer in use `-Dcamel-kamelets.version`.
+
+Removed automatic fallback to download Kamelet YAML files from GitHub. Instead, kamelets are now only loaded from embedded `camel-kamelets` JAR.
+
+Exporting with `--build-tools=gradle` is deprecated. Only Maven is and will be supported with camel-jbang.
+
+### camel-debezium
+
+The `camel-debezium` component has upgraded from Debezium 3.3.2 to 3.4.0.
+
+### camel-ftp
+
+Add producer health check to `camel-ftp`. Notice that producer health checks are default globally off.
+
+If you have enabled producer health checks globally, then you can turn off this on `camel-ftp` component to not use the newly introduced checks in `camel-ftp` to have same behavior as previously.
+
+### camel-infinispan
+
+`camel-infinispan` has been upgraded to [Infinispan 16](https://infinispan.org/blog/2025/11/10/infinispan-16-0). Virtual threads are enabled by default for embedded mode with `camel-infinispan-embedded`.
+
+If you choose to listen for cache events on the `infinispan-embedded` consumer, it is possible that events are not processed in a predictable order. Disabling virtual threads by setting system property `org.infinispan.threads.virtual` to `false` leads to more predictable event order processing.
+
+### camel-tika
+
+Upgraded to Tika v3, and removed `textMain` from `tikaParseOutputFormat` option.
+
+### camel-undertow
+
+This component will not skip headers that has invalid characters in key names (UT10052), implemented in the `UndertowHeaderFilterStrategy` class.
+
+### camel-docling
+
+There is a regression related to `EXTRACT_METADATA` operation. Only filename, filesize and filepath are still extracted.
+
+### Component deprecation
+
+The `camel-stomp` component is deprecated.
+
+### TestContainers updated to 2.0.2
+
+TestContainers (TC) is updated to 2.0.2, see the [TC release notes since 2.0.0](https://github.com/testcontainers/testcontainers-java/releases) and CAMEL-22720, noteworthy are: Removed JUnit 4 support, All modules are now prefixed with testcontainers-. For example, org.testcontainers:mysql is now org.testcontainers:testcontainers-mysql. Update docker image version to 25.0.5. Set default docker API version to 1.44.
+
+### camel-salesforce
+
+#### clientSecret now optional for refresh token authentication
+
+The `clientSecret` parameter is now optional when using refresh token authentication (`authenticationType=REFRESH_TOKEN`). This enables use of Salesforce connected apps that don’t require a client secret, such as the Salesforce CLI’s built-in `PlatformCLI` connected app.
+
+If you were previously providing a `clientSecret` with refresh token authentication, no changes are required - it will continue to work.
+
+#### Integration test infrastructure changes
+
+The integration test setup has been modernized to use Salesforce CLI instead of the deprecated Ant-based deployment. If you are a developer running or contributing to the Salesforce component integration tests:
+
+-   **Prerequisites**: Install [Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli) and [jq](https://jqlang.github.io/jq/)
+    
+-   **Scratch org support**: Tests can now automatically create and use scratch orgs (requires Dev Hub authentication)
+    
+-   **Refresh token authentication**: Tests use refresh token flow with SF CLI’s `PlatformCLI` connected app - no security token required
+    
+-   **Legacy directory removed**: `it/resources/salesforce/` has been removed; metadata is now in `it/resources/sfdx-project/salesforce-source/`
+    
+
+See `components/camel-salesforce/it/resources/README.md` for detailed setup instructions.
+
+### Maven Archetypes
+
+The `camel-archetype-spring` maven archetype is deprecated. This archetype is generating classic old-fashioned Spring XML `<beans>` projects. Use Spring Boot instead.

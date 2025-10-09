@@ -1,0 +1,84 @@
+# Apache Camel 4.x Upgrade Guide
+
+This document is for helping you upgrade your Apache Camel application from Camel 4.x to 4.y. For example, if you are upgrading Camel 4.0 to 4.2, then you should follow the guides from both 4.0 to 4.1 and 4.1 to 4.2.
+
+> **Note**
+> [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
+
+## Upgrading from 4.14.2 to 4.14.3
+
+### camel-tika
+
+Upgraded to Tika v3, and removed `textMain` from `tikaParseOutputFormat` option.
+
+## Upgrading from 4.14.1 to 4.14.2
+
+### camel-kamelet
+
+The kamelet component is now parsing endpoint parameters using _raw mode_ to ensure when using sensitive parameters such as access keys, passwords etc. they are not URI encoded.
+
+## Upgrading from 4.10.0 to 4.10.1
+
+No changes
+
+## Upgrading Camel 4.13 to 4.14
+
+### camel-core
+
+The `org.apache.camel.spi.ExecutorServiceManager.ThreadFactoryListener` has changed the method signature to include the source, so the method is changed from `ThreadFactory onNewThreadFactory(ThreadFactory factory)` to `ThreadFactory onNewThreadFactory(Object source, ThreadFactory factory)`
+
+#### Splitter and Multicast EIPs
+
+When using `shareUnitOfWork=true` in Split or Multicast EIPs, then Camel will now use a single shared `UnitOfWork` instance (parent) for the entire body of work. So if the Splitter is splitting into 1000 sub messages, then each of them will now reuse the same `UnitOfWork` and any completion tasks that each sub messages, will now be executed later, when the parent `UnitOfWork` is complete, usually when the original message is completed.
+
+Previously, each sub-message was independent (despite the documentation refers to this not being the case). However this feature has been mistakenly for many years, as this feature is rarely in use. However, we had the opportunity to look into this as part of an issue, and felt it’s better to fix this before for this LTS release.
+
+### camel-main
+
+The HTTP server for standalone `camel-main` applications has separated management services and business services. This means that configurations in `application.properties` should be changed from `camel.server.xxx` to `camel.management.xxx` as shown below:
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>Old Option</strong></td><td class="tableblock halign-left valign-top"><strong>New Option</strong></td></tr><tr><td class="tableblock halign-left valign-top">camel.server.devConsoleEnabled</td><td class="tableblock halign-left valign-top">camel.management.devConsoleEnabled</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.healthCheckEnabled</td><td class="tableblock halign-left valign-top">camel.management.healthCheckEnabled</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.jolokiaEnabled</td><td class="tableblock halign-left valign-top">camel.management.jolokiaEnabled</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.metricsEnabled</td><td class="tableblock halign-left valign-top">camel.management.metricsEnabled</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.uploadEnabled</td><td class="tableblock halign-left valign-top">camel.management.uploadEnabled</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.uploadSourceDir</td><td class="tableblock halign-left valign-top">camel.management.uploadSourceDir</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.downloadEnabled</td><td class="tableblock halign-left valign-top">camel.management.downloadEnabled</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.sendEnabled</td><td class="tableblock halign-left valign-top">camel.management.sendEnabled</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.healthPath</td><td class="tableblock halign-left valign-top">camel.management.healthPath</td></tr><tr><td class="tableblock halign-left valign-top">camel.server.jolokiaPath</td><td class="tableblock halign-left valign-top">camel.management.jolokiaPath</td></tr></tbody></table>
+> **Note**
+> Make sure if you use any of the managed HTTP services such as health-checks then enable the management server with `camel.management.enabled=true`.
+
+The default HTTP endpoints has changed in some management services as listed below:
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>Old Path</strong></td><td class="tableblock halign-left valign-top"><strong>New Path</strong></td></tr><tr><td class="tableblock halign-left valign-top">/q/health</td><td class="tableblock halign-left valign-top">/observe/health</td></tr><tr><td class="tableblock halign-left valign-top">/q/metrics</td><td class="tableblock halign-left valign-top">/observe/metrics</td></tr><tr><td class="tableblock halign-left valign-top">/q/info</td><td class="tableblock halign-left valign-top">/observe/info</td></tr><tr><td class="tableblock halign-left valign-top">/q/jolokia</td><td class="tableblock halign-left valign-top">/observe/jolokia</td></tr></tbody></table>
+
+### camel-jbang
+
+The `camel-jbang` has upgraded to Java 21 as the default java-version when running and exporting. To keep using java 17, you can use `--java-version=17` as parameter.
+
+The `camel export` will not include `camel-observabilities-services` out of the box. To include this, then use `--observe` to enable this during export.
+
+Notice when exporting to kubernetes then `camel-observabilities-services` is always enabled.
+
+When controlling Camel JBang exports with configuration in `application.properties` then there was a duplicate option (`camel.jbang.repositories` and `camel.jbang.repos`) which has been fixed to be only `camel.jbang.repos`.
+
+### camel-google
+
+The scopes parameter for camel-google-calendar, camel-google-calendar-streams, camel-google-drive, camel-google-mail, camel-google-mail-streams and camel-google-sheets-streams has been defined as String instead of Collection<String>. For the migration users will need to, eventually, define scopes as a comma separated list of scopes instead of a Collection instance. For more information the related issue is CAMEL-22247.
+
+### camel-consul
+
+The nodeMeta and the tags parameter for camel-consul has been defined as String instead of List<String>. For the migration users will need to, eventually, define nodeMeta as a comma separated list of nodeMeta instead of a List or Set instance. For more information the related issue is CAMEL-17339.
+
+### camel-dapr
+
+The configKeys parameter for camel-dapr has been defined as String instead of List<String>. For the migration users will need to, eventually, define configKeys as a comma separated list of config Keys instead of a List instance. For more information the related issue is CAMEL-17339.
+
+### camel-huawei-dms
+
+The availableZones parameter for camel-huawei-dms has been defined as String instead of List<String>. For the migration users will need to, eventually, define availableZones as a comma separated list of available zones instead of a List instance. For more information the related issue is CAMEL-17339.
+
+### camel-weather
+
+The ids parameter for camel-weather has been defined as String instead of List<String>. For the migration users will need to, eventually, define ids as a comma separated list of id instead of a List instance. For more information the related issue is CAMEL-17339.
+
+### camel-web3j
+
+The addresses, privateFor and Topics parameters for camel-web3j have been defined as String instead of List<String>. For the migration users will need to, eventually, define addresses, privateFor or topics as a comma separated list of addresses, privateFor or topics instead of a List instance. For more information the related issue is CAMEL-17339.
+
+### camel-spring-batch
+
+The `jobLauncher` and `jobRegistry` is now autowired on the component if there is a single instance pre-configured in the application. This avoids having to wire this into the Camel component or endpoints.

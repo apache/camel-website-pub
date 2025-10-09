@@ -1,0 +1,93 @@
+# Apache Camel 3.x Upgrade Guide
+
+This document is for helping you upgrade your Apache Camel application from Camel 3.x to 3.y. For example, if you are upgrading Camel 3.0 to 3.2, then you should follow the guides from both 3.0 to 3.1 and 3.1 to 3.2.
+
+## Upgrading Camel 3.10 to 3.11
+
+### Bean Language
+
+When using `beanType` (full qualified class name) with the bean language, then the bean language will **now** look up in the registry, and if there is a single instance of the same type, then the existing bean is used. If not, then a new bean is created (same behavior as before).
+
+### Aggregate EIP
+
+The aggregate EIP will now always use a worker thread pool for processing outgoing messages. Previously a worker pool was only created when `parallelProcessing=true`. When having `parallelProcessing=false` then a single-threaded worker pool is created and used by the aggregator.
+
+Camels routing engine works better when a dedicated worker pool that eliminates a _hack_ that otherwise was necessary in other EIPs that was affected if using the aggregator in some special configurations.
+
+### RemoveHeader EIP
+
+In XML and YAML DSL the `headerName` attribute has been deprecated, and you should use `name` instead. This is to make the EIP consistent with the naming used by other similar EIPs.
+
+### Routes loader
+
+The default pattern for discovering Camel routes et all from the classpath has changed from only including XML files to now include all files.
+
+The option `routesIncludePattern` is changed from:
+
+classpath:camel/\*.xml,classpath:camel-template/\*.xml,classpath:camel-rest/\*.xml\`
+
+to:
+
+classpath:camel/\*,classpath:camel-template/\*,classpath:camel-rest/\*
+
+This is from the `camel-main` module which is for running Camel standalone, but also reused for Camel on Spring Boot, or Camel on Quarkus.
+
+### camel-apns
+
+The `camel-apns` component has been removed as the APNS (Apple Push Notification Service) online service has been retired y Apple.
+
+### camel-mongodb
+
+The `streamFilter` option should now be configured as endpoint uri parameter, instead of a route property.
+
+### camel-saxon
+
+The camel-saxon component no longer depends on camel-xslt-saxon. Any applications in need of XSLT transformation with saxon should now declare an explicit dependency upon camel-xslt-saxon.
+
+### camel-maven-plugin with OSGi blueprint
+
+The `run` goal of the `camel-maven-plugin` has moved its OSGi Blueprint support out to its own `camel-karaf-maven-plugin`.
+
+This means if you use Camel on OSGi Blueprint then you need to migrate from:
+
+```xml
+<plugin>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-maven-plugin</artifactId>
+    <version>3.11.0</version>
+</plugin>
+```
+
+to
+
+```xml
+<plugin>
+    <groupId>org.apache.camel.karaf</groupId>
+    <artifactId>camel-karaf-maven-plugin</artifactId>
+    <version>3.11.0</version>
+</plugin>
+```
+
+In the `pom.xml` file.
+
+Also remember to execute the `run` goal, you should use `camel-karaf:run` instead of `camel:run` as shown:
+
+```bash
+mvn camel-karaf:run
+```
+
+### camel-sql
+
+Support for deprecated use of named dataSource in the URI has been removed.
+
+You have to use `sql:select * from table where id=# order by name?dataSource=#myDS` instead of `sql:select * from table where id=# order by name?dataSource=myDS`.
+
+### Spring Boot Starters
+
+Some of the Camel Spring Boot starters have additional autoconfiguration options that clashed with component. Therefore, those configurations have renamed their configuration keys:
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>Old Key prefix</strong></td><td class="tableblock halign-left valign-top"><strong>New key prefix</strong></td></tr><tr><td class="tableblock halign-left valign-top">camel.component.consul.service-registry</td><td class="tableblock halign-left valign-top">camel.cloud.consul</td></tr><tr><td class="tableblock halign-left valign-top">camel.cloud.consul.service-registry</td><td class="tableblock halign-left valign-top">camel.cloud.consul</td></tr></tbody></table>
+
+### Apache Karaf
+
+The `camel-grpc` feature has been removed.

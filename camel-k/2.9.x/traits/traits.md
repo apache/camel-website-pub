@@ -1,0 +1,121 @@
+# Traits
+
+A Camel K trait is a feature which encapsulate a specific Kubernetes behavior. The traits are used to fine tune the building and deployment process of a Camel workload on the cloud.
+
+Camel K provide sensible defaults for all such traits, taking into account the details of the target platform where the integration is going to run into. However, it’s possible for a **expert user** to configure them in order to obtain a different behavior.
+
+## Configuration
+
+Each trait has a unique ID that can be used to configure it using the CLI or changing the Integration `.spec.traits` parameter. For example, in order to disable the creation of a Service for an Integration, a user can execute:
+
+```none
+kamel run --trait service.enabled=false file.yaml
+```
+
+> **Note**
+> the flag `--trait` can be also abbreviated with `-t`.
+
+The `enabled` property is available on all traits and can be used to enable/disable them. All traits have their own internal logic to determine if they need to be enabled when the user does not activate them explicitly.
+
+Some traits share also a `auto` property that can be used to enable/disable auto-configuration of the trait based on the environment. The auto-configuration mechanism is able to enable/disable the trait when the `enabled` property is not explicitly set by the user and also change the trait configuration.
+
+> **Note**
+> some traits are applicable only to specific platforms (see the "profiles" in the trait description page).
+
+A trait may have additional properties that can be configured by the end user.
+
+### Configure the Integration spec
+
+Let’s use a further example to show how to configure a trait in an `Integration`. If you want to set an additional `JVM` classpath pointing to a known dependency, we can use the CLI as we’ve seen above:
+
+```console
+$ kamel run --trait jvm.classpath=/path/to/my.jar MyIntegration.java
+```
+
+The command is creating an `Integration` with the configuration below:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: my-integration
+spec:
+  traits:
+    jvm:
+      classpath: /path/to/my.jar
+...
+```
+
+The `.spec.traits` holds an array of traits, identified by their id (`jvm`, in this case). Then, the `.jvm.classpath` is the property we want to set. If you need to set a trait directly in the `Integration` spec, then, you should proceed in the way illustrated above.
+
+## List of available traits
+
+There are 34 traits. See each trait description page for more information on a specific trait:
+
+-   [Affinity Trait](affinity.md)
+    
+-   [Builder Trait](builder.md)
+    
+-   [Camel Trait](camel.md)
+    
+-   [Container Trait](container.md)
+    
+-   [Cron Trait](cron.md)
+    
+-   [Deployer Trait](deployer.md)
+    
+-   [Deployment Trait](deployment.md)
+    
+-   [Environment Trait](environment.md)
+    
+-   [Gitops Trait](gitops.md)
+    
+-   [Health Trait](health.md)
+    
+-   [Ingress Trait](ingress.md)
+    
+-   [Init Containers Trait](init-containers.md)
+    
+-   [Istio Trait](istio.md)
+    
+-   [Jolokia Trait](jolokia.md)
+    
+-   [Jvm Trait](jvm.md)
+    
+-   [Kamelets Trait](kamelets.md)
+    
+-   [Keda Trait](keda.md)
+    
+-   [Knative Service Trait](knative-service.md)
+    
+-   [Knative Trait](knative.md)
+    
+-   [Logging Trait](logging.md)
+    
+-   [Master Trait](master.md)
+    
+-   [Mount Trait](mount.md)
+    
+-   [Openapi Trait](openapi.md)
+    
+-   [Owner Trait](owner.md)
+    
+-   [Pdb Trait](pdb.md)
+    
+-   [Pod Trait](pod.md)
+    
+-   [Prometheus Trait](prometheus.md)
+    
+-   [Pull Secret Trait](pull-secret.md)
+    
+-   [Quarkus Trait](quarkus.md)
+    
+-   [Route Trait](route.md)
+    
+-   [Security Context Trait](security-context.md)
+    
+-   [Service Trait](service.md)
+    
+-   [Telemetry Trait](telemetry.md)
+    
+-   [Toleration Trait](toleration.md)

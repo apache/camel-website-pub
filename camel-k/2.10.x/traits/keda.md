@@ -1,0 +1,28 @@
+# Keda Trait
+
+The KEDA trait allows you to configure KEDA autoscalers to scale up and down based of events.
+
+This trait is available in the following profiles: **Kubernetes, Knative, OpenShift**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait keda.[key]=[value] --trait keda.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `keda.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `keda.polling-interval` | `int32` | Interval (seconds) to check each trigger on. |
+| `keda.cooldown-period` | `int32` | The wait period between the last active trigger reported and scaling the resource back to 0. |
+| `keda.idle-replica-count` | `int32` | Enabling this property allows KEDA to scale the resource down to the specified number of replicas. |
+| `keda.min-replica-count` | `int32` | Minimum number of replicas. |
+| `keda.max-replica-count` | `int32` | Maximum number of replicas. |
+| `keda.triggers` | `[]github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.KedaTrigger` | Definition of triggers according to the KEDA format. Each trigger must contain `type` field corresponding to the name of a KEDA autoscaler and a key/value map named `metadata` containing specific trigger options and optionally a mapping of secrets, used by Keda operator to poll resources according to the autoscaler type. |
+| `keda.auto` | `bool` | Automatically discover KEDA triggers from Camel component URIs. |
+| `keda.auto-metadata` | `map[string]map[string]string` | Additional metadata to merge into auto-discovered triggers. Keys are trigger types (e.g., "kafka"), values are maps of metadata key-value pairs to merge (e.g., {"lagThreshold": "10"}). |

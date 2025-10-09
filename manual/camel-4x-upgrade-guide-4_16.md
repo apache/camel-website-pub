@@ -1,0 +1,232 @@
+# Apache Camel 4.x Upgrade Guide
+
+This document is for helping you upgrade your Apache Camel application from Camel 4.x to 4.y. For example, if you are upgrading Camel 4.0 to 4.2, then you should follow the guides from both 4.0 to 4.1 and 4.1 to 4.2.
+
+> **Note**
+> [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
+
+## Upgrading Camel 4.15 to 4.16
+
+### EIPs
+
+The `validate` EIP in Java DSL has changed avoid having to use `.end()` to correctly continue building the route. Other EIPs such as `setBody` and `transform` does not require to use `.end()` and as such we are making this the same behavior.
+
+For example if stacking multiple validates then you would have to end `.end()` each time:
+
+```java
+    .validate(body().isNotNull()).end()
+    .validate(body().isInstanceOf(String.class)).end()
+    .validate(body().isGreaterThan("0")).end()
+```
+
+Should now be:
+
+```java
+    .validate(body().isNotNull())
+    .validate(body().isInstanceOf(String.class))
+    .validate(body().isGreaterThan("0"))
+```
+
+### camel-core
+
+The `tryConvertTo` method in Camel type converters will no longer in case of no converter suitable, mark this as a _miss_ for any same future converter attempts to immediately be identified as a _miss_.
+
+The `ModelToYAMLDumper` and `ModelToXMLDumper` has added `boolean sourceLocation` as parameter to the 2nd `dumpModelAsYaml` methods.
+
+### camel-as2
+
+This component has been improved to better support using different security algorithms isolated per context-path but sharing the same server port. If you use `camel-as2` then consider testing that everything is still working as expected when upgrading.
+
+### camel-kamelet
+
+The kamelet component is now parsing endpoint parameters using _raw mode_ to ensure when using sensitive parameters such as access keys, passwords etc. they are not URI encoded.
+
+### camel-graphql
+
+The `camel-graphql` component now includes Camel message headers as HTTP headers when calling the remote Graphql server.
+
+If the response is not success (2xx) then the component now throws the `org.apache.camel.http.base.HttpOperationFailedException`. This can be turned off by setting `throwExceptionOnFailure=false`.
+
+### camel-infinispan
+
+The `queryBuilder` option on `camel-infinispan` endpoint has been migrated to no longer use the deprecated query factory `org.infinispan.query.dsl.QueryFactory` to the new query API that is based on ickle query syntax.
+
+This means old code such:
+
+```java
+    private InfinispanQueryBuilder continuousQueryBuilder
+            = qf -> qf.from(User.class).having("name").like("CQ%").build();
+```
+
+Should use the [ickle](https://infinispan.org/docs/stable/titles/query/query.html#ickle-query-language) query syntax:
+
+```java
+    private InfinispanQueryBuilder continuousQueryBuilder
+            = qf -> qf.query("FROM sample_bank_account.User WHERE name LIKE 'CQ%'");
+```
+
+### camel-jbang
+
+The `camel-launcher` binary no longer include the `edit` plugin commands.
+
+### camel-milo
+
+The camel-milo component has been upgraded to use Eclipse Milo 1.0.5, which includes several breaking API changes:
+
+#### Certificate Validation API Changes
+
+The certificate validation API has been refactored in Milo 1.0.5:
+
+-   The `ServerCertificateValidator` class has been removed
+    
+-   Use `org.eclipse.milo.opcua.stack.core.security.CertificateValidator` instead
+    
+-   The new `CertificateValidator` is located in the core security package rather than the server-specific package
+    
+
+If you were programmatically configuring certificate validators, you need to update your code:
+
+```java
+// Old API (no longer works)
+import org.eclipse.milo.opcua.stack.server.security.ServerCertificateValidator;
+server.setCertificateValidator(serverCertificateValidator);
+
+// New API (Milo 1.0.5)
+import org.eclipse.milo.opcua.stack.core.security.CertificateValidator;
+server.setCertificateValidator(certificateValidator);
+```
+
+#### Subscription Monitoring API Changes
+
+The monitored item data value listener API has changed:
+
+-   The `DataValueListener` now requires two parameters: `OpcUaMonitoredItem` and `DataValue`
+    
+-   Previously it only accepted a `DataValue` parameter
+    
+
+If you were using custom data value listeners, update your lambda expressions or anonymous classes:
+
+```java
+// Old API
+item.setDataValueListener(dataValue -> processValue(dataValue));
+
+// New API (Milo 1.0.5)
+item.setDataValueListener((monitoredItem, dataValue) -> processValue(dataValue));
+```
+
+### camel-flink
+
+Apache Flink deprecated the DataSet API in version 1.12 in favor of a unified DataStream API that handles both streaming and batch processing. The DataStream API with bounded streams provides all the functionality of the DataSet API and more, with better performance and a unified programming model.
+
+#### Key Differences
+
+  
+| Aspect | DataSet API | DataStream API (Batch Mode) |
+| --- | --- | --- |
+| Execution | Immediate (lazy evaluation) | Event-driven (requires explicit execution) |
+| Data Type | Bounded datasets | Bounded or unbounded streams |
+| Time Semantics | Not applicable | Event time, processing time, ingestion time |
+| State Management | Limited | Full support for keyed and operator state |
+| Windowing | Not applicable | Full windowing support |
+
+#### Migration Guide
+
+##### Update Endpoint Type
+
+Replace `flink:dataset` with `flink:datastream`:
+
+Before
+
+```java
+from("direct:start")
+    .to("flink:dataset?dataSet=#myDataSet&dataSetCallback=#myCallback");
+```
+
+After
+
+```java
+from("direct:start")
+    .to("flink:datastream?dataStream=#myDataStream&dataStreamCallback=#myCallback");
+```
+
+##### Configure Batch Execution Mode
+
+For batch processing with DataStream API, configure the execution environment for batch mode:
+
+```java
+StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+// Set to batch mode for bounded streams
+env.setRuntimeMode(RuntimeExecutionMode.BATCH);
+```
+
+##### Update Data Sources
+
+Before (DataSet API)
+
+```java
+ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+DataSet<String> dataSet = env.readTextFile("input.txt");
+```
+
+After (DataStream API)
+
+```java
+StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+env.setRuntimeMode(RuntimeExecutionMode.BATCH);
+DataStream<String> dataStream = env.readTextFile("input.txt");
+```
+
+##### Update Transformations
+
+Most transformation operations have direct equivalents:
+
+ 
+| DataSet API | DataStream API |
+| --- | --- |
+| `map()` | `map()` |
+| `flatMap()` | `flatMap()` |
+| `filter()` | `filter()` |
+| `reduce()` | `reduce()` or `keyBy().reduce()` |
+| `groupBy()` | `keyBy()` |
+| `join()` | `join()` (with windowing) |
+| `coGroup()` | `coGroup()` (with windowing) |
+
+##### Update Callbacks
+
+Replace `DataSetCallback` with `DataStreamCallback`:
+
+Before (DataSet)
+
+```java
+@Bean
+public DataSetCallback<Long> dataSetCallback() {
+    return new DataSetCallback<Long>() {
+        public Long onDataSet(DataSet dataSet, Object... objects) {
+            try {
+                return dataSet.count();
+            } catch (Exception e) {
+                return -1L;
+            }
+        }
+    };
+}
+```
+
+After (DataStream)
+
+```java
+@Bean
+public DataStreamCallback dataStreamCallback() {
+    return new DataStreamCallback() {
+        public Object onDataStream(DataStream dataStream, Object... objects) {
+            // For batch mode, ensure runtime mode is set
+            dataStream.print();
+            return null;
+        }
+    };
+}
+```
+
+> **Note**
+> Most users will not be affected by these changes as they primarily affect advanced use cases where you directly interact with the Milo API. Standard camel-milo endpoint configurations remain unchanged.

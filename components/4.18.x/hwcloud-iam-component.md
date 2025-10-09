@@ -1,0 +1,213 @@
+# Huawei Identity and Access Management (IAM)
+
+**Since Camel 3.11**
+
+**Only producer is supported**
+
+Huawei Cloud Identity and Access Management (IAM) component allows you to integrate with [IAM](https://www.huaweicloud.com/intl/en-us/product/iam.md) provided by Huawei Cloud.
+
+Maven users will need to add the following dependency to their `pom.xml` for this component:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-huaweicloud-iam</artifactId>
+    <version>x.x.x</version>
+    <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+## URI Format
+
+hwcloud-iam:operation\[?options\]
+
+## Configuring Options
+
+Camel components are configured on two separate levels:
+
+-   component level
+    
+-   endpoint level
+    
+
+### Configuring Component Options
+
+At the component level, you set general and shared configurations that are, then, inherited by the endpoints. It is the highest configuration level.
+
+For example, a component may have security settings, credentials for authentication, urls for network connection and so forth.
+
+Some components only have a few options, and others may have many. Because components typically have pre-configured defaults that are commonly used, then you may often only need to configure a few options on a component; or none at all.
+
+You can configure components using:
+
+-   the [Component DSL](../../manual/component-dsl.md).
+    
+-   in a configuration file (`application.properties`, `*.yaml` files, etc).
+    
+-   directly in the Java code.
+    
+
+### Configuring Endpoint Options
+
+You usually spend more time setting up endpoints because they have many options. These options help you customize what you want the endpoint to do. The options are also categorized into whether the endpoint is used as a consumer (_from_), as a producer (_to_), or both.
+
+Configuring endpoints is most often done directly in the endpoint URI as _path_ and _query_ parameters. You can also use the [Endpoint DSL](../../manual/Endpoint-dsl.md) and [DataFormat DSL](../../manual/dataformat-dsl.md) as a _type safe_ way of configuring endpoints and data formats in Java.
+
+A good practice when configuring options is to use [Property Placeholders](../../manual/using-propertyplaceholder.md).
+
+Property placeholders provide a few benefits:
+
+-   They help prevent using hardcoded urls, port numbers, sensitive information, and other settings.
+    
+-   They allow externalizing the configuration from the code.
+    
+-   They help the code to become more flexible and reusable.
+    
+
+The following two sections list all the options, firstly for the component followed by the endpoint.
+
+## Component Options
+
+The Huawei Identity and Access Management (IAM) component supports 2 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+
+## Endpoint Options
+
+The Huawei Identity and Access Management (IAM) endpoint is configured using URI syntax:
+
+hwcloud-iam:operation
+
+With the following _path_ and _query_ parameters:
+
+### Path Parameters (1 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **operation** (producer) | **Required** Operation to be performed. |  | String |
+
+### Query Parameters (12 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **accessKey** (producer) | **Required** Access key for the cloud user. |  | String |
+| **groupId** (producer) | Group ID to perform operation with. |  | String |
+| **ignoreSslVerification** (producer) | Ignore SSL verification. | false | boolean |
+| **proxyHost** (producer) | Proxy server ip/hostname. |  | String |
+| **proxyPassword** (producer) | Proxy authentication password. |  | String |
+| **proxyPort** (producer) | Proxy server port. |  | int |
+| **proxyUser** (producer) | Proxy authentication user. |  | String |
+| **region** (producer) | **Required** IAM service region. |  | String |
+| **secretKey** (producer) | **Required** Secret key for the cloud user. |  | String |
+| **serviceKeys** (producer) | Configuration object for cloud service authentication. |  | ServiceKeys |
+| **userId** (producer) | User ID to perform operation with. |  | String |
+| **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+
+## Usage
+
+### Message properties evaluated by the IAM producer
+
+  
+| Header | Type | Description |
+| --- | --- | --- |
+| `CamelHwCloudIamOperation` | `String` | Name of operation to invoke |
+| `CamelHwCloudIamUserId` | `String` | User ID to invoke operation on |
+| `CamelHwCloudIamGroupId` | `String` | Group ID to invoke operation on |
+
+If any of the above properties are set, they will override their corresponding query parameter.
+
+### List of Supported IAM Operations
+
+-   listUsers
+    
+-   getUser - `userId` parameter is **required**
+    
+-   updateUser - `userId` parameter is **required**
+    
+-   listGroups
+    
+-   getGroupUsers - `groupId` is **required**
+    
+-   updateGroup - `groupId` is **required**
+    
+
+### Passing Options Through Exchange Body
+
+There are many options that can be submitted to [update a user](https://support.huaweicloud.com/en-us/api-iam/iam_08_0011.md) (Table 4) or to [update a group](https://support.huaweicloud.com/en-us/api-iam/iam_09_0004.md) (Table 4). Since there are multiple user/group options, they must be passed through the exchange body.
+
+For the `updateUser` operation, you can pass the user options as an UpdateUserOption object or a Json string:
+
+```java
+from("direct:triggerRoute")
+ .setBody(new UpdateUserOption().withName("user").withDescription("employee").withEmail("user@email.com"))
+ .to("hwcloud-iam:updateUser?userId=********&region=cn-north-4&accessKey=********&secretKey=********")
+```
+
+```java
+from("direct:triggerRoute")
+ .setBody("{\"name\":\"user\",\"description\":\"employee\",\"email\":\"user@email.com\"}")
+ .to("hwcloud-iam:updateUser?userId=********&region=cn-north-4&accessKey=********&secretKey=********")
+```
+
+For the `updateGroup` operation, you can pass the group options as a KeystoneUpdateGroupOption object or a Json string:
+
+```java
+from("direct:triggerRoute")
+ .setBody(new KeystoneUpdateGroupOption().withName("group").withDescription("employees").withDomainId("1234"))
+ .to("hwcloud-iam:updateUser?groupId=********&region=cn-north-4&accessKey=********&secretKey=********")
+```
+
+```java
+from("direct:triggerRoute")
+ .setBody("{\"name\":\"group\",\"description\":\"employees\",\"domain_id\":\"1234\"}")
+ .to("hwcloud-iam:updateUser?groupId=********&region=cn-north-4&accessKey=********&secretKey=********")
+```
+
+### Using ServiceKey Configuration Bean
+
+Access key and secret keys are required to authenticate against cloud IAM service. You can avoid having them being exposed and scattered over in your endpoint uri by wrapping them inside a bean of class `org.apache.camel.component.huaweicloud.iam.models.ServiceKeys`. Add it to the registry and let Camel look it up by referring the object via endpoint query parameter `serviceKeys`.
+
+Check the following code snippets:
+
+```xml
+<bean id="myServiceKeyConfig" class="org.apache.camel.component.huaweicloud.iam.models.ServiceKeys">
+   <property name="accessKey" value="your_access_key" />
+   <property name="secretKey" value="your_secret_key" />
+</bean>
+```
+
+```java
+from("direct:triggerRoute")
+ .setProperty(IAMPropeties.OPERATION, constant("listUsers"))
+ .setProperty(IAMPropeties.USER_ID ,constant("your_user_id"))
+ .setProperty(IAMPropeties.GROUP_ID, constant("your_group_id))
+ .to("hwcloud-iam:listUsers?region=cn-north-4&serviceKeys=#myServiceKeyConfig")
+```
+
+## Spring Boot Auto-Configuration
+
+When using hwcloud-iam with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+
+```xml
+<dependency>
+  <groupId>org.apache.camel.springboot</groupId>
+  <artifactId>camel-huaweicloud-iam-starter</artifactId>
+  <version>x.x.x</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+The component supports 3 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **camel.component.hwcloud-iam.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| **camel.component.hwcloud-iam.enabled** | Whether to enable auto configuration of the hwcloud-iam component. This is enabled by default. |  | Boolean |
+| **camel.component.hwcloud-iam.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |

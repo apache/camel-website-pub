@@ -1,0 +1,3 @@
+# Apache Camel Karaf features
+
+You can find the list of features directly in the repository: [https://github.com/apache/camel-karaf/blob/main/features/src/main/feature/camel-features.xml](https://github.com/apache/camel-karaf/blob/main/features/src/main/feature/camel-features.xml)

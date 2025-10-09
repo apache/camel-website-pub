@@ -1,0 +1,198 @@
+# Defining Camel routes
+
+Camel Quarkus supports several domain specific languages (DSLs) to define Camel Routes.
+
+## Java DSL
+
+Extending `org.apache.camel.builder.RouteBuilder` and using the fluent builder methods available there is the most common way of defining Camel Routes. Here is an example from the [timer-log](https://github.com/apache/camel-quarkus-examples/tree/main/timer-log) quickstart:
+
+```java
+import org.apache.camel.builder.RouteBuilder;
+
+public class TimerRoute extends RouteBuilder {
+
+    @Override
+    public void configure() throws Exception {
+        from("timer:foo?period=1000")
+                .log("Hello World");
+    }
+}
+```
+
+### Endpoint DSL
+
+You can use fluent builders for defining Camel endpoints. The following is equivalent with the previous example:
+
+```java
+import org.apache.camel.builder.RouteBuilder;
+import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.timer;
+
+public class TimerRoute extends RouteBuilder {
+
+    @Override
+    public void configure() throws Exception {
+        from(timer("foo").period(1000))
+                .log("Hello World");
+    }
+}
+```
+
+> **Note**
+> Builder methods for all Camel components are available via `camel-quarkus-core`, but you still need to add the given component’s extension as a dependency for the route to work properly. In case of the above example, it would be `camel-quarkus-timer`.
+
+It is also possible to include Java DSL routes from other JARs by adding them as dependencies to your application. When doing this, you must ensure such JARs have a [Jandex index](https://quarkus.io/guides/cdi-reference#how-to-generate-a-jandex-index), so that the routes are discoverable at build time.
+
+## XML DSL
+
+In order to configure Camel routes, rests or templates in XML, you must add the `camel-quarkus-xml-io-dsl` dependency to the classpath.
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-xml-io-dsl</artifactId>
+</dependency>
+```
+
+With Camel Main, you can set a property that points to the location of XML files such as routes, [REST DSL](../../../manual/rest-dsl.md) and [Route templates](../../../manual/route-template.md):
+
+```properties
+camel.main.routes-include-pattern = routes/routes.xml, file:src/main/routes/rests.xml, file:src/main/rests/route-template.xml
+```
+
+> **Note**
+> Path globbing like `camel.main.routes-include-pattern = *./routes.xml` currently does not work in native mode.
+
+Route
+
+```xml
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://camel.apache.org/schema/spring"
+        xsi:schemaLocation="
+            http://camel.apache.org/schema/spring
+            http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <route id="xml-route">
+        <from uri="timer:from-xml?period=1000"/>
+        <log message="Hello XML!"/>
+    </route>
+
+</routes>
+```
+
+> **Warning**
+> When using XML routes with beans, it is sometime needed to refer to class name, for instance `beanType=org.apache.SomeClass`. In such cases, it might be needed to register the class for reflection in native mode. Refer to the [Native mode](native-mode.html#reflection) user guide for more information.
+
+> **Warning**
+> Spring XML with `<beans>` or Blueprint XML with `<blueprint>` elements are not supported.
+
+The route XML should be in the simplified version like:
+
+Rest DSL
+
+```xml
+<rests xmlns="http://camel.apache.org/schema/spring">
+    <rest id="greeting" path="/greeting">
+        <get path="/hello">
+            <to uri="direct:greet"/>
+        </get>
+    </rest>
+</rests>
+```
+
+Route Templates
+
+```xml
+<routeTemplates xmlns="http://camel.apache.org/schema/spring">
+    <routeTemplate id="myTemplate">
+        <templateParameter name="name"/>
+        <templateParameter name="greeting"/>
+        <templateParameter name="myPeriod" defaultValue="3s"/>
+        <route>
+            <from uri="timer:{{name}}?period={{myPeriod}}"/>
+            <setBody><simple>{{greeting}} ${body}</simple></setBody>
+            <log message="${body}"/>
+        </route>
+    </routeTemplate>
+</routeTemplates>
+```
+
+## YAML DSL
+
+To configure routes with YAML, you must add the `camel-quarkus-yaml-dsl` dependency to the classpath.
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-yaml-dsl</artifactId>
+</dependency>
+```
+
+With Camel Main, you can set a property that points to the location of YAML files containing routes, [REST DSL](../../../manual/rest-dsl.md) and [Route templates](../../../manual/route-template.md) definitions:
+
+```properties
+camel.main.routes-include-pattern = routes/routes.yaml, routes/rests.yaml, rests/route-template.yaml
+```
+
+Route
+
+```yaml
+- route:
+    id: "my-yaml-route"
+    from:
+      uri: "timer:from-yaml?period=1000"
+      steps:
+        - set-body:
+            constant: "Hello YAML!"
+        - to: "log:from-yaml"
+```
+
+Rest DSL
+
+```yaml
+- rest:
+    get:
+      - path: "/greeting"
+        to: "direct:greet"
+
+- route:
+    id: "rest-route"
+    from:
+      uri: "direct:greet"
+      steps:
+        - set-body:
+            constant: "Hello YAML!"
+```
+
+Route Templates
+
+```yaml
+- route-template:
+    id: "myTemplate"
+    parameters:
+      - name: "name"
+      - name: "greeting"
+        defaultValue: "Hello"
+      - name: "myPeriod"
+        defaultValue: "3s"
+    from:
+      uri: "timer:{{name}}?period={{myPeriod}}"
+      steps:
+      - set-body:
+          expression:
+            simple: "{{greeting}} ${body}"
+      - log: "${body}"
+
+- templated-route:
+    route-template-ref: "myTemplate"
+    parameters:
+      - name: "name"
+        value: "tick"
+      - name: "greeting"
+        value: "Bonjour"
+      - name: "myPeriod"
+        value: "5s"
+```
+
+## What’s next?
+
+We recommend to continue with [Configuration](configuration.md).

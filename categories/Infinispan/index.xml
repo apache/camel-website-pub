@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Infinispan on Apache Camel</title>
+    <link>https://camel.apache.org/categories/Infinispan/</link>
+    <description>Recent content in Infinispan on Apache Camel</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 28 Jan 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://camel.apache.org/categories/Infinispan/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building a Smart Log Analyzer with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2026/01/log-analyzer/</link>
+      <pubDate>Wed, 28 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/log-analyzer/</guid>
+      <description>In this blogpost, we&amp;rsquo;ll walk through a modern approach to developing Apache Camel applications. We&amp;rsquo;ll build a distributed log analyzer that automatically detects errors and uses an LLM for root cause analysis. Along the way, we&amp;rsquo;ll explore how tools like Camel JBang and Kaoto make development incredibly productive, and why Apache Camel&amp;rsquo;s YAML DSL is a perfect match for LLM-assisted development.&#xA;Why Apache Camel? Before diving into the implementation, let&amp;rsquo;s address why Apache Camel is an excellent choice for this kind of system.</description>
+    </item>
+  </channel>
+</rss>

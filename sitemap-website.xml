@@ -2,25 +2,319 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/blog/2025/10/camel415-whatsnew/</loc>
-    <lastmod>2025-10-09T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2025-10-09T00:00:00+00:00</lastmod>
+    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Camel-K/</loc>
+    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/04/camel-k-2-10/</loc>
+    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/k-2.10.0/</loc>
+    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
-    <lastmod>2025-10-09T00:00:00+00:00</lastmod>
+    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Releases/</loc>
+    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Roadmap/</loc>
+    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.18.1/</loc>
+    <lastmod>2026-04-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/ckc-4.14.5/</loc>
+    <lastmod>2026-03-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/ckc-4.18.0/</loc>
+    <lastmod>2026-03-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.18.1/</loc>
+    <lastmod>2026-03-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/03/RELEASE-4.18.1/</loc>
+    <lastmod>2026-03-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Camel-Quarkus/</loc>
+    <lastmod>2026-03-25T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/03/camel-quarkus-3.33.0/</loc>
+    <lastmod>2026-03-25T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.33.0/</loc>
+    <lastmod>2026-03-25T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Kaoto/</loc>
+    <lastmod>2026-03-25T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/03/kaoto-release-2.10.0/</loc>
+    <lastmod>2026-03-25T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Tooling/</loc>
+    <lastmod>2026-03-25T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Camel-Karaf/</loc>
+    <lastmod>2026-03-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/03/camel-karaf-4.14.5/</loc>
+    <lastmod>2026-03-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/karaf-4.14.5/</loc>
+    <lastmod>2026-03-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/03/camel-quarkus-3.27.3/</loc>
+    <lastmod>2026-03-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.27.3/</loc>
+    <lastmod>2026-03-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Usecases/</loc>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/03/CAPIGateway/</loc>
+    <lastmod>2026-03-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/camel-k-gitops-apps/</loc>
+    <lastmod>2026-02-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Devops/</loc>
+    <lastmod>2026-02-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Howtos/</loc>
+    <lastmod>2026-02-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/camel-quarkus-3.32.0/</loc>
+    <lastmod>2026-02-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.32.0/</loc>
+    <lastmod>2026-02-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.14.5/</loc>
+    <lastmod>2026-02-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.18.0/</loc>
+    <lastmod>2026-02-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/camel-karaf-release-4.8.9/</loc>
+    <lastmod>2026-02-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/karaf-4.8.9/</loc>
+    <lastmod>2026-02-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/upgrade-recipes-4.18.0/</loc>
+    <lastmod>2026-02-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/camel418-whatsnew/</loc>
+    <lastmod>2026-02-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-25747.html</loc>
+    <lastmod>2026-02-18T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/</loc>
+    <lastmod>2026-02-18T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-23552.html</loc>
+    <lastmod>2026-02-17T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.18.0/</loc>
+    <lastmod>2026-02-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/RELEASE-4.18.0/</loc>
+    <lastmod>2026-02-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.14.5/</loc>
+    <lastmod>2026-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/RELEASE-4.14.5/</loc>
+    <lastmod>2026-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.10.9/</loc>
+    <lastmod>2026-02-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/RELEASE-4.10.9/</loc>
+    <lastmod>2026-02-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/k-2.9.1/</loc>
+    <lastmod>2026-02-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/AI/</loc>
+    <lastmod>2026-02-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/camel-jbang-mcp/</loc>
+    <lastmod>2026-02-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Camel/</loc>
+    <lastmod>2026-02-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/02/2025-downloads/</loc>
+    <lastmod>2026-02-09T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/log-analyzer/</loc>
+    <lastmod>2026-01-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/camel-quarkus-3.31.0/</loc>
+    <lastmod>2026-01-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Infinispan/</loc>
+    <lastmod>2026-01-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Kafka/</loc>
+    <lastmod>2026-01-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/OpenTelemetry/</loc>
+    <lastmod>2026-01-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.31.0/</loc>
+    <lastmod>2026-01-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/camel-quarkus-3.20.4/</loc>
+    <lastmod>2026-01-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.20.4/</loc>
+    <lastmod>2026-01-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.17.0/</loc>
+    <lastmod>2026-01-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/upgrade-recipes-4.17.0/</loc>
+    <lastmod>2026-01-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.14.4/</loc>
+    <lastmod>2026-01-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/camel-openai/</loc>
+    <lastmod>2026-01-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2025-66169.html</loc>
+    <lastmod>2026-01-13T07:30:42+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/camel417-whatsnew/</loc>
+    <lastmod>2026-01-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.17.0/</loc>
+    <lastmod>2026-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/RELEASE-4.17.0/</loc>
+    <lastmod>2026-01-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.14.4/</loc>
+    <lastmod>2026-01-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/RELEASE-4.14.4/</loc>
+    <lastmod>2026-01-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/camel-quarkus-3.27.2/</loc>
+    <lastmod>2026-01-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.27.2/</loc>
+    <lastmod>2026-01-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/2025-numbers/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.14.3/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/01/RELEASE-4.14.3/</loc>
+    <lastmod>2026-01-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/12/camel-k-2-9/</loc>
+    <lastmod>2025-12-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/k-2.9.0/</loc>
+    <lastmod>2025-12-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.10.8/</loc>
+    <lastmod>2025-12-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/12/RELEASE-4.10.8/</loc>
+    <lastmod>2025-12-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/11/camel-quarkus-3.30.0/</loc>
+    <lastmod>2025-11-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.30.0/</loc>
+    <lastmod>2025-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/upgrade-recipes-4.16.0/</loc>
+    <lastmod>2025-11-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/11/camel-website-llmstxt/</loc>
+    <lastmod>2025-11-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/11/kaoto-release-2.8.0/</loc>
+    <lastmod>2025-11-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.14.2/</loc>
+    <lastmod>2025-11-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.16.0/</loc>
+    <lastmod>2025-11-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/11/camel416-whatsnew/</loc>
+    <lastmod>2025-11-06T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.16.0/</loc>
+    <lastmod>2025-11-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/11/RELEASE-4.16.0/</loc>
+    <lastmod>2025-11-05T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/11/camel-quarkus-3.27.1/</loc>
+    <lastmod>2025-11-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.27.1/</loc>
+    <lastmod>2025-11-03T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.14.2/</loc>
+    <lastmod>2025-11-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/11/RELEASE-4.14.2/</loc>
+    <lastmod>2025-11-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/10/camel-quarkus-3.29.0/</loc>
+    <lastmod>2025-10-29T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/10/camel-quarkus-3.20.3/</loc>
+    <lastmod>2025-10-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.20.3/</loc>
+    <lastmod>2025-10-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.29.0/</loc>
+    <lastmod>2025-10-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/10/camel-karaf-release-4.10.7/</loc>
+    <lastmod>2025-10-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/karaf-4.10.7/</loc>
+    <lastmod>2025-10-26T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/10/wanaku-and-camel/</loc>
+    <lastmod>2025-10-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/10/camel-docling/</loc>
+    <lastmod>2025-10-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.15.0/</loc>
+    <lastmod>2025-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/upgrade-recipes-4.15.0/</loc>
+    <lastmod>2025-10-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2025/10/camel415-whatsnew/</loc>
     <lastmod>2025-10-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.15.0/</loc>
     <lastmod>2025-10-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2025/10/RELEASE-4.15.0/</loc>
-    <lastmod>2025-10-07T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2025-10-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.14.1/</loc>
@@ -44,13 +338,7 @@
     <loc>https://camel.apache.org/blog/2025/09/RELEASE-4.10.7/</loc>
     <lastmod>2025-09-24T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Camel-K/</loc>
-    <lastmod>2025-09-22T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2025/09/camel-k-2-8/</loc>
-    <lastmod>2025-09-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Camel-Quarkus/</loc>
     <lastmod>2025-09-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2025/09/camel-quarkus-3.27.0/</loc>
@@ -62,22 +350,13 @@
     <loc>https://camel.apache.org/releases/k-2.8.0/</loc>
     <lastmod>2025-09-22T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Roadmap/</loc>
-    <lastmod>2025-09-22T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/releases/release-4.8.9/</loc>
     <lastmod>2025-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2025/09/RELEASE-4.8.9/</loc>
     <lastmod>2025-09-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Kaoto/</loc>
-    <lastmod>2025-09-05T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2025/09/kaoto-release-2.7.0/</loc>
-    <lastmod>2025-09-05T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Tooling/</loc>
     <lastmod>2025-09-05T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/upgrade-recipes-4.14.0.1/</loc>
@@ -112,9 +391,6 @@
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.25.0/</loc>
     <lastmod>2025-07-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Camel/</loc>
-    <lastmod>2025-07-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/E2E/</loc>
     <lastmod>2025-07-21T00:00:00+00:00</lastmod>
@@ -163,9 +439,6 @@
   </url><url>
     <loc>https://camel.apache.org/blog/2025/06/RELEASE-4.10.6/</loc>
     <lastmod>2025-06-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Camel-Karaf/</loc>
-    <lastmod>2025-06-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2025/06/camel-karaf-release-4.10.5/</loc>
     <lastmod>2025-06-26T00:00:00+00:00</lastmod>
@@ -287,16 +560,10 @@
     <loc>https://camel.apache.org/blog/2025/04/RELEASE-4.11.0/</loc>
     <lastmod>2025-04-03T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/AI/</loc>
-    <lastmod>2025-04-02T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2025/04/camel-kserve/</loc>
     <lastmod>2025-04-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2025-30177.html</loc>
-    <lastmod>2025-04-01T07:30:42+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/security/</loc>
     <lastmod>2025-04-01T07:30:42+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.8.6/</loc>
@@ -377,12 +644,6 @@
     <loc>https://camel.apache.org/blog/2025/03/camel-observability/</loc>
     <lastmod>2025-03-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Devops/</loc>
-    <lastmod>2025-03-05T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Howtos/</loc>
-    <lastmod>2025-03-05T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/categories/Observability/</loc>
     <lastmod>2025-03-05T00:00:00+00:00</lastmod>
   </url><url>
@@ -417,9 +678,6 @@
     <lastmod>2025-02-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Transformation/</loc>
-    <lastmod>2025-02-19T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Usecases/</loc>
     <lastmod>2025-02-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.10.0/</loc>

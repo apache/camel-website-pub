@@ -1,0 +1,27 @@
+# Validator
+
+JVM since0.4.0 Native since0.4.0
+
+Validate the payload using XML Schema and JAXP Validation.
+
+## What’s inside
+
+-   [Validator component](../../../../components/4.14.x/validator-component.md), URI syntax: `validator:resourceUri`
+    
+
+Please refer to the above link for usage and configuration details.
+
+## Maven coordinates
+
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-validator)
+
+Or add the coordinates to your existing project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-validator</artifactId>
+</dependency>
+```
+
+Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.

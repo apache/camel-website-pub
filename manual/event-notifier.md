@@ -1,0 +1,194 @@
+# EventNotifier
+
+The event notifier `org.apache.camel.spi.EventNotifier` is used to get notified about events within the CamelContext. For example, when a route is started or stopped. The events are collected independently of the CamelContext (routes, services, exchanges, and so on). This means that the notifier doesn’t interfere with the rest of Camel, and the events can be processed independently for logging, data offloading or other type of actions.
+
+> **Important**
+> The event is called from the current thread so be careful if you do some processing that takes a long time. If so it’s recommended to execute this work from another thread, so the current thread can continue and is not blocked for a longer period of time.
+
+## Type of Events
+
+The following CamelEvents are available (but not limited to):
+
+-   CamelEvent
+    
+    -   CamelContextEvent
+        
+        -   CamelContextInitializedEvent
+            
+        -   CamelContextInitializingEvent
+            
+        -   CamelContextReloadedEvent
+            
+        -   CamelContextReloadFailureEvent
+            
+        -   CamelContextReloadingEvent
+            
+        -   CamelContextResumedEvent
+            
+        -   CamelContextResumeFailureEvent
+            
+        -   CamelContextResumingEvent
+            
+        -   CamelContextRoutesStartedEvent
+            
+        -   CamelContextRoutesStartingEvent
+            
+        -   CamelContextRoutesStoppedEvent
+            
+        -   CamelContextRoutesStoppingEvent
+            
+        -   CamelContextStartedEvent
+            
+        -   CamelContextStartingEvent
+            
+        -   CamelContextStartupFailureEvent
+            
+        -   CamelContextStopFailureEvent
+            
+        -   CamelContextStoppedEvent
+            
+        -   CamelContextStoppingEvent
+            
+        -   CamelContextSuspendedEvent
+            
+        -   CamelContextSuspendingEvent
+            
+        
+    -   ExchangeEvent
+        
+        -   ExchangeCompletedEvent
+            
+        -   ExchangeCreatedEvent
+            
+        -   ExchangeFailedEvent
+            
+        -   ExchangeFailureEvent
+            
+        -   ExchangeFailureHandledEvent
+            
+        -   ExchangeFailureHandlingEvent
+            
+        -   ExchangeRedeliveryEvent
+            
+        -   ExchangeSendingEvent
+            
+        -   ExchangeSentEvent
+            
+        
+    -   FailureEvent
+        
+    -   RouteEvent
+        
+        -   RouteAddedEvent
+            
+        -   RouteReloadedEvent
+            
+        -   RouteRemovedEvent
+            
+        -   RouteStartedEvent
+            
+        -   RouteStartingEvent
+            
+        -   RouteStoppedEvent
+            
+        -   RouteStoppingEvent
+            
+        
+    -   ServiceEvent
+        
+        -   ServiceStartupFailureEvent
+            
+        -   ServiceStopFailureEvent
+            
+        
+    -   StepEvent
+        
+        -   StepCompletedEvent
+            
+        -   StepFailedEvent
+            
+        -   StepStartedEvent
+            
+        
+    
+
+See the Javadoc of the `org.apache.camel.spi.CamelEvent` for more details.
+
+## Collect Events
+
+To collect events a class is needed that extends the EventNotifierSupport class.
+
+```java
+public class MyCollector extends EventNotifierSupport {
+
+    protected Logger log = LoggerFactory.getLogger(getClass());
+
+    @Override
+    public void notify(CamelEvent event) throws Exception {
+        log.info("Event: " + event.getType().name());
+    }
+
+}
+```
+
+Then you can enable the notifier:
+
+```java
+context.getManagementStrategy().addEventNotifier(new MyCollector());
+```
+
+## Collect Specific Events
+
+By default, you get notified by all events. It’s however possible to exclude certain groups of events to get only the group of event you are interested in.
+
+In the following example we collect only StepEvents:
+
+```java
+public class StepCollector extends EventNotifierSupport {
+    protected Logger log = LoggerFactory.getLogger(getClass());
+
+    @Override
+    public void notify(CamelEvent event) throws Exception {
+
+        // Cast CamelEvent to StepEvent
+        CamelEvent.StepEvent stepEvent = (CamelEvent.StepEvent) event;
+
+        // Get detailed information from the StepEvent
+        String eventType = stepEvent.getType().name();
+        String stepId = stepEvent.getStepId();
+        String body = stepEvent.getExchange().getMessage().getBody(String.class);
+
+        log.info("Event Type:\t\t" + eventType);
+        log.info("Step ID:\t\t\t" + stepId);
+        log.info("Message Body:\t\t " + body);
+
+    }
+
+}
+```
+
+Then you can enable the notifier for steps by excluding other groups:
+
+```java
+//Create eventNotifier that only collects stepEvents
+StepCollector stepCollector = new StepCollector();
+stepCollector.setIgnoreCamelContextEvents(true);
+stepCollector.setIgnoreCamelContextInitEvents(true);
+stepCollector.setIgnoreExchangeEvents(true);
+stepCollector.setIgnoreRouteEvents(true);
+stepCollector.setIgnoreServiceEvents(true);
+stepCollector.setIgnoreStepEvents(false);
+
+//Add the Event Notifier to the Camel Context
+context.getManagementStrategy().addEventNotifier(stepCollector);
+```
+
+## Event Timestamps
+
+By default, event timestamps are not included and the getTimestamp() method returns 0.
+
+Timestamps can be enabled from the CamelContext as follows:
+
+```java
+context.getManagementStrategy().getEventFactory().setTimestampEnabled(true);
+```

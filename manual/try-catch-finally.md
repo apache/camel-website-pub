@@ -1,0 +1,270 @@
+# Try, Catch and Finally
+
+Camel supports the Java equivalent of try …​ catch …​ finally directly in the DSL. It aims to work like its Java sisters but with more power.
+
+In Camel, we prefix the keywords with `do` to avoid having same keyword as Java. So we have:
+
+-   `doTry`
+    
+-   `doCatch`
+    
+-   `doFinally`
+    
+-   `end` to end the block in Java DSL
+    
+
+> **Important**
+> When using `doTry …​ doCatch …​ doFinally` then the regular Camel [Error Handler](error-handler.md) is not in use; meaning any `onException` or the likes does not trigger.
+>
+> The reason is that `doTry …​ doCatch …​ doFinally` is in fact its own error handler and mimics how try/catch/finally works in Java.
+
+## Using doTry …​ doCatch …​ doFinally
+
+In the route below we have all of them in action:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .doTry()
+        .process(new ProcessorFail())
+        .to("mock:result")
+    .doCatch(IOException.class, IllegalStateException.class)
+        .to("mock:catch")
+    .doFinally()
+        .to("mock:finally")
+    .end();
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <doTry>
+    <process ref="processorFail"/>
+    <to uri="mock:result"/>
+    <doCatch>
+      <exception>java.io.IOException</exception>
+      <exception>java.lang.IllegalStateException</exception>
+      <to uri="mock:catch"/>
+    </doCatch>
+    <doFinally>
+       <to uri="mock:finally"/>
+    </doFinally>
+  </doTry>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - doTry:
+            steps:
+              - process:
+                  ref: processorFail
+              - to:
+                  uri: mock:result
+              - doCatch:
+                  exception:
+                    - java.io.IOException
+                    - java.lang.IllegalStateException
+                  steps:
+                    - to:
+                        uri: mock:catch
+              - doFinally:
+                  steps:
+                    - to:
+                        uri: mock:finally
+```
+
+### Using onWhen with doCatch
+
+You can use [Predicate](predicate.md)s with `doCatch` to make it runtime determine if the block should be triggered or not. In our case, we only want to trigger if the caused exception message contains the **damn** word.
+
+\+ Java::
+
+```java
+from("direct:start")
+    .doTry()
+        .process(new ProcessorFail())
+        .to("mock:result")
+    .doCatch(IOException.class, IllegalStateException.class).onWhen(exceptionMessage().contains("Damn"))
+        .to("mock:catch")
+    .doCatch(CamelExchangeException.class)
+        .to("mock:catchCamel")
+    .doFinally()
+        .to("mock:finally")
+    .end();
+```
+
+XML
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <doTry>
+    <process ref="processorFail"/>
+    <to uri="mock:result"/>
+    <doCatch>
+      <exception>java.io.IOException</exception>
+      <exception>java.lang.IllegalStateException</exception>
+      <onWhen>
+        <simple>${exception.message} contains 'Damn'</simple>
+      </onWhen>
+      <to uri="mock:catch"/>
+    </doCatch>
+    <doCatch>
+      <exception>org.apache.camel.CamelExchangeException</exception>
+      <to uri="mock:catchCamel"/>
+    </doCatch>
+    <doFinally>
+       <to uri="mock:finally"/>
+    </doFinally>
+  </doTry>
+</route>
+```
+
+YAML
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - doTry:
+            steps:
+              - process:
+                  ref: processorFail
+              - to:
+                  uri: mock:result
+              - doCatch:
+                  exception:
+                    - java.io.IOException
+                    - java.lang.IllegalStateException
+                  steps:
+                    - onWhen:
+                        expression:
+                          simple:
+                            expression: "${exception.message} contains 'Damn'"
+                    - to:
+                        uri: mock:catch
+              - doCatch:
+                  exception:
+                    - org.apache.camel.CamelExchangeException
+                  steps:
+                    - to:
+                        uri: mock:catchCamel
+              - doFinally:
+                  steps:
+                    - to:
+                        uri: mock:finally
+```
+
+### Use end() to end the block
+
+Notice when using Java DSL we must use `end()` to indicate where the try …​ catch …​ finally block ends. As the example above has a finally, then the `end()` should be at the end of the finally block. If we are not using a finally, then the `end()` should be at the end of the `doCatch` to indicate the end there.
+
+> **Tip**
+> Instead of `end()` you can use `endDoTry()` to end and _return back_ to the try …​ catch scope.
+
+### Using nested doTry …​ doCatch EIPs
+
+When nesting `doTry …​ doCatch` from an outer `doTry …​ doCatch` EIP, then pay extra attention when using Java DSL as the Java programming language is not _indent aware_ so you may write Java code that is indented in a way where you think that a catch block is associated with the other doTry, but it is not.
+
+Given the following Java DSL:
+
+```java
+from("direct:test").routeId("myroute")
+    .doTry().
+        doTry().
+            throwException(new IllegalArgumentException("Forced by me"))
+        .doCatch(Exception.class)
+            .log("docatch 1")
+            .throwException(new IllegalArgumentException("Second forced by me"))
+    .doCatch(Exception.class)
+        .log("docatch 2")
+    .end();
+```
+
+Then you may think that `_docatch2_` is associated on the outer doTry because of how the code is formatted. But it is **not**, both `_docatch1_` and `_docatch2_` are in the inner `doTry`, and the outer `doTry` has no catch blocks.
+
+So in this example, the route will throw the first exception which is then handled in `_docatch1_` which then throws a second exception, that is not caught.
+
+So what you must do is to end the doCatch block correct (notice how we use `endDoTry()` two times) as shown below:
+
+```java
+from("direct:test")
+    .doTry().
+        doTry().
+            throwException(new IllegalArgumentException("Forced by me"))
+        .doCatch(Exception.class)
+            .log("docatch 1")
+            .throwException(new IllegalArgumentException("Second forced by me"))
+         .endDoTry() // end this doCatch block
+     .endDoTry() // end the inner doTry
+    .doCatch(Exception.class)
+        .log("docatch 2")
+    .end();
+```
+
+And by using the `endDoTry()` we can end the block correctly, and an XML or YAML representation of the route would be as follows:
+
+-   XML
+    
+-   YAML
+    
+
+```xml
+<route>
+    <from uri="direct:test"/>
+    <doTry>
+        <doTry>
+            <throwException exceptionType="java.lang.IllegalArgumentException" message="Forced by me"/>
+            <doCatch>
+                <exception>java.lang.Exception</exception>
+                <log message="docatch 1"/>
+                <throwException exceptionType="java.lang.IllegalArgumentException" message="Second forced by me"/>
+            </doCatch>
+        </doTry>
+        <doCatch>
+            <exception>java.lang.Exception</exception>
+            <log message="docatch 2"/>
+        </doCatch>
+    </doTry>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:test
+      steps:
+        - doTry:
+            steps:
+              - doTry:
+                  steps:
+                    - throwException:
+                        message: Forced by me
+                        exceptionType: java.lang.IllegalArgumentException
+                    - doCatch:
+                        exception:
+                          - java.lang.Exception
+                        steps:
+                          - log:
+                              message: docatch 1
+                          - throwException:
+                              message: Second forced by me
+                              exceptionType: java.lang.IllegalArgumentException
+              - doCatch:
+                  exception:
+                    - java.lang.Exception
+                  steps:
+                    - log:
+                        message: docatch 2
+```

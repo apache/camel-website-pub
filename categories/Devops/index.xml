@@ -6,8 +6,15 @@
     <description>Recent content in Devops on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 05 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 24 Feb 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel GitOps on Cloud</title>
+      <link>https://camel.apache.org/blog/2026/02/camel-k-gitops-apps/</link>
+      <pubDate>Tue, 24 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel-k-gitops-apps/</guid>
+      <description>With Camel K version 2.9 we have enhanced the GitOps capability of the operator to run a builtin opinionated GitOps strategy. In this blog we are going to expand with a complete example and show how to enabled with a sample Camel application we build on an environment and we promote to another environment controlled with a gateway.&#xA;The process will be the following: a development team (the &amp;ldquo;citizen integrator&amp;rdquo;?) is in charge to develop and test a given Camel application on a development environment.</description>
+    </item>
     <item>
       <title>Camel Observability Services</title>
       <link>https://camel.apache.org/blog/2025/03/camel-observability/</link>

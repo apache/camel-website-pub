@@ -1,0 +1,31 @@
+# Ingress Trait
+
+The Ingress trait can be used to expose the service associated with the integration to the outside world with a Kubernetes Ingress.
+
+It’s enabled by default whenever a Service is added to the integration (through the `service` trait).
+
+This trait is available in the following profiles: **Kubernetes**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait ingress.[key]=[value] --trait ingress.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `ingress.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `ingress.ingress-class-name` | `string` | The Ingress class name as defined by the Ingress spec See [https://kubernetes.io/docs/concepts/services-networking/ingress/](https://kubernetes.io/docs/concepts/services-networking/ingress/) |
+| `ingress.annotations` | `map[string]string` | The annotations added to the ingress. This can be used to set controller specific annotations, e.g., when using the NGINX Ingress controller: See [https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md) |
+| `ingress.host` | `string` | To configure the host exposed by the ingress. |
+| `ingress.path` | `string` | To configure the path exposed by the ingress (default `/`). Deprecated: In favor of `paths` - left for backward compatibility. |
+| `ingress.paths` | `[]string` | To configure the paths exposed by the ingress (default `['/']`). |
+| `ingress.path-type` | `k8s.io/api/networking/v1.PathType` | To configure the path type exposed by the ingress. One of `Exact`, `Prefix`, `ImplementationSpecific` (default to `Prefix`). |
+| `ingress.auto` | `bool` | To automatically add an ingress whenever the integration uses an HTTP endpoint consumer. |
+| `ingress.tls-hosts` | `[]string` | To configure tls hosts |
+| `ingress.tls-secret-name` | `string` | To configure tls secret name |

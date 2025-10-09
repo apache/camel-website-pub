@@ -1,0 +1,135 @@
+# Runtime configuration
+
+When you develop an integration with `Camel K` there are many ways you can provide a **configuration** resource to the runtime `Integration`. Since we are dealing with `Kubernetes` we use `Configmap` or `Secret`. The `kamel run` command is provided with a `--config` flag that help you setting any configuration resource your `Integration` need.
+
+The **runtime configuration** are expected to be encoded in `UTF-8` as they are processed by runtime `Camel Context` and parsed as property files. These resources are materialized as files in a well known path in the `Integration` `Pod`. The `mount` trait will be declared on the `Integration`. They are also made available on the classpath in order to ease their usage directly from the `Route`. If you need to provide a non `UTF-8` (ie, a binary resource) you may look for `--resource` flag instead.
+
+> **Note**
+> the scope of `--config` global option had different meaning prior Camel K version 1.5. The old global `--config` has been replaced with `--kube-config` since Camel K version 1.5.
+
+## Runtime configmap configuration
+
+In a `Kubernetes` world we’re dealing with `Configmap` containing configuration previously stored in the platform. When you need to materialize a `Configmap` into a file configuration available at your `Integration`, you can use the `--config` _configmap_ syntax.
+
+As an example, let’s create a `Configmap` named _my-cm_ containing certain information. You can alternatively use any `Configmap` you’ve already stored in your cluster:
+
+kubectl create configmap my-cm --from-literal=my-configmap-key="configmap content"
+
+We want to use the materialized file in an integration:
+
+config-configmap-route.yaml
+
+```yaml
+- from:
+    uri: "timer:configmap"
+    steps:
+      - setBody:
+          simple: "resource:classpath:my-configmap-key"
+      - setBody:
+          simple: "configmap content is: ${body}"
+      - to: "log:info"
+```
+
+You can see that we’re expecting to use a _my-configmap-key_ file stored somewhere in the classpath. In order to materialize the `Configmap` will be as easy as running the `--config` _configmap_ syntax:
+
+kamel run --config configmap:my-cm config-configmap-route.yaml
+
+As soon as the `Integration` starts, the `Camel K` operator will take care to mount a volume with the `Configmap` 's content.
+
+> **Note**
+> you can provide a `Configmap` which is not yet available on the cluster. The `Integration` won’t start until the resource will be made available.
+
+## Runtime secret configuration
+
+We can apply the very same concept seen in the previous section for the Kubernetes `Secret` 's.
+
+As an example, let’s create a `Secret` named _my-sec_ containing certain information. You can alternatively use any `Secret` you’ve already stored in your cluster:
+
+kubectl create secret generic my-sec --from-literal=my-secret-key="very top secret"
+
+We want to use the materialized secret file in an integration:
+
+config-secret-route.yaml
+
+```yaml
+- from:
+    uri: "timer:secret"
+    steps:
+      - setBody:
+          simple: "resource:classpath:my-secret-key"
+      - setBody:
+          simple: "secret content is: ${body}"
+      - to: "log:info"
+```
+
+You can see that we’re expecting to use a _my-secret-key_ file stored somewhere in the classpath. In order to materialize the `Secret` will be as easy as running the `--config` _secret_ syntax:
+
+kamel run --config secret:my-sec config-secret-route.yaml
+
+As soon as the `Integration` starts, the `Camel K` operator will take care to mount a volume with the `Secret` 's content.
+
+> **Note**
+> you can provide a `Secret` which is not yet available on the cluster. The `Integration` won’t start until the resource will be made available.
+
+## Configmap/Secret property references
+
+Each `Configmap`/`Secret` will be parsed as a property file and you will be able to use those properties inside your `Route` definition or, more in general, as you would do with any other [Camel property](camel-properties.md). As an example, you can create the following `Secret`:
+
+secret.properties
+
+```text
+my.key.1=hello
+my.key.2=world
+```
+
+kubectl create secret generic my-secret-properties --from-file=secret.properties
+
+In our `Integration` we can simply refer the properties defined in the `Secret` as we would do with any other property:
+
+config-secret-property-route.yaml
+
+```yaml
+- from:
+    uri: "timer:secret"
+    steps:
+      - setBody:
+          simple: "{{my.key.1}} {{my.key.2}}"
+      - to: "log:info"
+```
+
+We just have to provide the `--config` we are willing to use:
+
+kamel run --config secret:my-secret-properties config-secret-property-route.yaml
+
+## Configmap/Secret key filtering
+
+When you deal with `Configmap` or `Secret`, you may want to limit the quantity of information to recover from such resources. Both `Configmap` and `Secret` can hold more than one resource in the same unit. For this reason you will find a _key_ filtering feature available in the `--config` flag. In order to use it, you can add a _/key_ notation after the `Configmap` or `Secret` name (ie, `--config configmap:my-cm/my-key`).
+
+Let’s see an example with multiple `Secret` in action. The very same concept can be easily applied to `Configmap`. We start creating a `Secret` containing multiple resources:
+
+kubectl create secret generic my-sec-multi --from-literal=my-secret-key="very top secret" --from-literal=my-secret-key-2="even more secret"
+
+In our `Integration` we plan to use only one of the resources of the `Secret`:
+
+config-secret-key-route.yaml
+
+```yaml
+- from:
+    uri: "timer:secret"
+    steps:
+      - setBody:
+          simple: "resource:classpath:my-secret-key-2"
+      - setBody:
+          simple: "secret content is: ${body}"
+      - to: "log:info"
+```
+
+Let’s use the _key_ filtering:
+
+kamel run --config secret:my-sec-multi/my-secret-key-2 config-secret-key-route.yaml
+
+You may check in the `Integration` `Pod` that only the _my-secret-key-2_ data has been mounted.
+
+## Runtime resources
+
+If you’re looking for **runtime resources** (ie, binary resources) you can look at the [runtime resources](runtime-resources.md) section.

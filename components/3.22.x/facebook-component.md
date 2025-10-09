@@ -1,0 +1,400 @@
+# Facebook
+
+**Since Camel 2.14**
+
+**Both producer and consumer are supported**
+
+The Facebook component provides access to all of the Facebook APIs accessible using [Facebook4J](https://facebook4j.github.io/en/index.md). It allows producing messages to retrieve, add, and delete posts, likes, comments, photos, albums, videos, photos, checkins, locations, links, etc. It also supports APIs that allow polling for posts, users, checkins, groups, locations, etc.
+
+Facebook requires the use of OAuth for all client application authentication. In order to use camel-facebook with your account, you’ll need to create a new application within Facebook at [https://developers.facebook.com/apps](https://developers.facebook.com/apps) and grant the application access to your account. The Facebook application’s id and secret will allow access to Facebook APIs which do not require a current user. A user access token is required for APIs that require a logged in user. More information on obtaining a user access token can be found at [https://developers.facebook.com/docs/facebook-login/access-tokens/](https://developers.facebook.com/docs/facebook-login/access-tokens/).
+
+Maven users will need to add the following dependency to their pom.xml for this component:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-facebook</artifactId>
+    <version>${camel-version}</version>
+</dependency>
+```
+
+## URI format
+
+facebook://\[endpoint\]?\[options\]
+
+The facebook component can be configured with the Facebook account settings below, which are mandatory. The values can be provided to the component using the bean property **configuration** of type **org.apache.camel.component.facebook.config.FacebookConfiguration**. The **oAuthAccessToken** option may be ommited but that will only allow access to application APIs.
+
+## Configuring Options
+
+Camel components are configured on two separate levels:
+
+-   component level
+    
+-   endpoint level
+    
+
+### Configuring Component Options
+
+The component level is the highest level which holds general and common configurations that are inherited by the endpoints. For example a component may have security settings, credentials for authentication, urls for network connection and so forth.
+
+Some components only have a few options, and others may have many. Because components typically have pre configured defaults that are commonly used, then you may often only need to configure a few options on a component; or none at all.
+
+Configuring components can be done with the [Component DSL](../../manual/component-dsl.md), in a configuration file (application.properties|yaml), or directly with Java code.
+
+### Configuring Endpoint Options
+
+Where you find yourself configuring the most is on endpoints, as endpoints often have many options, which allows you to configure what you need the endpoint to do. The options are also categorized into whether the endpoint is used as consumer (from) or as a producer (to), or used for both.
+
+Configuring endpoints is most often done directly in the endpoint URI as path and query parameters. You can also use the [Endpoint DSL](../../manual/Endpoint-dsl.md) and [DataFormat DSL](../../manual/dataformat-dsl.md) as a _type safe_ way of configuring endpoints and data formats in Java.
+
+A good practice when configuring options is to use [Property Placeholders](../../manual/using-propertyplaceholder.md), which allows to not hardcode urls, port numbers, sensitive information, and other settings. In other words placeholders allows to externalize the configuration from your code, and gives more flexibility and reuse.
+
+The following two sections lists all the options, firstly for the component followed by the endpoint.
+
+## Component Options
+
+The Facebook component supports 31 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **clientURL** (common) | Facebook4J API client URL. |  | String |
+| **clientVersion** (common) | Facebook4J client API version. |  | String |
+| **debugEnabled** (common) | Enables deubg output. Effective only with the embedded logger. | false | Boolean |
+| **gzipEnabled** (common) | Use Facebook GZIP encoding. | true | Boolean |
+| **httpConnectionTimeout** (common) | Http connection timeout in milliseconds. | 20000 | Integer |
+| **httpDefaultMaxPerRoute** (common) | HTTP maximum connections per route. | 2 | Integer |
+| **httpMaxTotalConnections** (common) | HTTP maximum total connections. | 20 | Integer |
+| **httpReadTimeout** (common) | Http read timeout in milliseconds. | 120000 | Integer |
+| **httpRetryCount** (common) | Number of HTTP retries. | 0 | Integer |
+| **httpRetryIntervalSeconds** (common) | HTTP retry interval in seconds. | 5 | Integer |
+| **httpStreamingReadTimeout** (common) | HTTP streaming read timeout in milliseconds. | 40000 | Integer |
+| **jsonStoreEnabled** (common) | If set to true, raw JSON forms will be stored in DataObjectFactory. | false | Boolean |
+| **mbeanEnabled** (common) | If set to true, Facebook4J mbean will be registerd. | false | Boolean |
+| **prettyDebugEnabled** (common) | Prettify JSON debug output if set to true. | false | Boolean |
+| **restBaseURL** (common) | API base URL. | [https://graph.facebook.com/](https://graph.facebook.com/) | String |
+| **useSSL** (common) | Use SSL. | true | Boolean |
+| **videoBaseURL** (common) | Video API base URL. | [https://graph-video.facebook.com/](https://graph-video.facebook.com/) | String |
+| **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions occurred while the consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **configuration** (advanced) | To use the shared configuration. |  | FacebookConfiguration |
+| **httpProxyHost** (proxy) | HTTP proxy server host name. |  | String |
+| **httpProxyPassword** (proxy) | HTTP proxy server password. |  | String |
+| **httpProxyPort** (proxy) | HTTP proxy server port. |  | Integer |
+| **httpProxyUser** (proxy) | HTTP proxy server user name. |  | String |
+| **oAuthAccessToken** (security) | The user access token. |  | String |
+| **oAuthAccessTokenURL** (security) | OAuth access token URL. | [https://graph.facebook.com/oauth/access\_token](https://graph.facebook.com/oauth/access_token) | String |
+| **oAuthAppId** (security) | The application Id. |  | String |
+| **oAuthAppSecret** (security) | The application Secret. |  | String |
+| **oAuthAuthorizationURL** (security) | OAuth authorization URL. | [https://www.facebook.com/dialog/oauth](https://www.facebook.com/dialog/oauth) | String |
+| **oAuthPermissions** (security) | Default OAuth permissions. Comma separated permission names. See [https://developers.facebook.com/docs/reference/login/#permissions](https://developers.facebook.com/docs/reference/login/#permissions) for the detail. |  | String |
+
+## Endpoint Options
+
+The Facebook endpoint is configured using URI syntax:
+
+facebook:methodName
+
+with the following path and query parameters:
+
+### Path Parameters (1 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **methodName** (common) | **Required** What operation to perform. |  | String |
+
+### Query Parameters (102 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **achievementURL** (common) | The unique URL of the achievement. |  | URL |
+| **albumId** (common) | The album ID. |  | String |
+| **albumUpdate** (common) | The facebook Album to be created or updated. |  | AlbumUpdate |
+| **appId** (common) | The ID of the Facebook Application. |  | String |
+| **center** (common) | Location latitude and longitude. |  | GeoLocation |
+| **checkinId** (common) | The checkin ID. |  | String |
+| **checkinUpdate** (common) | **Deprecated** The checkin to be created. Deprecated, instead create a Post with an attached location. |  | CheckinUpdate |
+| **clientURL** (common) | Facebook4J API client URL. |  | String |
+| **clientVersion** (common) | Facebook4J client API version. |  | String |
+| **commentId** (common) | The comment ID. |  | String |
+| **commentUpdate** (common) | The facebook Comment to be created or updated. |  | CommentUpdate |
+| **debugEnabled** (common) | Enables deubg output. Effective only with the embedded logger. | false | Boolean |
+| **description** (common) | The description text. |  | String |
+| **distance** (common) | Distance in meters. |  | Integer |
+| **domainId** (common) | The domain ID. |  | String |
+| **domainName** (common) | The domain name. |  | String |
+| **domainNames** (common) | The domain names. |  | List |
+| **eventId** (common) | The event ID. |  | String |
+| **eventUpdate** (common) | The event to be created or updated. |  | EventUpdate |
+| **friendId** (common) | The friend ID. |  | String |
+| **friendlistId** (common) | The friend list ID. |  | String |
+| **friendlistName** (common) | The friend list Name. |  | String |
+| **friendUserId** (common) | The friend user ID. |  | String |
+| **groupId** (common) | The group ID. |  | String |
+| **gzipEnabled** (common) | Use Facebook GZIP encoding. | true | Boolean |
+| **httpConnectionTimeout** (common) | Http connection timeout in milliseconds. | 20000 | Integer |
+| **httpDefaultMaxPerRoute** (common) | HTTP maximum connections per route. | 2 | Integer |
+| **httpMaxTotalConnections** (common) | HTTP maximum total connections. | 20 | Integer |
+| **httpReadTimeout** (common) | Http read timeout in milliseconds. | 120000 | Integer |
+| **httpRetryCount** (common) | Number of HTTP retries. | 0 | Integer |
+| **httpRetryIntervalSeconds** (common) | HTTP retry interval in seconds. | 5 | Integer |
+| **httpStreamingReadTimeout** (common) | HTTP streaming read timeout in milliseconds. | 40000 | Integer |
+| **ids** (common) | The ids of users. |  | List |
+| **inBody** (common) | Sets the name of a parameter to be passed in the exchange In Body. |  | String |
+| **includeRead** (common) | Enables notifications that the user has already read in addition to unread ones. |  | Boolean |
+| **isHidden** (common) | Whether hidden. |  | Boolean |
+| **jsonStoreEnabled** (common) | If set to true, raw JSON forms will be stored in DataObjectFactory. | false | Boolean |
+| **link** (common) | Link URL. |  | URL |
+| **linkId** (common) | Link ID. |  | String |
+| **locale** (common) | Desired FQL locale. |  | Locale |
+| **mbeanEnabled** (common) | If set to true, Facebook4J mbean will be registerd. | false | Boolean |
+| **message** (common) | The message text. |  | String |
+| **messageId** (common) | The message ID. |  | String |
+| **metric** (common) | The metric name. |  | String |
+| **milestoneId** (common) | The milestone id. |  | String |
+| **name** (common) | Test user name, must be of the form 'first last'. |  | String |
+| **noteId** (common) | The note ID. |  | String |
+| **notificationId** (common) | The notification ID. |  | String |
+| **objectId** (common) | The insight object ID. |  | String |
+| **offerId** (common) | The offer id. |  | String |
+| **optionDescription** (common) | The question’s answer option description. |  | String |
+| **pageId** (common) | The page id. |  | String |
+| **permissionName** (common) | The permission name. |  | String |
+| **permissions** (common) | Test user permissions in the format perm1,perm2,…​ |  | String |
+| **photoId** (common) | The photo ID. |  | String |
+| **pictureId** (common) | The picture id. |  | Integer |
+| **pictureId2** (common) | The picture2 id. |  | Integer |
+| **pictureSize** (common) | 
+The picture size.
+
+Enum values:
+
+-   square
+    
+-   small
+    
+-   normal
+    
+-   large
+    
+-   thumbnail
+    
+-   album
+    
+
+
+
+
+
+ |  | PictureSize |
+| **placeId** (common) | The place ID. |  | String |
+| **postId** (common) | The post ID. |  | String |
+| **postUpdate** (common) | The post to create or update. |  | PostUpdate |
+| **prettyDebugEnabled** (common) | Prettify JSON debug output if set to true. | false | Boolean |
+| **queries** (common) | FQL queries. |  | Map |
+| **query** (common) | FQL query or search terms for search endpoints. |  | String |
+| **questionId** (common) | The question id. |  | String |
+| **reading** (common) | Optional reading parameters. See Reading Options(#reading). |  | Reading |
+| **readingOptions** (common) | To configure Reading using key/value pairs from the Map. |  | Map |
+| **restBaseURL** (common) | API base URL. | [https://graph.facebook.com/](https://graph.facebook.com/) | String |
+| **scoreValue** (common) | The numeric score with value. |  | Integer |
+| **size** (common) | 
+
+The picture size, one of large, normal, small or square.
+
+Enum values:
+
+-   square
+    
+-   small
+    
+-   normal
+    
+-   large
+    
+-   thumbnail
+    
+-   album
+    
+
+
+
+
+
+ |  | PictureSize |
+| **source** (common) | The media content from either a java.io.File or java.io.Inputstream. |  | Media |
+| **subject** (common) | The note of the subject. |  | String |
+| **tabId** (common) | The tab id. |  | String |
+| **tagUpdate** (common) | Photo tag information. |  | TagUpdate |
+| **testUser1** (common) | Test user 1. |  | TestUser |
+| **testUser2** (common) | Test user 2. |  | TestUser |
+| **testUserId** (common) | The ID of the test user. |  | String |
+| **title** (common) | The title text. |  | String |
+| **toUserId** (common) | The ID of the user to tag. |  | String |
+| **toUserIds** (common) | The IDs of the users to tag. |  | List |
+| **userId** (common) | The Facebook user ID. |  | String |
+| **userId1** (common) | The ID of a user 1. |  | String |
+| **userId2** (common) | The ID of a user 2. |  | String |
+| **userIds** (common) | The IDs of users to invite to event. |  | List |
+| **userLocale** (common) | The test user locale. |  | String |
+| **useSSL** (common) | Use SSL. | true | Boolean |
+| **videoBaseURL** (common) | Video API base URL. | [https://graph-video.facebook.com/](https://graph-video.facebook.com/) | String |
+| **videoId** (common) | The video ID. |  | String |
+| **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions occurred while the consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
+| **exchangePattern** (consumer (advanced)) | 
+
+Sets the exchange pattern when the consumer creates an exchange.
+
+Enum values:
+
+-   InOnly
+    
+-   InOut
+    
+-   InOptionalOut
+    
+
+
+
+
+
+ |  | ExchangePattern |
+| **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **httpProxyHost** (proxy) | HTTP proxy server host name. |  | String |
+| **httpProxyPassword** (proxy) | HTTP proxy server password. |  | String |
+| **httpProxyPort** (proxy) | HTTP proxy server port. |  | Integer |
+| **httpProxyUser** (proxy) | HTTP proxy server user name. |  | String |
+| **oAuthAccessToken** (security) | The user access token. |  | String |
+| **oAuthAccessTokenURL** (security) | OAuth access token URL. | [https://graph.facebook.com/oauth/access\_token](https://graph.facebook.com/oauth/access_token) | String |
+| **oAuthAppId** (security) | The application Id. |  | String |
+| **oAuthAppSecret** (security) | The application Secret. |  | String |
+| **oAuthAuthorizationURL** (security) | OAuth authorization URL. | [https://www.facebook.com/dialog/oauth](https://www.facebook.com/dialog/oauth) | String |
+| **oAuthPermissions** (security) | Default OAuth permissions. Comma separated permission names. See [https://developers.facebook.com/docs/reference/login/#permissions](https://developers.facebook.com/docs/reference/login/#permissions) for the detail. |  | String |
+
+## Message Headers
+
+The Facebook component supports 1 message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelFacebook.rawJSON** (common) Constant: [`RAW_JSON_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-facebook/latest/org/apache/camel/component/facebook/FacebookConstants.html#RAW_JSON_HEADER) | The raw json. |  | String |
+
+## Producer Endpoints:
+
+Producer endpoints can use endpoint names and options from the table below. Endpoints can also use the short name without the **get** or **search** prefix, except **checkin** due to ambiguity between **getCheckin** and **searchCheckin**. Endpoint options that are not mandatory are denoted by \[\].
+
+Producer endpoints can also use a special option **inBody** that in turn should contain the name of the endpoint option whose value will be contained in the Camel Exchange In message. For example, the facebook endpoint in the following route retrieves activities for the user id value in the incoming message body.
+
+```java
+from("direct:test").to("facebook://activities?inBody=userId")...
+```
+
+Any of the endpoint options can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFacebook.option`. For example, the **userId** option value in the previous route could alternately be provided in the message header **CamelFacebook.userId**. Note that the inBody option overrides message header, e.g. the endpoint option **inBody=user** would override a **CamelFacebook.userId** header.
+
+Endpoints that return a String return an Id for the created or modified entity, e.g. **addAlbumPhoto** returns the new album Id. Endpoints that return a boolean, return true for success and false otherwise. In case of Facebook API errors the endpoint will throw a RuntimeCamelException with a facebook4j.FacebookException cause.
+
+## Consumer Endpoints:
+
+Any of the producer endpoints that take a reading parameter can be used as a consumer endpoint. The polling consumer uses the **since** and **until** fields to get responses within the polling interval. In addition to other reading fields, an initial **since** value can be provided in the endpoint for the first poll.
+
+Rather than the endpoints returning a List (or **facebook4j.ResponseList**) through a single route exchange, camel-facebook creates one route exchange per returned object. As an example, if **"facebook://home"** results in five posts, the route will be executed five times (once for each Post).
+
+## Reading Options
+
+The **reading** option of type **facebook4j.Reading** adds support for reading parameters, which allow selecting specific fields, limits the number of results, etc. For more information see [Graph API documentation](https://developers.facebook.com/docs/reference/api/#reading).
+
+It is also used by consumer endpoints to poll Facebook data to avoid sending duplicate messages across polls.
+
+The reading option can be a reference or value of type **facebook4j.Reading**, or can be specified using the following reading options in either the endpoint URI or exchange header with **CamelFacebook.** prefix.
+
+## Message header
+
+Any of the URI options can be provided in a message header for producer endpoints with `CamelFacebook.` prefix.
+
+## Message body
+
+All result message bodies utilize objects provided by the Facebook4J API. Producer endpoints can specify the option name for incoming message body in the **inBody** endpoint parameter.
+
+For endpoints that return an array, or **facebook4j.ResponseList**, or **java.util.List**, a consumer endpoint will map every elements in the list to distinct messages.
+
+## Use cases
+
+To create a post within your Facebook profile, send this producer a facebook4j.PostUpdate body.
+
+```java
+from("direct:foo")
+    .to("facebook://postFeed/inBody=postUpdate);
+```
+
+To poll, every 5 sec (You can set the [polling consumer](eips/polling-consumer.md) options by adding a prefix of "consumer"), all statuses on your home feed:
+
+```java
+from("facebook://home?delay=5000")
+    .to("bean:blah");
+```
+
+Searching using a producer with dynamic options from header.
+
+In the bar header we have the Facebook search string we want to execute in public posts, so we need to assign this value to the CamelFacebook.query header.
+
+```java
+from("direct:foo")
+    .setHeader("CamelFacebook.query", header("bar"))
+    .to("facebook://posts");
+```
+
+## Spring Boot Auto-Configuration
+
+When using facebook with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+
+```xml
+<dependency>
+  <groupId>org.apache.camel.springboot</groupId>
+  <artifactId>camel-facebook-starter</artifactId>
+  <version>x.x.x</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+The component supports 32 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **camel.component.facebook.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| **camel.component.facebook.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions occurred while the consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
+| **camel.component.facebook.client-u-r-l** | Facebook4J API client URL. |  | String |
+| **camel.component.facebook.client-version** | Facebook4J client API version. |  | String |
+| **camel.component.facebook.configuration** | To use the shared configuration. The option is a org.apache.camel.component.facebook.config.FacebookConfiguration type. |  | FacebookConfiguration |
+| **camel.component.facebook.debug-enabled** | Enables deubg output. Effective only with the embedded logger. | false | Boolean |
+| **camel.component.facebook.enabled** | Whether to enable auto configuration of the facebook component. This is enabled by default. |  | Boolean |
+| **camel.component.facebook.gzip-enabled** | Use Facebook GZIP encoding. | true | Boolean |
+| **camel.component.facebook.http-connection-timeout** | Http connection timeout in milliseconds. | 20000 | Integer |
+| **camel.component.facebook.http-default-max-per-route** | HTTP maximum connections per route. | 2 | Integer |
+| **camel.component.facebook.http-max-total-connections** | HTTP maximum total connections. | 20 | Integer |
+| **camel.component.facebook.http-proxy-host** | HTTP proxy server host name. |  | String |
+| **camel.component.facebook.http-proxy-password** | HTTP proxy server password. |  | String |
+| **camel.component.facebook.http-proxy-port** | HTTP proxy server port. |  | Integer |
+| **camel.component.facebook.http-proxy-user** | HTTP proxy server user name. |  | String |
+| **camel.component.facebook.http-read-timeout** | Http read timeout in milliseconds. | 120000 | Integer |
+| **camel.component.facebook.http-retry-count** | Number of HTTP retries. | 0 | Integer |
+| **camel.component.facebook.http-retry-interval-seconds** | HTTP retry interval in seconds. | 5 | Integer |
+| **camel.component.facebook.http-streaming-read-timeout** | HTTP streaming read timeout in milliseconds. | 40000 | Integer |
+| **camel.component.facebook.json-store-enabled** | If set to true, raw JSON forms will be stored in DataObjectFactory. | false | Boolean |
+| **camel.component.facebook.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| **camel.component.facebook.mbean-enabled** | If set to true, Facebook4J mbean will be registerd. | false | Boolean |
+| **camel.component.facebook.o-auth-access-token** | The user access token. |  | String |
+| **camel.component.facebook.o-auth-access-token-u-r-l** | OAuth access token URL. | [https://graph.facebook.com/oauth/access\_token](https://graph.facebook.com/oauth/access_token) | String |
+| **camel.component.facebook.o-auth-app-id** | The application Id. |  | String |
+| **camel.component.facebook.o-auth-app-secret** | The application Secret. |  | String |
+| **camel.component.facebook.o-auth-authorization-u-r-l** | OAuth authorization URL. | [https://www.facebook.com/dialog/oauth](https://www.facebook.com/dialog/oauth) | String |
+| **camel.component.facebook.o-auth-permissions** | Default OAuth permissions. Comma separated permission names. See [https://developers.facebook.com/docs/reference/login/#permissions](https://developers.facebook.com/docs/reference/login/#permissions) for the detail. |  | String |
+| **camel.component.facebook.pretty-debug-enabled** | Prettify JSON debug output if set to true. | false | Boolean |
+| **camel.component.facebook.rest-base-u-r-l** | API base URL. | [https://graph.facebook.com/](https://graph.facebook.com/) | String |
+| **camel.component.facebook.use-s-s-l** | Use SSL. | true | Boolean |
+| **camel.component.facebook.video-base-u-r-l** | Video API base URL. | [https://graph-video.facebook.com/](https://graph-video.facebook.com/) | String |

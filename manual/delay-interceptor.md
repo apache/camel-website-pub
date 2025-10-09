@@ -1,0 +1,75 @@
+# Delayer
+
+The Delayer is used for slowing processing of messages.
+
+This allows you to set a fixed amount of delay between each step a message passes in the route. It can be used to better show how things are happening nicely and slowly, so you are not bombarded with a zillion lines of logging output.
+
+## Using Delayer
+
+The delayer can be configured on two levels:
+
+-   Camel context: _Globally_
+    
+-   Route: _Individually per route_
+    
+
+### Configuring using Spring XML
+
+Set the `delayer` attribute of the `<camelContext>` tag as shown below:
+
+Spring XML
+
+```xml
+<camelContext id="camel" delayer="500" xmlns="http://activemq.apache.org/camel/schema/spring">
+    <route>
+        <from uri="direct:start"/>
+        <to uri="mock:result"/>
+    </route>
+</camelContext>
+```
+
+### Configuring using Java
+
+You can enable delaying messages by setting the delay value on the `CamelContext` as shown:
+
+```java
+camelContext.setDelayer(200);
+```
+
+### Configuring on route level
+
+You can also configure it on both camel context and per route as you like. Per route will override the camel context setting.
+
+For example, the route below is only the first route that has a delayer with 200 milliseconds.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start").delayer(200)
+    .to("mock:result")
+```
+
+```xml
+<route delayer="200">
+ ...
+</route>
+
+<route>
+ ...
+</route>
+```
+
+```yaml
+- route:
+    delayer: 200
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: mock:result
+```

@@ -1,0 +1,163 @@
+# Thrift
+
+**Since Camel 2.20**
+
+Camel provides a Data Format to serialize between Java and the Apache Thrift . The project’s site details why you may wish to [https://thrift.apache.org/](https://thrift.apache.org/). Apache Thrift is language-neutral and platform-neutral, so messages produced by your Camel routes may be consumed by other language implementations.
+
+[Apache Thrift Implementation](https://github.com/apache/thrift)  
+
+## Thrift Options
+
+The Thrift dataformat supports 3 options, which are listed below.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **instanceClass** |  | `String` | Name of class to use when unmarshalling. |
+| **contentTypeFormat** | `binary` | `Enum` | 
+Defines a content type format in which thrift message will be serialized/deserialized from(to) the Java been. The format can either be native or json for either native binary thrift, json or simple json fields representation. The default value is binary.
+
+Enum values:
+
+-   binary
+    
+-   json
+    
+-   sjson
+    
+
+
+
+
+
+ |
+| **contentTypeHeader** | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
+
+## Content type format
+
+It’s possible to parse JSON message to convert it to the Thrift format and unparse it back using native util converter. To use this option, set contentTypeFormat value to 'json' or call thrift with second parameter. If default instance is not specified, always use native binary Thrift format. The simple JSON format is write-only (marshal) and produces a simple output format suitable for parsing by scripting languages. The sample code shows below:
+
+```java
+from("direct:marshal")
+    .unmarshal()
+    .thrift("org.apache.camel.dataformat.thrift.generated.Work", "json")
+    .to("mock:reverse");
+```
+
+## Thrift overview
+
+This quick overview of how to use Thrift. For more detail see the [complete tutorial](https://thrift.apache.org/tutorial/)
+
+## Defining the thrift format
+
+The first step is to define the format for the body of your exchange. This is defined in a .thrift file as so:
+
+**tutorial.thrift**
+
+```java
+namespace java org.apache.camel.dataformat.thrift.generated
+
+enum Operation {
+  ADD = 1,
+  SUBTRACT = 2,
+  MULTIPLY = 3,
+  DIVIDE = 4
+}
+
+struct Work {
+  1: i32 num1 = 0,
+  2: i32 num2,
+  3: Operation op,
+  4: optional string comment,
+}
+```
+
+## Generating Java classes
+
+The Apache Thrift provides a compiler which will generate the Java classes for the format we defined in our .thrift file.
+
+You can also run the compiler for any additional supported languages you require manually.
+
+`thrift -r --gen java -out ../java/ ./tutorial-dataformat.thrift`
+
+This will generate separate Java class for each type defined in .thrift file, i.e. struct or enum. The generated classes implement org.apache.thrift.TBase which is required by the serialization mechanism. For this reason it important that only these classes are used in the body of your exchanges. Camel will throw an exception on route creation if you attempt to tell the Data Format to use a class that does not implement org.apache.thrift.TBase.
+
+## Java DSL
+
+You can use create the ThriftDataFormat instance and pass it to Camel DataFormat marshal and unmarshal API like this.
+
+```java
+   ThriftDataFormat format = new ThriftDataFormat(new Work());
+
+   from("direct:in").marshal(format);
+   from("direct:back").unmarshal(format).to("mock:reverse");
+```
+
+Or use the DSL thrift() passing the unmarshal default instance or default instance class name like this.
+
+```java
+   // You don't need to specify the default instance for the thrift marshaling
+   from("direct:marshal").marshal().thrift();
+   from("direct:unmarshalA").unmarshal()
+       .thrift("org.apache.camel.dataformat.thrift.generated.Work")
+       .to("mock:reverse");
+
+   from("direct:unmarshalB").unmarshal().thrift(new Work()).to("mock:reverse");
+```
+
+## Spring DSL
+
+The following example shows how to use Thrift to unmarshal using Spring configuring the thrift data type
+
+```java
+<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+  <route>
+    <from uri="direct:start"/>
+    <unmarshal>
+      <thrift instanceClass="org.apache.camel.dataformat.thrift.generated.Work" />
+    </unmarshal>
+    <to uri="mock:result"/>
+  </route>
+</camelContext>
+```
+
+## Dependencies
+
+To use Thrift in your camel routes you need to add the a dependency on **camel-thrift** which implements this data format.
+
+```xml
+<dependency>
+  <groupId>org.apache.camel</groupId>
+  <artifactId>camel-thrift</artifactId>
+  <version>x.x.x</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+When using thrift with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+
+```xml
+<dependency>
+  <groupId>org.apache.camel.springboot</groupId>
+  <artifactId>camel-thrift-starter</artifactId>
+  <version>x.x.x</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+The component supports 9 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **camel.component.thrift.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| **camel.component.thrift.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions occurred while the consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
+| **camel.component.thrift.enabled** | Whether to enable auto configuration of the thrift component. This is enabled by default. |  | Boolean |
+| **camel.component.thrift.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| **camel.component.thrift.use-global-ssl-context-parameters** | Determine if the thrift component is using global SSL context parameters. | false | Boolean |
+| **camel.dataformat.thrift.content-type-format** | Defines a content type format in which thrift message will be serialized/deserialized from(to) the Java been. The format can either be native or json for either native binary thrift, json or simple json fields representation. The default value is binary. | binary | String |
+| **camel.dataformat.thrift.content-type-header** | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. | true | Boolean |
+| **camel.dataformat.thrift.enabled** | Whether to enable auto configuration of the thrift data format. This is enabled by default. |  | Boolean |
+| **camel.dataformat.thrift.instance-class** | Name of class to use when unmarshalling. |  | String |

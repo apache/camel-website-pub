@@ -6,8 +6,15 @@
     <description>Recent content in Usecases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Usecases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Your REST APIs already speak MCP. They just don&#39;t know it yet.</title>
+      <link>https://camel.apache.org/blog/2026/03/CAPIGateway/</link>
+      <pubDate>Tue, 03 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/CAPIGateway/</guid>
+      <description>Four years ago, I started writing an API Gateway. Not because I wanted to build a product — but because we needed more from the tools we had.&#xA;I was working inside a government institution running a complex hybrid environment — services spread across on-premises data centers and cloud, strict security and compliance requirements, and a growing number of APIs that all needed to be managed, secured, and observed.&#xA;We were using a well known API Gateway product, a capable and powerful platform, but for our use case, it was too heavy.</description>
+    </item>
     <item>
       <title>Connecting EDI to the Enterprise with Camel &amp; Smooks</title>
       <link>https://camel.apache.org/blog/2025/02/connecting-edi-to-the-enterprise-with-camel-and-smooks/</link>

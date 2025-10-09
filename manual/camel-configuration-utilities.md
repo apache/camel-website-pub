@@ -1,0 +1,569 @@
+# JSSE Utility
+
+The JSSE Utility allows you to easily configure aspects of the [Java Secure Socket Extension](https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.md) (JSSE) API in order to greatly simplify the use of custom transport layer security (TLS) settings on Camel components.
+
+## Supported JSSE Components
+
+A number of Camel components support this (such as but not limited to):
+
+-   [Cometd](../components/4.18.x/cometd-component.md)
+    
+-   [HTTP](../components/4.18.x/http-component.md)
+    
+-   [IRC](../components/4.18.x/irc-component.md)
+    
+-   [Jetty](../components/4.18.x/jetty-component.md)
+    
+-   [Netty](../components/4.18.x/netty-component.md)
+    
+-   [Mail](../components/4.18.x/mail-component.md)
+    
+
+## Configuring JSSE with Camel
+
+The key component in configuring TLS through the JSSE API is the `SSLContext`.
+
+The `SSLContext` provides socket factories for both client side and server side sockets as well as another component called an `SSLEngine` that is used by non-blocking IO to support TLS.
+
+The JSSE configuration utility provides an easy-to-use builder for configuring these JSSE components, among others, in a manner that allows you to provide all configuration options up front during the initialization of your application such that you don’t have to customize library code or dig though the inner workings of a third-party library in order to inject hooks for the configuration of each component in the JSSE API. The central builder in the JSSE configuration utility is the SSLContextParameters. This class serves as the entry point for most configuration in the JSSE utility.
+
+### SSLContextParameters
+
+`SSLContextParameters` (`<sslContextParameters>` XML tag) contain the following elements:
+
+-   provider (attribute)
+    
+-   secureSocketProtocol (attribute)
+    
+-   certAlias (attribute)
+    
+-   sessionTimeout (attribute)
+    
+-   cipherSuites (element)
+    
+-   cipherSuitesFilter (element)
+    
+-   secureSocketProtocols (element)
+    
+-   secureSocketProtocolsFilter (element)
+    
+-   namedGroups (element)
+    
+-   namedGroupsFilter (element)
+    
+-   keyManagers (element)
+    
+-   trustManagers (element)
+    
+-   secureRandom (element)
+    
+-   clientParameters (element)
+    
+-   serverParameters (element)
+    
+    provider
+    
+    The optional provider identifier for the JSSE implementation to use when constructing the SSLContext. If omitted, the standard provider look-up mechanism is used to resolve the provider.
+    
+    secureSocketProtocol
+    
+    The optional secure socket protocol. See [Java Security Standard Algorithm Names](https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.md) for information about standard protocol names. If omitted, TLS is used by default. Note that this property is related to but distinctly different from the secureSocketProtocols and secureSocketProtocolsFilter properties.
+    
+    certAlias
+    
+    An optional certificate alias to use. This is useful when the keystore has multiple certificates.
+    
+    sessionTimeout
+    
+    This optional property defines the timeout period, in seconds, for sessions on both the client and server side as well as in the SSLEngine.
+    
+    cipherSuites
+    
+    This optional property represents a collection of explicitly named cipher suites to enable on both the client and server side as well as in the SSLEngine. These values take precedence over filters supplied in cipherSuitesFilter. The utility attempts to enable the listed cipher suites regardless of whether the JSSE provider actually supports them or not. This behavior guarantees that listed cipher suites are always enabled when listed. For a more lenient option, use cipherSuitesFilter.
+    
+    cipherSuitesFilter
+    
+    This optional property represents a collection of include and exclude patterns for cipher suites to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available cipher suites. The excludes patterns have precedence over the includes patterns. If no cipherSuites and no cipherSuitesFilter are present, the default patterns applied are:
+    
+
+```text
+Includes .\*;
+Excludes .*_NULL_.*, .\*_anon_.*, .\*DES.*, .\*EXPORT.*, .\*MD5, .*RC4.*
+```
+
+secureSocketProtocols
+
+This optional property represents a collection of explicitly named secure socket protocols, such as SSLv3/TLS/etc., to enable on both the client and server side as well as in the SSLEngine. These values take precedence over filters supplied in secureSocketProtocolsFilter. The utility attempts to enable the listed protocols regardless of whether the JSSE provider actually supports them or not. This behavior guarantees that listed protocols are always enabled when listed. For a more lenient option, use secureSocketProtocolsFilter.
+
+secureSocketProtocolsFilter
+
+This optional property represents a collection of include and exclude patterns for secure socket protocols to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available protocols. The excludes patterns have precedence over the includes patterns. If no secureSocketProtocols and no secureSocketProtocolsFilter are present, the default patterns applied are:
+
+```text
+Includes .*
+```
+
+namedGroups
+
+This optional property represents a collection of explicitly named TLS named groups (key exchange algorithms) to enable on both the client and server side as well as in the SSLEngine. Named groups control which key exchange algorithms are available during the TLS handshake, including post-quantum hybrid groups such as `X25519MLKEM768`. These values take precedence over filters supplied in namedGroupsFilter. The utility attempts to enable the listed named groups regardless of whether the JSSE provider actually supports them or not. No default filtering is applied to named groups.
+
+namedGroupsFilter
+
+This optional property represents a collection of include and exclude patterns for named groups to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available named groups. The excludes patterns have precedence over the includes patterns. No default filtering is applied to named groups.
+
+keyManagers
+
+This optional property configures the source of key material for providing identity of client and server side connections as well as in the SSLEngine. If omitted, no source of key material is provided and the SSLContext is suitable only for client-side usage when mutual authentication is not in use. You typically configure this property with a key store containing a client or server private key.
+
+trustManagers
+
+This optional property configures the source of material for verifying trust of key material used in the handshake process. If omitted, the default trust manager is automatically used. See the [JSSE documentation](https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.html#GUID-7D9F43B8-AABF-4C5B-93E6-3AFB18B66150) for more information on how the default trust manager is configured. You typically configure this property with a key store containing trusted CA certificates.
+
+secureRandom
+
+This optional property configures the secure random number generator used by the client and server side as well as in the SSLEngine. If omitted, the default secure random number generator is used.
+
+clientParameters
+
+This optional property configures additional settings that apply only to the client side aspects of the SSLContext. If present, these settings override the settings specified at the SSLContextParameters level.
+
+serverParameters
+
+This optional property configures additional settings that apply only to the server side aspects of the SSLContext. If present, these settings override the settings specified at the SSLContextParameters level.
+
+### KeyManagersParameters
+
+KeyManagersParameters contain the following elements:
+
+-   keyPassword (attribute)
+    
+-   provider (attribute)
+    
+-   algorithm (attribute)
+    
+-   keyStore (element)
+    
+    keyPassword
+    
+    The optional password for recovering/accessing the private key in the key store. This is typically the password for the private key in the configured key store; however, in some cases, such as when using PKCS#11, the key password may be provided through other means and is omitted entirely in this configuration.
+    
+    provider
+    
+    The optional provider identifier for the KeyManagerFactory used to create the KeyManagers represented by this object’s configuration. If omitted, the default look-up behavior is used.
+    
+    algorithm
+    
+    The optional algorithm name for the KeyManagerFactory used to create the KeyManager represented by this object’s configuration. See the [Java Secure Socket Extension Reference Guide](https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.md) for information about standard algorithm names.
+    
+    keyStore
+    
+    This optional property represents the key store that provides key material to the key manager. This is typically configured with a key store containing a user or server private key. In some cases, such as when using PKCS#11, the key store is omitted entirely.
+    
+
+### TrustManagersParameters
+
+TrustManagersParameters contain the following elements:
+
+-   provider (attribute)
+    
+-   algorithm (attribute)
+    
+-   trustManager (attribute)
+    
+-   keyStore (element)
+    
+    provider
+    
+    The optional provider identifier for the TrustManagerFactory used to create the TrustManagers represented by this object’s configuration. If omitted, the default look-up behavior is used.
+    
+    algorithm
+    
+    The optional algorithm name for the TrustManagerFactory used to create the TrustManager represented by this object’s configuration. See the [Java Secure Socket Extension Reference Guide](https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.md) for information about standard algorithm names.
+    
+    trustManager
+    
+    To use an existing configured trust manager instead of using TrustManagerFactory to get the TrustManager.
+    
+    keyStore
+    
+    See [KeyStoreParameters](#CamelConfigurationUtilities-KeyStoreParameters). This optional property represents the key store that provides key material to the trust manager. This is typically configured with a key store containing trusted CA certificates / public keys. In some cases, such as when using PKCS#11, the key store is omitted entirely.
+    
+
+### KeyStoreParameters
+
+KeyStoreParameters contain the following elements:
+
+-   type (attribute)
+    
+-   password (attribute)
+    
+-   provider (attribute)
+    
+-   resource (attribute)
+    
+    type
+    
+    The optional type of the key store. See the [Java Security Standard Algorithm Names](https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.md) for more information on standard names. If omitted, defaults to the default lookup mechanism as defined by `KeyStore.getDefaultType()`
+    
+    password
+    
+    The optional password for reading/opening/verifying the key store.
+    
+    provider
+    
+    The optional provider identifier for the provider used to create the KeyStores represented by this object’s configuration. If omitted, the default look-up behavior is used.
+    
+    resource
+    
+    Optional property to load the key store resource from a uri. By default the class path is used, otherwise the uri needs to be specified. For example to use file path as a resource, the prefix file is needed (file:/path/to/keystore). In some cases, the resource is omitted as the key store is provided by other means.
+    
+
+### FilterParameters
+
+FilterParameters contain the following elements:
+
+-   include (element, multiple string)
+    
+-   exclude (element, multiple string)
+    
+    include
+    
+    This optional property represents zero or more regular expression patterns for which matching values should be included. The list of excludes takes precedence over the includes patterns.
+    
+    exclude
+    
+    This optional property represents zero or more regular expression patterns for which matching values should be included. The list of excludes takes precedence over the includes patterns.
+    
+
+### SecureRandomParameters
+
+SecureRandomParameters contain the following elements:
+
+-   algorithm (attribute)
+    
+-   provider (attribute)
+    
+    algorithm
+    
+    This optional property represents the Random Number Generator (RNG) algorithm identifier for the SecureRandom factory method used to create the SecureRandom represented by this object’s configuration. See [Java Security Standard Algorithm Names](https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.md) for information about standard RNG algorithm names.
+    
+    provider
+    
+    The optional provider identifier for the SecureRandom factory method used to create the SecureRandom represented by this object’s configuration. If omitted, the default look-up behavior is used.
+    
+
+### SSLContextServerParameters
+
+SSLContextServerParameters contain the following elements:
+
+-   clientAuthentication (attribute)
+    
+-   sessionTimeout (attribute)
+    
+-   cipherSuites (element)
+    
+-   cipherSuitesFilter (element)
+    
+-   secureSocketProtocols (element)
+    
+-   secureSocketProtocolsFilter (element)
+    
+-   namedGroups (element)
+    
+-   namedGroupsFilter (element)
+    
+    clientAuthentication
+    
+    This optional property indicates if the server side does not request, requests, or requires clients to provide authentication credentials during the handshake process. This is commonly referred to as mutual authentication, two direction SSL/TLS, or two-legged SSL/TLS. Valid values are: NONE, WANT, REQUIRE
+    
+    sessionTimeout
+    
+    This optional property defines the timeout period, in seconds, for sessions on the server side. This setting affects both the SSLServerSocketFactory/SSLServerSocket and the server side of the SSLEngine.
+    
+    cipherSuites
+    
+    This optional property overrides the value of this setting in the SSLContextParameters. This option has no effect on the SSLEngine configuration.
+    
+    cipherSuitesFilter
+    
+    This optional property overrides the value of this setting in the SSLContextParameters. This option has no effect on the SSLEngine configuration.
+    
+    secureSocketProtocols
+    
+    This optional property overrides the value of this setting in the SSLContextParameters. This option has no effect on the SSLEngine configuration.
+    
+    secureSocketProtocolsFilter
+    
+    This optional property overrides the value of this setting in the SSLContextParameters. This option has no effect on the SSLEngine configuration.
+    
+    namedGroups
+    
+    This optional property overrides the value of this setting in the SSLContextParameters. This option has no effect on the SSLEngine configuration.
+    
+    namedGroupsFilter
+    
+    This optional property overrides the value of this setting in the SSLContextParameters. This option has no effect on the SSLEngine configuration.
+    
+
+### SSLContextClientParameters
+
+SSLContextClientParameters contains the following elements:
+
+-   sniHostNames (elements)
+    
+-   sessionTimeout (attribute)
+    
+-   cipherSuites (element)
+    
+-   cipherSuitesFilter (element)
+    
+-   secureSocketProtocols (element)
+    
+-   secureSocketProtocolsFilter (element)
+    
+-   namedGroups (element)
+    
+-   namedGroupsFilter (element)
+    
+    sniHostNames
+    
+    Contains a list of sniHostName elements which provides a list of SNIHostNames to be used for SSL.
+    
+    sessionTimeout
+    
+    See above
+    
+    cipherSuites
+    
+    See above
+    
+    cipherSuitesFilter
+    
+    See above
+    
+    secureSocketProtocols
+    
+    See above
+    
+    secureSocketProtocolsFilter
+    
+    See above
+    
+    namedGroups
+    
+    See above
+    
+    namedGroupsFilter
+    
+    See above
+    
+    signatureSchemes
+    
+    This optional property represents a collection of explicitly named TLS signature schemes to enable on both the client and server side as well as in the SSLEngine. Signature schemes control which signature algorithms are available during the TLS handshake, including post-quantum signature algorithms such as `ML-DSA`. These values take precedence over filters supplied in signatureSchemesFilter. The utility attempts to enable the listed signature schemes regardless of whether the JSSE provider actually supports them or not. No default filtering is applied to signature schemes.
+    
+    signatureSchemesFilter
+    
+    This optional property represents a collection of include and exclude patterns for signature schemes to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available signature schemes. The excludes patterns have precedence over the includes patterns. No default filtering is applied to signature schemes.
+    
+
+## Post-Quantum Cryptography (PQC) TLS Configuration
+
+Starting with Camel 4.19, Apache Camel supports Post-Quantum Cryptography (PQC) at the TLS transport layer. This protects connections against _harvest-now-decrypt-later_ attacks, where an adversary captures encrypted traffic today with the intent to decrypt it once a cryptographically relevant quantum computer becomes available.
+
+### JDK Requirements
+
+PQC TLS support requires a JDK that implements post-quantum key exchange algorithms. JDK 25+ is expected to include support for `X25519MLKEM768`, a hybrid key exchange that combines the classical X25519 algorithm with the ML-KEM-768 post-quantum algorithm (NIST FIPS 203).
+
+To verify whether your JDK supports PQC named groups, you can inspect the available groups:
+
+```java
+SSLContext ctx = SSLContext.getDefault();
+SSLEngine engine = ctx.createSSLEngine();
+String[] groups = engine.getSSLParameters().getNamedGroups();
+System.out.println(Arrays.toString(groups));
+// Look for X25519MLKEM768 in the output
+```
+
+### Auto-Configuration (Zero-Config PQC)
+
+When running on a JDK that supports `X25519MLKEM768`, Camel **automatically** configures PQC-preferred named groups on all `SSLContextParameters` instances — no configuration is required.
+
+The auto-configuration activates only when:
+
+-   The user has **not** explicitly set `namedGroups` or `namedGroupsFilter`
+    
+-   The JVM’s TLS provider reports `X25519MLKEM768` as an available named group
+    
+
+When activated, Camel sets the following named group ordering:
+
+```text
+X25519MLKEM768, x25519, secp256r1, secp384r1, [remaining JVM defaults...]
+```
+
+This ensures post-quantum key exchange is preferred while maintaining backward compatibility with servers that do not yet support PQC. A log message confirms activation:
+
+```text
+INFO  o.a.c.s.j.SSLContextParameters - Auto-configured PQC named groups: [X25519MLKEM768, x25519, secp256r1, secp384r1, ...]
+```
+
+### Explicit Configuration via application.properties
+
+You can explicitly control PQC TLS settings in `application.properties`:
+
+```properties
+# Enable SSL
+camel.ssl.enabled = true
+
+# Explicit named groups ordering (PQC-first)
+camel.ssl.namedGroups = X25519MLKEM768,x25519,secp256r1,secp384r1
+
+# Explicit signature schemes (if your JDK supports PQC signatures)
+camel.ssl.signatureSchemes = ML-DSA,ECDSA,RSA
+```
+
+You can also use include/exclude filters instead of explicit lists:
+
+```properties
+# Include only PQC and ECDH groups
+camel.ssl.namedGroupsInclude = X25519MLKEM768,x25519,secp256r1
+
+# Exclude specific groups
+camel.ssl.namedGroupsExclude = ffdhe2048
+```
+
+> **Note**
+> When `namedGroups` is set explicitly, include/exclude filters are ignored. When neither `namedGroups` nor filters are set, auto-configuration applies.
+
+### Explicit Configuration via Java DSL
+
+You can also configure PQC TLS programmatically using `SSLContextParameters`:
+
+```java
+KeyStoreParameters ksp = new KeyStoreParameters();
+ksp.setResource("file:/path/to/keystore.jks");
+ksp.setPassword("keystorePassword");
+
+KeyManagersParameters kmp = new KeyManagersParameters();
+kmp.setKeyStore(ksp);
+kmp.setKeyPassword("keyPassword");
+
+// Configure named groups with PQC preference
+NamedGroupsParameters ngp = new NamedGroupsParameters();
+ngp.setNamedGroup(List.of("X25519MLKEM768", "x25519", "secp256r1", "secp384r1"));
+
+SSLContextParameters scp = new SSLContextParameters();
+scp.setKeyManagers(kmp);
+scp.setNamedGroups(ngp);
+
+SSLContext context = scp.createSSLContext();
+```
+
+### Disabling PQC Auto-Configuration
+
+If you need to disable PQC auto-configuration (for example, for compatibility testing), set the named groups explicitly to classical-only values:
+
+```properties
+camel.ssl.namedGroups = x25519,secp256r1,secp384r1
+```
+
+Or use a named groups filter:
+
+```properties
+camel.ssl.namedGroupsExclude = X25519MLKEM768
+```
+
+### TLS-Layer PQC vs. Application-Layer PQC
+
+Camel provides PQC protection at two distinct layers:
+
+  
+| Aspect | TLS-Layer PQC | Application-Layer PQC (camel-pqc) |
+| --- | --- | --- |
+| **Scope** | Transport security (TLS handshake) | Message payload encryption and signing |
+| **Configuration** | `camel.ssl.*` properties or `SSLContextParameters` | `camel-pqc` component and `pqc` data format |
+| **Protects** | Data in transit between endpoints | Data at rest and message payloads |
+| **Algorithms** | X25519MLKEM768 (hybrid KEM) | ML-KEM, ML-DSA, SLH-DSA, LMS, XMSS, Falcon, and more |
+| **JDK requirement** | JDK 25+ (for built-in PQC named groups) | JDK 21+ with Bouncy Castle provider |
+| **User action** | Zero-config on JDK 25+ (auto-configured) | Requires explicit component configuration |
+
+Both layers are complementary and can be used together for defense in depth:
+
+-   **TLS-layer PQC** secures the connection between Camel and external services (brokers, APIs, databases)
+    
+-   **Application-layer PQC** (`camel-pqc`) secures the message content itself, independent of transport
+    
+
+For full application-layer PQC documentation, see [PQC Component](../components/4.18.x/pqc-component.md) and [PQC Data Format](../components/4.18.x/dataformats/pqc-dataformat.md).
+
+### Migration from Classical TLS
+
+For users currently running classical TLS, migration to PQC TLS is straightforward:
+
+1.  **Upgrade your JDK** to JDK 25+ (or a JDK that supports `X25519MLKEM768`)
+    
+2.  **Upgrade Camel** to 4.19 or later
+    
+3.  **No configuration changes needed** — PQC named groups are auto-configured
+    
+4.  **Verify** that your TLS peers (servers, brokers, load balancers) support PQC key exchange or at least accept the classical fallback groups (`x25519`, `secp256r1`)
+    
+
+The hybrid nature of `X25519MLKEM768` ensures that even if the remote peer does not support PQC, the handshake gracefully falls back to classical key exchange using the next available group.
+
+## Examples
+
+### Setting Client Authentication on the Server Side
+
+This configuration sets the server side aspects of the TLS configuration to require client authentication during the handshake process. This configuration uses the default trust store and a custom key store to provide key material for both the server and client sides of the SSLContext.
+
+```java
+KeyStoreParameters ksp = new KeyStoreParameters();
+ksp.setResource("file:/users/home/server/keystore.jks");
+ksp.setPassword("keystorePassword");
+
+KeyManagersParameters kmp = new KeyManagersParameters();
+kmp.setKeyStore(ksp);
+kmp.setKeyPassword("keyPassword");
+
+SSLContextServerParameters scsp = new SSLContextServerParameters();
+scsp.setClientAuthentication(ClientAuthentication.REQUIRE);
+SSLContextParameters scp = new SSLContextParameters();
+scp.setServerParameters(scsp);
+scp.setKeyManagers(kmp);
+
+SSLContext context = scp.createSSLContext();
+SSLEngine engine = scp.createSSLEngine();
+```
+
+## Configuring Different Options on the Client and Server Side
+
+In this example, both the client and server sides share the same custom key store; however, the client side allows any supported cipher suite while the server side will use the default cipher suite filter and exclude any cipher suites that match the patterns:
+
+```text
+.*_NULL_.*
+.*_anon_.*
+```
+
+```java
+KeyStoreParameters ksp = new KeyStoreParameters();
+ksp.setResource("file:/users/home/server/keystore.jks");
+ksp.setPassword("keystorePassword");
+
+KeyManagersParameters kmp = new KeyManagersParameters();
+kmp.setKeyStore(ksp);
+kmp.setKeyPassword("keyPassword");
+
+FilterParameters filter = new FilterParameters();
+filter.getInclude().add(".*");
+
+SSLContextClientParameters sccp = new SSLContextClientParameters();
+sccp.setCipherSuitesFilter(filter);
+
+SSLContextParameters scp = new SSLContextParameters();
+scp.setClientParameters(sccp);
+scp.setKeyManagers(kmp);
+
+SSLContext context = scp.createSSLContext();
+SSLEngine engine = scp.createSSLEngine();
+```

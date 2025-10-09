@@ -1,0 +1,179 @@
+# ProducerTemplate
+
+The `ProducerTemplate` interface allows you to send message exchanges to endpoints in a variety of different ways to make it easy to work with Camel [Endpoint](endpoint.md) instances from Java code.
+
+It can be configured with a default endpoint if you just want to send lots of messages to the same endpoint; or you can specify an [Endpoint](endpoint.md) or uri as the first parameter.
+
+> **Important**
+> You are not meant to create a `ProducerTemplate` for each message invocation; you are meant to create a single instance on startup and keep it around. Also when you have finished using the `ProducerTemplate` you should call the `stop()` method to close down all the resources it has been using.
+
+The `sendBody()` method allows you to send any object to an endpoint easily as shown:
+
+```java
+ProducerTemplate template = exchange.getContext().createProducerTemplate();
+
+// send to default endpoint
+template.sendBody("<hello>world!</hello>");
+
+// send to a specific queue
+template.sendBody("activemq:MyQueue", "<hello>world!</hello>");
+
+// send with a body and header
+template.sendBodyAndHeader("activemq:MyQueue",
+   "<hello>world!</hello>",
+   "CustomerRating", "Gold");
+```
+
+You can also supply an `Exchange` or a `Processor` to customize the exchange.
+
+## Send vs Request methods
+
+The `ProducerTemplate` supports [Message Exchange Patterns](exchange-pattern.md) (MEP) that are used to control the messaging style to use:
+
+-   _send methods_ - [Event Message](../components/4.18.x/eips/event-message.md) (InOnly)
+    
+-   _request methods_ - [Request Reply](../components/4.18.x/eips/requestReply-eip.md) (InOut)
+    
+
+In other words, all the methods on the `ProducerTemplate` that starts with `sendXXX` are for InOnly messaging, and all the methods starting with `requestXXX` are for InOut messaging.
+
+Let’s see an example where we invoke an endpoint to get the response (InOut):
+
+```java
+Object response = template.requestBody("<hello/>");
+
+// you can type convert the response to what you want such as String
+String ret = template.requestBody("<hello/>", String.class);
+
+// or specify the endpoint uri in the method
+String ret = template.requestBody("cxf:bean:HelloWorldService", "<hello/>", String.class);
+```
+
+## Fluent interface
+
+The `FluentProducerTemplate` provides a fluent syntax over the regular `ProducerTemplate`.
+
+Here are some examples:
+
+### Set headers and body
+
+This is the most common style with fluent builders to set headers, and message body as show:
+
+```java
+Integer result = FluentProducerTemplate.on(context)
+    .withHeader("key-1", "value-1")
+    .withHeader("key-2", "value-2")
+    .withBody("Hello")
+    .to("direct:inout")
+    .request(Integer.class);
+```
+
+### Using a processor
+
+Here we use [Processor](processor.md) to prepare the message to be sent.
+
+```java
+Integer result = FluentProducerTemplate.on(context)
+    .withProcessor(exchange -> exchange.getIn().setBody("Hello World"))
+    .to("direct:exception")
+    .request(Integer.class);
+```
+
+### Advanced with a template customizer
+
+This is rarely in use, but a `TemplateCustomizer` can be used for advanced use-cases to control various aspects of the `FluentProducerTemplate` such as configuring to use a custom thread pool:
+
+```java
+Object result = FluentProducerTemplate.on(context)
+    .withTemplateCustomizer(
+        template -> {
+            template.setExecutorService(myExecutor);
+            template.setMaximumCacheSize(10);
+        }
+    )
+    .withBody("the body")
+    .to("direct:start")
+    .request();
+```
+
+## How do I retrieve the thrown Exception during processing an Exchange?
+
+You have sent an Exchange to Camel, but it fails during processing caused by a thrown Exception. How do I retrieve this Exception?
+
+If you are using CamelTemplate (or CamelProducer), then it is common to use the sendBody/requestBody methods that returns the exchange body response **only**. So if there was a thrown exception during processing Camel is not rethrowing this Exception. To remedy this you can use the plain send/request methods that accepts an Exchange object and returns an Exchange object.
+
+From the returned Exchange you can test if it has failed and get the caused exception. This is illustrated in the code sample:
+
+```java
+@Test
+public void testOk() {
+    int result = (Integer) template.sendBody("direct:input", ExchangePattern.InOut, "Hello London");
+    assertEquals(1, result);
+}
+
+@Test
+public void testFailure() {
+    // must create an exchange to get the result as an exchange where we can get the caused exception
+    Exchange exchange = getMandatoryEndpoint("direct:input").createExchange(ExchangePattern.InOut);
+    exchange.getIn().setBody("Hello Paris");
+
+    Exchange out = template.send("direct:input", exchange);
+    assertTrue("Should be failed", out.isFailed());
+    assertTrue("Should be IllegalArgumentException", out.getException() instanceof IllegalArgumentException);
+    assertEquals("Forced exception", out.getException().getMessage());
+}
+
+protected RouteBuilder createRouteBuilder() throws Exception {
+    return new RouteBuilder() {
+        public void configure() throws Exception {
+            from("direct:input").bean(new ExceptionBean());
+        }
+    };
+}
+
+public static class ExceptionBean {
+    public int doSomething(String request) throws Exception {
+        if (request.equals("Hello London")) {
+            return 1;
+        } else {
+            throw new IllegalArgumentException("Forced exception");
+        }
+    }
+}
+```
+
+## Configuring default cache size
+
+You can configure globally the default cache size for both `ProducerTemplate` and `ConsumerTemplate` which will be created or dependency inject by `CamelContext`.
+
+This can be done on the `CamelContext` as a global option as shown in the following Java code:
+
+```java
+getCamelContext().getGlobalOptions().put(Exchange.MAXIMUM_CACHE_POOL_SIZE, "50");
+```
+
+Or in `application.properties`:
+
+```properties
+camel.main.producerTemplateCacheSize = 50
+```
+
+The default maximum cache size is 1000.
+
+## Reusing ProducerTemplate
+
+When you use a `ProducerTemplate` you should ideally reuse the template for the duration of the lifecycle of your Camel application.
+
+A common reason is creating a new `ProducerTemplate` inside a `Processor` or [bean method invocation](bean-integration.md).
+
+You are not meant to create a `ProducerTemplate` for each message invocation; you are meant to create a single instance on startup and keep it around.
+
+When you have finished using the `ProducerTemplate` you should call the `stop()` method to close down all the resources it has been using.
+
+If you fail to do so then the Camel application can create more and more resources (threads etc.)
+
+It’s better to either explicitly create one on startup and inject the `ProducerTemplate` into your `Processor` or bean, for the template to be reused.
+
+## See Also
+
+See [ConsumerTemplate](consumertemplate.md)

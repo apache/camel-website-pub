@@ -6,8 +6,29 @@
     <description>Recent content in Camel Karaf on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 26 Jun 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 17 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Camel-Karaf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Karaf 4.14.5 Released</title>
+      <link>https://camel.apache.org/blog/2026/03/camel-karaf-4.14.5/</link>
+      <pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/camel-karaf-4.14.5/</guid>
+      <description>Camel Karaf 4.14.5 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.8.9 Released</title>
+      <link>https://camel.apache.org/blog/2026/02/camel-karaf-release-4.8.9/</link>
+      <pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel-karaf-release-4.8.9/</guid>
+      <description>Camel Karaf 4.8.9 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.10.7 Released</title>
+      <link>https://camel.apache.org/blog/2025/10/camel-karaf-release-4.10.7/</link>
+      <pubDate>Sun, 26 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/camel-karaf-release-4.10.7/</guid>
+      <description>Camel Karaf 4.10.7 release</description>
+    </item>
     <item>
       <title>Camel Karaf 4.10.5 Released</title>
       <link>https://camel.apache.org/blog/2025/06/camel-karaf-release-4.10.5/</link>

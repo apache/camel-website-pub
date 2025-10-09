@@ -1,0 +1,23 @@
+# camel top group
+
+Top performing route groups
+
+## Usage
+
+```bash
+camel top group [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--filter` | Filter groups by name |  | String |
+| `--filter-mean` | Filter groups that must be slower than the given time (ms) |  | long |
+| `--json` | Output in JSON Format |  | boolean |
+| `--limit` | Filter groups by limiting to the given number of rows |  | int |
+| `--running` | Only include running groups |  | boolean |
+| `--sort` | Sort by pid, name, age or group | pid | String |
+| `--watch` | Execute periodically and showing output fullscreen |  | boolean |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

@@ -6,8 +6,78 @@
     <description>Recent content in Camel Quarkus on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Sep 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Camel-Quarkus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Quarkus 3.33.0 Released</title>
+      <link>https://camel.apache.org/blog/2026/03/camel-quarkus-3.33.0/</link>
+      <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/camel-quarkus-3.33.0/</guid>
+      <description>Camel Quarkus 3.33.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.27.3 Released</title>
+      <link>https://camel.apache.org/blog/2026/03/camel-quarkus-3.27.3/</link>
+      <pubDate>Fri, 06 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/03/camel-quarkus-3.27.3/</guid>
+      <description>Camel Quarkus 3.27.3 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.32.0 Released</title>
+      <link>https://camel.apache.org/blog/2026/02/camel-quarkus-3.32.0/</link>
+      <pubDate>Mon, 23 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel-quarkus-3.32.0/</guid>
+      <description>Camel Quarkus 3.32.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.31.0 Released</title>
+      <link>https://camel.apache.org/blog/2026/01/camel-quarkus-3.31.0/</link>
+      <pubDate>Wed, 28 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel-quarkus-3.31.0/</guid>
+      <description>Camel Quarkus 3.31.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.20.4 Released</title>
+      <link>https://camel.apache.org/blog/2026/01/camel-quarkus-3.20.4/</link>
+      <pubDate>Mon, 19 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel-quarkus-3.20.4/</guid>
+      <description>Camel Quarkus 3.20.4 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.27.2 Released</title>
+      <link>https://camel.apache.org/blog/2026/01/camel-quarkus-3.27.2/</link>
+      <pubDate>Thu, 08 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel-quarkus-3.27.2/</guid>
+      <description>Camel Quarkus 3.27.2 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.30.0 Released</title>
+      <link>https://camel.apache.org/blog/2025/11/camel-quarkus-3.30.0/</link>
+      <pubDate>Wed, 26 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/camel-quarkus-3.30.0/</guid>
+      <description>Camel Quarkus 3.30.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.27.1 Released</title>
+      <link>https://camel.apache.org/blog/2025/11/camel-quarkus-3.27.1/</link>
+      <pubDate>Mon, 03 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/camel-quarkus-3.27.1/</guid>
+      <description>Camel Quarkus 3.27.1 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.29.0 Released</title>
+      <link>https://camel.apache.org/blog/2025/10/camel-quarkus-3.29.0/</link>
+      <pubDate>Wed, 29 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/camel-quarkus-3.29.0/</guid>
+      <description>Camel Quarkus 3.29.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.20.3 Released</title>
+      <link>https://camel.apache.org/blog/2025/10/camel-quarkus-3.20.3/</link>
+      <pubDate>Tue, 28 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/camel-quarkus-3.20.3/</guid>
+      <description>Camel Quarkus 3.20.3 release</description>
+    </item>
     <item>
       <title>Camel Quarkus 3.27.0 Released</title>
       <link>https://camel.apache.org/blog/2025/09/camel-quarkus-3.27.0/</link>

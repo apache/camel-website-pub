@@ -1,0 +1,80 @@
+# Init Containers Trait
+
+The Init Containers trait can be used to configure `init containers` or `sidecar containers`.
+
+This trait is available in the following profiles: **Kubernetes, Knative, OpenShift**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait init-containers.[key]=[value] --trait init-containers.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `init-containers.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `init-containers.init-tasks` | `[]string` | A list of init tasks to be executed with format `<name>;<container-image>;<container-command>`. |
+| `init-containers.sidecar-tasks` | `[]string` | A list of sidecar tasks to be executed with format `<name>;<container-image>;<container-command>`. |
+
+## An example init container
+
+Create an Integration which read some value initialized by an init container. The following route takes care to read a file which is expected to be initialized by another process.
+
+route.yaml
+
+```yaml
+- route:
+    from:
+      # Read a file that should have been initialized
+      # by the initContainer
+      uri: file:/tmp
+      parameters:
+        include: ^(init).*
+      steps:
+        - log:
+            message: "${body}"
+```
+
+The route is agnostic how this file is generated.
+
+When creating the Integration, then, it should include an init container taking care to initialize such file, for example:
+
+```console
+kamel run route.yaml -t mount.empty-dirs=common:/tmp -t init-containers.init-tasks="init;alpine;/bin/sh -c \"echo hello >> /tmp/init\""
+```
+
+As the file is shared between the containers you will need to provide a shared volume (an `EmtpyDir` in this case).
+
+## An example sidecar container
+
+Create an Integration which generate some values on a folder shared by the main Integration. This process is done by a `sidecar` container. The route takes care to read the files without knowing the process generating.
+
+route.yaml
+
+```yaml
+- route:
+    from:
+      # Read a file that should have been initialized
+      # by the initContainer
+      uri: file:/tmp
+      parameters:
+        include: ^(sidecar).*
+      steps:
+        - log:
+            message: "${body}"
+```
+
+The route is agnostic how this file is generated.
+
+When creating the Integration, then, it should include the sidecar container:
+
+```console
+kamel run route.yaml -t mount.empty-dirs=common:/tmp -t init-containers.sidecar-tasks="sidecar;alpine;/bin/sh -c \"for i in $(seq 1 10); do echo helloSidecar$i > /tmp/sidecar_$i.txt; sleep 1; done\""
+```
+
+As the file is shared between the containers you will need to provide a shared volume (an `EmtpyDir` in this case). Mind that the sidecar container can be any other process embedded into a docker container: in this simple case we’re creating a simple script to generate some content.

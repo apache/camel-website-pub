@@ -1,0 +1,16 @@
+# Microprofile Config
+
+**Since Camel 3.0**
+
+The microprofile-config component is used for bridging the Eclipse MicroProfile Config with Camels properties component. This allows to use configuration management from Eclipse MicroProfile with Camel.
+
+To enable this just add this component to the classpath and Camel should auto-detect this when starting up.
+
+## Register manually
+
+You can also register the microprofile-config component manually with Apache Camel properties component as shown below:
+
+```java
+    PropertiesComponent pc = (PropertiesComponent) camelContext.getPropertiesComponent();
+    pc.addPropertiesSource(new CamelMicroProfilePropertiesSource());
+```

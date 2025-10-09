@@ -1,0 +1,193 @@
+# Language
+
+**Since Camel 2.5**
+
+**Only producer is supported**
+
+The Language component allows you to send Exchange to an endpoint which executes a script by any of the supported Languages in Camel.  
+By having a component to execute language scripts, it allows more dynamic routing capabilities. For example by using the Routing Slip or [Dynamic Router](eips/dynamicRouter-eip.md) EIPs you can send messages to `language` endpoints where the script is dynamic defined as well.
+
+This component is provided out of the box in `camel-core` and hence no additional JARs is needed. You only have to include additional Camel components if the language of choice mandates it, such as using [Groovy](languages/groovy-language.md) or [JavaScript](languages/groovy-language.md) languages.
+
+## URI format
+
+language://languageName\[:script\]\[?options\]
+
+You can refer to an external resource for the script using same notation as supported by the other [Language](#)s in Camel
+
+language://languageName:resource:scheme:location\]\[?options\]
+
+## Configuring Options
+
+Camel components are configured on two separate levels:
+
+-   component level
+    
+-   endpoint level
+    
+
+### Configuring Component Options
+
+The component level is the highest level which holds general and common configurations that are inherited by the endpoints. For example a component may have security settings, credentials for authentication, urls for network connection and so forth.
+
+Some components only have a few options, and others may have many. Because components typically have pre configured defaults that are commonly used, then you may often only need to configure a few options on a component; or none at all.
+
+Configuring components can be done with the [Component DSL](../../manual/component-dsl.md), in a configuration file (application.properties|yaml), or directly with Java code.
+
+### Configuring Endpoint Options
+
+Where you find yourself configuring the most is on endpoints, as endpoints often have many options, which allows you to configure what you need the endpoint to do. The options are also categorized into whether the endpoint is used as consumer (from) or as a producer (to), or used for both.
+
+Configuring endpoints is most often done directly in the endpoint URI as path and query parameters. You can also use the [Endpoint DSL](../../manual/Endpoint-dsl.md) and [DataFormat DSL](../../manual/dataformat-dsl.md) as a _type safe_ way of configuring endpoints and data formats in Java.
+
+A good practice when configuring options is to use [Property Placeholders](../../manual/using-propertyplaceholder.md), which allows to not hardcode urls, port numbers, sensitive information, and other settings. In other words placeholders allows to externalize the configuration from your code, and gives more flexibility and reuse.
+
+The following two sections lists all the options, firstly for the component followed by the endpoint.
+
+## Component Options
+
+The Language component supports 2 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+
+## Endpoint Options
+
+The Language endpoint is configured using URI syntax:
+
+language:languageName:resourceUri
+
+with the following path and query parameters:
+
+### Path Parameters (2 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **languageName** (producer) | 
+**Required** Sets the name of the language to use.
+
+Enum values:
+
+-   bean
+    
+-   constant
+    
+-   csimple
+    
+-   datasonnet
+    
+-   exchangeProperty
+    
+-   file
+    
+-   groovy
+    
+-   header
+    
+-   hl7terser
+    
+-   joor
+    
+-   jq
+    
+-   jsonpath
+    
+-   mvel
+    
+-   ognl
+    
+-   ref
+    
+-   simple
+    
+-   spel
+    
+-   sql
+    
+-   tokenize
+    
+-   xpath
+    
+-   xquery
+    
+-   xtokenize
+    
+
+
+
+
+
+ |  | String |
+| **resourceUri** (producer) | Path to the resource, or a reference to lookup a bean in the Registry to use as the resource. |  | String |
+
+### Query Parameters (8 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **allowContextMapAll** (producer) | Sets whether the context map should allow access to all details. By default only the message body and headers can be accessed. This option can be enabled for full access to the current Exchange and CamelContext. Doing so impose a potential security risk as this opens access to the full power of CamelContext API. | false | boolean |
+| **binary** (producer) | Whether the script is binary content or text content. By default the script is read as text content (eg java.lang.String). | false | boolean |
+| **cacheScript** (producer) | Whether to cache the compiled script and reuse Notice reusing the script can cause side effects from processing one Camel org.apache.camel.Exchange to the next org.apache.camel.Exchange. | false | boolean |
+| **contentCache** (producer) | Sets whether to use resource content cache or not. | true | boolean |
+| **resultType** (producer) | Sets the class of the result type (type from output). |  | String |
+| **script** (producer) | Sets the script to execute. |  | String |
+| **transform** (producer) | Whether or not the result of the script should be used as message body. This options is default true. | true | boolean |
+| **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+
+## Message Headers
+
+The Language component supports 1 message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelLanguageScript** (producer) Constant: [`LANGUAGE_SCRIPT`](https://javadoc.io/doc/org.apache.camel/camel-language/latest/org/apache/camel/component/language/LanguageConstants.html#LANGUAGE_SCRIPT) | The script to execute provided in the header. Takes precedence over script configured on the endpoint. |  | String or Expression |
+
+## Examples
+
+For example, you can use the [Simple](languages/simple-language.md) language to Message Translator a message:
+
+In case you want to convert the message body type you can do this as well:
+
+You can also use the [Groovy](languages/groovy-language.md) language, such as this example where the input message will by multiplied with 2:
+
+You can also provide the script as a header as shown below. Here we use [XPath](languages/xpath-language.md) language to extract the text from the `<foo>` tag.
+
+```java
+Object out = producer.requestBodyAndHeader("language:xpath", "<foo>Hello World</foo>", Exchange.LANGUAGE_SCRIPT, "/foo/text()");
+assertEquals("Hello World", out);
+```
+
+## Loading scripts from resources
+
+You can specify a resource uri for a script to load in either the endpoint uri, or in the `Exchange.LANGUAGE_SCRIPT` header. The uri must start with one of the following schemes: file:, classpath:, or http:
+
+By default, the script is loaded once and cached. However, you can disable the `contentCache` option and have the script loaded on each evaluation. For example if the file myscript.txt is changed on disk, then the updated script is used:
+
+You can refer to the resource similar to the other [Language](#)s in Camel by prefixing with `"resource:"` as shown below:
+
+## Spring Boot Auto-Configuration
+
+When using language with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+
+```xml
+<dependency>
+  <groupId>org.apache.camel.springboot</groupId>
+  <artifactId>camel-language-starter</artifactId>
+  <version>x.x.x</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+The component supports 3 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **camel.component.language.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| **camel.component.language.enabled** | Whether to enable auto configuration of the language component. This is enabled by default. |  | Boolean |
+| **camel.component.language.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |

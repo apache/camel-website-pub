@@ -1,0 +1,342 @@
+# Stream caching
+
+While stream types (like `StreamSource`, `InputStream` and `Reader`) are commonly used in messaging for performance reasons, they also have an important drawback: they can only be read once. In order to be able to work with message content multiple times, the stream needs to be cached.
+
+Streams are cached in memory. However, for large stream messages, you can set `spoolEnabled=true` and then large message (over 128 KB) will be cached in a temporary file instead. Camel itself will handle deleting the temporary file once the cached stream is no longer necessary.
+
+## Why is my message empty?
+
+In Camel the message body can be of any types. Some types are safely readable multiple times, and therefore do not _suffer_ from becoming _empty_.
+
+So when you message body suddenly is empty, then that is often related to using a message type that is no re-readable; in other words, the message body can only be read once. On subsequent reads the body is now empty. This happens with types that are streaming based, such as `java.util.InputStream`, etc.
+
+A number of Camel components supports and use streaming types out of the box. For example the HTTP related components, CXF, etc.
+
+Camel comes with Stream Caching that caches the stream, so it can be re-readable.
+
+> **Important**
+> **StreamCache - Affecting the message payload**
+>
+> The `StreamCache` will affect your payload object as it will replace the `Stream` payload with a `org.apache.camel.StreamCache` object. This `StreamCache` is capable of being re-readable and thus possible to better be routed within Camel using redelivery or [Content Based Router](../components/4.18.x/eips/choice-eip.md) or the likes.
+
+In order to determine if a message payload requires caching, then Camel uses the [Type Converter](type-converter.md) functionality, to determine if the message payload type can be converted into an `org.apache.camel.StreamCache` instance.
+
+> **Important**
+> All the classes from the Camel release that implements `org.apache.camel.StreamCache` is NOT intended for end users to create as instances, but they are part of Camels stream-caching functionality.
+
+## Configuring Stream Caching
+
+Stream caching is configured using `org.apache.camel.spi.StreamCachingStrategy`.
+
+The strategy has the following options:
+
+  
+| Option | Default | Description |
+| --- | --- | --- |
+| `allowClasses` |  | To filter stream caching of a given set of allowed/denied classes. By default, all classes that are `java.io.InputStream` is allowed. Multiple class names can be separated by comma. |
+| `anySpoolRules` | false | Whether any or all `SpoolRule`s must return `true` to determine if the stream should be spooled or not. This can be used as applying AND/OR binary logic to all the rules. By default it’s AND based. |
+| `bufferSize` | 4096 | Sets the buffer size to use when allocating in-memory buffers used for in-memory stream caches. |
+| `denyClasses` |  | To filter stream caching of a given set of allowed/denied classes. By default, all classes that are `java.io.InputStream` is allowed. Multiple class names can be separated by comma. |
+| `enabled` | true | Whether stream caching is enabled |
+| `removeSpoolDirectoryWhenStopping` | true | Whether to remove the spool directory when stopping [CamelContext](camelcontext.md). |
+| `spoolCipher` | null | If set, the temporary files are encrypted using the specified cipher transformation (i.e., a valid stream or 8-bit cipher name such as "RC4", "AES/CTR/NoPadding". An empty name "" is treated as null). |
+| `spoolDirectory` | ${java.io.tmpdir}/camel/camel-tmp-#uuid# | Base directory where temporary files for spooled streams should be stored. This option supports naming patterns as documented below. |
+| `spoolEnabled` | false | Whether spool to disk is enabled |
+| `spoolThreshold` | 128 KB | Size in bytes when the stream should be spooled to disk instead of keeping in memory. Use a value of 0 or negative to disable it all together so streams is always kept in memory regardless of their size. |
+| `spoolUsedHeapMemoryLimit` | Max | If `spoolUsedHeapMemoryThreshold` is in use, then whether the used heap memory upper limit is either Max or Committed. |
+| `spoolUsedHeapMemoryThreshold` | 0 | A percentage (1 to 99) of current used heap memory to use as threshold for spooling streams to disk. The upper bounds is based on heap committed (guaranteed memory the JVM can claim). This can be used to spool to disk when running low on memory. |
+| `statisticsEnabled` | false | Whether utilization statistics is enabled. By enabling this you can see these statics for example with JMX. |
+
+### SpoolDirectory naming pattern
+
+The following patterns is supported:
+
+-   `#uuid#` = a random UUID
+    
+-   `#camelId#` = the CamelContext id (e.g. the name)
+    
+-   `#name#` = same as `#camelId#`
+    
+-   `#counter#` = an incrementing counter
+    
+-   `#bundleId#` = the OSGi bundle id (only for OSGi environments)
+    
+-   `#symbolicName#` = the OSGi symbolic name (only for OSGi environments)
+    
+-   `#version#` = the OSGi bundle version (only for OSGi environments)
+    
+-   `${env:key}` = the environment variable with the key
+    
+-   `${key}` = the JVM system property with the key
+    
+
+A couple of examples:
+
+To store in the java temp directory with a sub directory using the `CamelContext` name:
+
+```java
+context.getStreamCachingStrategy().setSpoolDirectory"${java.io.tmpdir}#name#/");
+```
+
+To store in `KARAF_HOME/tmp/bundleId` directory:
+
+```java
+context.getStreamCachingStrategy().setSpoolDirectory"${env:KARAF_HOME}/tmp/bundle#bundleId#");
+```
+
+## Configuring StreamCachingStrategy in Java
+
+You can configure the `StreamCachingStrategy` in Java as shown below:
+
+```java
+context.getStreamCachingStrategy().setSpoolEnabled(true);
+context.getStreamCachingStrategy().setSpoolDirectory("/tmp/cachedir");
+context.getStreamCachingStrategy().setSpoolThreshold(64 * 1024);
+context.getStreamCachingStrategy().setBufferSize(16 * 1024);
+// to enable encryption using RC4
+// context.getStreamCachingStrategy().setSpoolCipher("RC4");
+```
+
+And remember to enable Stream caching on the `CamelContext`:
+
+```java
+context.setStreamCaching(true);
+```
+
+or on routes:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file:inbox")
+  .streamCaching()
+  .to("bean:foo");
+```
+
+```xml
+<route streamCache="true">
+    <from uri="file:inbox"/>
+    <to uri="bean:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    streamCache: "true"
+    from:
+      uri: file:inbox
+      steps:
+        - to:
+            uri: bean:foo
+```
+
+## Configuring Stream Caching using Application Properties
+
+When using Spring Boot, Quarkus or Camel Standalone It’s recommended to configure stream caching in the `application.properties` configuration file:
+
+Application Properties
+
+```properties
+camel.main.streamCachingSpoolEnabled = true
+camel.main.streamCachingSpoolDirectory = /tmp/cachedir
+camel.main.streamCachingSpoolThreshold = 65536
+camel.main.streamCachingBufferSize = 16384;
+```
+
+> **Tip**
+> You can run Camel JBang: `camel doc main --filter=stream` from CLI to see all the options.
+
+## Configuring StreamCachingStrategy in Spring XML
+
+In [Spring XML](spring-xml-extensions.md) you can enable stream caching on the `<camelContext>` and then do the configuration in the `streamCaching` element:
+
+```xml
+<camelContext streamCache="true">
+
+  <streamCaching id="myCacheConfig" bufferSize="16384" spoolEnabled="true" spoolDirectory="/tmp/cachedir" spoolThreshold="65536"/>
+
+  <route>
+    <from uri="direct:c"/>
+    <to uri="mock:c"/>
+  </route>
+
+</camelContext>
+```
+
+## Using spoolUsedHeapMemoryThreshold
+
+By default, stream caching will spool only big payloads (128 KB or bigger) to disk. However you can also set the `spoolUsedHeapMemoryThreshold` option which is a percentage of used heap memory. This can be used to also spool to disk when running low on memory.
+
+For example with:
+
+-   Spring XML
+    
+-   Application Properties
+    
+
+```xml
+<streamCaching id="myCacheConfig" spoolEnabled="true" spoolDirectory="/tmp/cachedir" spoolUsedHeapMemoryThreshold="70"/>
+```
+
+```properties
+camel.main.streamCachingSpoolEnabled = true
+camel.main.streamCachingSpoolDirectory = /tmp/cachedir
+camel.main.streamCachingSpoolUsedHeapMemoryThreshold = 70
+```
+
+Then notice that as `spoolThreshold` is default enabled with 128 KB, then we have both thresholds in use (`spoolThreshold` and `spoolUsedHeapMemoryThreshold`). And in this example then we only spool to disk if payload is > 128 KB and that used heap memory is > 70%. The reason is that we have the option `anySpoolRules` as default `false`. That means both rules must be `true` (e.g. AND).
+
+If we want to spool to disk if either of the rules (e.g. OR), then we can do:
+
+-   Spring XML
+    
+-   Application Properties
+    
+
+```xml
+<streamCaching id="myCacheConfig" spoolEnabled="true" spoolDirectory="/tmp/cachedir" spoolUsedHeapMemoryThreshold="70" anySpoolRules="true"/>
+```
+
+```properties
+camel.main.streamCachingSpoolEnabled = true
+camel.main.streamCachingSpoolDirectory = /tmp/cachedir
+camel.main.streamCachingSpoolUsedHeapMemoryThreshold = 70
+camel.main.streamCachingAnySpoolRules = true
+```
+
+If we only want to spool to disk if we run low on memory then we can set:
+
+-   Spring XML
+    
+-   Application Properties
+    
+
+```xml
+<streamCaching id="myCacheConfig" spoolEnabled="true" spoolDirectory="/tmp/cachedir" spoolThreshold="-1" spoolUsedHeapMemoryThreshold="70"/>
+```
+
+```properties
+camel.main.streamCachingSpoolEnabled = true
+camel.main.streamCachingSpoolDirectory = /tmp/cachedir
+camel.main.streamCachingSpoolThreshold = -1
+camel.main.streamCachingSpoolUsedHeapMemoryThreshold = 70
+```
+
+then we do not use the `spoolThreshold` rule, and only the heap memory based is in use.
+
+By default, the upper limit of the used heap memory is based on the maximum heap size. Though you can also configure to use the committed heap size as the upper limit, this is done using the `spoolUsedHeapMemoryLimit` option as shown below:
+
+-   Spring XML
+    
+-   Application Properties
+    
+
+```xml
+<streamCaching id="myCacheConfig" spoolEnabled="true" spoolDirectory="/tmp/cachedir" spoolUsedHeapMemoryThreshold="70" spoolUsedHeapMemoryLimit="Committed"/>
+```
+
+```properties
+camel.main.streamCachingSpoolEnabled = true
+camel.main.streamCachingSpoolDirectory = /tmp/cachedir
+camel.main.streamCachingSpoolUsedHeapMemoryThreshold = 70
+camel.main.streamCachingSpoolUsedHeapMemoryLimit = Committed
+```
+
+## Using custom SpoolRule implementations (advanced)
+
+You can implement your custom rules to determine if the stream should be spooled to disk. This can be done by implementing the interface `org.apache.camel.spi.StreamCachingStrategy.SpoolRule` which has a single method:
+
+```java
+boolean shouldSpoolCache(long length);
+```
+
+The `length` is the length of the stream. To use the rule then add it to the `StreamCachingStrategy` as shown below:
+
+-   Java
+    
+-   Spring XML
+    
+-   Application Properties
+    
+
+```java
+SpoolRule mySpoolRule = ...
+context.getStreamCachingStrategy().addSpoolRule(mySpoolRule);
+```
+
+And from Spring XML you need to define a `<bean>` with your custom rule:
+
+```xml
+<bean id="mySpoolRule" class="com.foo.MySpoolRule"/>
+
+<streamCaching id="myCacheConfig" spoolEnabled="true" spoolDirectory="/tmp/cachedir" spoolRules="mySpoolRule"/>
+```
+
+Using the spoolRules attribute on `<streamCaching>`. if you have more rules, then separate them by comma.
+
+```xml
+<streamCaching id="myCacheConfig" spoolEnabled="true" spoolDirectory="/tmp/cachedir" spoolRules="mySpoolRule,myOtherSpoolRule"/>
+```
+
+When using Spring Boot or Camel Standalone you can also configure in `application.properties`:
+
+```properties
+# refers to the bean id of the rule object
+camel.main.streamCachingSpoolRules=mySpoolRule
+# you can also specify the class via
+camel.main.streamCachingSpoolRules=#class:com.foo.MySpoolRule
+```
+
+## Using StreamCachingProcessor
+
+Since **Camel 4.11** this processor can be used to convert the current message body to a `StreamCache`. This allows the body to be re-read multiple times and can be placed at any point in a Camel route.
+
+```java
+from("direct:start")
+    .process(new StreamCachingProcessor())
+    .to("log:cached");
+```
+
+## How do I enable streams when debug logging messages in Camel
+
+When you run Camel with `DEBUG` level as logging, it will log the messages and its content from time to time. As some messages can contain streams, which are prone to be not readable multiple times, and therefore Camel will by default **not** log these types.
+
+These are typical instances which are not logged by default:
+
+-   `java.xml.transform.StreamSource`
+    
+-   `java.io.InputStream`
+    
+-   `java.io.OutputStream`
+    
+-   `java.io.Reader`
+    
+-   `java.io.Writer`
+    
+
+You will see this in the log as:
+
+```log
+DEBUG ProducerCache                  - >>>> Endpoint[direct:start] Exchange[Message: [Body is instance of java.xml.transform.StreamSource]]
+```
+
+Here we have a message which is XML stream based. You can customize whether Camel should log the payload anyway.
+
+You can enable this as a global option on `CamelContext` from Java:
+
+```java
+context.getGlobalOptions().put(Exchange.LOG_DEBUG_BODY_STREAMS, "true");
+```
+
+In `application.properties` this can also be done as shown:
+
+```properties
+camel.main.globalOptions[CamelLogDebugBodyStreams] = true
+```
+
+Notice default is `false`.

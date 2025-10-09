@@ -1,0 +1,116 @@
+# POJO Consuming
+
+To consume a message you use the `@Consume` annotation to mark a particular method of a bean as being a consumer method. The value of the annotation defines the Camel [Endpoint](endpoint.md) to consume from.
+
+> **Important**
+> The `@Consume` POJO annotations are not part of any Camel routes, and you cannot use [errorHandler](error-handler.md) or [onException](exception-clause.md) with this.
+
+For example lets invoke the `onCheese()` method with the String body of the inbound JMS message from ActiveMQ on the cheese queue; this will use the [Type Converter](type-converter.md) to convert the JMS payload to `String` as declared in the method signature.
+
+```java
+public class Foo {
+
+  @Consume("activemq:cheese")
+  public void onCheese(String name) {
+    // do something here
+  }
+}
+```
+
+The [Bean Binding](bean-binding.md) is then used to convert the inbound [Message](../components/4.18.x/eips/message.md) to the parameter list used to invoke the method.
+
+This basically creates a route that looks kinda like this (based on the example above):
+
+```java
+from("activemq:cheese").bean(Foo.class, "onCheese");
+```
+
+## Using a property to define the endpoint
+
+The following annotations `@Consume`, `@Produce`, `@EndpointInject`, provides a `property` attribute you can use to define the endpoint uri as a property on the bean. Then Camel will use the getter method to access the property.
+
+For example:
+
+```java
+public class MyService {
+
+  private String serviceEndpoint;
+
+  public void setServiceEndpoint(String uri) {
+     this.serviceEndpoint = uri;
+  }
+
+  public String getServiceEndpoint() { (2)
+     return serviceEndpoint;
+  }
+
+  @Consume(property = "serviceEndpoint") (1)
+  public void onService(String input) {
+     // do something
+  }
+}
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>the getter for the property</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>refers to the name of the property</td></tr></tbody></table>
+
+The bean `MyService` has a property named `serviceEndpoint` which has getter/setter for the property. Now we want to use the bean for [POJO Consuming](#), and hence why we use `@Consume` in the `onService` method. Notice how we use the `property = "serviceEndpoint` to configure the property that has the endpoint url.
+
+-   Spring XML
+    
+-   YAML
+    
+
+If you define the bean in Spring XML, then you can configure the property as follows:
+
+```xml
+<bean id="myService" class="com.foo.MyService">
+  <property name="serviceEndpoint" value="activemq:queue:foo"/>
+</bean>
+```
+
+```yaml
+- beans:
+    - name: foo
+      type: com.foo.MyService
+      properties:
+        serviceEndpoint: activemq:queue:foo
+```
+
+This allows you to configure the bean without with any dependency injection style.
+
+### Advanced use with property naming convention
+
+Camel offers a naming convention which allows you to not have to explicit name the property. Camel uses this algorithm to find the getter method. The method must be a `getXXX` method.
+
+1.  Use the property name if explicit given
+    
+2.  If no property name was configured, then use the method name
+    
+3.  Try to get the property with name**Endpoint** (e.g. with Endpoint as postfix)
+    
+4.  Try to get the property with the name as is (e.g. no postfix or postfix)
+    
+5.  If the property name starts with **on** then omit that, and try step 3 and 4 again.
+    
+
+So in the example above, we could have defined the `@Consume` annotation as:
+
+```java
+  @Consume(property = "service")
+  public void onService(String input) {
+```
+
+Now the property is named "service" which then would match step 3 from the algorithm, and have Camel invoke the `getServiceEndpoint` method.
+
+We could also have omitted the property attribute, to make it implicit:
+
+```java
+  @Consume
+  public void onService(String input) {
+```
+
+Now Camel matches step 5, and loses the prefix **on** in the name, and looks for 'service' as the property. And because there is a `getServiceEndpoint` method, Camel will use this method.
+
+## See Also
+
+-   [POJO producing](pojo-producing.md)

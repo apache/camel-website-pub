@@ -1,0 +1,54 @@
+# UUID Generator
+
+Camel supports third-party UUID generator(s).
+
+A useful scenario is to use a simple counter for testing purpose. With this, it is easier to correlate the exchanges in the log/debugger.
+
+Camel uses UUIDs in the exchange and message ids, and other unique ids it uses.
+
+You only have to implement `org.apache.camel.spi.UuidGenerator` and tell Camel, that it should use your custom implementation:
+
+## Standard UUID Generators
+
+Camel comes with the following implementations out of the box:
+
+-   `org.apache.camel.support.ClassicUuidGenerator`: this is the classic Camel 2.x generator
+    
+-   `org.apache.camel.support.DefaultUuidGenerator`: default generator (32 chars) optimized for Camel usage
+    
+-   `org.apache.camel.support.ShortUuidGenerator`: Is 50% the size of the default (16 chars) optimized for Camel usage
+    
+-   `org.apache.camel.support.SimpleUuidGenerator`: This implementation uses internally a `java.util.concurrent.atomic.AtomicLong` and increases the ID for every call by one. Starting with 1 as the first id.
+    
+-   `org.apache.camel.support.RandomUuidGenerator`: type 4 (pseudo randomly generated) UUID. The UUID is generated using a cryptographically strong pseudo random number generator.
+    
+
+You can configure which standard generator to use in `application.properties`:
+
+```properties
+camel.main.uuidGenerator = simple
+```
+
+### Configuring custom UuidGenerator
+
+You can implement a custom `UuidGenerator` which you can set up in Camel to use:
+
+-   Java
+    
+-   Spring XML
+    
+
+```java
+camelContext.setUuidGenerator(new MyCustomUuidGenerator());
+```
+
+```xml
+<bean id="simpleUuid" class="org.apache.camel.support.SimpleUuidGenerator" />
+
+<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+  <route>
+    <from uri="direct:start" />
+    <to uri="mock:result" />
+  </route>
+</camelContext>
+```

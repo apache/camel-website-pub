@@ -1,0 +1,2834 @@
+# PQC Algorithms
+
+**Since Camel 4.12**
+
+**Only producer is supported**
+
+The PQC component supports signing and verifying payload using Post Quantum Cryptography algorithms, as well as key lifecycle management for Post-Quantum cryptographic keys.
+
+## Features
+
+-   **Digital Signatures** - Sign and verify data using NIST-standardized and experimental PQC signature algorithms
+    
+-   **Key Encapsulation** - Generate and extract shared secrets using Key Encapsulation Mechanisms (KEM)
+    
+-   **Key Lifecycle Management** - Generate, rotate, expire, revoke, and manage PQC keys
+    
+-   **Multiple Implementations** - File-based and in-memory key storage options
+    
+-   **Key Export/Import** - Convert keys between PEM, DER, PKCS8, and X.509 formats
+    
+
+Prerequisites
+
+## URI Format
+
+pqc://label\[?options\]
+
+You can append query options to the URI in the following format:
+
+`?options=value&option2=value&…​`
+
+## Configuring Options
+
+Camel components are configured on two separate levels:
+
+-   component level
+    
+-   endpoint level
+    
+
+### Configuring Component Options
+
+At the component level, you set general and shared configurations that are, then, inherited by the endpoints. It is the highest configuration level.
+
+For example, a component may have security settings, credentials for authentication, urls for network connection and so forth.
+
+Some components only have a few options, and others may have many. Because components typically have pre-configured defaults that are commonly used, then you may often only need to configure a few options on a component; or none at all.
+
+You can configure components using:
+
+-   the [Component DSL](../../manual/component-dsl.md).
+    
+-   in a configuration file (`application.properties`, `*.yaml` files, etc).
+    
+-   directly in the Java code.
+    
+
+### Configuring Endpoint Options
+
+You usually spend more time setting up endpoints because they have many options. These options help you customize what you want the endpoint to do. The options are also categorized into whether the endpoint is used as a consumer (_from_), as a producer (_to_), or both.
+
+Configuring endpoints is most often done directly in the endpoint URI as _path_ and _query_ parameters. You can also use the [Endpoint DSL](../../manual/Endpoint-dsl.md) and [DataFormat DSL](../../manual/dataformat-dsl.md) as a _type safe_ way of configuring endpoints and data formats in Java.
+
+A good practice when configuring options is to use [Property Placeholders](../../manual/using-propertyplaceholder.md).
+
+Property placeholders provide a few benefits:
+
+-   They help prevent using hardcoded urls, port numbers, sensitive information, and other settings.
+    
+-   They allow externalizing the configuration from the code.
+    
+-   They help the code to become more flexible and reusable.
+    
+
+The following two sections list all the options, firstly for the component followed by the endpoint.
+
+## Component Options
+
+The PQC Algorithms component supports 17 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **configuration** (producer) | Component configuration. |  | PQCConfiguration |
+| **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **operation** (producer) | 
+**Required** The operation to perform.
+
+Enum values:
+
+-   sign
+    
+-   verify
+    
+-   generateSecretKeyEncapsulation
+    
+-   extractSecretKeyEncapsulation
+    
+-   extractSecretKeyFromEncapsulation
+    
+-   getRemainingSignatures
+    
+-   getKeyState
+    
+-   deleteKeyState
+    
+-   generateKeyPair
+    
+-   exportKey
+    
+-   importKey
+    
+-   rotateKey
+    
+-   getKeyMetadata
+    
+-   listKeys
+    
+-   expireKey
+    
+-   revokeKey
+    
+
+
+
+
+
+ |  | PQCOperations |
+| **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **keyEncapsulationAlgorithm** (advanced) | 
+
+In case there is no keyGenerator, we specify an algorithm to build the KeyGenerator.
+
+Enum values:
+
+-   MLKEM
+    
+-   BIKE
+    
+-   HQC
+    
+-   CMCE
+    
+-   SABER
+    
+-   FRODO
+    
+-   NTRU
+    
+-   NTRULPRime
+    
+-   SNTRUPrime
+    
+-   KYBER
+    
+
+
+
+
+
+ |  | String |
+| **keyGenerator** (advanced) | **Autowired** The Key Generator to be used in encapsulation and extraction. |  | KeyGenerator |
+| **keyPair** (advanced) | **Autowired** The KeyPair to be used. |  | KeyPair |
+| **keyPairAlias** (advanced) | A KeyPair alias to use in combination with KeyStore parameter. |  | String |
+| **keyStore** (advanced) | **Autowired** A KeyStore where we could get Cryptographic material. |  | KeyStore |
+| **keyStorePassword** (advanced) | The KeyStore password to use in combination with KeyStore Parameter. |  | String |
+| **signatureAlgorithm** (advanced) | 
+
+In case there is no signer, we specify an algorithm to build the KeyPair or the Signer.
+
+Enum values:
+
+-   MLDSA
+    
+-   SLHDSA
+    
+-   LMS
+    
+-   HSS
+    
+-   XMSS
+    
+-   XMSSMT
+    
+-   DILITHIUM
+    
+-   FALCON
+    
+-   PICNIC
+    
+-   SNOVA
+    
+-   MAYO
+    
+-   SPHINCSPLUS
+    
+
+
+
+
+
+ |  | String |
+| **signer** (advanced) | **Autowired** The Signer to be used. |  | Signature |
+| **storeExtractedSecretKeyAsHeader** (advanced) | In the context of extractSecretKeyFromEncapsulation operation, this option define if we want to have the key set as header. | false | boolean |
+| **symmetricKeyAlgorithm** (advanced) | 
+
+In case we are using KEM operations, we need a Symmetric algorithm to be defined for the flow to work.
+
+Enum values:
+
+-   AES
+    
+-   ARIA
+    
+-   RC2
+    
+-   RC5
+    
+-   CAMELLIA
+    
+-   CAST5
+    
+-   CAST6
+    
+-   CHACHA7539
+    
+-   DSTU7624
+    
+-   GOST28147
+    
+-   GOST3412\_2015
+    
+-   GRAIN128
+    
+-   HC128
+    
+-   HC256
+    
+-   SALSA20
+    
+-   SEED
+    
+-   SM4
+    
+-   DESEDE
+    
+
+
+
+
+
+ |  | String |
+| **symmetricKeyLength** (advanced) | The required length of the symmetric key used. | 128 | int |
+| **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
+| **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
+
+## Endpoint Options
+
+The PQC Algorithms endpoint is configured using URI syntax:
+
+pqc:label
+
+With the following _path_ and _query_ parameters:
+
+### Path Parameters (1 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **label** (producer) | **Required** Logical name. |  | String |
+
+### Query Parameters (13 parameters)
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **operation** (producer) | 
+**Required** The operation to perform.
+
+Enum values:
+
+-   sign
+    
+-   verify
+    
+-   generateSecretKeyEncapsulation
+    
+-   extractSecretKeyEncapsulation
+    
+-   extractSecretKeyFromEncapsulation
+    
+-   getRemainingSignatures
+    
+-   getKeyState
+    
+-   deleteKeyState
+    
+-   generateKeyPair
+    
+-   exportKey
+    
+-   importKey
+    
+-   rotateKey
+    
+-   getKeyMetadata
+    
+-   listKeys
+    
+-   expireKey
+    
+-   revokeKey
+    
+
+
+
+
+
+ |  | PQCOperations |
+| **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **keyEncapsulationAlgorithm** (advanced) | 
+
+In case there is no keyGenerator, we specify an algorithm to build the KeyGenerator.
+
+Enum values:
+
+-   MLKEM
+    
+-   BIKE
+    
+-   HQC
+    
+-   CMCE
+    
+-   SABER
+    
+-   FRODO
+    
+-   NTRU
+    
+-   NTRULPRime
+    
+-   SNTRUPrime
+    
+-   KYBER
+    
+
+
+
+
+
+ |  | String |
+| **keyGenerator** (advanced) | **Autowired** The Key Generator to be used in encapsulation and extraction. |  | KeyGenerator |
+| **keyPair** (advanced) | **Autowired** The KeyPair to be used. |  | KeyPair |
+| **keyPairAlias** (advanced) | A KeyPair alias to use in combination with KeyStore parameter. |  | String |
+| **keyStore** (advanced) | **Autowired** A KeyStore where we could get Cryptographic material. |  | KeyStore |
+| **keyStorePassword** (advanced) | The KeyStore password to use in combination with KeyStore Parameter. |  | String |
+| **signatureAlgorithm** (advanced) | 
+
+In case there is no signer, we specify an algorithm to build the KeyPair or the Signer.
+
+Enum values:
+
+-   MLDSA
+    
+-   SLHDSA
+    
+-   LMS
+    
+-   HSS
+    
+-   XMSS
+    
+-   XMSSMT
+    
+-   DILITHIUM
+    
+-   FALCON
+    
+-   PICNIC
+    
+-   SNOVA
+    
+-   MAYO
+    
+-   SPHINCSPLUS
+    
+
+
+
+
+
+ |  | String |
+| **signer** (advanced) | **Autowired** The Signer to be used. |  | Signature |
+| **storeExtractedSecretKeyAsHeader** (advanced) | In the context of extractSecretKeyFromEncapsulation operation, this option define if we want to have the key set as header. | false | boolean |
+| **symmetricKeyAlgorithm** (advanced) | 
+
+In case we are using KEM operations, we need a Symmetric algorithm to be defined for the flow to work.
+
+Enum values:
+
+-   AES
+    
+-   ARIA
+    
+-   RC2
+    
+-   RC5
+    
+-   CAMELLIA
+    
+-   CAST5
+    
+-   CAST6
+    
+-   CHACHA7539
+    
+-   DSTU7624
+    
+-   GOST28147
+    
+-   GOST3412\_2015
+    
+-   GRAIN128
+    
+-   HC128
+    
+-   HC256
+    
+-   SALSA20
+    
+-   SEED
+    
+-   SM4
+    
+-   DESEDE
+    
+
+
+
+
+
+ |  | String |
+| **symmetricKeyLength** (advanced) | The required length of the symmetric key used. | 128 | int |
+
+## Message Headers
+
+The PQC Algorithms component supports 15 message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelPQCOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#OPERATION) | The operation we want to perform. |  | String |
+| **CamelPQCSignature** (producer) Constant: [`SIGNATURE`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#SIGNATURE) | The signature of a body. |  | String |
+| **CamelPQCVerification** (producer) Constant: [`VERIFY`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#VERIFY) | The result of verification of a Body signature. |  | Boolean |
+| **CamelPQCSecretKey** (producer) Constant: [`SECRET_KEY`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#SECRET_KEY) | The extracted key in case of extractSecretKeyFromEncapsulation operation and storeExtractedSecretKeyAsHeader option enabled. |  | Boolean |
+| **CamelPQCRemainingSignatures** (producer) Constant: [`REMAINING_SIGNATURES`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#REMAINING_SIGNATURES) | The remaining signatures for a stateful key. |  | Long |
+| **CamelPQCKeyState** (producer) Constant: [`KEY_STATE`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#KEY_STATE) | The key state for a stateful key. |  | StatefulKeyState |
+| **CamelPQCKeyId** (producer) Constant: [`KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#KEY_ID) | The key ID for stateful key operations. |  | String |
+| **CamelPQCKeyPair** (producer) Constant: [`KEY_PAIR`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#KEY_PAIR) | The generated key pair. |  | KeyPair |
+| **CamelPQCKeyFormat** (producer) Constant: [`KEY_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#KEY_FORMAT) | The key format for import/export operations. |  | String |
+| **CamelPQCExportedKey** (producer) Constant: [`EXPORTED_KEY`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#EXPORTED_KEY) | The exported key data. |  | byte\[\] |
+| **CamelPQCKeyMetadata** (producer) Constant: [`KEY_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#KEY_METADATA) | The key metadata. |  | KeyMetadata |
+| **CamelPQCKeyList** (producer) Constant: [`KEY_LIST`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#KEY_LIST) | List of key metadata. |  | List |
+| **CamelPQCAlgorithm** (producer) Constant: [`ALGORITHM`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#ALGORITHM) | The algorithm for key generation. |  | String |
+| **CamelPQCIncludePrivate** (producer) Constant: [`INCLUDE_PRIVATE`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#INCLUDE_PRIVATE) | Include private key in export. |  | Boolean |
+| **CamelPQCRevocationReason** (producer) Constant: [`REVOCATION_REASON`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#REVOCATION_REASON) | Revocation reason. |  | String |
+
+## Supported Algorithms
+
+The component supports the following algorithms for signature and verification.
+
+Standardized and implemented
+
+-   ML-DSA
+    
+-   SLH-DSA
+    
+-   LMS
+    
+-   HSS (Hierarchical Signature System)
+    
+-   XMSS
+    
+-   XMSSMT (XMSS Multi-Tree)
+    
+
+Experimental and non-standardized
+
+-   Dilithium
+    
+-   Falcon
+    
+-   Picnic
+    
+-   SNOVA
+    
+-   MAYO
+    
+-   SPHINCS+
+    
+
+## Supported Operations
+
+The component supports the following operations:
+
+**Signature Operations:**
+
+-   sign - Sign data using a PQC signature algorithm
+    
+-   verify - Verify a signature
+    
+
+**Key Encapsulation Operations:**
+
+-   generateSecretKeyEncapsulation - Generate a secret key and encapsulate it
+    
+-   extractSecretKeyEncapsulation - Extract the encapsulation
+    
+-   extractSecretKeyFromEncapsulation - Extract the secret key from encapsulation
+    
+
+**Key Lifecycle Operations:**
+
+-   generateKeyPair - Generate a new PQC key pair
+    
+-   exportKey - Export a key to PEM, DER, PKCS8, or X.509 format
+    
+-   importKey - Import a key from bytes
+    
+-   rotateKey - Rotate a key and deprecate the old one
+    
+-   getKeyMetadata - Get metadata for a key
+    
+-   listKeys - List all keys with metadata
+    
+-   expireKey - Mark a key as expired
+    
+-   revokeKey - Revoke a compromised key
+    
+
+## Signature and Verification
+
+The component expects to find a KeyPair and a Signature Objects in to the Camel Registry.
+
+In case the KeyPair and the Signature Objects are not in the registry, it will provide two instances of the Objects with default implementation.
+
+This will be true for standardized algorithms and for experimental ones.
+
+## Examples
+
+-   ML-DSA
+    
+
+```java
+    from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
+      .to("mock:verify");
+```
+
+With the following beans registered in the Registry
+
+```java
+    @BindToRegistry("Keypair")
+    public KeyPair setKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+        KeyPairGenerator kpGen = KeyPairGenerator.getInstance("ML-DSA", "BC");
+        kpGen.initialize(MLDSAParameterSpec.ml_dsa_65);
+        KeyPair kp = kpGen.generateKeyPair();
+        return kp;
+    }
+
+    @BindToRegistry("Signer")
+    public Signature getSigner() throws NoSuchAlgorithmException {
+        Signature mlDsa = Signature.getInstance("ML-DSA");
+        return mlDsa;
+    }
+```
+
+This could be done even without the Registry beans, by specifying the `signatureAlgorithm` parameter in the following way
+
+```java
+  from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=MLDSA").to("mock:sign")
+    .to("pqc:verify?operation=verify&signatureAlgorithm=MLDSA")
+    .to("mock:verify");
+```
+
+With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultMLDSAMaterial`, which will create the Signature and KeyPair objects to be used.
+
+The Spec used for the KeyPair will be, in this case, `ML-DSA-65`.
+
+-   SLH-DSA
+    
+
+```java
+    from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
+      .to("mock:verify");
+```
+
+With the following beans registered in the Registry
+
+```java
+    @BindToRegistry("Keypair")
+    public KeyPair setKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+        KeyPairGenerator kpGen = KeyPairGenerator.getInstance("SLH-DSA", "BC");
+        kpGen.initialize(SLHDSAParameterSpec.slh_dsa_sha2_128s);
+        KeyPair kp = kpGen.generateKeyPair();
+        return kp;
+    }
+
+    @BindToRegistry("Signer")
+    public Signature getSigner() throws NoSuchAlgorithmException {
+        Signature slhDsa = Signature.getInstance("SLH-DSA");
+        return slhDsa;
+    }
+```
+
+This could be done even without the Registry beans, by specifying the `signatureAlgorithm` parameter in the following way
+
+```java
+  from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=SLHDSA").to("mock:sign")
+    .to("pqc:verify?operation=verify&signatureAlgorithm=SLHDSA")
+    .to("mock:verify");
+```
+
+With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultSLHDSAMaterial`, which will create the Signature and KeyPair objects to be used.
+
+The Spec used for the KeyPair will be, in this case, `SLH-DSA-SHA2-128s`.
+
+-   LMS
+    
+
+```java
+    from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
+      .to("mock:verify");
+```
+
+With the following beans registered in the Registry
+
+```java
+    @BindToRegistry("Keypair")
+    public KeyPair setKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+        KeyPairGenerator kpGen = KeyPairGenerator.getInstance("LMS", "BC");
+        kpGen.initialize(new LMSKeyGenParameterSpec(LMSigParameters.lms_sha256_n32_h5, LMOtsParameters.sha256_n32_w1));
+        KeyPair kp = kpGen.generateKeyPair();
+        return kp;
+    }
+
+    @BindToRegistry("Signer")
+    public Signature getSigner() throws NoSuchAlgorithmException {
+        Signature lms = Signature.getInstance("LMS");
+        return lms;
+    }
+```
+
+This could be done even without the Registry beans, by specifying the `signatureAlgorithm` parameter in the following way
+
+```java
+  from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=LMS").to("mock:sign")
+    .to("pqc:verify?operation=verify&signatureAlgorithm=LMS")
+    .to("mock:verify");
+```
+
+With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultLMSMaterial`, which will create the Signature and KeyPair objects to be used.
+
+The Parameters used will be `LMS-SHA256-N32-H5` for the signature and `SHA256-n32-w1` for the one-time signature.
+
+-   XMSS
+    
+
+```java
+    from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
+      .to("mock:verify");
+```
+
+With the following beans registered in the Registry
+
+```java
+    @BindToRegistry("Keypair")
+    public KeyPair setKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+        KeyPairGenerator kpGen = KeyPairGenerator.getInstance("XMSS", "BCPQC");
+        kpGen.initialize(new XMSSParameterSpec(10, XMSSParameterSpec.SHA256), new SecureRandom());
+        KeyPair kp = kpGen.generateKeyPair();
+        return kp;
+    }
+
+    @BindToRegistry("Signer")
+    public Signature getSigner() throws NoSuchAlgorithmException {
+        Signature xmss = Signature.getInstance("XMSS");
+        return xmss;
+    }
+```
+
+This could be done even without the Registry beans, by specifying the `signatureAlgorithm` parameter in the following way
+
+```java
+  from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=XMSS").to("mock:sign")
+    .to("pqc:verify?operation=verify&signatureAlgorithm=XMSS")
+    .to("mock:verify");
+```
+
+With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultXMSSMaterial`, which will create the Signature and KeyPair objects to be used.
+
+The Parameters used will be `10` as tree height and `SHA-256` for the tree digest.
+
+## Key Encapsulation and Extraction
+
+In Post Quantum Cryptography it has been introduced the concept of Key Encapsulation Algorithm.
+
+In this context there are three entities to consider:
+
+-   A key generation algorithm which generates a public key and a private key (a keypair).
+    
+-   An encapsulation algorithm which takes as input a public key, and outputs a shared secret value and an “encapsulation” (a ciphertext) of this secret value.
+    
+-   A decapsulation algorithm which takes as input the encapsulation and the private key, and outputs the shared secret value.
+    
+
+In the component we are supporting the three phases in generateSecretKeyEncapsulation, extractSecretKeyEncapsulation and extractSecretKeyFromEncapsulation
+
+The KEM Algorithm supported are the following:
+
+Standardized and implemented
+
+-   ML-KEM
+    
+
+Experimental and non-standardized
+
+-   BIKE
+    
+-   CMCE
+    
+-   HQC
+    
+-   FRODO
+    
+-   SABER
+    
+-   NTRU
+    
+-   NTRULPRime
+    
+-   SNTRUPrime
+    
+-   Kyber
+    
+
+The component expects to find a KeyGenerator and a KeyPair in to the Camel Registry.
+
+In case the KeyPair and the KeyGenerator Objects are not in the registry, it will provide two instances of the Objects with default implementation.
+
+This will be true for standardized algorithms and for experimental ones.
+
+A possible flow of the operation could be the following:
+
+-   ML-KEM
+    
+
+```java
+from("direct:encapsulate").to("pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
+  .to("mock:encapsulate")
+  .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES").to("mock:extract");
+```
+
+With the following beans registered in the Registry
+
+```java
+    @BindToRegistry("Keypair")
+    public KeyPair setKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+        KeyPairGenerator kpg = KeyPairGenerator.getInstance(PQCKeyEncapsulationAlgorithms.MLKEM.getAlgorithm(),
+                PQCKeyEncapsulationAlgorithms.MLKEM.getBcProvider());
+        kpg.initialize(MLKEMParameterSpec.ml_kem_512, new SecureRandom());
+        KeyPair kp = kpg.generateKeyPair();
+        return kp;
+    }
+
+    @BindToRegistry("KeyGenerator")
+    public KeyGenerator setKeyGenerator()
+            throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+        KeyGenerator kg = KeyGenerator.getInstance(PQCKeyEncapsulationAlgorithms.MLKEM.getAlgorithm(),
+                PQCKeyEncapsulationAlgorithms.MLKEM.getBcProvider());
+        return kg;
+    }
+```
+
+This could be done even without the Registry beans, by specifying the `symmetricKeyAlgorithm` and `keyEncapsulationAlgorithm` parameters in the following way
+
+```java
+   from("direct:encapsulate").to(
+     "pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES&keyEncapsulationAlgorithm=MLKEM")
+     .to("mock:encapsulate")
+     .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES&keyEncapsulationAlgorithm=MLKEM")
+     .to("mock:extract");
+```
+
+With this approach the component will use the class `org.apache.camel.component.pqc.crypto.kem.PQCDefaultMLKEMMaterial`, which will create the KeyGenerator and KeyPair objects to be used.
+
+The Spec used for the KeyPair will be, in this case, `ML-KEM-512`.
+
+## Extract Secret Key from Encapsulation for downstream usage
+
+Once you have the encapsulation you’re able to decapsulate the secret key by using private key.
+
+All of this could be done to use the secret key coming from the encapsulation in the downstream route.
+
+As example you could use the secret key to dynamically instruct the CryptoDataFormat to use it, like in the following route.
+
+```java
+        CryptoDataFormat cryptoFormat = new CryptoDataFormat("AES", null);
+        return new RouteBuilder() {
+            @Override
+            public void configure() {
+                from("direct:encapsulate").to("pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
+                        .to("mock:encapsulate")
+                        .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
+                        .to("pqc:keyenc?operation=extractSecretKeyFromEncapsulation&symmetricKeyAlgorithm=AES")
+                        .setHeader(CryptoDataFormat.KEY, body())
+                        .setBody(constant("Hello"))
+                        .marshal(cryptoFormat)
+                        .log("Encrypted ${body}")
+                        .to("mock:encrypted")
+                        .unmarshal(cryptoFormat)
+                        .log("Unencrypted ${body}")
+                        .to("mock:unencrypted");
+                ;
+            }
+```
+
+This could be used to generate a secret key, protect it through Encapsulation and KEM approach and re-use it once extracted.
+
+## Key Lifecycle Management
+
+The PQC component provides comprehensive key lifecycle management capabilities for Post-Quantum Cryptography keys. This includes key generation, storage, rotation, expiration, revocation, and format conversion.
+
+Key lifecycle management is critical for maintaining security in production environments, especially with stateful hash-based signature algorithms (XMSS, XMSSMT, LMS, HSS) that have limited signature capacity.
+
+### Key Lifecycle Manager Interface
+
+The `KeyLifecycleManager` interface provides the following operations:
+
+-   **Key Generation** - Generate new key pairs with algorithm-specific parameters
+    
+-   **Key Storage** - Store and retrieve keys with metadata
+    
+-   **Key Rotation** - Rotate keys and deprecate old ones
+    
+-   **Key Expiration** - Mark keys as expired based on age or policy
+    
+-   **Key Revocation** - Revoke compromised keys with reason tracking
+    
+-   **Key Export/Import** - Convert keys between formats (PEM, DER, PKCS8, X.509)
+    
+-   **Key Listing** - List all keys with their metadata
+    
+-   **Rotation Detection** - Check if keys need rotation based on age or usage
+    
+
+### Available Implementations
+
+The component provides three implementations of `KeyLifecycleManager`:
+
+#### FileBasedKeyLifecycleManager
+
+A production-ready implementation that persists keys and metadata to disk.
+
+**Features:**
+
+-   Persistent storage - keys survive application restarts
+    
+-   File-based storage with `.key` and `.metadata` files
+    
+-   In-memory caching for performance
+    
+-   Automatic loading of existing keys on startup
+    
+-   Secure file permissions
+    
+
+**Use Cases:**
+
+-   Production environments
+    
+-   Single-instance deployments
+    
+-   When persistence is required
+    
+-   Audit and compliance requirements
+    
+
+**Example:**
+
+```java
+KeyLifecycleManager keyManager = new FileBasedKeyLifecycleManager("/secure/keys");
+
+// Generate a new Dilithium key
+KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
+    DilithiumParameterSpec.dilithium2);
+
+// Use the key
+KeyMetadata metadata = keyManager.getKeyMetadata("app-signing-key");
+logger.info("Key created: {}", metadata);
+```
+
+#### InMemoryKeyLifecycleManager
+
+A lightweight implementation that stores keys in memory only.
+
+**Features:**
+
+-   Non-persistent storage - keys lost on restart
+    
+-   ConcurrentHashMap-based storage
+    
+-   No I/O overhead
+    
+-   Thread-safe operations
+    
+-   Additional utility methods: `clear()` and `size()`
+    
+
+**Use Cases:**
+
+-   Testing and development
+    
+-   Ephemeral workloads
+    
+-   Short-lived applications
+    
+-   Unit and integration tests
+    
+
+**Example:**
+
+```java
+InMemoryKeyLifecycleManager keyManager = new InMemoryKeyLifecycleManager();
+
+// Generate a test key
+KeyPair keyPair = keyManager.generateKeyPair("FALCON", "test-key");
+
+// Clean up after testing
+keyManager.clear();
+```
+
+#### HashicorpVaultKeyLifecycleManager
+
+An enterprise-grade implementation that integrates with HashiCorp Vault for centralized secret management.
+
+**Security Implementation:**
+
+This implementation uses industry-standard cryptographic key formats and separation of concerns:
+
+-   **Private keys**: Stored in PKCS#8 format (RFC 5208) - the standard for private key encoding
+    
+-   **Public keys**: Stored in X.509/SubjectPublicKeyInfo format (RFC 5280) - the standard for public key encoding
+    
+-   **Separate storage**: Private keys, public keys, and metadata are stored in distinct Vault paths
+    
+-   **Fine-grained ACLs**: Enables different access policies for private keys (restricted) vs public keys (read-only)
+    
+
+**Security Note:** This implementation stores PQC keys in Vault’s KV secrets engine. While this approach uses industry-standard formats and enables fine-grained access control, organizations with stringent security requirements should consider:
+
+-   Using **Hardware Security Modules (HSMs)** via PKCS#11 for keys that must never be exportable
+    
+-   Implementing additional encryption layers using **Vault’s Transit engine** to encrypt key material before storage
+    
+-   Applying **strict Vault policies** limiting private key access to specific services or key IDs only
+    
+-   Regular **key rotation** and **audit log monitoring**
+    
+-   For production use, review and customize the Vault ACL policies shown in the setup section
+    
+
+**Features:**
+
+-   Centralized secret management via HashiCorp Vault
+    
+-   Industry-standard key formats (PKCS#8 for private keys, X.509 for public keys)
+    
+-   Separate storage for private and public keys (enables different ACLs)
+    
+-   Automatic audit logging of all key operations
+    
+-   Fine-grained access control with Vault policies
+    
+-   Encryption at rest
+    
+-   High availability support (Vault HA clusters)
+    
+-   In-memory caching for performance
+    
+-   Uses Spring Vault (spring-vault-core) consistent with camel-hashicorp-vault
+    
+-   HashiCorp Cloud Platform (HCP) Vault support
+    
+
+**Use Cases:**
+
+-   Production environments with existing Vault infrastructure
+    
+-   Multi-node/distributed deployments
+    
+-   Enterprise security and compliance requirements
+    
+-   Centralized key management across multiple applications
+    
+-   Audit and compliance mandates
+    
+
+**Dependencies:**
+
+To use HashicorpVaultKeyLifecycleManager, add the following optional dependency:
+
+```xml
+<dependency>
+    <groupId>org.springframework.vault</groupId>
+    <artifactId>spring-vault-core</artifactId>
+    <version>${spring-vault-core-version}</version>
+</dependency>
+```
+
+**Example with VaultTemplate:**
+
+```java
+// Option 1: Using existing VaultTemplate (recommended when using camel-hashicorp-vault)
+@BindToRegistry("vaultTemplate")
+public VaultTemplate createVaultTemplate() {
+    VaultEndpoint vaultEndpoint = new VaultEndpoint();
+    vaultEndpoint.setHost("localhost");
+    vaultEndpoint.setPort(8200);
+    vaultEndpoint.setScheme("https");
+
+    return new VaultTemplate(vaultEndpoint, new TokenAuthentication("s.token"));
+}
+
+@BindToRegistry("keyLifecycleManager")
+public HashicorpVaultKeyLifecycleManager createKeyManager() {
+    return new HashicorpVaultKeyLifecycleManager(
+        vaultTemplate,      // Reuse existing VaultTemplate
+        "secret",           // Secrets engine name
+        "pqc/keys"         // Key prefix in Vault
+    );
+}
+
+// Generate a Dilithium key stored in Vault
+KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
+    DilithiumParameterSpec.dilithium2);
+
+// Key is stored in Vault at: secret/data/pqc/keys/app-signing-key
+```
+
+**Example with Direct Configuration:**
+
+```java
+// Option 2: Direct configuration with connection parameters
+HashicorpVaultKeyLifecycleManager keyManager =
+    new HashicorpVaultKeyLifecycleManager(
+        "vault.example.com",  // host
+        8200,                 // port
+        "https",              // scheme
+        "s.your-token",       // Vault token
+        "secret",             // secrets engine (optional, defaults to "secret")
+        "pqc/keys"           // key prefix (optional, defaults to "pqc/keys")
+    );
+
+// Generate and store key in Vault
+KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "vault-key",
+    DilithiumParameterSpec.dilithium2);
+```
+
+**Example with HashiCorp Cloud Platform (HCP) Vault:**
+
+```java
+// Option 3: Configuration for HCP Vault with namespace
+HashicorpVaultKeyLifecycleManager keyManager =
+    new HashicorpVaultKeyLifecycleManager(
+        "your-cluster.vault.hashicorp.cloud",  // HCP Vault host
+        8200,                                    // port
+        "https",                                 // scheme
+        "s.your-hcp-token",                     // HCP Vault token
+        "secret",                                // secrets engine
+        "pqc/keys",                             // key prefix
+        true,                                    // cloud=true for HCP Vault
+        "admin"                                  // namespace (required for HCP)
+    );
+
+// Generate and store key in HCP Vault
+KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "hcp-key",
+    DilithiumParameterSpec.dilithium2);
+
+// Key is stored in HCP Vault at: admin/secret/data/pqc/keys/hcp-key
+```
+
+**YAML Configuration:**
+
+```yaml
+camel:
+  beans:
+    # Create VaultTemplate
+    vaultEndpoint:
+      type: org.springframework.vault.client.VaultEndpoint
+      properties:
+        host: "vault.example.com"
+        port: 8200
+        scheme: "https"
+
+    tokenAuthentication:
+      type: org.springframework.vault.authentication.TokenAuthentication
+      constructorArgs:
+        - "${VAULT_TOKEN}"
+
+    vaultTemplate:
+      type: org.springframework.vault.core.VaultTemplate
+      constructorArgs:
+        - "#bean:vaultEndpoint"
+        - "#bean:tokenAuthentication"
+
+    # Create HashicorpVaultKeyLifecycleManager
+    keyLifecycleManager:
+      type: org.apache.camel.component.pqc.lifecycle.HashicorpVaultKeyLifecycleManager
+      constructorArgs:
+        - "#bean:vaultTemplate"
+        - "secret"
+        - "pqc/keys"
+        - false              # cloud
+        - null               # namespace
+```
+
+**YAML Configuration for HCP Vault:**
+
+```yaml
+camel:
+  beans:
+    # Create VaultTemplate for HCP
+    vaultEndpoint:
+      type: org.springframework.vault.client.VaultEndpoint
+      properties:
+        host: "your-cluster.vault.hashicorp.cloud"
+        port: 8200
+        scheme: "https"
+
+    tokenAuthentication:
+      type: org.springframework.vault.authentication.TokenAuthentication
+      constructorArgs:
+        - "${HCP_VAULT_TOKEN}"
+
+    vaultTemplate:
+      type: org.springframework.vault.core.VaultTemplate
+      constructorArgs:
+        - "#bean:vaultEndpoint"
+        - "#bean:tokenAuthentication"
+
+    # Create HashicorpVaultKeyLifecycleManager for HCP Vault
+    keyLifecycleManager:
+      type: org.apache.camel.component.pqc.lifecycle.HashicorpVaultKeyLifecycleManager
+      constructorArgs:
+        - "#bean:vaultTemplate"
+        - "secret"
+        - "pqc/keys"
+        - true               # cloud=true for HCP Vault
+        - "admin"            # namespace (required for HCP)
+```
+
+**Vault Storage Structure:**
+
+Keys are stored in Vault’s KV v2 secrets engine with separate paths for private keys, public keys, and metadata. This separation enables fine-grained access control where applications can access public keys without having access to private keys.
+
+**On-Premise Vault:**
+
+```text
+secret/                                    # Secrets engine
+├── data/
+│   └── pqc/
+│       └── keys/
+│           ├── app-signing-key/
+│           │   ├── private                # Private key path (STRICT ACL)
+│           │   │   ├── key                # Base64-encoded PKCS#8 private key
+│           │   │   ├── format             # "PKCS8"
+│           │   │   └── algorithm          # "DILITHIUM"
+│           │   ├── public                 # Public key path (READ-ONLY ACL)
+│           │   │   ├── key                # Base64-encoded X.509 public key
+│           │   │   ├── format             # "X509"
+│           │   │   └── algorithm          # "DILITHIUM"
+│           │   └── metadata               # Metadata path
+│           │       ├── metadata           # Serialized KeyMetadata
+│           │       ├── keyId              # "app-signing-key"
+│           │       └── algorithm          # "DILITHIUM"
+│           └── app-signing-key-v2/
+│               ├── private/
+│               ├── public/
+│               └── metadata/
+└── metadata/
+    └── pqc/
+        └── keys/
+            ├── app-signing-key/           # Vault metadata entry
+            └── app-signing-key-v2/
+```
+
+**HCP Vault (with namespace):**
+
+```text
+admin/                                     # Namespace
+└── secret/                                # Secrets engine
+    ├── data/
+    │   └── pqc/
+    │       └── keys/
+    │           ├── app-signing-key/
+    │           │   ├── private/           # PKCS#8 private key (STRICT ACL)
+    │           │   ├── public/            # X.509 public key (READ-ONLY ACL)
+    │           │   └── metadata/          # Key metadata
+    │           └── app-signing-key-v2/
+    │               ├── private/
+    │               ├── public/
+    │               └── metadata/
+    └── metadata/
+        └── pqc/
+            └── keys/
+                ├── app-signing-key/
+                └── app-signing-key-v2/
+```
+
+**Integration with camel-hashicorp-vault:**
+
+HashicorpVaultKeyLifecycleManager can share the same VaultTemplate with the camel-hashicorp-vault component:
+
+```java
+// Reuse VaultTemplate from camel-hashicorp-vault
+@BindToRegistry("keyLifecycleManager")
+public HashicorpVaultKeyLifecycleManager createKeyManager() {
+    VaultTemplate vaultTemplate = context.getRegistry()
+        .lookupByNameAndType("vaultTemplate", VaultTemplate.class);
+
+    return new HashicorpVaultKeyLifecycleManager(
+        vaultTemplate,
+        "secret",
+        "pqc/keys"
+    );
+}
+```
+
+**Vault Setup and Security Policies:**
+
+To use HashicorpVaultKeyLifecycleManager, configure Vault with appropriate policies. The implementation stores private keys, public keys, and metadata separately to enable fine-grained access control.
+
+**Basic Policy (Full Access - Development/Testing):**
+
+```bash
+# Enable KV v2 secrets engine (usually enabled by default)
+vault secrets enable -path=secret kv-v2
+
+# Create basic policy with full access to all key paths
+cat > pqc-policy-full.hcl <<EOF
+# Full access to private keys
+path "secret/data/pqc/keys/*/private" {
+  capabilities = ["create", "read", "update", "delete"]
+}
+
+# Full access to public keys
+path "secret/data/pqc/keys/*/public" {
+  capabilities = ["create", "read", "update", "delete"]
+}
+
+# Full access to metadata
+path "secret/data/pqc/keys/*/metadata" {
+  capabilities = ["create", "read", "update", "delete"]
+}
+
+# List access to key paths
+path "secret/metadata/pqc/keys/*" {
+  capabilities = ["list", "read", "delete"]
+}
+EOF
+
+# Apply policy
+vault policy write pqc-keys-full pqc-policy-full.hcl
+
+# Create token with policy
+vault token create -policy=pqc-keys-full
+```
+
+**Production Policies (Fine-Grained Access Control):**
+
+```bash
+# POLICY 1: Admin Policy (Key Management Service)
+# Full access to generate, rotate, and manage keys
+cat > pqc-policy-admin.hcl <<EOF
+path "secret/data/pqc/keys/*/private" {
+  capabilities = ["create", "read", "update", "delete"]
+}
+
+path "secret/data/pqc/keys/*/public" {
+  capabilities = ["create", "read", "update", "delete"]
+}
+
+path "secret/data/pqc/keys/*/metadata" {
+  capabilities = ["create", "read", "update", "delete"]
+}
+
+path "secret/metadata/pqc/keys/*" {
+  capabilities = ["list", "read", "delete"]
+}
+EOF
+
+vault policy write pqc-admin pqc-policy-admin.hcl
+
+# POLICY 2: Signing Service Policy (Read Private Keys for Signing)
+# Read-only access to specific private keys for signing operations
+cat > pqc-policy-signing.hcl <<EOF
+# Read-only access to private keys (for signing operations)
+path "secret/data/pqc/keys/*/private" {
+  capabilities = ["read"]
+}
+
+# Read access to public keys
+path "secret/data/pqc/keys/*/public" {
+  capabilities = ["read"]
+}
+
+# Read access to metadata
+path "secret/data/pqc/keys/*/metadata" {
+  capabilities = ["read"]
+}
+
+# List keys
+path "secret/metadata/pqc/keys/*" {
+  capabilities = ["list", "read"]
+}
+EOF
+
+vault policy write pqc-signing pqc-policy-signing.hcl
+
+# POLICY 3: Application Policy (Public Keys Only)
+# Read-only access to public keys for signature verification
+cat > pqc-policy-app.hcl <<EOF
+# NO access to private keys
+# Read-only access to public keys
+path "secret/data/pqc/keys/*/public" {
+  capabilities = ["read"]
+}
+
+# Read access to metadata
+path "secret/data/pqc/keys/*/metadata" {
+  capabilities = ["read"]
+}
+
+# List keys
+path "secret/metadata/pqc/keys/*" {
+  capabilities = ["list", "read"]
+}
+EOF
+
+vault policy write pqc-app pqc-policy-app.hcl
+
+# POLICY 4: Specific Key Access (Production Best Practice)
+# Limit access to specific key IDs only
+cat > pqc-policy-specific.hcl <<EOF
+# Access only to app-signing-key private key
+path "secret/data/pqc/keys/app-signing-key/private" {
+  capabilities = ["read"]
+}
+
+path "secret/data/pqc/keys/app-signing-key/public" {
+  capabilities = ["read"]
+}
+
+path "secret/data/pqc/keys/app-signing-key/metadata" {
+  capabilities = ["read"]
+}
+EOF
+
+vault policy write pqc-app-signing-key pqc-policy-specific.hcl
+
+# Create tokens with different policies
+vault token create -policy=pqc-admin        # For key management service
+vault token create -policy=pqc-signing      # For signing service
+vault token create -policy=pqc-app          # For applications (verification only)
+vault token create -policy=pqc-app-signing-key  # For specific key access
+```
+
+#### AwsSecretsManagerKeyLifecycleManager
+
+An enterprise-grade implementation that integrates with AWS Secrets Manager for centralized secret management.
+
+**Security Implementation:**
+
+This implementation uses industry-standard cryptographic key formats and separation of concerns:
+
+-   **Private keys**: Stored in PKCS#8 format (RFC 5208) - the standard for private key encoding
+    
+-   **Public keys**: Stored in X.509/SubjectPublicKeyInfo format (RFC 5280) - the standard for public key encoding
+    
+-   **Separate storage**: Private keys, public keys, and metadata are stored as distinct AWS secrets
+    
+-   **Fine-grained IAM policies**: Enables different access policies for private keys (restricted) vs public keys (read-only)
+    
+
+**Security Note:** This implementation stores PQC keys in AWS Secrets Manager. While this approach uses industry-standard formats and enables fine-grained access control, organizations with stringent security requirements should consider:
+
+-   Using **AWS CloudHSM** for keys that must never be exportable
+    
+-   Implementing additional encryption layers using **AWS KMS Customer Master Keys (CMKs)**
+    
+-   Applying **strict IAM policies** limiting private key access to specific services or roles only
+    
+-   Regular **key rotation** and **CloudTrail audit log monitoring**
+    
+-   For production use, review and customize the IAM policies shown in the setup section
+    
+
+**Features:**
+
+-   Centralized secret management via AWS Secrets Manager
+    
+-   Industry-standard key formats (PKCS#8 for private keys, X.509 for public keys)
+    
+-   Separate storage for private and public keys (enables different IAM policies)
+    
+-   Automatic audit logging through AWS CloudTrail
+    
+-   Fine-grained access control with IAM policies
+    
+-   Encryption at rest with AWS KMS
+    
+-   Multi-region replication support
+    
+-   In-memory caching for performance
+    
+-   Uses AWS SDK v2 (software.amazon.awssdk) consistent with other Camel AWS components
+    
+-   LocalStack endpoint override support for testing
+    
+
+**Use Cases:**
+
+-   Production environments with existing AWS infrastructure
+    
+-   Multi-region deployments
+    
+-   Enterprise security and compliance requirements
+    
+-   Centralized key management across multiple applications
+    
+-   AWS Organizations and cross-account access scenarios
+    
+
+**Dependencies:**
+
+To use AwsSecretsManagerKeyLifecycleManager, add the following optional dependency:
+
+```xml
+<dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>secretsmanager</artifactId>
+    <version>${aws-java-sdk2-version}</version>
+</dependency>
+```
+
+**Example with SecretsManagerClient:**
+
+```java
+// Option 1: Using existing SecretsManagerClient (recommended when using camel-aws-secrets-manager)
+@BindToRegistry("secretsManagerClient")
+public SecretsManagerClient createSecretsManagerClient() {
+    return SecretsManagerClient.builder()
+        .region(Region.US_EAST_1)
+        .build(); // Uses default AWS credentials chain
+}
+
+@BindToRegistry("keyLifecycleManager")
+public AwsSecretsManagerKeyLifecycleManager createKeyManager() {
+    return new AwsSecretsManagerKeyLifecycleManager(
+        secretsManagerClient,   // Reuse existing client
+        "pqc/keys"             // Key prefix
+    );
+}
+
+// Generate a Dilithium key stored in AWS Secrets Manager
+KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
+    DilithiumParameterSpec.dilithium2);
+
+// Keys are stored as: pqc/keys/app-signing-key/private, /public, /metadata
+```
+
+**Example with Direct Configuration:**
+
+```java
+// Option 2: Direct configuration with AWS credentials
+AwsSecretsManagerKeyLifecycleManager keyManager =
+    new AwsSecretsManagerKeyLifecycleManager(
+        "us-east-1",          // AWS region
+        "AKIAIOSFODNN7EXAMPLE", // access key (optional, uses default credentials if null)
+        "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", // secret key (optional)
+        "pqc/keys"            // key prefix (optional, defaults to "pqc/keys")
+    );
+
+// Generate and store key in AWS Secrets Manager
+KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "aws-key",
+    DilithiumParameterSpec.dilithium2);
+```
+
+**Example with LocalStack (Testing):**
+
+```java
+// Option 3: Configuration for LocalStack testing
+AwsSecretsManagerKeyLifecycleManager keyManager =
+    new AwsSecretsManagerKeyLifecycleManager(
+        "us-east-1",                    // region
+        "test",                         // access key for LocalStack
+        "test",                         // secret key for LocalStack
+        "pqc/test-keys",                // key prefix
+        "http://localhost:4566"         // LocalStack endpoint
+    );
+
+// Generate and store key in LocalStack
+KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "test-key",
+    DilithiumParameterSpec.dilithium2);
+```
+
+**YAML Configuration:**
+
+```yaml
+camel:
+  beans:
+    # Create SecretsManagerClient using default credentials
+    secretsManagerClient:
+      type: software.amazon.awssdk.services.secretsmanager.SecretsManagerClient
+      factoryMethod: builder
+      factoryBean:
+        type: software.amazon.awssdk.services.secretsmanager.SecretsManagerClientBuilder
+        properties:
+          region: "!software.amazon.awssdk.regions.Region#US_EAST_1"
+        factoryMethod: build
+
+    # Create AwsSecretsManagerKeyLifecycleManager
+    keyLifecycleManager:
+      type: org.apache.camel.component.pqc.lifecycle.AwsSecretsManagerKeyLifecycleManager
+      constructorArgs:
+        - "#bean:secretsManagerClient"
+        - "pqc/keys"
+```
+
+**YAML Configuration with Explicit Credentials:**
+
+```yaml
+camel:
+  beans:
+    # Create AwsSecretsManagerKeyLifecycleManager with explicit configuration
+    keyLifecycleManager:
+      type: org.apache.camel.component.pqc.lifecycle.AwsSecretsManagerKeyLifecycleManager
+      constructorArgs:
+        - "us-east-1"           # region
+        - "${AWS_ACCESS_KEY}"   # access key from environment
+        - "${AWS_SECRET_KEY}"   # secret key from environment
+        - "pqc/keys"            # key prefix
+        - null                  # endpoint override (null for production)
+```
+
+**AWS Secrets Storage Structure:**
+
+Keys are stored in AWS Secrets Manager with separate secrets for private keys, public keys, and metadata. This separation enables fine-grained access control where applications can access public keys without having access to private keys.
+
+Each key creates three secrets:
+
+```text
+pqc/keys/app-signing-key/private     # PKCS#8 private key (STRICT IAM POLICY)
+  {
+    "key": "MIIEvQIBADANBg...",        # Base64-encoded PKCS#8 private key
+    "format": "PKCS8",
+    "algorithm": "DILITHIUM"
+  }
+  Tags: ManagedBy=camel-pqc
+
+pqc/keys/app-signing-key/public      # X.509 public key (READ-ONLY IAM POLICY)
+  {
+    "key": "MIIBIjANBgkqhk...",        # Base64-encoded X.509 public key
+    "format": "X509",
+    "algorithm": "DILITHIUM"
+  }
+  Tags: ManagedBy=camel-pqc
+
+pqc/keys/app-signing-key/metadata    # Key metadata
+  {
+    "metadata": "rO0ABXNyAC9vcm...",  # Serialized KeyMetadata object
+    "keyId": "app-signing-key",
+    "algorithm": "DILITHIUM"
+  }
+  Tags: ManagedBy=camel-pqc
+```
+
+**AWS Setup and IAM Policies:**
+
+To use AwsSecretsManagerKeyLifecycleManager, configure IAM policies for appropriate access control. The implementation stores private keys, public keys, and metadata separately to enable fine-grained access control.
+
+**Basic Policy (Full Access - Development/Testing):**
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PQCKeysFullAccess",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:CreateSecret",
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:PutSecretValue",
+        "secretsmanager:DeleteSecret",
+        "secretsmanager:ListSecrets",
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:TagResource"
+      ],
+      "Resource": "arn:aws:secretsmanager:*:*:secret:pqc/keys/*"
+    },
+    {
+      "Sid": "KMSAccess",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:GenerateDataKey"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "kms:ViaService": "secretsmanager.*.amazonaws.com"
+        }
+      }
+    }
+  ]
+}
+```
+
+**Production Policies (Fine-Grained Access Control):**
+
+**POLICY 1: Admin Policy (Key Management Service)**
+
+Full access to generate, rotate, and manage keys:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PQCKeyManagement",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:CreateSecret",
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:PutSecretValue",
+        "secretsmanager:DeleteSecret",
+        "secretsmanager:UpdateSecret",
+        "secretsmanager:ListSecrets",
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:TagResource"
+      ],
+      "Resource": "arn:aws:secretsmanager:*:*:secret:pqc/keys/*"
+    },
+    {
+      "Sid": "KMSFullAccess",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:GenerateDataKey",
+        "kms:DescribeKey"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+**POLICY 2: Signing Service Policy (Read Private Keys for Signing)**
+
+Read-only access to specific private keys for signing operations:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadPrivateKeysForSigning",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ],
+      "Resource": [
+        "arn:aws:secretsmanager:*:*:secret:pqc/keys/*/private-*",
+        "arn:aws:secretsmanager:*:*:secret:pqc/keys/*/public-*",
+        "arn:aws:secretsmanager:*:*:secret:pqc/keys/*/metadata-*"
+      ]
+    },
+    {
+      "Sid": "ListKeys",
+      "Effect": "Allow",
+      "Action": "secretsmanager:ListSecrets",
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "secretsmanager:Name": "pqc/keys/*"
+        }
+      }
+    },
+    {
+      "Sid": "KMSDecrypt",
+      "Effect": "Allow",
+      "Action": "kms:Decrypt",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+**POLICY 3: Application Policy (Public Keys Only)**
+
+Read-only access to public keys for signature verification:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ReadPublicKeysOnly",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ],
+      "Resource": [
+        "arn:aws:secretsmanager:*:*:secret:pqc/keys/*/public-*",
+        "arn:aws:secretsmanager:*:*:secret:pqc/keys/*/metadata-*"
+      ]
+    },
+    {
+      "Sid": "DenyPrivateKeyAccess",
+      "Effect": "Deny",
+      "Action": "secretsmanager:GetSecretValue",
+      "Resource": "arn:aws:secretsmanager:*:*:secret:pqc/keys/*/private-*"
+    },
+    {
+      "Sid": "ListKeys",
+      "Effect": "Allow",
+      "Action": "secretsmanager:ListSecrets",
+      "Resource": "*"
+    },
+    {
+      "Sid": "KMSDecrypt",
+      "Effect": "Allow",
+      "Action": "kms:Decrypt",
+      "Resource": "*"
+    }
+  ]
+}
+```
+
+**POLICY 4: Specific Key Access (Production Best Practice)**
+
+Limit access to specific key IDs only:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AccessSpecificKeyOnly",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ],
+      "Resource": [
+        "arn:aws:secretsmanager:us-east-1:123456789012:secret:pqc/keys/app-signing-key/private-*",
+        "arn:aws:secretsmanager:us-east-1:123456789012:secret:pqc/keys/app-signing-key/public-*",
+        "arn:aws:secretsmanager:us-east-1:123456789012:secret:pqc/keys/app-signing-key/metadata-*"
+      ]
+    },
+    {
+      "Sid": "KMSDecrypt",
+      "Effect": "Allow",
+      "Action": "kms:Decrypt",
+      "Resource": "arn:aws:kms:us-east-1:123456789012:key/your-kms-key-id"
+    }
+  ]
+}
+```
+
+**Integration with camel-aws-secrets-manager:**
+
+AwsSecretsManagerKeyLifecycleManager can share the same SecretsManagerClient with the camel-aws-secrets-manager component:
+
+```java
+// Reuse SecretsManagerClient from camel-aws-secrets-manager
+@BindToRegistry("keyLifecycleManager")
+public AwsSecretsManagerKeyLifecycleManager createKeyManager() {
+    SecretsManagerClient secretsManagerClient = context.getRegistry()
+        .lookupByNameAndType("secretsManagerClient", SecretsManagerClient.class);
+
+    return new AwsSecretsManagerKeyLifecycleManager(
+        secretsManagerClient,
+        "pqc/keys"
+    );
+}
+```
+
+**Comparison of Implementations:**
+
+    
+| Feature | FileBasedKeyLifecycleManager | InMemoryKeyLifecycleManager | HashicorpVaultKeyLifecycleManager | AwsSecretsManagerKeyLifecycleManager |
+| --- | --- | --- | --- | --- |
+| Persistence | ✅ File system | ❌ Memory only | ✅ Vault backend | ✅ AWS Secrets Manager |
+| Distributed | ❌ Single node | ❌ Single node | ✅ Multi-node | ✅ Multi-region |
+| Audit Logging | ❌ Manual | ❌ None | ✅ Automatic (Vault) | ✅ Automatic (CloudTrail) |
+| Access Control | ❌ File permissions | ❌ None | ✅ Vault policies | ✅ IAM policies |
+| Encryption at Rest | ❌ OS-dependent | ❌ N/A | ✅ Always (Vault) | ✅ Always (AWS KMS) |
+| High Availability | ❌ No | ❌ No | ✅ Yes (Vault HA) | ✅ Yes (AWS Multi-AZ) |
+| External Dependencies | ❌ None | ❌ None | ✅ Vault + spring-vault | ✅ AWS SDK v2 |
+| Caching | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
+| Spring Integration | ❌ No | ❌ No | ✅ Yes | ❌ No |
+| Cloud Integration | ❌ No | ❌ No | ✅ HCP Vault | ✅ AWS Native |
+| Multi-Region Support | ❌ No | ❌ No | ❌ No | ✅ Yes |
+| Use Case | Single server | Testing/Dev | Production/Enterprise (Vault) | Production/Enterprise (AWS) |
+
+### Key Generation
+
+The key lifecycle manager supports all PQC algorithms with sensible default parameter specifications.
+
+#### Signature Algorithms
+
+```java
+// ML-DSA (uses default ML-DSA-65)
+KeyPair mldsaKey = keyManager.generateKeyPair("MLDSA", "mldsa-key");
+
+// Dilithium with specific parameter
+KeyPair dilithiumKey = keyManager.generateKeyPair("DILITHIUM", "dilithium-key",
+    DilithiumParameterSpec.dilithium3);
+
+// Falcon (uses default Falcon-512)
+KeyPair falconKey = keyManager.generateKeyPair("FALCON", "falcon-key");
+
+// XMSS (uses default 10-tree height with SHA-256)
+KeyPair xmssKey = keyManager.generateKeyPair("XMSS", "xmss-key");
+
+// XMSSMT (uses default XMSSMT-SHA2-20d2-256)
+KeyPair xmssmtKey = keyManager.generateKeyPair("XMSSMT", "xmssmt-key");
+
+// LMS/HSS (uses default LMS-SHA256-N32-H10)
+KeyPair lmsKey = keyManager.generateKeyPair("LMS", "lms-key");
+```
+
+#### Key Encapsulation Algorithms
+
+```java
+// ML-KEM (uses default)
+KeyPair mlkemKey = keyManager.generateKeyPair("MLKEM", "mlkem-key");
+
+// NTRU (uses default ntruhps2048509)
+KeyPair ntruKey = keyManager.generateKeyPair("NTRU", "ntru-key");
+
+// SNTRUPrime (uses default sntrup761)
+KeyPair sntrupKey = keyManager.generateKeyPair("SNTRUPrime", "sntrup-key");
+
+// BIKE (uses default bike128)
+KeyPair bikeKey = keyManager.generateKeyPair("BIKE", "bike-key");
+```
+
+### Key Metadata
+
+Each key is associated with metadata that tracks its lifecycle:
+
+```java
+KeyMetadata metadata = keyManager.getKeyMetadata("my-key");
+
+System.out.println("Key ID: " + metadata.getKeyId());
+System.out.println("Algorithm: " + metadata.getAlgorithm());
+System.out.println("Status: " + metadata.getStatus());
+System.out.println("Created: " + metadata.getCreatedAt());
+System.out.println("Age (days): " + metadata.getAgeInDays());
+System.out.println("Usage count: " + metadata.getUsageCount());
+System.out.println("Expires at: " + metadata.getExpiresAt());
+System.out.println("Next rotation: " + metadata.getNextRotationAt());
+```
+
+**Key Status Values:**
+
+-   `ACTIVE` - Key is active and can be used
+    
+-   `EXPIRED` - Key has expired and should not be used
+    
+-   `REVOKED` - Key has been revoked due to compromise
+    
+-   `PENDING_ROTATION` - Key should be rotated soon
+    
+-   `DEPRECATED` - Key has been rotated and replaced
+    
+
+### Key Rotation
+
+Key rotation is essential for maintaining security. The lifecycle manager supports automated rotation:
+
+```java
+// Check if key needs rotation
+boolean needsRotation = keyManager.needsRotation("old-key",
+    Duration.ofDays(90),  // Max age: 90 days
+    10000);                // Max usage: 10,000 operations
+
+if (needsRotation) {
+    // Rotate the key
+    KeyPair newKey = keyManager.rotateKey("old-key", "new-key", "DILITHIUM");
+
+    // Old key is now DEPRECATED
+    // New key is ACTIVE
+    logger.info("Key rotated successfully");
+}
+```
+
+### Key Export and Import
+
+Keys can be exported and imported in multiple formats:
+
+**Supported Formats:**
+
+-   `PEM` - Privacy-Enhanced Mail format (Base64 encoded)
+    
+-   `DER` - Distinguished Encoding Rules (binary)
+    
+-   `PKCS8` - PKCS#8 format for private keys
+    
+-   `X509` - X.509 format for public keys
+    
+
+**Export Example:**
+
+```java
+KeyPair keyPair = keyManager.getKey("my-key");
+
+// Export public key as PEM
+byte[] publicPem = keyManager.exportPublicKey(keyPair, KeyFormat.PEM);
+String pemString = new String(publicPem);
+System.out.println(pemString);
+// Output:
+// -----BEGIN PUBLIC KEY-----
+// MIIBIjAN...
+// -----END PUBLIC KEY-----
+
+// Export entire key pair (public only for safety)
+byte[] keyPairPem = keyManager.exportKey(keyPair, KeyFormat.PEM, false);
+
+// Export with private key (USE WITH CAUTION)
+byte[] fullExport = keyManager.exportKey(keyPair, KeyFormat.DER, true);
+```
+
+**Import Example:**
+
+```java
+// Import from PEM format
+byte[] pemData = Files.readAllBytes(Paths.get("public-key.pem"));
+KeyPair imported = keyManager.importKey(pemData, KeyFormat.PEM, "DILITHIUM");
+
+// Store the imported key
+KeyMetadata metadata = new KeyMetadata("imported-key", "DILITHIUM");
+keyManager.storeKey("imported-key", imported, metadata);
+```
+
+### Key Expiration and Revocation
+
+**Expire a Key:**
+
+```java
+// Set expiration time
+KeyMetadata metadata = keyManager.getKeyMetadata("my-key");
+metadata.setExpiresAt(Instant.now().plus(Duration.ofDays(365)));
+keyManager.updateKeyMetadata("my-key", metadata);
+
+// Manually expire immediately
+keyManager.expireKey("my-key");
+
+// Check if expired
+if (metadata.isExpired()) {
+    logger.warn("Key {} has expired", metadata.getKeyId());
+}
+```
+
+**Revoke a Key:**
+
+```java
+// Revoke a compromised key
+keyManager.revokeKey("compromised-key", "Private key exposed in log file");
+
+KeyMetadata metadata = keyManager.getKeyMetadata("compromised-key");
+assert metadata.getStatus() == KeyMetadata.KeyStatus.REVOKED;
+assert metadata.getDescription().contains("Revoked: Private key exposed");
+```
+
+### Listing and Managing Keys
+
+```java
+// List all keys
+List<KeyMetadata> allKeys = keyManager.listKeys();
+
+// Filter active keys
+List<KeyMetadata> activeKeys = allKeys.stream()
+    .filter(m -> m.getStatus() == KeyMetadata.KeyStatus.ACTIVE)
+    .collect(Collectors.toList());
+
+// Find keys needing rotation
+for (KeyMetadata metadata : allKeys) {
+    if (keyManager.needsRotation(metadata.getKeyId(), Duration.ofDays(90), 5000)) {
+        logger.warn("Key {} needs rotation", metadata.getKeyId());
+    }
+}
+
+// Delete old keys
+for (KeyMetadata metadata : allKeys) {
+    if (metadata.getStatus() == KeyMetadata.KeyStatus.DEPRECATED
+        && metadata.getAgeInDays() > 365) {
+        keyManager.deleteKey(metadata.getKeyId());
+        logger.info("Deleted old deprecated key: {}", metadata.getKeyId());
+    }
+}
+```
+
+### Integration with Camel Routes
+
+The key lifecycle manager can be registered in the Camel registry and used in routes:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+@BindToRegistry("keyLifecycleManager")
+public KeyLifecycleManager createKeyManager() throws IOException {
+    return new FileBasedKeyLifecycleManager("/secure/keys");
+}
+
+@BindToRegistry("signingKey")
+public KeyPair createSigningKey() throws Exception {
+    KeyLifecycleManager manager = createKeyManager();
+    return manager.generateKeyPair("DILITHIUM", "route-signing-key",
+        DilithiumParameterSpec.dilithium2);
+}
+```
+
+```yaml
+# Configure key lifecycle manager in application.yaml
+camel:
+  beans:
+    keyLifecycleManager:
+      type: org.apache.camel.component.pqc.lifecycle.FileBasedKeyLifecycleManager
+      properties:
+        keyDirectoryPath: "/secure/keys"
+
+    signingKey:
+      type: org.apache.camel.component.pqc.lifecycle.FileBasedKeyLifecycleManager
+      scriptLanguage: groovy
+      script: |
+        def manager = new org.apache.camel.component.pqc.lifecycle.FileBasedKeyLifecycleManager('/secure/keys')
+        def spec = org.bouncycastle.pqc.jcajce.spec.DilithiumParameterSpec.dilithium2
+        manager.generateKeyPair('DILITHIUM', 'route-signing-key', spec)
+```
+
+**Using in Routes:**
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("timer:check-rotation?period=86400000") // Check daily
+    .bean("keyLifecycleManager", "needsRotation('route-signing-key', 90, 10000)")
+    .choice()
+        .when(body().isEqualTo(true))
+            .log("Rotating signing key")
+            .bean("keyLifecycleManager", "rotateKey('route-signing-key', 'route-signing-key-new', 'DILITHIUM')")
+            .to("log:rotation-complete")
+        .otherwise()
+            .log("Key rotation not needed")
+    .end();
+```
+
+```yaml
+# Automated key rotation route
+- route:
+    id: check-key-rotation
+    from:
+      uri: timer:check-rotation
+      parameters:
+        period: 86400000  # Check daily
+    steps:
+      - bean:
+          ref: keyLifecycleManager
+          method: needsRotation('route-signing-key', 90, 10000)
+      - choice:
+          when:
+            - simple: "${body} == true"
+              steps:
+                - log: "Rotating signing key"
+                - bean:
+                    ref: keyLifecycleManager
+                    method: rotateKey('route-signing-key', 'route-signing-key-new', 'DILITHIUM')
+                - to: log:rotation-complete
+          otherwise:
+            steps:
+              - log: "Key rotation not needed"
+```
+
+### Default Parameter Specifications
+
+The lifecycle manager provides sensible defaults for all algorithms:
+
+ 
+| Algorithm | Default Parameter Spec |
+| --- | --- |
+| DILITHIUM | dilithium2 |
+| FALCON | falcon\_512 |
+| SPHINCSPLUS | sha2\_128s |
+| XMSS | 10-tree height with SHA-256 |
+| XMSSMT | XMSSMT-SHA2-20d2-256 |
+| LMS/HSS | LMS-SHA256-N32-H10 with SHA256-N32-W4 |
+| NTRU | ntruhps2048509 |
+| NTRULPRime | ntrulpr653 |
+| SNTRUPrime | sntrup761 |
+| SABER | lightsaberkem128r3 |
+| FRODO | frodokem640aes |
+| BIKE | bike128 |
+| HQC | hqc128 |
+| CMCE | mceliece348864 |
+
+### Best Practices
+
+**1\. Regular Key Rotation**
+
+Implement automated key rotation policies:
+
+```java
+// Rotate keys every 90 days or after 10,000 uses
+Duration maxAge = Duration.ofDays(90);
+long maxUsage = 10000;
+
+if (keyManager.needsRotation(keyId, maxAge, maxUsage)) {
+    keyManager.rotateKey(keyId, keyId + "-new", algorithm);
+}
+```
+
+**2\. Secure Storage**
+
+For FileBasedKeyLifecycleManager:
+
+-   Store keys in a secure directory with restricted permissions
+    
+-   Use encrypted file systems where possible
+    
+-   Implement backup strategies for key files
+    
+-   Monitor access to key directories
+    
+
+**3\. Key Metadata Tracking**
+
+Always update metadata when using keys:
+
+```java
+KeyMetadata metadata = keyManager.getKeyMetadata(keyId);
+metadata.updateLastUsed(); // Increments usage count
+keyManager.updateKeyMetadata(keyId, metadata);
+```
+
+**4\. Handle Stateful Signatures Carefully**
+
+For XMSS, XMSSMT, LMS, and HSS algorithms:
+
+-   Track signature usage to prevent exhaustion
+    
+-   Never reuse a stateful signature state (critical security requirement)
+    
+-   Monitor usage percentage and rotate before exhaustion
+    
+-   Set appropriate `maxSignatures` based on tree height
+    
+
+**5\. Secure Key Export**
+
+When exporting keys:
+
+-   Export public keys only when possible
+    
+-   Encrypt private key exports
+    
+-   Use secure channels for key transfer
+    
+-   Audit all key export operations
+    
+
+**6\. Testing Strategy**
+
+Use InMemoryKeyLifecycleManager for tests:
+
+```java
+@BeforeEach
+public void setup() {
+    keyManager = new InMemoryKeyLifecycleManager();
+}
+
+@AfterEach
+public void cleanup() {
+    keyManager.clear();
+}
+```
+
+### Thread Safety
+
+Both implementations are thread-safe:
+
+-   **FileBasedKeyLifecycleManager**: Uses ConcurrentHashMap for caching and atomic file operations
+    
+-   **InMemoryKeyLifecycleManager**: Uses ConcurrentHashMap for all storage
+    
+
+Concurrent key operations are safe:
+
+```java
+ExecutorService executor = Executors.newFixedThreadPool(10);
+
+for (int i = 0; i < 100; i++) {
+    final int index = i;
+    executor.submit(() -> {
+        try {
+            keyManager.generateKeyPair("DILITHIUM", "key-" + index,
+                DilithiumParameterSpec.dilithium2);
+        } catch (Exception e) {
+            logger.error("Key generation failed", e);
+        }
+    });
+}
+
+executor.shutdown();
+executor.awaitTermination(1, TimeUnit.MINUTES);
+```
+
+### Migration Between Implementations
+
+To migrate from InMemoryKeyLifecycleManager to FileBasedKeyLifecycleManager:
+
+```java
+InMemoryKeyLifecycleManager memoryManager = new InMemoryKeyLifecycleManager();
+FileBasedKeyLifecycleManager fileManager = new FileBasedKeyLifecycleManager("/secure/keys");
+
+// Export all keys
+List<KeyMetadata> keys = memoryManager.listKeys();
+for (KeyMetadata metadata : keys) {
+    KeyPair keyPair = memoryManager.getKey(metadata.getKeyId());
+    fileManager.storeKey(metadata.getKeyId(), keyPair, metadata);
+}
+
+logger.info("Migrated {} keys to file-based storage", keys.size());
+```
+
+## PQC DataFormat
+
+The PQC component also provides a DataFormat for quantum-resistant encryption and decryption of message payloads using Key Encapsulation Mechanisms (KEM).
+
+### Overview
+
+The PQC DataFormat simplifies quantum-resistant encryption by combining:
+
+1.  **Key Encapsulation Mechanism (KEM)** - Uses PQC algorithms (ML-KEM, BIKE, NTRU, etc.) to establish a shared secret
+    
+2.  **Symmetric Encryption** - Encrypts data with the shared secret using standard algorithms (AES, Camellia, etc.)
+    
+3.  **Automatic Key Management** - Handles encapsulation/decapsulation transparently
+    
+
+This approach provides **defense-in-depth**: even if the symmetric algorithm is compromised, the shared secret is protected by quantum-resistant KEM.
+
+### Benefits
+
+-   **Simplified API** - Single marshal/unmarshal operation instead of multiple KEM steps
+    
+-   **Streaming Support** - Efficient encryption/decryption of large payloads
+    
+-   **Header-based Configuration** - Dynamic algorithm and key selection per message
+    
+-   **Standards-based** - Uses NIST-standardized ML-KEM and other PQC algorithms
+    
+-   **Drop-in Replacement** - Compatible with existing Camel DataFormat patterns
+    
+
+### Wire Format
+
+The encrypted message format is:
+
+```text
+[4 bytes: encapsulation length] [N bytes: encapsulation] [M bytes: encrypted data]
+```
+
+This format allows the receiver to extract the encapsulation, decapsulate the shared secret using their private key, and decrypt the data.
+
+### Basic Usage
+
+#### Java DSL
+
+```java
+// Create PQC DataFormat
+PQCDataFormat pqcFormat = new PQCDataFormat();
+pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
+pqcFormat.setSymmetricKeyAlgorithm("AES");
+pqcFormat.setSymmetricKeyLength(256);
+
+from("direct:encrypt")
+    .marshal(pqcFormat)
+    .to("file:encrypted");
+
+from("file:encrypted")
+    .unmarshal(pqcFormat)
+    .to("direct:decrypted");
+```
+
+#### YAML DSL
+
+```yaml
+- route:
+    id: encrypt-route
+    from:
+      uri: direct:encrypt
+    steps:
+      - marshal:
+          pqc:
+            keyEncapsulationAlgorithm: MLKEM
+            symmetricKeyAlgorithm: AES
+            symmetricKeyLength: 256
+      - to: file:encrypted
+
+- route:
+    id: decrypt-route
+    from:
+      uri: file:encrypted
+    steps:
+      - unmarshal:
+          pqc:
+            keyEncapsulationAlgorithm: MLKEM
+            symmetricKeyAlgorithm: AES
+            symmetricKeyLength: 256
+      - to: direct:decrypted
+```
+
+### Configuration Options
+
+   
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| keyEncapsulationAlgorithm | String | MLKEM | PQC KEM algorithm (MLKEM, BIKE, HQC, CMCE, SABER, FRODO, NTRU, NTRULPRime, SNTRUPrime, KYBER) |
+| symmetricKeyAlgorithm | String | AES | Symmetric encryption algorithm (AES, ARIA, RC2, RC5, CAMELLIA, CAST5, CAST6, CHACHA7539, DSTU7624, GOST28147, GRAIN128, SEED, SM4, DESEDE) |
+| symmetricKeyLength | int | 128 | Length of the symmetric key in bits (128, 192, or 256 for AES) |
+| keyPair | KeyPair | null | KeyPair to use for encryption/decryption. Can also be provided via header. |
+| bufferSize | int | 4096 | Buffer size for streaming encryption/decryption |
+| provider | String | null | JCE security provider (defaults to Bouncy Castle PQC provider) |
+| keyGenerator | KeyGenerator | null | Custom KeyGenerator for KEM operations |
+
+### Registering KeyPair
+
+The DataFormat requires a KeyPair to be available either:
+
+1.  Configured on the DataFormat instance
+    
+2.  Registered in the Camel Registry
+    
+3.  Provided via message header
+    
+
+#### Option 1: Registry-based Configuration
+
+```java
+@BindToRegistry("pqcKeyPair")
+public KeyPair createMLKEMKeyPair() throws Exception {
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+    kpg.initialize(MLKEMParameterSpec.ml_kem_768, new SecureRandom());
+    return kpg.generateKeyPair();
+}
+
+// DataFormat will automatically use the registered KeyPair
+PQCDataFormat pqcFormat = new PQCDataFormat();
+pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
+pqcFormat.setSymmetricKeyAlgorithm("AES");
+```
+
+#### Option 2: Direct Configuration
+
+```java
+KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+kpg.initialize(MLKEMParameterSpec.ml_kem_768, new SecureRandom());
+KeyPair keyPair = kpg.generateKeyPair();
+
+PQCDataFormat pqcFormat = new PQCDataFormat();
+pqcFormat.setKeyPair(keyPair);
+pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
+pqcFormat.setSymmetricKeyAlgorithm("AES");
+```
+
+#### Option 3: Header-based Configuration
+
+```java
+from("direct:encrypt")
+    .setHeader(PQCDataFormat.KEY_PAIR, () -> generateKeyPair())
+    .marshal(pqcFormat)
+    .to("direct:encrypted");
+```
+
+### Supported Algorithms
+
+#### Key Encapsulation Algorithms
+
+**Standardized (NIST)**
+
+-   **MLKEM** - ML-KEM (FIPS 203) - Recommended for production use
+    
+
+**Experimental**
+
+-   BIKE - Bit Flipping Key Encapsulation
+    
+-   CMCE - Classic McEliece
+    
+-   HQC - Hamming Quasi-Cyclic
+    
+-   FRODO - FrodoKEM
+    
+-   SABER - Saber KEM
+    
+-   NTRU - NTRU Encrypt
+    
+-   NTRULPRime - NTRU LPRime
+    
+-   SNTRUPrime - Streamlined NTRU Prime
+    
+-   KYBER - Kyber (pre-standardization version)
+    
+
+#### Symmetric Encryption Algorithms
+
+-   AES - Advanced Encryption Standard (recommended)
+    
+-   ARIA - Korean standard
+    
+-   RC2, RC5 - Rivest ciphers
+    
+-   CAMELLIA - Japanese standard
+    
+-   CAST5, CAST6 - CAST ciphers
+    
+-   CHACHA7539 - ChaCha stream cipher
+    
+-   DSTU7624 - Ukrainian standard
+    
+-   GOST28147 - Russian standard
+    
+-   GRAIN128 - Stream cipher
+    
+-   SEED - Korean standard
+    
+-   SM4 - Chinese standard
+    
+-   DESEDE - Triple DES
+    
+
+### Advanced Examples
+
+#### Secure File Transfer
+
+```java
+PQCDataFormat pqcFormat = new PQCDataFormat();
+pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
+pqcFormat.setSymmetricKeyAlgorithm("AES");
+pqcFormat.setSymmetricKeyLength(256);
+
+from("file:incoming?noop=true")
+    .log("Encrypting file: ${header.CamelFileName}")
+    .marshal(pqcFormat)
+    .to("file:encrypted?fileName=${header.CamelFileName}.pqc")
+    .log("File encrypted successfully");
+
+from("file:encrypted?noop=true")
+    .log("Decrypting file: ${header.CamelFileName}")
+    .unmarshal(pqcFormat)
+    .to("file:decrypted")
+    .log("File decrypted successfully");
+```
+
+#### API Message Encryption
+
+```java
+from("direct:secure-api")
+    .marshal().json()  // Convert to JSON
+    .marshal(pqcFormat)  // Encrypt with PQC
+    .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+    .to("https://api.example.com/secure-endpoint")
+    .unmarshal(pqcFormat)  // Decrypt response
+    .unmarshal().json()  // Parse JSON response
+    .to("direct:result");
+```
+
+#### Multiple Algorithm Support
+
+```java
+// Different algorithms for different security levels
+PQCDataFormat highSecurity = new PQCDataFormat();
+highSecurity.setKeyEncapsulationAlgorithm("MLKEM");
+highSecurity.setSymmetricKeyAlgorithm("AES");
+highSecurity.setSymmetricKeyLength(256);
+
+PQCDataFormat mediumSecurity = new PQCDataFormat();
+mediumSecurity.setKeyEncapsulationAlgorithm("KYBER");
+mediumSecurity.setSymmetricKeyAlgorithm("CAMELLIA");
+mediumSecurity.setSymmetricKeyLength(128);
+
+from("direct:classify")
+    .choice()
+        .when(header("SecurityLevel").isEqualTo("HIGH"))
+            .marshal(highSecurity)
+        .when(header("SecurityLevel").isEqualTo("MEDIUM"))
+            .marshal(mediumSecurity)
+        .otherwise()
+            .log("No encryption for low security")
+    .end()
+    .to("direct:output");
+```
+
+#### Dynamic Algorithm Selection via Headers
+
+```java
+PQCDataFormat pqcFormat = new PQCDataFormat();
+
+from("direct:dynamic-encrypt")
+    .setHeader(PQCDataFormat.KEM_ALGORITHM, constant("MLKEM"))
+    .setHeader(PQCDataFormat.SYMMETRIC_ALGORITHM, constant("AES"))
+    .marshal(pqcFormat)
+    .to("direct:encrypted");
+```
+
+### Integration with Key Lifecycle Management
+
+The PQC DataFormat can be integrated with the Key Lifecycle Manager for automated key management:
+
+```java
+@BindToRegistry("keyLifecycleManager")
+public KeyLifecycleManager createKeyManager() {
+    return new FileBasedKeyLifecycleManager("/secure/keys");
+}
+
+@BindToRegistry("pqcKeyPair")
+public KeyPair createKeyPair() throws Exception {
+    KeyLifecycleManager manager = context.getRegistry()
+        .lookupByNameAndType("keyLifecycleManager", KeyLifecycleManager.class);
+
+    // Generate or retrieve key
+    KeyPair keyPair;
+    try {
+        keyPair = manager.getKey("dataformat-key");
+    } catch (Exception e) {
+        keyPair = manager.generateKeyPair("MLKEM", "dataformat-key",
+            MLKEMParameterSpec.ml_kem_768);
+    }
+
+    // Check if rotation needed
+    if (manager.needsRotation("dataformat-key", Duration.ofDays(90), 10000)) {
+        keyPair = manager.rotateKey("dataformat-key", "dataformat-key-new", "MLKEM");
+    }
+
+    return keyPair;
+}
+```
+
+### Comparison with Manual KEM Operations
+
+**Manual Approach (using PQC component endpoints):**
+
+```java
+from("direct:manual-encrypt")
+    .to("pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
+    .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
+    .to("pqc:keyenc?operation=extractSecretKeyFromEncapsulation&symmetricKeyAlgorithm=AES")
+    .setHeader(CryptoDataFormat.KEY, body())
+    .setBody(constant("Hello"))
+    .marshal(new CryptoDataFormat("AES", null))
+    .to("direct:encrypted");
+```
+
+**DataFormat Approach (simplified):**
+
+```java
+from("direct:dataformat-encrypt")
+    .setBody(constant("Hello"))
+    .marshal(new PQCDataFormat("MLKEM", "AES", keyPair))
+    .to("direct:encrypted");
+```
+
+The DataFormat approach is significantly simpler and handles all KEM operations internally.
+
+### Security Considerations
+
+**1\. Key Management**
+
+-   **Private Key Protection**: The private key must be kept secure. Consider using:
+    
+    -   Hardware Security Modules (HSMs)
+        
+    -   Secure key storage (FileBasedKeyLifecycleManager with encrypted filesystem)
+        
+    -   Cloud key management services (HashicorpVaultKeyLifecycleManager, AwsSecretsManagerKeyLifecycleManager)
+        
+    
+-   **Key Rotation**: Regularly rotate keys using the Key Lifecycle Manager
+    
+
+**2\. Algorithm Selection**
+
+-   **Production Use**: Use MLKEM (NIST-standardized)
+    
+-   **High Security**: Use ML-KEM-1024 parameter spec
+    
+-   **Testing**: Experimental algorithms are suitable for research and testing
+    
+
+**3\. Symmetric Algorithm**
+
+-   **Recommended**: AES-256 or AES-128
+    
+-   **Avoid**: RC2, GOST28147 (legacy algorithms)
+    
+
+**4\. Wire Format Security**
+
+-   The encapsulation is not secret and can be transmitted in the clear
+    
+-   The encrypted data is protected by the symmetric key
+    
+-   Use authenticated encryption modes (GCM) when available
+    
+
+### Performance Considerations
+
+**1\. Buffer Size**
+
+Adjust bufferSize based on message size:
+
+```java
+PQCDataFormat pqcFormat = new PQCDataFormat();
+pqcFormat.setBufferSize(8192);  // Larger buffer for big files
+```
+
+**2\. Caching KeyGenerator**
+
+Configure a KeyGenerator once to avoid repeated initialization:
+
+```java
+@BindToRegistry("kemKeyGenerator")
+public KeyGenerator createKeyGenerator() throws Exception {
+    return KeyGenerator.getInstance("ML-KEM", "BCPQC");
+}
+
+PQCDataFormat pqcFormat = new PQCDataFormat();
+pqcFormat.setKeyGenerator(kemKeyGenerator);
+```
+
+**3\. Streaming**
+
+The DataFormat supports streaming for large payloads, avoiding memory issues:
+
+```java
+from("file:large-files?noop=true")
+    .streamCaching()  // Enable stream caching if needed
+    .marshal(pqcFormat)
+    .to("file:encrypted");
+```
+
+### Testing
+
+Example test demonstrating round-trip encryption/decryption:
+
+```java
+@Test
+void testPQCDataFormatRoundTrip() throws Exception {
+    // Setup
+    Security.addProvider(new BouncyCastleProvider());
+    Security.addProvider(new BouncyCastlePQCProvider());
+
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+    kpg.initialize(MLKEMParameterSpec.ml_kem_512, new SecureRandom());
+    KeyPair keyPair = kpg.generateKeyPair();
+
+    PQCDataFormat pqcFormat = new PQCDataFormat();
+    pqcFormat.setKeyPair(keyPair);
+    pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
+    pqcFormat.setSymmetricKeyAlgorithm("AES");
+
+    // Create route
+    context.addRoutes(new RouteBuilder() {
+        @Override
+        public void configure() {
+            from("direct:start")
+                .marshal(pqcFormat)
+                .to("mock:encrypted")
+                .unmarshal(pqcFormat)
+                .to("mock:decrypted");
+        }
+    });
+
+    // Test
+    String original = "Sensitive data";
+    template.sendBody("direct:start", original);
+
+    MockEndpoint encrypted = getMockEndpoint("mock:encrypted");
+    MockEndpoint decrypted = getMockEndpoint("mock:decrypted");
+
+    encrypted.assertIsSatisfied();
+    decrypted.assertIsSatisfied();
+
+    byte[] encryptedBody = encrypted.getExchanges().get(0).getMessage().getBody(byte[].class);
+    assertNotEquals(original, new String(encryptedBody));
+
+    String decryptedBody = decrypted.getExchanges().get(0).getMessage().getBody(String.class);
+    assertEquals(original, decryptedBody);
+}
+```
+
+### Troubleshooting
+
+**Issue**: `IllegalStateException: A valid KeyPair with public key is required`
+
+-   **Solution**: Ensure KeyPair is registered in registry or configured on DataFormat
+    
+
+**Issue**: `NoSuchAlgorithmException`
+
+-   **Solution**: Add Bouncy Castle providers:
+    
+    ```java
+    Security.addProvider(new BouncyCastleProvider());
+    Security.addProvider(new BouncyCastlePQCProvider());
+    ```
+    
+
+**Issue**: Decryption fails with corrupted data
+
+-   **Solution**: Ensure the same KeyPair is used for encryption and decryption
+    
+-   **Solution**: Verify encapsulation is not being corrupted during transmission
+    
+
+**Issue**: OutOfMemoryError with large files
+
+-   **Solution**: Increase buffer size or enable stream caching:
+    
+    ```java
+    pqcFormat.setBufferSize(16384);
+    // or
+    from("file:large").streamCaching().marshal(pqcFormat)...
+    ```
+    
+
+### Dependencies
+
+The PQC DataFormat is included in the camel-pqc component. Ensure you have:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-pqc</artifactId>
+    <version>${camel.version}</version>
+</dependency>
+
+<!-- Bouncy Castle PQC provider -->
+<dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcprov-jdk18on</artifactId>
+    <version>${bouncycastle.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcpkix-jdk18on</artifactId>
+    <version>${bouncycastle.version}</version>
+</dependency>
+<dependency>
+    <groupId>org.bouncycastle</groupId>
+    <artifactId>bcpqc-jdk18on</artifactId>
+    <version>${bouncycastle.version}</version>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+When using pqc with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+
+```xml
+<dependency>
+  <groupId>org.apache.camel.springboot</groupId>
+  <artifactId>camel-pqc-starter</artifactId>
+  <version>x.x.x</version>
+  <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+The component supports 26 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **camel.component.pqc.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| **camel.component.pqc.configuration** | Component configuration. The option is a org.apache.camel.component.pqc.PQCConfiguration type. |  | PQCConfiguration |
+| **camel.component.pqc.enabled** | Whether to enable auto configuration of the pqc component. This is enabled by default. |  | Boolean |
+| **camel.component.pqc.health-check-consumer-enabled** | Used for enabling or disabling all consumer based health checks from this component. | true | Boolean |
+| **camel.component.pqc.health-check-producer-enabled** | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
+| **camel.component.pqc.key-encapsulation-algorithm** | In case there is no keyGenerator, we specify an algorithm to build the KeyGenerator. |  | String |
+| **camel.component.pqc.key-generator** | The Key Generator to be used in encapsulation and extraction. The option is a javax.crypto.KeyGenerator type. |  | KeyGenerator |
+| **camel.component.pqc.key-pair** | The KeyPair to be used. The option is a java.security.KeyPair type. |  | KeyPair |
+| **camel.component.pqc.key-pair-alias** | A KeyPair alias to use in combination with KeyStore parameter. |  | String |
+| **camel.component.pqc.key-store** | A KeyStore where we could get Cryptographic material. The option is a java.security.KeyStore type. |  | KeyStore |
+| **camel.component.pqc.key-store-password** | The KeyStore password to use in combination with KeyStore Parameter. |  | String |
+| **camel.component.pqc.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| **camel.component.pqc.operation** | The operation to perform. |  | PQCOperations |
+| **camel.component.pqc.signature-algorithm** | In case there is no signer, we specify an algorithm to build the KeyPair or the Signer. |  | String |
+| **camel.component.pqc.signer** | The Signer to be used. The option is a java.security.Signature type. |  | Signature |
+| **camel.component.pqc.store-extracted-secret-key-as-header** | In the context of extractSecretKeyFromEncapsulation operation, this option define if we want to have the key set as header. | false | Boolean |
+| **camel.component.pqc.symmetric-key-algorithm** | In case we are using KEM operations, we need a Symmetric algorithm to be defined for the flow to work. |  | String |
+| **camel.component.pqc.symmetric-key-length** | The required length of the symmetric key used. | 128 | Integer |
+| **camel.dataformat.pqc.buffer-size** | The size of the buffer used for streaming encryption/decryption. | 4096 | Integer |
+| **camel.dataformat.pqc.enabled** | Whether to enable auto configuration of the pqc data format. This is enabled by default. |  | Boolean |
+| **camel.dataformat.pqc.key-encapsulation-algorithm** | The Post-Quantum KEM algorithm to use for key encapsulation. Supported values: MLKEM, BIKE, HQC, CMCE, SABER, FRODO, NTRU, NTRULPRime, SNTRUPrime, KYBER. | MLKEM | String |
+| **camel.dataformat.pqc.key-generator** | Refers to a custom KeyGenerator to lookup from the register for KEM operations. The option is a javax.crypto.KeyGenerator type. |  | String |
+| **camel.dataformat.pqc.key-pair** | Refers to the KeyPair to lookup from the register to use for KEM operations. The option is a java.security.KeyPair type. |  | String |
+| **camel.dataformat.pqc.provider** | The JCE security provider to use. |  | String |
+| **camel.dataformat.pqc.symmetric-key-algorithm** | The symmetric encryption algorithm to use with the shared secret. Supported values: AES, ARIA, RC2, RC5, CAMELLIA, CAST5, CAST6, CHACHA7539, etc. | AES | String |
+| **camel.dataformat.pqc.symmetric-key-length** | The length (in bits) of the symmetric key. | 128 | Integer |

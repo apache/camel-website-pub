@@ -1,0 +1,107 @@
+# Testing
+
+Testing is a crucial activity in any piece of software development or integration. Typically, Camel users would use various different technologies wired together in a variety of EIPs with different endpoints, languages, bean integration, and dependency injection, so it’s easy for things to go wrong! Testing is the crucial weapon to ensure that things work as you would expect.
+
+Camel is a Java library, so you can easily wire up tests in JUnit. However, the Camel project has tried to make the testing of Camel as easy and powerful as possible, so we have introduced the following features.
+
+## Testing modules
+
+The following modules are supported:
+
+ 
+| Component | Description |
+| --- | --- |
+| `[camel-test-junit5](../components/4.18.x/others/test-junit5.md)` | **JUnit 5**: Used for testing Camel in standalone mode (or without Spring) |
+| `[camel-test-main-junit5](../components/4.18.x/others/test-main-junit5.md)` | **JUnit 5**: Used for testing Camel in Camel Main mode |
+| `[camel-test-spring-junit5](../components/4.18.x/others/test-spring-junit5.md)` | **JUnit 5**: Used for testing Camel with Spring / Spring Boot |
+| `[camel-test-junit5](../components/4.18.x/others/test-junit6.md)` | **JUnit 6**: Used for testing Camel in standalone mode (or without Spring) |
+| `[camel-test-main-junit5](../components/4.18.x/others/test-main-junit6.md)` | **JUnit 6**: Used for testing Camel in Camel Main mode |
+| `[camel-test-spring-junit5](../components/4.18.x/others/test-spring-junit6.md)` | **JUnit 6**: Used for testing Camel with Spring / Spring Boot |
+| `[camel-test-infra](test-infra.md)` | **Camel Test Infra**: Camel Test Infra is a set of modules that leverage modern JUnit 5 features to abstract the provisioning and execution of test infrastructure. Among other things, it provides abstraction of the infrastructure (based on Test Containers - being the de-facto successor of the camel-testcontainers components) as well as JUnit 5 extensions for the Camel Context itself. |
+| `[camel-jbang-test](camel-jbang-test.md)` | **Camel JBang Test Plugin**: A Camel JBang plugin to help writing automated tests during prototyping with JBang. The tests are able to start the Camel integration and verify its logic from the very beginning. The test plugin does not require any project setup so you can just start writing and executing automated tests. |
+> **Note**
+> If you are using Camel Quarkus, then you can find information in the Camel Quarkus documentation how to do testing with Quarkus and Camel.
+
+In all approaches, the test classes look pretty much the same in that they all reuse the [Camel binding and injection annotations](bean-integration.md).
+
+> **Tip**
+> For more details on the different testing modules, then see their respective documentation from the links in the table above.
+
+## Testing functionality
+
+Camel provides a set of features that are common to use when writing unit or integration tests with Camel.
+
+### Testing endpoints
+
+Camel provides a number of [endpoints](endpoint.md) which can make testing easier.
+
+ 
+| Name | Description |
+| --- | --- |
+| [Mock](../components/4.18.x/mock-component.md) | For testing routes and mediation rules using mocks and allowing assertions to be added to an endpoint. |
+| [DataSet](../components/4.18.x/dataset-component.md) | For load & soak testing, this endpoint provides a way to create huge numbers of messages for sending to components and asserting that they are consumed correctly. |
+| [DataSet Test](../components/4.18.x/dataset-test-component.md) | Used to automatically load a set of expected messages from another endpoint which is then compared to the messages that arrive at this endpoint. |
+
+The main endpoint is the [Mock](../components/4.18.x/mock-component.md) endpoint, which allows expectations to be added to different endpoints; you can then run your tests and assert that your expectations are met at the end.
+
+### Stubbing out physical transport technologies
+
+If you wish to test out a route but want to avoid actually using real physical transport, then the following endpoints can be useful:
+
+> **Note**
+> For example, to unit test a transformation route rather than performing a full integration test
+
+ 
+| Name | Description |
+| --- | --- |
+| [Direct](../components/4.18.x/direct-component.md) | Direct invocation of the consumer from the producer so that single threaded (non-SEDA) in VM invocation is performed which can be useful to mock out physical transports |
+| [SEDA](../components/4.18.x/seda-component.md) | Deliver messages asynchronously to consumers via a `BlockingQueue` which is good for testing asynchronous transports |
+| [Stub](../components/4.18.x/stub-component.md) | Works like [SEDA](../components/4.18.x/stub-component.md) but does not validate the endpoint URI, which makes stubbing straightforward. |
+
+### Testing existing routes
+
+Camel provides some features to aid during testing of existing routes where you cannot or will not use [Mock](../components/4.18.x/mock-component.md) etc.
+
+For example, you may have a production ready route which you want to test with some third party API that sends messages into this route.
+
+ 
+| Name | Description |
+| --- | --- |
+| [NotifyBuilder](notify-builder.md) | Allows you to be notified when a certain condition has occurred. For example, when the route has completed five messages. You can build complex expressions to match your criteria when to be notified. |
+| [AdviceWith](advice-with.md) | Allows you to _advice_ (enhance) an existing route using a [RouteBuilder](route-builder.md) style. For example, you can send (or send and skip) a message to a [Mock](../components/4.18.x/mock-component.md) endpoint for validating the message send by Camel is as expected. |
+
+## Integration testing
+
+The purpose of integration testing is to verify a whole component or service with its integration to other components, infrastructure and services.
+
+Usually the integration tests start the Camel application as a whole and include test infrastructure such as message brokers, data persistence and 3rd party services that interact with the Camel application.
+
+See this chapter about [integration testing](integration-test.md) for details and how to master common integration testing challenges.
+
+There are a number of third party testing libraries that Camel users have found useful especially when it comes to integration testing.
+
+ 
+| Name | Description |
+| --- | --- |
+| [Citrus Integration Testing](https://citrusframework.org/) | Framework for automated integration tests supporting a wide range of message protocols and data formats |
+| [YAKS](https://citrusframework.org/yaks/) | YAKS is a framework based on Citrus to enable Cloud Native BDD testing on Kubernetes |
+
+### Citrus test framework
+
+As an example of writing integration tests for Camel applications you can use the [Citrus](https://citfrusframework.org) test framework. Citrus is an Open Source Java testing framework with focus on integration testing and messaging.
+
+The framework provides a very good integration with Apache Camel. Citrus helps you to write automated integration tests with a proper preparation of test infrastructure and connects with the exposed services to verify the Camel application with powerful message validation capabilities for different message data formats (e.g. XML, Json, YAML, plaintext).
+
+Please refer to the [Citrus documentation](https://citrusframework.org/citrus/reference/html/) to find out how to write automated tests for Apache Camel applications. The following sections might be interesting to explore for Camel developers and testers:
+
+ 
+| Name | Description |
+| --- | --- |
+| [Citrus & Camel routes](https://citrusframework.org/citrus/reference/html/#apache-camel) | Start and stop Camel routes as part of the test. |
+| [Citrus & Camel test infra](https://citrusframework.org/citrus/reference/html/#camel-infra) | Start and stop Camel test infrastructure services as part of the Citrus test. |
+| [Citrus & Camel processors](https://citrusframework.org/citrus/reference/html/#camel-processor-support) | Use Camel processor, transformer and data format EIPs in Citrus tests. |
+| [Citrus & Camel JBang](https://citrusframework.org/citrus/reference/html/#apache-camel) | Run Camel integrations with JBang as part of a test. |
+> **Tip**
+> Citrus provides a good integration with [JBang](https://www.jbang.dev) and Camel JBang. This means you can use Citrus from the very beginning for writing automated tests also in the prototyping phase with Camel JBang. Read about it in the chapter [Camel JBang test plugin](camel-jbang-test.md).
+
+Citrus integrates with Quarkus and Spring Boot so you can write the tests on top of known concepts and libraries. You can choose from a set of supported test engines such as JUnit Jupiter to run the tests as part of the build lifecycle or from your favorite IDE.

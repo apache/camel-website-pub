@@ -1,0 +1,48 @@
+# Cron Trait
+
+The Cron trait can be used to customize the behaviour of periodic timer/cron based integrations.
+
+While normally an integration requires a pod to be always up and running, some periodic tasks, such as batch jobs, require to be activated at specific hours of the day or with a periodic delay of minutes. For such tasks, the cron trait can materialize the integration as a Kubernetes CronJob instead of a standard deployment, in order to save resources when the integration does not need to be executed.
+
+Integrations that start from the following components are evaluated by the cron trait: `timer`, `cron`, `quartz`. The trait does support multiple evaluated components only if they have the same schedule, else it will fallback to Camel implementation instead of instantiating a Kubernetes CronJob.
+
+> **Warning**
+> In case of native build-mode defined in [quarkus](quarkus.md) trait, the component can’t be customized.
+
+The rules for using a Kubernetes CronJob are the following:
+
+-   `timer`: when period is set in milliseconds with no remaining seconds, for example 120000. If there is any second left as in 121000 (120s and 1s) or the presence of any of these parameters (delay, repeatCount, time) then a CronJob won’t be created, but a standard deployment.
+    
+-   `cron`, `quartz`: when the cron expression does not contain seconds (or the "seconds" part is set to 0). E.g.
+    
+    \`cron:tab?schedule=0/2 \* \* \* ?\` or \`quartz:trigger?cron=0 0/2 \* \* \* ?\`.
+    
+
+This trait is available in the following profiles: **Kubernetes, Knative, OpenShift**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait cron.[key]=[value] --trait cron.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `cron.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `cron.schedule` | `string` | The CronJob schedule for the whole integration. If multiple routes are declared, they must have the same schedule for this mechanism to work correctly. |
+| `cron.timeZone` | `string` | The timezone that the CronJob will run on |
+| `cron.components` | `string` | A comma separated list of the Camel components that need to be customized in order for them to work when the schedule is triggered externally by Kubernetes. Supported components are currently: `cron`, `timer` and `quartz`. |
+| `cron.fallback` | `bool` | Use the default Camel implementation of the `cron` endpoint (`quartz`) instead of trying to materialize the integration as Kubernetes CronJob. |
+| `cron.concurrency-policy` | `string` | Specifies how to treat concurrent executions of a Job. Valid values are: - "Allow": allows CronJobs to run concurrently; - "Forbid" (default): forbids concurrent runs, skipping next run if previous run hasn’t finished yet; - "Replace": cancels currently running job and replaces it with a new one |
+| `cron.auto` | `bool` | Automatically deploy the integration as CronJob when all routes are either starting from a periodic consumer (only `cron`, `timer` and `quartz` are supported) or a passive consumer (e.g. `direct` is a passive consumer).
+It’s required that all periodic consumers have the same period, and it can be expressed as cron schedule (e.g. `1m` can be expressed as `0/1 * * * *`, while `35m` or `50s` cannot).
+
+ |
+| `cron.starting-deadline-seconds` | `int64` | Optional deadline in seconds for starting the job if it misses scheduled time for any reason. Missed jobs executions will be counted as failed ones. |
+| `cron.active-deadline-seconds` | `int64` | Specifies the duration in seconds, relative to the start time, that the job may be continuously active before it is considered to be failed. It defaults to 60s. |
+| `cron.backoff-limit` | `int32` | Specifies the number of retries before marking the job failed. It defaults to 2. |

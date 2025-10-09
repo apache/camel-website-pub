@@ -1,0 +1,1339 @@
+# Camel Kubernetes plugin
+
+This plugin helps you to get started with running Camel applications on Kubernetes. Please make sure to meet these prerequisites for running Camel integrations on Kubernetes:
+
+-   Install a Kubernetes command line tooling ([kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl))
+    
+-   Connect to a running Kubernetes cluster where you want to run the Camel integration
+    
+
+You can connect to a remote Kubernetes cluster or set up a local cluster. To set up a local Kubernetes cluster, you have a variety of options.
+
+-   [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
+    
+-   [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+    
+
+Camel JBang is able to interact with any of these Kubernetes platforms (remote or local).
+
+Running Camel routes on Kubernetes is quite simple with Camel JBang. In fact, you can develop and test your Camel route locally with Camel JBang and then promote the same source to running it as an integration on Kubernetes.
+
+The Camel JBang Kubernetes functionality is provided as a command plugin. This means you need to enable the `kubernetes` plugin first to use the subcommands in Camel JBang.
+
+```bash
+camel plugin add kubernetes
+```
+
+You should see the `kubernetes` plugin listed as an installed plugin.
+
+```bash
+camel plugin get
+```
+
+```bash
+ NAME        COMMAND     DEPENDENCY                                      DESCRIPTION
+ kubernetes  kubernetes  org.apache.camel:camel-jbang-plugin-kubernetes  Run Camel applications on Kubernetes
+```
+
+Now Camel JBang is able to run the subcommands offered by the plugin. You can inspect the help page to see the list of available plugin subcommands.
+
+```bash
+camel kubernetes --help
+```
+
+## Kubernetes export
+
+The Kubernetes plugin works with the Camel JBang export functionality. The project export generates a proper Maven/Gradle project following one of the available runtime types Quarkus, SpringBoot or camel-main.
+
+In case you export the project with the Kubernetes plugin the exported project holds all information (e.g. sources, properties, dependencies, etc.) and is ready to build, push and deploy the application to Kubernetes, too. The export generates a Kubernetes manifest (kubernetes.yml) that holds all resources (e.g. Deployment, Service, ConfigMap) required to run the application on Kubernetes.
+
+You can create a project export with the following command.
+
+```bash
+camel kubernetes export route.yaml --dir some/path/to/project
+```
+
+The command receives one or more source files (e.g. Camel routes), and performs the export. As a result, you will find the Maven/Gradle project sources generated into the given project path.
+
+The default runtime of the project is Quarkus. You can adjust the runtime with an additional command option `--runtime=quarkus`.
+
+If you want to run this application on Kubernetes, you need to build the container image, push it to a registry and deploy the application to Kubernetes.
+
+> **Tip**
+> The Camel JBang Kubernetes plugin provides a `run` command that combines these steps (export, container image build, push, deploy) into a single command.
+
+You can now navigate to the generated project folder and build the project artifacts for instance with this Maven command.
+
+```bash
+./mvnw package -Dquarkus.container-image.build=true
+```
+
+According to the runtime type (e.g., quarkus) defined for the export this builds and creates a Quarkus application artifact JAR in the Maven build output folder (e.g. `target/route-1.0-SNAPSHOT.jar`).
+
+The option `-Dquarkus.container-image.build=true` also builds a container image that is ready for deployment to Kubernetes. More precisely, the exported project uses the very same tooling and options as an arbitrary Quarkus/SpringBoot application would do. This means you can easily customize the container image and all settings provided by the runtime provider (e.g., Quarkus or SpringBoot) after the export.
+
+The Kubernetes deployment resources are automatically generated with the export, too.
+
+You can find the Kubernetes manifest in `src/main/kubernetes/kubernetes.yml`.
+
+For instance with the option `-Dquarkus.kubernetes.deploy=true` uses this manifest to trigger the Kubernetes deployment as part of the Maven build.
+
+```bash
+./mvnw package -Dquarkus.kubernetes.deploy=true
+```
+
+You will see the Deployment on Kubernetes shortly after this command has finished.
+
+The Camel JBang Kubernetes export command provides several options to customize the exported project.
+
+ 
+| Option | Description |
+| --- | --- |
+| `--service-account` | The service account used to run the application. |
+| `--dependency` | Adds dependency that should be included, use "camel:" prefix for a Camel component, "mvn:org.my:app:1.0" for a Maven dependency. |
+| `--build-property` | Maven/Gradle build properties (syntax: --build-property=prop1=foo) |
+| `--property` | Add a runtime property or properties from a file (syntax: \[my-key=my-value|file:/path/to/my-conf.properties,/path/to/my-conf.properties\]). |
+| `--config` | Add a runtime configuration from a ConfigMap or a Secret (syntax: \[configmap,secret\]:name\[/key\], where name represents the configmap/secret name and key optionally represents the configmap/secret key to be filtered). |
+| `--resource` | Add a runtime resource from a Configmap or a Secret (syntax: \[configmap,secret\]:name\[/key\]\[@path\], where name represents the configmap/secret name, key optionally represents the configmap/secret key to be filtered and path represents the destination path). |
+| `--open-api` | Add an OpenAPI spec (syntax: \[configmap,file\]:name). |
+| `--env` | Set an environment variable in the integration container, for instance "-e MY\_VAR=my-value". |
+| `--volume` | Mount a volume into the integration container, for instance "-v pvcname:/container/path". |
+| `--connect` | A Service that the integration should bind to, specified as \[\[apigroup/\]version:\]kind:\[namespace/\]name. |
+| `--source` | Add the source file to your integration, this is added to the list of files listed as arguments of the command. |
+| `--annotation` | Add an annotation to the integration. Use name values pairs like "--annotation my.company=hello". |
+| `--label` | Add a label to the integration. Use name values pairs like "--label my.company=hello". |
+| `--trait` | Add a trait configuration to the integration. Use name values pairs like "--trait trait.name.config=hello". |
+| `--image` | An image built externally (for instance via CI/CD). Enabling it will skip the integration build phase. |
+| `--image-registry` | The image registry to hold the app container image. |
+| `--image-group` | The image registry group used to push images to. |
+| `--image-builder` | The image builder used to build the container image (e.g. docker, jib, s2i). |
+| `--image-platform` | List of target platforms. Each platform is defined using os and architecture (e.g. linux/amd64). |
+| `--base-image` | The base image that is used to build the container image from (default is eclipse-temurin:<java-version>). |
+| `--registry-mirror` | Optional Docker registry mirror where to pull images from when building the container image. |
+| `--cluster-type` | The target cluster type. Special configurations may be applied to different cluster types such as Kind or Minikube. |
+| `--profile` | The developer [profile](camel-jbang.html#_using_profiles) to use a specific configuration in configuration files using the naming style `application-<profile>.properties`. |
+
+The Kubernetes plugin export command also inherits all options from the arbitrary Camel JBang export command.
+
+> **Tip**
+> See the possible options by running: `camel kubernetes export --help` for more details.
+
+### Kubernetes Container Health Probes
+
+The Observability Services component is set by default in the project created by the export command, then the health path probes are prefixed with the `/observe` endpoint, regardless if they are Quarkus or Spring Boot.
+
+These are the HTTP Container probe endpoints.
+
+For Quarkus.
+
+```none
+/observe/health/live
+/observe/health/ready
+/observe/health/started
+```
+
+For Spring Boot (there is no startup probe)
+
+```none
+/observe/health/liveness
+/observe/health/readiness
+```
+
+Note that these container probes are generated by jkube plugin, when you run the `k8s:resource` to generate the manifests in the `target/kubernetes/kubernetes.yml`.
+
+You can export to a project and manually remove the `camel-observability-services` artifact from the `pom.xml`.
+
+## Kubernetes manifest options
+
+The Kubernetes manifest (kubernetes.yml) describes all resources to successfully run the application on Kubernetes. The manifest usually holds the deployment, a service definition, config maps and much more.
+
+You can use several options on the `export` command to customize this manifest with the traits. The trait concept was born out of Camel K, and the Camel K operator uses the traits to configure the Kubernetes resources that are managed by an integration. You can use the same options to also customize the Kubernetes manifest that is generated as part of the project export.
+
+The configuration of the traits is used by the given order:
+
+1.  Use the `--trait` command options values
+    
+2.  Any annotation starting with the prefix `trait.camel.apache.org/*`
+    
+3.  Any properties from the specific configuration `application-<profile>.properties` for the profile defined by the command option `--profile` with the prefix `camel.jbang.trait.*`
+    
+4.  Any properties from the default configuration `application.properties` with the prefix `camel.jbang.trait.*`
+    
+
+### Container trait options
+
+The container specification is part of the Kubernetes Deployment resource and describes the application container image, exposed ports and health probes, for example.
+
+The container trait is able to customize the container specification with the following options:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `container.port` | `int` | To configure a different port exposed by the container (default `8080`). |
+| `container.port-name` | `string` | To configure a different port name for the port exposed by the container. It defaults to `http` only when the `expose` parameter is true. |
+| `container.service-port` | `int` | To configure under which service port the container port is to be exposed (default `80`). |
+| `container.service-port-name` | `string` | To configure under which service port name the container port is to be exposed (default `http`). |
+| `container.name` | `string` | The application container name. |
+| `container.image` | `string` | The application container image to use for the Deployment. |
+| `container.image-pull-policy` | `PullPolicy` | The pull policy: Always|Never|IfNotPresent |
+| `container.image-pull-secrets` | `string[]` | The pull secrets for private registries |
+| `container.request-cpu` | `string` | The minimum amount of CPU required. |
+| `container.request-memory` | `string` | The minimum amount of memory required. |
+| `container.limit-cpu` | `string` | The maximum amount of CPU required. |
+| `container.limit-memory` | `string` | The maximum amount of memory required. |
+
+The syntax to specify container trait options is as follows:
+
+```bash
+camel kubernetes export Sample.java --trait container.[key]=[value]
+```
+
+You may specify these options with the export command to customize the container specification.
+
+```bash
+camel kubernetes export Sample.java --trait container.name=my-container --trait container.port=8088 --trait container.imagePullPolicy=IfNotPresent --trait container.request-cpu=0.005 --trait container.request-memory=100Mi
+```
+
+This results in the following container specification in the Deployment resource.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    camel.apache.org/integration: sample
+  name: sample
+spec:
+  selector:
+    matchLabels:
+      camel.apache.org/integration: sample
+  template:
+    metadata:
+      labels:
+        camel.apache.org/integration: sample
+    spec:
+      containers:
+      - image: quay.io/sample:1.0-SNAPSHOT (1)
+        imagePullPolicy: IfNotPresent (2)
+        name: my-container (3)
+        ports:
+        - containerPort: 8088 (4)
+          name: http
+          protocol: TCP
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: '0.005'
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Container image running the application</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Customized image pull policy</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Custom container name</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Custom container port exposed</td></tr></tbody></table>
+
+### Cronjob
+
+It’s possible to run the workload as a [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/), it allows to set some parameters as `schedule`, `timezone`, `startingDeadlineSeconds`, `activeDeadlineSeconds`, `backoffLimit`, and `durationMaxIdleSeconds`. When the CronJob trait is used, it doesn’t contain the container health probes, since the Cronjob doesn’t use them to start or check the pods.
+
+To generate the CronJob manifest, these are required trait parameters: `enabled=true` and `schedule`.
+
+Example
+
+```bash
+camel kubernetes export Sample.java \
+  --trait=cronjob.enabled=true \
+  --trait=cronjob.schedule="* * * * 2" \
+  --trait=cronjob.timezone="Europe/Lisbon" \
+  --trait=cronjob.startingDeadlineSeconds=3 \
+  --trait=cronjob.activeDeadlineSeconds=7 \
+  --trait=cronjob.backoffLimit=4 \
+  --trait=cronjob.durationMaxIdleSeconds=2
+```
+
+The CronJob configuration parameters:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `cronjob.enabled` | `boolean` | To generate the CronJob manifest instead of Deployment. (default=false) |
+| `cronjob.schedule` | `string` | To set the schedule to run the workload following the crontab format. |
+| `cronjob.timezone` | `string` | To set the timezone to run the workload. |
+| `cronjob.startingDeadlineSeconds` | `integer` | To set the `StartingDeadlineSeconds` field of the CronJob. |
+| `cronjob.activeDeadlineSeconds` | `integer` | To set the `ActiveDeadlineSeconds` field of the CronJob. |
+| `cronjob.backoffLimit` | `integer` | To set the `BackoffLimit` field of the CronJob. |
+| `cronjob.durationMaxIdleSeconds` | `integer` | To set the `camel.main.duration-max-idle-seconds` property for how long time in seconds Camel can be idle before automatic terminating the JVM. (default 1) |
+
+### Labels and annotations
+
+You may need to add labels or annotations to the generated Kubernetes resources. By default, the generated resources will have the label `camel.apache.org/integration` set to the exported project name.
+
+When the `--observe` command option is present (it is by default) then the generated resources will also have the label `camel.apache.org/app` set to the exported project name.
+
+You can add labels and annotations with these options on the export command:
+
+```bash
+camel kubernetes export Sample.java --annotation [key]=[value] --label [key]=[value]
+```
+
+Example
+
+```bash
+camel kubernetes export Sample.java --annotation project.team=camel-experts
+```
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    project.team: camel-experts (1)
+  labels:
+    camel.apache.org/integration: sample
+  name: sample
+spec:
+  selector:
+    matchLabels:
+      camel.apache.org/integration: sample
+  template:
+    metadata:
+      labels:
+        camel.apache.org/integration: sample
+    spec:
+      containers:
+      - image: quay.io/sample:1.0-SNAPSHOT
+        name: sample
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Custom deployment annotation</td></tr></tbody></table>
+
+### Environment variables
+
+The environment trait is there to set environment variables on the container specification.
+
+The environment trait provides the following configuration options:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `environment.vars` | `[]string` | A list of environment variables to be added to the integration container. The syntax is KEY=VALUE separated by a comma, e.g., `'MY_VAR="my value"','MY_OTHER_VAR="my value"'` .
+These take precedence over the previously defined environment variables.
+
+ |
+
+The syntax to specify environment trait options is as follows:
+
+```bash
+camel kubernetes export Sample.java --trait environment.[key]=[value]
+```
+
+There is also a shortcut option `--env` that you can use.
+
+```bash
+camel kubernetes export Sample.java --env [key]=[value]
+```
+
+Example
+
+```bash
+camel kubernetes export Sample.java --trait environment.vars=MY_ENV=foo --env FOO_ENV=bar
+```
+
+This results in the following container specification in the Deployment resource.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    camel.apache.org/integration: sample
+  name: sample
+spec:
+  selector:
+    matchLabels:
+      camel.apache.org/integration: sample
+  template:
+    metadata:
+      labels:
+        camel.apache.org/integration: sample
+    spec:
+      containers:
+      - image: quay.io/sample:1.0-SNAPSHOT
+        name: sample
+        env: (1)
+          - name: MY_ENV
+            value: foo
+          - name: FOO_ENV
+            value: bar
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Environment variables set in the container specification</td></tr></tbody></table>
+
+### Service trait options
+
+The Service trait enhances the Kubernetes manifest with a Service resource so that the application can be accessed by other components in the same namespace. The service resource exposes the application with a protocol (e.g., TCP/IP) on a given port and uses either `ClusterIP`, `NodePort` or `LoadBalancer` type.
+
+The Camel JBang plugin automatically inspects the Camel routes for exposed Http services and adds the service resource when applicable. This means when one of the Camel routes exposes a Http service (for instance by using the `platform-http` component) the Kubernetes manifest also creates a Kubernetes Service resource besides the arbitrary Deployment.
+
+You can customize the generated Kubernetes service resource with trait options:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `service.type` | `string` | The type of service to be used, either 'ClusterIP', 'NodePort' or 'LoadBalancer'. |
+| `container.service-port` | `int` | To configure under which service port the container port is to be exposed (default `80`). |
+| `container.service-port-name` | `string` | To configure under which service port name the container port is to be exposed (default `http`). |
+
+### Knative service trait options
+
+[Knative serving](https://knative.dev/docs/serving/) defines a set of resources on Kubernetes to handle Serverless workloads with automatic scaling and scale-to-zero functionality.
+
+When Knative serving is available on the target Kubernetes cluster, you may want to use the Knative service resource instead of an arbitrary Kubernetes service resource. The Knative service trait will create such a resource as part of the Kubernetes manifest.
+
+> **Note**
+> The `knative-service` trait is disabled by default, you need to enable the Knative service trait with `--trait knative-service.enabled=true` option. Otherwise, the Camel JBang export will always create an arbitrary Kubernetes service resource.
+
+> **Note**
+> If you enable the knative-service trait and deploys to minikube and uses the docker builder to build the container image in the minikube registry addon, it’s likely the container image published won’t contain the digest value, and [knative-serving has a verification to check the image digest](https://knative.dev/docs/serving/configuration/deployment/#skipping-tag-resolution), so the pod will fail to start with the error message `failed to resolve image to digest`, so for development purposes the kubernetes plugin will skip this validation by adding the property `registries-skipping-tag-resolving: localhost:5000` to the `configmap/config-deployment` in `knative-serving` namespace, if you want to disable this automatic setting, you can set the `--disable-auto` parameter to disable the automatic cluster configuration, however disabling it won’t set other automatic configuration for the cluster. You may also want to manually set that property, so this plugin won’t set it even with the automatic cluster detection.
+
+WARN: Currently knative-service doesn’t work in OpenShift, work is underway to fix it.
+
+The trait offers following options for customization:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `knative-service.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `knative-service.annotations` | `map[string]string` | The annotations added to route. This can be used to set knative service-specific annotations CLI usage example: -t "knative-service.annotations.'haproxy.router.openshift.io/balance'=true" |
+| `knative-service.class` | `string` | Configures the Knative autoscaling class property (e.g., to set `hpa.autoscaling.knative.dev` or `kpa.autoscaling.knative.dev` autoscaling).
+Refer to the Knative documentation for more information.
+
+ |
+| `knative-service.autoscaling-metric` | `string` | Configures the Knative autoscaling metric property (e.g., to set `concurrency` based or `cpu` based autoscaling).
+
+Refer to the Knative documentation for more information.
+
+ |
+| `knative-service.autoscaling-target` | `int` | Sets the allowed concurrency level or CPU percentage (depending on the autoscaling metric) for each Pod.
+
+Refer to the Knative documentation for more information.
+
+ |
+| `knative-service.min-scale` | `int` | The minimum number of Pods that should be running at any time for the integration. It’s **zero** by default, meaning that the integration is scaled down to zero when not used for a configured amount of time.
+
+Refer to the Knative documentation for more information.
+
+ |
+| `knative-service.max-scale` | `int` | An upper bound for the number of Pods that can be running in parallel for the integration. Knative has its own cap value that depends on the installation.
+
+Refer to the Knative documentation for more information.
+
+ |
+| `knative-service.rollout-duration` | `string` | Enables to gradually shift traffic to the latest Revision and sets the rollout duration. It’s disabled by default and must be expressed as a Golang `time.Duration` string representation, rounded to a second precision. |
+| `knative-service.visibility` | `string` | Setting `cluster-local`, Knative service becomes a private service. Specifically, this option applies the `networking.knative.dev/visibility` label to Knative service.
+
+Refer to the Knative documentation for more information.
+
+ |
+| `knative-service.timeout-seconds` | `int` | The maximum duration in seconds that the request instance is allowed to respond to a request. This field propagates to the integration Pod’s terminationGracePeriodSeconds.
+
+Refer to the Knative documentation for more information.
+
+ |
+
+### Connecting to Knative
+
+The previous section described how the exported Apache Camel application can leverage the Knative service resource with auto-scaling as part of the deployment to Kubernetes.
+
+Apache Camel also provides a Knative component that makes you easily interact with [Knative eventing](https://knative.dev/docs/eventing/) and [Knative serving](https://knative.dev/docs/serving/).
+
+The Knative component enables you to exchange data with the Knative eventing broker and other Knative services deployed on Kubernetes. The Camel JBang Kubernetes plugin provides some autoconfiguration options when connecting with the Knative component. The export command assists you in configuring both the Knative component and the Kubernetes manifest for connecting to Knative resources on the Kubernetes cluster.
+
+You can configure the Knative component with the Knative trait.
+
+> **Note**
+> The `knative` trait is disabled by default, you need to enable the Knative trait with `--trait knative.enabled=true` option.
+
+The trait offers the following options for customization:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `knative.enabled` | `bool` | Can be used to enable or disable a trait. (default: true) |
+| `knative.configuration` | `string` | Can be used to inject a Knative complete configuration in JSON format |
+| `knative.channel-sinks` | `[]string` | List of channels used as destination of camel routes. Can contain simple channel names or full Camel URIs.
+Refer to the Knative documentation for more information.
+
+ |
+| `knative.channel-sources` | `[]string` | List of channels used as the source of camel routes. Can contain simple channel names or full Camel URIs. |
+| `knative.endpoint-sinks` | `[]string` | List of endpoints used as destination of camel routes. Can contain simple endpoint names or full Camel URIs. |
+| `knative.endpoint-sources` | `[]string` | List of endpoints used as sources of camel routes. Can contain simple endpoint names or full Camel URIs. |
+| `knative.event-sinks` | `[]string` | List of endpoints used as destination of integration routes. Can contain simple endpoint names or full Camel URIs. |
+| `knative.event-sources` | `[]string` | List of event types that the integration will be subscribed to. Can contain simple event types or full Camel URIs (to use a specific broker different from "default"). |
+| `knative.sink-binding` | `bool` | Allows binding the integration to a sink via a Knative SinkBinding resource. This can be used when the integration targets a single sink. It’s enabled by default when the integration targets a single sink (except when the integration is owned by a Knative source). |
+| `knative.filters` | `[]string` | Sets filter attributes on the event stream (such as event type, source, subject and so on). A list of key-value pairs that represent filter attributes and its values. The syntax is KEY=VALUE, e.g., source="my.source". Filter attributes get set on the Knative trigger that is being created as part of this integration. |
+| `knative.filter-event-type` | `bool` | Enables the default filtering for the Knative trigger using the event type If this is true, the created Knative trigger uses the event type as a filter on the event stream when no other filter criteria is given. (default: true) |
+
+### Knative trigger
+
+The concept of a Knative trigger allows you to consume events from the [Knative eventing](https://knative.dev/docs/eventing/) broker. In case your Camel route uses the Knative component as a consumer you may need to create a trigger in Kubernetes to connect your Camel application with the Knative broker.
+
+The Camel JBang Kubernetes plugin is able to automatically create this trigger for you.
+
+> **Note**
+> The `knative` trait is disabled by default, you need to enable the Knative trait with `--trait knative.enabled=true` option.
+
+The following Camel route uses the Knative event component and references a Knative broker by its name. The plugin inspects the code and automatically generates the Knative trigger as part of the Kubernetes manifest that is used to run the Camel application on Kubernetes.
+
+```yaml
+- from:
+    uri: knative:event/camel.evt.type?name=my-broker
+    steps:
+      - to: log:info
+```
+
+The route consumes Knative events of type `camel.evt.type`. If you export this route with the Camel JBang Kubernetes plugin, you will see a Knative trigger being generated as part of the Kubernetes manifest (kubernetes.yml).
+
+```bash
+camel kubernetes export knative-route.yaml
+```
+
+The generated export project can be deployed to Kubernetes, and as part of the deployment, the trigger is automatically created so the application can start consuming events.
+
+The generated trigger looks as follows:
+
+```yaml
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: my-broker-knative-route-camel-evt-type
+spec:
+  broker: my-broker
+  filter:
+    attributes:
+      type: camel.evt.type
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: knative-route
+    uri: /events/camel-evt-type
+```
+
+The trigger uses a default filter on the event type CloudEvents attribute and calls the Camel application via the exposed Kubernetes service resource.
+
+The Camel application is automatically configured to expose an Http service so incoming events are handed over to the Camel route. You can review the Knative service resource configuration that makes Camel configure the Knative component. The configuration has been automatically created in `src/main/resources/knative.json` in the exported project.
+
+Here is an example of the generated `knative.json` file:
+
+```json
+{
+  "resources" : [ {
+    "name" : "camel-event",
+    "type" : "event",
+    "endpointKind" : "source",
+    "path" : "/events/camel-event",
+    "objectApiVersion" : "eventing.knative.dev/v1",
+    "objectKind" : "Broker",
+    "objectName" : "my-broker",
+    "reply" : false
+  } ]
+}
+```
+
+The exported project has everything configured to run the application on Kubernetes. Of course, you need Knative eventing installed on your target cluster, and you need to have a Knative broker named `my-broker` available in the target namespace.
+
+Now you can just deploy the application using the Kubernetes manifest and see the Camel route consuming events from the broker.
+
+### Knative channel subscription
+
+Knative channels represent another form of producing and consuming events from the Knative broker. Instead of using a trigger, you can create a subscription for a Knative channel to consume events.
+
+> **Note**
+> The `knative` trait is disabled by default, you need to enable the Knative trait with `--trait knative.enabled=true` option.
+
+The Camel route that connects to a Knative channel in order to receive events looks like this:
+
+```yaml
+- from:
+    uri: knative:channel/my-channel
+    steps:
+      - to: log:info
+```
+
+The Knative channel is referenced by its name. The Camel JBang Kubernetes plugin will inspect your code to automatically create a channel subscription as part of the Kubernetes manifest. You just need to export the Camel route as usual.
+
+```bash
+camel kubernetes export knative-route.yaml
+```
+
+The code inspection recognizes the Knative component that references the Knative channel, and the subscription automatically becomes part of the exported Kubernetes manifest.
+
+Here is an example subscription that has been generated during the export:
+
+```yaml
+apiVersion: messaging.knative.dev/v1
+kind: Subscription
+metadata:
+  name: my-channel-knative-route
+spec:
+  channel:
+    apiVersion: messaging.knative.dev/v1
+    kind: Channel
+    name: my-channel
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: knative-route
+    uri: /channels/my-channel
+```
+
+The subscription connects the Camel application with the channel, so each event on the channel is sent to the Kubernetes service resource that also has been created as part of the Kubernetes manifest.
+
+The Camel Knative component uses a service resource configuration internally to create the proper Http service. You can review the Knative service resource configuration that makes Camel configure the Knative component. The configuration has been automatically created in `src/main/resources/knative.json` in the exported project.
+
+Here is an example of the generated `knative.json` file:
+
+```json
+{
+  "resources" : [ {
+    "name" : "my-channel",
+    "type" : "channel",
+    "endpointKind" : "source",
+    "path" : "/channels/my-channel",
+    "objectApiVersion" : "messaging.knative.dev/v1",
+    "objectKind" : "Channel",
+    "objectName" : "my-channel",
+    "reply" : false
+  } ]
+}
+```
+
+Assuming that you have Knative eventing installed on your cluster and that you have set up the Knative channel `my-channel` you can start consuming events right away. The deployment of the exported project uses the Kubernetes manifest to create all required resources, including the Knative subscription.
+
+### Knative sink binding
+
+When connecting to a Knative resource (Broker, Channel, Service) in order to produce events for Knative eventing you probably want to use a `SinkBinding` that resolves the URL to the Knative resource for you. The sink binding is a Kubernetes resource that makes Knative eventing automatically inject the resource URL into your Camel application on startup. The Knative URL injection uses environment variables (`K_SINK`, `K_CE_OVERRIDES`) on your deployment. The Knative eventing operator will automatically resolve the Knative resource (e.g. a Knative broker URL) and inject the value so your application does not need to know the actual URL when deploying.
+
+The Camel JBang Kubernetes plugin leverages the sink binding concept for all routes that use the Knative component as an output.
+
+> **Note**
+> The `knative` trait is disabled by default, you need to enable the Knative trait with `--trait knative.enabled=true` option.
+
+The following route produces events on a Knative broker:
+
+```yaml
+- from:
+    uri: timer:tick
+    steps:
+      - setBody:
+          constant: Hello Camel !!!
+      - to: knative:event/camel.evt.type?name=my-broker
+```
+
+The route produces events of type `camel.evt.type` and pushes the events to the broker named `my-broker`. At this point, the actual Knative broker URL is unknown. The sink binding is going to resolve the URL and inject its value at deployment time using the `K_SINK` environment variable.
+
+The Camel JBang Kubernetes plugin export automatically inspects such a route and automatically creates the sink binding resource for us. The sink binding is part of the exported Kubernetes manifest and is created on the cluster as part of the deployment.
+
+A sink binding resource created by the export command looks like follows:
+
+```bash
+camel kubernetes export knative-route.yaml
+```
+
+```yaml
+apiVersion: sources.knative.dev/v1
+kind: SinkBinding
+metadata:
+  finalizers:
+    - sinkbindings.sources.knative.dev
+  name: knative-route
+spec:
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: my-broker
+  subject:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: knative-route
+```
+
+In addition to creating the sink binding, the Camel JBang plugin also takes care of configuring the Knative Camel component. The Knative component uses a configuration file that you can find in `src/main/resources/knative.json`. As you can see the configuration uses the `K_SINK` injected property placeholder as a broker URL.
+
+```json
+{
+  "resources" : [ {
+    "name" : "camel-evt-type",
+    "type" : "event",
+    "endpointKind" : "sink",
+    "url" : "{{k.sink}}",
+    "objectApiVersion" : "eventing.knative.dev/v1",
+    "objectKind" : "Broker",
+    "objectName" : "my-broker",
+    "reply" : false
+  } ]
+}
+```
+
+As soon as the Kubernetes deployment for the exported project has started the sink binding will inject the `K_SINK` environment variable so that the Camel applicaiton is ready to send events to the Knative broker.
+
+The sink binding concept works for Knative Broker, Channel and Service resources. You just reference the resource by its name in your Camel route when sending data to the Knative component as an output of the route (`to("knative:event|channel|endpoint/<resource-name>")`).
+
+### Mount trait options
+
+The mount trait is able to configure volume mounts on the Deployment resource in order to inject data from Kubernetes resources such as config maps or secrets.
+
+There are also shortcut options like `--volume`, `--config` and `--resource` for the mount trait. These options are described in more detail in the next section. For now let’s have a look into the pure mount trait configuration options.
+
+The mount trait provides the following configuration options:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `mount.configs` | `[]string` | A list of configuration pointing to configmap/secret. The configurations are expected to be UTF-8 resources as they are processed by runtime Camel Context and tried to be parsed as property files. They are also made available on the classpath to ease their usage directly from the Route. Syntax: \[configmap|secret\]:name\[/key\], where name represents the resource name and key optionally represents the resource key to be filtered |
+| `mount.resources` | `[]string` | A list of resources (text or binary content) pointing to a configmap/secret. The resources are expected to be any resource type (text or binary content). The destination path can be either a default location or any path specified by the user. Syntax: \[configmap|secret\]:name\[/key\]\[@path\], where name represents the resource name, key optionally represents the resource key to be filtered and path represents the destination path |
+| `mount.volumes` | `[]string` | A list of Persistent Volume Claims to be mounted. Syntax: \[pvcname:/container/path\] |
+
+The syntax to specify mount trait options is as follows:
+
+```bash
+camel kubernetes export Sample.java --trait mount.[key]=[value]
+```
+
+Example
+
+```bash
+camel kubernetes export Sample.java --trait mount.configs=configmap:my-data --trait mount.volumes=my-pvc:/container/path
+```
+
+This results in the following container specification in the Deployment resource.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    camel.apache.org/integration: sample
+  name: sample
+spec:
+  selector:
+    matchLabels:
+      camel.apache.org/integration: sample
+  template:
+    metadata:
+      labels:
+        camel.apache.org/integration: sample
+    spec:
+      containers:
+        - image: quay.io/sample:1.0-SNAPSHOT
+          name: sample
+          volumeMounts:
+            - mountPath: /etc/camel/conf.d/_configmaps/my-data (1)
+              name: my-data
+              readOnly: true
+            - mountPath: /container/path (2)
+              name: my-pvc
+              readOnly: false
+      volumes:
+        - name: my-data (3)
+          configMap:
+            name: my-data
+        - name: my-pvc (4)
+          persistentVolumeClaim:
+            claimName: my-pvc
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>The config map <code>my-data</code> mounted into the container with default mount path for configurations</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>The volume mounted into the container with given path</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>The config map reference as volume spec</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>The persistent volume claim <code>my-pvc</code></td></tr></tbody></table>
+
+### ConfigMaps, volumes and secrets
+
+In the previous section, we have seen how to mount volumes, configs, and resources into the container.
+
+The Kubernetes export command provides some shortcut options for adding configmaps and secrets as volume mounts. The syntax is as follows:
+
+```bash
+camel kubernetes export Sample.java --config [key]=[value] --resource [key]=[value] --volume [key]=[value]
+```
+
+The options expect the following syntax:
+
+ 
+| Option | Syntax |
+| --- | --- |
+| `config` | Add a runtime configuration from a ConfigMap or a Secret (syntax: \[configmap|secret\]:name\[/key\], where name represents the configmap or secret name and key optionally represents the configmap or secret key to be filtered). |
+| `resource` | Add a runtime resource from a Configmap or a Secret (syntax: \[configmap|secret\]:name\[/key\]\[@path\], where name represents the configmap or secret name, key optionally represents the configmap or secret key to be filtered and the path represents the destination path). |
+| `volume` | Mount a volume into the integration container, for instance "--volume pvcname:/container/path". |
+
+Example
+
+```bash
+camel kubernetes export Sample.java --config secret:my-credentials  --resource configmap:my-data --volume my-pvc:/container/path
+```
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    camel.apache.org/integration: sample
+  name: sample
+spec:
+  selector:
+    matchLabels:
+      camel.apache.org/integration: sample
+  template:
+    metadata:
+      labels:
+        camel.apache.org/integration: sample
+    spec:
+      containers:
+        - image: quay.io/sample:1.0-SNAPSHOT
+          name: sample
+          volumeMounts:
+            - mountPath: /etc/camel/conf.d/_secrets/my-credentials
+              name: my-credentials (1)
+              readOnly: true
+            - mountPath: /etc/camel/resources.d/_configmaps/my-data
+              name: my-data (2)
+              readOnly: true
+            - mountPath: /container/path
+              name: my-pvc (3)
+              readOnly: false
+      volumes:
+        - name: my-credentials (4)
+          secret:
+            secretName: my-credentials
+        - name: my-data (5)
+          configMap:
+            name: my-data
+        - name: my-pvc (6)
+          persistentVolumeClaim:
+            claimName: my-pvc
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>The secret configuration volume mount</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>The config map resource volume mount</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>The volume mount</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>The secret configuration volume</td></tr><tr><td><i class="conum" data-value="5"></i><b>5</b></td><td>The config map resource volume</td></tr><tr><td><i class="conum" data-value="6"></i><b>6</b></td><td>The persistent volume claim volume</td></tr></tbody></table>
+
+The trait volume mounts follow some best practices in specifying the mount paths in the container. Configurations and resources, secrets, and configmaps do use different paths in the container. The Camel application is automatically configured to read these paths as resource folders, so you can use the mounted data in the Camel routes via classpath reference, for instance.
+
+### Ingress trait options
+
+The ingress trait enhances the Kubernetes manifest with an Ingress resource to expose the application to the outside world. This requires the presence in the Kubernetes manifest of a Service Resource.
+
+The ingress trait provides the following configuration options:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `ingress.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property (default `false`). |
+| `ingress.annotations` | `map[string]string` | The annotations added to the ingress. This can be used to set controller-specific annotations, e.g., when using the [NGINX Ingress controller](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md). |
+| `ingress.host` | `string` | To configure the host exposed by the ingress. |
+| `ingress.path` | `string` | To configure the path exposed by the ingress (default `/`). |
+| `ingress.pathType` | `string` | To configure the [path type](https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types) exposed by the ingress. One of Exact, Prefix, ImplementationSpecific (default to Prefix). |
+| `ingress.auto` | `bool` | To automatically add an Ingress Resource whenever the route uses an HTTP endpoint consumer (default `true`). |
+| `ingress.tls-hosts` | `[]string` | To configure specific hosts exposed through SNI TLS extension by the ingess. |
+| `ingress.tls-secret-name` | `string` | To indicate the secret containing the TLS private key and certificate to use for TLS. |
+
+The syntax to specify container trait options is as follows:
+
+```bash
+camel kubernetes export Sample.java --trait ingress.[key]=[value]
+```
+
+You may specify these options with the export command to customize the Ingress Resource specification.
+
+```bash
+camel kubernetes export Sample.java --trait ingress.enabled=true --trait ingress.host=example.com --trait ingress.path=/sample(/|$)(.*) --trait ingress.pathType=ImplementationSpecific --trait ingress.annotations=nginx.ingress.kubernetes.io/rewrite-target=/\$2 --trait ingress.annotations=nginx.ingress.kubernetes.io/use-regex=true
+```
+
+This results in the following container specification in the Ingress resource.
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations: (1)
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  labels:
+    app.kubernetes.io/name: sample
+  name: sample
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: route-service
+            port:
+              name: http (2)
+        path: /sample(/|$)(.*) (3)
+        pathType: ImplementationSpecific (4)
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Custom annotations configuration for ingress behavior</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Service port name</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Custom ingress backend path</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Custom ingress backend path type</td></tr></tbody></table>
+
+### Route trait options
+
+The Route trait enhances the Kubernetes manifest with a Route resource to expose the application to the outside world. This requires the presence in the Kubernetes manifest of a Service Resource.
+
+The Route trait provides the following configuration options:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `route.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property (default `false`). |
+| `route.annotations` | `map[string]string` | The annotations added to the route. This can be used to set [openshift route specific annotations](https://docs.openshift.com/container-platform/4.16/networking/routes/route-configuration.html#nw-route-specific-annotations_route-configuration) options. |
+| `route.host` | `string` | To configure the host exposed by the route. |
+| `route.tls-termination` | `string` | The TLS termination type, like `edge`, `passthrough` or `reencrypt`. Refer to the OpenShift route documentation for additional information. |
+| `route.tls-certificate` | `string` | The TLS certificate contents or file (`file:absolute.path`). Refer to the OpenShift route documentation for additional information. |
+| `route.tls-key` | `string` | The TLS certificate key contents or file (`file:absolute.path`). Refer to the OpenShift route documentation for additional information. |
+| `route.tls-ca-certificate` | `string` | The TLS CA certificate contents or file (`file:absolute.path`). Refer to the OpenShift route documentation for additional information. |
+| `route.tls-destination-ca-certificate` | `string` | The destination CA contents or file (`file:absolute.path`). The destination CA certificate provides the contents of the CA certificate of the final destination. When using reencrypt termination, this file should be provided to have routers use it for health checks on the secure connection. If this field is not specified, the router may provide its own destination CA and perform hostname validation using the short service name (service.namespace.svc), which allows infrastructure generated certificates to automatically verify. Refer to the OpenShift route documentation for additional information. |
+| `route.tls-insecure-edge-termination-policy` | `string` | To configure how to deal with insecure traffic, e.g. `Allow`, `Disable` or `Redirect` traffic. Refer to the OpenShift route documentation for additional information. |
+
+The syntax to specify container trait options is as follows:
+
+```bash
+camel kubernetes export Sample.java --trait route.[key]=[value]
+```
+
+You may specify these options with the export command to customize the Route Resource specification.
+
+```bash
+camel kubernetes export Sample.java --cluster-type=openshift -t route.enabled=true --trait route.host=example.com -t route.tls-termination=edge -t route.tls-certificate=file:/tmp/tls.crt -t route.tls-key=file:/tmp/tls.key
+```
+
+This results in the following container specification in the Route resource.
+
+```yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: route-service
+spec:
+  host: example.com (1)
+  port:
+    targetPort: http (2)
+  tls:
+    certificate: | (3)
+      ...
+    key: | (4)
+      ...
+    termination: edge (5)
+  to: (6)
+    kind: Service
+    name: route-service
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Custom route host</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Service port name</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Custom route TLS certificate content</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Custom route TLS certificate key content</td></tr><tr><td><i class="conum" data-value="5"></i><b>5</b></td><td>Custom route TLS termination</td></tr><tr><td><i class="conum" data-value="6"></i><b>6</b></td><td>Service Resource reference</td></tr></tbody></table>
+
+### Jolokia trait options
+
+The Jolokia trait enhances the Kubernetes manifest enabling JMX access to Camel application. This requires jolokia being configured in the Camel Application.
+
+The Jolokia trait provides the following configuration options:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `jolokia.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. (default `false`). |
+| `jolokia.container-port` | `int` | To configure a different jolokia port exposed by the container (default `8778`). |
+| `jolokia.container-port-name` | `string` | To configure a different port name for the port exposed by the container (default `jolokia`). |
+| `jolokia.expose` | `bool` | Can be used to enable/disable exposure of jolokia via kubernetes Service. (default `false`). |
+| `jolokia.service-port` | `int` | To configure a different jolokia port exposed by the service (default `8778`). It is applied only when the expose parameter is true. |
+| `jolokia.service-port-name` | `string` | To configure a different port name for the port exposed by the service (default `jolokia`). It is applied only when the expose parameter is true. |
+
+The syntax to specify jolokia trait options is as follows:
+
+```bash
+camel kubernetes export Sample.java --trait jolokia.[key]=[value]
+```
+
+You may specify these options with the export command to customize the Container and Service Resource specification for Jolokia.
+
+```bash
+camel kubernetes export Sample.java --trait jolokia.enabled=true --trait jolokia.container-port=8779 --trait jolokia.container-port-name=jolokia-port --trait jolokia.expose=true --trait jolokia.service-port=8779 --trait jolokia.service-port-name=port-jolokia
+```
+
+This results in the following specifications in the Deployment and Service resources.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  ...
+  name: sample
+spec:
+  selector:
+  ...
+  template:
+  ...
+    spec:
+      containers:
+      - name: sample
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 8779 (1)
+          name: jolokia-port (2)
+          protocol: TCP
+...
+```
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+...
+  name: sample
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  - name: jolokia-port (3)
+    port: 8779 (4)
+    protocol: TCP
+    targetPort: jolokia-port (2)
+...
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Custom Jolokia container port</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Custom Jolokia container port name</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Custom Jolokia service port name</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Custom Jolokia service port</td></tr></tbody></table>
+
+### OpenApi specifications
+
+You can mount OpenAPI specifications to the application container with this trait.
+
+The openapi trait provides the following configuration options:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `openapi.configmaps` | `[]string` | The configmaps holding the spec of the OpenAPI |
+
+The syntax to specify openapi trait options is as follows:
+
+```bash
+camel kubernetes export Sample.java --trait openapi.[key]=[value]
+```
+
+Example
+
+```bash
+camel kubernetes export Sample.java --trait openapi.configmaps=configmap:my-spec
+```
+
+> **Tip**
+> There is also a shortcut option `--open-api=configmap:my-configmap`.
+
+```bash
+camel kubernetes export Sample.java --open-api configmap:[name-of-configmap]
+```
+
+This results in the following container specification in the Deployment resource.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    camel.apache.org/integration: sample
+  name: sample
+spec:
+  selector:
+    matchLabels:
+      camel.apache.org/integration: sample
+  template:
+    metadata:
+      labels:
+        camel.apache.org/integration: sample
+    spec:
+      containers:
+      - image: quay.io/sample:1.0-SNAPSHOT
+        name: sample
+        volumeMounts:
+            - mountPath: /etc/camel/resources.d/_configmaps/my-spec
+              name: my-spec (1)
+              readOnly: true
+      volumes:
+        - name: my-spec (2)
+          configMap:
+            name: my-spec
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>OpenAPI specification volume mount</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Volume referencing the config map holding the OpenAPI specification</td></tr></tbody></table>
+
+## Deploy to OpenShift
+
+By default, the Kubernetes manifest is suited for plain Kubernetes platforms. In case you are targeting OpenShift as a platform you may want to leverage special resources such as Route, ImageStream or BuildConfig.
+
+You can set the `cluster-type=openshift` option on the export command to tell the Kubernetes plugin to create a Kubernetes manifest specifically suited for OpenShift.
+
+Also, the default image builder is S2I for OpenShift clusters. This means by setting the cluster type, you will automatically switch from default Jib to S2I. Of course, you can tell the plugin to use Jib with `--image-builder=jib` option. The image may then get pushed to an external registry (docker.io or quay.io) so OpenShift can pull as part of the deployment in the cluster.
+
+> **Tip**
+> When using S2I, you may need to explicitly set the `--image-group` option to the project/namespace name in the OpenShift cluster. This is because S2I will push the container image to an image repository that uses the OpenShift project/namespace name as part of the image coordinates in the registry: `image-registry.openshift-image-registry.svc:5000/<project name>/<name>:<tag>`
+
+When using S2I as an image build option, the Kubernetes manifest also contains an ImageStream and BuildConfig resource. Both resources are automatically added/removed when creating/deleting the deployment with the Camel Kubernetes JBang plugin.
+
+## Kubernetes run
+
+The run command combines several steps into one single command. The command performs a project export to a temporary folder, builds the project artifacts as well as the container images, pushes the image to an image registry and finally performs the deployment to Kubernetes using the generated Kubernetes manifest (`kubernetes.yml`).
+
+```bash
+camel kubernetes run route.yaml --image-registry=kind
+```
+
+When connecting to a local Kubernetes cluster, you may need to specify the image registry where the application container image gets pushed to. The run command is able to automatically configure the local registry when using predefined names such as `kind` or `minikube`, there is a detection mechanism to set some properties accordingly to the cluster type, currently it can auto detect Openshift and Minikube. If you want to disable the cluster detection, you have to set the `--disable-auto` cli parameter.
+
+> **Note**
+> When running minikube, the easiest way to push the image to the minikube container registry, is to enable the registry addon in minikube and to run `eval $(minikube docker-env)`.
+
+Use the `--image-group` or the `--image` option to customize the container image.
+
+```bash
+camel kubernetes run route.yaml --image-registry=kind --image-group camel-experts
+```
+
+The command above builds and pushes the container image: `localhost:5001/camel-experts/route:1.0-SNAPSHOT`.
+
+```bash
+camel kubernetes run route.yaml --image quay.io/camel-experts/demo-app:1.0
+```
+
+The `--image` option forces the container image group, name, version as well as the image registry.
+
+### Customize the Kubernetes manifest
+
+The `run` command provides the same options to customize the Kubernetes manifest as the `export` command. You may want to add environment variables, mount secrets and configmaps, adjust the exposed service and many other things with trait options as described in the export command section.
+
+### Auto reload with `--dev` option
+
+The `--dev` option runs the application on Kubernetes and automatically adds a file watcher to listen for changes on the Camel route source files. In case the sources get changed, the process will automatically perform a rebuild and redeployment. The command constantly prints the logs to the output, so you may see the changes directly being applied to the Kubernetes deployment.
+
+```bash
+camel kubernetes run route.yaml --image-registry=kind --dev
+```
+
+You need to terminate the process to stop the dev mode. This automatically removes the Kubernetes deployment from the cluster on shutdown.
+
+> **Note**
+> On macOS hosts, the file watch mechanism is known to be much slower and less stable compared to using the `--dev` option on other operating systems like Linux. This is due to limited native file operations on macOS for Java processes.
+
+### Setting properties and resources at runtime
+
+There are several ways to set runtime properties:
+
+#### Properties as command parameters
+
+The simplest way is to set the property as `key`\=`value`:
+
+```bash
+camel kubernetes run route.yaml --property my-key=my-val
+```
+
+#### Properties from files
+
+You can also reference an existing properties file, which in this case the properties content will be read and set in the `src/main/resources/application.properties` file (in the maven project generated by the internal export command).
+
+```bash
+camel kubernetes run route.yaml --property /some/directory/file.properties
+```
+
+You can also use the `file:` prefix
+
+```bash
+camel kubernetes run route.yaml --property file:/some/directory/file.properties
+```
+
+#### Properties from ConfigMap and Secret kubernetes resources
+
+The `--config` supports mapping from `ConfigMap` and `Secret` kubernetes resources and materialize as properties files in the pod. There is a standard directory path materialized in the pod filesystem:
+
+-   `--config configmap:` materialized in `/etc/camel/conf.d/_configmaps/<configmap name>/<key name>`
+    
+-   `--config secret:` materialized in `/etc/camel/conf.d/_secrets/<secret name>/<key name>`
+    
+
+> **Note**
+> For each `--config` the following properties `camel.component.properties.location=<path>` and `camel.component.properties.ignore-missing-location=true` will be set in the generated application.properties, to allow the mapped properties to be readily available in the camel runtime with property placeholders `{{my key}}`.
+
+So, given the following `ConfigMap`, you can see there is a key named `game.properties` whose content is a set of key named values.
+
+```bash
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: game-config
+data:
+  game.properties: |
+    my-key=property from SINGLE game.properties
+    enemies.cheat=true
+    secret.code.lives=30
+```
+
+Materialize the content of `ConfigMap/game-config` using the `--config` parameter:
+
+```bash
+camel kubernetes run route.java --config configmap:game-config
+```
+
+It will set the following mount options in the deployment manifest:
+
+```yaml
+  volumeMounts:
+  - mountPath: /etc/camel/conf.d/_configmaps/game-config
+    name: game-config
+    readOnly: true
+volumes:
+- configMap:
+  name: game-config
+    name: game-config
+```
+
+Then it will materialize the following file in the pod filesystem:
+
+/etc/camel/conf.d/\_configmaps/game-config/game.properties
+
+Another example, with a `ConfigMap` with more key properties:
+
+```yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: multiple-config
+data:
+  game.properties: |
+    my-key=property from game.properties
+    secret.code.lives=30
+  ui.properties: |
+    how.nice.to.look=fairlyNice
+```
+
+```bash
+camel kubernetes run route.java --config configmap:multiple-config
+```
+
+It will materialize the files:
+
+/etc/camel/conf.d/\_configmaps/multiple-config/game.properties
+/etc/camel/conf.d/\_configmaps/multiple-config/ui.properties
+
+Note that each `ConfigMap` key is the file name.
+
+You can also map specific keys from the `data` section by using the `/<key name>`:
+
+camel kubernetes run route.java --config configmap:game-config/game.properties
+
+#### Mounting generic files from ConfigMap
+
+The `--resource` supports mapping from `ConfigMap` and `Secret` kubernetes resources and materialize as files in the pod. There is a standard directory path materialized in the pod filesystem:
+
+-   `--resource configmap:` materialized in `/etc/camel/resources.d/_configmaps/<configmap name>/<key name>`
+    
+-   `--resource secret:` materialized in `/etc/camel/resources.d/_secrets/<secret name>/<key name>`
+    
+
+> **Note**
+> The `--resource` parameter doesn’t set the `camel.component.properties.location=<path>` as the `--config`.
+
+The `--resource` syntax is `[configmap|secret]:name[/key][@path]`, the `key` and `@path` are optionals. The `@path` allows you to override the materialized file path in the pod filesystem.
+
+Given the following command:
+
+```bash
+camel kubernetes run route.java --resource configmap:multiple-config
+```
+
+It will materialize the files, similar to `--config`:
+
+```bash
+/etc/camel/resources.d/_configmaps/multiple-config/game.properties
+/etc/camel/resources.d/_configmaps/multiple-config/ui.properties
+```
+
+Given the following command:
+
+```bash
+camel kubernetes run route.java --resource configmap:multiple-config/ui.properties@/etc/my-file.txt
+```
+
+It will materialize the `/etc/my-file.txt` in the pod filesystem whose content is the `ui.properties` key of the `configmap:multiple-config`.
+
+```bash
+cat /etc/my-file.txt
+```
+
+```bash
+color.good=purple
+color.bad=yellow
+allow.textmode=true
+how.nice.to.look=fairlyNice
+my-key=property from ui.properties
+```
+
+## Show logs
+
+To inspect the log output of a running deployment call:
+
+```bash
+camel kubernetes logs --name=route
+```
+
+The command connects to the running integration Pod on the cluster and streams the log output. Just terminate the process to stop printing the logs.
+
+The `--name` option should point to a previously exported project (either via `run` or `export` command).
+
+## Delete deployments
+
+Of course, you may also delete a deployment from the cluster.
+
+```bash
+camel kubernetes delete --name=route
+```
+
+Use the `--name` option to select a previously exported project (either via `run` or `export` command). The delete operation will remove all resources defined in the Kubernetes manifest.
+
+If you used the `--cluster-type` option to create your project (either via `run` or `export` command) you will need to use it as well for the delete operation.
+
+```bash
+camel kubernetes delete --name=route --cluster-type=openshift
+```
+
+## Minikube deployment tips and troubleshooting
+
+To run a local Kubernetes cluster with Minikube for development purposes. Here are some tips from users that have been using this.
+
+The following steps have been known to be working with Camel 4.8.1+:
+
+1.  `minikube start --addons registry --driver=docker`
+    
+2.  `eval $(minikube -p minikube docker-env)`
+    
+3.  `camel kubernetes run demo.camel.yaml --cluster-type=minikube --build-property=quarkus.kubernetes.image-pull-policy=Never`
+    
+
+Most important `--build-property=quarkus.kubernetes.image-pull-policy=Never` without that it is not working, which is not clear from the current Minikube docs.
+
+The following steps have been known to be working with Camel 4.9+:
+
+1.  `minikube start --addons registry --driver=docker`
+    
+2.  `eval $(minikube -p minikube docker-env)`
+    
+3.  `camel kubernetes run demo.camel.yaml --cluster-type=minikube --build-property=quarkus.kubernetes.image-pull-policy=Never --trait container.image-push=true --image-registry '$(kubectl -n kube-system get service registry -o jsonpath='{.spec.clusterIP}')' --image-builder=docker`
+    
+
+The following steps have been known to be working with Camel 4.10+:
+
+1.  `minikube start --addons registry --driver=docker`
+    
+2.  `eval $(minikube -p minikube docker-env)`
+    
+3.  `camel kubernetes run demo.camel.yaml --cluster-type=minikube --build-property=quarkus.kubernetes.image-pull-policy=Never --image-registry "$(kubectl -n kube-system get service registry -o jsonpath='{.spec.clusterIP}')" --image-builder=docker`
+    
+
+Note that Docker multi-platform build is used. It requires to have followed these [Docker requirements](https://docs.docker.com/build/building/multi-platform/#build-multi-platform-images).

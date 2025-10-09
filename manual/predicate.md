@@ -1,0 +1,143 @@
+# Predicates
+
+Expressions and [Predicates](#) can then be used to create the various [Enterprise Integration Patterns](../components/4.18.x/eips/enterprise-integration-patterns.md) in the [DSL](dsl.md) like with the [Content Based Router](../components/4.18.x/eips/choice-eip.md) EIP, or [Recipient List](../components/4.18.x/eips/recipientList-eip.md) EIP.
+
+To support dynamic rules Camel supports pluggable [Predicate](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Predicate.md) strategies using a variety of different [Languages](../components/4.18.x/languages/index.md).
+
+> **Note**
+> The [Simple](../components/4.18.x/languages/simple-language.md) is often used as predicates and expressions with the Camel EIPs.
+
+## Predicate API
+
+The API for a Camel Predicate is defined in the `org.apache.camel.Predicate` interface as shown:
+
+```java
+public interface Predicate {
+
+    /**
+     * Evaluates the predicate on the message exchange and returns true if this
+     * exchange matches the predicate
+     *
+     * @param exchange the message exchange
+     * @return true if the predicate matches
+     */
+    boolean matches(Exchange exchange);
+
+}
+```
+
+A `Predicate` is being evaluated to a boolean value so the result is either `true` or `false`. This makes predicates so powerful as it is often used to control the routing of message in which path they should be routed.
+
+A simple example is to route an [Exchange](exchange.md) based on a header value with the [Content Based Router](../components/4.18.x/eips/choice-eip.md) EIP:
+
+```java
+from("jms:queue:order")
+   .choice()
+      .when(header("type").isEqualTo("widget")).to("bean:widgetOrder")
+      .when(header("type").isEqualTo("wombat")).to("bean:wombatOrder")
+   .otherwise()
+      .to("bean:miscOrder")
+   .end();
+```
+
+In the route above the [Predicate](#) is the `header("type").isEqualTo("widget")` as it is constructed as an [Expression](expression.md) that is evaluated as a [Predicate](#). To do this the various _Builder classes_ help us here to create a nice and fluent syntax. `isEqualTo` is a builder method that returns a [Predicate](#) based on the input.
+
+Sometimes the fluent builders can get long, and a bit complex to read, then you can just define your predicate outside the route and then just refer to the predicate in the route:
+
+```java
+Predicate isWidget = header("type").isEqualTo("widget");
+```
+
+And then you can refer to it in the route as:
+
+```java
+from("jms:queue:order")
+   .choice()
+      .when(isWidget).to("bean:widgetOrder")
+      .when(isWombat).to("bean:wombatOrder")
+   .otherwise()
+      .to("bean:miscOrder")
+   .end();
+```
+
+## Negating a Predicate
+
+You can use the **not** method on the `PredicateBuilder` to negate a predicate.
+
+First, we import the static method `not`, so it makes our route nice and easy to read:
+
+```java
+import static org.apache.camel.builder.PredicateBuilder.not;
+```
+
+And then we can use it to enclose an existing predicate and negate it as the example shows:
+
+```java
+from("direct:start")
+    .choice()
+        .when(not(header("username").regex("goofy|pluto"))).to("mock:people")
+        .otherwise().to("mock:animals")
+    .end();
+```
+
+## Compound Predicates
+
+You can also create compound predicates using boolean operators such as `and, or, not` and many others.
+
+Currently, this feature is only available in the Java-based DSLs, and not in other DSLs such as XML.
+
+Using the [`PredicateBuilder`](https://www.javadoc.io/doc/org.apache.camel/camel-support/current/org/apache/camel/support/builder/PredicateBuilder.md) class, you can combine predicates **from different Expression Languages** based on logical operators and comparison operators:
+
+-   `not`, `and`, `or`
+    
+-   `isNull`, `isNotNull`
+    
+-   `isEqualTo`, `isGreaterThan`, `isLessThan`
+    
+-   `startsWith`, `endsWith`
+    
+-   `in` ("any of X predicates stands true")
+    
+
+Additionally, with `PredicateBuilder` you can create regular expressions and use them as predicates, applying them to the result of an expression, e.g.
+
+```java
+PredicateBuilder.regex(header("foo"), "\d\{4}");
+```
+
+applies the regular expression to the foo header.
+
+Combining different Expression Languages is also possible, e.g.:
+
+```java
+PredicateBuilder.and(XPathBuilder.xpath("/bookings/flights"), simple("${exchangeProperty.country = 'Spain'}"))
+```
+
+The sample below demonstrates further use cases:
+
+```java
+// We define 3 predicates based on some user roles
+// we have static imported and/or from org.apache.camel.builder.PredicateBuilder
+
+// First we have a regular user that is just identified having a username header
+Predicate user = header("username").isNotNull();
+
+// The admin user must be a user AND have a admin header as true
+Predicate admin = and(user, header("admin").isEqualTo("true"));
+
+// And God must be an admin and (either have type god or a special message containing Camel Rider)
+Predicate god = and(admin, or(body().contains("Camel Rider"), header("type").isEqualTo("god")));
+
+// As you can see with the predicates above we can stack them to build compound predicates
+
+// In our route below we can create a nice content based router based on the predicates we
+// have defined. Then the route is easy to read and understand.
+// We encourage you to define complex predicates outside the fluent router builder as
+// it will just get a bit complex for humans to read
+from("direct:start").choice()
+    .when(god).to("mock:god")
+    .when(admin).to("mock:admin")
+    .when(user).to("mock:user")
+    .otherwise().to("mock:guest")
+.end();
+```

@@ -6,8 +6,43 @@
     <description>Recent content in Camel on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Jul 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 10 Feb 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Camel/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel MCP Server: Bringing Camel Knowledge to AI Coding Assistants</title>
+      <link>https://camel.apache.org/blog/2026/02/camel-jbang-mcp/</link>
+      <pubDate>Tue, 10 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel-jbang-mcp/</guid>
+      <description>Working with Apache Camel means dealing with over 300 components, dozens of Enterprise Integration Patterns, multiple DSL formats, and a rich set of configuration options. Keeping all of that in your head while writing integration routes is not trivial, and AI coding assistants have become a natural companion for this kind of work. The problem is that general-purpose LLMs lack deep, structured knowledge of Camel&amp;rsquo;s catalog, its component options, its URI syntax rules, and its security best practices.</description>
+    </item>
+    <item>
+      <title>Building a Smart Log Analyzer with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2026/01/log-analyzer/</link>
+      <pubDate>Wed, 28 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/log-analyzer/</guid>
+      <description>In this blogpost, we&amp;rsquo;ll walk through a modern approach to developing Apache Camel applications. We&amp;rsquo;ll build a distributed log analyzer that automatically detects errors and uses an LLM for root cause analysis. Along the way, we&amp;rsquo;ll explore how tools like Camel JBang and Kaoto make development incredibly productive, and why Apache Camel&amp;rsquo;s YAML DSL is a perfect match for LLM-assisted development.&#xA;Why Apache Camel? Before diving into the implementation, let&amp;rsquo;s address why Apache Camel is an excellent choice for this kind of system.</description>
+    </item>
+    <item>
+      <title>Simple LLM Integration with Camel OpenAI Component</title>
+      <link>https://camel.apache.org/blog/2026/01/camel-openai/</link>
+      <pubDate>Wed, 14 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel-openai/</guid>
+      <description>The integration of Large Language Models (LLMs) into enterprise applications has become increasingly important. Whether you&amp;rsquo;re building intelligent document processing pipelines, automated customer support systems, or data privacy solutions, the ability to seamlessly connect your integration flows with AI capabilities is essential.&#xA;Apache Camel 4.17 introduces the new camel-openai component, providing native integration with OpenAI and OpenAI-compatible APIs for chat completion. In this post, we&amp;rsquo;ll explore the component&amp;rsquo;s features and demonstrate a practical use case: Personal Identifiable Information (PII) redaction using structured output.</description>
+    </item>
+    <item>
+      <title>Apache Camel Meets MCP: Securely Exposing Your Enterprise Routes as MCP Tools with Wanaku</title>
+      <link>https://camel.apache.org/blog/2025/10/wanaku-and-camel/</link>
+      <pubDate>Wed, 22 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/wanaku-and-camel/</guid>
+      <description>The biggest challenge for enterprises in the rapidly evolving world of Generative AI isn&amp;rsquo;t just building &amp;ldquo;smarter&amp;rdquo; LLMs or agents — it&amp;rsquo;s securely connecting that AI to the decades of business logic and data locked away in enterprise systems. How do you let an AI agent interact with your Salesforce data, your Kafka topics, or your internal databases without rewriting everything or creating a massive security hole?&#xA;It turns out the answer may already be running in your organization.</description>
+    </item>
+    <item>
+      <title>Building Intelligent Document Processing with Apache Camel: Docling meets LangChain4j</title>
+      <link>https://camel.apache.org/blog/2025/10/camel-docling/</link>
+      <pubDate>Wed, 15 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/camel-docling/</guid>
+      <description>In the rapidly evolving landscape of AI-powered applications, the ability to process and understand documents has become increasingly crucial. Whether you&amp;rsquo;re dealing with PDFs, Word documents, or PowerPoint presentations, extracting meaningful insights from unstructured data is a challenge many developers face daily.&#xA;In this post, we&amp;rsquo;ll explore how Apache Camel&amp;rsquo;s new AI components enable developers to build sophisticated RAG (Retrieval Augmented Generation) pipelines with minimal code. We&amp;rsquo;ll combine the power of Docling for document conversion with LangChain4j for AI orchestration, all orchestrated through Camel&amp;rsquo;s YAML DSL.</description>
+    </item>
     <item>
       <title>Prototyping E2E scenarios with Apache Camel</title>
       <link>https://camel.apache.org/blog/2025/07/camel-jbang-infra/</link>

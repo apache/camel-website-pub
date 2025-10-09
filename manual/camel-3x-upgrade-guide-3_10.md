@@ -1,0 +1,59 @@
+# Apache Camel 3.x Upgrade Guide
+
+This document is for helping you upgrade your Apache Camel application from Camel 3.x to 3.y. For example if you are upgrading Camel 3.0 to 3.2, then you should follow the guides from both 3.0 to 3.1 and 3.1 to 3.2.
+
+## Upgrading Camel 3.9 to 3.10
+
+### API changes
+
+The method `concurrentTasks` on ``org.apache.camel.support.DefaultScheduledPollConsumerScheduler ` has been renamed to `concurrentConsumers``.
+
+The `org.apache.camel.cloud.ServiceFilter` and `org.apache.camel.cloud.ServiceLoadBalancer` functional interface methods take the current `Exchange` as additional parameter to allow for content-based filtering of service candidates. `RibbonServiceLoadBalancer` has no notion of a current exchange, service filters therefore receive a dummy exchange when used with Ribbon.
+
+The two methods `filterTypeInOutputs` on `org.apache.camel.model.ProcessorDefinitionHelper` has changed to return `Collection` instead of `Iterator`.
+
+The annotation `@Consume` has removed its target for field/constructor injection as the `@Consume` is only to be used on methods. The annotations `@Produce` and `@EndpointInject` has removed its target for constructor injection as that is not supported (Camel only does bean post processing)
+
+### camel-scheduler
+
+The option `concurrentTasks` has been renamed to `poolSize` to better reflect its purpose. The scheduler has also been fixed to only schedule triggering by one, and not as mistakenly by causing concurrent triggering which causes routing mistakes.
+
+The option configures the pool size of the scheduled thread pool used by the scheduler.
+
+If the scheduler thread is being blocked by anywhere in the downstream routing, and you want the scheduler to schedule with a fixed interval, you can use the Threads EIP as queue for pending tasks.
+
+### camel-jdbc
+
+The `camel-jdbc` component no longer depends on Spring Framework, instead a new `camel-spring-jdbc` component has been created. You should use `camel-spring-jdbc` if you use Spring and need Spring Transaction support. The `camel-jdbc` is using plain Java JDBC API only.
+
+### camel-jsonpath
+
+This component now uses Jackson as the default json parser instead of json-smart.
+
+Usage of `JacksonJsonAdapter` has been slightly changed.
+
+Component was trying to use `JacksonJsonAdapter` ahead of automatic conversion of the payload to the `InputStream` in the previous version. New version tries to convert the payload into `InpuStream` first. `JacksonJsonAdapter` is used only if conversion to `InputStream` is not possible.
+
+Order of the basic payload types (like `String`, `Map`, `File`) has not been changed.
+
+### camel-huaweicloud-smn
+
+Initialization options for SMN client has slightly changed.
+
+Earlier, the library configured the smn server url based on the region parameter provided in endpoint configurations. Now, it provides more flexibility by allowing camel users by providing fully qualified http url for more customizability.
+
+When endpoint URL is provided, it carries the higher precedence than region based configuration. Any region configuration entered along with endpoint url will be ignored.
+
+### Camel-Azure-Storage-Blob
+
+The service client is now autowired. No need to set explicitly on your route if it is already in the registry. This is the reason why the autoDiscoverClient option has been removed.
+
+### Camel-Azure-Storage-Queue
+
+The service client is now autowired. No need to set explicitly on your route if it is already in the registry.
+
+### Spring Boot Starters
+
+Some of the Camel Spring Boot starters have additional auto configuration options that clashed with component. Therefore those configurations has renamed their configuration keys:
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>Old Key prefix</strong></td><td class="tableblock halign-left valign-top"><strong>New key prefix</strong></td></tr><tr><td class="tableblock halign-left valign-top">camel.component.atomix.cluster.service</td><td class="tableblock halign-left valign-top">camel.cluster.atomix</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.consul.cluster.service</td><td class="tableblock halign-left valign-top">camel.cluster.consul</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.consul.service-registry</td><td class="tableblock halign-left valign-top">camel.cloud.consul.service-registry</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.file.cluster.service</td><td class="tableblock halign-left valign-top">camel.cluster.file</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.hystrix.mapping</td><td class="tableblock halign-left valign-top">camel.hystrix.mapping</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.jgroups.lock.cluster.service</td><td class="tableblock halign-left valign-top">camel.cluster.jgroups</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.jgroups.raft.cluster.service</td><td class="tableblock halign-left valign-top">camel.cluster.jgroups-raft</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.kubernetes.cluster.service</td><td class="tableblock halign-left valign-top">camel.cluster.kubernetes</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.servlet.mapping</td><td class="tableblock halign-left valign-top">camel.servlet.mapping</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.undertow.spring.security</td><td class="tableblock halign-left valign-top">camel.security.undertow</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.zookeeper.cluster.service</td><td class="tableblock halign-left valign-top">camel.cluster.zookeeper</td></tr><tr><td class="tableblock halign-left valign-top">camel.component.zookeeper.service-registry</td><td class="tableblock halign-left valign-top">camel.cloud.zookeeper</td></tr></tbody></table>

@@ -1,0 +1,36 @@
+# What are the dependencies?
+
+## JDK support
+
+-   Camel 2 requires JDK 8
+    
+-   Camel 3 requires JDK 8 and supports JDK 11
+    
+-   Camel 3.15.0+ requires JDK 11
+    
+-   Camel 3.17.0+ requires JDK 11 and supports JDK 17
+    
+-   Camel 4.0.0+ requires JDK 17 and supports JDK 21
+    
+
+You can use Camel JBang which lists up-to-date JDK requirements for every Camel release.
+
+```bash
+camel version list --lts --patch=false --fresh
+ CAMEL VERSION   JDK   KIND     RELEASED     SUPPORTED UNTIL  DAYS
+     4.0.0         17   LTS     August 2023      August 2024   926
+     4.4.0      17,21   LTS   February 2024    February 2025   739
+     4.8.0      17,21   LTS  September 2024   September 2025   528
+    4.10.0      17,21   LTS   February 2025    February 2026   379
+    4.14.0      17,21   LTS     August 2025      August 2026   190
+    4.18.0      17,21   LTS   February 2026    February 2027     8
+Last updated: 2026-02-25 (use --fresh to update list from internet)
+```
+
+## Camel JAR Dependencies
+
+Camel core itself is lightweight, and only requires the `slf4j-api` logging API jar.
+
+## Components
+
+All the [Components](../components/4.18.x/index.md) have a range of 3rd party jars they depend on. They are listed in the maven pom files which files they require.

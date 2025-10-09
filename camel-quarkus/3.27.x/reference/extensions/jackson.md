@@ -1,0 +1,125 @@
+# Jackson
+
+JVM since0.3.0 Native since0.3.0
+
+Marshal POJOs to JSON and back using Jackson
+
+## What’s inside
+
+-   [JSON Jackson data format](../../../../components/4.14.x/dataformats/jackson-dataformat.md)
+    
+
+Please refer to the above link for usage and configuration details.
+
+## Maven coordinates
+
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-jackson)
+
+Or add the coordinates to your existing project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-jackson</artifactId>
+</dependency>
+```
+
+Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
+
+## Usage
+
+### Configuring the Jackson `ObjectMapper`
+
+There are a few ways of configuring the `ObjectMapper` that the `JacksonDataFormat` uses. These are outlined below.
+
+#### `ObjectMapper` created internally by `JacksonDataFormat`
+
+By default, `JacksonDataFormat` will create its own `ObjectMapper` and use the various configuration options on the `DataFormat` to configure additional Jackson modules, pretty printing and other features.
+
+#### Custom `ObjectMapper` for `JacksonDataFormat`
+
+You can pass a custom `ObjectMapper` instance to `JacksonDataFormat` as follows.
+
+```java
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.jackson.JacksonDataFormat;
+
+public class Routes extends RouteBuilder {
+    public void configure() {
+        ObjectMapper mapper = new ObjectMapper();
+        JacksonDataFormat dataFormat = new JacksonDataFormat();
+        dataFormat.setObjectMapper(mapper);
+        // Use the dataFormat instance in a route definition
+        from("direct:my-direct").marshal(dataFormat)
+    }
+}
+```
+
+#### Using the Quarkus Jackson `ObjectMapper` with `JacksonDataFormat`
+
+The Quarkus Jackson extension exposes an `ObjectMapper` CDI bean which can be discovered by the `JacksonDataFormat`.
+
+```java
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.jackson.JacksonDataFormat;
+
+public class Routes extends RouteBuilder {
+    public void configure() {
+        JacksonDataFormat dataFormat = new JacksonDataFormat();
+        // Make JacksonDataFormat discover the Quarkus Jackson `ObjectMapper` from the Camel registry
+        dataFormat.setAutoDiscoverObjectMapper(true);
+        // Use the dataFormat instance in a route definition
+        from("direct:my-direct").marshal(dataFormat)
+    }
+}
+```
+
+If you are using the JSON binding mode in the Camel REST DSL and want to use the Quarkus Jackson `ObjectMapper`, it can be achieved as follows.
+
+```java
+import org.apache.camel.builder.RouteBuilder;
+
+@ApplicationScoped
+public class Routes extends RouteBuilder {
+    public void configure() {
+        restConfiguration().dataFormatProperty("autoDiscoverObjectMapper", "true");
+        // REST definition follows...
+    }
+}
+```
+
+You can perform customizations on the Quarkus `ObjectMapper` with a `ObjectMapperCustomizer`.
+
+```java
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.jackson.ObjectMapperCustomizer;
+
+@Singleton
+public class RegisterCustomModuleCustomizer implements ObjectMapperCustomizer {
+    public void customize(ObjectMapper mapper) {
+        mapper.registerModule(new CustomModule());
+    }
+}
+```
+
+It’s also possible to `@Inject` the Quarkus `ObjectMapper` and pass it to the `JacksonDataFormat`.
+
+```java
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.jackson.JacksonDataFormat;
+
+@ApplicationScoped
+public class Routes extends RouteBuilder {
+    @Inject
+    ObjectMapper mapper;
+
+    public void configure() {
+        JacksonDataFormat dataFormat = new JacksonDataFormat();
+        dataFormat.setObjectMapper(mapper);
+        // Use the dataFormat instance in a route definition
+        from("direct:my-direct").marshal(dataFormat)
+    }
+}
+```

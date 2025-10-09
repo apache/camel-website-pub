@@ -1,0 +1,84 @@
+# BacklogTracer
+
+Camel supports a backlog tracer interceptor that is used for capturing a trace message of each message as they are routed in Camel. The trace message is stored in a backlog queue, which contains the last N messages for each node in the routes (by default 10).
+
+## What is the difference between BacklogTracer and Tracer
+
+Camel also provides a [Tracer](tracer.md) which has similar capabilities as this backlog tracer. The difference is that the backlog tracer is storing a capture of the message in an internal backlog queue.
+
+The [Tracer](tracer.md) is event based and logs the messages as they happen (or route to another Camel destination).
+
+Use the [Tracer](tracer.md) when all you need is to log the traced messages as they happen.
+
+The backlog tracer allows you to pull the messages from the backlog queues on demand. The backlog tracer works better with JMX capable tooling as it is simpler, allowing to bulk dump all its traced messages in either a POJO or XML format.
+
+## Options
+
+  
+| Option | Default | Description |
+| --- | --- | --- |
+| standby | `false` | Whether the tracer is standby. If a tracer is in standby then the tracer is activated during startup and are ready to be enabled manually via JMX or calling the enabled method. |
+| enabled | `false` | Flag to enable or disable this tracer |
+| backlogSize | `100` | Maximum number of total traced messages to keep in the backlog (FIFO queue). Should be between 1 - 1000. |
+| tracePattern | `null` | Allows to filter tracing using a pattern that matches against the node id and route id. For example use `"to1,to2"` to match only nodes with either the name "to1", or "to2". You can use \* for wildcards. So you can do "to\*" to match any to. Or use "route-foo\*" to match any foo routes. |
+| traceFilter | `null` | Allow to configure a filter as a [Predicate](predicate.md) using any of the Camel [languages](languages.md). But default the [Simple](../components/4.18.x/languages/simple-language.md) language is used. For example to filter on messages with a given header, use `${header.foo} != null`. To use [Groovy](../components/4.18.x/languages/groovy-language.md) then prefix the value with "groovy:". And similar for the other languages. |
+| traceRests | `false` | Whether tracing should trace inner details from Rest DSL. Turning this on increases the verbosity of tracing by including events from internal routes by Rest DSL. |
+| traceTemplates | `false` | Whether tracing should trace inner details from route templates (or kamelets). Turning this on increases the verbosity of tracing by including events from internal routes in the templates or kamelets. |
+| removeOnDump | `true` | Whether to remove the traced messages that was returned when invoking the dump methods. |
+| bodyMaxChars | `32kb` | To limit the message body to a maximum size in the traced message. Use 0 or negative value to use unlimited size. |
+| bodyIncludeStreams | `false` | Whether to include the message body of stream based messages. If enabled then beware the stream may not be re-readable later. See more about [Stream Caching](stream-caching.md). |
+| bodyIncludeFiles | `true` | Whether to include the message body of file based messages. The overhead is that the file content has to be read from the file. |
+| includeExchangeProperties | `true` | Trace messages to include exchange properties. |
+| includeExchangeVariables | `true` | Trace messages to include exchange variables. |
+| includeException | `true` | Trace messages to include exception if the message failed. |
+
+## Operations
+
+  
+| Option | Default | Description |
+| --- | --- | --- |
+| getTraceCounter | `long` | Gets the total number of traced messages. |
+| getQueueSize | `long` | Number of traced messages in the backlog. |
+| resetTraceCounter | `void` | To reset the trace counter. |
+| dumpTracedMessages(nodeOrRouteId) | `List<BacklogTracerEventMessage>` | To dump the traced messages from the give node or route id. |
+| dumpTracedMessagesAsXml(nodeOrRouteId) | `String` | To dump the traced messages from the give node or route id in XML format. |
+| dumpTracedMessagesAsJSon(nodeOrRouteId) | `String` | To dump the traced messages from the give node or route id in JSon format. |
+| dumpAllTracedMessages | `List<BacklogTracerEventMessage>` | To dump all the traced messages |
+| dumpAllTracedMessagesAsXml | `String` | To dump all the traced messages in XML format. |
+| dumpAllTracedMessagesAsJSon | `String` | To dump all the traced messages in JSon format. |
+
+## Enabling
+
+You can turn on backlog tracing on `CamelContext`
+
+```java
+camelContext.setBacklogTracing(true);
+```
+
+And in Spring XML
+
+```xml
+<camelContext backlogTrace="true">
+  ...
+</camelContext>
+```
+
+And in Camel Main you can enable this in the `application.properties` file:
+
+```properties
+camel.trace.enabled = true
+```
+
+And in Spring Boot you can enable this in the `application.properties` file:
+
+```properties
+camel.trace.enabled = true
+```
+
+### Tracing payloads of InputStream types
+
+Beware that when enabling backlog tracing, and the message payloads is streaming types (such as `java.io.InputStream`), then the backlog tracer will read the payload and make a copy as a _trace_ that are stored in the backlog tracer. Then monitoring tooling is able to view these _traced_ events.
+
+When working with `InputStream` types then Camel has [Stream caching](stream-caching.md) that is able to automatic make such types _safe_ to use as they are cached and able to be _re-read_. See more details at [Stream caching](stream-caching.md).
+
+However, Camel’s stream caching is **ONLY** for message body. Having message headers of type `InputStream` is discouraged and not common use. If you add custom message headers, then it is recommended to **NOT** use streaming types, but convert these headers into `String` or `byte[]` or other standard Java types that are in-memory and _safe_ to re-read.

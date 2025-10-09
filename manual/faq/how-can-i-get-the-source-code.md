@@ -1,0 +1,9 @@
+# How can I get the source code?
+
+The source code is on GitHub at: [https://github.com/apache/camel](https://github.com/apache/camel)
+
+From GitHub you can checkout the code, and contribute back by sending Pull Requests. Working with the code is similar to other projects hosted on GitHub.
+
+## Building the code
+
+To then build the code see [Building](../building.md).

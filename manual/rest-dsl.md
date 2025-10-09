@@ -1,0 +1,1404 @@
+# REST DSL
+
+Apache Camel offers a REST styled DSL.
+
+The intention is to allow end users to define REST services (hosted by Camel) using a REST style with verbs such as get, post, delete, etc.
+
+> **Note**
+> From **Camel 4.6** onwards, the Rest DSL has been improved with a _contract-first_ approach using vanilla OpenAPI specification files. This is documented in the [Rest DSL with OpenAPI contract first](rest-dsl-openapi.md) page. This current page documents the _code-first_ Rest DSL that Camel provides for a long time.
+
+## How it works
+
+The Rest DSL is a facade that builds [Rest](../components/4.18.x/rest-component.md) endpoints as consumers for Camel routes. The actual REST transport is leveraged by using Camel REST components such as [Netty HTTP](../components/4.18.x/netty-http-component.md), [Servlet](../components/4.18.x/servlet-component.md), and others that have native REST integration.
+
+## Components supporting Rest DSL
+
+The following Camel components support the Rest DSL:
+
+-   [camel-rest](../components/4.18.x/rest-component.md) **required** contains the base rest component needed by Rest DSL
+    
+-   [camel-netty-http](../components/4.18.x/netty-http-component.md)
+    
+-   [camel-jetty](../components/4.18.x/jetty-component.md)
+    
+-   [camel-platform-http](../components/4.18.x/platform-http-component.md) (recommended)
+    
+-   [camel-servlet](../components/4.18.x/servlet-component.md)
+    
+-   [camel-undertow](../components/4.18.x/undertow-component.md)
+    
+
+## Rest DSL
+
+Lets defines a REST service with the following url mappings:
+
+   
+| Base Path | Uri template | Verb | Consumes |
+| --- | --- | --- | --- |
+| `_/say_` | `_/hello_` | `get` | _all_ |
+| `_/say_` | `_/bye_` | `get` | `application/json` |
+| `_/say_` | `_/bye_` | `post` | _all_ |
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+To use the Rest DSL in Java DSL, then just do as with regular Camel routes by extending the `RouteBuilder` and define the routes in the `configure` method.
+
+A simple REST service can be defined as follows, where we use `rest()` to define the services as shown below:
+
+```java
+@Override
+public void configure() throws Exception {
+    rest("/say")
+        .get("/hello").to("direct:hello")
+        .get("/bye").consumes("application/json").to("direct:bye")
+        .post("/bye").to("mock:update");
+
+    from("direct:hello")
+        .transform().constant("Hello World");
+
+    from("direct:bye")
+        .transform().constant("Bye World");
+}
+```
+
+Notice that in the REST service we route directly to a Camel endpoint using `to()`. This is because the Rest DSL has a shorthand for routing directly to an endpoint using `to()`.
+
+A simple REST service can be defined as follows, where we use `<rest>` to define the services as shown below:
+
+```xml
+  <rest path="/say">
+    <get path="/hello">
+      <to uri="direct:hello"/>
+    </get>
+    <get path="/bye" consumes="application/json">
+      <to uri="direct:bye"/>
+    </get>
+    <post path="/bye">
+      <to uri="mock:update"/>
+    </post>
+  </rest>
+  <route>
+    <from uri="direct:hello"/>
+    <transform>
+      <constant>Hello World</constant>
+    </transform>
+  </route>
+  <route>
+    <from uri="direct:bye"/>
+    <transform>
+      <constant>Bye World</constant>
+    </transform>
+  </route>
+```
+
+A simple REST service can be defined as follows, where we use `- rest:` to define the services as shown below:
+
+```yaml
+- rest:
+    path: "/say"
+    get:
+      - path: "/hello"
+        to: "direct:hello"
+      - path: "/bye"
+        consumes: "application/json"
+        to: "direct:bye"
+    post:
+      - path: "/bye"
+        to: "direct:update"
+- route:
+    from:
+      uri: direct:hello
+      steps:
+        - transform:
+            expression:
+              constant:
+                expression: Hello World
+- route:
+    from:
+      uri: direct:bye
+      steps:
+        - transform:
+            expression:
+              constant:
+                expression: Bye World
+```
+
+## Using a base path
+
+The REST DSL allows defining a base path to help applying the _"don’t repeat yourself"_ (DRY) practice. For example, to define a customer path, we can set the base path in `rest("/customer")` and then provide the uri templates in the verbs, as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+rest("/customers/")
+    .get("/{id}").to("direct:customerDetail")
+    .get("/{id}/orders").to("direct:customerOrders")
+    .post("/neworder").to("direct:customerNewOrder");
+```
+
+```xml
+<rest path="/customers/">
+  <get path="/{id}">
+    <to uri="direct:customerDetail"/>
+  </get>
+  <get path="/{id}/orders">
+    <to uri="direct:customerOrders"/>
+  </get>
+  <post path="/neworder">
+    <to uri="direct:customerNewOrder"/>
+  </post>
+</rest>
+```
+
+```yaml
+- rest:
+    path: "/customers/"
+    get:
+      - path: "/{id}}"
+        to: "direct:customerDetails"
+      - path: "/{id}/orders}"
+        to: "direct:customerOrders"
+    post:
+      - path: "/neworder"
+        to: "direct:customerNewOrder"
+```
+
+> **Tip**
+> The REST DSL will take care of duplicate path separators when using base path and uri templates. In the example above the rest base path ends with a slash `/` and the verb starts with a slash `/`. Camel will take care of this and remove the duplicated slash.
+
+It is not required to use both base path and uri templates. You can omit the base path and define the base path and uri template in the verbs only. The example above can be defined as:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+rest()
+    .get("/customers/{id}").to("direct:customerDetail")
+    .get("/customers/{id}/orders").to("direct:customerOrders")
+    .post("/customers/neworder").to("direct:customerNewOrder");
+```
+
+```xml
+<rest>
+  <get path="/customers/{id}">
+    <to uri="direct:customerDetail"/>
+  </get>
+  <get path="/customers/{id}/orders">
+    <to uri="direct:customerOrders"/>
+  </get>
+  <post path="/customers/neworder">
+    <to uri="direct:customerNewOrder"/>
+  </post>
+</rest>
+```
+
+```yaml
+- rest:
+    get:
+      - path: "/customers/{id}}"
+        to: "direct:customerDetails"
+      - path: "/customers/{id}/orders}"
+        to: "direct:customerOrders"
+    post:
+      - path: "/customers/neworder"
+        to: "direct:customerNewOrder"
+```
+
+You can combine path parameters to build complex expressions.
+
+For example the following defines a path for a getting an item as if it was a file syntax:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+ rest("items/")
+     .get("{id}/{filename}.{content-type}")
+     .to("direct:item");
+```
+
+```xml
+<rest path="items/">
+    <get path="{id}/{filename}.{content-type}">
+        <to uri="direct:item"/>
+    </get>
+</rest>
+```
+
+```yaml
+- rest:
+    path: "items/"
+    get:
+      - path: "{id}/{filename}.{content-type}"
+        to: "direct:item"
+```
+
+## Managing Rest services
+
+Each of the rest services becomes a Camel route, so in the first example, we have 2 x get and 1 x post REST service, which each becomes a Camel route.
+
+This makes it _the same_ from Apache Camel to manage and run these services, as they are just Camel routes. This means any tooling and API today that deals with Camel routes, also work with the REST services.
+
+> **Note**
+> To use JMX with Camel then `camel-management` JAR must be included in the classpath.
+
+This means you can use JMX to stop/start routes, and also get the JMX metrics about the routes, such as the number of messages processed, and their performance statistics.
+
+There is also a Rest Registry JMX MBean that contains a registry of all REST services that has been defined.
+
+## Inline Rest DSL as a single route
+
+> **Important**
+> Camel 4.4 or older has inline-routes disabled by default. Camel 4.5 or newer has inline-routes enabled by default.
+
+Each of the rest services becomes a Camel route, and this means, that if the rest service is calling another Camel route via `direct`, which is a widespread practice. This means that each rest service then becomes two routes. This can become harder to manage if you have many rest services.
+
+When you use `direct` endpoints then you can enable Rest DSL to automatically _inline_ the direct route in the rest route, meaning that there is only one route per rest service.
+
+> **Warning**
+> When using inline-routes, then each REST endpoint should link 1:1 to a unique `direct` endpoint. The linked _direct_ routes are inlined and therefore does not **exists** as independent routes, and they cannot be called from other regular Camel routes. In other words the inlined routes are essentially moved inside the rest-dsl and does not exist as a route. See more detils further below.
+
+To do this you **MUST** use `direct` endpoints, and each endpoint must be unique name per service. And the option `inlineRoutes` must be enabled.
+
+For example, in the Java DSL below we have enabled inline routes and each rest service uses `direct` endpoints with unique names.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().inlineRoutes(true);
+
+rest("/customers/")
+    .get("/{id}").to("direct:customerDetail")
+    .get("/{id}/orders").to("direct:customerOrders")
+    .post("/neworder").to("direct:customerNewOrder");
+```
+
+```xml
+<restConfiguration inlineRoutes="true"/>
+
+<rest>
+  <get path="/customers/{id}">
+    <to uri="direct:customerDetail"/>
+  </get>
+  <get path="/customers/{id}/orders">
+    <to uri="direct:customerOrders"/>
+  </get>
+  <post path="/customers/neworder">
+    <to uri="direct:customerNewOrder"/>
+  </post>
+</rest>
+```
+
+```yaml
+- restConfiguration:
+    inlineRoutes: true
+- rest:
+    get:
+      - path: "/customers/{id}}"
+        to: "direct:customerDetails"
+      - path: "/customers/{id}/orders}"
+        to: "direct:customerOrders"
+    post:
+      - path: "/customers/neworder"
+        to: "direct:customerNewOrder"
+```
+
+If you use Camel Main, Camel Spring Boot, Camel Quarkus or Camel JBang, you can also enable this in `application.properties` such as:
+
+```properties
+camel.rest.inline-routes = true
+```
+
+Notice the REST services above each use a unique 1:1 linked direct endpoint (direct:customerDetail, direct:customerOrders direct:customerNewOrder). This means that you cannot call these routes from another route such as the following would not function:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("kafka:new-order")
+   .to("direct:customerNewOrder");
+```
+
+```xml
+<route>
+    <from uri="kafka:new-order"/>
+    <to uri="direct:customerNewOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:new-order
+      steps:
+        - to:
+            uri: direct:customerNewOrder
+```
+
+So if you desire to call common routes from both Rest DSL and other regular Camel routes then keep these in separate routes as shown:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().inlineRoutes(true);
+
+rest("/customers/")
+    .get("/{id}").to("direct:customerDetail")
+    .get("/{id}/orders").to("direct:customerOrders")
+    .post("/neworder").to("direct:customerNewOrder");
+
+from("direct:customerNewOrder")
+  // do some stuff here
+  .to("direct:commonCustomerNewOrder"); // call common route
+
+from("direct:commonCustomerNewOrder")
+  // do stuff here
+  .log("Created new order");
+
+from("kafka:new-order")
+   .to("direct:commonCustomerNewOrder"); // make sure to call the common route
+```
+
+```xml
+<restConfiguration inlineRoutes="true"/>
+
+<rest path="/customers/">
+    <get path="/{id}">
+        <to uri="direct:customerDetail"/>
+    </get>
+    <get path="/{id}/orders">
+        <to uri="direct:customerOrders"/>
+    </get>
+    <post path="/neworder">
+        <to uri="direct:customerNewOrder"/>
+    </post>
+</rest>
+
+<routes>
+    <route>
+        <from uri="direct:customerNewOrder"/>
+        <to uri="direct:commonCustomerNewOrder"/>
+    </route>
+    <route>
+        <from uri="direct:commonCustomerNewOrder"/>
+        <log message="Created new order"/>
+    </route>
+    <route>
+        <from uri="kafka:new-order"/>
+        <to uri="direct:commonCustomerNewOrder"/>
+    </route>
+</routes>
+```
+
+```yaml
+- restConfiguration:
+    inlineRoutes: true
+- rest:
+    path: "/customers/"
+    get:
+      - path: "/{id}}"
+        to: "direct:customerDetails"
+      - path: "/{id}/orders}"
+        to: "direct:customerOrders"
+    post:
+      - path: "/neworder"
+        to: "direct:customerNewOrder"
+- route:
+    from:
+      uri: direct:customerNewOrder
+      steps:
+        - to:
+            uri: direct:commonCustomerNewOrder
+- route:
+    from:
+      uri: direct:commonCustomerNewOrder
+      steps:
+        - log:
+            message: Created new order
+- route:
+    from:
+      uri: kafka:new-order
+      steps:
+        - to:
+            uri: direct:commonCustomerNewOrder
+```
+
+Notice how the common shared route is separated into the route `direct:commonCustomerNewOrder`. Which can be called from both Rest DSL and regular Camel routes.
+
+## Disabling REST services
+
+While developing REST services using Rest DSL, you may want to temporary disabled some REST endpoints, which you can do using `disabled` as shown in the following.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+rest("/customers/")
+    .get("/{id}").to("direct:customerDetail")
+    .get("/{id}/orders").to("direct:customerOrders").disabled("{{ordersEnabled}}")
+    .post("/neworder").to("direct:customerNewOrder").disabled();
+```
+
+```xml
+<rest>
+  <get path="/customers/{id}">
+    <to uri="direct:customerDetail"/>
+  </get>
+  <get path="/customers/{id}/orders" disabled="{{ordersEnabled}}">
+    <to uri="direct:customerOrders"/>
+  </get>
+  <post path="/customers/neworder" disabled="true">
+    <to uri="direct:customerNewOrder"/>
+  </post>
+</rest>
+```
+
+```yaml
+- rest:
+    get:
+      - path: "/customers/{id}}"
+        to: "direct:customerDetails"
+      - path: "/customers/{id}/orders}"
+        to: "direct:customerOrders"
+        disabled: "{{ordersEnabled}}"
+    post:
+      - path: "/customers/neworder"
+        to: "direct:customerNewOrder"
+        disabled: "true"
+```
+
+In this example the last two REST endpoints are configured with `disabled`. You can use [Property Placeholder](using-propertyplaceholder.md) to let an external configuration determine if the REST endpoint is disabled or not. In this example the `/customers/{id}/orders` endpoint is disabled via a placeholder. The last REST endpoint is hardcoded to be disabled.
+
+## Binding to POJOs using
+
+The Rest DSL supports automatic binding json/xml contents to/from POJOs using data formats. By default, the binding mode is off, meaning there is no automatic binding happening for incoming and outgoing messages.
+
+You may want to use binding if you develop POJOs that maps to your REST services request and response types. This allows you as a developer to work with the POJOs in Java code.
+
+The binding modes are:
+
+ 
+| Binding Mode | Description |
+| --- | --- |
+| `off` | Binding is turned off. This is the default option. |
+| `auto` | Binding is enabled, and Camel is relaxed and supports JSON, XML or both if the necessary data formats are included in the classpath. Notice that if for example `camel-jaxb` is not on the classpath, then XML binding is not enabled. Notice that for XML then `jaxb` is default, and you must be explicit to set `xmlDataFormat=jacksonXml` if you want to use jackson XML instead. |
+| `json` | Binding to/from JSON is enabled, and requires a JSON capable data format on the classpath. By default, Camel will use `jackson` as the data format. |
+| `xm` | Binding to/from XML is enabled, and requires `camel-jaxb` or `camel-jacksonxml` on the classpath. |
+| `json_xml` | Binding to/from JSON and XML is enabled and requires both data formats to be on the classpath. |
+
+When using `camel-jaxb` for XML bindings, then you can use the option `mustBeJAXBElement` to relax the output message body must be a class with JAXB annotations. You can use this in situations where the message body is already in XML format, and you want to use the message body as-is as the output type. If that is the case, then set the dataFormatProperty option `mustBeJAXBElement` to `false` value.
+
+The binding from POJO to JSon/JAXB will only happen if the `content-type` header includes the word `json` or `xml` representatively. This allows you to specify a custom content-type if the message body should not attempt to be marshalled using the binding. For example, if the message body is a custom binary payload, etc.
+
+When automatic binding from POJO to JSON/JAXB takes place the existing `content-type` header will by default be replaced with either `application/json` or `application/xml`. To disable the default behavior and be able to produce JSON/JAXB responses with custom `content-type` headers (e.g. `application/user.v2+json`) you configure this as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().dataFormatProperty("contentTypeHeader", "false");
+```
+
+```xml
+<restConfiguration>
+   <dataFormatProperty key="contentTypeHeader" value="false"/>
+</restConfiguration>
+```
+
+The `value` in `dataFormatProperty` must be defined as a string value, so we use `"false"` in string quotes.
+
+```yaml
+- restConfiguration:
+    dataFormatProperty:
+      - key: "contentTypeHeader"
+        value: "false"
+```
+
+To use binding you must include the necessary data formats on the classpath, such as `camel-jaxb` / `camel-jacksonxml` and/or `camel-jackson`. And then enable the binding mode. You can configure the binding mode globally on the rest configuration, and then override per rest service as well.
+
+> **Note**
+> To use Jackson XML for XML binding, then you must configure `xmlDataformat=jacksonXml` and include `camel-jacksonxml` on the classpath.
+
+To enable binding, you configure this in Java DSL as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().component("netty-http").host("localhost").port(portNum).bindingMode(RestBindingMode.auto);
+```
+
+```xml
+<restConfiguration bindingMode="auto" component="netty-http" port="8080"/>
+```
+
+```yaml
+- restConfiguration:
+    bindingMode: "auto"
+    component: "netty-http"
+    port: "8080"
+```
+
+When binding is enabled, Camel will bind the incoming and outgoing messages automatic, accordingly to the content type of the message. If the message is JSON, then JSON binding happens; and so if the message is XML, then XML binding happens. The binding happens for incoming and reply messages. The table below summaries what binding occurs for incoming and reply messages.
+
+   
+| Message Body | Direction | Binding Mode | Message Body |
+| --- | --- | --- | --- |
+| XML | Incoming | auto,xml,json\_xml | POJO |
+| POJO | Outgoing | auto,xml, json\_xml | XML |
+| JSON | Incoming | auto,json,json\_xml | POJO |
+| POJO | Outgoing | auto,json,json\_xml | JSON |
+
+When using binding, you must also configure what POJO type to map to. This is mandatory for incoming messages, and optional for outgoing.
+
+> **Note**
+> When using binding mode `json`, `xml` or `json_xml` then Camel will automatically set `consumers` and `produces` on the rest endpoint (according to the mode), if not already explicit configured. For example, with binding mode `json` and setting the outType as `UserPojo` then Camel will define this rest endpoint as producing `application/json`.
+
+For example, to map from xml/json to a pojo class `UserPojo` you do this as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+// configure to use netty-http on localhost with the given port
+// and enable auto binding mode
+restConfiguration().component("netty-http").host("localhost").port(portNum).bindingMode(RestBindingMode.auto);
+
+// use the rest DSL to define the rest services
+rest("/users/")
+    .post().type(UserPojo.class)
+        .to("direct:newUser");
+```
+
+```xml
+<restConfiguration component="netty-http" host="localhost" port="{{portNum}}" bindingMode="auto"/>
+
+<rest>
+  <post path="/users" type="com.foo.UserPojo">
+    <to uri="direct:newUser"/>
+  </post>
+</rest>
+```
+
+```yaml
+- restConfiguration:
+    component: "netty-http"
+    host: "localhost"
+    port: "{{portNum}}"
+    bindingMode: "auto"
+- rest:
+    post:
+      - path: "/users"
+        to: "direct:newUser"
+        type: "com.foo.UserPojo"
+```
+
+Notice we use `type` to define the incoming type. We can optionally define an outgoing type (which can be a good idea, to make it known from the DSL and also for tooling and JMX APIs to know both the incoming and outgoing types of the REST services). To define the outgoing type, we use `outType` as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+// configure to use netty-http on localhost with the given port
+// and enable auto binding mode
+restConfiguration().component("netty-http").host("localhost").port(portNum).bindingMode(RestBindingMode.auto);
+
+// use the rest DSL to define the rest services
+rest("/users/")
+    .post().type(UserPojo.class).outType(CountryPojo.class)
+        .to("direct:newUser");
+```
+
+```xml
+<restConfiguration component="netty-http" host="localhost" port="{{portNum}}" bindingMode="auto"/>
+
+<rest>
+  <post path="/users" type="com.foo.UserPojo" outType="com.foo.CountryPojo">
+    <to uri="direct:newUser"/>
+  </post>
+</rest>
+```
+
+```yaml
+- restConfiguration:
+    component: "netty-http"
+    host: "localhost"
+    port: "{{portNum}}"
+    bindingMode: "auto"
+- rest:
+    post:
+      - path: "/users"
+        to: "direct:newUser"
+        type: "com.foo.UserPojo"
+        outType: "com.foo.CountryPojo"
+```
+
+To specify input and/or output using an array, append `[]` to the end of the canonical class name as shown in the following:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+Notice how we in Java declare this as an array class
+
+```java
+// configure to use netty-http on localhost with the given port
+// and enable auto binding mode
+restConfiguration().component("netty-http").host("localhost").port(portNum).bindingMode(RestBindingMode.auto);
+
+// use the rest DSL to define the rest services
+rest("/users/")
+    .post().type(UserPojo[].class).outType(CountryPojo[].class)
+        .to("direct:newUser");
+```
+
+```xml
+<restConfiguration component="netty-http" host="localhost" port="{{portNum}}" bindingMode="auto"/>
+
+<rest>
+  <post path="/users" type="com.foo.UserPojo[]" outType="com.foo.CountryPojo[]">
+    <to uri="direct:newUser"/>
+  </post>
+</rest>
+```
+
+```yaml
+- restConfiguration:
+    component: "netty-http"
+    host: "localhost"
+    port: "{{portNum}}"
+    bindingMode: "auto"
+- rest:
+    post:
+      - path: "/users"
+        to: "direct:newUser"
+        type: "com.foo.UserPojo[]"
+        outType: "com.foo.CountryPojo[]"
+```
+
+The `UserPojo` is just a plain pojo with getter/setter as shown:
+
+```java
+public class UserPojo {
+    private int id;
+    private String name;
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+```
+
+The `UserPojo` only supports JSON, as XML requires using JAXB annotations, so we can add those annotations if we want to support XML also
+
+```java
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class UserPojo {
+    @XmlAttribute
+    private int id;
+    @XmlAttribute
+    private String name;
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+```
+
+By having the JAXB annotations, the POJO supports both JSON and XML bindings.
+
+### Camel Rest-DSL configurations
+
+The Rest DSL supports the following options:
+
+   
+| Name | Default | Type | Description |
+| --- | --- | --- | --- |
+| **apiComponent** |  | String | Sets the name of the Camel component to use as the REST API (such as swagger or openapi) |
+| **apiContextPath** |  | String | Sets a leading API context-path the REST API services will be using. This can be used when using components such as camel-servlet where the deployed web application is deployed using a context-path. |
+| **apiHost** |  | String | To use a specific hostname for the API documentation (such as swagger or openapi) This can be used to override the generated host with this configured hostname |
+| **apiProperties** |  | Map | Sets additional options on api level |
+| **apiVendorExtension** | false | boolean | Whether a vendor extension is enabled in the Rest APIs. If enabled, then Camel will include additional information as a vendor extension (e.g., keys starting with `_x-_`) such as route ids, class names etc. Not all third party API gateways and tools support vendor-extensions when importing your API docs. |
+| **bindingMode** | off | RestBindingMode | Sets the binding mode to be used by the REST consumer |
+| **clientRequestValidation** | false | boolean | Whether to enable validation of the client request to check: 1) Content-Type header matches what the Rest DSL consumes; returns HTTP Status 415 if validation error. 2) Accept header matches what the Rest DSL produces; returns HTTP Status 406 if validation error. 3) Missing required data (query parameters, HTTP headers, body); returns HTTP Status 400 if validation error. 4) Parsing error of the message body (JSON, XML or Auto binding mode must be enabled); returns HTTP Status 400 if validation error. |
+| **clientResponseValidation** | false | boolean | Whether to check what Camel is returning as response to the client: 1) Status-code and Content-Type matches Rest DSL response messages. 2) Check whether expected headers is included according to the Rest DSL repose message headers. 3) If the response body is JSon then check whether its valid JSon. Returns 500 if validation error detected. |
+| **component** |  | String | Sets the name of the Camel component to use as the REST consumer |
+| **componentProperties** |  | Map | Sets additional options on component level |
+| **consumerProperties** |  | Map | Sets additional options on consumer level |
+| **contextPath** |  | String | Sets a leading context-path the REST services will be using. This can be used when using components such as camel-servlet where the deployed web application is deployed using a context-path. Or for components such as camel-jetty or camel-netty-http that includes a HTTP server. |
+| **corsHeaders** |  | Map | Sets the CORS headers to use if CORS has been enabled. |
+| **dataFormatProperties** |  | Map | Sets additional options on data format level |
+| **enableCORS** | false | boolean | To specify whether to enable CORS, which means Camel will automatically include CORS in the HTTP headers in the response. This option is default false |
+| **enableNoContentResponse** | false | boolean | To specify whether to return HTTP 204 with an empty body when a response contains an empty JSON object or XML root object. |
+| **endpointProperties** |  | Map | Sets additional options on endpoint level |
+| **host** |  | String | Sets the hostname to use by the REST consumer |
+| **hostNameResolver** | allLocalIp | RestHostNameResolver | Sets the resolver to use for resolving hostname |
+| **inlineRoutes** | true | boolean | Inline routes in rest-dsl which are linked using direct endpoints. If disabling then each service in Rest DSL is an individual route, meaning that you would have at least two routes per service (rest-dsl, and the route linked from rest-dsl). By default, this allows Camel to optimize and inline this as a single route. However, this requires using direct endpoints, which must be unique per service. |
+| **jsonDataFormat** |  | String | Sets a custom JSON data format to be used Important: This option is only for setting a custom name of the data format, not to refer to an existing data format instance. |
+| **port** |  | int | Sets the port to use by the REST consumer |
+| **producerApiDoc** |  | String | Sets the location of the api document (swagger api) the REST producer will use to validate the REST uri and query parameters are valid accordingly to the api document…​ |
+| **producerComponent** |  | String | Sets the name of the Camel component to use as the REST producer |
+| **scheme** |  | String | Sets the scheme to use by the REST consumer |
+| **skipBindingOnErrorCode** | true | boolean | Whether to skip binding output if there is a custom HTTP error code, and instead use the response body as-is. This option is default true. |
+| **useXForwardHeaders** | true | boolean | Whether to use X-Forward headers to set host etc. for Swagger. This option is default true. |
+| **xmlDataFormat** |  | String | Sets a custom XML data format to be used. Important: This option is only for setting a custom name of the data format, not to refer to an existing data format instance. |
+
+For example, to configure the requst buffer on the jetty component on port 9091, then we can do as follows:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().component("jetty").port(9091).componentProperty("requestBufferSize", "50000");
+```
+
+```xml
+<restConfiguration component="jetty" port="9091">
+  <componentProperty key="requestBufferSize" value="50000"/>
+</restConfiguration>
+```
+
+```yaml
+- restConfiguration:
+    component: "jetty"
+    port: "9091"
+    componentProperty:
+      - key: "requestBufferSize"
+        value: "50000"
+```
+
+If no component has been explicitly configured, then Camel will look up if there is a Camel component that integrates with the Rest DSL, or if a `org.apache.camel.spi.RestConsumerFactory` is registered in the registry. If either one is found, then that is being used.
+
+You can configure properties on these levels.
+
+-   component - Is used to set any options on the Component class. You can also configure these directly on the component.
+    
+-   endpoint - Is used set any option on the endpoint level. Many of the Camel components has many options you can set on endpoint level.
+    
+-   consumer - Is used to set any option on the consumer level.
+    
+-   data format - Is used to set any option on the data formats. For example, to enable pretty print in the JSON data format.
+    
+-   cors headers - If cors is enabled, then custom CORS headers can be set. See below for the default values which are in used. If a custom header is set then that value takes precedence over the default value.
+    
+
+You can set multiple options of the same level, so you can, for example, configure two component options, and three endpoint options, etc.
+
+## Enabling or disabling Jackson JSON features
+
+When using JSON binding, you may want to turn specific Jackson features on or off. For example, to disable failing on unknown properties (e.g., JSON input has a property which cannot be mapped to a POJO) then configure this using the `dataFormatProperty` as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().component("jetty").host("localhost").port(getPort()).bindingMode(RestBindingMode.json)
+   .dataFormatProperty("json.in.disableFeatures", "FAIL_ON_UNKNOWN_PROPERTIES");
+```
+
+You can disable more features by separating the values using comma, such as:
+
+```java
+.dataFormatProperty("json.in.disableFeatures", "FAIL_ON_UNKNOWN_PROPERTIES,ADJUST_DATES_TO_CONTEXT_TIME_ZONE");
+```
+
+Likewise, you can enable features using the enableFeatures such as:
+
+```java
+restConfiguration().component("jetty").host("localhost").port(getPort()).bindingMode(RestBindingMode.json)
+   .dataFormatProperty("json.in.disableFeatures", "FAIL_ON_UNKNOWN_PROPERTIES,ADJUST_DATES_TO_CONTEXT_TIME_ZONE")
+   .dataFormatProperty("json.in.enableFeatures", "FAIL_ON_NUMBERS_FOR_ENUMS,USE_BIG_DECIMAL_FOR_FLOATS");
+```
+
+```xml
+<restConfiguration component="jetty" host="localhost" port="9090" bindingMode="json">
+  <dataFormatProperty key="json.in.disableFeatures" value="FAIL_ON_UNKNOWN_PROPERTIES,ADJUST_DATES_TO_CONTEXT_TIME_ZONE"/>
+  <dataFormatProperty key="json.in.enableFeatures" value="FAIL_ON_NUMBERS_FOR_ENUMS,USE_BIG_DECIMAL_FOR_FLOATS"/>
+</restConfiguration>
+```
+
+```yaml
+- restConfiguration:
+    component: "jetty"
+    host: "localhost"
+    port: "9090"
+    bindingMode: "json"
+    dataFormatProperty:
+      - key: "json.in.disableFeatures"
+        value: "FAIL_ON_UNKNOWN_PROPERTIES,ADJUST_DATES_TO_CONTEXT_TIME_ZONE"
+      - key: json.in.enableFeatures
+        value: "FAIL_ON_NUMBERS_FOR_ENUMS,USE_BIG_DECIMAL_FOR_FLOATS"
+```
+
+The values that can be used for enabling and disabling features on Jackson are the names of the enums from the following three Jackson 2.x classes
+
+-   `com.fasterxml.jackson.databind.SerializationFeature`
+    
+-   `com.fasterxml.jackson.databind.DeserializationFeature`
+    
+-   `com.fasterxml.jackson.databind.MapperFeature`
+    
+
+## Default CORS headers
+
+If CORS is enabled, then the _"follow headers"_ is in use by default. You can configure custom CORS headers that take precedence over the default value.
+
+ 
+| Key | Value |
+| --- | --- |
+| `Access-Control-Allow-Origin` | \* |
+| `Access-Control-Allow-Methods` | GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, CONNECT, PATCH |
+| `Access-Control-Allow-Headers` | Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers |
+| `Access-Control-Max-Age` | 3600 |
+
+## Defining a custom error message as-is
+
+If you want to define custom error messages to be sent back to the client with an HTTP error code (e.g., such as 400, 404 etc.) then you set a header with the key `Exchange.HTTP_RESPONSE_CODE` to the error code (must be 300+) such as 404. And then the message body with any reply message, and optionally set the content-type header as well. There is a little example shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().component("netty-http").host("localhost").port(9091).bindingMode(RestBindingMode.json);
+// use the rest DSL to define the rest services
+rest("/users/")
+    .post("lives").type(UserPojo.class).outType(CountryPojo.class)
+    .to("direct:users-lives");
+
+from("direct:users-lives")
+    .choice()
+        .when().simple("${body.id} < 100")
+            .bean("userErrorService", "idToLowError")
+        .otherwise()
+            .bean("userService", "livesWhere");
+```
+
+```xml
+<restConfiguration component="netty-http" host="localhost" port="9091" bindingMode="json"/>
+
+<rest path="/users/">
+    <post path="lives" type="com.foo.UserPojo" outType="com.foo.CountryPojo">
+        <to uri="direct:users-lives"/>
+    </post>
+</rest>
+
+<route>
+    <from uri="direct:users-lives"/>
+    <choice>
+        <when>
+            <simple>${body.id} &lt; 100</simple>
+            <bean ref="userErrorService" method="idToLowError"/>
+        </when>
+        <otherwise>
+            <bean ref="userService" method="livesWhere"/>
+        </otherwise>
+    </choice>
+</route>
+```
+
+```yaml
+- restConfiguration:
+    component: "netty-http"
+    host: "localhost"
+    port: "9091"
+    bindingMode: "json"
+- rest:
+    path: "/users"
+    post:
+      - path: "/lives"
+        to: "direct:users-lives"
+        type: "com.foo.UserPojo"
+        outType: "com.foo.CountryPojo"
+- route:
+    from:
+      uri: direct:users-lives
+      steps:
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${body.id} < 100"
+                steps:
+                  - bean:
+                      ref: userErrorService
+                      method: idToLowError
+            otherwise:
+              steps:
+                - bean:
+                    ref: userService
+                    method: livesWhere
+```
+
+In this example, if the input id is a number that is below 100, we want to send back a custom error message, using the `UserErrorService` bean, which is implemented as shown:
+
+```java
+public class UserErrorService {
+    public void idToLowError(Exchange exchange) {
+        exchange.getIn().setBody("id value is too low");
+        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "text/plain");
+        exchange.getIn().setHeader(Exchange.HTTP_RESPONSE_CODE, 400);
+    }
+}
+```
+
+In the `_UserErrorService_` bean, we build our custom error message, and set the HTTP error code to 400. This is important, as that tells rest-dsl that this is a custom error message, and the message should not use the output pojo binding (e.g., would otherwise bind to `_CountryPojo_`).
+
+### Catching JsonParserException and returning a custom error message
+
+You can return a custom message as-is (see previous section). So we can leverage this with Camel error handler to catch `JsonParserException`, handle that exception and build our custom response message. For example, to return an HTTP error code 400 with a hardcoded message, we can do as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+onException(JsonParseException.class)
+    .handled(true)
+    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(400))
+    .setHeader(Exchange.CONTENT_TYPE, constant("text/plain"))
+    .setBody().constant("Invalid json data");
+```
+
+```xml
+<onException>
+    <exception>com.fasterxml.jackson.core.JsonParseException</exception>
+    <handled>
+        <constant>true</constant>
+    </handled>
+    <setHeader name="CamelHttpResponseCode">
+        <constant>400</constant>
+    </setHeader>
+    <setHeader name="Content-Type">
+        <constant>text/plain</constant>
+    </setHeader>
+    <setBody>
+        <constant>Invalid json data</constant>
+    </setBody>
+</onException>
+```
+
+```yaml
+- onException:
+    exception:
+      - com.fasterxml.jackson.core.JsonParseException
+    handled:
+      constant:
+        expression: "true"
+    steps:
+      - setHeader:
+          name: CamelHttpResponseCode
+          expression:
+            constant:
+              expression: 400
+      - setHeader:
+          name: Content-Type
+          expression:
+            constant:
+              expression: text/plain
+      - setBody:
+          expression:
+            constant:
+              expression: Invalid json data
+```
+
+## Query/Header Parameter default Values
+
+You can specify default values for parameters in the rest-dsl, such as the verbose parameter below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+rest("/customers/")
+    .get("/{id}").to("direct:customerDetail")
+    .get("/{id}/orders")
+      .param().name("verbose").type(RestParamType.query).defaultValue("false").description("Verbose order details").endParam()
+        .to("direct:customerOrders")
+    .post("/neworder").to("direct:customerNewOrder");
+```
+
+```xml
+<rest path="/customers/">
+    <get path="/{id}">
+        <to uri="direct:customerDetail"/>
+    </get>
+    <get path="/{id}/orders">
+        <param description="Verbose order details" name="verbose" type="query" defaultValue="false"/>
+        <to uri="direct:customerOrders"/>
+    </get>
+    <post path="/neworder">
+        <to uri="direct:customerNewOrder"/>
+    </post>
+</rest>
+```
+
+```yaml
+- rest:
+    path: "/customers/"
+    get:
+      - path: "/{id}"
+        to: "direct:customerDetail"
+      - path: "/{id}/orders"
+        to: "direct:customerOrders"
+        param:
+          - name: "verbose"
+            type: "query"
+            defaultValue: "false"
+            description: "Verbose order details"
+    post:
+      - path: "/neworder"
+        to: "direct:customerNewOrder"
+```
+
+The default value is automatic set as header on the incoming Camel `Message`. So if the call to `/customers/id/orders` do not include a query parameter with key `verbose` then Camel will now include a header with key `verbose` and the value `false` because it was declared as the default value. This functionality is only applicable for query parameters. Request headers may also be defaulted in the same way.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+rest("/customers/")
+    .get("/{id}").to("direct:customerDetail")
+    .get("/{id}/orders")
+      .param().name("indicator").type(RestParamType.header).defaultValue("disabled").description("Feature Enabled Indicator").endParam()
+        .to("direct:customerOrders")
+    .post("/neworder").to("direct:customerNewOrder");
+```
+
+```xml
+<rest path="/customers/">
+    <get path="/{id}">
+        <param name="id"/>
+        <to uri="direct:customerDetail"/>
+    </get>
+    <get path="/{id}/orders">
+        <param description="Feature Enabled Indicator" name="indicator" type="header" defaultValue="disabled"/>
+        <to uri="direct:customerOrders"/>
+    </get>
+    <post path="/neworder">
+        <to uri="direct:customerNewOrder"/>
+    </post>
+</rest>
+```
+
+```yaml
+- rest:
+    path: "/customers/"
+    get:
+      - path: "/{id}"
+        to: "direct:customerDetail"
+      - path: "/{id}/orders"
+        to: "direct:customerOrders"
+        param:
+          - name: "indicator"
+            type: "header"
+            defaultValue: "disabled"
+            description: "Feature Enabled Indicator"
+    post:
+      - path: "/neworder"
+        to: "direct:customerNewOrder"
+```
+
+## Client Request and Response Validation
+
+It is possible to enable validation of the incoming client request. The validation checks for the following:
+
+-   Content-Type header matches what the Rest DSL consumes. (Returns HTTP Status 415)
+    
+-   Accept header matches what the Rest DSL produces. (Returns HTTP Status 406)
+    
+-   Missing required data (query parameters, HTTP headers, body). (Returns HTTP Status 400)
+    
+-   Checking if query parameters or HTTP headers has not-allowed values. (Returns HTTP Status 400)
+    
+-   Parsing error of the message body (JSON, XML or Auto binding mode must be enabled). (Returns HTTP Status 400)
+    
+
+If the validation fails, then Rest DSL will return a response with an HTTP error code.
+
+The validation is by default turned off (to be backwards compatible). It can be turned on via `clientRequestValidation` as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().component("jetty").host("localhost")
+    .clientRequestValidation(true);
+```
+
+```xml
+<restConfiguration component="jetty" host="localhost" clientRequestValidation="true"/>
+```
+
+```yaml
+- restConfiguration:
+    component: "jetty"
+    host: "localhost"
+    clientRequestValidation: "true"
+```
+
+The validator is pluggable and Camel provides a default implementation out of the box.
+
+However, the `camel-openapi-validator` uses the third party [Atlassian Swagger Request Validator](https://bitbucket.org/atlassian/swagger-request-validator/src/master/) library instead for client request validator. This library is a more extensive validator than the default validator from `camel-core`, such as being able to validate the payload is structured according to the OpenAPI specification.
+
+In **Camel 4.13** we added a _response validator_ as well which is intended more as development assistance that you can enable while building your Camel integrations, and help ensure what Camel is sending back to the HTTP client is valid. The response validator checks for the following:
+
+-   Status-code and Content-Type matches Rest DSL response messages.
+    
+-   Check whether expected headers is included according to the Rest DSL repose message headers.
+    
+-   If the response body is JSon then check whether its valid JSon.
+    
+
+If any error is detected the HTTP Status 500 is returned.
+
+Also, the `camel-openapi-validator` can be added to the classpath to have a more powerful response validator, that can be used to validate the response payload is structured according to the OpenAPI specification.
+
+## OpenAPI / Swagger API
+
+The Rest DSL supports OpenAPI and Swagger by the `camel-openapi-java` modules.
+
+You can define each parameter fine-grained with details such as name, description, data type, parameter type and so on, using the `param`. For example, to define the id path parameter, you can do as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+rest()
+  .get("/{id}").description("Find user by id").outType(User.class)
+    .param().name("id").type(path).description("The id of the user to get").dataType("int").endParam()
+    .to("bean:userService?method=getUser(${header.id})");
+```
+
+```xml
+<rest>
+    <!-- this is a rest GET to view an user by the given id -->
+    <get path="/{id}" outType="org.apache.camel.example.rest.User">
+      <description>Find user by id</description>
+      <param name="id" type="path" description="The id of the user to get" dataType="int"/>
+      <to uri="bean:userService?method=getUser(${header.id})"/>
+    </get>
+</rest>
+```
+
+```yaml
+- rest:
+    get:
+      - path: "/{id}"
+        description: "Find user by id"
+        outType: "org.apache.camel.example.rest.User"
+        to: "bean:userService?method=getUser(${header.id})"
+        param:
+          - name: "id"
+            type: "path"
+            dataType: "int"
+            description: "The id of the user to get"
+```
+
+The body parameter type requires to use body as well for the name. For example, a REST PUT operation to create/update a user could be done as:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+rest()
+  .put().description("Updates or create a user").type(User.class)
+    .param().name("body").type(body).description("The user to update or create").endParam()
+    .to("bean:userService?method=updateUser");
+```
+
+```xml
+<rest>
+    <!-- this is a rest PUT to create/update an user -->
+    <put type="org.apache.camel.example.rest.User">
+      <description>Updates or create a user</description>
+      <param name="body" type="body" description="The user to update or create"/>
+      <to uri="bean:userService?method=updateUser"/>
+    </put>
+</rest>
+```
+
+```yaml
+- rest:
+    put:
+      - description: "Updates or create a user"
+        type: "org.apache.camel.example.rest.User"
+        to: "bean:userService?method=updateUser"
+        param:
+          - name: "body"
+            type: "body"
+            dataType: "int"
+            description: "The user to update or create"
+```
+
+### Vendor Extensions
+
+The generated API documentation can be configured to include vendor extensions ([https://swagger.io/specification/#specificationExtensions](https://swagger.io/specification/#specificationExtensions)) which document the operations and definitions with additional information, such as class name of model classes, camel context id and route id’s. This information can be very helpful for developers, especially during troubleshooting. However, at production usage you may wish to not have this turned on to avoid leaking implementation details into your API docs.
+
+The vendor extension information is stored in the API documentation with keys starting with `x-`.
+
+> **Note**
+> Not all third party API gateways and tools support vendor-extensions when importing your API docs.
+
+The vendor extensions can be turned on `RestConfiguration` via the `apiVendorExtension` option:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration()
+    .component("servlet")
+    .bindingMode(RestBindingMode.json)
+    .dataFormatProperty("prettyPrint", "true")
+    .apiContextPath("api-doc")
+    .apiVendorExtension(true)
+        .apiProperty("api.title", "User API").apiProperty("api.version", "1.0.0")
+        .apiProperty("cors", "true");
+```
+
+```xml
+ <restConfiguration component="servlet" bindingMode="json"
+                       apiContextPath="api-docs"
+                       apiVendorExtension="true">
+
+      <!-- we want json output in pretty mode -->
+      <dataFormatProperty key="prettyPrint" value="true"/>
+
+      <!-- setup swagger api descriptions -->
+      <apiProperty key="api.version" value="1.0.0"/>
+      <apiProperty key="api.title" value="User API"/>
+
+</restConfiguration>
+```
+
+```yaml
+- restConfiguration:
+    component: "servlet"
+    bindingMode: "json"
+    apiContextPath: "api-docs"
+    apiVendorExtension: "true"
+    dataFormatProperty:
+      - key: "prettyPrint"
+        value: "true"
+    apiProperty:
+      - key: "api.version"
+        value: "1.0.0"
+      - key: "api.title"
+        value: "User Api"
+```
+
+### Supported API properties
+
+The following table lists supported API properties and explains their effect. To set them use `apiProperty(String, String)` in the Java DSL or `<apiProperty>` when defining the REST API via XML configuration. Properties in **bold** are required by the OpenAPI 2.0 specification. Most of the properties affect the OpenAPI [Info object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#infoObject), [License object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#licenseObject) or [Contact object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#contact-object).
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Property</td><td class="tableblock halign-left valign-top">Description</td></tr><tr><td class="tableblock halign-left valign-top"><strong>api.version</strong></td><td class="tableblock halign-left valign-top">Version of the API</td></tr><tr><td class="tableblock halign-left valign-top"><strong>api.title</strong></td><td class="tableblock halign-left valign-top">Title of the API</td></tr><tr><td class="tableblock halign-left valign-top">api.description</td><td class="tableblock halign-left valign-top">Description of the API</td></tr><tr><td class="tableblock halign-left valign-top">api.termsOfService</td><td class="tableblock halign-left valign-top">API Terms of Service of the API</td></tr><tr><td class="tableblock halign-left valign-top">api.license.name</td><td class="tableblock halign-left valign-top">License information of the API</td></tr><tr><td class="tableblock halign-left valign-top">api.license.url</td><td class="tableblock halign-left valign-top">URL for the License of the API</td></tr><tr><td class="tableblock halign-left valign-top">api.contact.name</td><td class="tableblock halign-left valign-top">The identifying name of the contact person/organization</td></tr><tr><td class="tableblock halign-left valign-top">api.contact.url</td><td class="tableblock halign-left valign-top">The URL pointing to the contact information</td></tr><tr><td class="tableblock halign-left valign-top">api.contact.email</td><td class="tableblock halign-left valign-top">The email address of the contact person/organization</td></tr><tr><td class="tableblock halign-left valign-top">api.specification.contentType.json</td><td class="tableblock halign-left valign-top">The Content-Type of the served OpenAPI JSON specification, <code>application/json</code> by default</td></tr><tr><td class="tableblock halign-left valign-top">api.specification.contentType.yaml</td><td class="tableblock halign-left valign-top">The Content-Type of the served OpenAPI YAML specification, <code>text/yaml</code> by default</td></tr><tr><td class="tableblock halign-left valign-top">externalDocs.url</td><td class="tableblock halign-left valign-top">The URI for the target documentation. This must be in the form of a URI</td></tr><tr><td class="tableblock halign-left valign-top">externalDocs.description</td><td class="tableblock halign-left valign-top">A description of the target documentation</td></tr></tbody></table>

@@ -1,0 +1,75 @@
+# Mapped Diagnostic Context (MDC)
+
+The Mapped Diagnostic Context is a technology used in Java to provide a set of customized information into each log trace. The major logging frameworks implements it, and, although it may have certain limitations, this technology is used to enhance the logging and monitoring of a Java application (Camel applications included).
+
+> **Tip**
+> You’re invited to try the new [camel-mdc](../components/4.18.x/others/mdc.md) component for an improved user experience.
+
+The main limitation of this technology is the fact that it stores values on a context that is available at thread level. Since Camel is an application that manages multiple thread, when it deals with asynchronous calls, the context propagation may not work correctly.
+
+> **Note**
+> The framework should generally handle MDC correctly. However, there could be components (eg, tracing components) and other asynchronous parts of the system that still require the implementation of the context propagation: please report if you notice anything wrong.
+
+## Enabling MDC
+
+> **Note**
+> This feature is deprecated. Use the new [camel-mdc](../components/4.18.x/others/mdc.md) service component instead.
+
+The first thing you need to do is to enable MDC logging in Camel.
+
+-   Application Properties
+    
+-   Java
+    
+-   Spring XML
+    
+
+```properties
+camel.main.useMdcLogging = true
+```
+
+```java
+CamelContext context = ...
+context.setUseMDCLogging(true);
+```
+
+```xml
+<camelContext xmlns="http://camel.apache.org/schema/spring" useMDCLogging="true">
+...
+</camelContext>
+```
+
+When enabled then the following Camel information will be included in the MDC context:
+
+-   camel.breadcrumbId
+    
+-   camel.exchangeId
+    
+-   camel.messageId
+    
+-   camel.correlationId
+    
+-   camel.routeId
+    
+-   camel.stepId
+    
+-   camel.contextId
+    
+-   camel.transactionKey
+    
+
+You can use the above variables for MDC depending on the logging framework you’re using. For example, if you’re using log4j2, then, the variable will be like `%X{camel.exchangeId}`. Other logging frameworks should have a similar approach, just check its specific documentation.
+
+## User values
+
+If you’re using Java DSL you can include any customized information by adding that using low level MDC API:
+
+```java
+org.slf4j.MDC.put("myKey", "myValue");
+```
+
+Each MDC should be now able to include that information.
+
+## Context propagation
+
+If you’re using some asynchronous component, then, you may need to configure the application to enable the MDC context propagation. For that reason you need to add the `camel.main.mdcLoggingKeysPattern` configuration. This configuration will drive the process of copying the MDC context on the thread that will execute your Exchange asynchronously.

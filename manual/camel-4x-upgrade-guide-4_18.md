@@ -1,0 +1,278 @@
+# Apache Camel 4.x Upgrade Guide
+
+This document is for helping you upgrade your Apache Camel application from Camel 4.x to 4.y. For example, if you are upgrading Camel 4.0 to 4.2, then you should follow the guides from both 4.0 to 4.1 and 4.1 to 4.2.
+
+> **Note**
+> [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
+
+## Upgrading from 4.18.0 to 4.18.1
+
+### camel-bom
+
+The `camel-test` module has been removed from `camel-bom`. This module was included by mistake, as since Camel 4, this is not a JAR but a pom.xml file. Camel end users should use the `camel-test-junit5` / `camel-test-junit6` JARs and the others directly.
+
+### camel-yaml-io / camel-xml-io
+
+In the YAML DSL we have renamed `routePolicy` to `routePolicyRef` on the `route` node, as that is the correct name.
+
+#### Saga EIP
+
+The Saga EIP has _fixed_ the model for how to configure completion and compensation URIs.
+
+For Java DSL there is no changes, but XML and YAML DSL is affected. Here the `<compensation>` and `<completion>` tags has been changed to be an attribute on `<saga>` instead as shown below:
+
+Before:
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <saga sagaService="mySagaService">
+        <compensation uri="mock:compensation"/>
+        <completion uri="mock:completion"/>
+        <option key="myOptionKey">
+            <constant>myOptionValue</constant>
+        </option>
+        <option key="myOptionKey2">
+            <constant>myOptionValue2</constant>
+        </option>
+    </saga>
+    <choice>
+        <when>
+            <simple>${body} == 'fail'</simple>
+            <throwException exceptionType="java.lang.RuntimeException" message="fail"/>
+        </when>
+    </choice>
+    <to uri="mock:end"/>
+</route>
+```
+
+In YAML DSL the changes are even simpler as the endpoint is moved from `uri` to the value of `completion` or `compensation`.
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - saga:
+            sagaService: mySagaService
+            compensation:
+              uri: mock:compensation
+            completion:
+              uri: mock:completion
+            key: myOptionKey2
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${body} == 'fail'"
+                steps:
+                  - throwException:
+                      message: fail
+                      exceptionType: java.lang.RuntimeException
+        - to:
+            uri: mock:end
+```
+
+After:
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <saga sagaService="mySagaService" compensation="mock:compensation" completion="mock:completion">
+        <option key="myOptionKey">
+            <constant>myOptionValue</constant>
+        </option>
+        <option key="myOptionKey2">
+            <constant>myOptionValue2</constant>
+        </option>
+    </saga>
+    <choice>
+        <when>
+            <simple>${body} == 'fail'</simple>
+            <throwException exceptionType="java.lang.RuntimeException" message="fail"/>
+        </when>
+    </choice>
+    <to uri="mock:end"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - saga:
+            sagaService: mySagaService
+            compensation: mock:compensation
+            completion: mock:completion
+            key: myOptionKey2
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${body} == 'fail'"
+                steps:
+                  - throwException:
+                      message: fail
+                      exceptionType: java.lang.RuntimeException
+        - to:
+            uri: mock:end
+```
+
+### camel-simple
+
+In the simple language then init blocks syntax has changed to require that each variable ends with a semicolon and new line (no trailing comments etc is allowed)
+
+For example
+
+```yaml
+    - setBody:
+        simple:
+          expression: |-
+            $init{
+              // this is a java like comment
+              $sum := ${sum(${header.lines},100)}
+
+              $sku := ${iif(${body} contains 'Camel',123,999)}
+            }init$
+            orderId=$sku,total=$sum
+```
+
+Should be changed to have semicolons as shown below:
+
+```yaml
+    - setBody:
+        simple:
+          expression: |-
+            $init{
+              // this is a java like comment
+              $sum := ${sum(${header.lines},100)};
+
+              $sku := ${iif(${body} contains 'Camel',123,999)};
+            }init$
+            orderId=$sku,total=$sum
+```
+
+### camel-mail
+
+When configured a custom `IdempotentRepository` on `camel-mail` endpoint, then Camel will now auto-start the bean which is similar to what `camel-file` do as well.
+
+### camel-json-patch
+
+The `camel-json-patch` is now deprecated - the library it uses is not active maintained and this module does not work with Jackon 3.
+
+### camel-openapi-java
+
+When using _code first_ Rest DSL and have configured `base.path` then this will now be exclusively used for the returned server url in the API specification.
+
+For example here we set `base.path=cheese`:
+
+```java
+restConfiguration().component("jetty").host("localhost").port(getPort())
+        .contextPath("myapp")
+        .apiContextPath("/api-doc")
+        .apiProperty("cors", "true").apiProperty("base.path", "cheese")
+        .apiProperty("api.title", "The hello rest thing").apiProperty("api.version", "1.2.3");
+```
+
+Then the generated API specification now returns:
+
+```json
+  "servers" : [ {
+    "url" : "http://localhost:58678/cheese"
+  } ],
+```
+
+Previously the context-path would always be used:
+
+```json
+  "servers" : [ {
+    "url" : "http://localhost:58678/myapp"
+  } ],
+```
+
+The intention is to allow to configure the `base.path` _as is_ in the return API specification.
+
+## Upgrading Camel 4.17 to 4.18
+
+### camel-simple
+
+The **simple** language has deprecated binary operators that uses space in the name:
+
+-   `not contains` use `!contains` instead
+    
+-   `not regex` use `!regex` instead
+    
+-   `not range` use `!range` instead
+    
+-   `starts with` use `startsWith` instead
+    
+-   `ends with` use `endsWith` instead
+    
+
+### camel-file
+
+The `org.apache.camel.component.file.GenericFileOperations` has added method `storeFileDirectly`.
+
+### camel-docling
+
+All not working metadata headers have been removed. The option `extractAllMetadata` has been removed. Using `includeRawMetadata` will have the same effect given that there is no more `customMetadata` available.
+
+It corresponds to the removal of functionality no more working since 4.17. Given that this functionality was never available in a LTS version,that the next LST version is the next one and the fix requires important change in upstream dependency; it is not going through a deprecation phase and removed directly.
+
+#### DoclingDocument return type
+
+The `CONVERT_TO_JSON` and `EXTRACT_STRUCTURED_DATA` operations now return a `DoclingDocument` object (`ai.docling.core.DoclingDocument`) in the exchange body instead of a raw JSON string. This applies to both docling-serve API mode and CLI mode (where the JSON output is parsed into `DoclingDocument` via Jackson).
+
+Code that previously received a `String` and manually deserialized it should be updated:
+
+```java
+// Before (4.17)
+String result = template.requestBody("direct:convert", filePath, String.class);
+DoclingDocument doc = mapper.readValue(result, DoclingDocument.class);
+
+// After (4.18)
+DoclingDocument doc = template.requestBody("direct:convert", filePath, DoclingDocument.class);
+```
+
+The `EXTRACT_METADATA` operation also now uses `DoclingDocument` internally instead of re-parsing a JSON string, though the exchange body type (`DocumentMetadata`) is unchanged.
+
+#### EXTRACT\_STRUCTURED\_DATA differentiation
+
+The `EXTRACT_STRUCTURED_DATA` operation is now differentiated from `CONVERT_TO_JSON` when using the docling-serve API. It uses a dedicated request builder that enables table structure recognition (`doTableStructure=true`) by default. Additional enrichment features (code enrichment, formula enrichment, picture classification) can be enabled via the new configuration properties. Previously, both operations produced identical requests to the server.
+
+The `BATCH_EXTRACT_STRUCTURED_DATA` operation now has its own dedicated implementation (`processBatchStructuredData`) that sends structured data requests with table structure recognition enabled, matching its single-document counterpart. Previously, it was handled as a plain batch JSON conversion.
+
+#### processTimeout and HTTP read timeout
+
+The `processTimeout` configuration property (default: 30000ms) now also controls the HTTP read timeout when using docling-serve API mode. Previously, the HTTP read timeout was not configurable and used the docling-java client library default. For complex PDF documents that require OCR or enrichment processing, increase `processTimeout` (e.g., to 120000 for 2 minutes).
+
+#### OCR bridging to API mode
+
+The `enableOCR` configuration property is now bridged to the docling-serve API mode when explicitly set to `false`: it sends `doOcr(false)` to the server to disable OCR. When left at its default value (`true`), the server uses its own defaults to preserve backward compatibility. For explicit API-mode OCR control, use the new `doOcr` property instead.
+
+#### New advanced configuration properties
+
+18 new configuration properties have been added to expose the full `ConvertDocumentOptions` from the docling-serve SDK: `doOcr`, `forceOcr`, `ocrEngine`, `pdfBackend`, `tableMode`, `tableCellMatching`, `doTableStructure`, `pipeline`, `doCodeEnrichment`, `doFormulaEnrichment`, `doPictureClassification`, `doPictureDescription`, `includeImages`, `imageExportMode`, `abortOnError`, `documentTimeout`, `imagesScale`, and `mdPageBreakPlaceholder`. All default to `null` and only take effect when explicitly set. These options are applied to every docling-serve API request via the `applyConfigurationToOptions` method.
+
+### camel-qdrant
+
+The class `org.apache.camel.component.qdrant.Qdrant.Headers` has been removed. It was deprecated since 4.15. It is replaced by `org.apache.camel.component.qdrant.QdrantHeaders`.
+
+### camel-tahu
+
+The upgrade of Tahu from 1.0.17 to 1.0.18 introduced an API break. HostApplicationEventHandler has been renamed to MultiHostApplicationEventHandler and introduced one more parameter on all methods.
+
+Even if the interface HostApplicationEventHandler is public, I do not expect Camel users to use the implementation TahuHostApplicationEventHandler from Camel. Also the change would be relatively trivial. So replacing it without deprecating it first in order to be able to use the latest Tahu version right away.
+
+Consequently, there is an API break `org.apache.camel.tahu.handlers.TahuHostApplicationEventHandler` has been removed. It is replaced by `org.apache.camel.tahu.handlers.MultiTahuHostApplicationEventHandler`.
+
+### camel-platform-http-vertx and Rest DSL contract-first
+
+When using Rest DSL in _contract first_ style, then the HTTP engine (vertx-web) instead of a single router to handle all incoming Rest API calls, is now one unique router per API endpoint. This change can affect HTTP request validation as vertx/Quarkus is now also performing this per API endpoint according to the API specification.
+
+All together this would make Camel behave similar for Rest DSL for both _code first_ and _contract first_ style.
+
+### Component deprecation
+
+The `camel-olingo2` and `camel-olingo4` component are deprecated. This is due the Apache Olingo project is EOL and has been moved to the attic and is no longer maintained.

@@ -1,0 +1,82 @@
+# Control Bus
+
+JVM since0.4.0 Native since0.4.0
+
+Manage and monitor Camel routes.
+
+## What’s inside
+
+-   [Control Bus component](../../../../components/4.14.x/controlbus-component.md), URI syntax: `controlbus:command:language`
+    
+
+Please refer to the above link for usage and configuration details.
+
+## Maven coordinates
+
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-controlbus)
+
+Or add the coordinates to your existing project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-controlbus</artifactId>
+</dependency>
+```
+
+Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
+
+## Usage
+
+### Statistics
+
+When using the `stats` command endpoint, the `camel-quarkus-management` extension must be added as a project dependency to enable JMX. Maven users will have to add the following to their `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-management</artifactId>
+</dependency>
+```
+
+### Languages
+
+#### Bean
+
+The Bean language can be used to invoke a method on a bean to control the state of routes. The `org.apache.camel.quarkus:camel-quarkus-bean` extension must be added to the classpath. Maven users must add the following dependency to the POM:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-bean</artifactId>
+</dependency>
+```
+
+In native mode, the bean class must be annotated with `@RegisterForReflection`.
+
+#### Simple
+
+The Simple language can be used to control the state of routes. The following example uses a `ProducerTemplate` to stop a route with the id `foo`:
+
+```java
+template.sendBody(
+    "controlbus:language:simple",
+    "${camelContext.getRouteController().stopRoute('foo')}"
+);
+```
+
+To use the OGNL notation, the `org.apache.camel.quarkus:camel-quarkus-bean` extension must be added as a dependency.
+
+In native mode, the classes used in the OGNL notation must be registered for reflection. In the above code snippet, the `org.apache.camel.spi.RouteController` class returned from `camelContext.getRouteController()` must be registered. As this is a third-party class, it cannot be annotated with `@RegisterForReflection` directly - instead you can annotate a different class and specifying the target classes to register. For example, the class defining the Camel routes could be annotated with `@RegisterForReflection(targets = { org.apache.camel.spi.RouteController.class })`.
+
+Alternatively, add the following line to your `src/main/resources/application.properties`:
+
+```properties
+quarkus.camel.native.reflection.include-patterns = org.apache.camel.spi.RouteController
+```
+
+## Camel Quarkus limitations
+
+### Statistics
+
+The `stats` action is not available in native mode as JMX is not supported on GraalVM. Therefore, attempting to build a native image with the `camel-quarkus-management` extension on the classpath will result in a build failure.

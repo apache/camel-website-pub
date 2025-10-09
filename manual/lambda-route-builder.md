@@ -1,0 +1,55 @@
+# LambdaRouteBuilder
+
+The `LambdaRouteBuilder` is a functional interface which is used for creating a routing rule using the [DSL](dsl.md), using Java lambda style.
+
+```java
+rb -> rb.from("timer:foo").log("Hello Lambda");
+```
+
+Instances of `LambdaRouteBuilder` are discovered and transformed into `RouteBuilder` instances which are added to the CamelContext.
+
+## Usage
+
+To use `LambdaRouteBuilder` you need to create a method that returns `LambdaRouteBuilder` which then allows to use Java lambda style to define a single route.
+
+In the example below the method `myRoute` is used to create a Camel route that consumes from Kafka and sends the messages to JMS.
+
+To make the route discoverable by Camel during startup, then the method must be annotated. The method should be annotated with `@BindToRegistry` in standalone mode with `camel-main`, `@Bean` in case of Spring Boot or `@Produce` in case of Quarkus.
+
+```java
+public class MyConfiguration {
+    @BindToRegistry
+    public LambdaRouteBuilder myRoute() {
+        return rb -> rb.from("kafka:cheese?clientId=myClient&batching=true")
+                            .to("jms:queue:foo");
+    }
+}
+```
+
+## LambdaEndpointRouteBuilder
+
+The [Endpoint DSL](Endpoint-dsl.md) can also be used as a lambda route builder with the `org.apache.camel.builder.endpoint.LambdaEndpointRouteBuilder` class from the `camel-endpointdsl` JAR.
+
+```java
+public class MyConfiguration {
+    @BindToRegistry
+    public LambdaEndpointRouteBuilder myRoute() {
+        return rb -> rb.from(rb.kafka("cheese").clientId("myClient").batching(true))
+                            .to(rb.jms("queue:foo"));
+    }
+}
+```
+
+The `LambdaEndpointRouteBuilder` has _type safe_ endpoint but requires to prefix with the instance name (`rb`) when choosing an endpoint name. Notice above how to select the kafka endpoint
+
+```java
+rb.from(rb.kafka("cheese"))
+```
+
+With the regular `LambdaRouteBuilder` it’s just a `String` type, so the `rb` prefix is not needed anymore:
+
+```java
+rb.from("kafka:cheese")
+```
+
+On the other hand then the _type safe_ endpoint DSL allows your Java IDE to show available options which can be configured. In this example we have configured the clientId and batching options. This is of great help, as the Kafka component has 100+ options.

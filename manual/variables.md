@@ -1,0 +1,465 @@
+# Variables
+
+**Available from Camel 4.4**
+
+In Camel 4.4, we have introduced the concept of _variables_.
+
+A variable is a key/value that can hold a value that can either be private per `Exchange`, or shared per route, or per `CamelContext`.
+
+> **Important**
+> You can also use _exchange properties_ as variables, but the exchange properties are also used internally by Camel, and some EIPs and components. With the newly introduced _variables_ then these are exclusively for end users.
+
+## Variable Repository
+
+The variables are stored in one or more `org.apache.camel.spi.VariableRepository`. By default, there are the following repositories
+
+-   `ExchangeVariableRepository` - A private repository per `Exchange` that holds variables that are private for the lifecycle of each `Exchange`.
+    
+-   `RouteVariableRepository` - Uses `route` as id. A single repository, that holds variables per `Route`.
+    
+-   `GlobalVariableRepository` - Uses `global` as id. A single global repository for the entire `CamelContext`.
+    
+
+The `ExchangeVariableRepository` is special as its private per exchange and is the default repository when used during routing. The `RouteVariableRepository` is a single repository that holds variables that are route scoped.
+
+> **Tip**
+> There is also `org.apache.camel.spi.BrowsableVariableRepository` which is an extension to `VariableRepository` that has APIs to browse the current variables. Camel uses this with Camel JBang, and JMX to be able to see the current variables from management tooling, CLI, and the developer console.
+
+### Custom variable repositories
+
+You can implement custom `org.apache.camel.spi.VariableRepository` and plugin to be used out of the box with Apache Camel. For example, you can build a custom repository that stores the variables in a database, so they are persisted.
+
+Each repository must have its own unique id. However, it’s also possible to replace the default `global`, or `route` repositories with another.
+
+> **Important**
+> The id `exchange` and `header` is reserved by Camel internally and should not be used as id for custom repositories.
+
+## Getting and setting variables from Java API
+
+To get a local variable from the current exchange, you can do this via Java API:
+
+```java
+String myValue = "...";
+exchange.setVariable("myKey", myValue);
+
+// and later to get the variable
+Object val = exchange.getVariable("myKey");
+
+// you can get the value as a specific type
+String str = exchange.getVariable("myKey", String.class);
+```
+
+The API on `Exchange` will by default get the variables from its local private repository. However, you can also get variables from other repositories, such as the `global` as show:
+
+```java
+Object val = exchange.getVariable("global:myGlobalKey");
+```
+
+And you can also assign a global variable by prefixing with `global:` as follows:
+
+```java
+exchange.setVariable("global:myGlobalKey", someObjectHere);
+```
+
+There is also API on `CamelContext` to get variables. However, this API will by default get from the `global` repository, as it’s not possible to get variables from any inflight `Exchange` currently being routed.
+
+```java
+Object val = context.getVariable("myGlobalKey");
+
+// you can get the value as a specific type
+String str = context.getVariable("myGlobalKey", String.class);
+```
+
+You can also assign a variable to a specific route with `route:` as follows:
+
+```java
+exchange.setVariable("route:myRouteId:myRouteKey", someObjectHere);
+```
+
+And you can get route variables as well:
+
+```java
+Object val = context.getVariable("route:myRouteId:myRouteKey");
+
+// you can get the value as a specific type
+String str = context.getVariable("route:myRouteId:myRouteKey", String.class);
+```
+
+## Setting and getting variables from DSL
+
+It is also possible to use variables in Camel [routes](routes.md) using the:
+
+-   [setVariable](../components/4.18.x/eips/setVariable-eip.md) EIP
+    
+-   [removeVariable](../components/4.18.x/eips/removeVariable-eip.md) EIP
+    
+-   [convertVariableTo](../components/4.18.x/eips/convertVariableTo-eip.md) EIP
+    
+
+These EIPs make it possible to set and remove variables from routes. And you can also access variables from the [Simple](../components/4.18.x/languages/simple-language.md) language.
+
+In the following route, we set a variable on the exchange which we use later to build a human-readable event message:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("kafka:order.in")
+  .setVariable("customerId", jq(".customer.custId"))
+  .setVariable("country", jq(".customer.address.co"))
+  .transform().simple("Order received from customer ${variable.customerId} in ${variable.country}")
+  .to("kafka:order.event");
+```
+
+```xml
+<route>
+    <from uri="kafka:order.in"/>
+    <setVariable name="customerId">
+        <jq>.customer.custId</jq>
+    </setVariable>
+    <setVariable name="country">
+        <jq>.customer.address.co</jq>
+    </setVariable>
+    <transform>
+        <simple>Order received from customer ${variable.customerId} in ${variable.country}</simple>
+    </transform>
+    <to uri="kafka:order.event"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:order.in
+      steps:
+        - setVariable:
+            name: customerId
+            jq:
+              expression: .customer.custId
+        - setVariable:
+            name: country
+            jq:
+              expression: .customer.address.co
+        - transform:
+            simple:
+              expression: "Order received from customer ${variable.customerId} in ${variable.country}"
+        - to:
+            uri: kafka:order.event
+```
+
+When `route` variables in Camel routes, then the `routeId` is implied as the current route, if not explicit declared. For example, the following example the first route will set a variable (`route:second:foo`) in the second route. Then the second route can get hold of the variable without having to specify its route id `route:foo`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start").routeId("first")
+    // sets variable in another route
+    .setVariable("route:second:foo").constant("Hello World")
+    .to("mock:end");
+
+from("direct:second").routeId("second")
+    // use variable from this route
+    .setBody().variable("route:foo");
+```
+
+```xml
+<route id="first">
+    <from uri="direct:start"/>
+    <setVariable name="route:second:foo">
+        <constant>Hello World</constant>
+    </setVariable>
+    <to uri="mock:end"/>
+</route>
+
+<route id="second">
+    <from uri="direct:second"/>
+    <setBody>
+        <variable>route:foo</variable>
+    </setBody>
+</route>
+```
+
+```yaml
+- route:
+    id: first
+    from:
+      uri: direct:start
+      steps:
+        - setVariable:
+            name: route:second:foo
+            expression:
+              constant:
+                expression: Hello World
+        - to:
+            uri: mock:end
+- route:
+    id: second
+    from:
+      uri: direct:second
+      steps:
+        - setBody:
+            expression:
+              variable:
+                expression: route:foo
+```
+
+## Configuring initial variables on startup
+
+When Camel is starting then it’s possible to configure initial variables for `global` and `route` repositories only.
+
+This can be done in `application.properties` as shown below:
+
+```properties
+camel.variable.greeting = Random number
+camel.variable.random = 999
+```
+
+The variables are default set on the `global` repository, but you can set route scoped variables, using `route.` as prefix. As we cannot use colon (`:`) in property keys, then dot is used to separate the route id from the variable name, eg `myRoute.gold`.
+
+```properties
+camel.variable.route.myRoute.gold = true
+camel.variable.greeting = Random number
+camel.variable.random = 999
+```
+
+Here the gold variable is set on the `route` repository, and the other variables are set on the `global` repository.
+
+The value of a variable can also be loaded from the file system, such as a JSon file. To do this, you should prefix the value with `resource:file:` or `resource:classpath:` to load from the file system or classpath, as shown below:
+
+```properties
+camel.variable.user-template = resource:file:/etc/user.json
+```
+
+Camel (**Camel 4.8**) will automatically convert the value to appropriate type:
+
+-   all digits are converted to an int or long
+    
+-   true/false are converted to a boolean
+    
+-   otherwise string value
+    
+
+There is also support for referring to other existing beans, using the `#bean:` syntax:
+
+```properties
+camel.variable.cheese = #bean:myCheeseBean
+```
+
+Or create a new bean via the `#class:` or `#type:` syntax:
+
+```properties
+camel.variable.cheese = #class:com.foo.MyClassName
+```
+
+Or if the value must be of a special type, you can specify this via `#valueAs` as follows:
+
+```properties
+camel.variable.amount = #valueAs(float):1.23
+```
+
+## Using Variables with EIPs
+
+The following commonly used EIPs for sending and receiving, and transforming messages, have special support for choosing to use variables over the current `Exchange`:
+
+-   from
+    
+-   to
+    
+-   toD
+    
+-   enrich
+    
+-   poll
+    
+-   pollEnrich
+    
+-   wireTap
+    
+-   unmarshal
+    
+-   marshal
+    
+
+The intention is to make it more convenient and easy to _gather data_ from other systems without any ceremony to keep existing data by using techniques such as storing the data temporary using headers, exchange properties, or with the [Claim Check](../components/4.18.x/eips/claimCheck-eip.md) EIP.
+
+### Important concept when using variables and EIPs
+
+It is **important** to understand that the variables focus the use of the message **body** only. This is on purpose to keep it simpler and primary work with the message body as the user data.
+
+The following table summarizes what the EIP supports with variables:
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>EIP</strong></td><td class="tableblock halign-left valign-top"><strong>VariableSend</strong></td><td class="tableblock halign-left valign-top"><strong>VariableReceive</strong></td></tr><tr><td class="tableblock halign-left valign-top">From</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">yes</td></tr><tr><td class="tableblock halign-left valign-top">To</td><td class="tableblock halign-left valign-top">yes</td><td class="tableblock halign-left valign-top">yes</td></tr><tr><td class="tableblock halign-left valign-top">ToD</td><td class="tableblock halign-left valign-top">yes</td><td class="tableblock halign-left valign-top">yes</td></tr><tr><td class="tableblock halign-left valign-top">Enrich</td><td class="tableblock halign-left valign-top">yes</td><td class="tableblock halign-left valign-top">yes</td></tr><tr><td class="tableblock halign-left valign-top">Poll</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">yes</td></tr><tr><td class="tableblock halign-left valign-top">PollEnrich</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">yes</td></tr><tr><td class="tableblock halign-left valign-top">WireTap</td><td class="tableblock halign-left valign-top">yes</td><td class="tableblock halign-left valign-top"></td></tr><tr><td class="tableblock halign-left valign-top">Unmarshal</td><td class="tableblock halign-left valign-top">yes</td><td class="tableblock halign-left valign-top">yes</td></tr><tr><td class="tableblock halign-left valign-top">Marshal</td><td class="tableblock halign-left valign-top">yes</td><td class="tableblock halign-left valign-top">yes</td></tr></tbody></table>
+
+The EIPs listed above have support for using variables when sending and receiving data. This is done by using the `variableSend` and `variableReceive` options to specify the name of the variable.
+
+The EIPs works in two modes where **variableSend** and **variableReceive** are a little bit different, so pay attention to the following table:
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>VariableSend</strong></td><td class="tableblock halign-left valign-top"><strong>VariableReceive</strong></td></tr><tr><td class="tableblock halign-left valign-top"><strong>Sending Headers:</strong> Message</td><td class="tableblock halign-left valign-top"><strong>Received Headers:</strong> Variable</td></tr><tr><td class="tableblock halign-left valign-top"><strong>Sending Body:</strong> Variable</td><td class="tableblock halign-left valign-top"><strong>Received Body:</strong> Variable</td></tr></tbody></table>
+
+The **VariableSend** is intended for sending as regular Camel where the sending headers are from the current `Message` and the body is from the variable. In other words it’s only the message body taken from the variable instead of the current `Message` body.
+
+The **VariableReceive** works in a different mode. The idea is that all the received data is stored as variables. This means the current `Message` is not changed at all. The received body is stored in the variable, and the received headers (transport headers etc.) are stored as read-only headers as variables as well. The names of the variable is `header:variableName.headerName`. For example, if the variable is `myVar` and the header is `Content-Type` then the header is stored as a variable with the full name `header:myVar.Content-Type`.
+
+### Example using Variable Receive
+
+When the EIP is using **VariableReceive**, then the `Message` on the `Exchange` is not in use, but the body and headers will be from the variable. For example, given the following `Message` containing:
+
+```properties
+header.foo=123
+header.bar=456
+body=Hello World
+```
+
+And a remote service is called via the route below, and this service returns a new header (`level`) and body: 'Bye World'
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:service")
+  .to("http:myservice")
+  .to("log:after");
+```
+
+```xml
+<route>
+  <from uri="direct:service"/>
+  <to uri="http:myservice"/>
+  <to uri="log:after"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:service
+      steps:
+        - to: http:myservice
+        - to: log:after
+```
+
+Calling this route, the `Message` is updated to following:
+
+```properties
+header.foo=123
+header.bar=456
+header.level=gold
+body=Bye World
+```
+
+However, if you use **VariableReceive=myVar** to store the returned data from calling the remote service into a variable, then the result changes as follows:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:service")
+  .toV("http:myservice", null, "myVar")
+  .to("log:after");
+```
+
+```xml
+<route>
+  <from uri="direct:service"/>
+  <to uri="http:myservice" variableReceive="myVar"/>
+  <to uri="log:after"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "direct:service"
+      steps:
+        - to:
+            uri: http:myservice
+            variableReceive: myVar
+        - to: "log:after"
+```
+
+The `Message` on the current `Exchange` is not changed:
+
+```properties
+header.foo=123
+header.bar=456
+body=Hello World
+```
+
+And the variable contains all the data received from the remote HTTP service separated into two variables:
+
+```properties
+myVar=Bye World
+header:myVar.level=gold
+```
+
+> **Important**
+> Notice the headers are stored with the syntax `header:variable.key`. In the example above the variable name is `myVar`, and the header key is `level`, which gives: `header:myVar.level`.
+
+### Using variable to store incoming message body
+
+You can configure the `from` to store the message body into a variable, instead of the `Message`. This makes it easy to have quick access to the original incoming message body via the variable. Notice that the body on the `Message` will be `null`.
+
+The following example from a unit test shows how to do this. Notice how Java DSL uses `fromV` to make it possible to specify the name of the variable. In XML and YAML DSL you specify this using the `variableReceive` parameter.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+fromV("direct:start", "myKey")
+    .transform().simple("Bye ${body}")
+    .to("mock:foo")
+    .setBody(variable("myKey"))
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start" variableReceive="myKey"/>
+  <transform>
+    <simple>Bye ${body}</simple>
+  </transform>
+  <to uri="mock:foo"/>
+  <setBody>
+    <variable>myKey</variable>
+  </setBody>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "direct:start"
+      variableReceive: "myKey"
+      steps:
+        - transform:
+            simple: "Bye ${body}"
+        - to: "mock:foo"
+        - setBody:
+            variable: "myKey"
+        - to: "mock:result"
+```
+
+> **Note**
+> In the examples above the transform `Bye ${body}` will result as `Bye`  because the `Message` has no message body, as the incoming message body is stored in the variable `myKey` instead.

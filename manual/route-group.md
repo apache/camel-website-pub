@@ -1,0 +1,171 @@
+# Route Group
+
+A group is an identifier for multiple routes that belong together. For example, an order integration that consists of 2 different routes can be identified by the group name "order". A route group can either be used purely as a label, or to perform tasks or monitor a whole group at once.
+
+## Examples
+
+In the route below, we use the `group` option to give the 2 first routes the same group name `order` to identify that these two routes are grouped together. The last route has no group assigned.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("activemq:queue:order.in")
+    .routeId("validate")
+    .group("order")
+    .to("bean:orderServer?method=validate")
+    .to("direct:processOrder");
+
+from("direct:processOrder")
+    .routeId("process")
+    .group("order")
+    .to("bean:orderService?method=process")
+    .to("activemq:queue:order.out");
+
+from("timer:tick")
+    .to("bean:wakeup");
+```
+
+```xml
+<route id="validate" group="order">
+  <from uri="activemq:queue:order.in"/>
+  <to uri="bean:orderService?method=validate"/>
+  <to uri="direct:processOrder"/>
+</route>
+
+<route id="process" group="order">
+  <from uri="direct:processOrder"/>
+  <to uri="bean:orderService?method=process"/>
+  <to uri="activemq:queue:order.out"/>
+</route>
+
+<route>
+  <from uri="timer:tick"/>
+  <to uri="bean:wakeUp"/>
+</route>
+```
+
+```yaml
+- route:
+    id: validate
+    group: order
+    from:
+      uri: activemq:queue:order.in
+      steps:
+        - to:
+            uri: bean:orderServer?method=validate
+        - to:
+            uri: direct:processOrder
+- route:
+    id: process
+    group: order
+    from:
+      uri: direct:processOrder
+      steps:
+        - to:
+            uri: bean:orderService?method=process
+        - to:
+            uri: activemq:queue:order.out
+- route:
+    from:
+      uri: timer:tick
+      steps:
+        - to:
+            uri: bean:wakeUp
+```
+
+## Creating a route from a route template
+
+When creating new routes from [Route Template](route-template.md) then you can also assign a group name to the created route.
+
+In the example below we are creating 2 new route from the template `myTemplate` with the given set of parameters, and assign `greetings` as the group name to the created routes.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+templatedRoute("myTemplate")
+        .group("greetings")
+        .parameter("name", "one")
+        .parameter("greeting", "Hello");
+templatedRoute("myTemplate")
+        .group("greetings")
+        .parameter("name", "two")
+        .parameter("greeting", "Bonjour")
+        .parameter("myPeriod", "5s");
+```
+
+```xml
+<templatedRoutes>
+  <templatedRoute routeTemplateRef="myTemplate" group="greetings">
+    <parameter name="name" value="one"/>
+    <parameter name="greeting" value="Hello"/>
+  </templatedRoute>
+  <templatedRoute routeTemplateRef="myTemplate" group="greetings">
+    <parameter name="name" value="two"/>
+    <parameter name="greeting" value="Bonjour"/>
+    <parameter name="myPeriod" value="5s"/>
+  </templatedRoute>
+</templatedRoutes>
+```
+
+```yaml
+- templatedRoute:
+    routeTemplateRef: "myTemplate"
+    group: "greetings"
+    parameters:
+      - name: "name"
+        value: "one"
+      - name: "greeting"
+        value: "Hello"
+- templatedRoute:
+    routeTemplateRef: "myTemplate"
+    group: "greetings"
+    parameters:
+      - name: "name"
+        value: "two"
+      - name: "greeting"
+        value: "Bonjour"
+      - name: "myPeriod"
+        value: "5s"
+```
+
+## Managing route group in Java
+
+The Java API allows to retrieve all routes for a group and perform various tasks.
+
+Here is an example to suspend all routes:
+
+```java
+List<Route> routes = context.getRoutesByGroup("order");
+
+for (Route route : routes) {
+    System.out.println("Suspending routeId=" + route.getId() + " for group=" + route.getGroup());
+    route.getRouteController().suspendRoute(route.getId());
+}
+```
+
+## Monitoring Route Groups
+
+Camel has optional support for [JMX management](jmx.md). This includes management of groups.
+
+The following code will get the JMX MBean `ManagedRouteGroupMBean` for the route group with name `order`. Using this MBean you can get metrics, and also operations to start and stop all routes in this group.
+
+For example to get the total number of `Exchange`(s) that has failed within this group:
+
+```java
+ManagedCamelContext managedContext = context.getCamelContextExtension().getContextPlugin(ManagedCamelContext.class);
+ManagedRouteGroupMBean managedRouteGroup = managedContext.getManagedRouteGroup("order");
+
+if (managedRouteGroup != null) {
+    System.out.println("Group order has " + managedRouteGroup.getExchangesFailed() + " failed exchanges");
+}
+```

@@ -1,0 +1,53 @@
+# Promote JVM extension to Native
+
+The directory `extensions-jvm` contains extensions that have not been tested in [native mode](https://quarkus.io/guides/building-native-image) yet. Configuring the [native build](https://quarkus.io/guides/writing-native-applications-tips) and implementing integration tests for them may open the door to even faster startup and lower memory footprint. Please find some guiding steps below to start this quest:
+
+1.  Make sure that nobody else works on promoting the same extension by searching through the [GitHub issues](https://github.com/apache/camel-quarkus/issues).
+    
+2.  Let others know that you work on promoting the given extension by either creating a [new issue](https://github.com/apache/camel-quarkus/issues/new) or asking to assign an existing one to you.
+    
+3.  Use the `promote` mojo of `cq-maven-plugin` to perform the automatable steps:
+    
+    ```shell
+    cd camel-quarkus
+    mvn -N cq:promote -Dcq.artifactIdBase=...
+    ```
+    
+    where `cq.artifactIdBase` needs to be set to the unique part of the `artifactId` of the extension you are promoting. E.g. if you are promoting an extension with `artifactId` `camel-quarkus-foo`, you need to set `-Dcq.artifactIdBase=foo`.
+    
+    The `promote` mojo does the following for you:
+    
+    -   Copies the test module from `extensions-jvm/foo/integration-test` to `integration-tests/foo`
+        
+    -   Adjusts the `name` and `artifactId` of the test module
+        
+    -   Adds `native` profile to the test module
+        
+    -   Creates a native test class extending the existing JVM mode test class
+        
+    -   Copies the rest of the extension code from `extensions-jvm/foo` to `extensions/foo`
+        
+    -   Removes the warning build step from the processor class in the deployment module
+        
+    
+4.  Assign the integration test to an existing or new test category in `tooling/scripts/test-categories.yaml` so that it gets executed by the CI.
+    
+5.  Add some meaningful tests to `FooTest` and make sure they pass in both JVM and native mode:
+    
+    ```shell
+    cd integration-tests/foo
+    mvn clean verify -Pnative
+    ```
+    
+    Consider shifting some tasks from runtime to build time. The [Quarkus extension author’s guide](https://quarkus.io/guides/extension-authors-guide) may be a good ally for this.
+    
+6.  Unify source files format, update docs and rebuild the whole project:
+    
+    ```shell
+    mvn clean install -DskipTests -Pformat
+    ```
+    
+7.  Squash your commits before sending a pull request.
+    
+
+Good luck!

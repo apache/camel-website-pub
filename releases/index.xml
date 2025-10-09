@@ -6,8 +6,288 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 07 Oct 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 13 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel-K 2.10.0</title>
+      <link>https://camel.apache.org/releases/k-2.10.0/</link>
+      <pubDate>Mon, 13 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/k-2.10.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.18.1</title>
+      <link>https://camel.apache.org/releases/kamelets-4.18.1/</link>
+      <pubDate>Fri, 03 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.18.1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Kafka Connector release 4.14.5</title>
+      <link>https://camel.apache.org/releases/ckc-4.14.5/</link>
+      <pubDate>Mon, 30 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/ckc-4.14.5/</guid>
+      <description>This release is the new Camel Kafka Connector 4.14.5 release.</description>
+    </item>
+    <item>
+      <title>Camel Kafka Connector release 4.18.0</title>
+      <link>https://camel.apache.org/releases/ckc-4.18.0/</link>
+      <pubDate>Mon, 30 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/ckc-4.18.0/</guid>
+      <description>This release is the new Camel Kafka Connector 4.18.0 release.</description>
+    </item>
+    <item>
+      <title>Release 4.18.1</title>
+      <link>https://camel.apache.org/releases/release-4.18.1/</link>
+      <pubDate>Fri, 27 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.18.1/</guid>
+      <description>This release is the new Camel 4.18.1 LTS release.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.33.0</title>
+      <link>https://camel.apache.org/releases/q-3.33.0/</link>
+      <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.33.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.14.5</title>
+      <link>https://camel.apache.org/releases/karaf-4.14.5/</link>
+      <pubDate>Mon, 16 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.14.5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.27.3</title>
+      <link>https://camel.apache.org/releases/q-3.27.3/</link>
+      <pubDate>Fri, 06 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.27.3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.32.0</title>
+      <link>https://camel.apache.org/releases/q-3.32.0/</link>
+      <pubDate>Mon, 23 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.32.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.14.5</title>
+      <link>https://camel.apache.org/releases/kamelets-4.14.5/</link>
+      <pubDate>Mon, 23 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.14.5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.18.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.18.0/</link>
+      <pubDate>Mon, 23 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.18.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.8.9</title>
+      <link>https://camel.apache.org/releases/karaf-4.8.9/</link>
+      <pubDate>Sun, 22 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.8.9/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.18.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.18.0/</link>
+      <pubDate>Fri, 20 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.18.0/</guid>
+      <description>Upgrade Instructions For detailed instructions on using Apache Camel Upgrade Recipes, please see the Apache Camel Upgrade Recipes Tool Manual.&#xA;Full Release Notes Complete release notes for this version are available in the Camel Upgrade Recipes repository.</description>
+    </item>
+    <item>
+      <title>Release 4.18.0</title>
+      <link>https://camel.apache.org/releases/release-4.18.0/</link>
+      <pubDate>Tue, 17 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.18.0/</guid>
+      <description>This release is the new Camel 4.18.0 LTS release.</description>
+    </item>
+    <item>
+      <title>Release 4.14.5</title>
+      <link>https://camel.apache.org/releases/release-4.14.5/</link>
+      <pubDate>Fri, 13 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.14.5/</guid>
+      <description>This release is the new Camel 4.14.5 LTS release.</description>
+    </item>
+    <item>
+      <title>Release 4.10.9</title>
+      <link>https://camel.apache.org/releases/release-4.10.9/</link>
+      <pubDate>Thu, 12 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.10.9/</guid>
+      <description>This release is the new Camel 4.10.9 release.</description>
+    </item>
+    <item>
+      <title>Camel-K 2.9.1</title>
+      <link>https://camel.apache.org/releases/k-2.9.1/</link>
+      <pubDate>Wed, 11 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/k-2.9.1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.31.0</title>
+      <link>https://camel.apache.org/releases/q-3.31.0/</link>
+      <pubDate>Mon, 26 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.31.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.20.4</title>
+      <link>https://camel.apache.org/releases/q-3.20.4/</link>
+      <pubDate>Mon, 19 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.20.4/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.17.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.17.0/</link>
+      <pubDate>Mon, 19 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.17.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.17.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.17.0/</link>
+      <pubDate>Fri, 16 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.17.0/</guid>
+      <description>Upgrade Instructions For detailed instructions on using Apache Camel Upgrade Recipes, please see the Apache Camel Upgrade Recipes Tool Manual.&#xA;Full Release Notes Complete release notes for this version are available in the Camel Upgrade Recipes repository.</description>
+    </item>
+    <item>
+      <title>Kamelets 4.14.4</title>
+      <link>https://camel.apache.org/releases/kamelets-4.14.4/</link>
+      <pubDate>Thu, 15 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.14.4/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.17.0</title>
+      <link>https://camel.apache.org/releases/release-4.17.0/</link>
+      <pubDate>Mon, 12 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.17.0/</guid>
+      <description>This release is the new Camel 4.17.0 release.</description>
+    </item>
+    <item>
+      <title>Release 4.14.4</title>
+      <link>https://camel.apache.org/releases/release-4.14.4/</link>
+      <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.14.4/</guid>
+      <description>This release is the new Camel 4.14.4 LTS release.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.27.2</title>
+      <link>https://camel.apache.org/releases/q-3.27.2/</link>
+      <pubDate>Thu, 08 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.27.2/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.14.3</title>
+      <link>https://camel.apache.org/releases/release-4.14.3/</link>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.14.3/</guid>
+      <description>This release is the new Camel 4.14.3 LTS release.</description>
+    </item>
+    <item>
+      <title>Camel-K 2.9.0</title>
+      <link>https://camel.apache.org/releases/k-2.9.0/</link>
+      <pubDate>Tue, 23 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/k-2.9.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.10.8</title>
+      <link>https://camel.apache.org/releases/release-4.10.8/</link>
+      <pubDate>Sat, 13 Dec 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.10.8/</guid>
+      <description>This release is the new Camel 4.10.8 release.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.30.0</title>
+      <link>https://camel.apache.org/releases/q-3.30.0/</link>
+      <pubDate>Mon, 24 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.30.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.16.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.16.0/</link>
+      <pubDate>Mon, 24 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.16.0/</guid>
+      <description>Upgrade Instructions For detailed instructions on using Apache Camel Upgrade Recipes, please see the Apache Camel Upgrade Recipes Tool Manual.&#xA;Full Release Notes Complete release notes for this version are available in the Camel Upgrade Recipes repository.</description>
+    </item>
+    <item>
+      <title>Kamelets 4.14.2</title>
+      <link>https://camel.apache.org/releases/kamelets-4.14.2/</link>
+      <pubDate>Mon, 10 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.14.2/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.16.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.16.0/</link>
+      <pubDate>Mon, 10 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.16.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.16.0</title>
+      <link>https://camel.apache.org/releases/release-4.16.0/</link>
+      <pubDate>Wed, 05 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.16.0/</guid>
+      <description>This release is the new Camel 4.16.0 release.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.27.1</title>
+      <link>https://camel.apache.org/releases/q-3.27.1/</link>
+      <pubDate>Mon, 03 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.27.1/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Release 4.14.2</title>
+      <link>https://camel.apache.org/releases/release-4.14.2/</link>
+      <pubDate>Sat, 01 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.14.2/</guid>
+      <description>This release is the new Camel 4.14.2 LTS release.</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.20.3</title>
+      <link>https://camel.apache.org/releases/q-3.20.3/</link>
+      <pubDate>Mon, 27 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.20.3/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.29.0</title>
+      <link>https://camel.apache.org/releases/q-3.29.0/</link>
+      <pubDate>Mon, 27 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.29.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.10.7</title>
+      <link>https://camel.apache.org/releases/karaf-4.10.7/</link>
+      <pubDate>Sun, 26 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.10.7/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kamelets 4.15.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.15.0/</link>
+      <pubDate>Tue, 14 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.15.0/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upgrade Recipes 4.15.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.15.0/</link>
+      <pubDate>Tue, 14 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.15.0/</guid>
+      <description>Upgrade Instructions For detailed instructions on using Apache Camel Upgrade Recipes, please see the Apache Camel Upgrade Recipes Tool Manual.&#xA;Full Release Notes Complete release notes for this version are available in the Camel Upgrade Recipes repository.</description>
+    </item>
     <item>
       <title>Release 4.15.0</title>
       <link>https://camel.apache.org/releases/release-4.15.0/</link>

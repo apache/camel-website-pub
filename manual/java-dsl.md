@@ -1,0 +1,128 @@
+# Java DSL
+
+Apache Camel offers a Java-based DSL.
+
+In the Java DSL you create a route by extending the [`RouteBuilder` class](route-builder.md), and implementing the `configure` method.
+
+## Java DSL example
+
+This is best illustrated by an example. In the code below we create a new class called `MyRouteBuilder` that extends the `org.apache.camel.builder.RouteBuilder` from Camel.
+
+In the `configure` method the Java DSL is at our disposal.
+
+```java
+import org.apache.camel.builder.RouteBuilder;
+
+/**
+ * A Camel Java DSL Router
+ */
+public class MyRouteBuilder extends RouteBuilder {
+
+    /**
+     * Let's configure the Camel routing rules using Java code...
+     */
+    public void configure() {
+
+        // here is a sample which processes the input files
+        // (leaving them in place - see the 'noop' flag)
+        // then performs content based routing on the message using XPath
+        from("file:src/data?noop=true")
+            .choice()
+                .when(xpath("/person/city = 'London'"))
+                    .to("file:target/messages/uk")
+                .otherwise()
+                    .to("file:target/messages/others");
+    }
+
+}
+```
+
+In the `configure` method we can define Camel [Routes](routes.md).
+
+In the example above we have a single route, which pickup files (the `from`).
+
+```java
+from("file:src/data?noop=true")
+```
+
+Then we use the [Content-Based Router](../components/4.18.x/eips/choice-eip.md) EIP (the `choice`) to route the message whether the person is from London or not.
+
+```java
+.choice()
+    .when(xpath("/person/city = 'London'"))
+        .to("file:target/messages/uk")
+    .otherwise()
+        .to("file:target/messages/others");
+```
+
+### Using Text Blocks for long URIs
+
+If you have very long endpoint [uris](uris.md), then you can declare those in Java text blocks, instead of breaking a String into multiple added elements:
+
+```java
+    from("""
+            debezium-postgres:customerEvents
+            ?databasePassword={{myPassword}}
+            &databaseDbname=myDB
+            &databaseHostname=myHost
+            &pollIntervalMs=2000
+            &queryFetchSize=100
+        """)
+        .to("kafka:cheese");
+```
+
+### Routes using Java lambda style
+
+Camel now supports to define Camel routes in Java DSL using Lambda style. This can be beneficial for microservices or serverless where you may want to quickly define a few routes.
+
+For example, using lambda style you can define a Camel route that takes messages from Kafka and send to JMS in a single line of code:
+
+```java
+rb -> rb.from("kafka:cheese").to("jms:queue:foo");
+```
+
+There is a bit more to this as the lambda route must be coded in a Java method that returns an instance of `LambdaRouteBuilder`. See more at the [LambdaRouteBuilder](lambda-route-builder.md) documentation.
+
+### The Java DSL under the hood
+
+As mentioned in the Getting Started guide, you can use Camel’s Java DSL in a way that almost looks like a DSL. For instance:
+
+**Note**: comments afterward explain some of the constructs used in the example.
+
+**Example of Camel’s "Java DSL"**
+
+```java
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+        from("queue:a")
+            .filter(header("foo").isEqualTo("bar")).to("queue:b");
+
+        from("queue:c")
+            .choice()
+                .when(header("foo").isEqualTo("bar")).to("queue:d")
+                .when(header("foo").isEqualTo("cheese")).to("queue:e")
+                .otherwise().to("queue:f");
+    }
+};
+
+CamelContext myCamelContext = new DefaultCamelContext();
+myCamelContext.addRoutes(builder);
+```
+
+The first line in the above example creates an object which is an instance of an anonymous subclass of `RouteBuilder` with the specified `configure()` method.
+
+The `CamelContext.addRoutes(RouterBuilder builder)` method invokes `builder.setContext(this)` – so the `RouteBuilder` object knows which `CamelContext` object it is associated with – and then invokes `builder.configure()`. The body of `configure()` invokes methods such as `from()`, `filter()`, `choice()`, `when()`, `isEqualTo()`, `otherwise()` and `to()`.
+
+The `RouteBuilder.from(String uri)` method invokes `getEndpoint(uri)` on the `CamelContext` associated with the `RouteBuilder` object to get the specified `Endpoint` and then puts a `FromBuilder` _wrapper_ around this `Endpoint`. The `FromBuilder.filter(Predicate predicate)` method creates a `FilterProcessor` object for the `Predicate` (that is, condition) object built from the `header("foo").isEqualTo("bar")` expression. In this way, these operations incrementally build up a `Route` object (with a `RouteBuilder` wrapper around it) and add it to the `CamelContext` instance associated with the `RouteBuilder`.
+
+## More Information
+
+For more details see:
+
+-   [DSL](dsl.md)
+    
+-   [Routes](routes.md),
+    
+-   [Processor](processor.md)
+    
+-   [Lambda Route Builder](lambda-route-builder.md)

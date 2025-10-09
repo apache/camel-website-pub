@@ -1,0 +1,392 @@
+# Error Handler
+
+Camel supports pluggable [ErrorHandler](https://www.javadoc.io/doc/org.apache.camel/camel-base/current/org/apache/camel/processor/ErrorHandler.md) strategies to deal with errors processing an [Event Driven Consumer](../components/4.18.x/eips/eventDrivenConsumer-eip.md).
+
+An alternative is to specify the error handling directly in the [DSL](dsl.md) using the [Exception Clause](exception-clause.md).
+
+## Exception Clause
+
+Using Error Handler combined with Exception Clause is a very powerful combination. We encourage end-users to use this combination in your error handling strategies. See samples and Exception Clause.
+
+## Using try …​ catch …​ finally
+
+Related to error handling is the [Try Catch Finally](try-catch-finally.md) as DSL you can use directly in your route. Its basically a mimic of the regular try catch finally in the Java language but with more power.
+
+The current implementations Camel provides out of the box are:
+
+## Non transacted
+
+-   DefaultErrorHandler is the default error handler in Camel. This error handler does not support a dead letter queue, it will propagate exceptions back to the caller, as if there were no error handler at all. It has a limited set of features.
+    
+-   Dead Letter Channel which supports attempting to redeliver the message exchange a number of times before sending it to a dead letter endpoint
+    
+-   NoErrorHandler for no error handling
+    
+
+## Transacted
+
+-   TransactionErrorHandler is the default error handler in Camel for transacted routes. See the Transactional Client EIP pattern.
+    
+
+These error handlers can be applied in the DSL to an entire set of rules or a specific routing rule as we show in the next examples. Error handling rules are inherited on each routing rule within a single RouteBuilder
+
+## Short Summary of the provided Error Handlers
+
+### DefaultErrorHandler
+
+The DefaultErrorHandler is the default error handler in Camel. Unlike [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) it does not have any dead letter queue, and do **not** handle exceptions by default.
+
+### Dead Letter Channel
+
+The Dead Letter Channel will redeliver at most 6 times using 1-second delay, and if the exchange failed it will be logged at ERROR level.
+
+You can configure the default dead letter endpoint to use: or in Spring XML DSL:
+
+Spring XML
+
+```xml
+<camel:errorHandler id="deadLetterErrorHandler" type="DeadLetterChannel" deadLetterUri="log:dead">
+
+<camel:camelContext errorHandlerRef="deadLetterErrorHandler">
+  ...
+</camel:camelContext>
+```
+
+### No Error Handler
+
+The no error handler is to be used for disabling error handling in Java DSL:
+
+```java
+errorHandler(noErrorHandler());
+```
+
+And in Spring XML DSL:
+
+```xml
+<camel:errorHandler id="noErrorHandler" type="NoErrorHandler"/>
+
+<camel:camelContext errorHandlerRef="noErrorHandler">
+  ...
+</camel:camelContext>
+```
+
+### TransactionErrorHandler
+
+The TransactionErrorHandler is the default error handler in Camel for transacted routes.
+
+> **Tip**
+> If you have marked a route as transacted using the **transacted** DSL then Camel will automatically use a TransactionErrorHandler. It will try to lookup the global/per route configured error handler and use it if it is a `TransactionErrorHandlerBuilder` instance. If not Camel will automatically create a temporary TransactionErrorHandler that overrules the default error handler. This is convention over configuration.
+
+## Features support by various Error Handlers
+
+Here is a breakdown of which features are supported by the Error Handler(s):
+
+ 
+| Feature | Supported by the following Error Handler |
+| --- | --- |
+| all scopes | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| onException | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| onWhen | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| continued | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| handled | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| Custom ExceptionPolicy | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| useOriginalBody | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| retryWhile | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| onRedelivery | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| RedeliveryPolicy | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| asyncDelayedRedelivery | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| redeliverWhileStopping | DefaultErrorHandler, TransactionErrorHandler, Dead Letter Channel |
+| dead letter queue | Dead Letter Channel |
+| onPrepareFailure | DefaultErrorHandler, Dead Letter Channel |
+
+See [Exception Clause](exception-clause.md) documentation for additional documentation of the features above.
+
+## Scopes
+
+The error handler is scoped as either:
+
+-   CamelContext - _Globally_ in XML or _globally only_ within the same `RouteBuilder` in Java DSL
+    
+-   Route - _Individually per route_
+    
+
+The following example shows how you can register a global error handler for the `RouteBuilder`:
+
+```java
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+        errorHandler(deadLetterChannel("seda:error"));
+
+        // here is our regular route
+        from("seda:a").to("seda:b");
+    }
+};
+```
+
+The following example shows how you can register a route specific error handler:
+
+```java
+RouteBuilder builder = new RouteBuilder() {
+    public void configure() {
+        // this route is using a nested error handler
+        from("seda:a")
+            // here we configure the error handler
+            .errorHandler(deadLetterChannel("seda:error"))
+            // and we continue with the routing here
+            .to("seda:b");
+
+        // this route will use the default error handler
+        from("seda:b").to("seda:c");
+    }
+};
+```
+
+## XML and YAML based configuration
+
+**Java DSL vs. Spring DSL** The error handler is configured a bit differently in Java DSL and XML or YAML DSL. Legacy Spring XML relies more on standard Spring `<beans>` XML configuration whereas Java DSL uses fluent builders.
+
+The error handler can be configured as a legacy Spring XML bean and scoped in:
+
+-   global (the `<camelContext>` tag)
+    
+-   per route (the `<route>` tag)
+    
+-   or per policy (the `<policy>`/`<transacted>` tag)
+    
+
+The error handler is configured with the `errorHandlerRef` attribute.
+
+> **Tip**
+> **Error Handler Hierarchy**  
+> The error handlers are inherited, so if you only have set a global error handler, then it is used everywhere. But you can override this in a route and use another error handler.
+
+In this example, we configure a [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) on the route that should redeliver at most 3 times and use a little delay before retrying.
+
+-   XML
+    
+-   Legacy Spring XML
+    
+-   YAML
+    
+
+```xml
+<route>
+    <errorHandler>
+        <deadLetterChannel deadLetterUri="mock:dead">
+            <redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="250"/>
+        </deadLetterChannel>
+    </errorHandler>
+    <from uri="direct:in"/>
+    <process ref="myFailureProcessor"/>
+    <to uri="mock:result"/>
+</route>
+```
+
+First we configure the reference to **myDeadLetterErrorHandler** using the `errorHandlerRef` attribute on the `route` tag.
+
+Then we configure **myDeadLetterErrorHandler** that is our Dead Letter Channel. This configuration is legacy Spring XML using the bean element. And finally we have another spring bean for the redelivery policy where we can configure the options for how many times to redeliver, delays etc.
+
+```xml
+    <!-- here we configure our DeadLetterChannel -->
+    <bean id="myDeadLetterErrorHandler" class="org.apache.camel.builder.DeadLetterChannelBuilder">
+	    <!-- exchanges is routed to mock:dead in cased redelivery failed -->
+        <property name="deadLetterUri" value="mock:dead"/>
+		<!-- reference the redelivery policy to use -->
+        <property name="redeliveryPolicy" ref="myRedeliveryPolicyConfig"/>
+    </bean>
+
+    <!-- here we set the redelivery settings -->
+    <bean id="myRedeliveryPolicyConfig" class="org.apache.camel.processor.errorhandler.RedeliveryPolicy">
+	    <!-- try redelivery at most 3 times, after that the exchange is dead and its routed to the mock:dead endpoint -->
+        <property name="maximumRedeliveries" value="3"/>
+		<!-- delay 250ms before redelivery -->
+        <property name="redeliveryDelay" value="250"/>
+    </bean>
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <!-- set the errorHandlerRef to our DeadLetterChannel, this applies for this route only -->
+        <route errorHandlerRef="myDeadLetterErrorHandler">
+            <from uri="direct:in"/>
+            <process ref="myFailureProcessor"/>
+            <to uri="mock:result"/>
+        </route>
+    </camelContext>
+```
+
+```yaml
+- route:
+    errorHandler:
+      deadLetterChannel:
+        deadLetterUri: mock:dead
+        redeliveryPolicy:
+          maximumRedeliveries: 3
+          redeliveryDelay: 250
+    steps:
+      - process:
+          ref: myFailureProcessor
+      - to:
+          uri: mock:result
+    from:
+      uri: direct:in
+```
+
+## Using the transactional error handler
+
+The transactional error handler is based on spring transaction. This requires the usage of the camel-spring or camel-jta component.
+
+See [Transactional Client](../components/4.18.x/eips/transactional-client.md) that has many samples for how to use and transactional behavior and configuration with this error handler.
+
+## How do I retry failed messages forever?
+
+If you want to keep the bad message in the original system (such as a message broker), then you are also blocking the following messages that has arrived on the queue after the bad message.
+
+For example with [ActiveMQ](../components/4.18.x/activemq-component.md), Camel will retry consuming a message up til 6 times before its moved to the default dead letter queue on the broker (this is ActiveMQ broker specific).
+
+If you configure the [Default Error Handler](defaulterrorhandler.md) or [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) to use `maximumRedeliveries = -1` then Camel will retry forever.
+
+> **Important**
+> Beware that there is a difference between letting Camel retry processing a message, such as Camel fails to route a message to an external system (producer) vs consuming messages from a messaging system that offers redelivery such as [ActiveMQ](../components/4.18.x/activemq-component.md). The latter allows to roll back the entire message and attempt processing the same message again from Camel.
+
+If an external system such as [ActiveMQ](../components/4.18.x/activemq-component.md) is redelivering a message, then Camel enriches the message with headers that mark this.
+
+The `CamelRedeliveryCounter` contains the number of times it has been redelivered. The `CamelRedelivered` contains a boolean if its redelivered or if it is the first time the message is processed.
+
+See also [Transactional Client](../components/4.18.x/eips/transactional-client.md).
+
+## How do I retry processing a message from a certain point back or an entire route
+
+By default, Camel will perform any redelivery (retry) attempts from the point of failure. So if you want to retry from a point before this, you would need to split up your route.
+
+In the example below we have 2 routes (`direct:start`, `direct:sub`). In case of a failure anywhere in the `direct:sub` route, then the entire route is retried. This happens because we have instructed the `direct:sub` route to not use any error handler (e.g. the no error handler). Then we link the routes using the [Direct](../components/4.18.x/direct-component.md) component by calling the sub route from the 1st route.
+
+-   Java
+    
+-   Spring XML
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+// in case of io exception then try to redeliver up till 2 times
+// (do not use any delay due faster unit testing)
+onException(IOException.class)
+    .maximumRedeliveries(2).redeliveryDelay(0);
+
+from("direct:start")
+    .to("mock:a")
+    // call sub route (using direct)
+    .to("direct:sub")
+    .to("mock:c");
+
+from("direct:sub")
+    // disable error handler, so the entire route can be retried in case of redelivery
+    .errorHandler(noErrorHandler())
+    .to("mock:b")
+    .bean("myProcessor");
+```
+
+```xml
+<!-- this is the processor that will fail the first 2 attempts -->
+<bean id="myProcessor" class="org.apache.camel.processor.RedeliverToSubRouteTest.MyProcessor"/>
+
+<camelContext xmlns="http://camel.apache.org/schema/spring">
+
+    <!-- setup no error handler with an id, we refer to from the 2nd route -->
+    <errorHandler id="noErrorHandler" type="NoErrorHandler"/>
+
+    <!-- configure on exception to redelivery at most 2 times when an IOException was thrown
+         do not use redelivery delay to run unit test faster -->
+    <onException>
+        <exception>java.io.IOException</exception>
+        <redeliveryPolicy maximumRedeliveries="2" redeliveryDelay="0"/>
+    </onException>
+
+    <!-- 1st route, no need to setup error handler, as it will use the default error handler -->
+    <route>
+        <from uri="direct:start"/>
+        <to uri="mock:a"/>
+        <to uri="direct:sub"/>
+        <to uri="mock:c"/>
+    </route>
+
+    <!-- disable error handler on this route, so the entire route can be redelivered
+         when called from the 1st route -->
+    <route errorHandlerRef="noErrorHandler">
+        <from uri="direct:sub"/>
+        <to uri="mock:b"/>
+        <process ref="myProcessor"/>
+    </route>
+</camelContext>
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <onException>
+        <exception>java.io.IOException</exception>
+        <redeliveryPolicy maximumRedeliveries="2" redeliveryDelay="0"/>
+    </onException>
+    <to uri="mock:a"/>
+    <to uri="direct:sub"/>
+    <to uri="mock:c"/>
+</route>
+
+<route>
+    <errorHandler>
+        <noErrorHandler/>
+    </errorHandler>
+    <from uri="direct:sub"/>
+    <to uri="mock:b"/>
+    <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - onException:
+            exception:
+              - java.io.IOException
+        - redeliveryPolicy:
+            maximumRedeliveries: 2
+            redeliveryDelay: 0
+        - to:
+            uri: mock:a
+        - to:
+            uri: direct:sub
+        - to:
+            uri: mock:c
+
+- route:
+    errorHandler:
+      noErrorHandler: {}
+    from:
+      uri: direct:sub
+      steps:
+        - to:
+            uri: mock:b
+        - process:
+            ref: myProcessor
+```
+
+The code above is based on a unit test, and as you can see the processor below is configured to fail the first 2 attempts. So that means the entire `direct:sub` route is redelivered, meaning that the `mock:b` endpoint receives the incoming message again.
+
+```java
+public static class MyProcessor implements Processor {
+
+    private int counter;
+
+    @Override
+    public void process(Exchange exchange) throws Exception {
+        // use a processor to simulate error in the first 2 calls
+        if (counter++ < 2) {
+            throw new IOException("Forced");
+        }
+        exchange.getIn().setBody("Bye World");
+    }
+}
+```

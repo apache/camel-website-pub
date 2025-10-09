@@ -1,0 +1,148 @@
+# Camel Maven Plugin
+
+The Camel Maven Plugin supports the following goals
+
+-   camel:run - To run your Camel application
+    
+-   camel:dev - To run your Camel application in developer mode
+    
+-   camel:debug - To run your Camel application in debug mode
+    
+-   camel:prepare-fatjar - To prepare your Camel application for being packaged as a fat-jar (such as by maven-assembly-plugin)
+    
+
+## camel:run
+
+The `camel:run` goal of the Camel Maven Plugin is used to run your Camel Spring configurations in a forked JVM from Maven. A good example application to get you started is the Spring Example.
+
+```bash
+cd examples/camel-example-spring
+mvn camel:run
+```
+
+This makes it very easy to spin up and test your routing rules without having to write a main(…​) method; it also lets you create multiple jars to host different sets of routing rules and easily test them independently.
+
+How this works is that the plugin will compile the source code in the maven project, then boot up a Spring ApplicationContext using the XML configuration files on the classpath at `META-INF/spring/*.xml`
+
+If you want to boot up your Camel routes a little faster, you could try the `camel:embedded` instead.
+
+### Options
+
+The maven plugin **run** goal supports the following options which can be configured from the command line (use `-D` syntax), or defined in the `pom.xml` file in the `<configuration>` tag.
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Parameter</td><td class="tableblock halign-left valign-top">Default Value</td><td class="tableblock halign-left valign-top">Description</td></tr><tr><td class="tableblock halign-left valign-top">duration</td><td class="tableblock halign-left valign-top">-1</td><td class="tableblock halign-left valign-top">Sets the time duration (seconds) that the application will run for before terminating. A value ⇐ 0 will run forever.</td></tr><tr><td class="tableblock halign-left valign-top">durationIdle</td><td class="tableblock halign-left valign-top">-1</td><td class="tableblock halign-left valign-top">Sets the idle time duration (seconds) duration that the application can be idle before terminating. A value ⇐ 0 will run forever.</td></tr><tr><td class="tableblock halign-left valign-top">durationMaxMessages</td><td class="tableblock halign-left valign-top">-1</td><td class="tableblock halign-left valign-top">Sets the duration of maximum number of messages that the application will process before terminating.</td></tr><tr><td class="tableblock halign-left valign-top">logClasspath</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Whether to log the classpath when starting</td></tr><tr><td class="tableblock halign-left valign-top">loggingLevel</td><td class="tableblock halign-left valign-top">OFF</td><td class="tableblock halign-left valign-top">Whether to use built-in console logging (uses log4j), which does not require to add any logging dependency to your project. However, the logging is fixed to log to the console, with a color style that is similar to Spring Boot. You can change the root logging level to: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, OFF</td></tr><tr><td class="tableblock halign-left valign-top">profile</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">To run with a specific Camel Main profile (dev,test,prod)</td></tr></tbody></table>
+
+### Logging the classpath
+
+You can configure whether the classpath should be logged when `camel:run` executes. You can enable this in the configuration using:
+
+```xml
+<plugin>
+  <groupId>org.apache.camel</groupId>
+  <artifactId>camel-maven-plugin</artifactId>
+  <configuration>
+    <logClasspath>true</logClasspath>
+  </configuration>
+</plugin>
+```
+
+### Using built-in logging
+
+If you want quickly to have logging to console, you can use the built-in logging by setting the logging level as shown:
+
+```xml
+<plugin>
+  <groupId>org.apache.camel</groupId>
+  <artifactId>camel-maven-plugin</artifactId>
+  <configuration>
+    <loggingLevel>INFO</loggingLevel>
+  </configuration>
+</plugin>
+```
+
+This runs the application with console logging, in color that is similar to Spring Boot logging. This is default turned off, to use the configured logging system in the project.
+
+The idea with the built-in logging is that you sometimes want to avoid messing with setting up logging, and just want a quick and easy log to console that looks good.
+
+## camel:dev
+
+The `camel:dev` is an extension to `camel:run` to run the Camel application in developer mode. In this mode, among others, Camel will use hot-reloading of DSL routes (xml, yaml and java) that are located from the `src/main/resources` directory.
+
+### Options
+
+The maven plugin **dev** goal supports the following options which can be configured from the command line (use `-D` syntax), or defined in the `pom.xml` file in the `<configuration>` tag.
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Parameter</td><td class="tableblock halign-left valign-top">Default Value</td><td class="tableblock halign-left valign-top">Description</td></tr><tr><td class="tableblock halign-left valign-top">routesDirectory</td><td class="tableblock halign-left valign-top">src/main/resources</td><td class="tableblock halign-left valign-top">To watch the directory for file changes which triggers a live reload of the Camel routes on-the-fly.</td></tr><tr><td class="tableblock halign-left valign-top">duration</td><td class="tableblock halign-left valign-top">-1</td><td class="tableblock halign-left valign-top">Sets the time duration (seconds) that the application will run for before terminating. A value ⇐ 0 will run forever.</td></tr><tr><td class="tableblock halign-left valign-top">durationIdle</td><td class="tableblock halign-left valign-top">-1</td><td class="tableblock halign-left valign-top">Sets the idle time duration (seconds) duration that the application can be idle before terminating. A value ⇐ 0 will run forever.</td></tr><tr><td class="tableblock halign-left valign-top">durationMaxMessages</td><td class="tableblock halign-left valign-top">-1</td><td class="tableblock halign-left valign-top">Sets the duration of maximum number of messages that the application will process before terminating.</td></tr><tr><td class="tableblock halign-left valign-top">logClasspath</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Whether to log the classpath when starting</td></tr><tr><td class="tableblock halign-left valign-top">loggingLevel</td><td class="tableblock halign-left valign-top">OFF</td><td class="tableblock halign-left valign-top">Whether to use built-in console logging (uses log4j), which does not require to add any logging dependency to your project. However, the logging is fixed to log to the console, with a color style that is similar to Spring Boot. You can change the root logging level to: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, OFF</td></tr><tr><td class="tableblock halign-left valign-top">profile</td><td class="tableblock halign-left valign-top">dev</td><td class="tableblock halign-left valign-top">To run with a specific Camel Main profile (dev,test,prod)</td></tr></tbody></table>
+
+## camel:debug
+
+The `camel:debug` is an extension to `camel:dev` to run the Camel application in debug mode which allows to debug the Camel routes thanks to the Camel textual route debugger.
+
+### Options
+
+The maven plugin **debug** goal supports the following options which can be configured from the command line (use `-D` syntax), or defined in the `pom.xml` file in the `<configuration>` tag.
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Parameter</td><td class="tableblock halign-left valign-top">Default Value</td><td class="tableblock halign-left valign-top">Description</td></tr><tr><td class="tableblock halign-left valign-top">suspend</td><td class="tableblock halign-left valign-top">true</td><td class="tableblock halign-left valign-top">Indicates whether the message processing done by Camel should be suspended as long as a debugger is not attached.</td></tr></tbody></table>
+
+## camel:prepare-fatjar
+
+The `camel:prepare-fatjar` goal of the Camel Maven Plugin is used to prepare your Camel application for being packaged as a _fat jar_. The goal scans the Maven dependencies to discover Camel JARs and extract if they have type converters, which gets merged together into a single _uber_ file stored in `target/classes/META-INF/services/org/apache/camel/UberTypeConverterLoader`.
+
+This _uber_ loader file contains all the combined type converters the Camel application uses at runtime. They are merged together into this single file.
+
+This is needed as otherwise the _fat jar_ maven plugins (such as maven-assembly-plugin, or maven-shade-plugin) causes the `TypeConverterLoader` files to be overwritten in the assembled JAR which causes not all type converters to be loaded by Camel.
+
+The `UberTypeConverterLoader` ensures they all type converters gets loaded as this file contains all the known type converter files.
+
+To use this goal, you can add the following to your Camel application `pom.xml` file:
+
+```xml
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-maven-plugin</artifactId>
+        <version>${camel.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-fatjar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+```
+
+For example to use this with the `maven-assembly-plugin` you can do as below. Remember to specify the class name of **your** main class where it says `com.foo.NameOfMainClass`:
+
+```xml
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-maven-plugin</artifactId>
+        <version>${camel.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-fatjar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.foo.NameOfMainClass</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+```

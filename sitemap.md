@@ -1,0 +1,11 @@
+sitemaps[10]{loc}:
+  https://camel.apache.org/sitemap-camel-core.md
+  https://camel.apache.org/sitemap-camel-k.md
+  https://camel.apache.org/sitemap-camel-kafka-connector.md
+  https://camel.apache.org/sitemap-camel-kamelets.md
+  https://camel.apache.org/sitemap-camel-karaf.md
+  https://camel.apache.org/sitemap-camel-quarkus.md
+  https://camel.apache.org/sitemap-camel-spring-boot.md
+  https://camel.apache.org/sitemap-components.md
+  https://camel.apache.org/sitemap-manual.md
+  https://camel.apache.org/sitemap-website.md

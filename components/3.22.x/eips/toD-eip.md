@@ -1,0 +1,230 @@
+# To D
+
+Camel supports the [Message Endpoint](http://www.enterpriseintegrationpatterns.com/MessageEndpoint.md) from the [EIP patterns](enterprise-integration-patterns.md) using the [Endpoint](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.md) interface.
+
+How does an application connect to a messaging channel to send and receive messages?
+
+![image](_images/eip/MessageEndpointSolution.gif)
+
+Connect an application to a messaging channel using a Message Endpoint, a client of the messaging system that the application can then use to send or receive messages.
+
+In Camel the ToD EIP is used for sending [messages](message.md) to dynamic [endpoints](message-endpoint.md).
+
+The [To](to-eip.md) and ToD EIPs are the most common patterns to use in Camel [routes](../../../manual/routes.md).
+
+## Options
+
+The To D eip supports 7 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **uri** | **Required** The uri of the endpoint to send to. The uri can be dynamic computed using the org.apache.camel.language.simple.SimpleLanguage expression. |  | String |
+| **pattern** | 
+Sets the optional ExchangePattern used to invoke this endpoint.
+
+Enum values:
+
+-   InOnly
+    
+-   InOut
+    
+-   InOptionalOut
+    
+
+
+
+
+
+ |  | ExchangePattern |
+| **cacheSize** | Sets the maximum size used by the org.apache.camel.spi.ProducerCache which is used to cache and reuse producers when using this recipient list, when uris are reused. Beware that when using dynamic endpoints then it affects how well the cache can be utilized. If each dynamic endpoint is unique then its best to turn of caching by setting this to -1, which allows Camel to not cache both the producers and endpoints; they are regarded as prototype scoped and will be stopped and discarded after use. This reduces memory usage as otherwise producers/endpoints are stored in memory in the caches. However if there are a high degree of dynamic endpoints that have been used before, then it can benefit to use the cache to reuse both producers and endpoints and therefore the cache size can be set accordingly or rely on the default size (1000). If there is a mix of unique and used before dynamic endpoints, then setting a reasonable cache size can help reduce memory usage to avoid storing too many non frequent used producers. |  | Integer |
+| **ignoreInvalidEndpoint** | Whether to ignore invalid endpoint URIs and skip sending the message. | false | Boolean |
+| **allowOptimisedComponents** | Whether to allow components to optimise toD if they are org.apache.camel.spi.SendDynamicAware . | true | Boolean |
+| **autoStartComponents** | Whether to auto startup components when toD is starting up. | true | Boolean |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **description** | Sets the description of this node. |  | DescriptionDefinition |
+
+### Different between To and ToD
+
+The `to` is used for sending messages to a static [endpoint](message-endpoint.md). In other words `to` sends message only to the **same** endpoint.
+
+The `toD` is used for sending message to a dynamic [endpoint](message-endpoint.md). The dynamic endpoint is evaluated _on-demand_ by an [Expression](../../../manual/expression.md). By default, the [Simple](../languages/simple-language.md) expression is used to compute the dynamic endpoint URI.
+
+## Using ToD
+
+For example to send a message to an endpoint which is dynamic determined by a [message header](message.md) you can do as shown below:
+
+```java
+from("direct:start")
+  .toD("${header.foo}");
+```
+
+And in XML:
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <toD uri="${header.foo}"/>
+</route>
+```
+
+You can also prefix the uri with a value because the endpoint [URI](../../../manual/uris.md) is evaluated using the [Simple](../languages/simple-language.md) language:
+
+```java
+from("direct:start")
+  .toD("mock:${header.foo}");
+```
+
+And in XML:
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <toD uri="mock:${header.foo}"/>
+</route>
+```
+
+In the example above we compute the dynamic endpoint with a prefix "mock:" and then the header foo is appended. So for example if the header foo has value order, then the endpoint is computed as "mock:order".
+
+### Using other languages with toD
+
+You can also use other languages such as [XPath](../languages/xpath-language.md). Doing this requires to start with `language:` as shown below. If you do not specify `language:` then the endpoint is a component name. And in some cases there is both a component and language with the same name such as xquery.
+
+```java
+from("direct:start")
+  .toD("language:xpath:/order/@uri");
+```
+
+And in XML:
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <toD uri="language:xpath:/order/@uri"/>
+</route>
+```
+
+### Avoid creating endless dynamic endpoints which takes up resources
+
+When using dynamic computed endpoints with `toD` then you may compute a lot of dynamic endpoints, which results in an overhead of resources in use, by each dynamic endpoint uri, and its associated producer.
+
+For example HTTP based endpoints where you may have dynamic values in URI parameters when calling the HTTP service, such as:
+
+```java
+from("direct:login")
+  .toD("http:myloginserver:8080/login?userid=${header.userName}");
+```
+
+In the example above then the parameter `userid` is dynamic computed, and would result in one instance of endpoint and producer for each different userid. To avoid having too many dynamic endpoints you can configure `toD` to reduce its cache size, for example to use a cache size of 10:
+
+```java
+from("direct:login")
+  .toD("http:myloginserver:8080/login?userid=${header.userName}", 10);
+```
+
+And in XML:
+
+```xml
+<route>
+  <from uri="direct:login"/>
+  <toD uri="http:myloginserver:8080/login?userid=${header.userName}" cacheSize="10"/>
+</route>
+```
+
+> **Important**
+> this will only reduce the endpoint cache of the `toD` that has a chance of being reused in case a message is routed with the same `userName` header. Therefore, reducing the cache size will not solve the _endless dynamic endpoint\`s_ problem. Instead, you should use static endpoints with `to` and provide the dynamic parts in Camel message headers (if possible).
+
+#### Using static endpoints to avoid endless dynamic endpoints
+
+In the example above then the parameter `userid` is dynamic computed, and would result in one instance of endpoint and producer for each different userid. To avoid having too dynamic endpoints you use a single static endpoint and use headers to provide the dynamic parts:
+
+```java
+from("direct:login")
+  .setHeader(Exchange.HTTP_PATH, constant("/login"))
+  .setHeader(Exchange.HTTP_QUERY, simple("userid=${header.userName}"))
+  .toD("http:myloginserver:8080");
+```
+
+However, you can use optimised components for `toD` that can _solve_ this out of the box, as documented next.
+
+### Using optimised components with toD
+
+A better solution would be if the HTTP component could be optimised to handle the variations of dynamic computed endpoint uris. This is with among the following components, which have been optimised for `toD`:
+
+-   camel-http
+    
+-   camel-jetty
+    
+-   camel-netty-http
+    
+-   camel-undertow
+    
+-   camel-vertx-http
+    
+
+A number of non-HTTP components has been optimised as well:
+
+-   camel-activemq
+    
+-   camel-amqp
+    
+-   camel-file
+    
+-   camel-ftp
+    
+-   camel-jms
+    
+-   camel-kafka
+    
+-   camel-paho-mqtt5
+    
+-   camel-paho
+    
+-   camel-rabbitmq
+    
+-   camel-sjms
+    
+-   camel-sjms2
+    
+-   camel-spring-rabbitmq
+    
+
+For the optimisation to work, then:
+
+1.  The optimisation is detected and activated during startup of the Camel routes with `toD`.
+    
+2.  The dynamic uri in `toD` must provide the component name as either static or resolved via [property placeholders](../../../manual/using-propertyplaceholder.md).
+    
+3.  The supported components must be on the classpath.
+    
+
+The HTTP based components will be optimised to use the same hostname:port for each endpoint, and the dynamic values for context-path and query parameters will be provided as headers:
+
+For example this route:
+
+```java
+from("direct:login")
+  .toD("http:myloginserver:8080/login?userid=${header.userName}");
+```
+
+Will essentially be optimised to (pseudo route):
+
+```java
+from("direct:login")
+  .setHeader(Exchange.HTTP_PATH, expression("/login"))
+  .setHeader(Exchange.HTTP_QUERY, expression("userid=${header.userName}"))
+  .toD("http:myloginserver:8080")
+  .removeHeader(Exchange.HTTP_PATH)
+  .removeHeader(Exchange.HTTP_QUERY);
+```
+
+Where _expression_ will be evaluated dynamically. Notice how the uri in `toD` is now static (`\http:myloginserver:8080`). This optimisation allows Camel to reuse the same endpoint and its associated producer for all dynamic variations. This yields much lower resource overhead as the same http producer will be used for all the different variations of userid’s.
+
+> **Note**
+> When the optimised component is in use, then you cannot use the headers `Exchange.HTTP_PATH` and `Exchange.HTTP_QUERY` to provide dynamic values to override the uri in `toD`. If you want to use these headers, then use the plain `to` DSL instead. In other words these headers are used internally by `toD` to carry the dynamic details of the endpoint.
+
+In case of problems then you can turn on DEBUG logging level on `org.apache.camel.processor.SendDynamicProcessor` which will log during startup if `toD` was optimised, or if there was a failure loading the optimised component, with a stacktrace logged.
+
+```text
+Detected SendDynamicAware component: http optimising toD: http:myloginserver:8080/login?userid=${header.userName}
+```

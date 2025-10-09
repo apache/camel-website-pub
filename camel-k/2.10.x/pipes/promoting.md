@@ -1,0 +1,68 @@
+# Promoting Pipes across environments
+
+As soon as you have Pipes running in your cluster, you will be challenged to move that Pipe to an higher environment. Ie, you can test your Pipe in a **development** environment, and, as soon as you’re happy with the result, you will need to move it into a **production** environment.
+
+## CLI `promote` command
+
+You may already be familiar with this command as seen when [promoting Integrations across environments](../running/promoting.md). The command is smart enough to detect when you want to promote a Pipe or an Integration and it works exactly in the same manner.
+
+> **Note**
+> Use the dry run option (`-o yaml`) and export the result to any separated cluster or Git repository to perform a GitOps strategy.
+
+Let’s run a simple Pipe to see it in action:
+
+```bash
+kamel bind timer-source log-sink -p source.message="Hello Camel K"
+...
+binding "timer-source-to-log-sink" created
+```
+
+Once the Pipe Integration is running, we can `promote` the Pipe with `kamel promote timer-source-to-log-sink --to prod -o yaml`. We get the following result:
+
+timer-source-to-log-sink.yaml
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Pipe
+metadata:
+  annotations:
+    camel.apache.org/kamelet.icon: data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gU3ZnIFZlY3RvciBJY29ucyA6IGh0dHA6Ly93d3cub25saW5ld2ViZm9udHMuY29tL2ljb24gLS0...
+  name: timer-source-to-log-sink
+  namespace: prod
+spec:
+  sink:
+    ref:
+      apiVersion: camel.apache.org/v1
+      kind: Kamelet
+      name: log-sink
+      namespace: prod
+  source:
+    properties:
+      message: Hello Camel K
+    ref:
+      apiVersion: camel.apache.org/v1
+      kind: Kamelet
+      name: timer-source
+      namespace: prod
+  traits:
+    camel:
+      runtime-version: 3.8.1
+    container:
+      image: 10.100.107.57/camel-k/camel-k-kit-crbhu56n5tgc73cb1ts0@sha256:e3f66b61148e77ceda8531632847b455219300d95c9e640f4924b7e69419c2b9
+    jvm:
+      classpath: dependencies/*:dependencies/app/*:dependencies/lib/boot/*:dependencies/lib/main/*:dependencies/quarkus/*
+status: {}
+```
+
+As you may already have seen with the Integration example, also here the Pipe is reusing the very same container image. From a release perspective we are guaranteeing the **immutability** of the Pipe as the container used is exactly the same of the one we have tested in development (what we change are just the configurations, if any).
+
+## Moving traits
+
+> **Note**
+> This feature is available starting from version 2.5.
+
+When you use the `promote` subcommand, you’re also keeping the status of any configured trait along with the new promoted Pipe. The tool is in fact in charge to recover the trait configuration of the source Pipe and port it over to the new Pipe promoted.
+
+This is particularly nice when you have certain traits which are requiring the scan the source code (for instance, Service trait). In this way, when you promote the new Pipe, the traits will be automatically configured to copy any parameter, replicating the very exact behavior between the source and destination environment.
+
+With this approach, you won’t need to worry any longer about any trait which was requiring the source to be attached in order to automatically scan for features.

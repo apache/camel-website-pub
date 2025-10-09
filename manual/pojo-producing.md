@@ -1,0 +1,78 @@
+# POJO producing
+
+There are two different ways to send messages to any Camel [Endpoint](endpoint.md) from a POJO:
+
+-   Using `@Produce` or `@EndpointInject`
+    
+-   Hiding using an interface
+    
+
+## Using @Produce
+
+To allow sending of messages from POJOs you can use the `@Produce` annotation. This will inject a `org.apache.camel.ProducerTemplate` so that the bean can send messages.
+
+> **Important**
+> The `@Produce` POJO annotations are not part of any Camel routes, and you cannot use [errorHandler](error-handler.md) or [onException](exception-clause.md) with this.
+
+For example to send a message to the foo queue on ActiveMQ:
+
+```java
+public class Foo {
+
+  @Produce("activemq:foo")
+  ProducerTemplate producer;
+
+  public void doSomething() {
+    if (whatever) {
+      producer.sendBody("<hello>world!</hello>");
+    }
+  }
+}
+```
+
+The downside of this is that your code is now dependent on a Camel API, the `ProducerTemplate`. The next section describes how to remove this dependency.
+
+> **Tip**
+> See [POJO Consuming](pojo-consuming.md) for how to use a property on the bean as endpoint configuration, e.g., using the `property` attribute on `@Produce` or `@EndpointInject`.
+
+## Hiding the Camel APIs From Your Code
+
+You can hide Camel APIs from your application code. You can add the `@Produce` annotation to an injection point (a field or property setter) using some interface you use in your business logic. Example:
+
+```java
+public interface MyListener {
+
+    // this method is request/reply (InOut) because the method has a return value
+    // to use one way (InOnly) then the method should be a void method
+    String sayHello(String name);
+}
+
+public class MyBean {
+    @Produce("activemq:foo")
+    protected MyListener producer;
+
+    public void doSomething() {
+        // lets send a message and get a response back
+        String response = producer.sayHello("James");
+    }
+}
+```
+
+Here Camel will automatically inject a smart client side proxy at the `@Produce` annotation - an instance of the `MyListener` interface.
+
+When we invoke methods on this interface the method call is turned into an object and is sent to the endpoint; in this case the ActiveMQ endpoint to queue **`foo`**. Because the `sayHello` method has a return type (`String`) then Camel will use [Request Reply](../components/4.18.x/eips/requestReply-eip.md) (InOut) messaging.
+
+If the method is a `void` method, then Camel will use [Event Message](../components/4.18.x/eips/event-message.md) (InOnly) messaging, as shown below:
+
+```java
+public interface MyListener {
+
+    // this method is one-way (InOnly) because the method is void
+    void sayHello(String name);
+
+}
+```
+
+## See Also
+
+-   [POJO Consuming](pojo-consuming.md)
