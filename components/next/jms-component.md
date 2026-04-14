@@ -181,7 +181,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The JMS component supports 107 options, which are listed below.
+The JMS component supports 108 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -514,6 +514,7 @@ Enum values:
 
  | WARN | LoggingLevel |
 | **errorHandlerLogStackTrace** (logging) | Allows to control whether stack-traces should be logged or not, by the default errorHandler. | true | boolean |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter allowing java., javax. and org.apache.camel. is applied. |  | String |
 | **password** (security) | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **username** (security) | Username to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **transacted** (transaction) | Specifies whether to use transacted mode. | false | boolean |
@@ -557,7 +558,7 @@ Enum values:
  | queue | String |
 | **destinationName** (common) | **Required** Name of the queue or topic to use as destination. |  | String |
 
-### Query Parameters (102 parameters)
+### Query Parameters (103 parameters)
 
    
 | Name | Description | Default | Type |
@@ -900,6 +901,7 @@ Enum values:
 
  | WARN | LoggingLevel |
 | **errorHandlerLogStackTrace** (logging) | Allows to control whether stack-traces should be logged or not, by the default errorHandler. | true | boolean |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter allowing java., javax. and org.apache.camel. is applied. |  | String |
 | **password** (security) | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **username** (security) | Username to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **transacted** (transaction) | Specifies whether to use transacted mode. | false | boolean |
@@ -1534,7 +1536,7 @@ When using jms with Spring Boot make sure to use the following Maven dependency 
 </dependency>
 ```
 
-The component supports 108 options, which are listed below.
+The component supports 109 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -1568,6 +1570,7 @@ The component supports 108 options, which are listed below.
 | **camel.component.jms.delivery-delay** | Sets delivery delay to use for send calls for JMS. This option requires JMS 2.0 compliant broker. | \-1 | Long |
 | **camel.component.jms.delivery-mode** | Specifies the delivery mode to be used. Possible values are those defined by jakarta.jms.DeliveryMode. NON\_PERSISTENT = 1 and PERSISTENT = 2. |  | Integer |
 | **camel.component.jms.delivery-persistent** | Specifies whether persistent delivery is used by default. | true | Boolean |
+| **camel.component.jms.deserialization-filter** | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter allowing java., javax. and org.apache.camel. is applied. |  | String |
 | **camel.component.jms.destination-resolver** | A pluggable org.springframework.jms.support.destination.DestinationResolver that allows you to use your own resolver (for example, to lookup the real destination in a JNDI registry). The option is a org.springframework.jms.support.destination.DestinationResolver type. |  | DestinationResolver |
 | **camel.component.jms.disable-reply-to** | Specifies whether Camel ignores the JMSReplyTo header in messages. If true, Camel does not send a reply back to the destination specified in the JMSReplyTo header. You can use this option if you want Camel to consume from a route and you do not want Camel to automatically send back a reply message because another component in your code handles the reply message. You can also use this option if you want to use Camel as a proxy between different message brokers and you want to route message from one system to another. | false | Boolean |
 | **camel.component.jms.disable-time-to-live** | Use this option to force disabling time to live. For example when you do request/reply over JMS, then Camel will by default use the requestTimeout value as time to live on the message being sent. The problem is that the sender and receiver systems have to have their clocks synchronized, so they are in sync. This is not always so easy to archive. So you can use disableTimeToLive=true to not set a time to live value on the sent message. Then the message will not expire on the receiver system. See below in section About time to live for more details. | false | Boolean |
