@@ -69,7 +69,7 @@ Number of Camel components: 390 in 324 JAR artifacts (10 deprecated)
 | [AWS Bedrock Agent Runtime](../../components/next/aws-bedrock-agent-runtime-component.md) | camel-aws-bedrock-starter | Stable | 4.5 | Invoke Model of AWS Bedrock Agent Runtime service. |
 | [AWS Cloudtrail](../../components/next/aws-cloudtrail-component.md) | camel-aws-cloudtrail-starter | Stable | 3.19 | Consume events from Amazon Cloudtrail using AWS SDK version 2.x. |
 | [AWS CloudWatch](../../components/next/aws2-cw-component.md) | camel-aws2-cw-starter | Stable | 3.1 | Sending metrics to AWS CloudWatch. |
-| [AWS Comprehend](../../components/next/aws2-comprehend-component.md) | camel-aws2-comprehend-starter | Preview | 4.18 | Perform natural language processing using AWS Comprehend and AWS SDK version 2.x. |
+| [AWS Comprehend](../../components/next/aws2-comprehend-component.md) | camel-aws2-comprehend-starter | Stable | 4.18 | Perform natural language processing using AWS Comprehend and AWS SDK version 2.x. |
 | [AWS Config Service](../../components/next/aws-config-component.md) | camel-aws-config-starter | Stable | 4.3 | Manage AWS Config service. |
 | [AWS DynamoDB](../../components/next/aws2-ddb-component.md) | camel-aws2-ddb-starter | Stable | 3.1 | Store and retrieve data from AWS DynamoDB. |
 | [AWS DynamoDB Streams](../../components/next/aws2-ddbstream-component.md) | camel-aws2-ddb-starter | Stable | 3.1 | Receive messages from AWS DynamoDB Stream. |
@@ -85,13 +85,13 @@ Number of Camel components: 390 in 324 JAR artifacts (10 deprecated)
 | [AWS Managed Streaming for Apache Kafka (MSK)](../../components/next/aws2-msk-component.md) | camel-aws2-msk-starter | Stable | 3.1 | Manage AWS MSK instances. |
 | [AWS MQ](../../components/next/aws2-mq-component.md) | camel-aws2-mq-starter | Stable | 3.1 | Send messages to AWS MQ. |
 | [AWS Parameter Store](../../components/next/aws-parameter-store-component.md) | camel-aws-parameter-store-starter | Stable | 4.17 | Manage parameters using AWS Systems Manager (SSM) Parameter Store. |
-| [AWS Polly](../../components/next/aws2-polly-component.md) | camel-aws2-polly-starter | Preview | 4.18 | Synthesize speech using AWS Polly and AWS SDK version 2.x. |
+| [AWS Polly](../../components/next/aws2-polly-component.md) | camel-aws2-polly-starter | Stable | 4.18 | Synthesize speech using AWS Polly and AWS SDK version 2.x. |
 | [AWS RedshiftData](../../components/next/aws2-redshift-data-component.md) | camel-aws2-redshift-starter | Stable | 4.1 | Perform operations on AWS Redshift using Redshift Data API. |
 | [AWS Rekognition](../../components/next/aws2-rekognition-component.md) | camel-aws2-rekognition-starter | Stable | 4.17 | Manage and invoke AWS Rekognition. |
 | [AWS S3 Storage Service](../../components/next/aws2-s3-component.md) | camel-aws2-s3-starter | Stable | 3.2 | Store and retrieve objects from AWS S3 Storage Service. |
 | [AWS S3 Vectors](../../components/next/aws2-s3-vectors-component.md) | camel-aws2-s3-vectors-starter | Stable | 4.17 | Store and query vector embeddings using AWS S3 Vectors with similarity search. |
 | [AWS Secrets Manager](../../components/next/aws-secrets-manager-component.md) | camel-aws-secrets-manager-starter | Stable | 3.9 | Manage secrets using AWS Secrets Manager. |
-| [AWS Security Hub](../../components/next/aws-security-hub-component.md) | camel-aws-security-hub-starter | Preview | 4.18 | Manage and interact with AWS Security Hub for security findings. |
+| [AWS Security Hub](../../components/next/aws-security-hub-component.md) | camel-aws-security-hub-starter | Stable | 4.18 | Manage and interact with AWS Security Hub for security findings. |
 | [AWS Security Token Service (STS)](../../components/next/aws2-sts-component.md) | camel-aws2-sts-starter | Stable | 3.5 | Manage AWS STS cluster instances. |
 | [AWS Simple Email Service (SES)](../../components/next/aws2-ses-component.md) | camel-aws2-ses-starter | Stable | 3.1 | Send e-mails through AWS SES service. |
 | [AWS Simple Notification System (SNS)](../../components/next/aws2-sns-component.md) | camel-aws2-sns-starter | Stable | 3.1 | Send messages to AWS Simple Notification Topic. |
@@ -178,7 +178,7 @@ Number of Camel components: 390 in 324 JAR artifacts (10 deprecated)
 | [Geocoder](../../components/next/geocoder-component.md) | camel-geocoder-starter | Stable | 2.12 | Find geocodes (latitude and longitude) for a given address or the other way round. |
 | [Git](../../components/next/git-component.md) | camel-git-starter | Stable | 2.16 | Perform operations on git repositories. |
 | [GitHub](../../components/next/github-component.md) | camel-github-starter | Stable-deprecated | 2.15 | Interact with the GitHub API. |
-| [GitHub2](../../components/next/github2-component.md) | camel-github2-starter | Preview | 4.18 | Interact with the GitHub API. |
+| [GitHub2](../../components/next/github2-component.md) | camel-github2-starter | Stable | 4.18 | Interact with the GitHub API. |
 | [Google BigQuery](../../components/next/google-bigquery-component.md) | camel-google-bigquery-starter | Stable | 2.20 | Google BigQuery data warehouse for analytics. |
 | [Google BigQuery Standard SQL](../../components/next/google-bigquery-sql-component.md) | camel-google-bigquery-starter | Stable | 2.23 | Access Google Cloud BigQuery service using SQL queries. |
 | [Google Calendar](../../components/next/google-calendar-component.md) | camel-google-calendar-starter | Stable | 2.15 | Perform various operations on a Google Calendar. |
@@ -228,7 +228,7 @@ Number of Camel components: 390 in 324 JAR artifacts (10 deprecated)
 | [IBM Watson Language](../../components/next/ibm-watson-language-component.md) | camel-ibm-watson-language-starter | Stable | 4.16 | Perform natural language processing using IBM Watson Natural Language Understanding |
 | [IBM Watson Speech to Text](../../components/next/ibm-watson-speech-to-text-component.md) | camel-ibm-watson-speech-to-text-starter | Stable | 4.17 | Convert speech audio to text using IBM Watson Speech to Text |
 | [IBM Watson Text to Speech](../../components/next/ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech-starter | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
-| [IBM watsonx.ai](../../components/next/ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai-starter | Preview | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
+| [IBM watsonx.ai](../../components/next/ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai-starter | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
 | [IBM watsonx.data](../../components/next/ibm-watsonx-data-component.md) | camel-ibm-watsonx-data-starter | Preview | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
 | [IEC 60870 Client](../../components/next/iec60870-client-component.md) | camel-iec60870-starter | Stable | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
 | [IEC 60870 Server](../../components/next/iec60870-server-component.md) | camel-iec60870-starter | Stable | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
@@ -307,7 +307,7 @@ Number of Camel components: 390 in 324 JAR artifacts (10 deprecated)
 | [Micrometer](../../components/next/micrometer-component.md) | camel-micrometer-starter | Stable | 2.22 | Collect various metrics directly from Camel routes using the Micrometer library. |
 | [Milvus](../../components/next/milvus-component.md) | camel-milvus-starter | Stable | 4.5 | Perform operations on the Milvus Vector Database. |
 | [Mina](../../components/next/mina-component.md) | camel-mina-starter | Stable | 2.10 | Socket level networking using TCP or UDP with Apache Mina 2.x. |
-| [MINA SFTP](../../components/next/mina-sftp-component.md) | camel-mina-sftp-starter | Preview | 4.18 | Upload and download files to/from SFTP servers using Apache MINA SSHD. |
+| [MINA SFTP](../../components/next/mina-sftp-component.md) | camel-mina-sftp-starter | Stable | 4.18 | Upload and download files to/from SFTP servers using Apache MINA SSHD. |
 | [Minio](../../components/next/minio-component.md) | camel-minio-starter | Stable | 3.5 | Store and retrieve objects from Minio Storage Service using Minio SDK. |
 | [MLLP](../../components/next/mllp-component.md) | camel-mllp-starter | Stable | 2.17 | Communicate with external systems using the MLLP protocol. |
 | [Mock](../../components/next/mock-component.md) | camel-mock-starter | Stable | 1.0 | Test routes and mediation rules using mocks. |
@@ -492,7 +492,7 @@ Number of Camel data formats: 52 in 46 JAR artifacts (0 deprecated)
 | [JSonApi](../../components/next/dataformats/jsonApi-dataformat.md) | camel-jsonapi-starter | Stable | 3.0 | Marshal and unmarshal JSON:API resources using JSONAPI-Converter library. |
 | [LZF Deflate Compression](../../components/next/dataformats/lzf-dataformat.md) | camel-lzf-starter | Stable | 2.17 | Compress and decompress streams using LZF deflate algorithm. |
 | [MIME Multipart](../../components/next/dataformats/mimeMultipart-dataformat.md) | camel-mail-starter | Stable | 2.17 | Marshal Camel messages with attachments into MIME-Multipart messages and back. |
-| [OCSF](../../components/next/dataformats/ocsf-dataformat.md) | camel-ocsf-starter | Preview | 4.18 | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON. |
+| [OCSF](../../components/next/dataformats/ocsf-dataformat.md) | camel-ocsf-starter | Stable | 4.18 | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON. |
 | [Parquet File](../../components/next/dataformats/parquetAvro-dataformat.md) | camel-parquet-avro-starter | Stable | 4.0 | Parquet Avro serialization and de-serialization. |
 | [PGP (Pretty Good Privacy Cryptographic)](../../components/next/dataformats/pgp-dataformat.md) | camel-crypto-pgp-starter | Stable | 2.9 | Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP. |
 | [PQC (Post-Quantum Cryptography)](../../components/next/dataformats/pqc-dataformat.md) | camel-pqc-starter | Stable | 4.16 | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM). |

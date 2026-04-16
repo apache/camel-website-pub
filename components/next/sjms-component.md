@@ -430,14 +430,16 @@ When using sjms with Spring Boot make sure to use the following Maven dependency
 </dependency>
 ```
 
-The component supports 13 options, which are listed below.
+The component supports 15 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.component.sjms.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
 | **camel.component.sjms.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
+| **camel.component.sjms.client-id** | Sets the JMS client ID to use. Note that this value, if specified, must be unique and can only be used by a single JMS connection instance. It is typically only required for durable topic subscriptions. If using Apache ActiveMQ you may prefer to use Virtual Topics instead. |  | String |
 | **camel.component.sjms.connection-factory** | The connection factory to be use. A connection factory must be configured either on the component or endpoint. The option is a jakarta.jms.ConnectionFactory type. |  | ConnectionFactory |
+| **camel.component.sjms.deserialization-filter** | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter allowing java., javax. and org.apache.camel. is applied. |  | String |
 | **camel.component.sjms.destination-creation-strategy** | To use a custom DestinationCreationStrategy. The option is a org.apache.camel.component.sjms.jms.DestinationCreationStrategy type. |  | DestinationCreationStrategy |
 | **camel.component.sjms.enabled** | Whether to enable auto configuration of the sjms component. This is enabled by default. |  | Boolean |
 | **camel.component.sjms.exception-listener** | Specifies the JMS Exception Listener that is to be notified of any underlying JMS exceptions. The option is a jakarta.jms.ExceptionListener type. |  | ExceptionListener |

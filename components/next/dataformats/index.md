@@ -42,7 +42,7 @@ Number of Data Formats: 52 in 46 JAR artifacts (0 deprecated)
 | [JSonApi](jsonApi-dataformat.md) | camel-jsonapi | Stable | 3.0 | Marshal and unmarshal JSON:API resources using JSONAPI-Converter library. |
 | [LZF Deflate Compression](lzf-dataformat.md) | camel-lzf | Stable | 2.17 | Compress and decompress streams using LZF deflate algorithm. |
 | [MIME Multipart](mimeMultipart-dataformat.md) | camel-mail | Stable | 2.17 | Marshal Camel messages with attachments into MIME-Multipart messages and back. |
-| [OCSF](ocsf-dataformat.md) | camel-ocsf | Preview | 4.18 | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON. |
+| [OCSF](ocsf-dataformat.md) | camel-ocsf | Stable | 4.18 | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON. |
 | [Parquet File](parquetAvro-dataformat.md) | camel-parquet-avro | Stable | 4.0 | Parquet Avro serialization and de-serialization. |
 | [PGP (Pretty Good Privacy Cryptographic)](pgp-dataformat.md) | camel-crypto-pgp | Stable | 2.9 | Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP. |
 | [PQC (Post-Quantum Cryptography)](pqc-dataformat.md) | camel-pqc | Stable | 4.16 | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM). |

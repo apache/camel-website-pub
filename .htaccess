@@ -1155,8 +1155,8 @@ Redirect 301 /camel-quarkus/3.27.x/native-mode.html /camel-quarkus/3.27.x/user-g
 Redirect 301 /camel-quarkus/3.27.x/testing.html /camel-quarkus/3.27.x/user-guide/testing.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/bean-validator.html /camel-quarkus/3.27.x/reference/extensions/bean-validator.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/core.html /camel-quarkus/3.27.x/reference/extensions/core.html
-Redirect 301 /camel-quarkus/3.27.x/extensions/file-watch.html /camel-quarkus/3.27.x/reference/extensions/file-watch.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/debezium-mysql.html /camel-quarkus/3.27.x/reference/extensions/debezium-mysql.html
+Redirect 301 /camel-quarkus/3.27.x/extensions/file-watch.html /camel-quarkus/3.27.x/reference/extensions/file-watch.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/ftp.html /camel-quarkus/3.27.x/reference/extensions/ftp.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/github.html /camel-quarkus/3.27.x/reference/extensions/github.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/graphql.html /camel-quarkus/3.27.x/reference/extensions/graphql.html
@@ -1169,8 +1169,8 @@ Redirect 301 /camel-quarkus/3.27.x/extensions/jolt.html /camel-quarkus/3.27.x/re
 Redirect 301 /camel-quarkus/3.27.x/extensions/json-validator.html /camel-quarkus/3.27.x/reference/extensions/json-validator.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/mock.html /camel-quarkus/3.27.x/reference/extensions/mock.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/mustache.html /camel-quarkus/3.27.x/reference/extensions/mustache.html
-Redirect 301 /camel-quarkus/3.27.x/extensions/olingo4.html /camel-quarkus/3.27.x/reference/extensions/olingo4.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/openapi-java.html /camel-quarkus/3.27.x/reference/extensions/openapi-java.html
+Redirect 301 /camel-quarkus/3.27.x/extensions/olingo4.html /camel-quarkus/3.27.x/reference/extensions/olingo4.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/platform-http.html /camel-quarkus/3.27.x/reference/extensions/platform-http.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/quartz.html /camel-quarkus/3.27.x/reference/extensions/quartz.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/qute.html /camel-quarkus/3.27.x/reference/extensions/qute.html
@@ -1205,8 +1205,8 @@ Redirect 301 /camel-quarkus/3.27.x/extensions/salesforce.html /camel-quarkus/3.2
 Redirect 301 /camel-quarkus/3.27.x/extensions/sjms.html /camel-quarkus/3.27.x/reference/extensions/sjms.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/sql.html /camel-quarkus/3.27.x/reference/extensions/sql.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/xslt.html /camel-quarkus/3.27.x/reference/extensions/xslt.html
-Redirect 301 /camel-quarkus/3.27.x/extensions/amqp.html /camel-quarkus/3.27.x/reference/extensions/amqp.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/as2.html /camel-quarkus/3.27.x/reference/extensions/as2.html
+Redirect 301 /camel-quarkus/3.27.x/extensions/amqp.html /camel-quarkus/3.27.x/reference/extensions/amqp.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/attachments.html /camel-quarkus/3.27.x/reference/extensions/attachments.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/aws2-cw.html /camel-quarkus/3.27.x/reference/extensions/aws2-cw.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/aws2-mq.html /camel-quarkus/3.27.x/reference/extensions/aws2-mq.html
@@ -1253,8 +1253,8 @@ Redirect 301 /camel-quarkus/3.27.x/extensions/zip-deflater.html /camel-quarkus/3
 Redirect 301 /camel-quarkus/3.27.x/extensions/aws2-athena.html /camel-quarkus/3.27.x/reference/extensions/aws2-athena.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/aws2-ddb.html /camel-quarkus/3.27.x/reference/extensions/aws2-ddb.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/aws2-kms.html /camel-quarkus/3.27.x/reference/extensions/aws2-kms.html
-Redirect 301 /camel-quarkus/3.27.x/extensions/base64.html /camel-quarkus/3.27.x/reference/extensions/base64.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/bean.html /camel-quarkus/3.27.x/reference/extensions/bean.html
+Redirect 301 /camel-quarkus/3.27.x/extensions/base64.html /camel-quarkus/3.27.x/reference/extensions/base64.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/couchbase.html /camel-quarkus/3.27.x/reference/extensions/couchbase.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/cron.html /camel-quarkus/3.27.x/reference/extensions/cron.html
 Redirect 301 /camel-quarkus/3.27.x/extensions/debezium-sqlserver.html /camel-quarkus/3.27.x/reference/extensions/debezium-sqlserver.html
@@ -1463,8 +1463,8 @@ Redirect 301 /camel-quarkus/next/user-guide.html /camel-quarkus/next/user-guide/
 Redirect 301 /camel-quarkus/next/kubernetes.html /camel-quarkus/next/user-guide/kubernetes.html
 Redirect 301 /camel-quarkus/next/native-mode.html /camel-quarkus/next/user-guide/native-mode.html
 Redirect 301 /camel-quarkus/next/testing.html /camel-quarkus/next/user-guide/testing.html
-Redirect 301 /camel-quarkus/next/extensions/activemq.html /camel-quarkus/next/reference/extensions/activemq.html
 Redirect 301 /camel-quarkus/next/extensions/amqp.html /camel-quarkus/next/reference/extensions/amqp.html
+Redirect 301 /camel-quarkus/next/extensions/activemq.html /camel-quarkus/next/reference/extensions/activemq.html
 Redirect 301 /camel-quarkus/next/extensions/as2.html /camel-quarkus/next/reference/extensions/as2.html
 Redirect 301 /camel-quarkus/next/extensions/attachments.html /camel-quarkus/next/reference/extensions/attachments.html
 Redirect 301 /camel-quarkus/next/extensions/avro.html /camel-quarkus/next/reference/extensions/avro.html
@@ -1477,11 +1477,11 @@ Redirect 301 /camel-quarkus/next/extensions/aws2-eks.html /camel-quarkus/next/re
 Redirect 301 /camel-quarkus/next/extensions/aws2-iam.html /camel-quarkus/next/reference/extensions/aws2-iam.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-kms.html /camel-quarkus/next/reference/extensions/aws2-kms.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-mq.html /camel-quarkus/next/reference/extensions/aws2-mq.html
-Redirect 301 /camel-quarkus/next/extensions/aws2-msk.html /camel-quarkus/next/reference/extensions/aws2-msk.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-s3.html /camel-quarkus/next/reference/extensions/aws2-s3.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-ses.html /camel-quarkus/next/reference/extensions/aws2-ses.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-sns.html /camel-quarkus/next/reference/extensions/aws2-sns.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-sqs.html /camel-quarkus/next/reference/extensions/aws2-sqs.html
+Redirect 301 /camel-quarkus/next/extensions/aws2-msk.html /camel-quarkus/next/reference/extensions/aws2-msk.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-translate.html /camel-quarkus/next/reference/extensions/aws2-translate.html
 Redirect 301 /camel-quarkus/next/extensions/base64.html /camel-quarkus/next/reference/extensions/base64.html
 Redirect 301 /camel-quarkus/next/extensions/bean-validator.html /camel-quarkus/next/reference/extensions/bean-validator.html
@@ -1510,8 +1510,8 @@ Redirect 301 /camel-quarkus/next/extensions/file-watch.html /camel-quarkus/next/
 Redirect 301 /camel-quarkus/next/extensions/file.html /camel-quarkus/next/reference/extensions/file.html
 Redirect 301 /camel-quarkus/next/extensions/ftp.html /camel-quarkus/next/reference/extensions/ftp.html
 Redirect 301 /camel-quarkus/next/extensions/github.html /camel-quarkus/next/reference/extensions/github.html
-Redirect 301 /camel-quarkus/next/extensions/google-bigquery.html /camel-quarkus/next/reference/extensions/google-bigquery.html
 Redirect 301 /camel-quarkus/next/extensions/google-calendar.html /camel-quarkus/next/reference/extensions/google-calendar.html
+Redirect 301 /camel-quarkus/next/extensions/google-bigquery.html /camel-quarkus/next/reference/extensions/google-bigquery.html
 Redirect 301 /camel-quarkus/next/extensions/google-drive.html /camel-quarkus/next/reference/extensions/google-drive.html
 Redirect 301 /camel-quarkus/next/extensions/google-mail.html /camel-quarkus/next/reference/extensions/google-mail.html
 Redirect 301 /camel-quarkus/next/extensions/google-pubsub.html /camel-quarkus/next/reference/extensions/google-pubsub.html
@@ -1582,8 +1582,8 @@ Redirect 301 /camel-quarkus/next/extensions/snakeyaml.html /camel-quarkus/next/r
 Redirect 301 /camel-quarkus/next/extensions/soap.html /camel-quarkus/next/reference/extensions/soap.html
 Redirect 301 /camel-quarkus/next/extensions/sql.html /camel-quarkus/next/reference/extensions/sql.html
 Redirect 301 /camel-quarkus/next/extensions/stream.html /camel-quarkus/next/reference/extensions/stream.html
-Redirect 301 /camel-quarkus/next/extensions/tarfile.html /camel-quarkus/next/reference/extensions/tarfile.html
 Redirect 301 /camel-quarkus/next/extensions/telegram.html /camel-quarkus/next/reference/extensions/telegram.html
+Redirect 301 /camel-quarkus/next/extensions/tarfile.html /camel-quarkus/next/reference/extensions/tarfile.html
 Redirect 301 /camel-quarkus/next/extensions/threadpoolfactory-vertx.html /camel-quarkus/next/reference/extensions/threadpoolfactory-vertx.html
 Redirect 301 /camel-quarkus/next/extensions/tika.html /camel-quarkus/next/reference/extensions/tika.html
 Redirect 301 /camel-quarkus/next/extensions/timer.html /camel-quarkus/next/reference/extensions/timer.html

@@ -189,6 +189,10 @@ Enum values:
     
 -   CREATE\_TICKET\_FROM\_TWEET
     
+-   CREATE\_TICKET\_IDEMPOTENT
+    
+-   CREATE\_TICKET\_IDEMPOTENT\_ASYNC
+    
 -   CREATE\_TICKETS
     
 -   CREATE\_TICKETS\_1
@@ -984,7 +988,7 @@ The DEFAULT API is defined in the syntax as follows:
 zendesk:DEFAULT/methodName?[parameters]
 ```
 
-The 284 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
+The 286 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
 
   
 | Method | Alias | Description |
@@ -1101,6 +1105,12 @@ The 284 method(s) is(are) listed in the table below, followed by detailed syntax
 
  |
 | [**createTicketFromTweet**](#_api_DEFAULT_method_createTicketFromTweet) |  | 
+
+ |
+| [**createTicketIdempotent**](#_api_DEFAULT_method_createTicketIdempotent) |  | 
+
+ |
+| [**createTicketIdempotentAsync**](#_api_DEFAULT_method_createTicketIdempotentAsync) |  | 
 
  |
 | [**createTickets**](#_api_DEFAULT_method_createTickets) |  | 
@@ -2463,6 +2473,42 @@ The zendesk/createTicketFromTweet API method has the parameters listed in the ta
 | **tweetId** | 
 
  | Long |
+
+#### Method createTicketIdempotent
+
+Signatures:
+
+-   org.zendesk.client.v2.model.IdempotentResult<org.zendesk.client.v2.model.Ticket> createTicketIdempotent(org.zendesk.client.v2.model.Ticket ticket, String idempotencyKey);
+    
+
+The zendesk/createTicketIdempotent API method has the parameters listed in the table below:
+
+  
+| Parameter | Description | Type |
+| --- | --- | --- |
+| **idempotencyKey** | 
+ | String |
+| **ticket** | 
+
+ | Ticket |
+
+#### Method createTicketIdempotentAsync
+
+Signatures:
+
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.IdempotentResult<org.zendesk.client.v2.model.Ticket>> createTicketIdempotentAsync(org.zendesk.client.v2.model.Ticket ticket, String idempotencyKey);
+    
+
+The zendesk/createTicketIdempotentAsync API method has the parameters listed in the table below:
+
+  
+| Parameter | Description | Type |
+| --- | --- | --- |
+| **idempotencyKey** | 
+ | String |
+| **ticket** | 
+
+ | Ticket |
 
 #### Method createTickets
 

@@ -69,7 +69,7 @@ Number of Non-Core Components: 377 in 303 JAR artifacts (10 deprecated)
 | [AWS Bedrock Agent Runtime](aws-bedrock-agent-runtime-component.md) | camel-aws-bedrock | Stable | 4.5 | Invoke Model of AWS Bedrock Agent Runtime service. |
 | [AWS Cloudtrail](aws-cloudtrail-component.md) | camel-aws-cloudtrail | Stable | 3.19 | Consume events from Amazon Cloudtrail using AWS SDK version 2.x. |
 | [AWS CloudWatch](aws2-cw-component.md) | camel-aws2-cw | Stable | 3.1 | Sending metrics to AWS CloudWatch. |
-| [AWS Comprehend](aws2-comprehend-component.md) | camel-aws2-comprehend | Preview | 4.18 | Perform natural language processing using AWS Comprehend and AWS SDK version 2.x. |
+| [AWS Comprehend](aws2-comprehend-component.md) | camel-aws2-comprehend | Stable | 4.18 | Perform natural language processing using AWS Comprehend and AWS SDK version 2.x. |
 | [AWS Config Service](aws-config-component.md) | camel-aws-config | Stable | 4.3 | Manage AWS Config service. |
 | [AWS DynamoDB](aws2-ddb-component.md) | camel-aws2-ddb | Stable | 3.1 | Store and retrieve data from AWS DynamoDB. |
 | [AWS DynamoDB Streams](aws2-ddbstream-component.md) | camel-aws2-ddb | Stable | 3.1 | Receive messages from AWS DynamoDB Stream. |
@@ -85,13 +85,13 @@ Number of Non-Core Components: 377 in 303 JAR artifacts (10 deprecated)
 | [AWS Managed Streaming for Apache Kafka (MSK)](aws2-msk-component.md) | camel-aws2-msk | Stable | 3.1 | Manage AWS MSK instances. |
 | [AWS MQ](aws2-mq-component.md) | camel-aws2-mq | Stable | 3.1 | Send messages to AWS MQ. |
 | [AWS Parameter Store](aws-parameter-store-component.md) | camel-aws-parameter-store | Stable | 4.17 | Manage parameters using AWS Systems Manager (SSM) Parameter Store. |
-| [AWS Polly](aws2-polly-component.md) | camel-aws2-polly | Preview | 4.18 | Synthesize speech using AWS Polly and AWS SDK version 2.x. |
+| [AWS Polly](aws2-polly-component.md) | camel-aws2-polly | Stable | 4.18 | Synthesize speech using AWS Polly and AWS SDK version 2.x. |
 | [AWS RedshiftData](aws2-redshift-data-component.md) | camel-aws2-redshift | Stable | 4.1 | Perform operations on AWS Redshift using Redshift Data API. |
 | [AWS Rekognition](aws2-rekognition-component.md) | camel-aws2-rekognition | Stable | 4.17 | Manage and invoke AWS Rekognition. |
 | [AWS S3 Storage Service](aws2-s3-component.md) | camel-aws2-s3 | Stable | 3.2 | Store and retrieve objects from AWS S3 Storage Service. |
 | [AWS S3 Vectors](aws2-s3-vectors-component.md) | camel-aws2-s3-vectors | Stable | 4.17 | Store and query vector embeddings using AWS S3 Vectors with similarity search. |
 | [AWS Secrets Manager](aws-secrets-manager-component.md) | camel-aws-secrets-manager | Stable | 3.9 | Manage secrets using AWS Secrets Manager. |
-| [AWS Security Hub](aws-security-hub-component.md) | camel-aws-security-hub | Preview | 4.18 | Manage and interact with AWS Security Hub for security findings. |
+| [AWS Security Hub](aws-security-hub-component.md) | camel-aws-security-hub | Stable | 4.18 | Manage and interact with AWS Security Hub for security findings. |
 | [AWS Security Token Service (STS)](aws2-sts-component.md) | camel-aws2-sts | Stable | 3.5 | Manage AWS STS cluster instances. |
 | [AWS Simple Email Service (SES)](aws2-ses-component.md) | camel-aws2-ses | Stable | 3.1 | Send e-mails through AWS SES service. |
 | [AWS Simple Notification System (SNS)](aws2-sns-component.md) | camel-aws2-sns | Stable | 3.1 | Send messages to AWS Simple Notification Topic. |
@@ -168,7 +168,7 @@ Number of Non-Core Components: 377 in 303 JAR artifacts (10 deprecated)
 | [Geocoder](geocoder-component.md) | camel-geocoder | Stable | 2.12 | Find geocodes (latitude and longitude) for a given address or the other way round. |
 | [Git](git-component.md) | camel-git | Stable | 2.16 | Perform operations on git repositories. |
 | [GitHub](github-component.md) | camel-github | Stable-deprecated | 2.15 | Interact with the GitHub API. |
-| [GitHub2](github2-component.md) | camel-github2 | Preview | 4.18 | Interact with the GitHub API. |
+| [GitHub2](github2-component.md) | camel-github2 | Stable | 4.18 | Interact with the GitHub API. |
 | [Google](google-summary.md) |  |  |  |  |
 | [Google BigQuery](google-bigquery-component.md) | camel-google-bigquery | Stable | 2.20 | Google BigQuery data warehouse for analytics. |
 | [Google BigQuery Standard SQL](google-bigquery-sql-component.md) | camel-google-bigquery | Stable | 2.23 | Access Google Cloud BigQuery service using SQL queries. |
@@ -223,7 +223,7 @@ Number of Non-Core Components: 377 in 303 JAR artifacts (10 deprecated)
 | [IBM Watson Language](ibm-watson-language-component.md) | camel-ibm-watson-language | Stable | 4.16 | Perform natural language processing using IBM Watson Natural Language Understanding |
 | [IBM Watson Speech to Text](ibm-watson-speech-to-text-component.md) | camel-ibm-watson-speech-to-text | Stable | 4.17 | Convert speech audio to text using IBM Watson Speech to Text |
 | [IBM Watson Text to Speech](ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
-| [IBM watsonx.ai](ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai | Preview | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
+| [IBM watsonx.ai](ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
 | [IBM watsonx.data](ibm-watsonx-data-component.md) | camel-ibm-watsonx-data | Preview | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
 | [IEC 60870 Client](iec60870-client-component.md) | camel-iec60870 | Stable | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
 | [IEC 60870 Server](iec60870-server-component.md) | camel-iec60870 | Stable | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
@@ -301,7 +301,7 @@ Number of Non-Core Components: 377 in 303 JAR artifacts (10 deprecated)
 | [Micrometer](micrometer-component.md) | camel-micrometer | Stable | 2.22 | Collect various metrics directly from Camel routes using the Micrometer library. |
 | [Milvus](milvus-component.md) | camel-milvus | Stable | 4.5 | Perform operations on the Milvus Vector Database. |
 | [Mina](mina-component.md) | camel-mina | Stable | 2.10 | Socket level networking using TCP or UDP with Apache Mina 2.x. |
-| [MINA SFTP](mina-sftp-component.md) | camel-mina-sftp | Preview | 4.18 | Upload and download files to/from SFTP servers using Apache MINA SSHD. |
+| [MINA SFTP](mina-sftp-component.md) | camel-mina-sftp | Stable | 4.18 | Upload and download files to/from SFTP servers using Apache MINA SSHD. |
 | [Minio](minio-component.md) | camel-minio | Stable | 3.5 | Store and retrieve objects from Minio Storage Service using Minio SDK. |
 | [MLLP](mllp-component.md) | camel-mllp | Stable | 2.17 | Communicate with external systems using the MLLP protocol. |
 | [MongoDB](mongodb-component.md) | camel-mongodb | Stable | 2.19 | Perform operations on MongoDB documents and collections. |
