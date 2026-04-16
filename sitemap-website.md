@@ -1,11 +1,13 @@
-urls[1059]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-04-13T00:00:00+00:00
+urls[1061]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.19.0/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-k-2-10/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/releases/k-2.10.0/,2026-04-13T00:00:00+00:00
-  https://camel.apache.org/,2026-04-13T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-04-13T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/categories/Roadmap/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.18.1/,2026-04-03T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.14.5/,2026-03-30T00:00:00+00:00
