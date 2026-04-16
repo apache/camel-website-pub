@@ -19,7 +19,7 @@ To use this sink connector in Kafka connect you’ll need to set the following c
 connector.class=org.apache.camel.kafkaconnector.nettyhttp.CamelNettyhttpSinkConnector
 ```
 
-The camel-netty-http sink connector supports 118 options, which are listed below.
+The camel-netty-http sink connector supports 119 options, which are listed below.
 
    
 | Name | Description | Default | Priority |
@@ -87,6 +87,7 @@ Enum values:
 | **camel.sink.endpoint.workerGroup** | To use a explicit EventLoopGroup as the boss thread pool. For example to share a thread pool with multiple consumers or producers. By default each consumer or producer has their own worker pool with 2 x cpu count core threads. |  | MEDIUM |
 | **camel.sink.endpoint.decoders** | A list of decoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the Registry. Just remember to prefix the value with # so Camel knows it should lookup. |  | MEDIUM |
 | **camel.sink.endpoint.encoders** | A list of encoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the Registry. Just remember to prefix the value with # so Camel knows it should lookup. |  | MEDIUM |
+| **camel.sink.endpoint.deserializationFilter** | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied when deserializing Java objects from HTTP responses with Content-Type application/x-java-serialized-object. This is used when transferException is enabled and the remote side returns a serialized exception. When not set, the filter configured via the JVM system property jdk.serialFilter is used when present; otherwise a conservative default filter allowing java., javax. and org.apache.camel. packages is applied. |  | MEDIUM |
 | **camel.sink.endpoint.enabledProtocols** | Which protocols to enable when using SSL. | "TLSv1.2,TLSv1.3" | MEDIUM |
 | **camel.sink.endpoint.hostnameVerification** | To enable/disable hostname verification on SSLEngine. | false | MEDIUM |
 | **camel.sink.endpoint.keyStoreFormat** | Keystore format to be used for payload encryption. Defaults to JKS if not set. |  | MEDIUM |

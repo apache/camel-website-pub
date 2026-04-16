@@ -9,7 +9,7 @@ You need to create the resources required to let Prometheus to interact with the
 
 We have prepared a base configuration you can quickly apply executing:
 
-kubectl apply -k github.com/apache/camel-k/install/base/config/prometheus?ref=v2.9.1
+kubectl apply -k github.com/apache/camel-k/install/base/config/prometheus?ref=v2.10.0
 
 > **Note**
 > change the ref value with the installation version tag you want to install.

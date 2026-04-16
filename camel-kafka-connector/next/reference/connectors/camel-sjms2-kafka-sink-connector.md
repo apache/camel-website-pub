@@ -19,7 +19,7 @@ To use this sink connector in Kafka connect you’ll need to set the following c
 connector.class=org.apache.camel.kafkaconnector.sjms2.CamelSjms2SinkConnector
 ```
 
-The camel-sjms2 sink connector supports 45 options, which are listed below.
+The camel-sjms2 sink connector supports 46 options, which are listed below.
 
    
 | Name | Description | Default | Priority |
@@ -170,6 +170,7 @@ Enum values:
 | **camel.sink.endpoint.recoveryInterval** | Specifies the interval between recovery attempts, i.e. when a connection is being refreshed, in milliseconds. The default is 5000 ms, that is, 5 seconds. | 5000L | MEDIUM |
 | **camel.sink.endpoint.synchronous** | Sets whether synchronous processing should be strictly used. | false | MEDIUM |
 | **camel.sink.endpoint.transferException** | If enabled and you are using Request Reply messaging (InOut) and an Exchange failed on the consumer side, then the caused Exception will be send back in response as a jakarta.jms.ObjectMessage. If the client is Camel, the returned Exception is rethrown. This allows you to use Camel JMS as a bridge in your routing - for example, using persistent queues to enable robust routing. Notice that if you also have transferExchange enabled, this option takes precedence. The caught exception is required to be serializable. The original Exception on the consumer side can be wrapped in an outer exception such as org.apache.camel.RuntimeCamelException when returned to the producer. Use this with caution as the data is using Java Object serialization and requires the received to be able to deserialize the data at Class level, which forces a strong coupling between the producers and consumer!. | false | MEDIUM |
+| **camel.sink.endpoint.deserializationFilter** | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter allowing java., javax. and org.apache.camel. is applied. |  | MEDIUM |
 | **camel.sink.endpoint.transacted** | Specifies whether to use transacted mode. | false | MEDIUM |
 | **camel.component.sjms2.connectionFactory** | The connection factory to be use. A connection factory must be configured either on the component or endpoint. |  | MEDIUM |
 | **camel.component.sjms2.lazyStartProducer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | MEDIUM |

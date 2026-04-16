@@ -19,7 +19,7 @@ To use this sink connector in Kafka connect you’ll need to set the following c
 connector.class=org.apache.camel.kafkaconnector.couchbasesink.CamelCouchbasesinkSinkConnector
 ```
 
-The camel-couchbase-sink sink connector supports 8 options, which are listed below.
+The camel-couchbase-sink sink connector supports 9 options, which are listed below.
 
    
 | Name | Description | Default | Priority |
@@ -31,6 +31,7 @@ The camel-couchbase-sink sink connector supports 8 options, which are listed bel
 | **camel.kamelet.couchbase-sink.username** | Username to connect to Couchbase. |  | MEDIUM |
 | **camel.kamelet.couchbase-sink.password** | Password to connect to Couchbase. |  | MEDIUM |
 | **camel.kamelet.couchbase-sink.startingId** | The starting id. | 1 | MEDIUM |
+| **camel.kamelet.couchbase-sink.connectionString** | The full Couchbase SDK connection string (e.g. couchbase://host:port). When set, it takes precedence over hostname extraction for the KV service port. |  | MEDIUM |
 | **camel.kamelet.couchbase-sink.autoStartId** | Auto Start Id or not. | true | MEDIUM |
 
 The camel-couchbase-sink sink connector has no converters out of the box.

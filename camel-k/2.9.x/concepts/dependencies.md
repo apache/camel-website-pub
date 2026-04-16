@@ -8,8 +8,8 @@ Camel K was originally equipped with a dedicated runtime known as Camel K Runtim
 Camel dependencies matrix       
 | Camel K Version | Last release | (Default) Camel K Runtime | Camel Quarkus | Camel | Quarkus | Branch |
 | --- | --- | --- | --- | --- | --- | --- |
-| [Next (Pre-release)](../../next/index.md) | 2.9.1 | 3.15.3 | 3.15.3 | 4.8.5 | 3.15.4 | [main](https://github.com/apache/camel-k) |
-| [2.10.x](../../2.10.x/index.md) | 2.9.1 | 3.15.3 | 3.15.3 | 4.8.5 | 3.15.4 | [release-2.10.x](https://github.com/apache/camel-k/tree/release-2.10.x) |
+| [Next (Pre-release)](../../next/index.md) | 2.10.0 | 3.15.3 | 3.15.3 | 4.8.5 | 3.15.4 | [main](https://github.com/apache/camel-k) |
+| [2.10.x](../../2.10.x/index.md) | 2.10.0 | 3.15.3 | 3.15.3 | 4.8.5 | 3.15.4 | [release-2.10.x](https://github.com/apache/camel-k/tree/release-2.10.x) |
 | [2.9.x (LTS)](../index.md) | 2.9.1 | 3.15.3 | 3.15.3 | 4.8.5 | 3.15.4 | [release-2.9.x](https://github.com/apache/camel-k/tree/release-2.9.x) |
 
 ## Other APIs version matrix

@@ -89,6 +89,7 @@ Here it follows an example to configure the component to work with Opentelemetry
 
 ```java
 import org.apache.camel.micrometer.observability.MicrometerObservabilityTracer;
+import io.micrometer.tracing.otel.bridge.OtelBaggageManager;
 import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext;
 import io.micrometer.tracing.otel.bridge.OtelPropagator;
 import io.micrometer.tracing.otel.bridge.OtelTracer;
@@ -114,8 +115,10 @@ import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
             // which requires a Zipkin server listening to that port
             // )
             .build();
-        ContextPropagators propagators =  ContextPropagators.create(
-                    W3CTraceContextPropagator.getInstance());
+        ContextPropagators propagators = ContextPropagators.create(
+                TextMapPropagator.composite(
+                        W3CTraceContextPropagator.getInstance(),
+                        W3CBaggagePropagator.getInstance()));
         OpenTelemetrySdk openTelemetry = OpenTelemetrySdk.builder()
             .setTracerProvider(sdkTracerProvider)
             .setPropagators(propagators)
@@ -124,8 +127,11 @@ import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
             openTelemetry.getTracer("camel-app");
         io.micrometer.tracing.Tracer micrometerTracer = new OtelTracer(
                 otelTracer,
-                new OtelCurrentTraceContext(),
-                null);
+                currentTraceContext,
+                event -> {
+                },
+                new OtelBaggageManager(
+                        currentTraceContext, List.of(MicrometerObservabilitySpanAdapter.BAGGAGE_CAMEL_FLAG), List.of()));
         OtelPropagator otelPropagator = new OtelPropagator(propagators, otelTracer);
         getContext().getRegistry().bind("MicrometerObservabilityTracer", micrometerTracer);
         getContext().getRegistry().bind("OpentelemetryPropagators", otelPropagator);
@@ -140,6 +146,9 @@ import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
 
 You can see that the configuration of this component may get a bit difficult, unless you are already familiar with the tracing technology you’re going to implement.
 
+> **Note**
+> an important thing to do is to include a `BaggageManager` specifying the baggage properties to include during context propagation. The field provided in the example, `MicrometerObservabilitySpanAdapter.BAGGAGE_CAMEL_FLAG`, is necessary to handle consistency across asynchronous threads.
+
 ### How to trace
 
 Once the application is instrumented and configured, you can observe the traces produced with the tooling compatible to the concrete implementation you have in place. You are invited to follow the specific documentation of each technology.
@@ -153,3 +162,27 @@ Your application may require a Java agent in order to get the traces generated b
 You can leverage the `traceHeadersInclusion` to include the generated `CAMEL_TRACE_ID` and `CAMEL_SPAN_ID` into the Camel Exchange and together with `camel-mdc` you can make those headers available in the MDC context (via `camel.mdc.customHeaders=CAMEL_TRACE_ID,CAMEL_SPAN_ID` configuration). This is the idiomatic way in Camel.
 
 As an alternative, you can add Mapped Diagnostic Context tracing information (ie, `trace_id` and `span_id`) adding the specific [Opentelemetry Logger MDC auto instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/logger-mdc-instrumentation.md). This would be available if you configure the Opentelemetry. The logging configuration depends on the logging framework you’re using.
+
+### Span customization
+
+When you’re working at a very low level, you may need to tweak your metrics and add some in-process custom `span` in order to trace some specific measure of your application. If you need this advanced use case, you can create it during your process by configuring a Micrometer Tracer object and share it to your route. For example, in Java DSL:
+
+```java
+protected io.micrometer.tracing.Tracer tracer = new OtelTracer(
+    otelTracer,
+    currentTraceContext,
+    event -> {
+    },
+    new OtelBaggageManager(
+            currentTraceContext, List.of(MicrometerObservabilitySpanAdapter.BAGGAGE_CAMEL_FLAG), List.of()));
+...
+public void process(Exchange exchange) throws Exception {
+    exchange.getIn().setHeader("operation", "fake");
+    // We add a span during the processing. We need to verify this span is correctly
+    // created and belong to the proper hierarchy. Important: the user has to know which is the
+    // tracer, likely, setting it on the camel-telemetry Tracer component explicitly.
+    Span mySpan = tracer.nextSpan().name("mySpan").start();
+    // Do the work here
+    mySpan.end();
+}
+```

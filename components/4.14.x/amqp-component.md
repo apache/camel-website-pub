@@ -69,7 +69,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AMQP component supports 118 options, which are listed below.
+The AMQP component supports 119 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -411,6 +411,7 @@ Enum values:
 
  | WARN | LoggingLevel |
 | **errorHandlerLogStackTrace** (logging) | Allows to control whether stack-traces should be logged or not, by the default errorHandler. | true | boolean |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter allowing java., javax. and org.apache.camel. is applied. |  | String |
 | **keyStorePassword** (security) | The SSL keystore password. |  | String |
 | **password** (security) | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **trustStorePassword** (security) | The SSL truststore password. |  | String |
@@ -456,7 +457,7 @@ Enum values:
  | queue | String |
 | **destinationName** (common) | **Required** Name of the queue or topic to use as destination. |  | String |
 
-### Query Parameters (101 parameters)
+### Query Parameters (102 parameters)
 
    
 | Name | Description | Default | Type |
@@ -798,6 +799,7 @@ Enum values:
 
  | WARN | LoggingLevel |
 | **errorHandlerLogStackTrace** (logging) | Allows to control whether stack-traces should be logged or not, by the default errorHandler. | true | boolean |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter allowing java., javax. and org.apache.camel. is applied. |  | String |
 | **password** (security) | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **username** (security) | Username to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **transacted** (transaction) | Specifies whether to use transacted mode. | false | boolean |

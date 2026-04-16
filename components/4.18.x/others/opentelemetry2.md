@@ -101,3 +101,22 @@ As an alternative, you can use the agent’s built-in MDC integration.
 1.  Enable the [Logger MDC auto-instrumentation](https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/logger-mdc-instrumentation.md). This automatically adds `trace_id` and `span_id` to the MDC.
     
 2.  Configure your logging framework to include these MDC keys in your log format. The exact configuration depends on the logging library you use.
+    
+
+### Span customization
+
+When you’re working at a very low level, you may need to tweak your metrics and add some in-process custom `span` in order to trace some specific measure of your application. If you need this advanced use case, you can create it during your process by configuring an Opentelemetry Tracer object and share it to your route. For example, in Java DSL:
+
+```java
+private Tracer otelTracer = otelExtension.getOpenTelemetry().getTracer("traceTest");
+...
+public void process(Exchange exchange) throws Exception {
+     exchange.getIn().setHeader("operation", "fake");
+     // We add a span during the processing. We need to verify this span is correctly
+     // created and belong to the proper hierarchy. Important: the user has to know which is the
+     // tracer, likely, setting it on the camel-telemetry Tracer component explicitly.
+     Span mySpan = otelTracer.spanBuilder("mySpan").startSpan();
+     // Do the work here
+     mySpan.end();
+}
+```
