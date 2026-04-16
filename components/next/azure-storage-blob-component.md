@@ -222,6 +222,12 @@ Enum values:
     
 -   getPageBlobRanges
     
+-   getChangeFeed
+    
+-   copyBlob
+    
+-   createBlobSnapshot
+    
 
 
 
@@ -414,6 +420,12 @@ Enum values:
     
 -   getPageBlobRanges
     
+-   getChangeFeed
+    
+-   copyBlob
+    
+-   createBlobSnapshot
+    
 
 
 
@@ -492,7 +504,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Storage Blob Service component supports 69 message header(s), which is/are listed below:
+The Azure Storage Blob Service component supports 70 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -545,6 +557,8 @@ Enum values:
 -   getChangeFeed
     
 -   copyBlob
+    
+-   createBlobSnapshot
     
 
 
@@ -739,6 +753,7 @@ Enum values:
 | **CamelAzureStorageBlobChangeFeedStartTime** (producer) Constant: [`CHANGE_FEED_START_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_START_TIME) | (getChangeFeed) It filters the results to return events approximately after the start time. Note: A few events belonging to the previous hour can also be returned. A few events belonging to this hour can be missing; to ensure all events from the hour are returned, round the start time down by an hour. |  | OffsetDateTime |
 | **CamelAzureStorageBlobChangeFeedEndTime** (producer) Constant: [`CHANGE_FEED_END_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_END_TIME) | (getChangeFeed) It filters the results to return events approximately before the end time. Note: A few events belonging to the next hour can also be returned. A few events belonging to this hour can be missing; to ensure all events from the hour are returned, round the end time up by an hour. |  | OffsetDateTime |
 | **CamelAzureStorageBlobContext** (producer) Constant: [`CHANGE_FEED_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_CONTEXT) | (getChangeFeed) This gives additional context that is passed through the Http pipeline during the service call. |  | Context |
+| **CamelAzureStorageBlobSnapshotId** (consumer) Constant: [`BLOB_SNAPSHOT_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_SNAPSHOT_ID) | The snapshot identifier returned after creating a blob snapshot. |  | String |
 
 **Required information options:**
 
@@ -840,6 +855,7 @@ For these operations, `accountName`, `containerName` and `blobName` are **requir
 | `clearPageBlob` | `PageBlob` | Free the specified pages from the page blob. The size of the range must be a multiple of 512. |
 | `getPageBlobRanges` | `PageBlob` | Returns the list of valid page ranges for a page blob or snapshot of a page blob. |
 | `copyBlob` | `Common` | Copy a blob from one container to another one, even from different accounts. |
+| `createBlobSnapshot` | `Common` | Creates a read-only snapshot of a blob. The snapshot ID is returned in the `CamelAzureStorageBlobSnapshotId` header. |
 
 Refer to the example section in this page to learn how to use these operations into your camel application.
 
@@ -1358,6 +1374,16 @@ from("direct:copyBlob")
 ```
 
 In this way the `file.txt` in the container `containerblob1` of the account `account`, will be copied to the container `containerblob2` of the same account.
+
+-   `createBlobSnapshot`
+    
+
+```java
+from("direct:createBlobSnapshot")
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=createBlobSnapshot&serviceClient=#client")
+  .log("Snapshot ID: ${header.CamelAzureStorageBlobSnapshotId}")
+  .to("mock:result");
+```
 
 ### SAS Token generation example
 
