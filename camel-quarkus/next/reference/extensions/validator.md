@@ -6,7 +6,7 @@ Validate the payload using XML Schema and JAXP Validation.
 
 ## What’s inside
 
--   [Validator component](../../../../components/4.18.x/validator-component.md), URI syntax: `validator:resourceUri`
+-   [Validator component](../../../../components/next/validator-component.md), URI syntax: `validator:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

@@ -72,7 +72,7 @@ The OpenRewrite recipe should have added the quarkus-maven-plugin, but we need t
 
 There are no change for Java, YAML and XML IO DSL.
 
-In case, the Camel Spring XML DSL was used, it needs to be migrated. Please see [Camel XML IO DSL documentation](../../../components/4.18.x/others/java-xml-io-dsl.md)
+In case, the Camel Spring XML DSL was used, it needs to be migrated. Please see [Camel XML IO DSL documentation](../../../components/next/others/java-xml-io-dsl.md)
 
 ## Automated tests
 
@@ -100,7 +100,7 @@ This is a large topic on both side. There will surely need to adjust it. Please 
     
 -   [Quarkus transaction guide](https://quarkus.io/guides/transaction)
     
--   [Camel transaction guide which is focused on Spring](../../../components/4.18.x/eips/transactional-client.md)
+-   [Camel transaction guide which is focused on Spring](../../../components/next/eips/transactional-client.md)
     
 
 ## Custom components

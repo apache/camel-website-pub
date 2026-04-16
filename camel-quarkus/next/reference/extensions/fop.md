@@ -6,7 +6,7 @@ Render messages into PDF and other output formats supported by Apache FOP.
 
 ## What’s inside
 
--   [FOP component](../../../../components/4.18.x/fop-component.md), URI syntax: `fop:outputType`
+-   [FOP component](../../../../components/next/fop-component.md), URI syntax: `fop:outputType`
     
 
 Please refer to the above link for usage and configuration details.

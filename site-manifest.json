@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1776348036661,
+  "generated": 1776357389843,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -11264,6 +11264,12 @@
             },
             {
               "module": "ROOT",
+              "path": "migration-guide/3.35.0.adoc",
+              "url": "/camel-quarkus/next/migration-guide/3.35.0.html",
+              "title": "Camel Quarkus 3.35.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
               "path": "migration-guide/camel-spring-boot-to-camel-quarkus.adoc",
               "url": "/camel-quarkus/next/migration-guide/camel-spring-boot-to-camel-quarkus.html",
               "title": "Camel Spring Boot to Camel Quarkus Migration Guide"
@@ -11765,15 +11771,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/core-cloud.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/core-cloud.html",
-              "title": "Cloud",
-              "attributes": {
-                "page-aliases": "extensions/core-cloud.adoc"
-              }
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/core.adoc",
               "url": "/camel-quarkus/next/reference/extensions/core.html",
               "title": "Core",
@@ -12194,12 +12191,6 @@
               "attributes": {
                 "page-aliases": "extensions/grok.adoc"
               }
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/groovy-xml.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/groovy-xml.html",
-              "title": "Groovy XML"
             },
             {
               "module": "ROOT",
@@ -12910,15 +12901,6 @@
               "title": "Netty",
               "attributes": {
                 "page-aliases": "extensions/netty.adoc"
-              }
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/nitrite.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/nitrite.html",
-              "title": "Nitrite",
-              "attributes": {
-                "page-aliases": "extensions/nitrite.adoc"
               }
             },
             {

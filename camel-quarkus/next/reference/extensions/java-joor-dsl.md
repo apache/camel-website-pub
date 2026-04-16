@@ -6,7 +6,7 @@ Support for parsing Java route definitions at runtime
 
 ## What’s inside
 
--   [Java DSL (runtime compiled)](../../../../components/4.18.x/others/java-joor-dsl.md)
+-   [Java DSL (runtime compiled)](../../../../components/next/others/java-joor-dsl.md)
     
 
 Please refer to the above link for usage and configuration details.

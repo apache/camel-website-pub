@@ -6,7 +6,7 @@ Send and receive files to Azure storage file share
 
 ## What’s inside
 
--   [Azure Files component](../../../../components/4.18.x/azure-files-component.md), URI syntax: `azure-files:account/share`
+-   [Azure Files component](../../../../components/next/azure-files-component.md), URI syntax: `azure-files:account/share`
     
 
 Please refer to the above link for usage and configuration details.

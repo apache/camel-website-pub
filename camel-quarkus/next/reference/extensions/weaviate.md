@@ -6,7 +6,7 @@ Perform operations on the Weaviate Vector Database.
 
 ## What’s inside
 
--   [weaviate component](../../../../components/4.18.x/weaviate-component.md), URI syntax: `weaviate:collection`
+-   [weaviate component](../../../../components/next/weaviate-component.md), URI syntax: `weaviate:collection`
     
 
 Please refer to the above link for usage and configuration details.

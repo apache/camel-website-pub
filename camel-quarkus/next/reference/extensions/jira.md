@@ -6,7 +6,7 @@ Interact with JIRA issue tracker.
 
 ## What’s inside
 
--   [Jira component](../../../../components/4.18.x/jira-component.md), URI syntax: `jira:type`
+-   [Jira component](../../../../components/next/jira-component.md), URI syntax: `jira:type`
     
 
 Please refer to the above link for usage and configuration details.

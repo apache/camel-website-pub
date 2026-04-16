@@ -6,7 +6,7 @@ Open a Financial Interchange (FIX) session using an embedded QuickFix/J engine.
 
 ## What’s inside
 
--   [QuickFix component](../../../../components/4.18.x/quickfix-component.md), URI syntax: `quickfix:configurationName`
+-   [QuickFix component](../../../../components/next/quickfix-component.md), URI syntax: `quickfix:configurationName`
     
 
 Please refer to the above link for usage and configuration details.

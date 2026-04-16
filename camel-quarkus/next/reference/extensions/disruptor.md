@@ -6,9 +6,9 @@ Provides asynchronous SEDA behavior using LMAX Disruptor.
 
 ## What’s inside
 
--   [Disruptor component](../../../../components/4.18.x/disruptor-component.md), URI syntax: `disruptor:name`
+-   [Disruptor component](../../../../components/next/disruptor-component.md), URI syntax: `disruptor:name`
     
--   [Disruptor VM component](../../../../components/4.18.x/disruptor-component.md), URI syntax: `disruptor-vm:name`
+-   [Disruptor VM component](../../../../components/next/disruptor-component.md), URI syntax: `disruptor-vm:name`
     
 
 Please refer to the above links for usage and configuration details.

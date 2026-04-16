@@ -6,7 +6,7 @@ Route messages to an endpoint looked up dynamically by name in the Camel Registr
 
 ## What’s inside
 
--   [Ref component](../../../../components/4.18.x/ref-component.md), URI syntax: `ref:name`
+-   [Ref component](../../../../components/next/ref-component.md), URI syntax: `ref:name`
     
 
 Please refer to the above link for usage and configuration details.

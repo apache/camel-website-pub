@@ -6,7 +6,7 @@ Perform caching operations using Ehcache.
 
 ## What’s inside
 
--   [Ehcache component](../../../../components/4.18.x/ehcache-component.md), URI syntax: `ehcache:cacheName`
+-   [Ehcache component](../../../../components/next/ehcache-component.md), URI syntax: `ehcache:cacheName`
     
 
 Please refer to the above link for usage and configuration details.

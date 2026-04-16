@@ -6,7 +6,7 @@ Evaluates a JavaScript expression.
 
 ## What’s inside
 
--   [JavaScript language](../../../../components/4.18.x/languages/js-language.md)
+-   [JavaScript language](../../../../components/next/languages/js-language.md)
     
 
 Please refer to the above link for usage and configuration details.

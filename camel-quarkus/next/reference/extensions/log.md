@@ -6,7 +6,7 @@ Prints data form the routed message (such as body and headers) to the logger.
 
 ## What’s inside
 
--   [Log Data component](../../../../components/4.18.x/log-component.md), URI syntax: `log:loggerName`
+-   [Log Data component](../../../../components/next/log-component.md), URI syntax: `log:loggerName`
     
 
 Please refer to the above link for usage and configuration details.

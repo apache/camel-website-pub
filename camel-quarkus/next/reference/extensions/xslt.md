@@ -6,7 +6,7 @@ Transforms XML payload using an XSLT template.
 
 ## What’s inside
 
--   [XSLT component](../../../../components/4.18.x/xslt-component.md), URI syntax: `xslt:resourceUri`
+-   [XSLT component](../../../../components/next/xslt-component.md), URI syntax: `xslt:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

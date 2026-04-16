@@ -6,9 +6,9 @@ Provide data for load and soak testing of your Camel application.
 
 ## What’s inside
 
--   [Dataset component](../../../../components/4.18.x/dataset-component.md), URI syntax: `dataset:name`
+-   [Dataset component](../../../../components/next/dataset-component.md), URI syntax: `dataset:name`
     
--   [DataSet Test component](../../../../components/4.18.x/dataset-test-component.md), URI syntax: `dataset-test:name`
+-   [DataSet Test component](../../../../components/next/dataset-test-component.md), URI syntax: `dataset-test:name`
     
 
 Please refer to the above links for usage and configuration details.

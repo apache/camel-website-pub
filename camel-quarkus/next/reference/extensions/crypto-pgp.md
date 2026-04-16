@@ -6,7 +6,7 @@ Encrypt and decrypt messages using Bouncy Castle OpenPGP API.
 
 ## What’s inside
 
--   [PGP data format](../../../../components/4.18.x/dataformats/pgp-dataformat.md)
+-   [PGP (Pretty Good Privacy Cryptographic) data format](../../../../components/next/dataformats/pgp-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

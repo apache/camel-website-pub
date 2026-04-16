@@ -6,7 +6,7 @@ Execute custom actions within a route using the Saga EIP.
 
 ## What’s inside
 
--   [Saga component](../../../../components/4.18.x/saga-component.md), URI syntax: `saga:action`
+-   [Saga component](../../../../components/next/saga-component.md), URI syntax: `saga:action`
     
 
 Please refer to the above link for usage and configuration details.

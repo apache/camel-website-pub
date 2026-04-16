@@ -6,7 +6,7 @@ Call another endpoint from the same Camel Context synchronously.
 
 ## What’s inside
 
--   [Direct component](../../../../components/4.18.x/direct-component.md), URI syntax: `direct:name`
+-   [Direct component](../../../../components/next/direct-component.md), URI syntax: `direct:name`
     
 
 Please refer to the above link for usage and configuration details.

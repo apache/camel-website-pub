@@ -6,7 +6,7 @@ Parse documents and extract metadata and text using Apache Tika.
 
 ## What’s inside
 
--   [Tika component](../../../../components/4.18.x/tika-component.md), URI syntax: `tika:operation`
+-   [Tika component](../../../../components/next/tika-component.md), URI syntax: `tika:operation`
     
 
 Please refer to the above link for usage and configuration details.

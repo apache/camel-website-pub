@@ -6,7 +6,7 @@ LangChain4j Agent component
 
 ## What’s inside
 
--   [LangChain4j Agent component](../../../../components/4.18.x/langchain4j-agent-component.md), URI syntax: `langchain4j-agent:agentId`
+-   [LangChain4j Agent component](../../../../components/next/langchain4j-agent-component.md), URI syntax: `langchain4j-agent:agentId`
     
 
 Please refer to the above link for usage and configuration details.

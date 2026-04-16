@@ -6,7 +6,7 @@ Send messages to AWS Simple Notification Topic.
 
 ## What’s inside
 
--   [AWS Simple Notification System (SNS) component](../../../../components/4.18.x/aws2-sns-component.md), URI syntax: `aws2-sns:topicNameOrArn`
+-   [AWS Simple Notification System (SNS) component](../../../../components/next/aws2-sns-component.md), URI syntax: `aws2-sns:topicNameOrArn`
     
 
 Please refer to the above link for usage and configuration details.

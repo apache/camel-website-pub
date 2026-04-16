@@ -6,7 +6,7 @@ Retrieve secrets from CyberArk Conjur Vault.
 
 ## What’s inside
 
--   [CyberArk Vault component](../../../../components/4.18.x/cyberark-vault-component.md), URI syntax: `cyberark-vault:label`
+-   [CyberArk Vault component](../../../../components/next/cyberark-vault-component.md), URI syntax: `cyberark-vault:label`
     
 
 Please refer to the above link for usage and configuration details.

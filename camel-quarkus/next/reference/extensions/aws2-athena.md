@@ -6,7 +6,7 @@ Access AWS Athena service using AWS SDK version 2.x.
 
 ## What’s inside
 
--   [AWS Athena component](../../../../components/4.18.x/aws2-athena-component.md), URI syntax: `aws2-athena:label`
+-   [AWS Athena component](../../../../components/next/aws2-athena-component.md), URI syntax: `aws2-athena:label`
     
 
 Please refer to the above link for usage and configuration details.

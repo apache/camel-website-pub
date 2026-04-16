@@ -1,32 +1,34 @@
 # Hazelcast Atomic Number
 
-JVM since1.1.0 Native since1.6.0
+JVM since1.1.0 Native since1.6.0 ⚠️Deprecated
 
 Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number).
 
 ## What’s inside
 
--   [Hazelcast Atomic Number component](../../../../components/4.18.x/hazelcast-atomicvalue-component.md), URI syntax: `hazelcast-atomicvalue:cacheName`
+-   [Hazelcast Atomic Number component](../../../../components/next/hazelcast-atomicvalue-component.md), URI syntax: `hazelcast-atomicvalue:cacheName`
     
--   [Hazelcast Instance component](../../../../components/4.18.x/hazelcast-instance-component.md), URI syntax: `hazelcast-instance:cacheName`
+-   [Hazelcast Instance component](../../../../components/next/hazelcast-instance-component.md), URI syntax: `hazelcast-instance:cacheName`
     
--   [Hazelcast List component](../../../../components/4.18.x/hazelcast-list-component.md), URI syntax: `hazelcast-list:cacheName`
+-   [Hazelcast List component](../../../../components/next/hazelcast-list-component.md), URI syntax: `hazelcast-list:cacheName`
     
--   [Hazelcast Map component](../../../../components/4.18.x/hazelcast-map-component.md), URI syntax: `hazelcast-map:cacheName`
+-   [Hazelcast Map component](../../../../components/next/hazelcast-map-component.md), URI syntax: `hazelcast-map:cacheName`
     
--   [Hazelcast Multimap component](../../../../components/4.18.x/hazelcast-multimap-component.md), URI syntax: `hazelcast-multimap:cacheName`
+-   [Hazelcast Multimap component](../../../../components/next/hazelcast-multimap-component.md), URI syntax: `hazelcast-multimap:cacheName`
     
--   [Hazelcast Queue component](../../../../components/4.18.x/hazelcast-queue-component.md), URI syntax: `hazelcast-queue:cacheName`
+-   [Hazelcast PN Counter component](../../../../components/next/hazelcast-pncounter-component.md), URI syntax: `hazelcast-pncounter:cacheName`
     
--   [Hazelcast Replicated Map component](../../../../components/4.18.x/hazelcast-replicatedmap-component.md), URI syntax: `hazelcast-replicatedmap:cacheName`
+-   [Hazelcast Queue component](../../../../components/next/hazelcast-queue-component.md), URI syntax: `hazelcast-queue:cacheName`
     
--   [Hazelcast Ringbuffer component](../../../../components/4.18.x/hazelcast-ringbuffer-component.md), URI syntax: `hazelcast-ringbuffer:cacheName`
+-   [Hazelcast Replicated Map component](../../../../components/next/hazelcast-replicatedmap-component.md), URI syntax: `hazelcast-replicatedmap:cacheName`
     
--   [Hazelcast SEDA component](../../../../components/4.18.x/hazelcast-seda-component.md), URI syntax: `hazelcast-seda:cacheName`
+-   [Hazelcast Ringbuffer component](../../../../components/next/hazelcast-ringbuffer-component.md), URI syntax: `hazelcast-ringbuffer:cacheName`
     
--   [Hazelcast Set component](../../../../components/4.18.x/hazelcast-set-component.md), URI syntax: `hazelcast-set:cacheName`
+-   [Hazelcast SEDA component](../../../../components/next/hazelcast-seda-component.md), URI syntax: `hazelcast-seda:cacheName`
     
--   [Hazelcast Topic component](../../../../components/4.18.x/hazelcast-topic-component.md), URI syntax: `hazelcast-topic:cacheName`
+-   [Hazelcast Set component](../../../../components/next/hazelcast-set-component.md), URI syntax: `hazelcast-set:cacheName`
+    
+-   [Hazelcast Topic component](../../../../components/next/hazelcast-topic-component.md), URI syntax: `hazelcast-topic:cacheName`
     
 
 Please refer to the above links for usage and configuration details.

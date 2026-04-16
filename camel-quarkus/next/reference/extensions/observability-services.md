@@ -6,7 +6,7 @@ Camel Observability Services
 
 ## What’s inside
 
--   [Observability Services](../../../../components/4.18.x/others/observability-services.md)
+-   [Observability Services](../../../../components/next/others/observability-services.md)
     
 
 Please refer to the above link for usage and configuration details.

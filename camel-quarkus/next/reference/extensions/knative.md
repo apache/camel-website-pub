@@ -6,7 +6,7 @@ Send and receive events from Knative.
 
 ## What’s inside
 
--   [Knative component](../../../../components/4.18.x/knative-component.md), URI syntax: `knative:type/typeId`
+-   [Knative component](../../../../components/next/knative-component.md), URI syntax: `knative:type/typeId`
     
 
 Please refer to the above link for usage and configuration details.

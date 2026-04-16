@@ -6,7 +6,7 @@ Perform operations on the Qdrant Vector Database.
 
 ## What’s inside
 
--   [Qdrant component](../../../../components/4.18.x/qdrant-component.md), URI syntax: `qdrant:collection`
+-   [Qdrant component](../../../../components/next/qdrant-component.md), URI syntax: `qdrant:collection`
     
 
 Please refer to the above link for usage and configuration details.

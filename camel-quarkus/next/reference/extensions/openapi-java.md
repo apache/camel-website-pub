@@ -6,7 +6,7 @@ Expose OpenAPI resources defined in Camel REST DSL
 
 ## What’s inside
 
--   [Openapi Java](../../../../components/4.18.x/others/openapi-java.md)
+-   [Openapi Java](../../../../components/next/others/openapi-java.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Transform messages using a Velocity template.
 
 ## What’s inside
 
--   [Velocity component](../../../../components/4.18.x/velocity-component.md), URI syntax: `velocity:resourceUri`
+-   [Velocity component](../../../../components/next/velocity-component.md), URI syntax: `velocity:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

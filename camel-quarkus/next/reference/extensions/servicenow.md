@@ -6,7 +6,7 @@ Interact with ServiceNow via its REST API.
 
 ## What’s inside
 
--   [ServiceNow component](../../../../components/4.18.x/servicenow-component.md), URI syntax: `servicenow:instanceName`
+-   [ServiceNow component](../../../../components/next/servicenow-component.md), URI syntax: `servicenow:instanceName`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,9 +6,9 @@ Marshal and unmarshal HL7 (Health Care) model objects using the HL7 MLLP codec.
 
 ## What’s inside
 
--   [HL7 data format](../../../../components/4.18.x/dataformats/hl7-dataformat.md)
+-   [HL7 data format](../../../../components/next/dataformats/hl7-dataformat.md)
     
--   [HL7 Terser language](../../../../components/4.18.x/languages/hl7terser-language.md)
+-   [HL7 Terser language](../../../../components/next/languages/hl7terser-language.md)
     
 
 Please refer to the above links for usage and configuration details.

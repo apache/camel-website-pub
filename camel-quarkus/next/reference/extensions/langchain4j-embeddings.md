@@ -6,7 +6,7 @@ LangChain4j Embeddings
 
 ## What’s inside
 
--   [LangChain4j Embeddings component](../../../../components/4.18.x/langchain4j-embeddings-component.md), URI syntax: `langchain4j-embeddings:embeddingId`
+-   [LangChain4j Embeddings component](../../../../components/next/langchain4j-embeddings-component.md), URI syntax: `langchain4j-embeddings:embeddingId`
     
 
 Please refer to the above link for usage and configuration details.

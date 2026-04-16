@@ -6,19 +6,19 @@ Send and receive emails using imap, pop3 and smtp protocols. Marshal Camel messa
 
 ## What’s inside
 
--   [IMAP component](../../../../components/4.18.x/mail-component.md), URI syntax: `imap:host:port`
+-   [IMAP component](../../../../components/next/mail-component.md), URI syntax: `imap:host:port`
     
--   [IMAPS (Secure) component](../../../../components/4.18.x/mail-component.md), URI syntax: `imaps:host:port`
+-   [IMAPS (Secure) component](../../../../components/next/mail-component.md), URI syntax: `imaps:host:port`
     
--   [MIME Multipart data format](../../../../components/4.18.x/dataformats/mimeMultipart-dataformat.md)
+-   [MIME Multipart data format](../../../../components/next/dataformats/mimeMultipart-dataformat.md)
     
--   [POP3 component](../../../../components/4.18.x/mail-component.md), URI syntax: `pop3:host:port`
+-   [POP3 component](../../../../components/next/mail-component.md), URI syntax: `pop3:host:port`
     
--   [POP3S component](../../../../components/4.18.x/mail-component.md), URI syntax: `pop3s:host:port`
+-   [POP3S component](../../../../components/next/mail-component.md), URI syntax: `pop3s:host:port`
     
--   [SMTP component](../../../../components/4.18.x/mail-component.md), URI syntax: `smtp:host:port`
+-   [SMTP component](../../../../components/next/mail-component.md), URI syntax: `smtp:host:port`
     
--   [SMTPS component](../../../../components/4.18.x/mail-component.md), URI syntax: `smtps:host:port`
+-   [SMTPS component](../../../../components/next/mail-component.md), URI syntax: `smtps:host:port`
     
 
 Please refer to the above links for usage and configuration details.

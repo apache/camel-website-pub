@@ -1,12 +1,12 @@
 # OpenTelemetry
 
-JVM since2.1.0 Native since2.1.0
+JVM since2.1.0 Native since2.1.0 ⚠️Deprecated
 
 Distributed tracing using OpenTelemetry
 
 ## What’s inside
 
--   [OpenTelemetry](../../../../components/4.18.x/others/opentelemetry.md)
+-   [OpenTelemetry](../../../../components/next/others/opentelemetry.md)
     
 
 Please refer to the above link for usage and configuration details.

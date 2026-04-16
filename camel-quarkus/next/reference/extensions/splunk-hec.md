@@ -6,7 +6,7 @@ The splunk component allows to publish events in Splunk using the HTTP Event Col
 
 ## What’s inside
 
--   [Splunk HEC component](../../../../components/4.18.x/splunk-hec-component.md), URI syntax: `splunk-hec:splunkURL`
+-   [Splunk HEC component](../../../../components/next/splunk-hec-component.md), URI syntax: `splunk-hec:splunkURL`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Marshal POJOs to JSON and back using Fastjson
 
 ## What’s inside
 
--   [JSON Fastjson data format](../../../../components/4.18.x/dataformats/fastjson-dataformat.md)
+-   [JSON Fastjson data format](../../../../components/next/dataformats/fastjson-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

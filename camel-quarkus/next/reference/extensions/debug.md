@@ -6,7 +6,7 @@ Enables Camel Route Debugging
 
 ## What’s inside
 
--   [Debug](../../../../components/4.18.x/others/debug.md)
+-   [Debug](../../../../components/next/others/debug.md)
     
 
 Please refer to the above link for usage and configuration details.

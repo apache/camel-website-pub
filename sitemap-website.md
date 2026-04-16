@@ -1,10 +1,15 @@
-urls[1061]{loc,lastmod}:
+urls[1062]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/blog/2026/04/email-triage-agent/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/categories/Camel/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/categories/JBang/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/releases/release-4.19.0/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/releases/,2026-04-16T00:00:00+00:00
+  https://camel.apache.org/categories/Usecases/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-k-2-10/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/releases/k-2.10.0/,2026-04-13T00:00:00+00:00
@@ -25,7 +30,6 @@ urls[1061]{loc,lastmod}:
   https://camel.apache.org/releases/karaf-4.14.5/,2026-03-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/03/camel-quarkus-3.27.3/,2026-03-06T00:00:00+00:00
   https://camel.apache.org/releases/q-3.27.3/,2026-03-06T00:00:00+00:00
-  https://camel.apache.org/categories/Usecases/,2026-03-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/03/CAPIGateway/,2026-03-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/02/camel-k-gitops-apps/,2026-02-24T00:00:00+00:00
   https://camel.apache.org/categories/Devops/,2026-02-24T00:00:00+00:00
@@ -48,9 +52,7 @@ urls[1061]{loc,lastmod}:
   https://camel.apache.org/releases/release-4.10.9/,2026-02-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/02/RELEASE-4.10.9/,2026-02-12T00:00:00+00:00
   https://camel.apache.org/releases/k-2.9.1/,2026-02-11T00:00:00+00:00
-  https://camel.apache.org/categories/AI/,2026-02-10T00:00:00+00:00
   https://camel.apache.org/blog/2026/02/camel-jbang-mcp/,2026-02-10T00:00:00+00:00
-  https://camel.apache.org/categories/Camel/,2026-02-10T00:00:00+00:00
   https://camel.apache.org/blog/2026/02/2025-downloads/,2026-02-09T00:00:00+00:00
   https://camel.apache.org/blog/2026/01/log-analyzer/,2026-01-28T00:00:00+00:00
   https://camel.apache.org/blog/2026/01/camel-quarkus-3.31.0/,2026-01-28T00:00:00+00:00
@@ -225,7 +227,6 @@ urls[1061]{loc,lastmod}:
   https://camel.apache.org/blog/2025/02/camel-tensorflow-serving/,2025-02-24T00:00:00+00:00
   https://camel.apache.org/blog/2025/02/camel-k-2-6/,2025-02-19T00:00:00+00:00
   https://camel.apache.org/blog/2025/02/connecting-edi-to-the-enterprise-with-camel-and-smooks/,2025-02-19T00:00:00+00:00
-  https://camel.apache.org/categories/JBang/,2025-02-19T00:00:00+00:00
   https://camel.apache.org/categories/Transformation/,2025-02-19T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.10.0/,2025-02-17T00:00:00+00:00
   https://camel.apache.org/releases/k-2.6.0/,2025-02-15T00:00:00+00:00

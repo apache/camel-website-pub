@@ -6,7 +6,7 @@ Have only a single consumer in a cluster consuming from a given endpoint; with a
 
 ## What’s inside
 
--   [Master component](../../../../components/4.18.x/master-component.md), URI syntax: `master:namespace:delegateUri`
+-   [Master component](../../../../components/next/master-component.md), URI syntax: `master:namespace:delegateUri`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Send requests to ElasticSearch via Java Client API.
 
 ## What’s inside
 
--   [Elasticsearch component](../../../../components/4.18.x/elasticsearch-component.md), URI syntax: `elasticsearch:clusterName`
+-   [Elasticsearch component](../../../../components/next/elasticsearch-component.md), URI syntax: `elasticsearch:clusterName`
     
 
 Please refer to the above link for usage and configuration details.

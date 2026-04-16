@@ -6,7 +6,7 @@ Stub out any physical endpoints while in development or testing.
 
 ## What’s inside
 
--   [Stub component](../../../../components/4.18.x/stub-component.md), URI syntax: `stub:name`
+-   [Stub component](../../../../components/next/stub-component.md), URI syntax: `stub:name`
     
 
 Please refer to the above link for usage and configuration details.

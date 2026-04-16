@@ -6,7 +6,7 @@ Basic implementation of Camel Telemetry useful for development purposes
 
 ## What’s inside
 
--   [Telemetry Dev](../../../../components/4.18.x/others/telemetry-dev.md)
+-   [Telemetry Dev](../../../../components/next/others/telemetry-dev.md)
     
 
 Please refer to the above link for usage and configuration details.

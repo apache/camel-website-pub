@@ -6,7 +6,7 @@ Manage files in Google Drive.
 
 ## What’s inside
 
--   [Google Drive component](../../../../components/4.18.x/google-drive-component.md), URI syntax: `google-drive:apiName/methodName`
+-   [Google Drive component](../../../../components/next/google-drive-component.md), URI syntax: `google-drive:apiName/methodName`
     
 
 Please refer to the above link for usage and configuration details.

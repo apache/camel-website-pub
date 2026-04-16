@@ -6,7 +6,7 @@ Manage and invoke AWS Lambda functions using AWS SDK version 2.x.
 
 ## What’s inside
 
--   [AWS Lambda component](../../../../components/4.18.x/aws2-lambda-component.md), URI syntax: `aws2-lambda:function`
+-   [AWS Lambda component](../../../../components/next/aws2-lambda-component.md), URI syntax: `aws2-lambda:function`
     
 
 Please refer to the above link for usage and configuration details.

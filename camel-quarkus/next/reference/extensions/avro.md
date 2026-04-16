@@ -6,7 +6,7 @@ Serialize and deserialize messages using Apache Avro binary data format.
 
 ## What’s inside
 
--   [Avro data format](../../../../components/4.18.x/dataformats/avro-dataformat.md)
+-   [Avro data format](../../../../components/next/dataformats/avro-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Store and retrieve objects from Google Cloud Storage Service using the google-cl
 
 ## What’s inside
 
--   [Google Storage component](../../../../components/4.18.x/google-storage-component.md), URI syntax: `google-storage:bucketName`
+-   [Google Storage component](../../../../components/next/google-storage-component.md), URI syntax: `google-storage:bucketName`
     
 
 Please refer to the above link for usage and configuration details.

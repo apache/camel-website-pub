@@ -6,7 +6,7 @@ Enclose Camel routes in transactions using Java Transaction API (JTA) and Naraya
 
 ## What’s inside
 
--   [JTA](../../../../components/4.18.x/others/jta.md)
+-   [JTA](../../../../components/next/others/jta.md)
     
 
 Please refer to the above link for usage and configuration details.

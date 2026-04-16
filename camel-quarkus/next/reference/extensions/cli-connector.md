@@ -6,7 +6,7 @@ Runtime adapter connecting with Camel CLI
 
 ## What’s inside
 
--   [CLI Connector](../../../../components/4.18.x/others/cli-connector.md)
+-   [CLI Connector](../../../../components/next/others/cli-connector.md)
     
 
 Please refer to the above link for usage and configuration details.

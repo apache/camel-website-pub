@@ -6,9 +6,9 @@ Consume and produce records from AWS Kinesis Streams using AWS SDK version 2.x.
 
 ## What’s inside
 
--   [AWS Kinesis component](../../../../components/4.18.x/aws2-kinesis-component.md), URI syntax: `aws2-kinesis:streamName`
+-   [AWS Kinesis component](../../../../components/next/aws2-kinesis-component.md), URI syntax: `aws2-kinesis:streamName`
     
--   [AWS Kinesis Firehose component](../../../../components/4.18.x/aws2-kinesis-firehose-component.md), URI syntax: `aws2-kinesis-firehose:streamName`
+-   [AWS Kinesis Firehose component](../../../../components/next/aws2-kinesis-firehose-component.md), URI syntax: `aws2-kinesis-firehose:streamName`
     
 
 Please refer to the above links for usage and configuration details.

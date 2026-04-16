@@ -1,6 +1,6 @@
 # Camel data formats supported on Quarkus
 
-There are 49 data formats (0 deprecated, 8 JVM only)
+There are 50 data formats (0 deprecated, 7 JVM only)
 
      
 | Data format | Artifact | JVM  
@@ -25,7 +25,8 @@ level | Description |
 | [Flatpack](extensions/flatpack.md) | camel-quarkus-flatpack | 1.1.0 | 1.1.0 | Stable | Marshal and unmarshal Java lists and maps to/from flat files (such as CSV, delimited, or fixed length formats) using Flatpack library. |
 | [Fory](extensions/fory.md) | camel-quarkus-fory | 3.18.0 | 3.18.0 | Stable | Serialize and deserialize messages using Apache Fory |
 | [Grok](extensions/grok.md) | camel-quarkus-grok | 1.0.0 | 1.0.0 | Stable | Unmarshal unstructured data to objects using Logstash based Grok patterns. |
-| [Groovy XML](extensions/groovy-xml.md) | camel-quarkus-groovy-xml | 3.29.0 | 3.29.0 | Stable | Transform between XML and Groovy Node (Map structure) objects. |
+| [Groovy JSon](extensions/groovy.md) | camel-quarkus-groovy | 1.0.0 | 3.2.0 | Stable | Transform between JSon and java.util.Map or java.util.List objects. |
+| [Groovy XML](extensions/groovy.md) | camel-quarkus-groovy | 1.0.0 | 3.2.0 | Stable | Transform between XML and Groovy Node (Map structure) objects. |
 | [JSON Gson](extensions/gson.md) | camel-quarkus-gson | 1.0.0 | 1.0.0 | Stable | Marshal POJOs to JSON and back using Gson |
 | [GZip Deflater](extensions/zip-deflater.md) | camel-quarkus-zip-deflater | 1.0.0 | 1.0.0 | Stable | Compress and decompress messages using java.util.zip.GZIPStream. |
 | [HL7](extensions/hl7.md) | camel-quarkus-hl7 | 1.1.0 | 1.8.0 | Stable | Marshal and unmarshal HL7 (Health Care) model objects using the HL7 MLLP codec. |
@@ -38,8 +39,8 @@ level | Description |
 | [JSON JSON-B](extensions/jsonb.md) | camel-quarkus-jsonb | 1.5.0 | 1.5.0 | Stable | Marshal POJOs to JSON and back using JSON-B. |
 | [LZF Deflate Compression](extensions/lzf.md) | camel-quarkus-lzf | 1.0.0 | 1.0.0 | Stable | Compress and decompress streams using LZF deflate algorithm. |
 | [MIME Multipart](extensions/mail.md) | camel-quarkus-mail | 0.2.0 | 0.2.0 | Stable | Marshal Camel messages with attachments into MIME-Multipart messages and back. |
-| [PGP](extensions/crypto-pgp.md) | camel-quarkus-crypto-pgp | 3.13.0 | 3.13.0 | Stable | Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP. |
-| [PQC (Post-Quantum Cryptography)](extensions/pqc.md) | camel-quarkus-pqc | 3.24.0 | n/a | Preview | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM). |
+| [PGP (Pretty Good Privacy Cryptographic)](extensions/crypto-pgp.md) | camel-quarkus-crypto-pgp | 3.13.0 | 3.13.0 | Stable | Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP. |
+| [PQC (Post-Quantum Cryptography)](extensions/pqc.md) | camel-quarkus-pqc | 3.24.0 | 3.35.0 | Stable | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM). |
 | [Protobuf](extensions/protobuf.md) | camel-quarkus-protobuf | 1.0.0 | 1.5.0 | Stable | Serialize and deserialize Java objects using Google’s Protocol buffers. |
 | [Protobuf Jackson](extensions/jackson-protobuf.md) | camel-quarkus-jackson-protobuf | 2.0.0 | 2.0.0 | Stable | Marshal POJOs to Protobuf and back using Jackson. |
 | [RSS](extensions/rss.md) | camel-quarkus-rss | 1.1.0 | 1.2.0 | Stable | Transform from ROME SyndFeed Java Objects to XML and vice-versa. |

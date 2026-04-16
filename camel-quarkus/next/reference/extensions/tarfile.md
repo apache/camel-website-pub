@@ -6,7 +6,7 @@ Archive files into tarballs or extract files from tarballs.
 
 ## What’s inside
 
--   [Tar File data format](../../../../components/4.18.x/dataformats/tarFile-dataformat.md)
+-   [Tar File data format](../../../../components/next/dataformats/tarFile-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

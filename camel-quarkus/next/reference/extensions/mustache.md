@@ -6,7 +6,7 @@ Transform messages using a Mustache template.
 
 ## What’s inside
 
--   [Mustache component](../../../../components/4.18.x/mustache-component.md), URI syntax: `mustache:resourceUri`
+-   [Mustache component](../../../../components/next/mustache-component.md), URI syntax: `mustache:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

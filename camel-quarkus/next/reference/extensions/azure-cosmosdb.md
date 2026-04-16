@@ -6,7 +6,7 @@ Azure Cosmos DB is Microsofts globally distributed, multi-model database service
 
 ## What’s inside
 
--   [Azure CosmosDB component](../../../../components/4.18.x/azure-cosmosdb-component.md), URI syntax: `azure-cosmosdb:databaseName/containerName`
+-   [Azure CosmosDB component](../../../../components/next/azure-cosmosdb-component.md), URI syntax: `azure-cosmosdb:databaseName/containerName`
     
 
 Please refer to the above link for usage and configuration details.

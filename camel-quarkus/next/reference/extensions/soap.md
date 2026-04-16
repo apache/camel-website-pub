@@ -6,7 +6,7 @@ Marshal Java objects to SOAP messages and back.
 
 ## What’s inside
 
--   [SOAP data format](../../../../components/4.18.x/dataformats/soap-dataformat.md)
+-   [SOAP data format](../../../../components/next/dataformats/soap-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

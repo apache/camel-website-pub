@@ -6,7 +6,7 @@ Transfer data securely and reliably using the AS2 protocol (RFC4130).
 
 ## What’s inside
 
--   [AS2 component](../../../../components/4.18.x/as2-component.md), URI syntax: `as2:apiName/methodName`
+-   [AS2 component](../../../../components/next/as2-component.md), URI syntax: `as2:apiName/methodName`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Evaluate an OGNL expression using Apache Commons OGNL
 
 ## What’s inside
 
--   [OGNL language](../../../../components/4.18.x/languages/ognl-language.md)
+-   [OGNL language](../../../../components/next/languages/ognl-language.md)
     
 
 Please refer to the above link for usage and configuration details.

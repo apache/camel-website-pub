@@ -6,7 +6,7 @@ Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson
 
 ## What’s inside
 
--   [Jackson XML data format](../../../../components/4.18.x/dataformats/jacksonXml-dataformat.md)
+-   [Jackson XML data format](../../../../components/next/dataformats/jacksonXml-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

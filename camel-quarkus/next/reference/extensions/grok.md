@@ -6,7 +6,7 @@ Unmarshal unstructured data to objects using Logstash based Grok patterns.
 
 ## What’s inside
 
--   [Grok data format](../../../../components/4.18.x/dataformats/grok-dataformat.md)
+-   [Grok data format](../../../../components/next/dataformats/grok-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

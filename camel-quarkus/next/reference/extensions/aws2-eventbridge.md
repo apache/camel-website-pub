@@ -6,7 +6,7 @@ Manage AWS Eventbridge cluster instances using AWS SDK version 2.x.
 
 ## What’s inside
 
--   [AWS Eventbridge component](../../../../components/4.18.x/aws2-eventbridge-component.md), URI syntax: `aws2-eventbridge://eventbusNameOrArn`
+-   [AWS Eventbridge component](../../../../components/next/aws2-eventbridge-component.md), URI syntax: `aws2-eventbridge://eventbusNameOrArn`
     
 
 Please refer to the above link for usage and configuration details.

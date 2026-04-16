@@ -6,7 +6,7 @@ Send and receive messages from NATS messaging system.
 
 ## What’s inside
 
--   [Nats component](../../../../components/4.18.x/nats-component.md), URI syntax: `nats:topic`
+-   [Nats component](../../../../components/next/nats-component.md), URI syntax: `nats:topic`
     
 
 Please refer to the above link for usage and configuration details.

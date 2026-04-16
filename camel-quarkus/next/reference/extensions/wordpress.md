@@ -6,7 +6,7 @@ Manage posts and users using Wordpress API.
 
 ## What’s inside
 
--   [WordPress component](../../../../components/4.18.x/wordpress-component.md), URI syntax: `wordpress:operation`
+-   [WordPress component](../../../../components/next/wordpress-component.md), URI syntax: `wordpress:operation`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Integrate with Consul service discovery and configuration store.
 
 ## What’s inside
 
--   [Consul component](../../../../components/4.18.x/consul-component.md), URI syntax: `consul:apiEndpoint`
+-   [Consul component](../../../../components/next/consul-component.md), URI syntax: `consul:apiEndpoint`
     
 
 Please refer to the above link for usage and configuration details.

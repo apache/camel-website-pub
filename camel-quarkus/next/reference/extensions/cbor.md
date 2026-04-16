@@ -6,7 +6,7 @@ Unmarshal a CBOR payload to POJO and back.
 
 ## What’s inside
 
--   [CBOR data format](../../../../components/4.18.x/dataformats/cbor-dataformat.md)
+-   [CBOR data format](../../../../components/next/dataformats/cbor-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Integrate with Cassandra 2.0 using the CQL3 API (not the Thrift API). Based on C
 
 ## What’s inside
 
--   [Cassandra CQL component](../../../../components/4.18.x/cql-component.md), URI syntax: `cql:beanRef:hosts:port/keyspace`
+-   [Cassandra CQL component](../../../../components/next/cql-component.md), URI syntax: `cql:beanRef:hosts:port/keyspace`
     
 
 Please refer to the above link for usage and configuration details.

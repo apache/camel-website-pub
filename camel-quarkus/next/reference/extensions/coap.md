@@ -6,13 +6,13 @@ Send and receive messages to/from COAP capable devices.
 
 ## What’s inside
 
--   [CoAP component](../../../../components/4.18.x/coap-component.md), URI syntax: `coap:uri`
+-   [CoAP component](../../../../components/next/coap-component.md), URI syntax: `coap:uri`
     
--   [CoAP component](../../../../components/4.18.x/coap-component.md), URI syntax: `coap+tcp:uri`
+-   [CoAP component](../../../../components/next/coap-component.md), URI syntax: `coap+tcp:uri`
     
--   [CoAP component](../../../../components/4.18.x/coap-component.md), URI syntax: `coaps+tcp:uri`
+-   [CoAP component](../../../../components/next/coap-component.md), URI syntax: `coaps+tcp:uri`
     
--   [CoAP (Secure) component](../../../../components/4.18.x/coap-component.md), URI syntax: `coaps:uri`
+-   [CoAP (Secure) component](../../../../components/next/coap-component.md), URI syntax: `coaps:uri`
     
 
 Please refer to the above links for usage and configuration details.

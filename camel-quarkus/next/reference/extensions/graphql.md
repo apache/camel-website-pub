@@ -6,7 +6,7 @@ Send GraphQL queries and mutations to external systems.
 
 ## What’s inside
 
--   [GraphQL component](../../../../components/4.18.x/graphql-component.md), URI syntax: `graphql:httpUri`
+-   [GraphQL component](../../../../components/next/graphql-component.md), URI syntax: `graphql:httpUri`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Process documents using Docling library for parsing and conversion.
 
 ## What’s inside
 
--   [Docling component](../../../../components/4.18.x/docling-component.md), URI syntax: `docling:operationId`
+-   [Docling component](../../../../components/next/docling-component.md), URI syntax: `docling:operationId`
     
 
 Please refer to the above link for usage and configuration details.

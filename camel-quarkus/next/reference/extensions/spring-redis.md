@@ -6,7 +6,7 @@ Send and receive messages from Redis.
 
 ## What’s inside
 
--   [Spring Redis component](../../../../components/4.18.x/spring-redis-component.md), URI syntax: `spring-redis:host:port`
+-   [Spring Redis component](../../../../components/next/spring-redis-component.md), URI syntax: `spring-redis:host:port`
     
 
 Please refer to the above link for usage and configuration details.

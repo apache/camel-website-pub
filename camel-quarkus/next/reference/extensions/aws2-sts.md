@@ -6,7 +6,7 @@ Manage AWS STS cluster instances using AWS SDK version 2.x.
 
 ## What’s inside
 
--   [AWS Security Token Service (STS) component](../../../../components/4.18.x/aws2-sts-component.md), URI syntax: `aws2-sts:label`
+-   [AWS Security Token Service (STS) component](../../../../components/next/aws2-sts-component.md), URI syntax: `aws2-sts:label`
     
 
 Please refer to the above link for usage and configuration details.

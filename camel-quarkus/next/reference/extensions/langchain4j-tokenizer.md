@@ -6,7 +6,7 @@ LangChain4j Tokenizer
 
 ## What’s inside
 
--   [LangChain4j Tokenizer](../../../../components/4.18.x/others/langchain4j-tokenizer.md)
+-   [LangChain4j Tokenizer](../../../../components/next/others/langchain4j-tokenizer.md)
     
 
 Please refer to the above link for usage and configuration details.

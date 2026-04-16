@@ -6,7 +6,7 @@ Camel support for the CloudEvents specification
 
 ## What’s inside
 
--   [Cloudevents](../../../../components/4.18.x/others/cloudevents.md)
+-   [Cloudevents](../../../../components/next/others/cloudevents.md)
     
 
 Please refer to the above link for usage and configuration details.

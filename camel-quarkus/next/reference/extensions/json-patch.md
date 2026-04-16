@@ -6,7 +6,7 @@ JsonPatch component which transform JSON using JSON patch (RFC 6902).
 
 ## What’s inside
 
--   [JsonPatch component](../../../../components/4.18.x/json-patch-component.md), URI syntax: `json-patch:resourceUri`
+-   [JsonPatch component](../../../../components/next/json-patch-component.md), URI syntax: `json-patch:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

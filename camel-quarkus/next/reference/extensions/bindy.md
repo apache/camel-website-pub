@@ -6,11 +6,11 @@ Marshal and unmarshal between POJOs on one side and Comma separated values (CSV)
 
 ## What’s inside
 
--   [Bindy CSV data format](../../../../components/4.18.x/dataformats/bindy-dataformat.md)
+-   [Bindy CSV data format](../../../../components/next/dataformats/bindy-dataformat.md)
     
--   [Bindy Fixed Length data format](../../../../components/4.18.x/dataformats/bindy-dataformat.md)
+-   [Bindy Fixed Length data format](../../../../components/next/dataformats/bindy-dataformat.md)
     
--   [Bindy Key Value Pair data format](../../../../components/4.18.x/dataformats/bindy-dataformat.md)
+-   [Bindy Key Value Pair data format](../../../../components/next/dataformats/bindy-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

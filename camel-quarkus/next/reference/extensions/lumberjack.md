@@ -6,7 +6,7 @@ Receive logs messages using the Lumberjack protocol.
 
 ## What’s inside
 
--   [Lumberjack component](../../../../components/4.18.x/lumberjack-component.md), URI syntax: `lumberjack:host:port`
+-   [Lumberjack component](../../../../components/next/lumberjack-component.md), URI syntax: `lumberjack:host:port`
     
 
 Please refer to the above link for usage and configuration details.

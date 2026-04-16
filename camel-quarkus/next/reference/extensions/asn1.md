@@ -6,7 +6,7 @@ Encode and decode data structures using Abstract Syntax Notation One (ASN.1).
 
 ## What’s inside
 
--   [ASN.1 File data format](../../../../components/4.18.x/dataformats/asn1-dataformat.md)
+-   [ASN.1 File data format](../../../../components/next/dataformats/asn1-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

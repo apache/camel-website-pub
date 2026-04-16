@@ -6,7 +6,7 @@ OpenAI endpoint for chat completion.
 
 ## What’s inside
 
--   [OpenAI component](../../../../components/4.18.x/openai-component.md), URI syntax: `openai:operation`
+-   [OpenAI component](../../../../components/next/openai-component.md), URI syntax: `openai:operation`
     
 
 Please refer to the above link for usage and configuration details.

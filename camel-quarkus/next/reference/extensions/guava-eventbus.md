@@ -6,7 +6,7 @@ Send and receive messages to/from Guava EventBus.
 
 ## What’s inside
 
--   [Guava EventBus component](../../../../components/4.18.x/guava-eventbus-component.md), URI syntax: `guava-eventbus:eventBusRef`
+-   [Guava EventBus component](../../../../components/next/guava-eventbus-component.md), URI syntax: `guava-eventbus:eventBusRef`
     
 
 Please refer to the above link for usage and configuration details.

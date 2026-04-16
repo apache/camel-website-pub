@@ -6,7 +6,7 @@ Perform queries against an Apache Drill cluster.
 
 ## What’s inside
 
--   [Drill component](../../../../components/4.18.x/drill-component.md), URI syntax: `drill:host`
+-   [Drill component](../../../../components/next/drill-component.md), URI syntax: `drill:host`
     
 
 Please refer to the above link for usage and configuration details.

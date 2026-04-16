@@ -6,7 +6,7 @@ ThreadPoolFactory for camel-core using Vert.x
 
 ## What’s inside
 
--   [ThreadPoolFactory Vert.x](../../../../components/4.18.x/others/threadpoolfactory-vertx.md)
+-   [ThreadPoolFactory Vert.x](../../../../components/next/others/threadpoolfactory-vertx.md)
     
 
 Please refer to the above link for usage and configuration details.

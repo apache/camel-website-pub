@@ -6,7 +6,7 @@ Perform operations on the Milvus Vector Database.
 
 ## What’s inside
 
--   [Milvus component](../../../../components/4.18.x/milvus-component.md), URI syntax: `milvus:collection`
+-   [Milvus component](../../../../components/next/milvus-component.md), URI syntax: `milvus:collection`
     
 
 Please refer to the above link for usage and configuration details.

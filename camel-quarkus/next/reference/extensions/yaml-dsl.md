@@ -6,7 +6,7 @@ An YAML stack for parsing YAML route definitions
 
 ## What’s inside
 
--   [YAML DSL](../../../../components/4.18.x/others/yaml-dsl.md)
+-   [YAML DSL](../../../../components/next/others/yaml-dsl.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,21 +6,21 @@ Camel core functionality and basic Camel languages: Constant, ExchangeProperty, 
 
 ## What’s inside
 
--   [Constant language](../../../../components/4.18.x/languages/constant-language.md)
+-   [Constant language](../../../../components/next/languages/constant-language.md)
     
--   [ExchangeProperty language](../../../../components/4.18.x/languages/exchangeProperty-language.md)
+-   [ExchangeProperty language](../../../../components/next/languages/exchangeProperty-language.md)
     
--   [File language](../../../../components/4.18.x/languages/file-language.md)
+-   [File language](../../../../components/next/languages/file-language.md)
     
--   [Header language](../../../../components/4.18.x/languages/header-language.md)
+-   [Header language](../../../../components/next/languages/header-language.md)
     
--   [Ref language](../../../../components/4.18.x/languages/ref-language.md)
+-   [Ref language](../../../../components/next/languages/ref-language.md)
     
--   [Simple language](../../../../components/4.18.x/languages/simple-language.md)
+-   [Simple language](../../../../components/next/languages/simple-language.md)
     
--   [Tokenize language](../../../../components/4.18.x/languages/tokenize-language.md)
+-   [Tokenize language](../../../../components/next/languages/tokenize-language.md)
     
--   [Variable language](../../../../components/4.18.x/languages/variable-language.md)
+-   [Variable language](../../../../components/next/languages/variable-language.md)
     
 
 Please refer to the above links for usage and configuration details.
@@ -54,7 +54,7 @@ For instance, the simple expression below is accessing the `getAddress()` method
 simple("${body.address}")
 ```
 
-In such a situation, one should take an additional dependency on the camel-quarkus-bean extension [as described here](../../../../components/4.18.x/bean-component.md). Note that in native mode, some classes may need to be registered for reflection. In the example above, the `Client` class needs to be [registered for reflection](https://quarkus.io/guides/writing-native-applications-tips#registering-for-reflection).
+In such a situation, one should take an additional dependency on the camel-quarkus-bean extension [as described here](../../../../components/next/bean-component.md). Note that in native mode, some classes may need to be registered for reflection. In the example above, the `Client` class needs to be [registered for reflection](https://quarkus.io/guides/writing-native-applications-tips#registering-for-reflection).
 
 #### Using dynamic type resolution in native mode
 

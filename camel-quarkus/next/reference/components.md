@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 310 components (6 deprecated, 63 JVM only)
+There are 310 components (18 deprecated, 62 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -26,7 +26,7 @@ level | Description |
 | [AWS Elastic Compute Cloud (EC2)](extensions/aws2-ec2.md) | camel-quarkus-aws2-ec2 | 1.0.0 | 1.0.0 | Stable | Manage AWS EC2 instances. |
 | [AWS Elastic Container Service (ECS)](extensions/aws2-ecs.md) | camel-quarkus-aws2-ecs | 1.0.0 | 1.0.0 | Stable | Manage AWS ECS cluster instances. |
 | [AWS Elastic Kubernetes Service (EKS)](extensions/aws2-eks.md) | camel-quarkus-aws2-eks | 1.0.0 | 1.0.0 | Stable | Manage AWS EKS cluster instances. |
-| [AWS Eventbridge](extensions/aws2-eventbridge.md) | camel-quarkus-aws2-eventbridge | 1.4.0 | 1.7.0 | Stable | Send events to AWS Eventbridge cluster instances. |
+| [AWS Eventbridge](extensions/aws2-eventbridge.md) | camel-quarkus-aws2-eventbridge | 1.4.0 | 1.7.0 | Stable | Manage AWS EventBridge cluster instances and consume events via SQS-backed polling. |
 | [AWS Identity and Access Management (IAM)](extensions/aws2-iam.md) | camel-quarkus-aws2-iam | 1.0.0 | 1.0.0 | Stable | Manage AWS IAM instances. |
 | [AWS Kinesis Firehose](extensions/aws2-kinesis.md) | camel-quarkus-aws2-kinesis | 1.1.0 | 1.7.0 | Stable | Produce data to AWS Kinesis Firehose streams. |
 | [AWS Kinesis](extensions/aws2-kinesis.md) | camel-quarkus-aws2-kinesis | 1.1.0 | 1.7.0 | Stable | Consume and produce records from and to AWS Kinesis Streams. |
@@ -64,7 +64,7 @@ level | Description |
 | [CometD](extensions/cometd.md) | camel-quarkus-cometd | 1.1.0 | n/a | Preview | Offers publish/subscribe, peer-to-peer (via a server), and RPC style messaging using the CometD/Bayeux protocol. |
 | [Consul](extensions/consul.md) | camel-quarkus-consul | 1.0.0 | 1.0.0 | Stable | Integrate with Consul service discovery and configuration store. |
 | [Control Bus](extensions/controlbus.md) | camel-quarkus-controlbus | 0.4.0 | 0.4.0 | Stable | Manage and monitor Camel routes. |
-| [Couchbase](extensions/couchbase.md) | camel-quarkus-couchbase | 1.0.0 | n/a | Preview | Query Couchbase Views with a poll strategy and/or perform various operations against Couchbase databases. |
+| [Couchbase](extensions/couchbase.md) | camel-quarkus-couchbase | 1.0.0 | n/a | Preview | Query Couchbase databases using SQL (N1QL) queries or MapReduce Views with a poll strategy and/or perform various operations against Couchbase databases. |
 | [CouchDB](extensions/couchdb.md) | camel-quarkus-couchdb | 1.0.0 | 1.0.0 | Stable | Consume changesets for inserts, updates and deletes in a CouchDB database, as well as get, save, update and delete documents from a CouchDB database. |
 | [Cassandra CQL](extensions/cassandraql.md) | camel-quarkus-cassandraql | 1.0.0 | 1.7.0 | Stable | Integrate with Cassandra 2.0 using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
 | [Cron](extensions/cron.md) | camel-quarkus-cron | 1.0.0 | 1.0.0 | Stable | A generic interface for triggering events at times specified through the Unix cron syntax. |
@@ -126,6 +126,7 @@ level | Description |
 | [Hazelcast List](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed list. |
 | [Hazelcast Map](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed map. |
 | [Hazelcast Multimap](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed multimap. |
+| [Hazelcast PN Counter](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Increment, decrement, get, etc. operations on a Hazelcast PN Counter (CRDT counter). |
 | [Hazelcast Queue](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed queue. |
 | [Hazelcast Replicated Map](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast replicated map. |
 | [Hazelcast Ringbuffer](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed ringbuffer. |
@@ -221,7 +222,6 @@ level | Description |
 | [Nats](extensions/nats.md) | camel-quarkus-nats | 1.1.0 | 1.1.0 | Stable | Send and receive messages from NATS messaging system. |
 | [Netty HTTP](extensions/netty-http.md) | camel-quarkus-netty-http | 0.2.0 | 0.2.0 | Stable | Netty HTTP server and client using the Netty 4.x. |
 | [Netty](extensions/netty.md) | camel-quarkus-netty | 0.4.0 | 0.4.0 | Stable | Socket level networking using TCP or UDP with Netty 4.x. |
-| [Nitrite](extensions/nitrite.md) | camel-quarkus-nitrite | 1.0.0 | 1.8.0 | Stable | Access Nitrite databases. |
 | [OAI-PMH](extensions/oaipmh.md) | camel-quarkus-oaipmh | 1.7.0 | 1.7.0 | Stable | Harvest metadata using OAI-PMH protocol |
 | [Olingo4](extensions/olingo4.md) | camel-quarkus-olingo4 | 1.0.0 | 1.0.0 | Stable | Communicate with OData 4.0 services using Apache Olingo OData API. |
 | [Once](extensions/once.md) | camel-quarkus-once | 3.31.0 | 3.31.0 | Stable | Trigger a single message only once at startup (useful for development and testing purposes). |
@@ -244,7 +244,7 @@ level | Description |
 | [PostgresSQL Event](extensions/pgevent.md) | camel-quarkus-pgevent | 1.1.0 | 1.2.0 | Stable | Send and receive PostgreSQL events via LISTEN and NOTIFY commands. |
 | [Pinecone](extensions/pinecone.md) | camel-quarkus-pinecone | 3.12.0 | 3.12.0 | Stable | Perform operations on the Pinecone Vector Database. |
 | [Platform HTTP](extensions/platform-http.md) | camel-quarkus-platform-http | 0.3.0 | 0.3.0 | Stable | Expose HTTP endpoints using the HTTP server available in the current platform. |
-| [PQC Algorithms](extensions/pqc.md) | camel-quarkus-pqc | 3.24.0 | n/a | Preview | Post Quantum Cryptography Signature and Verification component. |
+| [PQC Algorithms](extensions/pqc.md) | camel-quarkus-pqc | 3.24.0 | 3.35.0 | Stable | Post Quantum Cryptography Signature and Verification component. |
 | [PubNub](extensions/pubnub.md) | camel-quarkus-pubnub | 1.0.0 | 1.7.0 | Stable | Send and receive messages to/from PubNub data stream network for connected devices. |
 | [Pulsar](extensions/pulsar.md) | camel-quarkus-pulsar | 1.1.0 | n/a | Preview | Send and receive messages from/to Apache Pulsar messaging system. |
 | [Qdrant](extensions/qdrant.md) | camel-quarkus-qdrant | 3.10.0 | 3.10.0 | Stable | Perform operations on the Qdrant Vector Database. |
@@ -253,7 +253,7 @@ level | Description |
 | [Reactive Streams](extensions/reactive-streams.md) | camel-quarkus-reactive-streams | 1.0.0 | 1.0.0 | Stable | Exchange messages with reactive stream processing libraries compatible with the reactive streams standard. |
 | [Ref](extensions/ref.md) | camel-quarkus-ref | 1.0.0 | 1.0.0 | Stable | Route messages to an endpoint looked up dynamically by name in the Camel Registry. |
 | [REST API](extensions/rest.md) | camel-quarkus-rest | 0.0.1 | 0.0.1 | Stable | Expose OpenAPI Specification of the REST services defined using Camel REST DSL. |
-| [REST OpenApi](extensions/rest-openapi.md) | camel-quarkus-rest-openapi | 1.0.0 | 1.0.0 | Stable | To call REST services using OpenAPI specification as contract. |
+| [REST OpenApi](extensions/rest-openapi.md) | camel-quarkus-rest-openapi | 1.0.0 | 1.0.0 | Stable | To call and expose REST services using OpenAPI specification as contract. |
 | [REST](extensions/rest.md) | camel-quarkus-rest | 0.0.1 | 0.0.1 | Stable | Expose REST services or call external REST services. |
 | [Robot Framework](extensions/robotframework.md) | camel-quarkus-robotframework | 1.1.0 | n/a | Preview | Pass camel exchanges to acceptance test written in Robot DSL. |
 | [RSS](extensions/rss.md) | camel-quarkus-rss | 1.1.0 | 1.2.0 | Stable | Poll RSS feeds. |

@@ -6,45 +6,45 @@ Perform operations against Kubernetes API
 
 ## What’s inside
 
--   [Kubernetes ConfigMap component](../../../../components/4.18.x/kubernetes-config-maps-component.md), URI syntax: `kubernetes-config-maps:masterUrl`
+-   [Kubernetes ConfigMap component](../../../../components/next/kubernetes-config-maps-component.md), URI syntax: `kubernetes-config-maps:masterUrl`
     
--   [Kubernetes Cronjob component](../../../../components/4.18.x/kubernetes-cronjob-component.md), URI syntax: `kubernetes-cronjob:masterUrl`
+-   [Kubernetes Cronjob component](../../../../components/next/kubernetes-cronjob-component.md), URI syntax: `kubernetes-cronjob:masterUrl`
     
--   [Kubernetes Custom Resources component](../../../../components/4.18.x/kubernetes-custom-resources-component.md), URI syntax: `kubernetes-custom-resources:masterUrl`
+-   [Kubernetes Custom Resources component](../../../../components/next/kubernetes-custom-resources-component.md), URI syntax: `kubernetes-custom-resources:masterUrl`
     
--   [Kubernetes Deployments component](../../../../components/4.18.x/kubernetes-deployments-component.md), URI syntax: `kubernetes-deployments:masterUrl`
+-   [Kubernetes Deployments component](../../../../components/next/kubernetes-deployments-component.md), URI syntax: `kubernetes-deployments:masterUrl`
     
--   [Kubernetes Event component](../../../../components/4.18.x/kubernetes-events-component.md), URI syntax: `kubernetes-events:masterUrl`
+-   [Kubernetes Event component](../../../../components/next/kubernetes-events-component.md), URI syntax: `kubernetes-events:masterUrl`
     
--   [Kubernetes HPA component](../../../../components/4.18.x/kubernetes-hpa-component.md), URI syntax: `kubernetes-hpa:masterUrl`
+-   [Kubernetes HPA component](../../../../components/next/kubernetes-hpa-component.md), URI syntax: `kubernetes-hpa:masterUrl`
     
--   [Kubernetes Job component](../../../../components/4.18.x/kubernetes-job-component.md), URI syntax: `kubernetes-job:masterUrl`
+-   [Kubernetes Job component](../../../../components/next/kubernetes-job-component.md), URI syntax: `kubernetes-job:masterUrl`
     
--   [Kubernetes Namespaces component](../../../../components/4.18.x/kubernetes-namespaces-component.md), URI syntax: `kubernetes-namespaces:masterUrl`
+-   [Kubernetes Namespaces component](../../../../components/next/kubernetes-namespaces-component.md), URI syntax: `kubernetes-namespaces:masterUrl`
     
--   [Kubernetes Nodes component](../../../../components/4.18.x/kubernetes-nodes-component.md), URI syntax: `kubernetes-nodes:masterUrl`
+-   [Kubernetes Nodes component](../../../../components/next/kubernetes-nodes-component.md), URI syntax: `kubernetes-nodes:masterUrl`
     
--   [Kubernetes Persistent Volume component](../../../../components/4.18.x/kubernetes-persistent-volumes-component.md), URI syntax: `kubernetes-persistent-volumes:masterUrl`
+-   [Kubernetes Persistent Volume component](../../../../components/next/kubernetes-persistent-volumes-component.md), URI syntax: `kubernetes-persistent-volumes:masterUrl`
     
--   [Kubernetes Persistent Volume Claim component](../../../../components/4.18.x/kubernetes-persistent-volumes-claims-component.md), URI syntax: `kubernetes-persistent-volumes-claims:masterUrl`
+-   [Kubernetes Persistent Volume Claim component](../../../../components/next/kubernetes-persistent-volumes-claims-component.md), URI syntax: `kubernetes-persistent-volumes-claims:masterUrl`
     
--   [Kubernetes Pods component](../../../../components/4.18.x/kubernetes-pods-component.md), URI syntax: `kubernetes-pods:masterUrl`
+-   [Kubernetes Pods component](../../../../components/next/kubernetes-pods-component.md), URI syntax: `kubernetes-pods:masterUrl`
     
--   [Kubernetes Replication Controller component](../../../../components/4.18.x/kubernetes-replication-controllers-component.md), URI syntax: `kubernetes-replication-controllers:masterUrl`
+-   [Kubernetes Replication Controller component](../../../../components/next/kubernetes-replication-controllers-component.md), URI syntax: `kubernetes-replication-controllers:masterUrl`
     
--   [Kubernetes Resources Quota component](../../../../components/4.18.x/kubernetes-resources-quota-component.md), URI syntax: `kubernetes-resources-quota:masterUrl`
+-   [Kubernetes Resources Quota component](../../../../components/next/kubernetes-resources-quota-component.md), URI syntax: `kubernetes-resources-quota:masterUrl`
     
--   [Kubernetes Secrets component](../../../../components/4.18.x/kubernetes-secrets-component.md), URI syntax: `kubernetes-secrets:masterUrl`
+-   [Kubernetes Secrets component](../../../../components/next/kubernetes-secrets-component.md), URI syntax: `kubernetes-secrets:masterUrl`
     
--   [Kubernetes Service Account component](../../../../components/4.18.x/kubernetes-service-accounts-component.md), URI syntax: `kubernetes-service-accounts:masterUrl`
+-   [Kubernetes Service Account component](../../../../components/next/kubernetes-service-accounts-component.md), URI syntax: `kubernetes-service-accounts:masterUrl`
     
--   [Kubernetes Services component](../../../../components/4.18.x/kubernetes-services-component.md), URI syntax: `kubernetes-services:masterUrl`
+-   [Kubernetes Services component](../../../../components/next/kubernetes-services-component.md), URI syntax: `kubernetes-services:masterUrl`
     
--   [OpenShift Build Config component](../../../../components/4.18.x/openshift-build-configs-component.md), URI syntax: `openshift-build-configs:masterUrl`
+-   [OpenShift Build Config component](../../../../components/next/openshift-build-configs-component.md), URI syntax: `openshift-build-configs:masterUrl`
     
--   [OpenShift Builds component](../../../../components/4.18.x/openshift-builds-component.md), URI syntax: `openshift-builds:masterUrl`
+-   [OpenShift Builds component](../../../../components/next/openshift-builds-component.md), URI syntax: `openshift-builds:masterUrl`
     
--   [OpenShift Deployment Configs component](../../../../components/4.18.x/openshift-deploymentconfigs-component.md), URI syntax: `openshift-deploymentconfigs:masterUrl`
+-   [OpenShift Deployment Configs component](../../../../components/next/openshift-deploymentconfigs-component.md), URI syntax: `openshift-deploymentconfigs:masterUrl`
     
 
 Please refer to the above links for usage and configuration details.

@@ -6,7 +6,7 @@ Send and receive messages to/from an Apache Kafka broker.
 
 ## What’s inside
 
--   [Kafka component](../../../../components/4.18.x/kafka-component.md), URI syntax: `kafka:topic`
+-   [Kafka component](../../../../components/next/kafka-component.md), URI syntax: `kafka:topic`
     
 
 Please refer to the above link for usage and configuration details.

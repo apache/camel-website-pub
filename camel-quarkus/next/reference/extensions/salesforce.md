@@ -6,7 +6,7 @@ Communicate with Salesforce using Java DTOs.
 
 ## What’s inside
 
--   [Salesforce component](../../../../components/4.18.x/salesforce-component.md), URI syntax: `salesforce:operationName:topicName`
+-   [Salesforce component](../../../../components/next/salesforce-component.md), URI syntax: `salesforce:operationName:topicName`
     
 
 Please refer to the above link for usage and configuration details.
@@ -36,7 +36,7 @@ To generate Salesforce DTOs for your project, use the `salesforce-maven-plugin`.
 <plugin>
     <groupId>org.apache.camel.maven</groupId>
     <artifactId>camel-salesforce-maven-plugin</artifactId>
-    <version>4.18.1</version>
+    <version>4.19.0</version>
     <executions>
         <execution>
             <goals>

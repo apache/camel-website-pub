@@ -6,7 +6,7 @@ Read and write files.
 
 ## What’s inside
 
--   [File component](../../../../components/4.18.x/file-component.md), URI syntax: `file:directoryName`
+-   [File component](../../../../components/next/file-component.md), URI syntax: `file:directoryName`
     
 
 Please refer to the above link for usage and configuration details.

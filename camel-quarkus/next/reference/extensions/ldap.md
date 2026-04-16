@@ -6,7 +6,7 @@ Perform searches on LDAP servers.
 
 ## What’s inside
 
--   [LDAP component](../../../../components/4.18.x/ldap-component.md), URI syntax: `ldap:dirContextName`
+-   [LDAP component](../../../../components/next/ldap-component.md), URI syntax: `ldap:dirContextName`
     
 
 Please refer to the above link for usage and configuration details.
@@ -66,7 +66,7 @@ quarkus.camel.ldap.dir-contexts."your_context".socket-factory=org.apache.camel.q
 
 ### Using SSL in Native Mode
 
-When using a custom `SSLSocketFactory` in native mode, such as the one in the [Configuring SSL](../../../../components/4.18.x/ldap-component.html#_configuring_ssl) section, you need to register the class for reflection otherwise the class will not be made available on the classpath. Add the `@RegisterForReflection` annotation above the class definition, as follows:
+When using a custom `SSLSocketFactory` in native mode, such as the one in the [Configuring SSL](../../../../components/next/ldap-component.html#_configuring_ssl) section, you need to register the class for reflection otherwise the class will not be made available on the classpath. Add the `@RegisterForReflection` annotation above the class definition, as follows:
 
 ```java
 @RegisterForReflection

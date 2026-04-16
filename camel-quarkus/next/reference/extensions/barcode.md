@@ -6,7 +6,7 @@ Transform strings to various 1D/2D barcode bitmap formats and back.
 
 ## What’s inside
 
--   [Barcode data format](../../../../components/4.18.x/dataformats/barcode-dataformat.md)
+-   [Barcode data format](../../../../components/next/dataformats/barcode-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

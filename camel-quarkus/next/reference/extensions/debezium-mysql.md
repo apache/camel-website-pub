@@ -6,7 +6,7 @@ Capture changes from a MySQL database.
 
 ## What’s inside
 
--   [Debezium MySQL Connector component](../../../../components/4.18.x/debezium-mysql-component.md), URI syntax: `debezium-mysql:name`
+-   [Debezium MySQL Connector component](../../../../components/next/debezium-mysql-component.md), URI syntax: `debezium-mysql:name`
     
 
 Please refer to the above link for usage and configuration details.

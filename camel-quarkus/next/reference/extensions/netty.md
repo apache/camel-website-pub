@@ -6,7 +6,7 @@ Socket level networking using TCP or UDP with Netty 4.x.
 
 ## What’s inside
 
--   [Netty component](../../../../components/4.18.x/netty-component.md), URI syntax: `netty:protocol://host:port`
+-   [Netty component](../../../../components/next/netty-component.md), URI syntax: `netty:protocol://host:port`
     
 
 Please refer to the above link for usage and configuration details.

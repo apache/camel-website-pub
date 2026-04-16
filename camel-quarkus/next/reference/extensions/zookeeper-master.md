@@ -6,7 +6,7 @@ Have only a single consumer in a cluster consuming from a given endpoint; with a
 
 ## What’s inside
 
--   [ZooKeeper Master component](../../../../components/4.18.x/zookeeper-master-component.md), URI syntax: `zookeeper-master:groupName:consumerEndpointUri`
+-   [ZooKeeper Master component](../../../../components/next/zookeeper-master-component.md), URI syntax: `zookeeper-master:groupName:consumerEndpointUri`
     
 
 Please refer to the above link for usage and configuration details.

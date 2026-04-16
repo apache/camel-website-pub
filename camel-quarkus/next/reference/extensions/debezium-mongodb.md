@@ -6,7 +6,7 @@ Capture changes from a MongoDB database.
 
 ## What’s inside
 
--   [Debezium MongoDB Connector component](../../../../components/4.18.x/debezium-mongodb-component.md), URI syntax: `debezium-mongodb:name`
+-   [Debezium MongoDB Connector component](../../../../components/next/debezium-mongodb-component.md), URI syntax: `debezium-mongodb:name`
     
 
 Please refer to the above link for usage and configuration details.

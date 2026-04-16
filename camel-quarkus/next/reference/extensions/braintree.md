@@ -6,7 +6,7 @@ Process payments using Braintree Payments.
 
 ## What’s inside
 
--   [Braintree component](../../../../components/4.18.x/braintree-component.md), URI syntax: `braintree:apiName/methodName`
+-   [Braintree component](../../../../components/next/braintree-component.md), URI syntax: `braintree:apiName/methodName`
     
 
 Please refer to the above link for usage and configuration details.

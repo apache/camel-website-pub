@@ -6,7 +6,7 @@ A generic interface for triggering events at times specified through the Unix cr
 
 ## What’s inside
 
--   [Cron component](../../../../components/4.18.x/cron-component.md), URI syntax: `cron:name`
+-   [Cron component](../../../../components/next/cron-component.md), URI syntax: `cron:name`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Store and retrieve Java objects from databases using Java Persistence API (JPA).
 
 ## What’s inside
 
--   [JPA component](../../../../components/4.18.x/jpa-component.md), URI syntax: `jpa:entityType`
+-   [JPA component](../../../../components/next/jpa-component.md), URI syntax: `jpa:entityType`
     
 
 Please refer to the above link for usage and configuration details.

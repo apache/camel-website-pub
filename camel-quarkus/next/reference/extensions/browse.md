@@ -6,7 +6,7 @@ Inspect the messages received on endpoints supporting BrowsableEndpoint.
 
 ## What’s inside
 
--   [Browse component](../../../../components/4.18.x/browse-component.md), URI syntax: `browse:name`
+-   [Browse component](../../../../components/next/browse-component.md), URI syntax: `browse:name`
     
 
 Please refer to the above link for usage and configuration details.

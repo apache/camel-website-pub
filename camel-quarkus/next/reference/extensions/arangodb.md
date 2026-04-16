@@ -6,7 +6,7 @@ Perform operations on ArangoDb documents, collections and graphs.
 
 ## What’s inside
 
--   [ArangoDb component](../../../../components/4.18.x/arangodb-component.md), URI syntax: `arangodb:database`
+-   [ArangoDb component](../../../../components/next/arangodb-component.md), URI syntax: `arangodb:database`
     
 
 Please refer to the above link for usage and configuration details.

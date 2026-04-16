@@ -6,7 +6,7 @@ Serialize and deserialize Java objects using Google’s Protocol buffers.
 
 ## What’s inside
 
--   [Protobuf data format](../../../../components/4.18.x/dataformats/protobuf-dataformat.md)
+-   [Protobuf data format](../../../../components/next/dataformats/protobuf-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Perform operations on MongoDB documents and collections.
 
 ## What’s inside
 
--   [MongoDB component](../../../../components/4.18.x/mongodb-component.md), URI syntax: `mongodb:connectionBean`
+-   [MongoDB component](../../../../components/next/mongodb-component.md), URI syntax: `mongodb:connectionBean`
     
 
 Please refer to the above link for usage and configuration details.

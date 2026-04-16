@@ -6,7 +6,7 @@ LangChain4j Web Search Engine
 
 ## What’s inside
 
--   [LangChain4j Web Search component](../../../../components/4.18.x/langchain4j-web-search-component.md), URI syntax: `langchain4j-web-search:searchId`
+-   [LangChain4j Web Search component](../../../../components/next/langchain4j-web-search-component.md), URI syntax: `langchain4j-web-search:searchId`
     
 
 Please refer to the above link for usage and configuration details.

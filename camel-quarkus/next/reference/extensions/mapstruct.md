@@ -6,7 +6,7 @@ Type Conversion using Mapstruct
 
 ## What’s inside
 
--   [MapStruct component](../../../../components/4.18.x/mapstruct-component.md), URI syntax: `mapstruct:className`
+-   [MapStruct component](../../../../components/next/mapstruct-component.md), URI syntax: `mapstruct:className`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Send requests to SAP NetWeaver Gateway using HTTP.
 
 ## What’s inside
 
--   [SAP NetWeaver component](../../../../components/4.18.x/sap-netweaver-component.md), URI syntax: `sap-netweaver:url`
+-   [SAP NetWeaver component](../../../../components/next/sap-netweaver-component.md), URI syntax: `sap-netweaver:url`
     
 
 Please refer to the above link for usage and configuration details.

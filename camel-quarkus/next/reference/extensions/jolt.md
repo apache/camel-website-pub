@@ -6,7 +6,7 @@ JSON to JSON transformation using JOLT.
 
 ## What’s inside
 
--   [JOLT component](../../../../components/4.18.x/jolt-component.md), URI syntax: `jolt:resourceUri`
+-   [JOLT component](../../../../components/next/jolt-component.md), URI syntax: `jolt:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

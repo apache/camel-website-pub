@@ -2,11 +2,11 @@
 
 JVM since1.0.0 Nativeunsupported
 
-Query Couchbase Views with a poll strategy and/or perform various operations against Couchbase databases.
+Query Couchbase databases using SQL (N1QL) queries or MapReduce Views with a poll strategy and/or perform various operations against Couchbase databases.
 
 ## What’s inside
 
--   [Couchbase component](../../../../components/4.18.x/couchbase-component.md), URI syntax: `couchbase:protocol://hostname:port`
+-   [Couchbase component](../../../../components/next/couchbase-component.md), URI syntax: `couchbase:protocol://hostname:port`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Test routes and mediation rules using mocks.
 
 ## What’s inside
 
--   [Mock component](../../../../components/4.18.x/mock-component.md), URI syntax: `mock:name`
+-   [Mock component](../../../../components/next/mock-component.md), URI syntax: `mock:name`
     
 
 Please refer to the above link for usage and configuration details.

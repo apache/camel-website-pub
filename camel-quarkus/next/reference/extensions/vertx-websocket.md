@@ -8,7 +8,7 @@ It is built on top of the Eclipse Vert.x HTTP server provided by the `quarkus-ve
 
 ## What’s inside
 
--   [Vert.x WebSocket component](../../../../components/4.18.x/vertx-websocket-component.md), URI syntax: `vertx-websocket:host:port/path`
+-   [Vert.x WebSocket component](../../../../components/next/vertx-websocket-component.md), URI syntax: `vertx-websocket:host:port/path`
     
 
 Please refer to the above link for usage and configuration details.

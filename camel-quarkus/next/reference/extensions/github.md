@@ -6,7 +6,7 @@ Interact with the GitHub API.
 
 ## What’s inside
 
--   [GitHub component](../../../../components/4.18.x/github-component.md), URI syntax: `github:type/branchName`
+-   [GitHub component](../../../../components/next/github-component.md), URI syntax: `github:type/branchName`
     
 
 Please refer to the above link for usage and configuration details.

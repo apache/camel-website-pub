@@ -6,7 +6,7 @@ Messaging with AMQP protocol using Apache QPid Client.
 
 ## What’s inside
 
--   [AMQP component](../../../../components/4.18.x/amqp-component.md), URI syntax: `amqp:destinationType:destinationName`
+-   [AMQP component](../../../../components/next/amqp-component.md), URI syntax: `amqp:destinationType:destinationName`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Send and receive messages to/from Slack.
 
 ## What’s inside
 
--   [Slack component](../../../../components/4.18.x/slack-component.md), URI syntax: `slack:channel`
+-   [Slack component](../../../../components/next/slack-component.md), URI syntax: `slack:channel`
     
 
 Please refer to the above link for usage and configuration details.

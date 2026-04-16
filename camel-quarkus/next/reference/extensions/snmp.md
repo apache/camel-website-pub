@@ -6,7 +6,7 @@ Receive traps and poll SNMP (Simple Network Management Protocol) capable devices
 
 ## What’s inside
 
--   [SNMP component](../../../../components/4.18.x/snmp-component.md), URI syntax: `snmp:host:port`
+-   [SNMP component](../../../../components/next/snmp-component.md), URI syntax: `snmp:host:port`
     
 
 Please refer to the above link for usage and configuration details.

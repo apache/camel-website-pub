@@ -6,7 +6,7 @@ Perform caching operations against JSR107/JCache.
 
 ## What’s inside
 
--   [JCache component](../../../../components/4.18.x/jcache-component.md), URI syntax: `jcache:cacheName`
+-   [JCache component](../../../../components/next/jcache-component.md), URI syntax: `jcache:cacheName`
     
 
 Please refer to the above link for usage and configuration details.

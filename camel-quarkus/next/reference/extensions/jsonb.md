@@ -6,7 +6,7 @@ Marshal POJOs to JSON and back using JSON-B.
 
 ## What’s inside
 
--   [JSON JSON-B data format](../../../../components/4.18.x/dataformats/jsonb-dataformat.md)
+-   [JSON JSON-B data format](../../../../components/next/dataformats/jsonb-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

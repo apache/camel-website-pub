@@ -6,7 +6,7 @@ Remote CLI debugger
 
 ## What’s inside
 
--   [CLI Debug](../../../../components/4.18.x/others/cli-debug.md)
+-   [CLI Debug](../../../../components/next/others/cli-debug.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Evaluate a JSONPath expression against a JSON message body
 
 ## What’s inside
 
--   [JSONPath language](../../../../components/4.18.x/languages/jsonpath-language.md)
+-   [JSONPath language](../../../../components/next/languages/jsonpath-language.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Stitch is a cloud ETL service that integrates various data sources into a centra
 
 ## What’s inside
 
--   [Stitch component](../../../../components/4.18.x/stitch-component.md), URI syntax: `stitch:tableName`
+-   [Stitch component](../../../../components/next/stitch-component.md), URI syntax: `stitch:tableName`
     
 
 Please refer to the above link for usage and configuration details.

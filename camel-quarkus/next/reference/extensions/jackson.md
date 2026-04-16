@@ -6,7 +6,7 @@ Marshal POJOs to JSON and back using Jackson
 
 ## What’s inside
 
--   [JSON Jackson data format](../../../../components/4.18.x/dataformats/jackson-dataformat.md)
+-   [JSON Jackson data format](../../../../components/next/dataformats/jackson-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

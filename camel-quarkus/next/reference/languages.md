@@ -1,6 +1,6 @@
 # Camel languages supported on Quarkus
 
-There are 25 languages (3 deprecated, 3 JVM only)
+There are 25 languages (4 deprecated, 3 JVM only)
 
      
 | Language | Artifact | JVM  

@@ -6,7 +6,7 @@ Manage Droplets and resources within the DigitalOcean cloud.
 
 ## What’s inside
 
--   [DigitalOcean component](../../../../components/4.18.x/digitalocean-component.md), URI syntax: `digitalocean:operation`
+-   [DigitalOcean component](../../../../components/next/digitalocean-component.md), URI syntax: `digitalocean:operation`
     
 
 Please refer to the above link for usage and configuration details.

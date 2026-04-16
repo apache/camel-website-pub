@@ -6,7 +6,7 @@ Transform messages using FreeMarker templates.
 
 ## What’s inside
 
--   [Freemarker component](../../../../components/4.18.x/freemarker-component.md), URI syntax: `freemarker:resourceUri`
+-   [Freemarker component](../../../../components/next/freemarker-component.md), URI syntax: `freemarker:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

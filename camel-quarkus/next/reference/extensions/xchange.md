@@ -6,7 +6,7 @@ Access market data and trade on Bitcoin and Altcoin exchanges.
 
 ## What’s inside
 
--   [XChange component](../../../../components/4.18.x/xchange-component.md), URI syntax: `xchange:name`
+-   [XChange component](../../../../components/next/xchange-component.md), URI syntax: `xchange:name`
     
 
 Please refer to the above link for usage and configuration details.

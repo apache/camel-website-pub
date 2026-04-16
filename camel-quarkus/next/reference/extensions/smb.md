@@ -6,7 +6,7 @@ SMB component which consumes natively from file shares using the Server Message 
 
 ## What’s inside
 
--   [SMB component](../../../../components/4.18.x/smb-component.md), URI syntax: `smb:hostname:port/shareName/path`
+-   [SMB component](../../../../components/next/smb-component.md), URI syntax: `smb:hostname:port/shareName/path`
     
 
 Please refer to the above link for usage and configuration details.

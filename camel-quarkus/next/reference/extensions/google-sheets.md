@@ -6,9 +6,9 @@ Manage spreadsheets in Google Sheets. Poll for changes in Google Sheets.
 
 ## What’s inside
 
--   [Google Sheets component](../../../../components/4.18.x/google-sheets-component.md), URI syntax: `google-sheets:apiName/methodName`
+-   [Google Sheets component](../../../../components/next/google-sheets-component.md), URI syntax: `google-sheets:apiName/methodName`
     
--   [Google Sheets Stream component](../../../../components/4.18.x/google-sheets-stream-component.md), URI syntax: `google-sheets-stream:spreadsheetId`
+-   [Google Sheets Stream component](../../../../components/next/google-sheets-stream-component.md), URI syntax: `google-sheets-stream:spreadsheetId`
     
 
 Please refer to the above links for usage and configuration details.

@@ -6,7 +6,7 @@ Execute scripts in any of the languages supported by Camel.
 
 ## What’s inside
 
--   [Language component](../../../../components/4.18.x/language-component.md), URI syntax: `language:languageName:resourceUri`
+-   [Language component](../../../../components/next/language-component.md), URI syntax: `language:languageName:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Send requests to OpenSearch via Java Client API.
 
 ## What’s inside
 
--   [OpenSearch component](../../../../components/4.18.x/opensearch-component.md), URI syntax: `opensearch:clusterName`
+-   [OpenSearch component](../../../../components/next/opensearch-component.md), URI syntax: `opensearch:clusterName`
     
 
 Please refer to the above link for usage and configuration details.

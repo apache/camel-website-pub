@@ -6,9 +6,9 @@ Compress and decompress streams using java.util.zip.Deflater, java.util.zip.Infl
 
 ## What’s inside
 
--   [GZip Deflater data format](../../../../components/4.18.x/dataformats/gzipDeflater-dataformat.md)
+-   [GZip Deflater data format](../../../../components/next/dataformats/gzipDeflater-dataformat.md)
     
--   [Zip Deflater data format](../../../../components/4.18.x/dataformats/zipDeflater-dataformat.md)
+-   [Zip Deflater data format](../../../../components/next/dataformats/zipDeflater-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

@@ -6,7 +6,7 @@ Camel Azure Datalake Gen2 Component
 
 ## What’s inside
 
--   [Azure Storage Data Lake Service component](../../../../components/4.18.x/azure-storage-datalake-component.md), URI syntax: `azure-storage-datalake:accountName/fileSystemName`
+-   [Azure Storage Data Lake Service component](../../../../components/next/azure-storage-datalake-component.md), URI syntax: `azure-storage-datalake:accountName/fileSystemName`
     
 
 Please refer to the above link for usage and configuration details.

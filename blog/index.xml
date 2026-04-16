@@ -9,6 +9,13 @@
     <lastBuildDate>Thu, 16 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Apache Camel AI: Building an Email Triage Agent with OpenAI, Gmail Transformers, and Camel JBang</title>
+      <link>https://camel.apache.org/blog/2026/04/email-triage-agent/</link>
+      <pubDate>Thu, 16 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/email-triage-agent/</guid>
+      <description>Recent Camel releases introduced several features that work well together for AI-powered integrations: the camel-openai component (4.17), the SimpleFunction interface, chain operator, and structured output with JSON Schema (4.18), and Gmail DataType Transformers (4.19).&#xA;To show how these pieces fit, I built an email triage agent that classifies Gmail messages using an LLM, moves them to labels, and drafts smart replies. The whole thing runs with Camel JBang. No Maven project, no framework setup.</description>
+    </item>
+    <item>
       <title>RELEASE 4.19.0</title>
       <link>https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/</link>
       <pubDate>Thu, 16 Apr 2026 00:00:00 +0000</pubDate>

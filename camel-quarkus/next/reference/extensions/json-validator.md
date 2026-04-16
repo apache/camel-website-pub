@@ -6,7 +6,7 @@ Validate JSON payloads using NetworkNT JSON Schema.
 
 ## What’s inside
 
--   [JSON Schema Validator component](../../../../components/4.18.x/json-validator-component.md), URI syntax: `json-validator:resourceUri`
+-   [JSON Schema Validator component](../../../../components/next/json-validator-component.md), URI syntax: `json-validator:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

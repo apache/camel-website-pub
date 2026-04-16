@@ -6,9 +6,9 @@ Sign and verify exchanges using the Signature Service of the Java Cryptographic 
 
 ## What’s inside
 
--   [Crypto (Java Cryptographic Extension) data format](../../../../components/4.18.x/dataformats/crypto-dataformat.md)
+-   [Crypto (Java Cryptographic Extension) data format](../../../../components/next/dataformats/crypto-dataformat.md)
     
--   [Crypto (JCE) component](../../../../components/4.18.x/crypto-component.md), URI syntax: `crypto:cryptoOperation:name`
+-   [Crypto (JCE) component](../../../../components/next/crypto-component.md), URI syntax: `crypto:cryptoOperation:name`
     
 
 Please refer to the above links for usage and configuration details.

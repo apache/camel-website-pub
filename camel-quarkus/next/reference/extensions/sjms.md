@@ -6,7 +6,7 @@ Send and receive messages to/from a JMS Queue or Topic using plain JMS 1.x API.
 
 ## What’s inside
 
--   [Simple JMS component](../../../../components/4.18.x/sjms-component.md), URI syntax: `sjms:destinationType:destinationName`
+-   [Simple JMS component](../../../../components/next/sjms-component.md), URI syntax: `sjms:destinationType:destinationName`
     
 
 Please refer to the above link for usage and configuration details.

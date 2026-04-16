@@ -6,7 +6,7 @@ Marshal and unmarshal JSON:API resources using JSONAPI-Converter library.
 
 ## What’s inside
 
--   [JSonApi data format](../../../../components/4.18.x/dataformats/jsonApi-dataformat.md)
+-   [JSonApi data format](../../../../components/next/dataformats/jsonApi-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

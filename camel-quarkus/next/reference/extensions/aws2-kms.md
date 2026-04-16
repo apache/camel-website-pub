@@ -6,7 +6,7 @@ Manage keys stored in AWS KMS instances.
 
 ## What’s inside
 
--   [AWS Key Management Service (KMS) component](../../../../components/4.18.x/aws2-kms-component.md), URI syntax: `aws2-kms:label`
+-   [AWS Key Management Service (KMS) component](../../../../components/next/aws2-kms-component.md), URI syntax: `aws2-kms:label`
     
 
 Please refer to the above link for usage and configuration details.

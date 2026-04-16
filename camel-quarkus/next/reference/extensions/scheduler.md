@@ -6,7 +6,7 @@ Generate messages in specified intervals using java.util.concurrent.ScheduledExe
 
 ## What’s inside
 
--   [Scheduler component](../../../../components/4.18.x/scheduler-component.md), URI syntax: `scheduler:name`
+-   [Scheduler component](../../../../components/next/scheduler-component.md), URI syntax: `scheduler:name`
     
 
 Please refer to the above link for usage and configuration details.

@@ -1,12 +1,12 @@
 # Splunk
 
-JVM since1.8.0 Native since1.8.0
+JVM since1.8.0 Native since1.8.0 ⚠️Deprecated
 
 Publish or search for events in Splunk.
 
 ## What’s inside
 
--   [Splunk component](../../../../components/4.18.x/splunk-component.md), URI syntax: `splunk:name`
+-   [Splunk component](../../../../components/next/splunk-component.md), URI syntax: `splunk:name`
     
 
 Please refer to the above link for usage and configuration details.

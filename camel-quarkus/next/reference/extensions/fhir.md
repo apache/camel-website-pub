@@ -6,11 +6,11 @@ Exchange information in the healthcare domain using the FHIR (Fast Healthcare In
 
 ## What’s inside
 
--   [FHIR component](../../../../components/4.18.x/fhir-component.md), URI syntax: `fhir:apiName/methodName`
+-   [FHIR component](../../../../components/next/fhir-component.md), URI syntax: `fhir:apiName/methodName`
     
--   [FHIR JSon data format](../../../../components/4.18.x/dataformats/fhirJson-dataformat.md)
+-   [FHIR JSon data format](../../../../components/next/dataformats/fhirJson-dataformat.md)
     
--   [FHIR XML data format](../../../../components/4.18.x/dataformats/fhirXml-dataformat.md)
+-   [FHIR XML data format](../../../../components/next/dataformats/fhirXml-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

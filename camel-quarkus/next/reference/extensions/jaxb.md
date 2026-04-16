@@ -6,7 +6,7 @@ Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard.
 
 ## What’s inside
 
--   [JAXB data format](../../../../components/4.18.x/dataformats/jaxb-dataformat.md)
+-   [JAXB data format](../../../../components/next/dataformats/jaxb-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

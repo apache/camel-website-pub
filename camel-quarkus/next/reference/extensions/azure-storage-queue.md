@@ -6,7 +6,7 @@ The azure-storage-queue component is used for storing and retrieving the message
 
 ## What’s inside
 
--   [Azure Storage Queue Service component](../../../../components/4.18.x/azure-storage-queue-component.md), URI syntax: `azure-storage-queue:accountName/queueName`
+-   [Azure Storage Queue Service component](../../../../components/next/azure-storage-queue-component.md), URI syntax: `azure-storage-queue:accountName/queueName`
     
 
 Please refer to the above link for usage and configuration details.

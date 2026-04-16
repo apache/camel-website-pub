@@ -6,7 +6,7 @@ Perform operations on git repositories.
 
 ## What’s inside
 
--   [Git component](../../../../components/4.18.x/git-component.md), URI syntax: `git:localPath`
+-   [Git component](../../../../components/next/git-component.md), URI syntax: `git:localPath`
     
 
 Please refer to the above link for usage and configuration details.

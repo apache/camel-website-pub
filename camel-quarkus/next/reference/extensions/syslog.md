@@ -6,7 +6,7 @@ Marshall SyslogMessages to RFC3164 and RFC5424 messages and back.
 
 ## What’s inside
 
--   [Syslog data format](../../../../components/4.18.x/dataformats/syslog-dataformat.md)
+-   [Syslog data format](../../../../components/next/dataformats/syslog-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

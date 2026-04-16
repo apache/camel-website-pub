@@ -6,7 +6,7 @@ The azure-eventhubs component that integrates Azure Event Hubs using AMQP protoc
 
 ## What’s inside
 
--   [Azure Event Hubs component](../../../../components/4.18.x/azure-eventhubs-component.md), URI syntax: `azure-eventhubs:namespace/eventHubName`
+-   [Azure Event Hubs component](../../../../components/next/azure-eventhubs-component.md), URI syntax: `azure-eventhubs:namespace/eventHubName`
     
 
 Please refer to the above link for usage and configuration details.

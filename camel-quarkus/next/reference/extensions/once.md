@@ -6,7 +6,7 @@ Camel Once component
 
 ## What’s inside
 
--   [Once component](../../../../components/4.18.x/once-component.md), URI syntax: `once:name`
+-   [Once component](../../../../components/next/once-component.md), URI syntax: `once:name`
     
 
 Please refer to the above link for usage and configuration details.

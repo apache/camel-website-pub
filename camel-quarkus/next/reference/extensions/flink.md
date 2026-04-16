@@ -6,7 +6,7 @@ Send DataSet jobs to an Apache Flink cluster.
 
 ## What’s inside
 
--   [Flink component](../../../../components/4.18.x/flink-component.md), URI syntax: `flink:endpointType`
+-   [Flink component](../../../../components/next/flink-component.md), URI syntax: `flink:endpointType`
     
 
 Please refer to the above link for usage and configuration details.

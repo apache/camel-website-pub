@@ -6,7 +6,7 @@ Harvest metadata using OAI-PMH protocol
 
 ## What’s inside
 
--   [OAI-PMH component](../../../../components/4.18.x/oaipmh-component.md), URI syntax: `oaipmh:baseUrl`
+-   [OAI-PMH component](../../../../components/next/oaipmh-component.md), URI syntax: `oaipmh:baseUrl`
     
 
 Please refer to the above link for usage and configuration details.

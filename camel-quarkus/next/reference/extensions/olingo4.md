@@ -6,7 +6,7 @@ Communicate with OData 4.0 services using Apache Olingo OData API.
 
 ## What’s inside
 
--   [Olingo4 component](../../../../components/4.18.x/olingo4-component.md), URI syntax: `olingo4:apiName/methodName`
+-   [Olingo4 component](../../../../components/next/olingo4-component.md), URI syntax: `olingo4:apiName/methodName`
     
 
 Please refer to the above link for usage and configuration details.

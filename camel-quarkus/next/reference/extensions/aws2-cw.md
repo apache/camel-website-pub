@@ -6,7 +6,7 @@ Sending metrics to AWS CloudWatch.
 
 ## What’s inside
 
--   [AWS CloudWatch component](../../../../components/4.18.x/aws2-cw-component.md), URI syntax: `aws2-cw:namespace`
+-   [AWS CloudWatch component](../../../../components/next/aws2-cw-component.md), URI syntax: `aws2-cw:namespace`
     
 
 Please refer to the above link for usage and configuration details.

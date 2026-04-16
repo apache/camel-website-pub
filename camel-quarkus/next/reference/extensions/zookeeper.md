@@ -6,7 +6,7 @@ Manage ZooKeeper clusters.
 
 ## What’s inside
 
--   [ZooKeeper component](../../../../components/4.18.x/zookeeper-component.md), URI syntax: `zookeeper:serverUrls/path`
+-   [ZooKeeper component](../../../../components/next/zookeeper-component.md), URI syntax: `zookeeper:serverUrls/path`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Marshal and unmarshal Java beans to and from flat files (such as CSV, delimited,
 
 ## What’s inside
 
--   [BeanIO data format](../../../../components/4.18.x/dataformats/beanio-dataformat.md)
+-   [BeanIO data format](../../../../components/next/dataformats/beanio-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

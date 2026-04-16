@@ -6,7 +6,7 @@ Transform XML payloads using an XSLT template using Saxon.
 
 ## What’s inside
 
--   [XSLT Saxon component](../../../../components/4.18.x/xslt-saxon-component.md), URI syntax: `xslt-saxon:resourceUri`
+-   [XSLT Saxon component](../../../../components/next/xslt-saxon-component.md), URI syntax: `xslt-saxon:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

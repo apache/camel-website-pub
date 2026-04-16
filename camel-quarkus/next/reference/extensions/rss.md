@@ -6,9 +6,9 @@ Poll RSS feeds.
 
 ## What’s inside
 
--   [RSS component](../../../../components/4.18.x/rss-component.md), URI syntax: `rss:feedUri`
+-   [RSS component](../../../../components/next/rss-component.md), URI syntax: `rss:feedUri`
     
--   [RSS data format](../../../../components/4.18.x/dataformats/rss-dataformat.md)
+-   [RSS data format](../../../../components/next/dataformats/rss-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

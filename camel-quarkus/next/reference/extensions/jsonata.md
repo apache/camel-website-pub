@@ -6,7 +6,7 @@ JSON to JSON transformation using JSONATA.
 
 ## What’s inside
 
--   [JSONata component](../../../../components/4.18.x/jsonata-component.md), URI syntax: `jsonata:resourceUri`
+-   [JSONata component](../../../../components/next/jsonata-component.md), URI syntax: `jsonata:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

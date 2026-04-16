@@ -6,7 +6,7 @@ Diagnose Camel applications with Java Flight Recorder
 
 ## What’s inside
 
--   [JFR](../../../../components/4.18.x/others/jfr.md)
+-   [JFR](../../../../components/next/others/jfr.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Validate XML payload using the Schematron Library.
 
 ## What’s inside
 
--   [Schematron component](../../../../components/4.18.x/schematron-component.md), URI syntax: `schematron:path`
+-   [Schematron component](../../../../components/next/schematron-component.md), URI syntax: `schematron:path`
     
 
 Please refer to the above link for usage and configuration details.

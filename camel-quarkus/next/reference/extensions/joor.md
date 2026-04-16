@@ -6,9 +6,9 @@ Evaluate a jOOR (Java compiled once at runtime) expression language.
 
 ## What’s inside
 
--   [Java language](../../../../components/4.18.x/languages/java-language.md)
+-   [Java language](../../../../components/next/languages/java-language.md)
     
--   [jOOR language](../../../../components/4.18.x/languages/joor-language.md)
+-   [jOOR language](../../../../components/next/languages/joor-language.md)
     
 
 Please refer to the above links for usage and configuration details.

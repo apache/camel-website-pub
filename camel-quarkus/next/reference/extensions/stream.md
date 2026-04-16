@@ -6,7 +6,7 @@ Read from system-in and write to system-out and system-err streams.
 
 ## What’s inside
 
--   [Stream component](../../../../components/4.18.x/stream-component.md), URI syntax: `stream:kind`
+-   [Stream component](../../../../components/next/stream-component.md), URI syntax: `stream:kind`
     
 
 Please refer to the above link for usage and configuration details.

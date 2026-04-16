@@ -6,7 +6,7 @@ Upload, download and manage files, folders, groups, collaborations, etc. on box.
 
 ## What’s inside
 
--   [Box component](../../../../components/4.18.x/box-component.md), URI syntax: `box:apiName/methodName`
+-   [Box component](../../../../components/next/box-component.md), URI syntax: `box:apiName/methodName`
     
 
 Please refer to the above link for usage and configuration details.

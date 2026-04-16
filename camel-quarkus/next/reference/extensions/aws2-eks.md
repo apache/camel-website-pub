@@ -6,7 +6,7 @@ Manage AWS EKS cluster instances.
 
 ## What’s inside
 
--   [AWS Elastic Kubernetes Service (EKS) component](../../../../components/4.18.x/aws2-eks-component.md), URI syntax: `aws2-eks:label`
+-   [AWS Elastic Kubernetes Service (EKS) component](../../../../components/next/aws2-eks-component.md), URI syntax: `aws2-eks:label`
     
 
 Please refer to the above link for usage and configuration details.

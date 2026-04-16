@@ -6,7 +6,7 @@ Interact with Asterisk PBX Server.
 
 ## What’s inside
 
--   [Asterisk component](../../../../components/4.18.x/asterisk-component.md), URI syntax: `asterisk:name`
+-   [Asterisk component](../../../../components/next/asterisk-component.md), URI syntax: `asterisk:name`
     
 
 Please refer to the above link for usage and configuration details.

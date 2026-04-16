@@ -6,7 +6,7 @@ Support for Camel K style modeline
 
 ## What’s inside
 
--   [DSL Modeline](../../../../components/4.18.x/others/dsl-modeline.md)
+-   [DSL Modeline](../../../../components/next/others/dsl-modeline.md)
     
 
 Please refer to the above link for usage and configuration details.

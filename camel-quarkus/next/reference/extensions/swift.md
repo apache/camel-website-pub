@@ -6,9 +6,9 @@ Encode and decode SWIFT messages.
 
 ## What’s inside
 
--   [SWIFT MT data format](../../../../components/4.18.x/dataformats/swiftMt-dataformat.md)
+-   [SWIFT MT data format](../../../../components/next/dataformats/swiftMt-dataformat.md)
     
--   [SWIFT MX data format](../../../../components/4.18.x/dataformats/swiftMx-dataformat.md)
+-   [SWIFT MX data format](../../../../components/next/dataformats/swiftMx-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

@@ -6,7 +6,7 @@ Perform inserts or queries against Apache Lucene databases.
 
 ## What’s inside
 
--   [Lucene component](../../../../components/4.18.x/lucene-component.md), URI syntax: `lucene:host:operation`
+-   [Lucene component](../../../../components/next/lucene-component.md), URI syntax: `lucene:host:operation`
     
 
 Please refer to the above link for usage and configuration details.

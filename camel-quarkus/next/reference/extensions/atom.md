@@ -6,7 +6,7 @@ Poll Atom RSS feeds.
 
 ## What’s inside
 
--   [Atom component](../../../../components/4.18.x/atom-component.md), URI syntax: `atom:feedUri`
+-   [Atom component](../../../../components/next/atom-component.md), URI syntax: `atom:feedUri`
     
 
 Please refer to the above link for usage and configuration details.

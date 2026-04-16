@@ -6,19 +6,19 @@ Perform cache operations on an Ignite cache or consume changes from a continuous
 
 ## What’s inside
 
--   [Ignite Cache component](../../../../components/4.18.x/ignite-cache-component.md), URI syntax: `ignite-cache:cacheName`
+-   [Ignite Cache component](../../../../components/next/ignite-cache-component.md), URI syntax: `ignite-cache:cacheName`
     
--   [Ignite Compute component](../../../../components/4.18.x/ignite-compute-component.md), URI syntax: `ignite-compute:endpointId`
+-   [Ignite Compute component](../../../../components/next/ignite-compute-component.md), URI syntax: `ignite-compute:endpointId`
     
--   [Ignite Events component](../../../../components/4.18.x/ignite-events-component.md), URI syntax: `ignite-events:endpointId`
+-   [Ignite Events component](../../../../components/next/ignite-events-component.md), URI syntax: `ignite-events:endpointId`
     
--   [Ignite ID Generator component](../../../../components/4.18.x/ignite-idgen-component.md), URI syntax: `ignite-idgen:name`
+-   [Ignite ID Generator component](../../../../components/next/ignite-idgen-component.md), URI syntax: `ignite-idgen:name`
     
--   [Ignite Messaging component](../../../../components/4.18.x/ignite-messaging-component.md), URI syntax: `ignite-messaging:topic`
+-   [Ignite Messaging component](../../../../components/next/ignite-messaging-component.md), URI syntax: `ignite-messaging:topic`
     
--   [Ignite Queues component](../../../../components/4.18.x/ignite-queue-component.md), URI syntax: `ignite-queue:name`
+-   [Ignite Queues component](../../../../components/next/ignite-queue-component.md), URI syntax: `ignite-queue:name`
     
--   [Ignite Sets component](../../../../components/4.18.x/ignite-set-component.md), URI syntax: `ignite-set:name`
+-   [Ignite Sets component](../../../../components/next/ignite-set-component.md), URI syntax: `ignite-set:name`
     
 
 Please refer to the above links for usage and configuration details.
