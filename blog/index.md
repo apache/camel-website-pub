@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[507]{title,link,pubDate,description}:
+posts[508]{title,link,pubDate,description}:
+  Apache Camel 4.19 What's New|https://camel.apache.org/blog/2026/04/camel419-whatsnew/index.md|Fri, 17 Apr 2026 00:00:00 +0000|Apache Camel 4.19 has just been released. This release introduces a set of new features and noticeable improvements that we will cover in this blog post. Camel Spring Boot This is our first release th
   Apache Camel AI: Building an Email Triage Agent with OpenAI, Gmail Transformers, and Camel JBang|https://camel.apache.org/blog/2026/04/email-triage-agent/index.md|Thu, 16 Apr 2026 00:00:00 +0000|Recent Camel releases introduced several features that work well together for AI-powered integrations: the camel-openai component (4.17), the SimpleFunction interface, chain operator, and structured o
   RELEASE 4.19.0|https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/index.md|Thu, 16 Apr 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.19.0 release with 283 new features and improvements. The artifacts are published and ready for you to download from the Central 
   Camel K 2.10.0|https://camel.apache.org/blog/2026/04/camel-k-2-10/index.md|Mon, 13 Apr 2026 00:00:00 +0000|© Smithsonian Magazine Here a new fresh release of Camel K: version 2.10.0 is ready to go. We&rsquo;ve worked to several improvements around the GitOps and Git features introduced lately. We&rsquo;ve 

@@ -80,7 +80,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure Storage Blob Service component supports 49 options, which are listed below.
+The Azure Storage Blob Service component supports 50 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -137,6 +137,7 @@ Enum values:
 | **regex** (common) | Filters the results to return only blobs whose names match the specified regular expression. May be null to return all if both prefix and regex are set, regex takes the priority and prefix is ignored. |  | String |
 | **sasToken** (common) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **serviceClient** (common) | **Autowired** Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). |  | BlobServiceClient |
+| **snapshotId** (common) | The snapshot identifier used to target a specific blob snapshot on read operations (getBlob, downloadBlobToFile, downloadLink). When set, the read targets the snapshot scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobSnapshotId header. |  | String |
 | **timeout** (common) | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **deleteAfterRead** (consumer) | Delete blobs from Azure after they have been retrieved. The delete is only performed if the Exchange is committed. If a rollback occurs, the blob is not deleted. If this option is false, then the same blobs will be retrieved over and over again in the polls. Therefore, you need to use the Idempotent Consumer EIP in the route to filter out duplicates. You can filter using the BlobConstants#BLOB\_NAME header, or only the blob name. | false | boolean |
@@ -260,7 +261,7 @@ With the following _path_ and _query_ parameters:
 | **accountName** (common) | Azure account name to be used for authentication with azure blob services. |  | String |
 | **containerName** (common) | The blob container name. |  | String |
 
-### Query Parameters (64 parameters)
+### Query Parameters (65 parameters)
 
    
 | Name | Description | Default | Type |
@@ -317,6 +318,7 @@ Enum values:
 | **regex** (common) | Filters the results to return only blobs whose names match the specified regular expression. May be null to return all if both prefix and regex are set, regex takes the priority and prefix is ignored. |  | String |
 | **sasToken** (common) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **serviceClient** (common) | **Autowired** Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). |  | BlobServiceClient |
+| **snapshotId** (common) | The snapshot identifier used to target a specific blob snapshot on read operations (getBlob, downloadBlobToFile, downloadLink). When set, the read targets the snapshot scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobSnapshotId header. |  | String |
 | **timeout** (common) | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
 | **deleteAfterRead** (consumer) | Delete blobs from Azure after they have been retrieved. The delete is only performed if the Exchange is committed. If a rollback occurs, the blob is not deleted. If this option is false, then the same blobs will be retrieved over and over again in the polls. Therefore, you need to use the Idempotent Consumer EIP in the route to filter out duplicates. You can filter using the BlobConstants#BLOB\_NAME header, or only the blob name. | false | boolean |
 | **destinationBlobPrefix** (consumer) | Define the destination blob prefix to use when a blob must be moved, and moveAfterRead is set to true. |  | String |
@@ -753,7 +755,7 @@ Enum values:
 | **CamelAzureStorageBlobChangeFeedStartTime** (producer) Constant: [`CHANGE_FEED_START_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_START_TIME) | (getChangeFeed) It filters the results to return events approximately after the start time. Note: A few events belonging to the previous hour can also be returned. A few events belonging to this hour can be missing; to ensure all events from the hour are returned, round the start time down by an hour. |  | OffsetDateTime |
 | **CamelAzureStorageBlobChangeFeedEndTime** (producer) Constant: [`CHANGE_FEED_END_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_END_TIME) | (getChangeFeed) It filters the results to return events approximately before the end time. Note: A few events belonging to the next hour can also be returned. A few events belonging to this hour can be missing; to ensure all events from the hour are returned, round the end time up by an hour. |  | OffsetDateTime |
 | **CamelAzureStorageBlobContext** (producer) Constant: [`CHANGE_FEED_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_CONTEXT) | (getChangeFeed) This gives additional context that is passed through the Http pipeline during the service call. |  | Context |
-| **CamelAzureStorageBlobSnapshotId** (consumer) Constant: [`BLOB_SNAPSHOT_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_SNAPSHOT_ID) | The snapshot identifier returned after creating a blob snapshot. |  | String |
+| **CamelAzureStorageBlobSnapshotId** (common) Constant: [`BLOB_SNAPSHOT_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_SNAPSHOT_ID) | The snapshot identifier. On createBlobSnapshot it is set on the exchange as the id of the newly created snapshot. On read operations (getBlob, downloadBlobToFile, downloadLink) it can be provided as input to target a specific blob snapshot. |  | String |
 
 **Required information options:**
 
@@ -1385,6 +1387,17 @@ from("direct:createBlobSnapshot")
   .to("mock:result");
 ```
 
+### Reading a specific blob snapshot
+
+The `getBlob`, `downloadBlobToFile` and `downloadLink` operations can target a specific snapshot by setting the `snapshotId` URI parameter or the `CamelAzureStorageBlobSnapshotId` exchange header. When set, the read is scoped to the snapshot version of the blob instead of the live one. The header takes precedence over the URI parameter.
+
+```java
+from("direct:readSnapshot")
+  .process(exchange -> exchange.getIn().setHeader(BlobConstants.BLOB_SNAPSHOT_ID, "2026-04-15T10:00:00.0000000Z"))
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=getBlob&serviceClient=#client")
+  .to("mock:result");
+```
+
 ### SAS Token generation example
 
 SAS Blob Container tokens can be generated programmatically or via Azure UI. To generate the token with java code, the following can be done:
@@ -1447,7 +1460,7 @@ When using azure-storage-blob with Spring Boot make sure to use the following Ma
 </dependency>
 ```
 
-The component supports 50 options, which are listed below.
+The component supports 51 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -1500,5 +1513,6 @@ The component supports 50 options, which are listed below.
 | **camel.component.azure-storage-blob.remove-prefix-on-move** | Remove the contents of the prefix configuration string from the new blob name before moving. For example, if prefix is set to 'notify/' and the destinationBlobPrefix is set to 'archive/', a blob with a name of 'notify/example.txt' will be moved to 'archive/example.txt', rather than the default behavior where the new name is 'archive/notify/example.txt'. Only applicable when moveAfterRead is true. | false | Boolean |
 | **camel.component.azure-storage-blob.sas-token** | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **camel.component.azure-storage-blob.service-client** | Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). The option is a com.azure.storage.blob.BlobServiceClient type. |  | BlobServiceClient |
+| **camel.component.azure-storage-blob.snapshot-id** | The snapshot identifier used to target a specific blob snapshot on read operations (getBlob, downloadBlobToFile, downloadLink). When set, the read targets the snapshot scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobSnapshotId header. |  | String |
 | **camel.component.azure-storage-blob.source-blob-access-key** | Source Blob Access Key: for copyblob operation, sadly, we need to have an accessKey for the source blob we want to copy Passing an accessKey as header, it’s unsafe so we could set as key. |  | String |
 | **camel.component.azure-storage-blob.timeout** | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |

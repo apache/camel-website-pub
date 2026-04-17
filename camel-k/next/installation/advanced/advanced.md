@@ -48,6 +48,6 @@ The following environment variables can be configured on the operator Deployment
 | `KAMEL_OPERATOR_ID` | `camel-k` | The operator ID used to identify which operator instance manages specific resources. Can also be set via `OPERATOR_ID`. |
 | `KAMEL_BASE_IMAGE` | `eclipse-temurin:17-jdk@sha256:<digest>` | The base image used for building Integration images. Can also be set via `RELATED_IMAGE_BASE`. |
 | `CAMEL_K_SYNTHETIC_INTEGRATIONS` | `false` | When set to `true`, enables synthetic Integration support for managing external workloads. |
-| `CAMEL_DASHBOARD_APP_LABEL` | `camel.apache.org/app` | If it exists, the operator add this label beside regular Camel K labels in order to let the Camel Dashboard discover and monitor the application. |
+| `CAMEL_MONITOR_OPERATOR_LABEL` | `camel.apache.org/monitor` | If it exists, the operator add this label beside regular Camel K labels in order to let the Camel Monitor operator discover and monitor the application. |
 | `LOG_LEVEL` | `info` | The log level for the operator. Valid values: `debug`, `info`, `warn`, `error`. |
 | `KAMELET_CATALOG_DIR` | `/tmp/kamelets/` | Directory where Kamelet catalog files are extracted during installation. |

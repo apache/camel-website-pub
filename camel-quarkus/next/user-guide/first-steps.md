@@ -10,7 +10,7 @@ This guide outlines various ways to create a new Camel Quarkus application.
     
 -   JDK 17+ with `JAVA_HOME` configured appropriately
     
--   Apache Maven 3.8.2+ (3.9.12 is recommended)
+-   Apache Maven 3.8.2+ (3.9.14 is recommended)
     
 -   GraalVM with the `native-image` command installed and the `GRAALVM_HOME` environment variable set. See [Building a native executable](https://quarkus.io/guides/building-native-image-guide) section of the Quarkus documentation.
     
@@ -30,7 +30,7 @@ When the project archive download has completed successfully, unzip and import i
 Quarkus provides a Maven plugin that enables you to quickly bootstrap projects. For example, to create a project skeleton that includes the `timer` and `log` component extensions:
 
 ```shell
-mvn io.quarkus:quarkus-maven-plugin:3.34.1:create \
+mvn io.quarkus:quarkus-maven-plugin:3.35.0.CR1:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -Dextensions=camel-quarkus-log,camel-quarkus-timer

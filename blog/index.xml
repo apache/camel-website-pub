@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 17 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel 4.19 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/04/camel419-whatsnew/</link>
+      <pubDate>Fri, 17 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/camel419-whatsnew/</guid>
+      <description>Apache Camel 4.19 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Spring Boot This is our first release that supports Spring Boot v4. Spring Boot v3 is no longer supported.&#xA;Camel Jackson 3 Components Four new components have been added which provide Jackson 3 support - they are named similarly to the previously existing camel-jackson components.</description>
+    </item>
     <item>
       <title>Apache Camel AI: Building an Email Triage Agent with OpenAI, Gmail Transformers, and Camel JBang</title>
       <link>https://camel.apache.org/blog/2026/04/email-triage-agent/</link>

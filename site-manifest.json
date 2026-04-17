@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1776357389843,
+  "generated": 1776427167115,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -490,7 +490,7 @@
               "module": "ROOT",
               "path": "observability/dashboard.adoc",
               "url": "/camel-k/next/observability/dashboard.html",
-              "title": "Camel Dashboard"
+              "title": "Camel Monitor Operator"
             },
             {
               "module": "ROOT",
