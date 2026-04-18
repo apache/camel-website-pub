@@ -6,8 +6,15 @@
     <description>Recent content in Camel Karaf on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 17 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Camel-Karaf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Karaf 4.18.1 Released</title>
+      <link>https://camel.apache.org/blog/2026/04/camel-karaf-4.18.1/</link>
+      <pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/camel-karaf-4.18.1/</guid>
+      <description>Camel Karaf 4.18.1 release</description>
+    </item>
     <item>
       <title>Camel Karaf 4.14.5 Released</title>
       <link>https://camel.apache.org/blog/2026/03/camel-karaf-4.14.5/</link>

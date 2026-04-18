@@ -1326,8 +1326,8 @@ Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-eks.html /camel-quarkus/3.33.
 Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-iam.html /camel-quarkus/3.33.x/reference/extensions/aws2-iam.html
 Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-kms.html /camel-quarkus/3.33.x/reference/extensions/aws2-kms.html
 Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-mq.html /camel-quarkus/3.33.x/reference/extensions/aws2-mq.html
-Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-s3.html /camel-quarkus/3.33.x/reference/extensions/aws2-s3.html
 Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-msk.html /camel-quarkus/3.33.x/reference/extensions/aws2-msk.html
+Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-s3.html /camel-quarkus/3.33.x/reference/extensions/aws2-s3.html
 Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-ses.html /camel-quarkus/3.33.x/reference/extensions/aws2-ses.html
 Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-sns.html /camel-quarkus/3.33.x/reference/extensions/aws2-sns.html
 Redirect 301 /camel-quarkus/3.33.x/extensions/aws2-sqs.html /camel-quarkus/3.33.x/reference/extensions/aws2-sqs.html
@@ -1468,9 +1468,9 @@ Redirect 301 /camel-quarkus/next/extensions/amqp.html /camel-quarkus/next/refere
 Redirect 301 /camel-quarkus/next/extensions/as2.html /camel-quarkus/next/reference/extensions/as2.html
 Redirect 301 /camel-quarkus/next/extensions/attachments.html /camel-quarkus/next/reference/extensions/attachments.html
 Redirect 301 /camel-quarkus/next/extensions/avro.html /camel-quarkus/next/reference/extensions/avro.html
+Redirect 301 /camel-quarkus/next/extensions/aws2-athena.html /camel-quarkus/next/reference/extensions/aws2-athena.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-cw.html /camel-quarkus/next/reference/extensions/aws2-cw.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-ddb.html /camel-quarkus/next/reference/extensions/aws2-ddb.html
-Redirect 301 /camel-quarkus/next/extensions/aws2-athena.html /camel-quarkus/next/reference/extensions/aws2-athena.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-ec2.html /camel-quarkus/next/reference/extensions/aws2-ec2.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-ecs.html /camel-quarkus/next/reference/extensions/aws2-ecs.html
 Redirect 301 /camel-quarkus/next/extensions/aws2-eks.html /camel-quarkus/next/reference/extensions/aws2-eks.html
@@ -1487,8 +1487,8 @@ Redirect 301 /camel-quarkus/next/extensions/base64.html /camel-quarkus/next/refe
 Redirect 301 /camel-quarkus/next/extensions/bean-validator.html /camel-quarkus/next/reference/extensions/bean-validator.html
 Redirect 301 /camel-quarkus/next/extensions/bean.html /camel-quarkus/next/reference/extensions/bean.html
 Redirect 301 /camel-quarkus/next/extensions/bindy.html /camel-quarkus/next/reference/extensions/bindy.html
-Redirect 301 /camel-quarkus/next/extensions/box.html /camel-quarkus/next/reference/extensions/box.html
 Redirect 301 /camel-quarkus/next/extensions/braintree.html /camel-quarkus/next/reference/extensions/braintree.html
+Redirect 301 /camel-quarkus/next/extensions/box.html /camel-quarkus/next/reference/extensions/box.html
 Redirect 301 /camel-quarkus/next/extensions/cassandraql.html /camel-quarkus/next/reference/extensions/cassandraql.html
 Redirect 301 /camel-quarkus/next/extensions/consul.html /camel-quarkus/next/reference/extensions/consul.html
 Redirect 301 /camel-quarkus/next/extensions/controlbus.html /camel-quarkus/next/reference/extensions/controlbus.html

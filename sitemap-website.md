@@ -1,15 +1,18 @@
-urls[1063]{loc,lastmod}:
+urls[1065]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-04-18T00:00:00+00:00
+  https://camel.apache.org/categories/Camel-Karaf/,2026-04-18T00:00:00+00:00
+  https://camel.apache.org/blog/2026/04/camel-karaf-4.18.1/,2026-04-18T00:00:00+00:00
+  https://camel.apache.org/releases/karaf-4.18.1/,2026-04-18T00:00:00+00:00
+  https://camel.apache.org/,2026-04-18T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-04-18T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-04-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel419-whatsnew/,2026-04-17T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-04-17T00:00:00+00:00
-  https://camel.apache.org/,2026-04-17T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-04-17T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/email-triage-agent/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/Camel/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/JBang/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/releases/release-4.19.0/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/,2026-04-16T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/Usecases/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-k-2-10/,2026-04-13T00:00:00+00:00
@@ -26,7 +29,6 @@ urls[1063]{loc,lastmod}:
   https://camel.apache.org/categories/Kaoto/,2026-03-25T00:00:00+00:00
   https://camel.apache.org/blog/2026/03/kaoto-release-2.10.0/,2026-03-25T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-03-25T00:00:00+00:00
-  https://camel.apache.org/categories/Camel-Karaf/,2026-03-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/03/camel-karaf-4.14.5/,2026-03-17T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.14.5/,2026-03-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/03/camel-quarkus-3.27.3/,2026-03-06T00:00:00+00:00
