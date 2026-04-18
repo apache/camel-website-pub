@@ -366,6 +366,51 @@ SSLContextClientParameters contains the following elements:
     This optional property represents a collection of include and exclude patterns for signature schemes to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available signature schemes. The excludes patterns have precedence over the includes patterns. No default filtering is applied to signature schemes.
     
 
+### Configuring SSLContextParameters in XML and YAML DSL
+
+**Available as of Camel 4.19**
+
+You can setup SSL in XML DSL as follows:
+
+-   XML
+    
+-   YAML
+    
+-   Spring Boot
+    
+
+```xml
+<camel xmlns="http://camel.apache.org/schema/xml-io">
+    <sslContextParameters id="mySSL" keyStore="server.p12" keystorePassword="changeit"
+                           trustStore="truststore.p12" trustStorePassword="changeit"/>
+
+    <route id="sslRoute">
+        <from uri="direct:ssl"/>
+        <to uri="mock:ssl"/>
+    </route>
+</camel>
+```
+
+```yaml
+- sslContextParameters:
+    id: mySSL
+    keyStore: server.p12
+    keystorePassword: changeit
+    trustStore: truststore.p12
+    trustStorePassword: changeit
+- from:
+    uri: "direct:ssl"
+    steps:
+      - to: "mock:ssl"
+```
+
+```properties
+camel.ssl.key-managers.key-store.password=changeit
+camel.ssl.key-managers.key-store.resource=server.p12
+camel.ssl.trust-managers.key-store.password=changeit
+camel.ssl.trust-managers.key-store.resource=truststore.p12
+```
+
 ## Post-Quantum Cryptography (PQC) TLS Configuration
 
 Starting with Camel 4.19, Apache Camel supports Post-Quantum Cryptography (PQC) at the TLS transport layer. This protects connections against _harvest-now-decrypt-later_ attacks, where an adversary captures encrypted traffic today with the intent to decrypt it once a cryptographically relevant quantum computer becomes available.
