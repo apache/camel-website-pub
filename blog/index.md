@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[510]{title,link,pubDate,description}:
+posts[511]{title,link,pubDate,description}:
+  RELEASE 4.18.2|https://camel.apache.org/blog/2026/04/RELEASE-4.18.2/index.md|Wed, 22 Apr 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.2 LTS release with 26 new features and improvements. The artifacts are published and ready for you to download from the Centr
   Camel Karaf 4.18.1 Released|https://camel.apache.org/blog/2026/04/camel-karaf-4.18.1/index.md|Sat, 18 Apr 2026 00:00:00 +0000|Camel Karaf 4.18.1 release
   RELEASE 4.14.6|https://camel.apache.org/blog/2026/04/RELEASE-4.14.6/index.md|Sat, 18 Apr 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.6 patch release with 26 bug fixes and improvements. The artifacts are published and ready for you to download from the Centra
   Apache Camel 4.19 What's New|https://camel.apache.org/blog/2026/04/camel419-whatsnew/index.md|Fri, 17 Apr 2026 00:00:00 +0000|Apache Camel 4.19 has just been released. This release introduces a set of new features and noticeable improvements that we will cover in this blog post. Camel Spring Boot This is our first release th

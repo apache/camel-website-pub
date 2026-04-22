@@ -1,13 +1,15 @@
-urls[1067]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-04-18T00:00:00+00:00
+urls[1069]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-04-22T00:00:00+00:00
+  https://camel.apache.org/,2026-04-22T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.18.2/,2026-04-22T00:00:00+00:00
+  https://camel.apache.org/blog/2026/04/RELEASE-4.18.2/,2026-04-22T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-04-22T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-04-22T00:00:00+00:00
   https://camel.apache.org/categories/Camel-Karaf/,2026-04-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-karaf-4.18.1/,2026-04-18T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.18.1/,2026-04-18T00:00:00+00:00
-  https://camel.apache.org/,2026-04-18T00:00:00+00:00
   https://camel.apache.org/releases/release-4.14.6/,2026-04-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.14.6/,2026-04-18T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-04-18T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-04-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel419-whatsnew/,2026-04-17T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/email-triage-agent/,2026-04-16T00:00:00+00:00

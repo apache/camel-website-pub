@@ -6,8 +6,22 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Release 4.18.2</title>
+      <link>https://camel.apache.org/releases/release-4.18.2/</link>
+      <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.18.2/</guid>
+      <description>This release is the new Camel 4.18.2 LTS release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.18.2</title>
+      <link>https://camel.apache.org/blog/2026/04/RELEASE-4.18.2/</link>
+      <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/RELEASE-4.18.2/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.18.2 LTS release with 26 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
     <item>
       <title>Camel Karaf 4.18.1 Released</title>
       <link>https://camel.apache.org/blog/2026/04/camel-karaf-4.18.1/</link>

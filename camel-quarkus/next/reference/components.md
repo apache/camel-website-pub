@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 310 components (18 deprecated, 62 JVM only)
+There are 310 components (18 deprecated, 60 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -137,8 +137,8 @@ level | Description |
 | [Huawei Simple Message Notification (SMN)](extensions/huaweicloud-smn.md) | camel-quarkus-huaweicloud-smn | 1.8.0 | n/a | Preview | To broadcast messages and connect cloud services through notifications on Huawei Cloud |
 | [IBM Cloud Object Storage](extensions/ibm-cos.md) | camel-quarkus-ibm-cos | 3.30.0 | 3.31.0 | Stable | Store and retrieve objects from IBM Cloud Object Storage. |
 | [IBM Secrets Manager](extensions/ibm-secrets-manager.md) | camel-quarkus-ibm-secrets-manager | 3.22.0 | n/a | Preview | Manage secrets in IBM Secrets Manager Service |
-| [IBM Watson Discovery](extensions/ibm-watson-discovery.md) | camel-quarkus-ibm-watson-discovery | 3.30.0 | n/a | Preview | Perform document understanding and search using IBM Watson Discovery |
-| [IBM Watson Language](extensions/ibm-watson-language.md) | camel-quarkus-ibm-watson-language | 3.30.0 | n/a | Preview | Perform natural language processing using IBM Watson Natural Language Understanding |
+| [IBM Watson Discovery](extensions/ibm-watson-discovery.md) | camel-quarkus-ibm-watson-discovery | 3.30.0 | 3.35.0 | Stable | Perform document understanding and search using IBM Watson Discovery |
+| [IBM Watson Language](extensions/ibm-watson-language.md) | camel-quarkus-ibm-watson-language | 3.30.0 | 3.35.0 | Stable | Perform natural language processing using IBM Watson Natural Language Understanding |
 | [IEC 60870 Client](extensions/iec60870.md) | camel-quarkus-iec60870 | 1.1.0 | n/a | Preview | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
 | [IEC 60870 Server](extensions/iec60870.md) | camel-quarkus-iec60870 | 1.1.0 | n/a | Preview | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
 | [Ignite Cache](extensions/ignite.md) | camel-quarkus-ignite | 1.1.0 | n/a | Preview | Perform cache operations on an Ignite cache or consume changes from a continuous query. |

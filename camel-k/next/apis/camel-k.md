@@ -1521,6 +1521,8 @@ int32 | the maximum amount of parallel running pipelines started by this operato
 
 IntegrationPlatformCluster is the kind of orchestration cluster the platform is installed into.
 
+Deprecated: no longer in use.
+
 ### IntegrationPlatformCondition
 
 **Appears on:**

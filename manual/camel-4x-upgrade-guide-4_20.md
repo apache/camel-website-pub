@@ -22,3 +22,17 @@ The Apache Pulsar client library has been upgraded from 4.1.3 to 4.2.0.
 Pulsar 4.2.0 removes support for V1 topic names via [PIP-457](https://github.com/apache/pulsar/pull/25304). Topic names must now use the V2 format (`persistent://tenant/namespace/topic`) with exactly three path segments after the scheme. The V1 format (`persistent://tenant/cluster/namespace/topic`) with four path segments is no longer accepted and will result in an `InvalidTopicNameException`.
 
 If your Camel routes use topic URIs with extra `/` characters in the topic name portion (e.g., `pulsar:persistent://public/default/my-topic/sub-path`), you must replace the extra `/` with another separator such as `-` (e.g., `pulsar:persistent://public/default/my-topic-sub-path`).
+
+### camel-oaipmh
+
+A new parameter to allow users to set or override HTTP Headers for consumers or producers.
+
+For example to set the HTTP Header `Authorization`, use: `httpHeader.Authorization=test-token`. You can also set it from the Java DSL.
+
+```java
+from("direct:start")
+  .to("oaipmh://my-server:8081"
+  + "/oai/request"
+  + "&httpHeader.Authorization=test-token"
+  + "&httpHeader.X-Custom=hello");
+```

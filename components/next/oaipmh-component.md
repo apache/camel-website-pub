@@ -94,7 +94,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **baseUrl** (common) | **Required** Base URL of the repository to which the request is made through the OAI-PMH protocol. |  | String |
 
-### Query Parameters (29 parameters)
+### Query Parameters (30 parameters)
 
    
 | Name | Description | Default | Type |
@@ -126,6 +126,7 @@ Enum values:
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
 | **onlyFirst** (producer) | Returns the response of a single request. Otherwise it will make requests until there is no more data to return. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **httpHeaders** (advanced) | Custom HTTP headers to send with each request to the OAI-PMH repository, for example for Authorization or Accept-Language. This is a multi-value option with prefix: httpHeader. |  | Map |
 | **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffIdleThreshold** (scheduler) | The number of subsequent idle polls that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
@@ -193,12 +194,13 @@ Enum values:
 
 ## Message Headers
 
-The OAI-PMH component supports 1 message header(s), which is/are listed below:
+The OAI-PMH component supports 2 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelOaimphResumptionToken** (producer) Constant: [`RESUMPTION_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-oaipmh/latest/org/apache/camel/oaipmh/component/model/OAIPMHConstants.html#RESUMPTION_TOKEN) | This header is obtained when onlyFirst option is enable. Return resumption token of the request when data is still available. |  | String |
+| **CamelOaimphHttpHeaders** (producer) Constant: [`HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-oaipmh/latest/org/apache/camel/oaipmh/component/model/OAIPMHConstants.html#HTTP_HEADERS) | Custom HTTP headers to send with the request, overriding any httpHeader. endpoint parameters. |  | Map |
 
 ## Usage
 

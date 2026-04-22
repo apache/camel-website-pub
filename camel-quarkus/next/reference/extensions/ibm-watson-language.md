@@ -1,6 +1,6 @@
 # IBM Watson Language
 
-JVM since3.30.0 Nativeunsupported
+JVM since3.30.0 Native since3.35.0
 
 Perform natural language processing using IBM Watson Natural Language Understanding
 
@@ -12,6 +12,10 @@ Perform natural language processing using IBM Watson Natural Language Understand
 Please refer to the above link for usage and configuration details.
 
 ## Maven coordinates
+
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-ibm-watson-language)
+
+Or add the coordinates to your existing project:
 
 ```xml
 <dependency>

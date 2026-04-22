@@ -103,6 +103,72 @@ As an alternative, you can use the agent’s built-in MDC integration.
 2.  Configure your logging framework to include these MDC keys in your log format. The exact configuration depends on the logging library you use.
     
 
+### Using the OpenTelemetry Spring Boot starter
+
+An alternative to the OpenTelemetry agent is to use [OpenTelemetry Spring Boot starter](https://opentelemetry.io/docs/zero-code/java/spring-boot-starter/).
+
+To ensure version alignment across all OpenTelemetry dependencies, you should import the opentelemetry-instrumentation-bom BOM.
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-instrumentation-bom</artifactId>
+            <version>2.26.1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+Note: Import the OpenTelemetry BOMs before any other BOMs in your project. For example, if you import the spring-boot-dependencies BOM, you have to declare it after the OpenTelemetry BOMs. Also make sure that the version you choose is compatible with the Opentelemetry version used by the Camel version you’re using.
+
+Then add the following dependency for the OpenTelemetry Spring Boot starter:
+
+```xml
+<dependency>
+    <groupId>io.opentelemetry.instrumentation</groupId>
+    <artifactId>opentelemetry-spring-boot-starter</artifactId>
+</dependency>
+```
+
+The starter auto-configures most aspects of the OpenTelemetry instrumentation, with two exceptions: No `Tracer` or `ContextPropagators` beans are autoconfigured, they need to be configured manually:
+
+```java
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.propagation.ContextPropagators;
+
+@Configuration
+public class OpenTelemetryConfiguration {
+
+  @Bean
+  public Tracer tracer(@Value("${spring.application.name}") String serviceName, OpenTelemetry openTelemetry) {
+    return openTelemetry.getTracer(serviceName);
+  }
+
+  @Bean
+  public ContextPropagators contextPropagators(OpenTelemetry openTelemetry) {
+    return openTelemetry.getPropagators();
+  }
+
+}
+```
+
+The instrumentation can be configured using the standard Spring Boot configuration mechanisms (e.g. using application.yml). For a complete list of options, see the official [agent configuration documentation](https://opentelemetry.io/docs/zero-code/java/agent/configuration/).
+
+For example, to set the service name and exporter type:
+
+```yaml
+otel:
+  service:
+    name: your-service-name
+  traces:
+    exporter: otlp
+```
+
 ### Span customization
 
 When you’re working at a very low level, you may need to tweak your metrics and add some in-process custom `span` in order to trace some specific measure of your application. If you need this advanced use case, you can create it during your process by configuring an Opentelemetry Tracer object and share it to your route. For example, in Java DSL:
@@ -120,3 +186,26 @@ public void process(Exchange exchange) throws Exception {
      mySpan.end();
 }
 ```
+
+### Baggage customization
+
+`Baggage` is a way to attach key-value metadata to a request and carry it across service boundaries. In the context of OpenTelemetry, baggage travels along with the context (like trace/span), but it’s meant for custom data you define, not telemetry internals. Camel allows you to programmatically provide any `Baggage` information via header settings. Whenever the component finds an header defined as `OTEL_BAGGAGE_xyz` it will consider it as a baggage variable named `xyz`. For example, in Java DSL:
+
+```java
+                from("direct:start")
+                        .setHeader("OTEL_BAGGAGE_myValue", constant("1234"))
+                        .routeId("start")
+                        .log("A message")
+                        .process(new Processor() {
+                            @Override
+                            public void process(Exchange exchange) throws Exception {
+                                exchange.getIn().setHeader("operation", "fake");
+                            }
+                        })
+                        .to("log:info");
+```
+
+Any span executed after the `setHeader` will include a baggage variable named `myValue` with value `1234` which will be reflected in your telemetry result.
+
+> **Note**
+> any baggage setting defined externally (i.e., calling the Camel process with a context propagation) is normally going to be propagated in Camel logic.

@@ -91,7 +91,7 @@ git checkout camel-4.19.0
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (64)
+### Bug (65)
 
 [CAMEL-23310](https://issues.apache.org/jira/browse/CAMEL-23310)
 
@@ -184,6 +184,10 @@ Deadlock can happen when JMS service is shutdown
 [CAMEL-23193](https://issues.apache.org/jira/browse/CAMEL-23193)
 
 JmsMessage does not copy attachments to new instance
+
+[CAMEL-23192](https://issues.apache.org/jira/browse/CAMEL-23192)
+
+jbang export to quarkus generates wrong dockerfiles
 
 [CAMEL-23191](https://issues.apache.org/jira/browse/CAMEL-23191)
 
@@ -757,11 +761,15 @@ camel-jbang - Make using JPA easier to use and export
 
 Consider MiMa as alternative to pure maven-resolver
 
-### New Feature (38)
+### New Feature (39)
 
 [CAMEL-23276](https://issues.apache.org/jira/browse/CAMEL-23276)
 
 Allow JBang plugins to customize Run command before CamelContext is built
+
+[CAMEL-23269](https://issues.apache.org/jira/browse/CAMEL-23269)
+
+Add new component camel-camunda for Camunda 8
 
 [CAMEL-23258](https://issues.apache.org/jira/browse/CAMEL-23258)
 
@@ -961,7 +969,7 @@ Generalize Google services authentication with common module - Google Calendar
 
 Generalize Google services authentication with common module - Google Bigquery
 
-### Task (41)
+### Task (44)
 
 [CAMEL-23298](https://issues.apache.org/jira/browse/CAMEL-23298)
 
@@ -1079,9 +1087,21 @@ camel-google-pubsub-lite - Remove this component
 
 Replace arquillian usage in camel-spring-boot itests
 
+[CAMEL-22780](https://issues.apache.org/jira/browse/CAMEL-22780)
+
+Update camel from JUnit5 to JUnit6
+
 [CAMEL-22774](https://issues.apache.org/jira/browse/CAMEL-22774)
 
 \[build\] Refactor java21 special code when dropping support for java17
+
+[CAMEL-22750](https://issues.apache.org/jira/browse/CAMEL-22750)
+
+junit-bom import : junit 5 to junit 6 migration
+
+[CAMEL-22729](https://issues.apache.org/jira/browse/CAMEL-22729)
+
+Upgrade camel from jackson 2.19 -> 2.20.1
 
 [CAMEL-22556](https://issues.apache.org/jira/browse/CAMEL-22556)
 
