@@ -91,7 +91,7 @@ git checkout camel-4.19.0
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (65)
+### Bug (66)
 
 [CAMEL-23310](https://issues.apache.org/jira/browse/CAMEL-23310)
 
@@ -349,6 +349,10 @@ camel plugin add xyz - should ignore the gav in the camel-jbang-user.properties
 
 \[camel-observation\] observations and metrics
 
+[CAMEL-22090](https://issues.apache.org/jira/browse/CAMEL-22090)
+
+couchbase - consumer does not work if jackson is on classpath
+
 [CAMEL-21932](https://issues.apache.org/jira/browse/CAMEL-21932)
 
 Kubernetes Secrets and Config maps context reloading doesn't work together
@@ -387,7 +391,7 @@ camel-groovy - Upgrade to groovy 5
 
 camel-kafka - Upgrade to Kafka 4
 
-### Improvement (93)
+### Improvement (94)
 
 [CAMEL-23308](https://issues.apache.org/jira/browse/CAMEL-23308)
 
@@ -732,6 +736,10 @@ camel-ssh - idleTimeout
 [CAMEL-22890](https://issues.apache.org/jira/browse/CAMEL-22890)
 
 camel-jbang - include opentelemtry2 dependency if camel.opentelemetry2.enabled
+
+[CAMEL-22884](https://issues.apache.org/jira/browse/CAMEL-22884)
+
+Provide error at build time or runtime when a \`method\` attribute is used inside a when clause in xml dsl
 
 [CAMEL-22801](https://issues.apache.org/jira/browse/CAMEL-22801)
 

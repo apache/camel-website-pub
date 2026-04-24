@@ -229,6 +229,10 @@ Enum values:
     
 -   createBlobSnapshot
     
+-   setBlobTags
+    
+-   getBlobTags
+    
 
 
 
@@ -428,6 +432,10 @@ Enum values:
     
 -   createBlobSnapshot
     
+-   setBlobTags
+    
+-   getBlobTags
+    
 
 
 
@@ -506,7 +514,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Storage Blob Service component supports 70 message header(s), which is/are listed below:
+The Azure Storage Blob Service component supports 71 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -561,6 +569,10 @@ Enum values:
 -   copyBlob
     
 -   createBlobSnapshot
+    
+-   setBlobTags
+    
+-   getBlobTags
     
 
 
@@ -756,6 +768,7 @@ Enum values:
 | **CamelAzureStorageBlobChangeFeedEndTime** (producer) Constant: [`CHANGE_FEED_END_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_END_TIME) | (getChangeFeed) It filters the results to return events approximately before the end time. Note: A few events belonging to the next hour can also be returned. A few events belonging to this hour can be missing; to ensure all events from the hour are returned, round the end time up by an hour. |  | OffsetDateTime |
 | **CamelAzureStorageBlobContext** (producer) Constant: [`CHANGE_FEED_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_CONTEXT) | (getChangeFeed) This gives additional context that is passed through the Http pipeline during the service call. |  | Context |
 | **CamelAzureStorageBlobSnapshotId** (common) Constant: [`BLOB_SNAPSHOT_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_SNAPSHOT_ID) | The snapshot identifier. On createBlobSnapshot it is set on the exchange as the id of the newly created snapshot. On read operations (getBlob, downloadBlobToFile, downloadLink) it can be provided as input to target a specific blob snapshot. |  | String |
+| **CamelAzureStorageBlobTags** (common) Constant: [`BLOB_TAGS`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_TAGS) | (producer) (setBlobTags) The tags to set on the blob as key-value pairs. (consumer) The tags retrieved from the blob. |  | Map |
 
 **Required information options:**
 
@@ -858,6 +871,8 @@ For these operations, `accountName`, `containerName` and `blobName` are **requir
 | `getPageBlobRanges` | `PageBlob` | Returns the list of valid page ranges for a page blob or snapshot of a page blob. |
 | `copyBlob` | `Common` | Copy a blob from one container to another one, even from different accounts. |
 | `createBlobSnapshot` | `Common` | Creates a read-only snapshot of a blob. The snapshot ID is returned in the `CamelAzureStorageBlobSnapshotId` header. |
+| `setBlobTags` | `Common` | Sets user-defined index tags on a blob. Tags are key-value pairs that can be used to filter and query blobs across containers. Tags can be provided via the `CamelAzureStorageBlobTags` header or as the message body (`Map<String, String>`). |
+| `getBlobTags` | `Common` | Retrieves user-defined index tags from a blob. The tags are returned as the message body (`Map<String, String>`) and also set in the `CamelAzureStorageBlobTags` header. |
 
 Refer to the example section in this page to learn how to use these operations into your camel application.
 
@@ -1395,6 +1410,26 @@ The `getBlob`, `downloadBlobToFile` and `downloadLink` operations can target a s
 from("direct:readSnapshot")
   .process(exchange -> exchange.getIn().setHeader(BlobConstants.BLOB_SNAPSHOT_ID, "2026-04-15T10:00:00.0000000Z"))
   .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=getBlob&serviceClient=#client")
+  .to("mock:result");
+```
+
+-   `setBlobTags`
+    
+
+```java
+from("direct:setBlobTags")
+  .setHeader(BlobConstants.BLOB_TAGS, constant(Map.of("status", "quarantine", "category", "document")))
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=setBlobTags&serviceClient=#client")
+  .to("mock:result");
+```
+
+-   `getBlobTags`
+    
+
+```java
+from("direct:getBlobTags")
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=getBlobTags&serviceClient=#client")
+  .log("Tags: ${body}")
   .to("mock:result");
 ```
 
