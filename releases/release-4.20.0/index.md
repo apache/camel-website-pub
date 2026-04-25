@@ -6,7 +6,7 @@ This release is the new Camel 4.20.0 release.
 
 ## Supported Java version
 
-This version supports Java 21 and 25.
+This version supports Java 17, 21 and 25.
 
 ## Getting the Binaries using Maven
 
