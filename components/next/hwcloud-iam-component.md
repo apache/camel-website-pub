@@ -98,7 +98,6 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **accessKey** (producer) | **Required** Access key for the cloud user. |  | String |
 | **groupId** (producer) | Group ID to perform operation with. |  | String |
-| **ignoreSslVerification** (producer) | Ignore SSL verification. | false | boolean |
 | **proxyHost** (producer) | Proxy server ip/hostname. |  | String |
 | **proxyPassword** (producer) | Proxy authentication password. |  | String |
 | **proxyPort** (producer) | Proxy server port. |  | int |
@@ -108,6 +107,7 @@ With the following _path_ and _query_ parameters:
 | **serviceKeys** (producer) | Configuration object for cloud service authentication. |  | ServiceKeys |
 | **userId** (producer) | User ID to perform operation with. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **ignoreSslVerification** (security) | Ignore SSL verification. | false | boolean |
 
 ## Usage
 

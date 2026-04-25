@@ -13,7 +13,7 @@ You can find the upgrade guide for each release in the following pages:
     
 -   [Upgrade guide 4.2 → 4.3](camel-4x-upgrade-guide-4_3.md)
     
--   [Upgrade guide 4.3 → 4.4](camel-4x-upgrade-guide-4_4.md)
+-   [Upgrade guide 4.3 → 4.4 LTS](camel-4x-upgrade-guide-4_4.md)
     
 -   [Upgrade guide 4.4 → 4.5](camel-4x-upgrade-guide-4_5.md)
     
@@ -21,11 +21,11 @@ You can find the upgrade guide for each release in the following pages:
     
 -   [Upgrade guide 4.6 → 4.7](camel-4x-upgrade-guide-4_7.md)
     
--   [Upgrade guide 4.7 → 4.8](camel-4x-upgrade-guide-4_8.md)
+-   [Upgrade guide 4.7 → 4.8 LTS](camel-4x-upgrade-guide-4_8.md)
     
 -   [Upgrade guide 4.8 → 4.9](camel-4x-upgrade-guide-4_9.md)
     
--   [Upgrade guide 4.9 → 4.10](camel-4x-upgrade-guide-4_10.md)
+-   [Upgrade guide 4.9 → 4.10 LTS](camel-4x-upgrade-guide-4_10.md)
     
 -   [Upgrade guide 4.10 → 4.11](camel-4x-upgrade-guide-4_11.md)
     
@@ -33,7 +33,7 @@ You can find the upgrade guide for each release in the following pages:
     
 -   [Upgrade guide 4.12 → 4.13](camel-4x-upgrade-guide-4_13.md)
     
--   [Upgrade guide 4.13 → 4.14](camel-4x-upgrade-guide-4_14.md)
+-   [Upgrade guide 4.13 → 4.14 LTS](camel-4x-upgrade-guide-4_14.md)
     
 -   [Upgrade guide 4.14 → 4.15](camel-4x-upgrade-guide-4_15.md)
     
@@ -41,11 +41,13 @@ You can find the upgrade guide for each release in the following pages:
     
 -   [Upgrade guide 4.16 → 4.17](camel-4x-upgrade-guide-4_17.md)
     
--   [Upgrade guide 4.17 → 4.18](camel-4x-upgrade-guide-4_18.md)
+-   [Upgrade guide 4.17 → 4.18 LTS](camel-4x-upgrade-guide-4_18.md)
     
 -   [Upgrade guide 4.18 → 4.19](camel-4x-upgrade-guide-4_19.md)
     
 -   [Upgrade guide 4.19 → 4.20](camel-4x-upgrade-guide-4_20.md)
+    
+-   [Upgrade guide 4.20 → 4.21](camel-4x-upgrade-guide-4_21.md)
     
 
 > **Note**

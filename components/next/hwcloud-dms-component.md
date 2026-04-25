@@ -116,7 +116,6 @@ Enum values:
 
  |  | String |
 | **engineVersion** (producer) | The version of the message engine. This option is mandatory when creating an instance. |  | String |
-| **ignoreSslVerification** (producer) | Ignore SSL verification. | false | boolean |
 | **instanceId** (producer) | The id of the instance. This option is mandatory when deleting or querying an instance. |  | String |
 | **kafkaManagerPassword** (producer) | The password for logging in to the Kafka Manager. This option is mandatory when creating a Kafka instance. |  | String |
 | **kafkaManagerUser** (producer) | The username for logging in to the Kafka Manager. This option is mandatory when creating a Kafka instance. |  | String |
@@ -139,6 +138,7 @@ Enum values:
 | **subnetId** (producer) | The subnet ID. This option is mandatory when creating an instance. |  | String |
 | **vpcId** (producer) | The VPC ID. This option is mandatory when creating an instance. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **ignoreSslVerification** (security) | Ignore SSL verification. | false | boolean |
 
 ## Usage
 
