@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1777119488362,
+  "generated": 1777210837725,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32556,6 +32556,24 @@
               "path": "jbang-commands/camel-jbang-update.adoc",
               "url": "/manual/jbang-commands/camel-jbang-update.html",
               "title": "camel update"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-validate-normalize.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-validate-normalize.html",
+              "title": "camel validate normalize"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-validate-yaml.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-validate-yaml.html",
+              "title": "camel validate yaml"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-validate.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-validate.html",
+              "title": "camel validate"
             },
             {
               "module": "ROOT",

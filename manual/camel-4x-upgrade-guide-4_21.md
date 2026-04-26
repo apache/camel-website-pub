@@ -6,3 +6,11 @@ This document is for helping you upgrade your Apache Camel application from Came
 > [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
 
 ## Upgrading Camel 4.20 to 4.21
+
+### camel-yaml-dsl
+
+A new canonical JSON Schema variant (`camelYamlDsl-canonical.json`) has been added alongside the existing classic schema (`camelYamlDsl.json`). The canonical schema removes all implicit patterns (string shorthands, inline expressions, `oneOf`/`anyOf`/`not` constructs) to provide a simpler, more predictable schema for tooling such as IDEs, code generators, and AI assistants. See the [YAML DSL](../components/4.18.x/others/yaml-dsl.md) documentation for details.
+
+The `YamlValidator` class now accepts a `boolean canonical` constructor parameter to validate against the canonical schema.
+
+A new `camel yaml normalize` command has been added to Camel JBang. It rewrites YAML routes from the classic (shorthand) form to the canonical (explicit) form. The `camel validate yaml` command also supports a new `--canonical` flag to validate against the canonical schema.

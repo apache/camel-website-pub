@@ -38,7 +38,7 @@ Once JBang is installed, you should be able to make sure it works by calling the
 
 ```bash
 $ jbang version
-0.137.0
+0.138.0
 ```
 
 After this then install Camel into JBang as follows:
@@ -51,7 +51,7 @@ Then you can check that Camel is installed and working by executing:
 
 ```bash
 $ camel version
-JBang version: 0.137.0
+JBang version: 0.138.0
 Camel JBang version: 4.18.0
 ```
 

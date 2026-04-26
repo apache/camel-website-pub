@@ -2374,7 +2374,11 @@ base Maven specification
 | `repositories`  
 **[\[\]Repository](#_camel_apache_org_v1_Repository)** | additional repositories |
 | `servers`  
-**[\[\]Server](#_camel_apache_org_v1_Server)** | Servers (auth) |
+**[\[\]Server](#_camel_apache_org_v1_Server)** | Servers (auth)
+
+Deprecated: no longer in use.
+
+ |
 
 ### MavenSpec
 

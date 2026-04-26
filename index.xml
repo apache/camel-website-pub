@@ -23,6 +23,62 @@
       <description>The Camel community announces the immediate availability of the Camel 4.20.0 release with 25 new features and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
     </item>
     <item>
+      <title>Apache Camel Security Advisory - CVE-2026-27172</title>
+      <link>https://camel.apache.org/security/CVE-2026-27172.html</link>
+      <pubDate>Fri, 24 Apr 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-27172.html</guid>
+      <description>Apache Camel: Unsafe Java deserialization in camel-consul ConsulRegistry allows arbitrary code execution via malicious values read from the Consul KV store</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-33454</title>
+      <link>https://camel.apache.org/security/CVE-2026-33454.html</link>
+      <pubDate>Fri, 24 Apr 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-33454.html</guid>
+      <description>Camel-Mail Message Header Injection via Improper Filtering</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-40022</title>
+      <link>https://camel.apache.org/security/CVE-2026-40022.html</link>
+      <pubDate>Fri, 24 Apr 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-40022.html</guid>
+      <description>Camel-Platform-HTTP-Main: Authentication Bypass on Non-Root Context Paths in camel main runtime</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-40048</title>
+      <link>https://camel.apache.org/security/CVE-2026-40048.html</link>
+      <pubDate>Fri, 24 Apr 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-40048.html</guid>
+      <description>Camel-PQC: Unsafe Deserialization from FileBasedKeyLifecycleManager</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-40453</title>
+      <link>https://camel.apache.org/security/CVE-2026-40453.html</link>
+      <pubDate>Fri, 24 Apr 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-40453.html</guid>
+      <description>Incomplete fix for CVE-2025-27636 in non-HTTP HeaderFilterStrategies (camel-jms, camel-sjms, camel-coap, camel-google-pubsub) allows case-variant header injection</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-40473</title>
+      <link>https://camel.apache.org/security/CVE-2026-40473.html</link>
+      <pubDate>Fri, 24 Apr 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-40473.html</guid>
+      <description>Camel-Mina: Unsafe Deserialization in MinaConverter.toObjectInput() via TCP/UDP</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-40858</title>
+      <link>https://camel.apache.org/security/CVE-2026-40858.html</link>
+      <pubDate>Fri, 24 Apr 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-40858.html</guid>
+      <description>Camel-Infinispan: Unsafe Deserialization in ProtoStream Remote Aggregation Repository</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-40860</title>
+      <link>https://camel.apache.org/security/CVE-2026-40860.html</link>
+      <pubDate>Fri, 24 Apr 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-40860.html</guid>
+      <description>Unsafe Deserialization of JMS ObjectMessage in camel-jms, camel-sjms, camel-sjms2 and camel-amqp</description>
+    </item>
+    <item>
       <title>Release 4.14.7</title>
       <link>https://camel.apache.org/releases/release-4.14.7/</link>
       <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>

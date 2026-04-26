@@ -1,10 +1,19 @@
-urls[1073]{loc,lastmod}:
+urls[1081]{loc,lastmod}:
   https://camel.apache.org/blog/,2026-04-25T00:00:00+00:00
   https://camel.apache.org/,2026-04-25T00:00:00+00:00
   https://camel.apache.org/releases/release-4.20.0/,2026-04-25T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.20.0/,2026-04-25T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-04-25T00:00:00+00:00
   https://camel.apache.org/releases/,2026-04-25T00:00:00+00:00
+  https://camel.apache.org/security/CVE-2026-27172.md,2026-04-24T09:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-33454.md,2026-04-24T09:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-40022.md,2026-04-24T09:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-40048.md,2026-04-24T09:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-40453.md,2026-04-24T09:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-40473.md,2026-04-24T09:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-40858.md,2026-04-24T09:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-40860.md,2026-04-24T09:00:00+02:00
+  https://camel.apache.org/security/,2026-04-24T09:00:00+02:00
   https://camel.apache.org/releases/release-4.14.7/,2026-04-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.14.7/,2026-04-24T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.2/,2026-04-22T00:00:00+00:00
@@ -54,7 +63,6 @@ urls[1073]{loc,lastmod}:
   https://camel.apache.org/releases/upgrade-recipes-4.18.0/,2026-02-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/02/camel418-whatsnew/,2026-02-19T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-25747.md,2026-02-18T09:00:00+02:00
-  https://camel.apache.org/security/,2026-02-18T09:00:00+02:00
   https://camel.apache.org/security/CVE-2026-23552.md,2026-02-17T09:00:00+02:00
   https://camel.apache.org/releases/release-4.18.0/,2026-02-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/02/RELEASE-4.18.0/,2026-02-17T00:00:00+00:00

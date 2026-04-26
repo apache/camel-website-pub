@@ -20,6 +20,33 @@
     <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-04-25T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-27172.html</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-33454.html</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-40022.html</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-40048.html</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-40453.html</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-40473.html</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-40858.html</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-40860.html</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/</loc>
+    <lastmod>2026-04-24T09:00:00+02:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/releases/release-4.14.7/</loc>
     <lastmod>2026-04-24T00:00:00+00:00</lastmod>
   </url><url>
@@ -165,9 +192,6 @@
     <lastmod>2026-02-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-25747.html</loc>
-    <lastmod>2026-02-18T09:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-02-18T09:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-23552.html</loc>
