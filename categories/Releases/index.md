@@ -2,7 +2,8 @@
 
 Release feed for Apache Camel and related projects.
 
-releases[355]{title,link,pubDate,description}:
+releases[356]{title,link,pubDate,description}:
+  Apache Camel 4.20 What's New|https://camel.apache.org/blog/2026/04/camel420-whatsnew/index.md|Mon, 27 Apr 2026 00:00:00 +0000|Apache Camel 4.20 has just been released. This release is an expedited security fix release on top of the previous 4.19 release. JDK25 compatibility This is the first release supporting JDK25. However
   RELEASE 4.20.0|https://camel.apache.org/blog/2026/04/RELEASE-4.20.0/index.md|Sat, 25 Apr 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.20.0 release with 25 new features and improvements. The artifacts are published and ready for you to download from the Central M
   RELEASE 4.14.7|https://camel.apache.org/blog/2026/04/RELEASE-4.14.7/index.md|Fri, 24 Apr 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.7 patch release with 3 bug fixes and improvements. The artifacts are published and ready for you to download from the Central
   RELEASE 4.18.2|https://camel.apache.org/blog/2026/04/RELEASE-4.18.2/index.md|Wed, 22 Apr 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.2 LTS release with 26 new features and improvements. The artifacts are published and ready for you to download from the Centr
