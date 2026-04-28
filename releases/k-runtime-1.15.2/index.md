@@ -24,14 +24,6 @@ git checkout camel-k-runtime-parent-1.15.2
 
 Here is a list of all the issues that have been resolved for this release
 
-[#923](https://github.com/apache/camel-k-runtime/pull/923)
-
-Preparing for release 1.15.2
-
-[#922](https://github.com/apache/camel-k-runtime/pull/922)
-
-Align to deps coming from next release 1.15.2 even on main
-
 [#920](https://github.com/apache/camel-k-runtime/issues/920)
 
 Release 1.15.2

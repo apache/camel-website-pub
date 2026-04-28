@@ -38,10 +38,6 @@ Release 2.3.1
 
 \[Regression\] Nightly Quarkus native checks failure
 
-[#5412](https://github.com/apache/camel-k/pull/5412)
-
-Adding eventing core types on RBAC
-
 [#5409](https://github.com/apache/camel-k/issues/5409)
 
 Knative accepted port names

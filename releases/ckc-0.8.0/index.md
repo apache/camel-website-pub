@@ -35,10 +35,6 @@ git checkout camel-kafka-connector-0.8.0
 
 Here is a list of all the issues that have been resolved for this release
 
-[#1007](https://github.com/apache/camel-kafka-connector/pull/1007)
-
-Fix problem when call 'context.errantRecordReporter()' will result in a NoSuchMethodException or NoClassDefFoundError when the sink connector is deployed to Connect runtimes older than Kafka 2.6
-
 [#997](https://github.com/apache/camel-kafka-connector/issues/997)
 
 Azure storage blob failing on camel-master
@@ -154,6 +150,10 @@ Create a Twitter timeline example
 [#166](https://github.com/apache/camel-kafka-connector/issues/166)
 
 Add tests to camel-kafka-connector-generator-maven-plugin
+
+[#149](https://github.com/apache/camel-kafka-connector/issues/149)
+
+camel-kafka-connector-generator-maven-plugin: optionally delete submodules not in catalog
 
 ## Keys
 

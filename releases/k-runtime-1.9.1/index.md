@@ -24,10 +24,6 @@ git checkout camel-k-runtime-parent-1.9.1
 
 Here is a list of all the issues that have been resolved for this release
 
-[#745](https://github.com/apache/camel-k-runtime/pull/745)
-
-Upgrade branch 1.9.x to camel-quarkus 2.3.0 and camel.3.11.2
-
 ## Keys
 
 You can verify your download by following these [procedures](http://www.apache.org/info/verification.md) and using these [KEYS](https://www.apache.org/dist/camel/KEYS).

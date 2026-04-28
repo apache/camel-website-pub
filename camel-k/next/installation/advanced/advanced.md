@@ -2,8 +2,6 @@
 
 Camel K Operators offers several possibility of customization. The default installation could be good in the most of the cases, but, we have a series of configuration that can be applied when you want to fine tune your Camel K operator and get the very best of it.
 
-Some of the configuration can be defined after the operator is installed using the proper [IntegrationPlatform specifications](../integrationplatform.md). Other fine tunings require to change the operator Deployment, so they either need to be provided before the installation procedure start, or after, with the subsequent operator restart.
-
 > **Note**
 > changing some of the default configuration may affect the behavior of your Camel K Operator. Make sure to understand how to properly tune each configuration.
 
@@ -35,7 +33,7 @@ The service exposed on the _/metrics_ endpoint is compatible with Prometheus. Yo
 
 By default, the operator Pod logging level is set to INFO. You may require to change this value to log also DEBUG. In this case you need to provide an environment variable to the operator Deployment, _LOG\_LEVEL_ which can be set to `debug`. You can also lower the number of logging tracing by setting this value to `error` (advisable for production environments).
 
-## Environment Variables
+## More configuration
 
 The following environment variables can be configured on the operator Deployment to tune the operator behavior:
 

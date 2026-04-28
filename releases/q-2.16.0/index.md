@@ -64,10 +64,6 @@ Multiple test methods do not work in a class extending CamelQuarkusTestSupport
 
 Java jOOR DSL native support
 
-[#4345](https://github.com/apache/camel-quarkus/pull/4345)
-
-Expand AWS CW test coverage #4196
-
 [#4330](https://github.com/apache/camel-quarkus/issues/4330)
 
 Split package warning

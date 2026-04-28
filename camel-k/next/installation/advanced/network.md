@@ -25,10 +25,10 @@ Also in this case, the longer the operator runs, the lower the need to access to
 
 ## Build application with Maven
 
-We always suggest the usage of a [Maven repository manager](maven.html#maven-proxy) in order to have production-grade performances. This component acts as a proxy and improve certain aspects of the development. However this is not mandatory and you can connect directly to the Maven repository of your choice (by default, Maven central).
+We always suggest the usage of a [Maven repository manager](../builds.html#maven-proxy) in order to have production-grade performances. This component acts as a proxy and improve certain aspects of the development. However this is not mandatory and you can connect directly to the Maven repository of your choice (by default, Maven central).
 
 As you can see in the diagram, either you’re using a Maven proxy or you’re running without it, when the operator (or the builder Pod) starts a build it may require to connect to the Internet (or any internal repository you may have configured). This is necessary to download locally the dependencies and perform the build.
 
 If the dependencies are stored in the local disk of the operator (or an IntegrationKit is already available to be used), then, no access to the Internet will be required. As a natural consequence, the longer the operator runs, the less it will need to access the Internet. A particular case is when you use the builder Pod strategy, in which case, it will require to download all dependencies from scratch. Similar situation when the operator Pod is restarted.
 
-We suggest you to check the [Maven configuration](maven.md) page which contains all the details required to fine tune the build phase.
+We suggest you to check the [Builds configuration](../builds.md) page which contains all the details required to fine tune the build phase.

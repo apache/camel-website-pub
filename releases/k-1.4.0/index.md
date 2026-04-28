@@ -29,10 +29,6 @@ git checkout v1.4.0
 
 Here is a list of all the issues that have been resolved for this release
 
-[#2222](https://github.com/apache/camel-k/pull/2222)
-
-chore(release): disable dynamic linking in released artifacts
-
 [#2164](https://github.com/apache/camel-k/issues/2164)
 
 Review generated CSV

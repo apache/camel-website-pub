@@ -69,17 +69,9 @@ fix(trait): force a volume path when key is set
 
 fix(cli): more user-friendly error messages for kamel local subcommands
 
-[#3489](https://github.com/apache/camel-k/pull/3489)
-
-fix(cli): run Integration from GitHub branch
-
 [#3471](https://github.com/apache/camel-k/pull/3471)
 
 fix(trait): nil pointer dereference when applying traits during kit building
-
-[#3460](https://github.com/apache/camel-k/pull/3460)
-
-fix(olm): fix profile name: Openshift -> OpenShift in OLM sample
 
 [#3445](https://github.com/apache/camel-k/issues/3445)
 
@@ -89,29 +81,9 @@ fix(olm): fix profile name: Openshift -> OpenShift in OLM sample
 
 CPU Spikes on Openshift with unusual operator behaviour
 
-[#3432](https://github.com/apache/camel-k/pull/3432)
-
-feat(build): Golang 1.17
-
-[#3403](https://github.com/apache/camel-k/pull/3403)
-
-allow setting resources & securityContext in Helm Chart values
-
 [#3381](https://github.com/apache/camel-k/issues/3381)
 
 Update to Knative v1.5.0
-
-[#3376](https://github.com/apache/camel-k/pull/3376)
-
-chore(build): Use Camel K runtime Maven structural logging module
-
-[#3373](https://github.com/apache/camel-k/pull/3373)
-
-fix(knative): Make knative broker name configurable
-
-[#3366](https://github.com/apache/camel-k/pull/3366)
-
-introduce spectrum option job
 
 [#3325](https://github.com/apache/camel-k/pull/3325)
 

@@ -29,10 +29,6 @@ git checkout v1.10.3
 
 Here is a list of all the issues that have been resolved for this release
 
-[#3802](https://github.com/apache/camel-k/pull/3802)
-
-Preparing for release 1.10.3
-
 [#3796](https://github.com/apache/camel-k/issues/3796)
 
 Release 1.10.3

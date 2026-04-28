@@ -29,10 +29,6 @@ git checkout v1.8.2
 
 Here is a list of all the issues that have been resolved for this release
 
-[#3058](https://github.com/apache/camel-k/pull/3058)
-
-fix: The error handler trait should update status dependencies (1.8.x backport)
-
 ## Keys
 
 You can verify your download by following these [procedures](http://www.apache.org/info/verification.md) and using these [KEYS](https://www.apache.org/dist/camel/KEYS).

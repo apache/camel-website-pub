@@ -185,6 +185,8 @@ Enum values:
 
 -   listBlobContainers
     
+-   findBlobsByTags
+    
 -   createBlobContainer
     
 -   deleteBlobContainer
@@ -388,6 +390,8 @@ Enum values:
 
 -   listBlobContainers
     
+-   findBlobsByTags
+    
 -   createBlobContainer
     
 -   deleteBlobContainer
@@ -514,7 +518,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Storage Blob Service component supports 71 message header(s), which is/are listed below:
+The Azure Storage Blob Service component supports 72 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -525,6 +529,8 @@ The Azure Storage Blob Service component supports 71 message header(s), which is
 Enum values:
 
 -   listBlobContainers
+    
+-   findBlobsByTags
     
 -   createBlobContainer
     
@@ -769,6 +775,7 @@ Enum values:
 | **CamelAzureStorageBlobContext** (producer) Constant: [`CHANGE_FEED_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_CONTEXT) | (getChangeFeed) This gives additional context that is passed through the Http pipeline during the service call. |  | Context |
 | **CamelAzureStorageBlobSnapshotId** (common) Constant: [`BLOB_SNAPSHOT_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_SNAPSHOT_ID) | The snapshot identifier. On createBlobSnapshot it is set on the exchange as the id of the newly created snapshot. On read operations (getBlob, downloadBlobToFile, downloadLink) it can be provided as input to target a specific blob snapshot. |  | String |
 | **CamelAzureStorageBlobTags** (common) Constant: [`BLOB_TAGS`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_TAGS) | (producer) (setBlobTags) The tags to set on the blob as key-value pairs. (consumer) The tags retrieved from the blob. |  | Map |
+| **CamelAzureStorageBlobTagFilter** (producer) Constant: [`BLOB_TAG_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_TAG_FILTER) | (findBlobsByTags) A SQL-like expression that filters blobs across the storage account based on their index tags, for example Environment = 'Production' AND Status = 'Active'. |  | String |
 
 **Required information options:**
 
@@ -834,6 +841,7 @@ For these operations, `accountName` is **required**.
 | --- | --- |
 | `listBlobContainers` | Get the content of the blob. You can restrict the output of this operation to a blob range. |
 | `getChangeFeed` | Returns transaction logs of all the changes that occur to the blobs and the blob metadata in your storage account. The change feed provides ordered, guaranteed, durable, immutable, read-only log of these changes. |
+| `findBlobsByTags` | Returns a list of blobs across the storage account whose index tags match the SQL-like filter expression provided via the `CamelAzureStorageBlobTagFilter` header or the message body. Optionally honours `CamelAzureStorageBlobMaxResultsPerPage` and `CamelAzureStorageBlobTimeout`. The result body is a `List<TaggedBlobItem>`. |
 
 **Operations on the container level**
 
@@ -1430,6 +1438,17 @@ from("direct:setBlobTags")
 from("direct:getBlobTags")
   .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=getBlobTags&serviceClient=#client")
   .log("Tags: ${body}")
+  .to("mock:result");
+```
+
+-   `findBlobsByTags`
+    
+
+```java
+from("direct:findBlobsByTags")
+  .setHeader(BlobConstants.BLOB_TAG_FILTER, constant("\"Environment\" = 'Production' AND \"Status\" = 'Active'"))
+  .to("azure-storage-blob://camelazure?operation=findBlobsByTags&serviceClient=#client")
+  .log("Matching blobs: ${body}")
   .to("mock:result");
 ```
 

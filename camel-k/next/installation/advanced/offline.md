@@ -2,6 +2,9 @@
 
 Camel K is naturally developed to fit in an "open world" cluster model. It basically means that the default installation assumes it can pull and push resources from the Internet. However, there could be certain domains or use cases where this is a limitation. For this reason this guide will show you how to setup properly Camel K in an offline (or disconnected, or air gapped) cluster environment.
 
+> **Warning**
+> This is an unsupported functionality, use at your own risk.
+
 In order to understand the content of this guide. It is good to have familiarity with the default [components topology](network.md). Let’s see again the diagram here:
 
 ![Network architecture](../../_images/architecture/camel-k-network.svg)
@@ -10,7 +13,7 @@ We can easily identify those components which requires access to the Internet an
 
 ## Container images registry
 
-The [registry](../registry/registry.md) is the component in charge to host the containers which are built from the operator and are used by the cluster to run the Camel applications. This component could be provided out of the box by the cluster, or should be operated by you (see the guide on [how to run your own registry](../registry/special/own.md)).
+The [registry](../registry.md) is the component in charge to host the containers which are built from the operator and are used by the cluster to run the Camel applications. This component could be provided out of the box by the cluster, or should be operated by you (see the guide on [how to run your own registry](../registry/special/own.md)).
 
 As we’re in a disconnected environment, we assume this component to be accessible by the cluster (through an IP or URL). However, the cluster need to use the Camel K container image in order to be installed. You therefore need to make sure that the cluster registry has preloaded the Camel K container image, which is `docker.io/apache/camel-k:2.3.0` (or any version you’re willing to use).
 
@@ -69,16 +72,10 @@ The file produced above can be used in a variety of ways. We can only give a few
 
 A simple strategy is to identify the Camel K operator maven repository directory (default, `/etc/maven/m2`), and just upload the file in the directory. Once the file is on the Pod, you can extract the content accordingly (ie, `tar -xzf`) accessing to the Pod (ie, `kubectl exec camel-k-<pod> — /bin/bash`).
 
-Once the dependencies are copied, you can edit your IntegrationPlatform custom resource and include the `--offline` option in the `cliOptions` configuration:
+Once the dependencies are copied, you can edit your `MAVEN_CLI_OPTIONS` env var and include the `--offline` option:
 
-```yaml
-...
-spec:
-  build:
-...
-    maven:
-      cliOptions:
-      - -o
+```none
+MAVEN_CLI_OPTIONS: -o, ...
 ```
 
 The downside of this procedure is that since the Pod is ephemeral, the content of the maven repository will be cleared on a Pod restart/reschedule. We therefore recommend for simple developments and demos.
@@ -99,36 +96,20 @@ kubectl create configmap local-maven-settings-offline --from-file=settings.xml=m
 
 Now you have to inform Camel K to use this settings.xml when building the integrations.
 
-If you have already installed Camel K, then you can patch the `IntegrationPlatform/camel-k`, verify you environment for custom name and namespace:
-
-```none
-kubectl patch itp/camel-k --type=merge -p '{"spec": {"build": {"maven": {"settings": {"configMapKeyRef": {"key": "settings.xml", "name": "local-maven-settings-offline"}}}}}}'
-```
-
-If you want to install Camel K with this custom maven settings.xml.
+If you have already installed Camel K, then you can update the `MAVEN_SETTINGS` accordingly.
 
 ### Quarkus Native Build
 
-If you are doing quarkus native builds, then you have to use the container image with digest address. The [quarkus trait](../../traits/quarkus.md) contains two parameters to set the `nativeBaseImage` and `nativeBuilderImage`. You can permanently set the quarkus parameter at the `IntegrationPlatform` or `IntegrationProfile` as a global configuration. The following example sets the `IntegrationPlatform/camel-k`. Be sure to verify the correct container image address digest values.
-
-```none
-kubectl patch itp/camel-k --type=merge -p '{"spec": {"traits": {"quarkus": {"nativeBaseImage": "quay.io/quarkus/quarkus-micro-image@sha256:<digest>", "nativeBuilderImage": "quay.io/quarkus/ubi-quarkus-mandrel-builder-image@sha256:<digest>"}}}}'
-```
+If you are doing quarkus native builds, then you have to use the container image with digest address. The [quarkus trait](../../traits/quarkus.md) contains two parameters to set the `nativeBaseImage` and `nativeBuilderImage`. You can permanently set the quarkus parameter at the `IntegrationProfile` as a global configuration.
 
 ### Run in a volume
 
 Another possible alternative is to use a Kubernetes Volume where to host such dependencies. You can create a volume, then you can upload and extract the dependencies. You can now use the volume, changing the Camel K operator Deployment and mount such Persistent Volume to the maven repository directory (default, _/etc/maven/m2_).
 
-Edit your IntegrationPlatform custom resource and include the `--offline` option in the `cliOptions` configuration:
+Edit your `MAVEN_CLI_OPTIONS` env var and include the `--offline` option in the configuration:
 
-```yaml
-...
-spec:
-  build:
-...
-    maven:
-      cliOptions:
-      - -o
+```none
+MAVEN_CLI_OPTIONS: -o, ...
 ```
 
 ### Run as initContainer
@@ -161,7 +142,7 @@ spec:
 ...
 ```
 
-Also in this case, you need to edit the IntegrationPlatform and add the `--offline` (or `-o`) option as shown above.
+Also in this case, you need to edit the `MAVEN_CLI_OPTIONS` and add the `--offline` (or `-o`) option as shown above.
 
 ### Create your own image from source
 
@@ -172,4 +153,4 @@ CUSTOM_IMAGE=my-camel-k CUSTOM_VERSION=2.0.0-offline make bundle
 make install-k8s-global
 ```
 
-Also here, you need to edit the IntegrationPlatform and add the `--offline` (or `-o`) option as shown above.
+Also here, you need to edit the MAVEN\_CLI\_OPTIONS and add the `--offline` (or `-o`) option as shown above.

@@ -24,10 +24,6 @@ git checkout camel-k-runtime-parent-1.16.0
 
 Here is a list of all the issues that have been resolved for this release
 
-[#927](https://github.com/apache/camel-k-runtime/pull/927)
-
-Prepare release 1.16.0
-
 [#925](https://github.com/apache/camel-k-runtime/issues/925)
 
 Release 1.16.0

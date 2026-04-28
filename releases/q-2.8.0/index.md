@@ -36,10 +36,6 @@ Improve MicroProfile Fault Tolerance extension test coverage
 
 paho: NullPointerException when MqqtException occurs during reconnect attempt in native mode
 
-[#3668](https://github.com/apache/camel-quarkus/pull/3668)
-
-Create Camel Google Secret Manager Extension
-
 [#3658](https://github.com/apache/camel-quarkus/issues/3658)
 
 Improve Infinispan extension test coverage

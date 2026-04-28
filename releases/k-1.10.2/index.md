@@ -29,14 +29,6 @@ git checkout v1.10.2
 
 Here is a list of all the issues that have been resolved for this release
 
-[#3756](https://github.com/apache/camel-k/pull/3756)
-
-Helm chart 1.10.2
-
-[#3748](https://github.com/apache/camel-k/pull/3748)
-
-Preparing for release 1.10.2 - Upgrade to Camel K Runtime 1.15.1 staging
-
 [#3746](https://github.com/apache/camel-k/issues/3746)
 
 Release 1.10.2

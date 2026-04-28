@@ -63,7 +63,7 @@ When using spring-boot with Spring Boot make sure to use the following Maven dep
 </dependency>
 ```
 
-The component supports 290 options, which are listed below.
+The component supports 296 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -227,6 +227,12 @@ The component supports 290 options, which are listed below.
 | **camel.routecontroller.unhealthy-on-exhausted** | Whether to mark the route as unhealthy (down) when all restarting attempts (backoff) have failed and the route is not successfully started and the route manager is giving up. If setting this to false will make health checks ignore this problem and allow to report the Camel application as UP. | true | Boolean |
 | **camel.routecontroller.unhealthy-on-restarting** | Whether to mark the route as unhealthy (down) when the route failed to initially start, and is being controlled for restarting (backoff). If setting this to false will make health checks ignore this problem and allow to report the Camel application as UP. | true | Boolean |
 | **camel.routetemplate.config** | Route template configurations. |  | List |
+| **camel.security.allowed-properties** | Comma-separated list of property keys to exclude from security policy checks. Use full property paths (e.g., camel.component.aws2-s3.trustAllCertificates) to allow specific properties regardless of the configured policy. |  | String |
+| **camel.security.insecure-dev-policy** | Security policy for development-only features. When set, overrides the global policy for options intended only for development environments. |  | String |
+| **camel.security.insecure-serialization-policy** | Security policy for insecure deserialization configuration. When set, overrides the global policy for options that enable dangerous deserialization of untrusted data. |  | String |
+| **camel.security.insecure-ssl-policy** | Security policy for insecure SSL/TLS configuration. When set, overrides the global policy for options that disable certificate validation or hostname verification. |  | String |
+| **camel.security.policy** | Global security policy applied to all categories unless overridden. Controls how Camel reacts when insecure configuration is detected at startup. | warn | String |
+| **camel.security.secret-policy** | Security policy for plain-text secrets. When set, overrides the global policy for properties that contain sensitive values configured as plain text. |  | String |
 | **camel.ssl.cert-alias** | An optional certificate alias to use. This is useful when the keystore has multiple certificates. |  | String |
 | **camel.ssl.cipher-suites** | The optional explicitly configured cipher suites for this configuration. |  | CipherSuitesParameters |
 | **camel.ssl.cipher-suites-filter** | The optional cipher suite filter configuration for this configuration. |  | FilterParameters |
@@ -703,6 +709,68 @@ Example:
 management.server.undertow.accesslog.use-camel-logging=true
 management.server.accesslog.pattern=combined
 ```
+
+## Security Policy
+
+Camel Spring Boot automatically enforces security policies at startup, detecting insecure configuration such as disabled SSL verification, plain-text secrets, enabled Java deserialization, or development-only features.
+
+The global policy controls how Camel reacts when insecure configuration is detected:
+
+```properties
+# allow  — no warnings, allow the configuration
+# warn   — log a warning at startup (default)
+# fail   — throw an exception and prevent startup
+camel.security.policy=warn
+```
+
+### Category Overrides
+
+Each security category can override the global policy independently:
+
+```properties
+camel.security.policy=fail
+camel.security.insecure-ssl-policy=warn
+camel.security.insecure-serialization-policy=warn
+camel.security.insecure-dev-policy=allow
+camel.security.secret-policy=fail
+```
+
+To exclude specific properties from all checks, use `allowed-properties`:
+
+```properties
+camel.security.allowed-properties=camel.component.http.trustAllCertificates,camel.component.netty.allowJavaSerializedObject
+```
+
+### Per-Environment Policies with Spring Profiles
+
+Spring profiles allow you to enforce strict security in production while keeping a relaxed policy during development.
+
+In `application-prod.properties`:
+
+```properties
+camel.security.policy=fail
+```
+
+In `application-dev.properties`:
+
+```properties
+camel.security.policy=allow
+```
+
+Activate the profile via `spring.profiles.active`:
+
+```properties
+# application.properties
+spring.profiles.active=dev
+```
+
+Or at runtime:
+
+```bash
+java -Dspring.profiles.active=prod -jar myApp.jar
+```
+
+This way, developers can freely use options like `trustAllCertificates=true` locally, while production deployments will fail fast if any insecure configuration is detected.
 
 ## Virtual Threads Support
 

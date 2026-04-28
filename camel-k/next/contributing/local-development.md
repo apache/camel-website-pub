@@ -57,7 +57,7 @@ docker push default-route-openshift-image-registry.apps-crc.testing/camel-k/came
 With the steps above you should have available a local operator into CRC and proceed normally with the `make install-k8s-global` procedure.
 
 > **Note**
-> you will need to configure the IntegrationPlatform and the registry as required for Openshift and the operator Deployment may fail due to high amount of resources limit (which you can remove to let the operator start).
+> you will need to configure the registry as required for Openshift and the operator Deployment may fail due to high amount of resources limit (which you can remove to let the operator start).
 
 ### Local Camel K runtime
 

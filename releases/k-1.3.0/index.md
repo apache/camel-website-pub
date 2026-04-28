@@ -49,10 +49,6 @@ Remove main runtime from operator codebase
 
 Use registry secrets for both pulling and pushing
 
-[#1762](https://github.com/apache/camel-k/pull/1762)
-
-Camel K operator monitoring
-
 [#1761](https://github.com/apache/camel-k/issues/1761)
 
 Move released images to a hub without rate limits

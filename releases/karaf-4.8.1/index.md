@@ -88,10 +88,6 @@ LevelDB fails on Mac with Apple chip
 
 Add camel-cxf integration tests
 
-[#466](https://github.com/apache/camel-karaf/pull/466)
-
-Add camel-disruptor integration test
-
 [#465](https://github.com/apache/camel-karaf/issues/465)
 
 Add camel-disruptor integration test
@@ -143,6 +139,10 @@ Integration test of the docker feature is unstable
 [#432](https://github.com/apache/camel-karaf/issues/432)
 
 Add camel-docker integration test
+
+[#431](https://github.com/apache/camel-karaf/issues/431)
+
+CamelAws2IamITest is failing on the test container
 
 ## Keys
 

@@ -52,7 +52,7 @@ By default, builds are queued sequentially based on their layout (e.g. native, f
 
 To avoid having many builds running in parallel the operator uses a maximum number of running builds setting that limits the amount of builds running.
 
-You can set this limit in the [IntegrationPlatform](integration-platform.md) settings.
+You can set this limit via environment variable settings.
 
 The default values for this limitation is based on the build strategy.
 

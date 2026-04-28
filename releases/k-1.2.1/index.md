@@ -29,10 +29,6 @@ git checkout v1.2.1
 
 Here is a list of all the issues that have been resolved for this release
 
-[#1786](https://github.com/apache/camel-k/pull/1786)
-
-Fix #1785: propagate klb changes to integrations
-
 [#1785](https://github.com/apache/camel-k/issues/1785)
 
 Changes to KameletBinding must be propagated to Integrations

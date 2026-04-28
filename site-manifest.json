@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1777286113046,
+  "generated": 1777360955836,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -266,12 +266,6 @@
             },
             {
               "module": "ROOT",
-              "path": "installation/advanced/build-config.adoc",
-              "url": "/camel-k/next/installation/advanced/build-config.html",
-              "title": "Build configuration"
-            },
-            {
-              "module": "ROOT",
               "path": "installation/advanced/http-proxy.adoc",
               "url": "/camel-k/next/installation/advanced/http-proxy.html",
               "title": "HTTP Proxy"
@@ -287,12 +281,6 @@
               "path": "installation/advanced/maven-proxy.adoc",
               "url": "/camel-k/next/installation/advanced/maven-proxy.html",
               "title": "Run a Maven Proxy"
-            },
-            {
-              "module": "ROOT",
-              "path": "installation/advanced/maven.adoc",
-              "url": "/camel-k/next/installation/advanced/maven.html",
-              "title": "Configuring Maven"
             },
             {
               "module": "ROOT",
@@ -332,15 +320,15 @@
             },
             {
               "module": "ROOT",
-              "path": "installation/installation.adoc",
-              "url": "/camel-k/next/installation/installation.html",
-              "title": "Installation"
+              "path": "installation/builds.adoc",
+              "url": "/camel-k/next/installation/builds.html",
+              "title": "Configuring Maven Builds"
             },
             {
               "module": "ROOT",
-              "path": "installation/integrationplatform.adoc",
-              "url": "/camel-k/next/installation/integrationplatform.html",
-              "title": "Configure an IntegrationPlatform"
+              "path": "installation/installation.adoc",
+              "url": "/camel-k/next/installation/installation.html",
+              "title": "Camel K operator installation"
             },
             {
               "module": "ROOT",
@@ -368,15 +356,15 @@
             },
             {
               "module": "ROOT",
-              "path": "installation/registry/registry-secret.adoc",
-              "url": "/camel-k/next/installation/registry/registry-secret.html",
-              "title": "Configuring a secret for the container registry"
+              "path": "installation/registry.adoc",
+              "url": "/camel-k/next/installation/registry.html",
+              "title": "Configuring Registry"
             },
             {
               "module": "ROOT",
-              "path": "installation/registry/registry.adoc",
-              "url": "/camel-k/next/installation/registry/registry.html",
-              "title": "Configuring Registry"
+              "path": "installation/registry/registry-secret.adoc",
+              "url": "/camel-k/next/installation/registry/registry-secret.html",
+              "title": "Configuring a secret for the container registry"
             },
             {
               "module": "ROOT",

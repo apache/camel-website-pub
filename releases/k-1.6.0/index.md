@@ -37,10 +37,6 @@ Numeric values are not properly encoded in KameletBindings
 
 Release 1.6.0
 
-[#2580](https://github.com/apache/camel-k/pull/2580)
-
-Reworked logging trait dependencies
-
 [#2541](https://github.com/apache/camel-k/issues/2541)
 
 Evaluate/Cleanup logging trait dependency

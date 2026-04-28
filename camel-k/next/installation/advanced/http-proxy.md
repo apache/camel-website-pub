@@ -4,8 +4,6 @@ Production or corporate environments can deny direct access to the Internet, and
 
 The Camel K operator can be configured to route egress traffic to this proxy, by setting the usual `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` on the operator Deployment.
 
-This can be achieved with the proper customization at installation time (see details for each specific installation method). Alternatively, the operator Deployment can be amended with the `kubectl` CLI, e.g.:
-
 ```console
 $ kubectl set env deployment camel-k-operator HTTP_PROXY=http://proxy
 ```
@@ -53,52 +51,4 @@ By default, the `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variable
 
 ```console
 $ kamel run -t environment.http-proxy=false
-```
-
-Alternatively, it can be disabled globally, by editing the IntegrationPlatform resources, e.g.:
-
-```yaml
-apiVersion: camel.apache.org/v1
-kind: IntegrationPlatform
-metadata:
-  name: camel-k
-spec:
-  traits:
-    environment:
-      configuration:
-        httpProxy: false (1)
-```
-
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Deactivates the propagation of HTTP proxy environment variables at the platform level</td></tr></tbody></table>
-
-## OpenShift
-
-On OpenShift 4, cluster-wide egress proxy can be configured by editing the `cluster` Proxy resource:
-
-```yaml
-apiVersion: config.openshift.io/v1
-kind: Proxy
-metadata:
-  name: cluster
-spec:
-  httpProxy: http://<username>:<pswd>@<ip>:<port>
-```
-
-Operator Lifecycle Manager (OLM), sources the status of this `cluster` Proxy, to automatically populate the `HTTP_PROXY`, `HTTPS_PROXY`, and `NO_PROXY` environment variables, on the operator Deployment resources it manages.
-
-These cluster-wide proxy settings can be overwritten, specifically for the Camel K operator if necessary, by editing the corresponding Subscription resource, e.g.:
-
-```yaml
-apiVersion: operators.coreos.com/v1alpha1
-kind: Subscription
-metadata:
-  name: camel-k
-  namespace: openshift-operators
-spec:
-  config:
-    env:
-    - name: HTTP_PROXY
-      value: ""
-    - name: NO_PROXY
-      value: ""
 ```

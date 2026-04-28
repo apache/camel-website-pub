@@ -18,4 +18,4 @@ When you are creating a new runtime for which a [CamelCatalog](../architecture/c
 
 ## Pin a runtime version
 
-By default each Camel K version uses the runtime version provided in the IntegrationPlatform. Using the trait will let you pin to a well defined version, avoiding to unintentionally upgrade the runtime of the integrations running when you perform an operator upgrade (hence an IntegrationPlatform upgrade). See more info in the [Camel K upgrade documentation](../installation/upgrade.html#maintain-runtime-integrations).
+By default each Camel K version uses the runtime version provided in the `BUILD_RUNTIME_VERSION` environment variable configuration. Using the trait will let you pin to a well defined version, avoiding to unintentionally upgrade the runtime of the integrations running when you perform an operator upgrade. See more info in the [Camel K upgrade documentation](../installation/upgrade.html#maintain-runtime-integrations).

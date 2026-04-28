@@ -28,10 +28,6 @@ Here is a list of all the issues that have been resolved for this release
 
 Log runtime version when starting
 
-[#503](https://github.com/apache/camel-k-runtime/pull/503)
-
-Create a wrap component to wrap single tenant component
-
 [#500](https://github.com/apache/camel-k-runtime/issues/500)
 
 Sink Kamelet not called

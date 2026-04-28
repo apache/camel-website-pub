@@ -19,19 +19,12 @@ docker login
 kubectl create secret generic your-secret-name --from-file ~/.docker/config.json
 ```
 
-After you’ve created the secret, you can provide it to your IntegrationPlatform resource:
+After you’ve created the secret, you can provide it to your environment variable configuration:
 
-```yaml
-apiVersion: camel.apache.org/v1
-kind: IntegrationPlatform
-metadata:
-  name: camel-k
-spec:
-  build:
-    registry:
-      address: <my-registry-address>
-      organization: <my-organization> (optional)
-      secret: <my-secret-credentials>
+```none
+REGISTRY_ADDRESS: <my-registry-address>
+REGISTRY_ORGANIZATION: <my-organization> (optional)
+REGISTRY_SECRET: <my-secret-credentials>
 ```
 
 > **Note**

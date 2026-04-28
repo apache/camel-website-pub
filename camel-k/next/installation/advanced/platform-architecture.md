@@ -19,7 +19,7 @@ The logs should indicate the architecture at the start of the operator pod:
 The operator will by default build integrations for the same platform it is running on. It is however also possible to explicitly define the set of target platforms integrations should be built for. You can use `builder.platforms` trait option to control this behavior.
 
 > **Note**
-> you can set the property at IntegrationPlatform level to have it for all Integrations.
+> you can set the property via `BUILD_IMAGE_PLATFORMS` env var to have it for all Integrations.
 
 Send the integration to the kamel operator to build, publish and run it
 

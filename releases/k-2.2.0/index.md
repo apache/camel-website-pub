@@ -34,10 +34,6 @@ Here is a list of all the issues that have been resolved for this release
 
 Native build fails with OpenAPI spec
 
-[#4968](https://github.com/apache/camel-k/pull/4968)
-
-feat(#4958): Supporting node selectors for the builder pod
-
 [#4956](https://github.com/apache/camel-k/issues/4956)
 
 Ability to override resources for the quarkus-native task

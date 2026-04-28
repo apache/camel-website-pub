@@ -35,10 +35,6 @@ git checkout camel-kafka-connector-0.7.2
 
 Here is a list of all the issues that have been resolved for this release
 
-[#1007](https://github.com/apache/camel-kafka-connector/pull/1007)
-
-Fix problem when call 'context.errantRecordReporter()' will result in a NoSuchMethodException or NoClassDefFoundError when the sink connector is deployed to Connect runtimes older than Kafka 2.6
-
 [#978](https://github.com/apache/camel-kafka-connector/issues/978)
 
 Release 0.7.2 once Camel 3.7.2 will be released

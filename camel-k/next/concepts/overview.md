@@ -8,9 +8,7 @@ A Camel workload is generally represented by a route expressed in any Camel DSL.
 
 ![Camel workload lifecycle](../_images/concepts/integrations.png)
 
-The user is responsible to create a single IntegrationPlatform which contains the configuration required to drive the build and publishing process. Then the user creates any Integration custom resource, which is mainly a container for the Camel route and other optional Kubernetes fine tunings.
-
-**IntegrationPlatform**: it is required to configure building aspects such as which container registry to use or Maven configuration settings.
+The user creates any Integration custom resource, which is mainly a container for the Camel route and other optional Kubernetes fine tunings.
 
 **Integration**: it is used to create the Camel application, setting mainly the Camel route the user wants to run on the cloud. The user can provide a _self managed build_ Integration as well, in which case, the operator will skip the building part.
 

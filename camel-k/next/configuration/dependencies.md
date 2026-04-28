@@ -72,7 +72,7 @@ Using Camel dependencies not listed in the catalog may lead to unexpected behavi
 kamel run -d mvn:com.google.guava:guava:26.0-jre Integration.java
 ```
 
-Note that if your dependencies belong to a private repository, this repository needs to be defined. See [Configure maven](../installation/advanced/maven.md).
+Note that if your dependencies belong to a private repository, this repository needs to be defined. See [Configure Builds](../installation/builds.md).
 
 ### Jitpack dependencies
 
