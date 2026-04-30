@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 377 in 303 JAR artifacts (10 deprecated)
+Number of Non-Core Components: 376 in 302 JAR artifacts (9 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -392,7 +392,6 @@ Number of Non-Core Components: 377 in 303 JAR artifacts (10 deprecated)
 | [SSH](ssh-component.md) | camel-ssh | Stable | 2.10 | Execute commands on remote hosts using SSH. |
 | [StAX](stax-component.md) | camel-stax | Stable | 2.9 | Process XML payloads by a SAX ContentHandler. |
 | [Stitch](stitch-component.md) | camel-stitch | Stable | 3.8 | Stitch is a cloud ETL service that integrates various data sources into a central data warehouse through various integrations. |
-| [Stomp](stomp-component.md) | camel-stomp | Stable-deprecated | 2.12 | Send and receive messages to/from STOMP (Simple Text Oriented Messaging Protocol) compliant message brokers. |
 | [String Template](string-template-component.md) | camel-stringtemplate | Stable | 1.2 | Transform messages using StringTemplate engine. |
 | [Stripe](stripe-component.md) | camel-stripe | Preview | 4.17 | Interact with the Stripe payment platform. |
 | [Tahu](tahu-summary.md) | camel-tahu | Preview | 4.8 | Sparkplug B Edge Node and Host Application support over MQTT using Eclipse Tahu |

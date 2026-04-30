@@ -74,6 +74,10 @@ GitOps triggered when moving from "Build Complete" to Deploying
 
 GitOps kustomization all profile new line
 
+[#6500](https://github.com/apache/camel-k/pull/6500)
+
+feat: enable Camel Dashboard monitoring
+
 [#6498](https://github.com/apache/camel-k/issues/6498)
 
 Plain Quarkus 3.31.x not working

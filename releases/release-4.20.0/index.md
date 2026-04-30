@@ -189,7 +189,11 @@ camel-ftp-common - Move shared code into a common module
 
 \[build\] non-varargs call of varargs method with inexact argument type for last parameter
 
-### Test (3)
+### Test (4)
+
+[CAMEL-23366](https://issues.apache.org/jira/browse/CAMEL-23366)
+
+VertxPlatformHttpProxyTest.testProxy test is failing
 
 [CAMEL-23323](https://issues.apache.org/jira/browse/CAMEL-23323)
 

@@ -6,10 +6,8 @@ Send and rececive messages to/from STOMP (Simple Text Oriented Messaging Protoco
 
 ## What’s inside
 
--   [Stomp component](../../../../components/next/stomp-component.md), URI syntax: `stomp:destination`
+-   Stomp
     
-
-Please refer to the above link for usage and configuration details.
 
 ## Maven coordinates
 

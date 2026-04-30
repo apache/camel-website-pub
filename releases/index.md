@@ -427,6 +427,7 @@ Releases by release date
 Releases by release date
 | Version | Release date | Description |
 | --- | --- | --- |
+| [3.35.0](../releases/q-3.35.0/) | 2026-04-27 |  |
 | [3.33.0](../releases/q-3.33.0/) | 2026-03-25 |  |
 | [3.27.3](../releases/q-3.27.3/) | 2026-03-06 |  |
 | [3.32.0](../releases/q-3.32.0/) | 2026-02-23 |  |

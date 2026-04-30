@@ -80,7 +80,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure Storage Blob Service component supports 50 options, which are listed below.
+The Azure Storage Blob Service component supports 51 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -139,6 +139,7 @@ Enum values:
 | **serviceClient** (common) | **Autowired** Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). |  | BlobServiceClient |
 | **snapshotId** (common) | The snapshot identifier used to target a specific blob snapshot on read operations (getBlob, downloadBlobToFile, downloadLink). When set, the read targets the snapshot scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobSnapshotId header. |  | String |
 | **timeout** (common) | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
+| **versionId** (common) | The blob version identifier used to target a specific blob version on read operations (getBlob, downloadBlobToFile, downloadLink). Requires blob versioning to be enabled on the storage account. When set, the read targets the version scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobVersionId header. |  | String |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **deleteAfterRead** (consumer) | Delete blobs from Azure after they have been retrieved. The delete is only performed if the Exchange is committed. If a rollback occurs, the blob is not deleted. If this option is false, then the same blobs will be retrieved over and over again in the polls. Therefore, you need to use the Idempotent Consumer EIP in the route to filter out duplicates. You can filter using the BlobConstants#BLOB\_NAME header, or only the blob name. | false | boolean |
 | **destinationBlobPrefix** (consumer) | Define the destination blob prefix to use when a blob must be moved, and moveAfterRead is set to true. |  | String |
@@ -267,7 +268,7 @@ With the following _path_ and _query_ parameters:
 | **accountName** (common) | Azure account name to be used for authentication with azure blob services. |  | String |
 | **containerName** (common) | The blob container name. |  | String |
 
-### Query Parameters (65 parameters)
+### Query Parameters (66 parameters)
 
    
 | Name | Description | Default | Type |
@@ -326,6 +327,7 @@ Enum values:
 | **serviceClient** (common) | **Autowired** Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). |  | BlobServiceClient |
 | **snapshotId** (common) | The snapshot identifier used to target a specific blob snapshot on read operations (getBlob, downloadBlobToFile, downloadLink). When set, the read targets the snapshot scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobSnapshotId header. |  | String |
 | **timeout** (common) | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
+| **versionId** (common) | The blob version identifier used to target a specific blob version on read operations (getBlob, downloadBlobToFile, downloadLink). Requires blob versioning to be enabled on the storage account. When set, the read targets the version scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobVersionId header. |  | String |
 | **deleteAfterRead** (consumer) | Delete blobs from Azure after they have been retrieved. The delete is only performed if the Exchange is committed. If a rollback occurs, the blob is not deleted. If this option is false, then the same blobs will be retrieved over and over again in the polls. Therefore, you need to use the Idempotent Consumer EIP in the route to filter out duplicates. You can filter using the BlobConstants#BLOB\_NAME header, or only the blob name. | false | boolean |
 | **destinationBlobPrefix** (consumer) | Define the destination blob prefix to use when a blob must be moved, and moveAfterRead is set to true. |  | String |
 | **destinationBlobSuffix** (consumer) | Define the destination blob suffix to use when a blob must be moved, and moveAfterRead is set to true. |  | String |
@@ -518,7 +520,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Storage Blob Service component supports 72 message header(s), which is/are listed below:
+The Azure Storage Blob Service component supports 78 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -579,6 +581,10 @@ Enum values:
 -   setBlobTags
     
 -   getBlobTags
+    
+-   setBlobLegalHold
+    
+-   setBlobImmutabilityPolicy
     
 
 
@@ -774,8 +780,31 @@ Enum values:
 | **CamelAzureStorageBlobChangeFeedEndTime** (producer) Constant: [`CHANGE_FEED_END_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_END_TIME) | (getChangeFeed) It filters the results to return events approximately before the end time. Note: A few events belonging to the next hour can also be returned. A few events belonging to this hour can be missing; to ensure all events from the hour are returned, round the end time up by an hour. |  | OffsetDateTime |
 | **CamelAzureStorageBlobContext** (producer) Constant: [`CHANGE_FEED_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#CHANGE_FEED_CONTEXT) | (getChangeFeed) This gives additional context that is passed through the Http pipeline during the service call. |  | Context |
 | **CamelAzureStorageBlobSnapshotId** (common) Constant: [`BLOB_SNAPSHOT_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_SNAPSHOT_ID) | The snapshot identifier. On createBlobSnapshot it is set on the exchange as the id of the newly created snapshot. On read operations (getBlob, downloadBlobToFile, downloadLink) it can be provided as input to target a specific blob snapshot. |  | String |
+| **CamelAzureStorageBlobVersionId** (common) Constant: [`BLOB_VERSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_VERSION_ID) | The blob version identifier. On read operations (getBlob, downloadBlobToFile, downloadLink) it can be provided as input to target a specific blob version when versioning is enabled on the storage account. On the consumer side it is populated from the blob properties when available. |  | String |
+| **CamelAzureStorageBlobIsCurrentVersion** (consumer) Constant: [`BLOB_IS_CURRENT_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_IS_CURRENT_VERSION) | Flag indicating whether this is the current version of the blob. |  | Boolean |
 | **CamelAzureStorageBlobTags** (common) Constant: [`BLOB_TAGS`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_TAGS) | (producer) (setBlobTags) The tags to set on the blob as key-value pairs. (consumer) The tags retrieved from the blob. |  | Map |
 | **CamelAzureStorageBlobTagFilter** (producer) Constant: [`BLOB_TAG_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_TAG_FILTER) | (findBlobsByTags) A SQL-like expression that filters blobs across the storage account based on their index tags, for example Environment = 'Production' AND Status = 'Active'. |  | String |
+| **CamelAzureStorageBlobLegalHold** (common) Constant: [`BLOB_LEGAL_HOLD`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_LEGAL_HOLD) | (producer) (setBlobLegalHold) The legal hold status to set on the blob. When set to true the blob is protected from modification and deletion until the hold is cleared by setting the value to false. (consumer) The legal hold status returned by the setBlobLegalHold operation. |  | Boolean |
+| **CamelAzureStorageBlobImmutabilityPolicy** (producer) Constant: [`BLOB_IMMUTABILITY_POLICY`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_IMMUTABILITY_POLICY) | (setBlobImmutabilityPolicy) A pre-built BlobImmutabilityPolicy object that overrides the policy expiry time and mode headers when present. |  | BlobImmutabilityPolicy |
+| **CamelAzureStorageBlobImmutabilityPolicyExpiryTime** (producer) Constant: [`BLOB_IMMUTABILITY_POLICY_EXPIRY_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_IMMUTABILITY_POLICY_EXPIRY_TIME) | (setBlobImmutabilityPolicy) The expiry time of the time-based retention policy. Required unless a pre-built BlobImmutabilityPolicy is provided via the body or the CamelAzureStorageBlobImmutabilityPolicy header. |  | OffsetDateTime |
+| **CamelAzureStorageBlobImmutabilityPolicyMode** (producer) Constant: [`BLOB_IMMUTABILITY_POLICY_MODE`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#BLOB_IMMUTABILITY_POLICY_MODE) | 
+
+(setBlobImmutabilityPolicy) The mode of the immutability policy: UNLOCKED (default, can be modified or deleted), LOCKED (cannot be modified or shortened, only extended), or MUTABLE.
+
+Enum values:
+
+-   Mutable
+    
+-   Unlocked
+    
+-   Locked
+    
+
+
+
+
+
+ |  | BlobImmutabilityPolicyMode |
 
 **Required information options:**
 
@@ -881,6 +910,8 @@ For these operations, `accountName`, `containerName` and `blobName` are **requir
 | `createBlobSnapshot` | `Common` | Creates a read-only snapshot of a blob. The snapshot ID is returned in the `CamelAzureStorageBlobSnapshotId` header. |
 | `setBlobTags` | `Common` | Sets user-defined index tags on a blob. Tags are key-value pairs that can be used to filter and query blobs across containers. Tags can be provided via the `CamelAzureStorageBlobTags` header or as the message body (`Map<String, String>`). |
 | `getBlobTags` | `Common` | Retrieves user-defined index tags from a blob. The tags are returned as the message body (`Map<String, String>`) and also set in the `CamelAzureStorageBlobTags` header. |
+| `setBlobLegalHold` | `Common` | Sets a legal hold on a blob. The legal hold flag (`Boolean`) is provided via the `CamelAzureStorageBlobLegalHold` header or the message body. While a legal hold is set, the blob cannot be modified or deleted until the hold is explicitly cleared by calling the operation again with `false`. |
+| `setBlobImmutabilityPolicy` | `Common` | Sets a time-based immutability policy on a blob. The policy expiry time (`OffsetDateTime`) is read from the `CamelAzureStorageBlobImmutabilityPolicyExpiryTime` header and the policy mode (`BlobImmutabilityPolicyMode`, defaults to `UNLOCKED`) from `CamelAzureStorageBlobImmutabilityPolicyMode`. A pre-built `BlobImmutabilityPolicy` may also be supplied via the message body or `CamelAzureStorageBlobImmutabilityPolicy` header. |
 
 Refer to the example section in this page to learn how to use these operations into your camel application.
 
@@ -1421,6 +1452,17 @@ from("direct:readSnapshot")
   .to("mock:result");
 ```
 
+### Reading a specific blob version
+
+When blob versioning is enabled on the storage account, the `getBlob`, `downloadBlobToFile` and `downloadLink` operations can target a specific version by setting the `versionId` URI parameter or the `CamelAzureStorageBlobVersionId` exchange header. When set, the read is scoped to the version of the blob instead of the live one. The header takes precedence over the URI parameter.
+
+```java
+from("direct:readVersion")
+  .setHeader(BlobConstants.BLOB_VERSION_ID, constant("2026-04-15T10:00:00.0000000Z"))
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=getBlob&serviceClient=#client")
+  .to("mock:result");
+```
+
 -   `setBlobTags`
     
 
@@ -1449,6 +1491,35 @@ from("direct:findBlobsByTags")
   .setHeader(BlobConstants.BLOB_TAG_FILTER, constant("\"Environment\" = 'Production' AND \"Status\" = 'Active'"))
   .to("azure-storage-blob://camelazure?operation=findBlobsByTags&serviceClient=#client")
   .log("Matching blobs: ${body}")
+  .to("mock:result");
+```
+
+-   `setBlobLegalHold`
+    
+
+```java
+// place a legal hold on the blob (e.g. for compliance / quarantine workflows)
+from("direct:setLegalHold")
+  .setHeader(BlobConstants.BLOB_LEGAL_HOLD, constant(true))
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=setBlobLegalHold&serviceClient=#client")
+  .to("mock:result");
+
+// clear the legal hold once the workflow is complete
+from("direct:clearLegalHold")
+  .setHeader(BlobConstants.BLOB_LEGAL_HOLD, constant(false))
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=setBlobLegalHold&serviceClient=#client")
+  .to("mock:result");
+```
+
+-   `setBlobImmutabilityPolicy`
+    
+
+```java
+// apply a 7-day unlocked time-based retention policy (can be modified or deleted)
+from("direct:setImmutabilityPolicy")
+  .setHeader(BlobConstants.BLOB_IMMUTABILITY_POLICY_EXPIRY_TIME, constant(OffsetDateTime.now().plusDays(7)))
+  .setHeader(BlobConstants.BLOB_IMMUTABILITY_POLICY_MODE, constant(BlobImmutabilityPolicyMode.UNLOCKED))
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=setBlobImmutabilityPolicy&serviceClient=#client")
   .to("mock:result");
 ```
 
@@ -1514,7 +1585,7 @@ When using azure-storage-blob with Spring Boot make sure to use the following Ma
 </dependency>
 ```
 
-The component supports 51 options, which are listed below.
+The component supports 52 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -1570,3 +1641,4 @@ The component supports 51 options, which are listed below.
 | **camel.component.azure-storage-blob.snapshot-id** | The snapshot identifier used to target a specific blob snapshot on read operations (getBlob, downloadBlobToFile, downloadLink). When set, the read targets the snapshot scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobSnapshotId header. |  | String |
 | **camel.component.azure-storage-blob.source-blob-access-key** | Source Blob Access Key: for copyblob operation, sadly, we need to have an accessKey for the source blob we want to copy Passing an accessKey as header, it’s unsafe so we could set as key. |  | String |
 | **camel.component.azure-storage-blob.timeout** | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
+| **camel.component.azure-storage-blob.version-id** | The blob version identifier used to target a specific blob version on read operations (getBlob, downloadBlobToFile, downloadLink). Requires blob versioning to be enabled on the storage account. When set, the read targets the version scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobVersionId header. |  | String |

@@ -4,13 +4,12 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 71 in 70 JAR artifacts (7 deprecated)
+Number of Miscellaneous Components: 71 in 70 JAR artifacts (6 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
 | [Attachments](attachments.md) | camel-attachments | Stable | 3.0 | Support for attachments on Camel messages |
-| [AWS XRay](aws-xray.md) | camel-aws-xray | Stable-deprecated | 2.21 | Enable Distributed tracing using AWS XRay |
 | [Azure Schema Registry](azure-schema-registry.md) | camel-azure-schema-registry | Stable | 4.2 | Azure Schema Registry Component for utilities to deal with authentication |
 | [Camel YAML DSL Validator Maven Plugin](camel-yaml-dsl-validator-maven-plugin.md) |  |  |  |  |
 | [CLI Connector](cli-connector.md) | camel-cli-connector | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
@@ -28,6 +27,7 @@ Number of Miscellaneous Components: 71 in 70 JAR artifacts (7 deprecated)
 | [Java DSL (runtime compiled)](java-joor-dsl.md) | camel-java-joor-dsl | Stable | 3.9 | Camel Java DSL with jOOR |
 | [Jaxb XML Dsl](java-xml-jaxb-dsl.md) | camel-xml-jaxb-dsl | Stable | 3.9 | Camel DSL with XML using camel-jaxb |
 | [JFR](jfr.md) | camel-jfr | Stable | 3.8 | Diagnose Camel applications with Java Flight Recorder |
+| [Jsoup](jsoup.md) | camel-jsoup | Preview | 4.21 | Cleanup HTML content |
 | [JTA](jta.md) | camel-jta | Stable | 3.4 | Using Camel With JTA Transaction Manager |
 | [Kamelet Main](kamelet-main.md) | camel-kamelet-main | Preview | 3.11 | Main to run Kamelet standalone |
 | [Kamelet Main Support](kamelet-main-support.md) | camel-kamelet-main-support | Preview | 4.19 | Support Module for Kamelet Main |

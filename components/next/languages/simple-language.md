@@ -738,6 +738,30 @@ For example `${base64Encode(Camel)}` returns `Q2FtZWw=` and you can reverse this
 
 If you want to encode the message body then use `${base64Encode()}`, but you can also provide a nested function such as `${base64Encode(${header.myKey})}` to encode a header.
 
+### HTML Functions
+
+From **Camel 4.21** onwards then Camel has built-in HTML functions to make it easy to clean/parse and decode.
+
+This requires having `camel-jsoup` JAR on the classpath.
+
+  
+| Function | Response Type | Description |
+| --- | --- | --- |
+| `htmlClean()` | `String` | Cleans the HTML to remove unsafe links and JavaScripts from the message body |
+| `htmlClean(exp)` | `String` | Cleans the HTML to remove unsafe links and JavaScripts from the expression |
+| `htmlDecode()` | `String` | Decodes the HTML as plain text (removing all HTML tags) that is also suitable as input for AI and LLMs |
+| `htmlDecode(exp)` | `String` | Decodes the HTML as plain text (removing all HTML tags) that is also suitable as input for AI and LLMs |
+| `htmlParse()` | `org.jsoup.nodes.Document` | Parses the HTML as a JSoup object from the message body |
+| `htmlParse(exp)` | `org.jsoup.nodes.Document` | Parses the HTML as a JSoup object from the expression |
+
+Camel comes with functions to use `camel-jsoup` JAR for HTML cleaning and decoding.
+
+For example `${htmlDecode(${header.myHtml})}` will from the header with key `myHtml` decode the HTML (removing all tags) into a plain text, which can be fed into LLMs etc.
+
+The `${htmlClean()}` function can be used to remove unwanted tags from the HTML to [sanitize untrusted HTML](https://jsoup.org/cookbook/cleaning-html/safelist-sanitizer).
+
+The `${htmlParse()`} is used to parse the HTML into a Java `org.jsoup.nodes.Document` structure which is similar to `org.w3c.Document` but uses the JSoup API instead.
+
 ## Built-in Symbols
 
 The following special symbols can be used when escaped with `\` as below:
@@ -1084,7 +1108,7 @@ Notice how the block uses the `$init{` …​ `}init$` markers to indicate the s
 Inside the init block, then you can assign local variables in the syntax `$key := <statement>;` where you can then use simple language to compute the value of the variable.
 
 > **Important**
-> Each statement must end with semicolon and new-line (`;\n`). This makes the init block more similar to Java programming language, and it was also necessary to make this work for the internal simple parser used by Camel.
+> Each statement must end with semicolon and new-line (`;\n`). You can only have 1 statement per line. This makes the init block more similar to Java programming language, and it was also necessary to make this work for the internal simple parser used by Camel.
 
 Here are a couple of examples:
 
@@ -1092,7 +1116,7 @@ Here are a couple of examples:
 $init{
   $cheese := 'Hello ${body}';
   $minAge := 18;
-  $foo := ${upper('Hello $body}'};
+  $foo := ${uppercase('Hello ${body}'};
   $bar := ${header.code > 999 ? 'Gold' : 'Silver'};
 }init$
 ```
@@ -1105,7 +1129,7 @@ $init{
   $minAge := 18;
 
   // say hello to my friend
-  $foo := ${upper('Hello $body}'};
+  $foo := ${uppercase('Hello ${body}')};
 
   // either gold or silver
   $bar := ${header.code > 999 ? 'Gold' : 'Silver'};
@@ -1118,8 +1142,8 @@ For example as below where we do a basic JSon mapping:
 
 ```text
 $init{
-  $greeting := ${upper('Hello $body}'}
-  $level := ${header.code > 999 ? 'Gold' : 'Silver'}
+  $greeting := ${uppercase('Hello ${body}')};
+  $level := ${header.code > 999 ? 'Gold' : 'Silver'};
 }init$
 {
   "message": "$greeting",
@@ -1143,7 +1167,7 @@ from("direct:welcome")
   .transform().simple(
           """
             $init{
-              $greeting := ${upper('Hello $body}'};
+              $greeting := ${uppercase('Hello ${body}')};
               $level := ${header.code > 999 ? 'Gold' : 'Silver'};
             }init$
             {
@@ -1161,7 +1185,7 @@ from("direct:welcome")
     <transform>
         <simple>
             $init{
-              $greeting := ${upper('Hello $body}'};
+              $greeting := ${uppercase('Hello ${body}')};
               $level := ${header.code > 999 ? 'Gold' : 'Silver'};
             }init$
             {
@@ -1183,7 +1207,7 @@ from("direct:welcome")
           simple:
             expression: |-
                 $init{
-                  $greeting := ${upper('Hello $body}'};
+                  $greeting := ${uppercase('Hello ${body}')};
                   $level := ${header.code > 999 ? 'Gold' : 'Silver'};
                 }init$
                 {

@@ -76,6 +76,10 @@ Bindy extension should avoid hard coding the resource path for \`NativeImageReso
 
 \[JDK17\]kudu:integration test failed in native mode
 
+[#3336](https://github.com/apache/camel-quarkus/pull/3336)
+
+:white\_check\_mark: Kafka Oauth Integration test with Strimzi and Keyc…
+
 [#3335](https://github.com/apache/camel-quarkus/issues/3335)
 
 Ban com.google.code.findbugs:jsr305 unconditionally

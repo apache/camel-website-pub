@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1777360955836,
+  "generated": 1777554864113,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -20633,12 +20633,6 @@
             },
             {
               "module": "others",
-              "path": "aws-xray.adoc",
-              "url": "/components/next/others/aws-xray.html",
-              "title": "AWS XRay"
-            },
-            {
-              "module": "others",
               "path": "azure-schema-registry.adoc",
               "url": "/components/next/others/azure-schema-registry.html",
               "title": "Azure Schema Registry"
@@ -20750,6 +20744,12 @@
               "path": "jfr.adoc",
               "url": "/components/next/others/jfr.html",
               "title": "JFR"
+            },
+            {
+              "module": "others",
+              "path": "jsoup.adoc",
+              "url": "/components/next/others/jsoup.html",
+              "title": "Jsoup"
             },
             {
               "module": "others",
@@ -23234,12 +23234,6 @@
               "path": "stitch-component.adoc",
               "url": "/components/next/stitch-component.html",
               "title": "Stitch"
-            },
-            {
-              "module": "ROOT",
-              "path": "stomp-component.adoc",
-              "url": "/components/next/stomp-component.html",
-              "title": "Stomp"
             },
             {
               "module": "ROOT",
@@ -31962,6 +31956,12 @@
               "path": "jbang-commands/camel-jbang-cmd-resume-route.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-resume-route.html",
               "title": "camel cmd resume-route"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-route-diagram.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-route-diagram.html",
+              "title": "camel cmd route-diagram"
             },
             {
               "module": "ROOT",

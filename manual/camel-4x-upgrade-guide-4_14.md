@@ -5,6 +5,12 @@ This document is for helping you upgrade your Apache Camel application from Came
 > **Note**
 > [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
 
+## Upgrading from 4.14.3 to 4.18.8
+
+### camel-core
+
+The `org.apache.camel.support.DefaultHeaderFilterStrategy` changed default setting for lowercase from `false` to `true`.
+
 ## Upgrading from 4.14.2 to 4.14.3
 
 ### camel-tika

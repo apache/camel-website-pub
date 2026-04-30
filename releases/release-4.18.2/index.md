@@ -145,11 +145,7 @@ CXF RS Rest service loses content-type with stream caching enabled
 
 JmsMessage does not copy attachments to new instance
 
-### Improvement (8)
-
-[CAMEL-23353](https://issues.apache.org/jira/browse/CAMEL-23353)
-
-camel-jbang: Support configurable default Maven repositories and dynamic Quarkus platform version resolution from registry
+### Improvement (7)
 
 [CAMEL-23322](https://issues.apache.org/jira/browse/CAMEL-23322)
 

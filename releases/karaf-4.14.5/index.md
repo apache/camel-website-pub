@@ -24,6 +24,10 @@ git checkout camel-karaf-4.14.5
 
 Here is a list of all the issues that have been resolved for this release
 
+[#682](https://github.com/apache/camel-karaf/pull/682)
+
+feat(#663): Update to Camel 4.14.5
+
 [#665](https://github.com/apache/camel-karaf/issues/665)
 
 camel-elasticsearch feature test never ends

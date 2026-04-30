@@ -23,6 +23,7 @@ camel cmd [options]
 | [reload](camel-jbang-cmd-reload.md) | Trigger reloading Camel |
 | [reset-stats](camel-jbang-cmd-reset-stats.md) | Reset performance statistics |
 | [resume-route](camel-jbang-cmd-resume-route.md) | Resume Camel routes |
+| [route-diagram](camel-jbang-cmd-route-diagram.md) | Display Camel route diagram in the terminal |
 | [route-structure](camel-jbang-cmd-route-structure.md) | Dump Camel route structure |
 | [send](camel-jbang-cmd-send.md) | Send messages to endpoints |
 | [start-group](camel-jbang-cmd-start-group.md) | Start Camel route groups |

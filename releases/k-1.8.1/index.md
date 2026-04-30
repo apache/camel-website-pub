@@ -33,6 +33,10 @@ Here is a list of all the issues that have been resolved for this release
 
 Build artifact checksum not working
 
+[#2999](https://github.com/apache/camel-k/pull/2999)
+
+fix(cmd/run): allow multiple resources
+
 [#2988](https://github.com/apache/camel-k/issues/2988)
 
 Errored status Kamelet cannot be reconciled to Ready status

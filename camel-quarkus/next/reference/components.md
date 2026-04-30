@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 310 components (18 deprecated, 60 JVM only)
+There are 310 components (18 deprecated, 59 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -90,7 +90,7 @@ level | Description |
 | [Dropbox](extensions/dropbox.md) | camel-quarkus-dropbox | 1.1.0 | 1.1.0 | Stable | Upload, download and manage files, folders, groups, collaborations, etc on Dropbox. |
 | [Ehcache](extensions/ehcache.md) | camel-quarkus-ehcache | 1.1.0 | n/a | Preview | Perform caching operations using Ehcache. |
 | [Elasticsearch Low level Rest Client](extensions/elasticsearch-rest-client.md) | camel-quarkus-elasticsearch-rest-client | 3.8.0 | 3.12.0 | Stable | Perform queries and other operations on Elasticsearch or OpenSearch (uses low-level client). |
-| [Elasticsearch](extensions/elasticsearch.md) | camel-quarkus-elasticsearch | 3.2.0 | n/a | Preview | Send requests to ElasticSearch via Java Client API. |
+| [Elasticsearch](extensions/elasticsearch.md) | camel-quarkus-elasticsearch | 3.2.0 | 3.36.0 | Stable | Send requests to ElasticSearch via Java Client API. |
 | [Exec](extensions/exec.md) | camel-quarkus-exec | 0.4.0 | 0.4.0 | Stable | Execute commands on the underlying operating system. |
 | [FHIR](extensions/fhir.md) | camel-quarkus-fhir | 0.3.0 | 0.3.0 | Stable | Exchange information in the healthcare domain using the FHIR (Fast Healthcare Interoperability Resources) standard. |
 | [File Watch](extensions/file-watch.md) | camel-quarkus-file-watch | 1.0.0 | 1.0.0 | Stable | Get notified about file events in a directory using java.nio.file.WatchService. |

@@ -760,12 +760,13 @@ Enum values:
 
 ## Message Headers
 
-The Salesforce component supports 22 message header(s), which is/are listed below:
+The Salesforce component supports 23 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelSalesforceReplayId** (consumer) Constant: [`HEADER_SALESFORCE_REPLAY_ID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_REPLAY_ID) | The Streaming API replayId. |  | Object |
+| **CamelSalesforceEventUuid** (consumer) Constant: [`HEADER_SALESFORCE_EVENT_UUID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_EVENT_UUID) | The Streaming API eventUuid. |  | Object |
 | **CamelSalesforceChangeEventSchema** (consumer) Constant: [`HEADER_SALESFORCE_CHANGE_EVENT_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CHANGE_EVENT_SCHEMA) | The change event schema. |  | Object |
 | **CamelSalesforceEventType** (consumer) Constant: [`HEADER_SALESFORCE_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_EVENT_TYPE) | The event type. |  | String |
 | **CamelSalesforceCommitTimestamp** (consumer) Constant: [`HEADER_SALESFORCE_COMMIT_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_COMMIT_TIMESTAMP) | The commit timestamp. |  | Object |

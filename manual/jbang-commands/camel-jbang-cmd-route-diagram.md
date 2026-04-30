@@ -1,0 +1,20 @@
+# camel cmd route-diagram
+
+Display Camel route diagram in the terminal
+
+## Usage
+
+```bash
+camel cmd route-diagram [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--filter` | Filter route by filename or route id |  | String |
+| `--output` | Save diagram to a PNG file instead of displaying in terminal |  | String |
+| `--theme,--colors` | Color theme preset (dark, light, transparent) or custom colors (e.g. bg=#1e1e1e:from=#2e7d32:to=#1565c0). Values can be #hex or ANSI color names (e.g. from=seagreen:to=steelblue). Use bg= for transparent. Can also be set via DIAGRAM\_COLORS env var. | dark | String |
+| `--width` | Image width in pixels (0 = auto) | 0 | int |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

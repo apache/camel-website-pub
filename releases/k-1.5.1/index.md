@@ -33,6 +33,10 @@ Here is a list of all the issues that have been resolved for this release
 
 Release 1.5.1
 
+[#2540](https://github.com/apache/camel-k/pull/2540)
+
+Forcelly set QUARKUS\_LOG\_CONSOLE\_JSON to false if the trait is not provided (GH issue #2539)
+
 [#2530](https://github.com/apache/camel-k/issues/2530)
 
 Error in OpenShift image-pull delegation on IBM Cloud

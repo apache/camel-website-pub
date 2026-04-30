@@ -28,6 +28,10 @@ Here is a list of all the issues that have been resolved for this release
 
 Release 1.15.1
 
+[#903](https://github.com/apache/camel-k-runtime/pull/903)
+
+Revert logback uprgade to 1.2.11
+
 ## Keys
 
 You can verify your download by following these [procedures](http://www.apache.org/info/verification.md) and using these [KEYS](https://www.apache.org/dist/camel/KEYS).

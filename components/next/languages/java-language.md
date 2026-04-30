@@ -288,8 +288,6 @@ The Java Camel language is only supported as a block of Java code that gets comp
 
 The supported runtime is intended for Java standalone, Spring Boot, Camel Quarkus and other microservices runtimes. It is not supported on any kind of Java Application Server runtime.
 
-Java does not support runtime compilation with Spring Boot using _fat jar_ packaging ([https://github.com/jOOQ/jOOR/issues/69](https://github.com/jOOQ/jOOR/issues/69)), it works with exploded classpath.
-
 ## Dependencies
 
 To use scripting languages in your camel routes, you need to add a dependency on **camel-joor**.

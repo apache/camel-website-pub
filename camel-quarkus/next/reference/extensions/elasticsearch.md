@@ -1,6 +1,6 @@
 # Elasticsearch
 
-JVM since3.2.0 Nativeunsupported
+JVM since3.2.0 Native since3.36.0
 
 Send requests to ElasticSearch via Java Client API.
 
@@ -12,6 +12,10 @@ Send requests to ElasticSearch via Java Client API.
 Please refer to the above link for usage and configuration details.
 
 ## Maven coordinates
+
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-elasticsearch)
+
+Or add the coordinates to your existing project:
 
 ```xml
 <dependency>

@@ -98,7 +98,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **feedUri** (consumer) | **Required** The URI to the feed to poll. |  | String |
 
-### Query Parameters (23 parameters)
+### Query Parameters (26 parameters)
 
    
 | Name | Description | Default | Type |
@@ -126,6 +126,24 @@ Enum values:
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
 | **feedHeader** (advanced) | Sets whether to add the feed object as a header. | true | boolean |
+| **idempotent** (filter) | Option to use the Idempotent Consumer EIP pattern to let Camel skip already processed entries. By default it skips Atom entries that is older that the last read entry, using Atom updatedDate and publishedDate, but this strategy can be changed with the idempotentStrategy option. Idempotency only works when splitEntries = true. | true | boolean |
+| **idempotentRepository** (filter) | A pluggable repository org.apache.camel.spi.IdempotentRepository which by default use MemoryIdempotentRepository if none is specified and idempotent is true. |  | IdempotentRepository |
+| **idempotentStrategy** (filter (advanced)) | 
+
+A pluggable strategy org.apache.camel.component.FeedIdempotentStrategy to use when checking idempotency. Camel provides two implementations out of the box: default and repository. The updated strategy is used as default if idempotent = true. The default strategy checks the Atom entrys updated or published date is newer than the previously read entry. You can provide your own implementation of the org.apache.camel.component.FeedIdempotentStrategy and refer to it using the # notation.
+
+Enum values:
+
+-   default
+    
+-   repository
+    
+
+
+
+
+
+ | default | AtomIdempotentStrategy |
 | **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffIdleThreshold** (scheduler) | The number of subsequent idle polls that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
@@ -209,6 +227,34 @@ Camel will set the In body on the returned `Exchange` with the entries. Dependin
 | `splitEntries` | `false` | The entire list of entries from the feed is set: `exchange.in.body(List<Entry>)` |
 
 Camel can set the `Feed` object on the In header (see `feedHeader` option to disable this):
+
+## Usage
+
+### Avoid reading the same entry more than once (idempotent consumer)
+
+Camel supports Idempotent Consumer directly within the component, so it will skip already processed entries. This feature is enabled by default, but can be disabled by setting the `idempotent=false` option.
+
+```java
+from("file://inbox?idempotent=false").to("...");
+```
+
+The default Idempotency strategy uses Atom published and updated timestamps to identify already read entries, by filtering all entries older that the _last read_ entry.
+
+The idempotency strategy can be changed by setting the `idempotentStrategy` option. The components support two strategies _out-of-the-box_, but custom strategies can be used, by referencing a subclass of `org.apache.camel.component.atom.AtomIdempotentStrategy`, with Apache Camel’s # notation.
+
+```java
+from("file://inbox?idempotentStrategy=#myIdempotentStrategy").to("...");
+```
+
+#### Repository idempotent strategy
+
+As an alternative to the default idempotent strategy, a repository based strategy can be use:
+
+```java
+from("file://inbox?idempotentStrategy=repository").to("...");
+```
+
+This strategy checks for idempotency by storing the Atom Entry GUID in an `IdempotentRepository`. The strategy defaults a MemoryIdempotentRepository, but the repository can be changes to any subclass of `IdempotentRepository`, using the `idempotentRepository` option.
 
 ## Examples
 

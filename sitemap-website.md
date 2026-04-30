@@ -1,11 +1,14 @@
-urls[1082]{loc,lastmod}:
+urls[1084]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-04-30T00:00:00+00:00
+  https://camel.apache.org/categories/Camel-Quarkus/,2026-04-30T00:00:00+00:00
+  https://camel.apache.org/blog/2026/04/camel-quarkus-release-3.35.0/,2026-04-30T00:00:00+00:00
+  https://camel.apache.org/,2026-04-30T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-04-30T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel420-whatsnew/,2026-04-27T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-04-27T00:00:00+00:00
-  https://camel.apache.org/,2026-04-27T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-04-27T00:00:00+00:00
+  https://camel.apache.org/releases/q-3.35.0/,2026-04-27T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-04-27T00:00:00+00:00
   https://camel.apache.org/releases/release-4.20.0/,2026-04-25T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.20.0/,2026-04-25T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-04-25T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-27172.md,2026-04-24T09:00:00+02:00
   https://camel.apache.org/security/CVE-2026-33454.md,2026-04-24T09:00:00+02:00
   https://camel.apache.org/security/CVE-2026-40022.md,2026-04-24T09:00:00+02:00
@@ -41,7 +44,6 @@ urls[1082]{loc,lastmod}:
   https://camel.apache.org/releases/ckc-4.18.0/,2026-03-30T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.1/,2026-03-27T00:00:00+00:00
   https://camel.apache.org/blog/2026/03/RELEASE-4.18.1/,2026-03-27T00:00:00+00:00
-  https://camel.apache.org/categories/Camel-Quarkus/,2026-03-25T00:00:00+00:00
   https://camel.apache.org/blog/2026/03/camel-quarkus-3.33.0/,2026-03-25T00:00:00+00:00
   https://camel.apache.org/releases/q-3.33.0/,2026-03-25T00:00:00+00:00
   https://camel.apache.org/categories/Kaoto/,2026-03-25T00:00:00+00:00

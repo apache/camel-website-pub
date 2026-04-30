@@ -29,6 +29,34 @@ git checkout v1.12.0
 
 Here is a list of all the issues that have been resolved for this release
 
+[#4067](https://github.com/apache/camel-k/pull/4067)
+
+Preparation of release 1.12.0
+
+[#4057](https://github.com/apache/camel-k/pull/4057)
+
+feature(#3903): Support secret refresh through the existing addons - Docs update
+
+[#4056](https://github.com/apache/camel-k/pull/4056)
+
+feature(#3903): Support secret refresh through the existing addons - Azure Key Vault
+
+[#4051](https://github.com/apache/camel-k/pull/4051)
+
+feature(#3903): Support secret refresh through the existing addons - Google Secret Manager
+
+[#4047](https://github.com/apache/camel-k/pull/4047)
+
+feature(#3903): Support secret refresh through the existing addons - AWS Secrets Manager
+
+[#4036](https://github.com/apache/camel-k/pull/4036)
+
+feat(vault): Support Hashicorp Vault as secrets properties source
+
+[#4032](https://github.com/apache/camel-k/pull/4032)
+
+Support Hashicorp Vault as secrets properties source
+
 [#4011](https://github.com/apache/camel-k/issues/4011)
 
 Camel 3.20 incompatibilities

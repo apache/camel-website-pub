@@ -97,6 +97,10 @@ Multi architecture support - Operator and builder pods
 
 Bring an option to force an image build to the kamel run command
 
+[#4109](https://github.com/apache/camel-k/pull/4109)
+
+Secret managers parsing errors
+
 [#4086](https://github.com/apache/camel-k/issues/4086)
 
 Nightly release fail after 2.0
@@ -144,10 +148,6 @@ Debug seems not to work on knative pods
 [#2418](https://github.com/apache/camel-k/issues/2418)
 
 Groovy script JSON paring runs into java.util.ServiceConfigurationError: org.apache.groovy.json.FastStringServiceFactory: org.apache.groovy.json.DefaultFastStringServiceFactory not a subtype
-
-[#1980](https://github.com/apache/camel-k/issues/1980)
-
-Add support for multiple data types and schemas in Kamelets
 
 ## Keys
 

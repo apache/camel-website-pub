@@ -10,9 +10,9 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 399 spring boot starter json files.
+There are 397 spring boot starter json files.
 
-Of these 395 are used in components, dataformats, etc.
+Of these 393 are used in components, dataformats, etc.
 
 > **Note**
 > Cluster service starters (consul, file, infinispan, jgroups-raft, kubernetes, zookeeper) are documented in the [Cluster Services](#_cluster_services) section below.
@@ -49,7 +49,7 @@ Apache Camel Spring Boot supports the following Camel artifacts as Spring Boot S
 
 ## Camel Components
 
-Number of Camel components: 390 in 324 JAR artifacts (10 deprecated)
+Number of Camel components: 389 in 323 JAR artifacts (9 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -401,7 +401,6 @@ Number of Camel components: 390 in 324 JAR artifacts (10 deprecated)
 | [SSH](../../components/next/ssh-component.md) | camel-ssh-starter | Stable | 2.10 | Execute commands on remote hosts using SSH. |
 | [StAX](../../components/next/stax-component.md) | camel-stax-starter | Stable | 2.9 | Process XML payloads by a SAX ContentHandler. |
 | [Stitch](../../components/next/stitch-component.md) | camel-stitch-starter | Stable | 3.8 | Stitch is a cloud ETL service that integrates various data sources into a central data warehouse through various integrations. |
-| [Stomp](../../components/next/stomp-component.md) | camel-stomp-starter | Stable-deprecated | 2.12 | Send and receive messages to/from STOMP (Simple Text Oriented Messaging Protocol) compliant message brokers. |
 | [Stream](../../components/next/stream-component.md) | camel-stream-starter | Stable | 1.3 | Read from system-in and write to system-out and system-err streams. |
 | [String Template](../../components/next/string-template-component.md) | camel-stringtemplate-starter | Stable | 1.2 | Transform messages using StringTemplate engine. |
 | [Stripe](../../components/next/stripe-component.md) | camel-stripe-starter | Preview | 4.17 | Interact with the Stripe payment platform. |
@@ -562,12 +561,11 @@ Number of Camel languages: 26 in 17 JAR artifacts (3 deprecated)
 
 ## Miscellaneous Extensions
 
-Number of miscellaneous extensions: 26 in 26 JAR artifacts (5 deprecated)
+Number of miscellaneous extensions: 25 in 25 JAR artifacts (4 deprecated)
 
     
 | Extensions | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
-| [AWS XRay](../../components/next/others/aws-xray.md) | camel-aws-xray-starter | Stable-deprecated | 2.21 | Enable Distributed tracing using AWS XRay |
 | [CLI Debug](../../components/next/others/cli-debug.md) | camel-cli-debug-starter | Stable | 4.17 | Remote CLI debugger |
 | [Cloudevents](../../components/next/others/cloudevents.md) | camel-cloudevents-starter | Stable | 3.15 | Camel support for the CloudEvents specification |
 | [CSimple jOOR](../../components/next/others/csimple-joor.md) | camel-csimple-joor-starter | Stable-deprecated | 3.7 | jOOR compiler for csimple language |
@@ -610,6 +608,7 @@ Number of miscellaneous extensions: 26 in 26 JAR artifacts (5 deprecated)
 | [Jandex](../../components/next/others/jandex.md) | camel-jandex-starter | Stable | 4.12 | Custom class and resource loader using jandex.idx |
 | [Java DSL (runtime compiled)](../../components/next/others/java-joor-dsl.md) | camel-java-joor-dsl-starter | Stable | 3.9 | Camel Java DSL with jOOR |
 | [Jaxb XML Dsl](../../components/next/others/java-xml-jaxb-dsl.md) | camel-xml-jaxb-dsl-starter | Stable | 3.9 | Camel DSL with XML using camel-jaxb |
+| [Jsoup](../../components/next/others/jsoup.md) | camel-jsoup-starter | Preview | 4.21 | Cleanup HTML content |
 | [JTA](../../components/next/others/jta.md) | camel-jta-starter | Stable | 3.4 | Using Camel With JTA Transaction Manager |
 | [Kamelet Main](../../components/next/others/kamelet-main.md) | camel-kamelet-main-starter | Preview | 3.11 | Main to run Kamelet standalone |
 | [Kamelet Main Support](../../components/next/others/kamelet-main-support.md) | camel-kamelet-main-support-starter | Preview | 4.19 | Support Module for Kamelet Main |

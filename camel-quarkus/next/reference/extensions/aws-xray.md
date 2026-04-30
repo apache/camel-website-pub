@@ -6,10 +6,8 @@ Distributed tracing using AWS XRay
 
 ## What’s inside
 
--   [AWS XRay](../../../../components/next/others/aws-xray.md)
+-   AWS XRay
     
-
-Please refer to the above link for usage and configuration details.
 
 ## Maven coordinates
 

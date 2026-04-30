@@ -29,21 +29,57 @@ git checkout v1.11.0
 
 Here is a list of all the issues that have been resolved for this release
 
+[#3841](https://github.com/apache/camel-k/pull/3841)
+
+fix(core): move to policy/v1
+
 [#3840](https://github.com/apache/camel-k/issues/3840)
 
 Remove deprecated Kubernetes API
+
+[#3839](https://github.com/apache/camel-k/pull/3839)
+
+chore: deprecated commands
+
+[#3838](https://github.com/apache/camel-k/pull/3838)
+
+Fix tests related to recent camel-k-runtime changes
 
 [#3837](https://github.com/apache/camel-k/issues/3837)
 
 Release 1.11.0
 
+[#3809](https://github.com/apache/camel-k/pull/3809)
+
+Minor steps improvements in release guide
+
 [#3790](https://github.com/apache/camel-k/issues/3790)
 
 Deprecate overlapping Kamel CLI features in favour of Camel JBang
 
+[#3788](https://github.com/apache/camel-k/pull/3788)
+
+fix(trait): Camel trait as IntegrationKit
+
+[#3786](https://github.com/apache/camel-k/pull/3786)
+
+feat(build): parse cmd execution for errors
+
+[#3783](https://github.com/apache/camel-k/pull/3783)
+
+feat(controller): add Ready condition to IntegrationPlatform
+
 [#3761](https://github.com/apache/camel-k/issues/3761)
 
 Ready condition message not always taken from Camel Health Check
+
+[#3757](https://github.com/apache/camel-k/pull/3757)
+
+Release Helm Chart 1.10.2
+
+[#3754](https://github.com/apache/camel-k/pull/3754)
+
+Use jolokia version defined in camel-k-runtime
 
 [#3732](https://github.com/apache/camel-k/pull/3732)
 
@@ -112,42 +148,6 @@ feat(controller/cli): improve handling of invalid components & dependencies agai
 [#3631](https://github.com/apache/camel-k/pull/3631)
 
 feat(cli): Allow to set build publish strategy options from install cmd
-
-[#3626](https://github.com/apache/camel-k/pull/3626)
-
-feat(cmd/run): secret/configmap as runtime/build-time properties
-
-[#3624](https://github.com/apache/camel-k/pull/3624)
-
-doc: generate Resume trait doc
-
-[#3623](https://github.com/apache/camel-k/pull/3623)
-
-feat(cli): Add add-repo command to add a repo for custom Kamelet catalog
-
-[#3599](https://github.com/apache/camel-k/pull/3599)
-
-feat(cli): Add a config command to manage the default settings
-
-[#3595](https://github.com/apache/camel-k/pull/3595)
-
-fix: Prevent operator panic on wrong Kamelet binding
-
-[#3594](https://github.com/apache/camel-k/pull/3594)
-
-feat(ci): smoke test before nightly release
-
-[#3589](https://github.com/apache/camel-k/pull/3589)
-
-feat(cli): Add tail flag to the log command
-
-[#3572](https://github.com/apache/camel-k/issues/3572)
-
-Run E2E test before nightly releases
-
-[#3571](https://github.com/apache/camel-k/pull/3571)
-
-feat(metadata): raise error when capability/dependency not resolved in CamelCatalog
 
 ## Keys
 
