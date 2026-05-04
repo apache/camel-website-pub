@@ -12,7 +12,7 @@
 
     protected abstract void initTracer();</code></pre> </div> </div> <div class="paragraph"> <p>The <code>initTracer()</code> is in charge to inject a concrete implementation of <code>SpanLifecycleManager</code> whose abstraction is:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public interface SpanLifecycleManager {
 
-    Span create(String spanName, Span parent, SpanContextPropagationExtractor extractor);
+    Span create(String spanName, String spanKind, Span parent, SpanContextPropagationExtractor extractor);
 
     void activate(Span span);
 

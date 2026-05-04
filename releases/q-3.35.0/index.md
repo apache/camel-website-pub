@@ -58,6 +58,10 @@ Cover (in JVM) base langchain4j tests when quarkus-langchain4j is on claspath
 
 camel-minio error writing to object store since migration to 3.32.0
 
+[#8304](https://github.com/apache/camel-quarkus/issues/8304)
+
+Add Grafana dashboards to camel-quarkus-observability example
+
 [#8288](https://github.com/apache/camel-quarkus/issues/8288)
 
 Add a integration test module for Quarkus LangChain4j integration

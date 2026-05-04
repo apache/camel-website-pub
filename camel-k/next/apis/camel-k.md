@@ -2411,7 +2411,7 @@ map\[string\]string | The Maven properties. |
 | `caSecrets`  
 **[\[\]Kubernetes core/v1.SecretKeySelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#secretkeyselector-v1-core)** | The Secrets name and key, containing the CA certificate(s) used to connect to remote Maven repositories. It can contain X.509 certificates, and PKCS#7 formatted certificate chains. A JKS formatted keystore is automatically created to store the CA certificate(s), and configured to be used as a trusted certificate(s) by the Maven commands. Note that the root CA certificates are also imported into the created keystore. |
 | `extension`  
-**[\[\]MavenArtifact](#_camel_apache_org_v1_MavenArtifact)** | The Maven build extensions. See [https://maven.apache.org/guides/mini/guide-using-extensions.html](https://maven.apache.org/guides/mini/guide-using-extensions.md). |
+**[\[\]MavenArtifact](#_camel_apache_org_v1_MavenArtifact)** | Deprecated: no longer in use. |
 | `cliOptions`  
 \[\]string | The CLI options that are appended to the list of arguments for Maven commands, e.g., `-V,--no-transfer-progress,-Dstyle.color=never`. See [https://maven.apache.org/ref/3.9.14/maven-embedder/cli.html](https://maven.apache.org/ref/3.9.14/maven-embedder/cli.md). |
 
@@ -4544,8 +4544,6 @@ bool | Whether a `PodMonitor` resource is created (default `true`). |
 
 The Pull Secret trait sets a pull secret on the pod, to allow Kubernetes to retrieve the container image from an external registry.
 
-The pull secret can be specified manually or, in case you’ve configured authentication for an external container registry on the `IntegrationPlatform`, the same secret is used to pull images.
-
 It’s enabled by default whenever you configure authentication for an external container registry, so it assumes that external registries are private.
 
 If your registry does not need authentication for pulling images, you can disable this trait.
@@ -4556,9 +4554,12 @@ If your registry does not need authentication for pulling images, you can disabl
 | `Trait`  
 **[Trait](#_camel_apache_org_v1_trait_Trait)** | (Members of `Trait` are embedded into this type.) |
 | `secretName`  
-string | The pull secret name to set on the Pod. If left empty this is automatically taken from the `IntegrationPlatform` registry configuration. |
+string | The pull secret name to set on the Pod. If left empty this is automatically taken from the platform registry configuration. |
 | `imagePullerDelegation`  
-bool | When using a global operator with a shared platform, this enables delegation of the `system:image-puller` cluster role on the operator namespace to the integration service account. |
+bool | When using a global operator with a shared platform, this enables delegation of the `system:image-puller` cluster role on the operator namespace to the integration service account.
+Deprecated: may be removed in future releases.
+
+ |
 | `auto`  
 bool | Automatically configures the platform registry secret on the pod if it is of type `kubernetes.io/dockerconfigjson`. |
 
