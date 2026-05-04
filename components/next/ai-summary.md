@@ -56,7 +56,7 @@ Perform operations on the Neo4j Graph Database
 
 [OpenAI](openai-component.md)
 
-OpenAI endpoint for chat completion and embeddings.
+OpenAI endpoint for chat completion, embeddings, and audio transcription.
 
 [PGVector](pgvector-component.md)
 

@@ -18,7 +18,7 @@ This version supports Java 17 and 21.
 
 | Download | Signature and checksum |
 | --- | --- |
-| [camel-upgrade-recipes-sources-4.18.0.tar.gz](https://www.apache.org/dyn/closer.lua/camel/camel-upgrade-recipes/4.18.0/camel-upgrade-recipes-sources-4.18.0.tar.gz) (Sources) | [PGP Signature](https://downloads.apache.org/camel/camel-upgrade-recipes/4.18.0/camel-upgrade-recipes-sources-4.18.0.tar.gz.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-upgrade-recipes/4.18.0/camel-upgrade-recipes-sources-4.18.0.tar.gz.sha512) |
+| [camel-upgrade-recipes-sources-4.18.0.tar.gz](https://archive.apache.org/dist/camel/camel-upgrade-recipes/4.18.0/camel-upgrade-recipes-sources-4.18.0.tar.gz) (Sources) | [PGP Signature](https://archive.apache.org/dist/camel/camel-upgrade-recipes/4.18.0/camel-upgrade-recipes-sources-4.18.0.tar.gz.asc), [SHA512 Checksum](https://archive.apache.org/dist/camel/camel-upgrade-recipes/4.18.0/camel-upgrade-recipes-sources-4.18.0.tar.gz.sha512) |
 
 ## Git tag checkout
 

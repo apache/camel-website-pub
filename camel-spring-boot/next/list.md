@@ -328,7 +328,7 @@ Number of Camel components: 389 in 323 JAR artifacts (9 deprecated)
 | [OPC UA Browser](../../components/next/milo-browse-component.md) | camel-milo-starter | Stable | 3.15 | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
 | [OPC UA Client](../../components/next/milo-client-component.md) | camel-milo-starter | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](../../components/next/milo-server-component.md) | camel-milo-starter | Stable | 2.19 | Make telemetry data available as an OPC UA server. |
-| [OpenAI](../../components/next/openai-component.md) | camel-openai-starter | Stable | 4.17 | OpenAI endpoint for chat completion and embeddings. |
+| [OpenAI](../../components/next/openai-component.md) | camel-openai-starter | Stable | 4.17 | OpenAI endpoint for chat completion, embeddings, and audio transcription. |
 | [OpenSearch](../../components/next/opensearch-component.md) | camel-opensearch-starter | Stable | 4.0 | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](../../components/next/openshift-build-configs-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](../../components/next/openshift-builds-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Builds. |

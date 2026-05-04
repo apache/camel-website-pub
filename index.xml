@@ -16,6 +16,13 @@
       <description></description>
     </item>
     <item>
+      <title>Upgrade Recipes 4.20.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.20.0/</link>
+      <pubDate>Mon, 04 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.20.0/</guid>
+      <description>Upgrade Instructions For detailed instructions on using Apache Camel Upgrade Recipes, please see the Apache Camel Upgrade Recipes Tool Manual.&#xA;Full Release Notes Complete release notes for this version are available in the Camel Upgrade Recipes repository.</description>
+    </item>
+    <item>
       <title>Camel Quarkus 3.35.0 Released</title>
       <link>https://camel.apache.org/blog/2026/04/camel-quarkus-release-3.35.0/</link>
       <pubDate>Thu, 30 Apr 2026 00:00:00 +0000</pubDate>

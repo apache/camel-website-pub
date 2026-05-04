@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion and text embeddings using the official openai-java SDK.
+The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, and audio transcription using the official openai-java SDK.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -30,6 +30,8 @@ Supported operations:
 -   `embeddings` - Generate vector embeddings from text for semantic search and RAG applications
     
 -   `tool-execution` - Execute MCP tool calls from a stored chat completion response (used in manual tool loops)
+    
+-   `audio-transcription` - Transcribe audio files to text using speech-to-text models (e.g., Whisper, GPT-4o Transcribe)
     
 
 ## Configuring Options
@@ -79,12 +81,13 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OpenAI component supports 7 options, which are listed below.
+The OpenAI component supports 8 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **apiKey** (producer) | Default API key for all endpoints. |  | String |
+| **audioModel** (producer) | Default model for audio transcription endpoints. |  | String |
 | **baseUrl** (producer) | Default base URL for all endpoints. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
 | **embeddingModel** (producer) | Default model for embeddings endpoints. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -106,7 +109,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform: 'chat-completion', 'embeddings', or 'tool-execution'.
+**Required** The operation to perform: 'chat-completion', 'embeddings', 'tool-execution', or 'audio-transcription'.
 
 Enum values:
 
@@ -116,6 +119,8 @@ Enum values:
     
 -   tool-execution
     
+-   audio-transcription
+    
 
 
 
@@ -123,13 +128,39 @@ Enum values:
 
  |  | OpenAIOperations |
 
-### Query Parameters (40 parameters)
+### Query Parameters (46 parameters)
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **additionalBodyProperty** (producer) | Additional JSON properties to include in the request body (e.g. additionalBodyProperty.traceId=123). This is a multi-value option with prefix: additionalBodyProperty. |  | Map |
 | **apiKey** (producer) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. |  | String |
+| **audioLanguage** (producer) | The language of the input audio in ISO-639-1 format (e.g., 'en'). Improves accuracy and latency. |  | String |
+| **audioModel** (producer) | The model to use for audio transcription (e.g., whisper-1, gpt-4o-transcribe). |  | String |
+| **audioPrompt** (producer) | Optional text to guide the model’s style or continue a previous audio segment. |  | String |
+| **audioResponseFormat** (producer) | 
+The format of the transcription output.
+
+Enum values:
+
+-   json
+    
+-   text
+    
+-   srt
+    
+-   verbose\_json
+    
+-   vtt
+    
+
+
+
+
+
+ | json | String |
+| **audioTemperature** (producer) | Sampling temperature for transcription (0.0 to 1.0). |  | Double |
+| **audioTimestampGranularities** (producer) | Comma-separated timestamp granularities: 'word', 'segment', or 'word,segment'. Only applicable with verbose\_json response format. |  | String |
 | **autoToolExecution** (producer) | When true and MCP servers are configured, automatically execute tool calls and loop back to the model. When false, tool calls are returned as the message body for manual handling. | true | boolean |
 | **baseUrl** (producer) | Base URL for OpenAI API. Defaults to OpenAI’s official endpoint. Can be used for local or third-party providers. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
 | **conversationHistoryProperty** (producer) | Exchange property name for storing conversation history. | CamelOpenAIConversationHistory | String |
@@ -138,6 +169,7 @@ Enum values:
 | **dimensions** (producer) | Number of dimensions for the embedding output. Only supported by text-embedding-3 models. Reducing dimensions can lower costs and improve performance without significant quality loss. |  | Integer |
 | **embeddingModel** (producer) | The model to use for embeddings. |  | String |
 | **encodingFormat** (producer) | 
+
 The format for embedding output: 'float' for list of floats, 'base64' for compressed format.
 
 Enum values:
@@ -185,7 +217,7 @@ Enum values:
 
 ## Message Headers
 
-The OpenAI component supports 30 message header(s), which is/are listed below:
+The OpenAI component supports 38 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -220,6 +252,14 @@ The OpenAI component supports 30 message header(s), which is/are listed below:
 | **CamelOpenAIReferenceEmbedding** (producer) Constant: [`REFERENCE_EMBEDDING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REFERENCE_EMBEDDING) | Reference embedding vector for similarity comparison. |  | List |
 | **CamelOpenAISimilarityScore** (producer) Constant: [`SIMILARITY_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SIMILARITY_SCORE) | Calculated cosine similarity score (0.0 to 1.0). |  | Double |
 | **CamelOpenAIOriginalText** (producer) Constant: [`ORIGINAL_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#ORIGINAL_TEXT) | Original text content when embeddings operation is used. |  | String or List |
+| **CamelOpenAIAudioModel** (producer) Constant: [`AUDIO_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_MODEL) | The model to use for audio transcription. |  | String |
+| **CamelOpenAIAudioLanguage** (producer) Constant: [`AUDIO_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_LANGUAGE) | The language of the input audio (ISO-639-1). |  | String |
+| **CamelOpenAIAudioResponseFormat** (producer) Constant: [`AUDIO_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_RESPONSE_FORMAT) | The response format for audio transcription (json, text, srt, verbose\_json, vtt). |  | String |
+| **CamelOpenAIAudioTemperature** (producer) Constant: [`AUDIO_TEMPERATURE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TEMPERATURE) | Sampling temperature for audio transcription (0.0 to 1.0). |  | Double |
+| **CamelOpenAIAudioPrompt** (producer) Constant: [`AUDIO_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_PROMPT) | Optional text to guide the model’s style or continue a previous audio segment. |  | String |
+| **CamelOpenAIAudioTimestampGranularities** (producer) Constant: [`AUDIO_TIMESTAMP_GRANULARITIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TIMESTAMP_GRANULARITIES) | Comma-separated timestamp granularities: word, segment, or word,segment (verbose\_json only). |  | String |
+| **CamelOpenAIAudioDuration** (producer) Constant: [`AUDIO_DURATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DURATION) | Duration of the audio in seconds (verbose\_json only). |  | Double |
+| **CamelOpenAIAudioDetectedLanguage** (producer) Constant: [`AUDIO_DETECTED_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DETECTED_LANGUAGE) | Language detected in the audio (verbose\_json only). |  | String |
 
 ## Usage
 
@@ -797,6 +837,97 @@ The following headers are set after an embeddings request:
 | `CamelOpenAIOriginalText` | String/List | Original input text(s) |
 | `CamelOpenAISimilarityScore` | Double | Cosine similarity (if reference embedding provided) |
 
+## Audio Transcription Operation
+
+The `audio-transcription` operation transcribes audio files to text using OpenAI’s speech-to-text models (Whisper, GPT-4o Transcribe).
+
+### Basic Audio Transcription
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("file:audio?noop=true")
+    .to("openai:audio-transcription?audioModel=whisper-1")
+    .log("Transcription: ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:transcribe
+      steps:
+        - to:
+            uri: openai:audio-transcription
+            parameters:
+              audioModel: whisper-1
+        - log: "Transcription: ${body}"
+```
+
+### Input Handling
+
+The audio transcription operation accepts the following types in the message body:
+
+-   `java.io.File` - Audio file reference
+    
+-   `java.nio.file.Path` - Path to an audio file
+    
+-   `java.io.InputStream` - Audio data stream
+    
+-   `byte[]` - Raw audio bytes
+    
+
+Supported audio formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm.
+
+### Audio Transcription Parameters
+
+   
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `audioModel` | String |  | The model to use (e.g., `whisper-1`, `gpt-4o-transcribe`). Required. |
+| `audioLanguage` | String |  | Input audio language in ISO-639-1 format (e.g., `en`). Improves accuracy. |
+| `audioPrompt` | String |  | Optional text to guide the model’s style or continue a previous segment. |
+| `audioResponseFormat` | String | `json` | Output format: `json`, `text`, `srt`, `verbose_json`, `vtt`. |
+| `audioTemperature` | Double |  | Sampling temperature (0.0 to 1.0). |
+| `audioTimestampGranularities` | String |  | Comma-separated: `word`, `segment`, or `word,segment`. Only with `verbose_json`. |
+
+### Audio Transcription Output Headers
+
+  
+| Header | Type | Description |
+| --- | --- | --- |
+| `CamelOpenAIAudioDuration` | Double | Duration of the audio in seconds (verbose\_json only) |
+| `CamelOpenAIAudioDetectedLanguage` | String | Language detected in the audio (verbose\_json only) |
+
+### Audio Models by Provider
+
+  
+| Provider | Model | Description |
+| --- | --- | --- |
+| OpenAI | `whisper-1` | General-purpose speech recognition |
+| OpenAI | `gpt-4o-transcribe` | High-accuracy transcription based on GPT-4o |
+| OpenAI | `gpt-4o-mini-transcribe` | Lighter-weight GPT-4o variant |
+
+### Local Audio Transcription Servers
+
+The audio transcription operation works with any OpenAI-compatible server that implements the `POST /v1/audio/transcriptions` endpoint. It has been tested with:
+
+-   [MLX Audio](https://github.com/ml-explore/mlx-audio) — `python3 -m mlx_audio.server --host 127.0.0.1 --port 8003`
+    
+
+Example using MLX Audio for local transcription:
+
+```java
+from("direct:transcribe")
+    .to("openai:audio-transcription?audioModel=mlx-community/whisper-large-v3-turbo"
+        + "&baseUrl=http://localhost:8003/v1");
+```
+
+> **Note**
+> Some local servers require the model parameter to be a path (e.g., `./models/granite-speech-4.1-2b-8bit`). Refer to your server’s documentation for the expected model identifier format.
+
 ## MCP Tool Calling (Agentic Loop)
 
 The component supports automatic tool calling via the [Model Context Protocol (MCP)](https://modelcontextprotocol.io). When MCP servers are configured, the component acts as an MCP client: it lists available tools, converts them to OpenAI function-calling format, and runs an agentic loop — the model requests tool calls, the component executes them via MCP, feeds results back, and repeats until the model produces a final text answer.
@@ -1120,7 +1251,7 @@ The component may throw the following exceptions:
 
 -   `IllegalArgumentException`:
     
-    -   When an invalid operation is specified (supported: `chat-completion`, `embeddings`)
+    -   When an invalid operation is specified (supported: `chat-completion`, `embeddings`, `tool-execution`, `audio-transcription`)
         
     -   When message body or user message is missing
         

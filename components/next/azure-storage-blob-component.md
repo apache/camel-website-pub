@@ -236,6 +236,10 @@ Enum values:
     
 -   getBlobTags
     
+-   undeleteBlob
+    
+-   setBlobTier
+    
 
 
 
@@ -442,6 +446,10 @@ Enum values:
     
 -   getBlobTags
     
+-   undeleteBlob
+    
+-   setBlobTier
+    
 
 
 
@@ -520,7 +528,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Storage Blob Service component supports 78 message header(s), which is/are listed below:
+The Azure Storage Blob Service component supports 79 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -585,6 +593,10 @@ Enum values:
 -   setBlobLegalHold
     
 -   setBlobImmutabilityPolicy
+    
+-   undeleteBlob
+    
+-   setBlobTier
     
 
 
@@ -805,6 +817,7 @@ Enum values:
 
 
  |  | BlobImmutabilityPolicyMode |
+| **CamelAzureStorageBlobRehydratePriority** (producer) Constant: [`REHYDRATE_PRIORITY`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#REHYDRATE_PRIORITY) | (setBlobTier) The rehydrate priority used when rehydrating a blob from the archive tier: Standard or High. Ignored when changing tier between non-archive tiers. |  | RehydratePriority |
 
 **Required information options:**
 
@@ -912,6 +925,8 @@ For these operations, `accountName`, `containerName` and `blobName` are **requir
 | `getBlobTags` | `Common` | Retrieves user-defined index tags from a blob. The tags are returned as the message body (`Map<String, String>`) and also set in the `CamelAzureStorageBlobTags` header. |
 | `setBlobLegalHold` | `Common` | Sets a legal hold on a blob. The legal hold flag (`Boolean`) is provided via the `CamelAzureStorageBlobLegalHold` header or the message body. While a legal hold is set, the blob cannot be modified or deleted until the hold is explicitly cleared by calling the operation again with `false`. |
 | `setBlobImmutabilityPolicy` | `Common` | Sets a time-based immutability policy on a blob. The policy expiry time (`OffsetDateTime`) is read from the `CamelAzureStorageBlobImmutabilityPolicyExpiryTime` header and the policy mode (`BlobImmutabilityPolicyMode`, defaults to `UNLOCKED`) from `CamelAzureStorageBlobImmutabilityPolicyMode`. A pre-built `BlobImmutabilityPolicy` may also be supplied via the message body or `CamelAzureStorageBlobImmutabilityPolicy` header. |
+| `undeleteBlob` | `Common` | Restores the contents and metadata of a soft-deleted blob and any associated soft-deleted snapshots. Soft delete must be enabled on the storage account for this operation to succeed. |
+| `setBlobTier` | `Common` | Sets the access tier of an existing blob. The target tier (`AccessTier` such as `HOT`, `COOL`, `COLD`, or `ARCHIVE`) is read from the `CamelAzureStorageBlobAccessTier` header or the message body. When rehydrating a blob from `ARCHIVE`, the optional `CamelAzureStorageBlobRehydratePriority` header (`RehydratePriority`, `STANDARD` or `HIGH`) controls the rehydration priority. |
 
 Refer to the example section in this page to learn how to use these operations into your camel application.
 
@@ -1520,6 +1535,34 @@ from("direct:setImmutabilityPolicy")
   .setHeader(BlobConstants.BLOB_IMMUTABILITY_POLICY_EXPIRY_TIME, constant(OffsetDateTime.now().plusDays(7)))
   .setHeader(BlobConstants.BLOB_IMMUTABILITY_POLICY_MODE, constant(BlobImmutabilityPolicyMode.UNLOCKED))
   .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=setBlobImmutabilityPolicy&serviceClient=#client")
+  .to("mock:result");
+```
+
+-   `undeleteBlob`
+    
+
+```java
+// restore a soft-deleted blob (requires soft delete to be enabled on the storage account)
+from("direct:undeleteBlob")
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=undeleteBlob&serviceClient=#client")
+  .to("mock:result");
+```
+
+-   `setBlobTier`
+    
+
+```java
+// move a blob to the COOL tier for less frequent access
+from("direct:moveToCool")
+  .setHeader(BlobConstants.ACCESS_TIER, constant(AccessTier.COOL))
+  .to("azure-storage-blob://camelazure/container1?blobName=hello.txt&operation=setBlobTier&serviceClient=#client")
+  .to("mock:result");
+
+// rehydrate a blob from ARCHIVE to HOT with high priority
+from("direct:rehydrate")
+  .setHeader(BlobConstants.ACCESS_TIER, constant(AccessTier.HOT))
+  .setHeader(BlobConstants.REHYDRATE_PRIORITY, constant(RehydratePriority.HIGH))
+  .to("azure-storage-blob://camelazure/container1?blobName=archived.txt&operation=setBlobTier&serviceClient=#client")
   .to("mock:result");
 ```
 

@@ -1374,11 +1374,15 @@ string | the container image as identified in the container registry |
 | `dependencies`  
 \[\]string | a list of Camel dependencies used by this kit |
 | `profile`  
-**[TraitProfile](#_camel_apache_org_v1_TraitProfile)** | the profile which is expected by this kit |
+**[TraitProfile](#_camel_apache_org_v1_TraitProfile)** | the profile which is expected by this kit
+Deprecated: may be removed in future releases.
+
+ |
 | `traits`  
 **[IntegrationKitTraits](#_camel_apache_org_v1_IntegrationKitTraits)** | traits that the kit will execute |
 | `configuration`  
 **[\[\]ConfigurationSpec](#_camel_apache_org_v1_ConfigurationSpec)** | Deprecated:
+
 Use camel trait (camel.properties) to manage properties Use mount trait (mount.configs) to manage configs Use mount trait (mount.resources) to manage resources Use mount trait (mount.volumes) to manage volumes configuration used by the kit
 
  |
@@ -1602,13 +1606,17 @@ IntegrationPlatformSpec defines the desired state of IntegrationPlatform.
 | `cluster`  
 **[IntegrationPlatformCluster](#_camel_apache_org_v1_IntegrationPlatformCluster)** | what kind of cluster you’re running (ie, plain Kubernetes or OpenShift) |
 | `profile`  
-**[TraitProfile](#_camel_apache_org_v1_TraitProfile)** | the profile you wish to use. It will apply certain traits which are required by the specific profile chosen. It usually relates the Cluster with the optional definition of special profiles (ie, Knative) |
+**[TraitProfile](#_camel_apache_org_v1_TraitProfile)** | the profile you wish to use. It will apply certain traits which are required by the specific profile chosen. It usually relates the Cluster with the optional definition of special profiles (ie, Knative)
+Deprecated: may be removed in future releases.
+
+ |
 | `build`  
 **[IntegrationPlatformBuildSpec](#_camel_apache_org_v1_IntegrationPlatformBuildSpec)** | specify how to build the Integration/IntegrationKits |
 | `traits`  
 **[Traits](#_camel_apache_org_v1_Traits)** | list of traits to be executed for all the Integration/IntegrationKits built from this IntegrationPlatform |
 | `configuration`  
 **[\[\]ConfigurationSpec](#_camel_apache_org_v1_ConfigurationSpec)** | Deprecated:
+
 Use camel trait (camel.properties) to manage properties Use mount trait (mount.configs) to manage configs Use mount trait (mount.resources) to manage resources Use mount trait (mount.volumes) to manage volumes list of configuration properties to be attached to all the Integration/IntegrationKits built from this IntegrationPlatform
 
  |
@@ -1799,11 +1807,15 @@ int32 | the number of `Pods` needed for the running Integration |
 | `dependencies`  
 \[\]string | the list of Camel or Maven dependencies required by the Integration |
 | `profile`  
-**[TraitProfile](#_camel_apache_org_v1_TraitProfile)** | the profile needed to run this Integration |
+**[TraitProfile](#_camel_apache_org_v1_TraitProfile)** | the profile needed to run this Integration
+Deprecated: may be removed in future releases.
+
+ |
 | `traits`  
 **[Traits](#_camel_apache_org_v1_Traits)** | the traits needed to run this Integration |
 | `template`  
 **[PodSpecTemplate](#_camel_apache_org_v1_PodSpecTemplate)** | Pod template customization.
+
 Deprecated: use container, init-containers or owner traits instead
 
  |
@@ -1843,7 +1855,10 @@ string | the Java jar dependency to execute (if available) |
 | `dependencies`  
 \[\]string | a list of dependencies needed by the application |
 | `profile`  
-**[TraitProfile](#_camel_apache_org_v1_TraitProfile)** | the profile needed to run this Integration |
+**[TraitProfile](#_camel_apache_org_v1_TraitProfile)** | the profile needed to run this Integration
+Deprecated: may be removed in future releases.
+
+ |
 | `traits`  
 **[Traits](#_camel_apache_org_v1_Traits)** | the traits executed for the Integration |
 | `integrationKit`  
@@ -1860,6 +1875,7 @@ string | the runtime version targeted for this Integration |
 **[Catalog](#_camel_apache_org_v1_Catalog)** | the catalog used to build/operate the Integration. |
 | `configuration`  
 **[\[\]ConfigurationSpec](#_camel_apache_org_v1_ConfigurationSpec)** | a list of configuration specification.
+
 Deprecated: use properties instead.
 
  |

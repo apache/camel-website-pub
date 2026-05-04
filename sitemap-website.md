@@ -1,7 +1,8 @@
-urls[1085]{loc,lastmod}:
+urls[1086]{loc,lastmod}:
   https://camel.apache.org/,2026-05-04T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.20.0/,2026-05-04T00:00:00+00:00
   https://camel.apache.org/releases/,2026-05-04T00:00:00+00:00
+  https://camel.apache.org/releases/upgrade-recipes-4.20.0/,2026-05-04T00:00:00+00:00
   https://camel.apache.org/blog/,2026-04-30T00:00:00+00:00
   https://camel.apache.org/categories/Camel-Quarkus/,2026-04-30T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-quarkus-release-3.35.0/,2026-04-30T00:00:00+00:00
