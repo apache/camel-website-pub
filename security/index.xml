@@ -6,8 +6,15 @@
     <description>Recent content in Security on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 Apr 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 06 May 2026 09:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-33453</title>
+      <link>https://camel.apache.org/security/CVE-2026-33453.html</link>
+      <pubDate>Wed, 06 May 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-33453.html</guid>
+      <description>Apache Camel: Improperly Controlled Modification of Dynamically-Determined Object Attributes vulnerability in Camel-Coap component.</description>
+    </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-27172</title>
       <link>https://camel.apache.org/security/CVE-2026-27172.html</link>

@@ -1,5 +1,7 @@
-urls[1086]{loc,lastmod}:
-  https://camel.apache.org/,2026-05-04T00:00:00+00:00
+urls[1087]{loc,lastmod}:
+  https://camel.apache.org/security/CVE-2026-33453.md,2026-05-06T09:00:00+02:00
+  https://camel.apache.org/,2026-05-06T09:00:00+02:00
+  https://camel.apache.org/security/,2026-05-06T09:00:00+02:00
   https://camel.apache.org/releases/kamelets-4.20.0/,2026-05-04T00:00:00+00:00
   https://camel.apache.org/releases/,2026-05-04T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.20.0/,2026-05-04T00:00:00+00:00
@@ -19,7 +21,6 @@ urls[1086]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-40473.md,2026-04-24T09:00:00+02:00
   https://camel.apache.org/security/CVE-2026-40858.md,2026-04-24T09:00:00+02:00
   https://camel.apache.org/security/CVE-2026-40860.md,2026-04-24T09:00:00+02:00
-  https://camel.apache.org/security/,2026-04-24T09:00:00+02:00
   https://camel.apache.org/releases/release-4.14.7/,2026-04-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.14.7/,2026-04-24T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.2/,2026-04-22T00:00:00+00:00
