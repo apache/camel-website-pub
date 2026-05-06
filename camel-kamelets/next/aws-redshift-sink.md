@@ -30,7 +30,7 @@ At runtime, the `aws-redshift-sink` Kamelet relies upon the presence of the foll
     
 -   camel:sql
     
--   mvn:com.amazon.redshift:redshift-jdbc42:2.2.5
+-   mvn:com.amazon.redshift:redshift-jdbc42:2.2.6
     
 -   mvn:org.apache.commons:commons-dbcp2:2.14.0
     

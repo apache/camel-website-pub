@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 376 in 302 JAR artifacts (9 deprecated)
+Number of Non-Core Components: 374 in 300 JAR artifacts (7 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -188,10 +188,8 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (9 deprecated)
 | [Google Sheets Stream](google-sheets-stream-component.md) | camel-google-sheets | Stable | 2.23 | Poll for changes in Google Sheets. |
 | [Google Storage](google-storage-component.md) | camel-google-storage | Stable | 3.9 | Store and retrieve objects from Google Cloud Storage Service using the google-cloud-storage library. |
 | [Google Vertex AI](google-vertexai-component.md) | camel-google-vertexai | Stable | 4.17 | Interact with Google Cloud Vertex AI generative models. |
-| [Grape](grape-component.md) | camel-grape | Stable-deprecated | 2.16 | Fetch, load and manage additional jars dynamically after Camel Context was started. |
 | [GraphQL](graphql-component.md) | camel-graphql | Stable | 3.0 | Send GraphQL queries and mutations to external systems. |
 | [gRPC](grpc-component.md) | camel-grpc | Stable | 2.19 | Expose gRPC endpoints and access external gRPC endpoints. |
-| [Guava EventBus](guava-eventbus-component.md) | camel-guava-eventbus | Stable-deprecated | 2.10 | Send and receive messages to/from Guava EventBus. |
 | [Hashicorp Vault](hashicorp-vault-component.md) | camel-hashicorp-vault | Stable | 3.18 | Manage secrets in Hashicorp Vault Service |
 | [Hazelcast](hazelcast-summary.md) | camel-hazelcast |  | 2.7 |  |
 | [Hazelcast Atomic Number](hazelcast-atomicvalue-component.md) | camel-hazelcast | Stable-deprecated | 2.7 | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |

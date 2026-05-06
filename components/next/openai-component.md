@@ -1278,12 +1278,13 @@ When using openai with Spring Boot make sure to use the following Maven dependen
 </dependency>
 ```
 
-The component supports 8 options, which are listed below.
+The component supports 9 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.component.openai.api-key** | Default API key for all endpoints. |  | String |
+| **camel.component.openai.audio-model** | Default model for audio transcription endpoints. |  | String |
 | **camel.component.openai.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
 | **camel.component.openai.base-url** | Default base URL for all endpoints. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
 | **camel.component.openai.embedding-model** | Default model for embeddings endpoints. |  | String |

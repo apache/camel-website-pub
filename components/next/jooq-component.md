@@ -275,7 +275,7 @@ JOOQ configuration:
     <context:property-placeholder location="classpath:config.properties"
                                   xmlns:context="http://www.springframework.org/schema/context"/>
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="url" value="${db.url}"/>
         <property name="driverClassName" value="${db.driver}"/>
         <property name="username" value="${db.username}"/>

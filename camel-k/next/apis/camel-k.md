@@ -3156,6 +3156,8 @@ generic raw message, typically a map containing the keys (trait parameters) and 
 
 TraitProfile represents lists of traits that are enabled for the specific installation/integration.
 
+Deprecated: may be removed in future releases.
+
 ### TraitSpec
 
 **Appears on:**

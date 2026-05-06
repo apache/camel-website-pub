@@ -50,10 +50,6 @@ Support opentelemetry2 traceHeadersInclusion tracer option
 
 \[quarkus-main\] Extended ReflectiveHierarchyStep breaks netty-http integration test native compilation
 
-[#8239](https://github.com/apache/camel-quarkus/issues/8239)
-
-MongoDB client healthcheck fails when using Debezium MongoDB
-
 [#8229](https://github.com/apache/camel-quarkus/issues/8229)
 
 Metric bug using Rest DSL with contract-first

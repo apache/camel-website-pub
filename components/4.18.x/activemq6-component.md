@@ -80,7 +80,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The ActiveMQ 6.x component supports 113 options, which are listed below.
+The ActiveMQ 6.x component supports 114 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -376,6 +376,7 @@ Enum values:
 | **messageIdEnabled** (advanced) | When sending, specifies whether message IDs should be added. This is just an hint to the JMS broker. If the JMS provider accepts this hint, these messages must have the message ID set to null; if the provider ignores the hint, the message ID must be set to its normal unique value. | true | boolean |
 | **messageListenerContainerFactory** (advanced) | Registry ID of the MessageListenerContainerFactory used to determine what org.springframework.jms.listener.AbstractMessageListenerContainer to use to consume messages. Setting this will automatically set consumerType to Custom. |  | MessageListenerContainerFactory |
 | **messageTimestampEnabled** (advanced) | Specifies whether timestamps should be enabled by default on sending messages. This is just an hint to the JMS broker. If the JMS provider accepts this hint, these messages must have the timestamp set to zero; if the provider ignores the hint the timestamp must be set to its normal value. | true | boolean |
+| **objectMessageEnabled** (advanced) | Whether to enable sending and receiving JMS ObjectMessage. By default this is disabled because Java object serialization is a known source of security vulnerabilities. Enable this option only if you trust the source of the messages and need to send or receive Java serialized objects via JMS. When disabled, Camel will refuse to create or read JMS ObjectMessage instances. Options that rely on ObjectMessage internally (such as transferExchange and transferException) require this option to be enabled. | false | boolean |
 | **pubSubNoLocal** (advanced) | Specifies whether to inhibit the delivery of messages published by its own connection. | false | boolean |
 | **queueBrowseStrategy** (advanced) | To use a custom QueueBrowseStrategy when browsing queues. |  | QueueBrowseStrategy |
 | **receiveTimeout** (advanced) | The timeout for receiving messages (in milliseconds). | 1000 | long |
@@ -462,7 +463,7 @@ Enum values:
  | queue | String |
 | **destinationName** (common) | **Required** Name of the queue or topic to use as destination. |  | String |
 
-### Query Parameters (104 parameters)
+### Query Parameters (105 parameters)
 
    
 | Name | Description | Default | Type |
@@ -768,6 +769,7 @@ Enum values:
 | **messageIdEnabled** (advanced) | When sending, specifies whether message IDs should be added. This is just an hint to the JMS broker. If the JMS provider accepts this hint, these messages must have the message ID set to null; if the provider ignores the hint, the message ID must be set to its normal unique value. | true | boolean |
 | **messageListenerContainerFactory** (advanced) | Registry ID of the MessageListenerContainerFactory used to determine what org.springframework.jms.listener.AbstractMessageListenerContainer to use to consume messages. Setting this will automatically set consumerType to Custom. |  | MessageListenerContainerFactory |
 | **messageTimestampEnabled** (advanced) | Specifies whether timestamps should be enabled by default on sending messages. This is just an hint to the JMS broker. If the JMS provider accepts this hint, these messages must have the timestamp set to zero; if the provider ignores the hint the timestamp must be set to its normal value. | true | boolean |
+| **objectMessageEnabled** (advanced) | Whether to enable sending and receiving JMS ObjectMessage. By default this is disabled because Java object serialization is a known source of security vulnerabilities. Enable this option only if you trust the source of the messages and need to send or receive Java serialized objects via JMS. When disabled, Camel will refuse to create or read JMS ObjectMessage instances. Options that rely on ObjectMessage internally (such as transferExchange and transferException) require this option to be enabled. | false | boolean |
 | **pubSubNoLocal** (advanced) | Specifies whether to inhibit the delivery of messages published by its own connection. | false | boolean |
 | **receiveTimeout** (advanced) | The timeout for receiving messages (in milliseconds). | 1000 | long |
 | **recoveryInterval** (advanced) | Specifies the interval between recovery attempts, i.e. when a connection is being refreshed, in milliseconds. The default is 5000 ms, that is, 5 seconds. | 5000 | long |

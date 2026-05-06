@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1777895873012,
+  "generated": 1778057821922,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -20681,6 +20681,12 @@
             },
             {
               "module": "others",
+              "path": "diagram.adoc",
+              "url": "/components/next/others/diagram.html",
+              "title": "Diagram"
+            },
+            {
+              "module": "others",
               "path": "dsl-modeline.adoc",
               "url": "/components/next/others/dsl-modeline.html",
               "title": "DSL Modeline"
@@ -21947,12 +21953,6 @@
             },
             {
               "module": "ROOT",
-              "path": "grape-component.adoc",
-              "url": "/components/next/grape-component.html",
-              "title": "Grape"
-            },
-            {
-              "module": "ROOT",
               "path": "graphql-component.adoc",
               "url": "/components/next/graphql-component.html",
               "title": "GraphQL"
@@ -21962,12 +21962,6 @@
               "path": "grpc-component.adoc",
               "url": "/components/next/grpc-component.html",
               "title": "gRPC"
-            },
-            {
-              "module": "ROOT",
-              "path": "guava-eventbus-component.adoc",
-              "url": "/components/next/guava-eventbus-component.html",
-              "title": "Guava EventBus"
             },
             {
               "module": "ROOT",

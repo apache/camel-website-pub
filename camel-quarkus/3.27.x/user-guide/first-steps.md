@@ -30,7 +30,7 @@ When the project archive download has completed successfully, unzip and import i
 Quarkus provides a Maven plugin that enables you to quickly bootstrap projects. For example, to create a project skeleton that includes the `timer` and `log` component extensions:
 
 ```shell
-mvn io.quarkus:quarkus-maven-plugin:3.27.3:create \
+mvn io.quarkus:quarkus-maven-plugin:3.27.3.1:create \
     -DprojectGroupId=org.acme \
     -DprojectArtifactId=getting-started \
     -Dextensions=camel-quarkus-log,camel-quarkus-timer

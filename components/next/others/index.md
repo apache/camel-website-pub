@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 71 in 70 JAR artifacts (6 deprecated)
+Number of Miscellaneous Components: 72 in 71 JAR artifacts (6 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -18,6 +18,7 @@ Number of Miscellaneous Components: 71 in 70 JAR artifacts (6 deprecated)
 | [CSimple jOOR](csimple-joor.md) | camel-csimple-joor | Stable-deprecated | 3.7 | jOOR compiler for csimple language |
 | [CXF Transport](cxf-transport.md) | camel-cxf-transport | Stable | 2.8 | Camel Transport for Apache CXF |
 | [Debug](debug.md) | camel-debug | Stable | 3.15 | Enables Camel Route Debugging |
+| [Diagram](diagram.md) | camel-diagram | Preview | 4.21 | Camel Route Diagram rendering |
 | [DSL](dsl.md) |  |  |  |  |
 | [DSL Modeline](dsl-modeline.md) | camel-dsl-modeline | Stable | 3.16 | Camel DSL modeline |
 | [Elytron](elytron.md) | camel-elytron | Stable-deprecated | 3.1 | Elytron Security Provider for camel-undertow |

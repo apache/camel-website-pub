@@ -10,9 +10,9 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 397 spring boot starter json files.
+There are 395 spring boot starter json files.
 
-Of these 393 are used in components, dataformats, etc.
+Of these 391 are used in components, dataformats, etc.
 
 > **Note**
 > Cluster service starters (consul, file, infinispan, jgroups-raft, kubernetes, zookeeper) are documented in the [Cluster Services](#_cluster_services) section below.
@@ -49,7 +49,7 @@ Apache Camel Spring Boot supports the following Camel artifacts as Spring Boot S
 
 ## Camel Components
 
-Number of Camel components: 389 in 323 JAR artifacts (9 deprecated)
+Number of Camel components: 387 in 321 JAR artifacts (7 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -197,10 +197,8 @@ Number of Camel components: 389 in 323 JAR artifacts (9 deprecated)
 | [Google Sheets Stream](../../components/next/google-sheets-stream-component.md) | camel-google-sheets-starter | Stable | 2.23 | Poll for changes in Google Sheets. |
 | [Google Storage](../../components/next/google-storage-component.md) | camel-google-storage-starter | Stable | 3.9 | Store and retrieve objects from Google Cloud Storage Service using the google-cloud-storage library. |
 | [Google Vertex AI](../../components/next/google-vertexai-component.md) | camel-google-vertexai-starter | Stable | 4.17 | Interact with Google Cloud Vertex AI generative models. |
-| [Grape](../../components/next/grape-component.md) | camel-grape-starter | Stable-deprecated | 2.16 | Fetch, load and manage additional jars dynamically after Camel Context was started. |
 | [GraphQL](../../components/next/graphql-component.md) | camel-graphql-starter | Stable | 3.0 | Send GraphQL queries and mutations to external systems. |
 | [gRPC](../../components/next/grpc-component.md) | camel-grpc-starter | Stable | 2.19 | Expose gRPC endpoints and access external gRPC endpoints. |
-| [Guava EventBus](../../components/next/guava-eventbus-component.md) | camel-guava-eventbus-starter | Stable-deprecated | 2.10 | Send and receive messages to/from Guava EventBus. |
 | [Hashicorp Vault](../../components/next/hashicorp-vault-component.md) | camel-hashicorp-vault-starter | Stable | 3.18 | Manage secrets in Hashicorp Vault Service |
 | [Hazelcast Atomic Number](../../components/next/hazelcast-atomicvalue-component.md) | camel-hazelcast-starter | Stable-deprecated | 2.7 | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
 | [Hazelcast Instance](../../components/next/hazelcast-instance-component.md) | camel-hazelcast-starter | Stable | 2.7 | Consume join/leave events of a cache instance in a Hazelcast cluster. |
@@ -601,6 +599,7 @@ Number of miscellaneous extensions: 25 in 25 JAR artifacts (4 deprecated)
 | [Azure Schema Registry](../../components/next/others/azure-schema-registry.md) | camel-azure-schema-registry-starter | Stable | 4.2 | Azure Schema Registry Component for utilities to deal with authentication |
 | [Camel YAML DSL Validator Maven Plugin](../../components/next/others/camel-yaml-dsl-validator-maven-plugin.md) | undefined-starter |  |  |  |
 | [CLI Connector](../../components/next/others/cli-connector.md) | camel-cli-connector-starter | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
+| [Diagram](../../components/next/others/diagram.md) | camel-diagram-starter | Preview | 4.21 | Camel Route Diagram rendering |
 | [DSL](../../components/next/others/dsl.md) | undefined-starter |  |  |  |
 | [DSL Modeline](../../components/next/others/dsl-modeline.md) | camel-dsl-modeline-starter | Stable | 3.16 | Camel DSL modeline |
 | [Elytron](../../components/next/others/elytron.md) | camel-elytron-starter | Stable-deprecated | 3.1 | Elytron Security Provider for camel-undertow |
