@@ -20,4 +20,6 @@ The following configuration options are available:
 | `kamelets.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
 | `kamelets.auto` | `bool` | Automatically inject all referenced Kamelets and their default configuration (enabled by default) |
 | `kamelets.list` | `string` | Comma separated list of Kamelet names to load into the current integration |
-| `kamelets.mount-point` | `string` | The directory where the application mounts and reads Kamelet spec (default `/etc/camel/kamelets`) |
+| `kamelets.mountPoint` | `string` | The directory where the application mounts and reads Kamelet spec (default `/etc/camel/kamelets`) |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

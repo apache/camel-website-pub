@@ -37,7 +37,9 @@ The following configuration options are available:
 | `logging.format` | `string` | Logs message format |
 | `logging.level` | `string` | Adjust the logging level (defaults to `INFO`) |
 | `logging.json` | `bool` | Output the logs in JSON |
-| `logging.json-pretty-print` | `bool` | Enable "pretty printing" of the JSON logs |
+| `logging.jsonPrettyPrint` | `bool` | Enable "pretty printing" of the JSON logs |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Migration Guide
 

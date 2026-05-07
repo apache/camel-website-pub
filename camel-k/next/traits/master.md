@@ -31,11 +31,13 @@ The following configuration options are available:
 | --- | --- | --- |
 | `master.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
 | `master.auto` | `bool` | Enables automatic configuration of the trait. |
-| `master.include-delegate-dependencies` | `bool` | When this flag is active, the operator analyzes the source code to add dependencies required by delegate endpoints. E.g. when using `master:lockname:timer`, then `camel:timer` is automatically added to the set of dependencies. It’s enabled by default. |
-| `master.resource-name` | `string` | Name of the configmap that will be used to store the lock. Defaults to "<integration-name>-lock". Name of the configmap/lease resource that will be used to store the lock. Defaults to "<integration-name>-lock". |
-| `master.resource-type` | `string` | Type of Kubernetes resource to use for locking ("ConfigMap" or "Lease"). Defaults to "Lease". |
-| `master.label-key` | `string` | Label that will be used to identify all pods contending the lock. Defaults to "camel.apache.org/integration". |
-| `master.label-value` | `string` | Label value that will be used to identify all pods contending the lock. Defaults to the integration name. |
+| `master.includeDelegateDependencies` | `bool` | When this flag is active, the operator analyzes the source code to add dependencies required by delegate endpoints. E.g. when using `master:lockname:timer`, then `camel:timer` is automatically added to the set of dependencies. It’s enabled by default. |
+| `master.resourceName` | `string` | Name of the configmap that will be used to store the lock. Defaults to "<integration-name>-lock". Name of the configmap/lease resource that will be used to store the lock. Defaults to "<integration-name>-lock". |
+| `master.resourceType` | `string` | Type of Kubernetes resource to use for locking ("ConfigMap" or "Lease"). Defaults to "Lease". |
+| `master.labelKey` | `string` | Label that will be used to identify all pods contending the lock. Defaults to "camel.apache.org/integration". |
+| `master.labelValue` | `string` | Label value that will be used to identify all pods contending the lock. Defaults to the integration name. |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Migration Guide
 

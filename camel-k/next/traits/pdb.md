@@ -18,5 +18,7 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `pdb.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `pdb.min-available` | `string` | The number of pods for the Integration that must still be available after an eviction. It can be either an absolute number or a percentage. Only one of `min-available` and `max-unavailable` can be specified. |
-| `pdb.max-unavailable` | `string` | The number of pods for the Integration that can be unavailable after an eviction. It can be either an absolute number or a percentage (default `1` if `min-available` is also not set). Only one of `max-unavailable` and `min-available` can be specified. |
+| `pdb.minAvailable` | `string` | The number of pods for the Integration that must still be available after an eviction. It can be either an absolute number or a percentage. Only one of `min-available` and `max-unavailable` can be specified. |
+| `pdb.maxUnavailable` | `string` | The number of pods for the Integration that can be unavailable after an eviction. It can be either an absolute number or a percentage (default `1` if `min-available` is also not set). Only one of `max-unavailable` and `min-available` can be specified. |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

@@ -38,11 +38,13 @@ The following configuration options are available:
 | `cron.timeZone` | `string` | The timezone that the CronJob will run on |
 | `cron.components` | `string` | A comma separated list of the Camel components that need to be customized in order for them to work when the schedule is triggered externally by Kubernetes. Supported components are currently: `cron`, `timer` and `quartz`. |
 | `cron.fallback` | `bool` | Use the default Camel implementation of the `cron` endpoint (`quartz`) instead of trying to materialize the integration as Kubernetes CronJob. |
-| `cron.concurrency-policy` | `string` | Specifies how to treat concurrent executions of a Job. Valid values are: - "Allow": allows CronJobs to run concurrently; - "Forbid" (default): forbids concurrent runs, skipping next run if previous run hasn’t finished yet; - "Replace": cancels currently running job and replaces it with a new one |
+| `cron.concurrencyPolicy` | `string` | Specifies how to treat concurrent executions of a Job. Valid values are: - "Allow": allows CronJobs to run concurrently; - "Forbid" (default): forbids concurrent runs, skipping next run if previous run hasn’t finished yet; - "Replace": cancels currently running job and replaces it with a new one |
 | `cron.auto` | `bool` | Automatically deploy the integration as CronJob when all routes are either starting from a periodic consumer (only `cron`, `timer` and `quartz` are supported) or a passive consumer (e.g. `direct` is a passive consumer).
 It’s required that all periodic consumers have the same period, and it can be expressed as cron schedule (e.g. `1m` can be expressed as `0/1 * * * *`, while `35m` or `50s` cannot).
 
  |
-| `cron.starting-deadline-seconds` | `int64` | Optional deadline in seconds for starting the job if it misses scheduled time for any reason. Missed jobs executions will be counted as failed ones. |
-| `cron.active-deadline-seconds` | `int64` | Specifies the duration in seconds, relative to the start time, that the job may be continuously active before it is considered to be failed. It defaults to 60s. |
-| `cron.backoff-limit` | `int32` | Specifies the number of retries before marking the job failed. It defaults to 2. |
+| `cron.startingDeadlineSeconds` | `int64` | Optional deadline in seconds for starting the job if it misses scheduled time for any reason. Missed jobs executions will be counted as failed ones. |
+| `cron.activeDeadlineSeconds` | `int64` | Specifies the duration in seconds, relative to the start time, that the job may be continuously active before it is considered to be failed. It defaults to 60s. |
+| `cron.backoffLimit` | `int32` | Specifies the number of retries before marking the job failed. It defaults to 2. |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

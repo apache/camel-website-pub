@@ -28,8 +28,10 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `prometheus.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `prometheus.pod-monitor` | `bool` | Whether a `PodMonitor` resource is created (default `true`). |
-| `prometheus.pod-monitor-labels` | `[]string` | The `PodMonitor` resource labels, applicable when `pod-monitor` is `true`. |
+| `prometheus.podMonitor` | `bool` | Whether a `PodMonitor` resource is created (default `true`). |
+| `prometheus.podMonitorLabels` | `[]string` | The `PodMonitor` resource labels, applicable when `pod-monitor` is `true`. |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 

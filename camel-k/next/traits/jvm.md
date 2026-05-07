@@ -19,22 +19,24 @@ The following configuration options are available:
 | --- | --- | --- |
 | `jvm.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
 | `jvm.debug` | `bool` | Activates remote debugging, so that a debugger can be attached to the JVM, e.g., using port-forwarding |
-| `jvm.debug-suspend` | `bool` | Suspends the target JVM immediately before the main class is loaded |
-| `jvm.print-command` | `bool` | Prints the command used the start the JVM in the container logs (default `true`).
+| `jvm.debugSuspend` | `bool` | Suspends the target JVM immediately before the main class is loaded |
+| `jvm.printCommand` | `bool` | Prints the command used the start the JVM in the container logs (default `true`).
 Deprecated: no longer in use.
 
  |
-| `jvm.debug-address` | `string` | Transport address at which to listen for the newly launched JVM (default `*:5005`) |
+| `jvm.debugAddress` | `string` | Transport address at which to listen for the newly launched JVM (default `*:5005`) |
 | `jvm.options` | `[]string` | A list of JVM options |
 | `jvm.classpath` | `string` | Additional JVM classpath (use `Linux` classpath separator) |
 | `jvm.jar` | `string` | The Jar dependency which will run the application. Leave it empty for managed Integrations. |
 | `jvm.agents` | `[]string` | A list of JVM agents to download and execute with format `<agent-name>;<agent-url>[;<jvm-agent-options>]`. |
-| `jvm.ca-certificates` | `[]github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.CACertConfig` | A list of CA certificates to import into the truststore. Certificates must be mounted via the mount trait. |
-| `jvm.base-truststore` | `github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.BaseTruststore` | Optional base truststore to use as the starting point for adding certificates. |
-| `jvm.truststore-password-path` | `string` | Path to a file containing the password for the generated truststore. Required when using ca-certificates without base-truststore. |
-| `jvm.ca-cert-mount-path` | `string` | The path where the generated truststore will be mounted (default `/etc/camel/conf.d/_truststore`). |
-| `jvm.ca-cert` | `string` | Deprecated: Use CACertificates instead. Path to a PEM-encoded CA certificate file. |
-| `jvm.ca-cert-password` | `string` | Deprecated: Use CACertificates instead. Path to a file containing the truststore password. |
+| `jvm.caCertificates` | `[]github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.CACertConfig` | A list of CA certificates to import into the truststore. Certificates must be mounted via the mount trait. |
+| `jvm.baseTruststore` | `github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.BaseTruststore` | Optional base truststore to use as the starting point for adding certificates. |
+| `jvm.truststorePasswordPath` | `string` | Path to a file containing the password for the generated truststore. Required when using ca-certificates without base-truststore. |
+| `jvm.caCertMountPath` | `string` | The path where the generated truststore will be mounted (default `/etc/camel/conf.d/_truststore`). |
+| `jvm.caCert` | `string` | Deprecated: Use CACertificates instead. Path to a PEM-encoded CA certificate file. |
+| `jvm.caCertPassword` | `string` | Deprecated: Use CACertificates instead. Path to a file containing the truststore password. |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Usage of jar parameters
 

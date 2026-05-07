@@ -21,30 +21,32 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `health.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `health.liveness-probe-enabled` | `bool` | Configures the liveness probe for the integration container (default `false`). |
-| `health.liveness-scheme` | `string` | Scheme to use when connecting to the liveness probe (default `HTTP`). |
-| `health.liveness-initial-delay` | `int32` | Number of seconds after the container has started before the liveness probe is initiated. |
-| `health.liveness-timeout` | `int32` | Number of seconds after which the liveness probe times out. |
-| `health.liveness-period` | `int32` | How often to perform the liveness probe. |
-| `health.liveness-success-threshold` | `int32` | Minimum consecutive successes for the liveness probe to be considered successful after having failed. |
-| `health.liveness-failure-threshold` | `int32` | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded. |
-| `health.liveness-probe` | `string` | The liveness probe path to use (default provided by the Catalog runtime used). |
-| `health.liveness-port` | `int32` | The liveness port to use (default 8080). |
-| `health.readiness-probe-enabled` | `bool` | Configures the readiness probe for the integration container (default `true`). |
-| `health.readiness-scheme` | `string` | Scheme to use when connecting to the readiness probe (default `HTTP`). |
-| `health.readiness-initial-delay` | `int32` | Number of seconds after the container has started before the readiness probe is initiated. |
-| `health.readiness-timeout` | `int32` | Number of seconds after which the readiness probe times out. |
-| `health.readiness-period` | `int32` | How often to perform the readiness probe. |
-| `health.readiness-success-threshold` | `int32` | Minimum consecutive successes for the readiness probe to be considered successful after having failed. |
-| `health.readiness-failure-threshold` | `int32` | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded. |
-| `health.readiness-probe` | `string` | The readiness probe path to use (default provided by the Catalog runtime used). |
-| `health.readiness-port` | `int32` | The readiness port to use (default 8080). |
-| `health.startup-probe-enabled` | `bool` | Configures the startup probe for the integration container (default `false`). |
-| `health.startup-scheme` | `string` | Scheme to use when connecting to the startup probe (default `HTTP`). |
-| `health.startup-initial-delay` | `int32` | Number of seconds after the container has started before the startup probe is initiated. |
-| `health.startup-timeout` | `int32` | Number of seconds after which the startup probe times out. |
-| `health.startup-period` | `int32` | How often to perform the startup probe. |
-| `health.startup-success-threshold` | `int32` | Minimum consecutive successes for the startup probe to be considered successful after having failed. |
-| `health.startup-failure-threshold` | `int32` | Minimum consecutive failures for the startup probe to be considered failed after having succeeded. |
-| `health.startup-probe` | `string` | The startup probe path to use (default provided by the Catalog runtime used). |
-| `health.startup-port` | `int32` | The startup port to use (default 8080). |
+| `health.livenessProbeEnabled` | `bool` | Configures the liveness probe for the integration container (default `false`). |
+| `health.livenessScheme` | `string` | Scheme to use when connecting to the liveness probe (default `HTTP`). |
+| `health.livenessInitialDelay` | `int32` | Number of seconds after the container has started before the liveness probe is initiated. |
+| `health.livenessTimeout` | `int32` | Number of seconds after which the liveness probe times out. |
+| `health.livenessPeriod` | `int32` | How often to perform the liveness probe. |
+| `health.livenessSuccessThreshold` | `int32` | Minimum consecutive successes for the liveness probe to be considered successful after having failed. |
+| `health.livenessFailureThreshold` | `int32` | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded. |
+| `health.livenessProbe` | `string` | The liveness probe path to use (default provided by the Catalog runtime used). |
+| `health.livenessPort` | `int32` | The liveness port to use (default 8080). |
+| `health.readinessProbeEnabled` | `bool` | Configures the readiness probe for the integration container (default `true`). |
+| `health.readinessScheme` | `string` | Scheme to use when connecting to the readiness probe (default `HTTP`). |
+| `health.readinessInitialDelay` | `int32` | Number of seconds after the container has started before the readiness probe is initiated. |
+| `health.readinessTimeout` | `int32` | Number of seconds after which the readiness probe times out. |
+| `health.readinessPeriod` | `int32` | How often to perform the readiness probe. |
+| `health.readinessSuccessThreshold` | `int32` | Minimum consecutive successes for the readiness probe to be considered successful after having failed. |
+| `health.readinessFailureThreshold` | `int32` | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded. |
+| `health.readinessProbe` | `string` | The readiness probe path to use (default provided by the Catalog runtime used). |
+| `health.readinessPort` | `int32` | The readiness port to use (default 8080). |
+| `health.startupProbeEnabled` | `bool` | Configures the startup probe for the integration container (default `false`). |
+| `health.startupScheme` | `string` | Scheme to use when connecting to the startup probe (default `HTTP`). |
+| `health.startupInitialDelay` | `int32` | Number of seconds after the container has started before the startup probe is initiated. |
+| `health.startupTimeout` | `int32` | Number of seconds after which the startup probe times out. |
+| `health.startupPeriod` | `int32` | How often to perform the startup probe. |
+| `health.startupSuccessThreshold` | `int32` | Minimum consecutive successes for the startup probe to be considered successful after having failed. |
+| `health.startupFailureThreshold` | `int32` | Minimum consecutive failures for the startup probe to be considered failed after having succeeded. |
+| `health.startupProbe` | `string` | The startup probe path to use (default provided by the Catalog runtime used). |
+| `health.startupPort` | `int32` | The startup port to use (default 8080). |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

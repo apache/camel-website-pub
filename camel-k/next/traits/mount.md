@@ -24,9 +24,11 @@ The following configuration options are available:
 | `mount.configs` | `[]string` | A list of configuration pointing to configmap/secret. The configuration are expected to be UTF-8 resources as they are processed by runtime Camel Context and tried to be parsed as property files. They are also made available on the classpath in order to ease their usage directly from the Route. Syntax: \[configmap|secret\]:name\[/key\], where name represents the resource name and key optionally represents the resource key to be filtered |
 | `mount.resources` | `[]string` | A list of resources (text or binary content) pointing to configmap/secret. The resources are expected to be any resource type (text or binary content). The destination path can be either a default location or any path specified by the user. Syntax: \[configmap|secret\]:name\[/key\]\[@path\], where name represents the resource name, key optionally represents the resource key to be filtered and path represents the destination path |
 | `mount.volumes` | `[]string` | A list of Persistent Volume Claims to be mounted. Syntax: \[pvcname:/container/path\]. If the PVC is not found, the Integration fails. You can use the syntax \[pvcname:/container/path:size:accessMode<:storageClass>\] to create a dynamic PVC based on the Storage Class provided or the default cluster Storage Class. However, if the PVC exists, the operator would mount it. |
-| `mount.empty-dirs` | `[]string` | A list of EmptyDir volumes to be mounted. An optional size limit may be configured (default 500Mi). Syntax: name:/container/path\[:sizeLimit\] |
-| `mount.hot-reload` | `bool` | Enable "hot reload" when a secret/configmap mounted is edited (default `false`). The configmap/secret must be marked with `camel.apache.org/integration` label to be taken in account. The resource will be watched for any kind change, also for changes in metadata. |
-| `mount.scan-kamelets-implicit-label-secrets` | `bool` | Deprecated: no longer available since version 2.5. |
+| `mount.emptyDirs` | `[]string` | A list of EmptyDir volumes to be mounted. An optional size limit may be configured (default 500Mi). Syntax: name:/container/path\[:sizeLimit\] |
+| `mount.hotReload` | `bool` | Enable "hot reload" when a secret/configmap mounted is edited (default `false`). The configmap/secret must be marked with `camel.apache.org/integration` label to be taken in account. The resource will be watched for any kind change, also for changes in metadata. |
+| `mount.scanKameletsImplicitLabelSecrets` | `bool` | Deprecated: no longer available since version 2.5. |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Dynamic creation of PersistentVolumeClaims
 

@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[515]{title,link,pubDate,description}:
+posts[516]{title,link,pubDate,description}:
+  Camel Quarkus 3.33.1 Released|https://camel.apache.org/blog/2026/05/camel-quarkus-3.33.1/index.md|Thu, 07 May 2026 00:00:00 +0000|Camel Quarkus 3.33.1 release
   Camel Quarkus 3.35.0 Released|https://camel.apache.org/blog/2026/04/camel-quarkus-release-3.35.0/index.md|Thu, 30 Apr 2026 00:00:00 +0000|Camel Quarkus 3.35.0 release
   Apache Camel 4.20 What's New|https://camel.apache.org/blog/2026/04/camel420-whatsnew/index.md|Mon, 27 Apr 2026 00:00:00 +0000|Apache Camel 4.20 has just been released. This release is an expedited security fix release on top of the previous 4.19 release. JDK25 compatibility This is the first release supporting JDK25. However
   RELEASE 4.20.0|https://camel.apache.org/blog/2026/04/RELEASE-4.20.0/index.md|Sat, 25 Apr 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.20.0 release with 25 new features and improvements. The artifacts are published and ready for you to download from the Central M

@@ -21,5 +21,7 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `owner.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `owner.target-annotations` | `[]string` | The set of annotations to be transferred |
-| `owner.target-labels` | `[]string` | The set of labels to be transferred |
+| `owner.targetAnnotations` | `[]string` | The set of annotations to be transferred |
+| `owner.targetLabels` | `[]string` | The set of labels to be transferred |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

@@ -23,9 +23,11 @@ The following configuration options are available:
 | `gitops.branch` | `string` | the git branch to check out. |
 | `gitops.tag` | `string` | the git tag to check out. |
 | `gitops.commit` | `string` | the git commit (full SHA) to check out. |
-| `gitops.branch-push` | `string` | the git branch to push to. If omitted, the operator will push to a new branch named as `cicd/release-candidate-<datetime>`. |
+| `gitops.branchPush` | `string` | the git branch to push to. If omitted, the operator will push to a new branch named as `cicd/release-candidate-<datetime>`. |
 | `gitops.overlays` | `[]string` | a list of overlays to provide (default {"dev","stag","prod"}). |
-| `gitops.overwrite-overlay` | `bool` | a flag (default, false) to overwrite any existing overlay. |
-| `gitops.integration-directory` | `string` | The root path where to store Kustomize overlays (default `integrations`). |
-| `gitops.committed-name` | `string` | The name used to commit the GitOps changes (default `Camel K Operator`). |
-| `gitops.committed-email` | `string` | The email used to commit the GitOps changes (default `camel-k-operator@apache.org`). |
+| `gitops.overwriteOverlay` | `bool` | a flag (default, false) to overwrite any existing overlay. |
+| `gitops.integrationDirectory` | `string` | The root path where to store Kustomize overlays (default `integrations`). |
+| `gitops.committerName` | `string` | The name used to commit the GitOps changes (default `Camel K Operator`). |
+| `gitops.committerEmail` | `string` | The email used to commit the GitOps changes (default `camel-k-operator@apache.org`). |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

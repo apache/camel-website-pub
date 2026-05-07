@@ -28,9 +28,13 @@ And there is [Code with Quarkus](https://code.quarkus.io/), the Quarkus generato
 
 ## Getting Started from command line (CLI)
 
+The Camel CLI can either be installed and used together with JBang (step 1a), or as a pure standalone Camel installation (step 1b).
+
+### Installing and using Camel JBang CLI
+
 Camel uses [JBang](https://www.jbang.dev/) for the Camel CLI. You can easily get up and running in a few steps.
 
-**Step 1**
+**Step 1a**
 
 First install [JBang](https://www.jbang.dev/download/) according to your platform.
 
@@ -54,6 +58,32 @@ $ camel version
 JBang version: 0.138.0
 Camel JBang version: 4.18.0
 ```
+
+### Installing and using Camel standalone CLI
+
+**Step 1b**
+
+Download the [Camel Launcher](camel-jbang-launcher.md) .zip distribution for a desired Camel release.
+
+For example to download Camel 4.18.2 from [Maven Central](https://repo1.maven.org/maven2/org/apache/camel/camel-launcher/4.18.2/), then click and download the _.bin.zip_ file, and then unzip the file to a work folder:
+
+```bash
+$ unzip camel-launcher-4.18.2-bin.zip
+$ cd camel-launcher-4.18.2
+```
+
+You can then execute the provided scripts from the bin folder:
+
+```bash
+$ bin/camel.sh version
+JBang version: 0.138.0
+Camel JBang version: 4.18.2
+```
+
+> **Tip**
+> You can also unzip the camel-launcher to a shared folder, and add its bin to the `$PATH` environment so you can execute `camel` from anywhere in your terminal.
+
+### Using Camel CLI
 
 **Step 2**
 
@@ -89,6 +119,9 @@ While in live coding mode, whenever you save changes to `hello.yaml`, Camel will
 **Step 5**
 
 Make sure to check out the [Camel JBang](camel-jbang.md) documentation, for more details on the powers of the Camel CLI. You will also find information how you can _export_ what you have built with the Camel CLI into a vanilla Camel Spring Boot or Camel Quarkus project.
+
+> **Tip**
+> See the `camel wrapper` command which can be used to install and pin Camel CLI to a given version which is local for a given project/directory (similar to how Maven Wrapper works).
 
 ## Alternative ways of getting started with Camel
 

@@ -20,7 +20,7 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `ingress.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `ingress.ingress-class-name` | `string` | The Ingress class name as defined by the Ingress spec See [https://kubernetes.io/docs/concepts/services-networking/ingress/](https://kubernetes.io/docs/concepts/services-networking/ingress/) |
+| `ingress.ingressClassName` | `string` | The Ingress class name as defined by the Ingress spec See [https://kubernetes.io/docs/concepts/services-networking/ingress/](https://kubernetes.io/docs/concepts/services-networking/ingress/) |
 | `ingress.annotations` | `map[string]string` | The annotations added to the ingress. This can be used to set controller specific annotations, e.g., when using the NGINX Ingress controller: See [https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md) |
 | `ingress.host` | `string` | To configure the host exposed by the ingress. |
 | `ingress.path` | `string` | To configure the path exposed by the ingress (default `/`).
@@ -28,7 +28,9 @@ Deprecated: In favor of `paths` - left for backward compatibility.
 
  |
 | `ingress.paths` | `[]string` | To configure the paths exposed by the ingress (default `['/']`). |
-| `ingress.path-type` | `k8s.io/api/networking/v1.PathType` | To configure the path type exposed by the ingress. One of `Exact`, `Prefix`, `ImplementationSpecific` (default to `Prefix`). |
+| `ingress.pathType` | `k8s.io/api/networking/v1.PathType` | To configure the path type exposed by the ingress. One of `Exact`, `Prefix`, `ImplementationSpecific` (default to `Prefix`). |
 | `ingress.auto` | `bool` | To automatically add an ingress whenever the integration uses an HTTP endpoint consumer. |
-| `ingress.tls-hosts` | `[]string` | To configure tls hosts |
-| `ingress.tls-secret-name` | `string` | To configure tls secret name |
+| `ingress.tlsHosts` | `[]string` | To configure tls hosts |
+| `ingress.tlsSecretName` | `string` | To configure tls secret name |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

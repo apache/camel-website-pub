@@ -26,10 +26,12 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `quarkus.enabled` | `bool` | Deprecated: no longer in use. |
-| `quarkus.package-type` | `[]github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.QuarkusPackageType` | The Quarkus package types, `fast-jar` or `native` (default `fast-jar`). In case both `fast-jar` and `native` are specified, two `IntegrationKit` resources are created, with the native kit having precedence over the `fast-jar` one once ready. The order influences the resolution of the current kit for the integration. The kit corresponding to the first package type will be assigned to the integration in case no existing kit that matches the integration exists.
+| `quarkus.packageTypes` | `[]github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.QuarkusPackageType` | The Quarkus package types, `fast-jar` or `native` (default `fast-jar`). In case both `fast-jar` and `native` are specified, two `IntegrationKit` resources are created, with the native kit having precedence over the `fast-jar` one once ready. The order influences the resolution of the current kit for the integration. The kit corresponding to the first package type will be assigned to the integration in case no existing kit that matches the integration exists.
 Deprecated: use `build-mode` instead.
 
  |
-| `quarkus.build-mode` | `[]github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.QuarkusMode` | The Quarkus mode to run: either `jvm` or `native` (default `jvm`). In case both `jvm` and `native` are specified, two `IntegrationKit` resources are created, with the `native` kit having precedence over the `jvm` one once ready. |
-| `quarkus.native-base-image` | `string` | The base image to use when running a native build (default `quay.io/quarkus/quarkus-micro-image:2.0`) |
-| `quarkus.native-builder-image` | `string` | The image containing the tooling required for a native build (by default it will use the one provided in the runtime catalog) |
+| `quarkus.buildMode` | `[]github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.QuarkusMode` | The Quarkus mode to run: either `jvm` or `native` (default `jvm`). In case both `jvm` and `native` are specified, two `IntegrationKit` resources are created, with the `native` kit having precedence over the `jvm` one once ready. |
+| `quarkus.nativeBaseImage` | `string` | The base image to use when running a native build (default `quay.io/quarkus/quarkus-micro-image:2.0`) |
+| `quarkus.nativeBuilderImage` | `string` | The image containing the tooling required for a native build (by default it will use the one provided in the runtime catalog) |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

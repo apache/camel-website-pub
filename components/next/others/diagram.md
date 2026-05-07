@@ -79,6 +79,8 @@ The following built-in themes are available:
     
 -   `transparent` - transparent background
     
+-   `text` - to use tree diagram instead of visual diagram
+    
 
 Custom colors can be specified using the format:
 
@@ -87,3 +89,18 @@ bg=#1e1e1e:from=#2e7d32:to=#1565c0:eip=#8957e5:choice=#d29922
 ```
 
 Color values can be `#hex` codes or ANSI color names (e.g., `seagreen`, `steelblue`).
+
+To use dark theme
+
+```bash
+camel cmd route-diagram MyRoute.java --theme=dark
+```
+
+To print textual tree diagram instead of visual
+
+```bash
+camel cmd route-diagram MyRoute.java --theme=tree
+```
+
+> **Tip**
+> You can also show diagrams for an existing running integration by executing `camel cmd diagram`.

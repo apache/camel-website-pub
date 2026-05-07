@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1778059225813,
+  "generated": 1778145490314,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -13478,6 +13478,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/tls-registry.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/tls-registry.html",
+              "title": "TLS Registry"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/twilio.adoc",
               "url": "/camel-quarkus/next/reference/extensions/twilio.html",
               "title": "Twilio"
@@ -20696,12 +20702,6 @@
               "path": "dsl.adoc",
               "url": "/components/next/others/dsl.html",
               "title": "DSL"
-            },
-            {
-              "module": "others",
-              "path": "elytron.adoc",
-              "url": "/components/next/others/elytron.html",
-              "title": "Elytron"
             },
             {
               "module": "others",

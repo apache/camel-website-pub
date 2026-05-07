@@ -22,9 +22,11 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `pull-secret.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `pull-secret.secret-name` | `string` | The pull secret name to set on the Pod. If left empty this is automatically taken from the platform registry configuration. |
-| `pull-secret.image-puller-delegation` | `bool` | When using a global operator with a shared platform, this enables delegation of the `system:image-puller` cluster role on the operator namespace to the integration service account.
+| `pull-secret.secretName` | `string` | The pull secret name to set on the Pod. If left empty this is automatically taken from the platform registry configuration. |
+| `pull-secret.imagePullerDelegation` | `bool` | When using a global operator with a shared platform, this enables delegation of the `system:image-puller` cluster role on the operator namespace to the integration service account.
 Deprecated: may be removed in future releases.
 
  |
 | `pull-secret.auto` | `bool` | Automatically configures the platform registry secret on the pod if it is of type `kubernetes.io/dockerconfigjson`. |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

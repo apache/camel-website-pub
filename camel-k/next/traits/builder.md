@@ -27,39 +27,41 @@ Deprecated: no longer in use
  |
 | `builder.properties` | `[]string` | A list of properties to be provided to the build task |
 | `builder.strategy` | `string` | The strategy to use, either `pod` or `routine` (default `routine`) |
-| `builder.base-image` | `string` | Specify a base image. In order to have the application working properly it must be a container image which has a Java JDK installed and ready to use on path (ie `/usr/bin/java`). |
-| `builder.incremental-image-build` | `bool` | Use the incremental image build option, to reuse existing containers (default `true`) |
-| `builder.order-strategy` | `string` | The build order strategy to use, either `dependencies`, `fifo` or `sequential` (default is the platform default) |
-| `builder.request-cpu` | `string` | When using `pod` strategy, the minimum amount of CPU required by the pod builder.
+| `builder.baseImage` | `string` | Specify a base image. In order to have the application working properly it must be a container image which has a Java JDK installed and ready to use on path (ie `/usr/bin/java`). |
+| `builder.incrementalImageBuild` | `bool` | Use the incremental image build option, to reuse existing containers (default `true`) |
+| `builder.orderStrategy` | `string` | The build order strategy to use, either `dependencies`, `fifo` or `sequential` (default is the platform default) |
+| `builder.requestCPU` | `string` | When using `pod` strategy, the minimum amount of CPU required by the pod builder.
 
 Deprecated: use TasksRequestCPU instead with task name `builder`.
 
  |
-| `builder.request-memory` | `string` | When using `pod` strategy, the minimum amount of memory required by the pod builder.
+| `builder.requestMemory` | `string` | When using `pod` strategy, the minimum amount of memory required by the pod builder.
 
 Deprecated: use TasksRequestCPU instead with task name `builder`.
 
  |
-| `builder.limit-cpu` | `string` | When using `pod` strategy, the maximum amount of CPU required by the pod builder.
+| `builder.limitCPU` | `string` | When using `pod` strategy, the maximum amount of CPU required by the pod builder.
 
 Deprecated: use TasksRequestCPU instead with task name `builder`.
 
  |
-| `builder.limit-memory` | `string` | When using `pod` strategy, the maximum amount of memory required by the pod builder.
+| `builder.limitMemory` | `string` | When using `pod` strategy, the maximum amount of memory required by the pod builder.
 
 Deprecated: use TasksRequestCPU instead with task name `builder`.
 
  |
-| `builder.maven-profiles` | `[]string` | A list of references pointing to configmaps/secrets that contains a maven profile. This configmap/secret is a resource of the IntegrationKit created, therefore it needs to be present in the namespace where the operator is going to create the IntegrationKit. The content of the maven profile is expected to be a text containing a valid maven profile starting with `<profile>` and ending with `</profile>` that will be integrated as an inline profile in the POM. Syntax: \[configmap|secret\]:name\[/key\], where name represents the resource name, key optionally represents the resource key to be filtered (default key value = profile.xml). |
+| `builder.mavenProfiles` | `[]string` | A list of references pointing to configmaps/secrets that contains a maven profile. This configmap/secret is a resource of the IntegrationKit created, therefore it needs to be present in the namespace where the operator is going to create the IntegrationKit. The content of the maven profile is expected to be a text containing a valid maven profile starting with `<profile>` and ending with `</profile>` that will be integrated as an inline profile in the POM. Syntax: \[configmap|secret\]:name\[/key\], where name represents the resource name, key optionally represents the resource key to be filtered (default key value = profile.xml). |
 | `builder.tasks` | `[]string` | A list of tasks to be executed (available only when using `pod` strategy) with format `<name>;<container-image>;<container-command>`. |
-| `builder.tasks-filter` | `string` | A list of tasks sorted by the order of execution in a csv format, ie, `<taskName1>,<taskName2>,…​`. Mind that you must include also the operator tasks (`builder`, `quarkus-native`, `package`, `jib`, `s2i`) if you need to execute them. Useful only with `pod` strategy. |
-| `builder.tasks-request-cpu` | `[]string` | A list of request cpu configuration for the specific task with format `<task-name>:<request-cpu-conf>`. |
-| `builder.tasks-request-memory` | `[]string` | A list of request memory configuration for the specific task with format `<task-name>:<request-memory-conf>`. |
-| `builder.tasks-limit-cpu` | `[]string` | A list of limit cpu configuration for the specific task with format `<task-name>:<limit-cpu-conf>`. |
-| `builder.tasks-limit-memory` | `[]string` | A list of limit memory configuration for the specific task with format `<task-name>:<limit-memory-conf>`. |
-| `builder.node-selector` | `map[string]string` | Defines a set of nodes the builder pod is eligible to be scheduled on, based on labels on the node. |
+| `builder.tasksFilter` | `string` | A list of tasks sorted by the order of execution in a csv format, ie, `<taskName1>,<taskName2>,…​`. Mind that you must include also the operator tasks (`builder`, `quarkus-native`, `package`, `jib`, `s2i`) if you need to execute them. Useful only with `pod` strategy. |
+| `builder.tasksRequestCPU` | `[]string` | A list of request cpu configuration for the specific task with format `<task-name>:<request-cpu-conf>`. |
+| `builder.tasksRequestMemory` | `[]string` | A list of request memory configuration for the specific task with format `<task-name>:<request-memory-conf>`. |
+| `builder.tasksLimitCPU` | `[]string` | A list of limit cpu configuration for the specific task with format `<task-name>:<limit-cpu-conf>`. |
+| `builder.tasksLimitMemory` | `[]string` | A list of limit memory configuration for the specific task with format `<task-name>:<limit-memory-conf>`. |
+| `builder.nodeSelector` | `map[string]string` | Defines a set of nodes the builder pod is eligible to be scheduled on, based on labels on the node. |
 | `builder.annotations` | `map[string]string` | When using `pod` strategy, annotation to use for the builder pod. |
 | `builder.platforms` | `[]string` | The list of manifest platforms to use to build a container image (default `linux/amd64`). |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Node Selectors
 

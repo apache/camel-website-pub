@@ -21,31 +21,31 @@ The following configuration options are available:
 | --- | --- | --- |
 | `knative-service.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
 | `knative-service.annotations` | `map[string]string` | The annotations added to route. This can be used to set knative service specific annotations CLI usage example: -t "knative-service.annotations.'haproxy.router.openshift.io/balance'=true" |
-| `knative-service.autoscaling-class` | `string` | Configures the Knative autoscaling class property (e.g. to set `hpa.autoscaling.knative.dev` or `kpa.autoscaling.knative.dev` autoscaling).
+| `knative-service.class` | `string` | Configures the Knative autoscaling class property (e.g. to set `hpa.autoscaling.knative.dev` or `kpa.autoscaling.knative.dev` autoscaling).
 Refer to the Knative documentation for more information.
 
  |
-| `knative-service.autoscaling-metric` | `string` | Configures the Knative autoscaling metric property (e.g. to set `concurrency` based or `cpu` based autoscaling).
-
-Refer to the Knative documentation for more information.
-
- |
-| `knative-service.autoscaling-target` | `int` | Sets the allowed concurrency level or CPU percentage (depending on the autoscaling metric) for each Pod.
+| `knative-service.autoscalingMetric` | `string` | Configures the Knative autoscaling metric property (e.g. to set `concurrency` based or `cpu` based autoscaling).
 
 Refer to the Knative documentation for more information.
 
  |
-| `knative-service.min-scale` | `int` | The minimum number of Pods that should be running at any time for the integration. It’s **zero** by default, meaning that the integration is scaled down to zero when not used for a configured amount of time.
+| `knative-service.autoscalingTarget` | `int` | Sets the allowed concurrency level or CPU percentage (depending on the autoscaling metric) for each Pod.
 
 Refer to the Knative documentation for more information.
 
  |
-| `knative-service.max-scale` | `int` | An upper bound for the number of Pods that can be running in parallel for the integration. Knative has its own cap value that depends on the installation.
+| `knative-service.minScale` | `int` | The minimum number of Pods that should be running at any time for the integration. It’s **zero** by default, meaning that the integration is scaled down to zero when not used for a configured amount of time.
 
 Refer to the Knative documentation for more information.
 
  |
-| `knative-service.rollout-duration` | `string` | Enables to gradually shift traffic to the latest Revision and sets the rollout duration. It’s disabled by default and must be expressed as a Golang `time.Duration` string representation, rounded to a second precision. |
+| `knative-service.maxScale` | `int` | An upper bound for the number of Pods that can be running in parallel for the integration. Knative has its own cap value that depends on the installation.
+
+Refer to the Knative documentation for more information.
+
+ |
+| `knative-service.rolloutDuration` | `string` | Enables to gradually shift traffic to the latest Revision and sets the rollout duration. It’s disabled by default and must be expressed as a Golang `time.Duration` string representation, rounded to a second precision. |
 | `knative-service.visibility` | `string` | Setting `cluster-local`, Knative service becomes a private service. Specifically, this option applies the `networking.knative.dev/visibility` label to Knative service.
 
 Refer to the Knative documentation for more information.
@@ -65,8 +65,10 @@ Automatically deploy the integration as Knative service when all conditions hold
 
 
  |
-| `knative-service.timeout-seconds` | `int64` | The maximum duration in seconds that the request instance is allowed to respond to a request. This field propagates to the integration pod’s terminationGracePeriodSeconds
+| `knative-service.timeoutSeconds` | `int64` | The maximum duration in seconds that the request instance is allowed to respond to a request. This field propagates to the integration pod’s terminationGracePeriodSeconds
 
 Refer to the Knative documentation for more information.
 
  |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

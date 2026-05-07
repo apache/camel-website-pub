@@ -24,55 +24,57 @@ The following configuration options are available:
 | `route.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
 | `route.annotations` | `map[string]string` | The annotations added to route. This can be used to set route specific annotations For annotations options see [https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html#route-specific-annotations](https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html#route-specific-annotations) CLI usage example: -t "route.annotations.'haproxy.router.openshift.io/balance'=true" |
 | `route.host` | `string` | To configure the host exposed by the route. |
-| `route.tls-termination` | `string` | The TLS termination type, like `edge`, `passthrough` or `reencrypt`.
+| `route.tlsTermination` | `string` | The TLS termination type, like `edge`, `passthrough` or `reencrypt`.
 Refer to the OpenShift route documentation for additional information.
 
  |
-| `route.tls-certificate` | `string` | The TLS certificate contents.
-
-Refer to the OpenShift route documentation for additional information.
-
- |
-| `route.tls-certificate-secret` | `string` | The secret name and key reference to the TLS certificate. The format is "secret-name\[/key-name\]", the value represents the secret name, if there is only one key in the secret it will be read, otherwise you can set a key name separated with a "/".
+| `route.tlsCertificate` | `string` | The TLS certificate contents.
 
 Refer to the OpenShift route documentation for additional information.
 
  |
-| `route.tls-key` | `string` | The TLS certificate key contents.
+| `route.tlsCertificateSecret` | `string` | The secret name and key reference to the TLS certificate. The format is "secret-name\[/key-name\]", the value represents the secret name, if there is only one key in the secret it will be read, otherwise you can set a key name separated with a "/".
 
 Refer to the OpenShift route documentation for additional information.
 
  |
-| `route.tls-key-secret` | `string` | The secret name and key reference to the TLS certificate key. The format is "secret-name\[/key-name\]", the value represents the secret name, if there is only one key in the secret it will be read, otherwise you can set a key name separated with a "/".
+| `route.tlsKey` | `string` | The TLS certificate key contents.
 
 Refer to the OpenShift route documentation for additional information.
 
  |
-| `route.tls-ca-certificate` | `string` | The TLS CA certificate contents.
+| `route.tlsKeySecret` | `string` | The secret name and key reference to the TLS certificate key. The format is "secret-name\[/key-name\]", the value represents the secret name, if there is only one key in the secret it will be read, otherwise you can set a key name separated with a "/".
 
 Refer to the OpenShift route documentation for additional information.
 
  |
-| `route.tls-ca-certificate-secret` | `string` | The secret name and key reference to the TLS CA certificate. The format is "secret-name\[/key-name\]", the value represents the secret name, if there is only one key in the secret it will be read, otherwise you can set a key name separated with a "/".
+| `route.tlsCACertificate` | `string` | The TLS CA certificate contents.
 
 Refer to the OpenShift route documentation for additional information.
 
  |
-| `route.tls-destination-ca-certificate` | `string` | The destination CA certificate provides the contents of the ca certificate of the final destination. When using reencrypt termination this file should be provided in order to have routers use it for health checks on the secure connection. If this field is not specified, the router may provide its own destination CA and perform hostname validation using the short service name (service.namespace.svc), which allows infrastructure generated certificates to automatically verify.
+| `route.tlsCACertificateSecret` | `string` | The secret name and key reference to the TLS CA certificate. The format is "secret-name\[/key-name\]", the value represents the secret name, if there is only one key in the secret it will be read, otherwise you can set a key name separated with a "/".
 
 Refer to the OpenShift route documentation for additional information.
 
  |
-| `route.tls-destination-ca-certificate-secret` | `string` | The secret name and key reference to the destination CA certificate. The format is "secret-name\[/key-name\]", the value represents the secret name, if there is only one key in the secret it will be read, otherwise you can set a key name separated with a "/".
+| `route.tlsDestinationCACertificate` | `string` | The destination CA certificate provides the contents of the ca certificate of the final destination. When using reencrypt termination this file should be provided in order to have routers use it for health checks on the secure connection. If this field is not specified, the router may provide its own destination CA and perform hostname validation using the short service name (service.namespace.svc), which allows infrastructure generated certificates to automatically verify.
 
 Refer to the OpenShift route documentation for additional information.
 
  |
-| `route.tls-insecure-edge-termination-policy` | `string` | To configure how to deal with insecure traffic, e.g. `Allow`, `Disable` or `Redirect` traffic.
+| `route.tlsDestinationCACertificateSecret` | `string` | The secret name and key reference to the destination CA certificate. The format is "secret-name\[/key-name\]", the value represents the secret name, if there is only one key in the secret it will be read, otherwise you can set a key name separated with a "/".
 
 Refer to the OpenShift route documentation for additional information.
 
  |
+| `route.tlsInsecureEdgeTerminationPolicy` | `string` | To configure how to deal with insecure traffic, e.g. `Allow`, `Disable` or `Redirect` traffic.
+
+Refer to the OpenShift route documentation for additional information.
+
+ |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 

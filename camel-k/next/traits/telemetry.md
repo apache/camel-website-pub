@@ -41,11 +41,13 @@ The following configuration options are available:
 | --- | --- | --- |
 | `telemetry.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
 | `telemetry.auto` | `bool` | Enables automatic configuration of the trait, including automatic discovery of the telemetry endpoint. |
-| `telemetry.service-name` | `string` | The name of the service that publishes telemetry data (defaults to the integration name) |
+| `telemetry.serviceName` | `string` | The name of the service that publishes telemetry data (defaults to the integration name) |
 | `telemetry.endpoint` | `string` | The target endpoint of the Telemetry service (automatically discovered by default) |
 | `telemetry.sampler` | `string` | The sampler of the telemetry used for tracing (default "on") |
 | `telemetry.sampler-ratio` | `string` | The sampler ratio of the telemetry used for tracing |
 | `telemetry.sampler-parent-based` | `bool` | The sampler of the telemetry used for tracing is parent based (default "true") |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 

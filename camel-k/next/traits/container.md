@@ -24,22 +24,24 @@ The following configuration options are available:
 | --- | --- | --- |
 | `container.enabled` | `bool` | Deprecated: no longer in use. |
 | `container.auto` | `bool` | To automatically enable the trait |
-| `container.request-cpu` | `string` | The minimum amount of CPU required (default 125 millicores). |
-| `container.request-memory` | `string` | The minimum amount of memory required (default 128 Mi). |
-| `container.limit-cpu` | `string` | The maximum amount of CPU to be provided (default 500 millicores). |
-| `container.limit-memory` | `string` | The maximum amount of memory to be provided (default 512 Mi). |
+| `container.requestCPU` | `string` | The minimum amount of CPU required (default 125 millicores). |
+| `container.requestMemory` | `string` | The minimum amount of memory required (default 128 Mi). |
+| `container.limitCPU` | `string` | The maximum amount of CPU to be provided (default 500 millicores). |
+| `container.limitMemory` | `string` | The maximum amount of memory to be provided (default 512 Mi). |
 | `container.ports` | `[]string` | List of container ports available in the container (syntax: <port-name>;<port-number>\[;port-protocol\]). When omitted, `port-protocol` (admitted values `TCP`, `UDP` or `SCTP`) is `TCP`. Don’t use this for the primary http managed port (for which case you need to use `portName` and `port`). Don’t use in Knative based environments. |
 | `container.expose` | `bool` | Can be used to enable/disable http exposure via kubernetes Service. |
 | `container.port` | `int32` | To configure a different http port exposed by the container (default `8080`). |
-| `container.port-name` | `string` | To configure a different http port name for the port exposed by the container. It defaults to `http` only when the `expose` parameter is true. |
-| `container.service-port` | `int32` | To configure under which service port the http container port is to be exposed (default `80`). |
-| `container.service-port-name` | `string` | To configure under which service port name the http container port is to be exposed (default `http`). |
+| `container.portName` | `string` | To configure a different http port name for the port exposed by the container. It defaults to `http` only when the `expose` parameter is true. |
+| `container.servicePort` | `int32` | To configure under which service port the http container port is to be exposed (default `80`). |
+| `container.servicePortName` | `string` | To configure under which service port name the http container port is to be exposed (default `http`). |
 | `container.name` | `string` | The main container name. It’s named `integration` by default. |
 | `container.image` | `string` | The main container image to use for the Integration. When using this parameter the operator will create a synthetic IntegrationKit which won’t be able to execute traits requiring CamelCatalog. If the container image you’re using is coming from an IntegrationKit, use instead Integration `.spec.integrationKit` parameter. If you’re moving the Integration across environments, you will also need to create an "external" IntegrationKit. |
-| `container.image-pull-policy` | `PullPolicy` | The pull policy: Always|Never|IfNotPresent |
-| `container.run-as-user` | `int64` | Security Context RunAsUser configuration (default none): this value is automatically retrieved in Openshift clusters when not explicitly set. |
-| `container.run-as-non-root` | `bool` | Security Context RunAsNonRoot configuration (default false). |
-| `container.seccomp-profile-type` | `SeccompProfileType` | Security Context SeccompProfileType configuration (default RuntimeDefault). |
-| `container.allow-privilege-escalation` | `bool` | Security Context AllowPrivilegeEscalation configuration (default false). |
-| `container.capabilities-drop` | `[]k8s.io/api/core/v1.Capability` | Security Context Capabilities Drop configuration (default ALL). |
-| `container.capabilities-add` | `[]k8s.io/api/core/v1.Capability` | Security Context Capabilities Add configuration (default none). |
+| `container.imagePullPolicy` | `PullPolicy` | The pull policy: Always|Never|IfNotPresent |
+| `container.runAsUser` | `int64` | Security Context RunAsUser configuration (default none): this value is automatically retrieved in Openshift clusters when not explicitly set. |
+| `container.runAsNonRoot` | `bool` | Security Context RunAsNonRoot configuration (default false). |
+| `container.seccompProfileType` | `SeccompProfileType` | Security Context SeccompProfileType configuration (default RuntimeDefault). |
+| `container.allowPrivilegeEscalation` | `bool` | Security Context AllowPrivilegeEscalation configuration (default false). |
+| `container.capabilitiesDrop` | `[]k8s.io/api/core/v1.Capability` | Security Context Capabilities Drop configuration (default ALL). |
+| `container.capabilitiesAdd` | `[]k8s.io/api/core/v1.Capability` | Security Context Capabilities Add configuration (default none). |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

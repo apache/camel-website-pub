@@ -128,12 +128,13 @@ Enum values:
 
  |  | OpenAIOperations |
 
-### Query Parameters (46 parameters)
+### Query Parameters (47 parameters)
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **additionalBodyProperty** (producer) | Additional JSON properties to include in the request body (e.g. additionalBodyProperty.traceId=123). This is a multi-value option with prefix: additionalBodyProperty. |  | Map |
+| **additionalResponseHeader** (producer) | Map additional fields from the response message to Camel headers. The key is the field name in the API response, the value is the Camel header name (e.g. additionalResponseHeader.reasoning\_content=CamelMyReasoningHeader). This is a multi-value option with prefix: additionalResponseHeader. |  | Map |
 | **apiKey** (producer) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. |  | String |
 | **audioLanguage** (producer) | The language of the input audio in ISO-639-1 format (e.g., 'en'). Improves accuracy and latency. |  | String |
 | **audioModel** (producer) | The model to use for audio transcription (e.g., whisper-1, gpt-4o-transcribe). |  | String |
@@ -217,7 +218,7 @@ Enum values:
 
 ## Message Headers
 
-The OpenAI component supports 38 message header(s), which is/are listed below:
+The OpenAI component supports 39 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -234,6 +235,7 @@ The OpenAI component supports 38 message header(s), which is/are listed below:
 | **CamelOpenAIJsonSchema** (producer) Constant: [`JSON_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA) | The JSON schema to use for structured output validation. |  | String |
 | **CamelOpenAIStripThinking** (producer) Constant: [`STRIP_THINKING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STRIP_THINKING) | Whether to strip …​ blocks from the response body. |  | Boolean |
 | **CamelOpenAIThinkingContent** (producer) Constant: [`THINKING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#THINKING_CONTENT) | The thinking content extracted from …​ blocks in the model response. |  | String |
+| **CamelOpenAIReasoningContent** (producer) Constant: [`REASONING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REASONING_CONTENT) | The reasoning content from the model response reasoning\_content field, used by thinking models like Qwen3 and DeepSeek-R1. |  | String |
 | **CamelOpenAIResponseModel** (producer) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_MODEL) | The model used for the completion response. |  | String |
 | **CamelOpenAIResponseId** (producer) Constant: [`RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ID) | The unique identifier for the completion response. |  | String |
 | **CamelOpenAIFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#FINISH_REASON) | The reason the completion finished (e.g., stop, length, content\_filter). |  | String |
@@ -652,6 +654,47 @@ from("direct:chat")
 | `sslKeymanagerAlgorithm` | String | `SunX509` | Algorithm for the key manager factory |
 | `sslTrustmanagerAlgorithm` | String | `PKIX` | Algorithm for the trust manager factory |
 | `sslEndpointAlgorithm` | String | `https` | Hostname verification algorithm; set to empty or `none` to disable |
+
+## Reasoning Models
+
+Some OpenAI-compatible models (e.g., Qwen3, DeepSeek-R1) return chain-of-thought reasoning in a separate `reasoning_content` field alongside the regular `content` in the API response. The component automatically extracts this field and sets it as the `CamelOpenAIReasoningContent` message header.
+
+This is independent from the inline `<think>…​</think>` tag stripping controlled by `stripThinking`. A response can populate both headers simultaneously:
+
+-   `CamelOpenAIReasoningContent` — from the API-level `reasoning_content` field
+    
+-   `CamelOpenAIThinkingContent` — from inline `<think>` tags in the `content` field (requires `stripThinking=true`)
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=qwen3&stripThinking=true")
+    .log("Answer: ${body}")
+    .log("Reasoning: ${header.CamelOpenAIReasoningContent}")
+    .log("Thinking: ${header.CamelOpenAIThinkingContent}");
+```
+
+> **Note**
+> Reasoning content extraction is supported in non-streaming mode only (both simple and agentic/MCP tool loop paths). Streaming responses do not extract reasoning content.
+
+### Mapping Additional Response Fields to Headers
+
+The `additionalResponseHeader` option allows mapping any extra field from the API response message into a named Camel header. This is useful for provider-specific fields that are not part of the standard OpenAI response schema.
+
+The key is the field name in the API response, and the value is the Camel header name to set:
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=qwen3"
+        + "&additionalResponseHeader.reasoning_content=CamelMyReasoning"
+        + "&additionalResponseHeader.custom_field=CamelMyCustomField")
+    .log("Custom reasoning: ${header.CamelMyReasoning}");
+```
+
+String-valued fields are set directly. Non-string fields (numbers, booleans, objects) are converted using `toString()`.
+
+> **Note**
+> This maps fields from the response message’s additional properties (fields not part of the standard schema). Standard response fields like `content`, `role`, and `tool_calls` are not accessible through this option.
 
 ## Compatibility
 

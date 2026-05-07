@@ -20,11 +20,13 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `affinity.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `affinity.pod-affinity` | `bool` | Always co-locates multiple replicas of the integration in the same node (default `false`). |
-| `affinity.pod-anti-affinity` | `bool` | Never co-locates multiple replicas of the integration in the same node (default `false`). |
-| `affinity.node-affinity-labels` | `[]string` | Defines a set of nodes the integration pod(s) are eligible to be scheduled on, based on labels on the node. |
-| `affinity.pod-affinity-labels` | `[]string` | Defines a set of pods (namely those matching the label selector, relative to the given namespace) that the integration pod(s) should be co-located with. |
-| `affinity.pod-anti-affinity-labels` | `[]string` | Defines a set of pods (namely those matching the label selector, relative to the given namespace) that the integration pod(s) should not be co-located with. |
+| `affinity.podAffinity` | `bool` | Always co-locates multiple replicas of the integration in the same node (default `false`). |
+| `affinity.podAntiAffinity` | `bool` | Never co-locates multiple replicas of the integration in the same node (default `false`). |
+| `affinity.nodeAffinityLabels` | `[]string` | Defines a set of nodes the integration pod(s) are eligible to be scheduled on, based on labels on the node. |
+| `affinity.podAffinityLabels` | `[]string` | Defines a set of pods (namely those matching the label selector, relative to the given namespace) that the integration pod(s) should be co-located with. |
+| `affinity.podAntiAffinityLabels` | `[]string` | Defines a set of pods (namely those matching the label selector, relative to the given namespace) that the integration pod(s) should not be co-located with. |
+> **Note**
+> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 
