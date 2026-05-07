@@ -1,5 +1,8 @@
 # IronMQ
 
+> **Warning**
+> **Deprecated:** This ironmq is deprecated and may be removed in a future release.
+
 **Since Camel 2.17**
 
 **Both producer and consumer are supported**

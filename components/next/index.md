@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 374 in 300 JAR artifacts (7 deprecated)
+Number of Non-Core Components: 374 in 300 JAR artifacts (10 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -144,7 +144,7 @@ Number of Non-Core Components: 374 in 300 JAR artifacts (7 deprecated)
 | [Deep Java Library](djl-component.md) | camel-djl | Stable | 3.3 | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
 | [DFDL](dfdl-component.md) | camel-dfdl | Stable | 4.11 | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
 | [DHIS2](dhis2-component.md) | camel-dhis2 | Stable | 4.0 | Leverages the DHIS2 Java SDK to integrate Apache Camel with the DHIS2 Web API. |
-| [DigitalOcean](digitalocean-component.md) | camel-digitalocean | Stable | 2.19 | Manage Droplets and resources within the DigitalOcean cloud. |
+| [DigitalOcean](digitalocean-component.md) | camel-digitalocean | Stable-deprecated | 2.19 | Manage Droplets and resources within the DigitalOcean cloud. |
 | [Disruptor](disruptor-component.md) | camel-disruptor | Stable | 2.12 | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [Disruptor VM](disruptor-vm-component.md) | camel-disruptor | Stable | 2.12 | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [DNS](dns-component.md) | camel-dns | Stable | 2.7 | Perform DNS queries using DNSJava. |
@@ -238,8 +238,8 @@ Number of Non-Core Components: 374 in 300 JAR artifacts (7 deprecated)
 | [Infinispan Embedded](infinispan-embedded-component.md) | camel-infinispan-embedded | Stable | 2.13 | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [InfluxDB](influxdb-component.md) | camel-influxdb | Stable | 2.18 | Interact with InfluxDB v1, a time series database. |
 | [InfluxDB2](influxdb2-component.md) | camel-influxdb2 | Stable | 3.20 | Interact with InfluxDB v2, a time series database. |
-| [IRC](irc-component.md) | camel-irc | Stable | 1.1 | Send and receive messages to/from and IRC chat. |
-| [IronMQ](ironmq-component.md) | camel-ironmq | Stable | 2.17 | Send and receive messages to/from IronMQ an elastic and durable hosted message queue as a service. |
+| [IRC](irc-component.md) | camel-irc | Stable-deprecated | 1.1 | Send and receive messages to/from and IRC chat. |
+| [IronMQ](ironmq-component.md) | camel-ironmq | Stable-deprecated | 2.17 | Send and receive messages to/from IronMQ an elastic and durable hosted message queue as a service. |
 | [JCache](jcache-component.md) | camel-jcache | Stable | 2.17 | Perform caching operations against JSR107/JCache. |
 | [JCR](jcr-component.md) | camel-jcr | Stable | 1.3 | Read and write nodes to/from a JCR compliant content repository. |
 | [JDBC](jdbc-component.md) | camel-jdbc | Stable | 1.2 | Access databases through SQL and JDBC. |

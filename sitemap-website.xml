@@ -8,13 +8,22 @@
     <loc>https://camel.apache.org/categories/Camel-Quarkus/</loc>
     <lastmod>2026-05-07T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/blog/2026/05/camel-quarkus-3.27.4/</loc>
+    <lastmod>2026-05-07T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/blog/2026/05/camel-quarkus-3.33.1/</loc>
+    <lastmod>2026-05-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.27.4/</loc>
     <lastmod>2026-05-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
     <lastmod>2026-05-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Releases/</loc>
+    <lastmod>2026-05-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-05-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-33453.html</loc>
@@ -24,9 +33,6 @@
     <lastmod>2026-05-06T09:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.33.1/</loc>
-    <lastmod>2026-05-06T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-05-06T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.20.0/</loc>

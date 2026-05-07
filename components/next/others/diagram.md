@@ -30,6 +30,17 @@ Add the `camel-diagram` dependency to your project:
 </dependency>
 ```
 
+#### Using Camel Java API
+
+You can use the diagram render with Camel based APIs such as:
+
+```java
+RouteDiagramDumper dumper = PluginHelper.getRouteDiagramDumper(context);
+BufferedImage image = dumper.dumpRoutesAsImage("*", RouteDiagramDumper.Theme.DARK);
+```
+
+#### Using standalone Java API
+
 Then use the API to render diagrams:
 
 ```java

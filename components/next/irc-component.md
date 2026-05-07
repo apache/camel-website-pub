@@ -1,5 +1,8 @@
 # IRC
 
+> **Warning**
+> **Deprecated:** This irc is deprecated and may be removed in a future release.
+
 **Since Camel 1.1**
 
 **Both producer and consumer are supported**

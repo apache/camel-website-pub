@@ -49,7 +49,7 @@ Apache Camel Spring Boot supports the following Camel artifacts as Spring Boot S
 
 ## Camel Components
 
-Number of Camel components: 387 in 321 JAR artifacts (7 deprecated)
+Number of Camel components: 387 in 321 JAR artifacts (10 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -149,7 +149,7 @@ Number of Camel components: 387 in 321 JAR artifacts (7 deprecated)
 | [Deep Java Library](../../components/next/djl-component.md) | camel-djl-starter | Stable | 3.3 | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
 | [DFDL](../../components/next/dfdl-component.md) | camel-dfdl-starter | Stable | 4.11 | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
 | [DHIS2](../../components/next/dhis2-component.md) | camel-dhis2-starter | Stable | 4.0 | Leverages the DHIS2 Java SDK to integrate Apache Camel with the DHIS2 Web API. |
-| [DigitalOcean](../../components/next/digitalocean-component.md) | camel-digitalocean-starter | Stable | 2.19 | Manage Droplets and resources within the DigitalOcean cloud. |
+| [DigitalOcean](../../components/next/digitalocean-component.md) | camel-digitalocean-starter | Stable-deprecated | 2.19 | Manage Droplets and resources within the DigitalOcean cloud. |
 | [Direct](../../components/next/direct-component.md) | camel-direct-starter | Stable | 1.0 | Call another endpoint from the same Camel Context synchronously. |
 | [Disruptor](../../components/next/disruptor-component.md) | camel-disruptor-starter | Stable | 2.12 | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [Disruptor VM](../../components/next/disruptor-vm-component.md) | camel-disruptor-starter | Stable | 2.12 | Provides asynchronous SEDA behavior using LMAX Disruptor. |
@@ -242,8 +242,8 @@ Number of Camel components: 387 in 321 JAR artifacts (7 deprecated)
 | [Infinispan Embedded](../../components/next/infinispan-embedded-component.md) | camel-infinispan-embedded-starter | Stable | 2.13 | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [InfluxDB](../../components/next/influxdb-component.md) | camel-influxdb-starter | Stable | 2.18 | Interact with InfluxDB v1, a time series database. |
 | [InfluxDB2](../../components/next/influxdb2-component.md) | camel-influxdb2-starter | Stable | 3.20 | Interact with InfluxDB v2, a time series database. |
-| [IRC](../../components/next/irc-component.md) | camel-irc-starter | Stable | 1.1 | Send and receive messages to/from and IRC chat. |
-| [IronMQ](../../components/next/ironmq-component.md) | camel-ironmq-starter | Stable | 2.17 | Send and receive messages to/from IronMQ an elastic and durable hosted message queue as a service. |
+| [IRC](../../components/next/irc-component.md) | camel-irc-starter | Stable-deprecated | 1.1 | Send and receive messages to/from and IRC chat. |
+| [IronMQ](../../components/next/ironmq-component.md) | camel-ironmq-starter | Stable-deprecated | 2.17 | Send and receive messages to/from IronMQ an elastic and durable hosted message queue as a service. |
 | [JCache](../../components/next/jcache-component.md) | camel-jcache-starter | Stable | 2.17 | Perform caching operations against JSR107/JCache. |
 | [JCR](../../components/next/jcr-component.md) | camel-jcr-starter | Stable | 1.3 | Read and write nodes to/from a JCR compliant content repository. |
 | [JDBC](../../components/next/jdbc-component.md) | camel-jdbc-starter | Stable | 1.2 | Access databases through SQL and JDBC. |
