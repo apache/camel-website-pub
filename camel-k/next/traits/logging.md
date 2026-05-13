@@ -39,7 +39,7 @@ The following configuration options are available:
 | `logging.json` | `bool` | Output the logs in JSON |
 | `logging.jsonPrettyPrint` | `bool` | Enable "pretty printing" of the JSON logs |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Migration Guide
 

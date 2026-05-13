@@ -25,4 +25,4 @@ The following configuration options are available:
 | `camel.runtimeVersion` | `string` | The runtime version to use for the integration. It overrides the default version set in the Integration Platform. You can use a fixed version (for example "3.2.3") or a semantic version (for example "3.x") which will try to resolve to the best matching Catalog existing on the cluster (Default, the one provided by the operator version). |
 | `camel.properties` | `[]string` | A list of properties to be provided to the Integration runtime |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

@@ -29,4 +29,4 @@ Deprecated: may be removed in future releases.
  |
 | `pull-secret.auto` | `bool` | Automatically configures the platform registry secret on the pod if it is of type `kubernetes.io/dockerconfigjson`. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

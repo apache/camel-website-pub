@@ -1736,6 +1736,8 @@ Signatures:
 
 -   com.braintreegateway.Result<com.braintreegateway.Transaction> voidTransaction(String id);
     
+-   com.braintreegateway.Result<com.braintreegateway.Transaction> voidTransaction(String id, com.braintreegateway.TransactionVoidRequest request);
+    
 
 The braintree/voidTransaction API method has the parameters listed in the table below:
 
@@ -1743,6 +1745,7 @@ The braintree/voidTransaction API method has the parameters listed in the table 
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | Of the transaction to void | String |
+| **voidRequest** | The request. Request can be null. Request is used to support idempotency. | TransactionVoidRequest |
 
 In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
 

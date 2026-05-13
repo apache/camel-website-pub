@@ -469,6 +469,12 @@ In this situation, then Camel will only watch and reload these two files (foo.ja
 > **Note**
 > You cannot use both files and source dir together. The following is not allowed: `camel run abc.java --source-dir=mycode`.
 
+#### Live reload of resource files
+
+When `--dev` is used, Camel also disables `contentCache` on resource-based components (such as `xslt`) whose default is `true`, so that edits to resource files are picked up on the next message without having to restart the route.
+
+This is driven by `camel.main.routesReloadEnabled` (set automatically by `--dev`). User properties (e.g. `camel.component.xslt.contentCache=true`) and explicit endpoint/URI settings are always respected: set `contentCache=true` to keep caching even in dev mode.
+
 #### Loading new routes into existing Camel
 
 **Available as of Camel 4.17**

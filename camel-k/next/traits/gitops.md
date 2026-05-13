@@ -30,4 +30,4 @@ The following configuration options are available:
 | `gitops.committerName` | `string` | The name used to commit the GitOps changes (default `Camel K Operator`). |
 | `gitops.committerEmail` | `string` | The email used to commit the GitOps changes (default `camel-k-operator@apache.org`). |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

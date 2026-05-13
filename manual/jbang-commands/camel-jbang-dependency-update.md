@@ -1,6 +1,6 @@
 # camel dependency update
 
-Updates dependencies in Maven pom.xml or Java source file (JBang style)
+Updates dependencies in Maven pom.xml or Java source files (JBang style)
 
 ## Usage
 
@@ -58,6 +58,7 @@ camel dependency update [options]
 | `--quiet` | Will be quiet, only print when error occurs | false | boolean |
 | `--repo,--repos` | Additional maven repositories (Use commas to separate multiple repositories) |  | String |
 | `--runtime` | Runtime (camel-main, spring-boot, quarkus) |  | RuntimeType |
+| `--scan-routes` | Sync dependencies from route definitions. Only manages org.apache.camel dependencies, preserving non-Camel dependencies. Removes unused Camel dependencies. |  | boolean |
 | `--skip-plugins` | Skip plugins during export | false | boolean |
 | `--spring-boot-version` | Spring Boot version | RuntimeType.SPRING\_BOOT\_VERSION | String |
 | `--verbose` | Verbose output of startup activity (dependency resolution and downloading | false | boolean |

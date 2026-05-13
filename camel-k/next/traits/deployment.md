@@ -26,4 +26,4 @@ The following configuration options are available:
 | `deployment.rollingUpdateMaxUnavailable` | `k8s.io/apimachinery/pkg/util/intstr.IntOrString` | The maximum number of pods that can be unavailable during the update. Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). Absolute number is calculated from percentage by rounding down. This can not be 0 if MaxSurge is 0. Defaults to `25%`. |
 | `deployment.rollingUpdateMaxSurge` | `k8s.io/apimachinery/pkg/util/intstr.IntOrString` | The maximum number of pods that can be scheduled above the desired number of pods. Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). This can not be 0 if MaxUnavailable is 0. Absolute number is calculated from percentage by rounding up. Defaults to `25%`. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

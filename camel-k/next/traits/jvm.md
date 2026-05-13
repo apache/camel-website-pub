@@ -36,7 +36,7 @@ Deprecated: no longer in use.
 | `jvm.caCert` | `string` | Deprecated: Use CACertificates instead. Path to a PEM-encoded CA certificate file. |
 | `jvm.caCertPassword` | `string` | Deprecated: Use CACertificates instead. Path to a file containing the truststore password. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Usage of jar parameters
 

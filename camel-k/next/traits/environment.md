@@ -25,4 +25,4 @@ The following configuration options are available:
 | `environment.httpProxy` | `bool` | Propagates the `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` environment variables (default `true`) |
 | `environment.vars` | `[]string` | A list of environment variables to be added to the integration container. The syntax is either VAR=VALUE or VAR=\[configmap|secret\]:name/key, where name represents the resource name, and key represents the resource key to be mapped as and environment variable. These take precedence over any previously defined environment variables. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

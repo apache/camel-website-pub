@@ -270,6 +270,10 @@ You can also use the header `CamelXsltStylesheet` which instead should contain t
 > **Tip**
 > You can set `contentCache=false` and refer to a non-existing template, such as `"xslt:dummy.xsl?contentCache=false&allowTemplateFromHeader=true"` as this will tell Camel to not load `dummy.xsl` on startup but to load the stylesheet on demand. And because you provide the stylesheet via headers, then it is fully dynamic.
 
+## Live reload in dev mode
+
+When routes-reload is enabled (`camel.main.routesReloadEnabled=true`, automatically set by `camel run --dev`), Camel disables `contentCache` on the XSLT component so that edits to the stylesheet file are picked up on the next message without having to restart the route. User properties (e.g. `camel.component.xslt.contentCache=true`) and explicit endpoint/URI settings are always respected: set `contentCache=true` to keep caching even in dev mode.
+
 ## Accessing warnings, errors and fatalErrors from XSLT ErrorListener
 
 Any warning/error or fatalError is stored on the current Exchange as a property with the keys `Exchange.XSLT_ERROR`, `Exchange.XSLT_FATAL_ERROR`, or `Exchange.XSLT_WARNING` which allows end users to get hold of any errors happening during transformation.

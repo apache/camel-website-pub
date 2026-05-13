@@ -2,19 +2,19 @@
 
 **Since Camel 4.21**
 
-The Diagram module provides route diagram rendering capabilities for Apache Camel routes. It can generate visual route diagrams as PNG images or text-based tree representations from route structure data.
+The Diagram module provides route diagram rendering capabilities for Apache Camel routes. It can generate visual route diagrams as PNG images or plain ASCII art text representations from route structure data.
 
 ## Features
 
 -   Render route diagrams as PNG images with colored nodes and scope boxes
     
--   Generate text-based tree diagrams for terminal output
+-   Render route diagrams as plain ASCII art text for terminal output
     
 -   Support for all Camel EIPs: choice, doTry/doCatch, filter, split, loop, multicast, and more
     
 -   Scope boxes visually group branching and scoping EIPs
     
--   Multiple color themes: dark, light, transparent, or custom
+-   Multiple color themes: dark, light, transparent, or custom (PNG only)
     
 
 ## Usage
@@ -32,11 +32,18 @@ Add the `camel-diagram` dependency to your project:
 
 #### Using Camel Java API
 
-You can use the diagram render with Camel based APIs such as:
+You can use the diagram renderer with the Camel API to render as PNG images:
 
 ```java
 RouteDiagramDumper dumper = PluginHelper.getRouteDiagramDumper(context);
 BufferedImage image = dumper.dumpRoutesAsImage("*", RouteDiagramDumper.Theme.DARK);
+```
+
+Or render as ASCII art text:
+
+```java
+RouteDiagramDumper dumper = PluginHelper.getRouteDiagramDumper(context);
+String ascii = dumper.dumpRoutesAsAsciiArt("*");
 ```
 
 #### Using standalone Java API
@@ -63,13 +70,22 @@ BufferedImage image = renderer.renderDiagram(List.of(lr), lr.maxY + RouteDiagram
 ImageIO.write(image, "PNG", new File("diagram.png"));
 ```
 
-### Text diagram
-
-For terminal or log output, generate a text-based tree:
+To render as ASCII art instead:
 
 ```java
-List<String> lines = renderer.printTextDiagram(routes);
-lines.forEach(System.out::println);
+import org.apache.camel.diagram.*;
+import org.apache.camel.diagram.RouteDiagramLayoutEngine.*;
+
+// Parse route structure from JSON
+List<RouteInfo> routes = RouteDiagramHelper.parseRoutes(jsonObject);
+
+// Layout and render as ASCII
+RouteDiagramLayoutEngine engine = new RouteDiagramLayoutEngine();
+LayoutRoute lr = engine.layoutRoute(routes.get(0), RouteDiagramLayoutEngine.PADDING);
+
+RouteDiagramAsciiRenderer renderer = new RouteDiagramAsciiRenderer(engine.getNodeWidth());
+String ascii = renderer.renderDiagram(List.of(lr), lr.maxY + RouteDiagramLayoutEngine.V_GAP);
+System.out.println(ascii);
 ```
 
 ### With Camel JBang
@@ -90,12 +106,10 @@ The following built-in themes are available:
     
 -   `transparent` - transparent background
     
--   `text` - to use tree diagram instead of visual diagram
-    
 
 Custom colors can be specified using the format:
 
-```text
+```properties
 bg=#1e1e1e:from=#2e7d32:to=#1565c0:eip=#8957e5:choice=#d29922
 ```
 
@@ -107,11 +121,80 @@ To use dark theme
 camel cmd route-diagram MyRoute.java --theme=dark
 ```
 
-To print textual tree diagram instead of visual
+## ASCII Art Rendering
 
-```bash
-camel cmd route-diagram MyRoute.java --theme=tree
+The ASCII art renderer produces plain text diagrams using box-drawing characters. This is useful for terminal output where images cannot be displayed.
+
+Nodes are drawn as boxes using `+`, `-`, and `|` characters, with arrows using `|` and `v`. Branching EIPs (choice, multicast, etc.) produce L-shaped arrows with horizontal connector lines. Long labels are automatically wrapped to fit within the box width.
+
+Example output for a simple route:
+
+```text
+route1
+    +----------------------+
+    |      timer:tick      |
+    +----------------------+
+                |
+                |
+                |
+                v
+    +----------------------+
+    |        log:a         |
+    +----------------------+
 ```
 
-> **Tip**
-> You can also show diagrams for an existing running integration by executing `camel cmd diagram`.
+Example output for a branching route with choice:
+
+```text
+route1
+                  +----------------------+
+                  |      timer:tick      |
+                  +----------------------+
+                              |
+                              v
+                  +----------------------+
+                  |       choice()       |
+                  +----------------------+
+                              |
+              +---------------+---------------+
+              v                               v
+  +----------------------+        +----------------------+
+  |      when(...)       |        |     otherwise()      |
+  +----------------------+        +----------------------+
+              |                               |
+              v                               v
+  +----------------------+        +----------------------+
+  |        log:a         |        |        log:b         |
+  +----------------------+        +----------------------+
+```
+
+Scope boxes (for filter, split, doTry, etc.) are rendered with dashed borders using `:` for vertical and `- - -` for horizontal lines.
+
+Use `--theme=ascii` for plain ASCII art:
+
+```bash
+camel cmd route-diagram MyRoute.java --theme=ascii
+```
+
+## Unicode Rendering
+
+The `unicode` theme uses Unicode box-drawing characters for a cleaner look. Node boxes use `┌──┐ │ └──┘`, arrows use `│` and `▼`, and branch junctions use `┴`. Scope boxes use `╌` (dashed horizontal) and `╎` (dashed vertical) with no corners.
+
+```bash
+camel cmd route-diagram MyRoute.java --theme=unicode
+```
+
+Example output:
+
+```text
+route1
+┌──────────────────────┐
+│      timer:tick      │
+└──────────────────────┘
+           │
+           │
+           ▼
+┌──────────────────────┐
+│        log:a         │
+└──────────────────────┘
+```

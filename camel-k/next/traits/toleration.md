@@ -33,7 +33,7 @@ The following configuration options are available:
 | `toleration.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
 | `toleration.taints` | `[]string` | The list of taints to tolerate, in the form `Key[=Value]:Effect[:Seconds]` |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 

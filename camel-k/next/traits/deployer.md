@@ -27,4 +27,4 @@ Deprecated: this feature will be removed in future releases.
  |
 | `deployer.useSSA` | `bool` | Deprecated: no longer in use. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

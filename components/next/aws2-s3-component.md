@@ -1970,7 +1970,7 @@ Sometimes building an AWS Request can be complex because of multiple options. We
 
 ```java
 from("direct:aws2-s3")
-     .setBody(ListObjectsRequest.builder().bucket(bucketName).build())
+.setBody(ListObjectsV2Request.builder().bucket(bucketName).build())
      .to("aws2-s3://test?amazonS3Client=#amazonS3Client&operation=listObjects&pojoRequest=true")
 ```
 

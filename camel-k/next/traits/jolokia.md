@@ -35,4 +35,4 @@ The following configuration options are available:
 | `jolokia.useSSLClientAuthentication` | `bool` | Whether client certificates should be used for authentication (default `true` for OpenShift). |
 | `jolokia.options` | `[]string` | A list of additional Jolokia options as defined in [JVM agent configuration options](https://jolokia.org/reference/html/agents.html#agent-jvm-config) |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

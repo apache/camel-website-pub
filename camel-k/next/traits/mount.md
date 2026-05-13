@@ -28,7 +28,7 @@ The following configuration options are available:
 | `mount.hotReload` | `bool` | Enable "hot reload" when a secret/configmap mounted is edited (default `false`). The configmap/secret must be marked with `camel.apache.org/integration` label to be taken in account. The resource will be watched for any kind change, also for changes in metadata. |
 | `mount.scanKameletsImplicitLabelSecrets` | `bool` | Deprecated: no longer available since version 2.5. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Dynamic creation of PersistentVolumeClaims
 

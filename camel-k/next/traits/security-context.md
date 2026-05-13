@@ -25,4 +25,4 @@ The following configuration options are available:
 | `security-context.runAsNonRoot` | `bool` | Security Context RunAsNonRoot configuration (default false). |
 | `security-context.seccompProfileType` | `SeccompProfileType` | Security Context SeccompProfileType configuration (default RuntimeDefault). |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

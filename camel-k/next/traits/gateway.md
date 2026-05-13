@@ -24,4 +24,4 @@ The following configuration options are available:
 | `gateway.className` | `string` | The class name to use for the gateway configuration. |
 | `gateway.listeners` | `[]string` | The listeners in the format "port;protocol" (default, "8080;HTTP"). |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

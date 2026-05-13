@@ -21,7 +21,7 @@ The following configuration options are available:
 | `init-containers.initTasks` | `[]string` | A list of init tasks to be executed with format `<name>;<container-image>;<container-command>`. |
 | `init-containers.sideCarTasks` | `[]string` | A list of sidecar tasks to be executed with format `<name>;<container-image>;<container-command>`. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## An example init container
 

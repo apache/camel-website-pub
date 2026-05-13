@@ -61,7 +61,7 @@ Deprecated: use TasksRequestCPU instead with task name `builder`.
 | `builder.annotations` | `map[string]string` | When using `pod` strategy, annotation to use for the builder pod. |
 | `builder.platforms` | `[]string` | The list of manifest platforms to use to build a container image (default `linux/amd64`). |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Node Selectors
 

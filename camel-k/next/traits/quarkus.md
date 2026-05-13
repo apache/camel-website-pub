@@ -34,4 +34,4 @@ Deprecated: use `build-mode` instead.
 | `quarkus.nativeBaseImage` | `string` | The base image to use when running a native build (default `quay.io/quarkus/quarkus-micro-image:2.0`) |
 | `quarkus.nativeBuilderImage` | `string` | The image containing the tooling required for a native build (by default it will use the one provided in the runtime catalog) |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

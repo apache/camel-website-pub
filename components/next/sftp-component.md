@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The SFTP component supports 5 options, which are listed below.
+The SFTP component supports 11 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -74,6 +74,26 @@ The SFTP component supports 5 options, which are listed below.
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
+| **autoCreateKnownHostsFile** (security) | If knownHostFile does not exist, then attempt to auto-create the path and file (beware that the file will be created by the current user of the running Java process, which may not have file permission). | false | boolean |
+| **knownHosts** (security) | Sets the known\_hosts from the byte array globally, so that the SFTP endpoints can do host key verification. |  | byte\[\] |
+| **knownHostsFile** (security) | Sets the known\_hosts file globally, so that the SFTP endpoints can do host key verification. |  | String |
+| **knownHostsUri** (security) | Sets the known\_hosts file (loaded from classpath by default) globally, so that the SFTP endpoints can do host key verification. |  | String |
+| **strictHostKeyChecking** (security) | 
+Sets whether to use strict host key checking globally for all endpoints. Setting this to 'no' (the default) disables host key verification and makes SFTP connections vulnerable to man-in-the-middle attacks. Use 'yes' in production environments.
+
+Enum values:
+
+-   no
+    
+-   yes
+    
+
+
+
+
+
+ | no | String |
+| **useUserKnownHostsFile** (security) | If knownHostFile has not been explicit configured then use the host file from System.getProperty(user.home)/.ssh/known\_hosts. | true | boolean |
 
 ## Endpoint Options
 
@@ -464,7 +484,7 @@ Enum values:
 | **serverHostKeys** (security) | Set a comma separated list of algorithms supported for the server host key. Some examples include: ssh-dss,ssh-rsa,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521. If not specified the default list from JSCH will be used. |  | String |
 | **strictHostKeyChecking** (security) | 
 
-Sets whether to use strict host key checking.
+Sets whether to use strict host key checking. Setting this to 'no' (the default) disables host key verification and makes SFTP connections vulnerable to man-in-the-middle attacks. Use 'yes' in production environments.
 
 Enum values:
 
@@ -510,6 +530,78 @@ The SFTP component supports 17 message header(s), which is/are listed below:
 | **CamelFtpReplyString** (common) Constant: [`FTP_REPLY_STRING`](https://javadoc.io/doc/org.apache.camel/camel-ftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FTP_REPLY_STRING) | The FTP client reply string. |  | String |
 
 ## Usage
+
+### Security Best Practices: Host Key Verification
+
+> **Warning**
+> By default, the SFTP component has `strictHostKeyChecking=no`, which disables host key verification and makes connections vulnerable to man-in-the-middle (MITM) attacks. For production environments, you should enable strict host key checking to ensure you are connecting to the expected server.
+
+#### Global Configuration (Component Level)
+
+You can configure host key verification settings globally on the SFTP component, which will apply to all SFTP endpoints unless overridden at the endpoint level:
+
+```java
+// Configure component for all SFTP endpoints
+SftpComponent sftp = context.getComponent("sftp", SftpComponent.class);
+sftp.setStrictHostKeyChecking("yes");
+sftp.setKnownHostsFile("/path/to/known_hosts");
+
+// All endpoints will inherit these settings
+from("sftp://host1/path1?username=user1&password=secret1")
+    .to("direct:result");
+
+from("sftp://host2/path2?username=user2&password=secret2")
+    .to("direct:result");
+```
+
+Or with application.properties configuration:
+
+```properties
+camel.component.sftp.strict-host-key-checking=yes
+camel.component.sftp.known-hosts-file=/path/to/known_hosts
+```
+
+#### Per-Endpoint Configuration
+
+Host key verification prevents MITM attacks by verifying the server’s host key against a known list of trusted keys. When `strictHostKeyChecking=yes` is enabled, the SFTP client will reject connections to servers whose host key is not in the known hosts file.
+
+Endpoint-level configurations will override component-level settings. This allows you to set secure defaults globally while making exceptions for specific endpoints if needed.
+
+To enable strict host key checking at the endpoint level, set `strictHostKeyChecking=yes` and provide a known hosts file:
+
+```java
+from("sftp://host:22/path"
+     + "?username=myuser"
+     + "&password=secret"
+     + "&knownHostsFile=/path/to/known_hosts"
+     + "&strictHostKeyChecking=yes")
+    .to("direct:result");
+```
+
+Alternatively, load the known hosts from the classpath:
+
+```java
+from("sftp://host:22/path"
+     + "?username=myuser"
+     + "&privateKeyFile=/path/to/id_rsa"
+     + "&knownHostsUri=classpath:known_hosts"
+     + "&strictHostKeyChecking=yes")
+    .to("direct:result");
+```
+
+If you do not have a known hosts file, you can create one by connecting to the server using the `ssh` command, which will add the host key to `~/.ssh/known_hosts`. By default, the SFTP component will use this file if `useUserKnownHostsFile=true` (which is the default).
+
+```java
+// Uses ~/.ssh/known_hosts by default
+from("sftp://host:22/path"
+     + "?username=myuser"
+     + "&privateKeyFile=/path/to/id_rsa"
+     + "&strictHostKeyChecking=yes")
+    .to("direct:result");
+```
+
+> **Note**
+> When `strictHostKeyChecking=yes` is enabled, Camel’s security policy enforcement framework will not flag this as a security violation. The default `strictHostKeyChecking=no` may trigger warnings or failures depending on your configured security policy.
 
 ### OpenSSH Certificate Authentication
 
@@ -573,7 +665,7 @@ When using sftp with Spring Boot make sure to use the following Maven dependency
 </dependency>
 ```
 
-The component supports 19 options, which are listed below.
+The component supports 25 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -591,9 +683,15 @@ The component supports 19 options, which are listed below.
 | **camel.component.ftps.health-check-producer-enabled** | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
 | **camel.component.ftps.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
 | **camel.component.ftps.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |
+| **camel.component.sftp.auto-create-known-hosts-file** | If knownHostFile does not exist, then attempt to auto-create the path and file (beware that the file will be created by the current user of the running Java process, which may not have file permission). | false | Boolean |
 | **camel.component.sftp.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
 | **camel.component.sftp.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
 | **camel.component.sftp.enabled** | Whether to enable auto configuration of the sftp component. This is enabled by default. |  | Boolean |
 | **camel.component.sftp.health-check-consumer-enabled** | Used for enabling or disabling all consumer based health checks from this component. | true | Boolean |
 | **camel.component.sftp.health-check-producer-enabled** | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
+| **camel.component.sftp.known-hosts** | Sets the known\_hosts from the byte array globally, so that the SFTP endpoints can do host key verification. |  | Byte\[\] |
+| **camel.component.sftp.known-hosts-file** | Sets the known\_hosts file globally, so that the SFTP endpoints can do host key verification. |  | String |
+| **camel.component.sftp.known-hosts-uri** | Sets the known\_hosts file (loaded from classpath by default) globally, so that the SFTP endpoints can do host key verification. |  | String |
 | **camel.component.sftp.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| **camel.component.sftp.strict-host-key-checking** | Sets whether to use strict host key checking globally for all endpoints. Setting this to 'no' (the default) disables host key verification and makes SFTP connections vulnerable to man-in-the-middle attacks. Use 'yes' in production environments. | no | String |
+| **camel.component.sftp.use-user-known-hosts-file** | If knownHostFile has not been explicit configured then use the host file from System.getProperty(user.home)/.ssh/known\_hosts. | true | Boolean |

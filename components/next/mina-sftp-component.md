@@ -416,7 +416,7 @@ Enum values:
 | **serverKeyVerifier** (security) | Custom ServerKeyVerifier for host key verification. When provided, this verifier is used exclusively, ignoring strictHostKeyChecking, knownHostsFile, and other host key options. |  | ServerKeyVerifier |
 | **strictHostKeyChecking** (security) | 
 
-Sets whether to use strict host key checking.
+Sets whether to use strict host key checking. Setting this to 'no' (the default) disables host key verification and makes SFTP connections vulnerable to man-in-the-middle attacks. Use 'yes' in production environments.
 
 Enum values:
 

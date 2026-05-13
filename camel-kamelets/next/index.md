@@ -293,10 +293,6 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![jms amqp 10 source](_images/kamelets/jms-amqp-10-source.svg) JMS - AMQP 1.0 Source](jms-amqp-10-source.html)
 
- [![jms amqp 10 ssl sink](_images/kamelets/jms-amqp-10-ssl-sink.svg) JMS - AMQP 1.0 SSL Sink](jms-amqp-10-ssl-sink.html)
-
- [![jms amqp 10 ssl source](_images/kamelets/jms-amqp-10-ssl-source.svg) JMS - AMQP 1.0 SSL Source](jms-amqp-10-ssl-source.html)
-
  [![jms apache artemis sink](_images/kamelets/jms-apache-artemis-sink.svg) JMS - Apache Artemis Sink](jms-apache-artemis-sink.html)
 
  [![jms apache artemis source](_images/kamelets/jms-apache-artemis-source.svg) JMS - Apache Artemis Source](jms-apache-artemis-source.html)

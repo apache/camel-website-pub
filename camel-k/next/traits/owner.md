@@ -24,4 +24,4 @@ The following configuration options are available:
 | `owner.targetAnnotations` | `[]string` | The set of annotations to be transferred |
 | `owner.targetLabels` | `[]string` | The set of labels to be transferred |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

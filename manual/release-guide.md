@@ -146,6 +146,31 @@ The settings follow the guidelines used by the Maven project. Please pay particu
 </settings>
 ```
 
+## Creating a New LTS Branch
+
+When creating a new LTS release branch (e.g., `camel-4.22.x`), the following additional steps are required beyond the normal branch creation:
+
+1.  Add branch protection in `.asf.yaml` (on the `main` branch):
+    
+    The `.asf.yaml` file in the `main` branch controls GitHub branch protection for the entire repository. Add the new branch to the `protected_branches` section to prevent force pushes and accidental branch deletion:
+    
+    ```yaml
+    github:
+      protected_branches:
+        main: {}
+        camel-4.14.x: {}
+        camel-4.18.x: {}
+        camel-4.22.x: {}   # <-- add new LTS branch here
+    ```
+    
+    > **Note**
+    > `.asf.yaml` does not support wildcard patterns — each branch must be listed explicitly. Only the `.asf.yaml` on the default branch (`main`) is used for repository-level settings like branch protection.
+    
+2.  Remove branch protection for EOL branches:
+    
+    When an LTS branch reaches end of life, remove it from the `protected_branches` section in `.asf.yaml`.
+    
+
 ## Creating the Release
 
 Complete the following steps to create a new Camel release:

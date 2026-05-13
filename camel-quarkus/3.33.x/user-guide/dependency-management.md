@@ -90,7 +90,7 @@ Note that if you do this, some dependencies in `camel-quarkus-bom` may not be pe
   ...
   <properties>
     <quarkus.platform.version>3.33.1.1</quarkus.platform.version>
-    <camel-quarkus.version>3.33.1</camel-quarkus.version>
+    <camel-quarkus.version>3.33.2</camel-quarkus.version>
     ...
   </properties>
   <dependencyManagement>

@@ -27,4 +27,4 @@ The following configuration options are available:
 | `keda.auto` | `bool` | Automatically discover KEDA triggers from Camel component URIs. |
 | `keda.autoMetadata` | `map[string]map[string]string` | Additional metadata to merge into auto-discovered triggers. Keys are trigger types (e.g., "kafka"), values are maps of metadata key-value pairs to merge (e.g., {"lagThreshold": "10"}). |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

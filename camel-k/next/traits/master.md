@@ -37,7 +37,7 @@ The following configuration options are available:
 | `master.labelKey` | `string` | Label that will be used to identify all pods contending the lock. Defaults to "camel.apache.org/integration". |
 | `master.labelValue` | `string` | Label value that will be used to identify all pods contending the lock. Defaults to the integration name. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Migration Guide
 

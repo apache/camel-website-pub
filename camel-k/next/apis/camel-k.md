@@ -18,7 +18,7 @@ string | `camel.apache.org/v1` |
 | `kind`  
 string | `Build` |
 | `metadata`  
-**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
+**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
 | `spec`  
 **[BuildSpec](#_camel_apache_org_v1_BuildSpec)** | 
  |
@@ -39,7 +39,7 @@ string | `camel.apache.org/v1` |
 | `kind`  
 string | `CamelCatalog` |
 | `metadata`  
-**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
+**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
 | `status`  
 **[CamelCatalogStatus](#_camel_apache_org_v1_CamelCatalogStatus)** | the actual state of the catalog |
 | `spec`  
@@ -57,7 +57,7 @@ string | `camel.apache.org/v1` |
 | `kind`  
 string | `Integration` |
 | `metadata`  
-**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
+**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
 | `spec`  
 **[IntegrationSpec](#_camel_apache_org_v1_IntegrationSpec)** | the desired Integration specification |
 | `status`  
@@ -75,7 +75,7 @@ string | `camel.apache.org/v1` |
 | `kind`  
 string | `IntegrationKit` |
 | `metadata`  
-**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
+**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
 | `spec`  
 **[IntegrationKitSpec](#_camel_apache_org_v1_IntegrationKitSpec)** | the desired configuration |
 | `status`  
@@ -95,7 +95,7 @@ string | `camel.apache.org/v1` |
 | `kind`  
 string | `IntegrationPlatform` |
 | `metadata`  
-**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
+**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
 | `spec`  
 **[IntegrationPlatformSpec](#_camel_apache_org_v1_IntegrationPlatformSpec)** | 
  |
@@ -116,7 +116,7 @@ string | `camel.apache.org/v1` |
 | `kind`  
 string | `IntegrationProfile` |
 | `metadata`  
-**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
+**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
 | `spec`  
 **[IntegrationProfileSpec](#_camel_apache_org_v1_IntegrationProfileSpec)** | 
  |
@@ -135,7 +135,7 @@ string | `camel.apache.org/v1` |
 | `kind`  
 string | `Kamelet` |
 | `metadata`  
-**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
+**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
 | `spec`  
 **[KameletSpec](#_camel_apache_org_v1_KameletSpec)** | the desired specification |
 | `status`  
@@ -153,7 +153,7 @@ string | `camel.apache.org/v1` |
 | `kind`  
 string | `Pipe` |
 | `metadata`  
-**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
+**[Kubernetes meta/v1.ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectmeta-v1-meta)** | Refer to the Kubernetes API documentation for the fields of the `metadata` field. |
 | `spec`  
 **[PipeSpec](#_camel_apache_org_v1_PipeSpec)** | the specification of a Pipe |
 | `status`  
@@ -274,11 +274,11 @@ BuildCondition describes the state of a resource at a certain point.
 | `type`  
 **[BuildConditionType](#_camel_apache_org_v1_BuildConditionType)** | Type of integration condition. |
 | `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
 | `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | The last time this condition was updated. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
 | `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
 | `reason`  
 string | The reason for the condition’s last transition. |
 | `message`  
@@ -382,7 +382,7 @@ Deprecated: no longer in use in Camel K 2 - maintained for backward compatibilit
 
  |
 | `timeout`  
-**[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#duration-v1-meta)** | Timeout defines the Build maximum execution duration. The Build deadline is set to the Build start time plus the Timeout duration. If the Build deadline is exceeded, the Build context is canceled, and its phase set to BuildPhaseFailed. |
+**[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#duration-v1-meta)** | Timeout defines the Build maximum execution duration. The Build deadline is set to the Build start time plus the Timeout duration. If the Build deadline is exceeded, the Build context is canceled, and its phase set to BuildPhaseFailed. |
 | `maxRunningBuilds`  
 int32 | the maximum amount of parallel running builds started by this operator instance.
 
@@ -421,7 +421,7 @@ string | the error description (if any) |
 | `failure`  
 **[Failure](#_camel_apache_org_v1_Failure)** | the reason of the failure (if any) |
 | `startedAt`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | the time when it started |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | the time when it started |
 | `conditions`  
 **[\[\]BuildCondition](#_camel_apache_org_v1_BuildCondition)** | a list of conditions occurred during the build |
 | `duration`  
@@ -574,11 +574,11 @@ CamelCatalogCondition describes the state of a resource at a certain point.
 | `type`  
 **[CamelCatalogConditionType](#_camel_apache_org_v1_CamelCatalogConditionType)** | Type of CamelCatalog condition. |
 | `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
 | `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | The last time this condition was updated. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
 | `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
 | `reason`  
 string | The reason for the condition’s last transition. |
 | `message`  
@@ -921,7 +921,7 @@ Endpoint represents a source/sink external entity (could be any Kubernetes resou
 | Field | Description |
 | --- | --- |
 | `ref`  
-**[Kubernetes core/v1.ObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectreference-v1-core)** | Ref can be used to declare a Kubernetes resource as source/sink endpoint |
+**[Kubernetes core/v1.ObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectreference-v1-core)** | Ref can be used to declare a Kubernetes resource as source/sink endpoint |
 | `uri`  
 string | URI can be used to specify the (Camel) endpoint explicitly |
 | `properties`  
@@ -1108,7 +1108,7 @@ Failure represent a message specifying the reason and the time of an event failu
 | `reason`  
 string | a short text specifying the reason |
 | `time`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | the time when the failure has happened |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | the time when the failure has happened |
 | `recovery`  
 **[FailureRecovery](#_camel_apache_org_v1_FailureRecovery)** | the recovery attempted for this failure |
 
@@ -1129,7 +1129,7 @@ int | attempt number |
 | `attemptMax`  
 int | maximum number of attempts |
 | `attemptTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | **(Optional)**
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | **(Optional)**
 time of the attempt execution
 
  |
@@ -1291,13 +1291,13 @@ IntegrationCondition describes the state of a resource at a certain point.
 | `type`  
 **[IntegrationConditionType](#_camel_apache_org_v1_IntegrationConditionType)** | Type of integration condition. |
 | `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
 | `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | The last time this condition was updated. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
 | `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
 | `firstTruthyTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | First time the condition status transitioned to True. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | First time the condition status transitioned to True. |
 | `reason`  
 string | The reason for the condition’s last transition. |
 | `message`  
@@ -1329,11 +1329,11 @@ IntegrationKitCondition describes the state of a resource at a certain point.
 | `type`  
 **[IntegrationKitConditionType](#_camel_apache_org_v1_IntegrationKitConditionType)** | Type of integration condition. |
 | `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
 | `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | The last time this condition was updated. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
 | `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
 | `reason`  
 string | The reason for the condition’s last transition. |
 | `message`  
@@ -1505,12 +1505,12 @@ string | a base image that can be used as base layer for all images. It can be u
 | `registry`  
 **[RegistrySpec](#_camel_apache_org_v1_RegistrySpec)** | the image registry used to push/pull Integration images |
 | `buildCatalogToolTimeout`  
-**[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#duration-v1-meta)** | the timeout (in seconds) to use when creating the build tools container image.
+**[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#duration-v1-meta)** | the timeout (in seconds) to use when creating the build tools container image.
 Deprecated: no longer in use
 
  |
 | `timeout`  
-**[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#duration-v1-meta)** | how much time to wait before time out the pipeline process |
+**[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#duration-v1-meta)** | how much time to wait before time out the pipeline process |
 | `maven`  
 **[MavenSpec](#_camel_apache_org_v1_MavenSpec)** | Maven configuration used to build the Camel/Camel-Quarkus applications |
 | `PublishStrategyOptions`  
@@ -1544,11 +1544,11 @@ IntegrationPlatformCondition describes the state of a resource at a certain poin
 | `type`  
 **[IntegrationPlatformConditionType](#_camel_apache_org_v1_IntegrationPlatformConditionType)** | Type of integration condition. |
 | `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
 | `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | The last time this condition was updated. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
 | `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
 | `reason`  
 string | The reason for the condition’s last transition. |
 | `message`  
@@ -1669,7 +1669,7 @@ string | a base image that can be used as base layer for all images. It can be u
 | `registry`  
 **[RegistrySpec](#_camel_apache_org_v1_RegistrySpec)** | the image registry used to push/pull Integration images |
 | `timeout`  
-**[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#duration-v1-meta)** | how much time to wait before time out the pipeline process |
+**[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#duration-v1-meta)** | how much time to wait before time out the pipeline process |
 | `maven`  
 **[MavenSpec](#_camel_apache_org_v1_MavenSpec)** | Maven configuration used to build the Camel/Camel-Quarkus applications |
 
@@ -1688,11 +1688,11 @@ IntegrationProfileCondition describes the state of a resource at a certain point
 | `type`  
 **[IntegrationProfileConditionType](#_camel_apache_org_v1_IntegrationProfileConditionType)** | Type of integration condition. |
 | `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
 | `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | The last time this condition was updated. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
 | `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
 | `reason`  
 string | The reason for the condition’s last transition. |
 | `message`  
@@ -1803,7 +1803,7 @@ int32 | the number of `Pods` needed for the running Integration |
 | `flows`  
 **[\[\]Flow](#_camel_apache_org_v1_Flow)** | a source in YAML DSL language which contain the routes to run |
 | `integrationKit`  
-**[Kubernetes core/v1.ObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectreference-v1-core)** | the reference of the `IntegrationKit` which is used for this Integration |
+**[Kubernetes core/v1.ObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectreference-v1-core)** | the reference of the `IntegrationKit` which is used for this Integration |
 | `dependencies`  
 \[\]string | the list of Camel or Maven dependencies required by the Integration |
 | `profile`  
@@ -1862,7 +1862,7 @@ Deprecated: may be removed in future releases.
 | `traits`  
 **[Traits](#_camel_apache_org_v1_Traits)** | the traits executed for the Integration |
 | `integrationKit`  
-**[Kubernetes core/v1.ObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#objectreference-v1-core)** | the reference of the `IntegrationKit` which is used for this Integration |
+**[Kubernetes core/v1.ObjectReference](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#objectreference-v1-core)** | the reference of the `IntegrationKit` which is used for this Integration |
 | `platform`  
 string | The IntegrationPlatform watching this Integration |
 | `generatedSources`  
@@ -1890,11 +1890,11 @@ string | label selector |
 | `capabilities`  
 \[\]string | features offered by the Integration |
 | `lastInitTimestamp`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | the timestamp representing the last time when this integration was initialized. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | the timestamp representing the last time when this integration was initialized. |
 | `lastDeploymentTimestamp`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | the timestamp representing the last time when this integration was deployed. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | the timestamp representing the last time when this integration was deployed. |
 | `lastBuildTimestamp`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | the timestamp representing the last time when this integration was built. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | the timestamp representing the last time when this integration was built. |
 
 ### JSON
 
@@ -2163,11 +2163,11 @@ KameletCondition describes the state of a resource at a certain point.
 | `type`  
 **[KameletConditionType](#_camel_apache_org_v1_KameletConditionType)** | Type of kamelet condition. |
 | `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
 | `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | The last time this condition was updated. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
 | `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
 | `reason`  
 string | The reason for the condition’s last transition. |
 | `message`  
@@ -2425,7 +2425,7 @@ map\[string\]string | The Maven properties. |
 | `settingsSecurity`  
 **[ValueSource](#_camel_apache_org_v1_ValueSource)** | A reference to the ConfigMap or Secret key that contains the security of the Maven settings. |
 | `caSecrets`  
-**[\[\]Kubernetes core/v1.SecretKeySelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#secretkeyselector-v1-core)** | The Secrets name and key, containing the CA certificate(s) used to connect to remote Maven repositories. It can contain X.509 certificates, and PKCS#7 formatted certificate chains. A JKS formatted keystore is automatically created to store the CA certificate(s), and configured to be used as a trusted certificate(s) by the Maven commands. Note that the root CA certificates are also imported into the created keystore. |
+**[\[\]Kubernetes core/v1.SecretKeySelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#secretkeyselector-v1-core)** | The Secrets name and key, containing the CA certificate(s) used to connect to remote Maven repositories. It can contain X.509 certificates, and PKCS#7 formatted certificate chains. A JKS formatted keystore is automatically created to store the CA certificate(s), and configured to be used as a trusted certificate(s) by the Maven commands. Note that the root CA certificates are also imported into the created keystore. |
 | `extension`  
 **[\[\]MavenArtifact](#_camel_apache_org_v1_MavenArtifact)** | Deprecated: no longer in use. |
 | `cliOptions`  
@@ -2490,11 +2490,11 @@ PipeCondition describes the state of a resource at a certain point.
 | `type`  
 **[PipeConditionType](#_camel_apache_org_v1_PipeConditionType)** | Type of pipe condition. |
 | `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
 | `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | The last time this condition was updated. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
 | `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
 | `reason`  
 string | The reason for the condition’s last transition. |
 | `message`  
@@ -2673,7 +2673,7 @@ PluginProperties — .
 string | 
  |
 | `condition`  
-**[Kubernetes core/v1.PodCondition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#podcondition-v1-core)** | 
+**[Kubernetes core/v1.PodCondition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#podcondition-v1-core)** | 
 
  |
 | `health`  
@@ -2698,27 +2698,27 @@ Deprecated: to be removed in future versions.
 | `automountServiceAccountToken`  
 bool | AutomountServiceAccountToken |
 | `volumes`  
-**[\[\]Kubernetes core/v1.Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#volume-v1-core)** | Volumes |
+**[\[\]Kubernetes core/v1.Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#volume-v1-core)** | Volumes |
 | `initContainers`  
-**[\[\]Kubernetes core/v1.Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#container-v1-core)** | InitContainers |
+**[\[\]Kubernetes core/v1.Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#container-v1-core)** | InitContainers |
 | `containers`  
-**[\[\]Kubernetes core/v1.Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#container-v1-core)** | Containers |
+**[\[\]Kubernetes core/v1.Container](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#container-v1-core)** | Containers |
 | `ephemeralContainers`  
-**[\[\]Kubernetes core/v1.EphemeralContainer](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#ephemeralcontainer-v1-core)** | EphemeralContainers |
+**[\[\]Kubernetes core/v1.EphemeralContainer](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#ephemeralcontainer-v1-core)** | EphemeralContainers |
 | `restartPolicy`  
-**[Kubernetes core/v1.RestartPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#restartpolicy-v1-core)** | RestartPolicy |
+**[Kubernetes core/v1.RestartPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#restartpolicy-v1-core)** | RestartPolicy |
 | `terminationGracePeriodSeconds`  
 int64 | TerminationGracePeriodSeconds |
 | `activeDeadlineSeconds`  
 int64 | ActiveDeadlineSeconds |
 | `dnsPolicy`  
-**[Kubernetes core/v1.DNSPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#dnspolicy-v1-core)** | DNSPolicy |
+**[Kubernetes core/v1.DNSPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#dnspolicy-v1-core)** | DNSPolicy |
 | `nodeSelector`  
 map\[string\]string | NodeSelector |
 | `topologySpreadConstraints`  
-**[\[\]Kubernetes core/v1.TopologySpreadConstraint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#topologyspreadconstraint-v1-core)** | TopologySpreadConstraints |
+**[\[\]Kubernetes core/v1.TopologySpreadConstraint](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#topologyspreadconstraint-v1-core)** | TopologySpreadConstraints |
 | `securityContext`  
-**[Kubernetes core/v1.PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#podsecuritycontext-v1-core)** | PodSecurityContext |
+**[Kubernetes core/v1.PodSecurityContext](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#podsecuritycontext-v1-core)** | PodSecurityContext |
 
 ### PodSpecTemplate
 
@@ -3358,9 +3358,9 @@ ValueSource --.
 | Field | Description |
 | --- | --- |
 | `configMapKeyRef`  
-**[Kubernetes core/v1.ConfigMapKeySelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#configmapkeyselector-v1-core)** | Selects a key of a ConfigMap. |
+**[Kubernetes core/v1.ConfigMapKeySelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#configmapkeyselector-v1-core)** | Selects a key of a ConfigMap. |
 | `secretKeyRef`  
-**[Kubernetes core/v1.SecretKeySelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#secretkeyselector-v1-core)** | Selects a key of a secret. |
+**[Kubernetes core/v1.SecretKeySelector](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#secretkeyselector-v1-core)** | Selects a key of a secret. |
 
 ### AffinityTrait
 
@@ -3582,19 +3582,19 @@ string | The main container name. It’s named `integration` by default. |
 | `image`  
 string | The main container image to use for the Integration. When using this parameter the operator will create a synthetic IntegrationKit which won’t be able to execute traits requiring CamelCatalog. If the container image you’re using is coming from an IntegrationKit, use instead Integration `.spec.integrationKit` parameter. If you’re moving the Integration across environments, you will also need to create an "external" IntegrationKit. |
 | `imagePullPolicy`  
-**[Kubernetes core/v1.PullPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#pullpolicy-v1-core)** | The pull policy: Always|Never|IfNotPresent |
+**[Kubernetes core/v1.PullPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#pullpolicy-v1-core)** | The pull policy: Always|Never|IfNotPresent |
 | `runAsUser`  
 int64 | Security Context RunAsUser configuration (default none): this value is automatically retrieved in Openshift clusters when not explicitly set. |
 | `runAsNonRoot`  
 bool | Security Context RunAsNonRoot configuration (default false). |
 | `seccompProfileType`  
-**[Kubernetes core/v1.SeccompProfileType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#seccompprofiletype-v1-core)** | Security Context SeccompProfileType configuration (default RuntimeDefault). |
+**[Kubernetes core/v1.SeccompProfileType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#seccompprofiletype-v1-core)** | Security Context SeccompProfileType configuration (default RuntimeDefault). |
 | `allowPrivilegeEscalation`  
 bool | Security Context AllowPrivilegeEscalation configuration (default false). |
 | `capabilitiesDrop`  
-**[\[\]Kubernetes core/v1.Capability](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#capability-v1-core)** | Security Context Capabilities Drop configuration (default ALL). |
+**[\[\]Kubernetes core/v1.Capability](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#capability-v1-core)** | Security Context Capabilities Drop configuration (default ALL). |
 | `capabilitiesAdd`  
-**[\[\]Kubernetes core/v1.Capability](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#capability-v1-core)** | Security Context Capabilities Add configuration (default none). |
+**[\[\]Kubernetes core/v1.Capability](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#capability-v1-core)** | Security Context Capabilities Add configuration (default none). |
 
 ### CronTrait
 
@@ -3702,7 +3702,7 @@ The Deployment trait is responsible for generating the Kubernetes deployment tha
 | `progressDeadlineSeconds`  
 int32 | The maximum time in seconds for the deployment to make progress before it is considered to be failed. It defaults to `60s`. |
 | `strategy`  
-**[Kubernetes apps/v1.DeploymentStrategyType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#deploymentstrategytype-v1-apps)** | The deployment strategy to use to replace existing pods with new ones. |
+**[Kubernetes apps/v1.DeploymentStrategyType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#deploymentstrategytype-v1-apps)** | The deployment strategy to use to replace existing pods with new ones. |
 | `rollingUpdateMaxUnavailable`  
 k8s.io/apimachinery/pkg/util/intstr.IntOrString | The maximum number of pods that can be unavailable during the update. Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). Absolute number is calculated from percentage by rounding down. This can not be 0 if MaxSurge is 0. Defaults to `25%`. |
 | `rollingUpdateMaxSurge`  
@@ -3939,7 +3939,7 @@ Deprecated: In favor of `paths` - left for backward compatibility.
 | `paths`  
 \[\]string | To configure the paths exposed by the ingress (default `['/']`). |
 | `pathType`  
-**[Kubernetes networking/v1.PathType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#pathtype-v1-networking)** | To configure the path type exposed by the ingress. One of `Exact`, `Prefix`, `ImplementationSpecific` (default to `Prefix`). |
+**[Kubernetes networking/v1.PathType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#pathtype-v1-networking)** | To configure the path type exposed by the ingress. One of `Exact`, `Prefix`, `ImplementationSpecific` (default to `Prefix`). |
 | `auto`  
 bool | To automatically add an ingress whenever the integration uses an HTTP endpoint consumer. |
 | `tlsHosts`  
@@ -4767,7 +4767,7 @@ int64 | Security Context RunAsUser configuration (default none): this value is a
 | `runAsNonRoot`  
 bool | Security Context RunAsNonRoot configuration (default false). |
 | `seccompProfileType`  
-**[Kubernetes core/v1.SeccompProfileType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.35/#seccompprofiletype-v1-core)** | Security Context SeccompProfileType configuration (default RuntimeDefault). |
+**[Kubernetes core/v1.SeccompProfileType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#seccompprofiletype-v1-core)** | Security Context SeccompProfileType configuration (default RuntimeDefault). |
 
 ### ServiceBindingTrait
 

@@ -2,7 +2,7 @@
 
 **Since Camel 4.5**
 
-**Both producer and consumer are supported**
+**Only producer is supported**
 
 The LangChain4j Chat Component allows you to integrate with any Large Language Model (LLM) supported by [LangChain4j](https://github.com/langchain4j/langchain4j).
 
@@ -70,12 +70,12 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The LangChain4j Chat component supports 6 options, which are listed below.
+The LangChain4j Chat component supports 5 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **chatOperation** (common) | 
+| **chatOperation** (producer) | 
 **Required** Operation in case of Endpoint of type CHAT. The value is one of the values of org.apache.camel.component.langchain4j.chat.LangChain4jChatOperations.
 
 Enum values:
@@ -92,8 +92,7 @@ Enum values:
 
 
  | CHAT\_SINGLE\_MESSAGE | LangChain4jChatOperations |
-| **configuration** (common) | The configuration. |  | LangChain4jChatConfiguration |
-| **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **configuration** (producer) | The configuration. |  | LangChain4jChatConfiguration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **chatModel** (advanced) | **Autowired** Chat Model of type dev.langchain4j.model.chat.ChatModel. |  | ChatModel |
@@ -111,14 +110,14 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **chatId** (common) | **Required** The id. |  | String |
+| **chatId** (producer) | **Required** The id. |  | String |
 
-### Query Parameters (6 parameters)
+### Query Parameters (3 parameters)
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **chatOperation** (common) | 
+| **chatOperation** (producer) | 
 **Required** Operation in case of Endpoint of type CHAT. The value is one of the values of org.apache.camel.component.langchain4j.chat.LangChain4jChatOperations.
 
 Enum values:
@@ -135,24 +134,6 @@ Enum values:
 
 
  | CHAT\_SINGLE\_MESSAGE | LangChain4jChatOperations |
-| **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
-| **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
-| **exchangePattern** (consumer (advanced)) | 
-
-Sets the exchange pattern when the consumer creates an exchange.
-
-Enum values:
-
--   InOnly
-    
--   InOut
-    
-
-
-
-
-
- |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **chatModel** (advanced) | **Autowired** Chat Model of type dev.langchain4j.model.chat.ChatModel. |  | ChatModel |
 
@@ -163,8 +144,8 @@ The LangChain4j Chat component supports 2 message header(s), which is/are listed
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelLangChain4jChatPromptTemplate** (common) Constant: [`PROMPT_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#PROMPT_TEMPLATE) | The prompt Template. |  | String |
-| **CamelLangChain4jChatAugmentedData** (common) Constant: [`AUGMENTED_DATA`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#AUGMENTED_DATA) | Augmented Data for RAG. |  | String |
+| **CamelLangChain4jChatPromptTemplate** (producer) Constant: [`PROMPT_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#PROMPT_TEMPLATE) | The prompt Template. |  | String |
+| **CamelLangChain4jChatAugmentedData** (producer) Constant: [`AUGMENTED_DATA`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#AUGMENTED_DATA) | Augmented Data for RAG. |  | String |
 
 ## Spring Boot Auto-Configuration
 
@@ -179,13 +160,12 @@ When using langchain4j-chat with Spring Boot make sure to use the following Mave
 </dependency>
 ```
 
-The component supports 7 options, which are listed below.
+The component supports 6 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.component.langchain4j-chat.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.langchain4j-chat.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
 | **camel.component.langchain4j-chat.chat-model** | Chat Model of type dev.langchain4j.model.chat.ChatModel. The option is a dev.langchain4j.model.chat.ChatModel type. |  | ChatModel |
 | **camel.component.langchain4j-chat.chat-operation** | Operation in case of Endpoint of type CHAT. The value is one of the values of org.apache.camel.component.langchain4j.chat.LangChain4jChatOperations. | chat-single-message | LangChain4jChatOperations |
 | **camel.component.langchain4j-chat.configuration** | The configuration. The option is a org.apache.camel.component.langchain4j.chat.LangChain4jChatConfiguration type. |  | LangChain4jChatConfiguration |
@@ -214,7 +194,7 @@ pom.xml
 <dependency>
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-open-ai-spring-boot-starter</artifactId>
-    <version>1.10.0</version>
+    <version>x.x.x</version>
     <!-- use the same version as your LangChain4j version -->
 </dependency>
 ```
@@ -225,7 +205,7 @@ application.properties
 
 ```properties
 langchain4j.open-ai.chat-model.api-key=${OPENAI_API_KEY}
-langchain4j.open-ai.chat-model.model-name=gpt-3.5-turbo
+langchain4j.open-ai.chat-model.model-name=gpt-4o-mini
 langchain4j.open-ai.chat-model.temperature=0.3
 langchain4j.open-ai.chat-model.timeout=3000s
 ```
@@ -237,7 +217,7 @@ langchain4j:
   open-ai:
     chat-model:
       api-key: ${OPENAI_API_KEY}
-      model-name: gpt-3.5-turbo
+      model-name: gpt-4o-mini
       temperature: 0.3
       timeout: 3000s
 ```
@@ -306,7 +286,7 @@ pom.xml
 <dependency>
     <groupId>dev.langchain4j</groupId>
     <artifactId>langchain4j-open-ai</artifactId>
-    <version>1.10.0</version>
+    <version>x.x.x</version>
     <!-- use the same version as your LangChain4j version -->
 </dependency>
 ```
@@ -314,9 +294,9 @@ pom.xml
 Initialize the OpenAI Chat Model, and add it to the Camel Registry:
 
 ```java
-ChatLanguageModel model = OpenAiChatModel.builder()
+ChatModel model = OpenAiChatModel.builder()
     .apiKey(openApiKey)
-    .modelName(GPT_3_5_TURBO)
+    .modelName(GPT_4_O_MINI)
     .temperature(0.3)
     .timeout(ofSeconds(3000))
     .build();
@@ -370,7 +350,7 @@ variables.put("dishType", "oven dish");
 variables.put("ingredients", "potato, tomato, feta, olive oil");
 
 String response = template.requestBodyAndHeader("direct:chat", variables,
-                LangChain4jChat.Headers.PROMPT_TEMPLATE, promptTemplate, String.class);
+                LangChain4jChatHeaders.PROMPT_TEMPLATE, promptTemplate, String.class);
 ```
 
 ### Chat with history
@@ -412,7 +392,7 @@ LangChain4jRagAggregatorStrategy aggregatorStrategy = new LangChain4jRagAggregat
 
 from("direct:test")
      .enrich("direct:rag", aggregatorStrategy)
-     .to("langchain4j-chat:test1?chatOperation=CHAT_SIMPLE_MESSAGE");
+     .to("langchain4j-chat:test1?chatOperation=CHAT_SINGLE_MESSAGE");
 
   from("direct:rag")
           .process(exchange -> {
@@ -435,7 +415,7 @@ LangChain4jRagAggregatorStrategy aggregatorStrategy = new LangChain4jRagAggregat
 from("direct:test")
      .enrich("direct:rag-from-source-1", aggregatorStrategy)
      .enrich("direct:rag-from-source-2", aggregatorStrategy)
-     .to("langchain4j-chat:test1?chatOperation=CHAT_SIMPLE_MESSAGE");
+     .to("langchain4j-chat:test1?chatOperation=CHAT_SINGLE_MESSAGE");
 ```
 
 #### Using RAG with headers
@@ -452,5 +432,5 @@ import dev.langchain4j.rag.content.Content;
 Content augmentedContent = new Content("data test");
 List<Content> contents = List.of(augmentedContent);
 
-String response = template.requestBodyAndHeader("direct:send-multiple", messages, LangChain4jChat.Headers.AUGMENTED_DATA , contents, String.class);
+String response = template.requestBodyAndHeader("direct:send-multiple", messages, LangChain4jChatHeaders.AUGMENTED_DATA, contents, String.class);
 ```

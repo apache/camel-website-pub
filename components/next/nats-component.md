@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Nats component supports 41 options, which are listed below.
+The Nats component supports 44 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -112,10 +112,13 @@ Enum values:
 | **ackWait** (consumer) | After a message is delivered to a consumer, the server waits 30 seconds (default) for an acknowledgement. If none arrives (timeout), the message becomes eligible for redelivery. | 30000 | long |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **durableName** (consumer) | Sets the name to assign to the JetStream durable consumer. Setting this value makes the consumer durable. The value is used to set the durable() field in the underlying NATS ConsumerConfiguration.Builder. |  | String |
+| **manualAck** (consumer) | Whether to allow doing manual acknowledgment via NatsManualAck. If this option is enabled then an instance of NatsManualAck is stored on the org.apache.camel.Exchange message header, which allows end users to access this API and perform manual ack/nak/term operations via the JetStream consumer. When enabled, the automatic acknowledgment on exchange completion is disabled. If the user does not call any ack method, the message remains unacknowledged and NATS will redeliver it after the ackWait timeout expires. This option is only applicable when JetStream is enabled (jetstreamEnabled=true). It has no effect when ackPolicy=None since the server acknowledges messages automatically on delivery. | false | boolean |
 | **maxDeliver** (consumer) | Maximum number of attempts to deliver a message from Nats to a consumer. Once MaxDeliver is reached, the NATS server stops attempting to deliver that specific message. The message is not deleted, it remains in the stream but is simply skipped. It is recommended to set this option to a sensible value in case a message is poison and can not successfully be processed and would always keep failing. |  | long |
 | **maxMessages** (consumer) | Stop receiving messages from a topic we are subscribing to after maxMessages. |  | String |
 | **nackWait** (consumer) | For negative acknowledgements (NAK), redelivery is delayed by 5 seconds (default). Setting this to 0 or negative makes the redelivery immediately. Be careful as this can cause the consumer to keep re-processing the same message over and over again due to intermediate error that last a while. | 5000 | long |
 | **poolSize** (consumer) | Consumer thread pool size (default is 10). | 10 | int |
+| **pullBatchSize** (consumer) | Maximum number of messages to fetch per pull request when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 10 | int |
+| **pullFetchTimeout** (consumer) | Maximum time (in milliseconds) to wait for a batch of messages to be available on the server during a single fetch when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 1000 | long |
 | **pullSubscription** (consumer) | Sets the consumer subscription type for JetStream. Set to true to use a Pull Subscription (consumer explicitly requests messages). Set to false to use a Push Subscription (messages are automatically delivered). | true | boolean |
 | **queueName** (consumer) | The Queue name if we are using nats for a queue configuration. |  | String |
 | **replyToDisabled** (consumer) | Can be used to turn off sending back reply message in the consumer. | false | boolean |
@@ -148,7 +151,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **topic** (common) | **Required** The name of topic we want to use. |  | String |
 
-### Query Parameters (40 parameters)
+### Query Parameters (43 parameters)
 
    
 | Name | Description | Default | Type |
@@ -188,10 +191,13 @@ Enum values:
  | Explicit | AckPolicy |
 | **ackWait** (consumer) | After a message is delivered to a consumer, the server waits 30 seconds (default) for an acknowledgement. If none arrives (timeout), the message becomes eligible for redelivery. | 30000 | long |
 | **durableName** (consumer) | Sets the name to assign to the JetStream durable consumer. Setting this value makes the consumer durable. The value is used to set the durable() field in the underlying NATS ConsumerConfiguration.Builder. |  | String |
+| **manualAck** (consumer) | Whether to allow doing manual acknowledgment via NatsManualAck. If this option is enabled then an instance of NatsManualAck is stored on the org.apache.camel.Exchange message header, which allows end users to access this API and perform manual ack/nak/term operations via the JetStream consumer. When enabled, the automatic acknowledgment on exchange completion is disabled. If the user does not call any ack method, the message remains unacknowledged and NATS will redeliver it after the ackWait timeout expires. This option is only applicable when JetStream is enabled (jetstreamEnabled=true). It has no effect when ackPolicy=None since the server acknowledges messages automatically on delivery. | false | boolean |
 | **maxDeliver** (consumer) | Maximum number of attempts to deliver a message from Nats to a consumer. Once MaxDeliver is reached, the NATS server stops attempting to deliver that specific message. The message is not deleted, it remains in the stream but is simply skipped. It is recommended to set this option to a sensible value in case a message is poison and can not successfully be processed and would always keep failing. |  | long |
 | **maxMessages** (consumer) | Stop receiving messages from a topic we are subscribing to after maxMessages. |  | String |
 | **nackWait** (consumer) | For negative acknowledgements (NAK), redelivery is delayed by 5 seconds (default). Setting this to 0 or negative makes the redelivery immediately. Be careful as this can cause the consumer to keep re-processing the same message over and over again due to intermediate error that last a while. | 5000 | long |
 | **poolSize** (consumer) | Consumer thread pool size (default is 10). | 10 | int |
+| **pullBatchSize** (consumer) | Maximum number of messages to fetch per pull request when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 10 | int |
+| **pullFetchTimeout** (consumer) | Maximum time (in milliseconds) to wait for a batch of messages to be available on the server during a single fetch when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 1000 | long |
 | **pullSubscription** (consumer) | Sets the consumer subscription type for JetStream. Set to true to use a Pull Subscription (consumer explicitly requests messages). Set to false to use a Push Subscription (messages are automatically delivered). | true | boolean |
 | **queueName** (consumer) | The Queue name if we are using nats for a queue configuration. |  | String |
 | **replyToDisabled** (consumer) | Can be used to turn off sending back reply message in the consumer. | false | boolean |
@@ -227,7 +233,7 @@ Enum values:
 
 ## Message Headers
 
-The Nats component supports 8 message header(s), which is/are listed below:
+The Nats component supports 9 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -240,6 +246,7 @@ The Nats component supports 8 message header(s), which is/are listed below:
 | **CamelNatsStatusCode** (consumer) Constant: [`NATS_STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_STATUS_CODE) | Status message code. |  | int |
 | **CamelNatsStatusError** (consumer) Constant: [`NATS_STATUS_ERROR`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_STATUS_ERROR) | Status message error message. |  | String |
 | **CamelNatsDeliveryCounter** (consumer) Constant: [`NATS_DELIVERY_COUNTER`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_DELIVERY_COUNTER) | Number of times this message has been delivered (1 = first, 1 then message has been redelivered). |  | long |
+| **CamelNatsManualAck** (consumer) Constant: [`NATS_MANUAL_ACK`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_MANUAL_ACK) | The manual acknowledgment handle for JetStream messages (only set when manualAck=true). |  | NatsManualAck |
 
 ## Usage
 
@@ -315,6 +322,24 @@ from("nats:mytopic?maxMessages=5&queueName=myqueue")
   .to("mock:result");
 ```
 
+### Manual Acknowledgment (JetStream)
+
+When consuming from JetStream, by default messages are automatically acknowledged after successful route processing, or negatively acknowledged (redelivered) on failure.
+
+To take full control of acknowledgment, set `manualAck=true` on the consumer endpoint. This disables automatic acknowledgment and exposes a `NatsManualAck` object as the `CamelNatsManualAck` message header.
+
+```java
+from("nats:mytopic?jetstreamEnabled=true&jetstreamName=mystream&durableName=myconsumer&pullSubscription=false&manualAck=true")
+    .process(exchange -> {
+        // do work ...
+
+        NatsManualAck manualAck = exchange.getIn().getHeader("CamelNatsManualAck", NatsManualAck.class);
+        manualAck.ack();
+    });
+```
+
+If the route completes without calling any NatsManualAck method, the message remains unacknowledged and NATS will redeliver it after `ackWait` expires (default 30 seconds).
+
 ## Spring Boot Auto-Configuration
 
 When using nats with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
@@ -328,7 +353,7 @@ When using nats with Spring Boot make sure to use the following Maven dependency
 </dependency>
 ```
 
-The component supports 42 options, which are listed below.
+The component supports 45 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -351,6 +376,7 @@ The component supports 42 options, which are listed below.
 | **camel.component.nats.jetstream-enabled** | Sets whether to enable JetStream support for this endpoint. | false | Boolean |
 | **camel.component.nats.jetstream-name** | Sets the name of the JetStream stream to use. |  | String |
 | **camel.component.nats.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| **camel.component.nats.manual-ack** | Whether to allow doing manual acknowledgment via NatsManualAck. If this option is enabled then an instance of NatsManualAck is stored on the org.apache.camel.Exchange message header, which allows end users to access this API and perform manual ack/nak/term operations via the JetStream consumer. When enabled, the automatic acknowledgment on exchange completion is disabled. If the user does not call any ack method, the message remains unacknowledged and NATS will redeliver it after the ackWait timeout expires. This option is only applicable when JetStream is enabled (jetstreamEnabled=true). It has no effect when ackPolicy=None since the server acknowledges messages automatically on delivery. | false | Boolean |
 | **camel.component.nats.max-deliver** | Maximum number of attempts to deliver a message from Nats to a consumer. Once MaxDeliver is reached, the NATS server stops attempting to deliver that specific message. The message is not deleted, it remains in the stream but is simply skipped. It is recommended to set this option to a sensible value in case a message is poison and can not successfully be processed and would always keep failing. |  | Long |
 | **camel.component.nats.max-messages** | Stop receiving messages from a topic we are subscribing to after maxMessages. |  | String |
 | **camel.component.nats.max-pings-out** | maximum number of pings have not received a response allowed by the client. | 2 | Integer |
@@ -361,6 +387,8 @@ The component supports 42 options, which are listed below.
 | **camel.component.nats.pedantic** | Whether or not running in pedantic mode (this affects performance). | false | Boolean |
 | **camel.component.nats.ping-interval** | Ping interval to be aware if connection is still alive (in milliseconds). | 120000 | Integer |
 | **camel.component.nats.pool-size** | Consumer thread pool size (default is 10). | 10 | Integer |
+| **camel.component.nats.pull-batch-size** | Maximum number of messages to fetch per pull request when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 10 | Integer |
+| **camel.component.nats.pull-fetch-timeout** | Maximum time (in milliseconds) to wait for a batch of messages to be available on the server during a single fetch when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 1000 | Long |
 | **camel.component.nats.pull-subscription** | Sets the consumer subscription type for JetStream. Set to true to use a Pull Subscription (consumer explicitly requests messages). Set to false to use a Push Subscription (messages are automatically delivered). | true | Boolean |
 | **camel.component.nats.queue-name** | The Queue name if we are using nats for a queue configuration. |  | String |
 | **camel.component.nats.reconnect** | Whether or not using reconnection feature. | true | Boolean |

@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Nats component supports 41 options, which are listed below.
+The Nats component supports 43 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -116,6 +116,8 @@ Enum values:
 | **maxMessages** (consumer) | Stop receiving messages from a topic we are subscribing to after maxMessages. |  | String |
 | **nackWait** (consumer) | For negative acknowledgements (NAK), redelivery is delayed by 5 seconds (default). Setting this to 0 or negative makes the redelivery immediately. Be careful as this can cause the consumer to keep re-processing the same message over and over again due to intermediate error that last a while. | 5000 | long |
 | **poolSize** (consumer) | Consumer thread pool size (default is 10). | 10 | int |
+| **pullBatchSize** (consumer) | Maximum number of messages to fetch per pull request when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 10 | int |
+| **pullFetchTimeout** (consumer) | Maximum time (in milliseconds) to wait for a batch of messages to be available on the server during a single fetch when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 1000 | long |
 | **pullSubscription** (consumer) | Sets the consumer subscription type for JetStream. Set to true to use a Pull Subscription (consumer explicitly requests messages). Set to false to use a Push Subscription (messages are automatically delivered). | true | boolean |
 | **queueName** (consumer) | The Queue name if we are using nats for a queue configuration. |  | String |
 | **replyToDisabled** (consumer) | Can be used to turn off sending back reply message in the consumer. | false | boolean |
@@ -148,7 +150,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **topic** (common) | **Required** The name of topic we want to use. |  | String |
 
-### Query Parameters (40 parameters)
+### Query Parameters (42 parameters)
 
    
 | Name | Description | Default | Type |
@@ -192,6 +194,8 @@ Enum values:
 | **maxMessages** (consumer) | Stop receiving messages from a topic we are subscribing to after maxMessages. |  | String |
 | **nackWait** (consumer) | For negative acknowledgements (NAK), redelivery is delayed by 5 seconds (default). Setting this to 0 or negative makes the redelivery immediately. Be careful as this can cause the consumer to keep re-processing the same message over and over again due to intermediate error that last a while. | 5000 | long |
 | **poolSize** (consumer) | Consumer thread pool size (default is 10). | 10 | int |
+| **pullBatchSize** (consumer) | Maximum number of messages to fetch per pull request when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 10 | int |
+| **pullFetchTimeout** (consumer) | Maximum time (in milliseconds) to wait for a batch of messages to be available on the server during a single fetch when using a JetStream Pull Subscription. Only used when \\{code pullSubscription=true}. | 1000 | long |
 | **pullSubscription** (consumer) | Sets the consumer subscription type for JetStream. Set to true to use a Pull Subscription (consumer explicitly requests messages). Set to false to use a Push Subscription (messages are automatically delivered). | true | boolean |
 | **queueName** (consumer) | The Queue name if we are using nats for a queue configuration. |  | String |
 | **replyToDisabled** (consumer) | Can be used to turn off sending back reply message in the consumer. | false | boolean |

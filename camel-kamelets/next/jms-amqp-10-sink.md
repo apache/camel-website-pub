@@ -4,7 +4,7 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send data to any AMQP 1.0 compliant message broker by using the Apache Qpid JMS client.
+Send data to any AMQP 1.0 compliant message broker by using the Apache Qpid JMS client. For SSL/TLS connections, use the amqps:// scheme in the remoteURI and configure SSL transport options as query parameters (e.g. transport.trustStoreLocation, transport.trustStorePassword, transport.keyStoreLocation, transport.keyStorePassword, transport.verifyHost, transport.trustAll).
 
 ## Configuration Options
 
@@ -14,7 +14,7 @@ The following table summarizes the configuration options available for the `jms-
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **destinationName** | Destination Name | **Required** The JMS destination name. | string |  |  |
-| **remoteURI** | Broker URL | **Required** The JMS URL. | string |  | amqp://my-host:31616 |
+| **remoteURI** | Broker URL | **Required** The JMS URL. Use the amqps:// scheme for SSL/TLS connections. | string |  | amqp://my-host:31616 |
 | **destinationType** | Destination Type | The JMS destination type (queue or topic). | string | queue |  |
 
 ## Dependencies

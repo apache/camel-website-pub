@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS Bedrock Agent Runtime component supports 24 options, which are listed below.
+The AWS Bedrock Agent Runtime component supports 28 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -97,6 +97,10 @@ Enum values:
 Enum values:
 
 -   retrieveAndGenerate
+    
+-   invokeFlow
+    
+-   retrieve
     
 
 
@@ -155,7 +159,11 @@ Enum values:
 | **useDefaultCredentialsProvider** (producer) | Set whether the Bedrock Agent Runtime client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | false | boolean |
 | **useProfileCredentialsProvider** (producer) | Set whether the Bedrock Agent Runtime client should expect to load credentials through a profile credentials provider. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **bedrockAgentRuntimeAsyncClient** (advanced) | **Autowired** To use an existing configured AWS Bedrock Agent Runtime async client (required for invokeFlow which streams events back). |  | BedrockAgentRuntimeAsyncClient |
 | **bedrockAgentRuntimeClient** (advanced) | **Autowired** To use an existing configured AWS Bedrock Agent Runtime client. |  | BedrockAgentRuntimeClient |
+| **enableTrace** (flow) | Enables tracing for the invokeFlow operation. When enabled, the producer collects FlowTraceEvent entries and publishes them in the CamelAwsBedrockAgentRuntimeFlowTraces header. | false | boolean |
+| **flowAliasIdentifier** (flow) | The unique identifier of the Bedrock flow alias to invoke (used by the invokeFlow operation). Can be overridden per exchange via the CamelAwsBedrockAgentRuntimeFlowAliasIdentifier header. |  | String |
+| **flowIdentifier** (flow) | The unique identifier of the Bedrock flow to invoke (used by the invokeFlow operation). Can be overridden per exchange via the CamelAwsBedrockAgentRuntimeFlowIdentifier header. |  | String |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
 | **proxyHost** (proxy) | To define a proxy host when instantiating the Bedrock Agent Runtime client. |  | String |
@@ -197,7 +205,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **label** (producer) | **Required** Logical name. |  | String |
 
-### Query Parameters (20 parameters)
+### Query Parameters (24 parameters)
 
    
 | Name | Description | Default | Type |
@@ -227,6 +235,10 @@ Enum values:
 Enum values:
 
 -   retrieveAndGenerate
+    
+-   invokeFlow
+    
+-   retrieve
     
 
 
@@ -285,7 +297,11 @@ Enum values:
 | **useDefaultCredentialsProvider** (producer) | Set whether the Bedrock Agent Runtime client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | false | boolean |
 | **useProfileCredentialsProvider** (producer) | Set whether the Bedrock Agent Runtime client should expect to load credentials through a profile credentials provider. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **bedrockAgentRuntimeAsyncClient** (advanced) | **Autowired** To use an existing configured AWS Bedrock Agent Runtime async client (required for invokeFlow which streams events back). |  | BedrockAgentRuntimeAsyncClient |
 | **bedrockAgentRuntimeClient** (advanced) | **Autowired** To use an existing configured AWS Bedrock Agent Runtime client. |  | BedrockAgentRuntimeClient |
+| **enableTrace** (flow) | Enables tracing for the invokeFlow operation. When enabled, the producer collects FlowTraceEvent entries and publishes them in the CamelAwsBedrockAgentRuntimeFlowTraces header. | false | boolean |
+| **flowAliasIdentifier** (flow) | The unique identifier of the Bedrock flow alias to invoke (used by the invokeFlow operation). Can be overridden per exchange via the CamelAwsBedrockAgentRuntimeFlowAliasIdentifier header. |  | String |
+| **flowIdentifier** (flow) | The unique identifier of the Bedrock flow to invoke (used by the invokeFlow operation). Can be overridden per exchange via the CamelAwsBedrockAgentRuntimeFlowIdentifier header. |  | String |
 | **proxyHost** (proxy) | To define a proxy host when instantiating the Bedrock Agent Runtime client. |  | String |
 | **proxyPort** (proxy) | To define a proxy port when instantiating the Bedrock Agent Runtime client. |  | Integer |
 | **proxyProtocol** (proxy) | 
@@ -312,7 +328,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Bedrock Agent Runtime component supports 3 message header(s), which is/are listed below:
+The AWS Bedrock Agent Runtime component supports 15 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -320,12 +336,102 @@ The AWS Bedrock Agent Runtime component supports 3 message header(s), which is/a
 | **CamelAwsBedrockAgentRuntimeOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#OPERATION) | The operation we want to perform. |  | String |
 | **CamelAwsBedrockAgentRuntimeCitations** (producer) Constant: [`CITATIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#CITATIONS) | When retrieving and generating a response, this header will contain the citations. |  | String |
 | **CamelAwsBedrockAgentRuntimeSessionId** (producer) Constant: [`SESSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#SESSION_ID) | When retrieving and generating a response, this header will contain he unique identifier of the session. Reuse the same value to continue the same session with the knowledge base. |  | String |
+| **CamelAwsBedrockAgentRuntimeFlowIdentifier** (producer) Constant: [`FLOW_IDENTIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_IDENTIFIER) | The unique identifier of the flow to invoke. Overrides the flowIdentifier configured on the endpoint. |  | String |
+| **CamelAwsBedrockAgentRuntimeFlowAliasIdentifier** (producer) Constant: [`FLOW_ALIAS_IDENTIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_ALIAS_IDENTIFIER) | The unique identifier of the flow alias to invoke. Overrides the flowAliasIdentifier configured on the endpoint. |  | String |
+| **CamelAwsBedrockAgentRuntimeFlowEnableTrace** (producer) Constant: [`FLOW_ENABLE_TRACE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_ENABLE_TRACE) | Enables tracing for the flow invocation. When set, overrides the enableTrace option on the endpoint. |  | Boolean |
+| **CamelAwsBedrockAgentRuntimeFlowExecutionId** (producer) Constant: [`FLOW_EXECUTION_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_EXECUTION_ID) | The unique identifier of an in-progress flow execution to continue. Used for multi-turn flow conversations. |  | String |
+| **CamelAwsBedrockAgentRuntimeFlowOutputs** (producer) Constant: [`FLOW_OUTPUTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_OUTPUTS) | When invoking a flow, this header will contain the list of FlowOutputEvent emitted by the flow. |  | List |
+| **CamelAwsBedrockAgentRuntimeFlowTraces** (producer) Constant: [`FLOW_TRACES`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_TRACES) | When invoking a flow with tracing enabled, this header will contain the list of FlowTraceEvent emitted during execution. |  | List |
+| **CamelAwsBedrockAgentRuntimeFlowCompletionReason** (producer) Constant: [`FLOW_COMPLETION_REASON`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_COMPLETION_REASON) | When invoking a flow, this header will contain the reason the flow completed (set when a FlowCompletionEvent is received). |  | String |
+| **CamelAwsBedrockAgentRuntimeRetrievedResults** (producer) Constant: [`RETRIEVED_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#RETRIEVED_RESULTS) | When performing a retrieve operation, this header will contain the list of KnowledgeBaseRetrievalResult chunks returned by the knowledge base. |  | List |
+| **CamelAwsBedrockAgentRuntimeNumberOfResults** (producer) Constant: [`NUMBER_OF_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#NUMBER_OF_RESULTS) | Overrides the maximum number of results returned by the retrieve operation. Must be a positive Integer; when not set the AWS service default is used. |  | Integer |
+| **CamelAwsBedrockAgentRuntimeSearchType** (producer) Constant: [`OVERRIDE_SEARCH_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#OVERRIDE_SEARCH_TYPE) | Overrides the search type used by the retrieve operation. Accepts the AWS SearchType enum (HYBRID, SEMANTIC) or its String representation. |  | String |
+| **CamelAwsBedrockAgentRuntimeNextToken** (producer) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#NEXT_TOKEN) | Pagination token used by the retrieve operation. Set on the in-message to request the next page; set on the out-message when the response carries one. |  | String |
+| **CamelAwsBedrockAgentRuntimeRetrieveGuardrailAction** (producer) Constant: [`RETRIEVE_GUARDRAIL_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#RETRIEVE_GUARDRAIL_ACTION) | When performing a retrieve operation, this header will contain the guardrail action (if any) applied by the knowledge base. |  | String |
 
 Required Bedrock component options
 
 You have to provide the bedrockRuntimeClient in the Registry or your accessKey and secretKey to access the [Amazon Bedrock](https://aws.amazon.com/bedrock/) service.
 
 ## Usage
+
+### Supported operations
+
+The component supports the following operations on the `operation` URI option:
+
+-   `retrieveAndGenerate` — Query a Bedrock Knowledge Base and generate a grounded response from the selected model.
+    
+-   `retrieve` — Run a semantic search against a Bedrock Knowledge Base and return the matched chunks without LLM generation.
+    
+-   `invokeFlow` — Invoke a Bedrock Flow by id/alias and stream the resulting events back as Camel message headers.
+    
+
+### Retrieving from a Bedrock Knowledge Base
+
+The `retrieve` operation performs a semantic search against a Bedrock Knowledge Base and returns the matching chunks without invoking an LLM. Use this when you want to plug retrieval into your own generation step, inspect retrieval quality, or build pagination on top of the knowledge base.
+
+Mandatory options:
+
+-   `knowledgeBaseId` — the id of the Bedrock Knowledge Base to query.
+    
+
+The body of the in-message must be a `String` containing the search query. When `pojoRequest=true`, the body must be a `RetrieveRequest` (any retrieval-config knobs in that POJO are honored verbatim).
+
+The retrieval configuration can be tuned per exchange via the following headers:
+
+-   `CamelAwsBedrockAgentRuntimeNumberOfResults` (Integer) — maximum number of chunks to return.
+    
+-   `CamelAwsBedrockAgentRuntimeSearchType` (String) — overrides the search type (`HYBRID` or `SEMANTIC`).
+    
+-   `CamelAwsBedrockAgentRuntimeNextToken` (String) — pagination token returned by a previous call.
+    
+
+The producer surfaces the matched chunks as the out-message body (a `List<KnowledgeBaseRetrievalResult>`) and on the following headers:
+
+-   `CamelAwsBedrockAgentRuntimeRetrievedResults` — the same `List<KnowledgeBaseRetrievalResult>` available on the body.
+    
+-   `CamelAwsBedrockAgentRuntimeNextToken` — present when the response carries a pagination token.
+    
+-   `CamelAwsBedrockAgentRuntimeRetrieveGuardrailAction` — present when the knowledge base applies a guardrail action.
+    
+
+### Invoking a Bedrock Flow
+
+The `invokeFlow` operation streams flow events using the AWS SDK async client; the producer transparently allocates a `BedrockAgentRuntimeAsyncClient` when the endpoint is configured with `operation=invokeFlow`.
+
+Mandatory options:
+
+-   `flowIdentifier` — the unique id of the flow to invoke (overridable via the `CamelAwsBedrockAgentRuntimeFlowIdentifier` header).
+    
+-   `flowAliasIdentifier` — the unique id of the flow alias to invoke (overridable via the `CamelAwsBedrockAgentRuntimeFlowAliasIdentifier` header).
+    
+
+Optional options:
+
+-   `enableTrace` — when `true`, the producer collects the emitted ``FlowTraceEvent`s into the `CamelAwsBedrockAgentRuntimeFlowTraces`` header (overridable via `CamelAwsBedrockAgentRuntimeFlowEnableTrace`).
+    
+
+The body of the in-message can be:
+
+-   a `String` — wrapped in a single `FlowInput` targeting node `FlowInputNode`, output `document`;
+    
+-   a `FlowInput` instance — used as the sole input to the flow;
+    
+-   a `List<FlowInput>` — passed verbatim to the request (use this form to chain multiple flow inputs).
+    
+
+When `pojoRequest=true`, the body must be an `InvokeFlowRequest` and is sent unchanged.
+
+The producer collects emitted events into headers:
+
+-   `CamelAwsBedrockAgentRuntimeFlowOutputs` — the list of \`FlowOutputEvent\`s emitted by the flow.
+    
+-   `CamelAwsBedrockAgentRuntimeFlowTraces` — the list of \`FlowTraceEvent\`s (only when tracing is enabled).
+    
+-   `CamelAwsBedrockAgentRuntimeFlowCompletionReason` — the completion reason reported by the flow (when present).
+    
+
+The out-message body is the document of the last `FlowOutputEvent` (decoded as `String` when the document is a string, otherwise the raw `Document`). When the flow emits no outputs, the body is left untouched.
 
 ### Static credentials, Default Credential Provider and Profile Credentials Provider
 
@@ -381,16 +487,20 @@ When using aws-bedrock-agent-runtime with Spring Boot make sure to use the follo
 </dependency>
 ```
 
-The component supports 83 options, which are listed below.
+The component supports 87 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.component.aws-bedrock-agent-runtime.access-key** | Amazon AWS Access Key. |  | String |
 | **camel.component.aws-bedrock-agent-runtime.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| **camel.component.aws-bedrock-agent-runtime.bedrock-agent-runtime-async-client** | To use an existing configured AWS Bedrock Agent Runtime async client (required for invokeFlow which streams events back). The option is a software.amazon.awssdk.services.bedrockagentruntime.BedrockAgentRuntimeAsyncClient type. |  | BedrockAgentRuntimeAsyncClient |
 | **camel.component.aws-bedrock-agent-runtime.bedrock-agent-runtime-client** | To use an existing configured AWS Bedrock Agent Runtime client. The option is a software.amazon.awssdk.services.bedrockagentruntime.BedrockAgentRuntimeClient type. |  | BedrockAgentRuntimeClient |
 | **camel.component.aws-bedrock-agent-runtime.configuration** | Component configuration. The option is a org.apache.camel.component.aws2.bedrock.agentruntime.BedrockAgentRuntimeConfiguration type. |  | BedrockAgentRuntimeConfiguration |
+| **camel.component.aws-bedrock-agent-runtime.enable-trace** | Enables tracing for the invokeFlow operation. When enabled, the producer collects FlowTraceEvent entries and publishes them in the CamelAwsBedrockAgentRuntimeFlowTraces header. | false | Boolean |
 | **camel.component.aws-bedrock-agent-runtime.enabled** | Whether to enable auto configuration of the aws-bedrock-agent-runtime component. This is enabled by default. |  | Boolean |
+| **camel.component.aws-bedrock-agent-runtime.flow-alias-identifier** | The unique identifier of the Bedrock flow alias to invoke (used by the invokeFlow operation). Can be overridden per exchange via the CamelAwsBedrockAgentRuntimeFlowAliasIdentifier header. |  | String |
+| **camel.component.aws-bedrock-agent-runtime.flow-identifier** | The unique identifier of the Bedrock flow to invoke (used by the invokeFlow operation). Can be overridden per exchange via the CamelAwsBedrockAgentRuntimeFlowIdentifier header. |  | String |
 | **camel.component.aws-bedrock-agent-runtime.health-check-consumer-enabled** | Used for enabling or disabling all consumer based health checks from this component. | true | Boolean |
 | **camel.component.aws-bedrock-agent-runtime.health-check-producer-enabled** | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
 | **camel.component.aws-bedrock-agent-runtime.knowledge-base-id** | Define the Knowledge Base Id we are going to use. |  | String |

@@ -1,5 +1,8 @@
 # IEC 60870 Server
 
+> **Warning**
+> **Deprecated:** This iec60870-server is deprecated and may be removed in a future release.
+
 **Since Camel 2.20**
 
 **Both producer and consumer are supported**

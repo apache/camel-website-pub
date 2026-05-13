@@ -115,7 +115,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Docling component supports 52 options, which are listed below.
+The Docling component supports 53 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -172,6 +172,7 @@ Enum values:
 | **useDoclingServe** (producer) | Use docling-serve API instead of CLI command. | false | boolean |
 | **abortOnError** (advanced) | Abort processing on error. | false | Boolean |
 | **asyncPollInterval** (advanced) | Polling interval for async conversion status in milliseconds. | 2000 | long |
+| **asyncTaskTtl** (advanced) | Time-to-live for pending async conversion tasks in milliseconds. Tasks older than this will be evicted from memory to prevent leaks. | 86400000 | long |
 | **asyncTimeout** (advanced) | Maximum time to wait for async conversion completion in milliseconds. | 300000 | long |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **doclingCommand** (advanced) | Path to Docling Python executable or command. |  | String |
@@ -245,7 +246,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **operationId** (producer) | **Required** The operation identifier. |  | String |
 
-### Query Parameters (50 parameters)
+### Query Parameters (51 parameters)
 
    
 | Name | Description | Default | Type |
@@ -301,6 +302,7 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **abortOnError** (advanced) | Abort processing on error. | false | Boolean |
 | **asyncPollInterval** (advanced) | Polling interval for async conversion status in milliseconds. | 2000 | long |
+| **asyncTaskTtl** (advanced) | Time-to-live for pending async conversion tasks in milliseconds. Tasks older than this will be evicted from memory to prevent leaks. | 86400000 | long |
 | **asyncTimeout** (advanced) | Maximum time to wait for async conversion completion in milliseconds. | 300000 | long |
 | **doclingCommand** (advanced) | Path to Docling Python executable or command. |  | String |
 | **doCodeEnrichment** (advanced) | Enable code enrichment in document processing. | false | Boolean |
@@ -2502,6 +2504,7 @@ When using docling-serve API mode, the component uses the [docling-java](https:/
 | `processTimeout` | 30000 | HTTP read timeout in milliseconds for synchronous API calls. Also used as the CLI subprocess timeout. Increase this for large or complex documents (e.g., 120000 for 2 minutes). |
 | `asyncPollInterval` | 2000 | Poll interval in milliseconds when checking async task status. |
 | `asyncTimeout` | 300000 | Maximum time to wait for async conversion completion in milliseconds (5 minutes). |
+| `asyncTaskTtl` | 86400000 | Time-to-live for pending async conversion tasks in milliseconds (24 hours). Tasks older than this will be automatically evicted from memory to prevent leaks. A background cleanup task runs periodically to remove expired entries. |
 > **Important**
 > The default `processTimeout` of 30 seconds may not be sufficient for complex PDF documents, especially when OCR or enrichment options are enabled. For production use with PDF files, consider increasing `processTimeout` to at least 120000 (2 minutes).
 
@@ -2570,7 +2573,7 @@ When using docling with Spring Boot make sure to use the following Maven depende
 </dependency>
 ```
 
-The component supports 53 options, which are listed below.
+The component supports 54 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -2578,6 +2581,7 @@ The component supports 53 options, which are listed below.
 | **camel.component.docling.abort-on-error** | Abort processing on error. | false | Boolean |
 | **camel.component.docling.api-key-header** | Header name for API key authentication. | X-API-Key | String |
 | **camel.component.docling.async-poll-interval** | Polling interval for async conversion status in milliseconds. | 2000 | Long |
+| **camel.component.docling.async-task-ttl** | Time-to-live for pending async conversion tasks in milliseconds. Tasks older than this will be evicted from memory to prevent leaks. | 86400000 | Long |
 | **camel.component.docling.async-timeout** | Maximum time to wait for async conversion completion in milliseconds. | 300000 | Long |
 | **camel.component.docling.authentication-scheme** | Authentication scheme (BEARER, API\_KEY, NONE). | none | AuthenticationScheme |
 | **camel.component.docling.authentication-token** | Authentication token for docling-serve API (Bearer token or API key). |  | String |

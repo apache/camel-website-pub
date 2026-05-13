@@ -33,4 +33,4 @@ Deprecated: In favor of `paths` - left for backward compatibility.
 | `ingress.tlsHosts` | `[]string` | To configure tls hosts |
 | `ingress.tlsSecretName` | `string` | To configure tls secret name |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

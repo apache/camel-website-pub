@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 374 in 300 JAR artifacts (10 deprecated)
+Number of Non-Core Components: 374 in 300 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -223,8 +223,8 @@ Number of Non-Core Components: 374 in 300 JAR artifacts (10 deprecated)
 | [IBM Watson Text to Speech](ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
 | [IBM watsonx.ai](ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
 | [IBM watsonx.data](ibm-watsonx-data-component.md) | camel-ibm-watsonx-data | Preview | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
-| [IEC 60870 Client](iec60870-client-component.md) | camel-iec60870 | Stable | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
-| [IEC 60870 Server](iec60870-server-component.md) | camel-iec60870 | Stable | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
+| [IEC 60870 Client](iec60870-client-component.md) | camel-iec60870 | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
+| [IEC 60870 Server](iec60870-server-component.md) | camel-iec60870 | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
 | [Iggy](iggy-component.md) | camel-iggy | Preview | 4.17 | Send and receive message to Apache Iggy streaming platform. |
 | [Ignite](ignite-summary.md) | camel-ignite |  | 2.17 |  |
 | [Ignite Cache](ignite-cache-component.md) | camel-ignite | Stable | 2.17 | Perform cache operations on an Ignite cache or consume changes from a continuous query. |

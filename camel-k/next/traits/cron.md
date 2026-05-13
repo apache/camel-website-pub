@@ -47,4 +47,4 @@ It’s required that all periodic consumers have the same period, and it can be 
 | `cron.activeDeadlineSeconds` | `int64` | Specifies the duration in seconds, relative to the start time, that the job may be continuously active before it is considered to be failed. It defaults to 60s. |
 | `cron.backoffLimit` | `int32` | Specifies the number of retries before marking the job failed. It defaults to 2. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

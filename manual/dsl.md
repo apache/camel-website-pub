@@ -34,4 +34,6 @@ Camel uses a Java _Domain Specific Language_ or DSL for creating [Enterprise Int
     
 -   [Route Template](route-template.md) for creating reusable route templates.
     
+-   [Route Diagram](route-diagram.md) for generating visual route diagrams for documentation purposes.
+    
 -   [Route Reload](route-reload.md) for hot-reloading routes in a running Camel application.

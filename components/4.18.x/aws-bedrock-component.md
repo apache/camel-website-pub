@@ -592,7 +592,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Bedrock component supports 22 message header(s), which is/are listed below:
+The AWS Bedrock component supports 23 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -613,6 +613,7 @@ The AWS Bedrock component supports 22 message header(s), which is/are listed bel
 | **CamelAwsBedrockConverseUsage** (producer) Constant: [`CONVERSE_USAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_USAGE) | The usage metrics from Converse API response. |  | TokenUsage |
 | **CamelAwsBedrockConverseOutputMessage** (producer) Constant: [`CONVERSE_OUTPUT_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_OUTPUT_MESSAGE) | The output message from Converse API response. |  | Message |
 | **CamelAwsBedrockGuardrailConfig** (producer) Constant: [`GUARDRAIL_CONFIG`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONFIG) | The guardrail configuration to apply to the request. |  | GuardrailConfiguration |
+| **CamelAwsBedrockGuardrailIdentifier** (producer) Constant: [`GUARDRAIL_IDENTIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_IDENTIFIER) | The guardrail identifier to use for the ApplyGuardrail operation. |  | String |
 | **CamelAwsBedrockGuardrailContent** (producer) Constant: [`GUARDRAIL_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONTENT) | The content blocks for ApplyGuardrail operation. |  | List |
 | **CamelAwsBedrockGuardrailSource** (producer) Constant: [`GUARDRAIL_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_SOURCE) | The source type for ApplyGuardrail operation (INPUT or OUTPUT). |  | String |
 | **CamelAwsBedrockGuardrailOutput** (producer) Constant: [`GUARDRAIL_OUTPUT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_OUTPUT) | The guardrail assessment output from the response. |  | GuardrailAssessment |
@@ -1409,6 +1410,8 @@ The Camel AWS Bedrock component provides comprehensive support for guardrails th
 **Message-level Configuration** (per-message override via headers):
 
 -   `CamelAwsBedrockGuardrailConfig`: GuardrailConfiguration object for converse operations
+    
+-   `CamelAwsBedrockGuardrailIdentifier`: Guardrail identifier String for the applyGuardrail operation (overrides the endpoint `guardrailIdentifier`)
     
 -   `CamelAwsBedrockGuardrailContent`: Content blocks for applyGuardrail operation
     

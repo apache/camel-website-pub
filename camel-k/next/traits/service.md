@@ -33,7 +33,7 @@ Deprecated: Use service type instead.
 | `service.labels` | `map[string]string` | The labels added to the Service object. |
 | `service.ports` | `[]string` | List of container ports available in the container to expose (syntax: <port-name>;<port-number>;<container-port-number>\[;<port-protocol\]). When omitted, `port-protocol` (admitted values `TCP`, `UDP` or `SCTP`) is `TCP`. Don’t use this for the primary http managed port (which is managed by container trait). Don’t use in Knative based environments. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 

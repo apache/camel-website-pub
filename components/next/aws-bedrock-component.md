@@ -592,7 +592,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Bedrock component supports 22 message header(s), which is/are listed below:
+The AWS Bedrock component supports 23 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -613,6 +613,7 @@ The AWS Bedrock component supports 22 message header(s), which is/are listed bel
 | **CamelAwsBedrockConverseUsage** (producer) Constant: [`CONVERSE_USAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_USAGE) | The usage metrics from Converse API response. |  | TokenUsage |
 | **CamelAwsBedrockConverseOutputMessage** (producer) Constant: [`CONVERSE_OUTPUT_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_OUTPUT_MESSAGE) | The output message from Converse API response. |  | Message |
 | **CamelAwsBedrockGuardrailConfig** (producer) Constant: [`GUARDRAIL_CONFIG`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONFIG) | The guardrail configuration to apply to the request. |  | GuardrailConfiguration |
+| **CamelAwsBedrockGuardrailIdentifier** (producer) Constant: [`GUARDRAIL_IDENTIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_IDENTIFIER) | The guardrail identifier to use for the ApplyGuardrail operation. |  | String |
 | **CamelAwsBedrockGuardrailContent** (producer) Constant: [`GUARDRAIL_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONTENT) | The content blocks for ApplyGuardrail operation. |  | List |
 | **CamelAwsBedrockGuardrailSource** (producer) Constant: [`GUARDRAIL_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_SOURCE) | The source type for ApplyGuardrail operation (INPUT or OUTPUT). |  | String |
 | **CamelAwsBedrockGuardrailOutput** (producer) Constant: [`GUARDRAIL_OUTPUT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_OUTPUT) | The guardrail assessment output from the response. |  | GuardrailAssessment |
@@ -1410,6 +1411,8 @@ The Camel AWS Bedrock component provides comprehensive support for guardrails th
 
 -   `CamelAwsBedrockGuardrailConfig`: GuardrailConfiguration object for converse operations
     
+-   `CamelAwsBedrockGuardrailIdentifier`: Guardrail identifier String for the applyGuardrail operation (overrides the endpoint `guardrailIdentifier`)
+    
 -   `CamelAwsBedrockGuardrailContent`: Content blocks for applyGuardrail operation
     
 -   `CamelAwsBedrockGuardrailSource`: Source type - "INPUT" or "OUTPUT" for applyGuardrail
@@ -2121,16 +2124,20 @@ When using aws-bedrock with Spring Boot make sure to use the following Maven dep
 </dependency>
 ```
 
-The component supports 83 options, which are listed below.
+The component supports 87 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.component.aws-bedrock-agent-runtime.access-key** | Amazon AWS Access Key. |  | String |
 | **camel.component.aws-bedrock-agent-runtime.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| **camel.component.aws-bedrock-agent-runtime.bedrock-agent-runtime-async-client** | To use an existing configured AWS Bedrock Agent Runtime async client (required for invokeFlow which streams events back). The option is a software.amazon.awssdk.services.bedrockagentruntime.BedrockAgentRuntimeAsyncClient type. |  | BedrockAgentRuntimeAsyncClient |
 | **camel.component.aws-bedrock-agent-runtime.bedrock-agent-runtime-client** | To use an existing configured AWS Bedrock Agent Runtime client. The option is a software.amazon.awssdk.services.bedrockagentruntime.BedrockAgentRuntimeClient type. |  | BedrockAgentRuntimeClient |
 | **camel.component.aws-bedrock-agent-runtime.configuration** | Component configuration. The option is a org.apache.camel.component.aws2.bedrock.agentruntime.BedrockAgentRuntimeConfiguration type. |  | BedrockAgentRuntimeConfiguration |
+| **camel.component.aws-bedrock-agent-runtime.enable-trace** | Enables tracing for the invokeFlow operation. When enabled, the producer collects FlowTraceEvent entries and publishes them in the CamelAwsBedrockAgentRuntimeFlowTraces header. | false | Boolean |
 | **camel.component.aws-bedrock-agent-runtime.enabled** | Whether to enable auto configuration of the aws-bedrock-agent-runtime component. This is enabled by default. |  | Boolean |
+| **camel.component.aws-bedrock-agent-runtime.flow-alias-identifier** | The unique identifier of the Bedrock flow alias to invoke (used by the invokeFlow operation). Can be overridden per exchange via the CamelAwsBedrockAgentRuntimeFlowAliasIdentifier header. |  | String |
+| **camel.component.aws-bedrock-agent-runtime.flow-identifier** | The unique identifier of the Bedrock flow to invoke (used by the invokeFlow operation). Can be overridden per exchange via the CamelAwsBedrockAgentRuntimeFlowIdentifier header. |  | String |
 | **camel.component.aws-bedrock-agent-runtime.health-check-consumer-enabled** | Used for enabling or disabling all consumer based health checks from this component. | true | Boolean |
 | **camel.component.aws-bedrock-agent-runtime.health-check-producer-enabled** | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
 | **camel.component.aws-bedrock-agent-runtime.knowledge-base-id** | Define the Knowledge Base Id we are going to use. |  | String |

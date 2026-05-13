@@ -26,7 +26,7 @@ The following configuration options are available:
 | `affinity.podAffinityLabels` | `[]string` | Defines a set of pods (namely those matching the label selector, relative to the given namespace) that the integration pod(s) should be co-located with. |
 | `affinity.podAntiAffinityLabels` | `[]string` | Defines a set of pods (namely those matching the label selector, relative to the given namespace) that the integration pod(s) should not be co-located with. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 

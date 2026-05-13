@@ -44,4 +44,4 @@ The following configuration options are available:
 | `container.capabilitiesDrop` | `[]k8s.io/api/core/v1.Capability` | Security Context Capabilities Drop configuration (default ALL). |
 | `container.capabilitiesAdd` | `[]k8s.io/api/core/v1.Capability` | Security Context Capabilities Add configuration (default none). |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

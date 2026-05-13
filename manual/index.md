@@ -179,6 +179,8 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [RouteTemplate](route-template.md)
     
+-   [Visual Route Diagrams](route-diagram.md)
+    
 -   [Routes](routes.md)
     
 -   [Stream caching](stream-caching.md)

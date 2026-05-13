@@ -49,4 +49,4 @@ The following configuration options are available:
 | `health.startupProbe` | `string` | The startup probe path to use (default provided by the Catalog runtime used). |
 | `health.startupPort` | `int32` | The startup port to use (default 8080). |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

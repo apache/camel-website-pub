@@ -267,6 +267,30 @@ Enum values:
     
 -   bulkUpdateUsers
     
+-   createOrganization
+    
+-   updateOrganization
+    
+-   deleteOrganization
+    
+-   getOrganization
+    
+-   listOrganizations
+    
+-   searchOrganizations
+    
+-   addOrganizationMember
+    
+-   removeOrganizationMember
+    
+-   listOrganizationMembers
+    
+-   linkOrganizationIdentityProvider
+    
+-   unlinkOrganizationIdentityProvider
+    
+-   listOrganizationIdentityProviders
+    
 
 
 
@@ -498,6 +522,30 @@ Enum values:
     
 -   bulkUpdateUsers
     
+-   createOrganization
+    
+-   updateOrganization
+    
+-   deleteOrganization
+    
+-   getOrganization
+    
+-   listOrganizations
+    
+-   searchOrganizations
+    
+-   addOrganizationMember
+    
+-   removeOrganizationMember
+    
+-   listOrganizationMembers
+    
+-   linkOrganizationIdentityProvider
+    
+-   unlinkOrganizationIdentityProvider
+    
+-   listOrganizationIdentityProviders
+    
 
 
 
@@ -600,7 +648,7 @@ Enum values:
 
 ## Message Headers
 
-The Keycloak component supports 55 message header(s), which is/are listed below:
+The Keycloak component supports 62 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -778,6 +826,30 @@ Enum values:
     
 -   bulkUpdateUsers
     
+-   createOrganization
+    
+-   updateOrganization
+    
+-   deleteOrganization
+    
+-   getOrganization
+    
+-   listOrganizations
+    
+-   searchOrganizations
+    
+-   addOrganizationMember
+    
+-   removeOrganizationMember
+    
+-   listOrganizationMembers
+    
+-   linkOrganizationIdentityProvider
+    
+-   unlinkOrganizationIdentityProvider
+    
+-   listOrganizationIdentityProviders
+    
 
 
 
@@ -838,6 +910,13 @@ Enum values:
 | **CamelKeycloakSubjectToken** (common) Constant: [`SUBJECT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#SUBJECT_TOKEN) | Subject token for permission evaluation on behalf of a user. |  | String |
 | **CamelKeycloakPermissionAudience** (common) Constant: [`PERMISSION_AUDIENCE`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#PERMISSION_AUDIENCE) | Audience for permission evaluation. |  | String |
 | **CamelKeycloakPermissionsOnly** (common) Constant: [`PERMISSIONS_ONLY`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#PERMISSIONS_ONLY) | Whether to only return the list of permissions without obtaining an RPT. |  | Boolean |
+| **CamelKeycloakOrganizationId** (common) Constant: [`ORGANIZATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_ID) | The organization ID. |  | String |
+| **CamelKeycloakOrganizationName** (common) Constant: [`ORGANIZATION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_NAME) | The organization name. |  | String |
+| **CamelKeycloakOrganizationAlias** (common) Constant: [`ORGANIZATION_ALIAS`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_ALIAS) | The organization alias. |  | String |
+| **CamelKeycloakOrganizationDescription** (common) Constant: [`ORGANIZATION_DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_DESCRIPTION) | The organization description. |  | String |
+| **CamelKeycloakOrganizationRedirectUrl** (common) Constant: [`ORGANIZATION_REDIRECT_URL`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_REDIRECT_URL) | The organization redirect URL. |  | String |
+| **CamelKeycloakOrganizationDomain** (common) Constant: [`ORGANIZATION_DOMAIN`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_DOMAIN) | The organization domain name. |  | String |
+| **CamelKeycloakOrganizationSearch** (common) Constant: [`ORGANIZATION_SEARCH`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_SEARCH) | Search query for organizations. |  | String |
 
 ## Producer Operations
 
@@ -965,6 +1044,8 @@ The component supports the following operations:
 -   **Identity Provider Management**: `createIdentityProvider`, `getIdentityProvider`, `updateIdentityProvider`, `listIdentityProviders`, `deleteIdentityProvider`
     
 -   **Authorization Services**: `createResource`, `getResource`, `updateResource`, `listResources`, `deleteResource`, `createResourcePolicy`, `getResourcePolicy`, `updateResourcePolicy`, `listResourcePolicies`, `deleteResourcePolicy`, `createResourcePermission`, `getResourcePermission`, `updateResourcePermission`, `listResourcePermissions`, `deleteResourcePermission`, `evaluatePermission`
+    
+-   **Organization Management** (Keycloak 26+): `createOrganization`, `getOrganization`, `updateOrganization`, `listOrganizations`, `searchOrganizations`, `deleteOrganization`, `addOrganizationMember`, `removeOrganizationMember`, `listOrganizationMembers`, `linkOrganizationIdentityProvider`, `unlinkOrganizationIdentityProvider`, `listOrganizationIdentityProviders`
     
 
 ### Realm Operations
@@ -1774,6 +1855,88 @@ IdentityProviderRepresentation provider = template.requestBodyAndHeaders(
 
 // Delete identity provider
 template.sendBodyAndHeaders("keycloak:admin?operation=deleteIdentityProvider", null, getIdpHeaders);
+```
+
+### Organization Operations
+
+Organizations (introduced in Keycloak 26) allow you to model multi-tenant scenarios within a realm. Each organization can have members and can be linked to one or more identity providers.
+
+```java
+// Create a new organization
+Map<String, Object> orgHeaders = new HashMap<>();
+orgHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+orgHeaders.put(KeycloakConstants.ORGANIZATION_NAME, "acme-corp");
+orgHeaders.put(KeycloakConstants.ORGANIZATION_ALIAS, "acme");
+orgHeaders.put(KeycloakConstants.ORGANIZATION_DESCRIPTION, "Acme Corporation");
+orgHeaders.put(KeycloakConstants.ORGANIZATION_DOMAIN, "acme.com");
+
+template.sendBodyAndHeaders("keycloak:admin?operation=createOrganization", null, orgHeaders);
+
+// Alternatively, pass a full OrganizationRepresentation via pojoRequest=true
+OrganizationRepresentation org = new OrganizationRepresentation();
+org.setName("acme-corp");
+org.setAlias("acme");
+org.setEnabled(true);
+OrganizationDomainRepresentation domain = new OrganizationDomainRepresentation();
+domain.setName("acme.com");
+org.addDomain(domain);
+
+template.sendBodyAndHeader("keycloak:admin?operation=createOrganization&pojoRequest=true",
+    org, KeycloakConstants.REALM_NAME, "my-realm");
+
+// List all organizations in a realm
+template.sendBodyAndHeader("keycloak:admin?operation=listOrganizations", null,
+    KeycloakConstants.REALM_NAME, "my-realm");
+
+// Search organizations by name/alias/domain
+Map<String, Object> searchHeaders = new HashMap<>();
+searchHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+searchHeaders.put(KeycloakConstants.ORGANIZATION_SEARCH, "acme");
+
+template.sendBodyAndHeaders("keycloak:admin?operation=searchOrganizations", null, searchHeaders);
+
+// Get a specific organization by ID
+Map<String, Object> getOrgHeaders = new HashMap<>();
+getOrgHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+getOrgHeaders.put(KeycloakConstants.ORGANIZATION_ID, "<organization-id>");
+
+OrganizationRepresentation organization = template.requestBodyAndHeaders(
+    "keycloak:admin?operation=getOrganization", null, getOrgHeaders,
+    OrganizationRepresentation.class);
+
+// Add an existing user as a member of an organization
+Map<String, Object> addMemberHeaders = new HashMap<>();
+addMemberHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+addMemberHeaders.put(KeycloakConstants.ORGANIZATION_ID, "<organization-id>");
+addMemberHeaders.put(KeycloakConstants.USER_ID, "<user-id>");
+
+template.sendBodyAndHeaders("keycloak:admin?operation=addOrganizationMember", null, addMemberHeaders);
+
+// List members of an organization
+template.sendBodyAndHeaders("keycloak:admin?operation=listOrganizationMembers", null, getOrgHeaders);
+
+// Remove a member from an organization
+template.sendBodyAndHeaders("keycloak:admin?operation=removeOrganizationMember", null, addMemberHeaders);
+
+// Link an identity provider to an organization
+Map<String, Object> linkIdpHeaders = new HashMap<>();
+linkIdpHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+linkIdpHeaders.put(KeycloakConstants.ORGANIZATION_ID, "<organization-id>");
+linkIdpHeaders.put(KeycloakConstants.IDP_ALIAS, "acme-saml");
+
+template.sendBodyAndHeaders("keycloak:admin?operation=linkOrganizationIdentityProvider",
+    null, linkIdpHeaders);
+
+// List identity providers linked to an organization
+template.sendBodyAndHeaders("keycloak:admin?operation=listOrganizationIdentityProviders",
+    null, getOrgHeaders);
+
+// Unlink an identity provider from an organization
+template.sendBodyAndHeaders("keycloak:admin?operation=unlinkOrganizationIdentityProvider",
+    null, linkIdpHeaders);
+
+// Delete an organization
+template.sendBodyAndHeaders("keycloak:admin?operation=deleteOrganization", null, getOrgHeaders);
 ```
 
 ### User Attribute Operations

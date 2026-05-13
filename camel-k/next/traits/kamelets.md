@@ -22,4 +22,4 @@ The following configuration options are available:
 | `kamelets.list` | `string` | Comma separated list of Kamelet names to load into the current integration |
 | `kamelets.mountPoint` | `string` | The directory where the application mounts and reads Kamelet spec (default `/etc/camel/kamelets`) |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

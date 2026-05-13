@@ -31,7 +31,7 @@ The following configuration options are available:
 | `prometheus.podMonitor` | `bool` | Whether a `PodMonitor` resource is created (default `true`). |
 | `prometheus.podMonitorLabels` | `[]string` | The `PodMonitor` resource labels, applicable when `pod-monitor` is `true`. |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 

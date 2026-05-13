@@ -20,8 +20,10 @@ The configuration properties for the component are:
   
 | Option | Default | Description |
 | --- | --- | --- |
+| `enabled` | false | Turn the tracing on/off. |
+| `traceProcessors` | false | Trace inner custom processors (i.e., any `process` configured in the route). |
+| `disableCoreProcessors` | false | Disable any inner core processors (any core DSL processor provided in the route, for example `bean`, `log`, …​). |
 | `excludePatterns` |  | Sets exclude pattern that will disable tracing for those spans that matches the pattern. The variable is a comma separated values of filters to execute (eg, `log*,direct*,setBody*`, …​) |
-| `traceProcessors` | `false` | Setting this to true will create new spans for each Camel Processors. Use the excludePattern property to filter out Processors |
 | `traceHeadersInclusion` | false | Add the generated telemetry `CAMEL_TRACE_ID` and `CAMEL_SPAN_ID` Exchange headers. |
 
 ## Spring Boot Auto-Configuration
@@ -37,13 +39,14 @@ When using micrometer-observability with Spring Boot make sure to use the follow
 </dependency>
 ```
 
-The component supports 2 options, which are listed below.
+The component supports 3 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **camel.micrometer.observability.exclude-patterns** | Sets exclude pattern(s) that will disable observability for Camel messages that matches the pattern. Multiple patterns can be separated by comma. |  | String |
-| **camel.micrometer.observability.trace-processors** | Enable tracing for inner Camel processors. | false | Boolean |
+| **camel.micrometer.observability.disable-core-processors** | Disable any inner core processors (any core DSL processor provided in the route, for example `bean`, `log`, …​). | false | Boolean |
+| **camel.micrometer.observability.exclude-patterns** | Sets exclude pattern(s) that will disable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. |  | String |
+| **camel.micrometer.observability.trace-processors** | Setting this to true will create new telemetry spans for each Camel custom Processors. Use the excludePattern property to filter out Processors. |  | Boolean |
 
 ### Spring Boot context propagation
 

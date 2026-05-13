@@ -47,7 +47,7 @@ The following configuration options are available:
 | `telemetry.sampler-ratio` | `string` | The sampler ratio of the telemetry used for tracing |
 | `telemetry.sampler-parent-based` | `bool` | The sampler of the telemetry used for tracing is parent based (default "true") |
 > **Note**
-> the variables names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 
 ## Examples
 

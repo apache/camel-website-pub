@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1778171462844,
+  "generated": 1778669107393,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -755,12 +755,6 @@
               "path": "mount.adoc",
               "url": "/camel-k/next/traits/mount.html",
               "title": "Mount Trait"
-            },
-            {
-              "module": "traits",
-              "path": "openapi.adoc",
-              "url": "/camel-k/next/traits/openapi.html",
-              "title": "Openapi Trait"
             },
             {
               "module": "traits",
@@ -7254,18 +7248,6 @@
               "path": "jms-amqp-10-source.adoc",
               "url": "/camel-kamelets/next/jms-amqp-10-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-amqp-10-source.svg\" alt=\"jms amqp 10 source\"></span> JMS - AMQP 1.0 Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "jms-amqp-10-ssl-sink.adoc",
-              "url": "/camel-kamelets/next/jms-amqp-10-ssl-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-amqp-10-ssl-sink.svg\" alt=\"jms amqp 10 ssl sink\"></span> JMS - AMQP 1.0 SSL Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "jms-amqp-10-ssl-source.adoc",
-              "url": "/camel-kamelets/next/jms-amqp-10-ssl-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-amqp-10-ssl-source.svg\" alt=\"jms amqp 10 ssl source\"></span> JMS - AMQP 1.0 SSL Source"
             },
             {
               "module": "ROOT",
@@ -32109,6 +32091,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-doctor.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-doctor.html",
+              "title": "camel doctor"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-eval-expression.adoc",
               "url": "/manual/jbang-commands/camel-jbang-eval-expression.html",
               "title": "camel eval expression"
@@ -32748,6 +32736,12 @@
               "path": "route-controller.adoc",
               "url": "/manual/route-controller.html",
               "title": "Route Controller"
+            },
+            {
+              "module": "ROOT",
+              "path": "route-diagram.adoc",
+              "url": "/manual/route-diagram.html",
+              "title": "Route Diagram"
             },
             {
               "module": "ROOT",

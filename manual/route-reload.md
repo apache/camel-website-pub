@@ -58,6 +58,12 @@ When using route reload, then it is recommended to assign id’s to your routes,
 
 And adding new routes is therefore possible as they would have a new unique route id specified.
 
+### Live reload of resource files
+
+In addition to reloading routes, when `routesReloadEnabled=true` Camel also disables the `contentCache` option on resource-based components (such as `xslt`) whose default is `true`. This way, edits to resource files are picked up on the next message without having to restart the route.
+
+User properties (e.g. `camel.component.xslt.contentCache=true`) and explicit endpoint/URI settings are always respected: set `contentCache=true` to keep caching even when route reload is enabled.
+
 ## See Also
 
 See related [Context Reload](context-reload.md).
