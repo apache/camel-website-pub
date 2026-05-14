@@ -132,14 +132,14 @@ The JGroups raft component supports 12 message header(s), which is/are listed be
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **JGROUPSRAFT\_LOG\_SIZE** (consumer) Constant: [`HEADER_JGROUPSRAFT_LOG_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_LOG_SIZE) | The Raft log size in number of entries. |  | int |
-| **JGROUPSRAFT\_COMMIT\_INDEX** (consumer) Constant: [`HEADER_JGROUPSRAFT_COMMIT_INDEX`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_COMMIT_INDEX) | The commit index. |  | int |
-| **JGROUPSRAFT\_CURRENT\_TERM** (consumer) Constant: [`HEADER_JGROUPSRAFT_CURRENT_TERM`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_CURRENT_TERM) | The current raft term. |  | int |
-| **JGROUPSRAFT\_IS\_LEADER** (consumer) Constant: [`HEADER_JGROUPSRAFT_IS_LEADER`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_IS_LEADER) | Whether the node is the Raft Leader or not. |  | boolean |
-| **JGROUPSRAFT\_LAST\_APPLIED** (consumer) Constant: [`HEADER_JGROUPSRAFT_LAST_APPLIED`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_LAST_APPLIED) | The index of the last log entry that was appended to the log. |  | int |
-| **JGROUPSRAFT\_LEADER\_ADDRESS** (consumer) Constant: [`HEADER_JGROUPSRAFT_LEADER_ADDRESS`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_LEADER_ADDRESS) | The Address ot Raft Leader or not. |  | Address |
-| **JGROUPSRAFT\_RAFT\_ID** (consumer) Constant: [`HEADER_JGROUPSRAFT_RAFT_ID`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_RAFT_ID) | The Raft id of the node. |  | String |
-| **JGROUPSRAFT\_EVENT\_TYPE** (consumer) Constant: [`HEADER_JGROUPSRAFT_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_EVENT_TYPE) | 
+| **CamelJGroupsRaftLogSize** (consumer) Constant: [`HEADER_JGROUPSRAFT_LOG_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_LOG_SIZE) | The Raft log size in number of entries. |  | int |
+| **CamelJGroupsRaftCommitIndex** (consumer) Constant: [`HEADER_JGROUPSRAFT_COMMIT_INDEX`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_COMMIT_INDEX) | The commit index. |  | int |
+| **CamelJGroupsRaftCurrentTerm** (consumer) Constant: [`HEADER_JGROUPSRAFT_CURRENT_TERM`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_CURRENT_TERM) | The current raft term. |  | int |
+| **CamelJGroupsRaftIsLeader** (consumer) Constant: [`HEADER_JGROUPSRAFT_IS_LEADER`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_IS_LEADER) | Whether the node is the Raft Leader or not. |  | boolean |
+| **CamelJGroupsRaftLastApplied** (consumer) Constant: [`HEADER_JGROUPSRAFT_LAST_APPLIED`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_LAST_APPLIED) | The index of the last log entry that was appended to the log. |  | int |
+| **CamelJGroupsRaftLeaderAddress** (consumer) Constant: [`HEADER_JGROUPSRAFT_LEADER_ADDRESS`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_LEADER_ADDRESS) | The Address ot Raft Leader or not. |  | Address |
+| **CamelJGroupsRaftRaftId** (consumer) Constant: [`HEADER_JGROUPSRAFT_RAFT_ID`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_RAFT_ID) | The Raft id of the node. |  | String |
+| **CamelJGroupsRaftEventType** (consumer) Constant: [`HEADER_JGROUPSRAFT_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_EVENT_TYPE) | 
 The event type.
 
 Enum values:
@@ -160,10 +160,10 @@ Enum values:
 
 
  |  | JGroupsRaftEventType |
-| **JGROUPSRAFT\_SET\_OFFSET** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_OFFSET) | Offset to use in the byte buffer to be set(). |  | Integer |
-| **JGROUPSRAFT\_SET\_LENGTH** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_LENGTH) | Length to use in the byte buffer to be set(). |  | Integer |
-| **JGROUPSRAFT\_SET\_TIMEOUT** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_TIMEOUT) | Timeout to be used in set() operation. |  | Long |
-| **JGROUPSRAFT\_SET\_TIMEUNIT** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_TIMEUNIT`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_TIMEUNIT) | 
+| **CamelJGroupsRaftSetOffset** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_OFFSET) | Offset to use in the byte buffer to be set(). |  | Integer |
+| **CamelJGroupsRaftSetLength** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_LENGTH) | Length to use in the byte buffer to be set(). |  | Integer |
+| **CamelJGroupsRaftSetTimeout** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_TIMEOUT) | Timeout to be used in set() operation. |  | Long |
+| **CamelJGroupsRaftSetTimeUnit** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_TIMEUNIT`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_TIMEUNIT) | 
 
 Timeunit to be used in set() operation.
 

@@ -1,7 +1,9 @@
 # Camel K Operator Monitoring
 
-> **Note**
-> The Camel K monitoring architecture relies on [Prometheus](https://prometheus.io) and the eponymous operator. Make sure you’ve checked the [Camel K monitoring prerequisites](../monitoring.html#prerequisites).
+In this chapter we provide some example how to provide a monitoring based on Prometheus for your Camel K operator main metrics.
+
+> **Warning**
+> this is a guide that mostly depends on Prometheus. The goal is to provide some basic example more than an exhaustive guide. Please, refer to Prometheus documentation for a full production configuration.
 
 ## Installation
 

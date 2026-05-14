@@ -312,7 +312,10 @@ BuildConfiguration represent the configuration required to build the runtime.
 | `toolImage`  
 string | The container image to be used to run the build. |
 | `operatorNamespace`  
-string | The namespace where to run the builder Pod (must be the same of the operator in charge of this Build reconciliation). |
+string | The namespace where to run the builder Pod (must be the same of the operator in charge of this Build reconciliation).
+Deprecated: no longer in use.
+
+ |
 | `strategy`  
 **[BuildStrategy](#_camel_apache_org_v1_BuildStrategy)** | the strategy to adopt |
 | `orderStrategy`  
@@ -1303,7 +1306,10 @@ string | The reason for the condition’s last transition. |
 | `message`  
 string | A human-readable message indicating details about the transition. |
 | `pods`  
-**[\[\]PodCondition](#_camel_apache_org_v1_PodCondition)** | Pods collect health and conditions information from the owned PODs |
+**[\[\]PodCondition](#_camel_apache_org_v1_PodCondition)** | DeprecatedPods collect health and conditions information from the owned PODs
+Deprecated: may be removed in future releases.
+
+ |
 
 ### IntegrationConditionType(`string` alias)
 
@@ -2665,6 +2671,8 @@ PluginProperties — .
     
 -   [PipeCondition](#_camel_apache_org_v1_PipeCondition)
     
+
+Deprecated: may be removed in future releases.
 
  
 | Field | Description |
@@ -4512,7 +4520,7 @@ bool | Deprecated: no longer in use. |
     
 
 > **Warning**
-> The Pod trait is **deprecated** and will removed in future release versions: use InitContainers trait istead.
+> The Pod trait is **deprecated** and will removed in future release versions: use InitContainers trait instead.
 
 The pod trait allows the customization of the Integration pods. It applies the `PodSpecTemplate` struct contained in the Integration `.spec.podTemplate` field, into the Integration deployment Pods template, using strategic merge patch.
 
@@ -4530,6 +4538,9 @@ This can be used to customize the container where Camel routes execute, by using
 
 -   [Traits](#_camel_apache_org_v1_Traits)
     
+
+> **Warning**
+> The Prometheus trait is **deprecated** and will removed in future release versions: use Camel Monitor operator ([https://camel-tooling.github.io/camel-dashboard/docs/installation-guide/advanced/operator/](https://camel-tooling.github.io/camel-dashboard/docs/installation-guide/advanced/operator/)) instead.
 
 The Prometheus trait configures a Prometheus-compatible endpoint. It also creates a `PodMonitor` resource, so that the endpoint can be scraped automatically, when using the Prometheus operator.
 

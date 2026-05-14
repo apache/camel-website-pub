@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 310 components (18 deprecated, 59 JVM only)
+There are 311 components (18 deprecated, 59 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -256,6 +256,7 @@ level | Description |
 | [REST OpenApi](extensions/rest-openapi.md) | camel-quarkus-rest-openapi | 1.0.0 | 1.0.0 | Stable | To call and expose REST services using OpenAPI specification as contract. |
 | [REST](extensions/rest.md) | camel-quarkus-rest | 0.0.1 | 0.0.1 | Stable | Expose REST services or call external REST services. |
 | [Robot Framework](extensions/robotframework.md) | camel-quarkus-robotframework | 1.1.0 | n/a | Preview | Pass camel exchanges to acceptance test written in Robot DSL. |
+| [RocketMQ](extensions/rocketmq.md) | camel-quarkus-rocketmq | 3.36.0 | 3.36.0 | Stable | Send and receive messages from RocketMQ cluster. |
 | [RSS](extensions/rss.md) | camel-quarkus-rss | 1.1.0 | 1.2.0 | Stable | Poll RSS feeds. |
 | [Saga](extensions/saga.md) | camel-quarkus-saga | 1.1.0 | 1.4.0 | Stable | Execute custom actions within a route using the Saga EIP. |
 | [Salesforce](extensions/salesforce.md) | camel-quarkus-salesforce | 0.2.0 | 0.0.2 | Stable | Communicate with Salesforce using Java DTOs. |

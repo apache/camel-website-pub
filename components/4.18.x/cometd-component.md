@@ -109,7 +109,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | **Required** Host port number. |  | int |
 | **channelName** (common) | **Required** The channelName represents a topic that can be subscribed to by the Camel endpoints. |  | String |
 
-### Query Parameters (16 parameters)
+### Query Parameters (17 parameters)
 
    
 | Name | Description | Default | Type |
@@ -161,6 +161,7 @@ Enum values:
  |  | ExchangePattern |
 | **disconnectLocalSession** (producer) | Whether to disconnect local sessions after publishing a message to its channel. Disconnecting local session is needed as they are not swept by default by CometD, and therefore you can run out of memory. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter headers. |  | HeaderFilterStrategy |
 
 ## Message Headers
 

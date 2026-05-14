@@ -2,6 +2,9 @@
 
 Camel offers several forms and levels of security capabilities that can be used on Camel routes. These various forms of security may be used in conjunction with each other or separately.
 
+> **Note**
+> This page describes the security **features** Camel offers to route authors and operators. For the project’s **security model** - who is trusted, where the trust boundaries sit, what counts as a framework vulnerability, and what is operator responsibility - see [Security Model](security-model.md).
+
 The broad categories offered are:
 
 -   _Route Security_ - Authentication and Authorization services to proceed on a route or route segment

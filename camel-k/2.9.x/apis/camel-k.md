@@ -310,7 +310,10 @@ BuildConfiguration represent the configuration required to build the runtime.
 | `toolImage`  
 string | The container image to be used to run the build. |
 | `operatorNamespace`  
-string | The namespace where to run the builder Pod (must be the same of the operator in charge of this Build reconciliation). |
+string | The namespace where to run the builder Pod (must be the same of the operator in charge of this Build reconciliation).
+Deprecated: no longer in use.
+
+ |
 | `strategy`  
 **[BuildStrategy](#_camel_apache_org_v1_BuildStrategy)** | the strategy to adopt |
 | `orderStrategy`  

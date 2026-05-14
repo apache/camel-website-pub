@@ -1,6 +1,6 @@
 # Pod Trait
 
-Deprecated since2.8.0 WARNING: The Pod trait is **deprecated** and will removed in future release versions: use InitContainers trait istead.
+Deprecated since2.8.0 WARNING: The Pod trait is **deprecated** and will removed in future release versions: use InitContainers trait instead.
 
 The pod trait allows the customization of the Integration pods. It applies the `PodSpecTemplate` struct contained in the Integration `.spec.podTemplate` field, into the Integration deployment Pods template, using strategic merge patch.
 

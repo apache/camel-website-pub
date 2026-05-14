@@ -1,7 +1,7 @@
 # Camel K Integration Monitoring
 
-> **Note**
-> The Camel K monitoring architecture relies on [Prometheus](https://prometheus.io) and the eponymous operator. Make sure you’ve checked the [Camel K monitoring prerequisites](../monitoring.html#prerequisites).
+> **Warning**
+> The Camel K Integration monitoring part is deprecated. Use instead [Camel Dashboard](../dashboard.md) project to provide a deeper level of monitoring to your Camel applications.
 
 ## Instrumentation
 

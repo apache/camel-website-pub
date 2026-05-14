@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1778669107393,
+  "generated": 1778763874749,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -484,7 +484,7 @@
               "module": "ROOT",
               "path": "observability/monitoring.adoc",
               "url": "/camel-k/next/observability/monitoring.html",
-              "title": "Camel K Monitoring"
+              "title": "Camel K Operator Monitoring"
             },
             {
               "module": "ROOT",
@@ -13142,6 +13142,12 @@
               "path": "reference/extensions/robotframework.adoc",
               "url": "/camel-quarkus/next/reference/extensions/robotframework.html",
               "title": "Robot Framework"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/rocketmq.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/rocketmq.html",
+              "title": "RocketMQ"
             },
             {
               "module": "ROOT",
@@ -32778,6 +32784,12 @@
               "path": "scheduledroutepolicy.adoc",
               "url": "/manual/scheduledroutepolicy.html",
               "title": "ScheduledRoutePolicy"
+            },
+            {
+              "module": "ROOT",
+              "path": "security-model.adoc",
+              "url": "/manual/security-model.html",
+              "title": "Security Model"
             },
             {
               "module": "ROOT",
