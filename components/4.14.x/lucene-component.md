@@ -142,8 +142,8 @@ The Lucene component supports 2 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **QUERY** (producer) Constant: [`HEADER_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-lucene/latest/org/apache/camel/component/lucene/LuceneConstants.html#HEADER_QUERY) | The Lucene Query to performed on the index. The query may include wildcards and phrases. |  | String |
-| **RETURN\_LUCENE\_DOCS** (producer) Constant: [`HEADER_RETURN_LUCENE_DOCS`](https://javadoc.io/doc/org.apache.camel/camel-lucene/latest/org/apache/camel/component/lucene/LuceneConstants.html#HEADER_RETURN_LUCENE_DOCS) | Set this header to true to include the actual Lucene documentation when returning hit information. |  | String |
+| **CamelLuceneQuery** (producer) Constant: [`HEADER_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-lucene/latest/org/apache/camel/component/lucene/LuceneConstants.html#HEADER_QUERY) | The Lucene Query to performed on the index. The query may include wildcards and phrases. |  | String |
+| **CamelLuceneReturnLuceneDocs** (producer) Constant: [`HEADER_RETURN_LUCENE_DOCS`](https://javadoc.io/doc/org.apache.camel/camel-lucene/latest/org/apache/camel/component/lucene/LuceneConstants.html#HEADER_RETURN_LUCENE_DOCS) | Set this header to true to include the actual Lucene documentation when returning hit information. |  | String |
 
 ## Usage
 
@@ -151,7 +151,7 @@ The Lucene component supports 2 message header(s), which is/are listed below:
 
 This component supports 2 producer endpoints.
 
-**insert**: the insert producer builds a searchable index by analyzing the body in incoming exchanges and associating it with a token ("content"). **query**: the query producer performs searches on a pre-created index. The query uses the searchable index to perform score & relevance based searches. Queries are sent via the incoming exchange contains a header property name called 'QUERY'. The value of the header property 'QUERY' is a Lucene Query. For more details on how to create Lucene Queries, check out [Query Parser Classic syntax](https://lucene.apache.org/core/8_4_1/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package.description)
+**insert**: the insert producer builds a searchable index by analyzing the body in incoming exchanges and associating it with a token ("content"). **query**: the query producer performs searches on a pre-created index. The query uses the searchable index to perform score & relevance based searches. Queries are sent via the incoming exchange contains a header property name called `CamelLuceneQuery`. The value of the header property `CamelLuceneQuery` is a Lucene Query. For more details on how to create Lucene Queries, check out [Query Parser Classic syntax](https://lucene.apache.org/core/8_4_1/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package.description)
 
 ### Lucene Processor
 

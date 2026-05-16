@@ -82,6 +82,44 @@ A user-supplied `JavaSerializationFilterConfig` (set on the `SerializationConfig
 
 Applications that store classes outside the default whitelist on a Hazelcast topic, queue, map, list, set, or in one of the repositories above must provide their own `Config` with a `JavaSerializationFilterConfig` configured for their class names.
 
+### camel-lucene
+
+The Exchange header values exposed by `LuceneConstants` have been renamed to follow the standard Camel naming convention. The field names are unchanged, so routes referencing the constants (`LuceneConstants.HEADER_QUERY`, `LuceneConstants.HEADER_RETURN_LUCENE_DOCS`) continue to work without modification. However, routes that set or read these headers using the raw string values must be updated:
+
+-   `QUERY` → `CamelLuceneQuery`
+    
+-   `RETURN_LUCENE_DOCS` → `CamelLuceneReturnLuceneDocs`
+    
+
+As a consequence, the generated Endpoint DSL header accessors on `LuceneHeaderNameBuilder` have been renamed accordingly:
+
+-   `qUERY()` → `luceneQuery()`
+    
+-   `returnLuceneDocs()` → `luceneReturnLuceneDocs()`
+    
+
+### camel-jgroups-raft
+
+The Exchange header constants in `JGroupsRaftConstants` have been renamed to follow the Camel naming convention used across the rest of the component catalog. The Java field names are unchanged; only the header string values have changed:
+
+  
+| Constant | Previous value | New value |
+| --- | --- | --- |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_LOG_SIZE` | `JGROUPSRAFT_LOG_SIZE` | `CamelJGroupsRaftLogSize` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_COMMIT_INDEX` | `JGROUPSRAFT_COMMIT_INDEX` | `CamelJGroupsRaftCommitIndex` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_CURRENT_TERM` | `JGROUPSRAFT_CURRENT_TERM` | `CamelJGroupsRaftCurrentTerm` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_IS_LEADER` | `JGROUPSRAFT_IS_LEADER` | `CamelJGroupsRaftIsLeader` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_LAST_APPLIED` | `JGROUPSRAFT_LAST_APPLIED` | `CamelJGroupsRaftLastApplied` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_LEADER_ADDRESS` | `JGROUPSRAFT_LEADER_ADDRESS` | `CamelJGroupsRaftLeaderAddress` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_RAFT_ID` | `JGROUPSRAFT_RAFT_ID` | `CamelJGroupsRaftRaftId` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_EVENT_TYPE` | `JGROUPSRAFT_EVENT_TYPE` | `CamelJGroupsRaftEventType` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_SET_OFFSET` | `JGROUPSRAFT_SET_OFFSET` | `CamelJGroupsRaftSetOffset` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_SET_LENGTH` | `JGROUPSRAFT_SET_LENGTH` | `CamelJGroupsRaftSetLength` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_SET_TIMEOUT` | `JGROUPSRAFT_SET_TIMEOUT` | `CamelJGroupsRaftSetTimeout` |
+| `JGroupsRaftConstants.HEADER_JGROUPSRAFT_SET_TIMEUNIT` | `JGROUPSRAFT_SET_TIMEUNIT` | `CamelJGroupsRaftSetTimeUnit` |
+
+Routes that reference the constant symbolically (for example `setHeader(JGroupsRaftConstants.HEADER_JGROUPSRAFT_SET_TIMEOUT, …​)`) continue to work without changes. Routes that set the header by its literal string value (for example `setHeader("JGROUPSRAFT_SET_TIMEOUT", …​)`) must be updated to use the new value (`setHeader("CamelJGroupsRaftSetTimeout", …​)`).
+
 ## Upgrading from 4.14.2 to 4.14.3
 
 ### camel-tika

@@ -532,3 +532,5 @@ Consult the Kamelets User Guide for information about how to use these.
  [![xj template action](_images/kamelets/xj-template-action.svg) XJ Template Action](xj-template-action.html)
 
 [Kamelets Developer Guide](development.md)
+
+[Security Model](security-model.md)

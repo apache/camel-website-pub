@@ -8,7 +8,7 @@ The **couchdb:** component allows you to treat [CouchDB](http://couchdb.apache.o
 
 -   As a consumer, monitors couch changesets for inserts, updates and deletes and publishes these as messages into camel routes.
     
--   As a producer, can save, update, delete (by using `CouchDbMethod` with `DELETE` value) documents and get documents by id (by using `CouchDbMethod` with GET value) into CouchDB.
+-   As a producer, can save, update, delete (by using `CamelCouchDbMethod` with `DELETE` value) documents and get documents by id (by using `CamelCouchDbMethod` with GET value) into CouchDB.
     
 -   Can support as many endpoints as required, eg for multiple databases across multiple instances.
     
@@ -179,14 +179,14 @@ The CouchDB component supports 6 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CouchDbDatabase** (consumer) Constant: [`HEADER_DATABASE`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_DATABASE) | The database the message came from. |  | String |
-| **CouchDbSeq** (consumer) Constant: [`HEADER_SEQ`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_SEQ) | The couchdb changeset sequence number of the update / delete message. |  | String |
-| **CouchDbId** (common) Constant: [`HEADER_DOC_ID`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_DOC_ID) | The couchdb document id. |  | String |
-| **CouchDbRev** (common) Constant: [`HEADER_DOC_REV`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_DOC_REV) | The couchdb document revision. |  | String |
-| **CouchDbMethod** (common) Constant: [`HEADER_METHOD`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_METHOD) | The method (delete / update). |  | String |
+| **CamelCouchDbDatabase** (consumer) Constant: [`HEADER_DATABASE`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_DATABASE) | The database the message came from. |  | String |
+| **CamelCouchDbSeq** (consumer) Constant: [`HEADER_SEQ`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_SEQ) | The couchdb changeset sequence number of the update / delete message. |  | String |
+| **CamelCouchDbId** (common) Constant: [`HEADER_DOC_ID`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_DOC_ID) | The couchdb document id. |  | String |
+| **CamelCouchDbRev** (common) Constant: [`HEADER_DOC_REV`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_DOC_REV) | The couchdb document revision. |  | String |
+| **CamelCouchDbMethod** (common) Constant: [`HEADER_METHOD`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_METHOD) | The method (delete / update). |  | String |
 | **CamelCouchDbResumeAction** (consumer) Constant: [`COUCHDB_RESUME_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#COUCHDB_RESUME_ACTION) | The resume action to execute when resuming. |  | String |
 
-Headers are set by the consumer once the message is received. The producer will also set the headers for downstream processors once the insert/update has taken place. Any headers set prior to the producer are ignored. That means, for example, if you set CouchDbId as a header, it will not be used as the id for insertion, the id of the document will still be used.
+Headers are set by the consumer once the message is received. The producer will also set the headers for downstream processors once the insert/update has taken place. Any headers set prior to the producer are ignored. That means, for example, if you set CamelCouchDbId as a header, it will not be used as the id for insertion, the id of the document will still be used.
 
 ## Message Body
 

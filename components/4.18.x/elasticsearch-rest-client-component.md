@@ -149,11 +149,11 @@ The Elasticsearch Low level Rest Client component supports 5 message header(s), 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **ID** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#ID) | ID of the object to index or retrieve or delete. |  | String |
-| **SEARCH\_QUERY** (producer) Constant: [`SEARCH_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#SEARCH_QUERY) | The JSON Query to perform for search. |  | String |
-| **INDEX\_SETTINGS** (producer) Constant: [`INDEX_SETTINGS`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#INDEX_SETTINGS) | Advanced - The JSON Index Settings and/or Mappings Query to perform to create an index. |  | String |
-| **INDEX\_NAME** (producer) Constant: [`INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#INDEX_NAME) | The Index name. |  | String |
-| **OPERATION** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#OPERATION) | 
+| **CamelElasticsearchId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#ID) | ID of the object to index or retrieve or delete. |  | String |
+| **CamelElasticsearchSearchQuery** (producer) Constant: [`SEARCH_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#SEARCH_QUERY) | The JSON Query to perform for search. |  | String |
+| **CamelElasticsearchIndexSettings** (producer) Constant: [`INDEX_SETTINGS`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#INDEX_SETTINGS) | Advanced - The JSON Index Settings and/or Mappings Query to perform to create an index. |  | String |
+| **CamelElasticsearchIndexName** (producer) Constant: [`INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#INDEX_NAME) | The Index name. |  | String |
+| **CamelElasticsearchOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch-rest-client/latest/org/apache/camel/component/elasticsearch/rest/client/ElasticSearchRestClientConstant.html#OPERATION) | 
 The operation to perform.
 
 Enum values:
@@ -187,9 +187,9 @@ Set an endpoint URI option or exchange header with a name of `operation` and a v
 | `INDEX_OR_UPDATE` | `String`, `byte[]`, `Reader` or `InputStream` content to index or update | Adds or updates content to an index and returns the resulting `id` in the message body. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. When updating indexed content, you must provide its id via a message header with the key `ID` . |
 | `GET_BY_ID` | `String` id of content to retrieve | Retrieves a JSON String representation of the indexed document, corresponding to the given index id and sets it as the message exchange body. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. You must provide the index id of the content to retrieve either in the message body, or via a message header with the key `ID` . |
 | `DELETE` | `String` id of content to delete | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. You must provide the index id of the content to delete either in the message body, or via a message header with the key `ID` . |
-| `CREATE_INDEX` |  | Creates the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. You may also provide a header with the key `INDEX_SETTINGS` where the value is a JSON String representation of the index settings. |
-| `DELETE_INDEX` |  | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. |
-| `SEARCH` | `Map` (optional) | Search for content with either a `Map` of `String` keys & values of query criteria. Or a JSON string representation of the query. Matching documents are returned as a JSON string set on the message exchange body. You can set the JSON query String by providing a message header with the key `SEARCH_QUERY`. You can set the message exchange body to a `Map` of `String` keys & values for the query criteria. |
+| `CREATE_INDEX` |  | Creates the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. You may also provide a header with the key `CamelElasticsearchIndexSettings` where the value is a JSON String representation of the index settings. |
+| `DELETE_INDEX` |  | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. |
+| `SEARCH` | `Map` (optional) | Search for content with either a `Map` of `String` keys & values of query criteria. Or a JSON string representation of the query. Matching documents are returned as a JSON string set on the message exchange body. You can set the JSON query String by providing a message header with the key `CamelElasticsearchSearchQuery`. You can set the message exchange body to a `Map` of `String` keys & values for the query criteria. |
 
 ## Examples
 
@@ -207,7 +207,7 @@ To update existing indexed content, provide the `ID` message header and the mess
 
 ```java
 from("direct:index")
-    .setHeader("ID").constant("1")
+    .setHeader("CamelElasticsearchId").constant("1")
     .setBody().constant("{\"content\": \"ElasticSearch REST Client With Camel\"}")
     .to("elasticsearch-rest-client://myCluster?operation=INDEX_OR_UPDATE&indexName=myIndex");
 ```
@@ -216,7 +216,7 @@ from("direct:index")
 
 ```java
 from("direct:getById")
-    .setHeader("ID").constant("1")
+    .setHeader("CamelElasticsearchId").constant("1")
     .to("elasticsearch-rest-client://myCluster?operation=GET_BY_ID&indexName=myIndex");
 ```
 
@@ -226,7 +226,7 @@ To delete indexed content, provide the `ID` message header.
 
 ```java
 from("direct:getById")
-    .setHeader("ID").constant("1")
+    .setHeader("CamelElasticsearchId").constant("1")
     .to("elasticsearch-rest-client://myCluster?operation=DELETE&indexName=myIndex");
 ```
 
@@ -247,7 +247,7 @@ String indexSettings = "{\"settings\":{\"number_of_replicas\": 1,\"number_of_sha
 
 ```java
 from("direct:createIndex")
-    .setHeader("INDEX_SETTINGS").constant(indexSettings)
+    .setHeader("CamelElasticsearchIndexSettings").constant(indexSettings)
     .to("elasticsearch-rest-client://myCluster?operation=CREATE_INDEX&indexName=myIndex");
 ```
 
@@ -266,7 +266,7 @@ Search with a JSON query.
 
 ```java
 from("direct:search")
-    .setHeader("SEARCH_QUERY").constant("{\"query\":{\"match\":{\"content\":\"ElasticSearch With Camel\"}}}")
+    .setHeader("CamelElasticsearchSearchQuery").constant("{\"query\":{\"match\":{\"content\":\"ElasticSearch With Camel\"}}}")
     .to("elasticsearch-rest-client://myCluster?operation=SEARCH&indexName=myIndex");
 ```
 

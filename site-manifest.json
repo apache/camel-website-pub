@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1778763874749,
+  "generated": 1778964248399,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -3653,6 +3653,12 @@
               "path": "reference/transformers/index.adoc",
               "url": "/camel-kafka-connector/next/reference/transformers/index.html",
               "title": "Single Message Transformations"
+            },
+            {
+              "module": "ROOT",
+              "path": "security-model.adoc",
+              "url": "/camel-kafka-connector/next/security-model.html",
+              "title": "Security Model"
             },
             {
               "module": "ROOT",
@@ -7746,6 +7752,12 @@
               "path": "scp-sink.adoc",
               "url": "/camel-kamelets/next/scp-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/scp-sink.svg\" alt=\"scp sink\"></span> SCP Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "security-model.adoc",
+              "url": "/camel-kamelets/next/security-model.html",
+              "title": "Security Model"
             },
             {
               "module": "ROOT",
@@ -13793,6 +13805,12 @@
               "path": "user-guide/observability.adoc",
               "url": "/camel-quarkus/next/user-guide/observability.html",
               "title": "Observability"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/security-model.adoc",
+              "url": "/camel-quarkus/next/user-guide/security-model.html",
+              "title": "Security Model"
             },
             {
               "module": "ROOT",

@@ -220,11 +220,11 @@ The Couchbase component supports 6 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CCB\_KEY** (consumer) Constant: [`HEADER_KEY`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_KEY) | The key. |  | String |
-| **CCB\_ID** (common) Constant: [`HEADER_ID`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_ID) | The document id. |  | String |
-| **CCB\_TTL** (producer) Constant: [`HEADER_TTL`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_TTL) | The expiry for the document in seconds. |  | String |
-| **CCB\_DDN** (consumer) Constant: [`HEADER_DESIGN_DOCUMENT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_DESIGN_DOCUMENT_NAME) | The design document name. |  | String |
-| **CCB\_VN** (consumer) Constant: [`HEADER_VIEWNAME`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_VIEWNAME) | The view name. |  | String |
+| **CamelCouchbaseKey** (consumer) Constant: [`HEADER_KEY`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_KEY) | The key. |  | String |
+| **CamelCouchbaseId** (common) Constant: [`HEADER_ID`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_ID) | The document id. |  | String |
+| **CamelCouchbaseTtl** (producer) Constant: [`HEADER_TTL`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_TTL) | The expiry for the document in seconds. |  | String |
+| **CamelCouchbaseDesignDocumentName** (consumer) Constant: [`HEADER_DESIGN_DOCUMENT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_DESIGN_DOCUMENT_NAME) | The design document name. |  | String |
+| **CamelCouchbaseViewName** (consumer) Constant: [`HEADER_VIEWNAME`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_VIEWNAME) | The view name. |  | String |
 | **CamelCqlResumeQuery** (consumer) Constant: [`COUCHBASE_RESUME_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#COUCHBASE_RESUME_ACTION) | The resume action to execute when resuming. |  | String |
 
 ## Consuming documents
