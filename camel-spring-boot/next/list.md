@@ -12,7 +12,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 
 There are 395 spring boot starter json files.
 
-Of these 391 are used in components, dataformats, etc.
+Of these 392 are used in components, dataformats, etc.
 
 > **Note**
 > Cluster service starters (consul, file, infinispan, jgroups-raft, kubernetes, zookeeper) are documented in the [Cluster Services](#_cluster_services) section below.
@@ -34,8 +34,6 @@ jackson3-avro
 jackson3-protobuf
 
 jackson3
-
-jackson3xml
 
 jgroups-raft-cluster-service
 
@@ -453,14 +451,15 @@ Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 
 ## Camel Data Formats
 
-Number of Camel data formats: 52 in 46 JAR artifacts (0 deprecated)
+Number of Camel data formats: 56 in 50 JAR artifacts (0 deprecated)
 
     
 | Data Format | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
 | [ASN.1 File](../../components/next/dataformats/asn1-dataformat.md) | camel-asn1-starter | Stable | 2.20 | Encode and decode data structures using Abstract Syntax Notation One (ASN.1). |
 | [Avro](../../components/next/dataformats/avro-dataformat.md) | camel-avro-starter | Stable | 2.14 | Serialize and deserialize messages using Apache Avro binary data format. |
-| [Avro Jackson](../../components/next/dataformats/avroJackson-dataformat.md) | camel-jackson3-avro-starter | Preview | 4.19 | Marshal POJOs to Avro and back using Jackson. |
+| [Avro Jackson 2](../../components/next/dataformats/avroJackson2-dataformat.md) | camel-jackson-avro-starter | Stable | 3.10 | Marshal POJOs to Avro and back using Jackson. |
+| [Avro Jackson 3](../../components/next/dataformats/avroJackson3-dataformat.md) | camel-jackson3-avro-starter | Preview | 4.19 | Marshal POJOs to Avro and back using Jackson. |
 | [Barcode](../../components/next/dataformats/barcode-dataformat.md) | camel-barcode-starter | Stable | 2.14 | Transform strings to various 1D/2D barcode bitmap formats and back. |
 | [Base64](../../components/next/dataformats/base64-dataformat.md) | camel-base64-starter | Stable | 2.11 | Encode and decode data using Base64. |
 | [BeanIO](../../components/next/dataformats/beanio-dataformat.md) | camel-beanio-starter | Stable | 2.10 | Marshal and unmarshal Java beans to and from flat files (such as CSV, delimited, or fixed length formats). |
@@ -480,11 +479,13 @@ Number of Camel data formats: 52 in 46 JAR artifacts (0 deprecated)
 | [HL7](../../components/next/dataformats/hl7-dataformat.md) | camel-hl7-starter | Stable | 2.0 | Marshal and unmarshal HL7 (Health Care) model objects using the HL7 MLLP codec. |
 | [iCal](../../components/next/dataformats/ical-dataformat.md) | camel-ical-starter | Stable | 2.12 | Marshal and unmarshal iCal (.ics) documents to/from model objects. |
 | [ISO-8583](../../components/next/dataformats/iso8583-dataformat.md) | camel-iso8583-starter | Stable | 4.14 | Create, edit and read ISO-8583 messages. |
-| [Jackson XML](../../components/next/dataformats/jacksonXml-dataformat.md) | camel-jacksonxml-starter | Stable | 2.16 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson. |
+| [Jackson XML 2](../../components/next/dataformats/jacksonXml2-dataformat.md) | camel-jacksonxml-starter | Stable | 2.16 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson. |
+| [Jackson XML 3](../../components/next/dataformats/jacksonXml3-dataformat.md) | camel-jackson3xml-starter | Preview | 4.19 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson. |
 | [JAXB](../../components/next/dataformats/jaxb-dataformat.md) | camel-jaxb-starter | Stable | 1.0 | Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard. |
 | [JSON Fastjson](../../components/next/dataformats/fastjson-dataformat.md) | camel-fastjson-starter | Stable | 2.20 | Marshal POJOs to JSON and back using Fastjson |
 | [JSON Gson](../../components/next/dataformats/gson-dataformat.md) | camel-gson-starter | Stable | 2.10 | Marshal POJOs to JSON and back using Gson |
-| [JSON Jackson](../../components/next/dataformats/jackson-dataformat.md) | camel-jackson3-starter | Preview | 4.19 | Marshal POJOs to JSON and back using Jackson. |
+| [JSON Jackson 2](../../components/next/dataformats/jackson2-dataformat.md) | camel-jackson-starter | Stable | 2.0 | Marshal POJOs to JSON and back using Jackson. |
+| [JSON Jackson 3](../../components/next/dataformats/jackson3-dataformat.md) | camel-jackson3-starter | Preview | 4.19 | Marshal POJOs to JSON and back using Jackson. |
 | [JSON JSON-B](../../components/next/dataformats/jsonb-dataformat.md) | camel-jsonb-starter | Stable | 3.7 | Marshal POJOs to JSON and back using JSON-B. |
 | [JSonApi](../../components/next/dataformats/jsonApi-dataformat.md) | camel-jsonapi-starter | Stable | 3.0 | Marshal and unmarshal JSON:API resources using JSONAPI-Converter library. |
 | [LZF Deflate Compression](../../components/next/dataformats/lzf-dataformat.md) | camel-lzf-starter | Stable | 2.17 | Compress and decompress streams using LZF deflate algorithm. |
@@ -494,7 +495,8 @@ Number of Camel data formats: 52 in 46 JAR artifacts (0 deprecated)
 | [PGP (Pretty Good Privacy Cryptographic)](../../components/next/dataformats/pgp-dataformat.md) | camel-crypto-pgp-starter | Stable | 2.9 | Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP. |
 | [PQC (Post-Quantum Cryptography)](../../components/next/dataformats/pqc-dataformat.md) | camel-pqc-starter | Stable | 4.16 | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM). |
 | [Protobuf](../../components/next/dataformats/protobuf-dataformat.md) | camel-protobuf-starter | Stable | 2.2 | Serialize and deserialize Java objects using Google’s Protocol buffers. |
-| [Protobuf Jackson](../../components/next/dataformats/protobufJackson-dataformat.md) | camel-jackson3-protobuf-starter | Preview | 4.19 | Marshal POJOs to Protobuf and back using Jackson. |
+| [Protobuf Jackson 2](../../components/next/dataformats/protobufJackson2-dataformat.md) | camel-jackson-protobuf-starter | Stable | 3.10 | Marshal POJOs to Protobuf and back using Jackson. |
+| [Protobuf Jackson 3](../../components/next/dataformats/protobufJackson3-dataformat.md) | camel-jackson3-protobuf-starter | Preview | 4.19 | Marshal POJOs to Protobuf and back using Jackson. |
 | [RSS](../../components/next/dataformats/rss-dataformat.md) | camel-rss-starter | Stable | 2.1 | Transform from ROME SyndFeed Java Objects to XML and vice-versa. |
 | [Smooks](../../components/next/dataformats/smooks-dataformat.md) | camel-smooks-starter | Stable | 4.9 | Transform and bind XML as well as non-XML data, including EDI, CSV, JSON, and YAML using Smooks. |
 | [SOAP](../../components/next/dataformats/soap-dataformat.md) | camel-soap-starter | Stable | 2.3 | Marshal Java objects to SOAP messages and back. |

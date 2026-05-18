@@ -1,4 +1,4 @@
-# Protobuf Jackson
+# Protobuf Jackson 3
 
 **Since Camel 4.19**
 
@@ -15,7 +15,7 @@ from("kafka:topic").
 
 ## Protobuf Jackson Options
 
-The Protobuf Jackson dataformat supports 18 options, which are listed below.
+The Protobuf Jackson 3 dataformat supports 18 options, which are listed below.
 
    
 | Name | Default | Java Type | Description |
@@ -70,7 +70,7 @@ If you use Maven, you could add the following to your pom.xml, substituting the 
 
 ## Spring Boot Auto-Configuration
 
-When using protobufJackson with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+When using protobufJackson3 with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
 
 ```xml
 <dependency>

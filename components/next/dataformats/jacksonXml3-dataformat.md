@@ -1,6 +1,6 @@
-# Jackson XML
+# Jackson XML 3
 
-**Since Camel 2.16**
+**Since Camel 4.19**
 
 Jackson XML is a Data Format that uses the [Jackson library](https://github.com/FasterXML/jackson/) with the [XMLMapper extension](https://github.com/FasterXML/jackson-dataformat-xml) to unmarshal an XML payload into Java objects or to marshal Java objects into an XML payload.
 
@@ -19,7 +19,7 @@ from("activemq:My.Queue").
 
 ## JacksonXML Options
 
-The Jackson XML dataformat supports 17 options, which are listed below.
+The Jackson XML 3 dataformat supports 17 options, which are listed below.
 
    
 | Name | Default | Java Type | Description |
@@ -35,10 +35,10 @@ The Jackson XML dataformat supports 17 options, which are listed below.
 | **useList** (common) | `false` | `Boolean` | To unmarshal to a List of Map or a List of Pojo. |
 | **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
 | **enableJaxbAnnotationModule** (advanced) | `false` | `Boolean` | Whether to enable the JAXB annotations module when using jackson. When enabled then JAXB annotations can be used by Jackson. |
-| **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules com.fasterxml.jackson.databind.Module specified as a String with FQN class names. Multiple classes can be separated by comma. |
+| **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules tools.jackson.databind.JacksonModule specified as a String with FQN class names. Multiple classes can be separated by comma. |
 | **moduleRefs** (advanced) |  | `String` | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |
-| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |
-| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |
+| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson tools.jackson.databind.ObjectMapper. The features should be a name that matches a enum from tools.jackson.databind.SerializationFeature, tools.jackson.databind.DeserializationFeature, or tools.jackson.databind.MapperFeature Multiple features can be separated by comma. |
+| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson tools.jackson.databind.ObjectMapper. The features should be a name that matches a enum from tools.jackson.databind.SerializationFeature, tools.jackson.databind.DeserializationFeature, or tools.jackson.databind.MapperFeature Multiple features can be separated by comma. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **maxStringLength** (advanced) |  | `Integer` | Sets the maximum string length (in chars or bytes, depending on input context). The default is 20,000,000. This limit is not exact, the limit is applied when we increase internal buffer sizes and an exception will happen at sizes greater than this limit. Some text values that are a little bigger than the limit may be treated as valid but no text values with sizes less than or equal to this limit will be treated as invalid. |
 
@@ -52,7 +52,7 @@ When using Data Format in Spring DSL, you need to declare the data formats first
         <dataFormats>
             <!-- here we define an XML data format with the id jack and that it should use the TestPojo as the class type when
                  doing unmarshal. The unmarshalType is optional, if not provided Camel will use a Map as the type -->
-            <jacksonXml id="jack" unmarshalType="org.apache.camel.component.jacksonxml.TestPojo"/>
+            <jacksonXml id="jack" unmarshalType="org.apache.camel.component.jackson3xml.TestPojo"/>
         </dataFormats>
 ```
 
@@ -68,7 +68,7 @@ And then you can refer to this id in the route:
 
 ### Excluding POJO fields from marshalling
 
-When marshalling a POJO to XML, you might want to exclude certain fields from the XML output. With Jackson, you can use [JSON views](https://github.com/FasterXML/jackson-annotations/blob/master/src/main/java/com/fasterxml/jackson/annotation/JsonView.java) to accomplish this. First, create one or more marker classes.
+When marshalling a POJO to XML, you might want to exclude certain fields from the XML output. With Jackson, you can use [JSON views](https://github.com/FasterXML/jackson-annotations/blob/master/src/main/java/tools/jackson/annotation/JsonView.java) to accomplish this. First, create one or more marker classes.
 
 Use the marker classes with the `@JsonView` annotation to include/exclude certain fields. The annotation also works on getters.
 
@@ -91,7 +91,7 @@ from("direct:inPojoAgeView")
   .marshal(ageViewFormat);
 ```
 
-Directly specify your [JSON view](https://github.com/FasterXML/jackson-annotations/blob/master/src/main/java/com/fasterxml/jackson/annotation/JsonView.java) inside the Java DSL as:
+Directly specify your [JSON view](https://github.com/FasterXML/jackson-annotations/blob/master/src/main/java/tools/jackson/annotation/JsonView.java) inside the Java DSL as:
 
 ```java
 from("direct:inPojoAgeView")
@@ -104,7 +104,7 @@ And the same in XML DSL:
 <route>
 <from uri="direct:inPojoAgeView"/>
     <marshal>
-      <jacksonXml unmarshalType="org.apache.camel.component.jacksonxml.TestPojoView" jsonView="org.apache.camel.component.jacksonxml.Views$Age"/>
+      <jacksonXml unmarshalType="org.apache.camel.component.jackson3xml.TestPojoView" jsonView="org.apache.camel.component.jackson3xml.Views$Age"/>
     </marshal>
 </route>
 ```
@@ -156,7 +156,7 @@ Or from XML DSL you configure this as:
 
 ### Unmarshalling from XML to `List<Map>` or `List<POJO>`
 
-If you are using Jackson to unmarshal XML to a list of map/POJO, you can now specify this by setting `useList="true"` or use the `org.apache.camel.component.jacksonxml.ListJacksonXMLDataFormat`. For example, with Java, you can do as shown below:
+If you are using Jackson to unmarshal XML to a list of map/POJO, you can now specify this by setting `useList="true"` or use the `org.apache.camel.component.jackson3xml.ListJacksonXMLDataFormat`. For example, with Java, you can do as shown below:
 
 ```java
 JacksonXMLDataFormat format = new ListJacksonXMLDataFormat();
@@ -219,13 +219,13 @@ Jackson XML has a number of features you can enable or disable, which its XmlMap
 
 You can disable multiple features by separating the values using comma. The values for the features must be the name of the enums from Jackson from the following enum classes:
 
--   `com.fasterxml.jackson.databind.SerializationFeature`
+-   `tools.jackson.databind.SerializationFeature`
     
--   `com.fasterxml.jackson.databind.DeserializationFeature`
+-   `tools.jackson.databind.DeserializationFeature`
     
--   `com.fasterxml.jackson.databind.MapperFeature`
+-   `tools.jackson.databind.MapperFeature`
     
--   `com.fasterxml.jackson.dataformat.xml.deser.FromXmlParser.Feature`
+-   `tools.jackson.dataformat.xml.deser.FromXmlParser.Feature`
     
 
 To enable a feature, use the enableFeatures options instead.
@@ -280,7 +280,7 @@ If you use Maven, you could add the following to your `pom.xml`, substituting th
 ```xml
 <dependency>
   <groupId>org.apache.camel</groupId>
-  <artifactId>camel-jacksonxml</artifactId>
+  <artifactId>camel-jackson3xml</artifactId>
   <version>x.x.x</version>
   <!-- use the same version as your Camel core version -->
 </dependency>
@@ -288,12 +288,12 @@ If you use Maven, you could add the following to your `pom.xml`, substituting th
 
 ## Spring Boot Auto-Configuration
 
-When using jacksonXml with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+When using jacksonXml3 with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
 
 ```xml
 <dependency>
   <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-jacksonxml-starter</artifactId>
+  <artifactId>camel-jackson3xml-starter</artifactId>
   <version>x.x.x</version>
   <!-- use the same version as your Camel core version -->
 </dependency>
@@ -308,14 +308,14 @@ The component supports 18 options, which are listed below.
 | **camel.dataformat.jackson-xml.allow-unmarshall-type** | If enabled then Jackson is allowed to attempt to use the CamelJacksonUnmarshalType header during the unmarshalling. This should only be enabled when desired to be used. | false | Boolean |
 | **camel.dataformat.jackson-xml.collection-type** | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows to use different collection types than java.util.Collection based as default. |  | String |
 | **camel.dataformat.jackson-xml.content-type-header** | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. | true | Boolean |
-| **camel.dataformat.jackson-xml.disable-features** | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |  | String |
-| **camel.dataformat.jackson-xml.enable-features** | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |  | String |
+| **camel.dataformat.jackson-xml.disable-features** | Set of features to disable on the Jackson tools.jackson.databind.ObjectMapper. The features should be a name that matches a enum from tools.jackson.databind.SerializationFeature, tools.jackson.databind.DeserializationFeature, or tools.jackson.databind.MapperFeature Multiple features can be separated by comma. |  | String |
+| **camel.dataformat.jackson-xml.enable-features** | Set of features to enable on the Jackson tools.jackson.databind.ObjectMapper. The features should be a name that matches a enum from tools.jackson.databind.SerializationFeature, tools.jackson.databind.DeserializationFeature, or tools.jackson.databind.MapperFeature Multiple features can be separated by comma. |  | String |
 | **camel.dataformat.jackson-xml.enable-jaxb-annotation-module** | Whether to enable the JAXB annotations module when using jackson. When enabled then JAXB annotations can be used by Jackson. | false | Boolean |
 | **camel.dataformat.jackson-xml.enabled** | Whether to enable auto configuration of the jacksonXml data format. This is enabled by default. |  | Boolean |
 | **camel.dataformat.jackson-xml.include** | If you want to marshal a pojo to JSON, and the pojo has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |  | String |
 | **camel.dataformat.jackson-xml.json-view** | When marshalling a POJO to JSON you might want to exclude certain fields from the JSON output. With Jackson you can use JSON views to accomplish this. This option is to refer to the class which has JsonView annotations. |  | String |
 | **camel.dataformat.jackson-xml.max-string-length** | Sets the maximum string length (in chars or bytes, depending on input context). The default is 20,000,000. This limit is not exact, the limit is applied when we increase internal buffer sizes and an exception will happen at sizes greater than this limit. Some text values that are a little bigger than the limit may be treated as valid but no text values with sizes less than or equal to this limit will be treated as invalid. |  | Integer |
-| **camel.dataformat.jackson-xml.module-class-names** | To use custom Jackson modules com.fasterxml.jackson.databind.Module specified as a String with FQN class names. Multiple classes can be separated by comma. |  | String |
+| **camel.dataformat.jackson-xml.module-class-names** | To use custom Jackson modules tools.jackson.databind.JacksonModule specified as a String with FQN class names. Multiple classes can be separated by comma. |  | String |
 | **camel.dataformat.jackson-xml.module-refs** | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |  | String |
 | **camel.dataformat.jackson-xml.pretty-print** | To enable pretty printing output nicely formatted. Is by default false. | false | Boolean |
 | **camel.dataformat.jackson-xml.timezone** | If set then Jackson will use the Timezone when marshalling/unmarshalling. |  | String |

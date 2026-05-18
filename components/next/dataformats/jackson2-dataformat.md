@@ -1,18 +1,18 @@
-# JSON Jackson
+# JSON Jackson 2
 
-**Since Camel 4.19**
+**Since Camel 2.0**
 
-Jackson 3 is a Data Format that uses the [Jackson 3 Library](https://github.com/FasterXML/jackson)
+Jackson is a Data Format that uses the [Jackson Library](https://github.com/FasterXML/jackson-core)
 
 ```java
 from("activemq:My.Queue").
-  marshal().jackson().
+  marshal().json(JsonLibrary.Jackson).
   to("mqseries:Another.Queue");
 ```
 
-## Jackson 3 Options
+## Jackson Options
 
-The JSON Jackson dataformat supports 22 options, which are listed below.
+The JSON Jackson 2 dataformat supports 22 options, which are listed below.
 
    
 | Name | Default | Java Type | Description |
@@ -42,33 +42,9 @@ The JSON Jackson dataformat supports 22 options, which are listed below.
 
 ## Usage
 
-### Using Jackson with the json() DSL
-
-Jackson can also be used via the generic `json()` DSL method by specifying `JsonLibrary.Jackson`:
-
-```java
-from("activemq:My.Queue")
-  .marshal().json(JsonLibrary.Jackson)
-  .to("mqseries:Another.Queue");
-```
-
-This is equivalent to using `.jackson()` directly. The `json()` method also supports additional parameters:
-
-```java
-// Pretty print
-from("activemq:My.Queue")
-  .marshal().json(JsonLibrary.Jackson, true)
-  .to("mqseries:Another.Queue");
-
-// Specify unmarshal type
-from("activemq:My.Queue")
-  .unmarshal().json(JsonLibrary.Jackson, MyPojo.class)
-  .to("mqseries:Another.Queue");
-```
-
 ### 2 and 4 bytes characters
 
-Jackson 3 by default outputs 4-byte characters (in languages such as Japanese) as surrogate pair, escaped. This is compliant with Json specification. This can however frustrate users, because it garbles regular output, such as names and texts with Unicode escapes. To avoid this, users commonly use 4-bytes would need to turn on `combineUnicodeSurrogates=true` in the Camel dataformat.
+Jackson by default outputs 4-byte characters (in languages such as Japanese) as surrogate pair, escaped. This is compliant with Json specification. This can however frustrate users, because it garbles regular output, such as names and texts with Unicode escapes. To avoid this, users commonly use 4-bytes would need to turn on `combineUnicodeSurrogates=true` in the Camel dataformat.
 
 ### Using custom ObjectMapper
 
@@ -76,36 +52,36 @@ You can configure `JacksonDataFormat` to use a custom `ObjectMapper` in case you
 
 If you set up a single `ObjectMapper` in the registry, then Camel will automatic lookup and use this `ObjectMapper`. For example, if you use Spring Boot, then Spring Boot can provide a default `ObjectMapper` for you if you have Spring MVC enabled. And this would allow Camel to detect that there is one bean of `ObjectMapper` class type in the Spring Boot bean registry and then use it. When this happens you should set a `INFO` logging from Camel.
 
-### Using Jackson 3 for automatic type conversion
+### Using Jackson for automatic type conversion
 
-The `camel-jackson3` module allows integrating Jackson 3 as a [Type Converter](../../../manual/type-converter.md).
+The `camel-jackson` module allows integrating Jackson as a [Type Converter](../../../manual/type-converter.md).
 
-This gives a set of out-of-the-box converters to/from the Jackson type `JsonNode`, such as converting from `JsonNode` to `String` or vice versa.
+This gives a set of out-of-the-box converters to/from the Jackson type `JSonNode`, such as converting from `JSonNode` to `String` or vice versa.
 
 #### Enabling more type converters and support for POJOs
 
-To enable POJO conversion support for `camel-jackson3` then this must be enabled, which is done by setting the following options on the `CamelContext` global options, as shown:
+To enable POJO conversion support for `camel-jackson` then this must be enabled, which is done by setting the following options on the `CamelContext` global options, as shown:
 
 ```java
-// Enable Jackson 3 JSON type converter for more types.
+// Enable Jackson JSON type converter for more types.
 camelContext.getGlobalOptions().put("CamelJacksonEnableTypeConverter", "true");
-// Allow Jackson 3 JSON to convert to pojo types also
+// Allow Jackson JSON to convert to pojo types also
 // (by default, Jackson only converts to String and other simple types)
 getContext().getGlobalOptions().put("CamelJacksonTypeConverterToPojo", "true");
 ```
 
-The `camel-jackson3` type converter integrates with [JAXB](jaxb-dataformat.md) which means you can annotate POJO class with `JAXB` annotations that Jackson can use. You can also use Jackson’s own annotations in your POJO classes.
+The `camel-jackson` type converter integrates with [JAXB](jaxb-dataformat.md) which means you can annotate POJO class with `JAXB` annotations that Jackson can use. You can also use Jackson’s own annotations in your POJO classes.
 
 ## Dependencies
 
-To use Jackson 3 in your Camel routes, you need to add the dependency on **camel-jackson3**, which implements this data format.
+To use Jackson in your Camel routes, you need to add the dependency on **camel-jackson**, which implements this data format.
 
 If you use Maven, you could add the following to your `pom.xml`, substituting the version number for the latest & greatest release:
 
 ```xml
 <dependency>
   <groupId>org.apache.camel</groupId>
-  <artifactId>camel-jackson3</artifactId>
+  <artifactId>camel-jackson</artifactId>
   <version>x.x.x</version>
   <!-- use the same version as your Camel core version -->
 </dependency>
@@ -113,12 +89,12 @@ If you use Maven, you could add the following to your `pom.xml`, substituting th
 
 ## Spring Boot Auto-Configuration
 
-When using jackson with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
+When using jackson2 with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
 
 ```xml
 <dependency>
   <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-jackson3-starter</artifactId>
+  <artifactId>camel-jackson-starter</artifactId>
   <version>x.x.x</version>
   <!-- use the same version as your Camel core version -->
 </dependency>

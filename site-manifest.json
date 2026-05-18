@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1778966547274,
+  "generated": 1779108221811,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -11028,6 +11028,12 @@
               "path": "index.adoc",
               "url": "/camel-karaf/4.9.x/index.html",
               "title": "Support for Apache Karaf"
+            },
+            {
+              "module": "ROOT",
+              "path": "security-model.adoc",
+              "url": "/camel-karaf/4.9.x/security-model.html",
+              "title": "Security Model"
             }
           ]
         }
@@ -19517,9 +19523,15 @@
             },
             {
               "module": "dataformats",
-              "path": "avroJackson-dataformat.adoc",
-              "url": "/components/next/dataformats/avroJackson-dataformat.html",
-              "title": "Avro Jackson"
+              "path": "avroJackson2-dataformat.adoc",
+              "url": "/components/next/dataformats/avroJackson2-dataformat.html",
+              "title": "Avro Jackson 2"
+            },
+            {
+              "module": "dataformats",
+              "path": "avroJackson3-dataformat.adoc",
+              "url": "/components/next/dataformats/avroJackson3-dataformat.html",
+              "title": "Avro Jackson 3"
             },
             {
               "module": "dataformats",
@@ -19655,15 +19667,27 @@
             },
             {
               "module": "dataformats",
-              "path": "jackson-dataformat.adoc",
-              "url": "/components/next/dataformats/jackson-dataformat.html",
-              "title": "JSON Jackson"
+              "path": "jackson2-dataformat.adoc",
+              "url": "/components/next/dataformats/jackson2-dataformat.html",
+              "title": "JSON Jackson 2"
             },
             {
               "module": "dataformats",
-              "path": "jacksonXml-dataformat.adoc",
-              "url": "/components/next/dataformats/jacksonXml-dataformat.html",
-              "title": "Jackson XML"
+              "path": "jackson3-dataformat.adoc",
+              "url": "/components/next/dataformats/jackson3-dataformat.html",
+              "title": "JSON Jackson 3"
+            },
+            {
+              "module": "dataformats",
+              "path": "jacksonXml2-dataformat.adoc",
+              "url": "/components/next/dataformats/jacksonXml2-dataformat.html",
+              "title": "Jackson XML 2"
+            },
+            {
+              "module": "dataformats",
+              "path": "jacksonXml3-dataformat.adoc",
+              "url": "/components/next/dataformats/jacksonXml3-dataformat.html",
+              "title": "Jackson XML 3"
             },
             {
               "module": "dataformats",
@@ -19727,9 +19751,15 @@
             },
             {
               "module": "dataformats",
-              "path": "protobufJackson-dataformat.adoc",
-              "url": "/components/next/dataformats/protobufJackson-dataformat.html",
-              "title": "Protobuf Jackson"
+              "path": "protobufJackson2-dataformat.adoc",
+              "url": "/components/next/dataformats/protobufJackson2-dataformat.html",
+              "title": "Protobuf Jackson 2"
+            },
+            {
+              "module": "dataformats",
+              "path": "protobufJackson3-dataformat.adoc",
+              "url": "/components/next/dataformats/protobufJackson3-dataformat.html",
+              "title": "Protobuf Jackson 3"
             },
             {
               "module": "dataformats",

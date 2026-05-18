@@ -421,6 +421,10 @@ When using Rest DSL in _contract first_ style, then the HTTP engine (vertx-web) 
 
 All together this would make Camel behave similar for Rest DSL for both _code first_ and _contract first_ style.
 
+### camel-nats
+
+The default `headerFilterStrategy` is now a new `NatsHeaderFilterStrategy` that filters headers starting with `Camel` / `camel` (case-insensitive) in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog (`camel-kafka`, `camel-mail`, `camel-coap`, `camel-google-pubsub`, …​). Routes that relied on passing through these header names from NATS messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
 ### Component deprecation
 
 The `camel-olingo2` and `camel-olingo4` component are deprecated. This is due the Apache Olingo project is EOL and has been moved to the attic and is no longer maintained.

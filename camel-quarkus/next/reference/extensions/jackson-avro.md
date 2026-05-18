@@ -6,7 +6,7 @@ Marshal POJOs to Avro and back using Jackson.
 
 ## What’s inside
 
--   [Avro Jackson data format](../../../../components/next/dataformats/avroJackson-dataformat.md)
+-   [Avro Jackson data format](../../../../components/next/dataformats/avroJackson2-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.
