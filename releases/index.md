@@ -298,6 +298,7 @@ Releases by release date
 Releases by release date
 | Version | Release date | Description |
 | --- | --- | --- |
+| [4.18.2](../releases/kamelets-4.18.2/) | 2026-05-15 |  |
 | [4.20.0](../releases/kamelets-4.20.0/) | 2026-05-04 |  |
 | [4.18.1](../releases/kamelets-4.18.1/) | 2026-04-03 |  |
 | [4.14.5](../releases/kamelets-4.14.5/) | 2026-02-23 |  |
