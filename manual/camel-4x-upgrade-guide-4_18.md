@@ -153,6 +153,10 @@ The Exchange header constants in `ElasticSearchRestClientConstant` have been ren
 
 Routes that reference the constant symbolically (for example `setHeader(ElasticSearchRestClientConstant.SEARCH_QUERY, …​)`) continue to work without changes. Routes that set the header by its literal string value (for example `setHeader("SEARCH_QUERY", …​)`) must be updated to use the new value (`setHeader("CamelElasticsearchSearchQuery", …​)`).
 
+### camel-neo4j
+
+When using the `RETRIEVE_NODES` or `DELETE_NODE` operations with the `CamelNeo4jMatchProperties` header, the property names provided in the JSON match map are now validated before the `MATCH` / `DELETE` `WHERE` clause is built. Property names must be valid identifiers matching `[A-Za-z_][A-Za-z0-9_]*`. A request whose match map contains a property name that does not match this pattern now fails fast with an `IllegalArgumentException` (wrapped in a `Neo4jOperationException`) instead of producing a malformed query. Property values continue to be passed as bound query parameters and are unaffected.
+
 ## Upgrading from 4.18.0 to 4.18.1
 
 ### camel-bom
@@ -424,6 +428,10 @@ All together this would make Camel behave similar for Rest DSL for both _code fi
 ### camel-nats
 
 The default `headerFilterStrategy` is now a new `NatsHeaderFilterStrategy` that filters headers starting with `Camel` / `camel` (case-insensitive) in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog (`camel-kafka`, `camel-mail`, `camel-coap`, `camel-google-pubsub`, …​). Routes that relied on passing through these header names from NATS messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
+### camel-xmpp
+
+The default `headerFilterStrategy` is now a new `XmppHeaderFilterStrategy` that filters headers starting with `Camel` / `camel` (case-insensitive) in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog (`camel-kafka`, `camel-mail`, `camel-coap`, `camel-google-pubsub`, …​). Routes that relied on passing through these header names from XMPP messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.
 
 ### Component deprecation
 

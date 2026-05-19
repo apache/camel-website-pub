@@ -1,5 +1,6 @@
-urls[1096]{loc,lastmod}:
+urls[1097]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-45760.md,2026-05-18T09:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-47323.md,2026-05-18T09:00:00+02:00
   https://camel.apache.org/,2026-05-18T09:00:00+02:00
   https://camel.apache.org/security/,2026-05-18T09:00:00+02:00
   https://camel.apache.org/releases/k-2.10.1/,2026-05-18T00:00:00+00:00

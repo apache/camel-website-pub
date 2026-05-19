@@ -16,6 +16,13 @@
       <description>Camel K Cross-Namespace Build Deputy Attack</description>
     </item>
     <item>
+      <title>Apache Camel Security Advisory - CVE-2026-47323</title>
+      <link>https://camel.apache.org/security/CVE-2026-47323.html</link>
+      <pubDate>Mon, 18 May 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-47323.html</guid>
+      <description>Camel-CXF and Camel-Knative Message Header Injection via Missing Inbound Filtering</description>
+    </item>
+    <item>
       <title>Camel-K 2.10.1</title>
       <link>https://camel.apache.org/releases/k-2.10.1/</link>
       <pubDate>Mon, 18 May 2026 00:00:00 +0000</pubDate>
