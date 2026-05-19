@@ -11,9 +11,9 @@ The first step is to install and run the Camel K operator. You can do it via any
 [Kustomize](https://kustomize.io) provides a declarative approach to the configuration customization of a Camel-K installation. Kustomize works either with a standalone executable or as a built-in to `kubectl`. The [/install](https://github.com/apache/camel-k/tree/main/install) directory provides a series of base and overlays configuration that you can use. You can create your own overlays or customize the one available in the repository to accommodate your need.
 
 $ kubectl create ns camel-k
-$ kubectl apply -k github.com/apache/camel-k/install/overlays/kubernetes/descoped?ref=v2.10.0 --server-side
+$ kubectl apply -k github.com/apache/camel-k/install/overlays/kubernetes/descoped?ref=v2.10.1 --server-side
 
-You can specify as `ref` parameter the version you’re willing to install (ie, `v2.10.0`). The command above will install a descoped (global) operator in the camel-k namespace. This is the suggested configuration in order to manage Integrations in all namespaces.
+You can specify as `ref` parameter the version you’re willing to install (ie, `v2.10.1`). The command above will install a descoped (global) operator in the camel-k namespace. This is the suggested configuration in order to manage Integrations in all namespaces.
 
 ### Installation via Helm Hub
 

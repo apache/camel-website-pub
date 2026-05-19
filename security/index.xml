@@ -6,8 +6,15 @@
     <description>Recent content in Security on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 06 May 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 18 May 2026 09:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-45760</title>
+      <link>https://camel.apache.org/security/CVE-2026-45760.html</link>
+      <pubDate>Mon, 18 May 2026 09:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-45760.html</guid>
+      <description>Camel K Cross-Namespace Build Deputy Attack</description>
+    </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-33453</title>
       <link>https://camel.apache.org/security/CVE-2026-33453.html</link>

@@ -2,13 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/</loc>
-    <lastmod>2026-05-15T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/security/CVE-2026-45760.html</loc>
+    <lastmod>2026-05-18T09:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/releases/kamelets-4.18.2/</loc>
-    <lastmod>2026-05-15T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-05-18T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/</loc>
+    <lastmod>2026-05-18T09:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/k-2.10.1/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/k-2.8.1/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/k-2.9.2/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.18.2/</loc>
     <lastmod>2026-05-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/</loc>
@@ -30,9 +45,6 @@
     <lastmod>2026-05-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-33453.html</loc>
-    <lastmod>2026-05-06T09:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-05-06T09:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.33.1/</loc>

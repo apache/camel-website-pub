@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 374 in 300 JAR artifacts (12 deprecated)
+Number of Non-Core Components: 374 in 300 JAR artifacts (13 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -332,7 +332,7 @@ Number of Non-Core Components: 374 in 300 JAR artifacts (12 deprecated)
 | [OpenStack Swift](openstack-swift-component.md) | camel-openstack | Stable | 2.19 | Access OpenStack Swift object/blob store. |
 | [OpenTelemetry Metrics](opentelemetry-metrics-component.md) | camel-opentelemetry-metrics | Stable | 4.17 | Camel metrics based on the Camel Telemetry spec |
 | [OptaPlanner](optaplanner-component.md) | camel-optaplanner | Stable | 2.13 | Solve planning problems with OptaPlanner. |
-| [Paho](paho-component.md) | camel-paho | Stable | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |
+| [Paho](paho-component.md) | camel-paho | Stable-deprecated | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |
 | [Paho MQTT 5](paho-mqtt5-component.md) | camel-paho-mqtt5 | Stable | 3.8 | Communicate with MQTT message brokers using Eclipse Paho MQTT v5 Client. |
 | [PDF](pdf-component.md) | camel-pdf | Stable | 2.16 | Create, modify or extract content from PDF documents. |
 | [PGVector](pgvector-component.md) | camel-pgvector | Preview | 4.19 | Perform operations on the PostgreSQL pgvector Vector Database. |

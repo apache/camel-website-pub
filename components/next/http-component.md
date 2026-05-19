@@ -89,7 +89,7 @@ The HTTP component supports 49 options, which are listed below.
 | **userAgent** (producer (advanced)) | To set a custom HTTP User-Agent request header. |  | String |
 | **allowJavaSerializedObject** (advanced) | Whether to allow java serialization when a request uses context-type=application/x-java-serialized-object. This is by default turned off. If you enable this then be aware that Java will deserialize the incoming data from the request to Java and that can be a potential security risk. | false | boolean |
 | **authCachingDisabled** (advanced) | Disables authentication scheme caching. | false | boolean |
-| **automaticRetriesDisabled** (advanced) | Disables automatic request recovery and re-execution. | false | boolean |
+| **automaticRetriesDisabled** (advanced) | Disables automatic request recovery and re-execution. This is useful when a server responds with HTTP 429 (Too Many Requests) and includes a long Retry-After header, which would otherwise cause the client to wait (and appear to hang) before retrying. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **clientConnectionManager** (advanced) | To use a custom and shared HttpClientConnectionManager to manage connections. If this has been configured then this is always used for all endpoints created by this component. |  | HttpClientConnectionManager |
 | **connectionsPerRoute** (advanced) | The maximum number of connections per route. | 20 | int |
@@ -423,6 +423,25 @@ Camel will handle, according to the HTTP response code:
 **throwExceptionOnFailure**
 
 The option, `throwExceptionOnFailure`, can be set to `false` to prevent the `HttpOperationFailedException` from being thrown for failed response codes. This allows you to get any response from the remote server.
+
+### Handling HTTP 429 Too Many Requests
+
+When a server responds with HTTP 429 (Too Many Requests) and includes a `Retry-After` header, the underlying Apache HttpClient 5 will automatically wait for the specified duration before retrying the request. If the server returns a long retry delay (for example, `Retry-After: 3600` for one hour), the HTTP component will appear to hang for that duration.
+
+To avoid this, you can disable automatic retries on the component:
+
+```java
+HttpComponent httpComponent = context.getComponent("https", HttpComponent.class);
+httpComponent.setAutomaticRetriesDisabled(true);
+```
+
+Or as a URI option on the endpoint:
+
+```text
+https://myhost/mypath?automaticRetriesDisabled=true
+```
+
+With automatic retries disabled, a 429 response is treated as an error and a `HttpOperationFailedException` is thrown immediately (unless `throwExceptionOnFailure=false`).
 
 ### Exceptions
 

@@ -47,7 +47,7 @@ Apache Camel Spring Boot supports the following Camel artifacts as Spring Boot S
 
 ## Camel Components
 
-Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
+Number of Camel components: 387 in 321 JAR artifacts (13 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -337,7 +337,7 @@ Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 | [OpenStack Swift](../../components/next/openstack-swift-component.md) | camel-openstack-starter | Stable | 2.19 | Access OpenStack Swift object/blob store. |
 | [OpenTelemetry Metrics](../../components/next/opentelemetry-metrics-component.md) | camel-opentelemetry-metrics-starter | Stable | 4.17 | Camel metrics based on the Camel Telemetry spec |
 | [OptaPlanner](../../components/next/optaplanner-component.md) | camel-optaplanner-starter | Stable | 2.13 | Solve planning problems with OptaPlanner. |
-| [Paho](../../components/next/paho-component.md) | camel-paho-starter | Stable | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |
+| [Paho](../../components/next/paho-component.md) | camel-paho-starter | Stable-deprecated | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |
 | [Paho MQTT 5](../../components/next/paho-mqtt5-component.md) | camel-paho-mqtt5-starter | Stable | 3.8 | Communicate with MQTT message brokers using Eclipse Paho MQTT v5 Client. |
 | [PDF](../../components/next/pdf-component.md) | camel-pdf-starter | Stable | 2.16 | Create, modify or extract content from PDF documents. |
 | [Pinecone](../../components/next/pinecone-component.md) | camel-pinecone-starter | Stable | 4.6 | Perform operations on the Pinecone Vector Database. |

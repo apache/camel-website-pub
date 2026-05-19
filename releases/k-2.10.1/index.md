@@ -1,0 +1,35 @@
+# Apache camel-k 2.10.1 Release
+
+## New and Noteworthy
+
+## Supported Java version
+
+This version supports Java 17 and 21.
+
+## Apache Camel-K
+
+| Download | Signature and checksum |
+| --- | --- |
+| [camel-k-client-2.10.1-linux-amd64.tar.gz](https://www.apache.org/dyn/closer.lua/camel/camel-k/2.10.1/camel-k-client-2.10.1-linux-amd64.tar.gz) (Linux AMD64 CLI) | [PGP Signature](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-linux-amd64.tar.gz.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-linux-amd64.tar.gz.sha512) |
+| [camel-k-client-2.10.1-linux-arm64.tar.gz](https://www.apache.org/dyn/closer.lua/camel/camel-k/2.10.1/camel-k-client-2.10.1-linux-arm64.tar.gz) (Linux ARM64 CLI) | [PGP Signature](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-linux-arm64.tar.gz.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-linux-arm64.tar.gz.sha512) |
+| [camel-k-client-2.10.1-darwin-amd64.tar.gz](https://www.apache.org/dyn/closer.lua/camel/camel-k/2.10.1/camel-k-client-2.10.1-darwin-amd64.tar.gz) (Darwin AMD64 CLI) | [PGP Signature](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-darwin-amd64.tar.gz.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-darwin-amd64.tar.gz.sha512) |
+| [camel-k-client-2.10.1-darwin-arm64.tar.gz](https://www.apache.org/dyn/closer.lua/camel/camel-k/2.10.1/camel-k-client-2.10.1-darwin-arm64.tar.gz) (Darwin ARM64 CLI) | [PGP Signature](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-darwin-arm64.tar.gz.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-darwin-arm64.tar.gz.sha512) |
+| [camel-k-client-2.10.1-windows-amd64.tar.gz](https://www.apache.org/dyn/closer.lua/camel/camel-k/2.10.1/camel-k-client-2.10.1-windows-amd64.tar.gz) (Windows AMD64 CLI) | [PGP Signature](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-windows-amd64.tar.gz.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-client-2.10.1-windows-amd64.tar.gz.sha512) |
+| [camel-k-sources-2.10.1.tar.gz](https://www.apache.org/dyn/closer.lua/camel/camel-k/2.10.1/camel-k-sources-2.10.1.tar.gz) (Sources) | [PGP Signature](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-sources-2.10.1.tar.gz.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-k/2.10.1/camel-k-sources-2.10.1.tar.gz.sha512) |
+| [sbom.json](https://www.apache.org/dyn/closer.lua/camel/camel-k/2.10.1/sbom.json) (SBOM) | [PGP Signature](https://downloads.apache.org/camel/camel-k/2.10.1/sbom.json.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-k/2.10.1/sbom.json.sha512) |
+
+## Git tag checkout
+
+Release is tagged with `v2.10.1` in the Git, to fetch it use:
+
+git clone https://git-wip-us.apache.org/repos/asf/camel-k.git
+cd camel-k
+git checkout v2.10.1
+
+## Resolved issues
+
+Here is a list of all the issues that have been resolved for this release
+
+## Keys
+
+You can verify your download by following these [procedures](http://www.apache.org/info/verification.md) and using these [KEYS](https://www.apache.org/dist/camel/KEYS).
