@@ -180,7 +180,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **topicName** (common) | **Required** Name of the topic. |  | String |
 
-### Query Parameters (27 parameters)
+### Query Parameters (28 parameters)
 
    
 | Name | Description | Default | Type |
@@ -272,6 +272,7 @@ Enum values:
  |  | ExchangePattern |
 | **partitioning** (producer) | Partitioning strategy for message distribution. | balanced | Partitioning |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **username** (security) | Iggy username. |  | String |
 
 ## Iggy Headers

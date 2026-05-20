@@ -102,7 +102,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | **Required** WebSocket port number to use. |  | int |
 | **path** (common) | WebSocket path to use. |  | String |
 
-### Query Parameters (19 parameters)
+### Query Parameters (20 parameters)
 
    
 | Name | Description | Default | Type |
@@ -136,6 +136,7 @@ Enum values:
 | **sendToAll** (producer) | To send to all websocket subscribers. Can be used to configure at the endpoint level, instead of providing the VertxWebsocketConstants.SEND\_TO\_ALL header on the message. Note that when using this option, the host name specified for the vertx-websocket producer URI must match one used for an existing vertx-websocket consumer. Note that this option only applies when producing messages to endpoints hosted by the vertx-websocket consumer and not to an externally hosted WebSocket. | false | boolean |
 | **clientOptions** (producer (advanced)) | Sets customized options for configuring the WebSocket client used in the producer. |  | HttpClientOptions |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **allowOriginHeader** (security) | Whether the WebSocket client should add the Origin header to the WebSocket handshake request. | true | boolean |
 | **handshakeHeaders** (security) | Headers to send in the HTTP handshake request. When the endpoint is a consumer, it only works when it consumes a remote host as a client (i.e. consumeAsClient is true). This is a multi-value option with prefix: handshake. |  | Map |
 | **originHeaderUrl** (security) | The value of the Origin header that the WebSocket client should use on the WebSocket handshake request. When not specified, the WebSocket client will automatically determine the value for the Origin from the request URL. |  | String |

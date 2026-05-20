@@ -717,7 +717,7 @@ You can have profile-specific configuration in configuration files using the nam
 The profile-specific configuration will override values in the common configuration.
 
 > **Note**
-> You MUST include the properties files in the files path when using `camel run` or `camel export` to include the files, such as `camel run hello.java application.properties`.
+> Since Camel 4.21, the `camel run` and `camel export` commands auto-detect `application.properties` (and profile-specific variants such as `application-prod.properties`) in the current directory. You no longer need to list them explicitly on the command line.
 
 ### Downloading JARs over the internet
 
@@ -791,7 +791,7 @@ Alternatively, you can configure default Maven repositories globally via a syste
 export JAVA_TOOL_OPTIONS="-Dcamel.extra.repos=repo1=https://repo1.example.com/maven2,repo2=https://repo2.example.com/releases"
 ```
 
-When running Camel you need to include the properties file to use:
+When running Camel, `application.properties` in the current directory is auto-detected and included. You can also pass it explicitly if needed:
 
 ```bash
 camel run foo.java application.properties
