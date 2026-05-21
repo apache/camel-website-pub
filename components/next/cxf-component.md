@@ -196,8 +196,8 @@ The CXF component supports 6 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **operationName** (common) Constant: [`OPERATION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#OPERATION_NAME) | The name of the operation. |  | String |
-| **operationNamespace** (common) Constant: [`OPERATION_NAMESPACE`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#OPERATION_NAMESPACE) | The operation namespace. |  | String |
+| **CamelCxfOperationName** (common) Constant: [`OPERATION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#OPERATION_NAME) | The name of the operation. |  | String |
+| **CamelCxfOperationNamespace** (common) Constant: [`OPERATION_NAMESPACE`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#OPERATION_NAMESPACE) | The operation namespace. |  | String |
 | **CamelDestinationOverrideUrl** (common) Constant: [`DESTINATION_OVERRIDE_URL`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#DESTINATION_OVERRIDE_URL) | The destination override url. |  | String |
 | **ResponseContext** (common) Constant: [`RESPONSE_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#RESPONSE_CONTEXT) | The response context. |  | Map |
 | **CamelAuthentication** (common) Constant: [`AUTHENTICATION`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#AUTHENTICATION) | The authentication. |  | Subject |
@@ -458,7 +458,7 @@ As an alternative, you can add a message header for it as demonstrated in [CxfCo
 
 ### Configure the CXF endpoints with Spring
 
-You can configure the CXF endpoint with the Spring configuration file shown below, and you can also embed the endpoint into the `camelContext` tags. When you are invoking the service endpoint, you can set the `operationName` and `operationNamespace` headers to explicitly state which operation you are calling.
+You can configure the CXF endpoint with the Spring configuration file shown below, and you can also embed the endpoint into the `camelContext` tags. When you are invoking the service endpoint, you can set the `CamelCxfOperationName` and `CamelCxfOperationNamespace` headers to explicitly state which operation you are calling.
 
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"

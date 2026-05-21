@@ -124,6 +124,21 @@ Routes that reference the constant symbolically (for example `setHeader(JGroupsR
 
 When using the `RETRIEVE_NODES` or `DELETE_NODE` operations with the `CamelNeo4jMatchProperties` header, the property names provided in the JSON match map are now validated before the `MATCH` / `DELETE` `WHERE` clause is built. Property names must be valid identifiers matching `[A-Za-z_][A-Za-z0-9_]*`. A request whose match map contains a property name that does not match this pattern now fails fast with an `IllegalArgumentException` (wrapped in a `Neo4jOperationException`) instead of producing a malformed query. Property values continue to be passed as bound query parameters and are unaffected.
 
+### camel-elasticsearch-rest-client
+
+The Exchange header constants in `ElasticSearchRestClientConstant` have been renamed to follow the Camel naming convention used across the rest of the component catalog. The Java field names are unchanged; only the header string values have changed:
+
+  
+| Constant | Previous value | New value |
+| --- | --- | --- |
+| `ElasticSearchRestClientConstant.ID` | `ID` | `CamelElasticsearchId` |
+| `ElasticSearchRestClientConstant.SEARCH_QUERY` | `SEARCH_QUERY` | `CamelElasticsearchSearchQuery` |
+| `ElasticSearchRestClientConstant.INDEX_SETTINGS` | `INDEX_SETTINGS` | `CamelElasticsearchIndexSettings` |
+| `ElasticSearchRestClientConstant.INDEX_NAME` | `INDEX_NAME` | `CamelElasticsearchIndexName` |
+| `ElasticSearchRestClientConstant.OPERATION` | `OPERATION` | `CamelElasticsearchOperation` |
+
+Routes that reference the constant symbolically (for example `setHeader(ElasticSearchRestClientConstant.SEARCH_QUERY, …​)`) continue to work without changes. Routes that set the header by its literal string value (for example `setHeader("SEARCH_QUERY", …​)`) must be updated to use the new value (`setHeader("CamelElasticsearchSearchQuery", …​)`).
+
 ## Upgrading from 4.14.2 to 4.14.3
 
 ### camel-tika
@@ -209,3 +224,19 @@ The default `headerFilterStrategy` is now a new `NatsHeaderFilterStrategy` that 
 ### camel-xmpp
 
 The default `headerFilterStrategy` is now a new `XmppHeaderFilterStrategy` that filters headers starting with `Camel` / `camel` (case-insensitive) in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog (`camel-kafka`, `camel-mail`, `camel-coap`, `camel-google-pubsub`, …​). Routes that relied on passing through these header names from XMPP messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
+### camel-vertx-websocket
+
+The `vertx-websocket` consumer now applies a `HeaderFilterStrategy` to the WebSocket query and path parameters before mapping them into the Camel message headers. The new default `VertxWebsocketHeaderFilterStrategy` filters headers starting with `Camel` / `camel` (case-insensitive) in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog (`camel-coap`, `camel-kafka`, `camel-nats`, …​). A new `headerFilterStrategy` endpoint option is available; routes that relied on receiving `Camel`\-prefixed header names from WebSocket query or path parameters can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
+### camel-atmosphere-websocket
+
+The `atmosphere-websocket` consumer now applies the endpoint `HeaderFilterStrategy` to the WebSocket query parameters before mapping them into the Camel message headers. The inherited default `HttpHeaderFilterStrategy` filters headers starting with `Camel` / `camel` (case-insensitive). Routes that relied on receiving `Camel`\-prefixed header names from WebSocket query parameters can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
+### camel-aws2-sqs
+
+`Sqs2HeaderFilterStrategy` now also configures an inbound filter aligned with the existing outbound regex. Headers starting with `Camel` / `camel` (case-insensitive), `breadcrumbId` and `org.apache.camel.*` are now filtered in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog (`camel-kafka`, `camel-mail`, `camel-coap`, `camel-google-pubsub`, …​). Routes that relied on receiving these header names from inbound SQS messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
+### camel-aws2-sns
+
+`Sns2HeaderFilterStrategy` now also configures an inbound filter aligned with the existing outbound regex. Headers starting with `Camel` / `camel` (case-insensitive), `breadcrumbId` and `org.apache.camel.*` are now filtered in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog. Routes that relied on receiving these header names on inbound SNS messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.

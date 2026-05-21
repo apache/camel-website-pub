@@ -28,7 +28,7 @@ By default, the HTTP server is disabled. To enable it, set `quarkus.http.host-en
 
 ## Available Tools
 
-The server exposes 27 tools organized into eleven functional areas, plus 3 prompts that provide structured multi-step workflows.
+The server exposes 28 tools organized into eleven functional areas, plus 3 prompts that provide structured multi-step workflows.
 
 ### Catalog Exploration
 
@@ -36,7 +36,8 @@ The server exposes 27 tools organized into eleven functional areas, plus 3 promp
 | Tool | Description |
 | --- | --- |
 | `camel_catalog_components` | List available Camel components with filtering by name, label (e.g., `messaging`, `cloud`, `database`), and runtime type (`main`, `spring-boot`, `quarkus`). Supports querying specific Camel versions. |
-| `camel_catalog_component_doc` | Get detailed documentation for a specific component including all endpoint options, component-level options, Maven coordinates, and URI syntax. |
+| `camel_catalog_component_doc` | Get documentation for a specific component: URI syntax, component-level and endpoint options. Supports `optionsFilter` (case-insensitive substring on option name) and `includeOptions` (`required`, `common`, or `all`; default `common`, which excludes deprecated and advanced options) to control payload size. |
+| `camel_catalog_component_maven` | Get the Maven coordinates (`groupId`, `artifactId`, `version`) of a specific component, for adding it as a project dependency. |
 | `camel_catalog_dataformats` | List available data formats (JSON, XML, CSV, Avro, Protobuf, and others). |
 | `camel_catalog_dataformat_doc` | Get detailed documentation for a specific data format including all configuration options, Maven coordinates, and model information. |
 | `camel_catalog_languages` | List expression languages (Simple, JsonPath, XPath, JQ, Groovy, and others). |

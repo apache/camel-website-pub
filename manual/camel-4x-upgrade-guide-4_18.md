@@ -448,3 +448,65 @@ The `atmosphere-websocket` consumer now applies the endpoint `HeaderFilterStrate
 ### camel-iggy
 
 The `iggy` consumer now applies a `HeaderFilterStrategy` to the Iggy message user-headers before mapping them into the Camel message headers. The new default `IggyHeaderFilterStrategy` filters headers starting with `Camel` / `camel` (case-insensitive) in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog. A new `headerFilterStrategy` endpoint option is available; routes that relied on receiving `Camel`\-prefixed user-header names from Iggy messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
+### camel-aws2-sqs
+
+`Sqs2HeaderFilterStrategy` now also configures an inbound filter aligned with the existing outbound regex. Headers starting with `Camel` / `camel` (case-insensitive), `breadcrumbId` and `org.apache.camel.*` are now filtered in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog (`camel-kafka`, `camel-mail`, `camel-coap`, `camel-google-pubsub`, …​). Routes that relied on receiving these header names from inbound SQS messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
+### camel-aws2-sns
+
+`Sns2HeaderFilterStrategy` now also configures an inbound filter aligned with the existing outbound regex. Headers starting with `Camel` / `camel` (case-insensitive), `breadcrumbId` and `org.apache.camel.*` are now filtered in both the inbound and outbound directions, aligning the component with the rest of the Camel component catalog. Routes that relied on receiving these header names on inbound SNS messages can supply a custom `headerFilterStrategy` to restore the previous behaviour.
+
+### camel-cxf
+
+The Exchange header constants in `CxfConstants` (module `camel-cxf-common`, shared by `camel-cxf` and `camel-cxfrs`) have been renamed to follow the Camel naming convention used across the rest of the component catalog. The Java field names are unchanged; only the header string values have changed:
+
+  
+| Constant | Previous value | New value |
+| --- | --- | --- |
+| `CxfConstants.OPERATION_NAME` | `operationName` | `CamelCxfOperationName` |
+| `CxfConstants.OPERATION_NAMESPACE` | `operationNamespace` | `CamelCxfOperationNamespace` |
+
+Routes that reference the constant symbolically (for example `setHeader(CxfConstants.OPERATION_NAME, …​)`) continue to work without changes. Routes that set the header by its literal string value (for example `setHeader("operationName", …​)`) must be updated to use the new value (`setHeader("CamelCxfOperationName", …​)`).
+
+In particular, the documented `cxfrs` `SimpleConsumer` dispatch idiom that routes on the operation name by its literal header name must be updated:
+
+```java
+// before
+from("cxfrs:bean:rsServer?bindingStyle=SimpleConsumer")
+    .recipientList(simple("direct:${header.operationName}"));
+
+// after
+from("cxfrs:bean:rsServer?bindingStyle=SimpleConsumer")
+    .recipientList(simple("direct:${header.CamelCxfOperationName}"));
+```
+
+#### Behaviour change: cross-transport propagation of the operation header
+
+Because the renamed header value now begins with `Camel`, it is filtered by the standard transport `HeaderFilterStrategy` (`JmsHeaderFilterStrategy`, `HttpHeaderFilterStrategy`, etc.) when crossing a transport boundary, by design — `Camel*` headers are framework-internal and are not propagated over the wire.
+
+Routes that bridge an external transport (JMS, HTTP, …​) into a `cxf:` producer and select the SOAP operation from a header supplied by the sender must therefore carry the operation in a non-`Camel`\-prefixed application header and map it to `CxfConstants.OPERATION_NAME` (`CamelCxfOperationName`) in the route between the transport `from` and the `cxf:` `to`:
+
+```xml
+<!-- before -->
+<route>
+    <from uri="jms:queue:bridge.cxf"/>
+    <to uri="cxf://bean:serviceEndpoint"/>
+</route>
+<!-- caller sets the header keyed by the pre-rename value:
+     setHeader("operationName", "greetMe") -->
+
+<!-- after -->
+<route>
+    <from uri="jms:queue:bridge.cxf"/>
+    <setHeader name="CamelCxfOperationName">
+        <simple>${header.operationName}</simple>
+    </setHeader>
+    <to uri="cxf://bean:serviceEndpoint"/>
+</route>
+<!-- caller sets a non-Camel-prefixed application carrier header (any name
+     that is not stripped by the transport HeaderFilterStrategy works);
+     the route restores the CXF operation header after the transport hop. -->
+```
+
+The same pattern applies to HTTP-based bridges (`platform-http`/`jetty`/`netty -http`/`http` → `cxf:`) and any other transport whose default `HeaderFilterStrategy` filters `Camel*` headers.

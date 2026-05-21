@@ -357,7 +357,7 @@ couchbase - consumer does not work if jackson is on classpath
 
 Kubernetes Secrets and Config maps context reloading doesn't work together
 
-### Dependency upgrade (8)
+### Dependency upgrade (9)
 
 [CAMEL-23292](https://issues.apache.org/jira/browse/CAMEL-23292)
 
@@ -382,6 +382,10 @@ Upgrade quickfixj to 3.x
 [CAMEL-23019](https://issues.apache.org/jira/browse/CAMEL-23019)
 
 camel-cxf - Upgrade to CXF 4.2.x
+
+[CAMEL-22572](https://issues.apache.org/jira/browse/CAMEL-22572)
+
+camel-netty - Upgrade to 4.2.x
 
 [CAMEL-22369](https://issues.apache.org/jira/browse/CAMEL-22369)
 
