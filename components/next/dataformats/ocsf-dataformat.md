@@ -211,7 +211,7 @@ from("kafka:security-events")
 ```yaml
 - route:
     from:
-      uri: "kafka:security-events"
+      uri: kafka:security-events
     steps:
       - unmarshal:
           ocsf:
@@ -238,11 +238,11 @@ from("kafka:security-events")
             2. Recommended immediate actions
             3. Risk assessment (Critical/High/Medium/Low)
       - to:
-          uri: "langchain4j-chat:security-analyst"
+          uri: langchain4j-chat:security-analyst
           parameters:
             chatModel: "#chatLanguageModel"
       - to:
-          uri: "direct:ai-summary"
+          uri: direct:ai-summary
 ```
 
 ## Dependencies

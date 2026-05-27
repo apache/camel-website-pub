@@ -57,14 +57,15 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - dynamicRouter:
-          expression:
-            method:
-              beanType: com.foo.MySlipBean
-              method: slip
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - dynamicRouter:
+            expression:
+              method:
+                beanType: com.foo.MySlipBean
+                method: slip
 ```
 
 Which will call a [Bean Method](../languages/bean-language.md) to compute the slip _on-the-fly_. The bean could be implemented as follows:

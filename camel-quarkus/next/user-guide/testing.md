@@ -349,26 +349,68 @@ class SimpleTest extends CamelQuarkusTestSupport {
 
 #### Using `AdviceWith`
 
+[AdviceWith](../../../manual/advice-with.md) allows you to modify routes at runtime for testing purposes - replacing endpoints, adding interceptors, or changing route behavior without modifying production code.
+
+##### Advising existing application routes
+
+The recommended pattern is:
+
+1.  Define routes in your **application code** (src/main/java)
+    
+2.  Use `AdviceWith` to modify these **existing** routes in your tests
+    
+
+```java
+// Application code: src/main/java/com/example/MyRoutes.java
+public class MyRoutes extends RouteBuilder {
+    @Override
+    public void configure() {
+        from("kafka:input-topic").routeId("my-kafka-route")
+            .to("kafka:output-topic")
+            .to("mock:result");
+    }
+}
+
+// Test code: src/test/java/com/example/MyRoutesTest.java
+@QuarkusTest
+class MyRoutesTest extends CamelQuarkusTestSupport {
+    @BeforeEach
+    public void beforeEach() throws Exception {
+        // Advise the application route
+        AdviceWith.adviceWith(this.context, "my-kafka-route", route -> {
+            route.weaveByToUri("kafka:output-topic*").replace().to("mock:kafka-stub");
+        });
+    }
+
+    @Test
+    void testRoute() throws Exception {
+        MockEndpoint stub = getMockEndpoint("mock:kafka-stub");
+        stub.expectedMessageCount(1);
+
+        template.sendBody("kafka:input-topic", "test");
+
+        stub.assertIsSatisfied();
+    }
+}
+```
+
+> **Warning**
+> Advising routes created via `createRouteBuilder()` in tests can lead to unpredictable behavior.
+
+##### Apply advice in `@BeforeEach` or `doBeforeEach`
+
+When all tests in a class need the same advice, apply it in `@BeforeEach` or override `doBeforeEach`:
+
 ```java
 @QuarkusTest
 class SimpleTest extends CamelQuarkusTestSupport {
     @BeforeEach
     public void beforeEach() throws Exception {
+        // Apply advice to EXISTING application route
         AdviceWith.adviceWith(this.context, "advisedRoute", route -> {
             route.replaceFromWith("direct:replaced");
         });
-    }
-
-    @Override
-    protected RoutesBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                from("direct:start").routeId("advisedRoute")
-                    .transform().simple("Hello ${body}")
-                    .to("mock:result");
-            }
-        };
+        // Routes that aren't advised are automatically started after this method completes
     }
 
     @Test
@@ -383,9 +425,82 @@ class SimpleTest extends CamelQuarkusTestSupport {
 }
 ```
 
-#### Explicitly enabling advice
+Routes that aren’t advised are automatically started after `@BeforeEach` or `doBeforeEach` completes. Advice modifications are automatically cleaned up between test methods
 
-When explicitly [enabling advice](../../../manual/advice-with.html#_enabling_advice_during_testing) you must invoke `startRouteDefinitions` when completing your `AdviceWith` setup. Note that this is only required if you have routes configured that are NOT being advised.
+##### Per-test-method advice using `adviceRoute()`
+
+When you need **different** advice in each test method, use the `adviceRoute()` helper method which handles route lifecycle (stop, advice, start) automatically:
+
+```java
+@QuarkusTest
+class PerMethodAdviceTest extends CamelQuarkusTestSupport {
+    @Test
+    void testWithMockOutput() throws Exception {
+        // Apply advice specific to this test on EXISTING application route
+        adviceRoute("my-route", route -> {
+            route.weaveByToUri("kafka:output*").replace().to("mock:kafka-stub");
+        });
+
+        MockEndpoint stub = getMockEndpoint("mock:kafka-stub");
+        stub.expectedMessageCount(1);
+
+        template.sendBody("kafka:input", "test message");
+
+        stub.assertIsSatisfied();
+    }
+
+    @Test
+    void testWithDifferentAdvice() throws Exception {
+        // Different advice for this test on the same EXISTING route
+        adviceRoute("my-route", route -> {
+            route.weaveByToUri("kafka:output*").replace()
+                .transform(simple("MODIFIED: ${body}"))
+                .to("mock:result");
+        });
+
+        // ... different test assertions
+    }
+}
+```
+
+##### Advice patterns
+
+> **Important**
+> When using `weaveByToUri()`, `weaveByType()`, or similar methods, use specific patterns rather than wildcards to avoid unintentionally matching endpoints from the main application or other routes.
+
+For example, instead of:
+
+```java
+// Matches ALL Kafka endpoints in the context
+route.weaveByToUri("kafka:*").replace().to("mock:result");
+```
+
+Use specific endpoint URIs:
+
+```java
+// Only matches the specific endpoint you intend to advise
+route.weaveByToUri("kafka:my-output-topic*").replace().to("mock:result");
+```
+
+Or use IDs for even more precision:
+
+```java
+// Uses ID for exact matching
+route.weaveById("kafkaProducer").replace().to("mock:result");
+```
+
+Wildcard patterns like `kafka:*`, `http:*`, or `direct:*` will match **all** endpoints of that type throughout the entire `CamelContext`, including routes from your main application that the test may not need to modify. This can cause unexpected test failures and interference between tests.
+
+##### Advice cleanup between tests
+
+Advice modifications are automatically cleaned up between test methods to prevent interference. This ensures that:
+
+-   Each test starts with a clean route state
+    
+-   Advice from one test doesn’t affect subsequent tests
+    
+-   Tests remain independent and can run in any order
+    
 
 ### Limitations
 

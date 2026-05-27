@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 374 in 300 JAR artifacts (13 deprecated)
+Number of Non-Core Components: 373 in 299 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -167,7 +167,6 @@ Number of Non-Core Components: 374 in 300 JAR artifacts (13 deprecated)
 | [FTPS](ftps-component.md) | camel-ftp | Stable | 2.2 | Upload and download files to/from FTP servers supporting the FTPS protocol. |
 | [Geocoder](geocoder-component.md) | camel-geocoder | Stable | 2.12 | Find geocodes (latitude and longitude) for a given address or the other way round. |
 | [Git](git-component.md) | camel-git | Stable | 2.16 | Perform operations on git repositories. |
-| [GitHub](github-component.md) | camel-github | Stable-deprecated | 2.15 | Interact with the GitHub API. |
 | [GitHub2](github2-component.md) | camel-github2 | Stable | 4.18 | Interact with the GitHub API. |
 | [Google](google-summary.md) |  |  |  |  |
 | [Google BigQuery](google-bigquery-component.md) | camel-google-bigquery | Stable | 2.20 | Google BigQuery data warehouse for analytics. |

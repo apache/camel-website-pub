@@ -2,7 +2,9 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[517]{title,link,pubDate,description}:
+posts[519]{title,link,pubDate,description}:
+  Camel Karaf 4.14.7 Released|https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/index.md|Sun, 24 May 2026 00:00:00 +0000|Camel Karaf 4.14.7 release
+  Camel Karaf 4.18.2 Released|https://camel.apache.org/blog/2026/05/camel-karaf-4.18.2/index.md|Sun, 24 May 2026 00:00:00 +0000|Camel Karaf 4.18.2 release
   Camel Quarkus 3.27.4 Released|https://camel.apache.org/blog/2026/05/camel-quarkus-3.27.4/index.md|Thu, 07 May 2026 00:00:00 +0000|Camel Quarkus 3.27.4 release
   Camel Quarkus 3.33.1 Released|https://camel.apache.org/blog/2026/05/camel-quarkus-3.33.1/index.md|Thu, 07 May 2026 00:00:00 +0000|Camel Quarkus 3.33.1 release
   Camel Quarkus 3.35.0 Released|https://camel.apache.org/blog/2026/04/camel-quarkus-release-3.35.0/index.md|Thu, 30 Apr 2026 00:00:00 +0000|Camel Quarkus 3.35.0 release

@@ -347,8 +347,10 @@ from("direct:service")
     from:
       uri: direct:service
       steps:
-        - to: http:myservice
-        - to: log:after
+        - to:
+            uri: http:myservice
+        - to:
+            uri: log:after
 ```
 
 Calling this route, the `Message` is updated to following:
@@ -386,12 +388,13 @@ from("direct:service")
 ```yaml
 - route:
     from:
-      uri: "direct:service"
+      uri: direct:service
       steps:
         - to:
             uri: http:myservice
             variableReceive: myVar
-        - to: "log:after"
+        - to:
+            uri: log:after
 ```
 
 The `Message` on the current `Exchange` is not changed:
@@ -450,15 +453,21 @@ fromV("direct:start", "myKey")
 ```yaml
 - route:
     from:
-      uri: "direct:start"
-      variableReceive: "myKey"
+      uri: direct:start
+      variableReceive: myKey
       steps:
         - transform:
-            simple: "Bye ${body}"
-        - to: "mock:foo"
+            expression:
+              simple:
+                expression: "Bye ${body}"
+        - to:
+            uri: mock:foo
         - setBody:
-            variable: "myKey"
-        - to: "mock:result"
+            expression:
+              variable:
+                expression: myKey
+        - to:
+            uri: mock:result
 ```
 
 > **Note**

@@ -257,10 +257,14 @@ from("direct:store")
 ```yaml
 - route:
     from:
-      uri: "direct:store"
+      uri: direct:store
     steps:
-      - to: "langchain4j-embeddings:embed"
-      - to: "langchain4j-embeddingstore:myStore?action=ADD"
+      - to:
+          uri: langchain4j-embeddings:embed
+      - to:
+          uri: langchain4j-embeddingstore:myStore
+          parameters:
+            action: ADD
 ```
 
 The response body contains the generated embedding ID.
@@ -283,10 +287,16 @@ from("direct:search")
 ```yaml
 - route:
     from:
-      uri: "direct:search"
+      uri: direct:search
     steps:
-      - to: "langchain4j-embeddings:embed"
-      - to: "langchain4j-embeddingstore:myStore?action=SEARCH&maxResults=5&minScore=0.7"
+      - to:
+          uri: langchain4j-embeddings:embed
+      - to:
+          uri: langchain4j-embeddingstore:myStore
+          parameters:
+            action: SEARCH
+            maxResults: 5
+            minScore: 0.7
 ```
 
 The response contains a list of `EmbeddingMatch` objects with the matching text segments and scores.
@@ -310,11 +320,18 @@ from("direct:search")
 ```yaml
 - route:
     from:
-      uri: "direct:search"
+      uri: direct:search
     steps:
-      - to: "langchain4j-embeddings:embed"
-      - to: "langchain4j-embeddingstore:myStore?action=SEARCH&maxResults=5&returnTextContent=true"
-      - log: "Found texts: ${body}"
+      - to:
+          uri: langchain4j-embeddings:embed
+      - to:
+          uri: langchain4j-embeddingstore:myStore
+          parameters:
+            action: SEARCH
+            maxResults: 5
+            returnTextContent: true
+      - log:
+          message: "Found texts: ${body}"
 ```
 
 ### Removing Embeddings (REMOVE Operation)
@@ -335,11 +352,16 @@ from("direct:remove")
 ```yaml
 - route:
     from:
-      uri: "direct:remove"
+      uri: direct:remove
     steps:
       - setBody:
-          simple: "${header.embeddingId}"
-      - to: "langchain4j-embeddingstore:myStore?action=REMOVE"
+          expression:
+            simple:
+              expression: "${header.embeddingId}"
+      - to:
+          uri: langchain4j-embeddingstore:myStore
+          parameters:
+            action: REMOVE
 ```
 
 ### Complete RAG Pipeline Example

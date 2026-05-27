@@ -291,8 +291,8 @@ The JT400 component supports 9 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **SENDER\_INFORMATION** (consumer) Constant: [`SENDER_INFORMATION`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#SENDER_INFORMATION) | Data queues: Returns the sender information for this data queue entry, or an empty string if not available.Message queues: The job identifier of the sending job. |  | String |
-| **KEY** (common) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#KEY) | The data queue key. |  | String or byte\[\] |
+| **CamelJt400SenderInformation** (consumer) Constant: [`SENDER_INFORMATION`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#SENDER_INFORMATION) | Data queues: Returns the sender information for this data queue entry, or an empty string if not available.Message queues: The job identifier of the sending job. |  | String |
+| **CamelJt400Key** (common) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#KEY) | The data queue key. |  | String or byte\[\] |
 | **CamelJt400Message** (consumer) Constant: [`MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#MESSAGE) | The message received. |  | QueuedMessage |
 | **CamelJt400MessageID** (consumer) Constant: [`MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#MESSAGE_ID) | The message identifier. |  | String |
 | **CamelJt400MessageFile** (consumer) Constant: [`MESSAGE_FILE`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#MESSAGE_FILE) | The message file name. |  | String |

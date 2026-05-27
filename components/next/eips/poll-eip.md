@@ -99,7 +99,9 @@ from("direct:payload")
       uri: direct:payload
       steps:
         - poll:
-            uri: ftp:myserver.com/myfolder?fileName=report-file.pdf
+            uri: ftp:myserver.com/myfolder
+            parameters:
+              fileName: report-file.pdf
 ```
 
 > **Note**
@@ -130,7 +132,9 @@ from("direct:payload")
       uri: direct:payload
       steps:
         - poll:
-            uri: "ftp:myserver.com/myfolder?fileName=report-${header.id}.pdf"
+            uri: ftp:myserver.com/myfolder
+            parameters:
+              fileName: "report-${header.id}.pdf"
 ```
 
 ### Using Poll with Rest DSL
@@ -178,7 +182,11 @@ from("direct:payload")
       uri: direct:payload
       steps:
         - poll:
-            uri: aws-s3:xavier-dev?amazonS3Client=#s3client&deleteAfterRead=false&fileName=report-file.pdf
+            uri: aws-s3:xavier-dev
+            parameters:
+              amazonS3Client: "#s3client"
+              deleteAfterRead: false
+              fileName: report-file.pdf
 ```
 
 ### Using Poll with file based components

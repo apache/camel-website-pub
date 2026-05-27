@@ -62,13 +62,17 @@ from("direct:start")
                     expression: /employee
                 steps:
                   - to:
-                      uri: bean:normalizer?method=employeeToPerson
+                      uri: bean:normalizer
+                      parameters:
+                        method: employeeToPerson
               - expression:
                   xpath:
                     expression: /customer
                 steps:
                   - to:
-                      uri: bean:normalizer?method=customerToPerson
+                      uri: bean:normalizer
+                      parameters:
+                        method: customerToPerson
         - to:
             uri: mock:result
 ```

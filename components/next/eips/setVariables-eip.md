@@ -51,17 +51,18 @@ from("direct:a")
 ```
 
 ```yaml
-- from:
-    uri: direct:a
-    steps:
-      - setVariables:
-          variables:
-            - name: myVar
-              constant: test
-            - name: otherVar
-              constant: other
-      - to:
-          uri: direct:b
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - setVariables:
+            variables:
+              - name: myVar
+                constant: test
+              - name: otherVar
+                constant: other
+        - to:
+            uri: direct:b
 ```
 
 For example, the variables values are [constants](../../4.18.x/languages/constant-language.md).
@@ -97,17 +98,22 @@ from("direct:a")
 ```
 
 ```yaml
-- from:
-    uri: direct:a
-    steps:
-      - setVariables:
-          variables:
-            - name: randomNumber
-              simple: "${random(1,100)}"
-            - name: body
-              simple: "${body}"
-      - to:
-          uri:direct:b
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - setVariables:
+            variables:
+              - name: randomNumber
+                expression:
+                  simple:
+                    expression: "${random(1,100)}"
+              - name: body
+                expression:
+                  simple:
+                    expression: "${body}"
+        - to:
+            uri: direct:b
 ```
 
 ### Setting a variable from another variable
@@ -145,19 +151,23 @@ from("direct:a")
 ```
 
 ```yaml
-- from:
-    uri: direct:a
-    steps:
-      - setVariables:
-          variables:
-            - name: foo
-              simple: "${body}"
-            - name: bar
-              simple:
-                expression: "${variable.foo} > 10"
-                resultType: "boolean"
-      - to:
-          uri:direct:b
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - setVariables:
+            variables:
+              - name: foo
+                expression:
+                  simple:
+                    expression: "${body}"
+              - name: bar
+                expression:
+                  simple:
+                    expression: "${variable.foo} > 10"
+                    resultType: "boolean"
+        - to:
+            uri: direct:b
 ```
 
 ### Using a Map with Java DSL

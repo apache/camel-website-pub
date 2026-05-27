@@ -15,7 +15,8 @@ camel plugin [options]
 | --- | --- |
 | [add](camel-jbang-plugin-add.md) | Add new plugin |
 | [delete](camel-jbang-plugin-delete.md) | Removes a plugin |
-| [get](camel-jbang-plugin-get.md) | Display available plugins |
+| [get](camel-jbang-plugin-get.md) | Get installed plugins |
+| [list](camel-jbang-plugin-list.md) | List all available plugins |
 
 ## Options
 

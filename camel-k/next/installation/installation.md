@@ -37,6 +37,10 @@ You can edit the `Subscription` custom resource, setting the channel you want to
 > **Note**
 > Some Kubernetes clusters such as Openshift may let you to perform the same operation from a GUI as well. Refer to the cluster instruction to learn how to perform such action from user interface.
 
+## Setup the operator configuration
+
+Each installation method have its proper way to setup configuration. A common one is the creation of a `Configmap` named `camel-k-operator-configmap-configuration` and a `Secret` named `camel-k-operator-secret-configuration` in the same namespace where the operator is installed. If available, the operator will read the environment variable from these resources.
+
 ## Setup the container registry
 
 The only configuration you may want to change is the container registry which the operator need to use in order to store the container images used to run the Camel applications built. The default installation expects a container registry available in the `kube-system` namespace exposed by a `Service` named `registry` (this is the location where development environment Minikube install the registry via `minikube addons enable registry`).

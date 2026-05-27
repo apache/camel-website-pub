@@ -67,7 +67,9 @@ from("file:messages/foo?sorter=#bean:mySpecialFileSorter")
 ```yaml
 - route:
     from:
-      uri: file:messages/foo?sorter=#bean:mySpecialFileSorter
+      uri: file:messages/foo
+      parameters:
+        sorter: "#bean:mySpecialFileSorter"
       steps:
         - to:
             uri: jms:queue:foo
@@ -241,7 +243,10 @@ from("file:inbox")
       uri: file:inbox
       steps:
         - to:
-            uri: "ftp:joe@myftpserver.com?password=RAW($simple{env:MY_FTP_PASSWORD})&binary=true"
+            uri: ftp:joe@myftpserver.com
+            parameters:
+              password: "RAW($simple{env:MY_FTP_PASSWORD})"
+              binary: true
 ```
 
 ### Endpoint URIs with property placeholders
@@ -281,7 +286,10 @@ from("file:inbox")
       uri: file:inbox
       steps:
         - to:
-            uri: "ftp:joe@myftpserver.com?password={{myFtpPassword}}&binary=true"
+            uri: ftp:joe@myftpserver.com
+            parameters:
+              password: "{{myFtpPassword}}"
+              binary: true
 ```
 
 And have a `application.properties` file with password. Notice we still define the `RAW(value)` style to ensure the password is used _as is_:

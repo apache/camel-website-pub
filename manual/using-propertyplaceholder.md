@@ -220,7 +220,9 @@ from("direct:start")
       uri: direct:start
       steps:
         - to:
-            uri: "file:outbox?bufferSize={{buf}}"
+            uri: file:outbox
+            parameters:
+              bufferSize: "{{buf}}"
 ```
 
 However, the placeholder can be anywhere, so it could also be the name of a mock endpoint
@@ -325,7 +327,9 @@ from("direct:start")
       uri: direct:start
       steps:
         - to:
-            uri: "elasticsearch:foo?query={{myQuery?nested=false}}"
+            uri: elasticsearch:foo
+            parameters:
+              query: "{{myQuery?nested=false}}"
 ```
 
 In the example above the placeholder _myQuery_ placeholder value is as follows
@@ -398,7 +402,10 @@ from("{{cool.start}}")
       uri: direct:start
       steps:
         - to:
-            uri: "log:{{cool.start}}?showBodyType=false&showExchangeId={{cool.showid}}"
+            uri: "log:{{cool.start}}"
+            parameters:
+              showBodyType: "false"
+              showExchangeId: "{{cool.showid}}"
         - to:
             uri: "mock:{{cool.result}}"
 ```
@@ -722,7 +729,9 @@ from("direct:start")
         - choice:
             disabled: "{{boolean:region == 'EMEA'}}"
             when:
-            - simple: "${header.RetryAttempts} == null"
+            - expression:
+                simple:
+                  expression: "${header.RetryAttempts} == null"
               steps:
               - setProperty:
                   name: "HttpMessageMethod"

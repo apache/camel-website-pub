@@ -207,7 +207,9 @@ from("direct:report")
       uri: direct:report
       steps:
         - pollEnrich:
-            uri: aws-s3:xavier-dev?amazonS3Client=#s3client&amp;deleteAfterRead=false&amp;fileName=report-file.pdf
+            expression:
+              constant:
+                expression: "aws-s3:xavier-dev?amazonS3Client=#s3client&deleteAfterRead=false&fileName=report-file.pdf"
 ```
 
 Notice that the enriched endpoint is a constant, however, Camel also supports dynamic endpoints which is covered next.

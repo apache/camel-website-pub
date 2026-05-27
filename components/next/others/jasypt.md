@@ -17,6 +17,9 @@ If you are using Maven, you need to add the following dependency to your `pom.xm
 
 ## Tooling
 
+> **Warning**
+> The command line utility shipped with `camel-jasypt` (the `Main` class) is **deprecated** and will be removed in a future Camel release. Use the standalone CLI scripts (`encrypt.sh` / `decrypt.sh` / `digest.sh`) shipped in the upstream [jasypt-1.9.3 distribution](https://github.com/jasypt/jasypt/releases/tag/jasypt-1.9.3) instead — they cover the same encrypt/decrypt workflow and let us drop the duplicated implementation maintained here.
+
 The Jasypt component is a runnable JAR that provides a command line utility to encrypt or decrypt values.
 
 The usage documentation can be output to the console to describe the syntax and options it provides:

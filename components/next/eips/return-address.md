@@ -70,7 +70,9 @@ from("direct:foo")
       uri: direct:foo
       steps:
         - to:
-            uri: jms:queue:cheese?replyTo=myReplyQueue
+            uri: jms:queue:cheese
+            parameters:
+              replyTo: myReplyQueue
 ```
 
 ## See Also

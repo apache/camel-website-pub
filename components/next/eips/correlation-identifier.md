@@ -55,12 +55,13 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - to:
-          uri: jms:queue:foo
-          pattern: InOut
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: jms:queue:foo
+            pattern: InOut
+        - to:
+            uri: mock:result
 ```

@@ -94,17 +94,19 @@ And in XML DSL you can call this bean:
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - bean:
-          ref: myBean
-          method: myMethod
-- from:
-    uri: direct:start
-    steps:
-      - bean:
-          ref: myBean
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - bean:
+            ref: myBean
+            method: myMethod
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - bean:
+            ref: myBean
 - beans:
     - name: myBean
       type: com.foo.ExampleBean
@@ -148,22 +150,25 @@ from("direct:cheese").bean(ExampleBean.class);
 ```
 
 ```yaml
-- from:
-    uri: direct:foo
-    steps:
-      - bean:
-          beanType: com.foo.ExampleBean
-          method: myMethod
-- from:
-    uri: direct:bar
-    steps:
-      - bean:
-          beanType: com.foo.ExampleBean
-- from:
-    uri: direct:cheese
-    steps:
-      - bean:
-          beanType: com.foo.ExampleBean
+- route:
+    from:
+      uri: direct:foo
+      steps:
+        - bean:
+            beanType: com.foo.ExampleBean
+            method: myMethod
+- route:
+    from:
+      uri: direct:bar
+      steps:
+        - bean:
+            beanType: com.foo.ExampleBean
+- route:
+    from:
+      uri: direct:cheese
+      steps:
+        - bean:
+            beanType: com.foo.ExampleBean
 ```
 
 ## Bean binding

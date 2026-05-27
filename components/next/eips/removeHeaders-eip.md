@@ -56,13 +56,14 @@ from("seda:b")
 ```
 
 ```yaml
-- from:
-    uri: seda:b
-    steps:
-      - removeHeaders:
-          pattern: "*"
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - removeHeaders:
+            pattern: "*"
+        - to:
+            uri: mock:result
 ```
 
 ## Remove all Camel headers
@@ -91,12 +92,13 @@ from("seda:b")
 ```
 
 ```yaml
-- from:
-    uri: seda:b
-    steps:
-      - removeHeaders: "Camel*"
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - removeHeaders: "Camel*"
+        - to:
+            uri: mock:result
 ```
 
 ## Leaking Camel headers when sending to an endpoint

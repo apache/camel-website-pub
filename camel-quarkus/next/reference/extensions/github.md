@@ -6,10 +6,8 @@ Interact with the GitHub API.
 
 ## What’s inside
 
--   [GitHub component](../../../../components/next/github-component.md), URI syntax: `github:type/branchName`
+-   GitHub
     
-
-Please refer to the above link for usage and configuration details.
 
 ## Maven coordinates
 

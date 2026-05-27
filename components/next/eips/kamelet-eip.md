@@ -60,7 +60,9 @@ from("direct:start")
       uri: direct:start
       steps:
         - to:
-            uri: kamelet:my-aggregate?count=5
+            uri: kamelet:my-aggregate
+            parameters:
+              count: 5
         - to:
             uri: log:info
         - to:

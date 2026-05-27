@@ -482,10 +482,14 @@ The Camel JBang Kubernetes plugin is able to automatically create this trigger f
 The following Camel route uses the Knative event component and references a Knative broker by its name. The plugin inspects the code and automatically generates the Knative trigger as part of the Kubernetes manifest that is used to run the Camel application on Kubernetes.
 
 ```yaml
-- from:
-    uri: knative:event/camel.evt.type?name=my-broker
-    steps:
-      - to: log:info
+- route:
+    from:
+      uri: knative:event/camel.evt.type
+      parameters:
+        name: my-broker
+      steps:
+        - to:
+            uri: log:info
 ```
 
 The route consumes Knative events of type `camel.evt.type`. If you export this route with the Camel JBang Kubernetes plugin, you will see a Knative trigger being generated as part of the Kubernetes manifest (kubernetes.yml).
@@ -551,10 +555,12 @@ Knative channels represent another form of producing and consuming events from t
 The Camel route that connects to a Knative channel in order to receive events looks like this:
 
 ```yaml
-- from:
-    uri: knative:channel/my-channel
-    steps:
-      - to: log:info
+- route:
+    from:
+      uri: knative:channel/my-channel
+      steps:
+        - to:
+            uri: log:info
 ```
 
 The Knative channel is referenced by its name. The Camel JBang Kubernetes plugin will inspect your code to automatically create a channel subscription as part of the Kubernetes manifest. You just need to export the Camel route as usual.
@@ -620,12 +626,16 @@ The Camel JBang Kubernetes plugin leverages the sink binding concept for all rou
 The following route produces events on a Knative broker:
 
 ```yaml
-- from:
-    uri: timer:tick
-    steps:
-      - setBody:
-          constant: Hello Camel !!!
-      - to: knative:event/camel.evt.type?name=my-broker
+- route:
+    from:
+      uri: timer:tick
+      steps:
+        - setBody:
+            constant: Hello Camel !!!
+        - to:
+            uri: knative:event/camel.evt.type
+            parameters:
+              name: my-broker
 ```
 
 The route produces events of type `camel.evt.type` and pushes the events to the broker named `my-broker`. At this point, the actual Knative broker URL is unknown. The sink binding is going to resolve the URL and inject its value at deployment time using the `K_SINK` environment variable.

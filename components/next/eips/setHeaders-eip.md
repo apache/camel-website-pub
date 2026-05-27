@@ -51,17 +51,18 @@ from("direct:a")
 ```
 
 ```yaml
-- from:
-    uri: direct:a
-    steps:
-      - setHeaders:
-          headers:
-            - name: myHeader
-              constant: test
-            - name: otherHeader
-              constant: other
-      - to:
-          uri:direct:b
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - setHeaders:
+            headers:
+              - name: myHeader
+                constant: test
+              - name: otherHeader
+                constant: other
+        - to:
+            uri: direct:b
 ```
 
 For example, the header values are [constants](../../4.18.x/languages/constant-language.md).
@@ -97,17 +98,22 @@ from("direct:a")
 ```
 
 ```yaml
-- from:
-    uri: direct:a
-    steps:
-      - setHeaders:
-          headers:
-            - name: randomNumber
-              simple: "${random(1,100)}"
-            - name: body
-              simple: "${body}"
-      - to:
-          uri:direct:b
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - setHeaders:
+            headers:
+              - name: randomNumber
+                expression:
+                  simple:
+                    expression: "${random(1,100)}"
+              - name: body
+                expression:
+                  simple:
+                    expression: "${body}"
+        - to:
+            uri: direct:b
 ```
 
 ### Setting a header from another header
@@ -145,19 +151,23 @@ from("direct:a")
 ```
 
 ```yaml
-- from:
-    uri: direct:a
-    steps:
-      - setHeaders:
-          headers:
-            - name: foo
-              simple: "${body}"
-            - name: bar
-              simple:
-                expression: "${header.foo} > 10"
-                resultType: "boolean"
-      - to:
-          uri:direct:b
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - setHeaders:
+            headers:
+              - name: foo
+                expression:
+                  simple:
+                    expression: "${body}"
+              - name: bar
+                expression:
+                  simple:
+                    expression: "${header.foo} > 10"
+                    resultType: boolean
+        - to:
+            uri: direct:b
 ```
 
 ### Using a Map with Java DSL

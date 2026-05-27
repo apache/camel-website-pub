@@ -56,13 +56,14 @@ from("seda:b")
 ```
 
 ```yaml
-- from:
-    uri: seda:b
-    steps:
-      - removeProperties:
-          pattern: "*"
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - removeProperties:
+            pattern: "*"
+        - to:
+            uri: mock:result
 ```
 
 > **Important**
@@ -94,13 +95,14 @@ from("seda:b")
 ```
 
 ```yaml
-- from:
-    uri: seda:b
-    steps:
-      - removeProperties:
-          pattern: "Foo*"
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - removeProperties:
+            pattern: "Foo*"
+        - to:
+            uri: mock:result
 ```
 
 ## See Also

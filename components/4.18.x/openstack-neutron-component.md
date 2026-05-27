@@ -151,10 +151,10 @@ The OpenStack Neutron component supports 22 message header(s), which is/are list
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **tenantId** (network port router) Constant: [`TENANT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#TENANT_ID) | Tenant ID. |  | String |
-| **networkId** (subnet port) Constant: [`NETWORK_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#NETWORK_ID) | Network ID. |  | String |
-| **adminStateUp** (network) Constant: [`ADMIN_STATE_UP`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#ADMIN_STATE_UP) | AdminStateUp header. |  | Boolean |
-| **networkType** (network) Constant: [`NETWORK_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#NETWORK_TYPE) | 
+| **CamelOpenstackNeutronTenantId** (network port router) Constant: [`TENANT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#TENANT_ID) | Tenant ID. |  | String |
+| **CamelOpenstackNeutronNetworkId** (subnet port) Constant: [`NETWORK_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#NETWORK_ID) | Network ID. |  | String |
+| **CamelOpenstackNeutronAdminStateUp** (network) Constant: [`ADMIN_STATE_UP`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#ADMIN_STATE_UP) | AdminStateUp header. |  | Boolean |
+| **CamelOpenstackNeutronNetworkType** (network) Constant: [`NETWORK_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#NETWORK_TYPE) | 
 Network type.
 
 Enum values:
@@ -177,13 +177,13 @@ Enum values:
 
 
  |  | NetworkType |
-| **physicalNetwork** (network) Constant: [`PHYSICAL_NETWORK`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#PHYSICAL_NETWORK) | Physical network. |  | String |
-| **segmentId** (network) Constant: [`SEGMENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#SEGMENT_ID) | Segment ID. |  | String |
-| **isShared** (network) Constant: [`IS_SHARED`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#IS_SHARED) | Is shared. |  | Boolean |
-| **isRouterExternal** (network) Constant: [`IS_ROUTER_EXTERNAL`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#IS_ROUTER_EXTERNAL) | Is router external. |  | Boolean |
-| **enableDHCP** (subnet) Constant: [`ENABLE_DHCP`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#ENABLE_DHCP) | Enable DHCP. |  | Boolean |
-| **gateway** (subnet) Constant: [`GATEWAY`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#GATEWAY) | Gateway. |  | String |
-| **ipVersion** (subnet) Constant: [`IP_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#IP_VERSION) | 
+| **CamelOpenstackNeutronPhysicalNetwork** (network) Constant: [`PHYSICAL_NETWORK`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#PHYSICAL_NETWORK) | Physical network. |  | String |
+| **CamelOpenstackNeutronSegmentId** (network) Constant: [`SEGMENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#SEGMENT_ID) | Segment ID. |  | String |
+| **CamelOpenstackNeutronIsShared** (network) Constant: [`IS_SHARED`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#IS_SHARED) | Is shared. |  | Boolean |
+| **CamelOpenstackNeutronIsRouterExternal** (network) Constant: [`IS_ROUTER_EXTERNAL`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#IS_ROUTER_EXTERNAL) | Is router external. |  | Boolean |
+| **CamelOpenstackNeutronEnableDhcp** (subnet) Constant: [`ENABLE_DHCP`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#ENABLE_DHCP) | Enable DHCP. |  | Boolean |
+| **CamelOpenstackNeutronGateway** (subnet) Constant: [`GATEWAY`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#GATEWAY) | Gateway. |  | String |
+| **CamelOpenstackNeutronIpVersion** (subnet) Constant: [`IP_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#IP_VERSION) | 
 
 IP version.
 
@@ -199,14 +199,14 @@ Enum values:
 
 
  |  | IPVersionType |
-| **cidr** (subnet) Constant: [`CIDR`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#CIDR) | The cidr representing the IP range for this subnet, based on IP version. |  | String |
-| **subnetPools** (subnet) Constant: [`SUBNET_POOL`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#SUBNET_POOL) | The allocation pool. |  | NeutronPool |
-| **deviceId** (port) Constant: [`DEVICE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#DEVICE_ID) | Device ID. |  | String |
-| **macAddress** (port) Constant: [`MAC_ADDRESS`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#MAC_ADDRESS) | MAC address. |  | String |
-| **routerId** (router) Constant: [`ROUTER_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#ROUTER_ID) | Router ID. |  | String |
-| **subnetId** (router subnet) Constant: [`SUBNET_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#SUBNET_ID) | Subnet ID. |  | String |
-| **portId** (port router) Constant: [`PORT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#PORT_ID) | Port ID. |  | String |
-| **interfaceType** (router) Constant: [`ITERFACE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#ITERFACE_TYPE) | 
+| **CamelOpenstackNeutronCidr** (subnet) Constant: [`CIDR`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#CIDR) | The cidr representing the IP range for this subnet, based on IP version. |  | String |
+| **CamelOpenstackNeutronSubnetPools** (subnet) Constant: [`SUBNET_POOL`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#SUBNET_POOL) | The allocation pool. |  | NeutronPool |
+| **CamelOpenstackNeutronDeviceId** (port) Constant: [`DEVICE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#DEVICE_ID) | Device ID. |  | String |
+| **CamelOpenstackNeutronMacAddress** (port) Constant: [`MAC_ADDRESS`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#MAC_ADDRESS) | MAC address. |  | String |
+| **CamelOpenstackNeutronRouterId** (router) Constant: [`ROUTER_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#ROUTER_ID) | Router ID. |  | String |
+| **CamelOpenstackNeutronSubnetId** (router subnet) Constant: [`SUBNET_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#SUBNET_ID) | Subnet ID. |  | String |
+| **CamelOpenstackNeutronPortId** (port router) Constant: [`PORT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#PORT_ID) | Port ID. |  | String |
+| **CamelOpenstackNeutronInterfaceType** (router) Constant: [`ITERFACE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/neutron/NeutronConstants.html#ITERFACE_TYPE) | 
 
 Interface type.
 
@@ -222,9 +222,9 @@ Enum values:
 
 
  |  | AttachInterfaceType |
-| **operation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
-| **ID** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
-| **name** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
+| **CamelOpenstackOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
+| **CamelOpenstackId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
+| **CamelOpenstackName** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
 
 ## Usage
 

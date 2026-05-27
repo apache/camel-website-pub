@@ -224,7 +224,7 @@ The OPC UA Client component supports 2 message header(s), which is/are listed be
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelMiloNodeIds** (producer) Constant: [`HEADER_NODE_IDS`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_NODE_IDS) | The node ids. |  | List |
-| **await** (producer) Constant: [`HEADER_AWAIT`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_AWAIT) | The await setting for writes. |  | Boolean |
+| **CamelMiloAwait** (producer) Constant: [`HEADER_AWAIT`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_AWAIT) | The await setting for writes. |  | Boolean |
 
 ### Discovery
 
@@ -282,7 +282,7 @@ Example:
 ```java
 from("direct:start")
     .setHeader("CamelMiloNodeIds", constant(Arrays.asList("nsu=urn:org:apache:camel;s=myitem1")))
-    .setHeader("await", constant(true)) // await: parameter "defaultAwaitWrites"
+    .setHeader("CamelMiloAwait", constant(true)) // CamelMiloAwait: parameter "defaultAwaitWrites"
         .enrich("milo-client:opc.tcp://localhost:4334", new AggregationStrategy() {
 
             @Override
@@ -291,6 +291,33 @@ from("direct:start")
             }
         }).to("mock:test1");
 ```
+
+### Custom data types: accessing the underlying milo OpcUaClient
+
+Built-in OPC UA data types are read and written transparently. Values whose node has a **custom** (server-defined) data type are instead returned as an `org.eclipse.milo.opcua.stack.core.types.builtin.ExtensionObject`, which can only be decoded (or, for writes, encoded) with an `EncodingContext` obtained from the underlying milo client.
+
+The component does not decode these values automatically, because it cannot reliably determine which encoding context applies. Instead, the active `OpcUaClient` is exposed through `MiloClientConnection.getOpcUaClient()`, so you can obtain its encoding contexts and perform the encode/decode yourself:
+
+```java
+MiloClientEndpoint endpoint = context.getEndpoint("milo-client:opc.tcp://localhost:4334", MiloClientEndpoint.class);
+MiloClientConnection connection = endpoint.createConnection();
+try {
+    OpcUaClient client = connection.getOpcUaClient();
+    // dynamic context resolves custom, server-defined types; static context covers built-in/generated types
+    EncodingContext encodingContext = client.getDynamicEncodingContext();
+
+    // decode a value read as ExtensionObject
+    UaStructuredType decoded = extensionObject.decode(encodingContext);
+
+    // or encode a structure before writing it
+    ExtensionObject toWrite = ExtensionObject.encode(encodingContext, myStructure);
+} finally {
+    endpoint.releaseConnection(connection);
+}
+```
+
+> **Note**
+> The connection is established lazily and asynchronously, so `getOpcUaClient()` returns `null` until the client is connected, and again briefly while a connection is being re-established. The client is owned and managed by Camel: do not connect, disconnect or otherwise change its lifecycle, and fetch it on demand rather than caching the reference, as a reconnect replaces the instance.
 
 ### Security policies
 

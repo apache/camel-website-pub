@@ -10,6 +10,7 @@ This page provides a reference for all Camel JBang CLI commands.
  
 | Command | Description |
 | --- | --- |
+| [camel ask](camel-jbang-ask.md) | Ask a question about a running Camel application using AI |
 | [camel bind](camel-jbang-bind.md) | DEPRECATED: Bind source and sink Kamelets as a new Camel integration |
 | [camel catalog](camel-jbang-catalog.md) | List artifacts from Camel Catalog |
 | [camel cmd](camel-jbang-cmd.md) | Performs commands in the running Camel integrations, such as start/stop route, or change logging levels. |

@@ -766,13 +766,16 @@ from("direct:chatWithTools")
       - loop:
           id: loop-4459
           doWhile: true
-          simple:
-            expression: ${header.CamelIBMWatsonxAiHasToolCalls} == true
+          expression:
+            simple:
+              expression: ${header.CamelIBMWatsonxAiHasToolCalls} == true
           steps:
             - log:
                 message: Executing tool calls...
             - to:
-                uri: ibm-watsonx-ai:tools?operation=processToolCalls
+                uri: ibm-watsonx-ai:tools
+                parameters:
+                  operation: processToolCalls
             - to:
                 uri: ibm-watsonx-ai:chat
                 parameters:

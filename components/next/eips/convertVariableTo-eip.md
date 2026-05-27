@@ -48,14 +48,15 @@ from("seda:foo")
 ```
 
 ```yaml
-- from:
-    uri: seda:foo
-    steps:
-      - convertVariableTo:
-          name: foo
-          type: String
-      - log:
-          message: "The variable content: ${variable.foo}"
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - convertVariableTo:
+            name: foo
+            type: String
+        - log:
+            message: "The variable content: ${variable.foo}"
 ```
 
 ### Convert to another variable
@@ -84,15 +85,16 @@ from("seda:foo")
 ```
 
 ```yaml
-- from:
-    uri: seda:foo
-    steps:
-      - convertVariableTo:
-          name: foo
-          toName: bar
-          type: String
-      - log:
-          message: "The variable content: ${variable.bar}"
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - convertVariableTo:
+            name: foo
+            toName: bar
+            type: String
+        - log:
+            message: "The variable content: ${variable.bar}"
 ```
 
 ### Dynamic variable name
@@ -134,12 +136,13 @@ from("seda:foo")
 ```
 
 ```yaml
-- from:
-    uri: seda:foo
-    steps:
-      - convertVariableTo:
-          name: ${variable.region}
-          type: String
-      - log:
-          message: "Order from EMEA: ${variable.emea}"
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - convertVariableTo:
+            name: ${variable.region}
+            type: String
+        - log:
+            message: "Order from EMEA: ${variable.emea}"
 ```

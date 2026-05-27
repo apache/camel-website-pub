@@ -441,14 +441,14 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Convert to HTML with content in body
@@ -470,12 +470,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_HTML"
+          uri: docling:CONVERT_TO_HTML
           parameters:
             contentInBody: true
       - process:
@@ -509,12 +509,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:EXTRACT_STRUCTURED_DATA"
+          uri: docling:EXTRACT_STRUCTURED_DATA
           parameters:
             useDoclingServe: true
             contentInBody: true
@@ -547,32 +547,32 @@ from("file:///data/documents?include=.*\\.pdf")
 # CLI mode
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             enableOCR: false
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 
 # API mode
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             doOcr: false
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Using headers to control processing
@@ -594,7 +594,7 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
@@ -608,9 +608,9 @@ from("file:///data/documents?include=.*\\.pdf")
           name: "CamelDoclingOCRLanguage"
           constant: "es"
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"  # Operation will be overridden by header
+          uri: docling:CONVERT_TO_MARKDOWN  # Operation will be overridden by header
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Processing with custom arguments
@@ -633,7 +633,7 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
@@ -644,9 +644,9 @@ from("file:///data/documents?include=.*\\.pdf")
               ref: "customArgsBean"
               method: "createCustomArgs"
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Custom argument validation
@@ -709,14 +709,16 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:EXTRACT_METADATA"
-      - log: "Document: ${header.CamelDoclingMetadataTitle} by ${header.CamelDoclingMetadataAuthor}"
-      - log: "Pages: ${header.CamelDoclingMetadataPageCount}"
+          uri: docling:EXTRACT_METADATA
+      - log:
+          message: "Document: ${header.CamelDoclingMetadataTitle} by ${header.CamelDoclingMetadataAuthor}"
+      - log:
+          message: "Pages: ${header.CamelDoclingMetadataPageCount}"
       - process:
           ref: "metadataProcessor"
 ```
@@ -745,12 +747,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:EXTRACT_METADATA"
+          uri: docling:EXTRACT_METADATA
           parameters:
             includeRawMetadata: true
       - process:
@@ -785,29 +787,42 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:EXTRACT_METADATA"
+          uri: docling:EXTRACT_METADATA
       - choice:
           when:
-            - simple: "${header.CamelDoclingMetadataPageCount} > 100"
+            - expression:
+                simple:
+                  expression: "${header.CamelDoclingMetadataPageCount} > 100"
               steps:
-                - log: "Large document with ${header.CamelDoclingMetadataPageCount} pages"
-                - to: "file:///data/large-docs"
-            - simple: "${header.CamelDoclingMetadataLanguage} == 'fr'"
+                - log:
+                    message: "Large document with ${header.CamelDoclingMetadataPageCount} pages"
+                - to:
+                    uri: file:///data/large-docs
+            - expression:
+                simple:
+                  expression: "${header.CamelDoclingMetadataLanguage} == 'fr'"
               steps:
-                - log: "French document"
-                - to: "file:///data/french-docs"
-            - simple: "${header.CamelDoclingMetadataAuthor} contains 'Smith'"
+                - log:
+                    message: "French document"
+                - to:
+                    uri: file:///data/french-docs
+            - expression:
+                simple:
+                  expression: "${header.CamelDoclingMetadataAuthor} contains 'Smith'"
               steps:
-                - log: "Document by Smith"
-                - to: "file:///data/smith-docs"
+                - log:
+                    message: "Document by Smith"
+                - to:
+                    uri: file:///data/smith-docs
           otherwise:
             steps:
-              - to: "file:///data/other-docs"
+              - to:
+                  uri: file:///data/other-docs
 ```
 
 ### Extract metadata without headers
@@ -832,12 +847,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:EXTRACT_METADATA"
+          uri: docling:EXTRACT_METADATA
           parameters:
             includeMetadataInHeaders: false
       - process:
@@ -873,12 +888,12 @@ from("file:///data/documents?include=.*\\.pdf")
 # Get content directly in body (file is automatically deleted)
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             contentInBody: true
       - process:
@@ -887,12 +902,12 @@ from("file:///data/documents?include=.*\\.pdf")
 # Get file path (file is preserved)
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             contentInBody: false
       - process:
@@ -1016,27 +1031,36 @@ from("direct:documents")
 - route:
     id: batch-convert
     from:
-      uri: "direct:documents"
+      uri: direct:documents
     steps:
       - to:
-          uri: "docling:convert"
+          uri: docling:convert
           parameters:
             operation: "BATCH_CONVERT_TO_MARKDOWN"
             useDoclingServe: true
             batchParallelism: 4
             batchFailOnFirstError: true
-      - log: "Processed ${header.CamelDoclingBatchSuccessCount}/${header.CamelDoclingBatchTotalDocuments} documents successfully"
+      - log:
+          message: "Processed ${header.CamelDoclingBatchSuccessCount}/${header.CamelDoclingBatchTotalDocuments} documents successfully"
       - split:
-          simple: "${body.results}"
+          expression:
+            simple:
+              expression: "${body.results}"
           steps:
             - choice:
                 when:
-                  - simple: "${body.success}"
+                  - expression:
+                      simple:
+                        expression: "${body.success}"
                     steps:
-                      - to: "file:///data/output?fileName=${body.documentId}.md"
+                      - to:
+                          uri: file:///data/output
+                          parameters:
+                            fileName: "${body.documentId}.md"
                 otherwise:
                   steps:
-                    - log: "Failed: ${body.originalPath} - ${body.errorMessage}"
+                    - log:
+                        message: "Failed: ${body.originalPath} - ${body.errorMessage}"
 ```
 
 ### Queue-Based Batch Processing
@@ -1102,7 +1126,7 @@ from("direct:batch-process")
 # Route 1: Collect documents
 - route:
     from:
-      uri: "file:///data/incoming"
+      uri: file:///data/incoming
       parameters:
         noop: true
         maxMessagesPerPoll: 50
@@ -1111,16 +1135,18 @@ from("direct:batch-process")
           type: "java.lang.String"
       - setHeader:
           name: "documentPath"
-          simple: "${body}"
+          expression:
+            simple:
+              expression: "${body}"
       - to:
-          uri: "seda:document-queue"
+          uri: seda:document-queue
           parameters:
             waitForTaskToComplete: "Never"
 
 # Route 2: Aggregate into batches
 - route:
     from:
-      uri: "seda:document-queue"
+      uri: seda:document-queue
       parameters:
         concurrentConsumers: 1
     steps:
@@ -1131,31 +1157,42 @@ from("direct:batch-process")
             constant: true
           completionSize: 10
           completionTimeout: 5000
-      - to: "direct:batch-process"
+      - to:
+          uri: direct:batch-process
 
 # Route 3: Process batch
 - route:
     from:
-      uri: "direct:batch-process"
+      uri: direct:batch-process
     steps:
       - to:
-          uri: "docling:convert"
+          uri: docling:convert
           parameters:
             operation: "BATCH_CONVERT_TO_MARKDOWN"
             useDoclingServe: true
             batchParallelism: 5
             batchFailOnFirstError: false
       - split:
-          simple: "${body.results}"
+          expression:
+            simple:
+              expression: "${body.results}"
           steps:
             - choice:
                 when:
-                  - simple: "${body.success}"
+                  - expression:
+                      simple:
+                        expression: "${body.success}"
                     steps:
-                      - to: "file:///data/output?fileName=${body.documentId}.md"
+                      - to:
+                          uri: file:///data/output
+                          parameters:
+                            fileName: "${body.documentId}.md"
                 otherwise:
                   steps:
-                    - to: "file:///data/failed?fileName=${body.documentId}.error"
+                    - to:
+                        uri: file:///data/failed
+                        parameters:
+                          fileName: "${body.documentId}.error"
 ```
 
 > **Note**
@@ -1228,41 +1265,52 @@ from("direct:batch-lenient")
 - route:
     id: batch-strict
     from:
-      uri: "direct:batch-strict"
+      uri: direct:batch-strict
     steps:
       - to:
-          uri: "docling:convert"
+          uri: docling:convert
           parameters:
             operation: "BATCH_CONVERT_TO_MARKDOWN"
             useDoclingServe: true
             batchFailOnFirstError: true
-      - log: "All documents converted successfully"
+      - log:
+          message: "All documents converted successfully"
 
 # Continue on errors and process failures
 - route:
     id: batch-lenient
     from:
-      uri: "direct:batch-lenient"
+      uri: direct:batch-lenient
     steps:
       - to:
-          uri: "docling:convert"
+          uri: docling:convert
           parameters:
             operation: "BATCH_CONVERT_TO_MARKDOWN"
             useDoclingServe: true
             batchFailOnFirstError: false
-      - log: "Batch completed: ${header.CamelDoclingBatchSuccessCount} succeeded, ${header.CamelDoclingBatchFailureCount} failed"
+      - log:
+          message: "Batch completed: ${header.CamelDoclingBatchSuccessCount} succeeded, ${header.CamelDoclingBatchFailureCount} failed"
       - choice:
           when:
-            - simple: "${header.CamelDoclingBatchFailureCount} > 0"
+            - expression:
+                simple:
+                  expression: "${header.CamelDoclingBatchFailureCount} > 0"
               steps:
                 - split:
-                    simple: "${body.failed}"
+                    expression:
+                      simple:
+                        expression: "${body.failed}"
                     steps:
-                      - log: "Failed document: ${body.originalPath} - ${body.errorMessage}"
-                      - to: "file:///data/failed?fileName=${body.documentId}.error"
+                      - log:
+                          message: "Failed document: ${body.originalPath} - ${body.errorMessage}"
+                      - to:
+                          uri: file:///data/failed
+                          parameters:
+                            fileName: "${body.documentId}.error"
           otherwise:
             steps:
-              - log: "All documents processed successfully"
+              - log:
+                  message: "All documents processed successfully"
 ```
 
 ### Batch Configuration Parameters
@@ -1401,37 +1449,49 @@ from("direct:batch-parallel-individual")
 # Example 1: Split and route based on success
 - route:
     from:
-      uri: "direct:batch-with-split"
+      uri: direct:batch-with-split
     steps:
       - to:
-          uri: "docling:convert"
+          uri: docling:convert
           parameters:
             operation: "BATCH_CONVERT_TO_MARKDOWN"
             useDoclingServe: true
             splitBatchResults: true
             contentInBody: true
       - split:
-          simple: "${body}"
+          expression:
+            simple:
+              expression: "${body}"
           steps:
             - choice:
                 when:
-                  - simple: "${body.success}"
+                  - expression:
+                      simple:
+                        expression: "${body.success}"
                     steps:
-                      - log: "Success: ${body.documentId}"
-                      - to: "file:///data/success?fileName=${body.documentId}.md"
+                      - log:
+                          message: "Success: ${body.documentId}"
+                      - to:
+                          uri: file:///data/success
+                          parameters:
+                            fileName: "${body.documentId}.md"
                 otherwise:
                   steps:
-                    - log: "Failed: ${body.documentId}"
-                    - to: "file:///data/failed?fileName=${body.documentId}.error"
+                    - log:
+                        message: "Failed: ${body.documentId}"
+                    - to:
+                        uri: file:///data/failed
+                        parameters:
+                          fileName: "${body.documentId}.error"
 
 # Example 2: Split with parallel processing
 - route:
     id: batch-split-parallel
     from:
-      uri: "direct:batch-parallel"
+      uri: direct:batch-parallel
     steps:
       - to:
-          uri: "docling:convert"
+          uri: docling:convert
           parameters:
             operation: "BATCH_CONVERT_TO_MARKDOWN"
             useDoclingServe: true
@@ -1439,20 +1499,33 @@ from("direct:batch-parallel-individual")
             batchParallelism: 4
             contentInBody: true
       - split:
-          simple: "${body}"
+          expression:
+            simple:
+              expression: "${body}"
           parallelProcessing: true
           steps:
-            - log: "Processing document ${body.documentId} (index ${body.batchIndex})"
+            - log:
+                message: "Processing document ${body.documentId} (index ${body.batchIndex})"
             - choice:
                 when:
-                  - simple: "${body.success}"
+                  - expression:
+                      simple:
+                        expression: "${body.success}"
                     steps:
-                      - log: "Successfully converted ${body.documentId}"
-                      - to: "file:///data/processed?fileName=${body.documentId}.md"
+                      - log:
+                          message: "Successfully converted ${body.documentId}"
+                      - to:
+                          uri: file:///data/processed
+                          parameters:
+                            fileName: "${body.documentId}.md"
                 otherwise:
                   steps:
-                    - log: "Failed to convert ${body.documentId}: ${body.errorMessage}"
-                    - to: "file:///data/errors?fileName=${body.documentId}.error"
+                    - log:
+                        message: "Failed to convert ${body.documentId}: ${body.errorMessage}"
+                    - to:
+                        uri: file:///data/errors
+                        parameters:
+                          fileName: "${body.documentId}.error"
 ```
 
 **Comparison: BatchProcessingResults vs Split Results**
@@ -1522,15 +1595,17 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - setHeader:
           name: CamelDoclingInputFilePath
-          simple: "${file:absolute.path}"
+          expression:
+            simple:
+              expression: "${file:absolute.path}"
       - to:
-          uri: "docling:CHUNK_HYBRID"
+          uri: docling:CHUNK_HYBRID
           parameters:
             useDoclingServe: true
             contentInBody: true
@@ -1538,9 +1613,12 @@ from("file:///data/documents?include=.*\\.pdf")
             chunkingMaxTokens: 128
             chunkingMergePeers: true
       - split:
-          simple: "${body}"
+          expression:
+            simple:
+              expression: "${body}"
           steps:
-            - log: "Chunk ${body.chunkIndex}: ${body.text}"
+            - log:
+                message: "Chunk ${body.chunkIndex}: ${body.text}"
 ```
 
 ### Chunking for RAG Pipelines
@@ -1573,13 +1651,15 @@ from("direct:ingest-pdf")
 - route:
     id: ingest-pdf
     from:
-      uri: "direct:ingest-pdf"
+      uri: direct:ingest-pdf
     steps:
       - setHeader:
           name: CamelDoclingInputFilePath
-          simple: "${header.pdfFilePath}"
+          expression:
+            simple:
+              expression: "${header.pdfFilePath}"
       - to:
-          uri: "docling:CHUNK_HYBRID"
+          uri: docling:CHUNK_HYBRID
           parameters:
             useDoclingServe: true
             contentInBody: true
@@ -1587,15 +1667,20 @@ from("direct:ingest-pdf")
             chunkingMaxTokens: "{{embedding.max-tokens}}"
             chunkingMergePeers: true
       - split:
-          simple: "${body}"
+          expression:
+            simple:
+              expression: "${body}"
           steps:
             - setBody:
-                simple: "${body.text}"
+                expression:
+                  simple:
+                    expression: "${body.text}"
             - to:
-                uri: "openai:embeddings"
+                uri: openai:embeddings
                 parameters:
                   embeddingModel: "{{embedding.model}}"
-            - to: "direct:store-embedding"
+            - to:
+                uri: direct:store-embedding
 ```
 
 ### Hierarchical Chunking
@@ -1621,22 +1706,27 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - setHeader:
           name: CamelDoclingInputFilePath
-          simple: "${file:absolute.path}"
+          expression:
+            simple:
+              expression: "${file:absolute.path}"
       - to:
-          uri: "docling:CHUNK_HIERARCHICAL"
+          uri: docling:CHUNK_HIERARCHICAL
           parameters:
             useDoclingServe: true
             contentInBody: true
       - split:
-          simple: "${body}"
+          expression:
+            simple:
+              expression: "${body}"
           steps:
-            - log: "Section [${body.headings}] page ${body.pageNumbers}: ${body.text}"
+            - log:
+                message: "Section [${body.headings}] page ${body.pageNumbers}: ${body.text}"
 ```
 
 ## Asynchronous Processing
@@ -1664,12 +1754,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             useAsyncMode: true
@@ -1677,7 +1767,7 @@ from("file:///data/documents?include=.*\\.pdf")
             asyncTimeout: 300000
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Async Processing with Custom Timeout
@@ -1703,12 +1793,12 @@ from("file:///data/large-documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/large-documents"
+      uri: file:///data/large-documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             useAsyncMode: true
@@ -1716,7 +1806,7 @@ from("file:///data/large-documents?include=.*\\.pdf")
             asyncTimeout: 600000
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Using Headers to Control Async Behavior
@@ -1745,19 +1835,19 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - process:
           ref: "asyncDecisionProcessor"
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Custom Async Workflows
@@ -1899,24 +1989,29 @@ public class MyPollingHelper {
 - route:
     id: async-with-custom-polling
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
-      - log: "Starting async conversion for: ${header.CamelFileName}"
+      - log:
+          message: "Starting async conversion for: ${header.CamelFileName}"
       - to:
-          uri: "docling:convert"
+          uri: docling:convert
           parameters:
             operation: "SUBMIT_ASYNC_CONVERSION"
             useDoclingServe: true
-      - log: "Submitted conversion with task ID: ${body}"
+      - log:
+          message: "Submitted conversion with task ID: ${body}"
       - setHeader:
           name: "taskId"
-          simple: "${body}"
+          expression:
+            simple:
+              expression: "${body}"
       # For YAML, simpler to use Java processor bean or built-in async mode
       - to:
-          uri: "bean:asyncPollingProcessor"
-      - to: "file:///data/output"
+          uri: bean:asyncPollingProcessor
+      - to:
+          uri: file:///data/output
 ```
 
 #### ConversionStatus Object
@@ -1997,12 +2092,12 @@ from("seda:task-queue?concurrentConsumers=5")
 
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:convert"
+          uri: docling:convert
           parameters:
             operation: "CONVERT_TO_MARKDOWN"
             useDoclingServe: true
@@ -2011,7 +2106,7 @@ from("seda:task-queue?concurrentConsumers=5")
             asyncTimeout: 120000
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
           parameters:
             fileName: "${header.CamelFileName}"
 ```
@@ -2040,12 +2135,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             doclingServeUrl: "http://localhost:5001"
@@ -2073,19 +2168,19 @@ from("timer:convert?repeatCount=1")
 ```yaml
 - route:
     from:
-      uri: "timer:convert"
+      uri: timer:convert
       parameters:
         repeatCount: 1
     steps:
       - setBody:
           constant: "https://arxiv.org/pdf/2501.17887"
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Batch processing with docling-serve
@@ -2104,18 +2199,18 @@ from("file:///data/documents?include=.*\\.(pdf|docx)")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.(pdf|docx)"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_HTML"
+          uri: docling:CONVERT_TO_HTML
           parameters:
             useDoclingServe: true
             doclingServeUrl: "http://localhost:5001"
             contentInBody: true
       - to:
-          uri: "file:///data/converted"
+          uri: file:///data/converted
           parameters:
             fileName: "${file:name.noext}.html"
 ```
@@ -2145,12 +2240,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             doclingServeUrl: "http://localhost:5001"
@@ -2158,7 +2253,7 @@ from("file:///data/documents?include=.*\\.pdf")
             authenticationToken: "your-bearer-token-here"
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 #### API Key Authentication
@@ -2183,12 +2278,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             doclingServeUrl: "http://localhost:5001"
@@ -2197,7 +2292,7 @@ from("file:///data/documents?include=.*\\.pdf")
             apiKeyHeader: "X-API-Key"
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 #### Using Custom API Key Header
@@ -2224,12 +2319,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             doclingServeUrl: "http://localhost:5001"
@@ -2238,7 +2333,7 @@ from("file:///data/documents?include=.*\\.pdf")
             apiKeyHeader: "X-Custom-API-Key"
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 #### Using Authentication Token from Properties
@@ -2264,12 +2359,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             doclingServeUrl: "{{docling.serve.url}}"
@@ -2277,7 +2372,7 @@ from("file:///data/documents?include=.*\\.pdf")
             authenticationToken: "{{docling.serve.token}}"
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 Then define in `application.properties`:
@@ -2383,12 +2478,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:EXTRACT_STRUCTURED_DATA"
+          uri: docling:EXTRACT_STRUCTURED_DATA
           parameters:
             useDoclingServe: true
             doOcr: true
@@ -2441,12 +2536,12 @@ from("file:///data/documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/documents"
+      uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_JSON"
+          uri: docling:CONVERT_TO_JSON
           parameters:
             useDoclingServe: true
             contentInBody: true
@@ -2533,12 +2628,12 @@ from("file:///data/large-documents?include=.*\\.pdf")
 ```yaml
 - route:
     from:
-      uri: "file:///data/large-documents"
+      uri: file:///data/large-documents
       parameters:
         include: ".*\\.pdf"
     steps:
       - to:
-          uri: "docling:CONVERT_TO_MARKDOWN"
+          uri: docling:CONVERT_TO_MARKDOWN
           parameters:
             useDoclingServe: true
             useAsyncMode: true
@@ -2546,7 +2641,7 @@ from("file:///data/large-documents?include=.*\\.pdf")
             asyncTimeout: 600000
             contentInBody: true
       - to:
-          uri: "file:///data/output"
+          uri: file:///data/output
 ```
 
 ### Best Practices

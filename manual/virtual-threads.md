@@ -73,8 +73,12 @@ When virtual threads are enabled, Camel’s `DefaultThreadPoolFactory` (JDK 21+ 
 | Thread Pool Type | Platform Mode | Virtual Mode |
 | --- | --- | --- |
 | `newCachedThreadPool()` | `Executors.newCachedThreadPool()` | `Executors.newThreadPerTaskExecutor()` |
-| `newThreadPool()` (poolSize > 1) | `ThreadPoolExecutor` | `Executors.newThreadPerTaskExecutor()` |
+| `newThreadPool()` (maxQueueSize > 0) | `ThreadPoolExecutor` with bounded queue | `Executors.newThreadPerTaskExecutor()` wrapped with semaphore-based concurrency limit |
+| `newThreadPool()` (maxQueueSize ≤ 0) | `ThreadPoolExecutor` with `SynchronousQueue` | `Executors.newThreadPerTaskExecutor()` (unbounded) |
 | `newScheduledThreadPool()` | `ScheduledThreadPoolExecutor` | `Executors.newScheduledThreadPool(0, factory)` |
+
+When `maxQueueSize` is set to a positive value, the virtual thread executor is wrapped with a semaphore that enforces a flat concurrency cap of `maxQueueSize`. Unlike `ThreadPoolExecutor` where pool threads and queued tasks are distinct, all permitted tasks execute immediately on virtual threads. The `rejectedPolicy` controls what happens when the concurrency limit is reached — see [Rejected Policy](threading-model.html#rejected-policy) for details.
+
 > **Note**
 > Single-threaded executors and scheduled tasks still use platform threads, as virtual threads are optimized for concurrent I/O-bound work, not scheduled or sequential tasks.
 

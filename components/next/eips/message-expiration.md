@@ -42,5 +42,7 @@ from("direct:cheese")
       uri: direct:cheese
       steps:
         - to:
-            uri: jms:queue:cheese?timeToLive=5000
+            uri: jms:queue:cheese
+            parameters:
+              timeToLive: 5000
 ```

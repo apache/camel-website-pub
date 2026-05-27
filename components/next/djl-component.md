@@ -317,15 +317,6 @@ Application: `nlp/sentiment_analysis`
 | --- | --- | --- |
 | DistilBERT | `ai.djl.pytorch:distilbert:0.0.1` | {backbone=distilbert, dataset=sst} |
 
-#### NLP - Word Embedding
-
-Application: `nlp/word_embedding`
-
-  
-| Model family | Artifact ID | Options |
-| --- | --- | --- |
-| GloVe | `ai.djl.mxnet:glove:0.0.2` | {dimensions=50} |
-
 #### Time Series - Forecasting
 
 Application: `timeseries/forecasting`

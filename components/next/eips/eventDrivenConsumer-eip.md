@@ -35,9 +35,10 @@ from("jms:queue:foo")
 ```
 
 ```yaml
-- from:
-    uri: jms:queue:foo
-    steps:
-      - bean:
-          beanType: com.foo.MyBean
+- route:
+    from:
+      uri: jms:queue:foo
+      steps:
+        - bean:
+            beanType: com.foo.MyBean
 ```

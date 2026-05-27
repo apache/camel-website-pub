@@ -43,13 +43,14 @@ from("activemq:My.Queue")
 ```
 
 ```yaml
-- from:
-    uri: activemq:My.Queue
-    steps:
-      - to:
-          uri: velocity:com/acme/MyResponse.vm
-      - to:
-          uri: activemq:Another.Queue
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: velocity:com/acme/MyResponse.vm
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 You can also enrich the message in Java DSL directly (using fluent builder) as an [Expression](../../../manual/expression.md). In the example below, the message is enriched by appending \` World!\` to the message body:
@@ -195,14 +196,15 @@ from("activemq:My.Queue")
 ```
 
 ```yaml
-- from:
-    uri: activemq:Input
-    steps:
-      - bean:
-          ref: myBeanName
-          method: doTransform
-      - to:
-          uri: activemq:Output
+- route:
+    from:
+      uri: activemq:Input
+      steps:
+        - bean:
+            ref: myBeanName
+            method: doTransform
+        - to:
+            uri: activemq:Output
 ```
 
 ## Content enrichment using Enrich EIP

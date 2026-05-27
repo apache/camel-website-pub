@@ -131,7 +131,7 @@ The OpenStack Glance component supports 12 message header(s), which is/are liste
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **diskFormat** (producer) Constant: [`DISK_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#DISK_FORMAT) | 
+| **CamelOpenstackGlanceDiskFormat** (producer) Constant: [`DISK_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#DISK_FORMAT) | 
 The number of flavor VCPU.
 
 Enum values:
@@ -162,7 +162,7 @@ Enum values:
 
 
  |  | DiskFormat |
-| **containerFormat** (producer) Constant: [`CONTAINER_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#CONTAINER_FORMAT) | 
+| **CamelOpenstackGlanceContainerFormat** (producer) Constant: [`CONTAINER_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#CONTAINER_FORMAT) | 
 
 Size of RAM.
 
@@ -188,16 +188,16 @@ Enum values:
 
 
  |  | ContainerFormat |
-| **owner** (producer) Constant: [`OWNER`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#OWNER) | Image owner. |  | String |
-| **isPublic** (producer) Constant: [`IS_PUBLIC`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#IS_PUBLIC) | Is public. |  | Boolean |
-| **minRam** (producer) Constant: [`MIN_RAM`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#MIN_RAM) | Minimum ram. |  | Long |
-| **minDisk** (producer) Constant: [`MIN_DISK`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#MIN_DISK) | Minimum disk. |  | Long |
-| **size** (producer) Constant: [`SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#SIZE) | Size. |  | Long |
-| **checksum** (producer) Constant: [`CHECKSUM`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#CHECKSUM) | Checksum. |  | String |
-| **operation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
-| **ID** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
-| **name** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
-| **properties** (producer) Constant: [`PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#PROPERTIES) | The image properties. |  | Map |
+| **CamelOpenstackGlanceOwner** (producer) Constant: [`OWNER`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#OWNER) | Image owner. |  | String |
+| **CamelOpenstackGlanceIsPublic** (producer) Constant: [`IS_PUBLIC`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#IS_PUBLIC) | Is public. |  | Boolean |
+| **CamelOpenstackGlanceMinRam** (producer) Constant: [`MIN_RAM`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#MIN_RAM) | Minimum ram. |  | Long |
+| **CamelOpenstackGlanceMinDisk** (producer) Constant: [`MIN_DISK`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#MIN_DISK) | Minimum disk. |  | Long |
+| **CamelOpenstackGlanceSize** (producer) Constant: [`SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#SIZE) | Size. |  | Long |
+| **CamelOpenstackGlanceChecksum** (producer) Constant: [`CHECKSUM`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/glance/GlanceConstants.html#CHECKSUM) | Checksum. |  | String |
+| **CamelOpenstackOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
+| **CamelOpenstackId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
+| **CamelOpenstackName** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
+| **CamelOpenstackProperties** (producer) Constant: [`PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#PROPERTIES) | The image properties. |  | Map |
 
 ## Usage
 

@@ -64,23 +64,28 @@ from("direct:a")
 ```
 
 ```yaml
-- from:
-    uri: direct:a
-    steps:
-      - choice:
-          when:
-            - simple: "${header.foo} == 'bar'"
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.foo} == 'bar'"
+                steps:
+                  - to:
+                      uri: direct:b
+              - expression:
+                  simple:
+                    expression: "${header.foo} == 'cheese'"
+                steps:
+                  - to:
+                      uri: direct:c
+            otherwise:
               steps:
                 - to:
-                    uri: direct:b
-            - simple: "${header.foo} == 'cheese'"
-              steps:
-                - to:
-                    uri: direct:c
-          otherwise:
-            steps:
-              - to:
-                  uri: direct:d
+                    uri: direct:d
 ```
 
 ### Why can I not use otherwise in Java DSL?
@@ -194,21 +199,29 @@ from("direct:a")
 ```
 
 ```yaml
-- from:
-    uri: "direct:a"
-    steps:
-      - choice:
-          precondition: true
-          when:
-            - simple: "{{?foo}}"
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - choice:
+            precondition: true
+            when:
+              - expression:
+                  simple:
+                    expression: "{{?foo}}"
+                steps:
+                  - to:
+                      uri: direct:foo
+              - expression:
+                  simple:
+                    expression: "{{?bar}}"
+                steps:
+                  - to:
+                      uri: direct:bar
+            otherwise:
               steps:
-                - to: "direct:foo"
-            - simple: "{{?bar}}"
-              steps:
-                - to: "direct:bar"
-          otherwise:
-            steps:
-              - to: "direct:other"
+                - to:
+                    uri: direct:other
 ```
 
 > **Tip**

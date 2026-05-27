@@ -1181,9 +1181,9 @@ from("kafka:topic?groupId=myGroup&pollTimeoutMs=1000&batching=true&maxPollRecord
 ```yaml
 - route:
     from:
-      uri: "kafka:topic"
+      uri: kafka:topic
       parameters:
-        groupId: "myGroup"
+        groupId: myGroup
         pollTimeoutMs: 1000
         batching: true
         maxPollRecords: 10
@@ -1191,8 +1191,9 @@ from("kafka:topic?groupId=myGroup&pollTimeoutMs=1000&batching=true&maxPollRecord
         autoCommitEnable: true
     steps:
       - process:
-          ref: "batchProcessor"
-      - to: "mock:result"
+          ref: batchProcessor
+      - to:
+          uri: mock:result
 ```
 
 ```java
@@ -1271,25 +1272,26 @@ from("kafka:topic?groupId=myGroup&batching=true&breakOnFirstError=true&autoCommi
 ```yaml
 - route:
     on-exception:
-      - exception: "java.lang.Exception"
+      - exception: java.lang.Exception
         handled: false
         steps:
           - process:
-              ref: "errorCommitProcessor"
+              ref: errorCommitProcessor
     from:
-      uri: "kafka:topic"
+      uri: kafka:topic
       parameters:
-        groupId: "myGroup"
+        groupId: myGroup
         batching: true
         breakOnFirstError: true
         autoCommitEnable: false
         allowManualCommit: true
     steps:
       - process:
-          ref: "batchProcessorManual"
+          ref: batchProcessorManual
       - process:
-          ref: "successCommitProcessor"
-      - to: "mock:result"
+          ref: successCommitProcessor
+      - to:
+          uri: mock:result
 ```
 
 ```java

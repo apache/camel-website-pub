@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1779347876534,
+  "generated": 1779888241042,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -11258,6 +11258,12 @@
             },
             {
               "module": "ROOT",
+              "path": "migration-guide/3.36.0.adoc",
+              "url": "/camel-quarkus/next/migration-guide/3.36.0.html",
+              "title": "Camel Quarkus 3.36.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
               "path": "migration-guide/camel-spring-boot-to-camel-quarkus.adoc",
               "url": "/camel-quarkus/next/migration-guide/camel-spring-boot-to-camel-quarkus.html",
               "title": "Camel Spring Boot to Camel Quarkus Migration Guide"
@@ -21863,12 +21869,6 @@
             },
             {
               "module": "ROOT",
-              "path": "github-component.adoc",
-              "url": "/components/next/github-component.html",
-              "title": "GitHub"
-            },
-            {
-              "module": "ROOT",
               "path": "github2-component.adoc",
               "url": "/components/next/github2-component.html",
               "title": "GitHub2"
@@ -31875,6 +31875,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-ask.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-ask.html",
+              "title": "camel ask"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-bind.adoc",
               "url": "/manual/jbang-commands/camel-jbang-bind.html",
               "title": "camel bind"
@@ -32217,6 +32223,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-get-error.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-error.html",
+              "title": "camel get error"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-get-event.adoc",
               "url": "/manual/jbang-commands/camel-jbang-get-event.html",
               "title": "camel get event"
@@ -32457,6 +32469,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-plugin-list.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-plugin-list.html",
+              "title": "camel plugin list"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-plugin.adoc",
               "url": "/manual/jbang-commands/camel-jbang-plugin.html",
               "title": "camel plugin"
@@ -32676,6 +32694,12 @@
               "path": "mdc.adoc",
               "url": "/manual/mdc.html",
               "title": "Mapped Diagnostic Context (MDC)"
+            },
+            {
+              "module": "ROOT",
+              "path": "message-size.adoc",
+              "url": "/manual/message-size.html",
+              "title": "Message Size"
             },
             {
               "module": "ROOT",

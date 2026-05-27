@@ -212,10 +212,10 @@ from("direct:embeddings")
 ```yaml
 - route:
     from:
-      uri: "direct:embeddings"
+      uri: direct:embeddings
     steps:
       - to:
-          uri: "langchain4j-embeddings:test"
+          uri: langchain4j-embeddings:test
           parameters:
             embeddingModel: "#embeddingModel"
 ```
@@ -285,10 +285,10 @@ from("direct:embeddings")
 ```yaml
 - route:
     from:
-      uri: "direct:embeddings"
+      uri: direct:embeddings
     steps:
       - to:
-          uri: "langchain4j-embeddings:test"
+          uri: langchain4j-embeddings:test
           parameters:
             embeddingModel: "#myEmbeddingModel"
 ```
@@ -318,9 +318,10 @@ from("direct:store")
 ```yaml
 - route:
     from:
-      uri: "direct:store"
+      uri: direct:store
     steps:
-      - to: "langchain4j-embeddings:embed"
+      - to:
+          uri: langchain4j-embeddings:embed
       - setHeader:
           name: CamelQdrantAction
           constant: UPSERT
@@ -329,7 +330,8 @@ from("direct:store")
           constant: 1
       - transform:
           dataType: "qdrant:embeddings"
-      - to: "qdrant:myCollection"
+      - to:
+          uri: qdrant:myCollection
 ```
 
 #### Similarity Search for RAG
@@ -354,9 +356,10 @@ from("direct:search")
 ```yaml
 - route:
     from:
-      uri: "direct:search"
+      uri: direct:search
     steps:
-      - to: "langchain4j-embeddings:embed"
+      - to:
+          uri: langchain4j-embeddings:embed
       - transform:
           dataType: "qdrant:embeddings"
       - setHeader:
@@ -365,7 +368,8 @@ from("direct:search")
       - setHeader:
           name: CamelQdrantIncludePayload
           constant: true
-      - to: "qdrant:myCollection"
+      - to:
+          uri: qdrant:myCollection
       - transform:
           dataType: "qdrant:rag"
 ```
@@ -390,15 +394,17 @@ from("direct:store")
 ```yaml
 - route:
     from:
-      uri: "direct:store"
+      uri: direct:store
     steps:
-      - to: "langchain4j-embeddings:embed"
+      - to:
+          uri: langchain4j-embeddings:embed
       - setHeader:
           name: CamelPgVectorAction
           constant: UPSERT
       - transform:
           dataType: "pgvector:embeddings"
-      - to: "pgvector:myCollection"
+      - to:
+          uri: pgvector:myCollection
 ```
 
 Similarity search with PGVector and RAG:
@@ -420,15 +426,17 @@ from("direct:search")
 ```yaml
 - route:
     from:
-      uri: "direct:search"
+      uri: direct:search
     steps:
-      - to: "langchain4j-embeddings:embed"
+      - to:
+          uri: langchain4j-embeddings:embed
       - transform:
           dataType: "pgvector:embeddings"
       - setHeader:
           name: CamelPgVectorAction
           constant: SIMILARITY_SEARCH
-      - to: "pgvector:myCollection"
+      - to:
+          uri: pgvector:myCollection
       - transform:
           dataType: "pgvector:rag"
 ```
@@ -455,15 +463,25 @@ from("direct:search")
 ```yaml
 - route:
     from:
-      uri: "direct:store"
+      uri: direct:store
     steps:
-      - to: "langchain4j-embeddings:embed"
-      - to: "langchain4j-embeddingstore:myStore?action=ADD"
+      - to:
+          uri: langchain4j-embeddings:embed
+      - to:
+          uri: langchain4j-embeddingstore:myStore
+          parameters:
+            action: ADD
 
 - route:
     from:
-      uri: "direct:search"
+      uri: direct:search
     steps:
-      - to: "langchain4j-embeddings:embed"
-      - to: "langchain4j-embeddingstore:myStore?action=SEARCH&maxResults=5&returnTextContent=true"
+      - to:
+          uri: langchain4j-embeddings:embed
+      - to:
+          uri: langchain4j-embeddingstore:myStore
+          parameters:
+            action: SEARCH
+            maxResults: 5
+            returnTextContent: true
 ```

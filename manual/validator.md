@@ -63,7 +63,8 @@ validator()
     predicateValidator:
       type: csv:CSVOrder
       expression:
-        simple: "${body} contains '{name:XOrder}'"
+        simple:
+          expression: "${body} contains '{name:XOrder}'"
 ```
 
 ## Endpoint Validator Options

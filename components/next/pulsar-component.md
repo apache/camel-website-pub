@@ -66,7 +66,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Pulsar component supports 49 options, which are listed below.
+The Pulsar component supports 50 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -84,6 +84,7 @@ The Pulsar component supports 49 options, which are listed below.
 | **consumerNamePrefix** (consumer) | Prefix to add to consumer names when a SHARED or FAILOVER subscription is used. | cons | String |
 | **consumerQueueSize** (consumer) | Size of the consumer queue - defaults to 10. | 10 | int |
 | **deadLetterTopic** (consumer) | Name of the topic where the messages which fail maxRedeliverCount times will be sent. Note: if not set, default topic name will be topicName-subscriptionName-DLQ. |  | String |
+| **enableBatchIndexAcknowledgment** (consumer) | When enabled, allows each individual message in a batch to be acknowledged independently. By default Pulsar redelivers the entire batch when any single message in the batch is not acknowledged. This option also requires the Pulsar broker to be configured with acknowledgmentAtBatchIndexLevelEnabled=true. | false | boolean |
 | **enableRetry** (consumer) | To enable retry letter topic mode. The default retry letter topic uses this format: topicname-subscriptionname-RETRY. | false | boolean |
 | **keySharedPolicy** (consumer) | 
 Policy to use by consumer when using key-shared subscription type.
@@ -301,7 +302,7 @@ Enum values:
 | **namespace** (common) | **Required** The namespace. |  | String |
 | **topic** (common) | **Required** The topic. |  | String |
 
-### Query Parameters (46 parameters)
+### Query Parameters (47 parameters)
 
    
 | Name | Description | Default | Type |
@@ -317,6 +318,7 @@ Enum values:
 | **consumerNamePrefix** (consumer) | Prefix to add to consumer names when a SHARED or FAILOVER subscription is used. | cons | String |
 | **consumerQueueSize** (consumer) | Size of the consumer queue - defaults to 10. | 10 | int |
 | **deadLetterTopic** (consumer) | Name of the topic where the messages which fail maxRedeliverCount times will be sent. Note: if not set, default topic name will be topicName-subscriptionName-DLQ. |  | String |
+| **enableBatchIndexAcknowledgment** (consumer) | When enabled, allows each individual message in a batch to be acknowledged independently. By default Pulsar redelivers the entire batch when any single message in the batch is not acknowledged. This option also requires the Pulsar broker to be configured with acknowledgmentAtBatchIndexLevelEnabled=true. | false | boolean |
 | **enableRetry** (consumer) | To enable retry letter topic mode. The default retry letter topic uses this format: topicname-subscriptionname-RETRY. | false | boolean |
 | **keySharedPolicy** (consumer) | 
 Policy to use by consumer when using key-shared subscription type.
@@ -553,7 +555,7 @@ When using pulsar with Spring Boot make sure to use the following Maven dependen
 </dependency>
 ```
 
-The component supports 50 options, which are listed below.
+The component supports 51 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -579,6 +581,7 @@ The component supports 50 options, which are listed below.
 | **camel.component.pulsar.consumer-name-prefix** | Prefix to add to consumer names when a SHARED or FAILOVER subscription is used. | cons | String |
 | **camel.component.pulsar.consumer-queue-size** | Size of the consumer queue - defaults to 10. | 10 | Integer |
 | **camel.component.pulsar.dead-letter-topic** | Name of the topic where the messages which fail maxRedeliverCount times will be sent. Note: if not set, default topic name will be topicName-subscriptionName-DLQ. |  | String |
+| **camel.component.pulsar.enable-batch-index-acknowledgment** | When enabled, allows each individual message in a batch to be acknowledged independently. By default Pulsar redelivers the entire batch when any single message in the batch is not acknowledged. This option also requires the Pulsar broker to be configured with acknowledgmentAtBatchIndexLevelEnabled=true. | false | Boolean |
 | **camel.component.pulsar.enable-retry** | To enable retry letter topic mode. The default retry letter topic uses this format: topicname-subscriptionname-RETRY. | false | Boolean |
 | **camel.component.pulsar.enabled** | Whether to enable auto configuration of the pulsar component. This is enabled by default. |  | Boolean |
 | **camel.component.pulsar.hashing-scheme** | Hashing function to use when choosing the partition to use for a particular message. | JavaStringHash | String |

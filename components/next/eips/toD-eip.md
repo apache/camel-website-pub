@@ -196,7 +196,9 @@ from("direct:login")
       uri: direct:login
       steps:
         - toD:
-            uri: "http:myloginserver:8080/login?userid=${header.userName}"
+            uri: http:myloginserver:8080/login
+            parameters:
+              userid: "${header.userName}"
             cacheSize: 10
 ```
 
@@ -341,7 +343,9 @@ from("direct:login")
       uri: direct:login
       steps:
         - toD:
-            uri: "http:myloginserver:8080/login?userid=${header.userName}"
+            uri: http:myloginserver:8080/login
+            parameters:
+              userid: "${header.userName}"
 ```
 
 This will essentially be optimized to (**internally** pseudo route):

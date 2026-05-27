@@ -39,13 +39,14 @@ from("jms:MyQueue?concurrentConsumers=5")
 ```
 
 ```yaml
-- from:
-    uri: jms:MyQueue
-    parameters:
-      concurrentConsumers: 5
-    steps:
-      - to:
-          uri: bean:someBean
+- route:
+    from:
+      uri: jms:MyQueue
+      parameters:
+        concurrentConsumers: 5
+      steps:
+        - to:
+            uri: bean:someBean
 ```
 
 ## Competing Consumers with Thread Pool
@@ -74,11 +75,14 @@ from("file://inbox?move=../backup-${date:now:yyyyMMdd}")
 ```
 
 ```yaml
-- from:
-    uri: "file://inbox?move=../backup-${date:now:yyyyMMdd}"
-    steps:
-      - to:
-          uri: bean:calculateBean
+- route:
+    from:
+      uri: file://inbox
+      parameters:
+        move: "../backup-${date:now:yyyyMMdd}"
+      steps:
+        - to:
+            uri: bean:calculateBean
 ```
 
 The route is synchronous, and there is only a single consumer running at any given time. This scenario is well known, and it doesn’t affect thread safety as we only have one active thread involved at any given time.
@@ -115,13 +119,16 @@ from("file://inbox?move=../backup-${date:now:yyyyMMdd}")
 ```
 
 ```yaml
-- from:
-    uri: "file://inbox?move=../backup-${date:now:yyyyMMdd}"
-    steps:
-      - threads:
-          poolSize: 10
-      - to:
-          uri: bean:calculateBean
+- route:
+    from:
+      uri: file://inbox
+      parameters:
+        move: "../backup-${date:now:yyyyMMdd}"
+      steps:
+        - threads:
+            poolSize: 10
+        - to:
+            uri: bean:calculateBean
 ```
 
 So by inserting `threads(10)` we have instructed Camel that from this point forward in the route it should use a thread pool with up till 10 concurrent threads. So when the file consumer delivers a message to the threads, then the threads take it from there, and the file consumer can return and continue to poll the next file.

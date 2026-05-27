@@ -49,14 +49,15 @@ from("seda:b")
 ```
 
 ```yaml
-- from:
-    uri: seda:b
-    steps:
-      - delay:
-          expression:
-            constant: 1000
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - delay:
+            expression:
+              constant: "1000"
+        - to:
+            uri: mock:result
 ```
 
 Note that delay creates its own block, so some DSLs (including Java) require the delay block be closed:
@@ -102,14 +103,16 @@ from("seda:b")
 ```
 
 ```yaml
-- from:
-    uri: seda:b
-    steps:
-      - delay:
-          expression:
-            simple: "${random(1000,5000)}"
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - delay:
+            expression:
+              simple:
+                expression: "${random(1000,5000)}"
+        - to:
+            uri: mock:result
 ```
 
 You can also call a [Bean Method](../languages/bean-language.md) to compute the delayed value from Java code:
@@ -197,13 +200,14 @@ from("activemq:queue:foo")
 ```
 
 ```yaml
-- from:
-    uri: activemq:queue:foo
-    steps:
-      - delay:
-          expression:
-            constant: 1000
-          asyncDelayed: true
-      - to:
-          uri: activemq:aDelayedQueue
+- route:
+    from:
+      uri: activemq:queue:foo
+      steps:
+        - delay:
+            expression:
+              constant: "1000"
+            asyncDelayed: true
+        - to:
+            uri: activemq:aDelayedQueue
 ```

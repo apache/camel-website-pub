@@ -110,14 +110,15 @@ from("activemq:My.Queue")
 ```
 
 ```yaml
-- from:
-    uri: activemq:Input
-    steps:
-      - bean:
-          ref: myBeanName
-          method: doFilter
-      - to:
-          uri: activemq:Output
+- route:
+    from:
+      uri: activemq:Input
+      steps:
+        - bean:
+            ref: myBeanName
+            method: doFilter
+        - to:
+            uri: activemq:Output
 ```
 
 ## Message Content filtering using expression
@@ -150,12 +151,13 @@ from("activemq:Input")
 ```
 
 ```yaml
-- from:
-    uri: activemq:Input
-    steps:
-      - setBody:
-          expression:
-            xpath: //foo:bar
-      - to:
-          uri: activemq:Output
+- route:
+    from:
+      uri: activemq:Input
+      steps:
+        - setBody:
+            expression:
+              xpath: //foo:bar
+        - to:
+            uri: activemq:Output
 ```

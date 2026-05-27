@@ -159,7 +159,9 @@ transformer()
 ```yaml
 - transformers:
     endpointTransformer:
-      uri: component:componentPathOptions?mappingFile=myMapping.xml
+      uri: component:componentPathOptions
+      parameters:
+        mappingFile: myMapping.xml
       fromType: xml
       toType: json
 ```

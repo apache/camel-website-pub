@@ -62,7 +62,9 @@ from("file:inbox")
               simple:
                 expression: "${body} regex '^\\w{10}\\,\\d{2}\\,\\w{24}$'"
         - to:
-            uri: bean:myServiceBean?method=processLine
+            uri: bean:myServiceBean
+            parameters:
+              method: processLine
 ```
 
 Validate EIP is not limited to the message body. You can also validate the message header.

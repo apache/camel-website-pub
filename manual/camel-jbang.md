@@ -1102,10 +1102,19 @@ camel plugin get --all
 ```text
 Supported plugins:
 
- NAME        COMMAND     DEPENDENCY                                      DESCRIPTION
- kubernetes  kubernetes  org.apache.camel:camel-jbang-plugin-kubernetes  Run Camel applications on Kubernetes
- generate    generate    org.apache.camel:camel-jbang-plugin-generate    Generate code such as DTOs
+ NAME        COMMAND     VENDOR  DEPENDENCY                                      DESCRIPTION
+ kubernetes  kubernetes  ASF     org.apache.camel:camel-jbang-plugin-kubernetes  Run Camel applications on Kubernetes
+ generate    generate    ASF     org.apache.camel:camel-jbang-plugin-generate    Generate code such as DTOs
+ ...
+
+Known 3rd party plugins:
+
+ NAME        COMMAND  VENDOR     DEPENDENCY                                        DESCRIPTION
+ forage      forage   Community  io.kaoto.forage:camel-jbang-plugin-forage         Production ready Apache Camel components configurations via properties
+ camel-kit   kit      Community  io.github.luigidemasi:camel-kit-jbang-plugin      Design Apache Camel Integrations with AI
 ```
+
+The `VENDOR` column indicates whether the plugin is from `ASF` (Apache Software Foundation) or `Community` (3rd party).
 
 In case you want to enable a plugin and its functionality, you can add it as follows:
 
@@ -1120,6 +1129,18 @@ camel plugin add generate
 ```
 
 This adds the plugin, and all subcommands are now available for execution.
+
+Known 3rd party plugins can be installed by name as well. For example:
+
+```bash
+camel plugin add forage
+```
+
+To install a specific version of a 3rd party plugin, use the `--version` option:
+
+```bash
+camel plugin add forage --version=1.2.3
+```
 
 You can list the currently installed plugins with:
 
@@ -1264,13 +1285,15 @@ This will create a basic kamelet (based on the timer source).
 And to use the kamelet, you could create the following route:
 
 ```yaml
-- from:
-    uri: "kamelet:cheese-source"
-    parameters:
-      period: "2000"
-      message: "Hello World"
-    steps:
-      - log: "${body}"
+- route:
+    from:
+      uri: kamelet:cheese-source
+      parameters:
+        period: "2000"
+        message: "Hello World"
+      steps:
+        - log:
+            message: "${body}"
 ```
 
 If you want to create a sink kamelet, then you just name it with sink as follows (based on log sink):
@@ -1282,13 +1305,15 @@ camel init wine-sink.kamelet.yaml
 You can then change the route to use the wine kamelet as follows:
 
 ```yaml
-- from:
-    uri: "kamelet:cheese-source"
-    parameters:
-      period: "2000"
-      message: "Hello World"
-    steps:
-      - to: "kamelet:wine-sink"
+- route:
+    from:
+      uri: kamelet:cheese-source
+      parameters:
+        period: "2000"
+        message: "Hello World"
+      steps:
+        - to:
+            uri: kamelet:wine-sink
 ```
 
 If you want to create a new Kamelet based on an existing Kamelet, for example, to create a new sink based on the existing MySQL:
@@ -2271,11 +2296,12 @@ camel run --local-kamelet-dir=https://github.com/apache/camel-kamelets-examples/
 When a route is started from `platform-http` then Camel JBang will automatically include a VertX HTTP server running on port 8080. For example, the following route in a file named `server.yaml`:
 
 ```yaml
-- from:
-    uri: "platform-http:/hello"
-    steps:
-      - set-body:
-          constant: "Hello World"
+- route:
+    from:
+      uri: platform-http:/hello
+      steps:
+        - set-body:
+            constant: "Hello World"
 ```
 
 Can be run with
@@ -2518,6 +2544,9 @@ Here is a snippet how you can declare a bean as the `DataSource` for a Postgres 
 You would then also need to add the JAR dependency with Maven coordinates: `org.postgresql:postgresql:42.7.3`.
 
 #### Using a Spring Boot JDBC data source
+
+> **Note**
+> The `spring.datasource.` configuration is intended for rapid prototyping with Camel JBang, and for users who plan to export to the Spring Boot runtime. It is not supported when exporting to the default Camel Main runtime or Camel Quarkus.
 
 In `application.properties` you can set up the datasource such as:
 
@@ -3749,7 +3778,7 @@ The follow options related to _exporting_ or _running_, can be configured in `ap
 
 ### Camel JBang configurations
 
-The camel.jbang supports 47 options, which are listed below.
+The camel.jbang supports 48 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -3793,6 +3822,7 @@ The camel.jbang supports 47 options, which are listed below.
 | **camel.jbang.quarkusExtensionRegistryBaseUri** | The base URI of Quarkus Extension Registry |  | String |
 | **camel.jbang.quarkusGroupId** | groupId of Quarkus Platform BOM |  | String |
 | **camel.jbang.quarkusVersion** | version of Quarkus Platform BOM |  | String |
+| **camel.jbang.readmeFiles** | README files included with the integration (Use commas to separate multiple files) |  | String |
 | **camel.jbang.repos** | Additional Maven repositories for download on-demand (Use commas to separate multiple repositories) |  | String |
 | **camel.jbang.runtime** | Which runtime to use (camel-main, spring-boot, quarkus) |  | String |
 | **camel.jbang.scriptFiles** | Additional shell script files to export to src/main/scripts directory |  | String |

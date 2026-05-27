@@ -132,7 +132,7 @@ The Google Cloud Vision component supports 2 message header(s), which is/are lis
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **GoogleCloudVisionOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-vision/latest/org/apache/camel/component/google/vision/GoogleCloudVisionConstants.html#OPERATION) | 
+| **CamelGoogleCloudVisionOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-vision/latest/org/apache/camel/component/google/vision/GoogleCloudVisionConstants.html#OPERATION) | 
 The operation to perform.
 
 Enum values:
@@ -165,7 +165,7 @@ Enum values:
 
 
  |  | GoogleCloudVisionOperations |
-| **GoogleCloudVisionResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-vision/latest/org/apache/camel/component/google/vision/GoogleCloudVisionConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Cloud Vision API invocation. |  | AnnotateImageResponse |
+| **CamelGoogleCloudVisionResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-vision/latest/org/apache/camel/component/google/vision/GoogleCloudVisionConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Cloud Vision API invocation. |  | AnnotateImageResponse |
 
 ## Usage
 

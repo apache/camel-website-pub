@@ -52,7 +52,9 @@ from("mq:someQueue?exchangePattern=InOnly")
 ```yaml
 - route:
     from:
-      uri: mq:someQueue?exchangePattern=InOnly
+      uri: mq:someQueue
+      parameters:
+        exchangePattern: InOnly
       steps:
         - to:
             uri: activemq:queue:one-way

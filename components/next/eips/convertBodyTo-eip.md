@@ -46,11 +46,12 @@ from("file:inbox")
 ```
 
 ```yaml
-- from:
-    uri: file:inbox
-    steps:
-      - convertBodyTo:
-          type: String
-      - log:
-          message: "The file content: ${body}"
+- route:
+    from:
+      uri: file:inbox
+      steps:
+        - convertBodyTo:
+            type: String
+        - log:
+            message: "The file content: ${body}"
 ```

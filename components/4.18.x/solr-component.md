@@ -177,7 +177,7 @@ The following Solr operations are currently supported. Set an exchange header wi
   
 | Operation | Message body | Description |
 | --- | --- | --- |
-| `INSERT` | n/a | inserts/updates a document using message headers (solr fields must be prefixed with "SolrField.") |
+| `INSERT` | n/a | inserts/updates a document using message headers (solr fields must be prefixed with "CamelSolrField.") |
 | `INSERT` | File | inserts/updates a document or documents using the given File (using ContentStreamUpdateRequest) |
 | `INSERT` | SolrInputDocument or Collection<SolrInputDocument> | inserts/updates a document or documents based on the given (collection of) SolrInputDocument |
 | `INSERT` | bean or Collection<bean> | inserts/updates a document or documents based on values in an [annotated bean](http://wiki.apache.org/solr/Solrj#Directly_adding_POJOs_to_Solr) |
@@ -212,7 +212,7 @@ from("direct:search")
     <setHeader name="CamelSolrOperation">
         <constant>INSERT</constant>
     </setHeader>
-    <setHeader name="SolrField.id">
+    <setHeader name="CamelSolrField.id">
         <simple>${body}</simple>
     </setHeader>
     <to uri="solr://localhost:8983/solr"/>
@@ -236,8 +236,8 @@ from("direct:search")
 A client would simply need to pass a body message to the insert or delete routes and then call the commit route.
 
 ```java
-template.sendBodyAndHeader("direct:insert", "1234", "SolrParam.commit", true);
-template.sendBodyAndHeader("direct:delete", "1234", "SolrParam.commit", true);
+template.sendBodyAndHeader("direct:insert", "1234", "CamelSolrParam.commit", true);
+template.sendBodyAndHeader("direct:delete", "1234", "CamelSolrParam.commit", true);
 template.sendBody("direct:search", "id:1234");
 ```
 

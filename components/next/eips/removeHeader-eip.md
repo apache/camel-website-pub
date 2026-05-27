@@ -44,13 +44,14 @@ from("seda:b")
 ```
 
 ```yaml
-- from:
-    uri: seda:b
-    steps:
-      - removeHeader:
-          name: myHeader
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - removeHeader:
+            name: myHeader
+        - to:
+            uri: mock:result
 ```
 
 ## See Also

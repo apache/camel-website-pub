@@ -10,9 +10,9 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 395 spring boot starter json files.
+There are 394 spring boot starter json files.
 
-Of these 392 are used in components, dataformats, etc.
+Of these 391 are used in components, dataformats, etc.
 
 > **Note**
 > Cluster service starters (consul, file, infinispan, jgroups-raft, kubernetes, zookeeper) are documented in the [Cluster Services](#_cluster_services) section below.
@@ -47,7 +47,7 @@ Apache Camel Spring Boot supports the following Camel artifacts as Spring Boot S
 
 ## Camel Components
 
-Number of Camel components: 387 in 321 JAR artifacts (13 deprecated)
+Number of Camel components: 386 in 320 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -175,7 +175,6 @@ Number of Camel components: 387 in 321 JAR artifacts (13 deprecated)
 | [FTPS](../../components/next/ftps-component.md) | camel-ftp-starter | Stable | 2.2 | Upload and download files to/from FTP servers supporting the FTPS protocol. |
 | [Geocoder](../../components/next/geocoder-component.md) | camel-geocoder-starter | Stable | 2.12 | Find geocodes (latitude and longitude) for a given address or the other way round. |
 | [Git](../../components/next/git-component.md) | camel-git-starter | Stable | 2.16 | Perform operations on git repositories. |
-| [GitHub](../../components/next/github-component.md) | camel-github-starter | Stable-deprecated | 2.15 | Interact with the GitHub API. |
 | [GitHub2](../../components/next/github2-component.md) | camel-github2-starter | Stable | 4.18 | Interact with the GitHub API. |
 | [Google BigQuery](../../components/next/google-bigquery-component.md) | camel-google-bigquery-starter | Stable | 2.20 | Google BigQuery data warehouse for analytics. |
 | [Google BigQuery Standard SQL](../../components/next/google-bigquery-sql-component.md) | camel-google-bigquery-starter | Stable | 2.23 | Access Google Cloud BigQuery service using SQL queries. |

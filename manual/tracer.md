@@ -38,6 +38,9 @@ camel.main.tracing = true
 
 By default, Camel optimizes and opt-out tracing. Therefore, you would either have to enable tracing from the startup, or turn on standby mode, to allow tracing to be enabled later during runtime.
 
+> **Note**
+> When using Camel Main or Camel JBang with the `dev` profile (the default), tracing standby is automatically enabled. This means you can toggle tracing on and off at runtime without needing to restart.
+
 To set tracing in standby mode you can do:
 
 -   Java

@@ -57,7 +57,9 @@ from("timer:tick")
       uri: activemq:queue:order.in
       steps:
         - to:
-            uri: bean:orderServer?method=validate
+            uri: bean:orderServer
+            parameters:
+              method: validate
         - to:
             uri: direct:processOrder
 - route:
@@ -67,7 +69,9 @@ from("timer:tick")
       uri: direct:processOrder
       steps:
         - to:
-            uri: bean:orderService?method=process
+            uri: bean:orderService
+            parameters:
+              method: process
         - to:
             uri: activemq:queue:order.out
 - route:

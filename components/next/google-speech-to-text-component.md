@@ -134,7 +134,7 @@ The Google Cloud Speech To Text component supports 2 message header(s), which is
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **GoogleCloudSpeechToTextOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-speech-to-text/latest/org/apache/camel/component/google/speechtotext/GoogleCloudSpeechToTextConstants.html#OPERATION) | 
+| **CamelGoogleCloudSpeechToTextOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-speech-to-text/latest/org/apache/camel/component/google/speechtotext/GoogleCloudSpeechToTextConstants.html#OPERATION) | 
 The operation to perform.
 
 Enum values:
@@ -147,7 +147,7 @@ Enum values:
 
 
  |  | GoogleCloudSpeechToTextOperations |
-| **GoogleCloudSpeechToTextResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-speech-to-text/latest/org/apache/camel/component/google/speechtotext/GoogleCloudSpeechToTextConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Cloud Speech-to-Text API invocation. |  | RecognizeResponse |
+| **CamelGoogleCloudSpeechToTextResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-speech-to-text/latest/org/apache/camel/component/google/speechtotext/GoogleCloudSpeechToTextConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Cloud Speech-to-Text API invocation. |  | RecognizeResponse |
 
 ## Usage
 

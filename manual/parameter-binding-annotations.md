@@ -113,7 +113,9 @@ from("activemq:someQueue").
       uri: activemq:someQueue
       steps:
         - to:
-            uri: bean:myBean?method=doSomething
+            uri: bean:myBean
+            parameters:
+              method: doSomething
 ```
 
 And here we have a nifty example for you to show some great power in Camel. You can mix and match the annotations with the normal parameters, so we can have this example with annotations and the Exchange also:

@@ -661,22 +661,23 @@ from("direct:insert")
 ```
 
 ```yaml
-- from:
-    uri: direct:insert
-    steps:
-      - setHeader:
-          name: CamelAwsS3VectorsVectorId
-          constant: doc-001
-      - setBody:
-          constant:
-            - 0.1
-            - 0.2
-            - 0.3
-      - to:
-          uri: aws2-s3-vectors://my-bucket
-          parameters:
-            operation: putVectors
-            vectorIndexName: my-index
+- route:
+    from:
+      uri: direct:insert
+      steps:
+        - setHeader:
+            name: CamelAwsS3VectorsVectorId
+            constant: doc-001
+        - setBody:
+            constant:
+              - 0.1
+              - 0.2
+              - 0.3
+        - to:
+            uri: aws2-s3-vectors://my-bucket
+            parameters:
+              operation: putVectors
+              vectorIndexName: my-index
 ```
 
 ### Query Similar Vectors
@@ -695,23 +696,25 @@ from("direct:search")
 ```
 
 ```yaml
-- from:
-    uri: direct:search
-    steps:
-      - setBody:
-          constant:
-            - 0.15
-            - 0.25
-            - 0.35
-      - setHeader:
-          name: CamelAwsS3VectorsTopK
-          constant: 5
-      - to:
-          uri: aws2-s3-vectors://my-bucket
-          parameters:
-            operation: queryVectors
-            vectorIndexName: my-index
-      - log: "Found ${body.size} similar vectors"
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - setBody:
+            constant:
+              - 0.15
+              - 0.25
+              - 0.35
+        - setHeader:
+            name: CamelAwsS3VectorsTopK
+            constant: 5
+        - to:
+            uri: aws2-s3-vectors://my-bucket
+            parameters:
+              operation: queryVectors
+              vectorIndexName: my-index
+        - log:
+            message: "Found ${body.size} similar vectors"
 ```
 
 ### Consumer Polling
@@ -732,16 +735,19 @@ from("aws2-s3-vectors://my-bucket?"
 ```
 
 ```yaml
-- from:
-    uri: aws2-s3-vectors://my-bucket
-    parameters:
-      vectorIndexName: my-index
-      consumerQueryVector: "0.1,0.2,0.3"
-      delay: 5000
-      maxMessagesPerPoll: 10
-    steps:
-      - log: "Vector ID: ${header.CamelAwsS3VectorsVectorId}"
-      - to: direct:process
+- route:
+    from:
+      uri: aws2-s3-vectors://my-bucket
+      parameters:
+        vectorIndexName: my-index
+        consumerQueryVector: "0.1,0.2,0.3"
+        delay: 5000
+        maxMessagesPerPoll: 10
+      steps:
+        - log:
+            message: "Vector ID: ${header.CamelAwsS3VectorsVectorId}"
+        - to:
+            uri: direct:process
 ```
 
 ### Create Index
@@ -760,23 +766,24 @@ from("direct:createIndex")
 ```
 
 ```yaml
-- from:
-    uri: direct:createIndex
-    steps:
-      - setHeader:
-          name: CamelAwsS3VectorsVectorDimensions
-          constant: 1536
-      - setHeader:
-          name: CamelAwsS3VectorsDataType
-          constant: float32
-      - setHeader:
-          name: CamelAwsS3VectorsDistanceMetric
-          constant: cosine
-      - to:
-          uri: aws2-s3-vectors://my-bucket
-          parameters:
-            operation: createVectorIndex
-            vectorIndexName: my-index
+- route:
+    from:
+      uri: direct:createIndex
+      steps:
+        - setHeader:
+            name: CamelAwsS3VectorsVectorDimensions
+            constant: 1536
+        - setHeader:
+            name: CamelAwsS3VectorsDataType
+            constant: float32
+        - setHeader:
+            name: CamelAwsS3VectorsDistanceMetric
+            constant: cosine
+        - to:
+            uri: aws2-s3-vectors://my-bucket
+            parameters:
+              operation: createVectorIndex
+              vectorIndexName: my-index
 ```
 
 ## Dependencies

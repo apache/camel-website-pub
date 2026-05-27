@@ -216,7 +216,8 @@ from("direct:in").precondition("'{{format}}' == 'xml'")
       steps:
         - unmarshal:
             jaxb: {}
-        - to: "direct:out"
+        - to:
+            uri: direct:out
 ```
 
 ## More Information

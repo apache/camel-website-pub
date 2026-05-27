@@ -530,8 +530,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:getResource
+    - route:
+        from:
+          uri: direct:getResource
         steps:
           - to:
               uri: dhis2:get/resource
@@ -569,8 +570,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:getCollection
+    - route:
+        from:
+          uri: direct:getCollection
         steps:
           - to:
               uri: dhis2:get/collection
@@ -581,11 +583,14 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
                 password: district
                 baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
           - split:
-              simple: ${body}
+              expression:
+                simple:
+                  expression: ${body}
               steps:
                 - convertBodyTo:
                     type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
-                - log: ${body}
+                - log:
+                    message: ${body}
     ```
     
 -   Fetch all organisation unit codes:
@@ -612,8 +617,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:getCollection
+    - route:
+        from:
+          uri: direct:getCollection
         steps:
           - to:
               uri: dhis2:get/collection
@@ -625,11 +631,14 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
                 baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
                 fields: code
           - split:
-              simple: ${body}
+              expression:
+                simple:
+                  expression: ${body}
               steps:
                 - convertBodyTo:
                     type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
-                - log: ${body}
+                - log:
+                    message: ${body}
     ```
     
 -   Fetch users with a phone number:
@@ -657,8 +666,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:getCollection
+    - route:
+        from:
+          uri: direct:getCollection
         steps:
           - to:
               uri: dhis2:get/collection
@@ -670,11 +680,14 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
                 baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
                 filter: "phoneNumber:!null:"
           - split:
-              simple: ${body}
+              expression:
+                simple:
+                  expression: ${body}
               steps:
                 - convertBodyTo:
                     type: org.hisp.dhis.api.model.v40_2_2.User
-                - log: ${body}
+                - log:
+                    message: ${body}
     ```
     
 -   Save a data value set
@@ -720,8 +733,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:postResource
+    - route:
+        from:
+          uri: direct:postResource
         steps:
           - setBody:
               groovy: |
@@ -781,8 +795,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:putResource
+    - route:
+        from:
+          uri: direct:putResource
         steps:
           - setBody:
               groovy: |
@@ -836,8 +851,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:deleteResource
+    - route:
+        from:
+          uri: direct:deleteResource
         steps:
           - to:
               uri: dhis2:delete/resource
@@ -879,8 +895,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:resourceTablesAnalytics
+    - route:
+        from:
+          uri: direct:resourceTablesAnalytics
         steps:
           - to:
               uri: dhis2:resourceTables/analytics
@@ -927,8 +944,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
         script: >
           org.hisp.dhis.integration.sdk.Dhis2ClientBuilder.newClient('https://play.im.dhis2.org/stable-2-40-5/api', 'admin', 'district').build()
     
-    - from:
-        uri: direct:resourceTablesAnalytics
+    - route:
+        from:
+          uri: direct:resourceTablesAnalytics
         steps:
           - to:
               uri: dhis2:resourceTables/analytics
@@ -964,8 +982,9 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     ```
     
     ```yaml
-    - from:
-        uri: direct:clearCache
+    - route:
+        from:
+          uri: direct:clearCache
         steps:
           - setHeader:
               name: CamelDhis2.queryParams

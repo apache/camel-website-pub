@@ -262,7 +262,7 @@ from("direct:start")
         - setBody:
             simple: '{"process_id":"processId","variables":${body}}'
         - to:
-            uri: "camunda://startProcess"
+            uri: camunda://startProcess
 ```
 
 ```xml
@@ -327,7 +327,7 @@ from("direct:cancel")
         - setBody:
             simple: '{"process_instance_key": 123}'
         - to:
-            uri: "camunda://cancelProcess"
+            uri: camunda://cancelProcess
 ```
 
 ```xml
@@ -371,7 +371,7 @@ from("direct:message")
         - setBody:
             simple: '{"name":"MessageName","correlation_key":"messageKey","time_to_live":100,"variables":{}}'
         - to:
-            uri: "camunda://publishMessage"
+            uri: camunda://publishMessage
 ```
 
 ```xml
@@ -412,7 +412,7 @@ from("direct:deploy")
             name: CamelCamundaResourceName
             simple: "process.bpmn"
         - to:
-            uri: "camunda://deployResource"
+            uri: camunda://deployResource
 ```
 
 ```xml
@@ -472,7 +472,10 @@ from("camunda://worker?jobType=myJobType&timeout=20")
 ```yaml
 - route:
     from:
-      uri: "camunda://worker?jobType=myJobType&timeout=20"
+      uri: camunda://worker
+      parameters:
+        jobType: myJobType
+        timeout: 20
       steps:
         - log:
             message: "Received job ${header.CamelCamundaJobKey}"
@@ -506,7 +509,10 @@ from("camunda://worker?jobType=myJobType&timeout=20")
 ```yaml
 - route:
     from:
-      uri: "camunda://worker?jobType=myJobType&timeout=20"
+      uri: camunda://worker
+      parameters:
+        jobType: myJobType
+        timeout: 20
       steps:
         - setBody:
             constant:
@@ -547,7 +553,10 @@ from("camunda://worker?jobType=myJobType&timeout=20")
 ```yaml
 - route:
     from:
-      uri: "camunda://worker?jobType=myJobType&timeout=20"
+      uri: camunda://worker
+      parameters:
+        jobType: myJobType
+        timeout: 20
       steps:
         - setHeader:
             name: CamelCamundaErrorCode
@@ -556,7 +565,7 @@ from("camunda://worker?jobType=myJobType&timeout=20")
             name: CamelCamundaErrorMessage
             simple: "Data validation failed"
         - to:
-            uri: "camunda://throwError"
+            uri: camunda://throwError
 ```
 
 ```xml

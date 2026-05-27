@@ -37,13 +37,15 @@ from("direct:unmarshal")
 ```
 
 ```yaml
-- from:
-    uri: direct:unmarshal
+- route:
+    from:
+      uri: direct:unmarshal
     steps:
       - unmarshal:
           dfdl:
             schemaUri: X12-837P.dfdl.xsd
-      - log: "Unmarshalled X12 837P message: ${body}"
+      - log:
+          message: "Unmarshalled X12 837P message: ${body}"
 ```
 
 ### Marshal (XML to fixed format)
@@ -62,13 +64,15 @@ from("direct:marshal")
 ```
 
 ```yaml
-- from:
-    uri: direct:marshal
+- route:
+    from:
+      uri: direct:marshal
     steps:
       - marshal:
           dfdl:
             schemaUri: X12-837P.dfdl.xsd
-      - log: "Marshalled X12 837P message: ${body}"
+      - log:
+          message: "Marshalled X12 837P message: ${body}"
 ```
 
 ## DFDL Data Format Options

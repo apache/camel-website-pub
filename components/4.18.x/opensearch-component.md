@@ -167,7 +167,7 @@ The OpenSearch component supports 9 message header(s), which is/are listed below
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **operation** (producer) Constant: [`PARAM_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_OPERATION) | 
+| **CamelOpensearchOperation** (producer) Constant: [`PARAM_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_OPERATION) | 
 The operation to perform.
 
 Enum values:
@@ -200,14 +200,14 @@ Enum values:
 
 
  |  | OpensearchOperation |
-| **indexId** (producer) Constant: [`PARAM_INDEX_ID`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_INDEX_ID) | The id of the indexed document. |  | String |
-| **indexName** (producer) Constant: [`PARAM_INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_INDEX_NAME) | The name of the index to act against. |  | String |
-| **documentClass** (producer) Constant: [`PARAM_DOCUMENT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_DOCUMENT_CLASS) | The full qualified name of the class of the document to unmarshall. | ObjectNode | Class |
-| **waitForActiveShards** (producer) Constant: [`PARAM_WAIT_FOR_ACTIVE_SHARDS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_WAIT_FOR_ACTIVE_SHARDS) | The index creation waits for the write consistency number of shards to be available. |  | Integer |
-| **scrollKeepAliveMs** (producer) Constant: [`PARAM_SCROLL_KEEP_ALIVE_MS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SCROLL_KEEP_ALIVE_MS) | The starting index of the response. |  | Integer |
-| **useScroll** (producer) Constant: [`PARAM_SCROLL`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SCROLL) | Set to true to enable scroll usage. When enabled, the body is returned as a OpensearchScrollRequestIterator. Make sure to use the stream and close it accordingly to avoid potential resource leaks. |  | Boolean |
-| **size** (producer) Constant: [`PARAM_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SIZE) | The size of the response. |  | Integer |
-| **from** (producer) Constant: [`PARAM_FROM`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_FROM) | The starting index of the response. |  | Integer |
+| **CamelOpensearchIndexId** (producer) Constant: [`PARAM_INDEX_ID`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_INDEX_ID) | The id of the indexed document. |  | String |
+| **CamelOpensearchIndexName** (producer) Constant: [`PARAM_INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_INDEX_NAME) | The name of the index to act against. |  | String |
+| **CamelOpensearchDocumentClass** (producer) Constant: [`PARAM_DOCUMENT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_DOCUMENT_CLASS) | The full qualified name of the class of the document to unmarshall. | ObjectNode | Class |
+| **CamelOpensearchWaitForActiveShards** (producer) Constant: [`PARAM_WAIT_FOR_ACTIVE_SHARDS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_WAIT_FOR_ACTIVE_SHARDS) | The index creation waits for the write consistency number of shards to be available. |  | Integer |
+| **CamelOpensearchScrollKeepAliveMs** (producer) Constant: [`PARAM_SCROLL_KEEP_ALIVE_MS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SCROLL_KEEP_ALIVE_MS) | The starting index of the response. |  | Integer |
+| **CamelOpensearchUseScroll** (producer) Constant: [`PARAM_SCROLL`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SCROLL) | Set to true to enable scroll usage. When enabled, the body is returned as a OpensearchScrollRequestIterator. Make sure to use the stream and close it accordingly to avoid potential resource leaks. |  | Boolean |
+| **CamelOpensearchSize** (producer) Constant: [`PARAM_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SIZE) | The size of the response. |  | Integer |
+| **CamelOpensearchFrom** (producer) Constant: [`PARAM_FROM`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_FROM) | The starting index of the response. |  | Integer |
 
 ## Usage
 

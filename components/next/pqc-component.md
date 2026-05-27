@@ -2270,16 +2270,21 @@ from("timer:check-rotation?period=86400000") // Check daily
           method: needsRotation('route-signing-key', 90, 10000)
       - choice:
           when:
-            - simple: "${body} == true"
+            - expression:
+                simple:
+                  expression: "${body} == true"
               steps:
-                - log: "Rotating signing key"
+                - log:
+                    message: "Rotating signing key"
                 - bean:
                     ref: keyLifecycleManager
                     method: rotateKey('route-signing-key', 'route-signing-key-new', 'DILITHIUM')
-                - to: log:rotation-complete
+                - to:
+                    uri: log:rotation-complete
           otherwise:
             steps:
-              - log: "Key rotation not needed"
+              - log:
+                  message: "Key rotation not needed"
 ```
 
 ### Default Parameter Specifications
@@ -2800,7 +2805,8 @@ from("file:encrypted")
             keyEncapsulationAlgorithm: MLKEM
             symmetricKeyAlgorithm: AES
             symmetricKeyLength: 256
-      - to: file:encrypted
+      - to:
+          uri: file:encrypted
 
 - route:
     id: decrypt-route
@@ -2812,7 +2818,8 @@ from("file:encrypted")
             keyEncapsulationAlgorithm: MLKEM
             symmetricKeyAlgorithm: AES
             symmetricKeyLength: 256
-      - to: direct:decrypted
+      - to:
+          uri: direct:decrypted
 ```
 
 ### Configuration Options

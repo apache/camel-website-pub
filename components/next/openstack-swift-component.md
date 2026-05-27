@@ -147,20 +147,20 @@ The OpenStack Swift component supports 14 message header(s), which is/are listed
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **containerName** (object container) Constant: [`CONTAINER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#CONTAINER_NAME) | The container name. |  | String |
-| **objectName** (object) Constant: [`OBJECT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#OBJECT_NAME) | The object name. |  | String |
+| **CamelOpenstackSwiftContainerName** (object container) Constant: [`CONTAINER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#CONTAINER_NAME) | The container name. |  | String |
+| **CamelOpenstackSwiftObjectName** (object) Constant: [`OBJECT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#OBJECT_NAME) | The object name. |  | String |
 | xref:#\_endpoint\_header\_X-Container-Meta-**X-Container-Meta-** (container) Constant: [`CONTAINER_METADATA_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#CONTAINER_METADATA_PREFIX) | Container metadata prefix. |  | Map |
 | **X-Versions-Location** (container) Constant: [`VERSIONS_LOCATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#VERSIONS_LOCATION) | Versions location. |  | String |
 | **X-Container-Read** (container) Constant: [`CONTAINER_READ`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#CONTAINER_READ) | ACL - container read. |  | String |
 | **X-Container-Write** (container) Constant: [`CONTAINER_WRITE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#CONTAINER_WRITE) | ACL - container write. |  | String |
-| **limit** (container) Constant: [`LIMIT`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#LIMIT) | List options - limit. |  | Integer |
-| **marker** (container) Constant: [`MARKER`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#MARKER) | List options - marker. |  | String |
-| **end\_marker** (container) Constant: [`END_MARKER`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#END_MARKER) | List options - end marker. |  | String |
-| **delimiter** (container) Constant: [`DELIMITER`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#DELIMITER) | List options - delimiter. |  | Character |
-| **path** (container object) Constant: [`PATH`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#PATH) | The path. |  | String |
-| **operation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
-| **ID** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
-| **name** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
+| **CamelOpenstackSwiftLimit** (container) Constant: [`LIMIT`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#LIMIT) | List options - limit. |  | Integer |
+| **CamelOpenstackSwiftMarker** (container) Constant: [`MARKER`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#MARKER) | List options - marker. |  | String |
+| **CamelOpenstackSwiftEndMarker** (container) Constant: [`END_MARKER`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#END_MARKER) | List options - end marker. |  | String |
+| **CamelOpenstackSwiftDelimiter** (container) Constant: [`DELIMITER`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#DELIMITER) | List options - delimiter. |  | Character |
+| **CamelOpenstackSwiftPath** (container object) Constant: [`PATH`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/swift/SwiftConstants.html#PATH) | The path. |  | String |
+| **CamelOpenstackOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
+| **CamelOpenstackId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
+| **CamelOpenstackName** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
 
 ## Usage
 

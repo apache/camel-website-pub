@@ -284,21 +284,22 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - to: mock:a
-      - claimCheck:
-          operation: Push
-      - transform:
-          expression:
-            constant: Bye World
-      - to:
-          uri: mock:b
-      - claimCheck:
-          operation: Pop
-      - to:
-          uri: mock:c
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to: mock:a
+        - claimCheck:
+            operation: Push
+        - transform:
+            expression:
+              constant: Bye World
+        - to:
+            uri: mock:b
+        - claimCheck:
+            operation: Pop
+        - to:
+            uri: mock:c
 ```
 
 In the above example, imagine message body from the beginning is `Hello World`. That data is pushed on the stack of the Claim Check EIP. Then the message body is transformed to `Bye World`, which is what `mock:b` endpoint receives. When we `Pop` from the Claim Check EIP, the original message body is retrieved and merged back, so `mock:c` will retrieve the message body with `Hello World`.
@@ -347,33 +348,34 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - to: mock:a
-      - claimCheck:
-          operation: Set
-          key: foo
-      - transform:
-          expression:
-            constant: Bye World
-      - to:
-          uri: mock:b
-      - claimCheck:
-          operation: Get
-          key: foo
-      - to:
-          uri: mock:c
-      - transform:
-          expression:
-            constant: Hi World
-      - to:
-          uri: mock:d
-      - claimCheck:
-          operation: Get
-          key: foo
-      - to:
-          uri: mock:e
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to: mock:a
+        - claimCheck:
+            operation: Set
+            key: foo
+        - transform:
+            expression:
+              constant: Bye World
+        - to:
+            uri: mock:b
+        - claimCheck:
+            operation: Get
+            key: foo
+        - to:
+            uri: mock:c
+        - transform:
+            expression:
+              constant: Hi World
+        - to:
+            uri: mock:d
+        - claimCheck:
+            operation: Get
+            key: foo
+        - to:
+            uri: mock:e
 ```
 
 Notice how we can `Get` the same data twice using the `Get` operation as it will not remove the data. If you only want to get the data once, you can use `GetAndRemove`.
@@ -420,27 +422,28 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - to:
-          uri: mock:a
-      - claimCheck:
-          operation: Push
-      - transform:
-          expression:
-            constant: ByeWorld
-      - setHeader:
-          name: foo
-          expression:
-            constant: 456
-      - removeHeader:
-          name: bar
-      - to:
-          uri: mock:b
-      - claimCheck:
-          operation: Pop
-          filter: "header:(foo|bar)"
-      - to:
-          uri: mock:c
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: mock:a
+        - claimCheck:
+            operation: Push
+        - transform:
+            expression:
+              constant: ByeWorld
+        - setHeader:
+            name: foo
+            expression:
+              constant: 456
+        - removeHeader:
+            name: bar
+        - to:
+            uri: mock:b
+        - claimCheck:
+            operation: Pop
+            filter: "header:(foo|bar)"
+        - to:
+            uri: mock:c
 ```

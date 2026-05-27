@@ -224,7 +224,7 @@ The OPC UA Client component supports 2 message header(s), which is/are listed be
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelMiloNodeIds** (producer) Constant: [`HEADER_NODE_IDS`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_NODE_IDS) | The node ids. |  | List |
-| **await** (producer) Constant: [`HEADER_AWAIT`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_AWAIT) | The await setting for writes. |  | Boolean |
+| **CamelMiloAwait** (producer) Constant: [`HEADER_AWAIT`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_AWAIT) | The await setting for writes. |  | Boolean |
 
 ### Discovery
 
@@ -282,7 +282,7 @@ Example:
 ```java
 from("direct:start")
     .setHeader("CamelMiloNodeIds", constant(Arrays.asList("nsu=urn:org:apache:camel;s=myitem1")))
-    .setHeader("await", constant(true)) // await: parameter "defaultAwaitWrites"
+    .setHeader("CamelMiloAwait", constant(true)) // CamelMiloAwait: parameter "defaultAwaitWrites"
         .enrich("milo-client:opc.tcp://localhost:4334", new AggregationStrategy() {
 
             @Override

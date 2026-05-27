@@ -12,7 +12,7 @@ The following tables lists all the options:
 
 ### Camel Main configurations
 
-The camel.main supports 131 options, which are listed below.
+The camel.main supports 129 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -57,10 +57,6 @@ The camel.main supports 131 options, which are listed below.
 | **camel.main.endpointBridgeErrorHandler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions occurred while the consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN/ERROR level and ignored. The default value is false. | false | boolean |
 | **camel.main.endpointLazyStartProducer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. The default value is false. | false | boolean |
 | **camel.main.endpointRuntimeStatisticsEnabled** | Sets whether endpoint runtime statistics is enabled (gathers runtime usage of each incoming and outgoing endpoints). The default value is false. | false | boolean |
-| **camel.main.errorRegistryEnabled** | Sets whether the error registry is enabled to capture errors during message routing. This is by default disabled. | false | boolean |
-| **camel.main.errorRegistryMaximumEntries** | Sets the maximum number of error entries to keep in the error registry. When the limit is exceeded, the oldest entries are evicted. The default value is 100. | 100 | int |
-| **camel.main.errorRegistryStackTraceEnabled** | Sets whether to capture stack traces in the error registry. This is enabled by default. | true | boolean |
-| **camel.main.errorRegistryTimeToLiveSeconds** | Sets the time-to-live in seconds for error entries in the error registry. Entries older than this are evicted. The default value is 3600 (1 hour). | 3600 | int |
 | **camel.main.exchangeFactory** | Controls whether to pool (reuse) exchanges or create new exchanges (prototype). Using pooled will reduce JVM garbage collection overhead by avoiding to re-create Exchange instances per message each consumer receives. The default is prototype mode. | default | String |
 | **camel.main.exchangeFactoryCapacity** | The capacity the pool (for each consumer) uses for storing exchanges. The default capacity is 100. | 100 | int |
 | **camel.main.exchangeFactoryStatisticsEnabled** | Configures whether statistics is enabled on exchange factory. | false | boolean |
@@ -91,6 +87,7 @@ The camel.main supports 131 options, which are listed below.
 | **camel.main.mainListeners** | Sets main listener objects that will be used for MainListener that makes it possible to do custom logic during starting and stopping camel-main. |  | List |
 | **camel.main.mdcLoggingKeysPattern** | Sets the pattern used for determine which custom MDC keys to propagate during message routing when the routing engine continues routing asynchronously for the given message. Setting this pattern to will propagate all custom keys. Or setting the pattern to foo,bar will propagate any keys starting with either foo or bar. Notice that a set of standard Camel MDC keys are always propagated which starts with camel. as key name. The match rules are applied in this order (case insensitive): 1. exact match, returns true 2. wildcard match (pattern ends with a and the name starts with the pattern), returns true 3. regular expression match, returns true 4. otherwise returns false Deprecated, use camel-mdc component instead |  | String |
 | **camel.main.messageHistory** | Sets whether message history is enabled or not. Default is false. | false | boolean |
+| **camel.main.messageSizeEnabled** | Sets whether message size observation is enabled (default is false). When enabled, Camel will compute the size of message body and headers (in bytes) per endpoint (for both IN and OUT directions) and make this available via JMX MBeans (min/max/mean body size and headers size). | false | boolean |
 | **camel.main.modeline** | Whether to support JBang style //DEPS to specify additional dependencies when running Camel JBang | false | boolean |
 | **camel.main.name** | Sets the name of the CamelContext. |  | String |
 | **camel.main.producerTemplateCacheSize** | Producer template endpoints cache size. | 1000 | int |
@@ -148,6 +145,7 @@ The camel.main supports 131 options, which are listed below.
 | **camel.main.useMdcLogging** | To turn on MDC logging (deprecated, use camel-mdc component instead) | false | boolean |
 | **camel.main.uuidGenerator** | UUID generator to use. default (32 bytes), short (16 bytes), classic (32 bytes or longer), simple (long incrementing counter), off (turned off for exchanges - only intended for performance profiling) | default | String |
 | **camel.main.virtualThreadsEnabled** | Whether to enable virtual threads when creating thread pools. When enabled, Camel will use virtual threads instead of platform threads for its thread pools. This can also be enabled via the JVM system property {code camel.threads.virtual.enabled=true} . This option must be read early during bootstrap, so it is set as a system property before thread pools are created. | false | boolean |
+| **camel.main.yamlDslCompactNotationWarn** | Whether to log a WARN when YAML DSL routes use compact (shorthand) notation instead of the canonical (explicit/normalized) form. The canonical style is recommended as it is more tooling and AI friendly. Use Camel JBang to normalize existing routes: camel yaml normalize <file> | true | boolean |
 
 ### Camel Startup Condition configurations
 
@@ -543,7 +541,7 @@ The camel.vault.cyberark supports 9 options, which are listed below.
 
 ### Camel OpenTelemetry configurations
 
-The camel.opentelemetry supports 10 options, which are listed below.
+The camel.opentelemetry supports 11 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -556,12 +554,13 @@ The camel.opentelemetry supports 10 options, which are listed below.
 | **camel.opentelemetry2.enabled** | To enable OpenTelemetry 2 | false | boolean |
 | **camel.opentelemetry2.encoding** | Sets whether the header keys need to be encoded (connector specific) or not. The value is a boolean. Dashes need for instances to be encoded for JMS property keys. | false | boolean |
 | **camel.opentelemetry2.excludePatterns** | Sets exclude pattern(s) that will disable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. |  | String |
+| **camel.opentelemetry2.includePatterns** | Sets include pattern(s) that will explicitly enable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. All processors included by default if nothing is specified. |  | String |
 | **camel.opentelemetry2.instrumentationName** | A name uniquely identifying the instrumentation scope, such as the instrumentation library, package, or fully qualified class name. Must not be null. | camel | String |
 | **camel.opentelemetry2.traceProcessors** | Setting this to true will create new telemetry spans for each Camel custom Processors. Use the excludePattern property to filter out Processors. | false | boolean |
 
 ### Camel OpenTelemetry 2 configurations
 
-The camel.opentelemetry2 supports 5 options, which are listed below.
+The camel.opentelemetry2 supports 6 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -569,18 +568,20 @@ The camel.opentelemetry2 supports 5 options, which are listed below.
 | **camel.opentelemetry2.enabled** | To enable OpenTelemetry 2 | false | boolean |
 | **camel.opentelemetry2.encoding** | Sets whether the header keys need to be encoded (connector specific) or not. The value is a boolean. Dashes need for instances to be encoded for JMS property keys. | false | boolean |
 | **camel.opentelemetry2.excludePatterns** | Sets exclude pattern(s) that will disable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. |  | String |
+| **camel.opentelemetry2.includePatterns** | Sets include pattern(s) that will explicitly enable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. All processors included by default if nothing is specified. |  | String |
 | **camel.opentelemetry2.instrumentationName** | A name uniquely identifying the instrumentation scope, such as the instrumentation library, package, or fully qualified class name. Must not be null. | camel | String |
 | **camel.opentelemetry2.traceProcessors** | Setting this to true will create new telemetry spans for each Camel custom Processors. Use the excludePattern property to filter out Processors. | false | boolean |
 
 ### Camel Telemetry Dev configurations
 
-The camel.telemetryDev supports 4 options, which are listed below.
+The camel.telemetryDev supports 5 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.telemetryDev.enabled** | To enable TelemetryDev | false | boolean |
 | **camel.telemetryDev.excludePatterns** | Sets exclude pattern(s) that will disable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. |  | String |
+| **camel.telemetryDev.includePatterns** | Sets include pattern(s) that will explicitly enable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. All processors included by default if nothing is specified. |  | String |
 | **camel.telemetryDev.traceFormat** | The output format for traces. |  | String |
 | **camel.telemetryDev.traceProcessors** | Setting this to true will create new telemetry spans for each Camel custom Processors. Use the excludePattern property to filter out Processors. | false | boolean |
 
@@ -680,6 +681,22 @@ The camel.lra supports 5 options, which are listed below.
 | **camel.lra.enabled** | To enable Saga LRA | false | boolean |
 | **camel.lra.localParticipantContextPath** | The context-path for the local participant. Is default /lra-participant | /lra-participant | String |
 | **camel.lra.localParticipantUrl** | The URL for the local participant |  | String |
+
+### Camel Error Registry configurations
+
+The camel.errorRegistry supports 8 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **camel.errorRegistry.bodyIncludeFiles** | Whether to include the message body of file based messages. The overhead is that the file content has to be read from the file. | true | boolean |
+| **camel.errorRegistry.bodyIncludeStreams** | Whether to include the message body of stream based messages. If enabled then beware the stream may not be re-readable later. See more about Stream Caching. | false | boolean |
+| **camel.errorRegistry.bodyMaxChars** | To limit the message body to a maximum size in the captured error data. Use 0 or negative value to use unlimited size. | 32768 | int |
+| **camel.errorRegistry.enabled** | Whether the error registry is enabled to capture errors during message routing. | false | boolean |
+| **camel.errorRegistry.includeExchangeProperties** | Whether to include the exchange properties in the captured error data. | true | boolean |
+| **camel.errorRegistry.includeExchangeVariables** | Whether to include the exchange variables in the captured error data. | true | boolean |
+| **camel.errorRegistry.maximumEntries** | The maximum number of error entries to keep in the registry. When the limit is exceeded, the oldest entries are evicted. | 100 | int |
+| **camel.errorRegistry.timeToLiveSeconds** | The time-to-live in seconds for error entries. Entries older than this are evicted. | 3600 | int |
 
 ## Package Scanning
 

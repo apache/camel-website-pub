@@ -63,7 +63,9 @@ from("jms:someQueue?exchangePattern=InOut")
 ```yaml
 - route:
     from:
-      uri: jms:someQueue?exchangePattern=InOut
+      uri: jms:someQueue
+      parameters:
+        exchangePattern: InOut
       steps:
         - to:
             uri: bean:processMessage

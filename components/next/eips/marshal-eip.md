@@ -45,15 +45,16 @@ from("file:inbox/xml")
 ```
 
 ```yaml
-- from:
-    uri: file:inbox/xml
-    steps:
-      - unmarshal:
-          jaxb: {}
-      - to:
-          uri: bean:validateOrder
-      - marshal:
-          jaxb: {}
-      - to:
-          uri: jms:queue:order
+- route:
+    from:
+      uri: file:inbox/xml
+      steps:
+        - unmarshal:
+            jaxb: {}
+        - to:
+            uri: bean:validateOrder
+        - marshal:
+            jaxb: {}
+        - to:
+            uri: jms:queue:order
 ```

@@ -180,7 +180,7 @@ The CXF-RS component supports 16 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **operationName** (common) Constant: [`OPERATION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#OPERATION_NAME) | The name of the operation. |  | String |
+| **CamelCxfOperationName** (common) Constant: [`OPERATION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#OPERATION_NAME) | The name of the operation. |  | String |
 | **CamelAuthentication** (common) Constant: [`AUTHENTICATION`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#AUTHENTICATION) | The authentication. |  | Subject |
 | **CamelHttpMethod** (common) Constant: [`HTTP_METHOD`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#HTTP_METHOD) | The http method to use. |  | String |
 | **CamelHttpPath** (common) Constant: [`HTTP_PATH`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#HTTP_PATH) | The http path. |  | String |
@@ -297,7 +297,7 @@ Serviced by the following route:
 
 ```java
 from("cxfrs:bean:rsServer?bindingStyle=SimpleConsumer")
-    .recipientList(simple("direct:${header.operationName}"));
+    .recipientList(simple("direct:${header.CamelCxfOperationName}"));
 
 from("direct:newCustomer")
     .log("Request: type=${header.type}, active=${header.active}, customerData=${body}");

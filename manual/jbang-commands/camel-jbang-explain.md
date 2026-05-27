@@ -13,8 +13,8 @@ camel explain [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
-| `--api-key` | API key for authentication. Also reads OPENAI\_API\_KEY or LLM\_API\_KEY env vars |  | String |
-| `--api-type` | API type: 'ollama' or 'openai' (OpenAI-compatible) | ollama | ApiType |
+| `--api-key` | API key for authentication. Also reads ANTHROPIC\_API\_KEY, OPENAI\_API\_KEY, or LLM\_API\_KEY env vars |  | String |
+| `--api-type` | API type: 'ollama', 'openai' (OpenAI-compatible), or 'anthropic' (Anthropic/Vertex AI) |  | ApiType |
 | `--catalog-context` | Include Camel Catalog descriptions in the prompt |  | boolean |
 | `--format` | Output format (text, markdown) | text | String |
 | `--model` | Model to use | DEFAULT\_MODEL | String |

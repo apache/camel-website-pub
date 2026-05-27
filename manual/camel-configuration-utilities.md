@@ -398,10 +398,12 @@ You can setup SSL in XML DSL as follows:
     keystorePassword: changeit
     trustStore: truststore.p12
     trustStorePassword: changeit
-- from:
-    uri: "direct:ssl"
-    steps:
-      - to: "mock:ssl"
+- route:
+    from:
+      uri: direct:ssl
+      steps:
+        - to:
+            uri: mock:ssl
 ```
 
 ```properties

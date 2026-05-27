@@ -48,14 +48,15 @@ from("seda:foo")
 ```
 
 ```yaml
-- from:
-    uri: seda:foo
-    steps:
-      - convertHeaderTo:
-          name: foo
-          type: String
-      - log:
-          message: "The header content: ${header.foo}"
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - convertHeaderTo:
+            name: foo
+            type: String
+        - log:
+            message: "The header content: ${header.foo}"
 ```
 
 ### Convert to another header
@@ -84,15 +85,16 @@ from("seda:foo")
 ```
 
 ```yaml
-- from:
-    uri: seda:foo
-    steps:
-      - convertHeaderTo:
-          name: foo
-          toName: bar
-          type: String
-      - log:
-          message: "The header content: ${header.bar}"
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - convertHeaderTo:
+            name: foo
+            toName: bar
+            type: String
+        - log:
+            message: "The header content: ${header.bar}"
 ```
 
 ### Dynamic header name
@@ -134,12 +136,13 @@ from("seda:foo")
 ```
 
 ```yaml
-- from:
-    uri: seda:foo
-    steps:
-      - convertHeaderTo:
-          name: ${header.region}
-          type: String
-      - log:
-          message: "Order from EMEA: ${header.emea}"
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - convertHeaderTo:
+            name: ${header.region}
+            type: String
+        - log:
+            message: "Order from EMEA: ${header.emea}"
 ```

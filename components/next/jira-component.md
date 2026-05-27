@@ -292,25 +292,25 @@ The Jira component supports 19 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **IssueAssigneeId** (producer) Constant: [`ISSUE_ASSIGNEE_ID`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_ASSIGNEE_ID) | The assignee’s id of the issue. |  | String |
-| **IssueAssignee** (producer) Constant: [`ISSUE_ASSIGNEE`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_ASSIGNEE) | The assignee’s name of the issue. |  | String |
-| **IssueComponents** (producer) Constant: [`ISSUE_COMPONENTS`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_COMPONENTS) | The comma separated list of the issue’s components. |  | String |
-| **IssueChanged** (consumer) Constant: [`ISSUE_CHANGED`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_CHANGED) | The name of the updated field (i.e Status). |  | String |
-| **IssueKey** (common) Constant: [`ISSUE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_KEY) | The id of the issue. |  | String |
-| **IssuePriorityId** (producer) Constant: [`ISSUE_PRIORITY_ID`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_PRIORITY_ID) | The priority’s id of the issue. |  | Long |
-| **IssuePriorityName** (producer) Constant: [`ISSUE_PRIORITY_NAME`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_PRIORITY_NAME) | The priority’s name of the issue. |  | String |
-| **ProjectKey** (producer) Constant: [`ISSUE_PROJECT_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_PROJECT_KEY) | The project’s id of the issue. |  | String |
-| **IssueSummary** (producer) Constant: [`ISSUE_SUMMARY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_SUMMARY) | The summary of the issue. |  | String |
-| **IssueTransitionId** (producer) Constant: [`ISSUE_TRANSITION_ID`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_TRANSITION_ID) | The transition id. |  | Integer |
-| **IssueTypeId** (producer) Constant: [`ISSUE_TYPE_ID`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_TYPE_ID) | The type’s id of the issue. |  | Long |
-| **IssueTypeName** (producer) Constant: [`ISSUE_TYPE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_TYPE_NAME) | The type’s name of the issue. |  | String |
-| **IssueWatchedIssues** (consumer) Constant: [`ISSUE_WATCHED_ISSUES`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_WATCHED_ISSUES) | The list of all issue keys that are watched in the time of update. |  | String |
-| **IssueWatchersAdd** (producer) Constant: [`ISSUE_WATCHERS_ADD`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_WATCHERS_ADD) | The comma separated list of watchers to add to the issue. |  | String |
-| **IssueWatchersRemove** (producer) Constant: [`ISSUE_WATCHERS_REMOVE`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_WATCHERS_REMOVE) | The watchers of the issue to remove. |  | String |
-| **ParentIssueKey** (producer) Constant: [`PARENT_ISSUE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#PARENT_ISSUE_KEY) | The id of the parent issue. |  | String |
-| **ChildIssueKey** (producer) Constant: [`CHILD_ISSUE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#CHILD_ISSUE_KEY) | The id of the child issue. |  | String |
-| **linkType** (producer) Constant: [`LINK_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#LINK_TYPE) | The type of link. |  | String |
-| **minutesSpent** (producer) Constant: [`MINUTES_SPENT`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#MINUTES_SPENT) | The minutes spent. | \-1 | int |
+| **CamelJiraIssueAssigneeId** (producer) Constant: [`ISSUE_ASSIGNEE_ID`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_ASSIGNEE_ID) | The assignee’s id of the issue. |  | String |
+| **CamelJiraIssueAssignee** (producer) Constant: [`ISSUE_ASSIGNEE`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_ASSIGNEE) | The assignee’s name of the issue. |  | String |
+| **CamelJiraIssueComponents** (producer) Constant: [`ISSUE_COMPONENTS`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_COMPONENTS) | The comma separated list of the issue’s components. |  | String |
+| **CamelJiraIssueChanged** (consumer) Constant: [`ISSUE_CHANGED`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_CHANGED) | The name of the updated field (i.e Status). |  | String |
+| **CamelJiraIssueKey** (common) Constant: [`ISSUE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_KEY) | The id of the issue. |  | String |
+| **CamelJiraIssuePriorityId** (producer) Constant: [`ISSUE_PRIORITY_ID`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_PRIORITY_ID) | The priority’s id of the issue. |  | Long |
+| **CamelJiraIssuePriorityName** (producer) Constant: [`ISSUE_PRIORITY_NAME`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_PRIORITY_NAME) | The priority’s name of the issue. |  | String |
+| **CamelJiraIssueProjectKey** (producer) Constant: [`ISSUE_PROJECT_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_PROJECT_KEY) | The project’s id of the issue. |  | String |
+| **CamelJiraIssueSummary** (producer) Constant: [`ISSUE_SUMMARY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_SUMMARY) | The summary of the issue. |  | String |
+| **CamelJiraIssueTransitionId** (producer) Constant: [`ISSUE_TRANSITION_ID`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_TRANSITION_ID) | The transition id. |  | Integer |
+| **CamelJiraIssueTypeId** (producer) Constant: [`ISSUE_TYPE_ID`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_TYPE_ID) | The type’s id of the issue. |  | Long |
+| **CamelJiraIssueTypeName** (producer) Constant: [`ISSUE_TYPE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_TYPE_NAME) | The type’s name of the issue. |  | String |
+| **CamelJiraIssueWatchedIssues** (consumer) Constant: [`ISSUE_WATCHED_ISSUES`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_WATCHED_ISSUES) | The list of all issue keys that are watched in the time of update. |  | String |
+| **CamelJiraIssueWatchersAdd** (producer) Constant: [`ISSUE_WATCHERS_ADD`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_WATCHERS_ADD) | The comma separated list of watchers to add to the issue. |  | String |
+| **CamelJiraIssueWatchersRemove** (producer) Constant: [`ISSUE_WATCHERS_REMOVE`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#ISSUE_WATCHERS_REMOVE) | The watchers of the issue to remove. |  | String |
+| **CamelJiraParentIssueKey** (producer) Constant: [`PARENT_ISSUE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#PARENT_ISSUE_KEY) | The id of the parent issue. |  | String |
+| **CamelJiraChildIssueKey** (producer) Constant: [`CHILD_ISSUE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#CHILD_ISSUE_KEY) | The id of the child issue. |  | String |
+| **CamelJiraLinkType** (producer) Constant: [`LINK_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#LINK_TYPE) | The type of link. |  | String |
+| **CamelJiraMinutesSpent** (producer) Constant: [`MINUTES_SPENT`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#MINUTES_SPENT) | The minutes spent. | \-1 | int |
 
 ## Usage
 
@@ -389,33 +389,33 @@ There are operations that requires `id` for fields such as the issue type, prior
 
 Required:
 
--   `ProjectKey`: The project key, example: CAMEL, HHH, MYP.
+-   `CamelJiraIssueProjectKey`: The project key, example: CAMEL, HHH, MYP.
     
--   `IssueTypeId` or `IssueTypeName`: The `id` of the issue type or the name of the issue type, you can see the valid list in `http://jira_server/rest/api/2/issue/createmeta?projectKeys=SAMPLE_KEY`.
+-   `CamelJiraIssueTypeId` or `CamelJiraIssueTypeName`: The `id` of the issue type or the name of the issue type, you can see the valid list in `http://jira_server/rest/api/2/issue/createmeta?projectKeys=SAMPLE_KEY`.
     
--   `IssueSummary`: The summary of the issue.
+-   `CamelJiraIssueSummary`: The summary of the issue.
     
 
 Optional:
 
--   `IssueAssignee`: the assignee user
+-   `CamelJiraIssueAssignee`: the assignee user
     
--   `IssueAssigneeId`: the assignee user id
+-   `CamelJiraIssueAssigneeId`: the assignee user id
     
--   `IssuePriorityId` or `IssuePriorityName`: The priority of the issue, you can see the valid list in `http://jira_server/rest/api/2/priority`.
+-   `CamelJiraIssuePriorityId` or `CamelJiraIssuePriorityName`: The priority of the issue, you can see the valid list in `http://jira_server/rest/api/2/priority`.
     
--   `IssueComponents`: A list of string with the valid component names.
+-   `CamelJiraIssueComponents`: A list of string with the valid component names.
     
--   `IssueWatchersAdd`: A list of strings with the usernames (or id) to add to the watcher list.
+-   `CamelJiraIssueWatchersAdd`: A list of strings with the usernames (or id) to add to the watcher list.
     
--   `IssueDescription`: The description of the issue.
+-   The exchange body is used as the issue description.
     
 
 ### AddComment
 
 Required:
 
--   `IssueKey`: The issue key identifier.
+-   `CamelJiraIssueKey`: The issue key identifier.
     
 -   the body of the exchange is the description.
     
@@ -426,7 +426,7 @@ Only one file should attach per invocation.
 
 Required:
 
--   `IssueKey`: The issue key identifier.
+-   `CamelJiraIssueKey`: The issue key identifier.
     
 -   body of the exchange should be of type `File`
     
@@ -435,46 +435,46 @@ Required:
 
 Required:
 
--   `IssueKey`: The issue key identifier.
+-   `CamelJiraIssueKey`: The issue key identifier.
     
 
 ### TransitionIssue
 
 Required:
 
--   `IssueKey`: The issue key identifier.
+-   `CamelJiraIssueKey`: The issue key identifier.
     
--   `IssueTransitionId`: The issue transition `id`.
+-   `CamelJiraIssueTransitionId`: The issue transition `id`.
     
 -   the body of the exchange is the description.
     
 
 ### UpdateIssue
 
--   `IssueKey`: The issue key identifier.
+-   `CamelJiraIssueKey`: The issue key identifier.
     
--   `IssueTypeId` or `IssueTypeName`: The `id` of the issue type or the name of the issue type, you can see the valid list in `http://jira_server/rest/api/2/issue/createmeta?projectKeys=SAMPLE_KEY`.
+-   `CamelJiraIssueTypeId` or `CamelJiraIssueTypeName`: The `id` of the issue type or the name of the issue type, you can see the valid list in `http://jira_server/rest/api/2/issue/createmeta?projectKeys=SAMPLE_KEY`.
     
--   `IssueSummary`: The summary of the issue.
+-   `CamelJiraIssueSummary`: The summary of the issue.
     
--   `IssueAssignee`: the assignee user
+-   `CamelJiraIssueAssignee`: the assignee user
     
--   `IssueAssigneeId`: the assignee user id
+-   `CamelJiraIssueAssigneeId`: the assignee user id
     
--   `IssuePriorityId` or `IssuePriorityName`: The priority of the issue, you can see the valid list in `http://jira_server/rest/api/2/priority`.
+-   `CamelJiraIssuePriorityId` or `CamelJiraIssuePriorityName`: The priority of the issue, you can see the valid list in `http://jira_server/rest/api/2/priority`.
     
--   `IssueComponents`: A list of string with the valid component names.
+-   `CamelJiraIssueComponents`: A list of string with the valid component names.
     
--   `IssueDescription`: The description of the issue.
+-   The exchange body is used as the issue description.
     
 
 ### Watcher
 
--   `IssueKey`: The issue key identifier.
+-   `CamelJiraIssueKey`: The issue key identifier.
     
--   `IssueWatchersAdd`: A list of strings with the usernames (or id) to add to the watcher list.
+-   `CamelJiraIssueWatchersAdd`: A list of strings with the usernames (or id) to add to the watcher list.
     
--   `IssueWatchersRemove`: A list of strings with the usernames to remove from the watcher list.
+-   `CamelJiraIssueWatchersRemove`: A list of strings with the usernames to remove from the watcher list.
     
 
 ### WatchUpdates (consumer)

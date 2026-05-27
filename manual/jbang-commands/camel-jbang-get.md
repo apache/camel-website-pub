@@ -20,6 +20,7 @@ camel get [options]
 | [context](camel-jbang-get-context.md) | Get status of Camel integrations |
 | [count](camel-jbang-get-count.md) | Get total and failed exchanges |
 | [endpoint](camel-jbang-get-endpoint.md) | Get usage of Camel endpoints |
+| [error](camel-jbang-get-error.md) | Get captured routing errors of Camel integrations |
 | [event](camel-jbang-get-event.md) | Get latest events of Camel integrations |
 | [groovy](camel-jbang-get-groovy.md) | Groovy Sources used of Camel integrations |
 | [group](camel-jbang-get-group.md) | Get status of Camel route groups |

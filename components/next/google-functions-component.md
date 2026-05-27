@@ -160,7 +160,7 @@ The Google Cloud Functions component supports 5 message header(s), which is/are 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **GoogleCloudFunctionsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#OPERATION) | 
+| **CamelGoogleCloudFunctionsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#OPERATION) | 
 The operation to perform.
 
 Enum values:
@@ -187,10 +187,10 @@ Enum values:
 
 
  |  | GoogleCloudFunctionsOperations |
-| **GoogleCloudFunctionsEntryPoint** (producer) Constant: [`ENTRY_POINT`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#ENTRY_POINT) | The name of the function (as defined in source code) that will be executed. Used for createFunction operation. |  | String |
-| **GoogleCloudFunctionsRuntime** (producer) Constant: [`RUNTIME`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#RUNTIME) | The runtime in which to run the function. Possible values are: nodejs10 nodejs12 nodejs14 python37 python38 python39 go111 go113 java11 dotnet3 ruby26 nodejs6 nodejs8 Used for createFunction operation. |  | String |
-| **GoogleCloudFunctionsSourceArchiveUrl** (producer) Constant: [`SOURCE_ARCHIVE_URL`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#SOURCE_ARCHIVE_URL) | The Google Cloud Storage URL, starting with gs://, pointing to the zip archive which contains the function. Used for createFunction operation. |  | String |
-| **GoogleCloudFunctionsResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Functions Client invocation. |  | Object |
+| **CamelGoogleCloudFunctionsEntryPoint** (producer) Constant: [`ENTRY_POINT`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#ENTRY_POINT) | The name of the function (as defined in source code) that will be executed. Used for createFunction operation. |  | String |
+| **CamelGoogleCloudFunctionsRuntime** (producer) Constant: [`RUNTIME`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#RUNTIME) | The runtime in which to run the function. Possible values are: nodejs10 nodejs12 nodejs14 python37 python38 python39 go111 go113 java11 dotnet3 ruby26 nodejs6 nodejs8 Used for createFunction operation. |  | String |
+| **CamelGoogleCloudFunctionsSourceArchiveUrl** (producer) Constant: [`SOURCE_ARCHIVE_URL`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#SOURCE_ARCHIVE_URL) | The Google Cloud Storage URL, starting with gs://, pointing to the zip archive which contains the function. Used for createFunction operation. |  | String |
+| **CamelGoogleCloudFunctionsResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Functions Client invocation. |  | Object |
 
 ## Usage
 

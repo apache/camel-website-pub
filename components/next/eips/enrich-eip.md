@@ -114,15 +114,16 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - enrich:
-          expression:
-            constant: "http:remoteserver/foo"
-          aggregationStrategy: "#myStrategy"
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - enrich:
+            expression:
+              constant: http:remoteserver/foo
+            aggregationStrategy: "#myStrategy"
+        - to:
+            uri: mock:result
 - beans:
     - name: myStrategy
       type: com.foo.ExampleAggregationStrategy
@@ -158,14 +159,15 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - enrich:
-          expression:
-            constant: "http:remoteserver/foo"
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - enrich:
+            expression:
+              constant: http:remoteserver/foo
+        - to:
+            uri: mock:result
 ```
 
 Would be the same as using `to`:
@@ -192,13 +194,14 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - to:
-          uri: http:remoteserver/foo
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: http:remoteserver/foo
+        - to:
+            uri: mock:result
 ```
 
 ### Using dynamic uris
@@ -229,14 +232,16 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - enrich:
-          expression:
-            simple: "http:myserver/${header.orderId}/order"
-      - to:
-          uri: mock:result
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - enrich:
+            expression:
+              simple:
+                expression: "http:myserver/${header.orderId}/order"
+        - to:
+            uri: mock:result
 ```
 
 > **Tip**

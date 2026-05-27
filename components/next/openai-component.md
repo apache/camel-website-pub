@@ -333,7 +333,8 @@ from("direct:chat")
             uri: openai:chat-completion
             parameters:
               userMessage: What is Apache Camel?
-        - log: "Response: ${body}"
+        - log:
+            message: "Response: ${body}"
 ```
 
 ### File-Backed Prompt with Text File
@@ -391,8 +392,9 @@ Usage example:
               - log:
                   id: log-6722
                   message: ${body}
-            simple:
-              expression: ${body}
+            expression:
+              simple:
+                expression: ${body}
             streaming: true
 ```
 
@@ -795,7 +797,9 @@ Using the [PGVector](pgvector-component.md) component:
       steps:
         - setVariable:
             name: text
-            simple: "${body}"
+            expression:
+              simple:
+                expression: "${body}"
         - to:
             uri: openai:embeddings
             parameters:
@@ -805,7 +809,9 @@ Using the [PGVector](pgvector-component.md) component:
             constant: UPSERT
         - setHeader:
             name: CamelPgVectorTextContent
-            simple: "${variable.text}"
+            expression:
+              simple:
+                expression: "${variable.text}"
         - to:
             uri: pgvector:documents
 
@@ -906,7 +912,8 @@ from("file:audio?noop=true")
             uri: openai:audio-transcription
             parameters:
               audioModel: whisper-1
-        - log: "Transcription: ${body}"
+        - log:
+            message: "Transcription: ${body}"
 ```
 
 ### Input Handling
@@ -1040,7 +1047,8 @@ from("direct:chat")
               mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
               mcpServer.weather.transportType: sse
               mcpServer.weather.url: http://localhost:8080
-        - log: "${body}"
+        - log:
+            message: "${body}"
 ```
 
 ### Agentic Loop Behavior
@@ -1121,7 +1129,9 @@ from("direct:chat")
       steps:
         - setProperty:
             name: originalPrompt
-            simple: "${body}"
+            expression:
+              simple:
+                expression: "${body}"
         - to:
             uri: openai:chat-completion
             parameters:
@@ -1131,7 +1141,9 @@ from("direct:chat")
               mcpServer.api.transportType: streamableHttp
               mcpServer.api.url: http://localhost:9090/mcp
         - loopDoWhile:
-            simple: "${header.CamelOpenAIFinishReason} == 'tool_calls'"
+            expression:
+              simple:
+                expression: "${header.CamelOpenAIFinishReason} == 'tool_calls'"
             steps:
               - to:
                   uri: openai:tool-execution
@@ -1146,7 +1158,8 @@ from("direct:chat")
                     storeFullResponse: true
                     mcpServer.api.transportType: streamableHttp
                     mcpServer.api.url: http://localhost:9090/mcp
-        - log: "Final answer: ${body}"
+        - log:
+            message: "Final answer: ${body}"
 ```
 
 > **Note**
@@ -1213,7 +1226,8 @@ from("direct:chat")
               conversationMemory: true
               mcpServer.api.transportType: streamableHttp
               mcpServer.api.url: http://localhost:9090/mcp
-        - log: "${body}"
+        - log:
+            message: "${body}"
 ```
 
 With this route, a multi-turn conversation works as follows:

@@ -87,7 +87,8 @@ from("jms:queue:order")
 ```yaml
 - intercept:
     steps:
-      - to: "log:hello"
+      - to:
+          uri: log:hello
 - route:
     from:
       uri: jms:queue:order
@@ -146,9 +147,12 @@ from("jms:queue:order")
 ```yaml
 - intercept:
     onWhen:
-      simple: "${body} contains 'Hello'"
+      expression:
+        simple:
+          expression: "${body} contains 'Hello'"
     steps:
-      - to: "log:hello"
+      - to:
+          uri: log:hello
 - route:
     from:
       uri: jms:queue:order
@@ -247,9 +251,12 @@ from("jms:queue:order")
 ```yaml
 - intercept:
     onWhen:
-      simple: "${body} contains 'Hello'"
+      expression:
+        simple:
+          expression: "${body} contains 'Hello'"
     steps:
-      - to: "log:test"
+      - to:
+          uri: log:test
       - stop: {}
 - route:
     from:
@@ -300,7 +307,8 @@ from("jms:queue:order")
 ```yaml
 - interceptFrom:
     steps:
-      - to: "log:incoming"
+      - to:
+          uri: log:incoming
 - route:
     from:
       uri: jms:queue:order
@@ -352,7 +360,8 @@ from("file:inbox")
 - interceptFrom:
     uri: "jms*"
     steps:
-      - to: "log:incoming"
+      - to:
+          uri: log:incoming
 - route:
     from:
       uri: jms:queue:order
@@ -421,7 +430,8 @@ from("jms:queue:order")
 - interceptSendToEndpoint:
     uri: "kafka*"
     steps:
-      - to: "bean:beforeKafka"
+      - to:
+          uri: bean:beforeKafka
 - route:
     from:
       uri: jms:queue:order
@@ -472,7 +482,8 @@ from("jms:queue:order")
     uri: "kafka*"
     afterUri: "bean:afterKafka"
     steps:
-      - to: "bean:beforeKafka"
+      - to:
+          uri: bean:beforeKafka
 - route:
     from:
       uri: jms:queue:order
@@ -526,7 +537,8 @@ from("jms:queue:order")
     uri: "kafka*"
     skipSendToOriginalEndpoint: true
     steps:
-      - to: "mock:kafka"
+      - to:
+          uri: mock:kafka
 - route:
     from:
       uri: jms:queue:order
@@ -580,7 +592,9 @@ from("jms:queue:order")
     uri: "kafka*"
     skipSendToOriginalEndpoint: true
     onWhen:
-      simple: "${header.biztype} == 'TEST'"
+      expression:
+        simple:
+          expression: "${header.biztype} == 'TEST'"
     steps:
       - log:
           message: "TEST message detected - is NOT send to kafka"
@@ -635,7 +649,8 @@ interceptSendToEndpoint("jms:queue:cheese")
 - interceptSendToEndpoint:
     uri: "jms:queue:cheese"
     steps:
-      - to: "log:smelly"
+      - to:
+          uri: log:smelly
 ```
 
 ### Intercepting when matching endpoints by wildcard
@@ -664,7 +679,8 @@ interceptFrom("file:*")
 - interceptFrom:
     uri: "file:*"
     steps:
-      - to: "log:from-file"
+      - to:
+          uri: log:from-file
 ```
 
 Match by wildcard works so that the pattern ends with a `\*` and that the uri matches if it starts with the same pattern.
@@ -693,7 +709,8 @@ interceptFrom("file:order/inbox/*")
 - interceptFrom:
     uri: "file:order/inbox/*"
     steps:
-      - to: "log:new-file-orders"
+      - to:
+          uri: log:new-file-orders
 ```
 
 ### Intercepting when matching endpoints by regular expression
@@ -722,5 +739,6 @@ interceptFrom("jms:queue:(gold|silver)")
 - interceptFrom:
     uri: "jms:queue:(gold|silver)"
     steps:
-      - to: "seda:handleFast"
+      - to:
+          uri: seda:handleFast
 ```

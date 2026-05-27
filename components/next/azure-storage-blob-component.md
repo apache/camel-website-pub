@@ -981,8 +981,10 @@ from("azure-storage-blob://camelazure/container1?deleteAfterRead=true&accessKey=
         credentialType: SHARED_ACCOUNT_KEY
         accessKey: "RAW({{azure.accessKey}})"
       steps:
-        - log: "Processing blob: ${header.CamelAzureStorageBlobBlobName}"
-        - to: direct:processBlob
+        - log:
+            message: "Processing blob: ${header.CamelAzureStorageBlobBlobName}"
+        - to:
+            uri: direct:processBlob
 ```
 
 > **Important**
@@ -1018,8 +1020,10 @@ from("azure-storage-blob://camelazure/incoming?moveAfterRead=true&destinationCon
         credentialType: SHARED_ACCOUNT_KEY
         accessKey: "RAW({{azure.accessKey}})"
       steps:
-        - log: "Processing blob: ${header.CamelAzureStorageBlobBlobName}"
-        - to: direct:processBlob
+        - log:
+            message: "Processing blob: ${header.CamelAzureStorageBlobBlobName}"
+        - to:
+            uri: direct:processBlob
 ```
 
 You can also customize the destination blob name by adding a prefix and/or suffix:
@@ -1059,8 +1063,10 @@ from("azure-storage-blob://camelazure/source"
         credentialType: SHARED_ACCOUNT_KEY
         accessKey: "RAW({{azure.accessKey}})"
       steps:
-        - log: "Processing: ${header.CamelAzureStorageBlobBlobName}"
-        - to: direct:processBlob
+        - log:
+            message: "Processing: ${header.CamelAzureStorageBlobBlobName}"
+        - to:
+            uri: direct:processBlob
 ```
 
 The move operation works as follows:
@@ -1265,9 +1271,12 @@ from("file://data?noop=true")
 - route:
     id: azure-blob-upload
     from:
-      uri: file://data?noop=true
+      uri: file://data
+      parameters:
+        noop: true
       steps:
-        - log: "Uploading file: ${header.CamelFileName}"
+        - log:
+            message: "Uploading file: ${header.CamelFileName}"
         - toD:
             uri: "azure-storage-blob://{{azure.account}}/{{azure.container}}"
             parameters:
@@ -1277,7 +1286,8 @@ from("file://data?noop=true")
               maxConcurrency: 4          # 4 parallel uploads
               credentialType: SHARED_ACCOUNT_KEY
               accessKey: "RAW({{azure.accessKey}})"
-        - log: "Upload completed: ${header.CamelFileName}"
+        - log:
+            message: "Upload completed: ${header.CamelFileName}"
 ```
 
 The `blockSize` and `maxConcurrency` options control memory usage and upload speed:

@@ -89,7 +89,9 @@ from("direct:search")
     steps:
       - setVariable:
           name: text
-          simple: "${body}"
+          expression:
+            simple:
+              expression: "${body}"
       - to:
           uri: openai:embeddings
           parameters:
@@ -99,8 +101,11 @@ from("direct:search")
           constant: UPSERT
       - setHeader:
           name: CamelPgVectorTextContent
-          simple: "${variable.text}"
-      - to: pgvector:documents
+          expression:
+            simple:
+              expression: "${variable.text}"
+      - to:
+          uri: pgvector:documents
 
 - route:
     from:
@@ -116,7 +121,8 @@ from("direct:search")
       - setHeader:
           name: CamelPgVectorQueryTopK
           constant: 5
-      - to: pgvector:documents
+      - to:
+          uri: pgvector:documents
 ```
 
 ## LangChain4j Integration
@@ -153,27 +159,31 @@ from("direct:search")
 ```yaml
 - route:
     from:
-      uri: "direct:store"
+      uri: direct:store
     steps:
-      - to: "langchain4j-embeddings:embed"
+      - to:
+          uri: langchain4j-embeddings:embed
       - setHeader:
           name: CamelPgVectorAction
           constant: UPSERT
       - transform:
           dataType: "pgvector:embeddings"
-      - to: "pgvector:myCollection"
+      - to:
+          uri: pgvector:myCollection
 
 - route:
     from:
-      uri: "direct:search"
+      uri: direct:search
     steps:
-      - to: "langchain4j-embeddings:embed"
+      - to:
+          uri: langchain4j-embeddings:embed
       - transform:
           dataType: "pgvector:embeddings"
       - setHeader:
           name: CamelPgVectorAction
           constant: SIMILARITY_SEARCH
-      - to: "pgvector:myCollection"
+      - to:
+          uri: pgvector:myCollection
       - transform:
           dataType: "pgvector:rag"
 ```

@@ -141,11 +141,16 @@ from("file:inputDir?noop=true")
 ```
 
 ```yaml
-- from:
-    uri: file:inputDir?noop=true
+- route:
+    from:
+      uri: file:inputDir
+      parameters:
+        noop: true
     steps:
-      - to: smooks:smooks-config.xml
-      - to: jms:queue:order
+      - to:
+          uri: smooks:smooks-config.xml
+      - to:
+          uri: jms:queue:order
 ```
 
 The Smooks component is configured with a mandatory configuration file, which is `smooks-config.xml` in the example above. It is not clear what type of output the component is producing from looking at the above route. By default, the message body output is a stream but the type of output can be changed by configuring `{https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd}exports` in the Smooks configuration as shown next:

@@ -268,6 +268,19 @@ You can enable load statistics such as from `application.properties`:
 camel.main.loadStatisticsEnabled = true
 ```
 
+### Message size statistics
+
+It is possible to include message size statistics per endpoint. These track the min, max, and mean sizes of message bodies and headers for both incoming (IN) and outgoing (OUT) endpoints.
+
+You can enable message size statistics from `application.properties`:
+
+```properties
+camel.main.messageSizeEnabled = true
+camel.main.jmxManagementStatisticsLevel = Extended
+```
+
+See [Message Size](message-size.md) for more details.
+
 ## Hiding sensitive information
 
 By default, Camel enlists MBeans in JMX such as endpoints configured using URIs. In this configuration, there may be sensitive information such as passwords.

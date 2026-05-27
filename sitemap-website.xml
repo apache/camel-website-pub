@@ -2,13 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Camel-Karaf/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/05/camel-karaf-4.18.2/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/karaf-4.14.7/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/karaf-4.18.2/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-05-24T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-45760.html</loc>
     <lastmod>2026-05-18T09:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-47323.html</loc>
-    <lastmod>2026-05-18T09:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/</loc>
     <lastmod>2026-05-18T09:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/</loc>
@@ -23,14 +47,8 @@
     <loc>https://camel.apache.org/releases/k-2.9.2/</loc>
     <lastmod>2026-05-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
-    <lastmod>2026-05-18T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.18.2/</loc>
     <lastmod>2026-05-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-05-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Camel-Quarkus/</loc>
     <lastmod>2026-05-07T00:00:00+00:00</lastmod>
@@ -42,9 +60,6 @@
     <lastmod>2026-05-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.27.4/</loc>
-    <lastmod>2026-05-07T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
     <lastmod>2026-05-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-33453.html</loc>
@@ -109,9 +124,6 @@
   </url><url>
     <loc>https://camel.apache.org/blog/2026/04/RELEASE-4.18.2/</loc>
     <lastmod>2026-04-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Camel-Karaf/</loc>
-    <lastmod>2026-04-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/04/camel-karaf-4.18.1/</loc>
     <lastmod>2026-04-18T00:00:00+00:00</lastmod>

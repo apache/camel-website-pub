@@ -6,8 +6,36 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 May 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 24 May 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Karaf 4.14.7 Released</title>
+      <link>https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/</guid>
+      <description>Camel Karaf 4.14.7 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf 4.18.2 Released</title>
+      <link>https://camel.apache.org/blog/2026/05/camel-karaf-4.18.2/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/05/camel-karaf-4.18.2/</guid>
+      <description>Camel Karaf 4.18.2 release</description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.14.7</title>
+      <link>https://camel.apache.org/releases/karaf-4.14.7/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.14.7/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Karaf release 4.18.2</title>
+      <link>https://camel.apache.org/releases/karaf-4.18.2/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/karaf-4.18.2/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-45760</title>
       <link>https://camel.apache.org/security/CVE-2026-45760.html</link>

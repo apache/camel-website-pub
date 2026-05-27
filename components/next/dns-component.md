@@ -137,12 +137,12 @@ The DNS component supports 6 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **dns.class** (lookup dig) Constant: [`DNS_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_CLASS) | The DNS class of the lookup. Should match the values of org.xbill.dns.DClass. Optional. |  | String |
-| **dns.name** (lookup) Constant: [`DNS_NAME`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_NAME) | **Required** The name to lookup. |  | String |
-| **dns.domain** (ip) Constant: [`DNS_DOMAIN`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_DOMAIN) | **Required** The domain name. |  | String |
-| **dns.server** (dig) Constant: [`DNS_SERVER`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_SERVER) | The server in particular for the query. If none is given, the default one specified by the OS will be used. Optional. |  | String |
-| **dns.type** (lookup dig) Constant: [`DNS_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_TYPE) | The type of the lookup. Should match the values of org.xbill.dns.Type. Optional. |  | String |
-| **term** (wikipedia) Constant: [`TERM`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#TERM) | **Required** The term. |  |  |
+| **CamelDnsClass** (lookup dig) Constant: [`DNS_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_CLASS) | The DNS class of the lookup. Should match the values of org.xbill.dns.DClass. Optional. |  | String |
+| **CamelDnsName** (lookup) Constant: [`DNS_NAME`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_NAME) | **Required** The name to lookup. |  | String |
+| **CamelDnsDomain** (ip) Constant: [`DNS_DOMAIN`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_DOMAIN) | **Required** The domain name. |  | String |
+| **CamelDnsServer** (dig) Constant: [`DNS_SERVER`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_SERVER) | The server in particular for the query. If none is given, the default one specified by the OS will be used. Optional. |  | String |
+| **CamelDnsType** (lookup dig) Constant: [`DNS_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_TYPE) | The type of the lookup. Should match the values of org.xbill.dns.Type. Optional. |  | String |
+| **CamelDnsTerm** (wikipedia) Constant: [`TERM`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#TERM) | **Required** The term. |  |  |
 
 ## Examples
 
@@ -157,7 +157,7 @@ The DNS component supports 6 message header(s), which is/are listed below:
 
 This looks up a domain’s IP. For example, _www.example.com_ resolves to 192.0.32.10.
 
-The IP address to lookup must be provided in the header with key `"dns.domain"`.
+The IP address to lookup must be provided in the header with key `"CamelDnsDomain"`.
 
 ### DNS lookup
 
@@ -169,7 +169,7 @@ The IP address to lookup must be provided in the header with key `"dns.domain"`.
 ```
 
 This returns a set of DNS records associated with a domain.  
-The name to lookup must be provided in the header with key `"dns.name"`.
+The name to lookup must be provided in the header with key `"CamelDnsName"`.
 
 ### DNS Dig
 
@@ -182,7 +182,7 @@ Dig is a Unix command-line utility to run DNS queries.
 </route>
 ```
 
-The query must be provided in the header with key `"dns.query"`.
+The query must be provided in the header with key `"CamelDnsName"`.
 
 ### Dns Activation Policy
 

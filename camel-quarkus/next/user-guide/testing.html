@@ -167,25 +167,45 @@ class SimpleTest extends CamelQuarkusTestSupport {
 
         mockEndpoint.assertIsSatisfied();
     }
-}</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_using_advicewith"><a class="anchor" href="#_using_advicewith"></a>Using <code>AdviceWith</code></h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@QuarkusTest
-class SimpleTest extends CamelQuarkusTestSupport {
+}</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_using_advicewith"><a class="anchor" href="#_using_advicewith"></a>Using <code>AdviceWith</code></h4> <div class="paragraph"> <p><a href="../../../manual/advice-with.html" class="xref page">AdviceWith</a> allows you to modify routes at runtime for testing purposes - replacing endpoints, adding interceptors, or changing route behavior without modifying production code.</p> </div> <div class="sect4"> <h5 id="_advising_existing_application_routes"><a class="anchor" href="#_advising_existing_application_routes"></a>Advising existing application routes</h5> <div class="paragraph"> <p>The recommended pattern is:</p> </div> <div class="olist arabic"> <ol class="arabic"> <li> <p>Define routes in your <strong>application code</strong> (src/main/java)</p> </li> <li> <p>Use <code>AdviceWith</code> to modify these <strong>existing</strong> routes in your tests</p> </li> </ol> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Application code: src/main/java/com/example/MyRoutes.java
+public class MyRoutes extends RouteBuilder {
+    @Override
+    public void configure() {
+        from("kafka:input-topic").routeId("my-kafka-route")
+            .to("kafka:output-topic")
+            .to("mock:result");
+    }
+}
+
+// Test code: src/test/java/com/example/MyRoutesTest.java
+@QuarkusTest
+class MyRoutesTest extends CamelQuarkusTestSupport {
     @BeforeEach
     public void beforeEach() throws Exception {
-        AdviceWith.adviceWith(this.context, "advisedRoute", route -&gt; {
-            route.replaceFromWith("direct:replaced");
+        // Advise the application route
+        AdviceWith.adviceWith(this.context, "my-kafka-route", route -&gt; {
+            route.weaveByToUri("kafka:output-topic*").replace().to("mock:kafka-stub");
         });
     }
 
-    @Override
-    protected RoutesBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                from("direct:start").routeId("advisedRoute")
-                    .transform().simple("Hello ${body}")
-                    .to("mock:result");
-            }
-        };
+    @Test
+    void testRoute() throws Exception {
+        MockEndpoint stub = getMockEndpoint("mock:kafka-stub");
+        stub.expectedMessageCount(1);
+
+        template.sendBody("kafka:input-topic", "test");
+
+        stub.assertIsSatisfied();
+    }
+}</code></pre> </div> </div> <div class="admonitionblock warning"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-warning" title="Warning"></i> </td> <td class="content"> Advising routes created via <code>createRouteBuilder()</code> in tests can lead to unpredictable behavior. </td> </tr> </table></div> </div> </div> <div class="sect4"> <h5 id="_apply_advice_in_beforeeach_or_dobeforeeach"><a class="anchor" href="#_apply_advice_in_beforeeach_or_dobeforeeach"></a>Apply advice in <code>@BeforeEach</code> or <code>doBeforeEach</code></h5> <div class="paragraph"> <p>When all tests in a class need the same advice, apply it in <code>@BeforeEach</code> or override <code>doBeforeEach</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@QuarkusTest
+class SimpleTest extends CamelQuarkusTestSupport {
+    @BeforeEach
+    public void beforeEach() throws Exception {
+        // Apply advice to EXISTING application route
+        AdviceWith.adviceWith(this.context, "advisedRoute", route -&gt; {
+            route.replaceFromWith("direct:replaced");
+        });
+        // Routes that aren't advised are automatically started after this method completes
     }
 
     @Test
@@ -197,7 +217,38 @@ class SimpleTest extends CamelQuarkusTestSupport {
 
         mockEndpoint.assertIsSatisfied();
     }
-}</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_explicitly_enabling_advice"><a class="anchor" href="#_explicitly_enabling_advice"></a>Explicitly enabling advice</h4> <div class="paragraph"> <p>When explicitly <a href="../../../manual/advice-with.html#_enabling_advice_during_testing" class="xref page">enabling advice</a> you must invoke <code>startRouteDefinitions</code> when completing your <code>AdviceWith</code> setup. Note that this is only required if you have routes configured that are NOT being advised.</p> </div> </div> </div> <div class="sect2"> <h3 id="_limitations"><a class="anchor" href="#_limitations"></a>Limitations</h3> <div class="sect3"> <h4 id="_test_lifecycle_methods_inherited_from_cameltestsupport"><a class="anchor" href="#_test_lifecycle_methods_inherited_from_cameltestsupport"></a>Test lifecycle methods inherited from <code>CamelTestSupport</code></h4> <div class="paragraph"> <p><code>CamelQuarkusTestSupport</code> inherits some test lifecycle methods from <code>CamelTestSupport</code>. However, they should not be used and instead are replaced with equivalent methods in <code>CamelQuarkusTestSupport</code>.</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">CamelTestSupport lifecycle methods</th> <th class="tableblock halign-left valign-top">CamelQuarkusTestSupport equivalent</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>afterAll</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doAfterAll</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>afterEach</code>, <code>afterTestExecution</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doAfterEach</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>beforeAll</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doAfterConstruct</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>beforeEach</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doBeforeEach</code></p></td> </tr> </tbody> </table></div> </div> <div class="sect3"> <h4 id="_creating_a_custom_camel_registry_is_not_supported"><a class="anchor" href="#_creating_a_custom_camel_registry_is_not_supported"></a>Creating a custom Camel registry is not supported</h4> <div class="paragraph"> <p>The <code>CamelQuarkusTestSupport</code> implementation of <code>createCamelRegistry</code> will throw <code>UnsupportedOperationException</code>.</p> </div> <div class="paragraph"> <p>If you need to bind or unbind objects to the Camel registry, then you can do it by one of the following methods.</p> </div> <div class="ulist"> <ul> <li> <p>Produce named CDI beans</p> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyBeanProducers {
+}</code></pre> </div> </div> <div class="paragraph"> <p>Routes that aren&#8217;t advised are automatically started after <code>@BeforeEach</code> or <code>doBeforeEach</code> completes. Advice modifications are automatically cleaned up between test methods</p> </div> </div> <div class="sect4"> <h5 id="_per_test_method_advice_using_adviceroute"><a class="anchor" href="#_per_test_method_advice_using_adviceroute"></a>Per-test-method advice using <code>adviceRoute()</code></h5> <div class="paragraph"> <p>When you need <strong>different</strong> advice in each test method, use the <code>adviceRoute()</code> helper method which handles route lifecycle (stop, advice, start) automatically:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@QuarkusTest
+class PerMethodAdviceTest extends CamelQuarkusTestSupport {
+    @Test
+    void testWithMockOutput() throws Exception {
+        // Apply advice specific to this test on EXISTING application route
+        adviceRoute("my-route", route -&gt; {
+            route.weaveByToUri("kafka:output*").replace().to("mock:kafka-stub");
+        });
+
+        MockEndpoint stub = getMockEndpoint("mock:kafka-stub");
+        stub.expectedMessageCount(1);
+
+        template.sendBody("kafka:input", "test message");
+
+        stub.assertIsSatisfied();
+    }
+
+    @Test
+    void testWithDifferentAdvice() throws Exception {
+        // Different advice for this test on the same EXISTING route
+        adviceRoute("my-route", route -&gt; {
+            route.weaveByToUri("kafka:output*").replace()
+                .transform(simple("MODIFIED: ${body}"))
+                .to("mock:result");
+        });
+
+        // ... different test assertions
+    }
+}</code></pre> </div> </div> </div> <div class="sect4"> <h5 id="_advice_patterns"><a class="anchor" href="#_advice_patterns"></a>Advice patterns</h5> <div class="admonitionblock important"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-important" title="Important"></i> </td> <td class="content"> When using <code>weaveByToUri()</code>, <code>weaveByType()</code>, or similar methods, use specific patterns rather than wildcards to avoid unintentionally matching endpoints from the main application or other routes. </td> </tr> </table></div> </div> <div class="paragraph"> <p>For example, instead of:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Matches ALL Kafka endpoints in the context
+route.weaveByToUri("kafka:*").replace().to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>Use specific endpoint URIs:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Only matches the specific endpoint you intend to advise
+route.weaveByToUri("kafka:my-output-topic*").replace().to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>Or use IDs for even more precision:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Uses ID for exact matching
+route.weaveById("kafkaProducer").replace().to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>Wildcard patterns like <code>kafka:*</code>, <code>http:*</code>, or <code>direct:*</code> will match <strong>all</strong> endpoints of that type throughout the entire <code>CamelContext</code>, including routes from your main application that the test may not need to modify. This can cause unexpected test failures and interference between tests.</p> </div> </div> <div class="sect4"> <h5 id="_advice_cleanup_between_tests"><a class="anchor" href="#_advice_cleanup_between_tests"></a>Advice cleanup between tests</h5> <div class="paragraph"> <p>Advice modifications are automatically cleaned up between test methods to prevent interference. This ensures that:</p> </div> <div class="ulist"> <ul> <li> <p>Each test starts with a clean route state</p> </li> <li> <p>Advice from one test doesn&#8217;t affect subsequent tests</p> </li> <li> <p>Tests remain independent and can run in any order</p> </li> </ul> </div> </div> </div> </div> <div class="sect2"> <h3 id="_limitations"><a class="anchor" href="#_limitations"></a>Limitations</h3> <div class="sect3"> <h4 id="_test_lifecycle_methods_inherited_from_cameltestsupport"><a class="anchor" href="#_test_lifecycle_methods_inherited_from_cameltestsupport"></a>Test lifecycle methods inherited from <code>CamelTestSupport</code></h4> <div class="paragraph"> <p><code>CamelQuarkusTestSupport</code> inherits some test lifecycle methods from <code>CamelTestSupport</code>. However, they should not be used and instead are replaced with equivalent methods in <code>CamelQuarkusTestSupport</code>.</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">CamelTestSupport lifecycle methods</th> <th class="tableblock halign-left valign-top">CamelQuarkusTestSupport equivalent</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>afterAll</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doAfterAll</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>afterEach</code>, <code>afterTestExecution</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doAfterEach</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>beforeAll</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doAfterConstruct</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>beforeEach</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doBeforeEach</code></p></td> </tr> </tbody> </table></div> </div> <div class="sect3"> <h4 id="_creating_a_custom_camel_registry_is_not_supported"><a class="anchor" href="#_creating_a_custom_camel_registry_is_not_supported"></a>Creating a custom Camel registry is not supported</h4> <div class="paragraph"> <p>The <code>CamelQuarkusTestSupport</code> implementation of <code>createCamelRegistry</code> will throw <code>UnsupportedOperationException</code>.</p> </div> <div class="paragraph"> <p>If you need to bind or unbind objects to the Camel registry, then you can do it by one of the following methods.</p> </div> <div class="ulist"> <ul> <li> <p>Produce named CDI beans</p> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyBeanProducers {
     @Produces
     @Named("myBean")
     public MyBean createMyBean() {

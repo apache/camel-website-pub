@@ -50,7 +50,11 @@ Deprecated: use TasksRequestCPU instead with task name `builder`.
 Deprecated: use TasksRequestCPU instead with task name `builder`.
 
  |
-| `builder.mavenProfiles` | `[]string` | A list of references pointing to configmaps/secrets that contains a maven profile. This configmap/secret is a resource of the IntegrationKit created, therefore it needs to be present in the namespace where the operator is going to create the IntegrationKit. The content of the maven profile is expected to be a text containing a valid maven profile starting with `<profile>` and ending with `</profile>` that will be integrated as an inline profile in the POM. Syntax: \[configmap|secret\]:name\[/key\], where name represents the resource name, key optionally represents the resource key to be filtered (default key value = profile.xml). |
+| `builder.mavenProfiles` | `[]string` | A list of references pointing to configmaps/secrets that contains a maven profile. This configmap/secret is a resource of the IntegrationKit created, therefore it needs to be present in the namespace where the operator is going to create the IntegrationKit. The content of the maven profile is expected to be a text containing a valid maven profile starting with `<profile>` and ending with `</profile>` that will be integrated as an inline profile in the POM. Syntax: \[configmap|secret\]:name\[/key\], where name represents the resource name, key optionally represents the resource key to be filtered (default key value = profile.xml).
+
+Deprecated: will be removed in future versions.
+
+ |
 | `builder.tasks` | `[]string` | A list of tasks to be executed (available only when using `pod` strategy) with format `<name>;<container-image>;<container-command>`. |
 | `builder.tasksFilter` | `string` | A list of tasks sorted by the order of execution in a csv format, ie, `<taskName1>,<taskName2>,…​`. Mind that you must include also the operator tasks (`builder`, `quarkus-native`, `package`, `jib`, `s2i`) if you need to execute them. Useful only with `pod` strategy. |
 | `builder.tasksRequestCPU` | `[]string` | A list of request cpu configuration for the specific task with format `<task-name>:<request-cpu-conf>`. |

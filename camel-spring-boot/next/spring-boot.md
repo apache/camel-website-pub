@@ -63,7 +63,7 @@ When using spring-boot with Spring Boot make sure to use the following Maven dep
 </dependency>
 ```
 
-The component supports 296 options, which are listed below.
+The component supports 298 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -160,6 +160,7 @@ The component supports 296 options, which are listed below.
 | **camel.main.log-mask** | Sets whether log mask is enabled or not. Default is false. | false | Boolean |
 | **camel.main.log-name** | The global name to use for Log EIP The name is default the routeId or the source:line if source location is enabled. You can also specify the name using tokens: <br/> ${class} - the logger class name (org.apache.camel.processor.LogProcessor) <br/> ${contextId} - the camel context id <br/> ${routeId} - the route id <br/> ${groupId} - the route group id <br/> ${nodeId} - the node id <br/> ${nodePrefixId} - the node prefix id <br/> ${source} - the source:line (source location must be enabled) <br/> $\\{source.name} - the source filename (source location must be enabled) <br/> $\\{source.line} - the source line number (source location must be enabled) For example to use the route and node id you can specify the name as: ${routeId}/${nodeId}. |  | String |
 | **camel.main.message-history** | Sets whether message history is enabled or not. Default is false. | false | Boolean |
+| **camel.main.message-size-enabled** | Sets whether message size observation is enabled (default is false). When enabled, Camel will compute the size of message body and headers (in bytes) per endpoint (for both IN and OUT directions) and make this available via JMX MBeans (min/max/mean body size and headers size). | false | Boolean |
 | **camel.main.modeline** | Whether to support JBang style //DEPS to specify additional dependencies when running Camel JBang. | false | Boolean |
 | **camel.main.name** | Sets the name of the CamelContext. |  | String |
 | **camel.main.producer-template-cache-size** | Producer template endpoints cache size. | 1000 | Integer |
@@ -214,6 +215,7 @@ The component supports 296 options, which are listed below.
 | **camel.main.use-data-type** | Whether to enable using data type on Camel messages. Data type are automatic turned on if one ore more routes has been explicit configured with input and output types. Otherwise data type is default off. | false | Boolean |
 | **camel.main.uuid-generator** | UUID generator to use. default (32 bytes), short (16 bytes), classic (32 bytes or longer), simple (long incrementing counter), off (turned off for exchanges - only intended for performance profiling). | default | String |
 | **camel.main.warn-on-early-shutdown** | Whether to log a WARN if Camel on Spring Boot was immediately shutdown after starting which very likely is because there is no JVM thread to keep the application running. | true | Boolean |
+| **camel.main.yaml-dsl-compact-notation-warn** | Whether to log a WARN when YAML DSL routes use compact (shorthand) notation instead of the canonical (explicit/normalized) form. The canonical style is recommended as it is more tooling and AI friendly. Use Camel JBang to normalize existing routes: camel yaml normalize <file>. | true | Boolean |
 | **camel.routecontroller.back-off-delay** | Backoff delay in millis when restarting a route that failed to startup. | 2000 | Long |
 | **camel.routecontroller.back-off-max-attempts** | Backoff maximum number of attempts to restart a route that failed to startup. When this threshold has been exceeded then the controller will give up attempting to restart the route, and the route will remain as stopped. | 0 | Long |
 | **camel.routecontroller.back-off-max-delay** | Backoff maximum delay in millis when restarting a route that failed to startup. | 0 | Long |

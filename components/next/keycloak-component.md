@@ -1154,13 +1154,20 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteRole", null, deleteR
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakRoleName
-            simple: "${body[roleName]}"
+            expression:
+              simple:
+                expression: "${body[roleName]}"
         - setHeader:
             name: CamelKeycloakRoleDescription
-            simple: "${body[description]}"
+            expression:
+              simple:
+                expression: "${body[description]}"
         - to:
-            uri: keycloak:admin?operation=createRole
-        - log: "Created role: ${header.CamelKeycloakRoleName}"
+            uri: keycloak:admin
+            parameters:
+              operation: createRole
+        - log:
+            message: "Created role: ${header.CamelKeycloakRoleName}"
 
 # Get role route
 - route:
@@ -1172,10 +1179,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteRole", null, deleteR
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakRoleName
-            simple: "${body[roleName]}"
+            expression:
+              simple:
+                expression: "${body[roleName]}"
         - to:
-            uri: keycloak:admin?operation=getRole
-        - log: "Role info: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: getRole
+        - log:
+            message: "Role info: ${body}"
 
 # Assign role to user route
 - route:
@@ -1187,13 +1199,20 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteRole", null, deleteR
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUsername
-            simple: "${body[username]}"
+            expression:
+              simple:
+                expression: "${body[username]}"
         - setHeader:
             name: CamelKeycloakRoleName
-            simple: "${body[roleName]}"
+            expression:
+              simple:
+                expression: "${body[roleName]}"
         - to:
-            uri: keycloak:admin?operation=assignRoleToUser
-        - log: "Assigned role ${header.CamelKeycloakRoleName} to user ${header.CamelKeycloakUsername}"
+            uri: keycloak:admin
+            parameters:
+              operation: assignRoleToUser
+        - log:
+            message: "Assigned role ${header.CamelKeycloakRoleName} to user ${header.CamelKeycloakUsername}"
 
 # Delete role route
 - route:
@@ -1205,10 +1224,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteRole", null, deleteR
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakRoleName
-            simple: "${body[roleName]}"
+            expression:
+              simple:
+                expression: "${body[roleName]}"
         - to:
-            uri: keycloak:admin?operation=deleteRole
-        - log: "Deleted role: ${header.CamelKeycloakRoleName}"
+            uri: keycloak:admin
+            parameters:
+              operation: deleteRole
+        - log:
+            message: "Deleted role: ${header.CamelKeycloakRoleName}"
 ```
 
 ### Client Operations
@@ -1262,7 +1286,9 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClient", null, delet
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientId
-            simple: "${body[clientId]}"
+            expression:
+              simple:
+                expression: "${body[clientId]}"
         - setHeader:
             name: CamelKeycloakClientSecretRequired
             constant: true
@@ -1270,8 +1296,11 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClient", null, delet
             name: CamelKeycloakClientDirectAccessGrantsEnabled
             constant: true
         - to:
-            uri: keycloak:admin?operation=createClient
-        - log: "Created client: ${header.CamelKeycloakClientId}"
+            uri: keycloak:admin
+            parameters:
+              operation: createClient
+        - log:
+            message: "Created client: ${header.CamelKeycloakClientId}"
 
 # Get client route
 - route:
@@ -1283,10 +1312,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClient", null, delet
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientId
-            simple: "${body[clientId]}"
+            expression:
+              simple:
+                expression: "${body[clientId]}"
         - to:
-            uri: keycloak:admin?operation=getClient
-        - log: "Client info: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: getClient
+        - log:
+            message: "Client info: ${body}"
 
 # Get client secret route
 - route:
@@ -1298,10 +1332,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClient", null, delet
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientId
-            simple: "${body[clientId]}"
+            expression:
+              simple:
+                expression: "${body[clientId]}"
         - to:
-            uri: keycloak:admin?operation=getClientSecret
-        - log: "Client secret retrieved for: ${header.CamelKeycloakClientId}"
+            uri: keycloak:admin
+            parameters:
+              operation: getClientSecret
+        - log:
+            message: "Client secret retrieved for: ${header.CamelKeycloakClientId}"
 
 # Delete client route
 - route:
@@ -1313,10 +1352,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClient", null, delet
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientId
-            simple: "${body[clientId]}"
+            expression:
+              simple:
+                expression: "${body[clientId]}"
         - to:
-            uri: keycloak:admin?operation=deleteClient
-        - log: "Deleted client: ${header.CamelKeycloakClientId}"
+            uri: keycloak:admin
+            parameters:
+              operation: deleteClient
+        - log:
+            message: "Deleted client: ${header.CamelKeycloakClientId}"
 ```
 
 ### Group Operations
@@ -1372,10 +1416,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteGroup", null, delete
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakGroupName
-            simple: "${body[groupName]}"
+            expression:
+              simple:
+                expression: "${body[groupName]}"
         - to:
-            uri: keycloak:admin?operation=createGroup
-        - log: "Created group: ${header.CamelKeycloakGroupName}"
+            uri: keycloak:admin
+            parameters:
+              operation: createGroup
+        - log:
+            message: "Created group: ${header.CamelKeycloakGroupName}"
 
 # List groups route
 - route:
@@ -1386,8 +1435,11 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteGroup", null, delete
             name: CamelKeycloakRealmName
             constant: "my-realm"
         - to:
-            uri: keycloak:admin?operation=listGroups
-        - log: "Groups: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: listGroups
+        - log:
+            message: "Groups: ${body}"
 
 # Add user to group route
 - route:
@@ -1399,13 +1451,20 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteGroup", null, delete
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakGroupId
-            simple: "${body[groupId]}"
+            expression:
+              simple:
+                expression: "${body[groupId]}"
         - to:
-            uri: keycloak:admin?operation=addUserToGroup
-        - log: "Added user ${header.CamelKeycloakUserId} to group"
+            uri: keycloak:admin
+            parameters:
+              operation: addUserToGroup
+        - log:
+            message: "Added user ${header.CamelKeycloakUserId} to group"
 
 # List user groups route
 - route:
@@ -1417,10 +1476,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteGroup", null, delete
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - to:
-            uri: keycloak:admin?operation=listUserGroups
-        - log: "User groups: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: listUserGroups
+        - log:
+            message: "User groups: ${body}"
 ```
 
 ### Password Management Operations
@@ -1461,16 +1525,25 @@ template.sendBodyAndHeaders("keycloak:admin?operation=resetUserPassword", null, 
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakUserPassword
-            simple: "${body[password]}"
+            expression:
+              simple:
+                expression: "${body[password]}"
         - setHeader:
             name: CamelKeycloakPasswordTemporary
-            simple: "${body[temporary]}"
+            expression:
+              simple:
+                expression: "${body[temporary]}"
         - to:
-            uri: keycloak:admin?operation=resetUserPassword
-        - log: "Password reset for user ${header.CamelKeycloakUserId}"
+            uri: keycloak:admin
+            parameters:
+              operation: resetUserPassword
+        - log:
+            message: "Password reset for user ${header.CamelKeycloakUserId}"
 
 # Reset with temporary password
 - route:
@@ -1482,16 +1555,23 @@ template.sendBodyAndHeaders("keycloak:admin?operation=resetUserPassword", null, 
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakUserPassword
-            simple: "${body[password]}"
+            expression:
+              simple:
+                expression: "${body[password]}"
         - setHeader:
             name: CamelKeycloakPasswordTemporary
             constant: true
         - to:
-            uri: keycloak:admin?operation=resetUserPassword
-        - log: "Temporary password set for user ${header.CamelKeycloakUserId}"
+            uri: keycloak:admin
+            parameters:
+              operation: resetUserPassword
+        - log:
+            message: "Temporary password set for user ${header.CamelKeycloakUserId}"
 ```
 
 ### User Search Operations
@@ -1538,10 +1618,15 @@ List<RoleRepresentation> roles = template.requestBodyAndHeaders(
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakSearchQuery
-            simple: "${body[query]}"
+            expression:
+              simple:
+                expression: "${body[query]}"
         - to:
-            uri: keycloak:admin?operation=searchUsers
-        - log: "Search results: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: searchUsers
+        - log:
+            message: "Search results: ${body}"
 
 # Search with pagination
 - route:
@@ -1553,16 +1638,25 @@ List<RoleRepresentation> roles = template.requestBodyAndHeaders(
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakSearchQuery
-            simple: "${body[query]}"
+            expression:
+              simple:
+                expression: "${body[query]}"
         - setHeader:
             name: CamelKeycloakFirstResult
-            simple: "${body[offset]}"
+            expression:
+              simple:
+                expression: "${body[offset]}"
         - setHeader:
             name: CamelKeycloakMaxResults
-            simple: "${body[limit]}"
+            expression:
+              simple:
+                expression: "${body[limit]}"
         - to:
-            uri: keycloak:admin?operation=searchUsers
-        - log: "Found ${body.size} users"
+            uri: keycloak:admin
+            parameters:
+              operation: searchUsers
+        - log:
+            message: "Found ${body.size} users"
 
 # Get user roles route
 - route:
@@ -1574,10 +1668,15 @@ List<RoleRepresentation> roles = template.requestBodyAndHeaders(
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - to:
-            uri: keycloak:admin?operation=getUserRoles
-        - log: "User roles: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: getUserRoles
+        - log:
+            message: "User roles: ${body}"
 ```
 
 ### Client Role Operations
@@ -1634,16 +1733,25 @@ template.sendBodyAndHeaders("keycloak:admin?operation=removeClientRoleFromUser",
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientUuid
-            simple: "${body[clientUuid]}"
+            expression:
+              simple:
+                expression: "${body[clientUuid]}"
         - setHeader:
             name: CamelKeycloakRoleName
-            simple: "${body[roleName]}"
+            expression:
+              simple:
+                expression: "${body[roleName]}"
         - setHeader:
             name: CamelKeycloakRoleDescription
-            simple: "${body[description]}"
+            expression:
+              simple:
+                expression: "${body[description]}"
         - to:
-            uri: keycloak:admin?operation=createClientRole
-        - log: "Created client role: ${header.CamelKeycloakRoleName}"
+            uri: keycloak:admin
+            parameters:
+              operation: createClientRole
+        - log:
+            message: "Created client role: ${header.CamelKeycloakRoleName}"
 
 # List client roles route
 - route:
@@ -1655,10 +1763,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=removeClientRoleFromUser",
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientUuid
-            simple: "${body[clientUuid]}"
+            expression:
+              simple:
+                expression: "${body[clientUuid]}"
         - to:
-            uri: keycloak:admin?operation=listClientRoles
-        - log: "Client roles: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: listClientRoles
+        - log:
+            message: "Client roles: ${body}"
 
 # Assign client role to user
 - route:
@@ -1670,16 +1783,25 @@ template.sendBodyAndHeaders("keycloak:admin?operation=removeClientRoleFromUser",
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakClientUuid
-            simple: "${body[clientUuid]}"
+            expression:
+              simple:
+                expression: "${body[clientUuid]}"
         - setHeader:
             name: CamelKeycloakRoleName
-            simple: "${body[roleName]}"
+            expression:
+              simple:
+                expression: "${body[roleName]}"
         - to:
-            uri: keycloak:admin?operation=assignClientRoleToUser
-        - log: "Assigned client role to user"
+            uri: keycloak:admin
+            parameters:
+              operation: assignClientRoleToUser
+        - log:
+            message: "Assigned client role to user"
 ```
 
 ### Session Management Operations
@@ -1717,10 +1839,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=logoutUser", null, logoutH
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - to:
-            uri: keycloak:admin?operation=listUserSessions
-        - log: "User sessions: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: listUserSessions
+        - log:
+            message: "User sessions: ${body}"
 
 # Logout user route
 - route:
@@ -1732,10 +1859,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=logoutUser", null, logoutH
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - to:
-            uri: keycloak:admin?operation=logoutUser
-        - log: "User logged out: ${header.CamelKeycloakUserId}"
+            uri: keycloak:admin
+            parameters:
+              operation: logoutUser
+        - log:
+            message: "User logged out: ${header.CamelKeycloakUserId}"
 ```
 
 ### Client Scope Operations
@@ -1783,10 +1915,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClientScope", null, 
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientScopeName
-            simple: "${body[scopeName]}"
+            expression:
+              simple:
+                expression: "${body[scopeName]}"
         - to:
-            uri: keycloak:admin?operation=createClientScope
-        - log: "Created client scope: ${header.CamelKeycloakClientScopeName}"
+            uri: keycloak:admin
+            parameters:
+              operation: createClientScope
+        - log:
+            message: "Created client scope: ${header.CamelKeycloakClientScopeName}"
 
 # List client scopes route
 - route:
@@ -1797,8 +1934,11 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClientScope", null, 
             name: CamelKeycloakRealmName
             constant: "my-realm"
         - to:
-            uri: keycloak:admin?operation=listClientScopes
-        - log: "Client scopes: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: listClientScopes
+        - log:
+            message: "Client scopes: ${body}"
 
 # Get client scope route
 - route:
@@ -1810,10 +1950,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClientScope", null, 
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientScopeId
-            simple: "${body[scopeId]}"
+            expression:
+              simple:
+                expression: "${body[scopeId]}"
         - to:
-            uri: keycloak:admin?operation=getClientScope
-        - log: "Client scope: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: getClientScope
+        - log:
+            message: "Client scope: ${body}"
 ```
 
 ### Identity Provider Operations
@@ -1986,16 +2131,25 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteUserAttribute", null
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakAttributeName
-            simple: "${body[attributeName]}"
+            expression:
+              simple:
+                expression: "${body[attributeName]}"
         - setHeader:
             name: CamelKeycloakAttributeValue
-            simple: "${body[attributeValue]}"
+            expression:
+              simple:
+                expression: "${body[attributeValue]}"
         - to:
-            uri: keycloak:admin?operation=setUserAttribute
-        - log: "Set attribute ${header.CamelKeycloakAttributeName}"
+            uri: keycloak:admin
+            parameters:
+              operation: setUserAttribute
+        - log:
+            message: "Set attribute ${header.CamelKeycloakAttributeName}"
 
 # Get user attributes
 - route:
@@ -2007,10 +2161,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteUserAttribute", null
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - to:
-            uri: keycloak:admin?operation=getUserAttributes
-        - log: "User attributes: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: getUserAttributes
+        - log:
+            message: "User attributes: ${body}"
 
 # Delete user attribute
 - route:
@@ -2022,13 +2181,20 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteUserAttribute", null
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakAttributeName
-            simple: "${body[attributeName]}"
+            expression:
+              simple:
+                expression: "${body[attributeName]}"
         - to:
-            uri: keycloak:admin?operation=deleteUserAttribute
-        - log: "Deleted attribute ${header.CamelKeycloakAttributeName}"
+            uri: keycloak:admin
+            parameters:
+              operation: deleteUserAttribute
+        - log:
+            message: "Deleted attribute ${header.CamelKeycloakAttributeName}"
 ```
 
 ### User Credential and Action Operations
@@ -2101,10 +2267,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=executeActionsEmail", null
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - to:
-            uri: keycloak:admin?operation=getUserCredentials
-        - log: "User credentials: ${body}"
+            uri: keycloak:admin
+            parameters:
+              operation: getUserCredentials
+        - log:
+            message: "User credentials: ${body}"
 
 # Send verification email
 - route:
@@ -2116,10 +2287,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=executeActionsEmail", null
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - to:
-            uri: keycloak:admin?operation=sendVerifyEmail
-        - log: "Verification email sent to user ${header.CamelKeycloakUserId}"
+            uri: keycloak:admin
+            parameters:
+              operation: sendVerifyEmail
+        - log:
+            message: "Verification email sent to user ${header.CamelKeycloakUserId}"
 
 # Send password reset email
 - route:
@@ -2131,10 +2307,15 @@ template.sendBodyAndHeaders("keycloak:admin?operation=executeActionsEmail", null
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - to:
-            uri: keycloak:admin?operation=sendPasswordResetEmail
-        - log: "Password reset email sent"
+            uri: keycloak:admin
+            parameters:
+              operation: sendPasswordResetEmail
+        - log:
+            message: "Password reset email sent"
 
 # Add required action
 - route:
@@ -2146,13 +2327,18 @@ template.sendBodyAndHeaders("keycloak:admin?operation=executeActionsEmail", null
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakRequiredAction
             constant: "VERIFY_EMAIL"
         - to:
-            uri: keycloak:admin?operation=addRequiredAction
-        - log: "Added required action VERIFY_EMAIL"
+            uri: keycloak:admin
+            parameters:
+              operation: addRequiredAction
+        - log:
+            message: "Added required action VERIFY_EMAIL"
 
 # Execute actions email
 - route:
@@ -2164,7 +2350,9 @@ template.sendBodyAndHeaders("keycloak:admin?operation=executeActionsEmail", null
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakActions
             constant:
@@ -2177,8 +2365,11 @@ template.sendBodyAndHeaders("keycloak:admin?operation=executeActionsEmail", null
             name: CamelKeycloakLifespan
             constant: 3600
         - to:
-            uri: keycloak:admin?operation=executeActionsEmail
-        - log: "Sent actions email to user"
+            uri: keycloak:admin
+            parameters:
+              operation: executeActionsEmail
+        - log:
+            message: "Sent actions email to user"
 ```
 
 ### Client Secret Management
@@ -2225,10 +2416,15 @@ System.out.println("New client secret: " + newSecret.getValue());
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientUuid
-            simple: "${body[clientUuid]}"
+            expression:
+              simple:
+                expression: "${body[clientUuid]}"
         - to:
-            uri: keycloak:admin?operation=getClientSecret
-        - log: "Retrieved client secret"
+            uri: keycloak:admin
+            parameters:
+              operation: getClientSecret
+        - log:
+            message: "Retrieved client secret"
 
 # Regenerate client secret
 - route:
@@ -2240,11 +2436,17 @@ System.out.println("New client secret: " + newSecret.getValue());
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakClientUuid
-            simple: "${body[clientUuid]}"
+            expression:
+              simple:
+                expression: "${body[clientUuid]}"
         - to:
-            uri: keycloak:admin?operation=regenerateClientSecret
-        - log: "Regenerated client secret: ${body.value}"
-        - to: "direct:notify-secret-rotation"
+            uri: keycloak:admin
+            parameters:
+              operation: regenerateClientSecret
+        - log:
+            message: "Regenerated client secret: ${body.value}"
+        - to:
+            uri: direct:notify-secret-rotation
 ```
 
 ### Authorization Services Operations
@@ -2426,7 +2628,9 @@ System.out.println("RPT token obtained: " + (rptToken != null));
       steps:
         - setHeader:
             name: CamelKeycloakAccessToken
-            simple: "${header.Authorization.substring(7)}"  # Extract from Bearer token
+            expression:
+              simple:
+                expression: "${header.Authorization.substring(7)}"
         - setHeader:
             name: CamelKeycloakPermissionsOnly
             constant: true
@@ -2438,7 +2642,8 @@ System.out.println("RPT token obtained: " + (rptToken != null));
               clientId={{keycloak.client-id}}&
               clientSecret={{keycloak.client-secret}}&
               operation=evaluatePermission
-        - log: "User has ${body[permissionCount]} permissions, access granted: ${body[granted]}"
+        - log:
+            message: "User has ${body[permissionCount]} permissions, access granted: ${body[granted]}"
 
 # Check specific resource access
 - route:
@@ -2448,10 +2653,14 @@ System.out.println("RPT token obtained: " + (rptToken != null));
       steps:
         - setHeader:
             name: CamelKeycloakAccessToken
-            simple: "${header.Authorization.substring(7)}"
+            expression:
+              simple:
+                expression: "${header.Authorization.substring(7)}"
         - setHeader:
             name: CamelKeycloakPermissionResourceNames
-            simple: "${body[resourceName]}"
+            expression:
+              simple:
+                expression: "${body[resourceName]}"
         - setHeader:
             name: CamelKeycloakPermissionScopes
             constant: "read,write"
@@ -2468,13 +2677,18 @@ System.out.println("RPT token obtained: " + (rptToken != null));
               operation=evaluatePermission
         - choice:
             when:
-              - simple: "${body[granted]} == true"
+              - expression:
+                  simple:
+                    expression: "${body[granted]} == true"
                 steps:
-                  - log: "Access granted for resource ${body[resourceName]}"
-                  - to: "direct:process-resource"
+                  - log:
+                      message: "Access granted for resource ${body[resourceName]}"
+                  - to:
+                      uri: direct:process-resource
             otherwise:
               steps:
-                - log: "Access denied for resource ${body[resourceName]}"
+                - log:
+                    message: "Access denied for resource ${body[resourceName]}"
                 - setHeader:
                     name: CamelHttpResponseCode
                     constant: 403
@@ -2489,7 +2703,9 @@ System.out.println("RPT token obtained: " + (rptToken != null));
       steps:
         - setHeader:
             name: CamelKeycloakPermissionResourceNames
-            simple: "${body[resources]}"
+            expression:
+              simple:
+                expression: "${body[resources]}"
         - to:
             uri: >
               keycloak:authz?
@@ -2500,7 +2716,8 @@ System.out.println("RPT token obtained: " + (rptToken != null));
               username={{service.username}}&
               password={{service.password}}&
               operation=evaluatePermission
-        - log: "RPT token obtained, expires in: ${body[expiresIn]} seconds"
+        - log:
+            message: "RPT token obtained, expires in: ${body[expiresIn]} seconds"
 ```
 
 #### Authorization Patterns
@@ -2675,8 +2892,11 @@ for (Map<String, Object> userResult : results) {
             name: CamelKeycloakContinueOnError
             constant: true
         - to:
-            uri: keycloak:admin?operation=bulkCreateUsers
-        - log: "Created ${body[success]} out of ${body[total]} users"
+            uri: keycloak:admin
+            parameters:
+              operation: bulkCreateUsers
+        - log:
+            message: "Created ${body[success]} out of ${body[total]} users"
 ```
 
 #### Bulk Delete Users
@@ -2722,13 +2942,18 @@ System.out.println("Deleted " + result.get("success") + " users");
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUsernames
-            simple: "${body}"  # List of usernames
+            expression:
+              simple:
+                expression: "${body}"
         - setHeader:
             name: CamelKeycloakContinueOnError
             constant: true
         - to:
-            uri: keycloak:admin?operation=bulkDeleteUsers
-        - log: "Deleted ${body[success]} out of ${body[total]} users"
+            uri: keycloak:admin
+            parameters:
+              operation: bulkDeleteUsers
+        - log:
+            message: "Deleted ${body[success]} out of ${body[total]} users"
 ```
 
 #### Bulk Assign Roles to User
@@ -2773,16 +2998,23 @@ for (Map<String, Object> roleResult : results) {
             constant: "my-realm"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setHeader:
             name: CamelKeycloakRoleNames
-            simple: "${body[roles]}"  # List of role names
+            expression:
+              simple:
+                expression: "${body[roles]}"
         - setHeader:
             name: CamelKeycloakContinueOnError
             constant: true
         - to:
-            uri: keycloak:admin?operation=bulkAssignRolesToUser
-        - log: "Assigned ${body[assigned]} roles to user"
+            uri: keycloak:admin
+            parameters:
+              operation: bulkAssignRolesToUser
+        - log:
+            message: "Assigned ${body[assigned]} roles to user"
 ```
 
 #### Bulk Assign Role to Users
@@ -2832,13 +3064,18 @@ result = template.requestBodyAndHeaders(
             constant: "developer"
         - setHeader:
             name: CamelKeycloakUsernames
-            simple: "${body}"  # List of usernames
+            expression:
+              simple:
+                expression: "${body}"
         - setHeader:
             name: CamelKeycloakContinueOnError
             constant: true
         - to:
-            uri: keycloak:admin?operation=bulkAssignRoleToUsers
-        - log: "Assigned role to ${body[success]} out of ${body[total]} users"
+            uri: keycloak:admin
+            parameters:
+              operation: bulkAssignRoleToUsers
+        - log:
+            message: "Assigned role to ${body[success]} out of ${body[total]} users"
 ```
 
 #### Bulk Update Users
@@ -2896,8 +3133,11 @@ for (Map<String, Object> userResult : results) {
             name: CamelKeycloakContinueOnError
             constant: true
         - to:
-            uri: keycloak:admin?operation=bulkUpdateUsers
-        - log: "Updated ${body[success]} out of ${body[total]} users"
+            uri: keycloak:admin
+            parameters:
+              operation: bulkUpdateUsers
+        - log:
+            message: "Updated ${body[success]} out of ${body[total]} users"
 ```
 
 #### Bulk Operations Response Format
@@ -3061,9 +3301,12 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
 - route:
     id: bulk-user-provisioning
     from:
-      uri: file:data/incoming?noop=true
+      uri: file:data/incoming
+      parameters:
+        noop: "true"
       steps:
-        - log: "Processing user provisioning file: ${header.CamelFileName}"
+        - log:
+            message: "Processing user provisioning file: ${header.CamelFileName}"
         - unmarshal:
             csv: {}
         - process:
@@ -3075,8 +3318,11 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
             name: CamelKeycloakContinueOnError
             constant: true
         - to:
-            uri: keycloak:admin?operation=bulkCreateUsers
-        - log: "Provisioning completed: ${body[success]} succeeded, ${body[failed]} failed"
+            uri: keycloak:admin
+            parameters:
+              operation: bulkCreateUsers
+        - log:
+            message: "Provisioning completed: ${body[success]} succeeded, ${body[failed]} failed"
 
 # Bulk role assignment API
 - rest:
@@ -3093,17 +3339,25 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
             json: {}
         - setHeader:
             name: CamelKeycloakRealmName
-            simple: "${body[realm]}"
+            expression:
+              simple:
+                expression: "${body[realm]}"
         - setHeader:
             name: CamelKeycloakUserId
-            simple: "${body[userId]}"
+            expression:
+              simple:
+                expression: "${body[userId]}"
         - setBody:
-            simple: "${body[roles]}"
+            expression:
+              simple:
+                expression: "${body[roles]}"
         - setHeader:
             name: CamelKeycloakContinueOnError
             constant: true
         - to:
-            uri: keycloak:admin?operation=bulkAssignRolesToUser
+            uri: keycloak:admin
+            parameters:
+              operation: bulkAssignRolesToUser
         - marshal:
             json: {}
 
@@ -3111,25 +3365,35 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
 - route:
     id: cleanup-inactive-users
     from:
-      uri: timer:cleanup?period=86400000
+      uri: timer:cleanup
+      parameters:
+        period: "86400000"
       steps:
-        - log: "Starting inactive user cleanup"
+        - log:
+            message: "Starting inactive user cleanup"
         - setHeader:
             name: CamelKeycloakRealmName
             constant: "my-realm"
         - to:
-            uri: keycloak:admin?operation=listUsers
+            uri: keycloak:admin
+            parameters:
+              operation: listUsers
         - process:
             ref: identifyInactiveUsersProcessor
         - filter:
-            simple: "${body.size} > 0"
+            expression:
+              simple:
+                expression: "${body.size} > 0"
             steps:
               - setHeader:
                   name: CamelKeycloakContinueOnError
                   constant: true
               - to:
-                  uri: keycloak:admin?operation=bulkDeleteUsers
-              - log: "Deleted ${body[success]} inactive users"
+                  uri: keycloak:admin
+                  parameters:
+                    operation: bulkDeleteUsers
+              - log:
+                  message: "Deleted ${body[success]} inactive users"
 ```
 
 #### Best Practices for Bulk Operations
@@ -3261,15 +3525,19 @@ public class KeycloakManagementRoutes extends RouteBuilder {
     from:
       uri: direct:setup-user-environment
       steps:
-        - log: "Setting up user environment..."
+        - log:
+            message: "Setting up user environment..."
 
         # Step 1: Create realm
         - setHeader:
             name: CamelKeycloakRealmName
             constant: "my-company"
         - to:
-            uri: keycloak:admin?operation=createRealm
-        - log: "Created realm: my-company"
+            uri: keycloak:admin
+            parameters:
+              operation: createRealm
+        - log:
+            message: "Created realm: my-company"
 
         # Step 2: Create admin role
         - setHeader:
@@ -3279,8 +3547,11 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             name: CamelKeycloakRoleDescription
             constant: "Administrator role"
         - to:
-            uri: keycloak:admin?operation=createRole
-        - log: "Created admin role"
+            uri: keycloak:admin
+            parameters:
+              operation: createRole
+        - log:
+            message: "Created admin role"
 
         # Step 3: Create user role
         - setHeader:
@@ -3290,8 +3561,11 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             name: CamelKeycloakRoleDescription
             constant: "Standard user role"
         - to:
-            uri: keycloak:admin?operation=createRole
-        - log: "Created user role"
+            uri: keycloak:admin
+            parameters:
+              operation: createRole
+        - log:
+            message: "Created user role"
 
         # Step 4: Create client
         - setHeader:
@@ -3304,8 +3578,11 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             name: CamelKeycloakClientDirectAccessGrantsEnabled
             constant: true
         - to:
-            uri: keycloak:admin?operation=createClient
-        - log: "Created client: my-app"
+            uri: keycloak:admin
+            parameters:
+              operation: createClient
+        - log:
+            message: "Created client: my-app"
 
         # Step 5: Create admin user
         - setHeader:
@@ -3321,8 +3598,11 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             name: CamelKeycloakUserLastName
             constant: "User"
         - to:
-            uri: keycloak:admin?operation=createUser
-        - log: "Created admin user"
+            uri: keycloak:admin
+            parameters:
+              operation: createUser
+        - log:
+            message: "Created admin user"
 
         # Step 6: Set password
         - setHeader:
@@ -3332,16 +3612,22 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             name: CamelKeycloakUserPasswordTemporary
             constant: false
         - to:
-            uri: keycloak:admin?operation=setUserPassword
-        - log: "Set admin user password"
+            uri: keycloak:admin
+            parameters:
+              operation: setUserPassword
+        - log:
+            message: "Set admin user password"
 
         # Step 7: Assign role
         - setHeader:
             name: CamelKeycloakRoleName
             constant: "admin"
         - to:
-            uri: keycloak:admin?operation=assignRoleToUser
-        - log: "Assigned admin role to user"
+            uri: keycloak:admin
+            parameters:
+              operation: assignRoleToUser
+        - log:
+            message: "Assigned admin role to user"
 
         - transform:
             constant: "User environment setup completed successfully"
@@ -3368,7 +3654,8 @@ public class KeycloakManagementRoutes extends RouteBuilder {
     from:
       uri: direct:create-user-api
       steps:
-        - log: "Creating user: ${body}"
+        - log:
+            message: "Creating user: ${body}"
         - setHeader:
             name: CamelKeycloakRealmName
             constant: "my-company"
@@ -3385,7 +3672,9 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             name: CamelKeycloakUserLastName
             jsonpath: "$.lastName"
         - to:
-            uri: keycloak:admin?operation=createUser
+            uri: keycloak:admin
+            parameters:
+              operation: createUser
         - setHeader:
             name: Content-Type
             constant: "application/json"
@@ -3397,12 +3686,15 @@ public class KeycloakManagementRoutes extends RouteBuilder {
     from:
       uri: direct:list-users-api
       steps:
-        - log: "Listing users"
+        - log:
+            message: "Listing users"
         - setHeader:
             name: CamelKeycloakRealmName
             constant: "my-company"
         - to:
-            uri: keycloak:admin?operation=listUsers
+            uri: keycloak:admin
+            parameters:
+              operation: listUsers
         - setHeader:
             name: Content-Type
             constant: "application/json"
@@ -3412,7 +3704,8 @@ public class KeycloakManagementRoutes extends RouteBuilder {
     from:
       uri: direct:delete-user-api
       steps:
-        - log: "Deleting user: ${header.username}"
+        - log:
+            message: "Deleting user: ${header.username}"
         - setHeader:
             name: CamelKeycloakRealmName
             constant: "my-company"
@@ -3420,7 +3713,9 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             name: CamelKeycloakUsername
             header: "username"
         - to:
-            uri: keycloak:admin?operation=deleteUser
+            uri: keycloak:admin
+            parameters:
+              operation: deleteUser
         - setHeader:
             name: Content-Type
             constant: "application/json"
@@ -3569,22 +3864,34 @@ from("direct:process-admin-event")
         initialDelay=1000&
         delay=5000
       steps:
-        - log: "Received admin event: ${body}"
+        - log:
+            message: "Received admin event: ${body}"
         - choice:
             when:
-              - simple: "${body.operationType} == 'CREATE'"
+              - expression:
+                  simple:
+                    expression: "${body.operationType} == 'CREATE'"
                 steps:
-                  - log: "Resource created: ${body.resourceType} at ${body.resourcePath}"
-              - simple: "${body.operationType} == 'UPDATE'"
+                  - log:
+                      message: "Resource created: ${body.resourceType} at ${body.resourcePath}"
+              - expression:
+                  simple:
+                    expression: "${body.operationType} == 'UPDATE'"
                 steps:
-                  - log: "Resource updated: ${body.resourceType}"
-              - simple: "${body.operationType} == 'DELETE'"
+                  - log:
+                      message: "Resource updated: ${body.resourceType}"
+              - expression:
+                  simple:
+                    expression: "${body.operationType} == 'DELETE'"
                 steps:
-                  - log: "Resource deleted: ${body.resourceType}"
+                  - log:
+                      message: "Resource deleted: ${body.resourceType}"
             otherwise:
               steps:
-                - log: "Other operation: ${body.operationType}"
-        - to: "direct:process-admin-event"
+                - log:
+                    message: "Other operation: ${body.operationType}"
+        - to:
+            uri: direct:process-admin-event
 
 # Process admin events
 - route:
@@ -3592,8 +3899,12 @@ from("direct:process-admin-event")
     from:
       uri: direct:process-admin-event
       steps:
-        - log: "Processing admin event: ${body.operationType} on ${body.resourceType}"
-        - to: "bean:auditService?method=recordAdminEvent"
+        - log:
+            message: "Processing admin event: ${body.operationType} on ${body.resourceType}"
+        - to:
+            uri: bean:auditService
+            parameters:
+              method: recordAdminEvent
 ```
 
 ### Consuming User Events
@@ -3673,28 +3984,46 @@ from("direct:handle-failed-login")
         initialDelay=1000&
         delay=5000
       steps:
-        - log: "Received user event: ${body}"
+        - log:
+            message: "Received user event: ${body}"
         - choice:
             when:
-              - simple: "${body.type} == 'LOGIN'"
+              - expression:
+                  simple:
+                    expression: "${body.type} == 'LOGIN'"
                 steps:
-                  - log: "User logged in: ${body.userId} from IP ${body.ipAddress}"
-                  - to: "direct:handle-login"
-              - simple: "${body.type} == 'LOGIN_ERROR'"
+                  - log:
+                      message: "User logged in: ${body.userId} from IP ${body.ipAddress}"
+                  - to:
+                      uri: direct:handle-login
+              - expression:
+                  simple:
+                    expression: "${body.type} == 'LOGIN_ERROR'"
                 steps:
-                  - log: "Failed login attempt: ${body.userId}"
-                  - to: "direct:handle-failed-login"
-              - simple: "${body.type} == 'LOGOUT'"
+                  - log:
+                      message: "Failed login attempt: ${body.userId}"
+                  - to:
+                      uri: direct:handle-failed-login
+              - expression:
+                  simple:
+                    expression: "${body.type} == 'LOGOUT'"
                 steps:
-                  - log: "User logged out: ${body.userId}"
-                  - to: "direct:handle-logout"
-              - simple: "${body.type} == 'REGISTER'"
+                  - log:
+                      message: "User logged out: ${body.userId}"
+                  - to:
+                      uri: direct:handle-logout
+              - expression:
+                  simple:
+                    expression: "${body.type} == 'REGISTER'"
                 steps:
-                  - log: "New user registered: ${body.userId}"
-                  - to: "direct:handle-registration"
+                  - log:
+                      message: "New user registered: ${body.userId}"
+                  - to:
+                      uri: direct:handle-registration
             otherwise:
               steps:
-                - log: "Other event: ${body.type}"
+                - log:
+                    message: "Other event: ${body.type}"
 
 # Handle login events
 - route:
@@ -3702,8 +4031,12 @@ from("direct:handle-failed-login")
     from:
       uri: direct:handle-login
       steps:
-        - log: "Processing login event for user ${body.userId}"
-        - to: "bean:analyticsService?method=recordLogin"
+        - log:
+            message: "Processing login event for user ${body.userId}"
+        - to:
+            uri: bean:analyticsService
+            parameters:
+              method: recordLogin
 
 # Handle failed login
 - route:
@@ -3711,8 +4044,12 @@ from("direct:handle-failed-login")
     from:
       uri: direct:handle-failed-login
       steps:
-        - log: "Processing failed login from ${body.ipAddress}"
-        - to: "bean:securityService?method=checkFailedAttempts"
+        - log:
+            message: "Processing failed login from ${body.ipAddress}"
+        - to:
+            uri: bean:securityService
+            parameters:
+              method: checkFailedAttempts
 ```
 
 ### Filtering Events
@@ -3772,7 +4109,8 @@ from("keycloak:userEvents"
         operationTypes=CREATE,UPDATE,DELETE&
         maxResults=100
       steps:
-        - log: "Filtered admin event: ${body}"
+        - log:
+            message: "Filtered admin event: ${body}"
 
 # Filter user events by type
 - route:
@@ -3784,7 +4122,8 @@ from("keycloak:userEvents"
         types=LOGIN,LOGOUT,REGISTER&
         maxResults=100
       steps:
-        - log: "Filtered user event: ${body}"
+        - log:
+            message: "Filtered user event: ${body}"
 
 # Filter by date range
 - route:
@@ -3797,7 +4136,8 @@ from("keycloak:userEvents"
         dateTo=1640995200000&
         maxResults=100
       steps:
-        - log: "Events in date range: ${body}"
+        - log:
+            message: "Events in date range: ${body}"
 
 # Filter by user and client
 - route:
@@ -3811,7 +4151,8 @@ from("keycloak:userEvents"
         ipAddress=192.168.1.100&
         maxResults=50
       steps:
-        - log: "Specific user events: ${body}"
+        - log:
+            message: "Specific user events: ${body}"
 ```
 
 ### Event Processing Patterns
@@ -3875,8 +4216,14 @@ from("keycloak:adminEvents"
               }
         - marshal:
             json: {}
-        - to: "kafka:audit-trail?brokers=localhost:9092"
-        - to: "jdbc:dataSource?useHeadersAsParameters=true"
+        - to:
+            uri: kafka:audit-trail
+            parameters:
+              brokers: "localhost:9092"
+        - to:
+            uri: jdbc:dataSource
+            parameters:
+              useHeadersAsParameters: true
 ```
 
 #### Security Monitoring
@@ -3922,17 +4269,24 @@ from("keycloak:userEvents"
         delay=5000
       steps:
         - filter:
-            simple: "${body.type} == 'LOGIN_ERROR'"
+            expression:
+              simple:
+                expression: "${body.type} == 'LOGIN_ERROR'"
         - aggregate:
             correlationExpression:
-              simple: "${body.ipAddress}"
+              expression:
+                simple:
+                  expression: "${body.ipAddress}"
             aggregationStrategy: "#arrayListAggregation"
             completionSize: 5
             completionTimeout: 300000
             steps:
-              - log: "SECURITY ALERT: Multiple failed login attempts from ${body[0].ipAddress}"
-              - to: "direct:block-ip"
-              - to: "direct:send-security-alert"
+              - log:
+                  message: "SECURITY ALERT: Multiple failed login attempts from ${body[0].ipAddress}"
+              - to:
+                  uri: direct:block-ip
+              - to:
+                  uri: direct:send-security-alert
 ```
 
 #### User Activity Analytics
@@ -3993,8 +4347,15 @@ from("keycloak:userEvents"
                 "ipAddress": "${body.ipAddress}",
                 "sessionId": "${body.sessionId}"
               }
-        - to: "bean:analyticsService?method=recordActivity"
-        - to: "elasticsearch://keycloak-events?operation=Index&indexName=user-activity"
+        - to:
+            uri: bean:analyticsService
+            parameters:
+              method: recordActivity
+        - to:
+            uri: elasticsearch://keycloak-events
+            parameters:
+              operation: Index
+              indexName: user-activity
 ```
 
 ### Consumer Options
@@ -4142,8 +4503,10 @@ camel:
         maxResults=100&
         delay=10000
       steps:
-        - log: "Admin event: ${body.operationType} on ${body.resourceType}"
-        - to: "direct:audit-trail"
+        - log:
+            message: "Admin event: ${body.operationType} on ${body.resourceType}"
+        - to:
+            uri: direct:audit-trail
 
 - route:
     id: user-activity-tracking
@@ -4156,8 +4519,10 @@ camel:
         maxResults=50&
         delay=30000
       steps:
-        - log: "User activity: ${body.type} for user ${body.userId}"
-        - to: "direct:analytics"
+        - log:
+            message: "User activity: ${body.type} for user ${body.userId}"
+        - to:
+            uri: direct:analytics
 
 - route:
     id: security-monitoring
@@ -4170,8 +4535,10 @@ camel:
         maxResults=100&
         delay=5000
       steps:
-        - log: "Failed login from IP: ${body.ipAddress}"
-        - to: "direct:security-check"
+        - log:
+            message: "Failed login from IP: ${body.ipAddress}"
+        - to:
+            uri: direct:security-check
 
 # Processing routes
 - route:
@@ -4181,24 +4548,36 @@ camel:
       steps:
         - marshal:
             json: {}
-        - to: "kafka:admin-audit?brokers=localhost:9092"
-        - to: "log:audit"
+        - to:
+            uri: kafka:admin-audit
+            parameters:
+              brokers: "localhost:9092"
+        - to:
+            uri: log:audit
 
 - route:
     id: process-analytics
     from:
       uri: direct:analytics
       steps:
-        - to: "bean:analyticsService?method=processUserActivity"
-        - to: "log:analytics"
+        - to:
+            uri: bean:analyticsService
+            parameters:
+              method: processUserActivity
+        - to:
+            uri: log:analytics
 
 - route:
     id: process-security-check
     from:
       uri: direct:security-check
       steps:
-        - to: "bean:securityService?method=checkFailedLogin"
-        - to: "log:security"
+        - to:
+            uri: bean:securityService
+            parameters:
+              method: checkFailedLogin
+        - to:
+            uri: log:security
 ```
 
 ### Enabling Events in Keycloak
@@ -4543,7 +4922,9 @@ from("rest:get:/api/data")
         - policy:
             ref: paymentPolicy
         - to:
-            uri: bean:paymentService?method=processPayment
+            uri: bean:paymentService
+            parameters:
+              method: processPayment
 
 # Regular endpoint with local JWT
 - route:
@@ -4553,7 +4934,9 @@ from("rest:get:/api/data")
         - policy:
             ref: standardPolicy
         - to:
-            uri: bean:dataService?method=getData
+            uri: bean:dataService
+            parameters:
+              method: getData
 
 # Security policies
 beans:
@@ -4637,7 +5020,9 @@ public class HybridSecurityRoutes extends RouteBuilder {
         - policy:
             ref: adminIntrospection
         - to:
-            uri: bean:userService?method=deleteUser
+            uri: bean:userService
+            parameters:
+              method: deleteUser
 
 - route:
     from:
@@ -4646,7 +5031,9 @@ public class HybridSecurityRoutes extends RouteBuilder {
         - policy:
             ref: adminIntrospection
         - to:
-            uri: bean:roleService?method=assignRole
+            uri: bean:roleService
+            parameters:
+              method: assignRole
 
 # Read routes with local JWT
 - route:
@@ -4656,7 +5043,9 @@ public class HybridSecurityRoutes extends RouteBuilder {
         - policy:
             ref: readPolicy
         - to:
-            uri: bean:userService?method=listUsers
+            uri: bean:userService
+            parameters:
+              method: listUsers
 
 - route:
     from:
@@ -4665,7 +5054,9 @@ public class HybridSecurityRoutes extends RouteBuilder {
         - policy:
             ref: readPolicy
         - to:
-            uri: bean:userService?method=getProfile
+            uri: bean:userService
+            parameters:
+              method: getProfile
 
 # Security policies
 beans:
@@ -5278,7 +5669,9 @@ from("direct:user-endpoint")
         - policy:
             ref: userPolicy
         - to:
-            uri: bean:userService?method=processUser
+            uri: bean:userService
+            parameters:
+              method: processUser
 
 # Bean definition
 beans:
@@ -5460,7 +5853,8 @@ from("rest:post:/secure-data")
           constant: "application/json"
       - transform:
           constant: '{"error": "Access denied", "message": "Insufficient privileges"}'
-      - log: "Authorization failed: ${exception.message}"
+      - log:
+          message: "Authorization failed: ${exception.message}"
 
 # Route-specific error handling
 - route:
@@ -5595,7 +5989,9 @@ public class KeycloakSecurityRoutes extends RouteBuilder {
         - policy:
             ref: adminPolicy
         - to:
-            uri: bean:userService?method=getAllUsers
+            uri: bean:userService
+            parameters:
+              method: getAllUsers
 
 - route:
     from:
@@ -5604,7 +6000,9 @@ public class KeycloakSecurityRoutes extends RouteBuilder {
         - policy:
             ref: userPolicy
         - to:
-            uri: bean:userService?method=getCurrentUser
+            uri: bean:userService
+            parameters:
+              method: getCurrentUser
 
 # Security policy beans
 beans:
@@ -5924,7 +6322,9 @@ from("direct:flexible-access")
         - policy:
             ref: strictPolicy
         - to:
-            uri: bean:documentService?method=adminOperations
+            uri: bean:documentService
+            parameters:
+              method: adminOperations
 
 - route:
     from:
@@ -5933,7 +6333,9 @@ from("direct:flexible-access")
         - policy:
             ref: flexiblePolicy
         - to:
-            uri: bean:documentService?method=flexibleOperations
+            uri: bean:documentService
+            parameters:
+              method: flexibleOperations
 
 # Bean definitions
 beans:

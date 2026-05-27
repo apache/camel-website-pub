@@ -60,7 +60,9 @@ public class MyRouteTemplates extends RouteBuilder {
       - name: "myPeriod"
         defaultValue: "3s"
     from:
-      uri: "timer:{{name}}?period={{myPeriod}}"
+      uri: "timer:{{name}}"
+      parameters:
+        period: "{{myPeriod}}"
       steps:
         - setBody:
             expression:
@@ -138,14 +140,18 @@ Notice how we use `?` in the replyTo option below:
 ```yaml
 - route:
     from:
-      uri: "timer:{{name}}?period={{myPeriod}}"
+      uri: "timer:{{name}}"
+      parameters:
+        period: "{{myPeriod}}"
       steps:
         - setBody:
             expression:
               simple:
                 expression: "{{greeting}} ${body}"
         - to:
-            uri: "jms:myqueue?replyTo={{?replyToQueue}}"
+            uri: "jms:myqueue"
+            parameters:
+              replyTo: "{{?replyToQueue}}"
 ```
 
 > **Important**
@@ -834,7 +840,9 @@ Notice how the Groovy code can be inlined directly in the route template in DSL 
       uri: direct:s3-store
       steps:
         - to:
-            uri: "aws2-s3:{{bucket}}?amazonS3Client=#{{myClient}}"
+            uri: "aws2-s3:{{bucket}}"
+            parameters:
+              amazonS3Client: "#{{myClient}}"
 ```
 
 The groovy code can be externalized into a file on the classpath or file system, by using `resource:` as prefix, such as:
@@ -890,7 +898,9 @@ Notice how we can tell Camel the type of the bean is `software.amazon.awssdk.ser
       uri: direct:s3-store
       steps:
         - to:
-            uri: "aws2-s3:{{bucket}}?amazonS3Client=#{{myClient}}"
+            uri: "aws2-s3:{{bucket}}"
+            parameters:
+              amazonS3Client: "#{{myClient}}"
 ```
 
 Then create the file `s3bean.groovy` in the classpath root:
@@ -984,7 +994,9 @@ routeTemplate("s3template")
       uri: direct:s3-store
       steps:
         - to:
-            uri: "aws2-s3:{{bucket}}?amazonS3Client=#{{myClient}}"
+            uri: "aws2-s3:{{bucket}}"
+            parameters:
+              amazonS3Client: "#{{myClient}}"
 ```
 
 The method signature of `createS3Client` method **MUST** then have one parameter for the `RouteTemplateContext` as shown:
@@ -1054,7 +1066,9 @@ routeTemplate("s3template")
       uri: direct:s3-store
       steps:
         - to:
-            uri: "aws2-s3:{{bucket}}?amazonS3Client=#{{myClient}}"
+            uri: "aws2-s3:{{bucket}}"
+            parameters:
+              amazonS3Client: "#{{myClient}}"
 ```
 
 ## Configuring route templates when creating route (advanced)

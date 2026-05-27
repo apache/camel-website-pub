@@ -31,13 +31,15 @@ from("direct:unmarshal")
 ```
 
 ```yaml
-- from:
-    uri: direct:unmarshal
+- route:
+    from:
+      uri: direct:unmarshal
     steps:
       - unmarshal:
           smooks:
             smooksConfig: csv-smooks-unmarshal-config.xml
-      - log: "Unmarshalled customers: ${body}"
+      - log:
+          message: "Unmarshalled customers: ${body}"
 ```
 
 The Smooks configuration in `csv-smooks-unmarshal-config.xml` is as follows:

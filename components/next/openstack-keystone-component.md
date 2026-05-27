@@ -140,16 +140,16 @@ The OpenStack Keystone component supports 10 message header(s), which is/are lis
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **description** (producer) Constant: [`DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#DESCRIPTION) | The description. |  | String |
-| **domainId** (group project user) Constant: [`DOMAIN_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#DOMAIN_ID) | ID of the domain. |  | String |
-| **parentId** (project) Constant: [`PARENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#PARENT_ID) | The parent project ID. |  | String |
-| **password** (user) Constant: [`PASSWORD`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#PASSWORD) | User’s password. |  | String |
-| **email** (user) Constant: [`EMAIL`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#EMAIL) | User’s email. |  | String |
-| **userId** (group) Constant: [`USER_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#USER_ID) | ID of the user. |  | String |
-| **groupId** (group) Constant: [`GROUP_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#GROUP_ID) | ID of the group. |  | String |
-| **operation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
-| **ID** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
-| **name** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
+| **CamelOpenstackKeystoneDescription** (producer) Constant: [`DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#DESCRIPTION) | The description. |  | String |
+| **CamelOpenstackKeystoneDomainId** (group project user) Constant: [`DOMAIN_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#DOMAIN_ID) | ID of the domain. |  | String |
+| **CamelOpenstackKeystoneParentId** (project) Constant: [`PARENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#PARENT_ID) | The parent project ID. |  | String |
+| **CamelOpenstackKeystonePassword** (user) Constant: [`PASSWORD`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#PASSWORD) | User’s password. |  | String |
+| **CamelOpenstackKeystoneEmail** (user) Constant: [`EMAIL`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#EMAIL) | User’s email. |  | String |
+| **CamelOpenstackKeystoneUserId** (group) Constant: [`USER_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#USER_ID) | ID of the user. |  | String |
+| **CamelOpenstackKeystoneGroupId** (group) Constant: [`GROUP_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/keystone/KeystoneConstants.html#GROUP_ID) | ID of the group. |  | String |
+| **CamelOpenstackOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
+| **CamelOpenstackId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
+| **CamelOpenstackName** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
 
 ## Usage
 
