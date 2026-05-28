@@ -2,7 +2,7 @@
 
 We offer several examples in [Camel Quarkus examples repository](https://github.com/apache/camel-quarkus-examples). To learn how to use them, please follow the [First steps](first-steps.md) chapter of the User guide.
 
-Number of Examples: 32
+Number of Examples: 33
 
  
 | Example | Description |
@@ -17,6 +17,7 @@ Number of Examples: 32
 | [FHIR](https://github.com/apache/camel-quarkus-examples/tree/main/fhir) | Shows how to use Camel FHIR with Quarkus. |
 | [File consumer with Bindy & FTP](https://github.com/apache/camel-quarkus-examples/tree/main/file-bindy-ftp) | Shows how to consume CSV files, marshal & unmarshal the data and send it onwards via FTP |
 | [HTTP with Post-Quantum Cryptography (PQC) (Java 17)](https://github.com/apache/camel-quarkus-examples/tree/main/http-pqc-j17) | Shows how to implement quantum-resistant authentication using hybrid certificates that combine RSA with post-quantum ML-DSA-65 signatures on Java 17 using application-level validation |
+| [HTTP with Post-Quantum Cryptography (PQC) (Java 21)](https://github.com/apache/camel-quarkus-examples/tree/main/http-pqc-j21) | Shows how to implement quantum-resistant TLS using Java 21 with BouncyCastle JSSE provider for native PQC support with hybrid cipher suites |
 | [HTTP with vanilla JAX-RS or with Camel `platform-http` component](https://github.com/apache/camel-quarkus-examples/tree/main/http-log) | Shows how to create HTTP endpoints using either the RESTEasy |
 | [Health](https://github.com/apache/camel-quarkus-examples/tree/main/health) | Shows how to use Camel health-checks with Quarkus. |
 | [JMS and JPA](https://github.com/apache/camel-quarkus-examples/tree/main/jms-jpa) | Shows how to run a Camel Quarkus application that supports JTA transactions on three external transactional resources: a database (MySQL), a messaging broker (Artemis) and a simulated XAResource which can demonstrate the commit, rollback and crash recovery. |

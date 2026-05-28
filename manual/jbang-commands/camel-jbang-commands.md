@@ -34,6 +34,7 @@ This page provides a reference for all Camel JBang CLI commands.
 | [camel nano](camel-jbang-nano.md) | Nano editor to edit file |
 | [camel plugin](camel-jbang-plugin.md) | Manage plugins that add sub-commands to this CLI |
 | [camel ps](camel-jbang-ps.md) | List running Camel integrations |
+| [camel restart](camel-jbang-restart.md) | Restarts running Camel integrations (stop + re-launch) |
 | [camel run](camel-jbang-run.md) | Run as local Camel integration |
 | [camel sbom](camel-jbang-sbom.md) | Generate a CycloneDX or SPDX SBOM for a specific project |
 | [camel script](camel-jbang-script.md) | Run Camel integration as shell script for terminal scripting |
