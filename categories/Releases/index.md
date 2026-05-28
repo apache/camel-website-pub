@@ -2,7 +2,8 @@
 
 Release feed for Apache Camel and related projects.
 
-releases[361]{title,link,pubDate,description}:
+releases[362]{title,link,pubDate,description}:
+  Camel Quarkus 3.36.0 Released|https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/index.md|Thu, 28 May 2026 00:00:00 +0000|Camel Quarkus 3.36.0 release
   Camel Karaf 4.14.7 Released|https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/index.md|Sun, 24 May 2026 00:00:00 +0000|Camel Karaf 4.14.7 release
   Camel Karaf 4.18.2 Released|https://camel.apache.org/blog/2026/05/camel-karaf-4.18.2/index.md|Sun, 24 May 2026 00:00:00 +0000|Camel Karaf 4.18.2 release
   Camel Quarkus 3.27.4 Released|https://camel.apache.org/blog/2026/05/camel-quarkus-3.27.4/index.md|Thu, 07 May 2026 00:00:00 +0000|Camel Quarkus 3.27.4 release

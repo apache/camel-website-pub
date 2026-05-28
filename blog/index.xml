@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 24 May 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 28 May 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Quarkus 3.36.0 Released</title>
+      <link>https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/</link>
+      <pubDate>Thu, 28 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/</guid>
+      <description>Camel Quarkus 3.36.0 release</description>
+    </item>
     <item>
       <title>Camel Karaf 4.14.7 Released</title>
       <link>https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/</link>

@@ -63,7 +63,7 @@ When using spring-boot with Spring Boot make sure to use the following Maven dep
 </dependency>
 ```
 
-The component supports 298 options, which are listed below.
+The component supports 302 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -86,6 +86,14 @@ The component supports 298 options, which are listed below.
 | **camel.component.properties.properties-parser** | To use a custom PropertiesParser. The option is a org.apache.camel.component.properties.PropertiesParser type. |  | String |
 | **camel.component.properties.system-properties-mode** | Sets the JVM system property mode (0 = never, 1 = fallback, 2 = override). The default mode (override) is to use system properties if present, and override any existing properties. OS environment variable mode is checked before JVM system property mode. |  | Integer |
 | **camel.dataformat.enabled** | Global option to enable/disable dataformat auto-configuration, default is true. | true | Boolean |
+| **camel.errorregistry.body-include-files** | Whether to include the message body of file based messages. The overhead is that the file content has to be read from the file. | true | Boolean |
+| **camel.errorregistry.body-include-streams** | Whether to include the message body of stream based messages. If enabled then beware the stream may not be re-readable later. See more about Stream Caching. | false | Boolean |
+| **camel.errorregistry.body-max-chars** | To limit the message body to a maximum size in the captured error data. Use 0 or negative value to use unlimited size. |  | Integer |
+| **camel.errorregistry.enabled** | Whether the error registry is enabled to capture errors during message routing. | false | Boolean |
+| **camel.errorregistry.include-exchange-properties** | Whether to include the exchange properties in the captured error data. | true | Boolean |
+| **camel.errorregistry.include-exchange-variables** | Whether to include the exchange variables in the captured error data. | true | Boolean |
+| **camel.errorregistry.maximum-entries** | The maximum number of error entries to keep in the registry. When the limit is exceeded, the oldest entries are evicted. | 100 | Integer |
+| **camel.errorregistry.time-to-live-seconds** | The time-to-live in seconds for error entries. Entries older than this are evicted. The default value is 0 (disabled). | 0 | Integer |
 | **camel.health.async-camel-health-check** | Whether Camel Health Checks are executed asynchronously <p> disabled by default. | false | Boolean |
 | **camel.health.consumers-enabled** | Whether consumers health check is enabled. <p> Is default enabled. |  | Boolean |
 | **camel.health.enabled** | Whether health check is enabled globally. <p> Is default enabled. |  | Boolean |
@@ -129,10 +137,6 @@ The component supports 298 options, which are listed below.
 | **camel.main.endpoint-bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions occurred while the consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. <p/> By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN/ERROR level and ignored. The default value is false. | false | Boolean |
 | **camel.main.endpoint-lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. The default value is false. | false | Boolean |
 | **camel.main.endpoint-runtime-statistics-enabled** | Sets whether endpoint runtime statistics is enabled (gathers runtime usage of each incoming and outgoing endpoints). The default value is false. | false | Boolean |
-| **camel.main.error-registry-enabled** | Sets whether the error registry is enabled to capture errors during message routing. This is by default disabled. | false | Boolean |
-| **camel.main.error-registry-maximum-entries** | Sets the maximum number of error entries to keep in the error registry. When the limit is exceeded, the oldest entries are evicted. The default value is 100. | 100 | Integer |
-| **camel.main.error-registry-stack-trace-enabled** | Sets whether to capture stack traces in the error registry. This is enabled by default. | true | Boolean |
-| **camel.main.error-registry-time-to-live-seconds** | Sets the time-to-live in seconds for error entries in the error registry. Entries older than this are evicted. The default value is 3600 (1 hour). | 3600 | Integer |
 | **camel.main.exchange-factory** | Controls whether to pool (reuse) exchanges or create new exchanges (prototype). Using pooled will reduce JVM garbage collection overhead by avoiding to re-create Exchange instances per message each consumer receives. The default is prototype mode. | default | String |
 | **camel.main.exchange-factory-capacity** | The capacity the pool (for each consumer) uses for storing exchanges. The default capacity is 100. | 100 | Integer |
 | **camel.main.exchange-factory-statistics-enabled** | Configures whether statistics is enabled on exchange factory. | false | Boolean |
