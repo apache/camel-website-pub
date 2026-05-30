@@ -476,7 +476,7 @@ public class MyAppConfig {
 }
 ```
 
-Method beforeApplicationStart\` will be called just before the Spring context is started, so the `CamelContext` instance passed to this callback is fully auto-configured. You can add many instances of `CamelContextConfiguration` into your Spring context - all of them will be executed.
+Method `beforeApplicationStart` will be called just before the Spring context is started, so the `CamelContext` instance passed to this callback is fully auto-configured. You can add many instances of `CamelContextConfiguration` into your Spring context - all of them will be executed.
 
 ## Auto-configured consumer and producer templates
 
