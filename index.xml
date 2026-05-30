@@ -7279,14 +7279,14 @@
       <link>https://camel.apache.org/community/articles/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/articles/</guid>
-      <description>Camel Videos Enterprise Integration Patterns (EIP) | What is Apache Camel? from January 2026 by Jasvinder Saggu; a great 50-minute video that greatly covers the importance of integration, EIP patterns and what Apache Camel can do. Highly recommended for new users to Camel. Enterprise Integration Is Dead! Long Live AI-Driven Integration with Apache Camel from Devoxx UK in May 2025 where Markus and Bruno shows firrst hand how Camel, powered by AI, is quietly reinventing how we connect the enterprise.</description>
+      <description>Camel Videos Cadec 2026 Large Project Migration from Mule to Apache Camel - Cadec (January 2026) use-case how they migrated 340 integrations from Mule to Camel (Swedish) Enterprise Integration Patterns (EIP) | What is Apache Camel? from January 2026 by Jasvinder Saggu; a great 50-minute video that greatly covers the importance of integration, EIP patterns and what Apache Camel can do. Highly recommended for new users to Camel. Enterprise Integration Is Dead!</description>
     </item>
     <item>
       <title>Books</title>
       <link>https://camel.apache.org/community/books/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/books/</guid>
-      <description>This page lists the known books about Apache Camel. If you happen to know a book which is not listed, then please contact us (i.e., using the Mailing Lists).&#xA;Cloud Native Integration with Apache Camel Camel in Action 2nd edition Camel in Action Apache Camel Developer&amp;rsquo;s Cookbook Camel Design Patterns Mastering Apache Camel Instant Apache Camel Message Routing Instant Apache Camel Messaging System Enterprise Integration Patterns Cloud Native Integration with Apache Camel Cloud Native Integration with Apache Camel by Guilherme Camposo.</description>
+      <description>This page lists the known books about Apache Camel. If you happen to know a book which is not listed, then please contact us (i.e., using the Mailing Lists).&#xA;Recommended Enterprise Integration Patterns Camel in Action 2nd edition Camel Design Patterns Other Books Cloud Native Integration with Apache Camel Mastering Apache Camel Apache Camel Developer&amp;rsquo;s Cookbook Camel in Action Instant Apache Camel Message Routing Instant Apache Camel Messaging System Enterprise Integration Patterns Enterprise Integration Patterns by Gregor Hohpe and Bobby Woolf.</description>
     </item>
     <item>
       <title>Building</title>
