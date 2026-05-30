@@ -3146,7 +3146,7 @@ The DataFormat supports streaming for large payloads, avoiding memory issues:
 
 ```java
 from("file:large-files?noop=true")
-    .streamCaching()  // Enable stream caching if needed
+    .streamCache(true)e)  // Enable stream caching if needed
     .marshal(pqcFormat)
     .to("file:encrypted");
 ```
@@ -3232,7 +3232,7 @@ void testPQCDataFormatRoundTrip() throws Exception {
     ```java
     pqcFormat.setBufferSize(16384);
     // or
-    from("file:large").streamCaching().marshal(pqcFormat)...
+    from("file:large.streamCache(true)rue).marshal(pqcFormat)...
     ```
     
 

@@ -112,6 +112,19 @@ Enum values:
 
 / component headers: START
 
+## DFDL Schemas
+
+Many DFDL schemas are freely available at [DFDLSchemas on GitHub](https://github.com/DFDLSchemas) including:
+
+-   [UN/EDIFACT](https://github.com/DFDLSchemas/EDIFACT) — models UN/EDIFACT interchanges (ISO 9735) including Supply Chain messages (ORDERS, INVOIC, DESADV, etc.)
+    
+-   [NACHA](https://github.com/DFDLSchemas/NACHA) — ACH payment transactions
+    
+-   [HL7](https://github.com/DFDLSchemas/HL7-v2.7) — healthcare messaging
+    
+-   [PCAP](https://github.com/DFDLSchemas/PCAP) — network packet capture
+    
+
 ## Using DFDL endpoints
 
 The following format is an example of using DFDL to convert an EDI message to an XML using `X12-837P-dfdl.xsd` DFDL schema file.

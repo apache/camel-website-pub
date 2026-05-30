@@ -169,7 +169,7 @@ The Elasticsearch component supports 10 message header(s), which is/are listed b
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **operation** (producer) Constant: [`PARAM_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_OPERATION) | 
+| **CamelElasticsearchOperation** (producer) Constant: [`PARAM_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_OPERATION) | 
 The operation to perform.
 
 Enum values:
@@ -202,15 +202,15 @@ Enum values:
 
 
  |  | ElasticsearchOperation |
-| **indexId** (producer) Constant: [`PARAM_INDEX_ID`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_INDEX_ID) | The id of the indexed document. |  | String |
-| **indexName** (producer) Constant: [`PARAM_INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_INDEX_NAME) | The name of the index to act against. |  | String |
-| **documentClass** (producer) Constant: [`PARAM_DOCUMENT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_DOCUMENT_CLASS) | The full qualified name of the class of the document to unmarshall. | ObjectNode | Class |
-| **waitForActiveShards** (producer) Constant: [`PARAM_WAIT_FOR_ACTIVE_SHARDS`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_WAIT_FOR_ACTIVE_SHARDS) | The index creation waits for the write consistency number of shards to be available. |  | Integer |
-| **scrollKeepAliveMs** (producer) Constant: [`PARAM_SCROLL_KEEP_ALIVE_MS`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_SCROLL_KEEP_ALIVE_MS) | The starting index of the response. |  | Integer |
-| **useScroll** (producer) Constant: [`PARAM_SCROLL`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_SCROLL) | Set to true to enable scroll usage. |  | Boolean |
-| **size** (producer) Constant: [`PARAM_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_SIZE) | The size of the response. |  | Integer |
-| **from** (producer) Constant: [`PARAM_FROM`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_FROM) | The starting index of the response. |  | Integer |
-| **enableDocumentOnlyMode** (producer) Constant: [`PARAM_DOCUMENT_MODE`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_DOCUMENT_MODE) | Indicates whether the body of the message contains only documents. | false | Boolean |
+| **CamelElasticsearchIndexId** (producer) Constant: [`PARAM_INDEX_ID`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_INDEX_ID) | The id of the indexed document. |  | String |
+| **CamelElasticsearchIndexName** (producer) Constant: [`PARAM_INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_INDEX_NAME) | The name of the index to act against. |  | String |
+| **CamelElasticsearchDocumentClass** (producer) Constant: [`PARAM_DOCUMENT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_DOCUMENT_CLASS) | The full qualified name of the class of the document to unmarshall. | ObjectNode | Class |
+| **CamelElasticsearchWaitForActiveShards** (producer) Constant: [`PARAM_WAIT_FOR_ACTIVE_SHARDS`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_WAIT_FOR_ACTIVE_SHARDS) | The index creation waits for the write consistency number of shards to be available. |  | Integer |
+| **CamelElasticsearchScrollKeepAliveMs** (producer) Constant: [`PARAM_SCROLL_KEEP_ALIVE_MS`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_SCROLL_KEEP_ALIVE_MS) | The starting index of the response. |  | Integer |
+| **CamelElasticsearchUseScroll** (producer) Constant: [`PARAM_SCROLL`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_SCROLL) | Set to true to enable scroll usage. |  | Boolean |
+| **CamelElasticsearchSize** (producer) Constant: [`PARAM_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_SIZE) | The size of the response. |  | Integer |
+| **CamelElasticsearchFrom** (producer) Constant: [`PARAM_FROM`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_FROM) | The starting index of the response. |  | Integer |
+| **CamelElasticsearchEnableDocumentOnlyMode** (producer) Constant: [`PARAM_DOCUMENT_MODE`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_DOCUMENT_MODE) | Indicates whether the body of the message contains only documents. | false | Boolean |
 
 ## Message Operations
 

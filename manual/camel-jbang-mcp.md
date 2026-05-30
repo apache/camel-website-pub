@@ -209,7 +209,20 @@ The MCP server requires [JBang](https://www.jbang.dev/) to be installed and avai
 
 ### Claude Code
 
-Add the following to your project’s `.mcp.json` (or `~/.claude/mcp.json` for global configuration):
+#### Install as a plugin (recommended)
+
+Claude Code can install the Camel MCP server from the marketplace defined in the `apache/camel` repository, so you do not have to edit any configuration file by hand. JBang must still be installed and available on your PATH.
+
+```bash
+claude plugin marketplace add apache/camel
+claude plugin install camel-mcp@camel-marketplace
+```
+
+The first command registers the marketplace; the second installs the `camel-mcp` plugin, which ships the MCP server configuration. The server is launched on demand over STDIO via JBang.
+
+#### Manual configuration
+
+Alternatively, add the following to your project’s `.mcp.json` (or `~/.claude/mcp.json` for global configuration):
 
 ```json
 {
@@ -218,7 +231,7 @@ Add the following to your project’s `.mcp.json` (or `~/.claude/mcp.json` for g
       "command": "jbang",
       "args": [
         "-Dquarkus.log.level=WARN",
-        "org.apache.camel:camel-jbang-mcp:4.18.0:runner"
+        "org.apache.camel:camel-jbang-mcp:LATEST:runner"
       ]
     }
   }
@@ -236,7 +249,7 @@ Add the server to your MCP configuration:
       "command": "jbang",
       "args": [
         "-Dquarkus.log.level=WARN",
-        "org.apache.camel:camel-jbang-mcp:4.18.0:runner"
+        "org.apache.camel:camel-jbang-mcp:LATEST:runner"
       ]
     }
   }
@@ -254,7 +267,7 @@ Configure MCP servers in your `.vscode/mcp.json` or in the user settings:
       "command": "jbang",
       "args": [
         "-Dquarkus.log.level=WARN",
-        "org.apache.camel:camel-jbang-mcp:4.18.0:runner"
+        "org.apache.camel:camel-jbang-mcp:LATEST:runner"
       ]
     }
   }
@@ -272,7 +285,7 @@ JetBrains IDEs support MCP servers starting from 2025.1. Configure them in Setti
       "command": "jbang",
       "args": [
         "-Dquarkus.log.level=WARN",
-        "org.apache.camel:camel-jbang-mcp:4.18.0:runner"
+        "org.apache.camel:camel-jbang-mcp:LATEST:runner"
       ]
     }
   }
@@ -284,7 +297,7 @@ JetBrains IDEs support MCP servers starting from 2025.1. Configure them in Setti
 Any MCP client that supports the STDIO transport can launch the server directly:
 
 ```bash
-jbang org.apache.camel:camel-jbang-mcp:4.18.0:runner
+jbang org.apache.camel:camel-jbang-mcp:LATEST:runner
 ```
 
 ### HTTP/SSE Transport
@@ -292,7 +305,7 @@ jbang org.apache.camel:camel-jbang-mcp:4.18.0:runner
 To start the server with the HTTP/SSE transport enabled:
 
 ```bash
-jbang -Dquarkus.http.host-enabled=true -Dquarkus.http.port=8080 org.apache.camel:camel-jbang-mcp:4.18.0:runner
+jbang -Dquarkus.http.host-enabled=true -Dquarkus.http.port=8080 org.apache.camel:camel-jbang-mcp:LATEST:runner
 ```
 
 If you have built Camel locally, you can also run the uber-JAR directly:

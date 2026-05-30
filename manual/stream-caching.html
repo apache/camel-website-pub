@@ -4,7 +4,7 @@ context.getStreamCachingStrategy().setSpoolThreshold(64 * 1024);
 context.getStreamCachingStrategy().setBufferSize(16 * 1024);
 // to enable encryption using RC4
 // context.getStreamCachingStrategy().setSpoolCipher("RC4");</code></pre> </div> </div> <div class="paragraph"> <p>And remember to enable Stream caching on the <code>CamelContext</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">context.setStreamCaching(true);</code></pre> </div> </div> <div class="paragraph"> <p>or on routes:</p> </div> <div id="_tabs_1" class="openblock tabs is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:inbox")
-  .streamCaching()
+  .streamCache(true)
   .to("bean:foo");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route streamCache="true"&gt;
     &lt;from uri="file:inbox"/&gt;
     &lt;to uri="bean:foo"/&gt;

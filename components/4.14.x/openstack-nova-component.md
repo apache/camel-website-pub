@@ -149,17 +149,17 @@ The OpenStack Nova component supports 14 message header(s), which is/are listed 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **FlavorId** (flavor server) Constant: [`FLAVOR_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#FLAVOR_ID) | ID of the flavor. |  | String |
-| **RAM** (flavor) Constant: [`RAM`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#RAM) | Size of RAM. |  | Integer |
-| **VCPU** (flavor) Constant: [`VCPU`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#VCPU) | The number of flavor VCPU. |  | Integer |
-| **disk** (flavor) Constant: [`DISK`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#DISK) | Size of disk. |  | Integer |
-| **swap** (flavor) Constant: [`SWAP`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#SWAP) | Size of swap. |  | Integer |
-| **rxtxFactor** (flavor) Constant: [`RXTXFACTOR`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#RXTXFACTOR) | Rxtx Factor. |  | Integer |
-| **AdminPassword** (server) Constant: [`ADMIN_PASSWORD`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#ADMIN_PASSWORD) | Admin password of the new server. |  | String |
-| **ImageId** (server) Constant: [`IMAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#IMAGE_ID) | The Image ID. |  | String |
-| **KeypairName** (server) Constant: [`KEYPAIR_NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#KEYPAIR_NAME) | The Keypair name. |  | String |
-| **NetworkId** (server) Constant: [`NETWORK`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#NETWORK) | The list of networks (by id). |  | List |
-| **action** (server) Constant: [`ACTION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#ACTION) | 
+| **CamelOpenstackNovaFlavorId** (flavor server) Constant: [`FLAVOR_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#FLAVOR_ID) | ID of the flavor. |  | String |
+| **CamelOpenstackNovaRam** (flavor) Constant: [`RAM`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#RAM) | Size of RAM. |  | Integer |
+| **CamelOpenstackNovaVcpu** (flavor) Constant: [`VCPU`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#VCPU) | The number of flavor VCPU. |  | Integer |
+| **CamelOpenstackNovaDisk** (flavor) Constant: [`DISK`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#DISK) | Size of disk. |  | Integer |
+| **CamelOpenstackNovaSwap** (flavor) Constant: [`SWAP`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#SWAP) | Size of swap. |  | Integer |
+| **CamelOpenstackNovaRxtxFactor** (flavor) Constant: [`RXTXFACTOR`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#RXTXFACTOR) | Rxtx Factor. |  | Integer |
+| **CamelOpenstackNovaAdminPassword** (server) Constant: [`ADMIN_PASSWORD`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#ADMIN_PASSWORD) | Admin password of the new server. |  | String |
+| **CamelOpenstackNovaImageId** (server) Constant: [`IMAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#IMAGE_ID) | The Image ID. |  | String |
+| **CamelOpenstackNovaKeypairName** (server) Constant: [`KEYPAIR_NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#KEYPAIR_NAME) | The Keypair name. |  | String |
+| **CamelOpenstackNovaNetworkId** (server) Constant: [`NETWORK`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#NETWORK) | The list of networks (by id). |  | List |
+| **CamelOpenstackNovaAction** (server) Constant: [`ACTION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/nova/NovaConstants.html#ACTION) | 
 An action to perform.
 
 Enum values:
@@ -198,9 +198,9 @@ Enum values:
 
 
  |  | Action |
-| **operation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
-| **ID** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
-| **name** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
+| **CamelOpenstackOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
+| **CamelOpenstackId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
+| **CamelOpenstackName** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
 
 ## Usage
 

@@ -144,7 +144,7 @@ The Google Secret Manager component supports 3 message header(s), which is/are l
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **GoogleSecretManagerOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-secret-manager/latest/org/apache/camel/component/google/secret/manager/GoogleSecretManagerConstants.html#OPERATION) | 
+| **CamelGoogleSecretManagerOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-secret-manager/latest/org/apache/camel/component/google/secret/manager/GoogleSecretManagerConstants.html#OPERATION) | 
 The operation to perform.
 
 Enum values:

@@ -566,18 +566,18 @@ The Kafka component supports 13 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **kafka.PARTITION\_KEY** (producer) Constant: [`PARTITION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#PARTITION_KEY) | Explicitly specify the partition. |  | Integer |
-| **kafka.PARTITION** (consumer) Constant: [`PARTITION`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#PARTITION) | The partition where the message was stored. |  | Integer |
-| **kafka.KEY** (common) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#KEY) | **Required** Producer: The key of the message in order to ensure that all related message goes in the same partition. Consumer: The key of the message if configured. |  | Object |
-| **kafka.TOPIC** (consumer) Constant: [`TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#TOPIC) | The topic from where the message originated. |  | String |
-| **kafka.OVERRIDE\_TOPIC** (producer) Constant: [`OVERRIDE_TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#OVERRIDE_TOPIC) | The topic to which send the message (override and takes precedence), and the header is not preserved. |  | String |
-| **kafka.OFFSET** (consumer) Constant: [`OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#OFFSET) | The offset of the message. |  | Long |
-| **kafka.HEADERS** (consumer) Constant: [`HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#HEADERS) | The record headers. |  | Headers |
-| **kafka.LAST\_RECORD\_BEFORE\_COMMIT** (consumer) Constant: [`LAST_RECORD_BEFORE_COMMIT`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#LAST_RECORD_BEFORE_COMMIT) | Whether or not it’s the last record before commit (only available if autoCommitEnable endpoint parameter is false). |  | Boolean |
-| **kafka.LAST\_POLL\_RECORD** (consumer) Constant: [`LAST_POLL_RECORD`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#LAST_POLL_RECORD) | Indicates the last record within the current poll request (only available if autoCommitEnable endpoint parameter is false or allowManualCommit is true). |  | Boolean |
-| **kafka.TIMESTAMP** (consumer) Constant: [`TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#TIMESTAMP) | The timestamp of the message. |  | Long |
-| **kafka.OVERRIDE\_TIMESTAMP** (producer) Constant: [`OVERRIDE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#OVERRIDE_TIMESTAMP) | The ProducerRecord also has an associated timestamp. If the user did provide a timestamp, the producer will stamp the record with the provided timestamp and the header is not preserved. |  | Long |
-| **kafka.RECORD\_META** (producer) Constant: [`KAFKA_RECORD_META`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#KAFKA_RECORD_META) | The metadata (only configured if recordMetadata endpoint parameter is true). |  | List |
+| **CamelKafkaPartitionKey** (producer) Constant: [`PARTITION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#PARTITION_KEY) | Explicitly specify the partition. |  | Integer |
+| **CamelKafkaPartition** (consumer) Constant: [`PARTITION`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#PARTITION) | The partition where the message was stored. |  | Integer |
+| **CamelKafkaKey** (common) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#KEY) | **Required** Producer: The key of the message in order to ensure that all related message goes in the same partition. Consumer: The key of the message if configured. |  | Object |
+| **CamelKafkaTopic** (consumer) Constant: [`TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#TOPIC) | The topic from where the message originated. |  | String |
+| **CamelKafkaOverrideTopic** (producer) Constant: [`OVERRIDE_TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#OVERRIDE_TOPIC) | The topic to which send the message (override and takes precedence), and the header is not preserved. |  | String |
+| **CamelKafkaOffset** (consumer) Constant: [`OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#OFFSET) | The offset of the message. |  | Long |
+| **CamelKafkaHeaders** (consumer) Constant: [`HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#HEADERS) | The record headers. |  | Headers |
+| **CamelKafkaLastRecordBeforeCommit** (consumer) Constant: [`LAST_RECORD_BEFORE_COMMIT`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#LAST_RECORD_BEFORE_COMMIT) | Whether or not it’s the last record before commit (only available if autoCommitEnable endpoint parameter is false). |  | Boolean |
+| **CamelKafkaLastPollRecord** (consumer) Constant: [`LAST_POLL_RECORD`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#LAST_POLL_RECORD) | Indicates the last record within the current poll request (only available if autoCommitEnable endpoint parameter is false or allowManualCommit is true). |  | Boolean |
+| **CamelKafkaTimestamp** (consumer) Constant: [`TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#TIMESTAMP) | The timestamp of the message. |  | Long |
+| **CamelKafkaOverrideTimestamp** (producer) Constant: [`OVERRIDE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#OVERRIDE_TIMESTAMP) | The ProducerRecord also has an associated timestamp. If the user did provide a timestamp, the producer will stamp the record with the provided timestamp and the header is not preserved. |  | Long |
+| **CamelKafkaRecordMeta** (producer) Constant: [`KAFKA_RECORD_META`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#KAFKA_RECORD_META) | The metadata (only configured if recordMetadata endpoint parameter is true). |  | List |
 | **CamelKafkaManualCommit** (consumer) Constant: [`MANUAL_COMMIT`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#MANUAL_COMMIT) | Can be used for forcing manual offset commit when using Kafka consumer. |  | KafkaManualCommit |
 
 If you want to send a message to a dynamic topic then use `KafkaConstants.OVERRIDE_TOPIC` as it is used as a one-time header that is not sent along the message, and actually is removed in the producer.
@@ -1115,10 +1115,10 @@ Here is the minimal route you need to read messages from Kafka.
 ```java
 from("kafka:test?brokers=localhost:9092")
     .log("Message received from Kafka : ${body}")
-    .log("    on the topic ${headers[kafka.TOPIC]}")
-    .log("    on the partition ${headers[kafka.PARTITION]}")
-    .log("    with the offset ${headers[kafka.OFFSET]}")
-    .log("    with the key ${headers[kafka.KEY]}")
+    .log("    on the topic ${headers[CamelKafkaTopic]}")
+    .log("    on the partition ${headers[CamelKafkaPartition]}")
+    .log("    with the offset ${headers[CamelKafkaOffset]}")
+    .log("    with the key ${headers[CamelKafkaKey]}")
 ```
 
 If you need to consume messages from multiple topics, you can use a comma separated list of topic names.
@@ -1126,10 +1126,10 @@ If you need to consume messages from multiple topics, you can use a comma separa
 ```java
 from("kafka:test,test1,test2?brokers=localhost:9092")
     .log("Message received from Kafka : ${body}")
-    .log("    on the topic ${headers[kafka.TOPIC]}")
-    .log("    on the partition ${headers[kafka.PARTITION]}")
-    .log("    with the offset ${headers[kafka.OFFSET]}")
-    .log("    with the key ${headers[kafka.KEY]}")
+    .log("    on the topic ${headers[CamelKafkaTopic]}")
+    .log("    on the partition ${headers[CamelKafkaPartition]}")
+    .log("    with the offset ${headers[CamelKafkaOffset]}")
+    .log("    with the key ${headers[CamelKafkaKey]}")
 ```
 
 It’s also possible to subscribe to multiple topics giving a pattern as the topic name and using the `topicIsPattern` option.
@@ -1137,10 +1137,10 @@ It’s also possible to subscribe to multiple topics giving a pattern as the top
 ```java
 from("kafka:test.*?brokers=localhost:9092&topicIsPattern=true")
     .log("Message received from Kafka : ${body}")
-    .log("    on the topic ${headers[kafka.TOPIC]}")
-    .log("    on the partition ${headers[kafka.PARTITION]}")
-    .log("    with the offset ${headers[kafka.OFFSET]}")
-    .log("    with the key ${headers[kafka.KEY]}")
+    .log("    on the topic ${headers[CamelKafkaTopic]}")
+    .log("    on the partition ${headers[CamelKafkaPartition]}")
+    .log("    with the offset ${headers[CamelKafkaOffset]}")
+    .log("    with the key ${headers[CamelKafkaKey]}")
 ```
 
 When consuming messages from Kafka, you can use your own offset management and not delegate this management to Kafka. To keep the offsets, the component needs a `StateRepository` implementation such as `FileStateRepository`. This bean should be available in the registry. Here how to use it :

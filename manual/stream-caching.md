@@ -114,7 +114,7 @@ or on routes:
 
 ```java
 from("file:inbox")
-  .streamCaching()
+  .streamCache(true)
   .to("bean:foo");
 ```
 

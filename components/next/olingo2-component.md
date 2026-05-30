@@ -426,6 +426,8 @@ The Olingo2 component supports 1 message header(s), which is/are listed below:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelOlingo2.responseHttpHeaders** (producer) Constant: [`RESPONSE_HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-olingo2/latest/org/apache/camel/component/olingo2/internal/Olingo2Constants.html#RESPONSE_HTTP_HEADERS) | The response Http headers. |  | Map |
+> **Note**
+> This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 
 ## Usage
 

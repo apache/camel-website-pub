@@ -99,7 +99,7 @@ With the following _path_ and _query_ parameters:
 | **channels** (common) | Comma separated list of IRC channels. |  | String |
 | **commandTimeout** (common) | Delay in milliseconds before sending commands after the connection is established. | 5000 | long |
 | **keys** (common) | Comma separated list of keys for channels. |  | String |
-| **namesOnJoin** (common) | Sends NAMES command to channel after joining it. onReply has to be true in order to process the result which will have the header value irc.num = '353'. | false | boolean |
+| **namesOnJoin** (common) | Sends NAMES command to channel after joining it. onReply has to be true in order to process the result which will have the header value CamelIrcNum = '353'. | false | boolean |
 | **nickname** (common) | The nickname used in chat. |  | String |
 | **persistent** (common) | **Deprecated** Use persistent messages. | true | boolean |
 | **realname** (common) | The IRC user’s actual name. |  | String |
@@ -144,16 +144,16 @@ The IRC component supports 10 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **irc.messageType** (common) Constant: [`IRC_MESSAGE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_MESSAGE_TYPE) | The type of message. |  | String |
-| **irc.target** (common) Constant: [`IRC_TARGET`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_TARGET) | The target. |  | String |
-| **irc.sendTo** (common) Constant: [`IRC_SEND_TO`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_SEND_TO) | The nickname or channel the message should be sent to. |  | String |
-| **irc.user.kicked** (common) Constant: [`IRC_USER_KICKED`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_KICKED) | The nickname of the user who is kicked from a channel (passive). |  | String |
-| **irc.user.host** (common) Constant: [`IRC_USER_HOST`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_HOST) | The host of the person who sent the line. |  | String |
-| **irc.user.nick** (common) Constant: [`IRC_USER_NICK`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_NICK) | The nickname of the person who sent the line or the server name of the server which sent the line. |  | String |
-| **irc.user.servername** (common) Constant: [`IRC_USER_SERVERNAME`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_SERVERNAME) | The server name of the server which sent the line or the nickname of the person who sent the line. |  | String |
-| **irc.user.username** (common) Constant: [`IRC_USER_USERNAME`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_USERNAME) | The username of the person who sent the line. |  | String |
-| **irc.num** (common) Constant: [`IRC_NUM`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_NUM) | The numeric reply. |  | int |
-| **irc.value** (common) Constant: [`IRC_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_VALUE) | The first part of the message. |  | String |
+| **CamelIrcMessageType** (common) Constant: [`IRC_MESSAGE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_MESSAGE_TYPE) | The type of message. |  | String |
+| **CamelIrcTarget** (common) Constant: [`IRC_TARGET`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_TARGET) | The target. |  | String |
+| **CamelIrcSendTo** (common) Constant: [`IRC_SEND_TO`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_SEND_TO) | The nickname or channel the message should be sent to. |  | String |
+| **CamelIrcUserKicked** (common) Constant: [`IRC_USER_KICKED`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_KICKED) | The nickname of the user who is kicked from a channel (passive). |  | String |
+| **CamelIrcUserHost** (common) Constant: [`IRC_USER_HOST`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_HOST) | The host of the person who sent the line. |  | String |
+| **CamelIrcUserNick** (common) Constant: [`IRC_USER_NICK`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_NICK) | The nickname of the person who sent the line or the server name of the server which sent the line. |  | String |
+| **CamelIrcUserServername** (common) Constant: [`IRC_USER_SERVERNAME`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_SERVERNAME) | The server name of the server which sent the line or the nickname of the person who sent the line. |  | String |
+| **CamelIrcUserUsername** (common) Constant: [`IRC_USER_USERNAME`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_USER_USERNAME) | The username of the person who sent the line. |  | String |
+| **CamelIrcNum** (common) Constant: [`IRC_NUM`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_NUM) | The numeric reply. |  | int |
+| **CamelIrcValue** (common) Constant: [`IRC_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-irc/latest/org/apache/camel/component/irc/IrcConstants.html#IRC_VALUE) | The first part of the message. |  | String |
 
 ## Usage
 
@@ -229,15 +229,15 @@ irc:nick@irc.server.org?channels=#chan1,#chan2,#chan3&keys=chan1Key,,chan3key
 
 ### Getting a list of channel users
 
-Using the `namesOnJoin` option one can invoke the IRC-`NAMES` command after the component has joined a channel. The server will reply with `irc.num = 353`. So to process the result the property `onReply` has to be `true`. Furthermore, one has to filter the `onReply` exchanges to get the names.
+Using the `namesOnJoin` option one can invoke the IRC-`NAMES` command after the component has joined a channel. The server will reply with `CamelIrcNum = 353`. So to process the result the property `onReply` has to be `true`. Furthermore, one has to filter the `onReply` exchanges to get the names.
 
 For example, we want to get all exchanges that contain the usernames of the channel:
 
 ```java
 from("ircs:nick@myserver:1234/#mychannelname?namesOnJoin=true&onReply=true")
 	.choice()
-		.when(header("irc.messageType").isEqualToIgnoreCase("REPLY"))
-			.filter(header("irc.num").isEqualTo("353"))
+		.when(header("CamelIrcMessageType").isEqualToIgnoreCase("REPLY"))
+			.filter(header("CamelIrcNum").isEqualTo("353"))
 			.to("mock:result").stop();
 ```
 
@@ -250,7 +250,7 @@ You can specify the destination in the following header:
   
 | Header | Type | Description |
 | --- | --- | --- |
-| `irc.sendTo` | `String` | The channel (or the person) name. |
+| `CamelIrcSendTo` | `String` | The channel (or the person) name. |
 
 ## Spring Boot Auto-Configuration
 

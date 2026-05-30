@@ -147,17 +147,17 @@ The OpenStack Cinder component supports 11 message header(s), which is/are liste
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **size** (volume) Constant: [`SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#SIZE) | Size of volume. |  | Integer |
-| **volumeType** (volume) Constant: [`VOLUME_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#VOLUME_TYPE) | Volume type. |  | String |
-| **imageRef** (volume) Constant: [`IMAGE_REF`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#IMAGE_REF) | ID of image. |  | String |
-| **snapshotId** (volume) Constant: [`SNAPSHOT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#SNAPSHOT_ID) | ID of snapshot. |  | String |
-| **isBootable** (volume) Constant: [`IS_BOOTABLE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#IS_BOOTABLE) | Is bootable. |  | Boolean |
-| **volumeId** (snapshot) Constant: [`VOLUME_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#VOLUME_ID) | The Volume ID. |  | String |
-| **force** (snapshot) Constant: [`FORCE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#FORCE) | Force. |  | Boolean |
-| **operation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
-| **ID** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
-| **name** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
-| **description** (producer) Constant: [`DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#DESCRIPTION) | The description. |  | String |
+| **CamelOpenstackCinderSize** (volume) Constant: [`SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#SIZE) | Size of volume. |  | Integer |
+| **CamelOpenstackCinderVolumeType** (volume) Constant: [`VOLUME_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#VOLUME_TYPE) | Volume type. |  | String |
+| **CamelOpenstackCinderImageRef** (volume) Constant: [`IMAGE_REF`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#IMAGE_REF) | ID of image. |  | String |
+| **CamelOpenstackCinderSnapshotId** (volume) Constant: [`SNAPSHOT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#SNAPSHOT_ID) | ID of snapshot. |  | String |
+| **CamelOpenstackCinderIsBootable** (volume) Constant: [`IS_BOOTABLE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#IS_BOOTABLE) | Is bootable. |  | Boolean |
+| **CamelOpenstackCinderVolumeId** (snapshot) Constant: [`VOLUME_ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#VOLUME_ID) | The Volume ID. |  | String |
+| **CamelOpenstackCinderForce** (snapshot) Constant: [`FORCE`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/cinder/CinderConstants.html#FORCE) | Force. |  | Boolean |
+| **CamelOpenstackOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#OPERATION) | The operation to perform. |  | String |
+| **CamelOpenstackId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#ID) | The ID. |  | String |
+| **CamelOpenstackName** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
+| **CamelOpenstackDescription** (producer) Constant: [`DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#DESCRIPTION) | The description. |  | String |
 
 ## Usage
 
