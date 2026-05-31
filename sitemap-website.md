@@ -1,9 +1,12 @@
-urls[1103]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-05-28T00:00:00+00:00
+urls[1104]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-05-31T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-05-31T00:00:00+00:00
+  https://camel.apache.org/categories/Camel/,2026-05-31T00:00:00+00:00
+  https://camel.apache.org/,2026-05-31T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-05-31T00:00:00+00:00
+  https://camel.apache.org/blog/2026/05/wanaku-0.1.1/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/categories/Camel-Quarkus/,2026-05-28T00:00:00+00:00
   https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/,2026-05-28T00:00:00+00:00
-  https://camel.apache.org/,2026-05-28T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-05-28T00:00:00+00:00
   https://camel.apache.org/releases/q-3.36.0/,2026-05-26T00:00:00+00:00
   https://camel.apache.org/releases/,2026-05-26T00:00:00+00:00
   https://camel.apache.org/categories/Camel-Karaf/,2026-05-24T00:00:00+00:00
@@ -47,9 +50,7 @@ urls[1103]{loc,lastmod}:
   https://camel.apache.org/releases/release-4.14.6/,2026-04-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.14.6/,2026-04-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel419-whatsnew/,2026-04-17T00:00:00+00:00
-  https://camel.apache.org/categories/AI/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/email-triage-agent/,2026-04-16T00:00:00+00:00
-  https://camel.apache.org/categories/Camel/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/JBang/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/releases/release-4.19.0/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/,2026-04-16T00:00:00+00:00

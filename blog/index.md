@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[520]{title,link,pubDate,description}:
+posts[521]{title,link,pubDate,description}:
+  Wanaku 0.1.1: Bringing Apache Camel Integration Capabilities to AI Agents via MCP|https://camel.apache.org/blog/2026/05/wanaku-0.1.1/index.md|Sun, 31 May 2026 00:00:00 +0000|We&rsquo;re excited to announce Wanaku 0.1.1, a significant milestone that showcases how Apache Camel&rsquo;s powerful integration capabilities can be seamlessly exposed to AI agents through the Model
   Camel Quarkus 3.36.0 Released|https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/index.md|Thu, 28 May 2026 00:00:00 +0000|Camel Quarkus 3.36.0 release
   Camel Karaf 4.14.7 Released|https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/index.md|Sun, 24 May 2026 00:00:00 +0000|Camel Karaf 4.14.7 release
   Camel Karaf 4.18.2 Released|https://camel.apache.org/blog/2026/05/camel-karaf-4.18.2/index.md|Sun, 24 May 2026 00:00:00 +0000|Camel Karaf 4.18.2 release

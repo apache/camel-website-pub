@@ -12,7 +12,7 @@ Apache Camel is a widely used project. As such, several companies have built pro
 
 ## [IBM](http://ibm.biz/OSSupport)
 
-[IBM](http://ibm.biz/OSSupport) provides cross-platform support and consulting for [Apache Camel and many other open source packages](https://www.ibm.com/downloads/cas/KOAB4E9V).
+[IBM](http://ibm.biz/OSSupport) provides cross-platform support and consulting for Apache Camel and many other open source packages.
 
 ## [Linux Polska](https://linuxpolska.com/)
 
@@ -30,21 +30,13 @@ meshIQ provides expert support for Apache Camel, ensuring optimal performance an
 
 [Red Hat](https://www.redhat.com) offers a [supported build of Camel](https://developers.redhat.com/products/redhat-build-of-camel/overview) as part of [Red Hat Integration](https://www.redhat.com/en/products/integration) and [Red Hat Application Foundations](https://www.redhat.com/en/products/application-foundations). It contains an enterprise integration platform based on Apache Camel and other open source integration projects, with developer and production support. In addition to enterprise support, Red Hat provides [training](https://www.redhat.com/en/training/skills-path-finder/red-hat-certified-specialist-camel-development), [consulting](https://www.redhat.com/en/services/consulting), and [a developer community](https://developers.redhat.com/products/redhat-build-of-camel/overview).
 
-## [Randoli](https://www.randoli.io)
-
-We provide consulting and implementation of Microservices as well as modernization support for legacy applications using Spring Boot + Camel or Quarkus + Camel.
-
 ## [RiverLog](https://riverlog.com/systemintegration/esb-model-and-camel-based-systems-integration)
 
 [RiverLog Software](https://www.riverlog.com) engages with systems integrators and implementers to deploy Camel based, ESB model integration within enterprises. RiverLog’s custom scripts and generic modules help in reducing Apache Camel integration efforts across the enterprise.
 
-## [RouteBLAZE](https://www.routeblaze.io)
-
-[RouteBLAZE](https://www.routeblaze.io) allows you to design, develop and deploy business processes at Enterprise scale. It comes bundled with a suite of tools and services that support every step of the journey, from project inception through to production support. We also provide bespoke development and consultancy.
-
 ## [Savoir Technologies, Inc](http://www.savoirtech.com)
 
-[Savoir Technologies, Inc](http://www.savoirtech.com) provides enterprise consulting, training and support for Camel and a host of other Apache service containers. Savoir can provide best practice mentoring for developing with Camel, as well as architectural/design reviews, troubleshooting and SOA infrastructure implementations.
+[Savoir Technologies, Inc](http://www.savoirtech.com) provides enterprise consulting, training and support for Apache Camel and related Apache projects. Savoir can provide best practice mentoring for developing with Camel, as well as architectural/design reviews and troubleshooting.
 
 ## [SK Integration Solutions Private Limited](https://skintegrationsolutions.com)
 
@@ -52,15 +44,11 @@ We provide consulting and implementation of Microservices as well as modernizati
 
 ## [Talend, Inc](http://www.talend.com)
 
-[Talend, Inc](http://www.talend.com) provides enterprise level services, training and support for Apache Camel and their [Talend ESB](http://www.talend.com/products/esb-standard-edition.php) product which is a repackaging of Apache Camel including a full, pre-configured OSGi runtime container.
+[Talend, Inc](http://www.talend.com) provides enterprise level services, training and support for Apache Camel and their Talend ESB product which includes Apache Camel.
 
-## [Talisman Platform](https://talismanplatform.com)
+## [Talisman Platform](https://talismancloud.io)
 
-The [Talisman Platform](https://talismanplatform.com) is a production-ready data integration platform designed for business-critical integrations. Designed to facilitate integration driven by the robust capabilities of Apache Camel, building on top of [Apache Camel Karavan](https://github.com/apache/camel-karavan), the Talisman Platform offers exclusive additional features to enhance your integration experience. These include Authentication and Authorization mechanisms, advanced Monitoring and Observability tools, and a comprehensive API Gateway.
-
-## [TouK](http://touk.pl)
-
-[TouK](http://touk.pl) provides enterprise integration consulting and system integration services as well as support for Apache Camel and Apache Servicemix.
+The [Talisman Platform](https://talismancloud.io) is an enterprise integration lifecycle platform built on top of [Apache Camel Karavan](https://github.com/apache/camel-karavan). It provides visual design, AI-assisted development, a deployment control plane, and enterprise features including authentication, monitoring, observability, and API gateway capabilities.
 
 ## [Yupiik](https://www.yupiik.com)
 
