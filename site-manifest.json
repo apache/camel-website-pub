@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1780328947231,
+  "generated": 1780346726257,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32142,6 +32142,12 @@
               "path": "jbang-commands/camel-jbang-dependency.adoc",
               "url": "/manual/jbang-commands/camel-jbang-dependency.html",
               "title": "camel dependency"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-dev.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-dev.html",
+              "title": "camel dev"
             },
             {
               "module": "ROOT",

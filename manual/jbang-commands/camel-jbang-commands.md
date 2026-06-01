@@ -18,6 +18,7 @@ This page provides a reference for all Camel JBang CLI commands.
 | [camel config](camel-jbang-config.md) | Get and set user configuration values |
 | [camel debug](camel-jbang-debug.md) | Debug local Camel integration |
 | [camel dependency](camel-jbang-dependency.md) | Displays all Camel dependencies required to run |
+| [camel dev](camel-jbang-dev.md) | Run in dev mode with live reload |
 | [camel dirty](camel-jbang-dirty.md) | Check if there are dirty files from previous Camel runs that did not terminate gracefully |
 | [camel doc](camel-jbang-doc.md) | Shows documentation for kamelet, component, and other Camel resources |
 | [camel doctor](camel-jbang-doctor.md) | Checks the environment and reports potential issues |
