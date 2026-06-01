@@ -6,8 +6,50 @@
     <description>Recent content in Events on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Aug 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 07 Dec 2023 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Events/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Debugging Camel Quarkus native application in VS Code</title>
+      <link>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</link>
+      <pubDate>Thu, 07 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</guid>
+      <description>Prerequisites Visual Studio Code GraalVM for JDK 20+ Maven 3.9.3+ Extension Pack for Apache Camel by Red Hat Step-by-Step These steps provide a structured approach to generating, setting up, building, and debugging a Camel Quarkus native application within the VS Code environment.&#xA;Generate Example Camel Route in VS Code Workspace Within your clean VS Code workspace, initiate the creation of an exemplary Camel route using the command Camel: Create a Camel Route using Java DSL.</description>
+    </item>
+    <item>
+      <title>Three Apache Camel JBang Videos</title>
+      <link>https://camel.apache.org/blog/2023/10/jbang-video/</link>
+      <pubDate>Wed, 18 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/jbang-video/</guid>
+      <description>For the past year, we have worked on Camel JBang, that is becoming ready to be more widespread known among Camel users.&#xA;In this blog I just want to quickly refer to a number of recent video recordings of Camel JBang in action.&#xA;Apache Camel 4.0 with Camel JBang MQTT demo - by Claus, How to quickly build a Camel prototype with MQTT using Docker Camel JBang - Run Camel as Script using JBang by Jasvinder, with first impressions of Camel JBang Apache Camel JBang - Reload quickly running Camel via copy/paste - by Claus, a poor man&amp;rsquo;s iPaaS with Apache Camel Karavan and Camel JBang </description>
+    </item>
+    <item>
+      <title>Karavan Introduction in 4 minutes</title>
+      <link>https://camel.apache.org/blog/2023/01/karavan-intro/</link>
+      <pubDate>Mon, 09 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/karavan-intro/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel, which makes integration easy and fun through the visualization of pipelines, integration with runtimes and package, image build and deployment to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.</description>
+    </item>
+    <item>
+      <title>How to quickly run 16 years old Camel 1.0 route today</title>
+      <link>https://camel.apache.org/blog/2022/12/quarkus-insights/</link>
+      <pubDate>Fri, 16 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/quarkus-insights/</guid>
+      <description>A few weeks ago I presented Camel JBang at the Quarkus Insights show and one of the demos I did was to quickly run Camel 1.0 route copied with the latest Camel.&#xA;This is a 4-minute recording of that demo.&#xA;If you want to see more, then I recommend to watch the Quarkus Insight session.</description>
+    </item>
+    <item>
+      <title>Camel presented at Quarkus Insights</title>
+      <link>https://camel.apache.org/blog/2022/12/run2007today/</link>
+      <pubDate>Mon, 12 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/run2007today/</guid>
+      <description>Apache Camel was recently showcased at the Quarkus Insights show (#110).&#xA;The session runs 1 hour and 10 minutes, where Peter first give an overview of Apache Camel, then Claus presents the latest update on Camel JBang, and with live demos. And the last 40 minutes is focused on Camel Quarkus where Zineb shows a live coded demo.&#xA;The recording can be watched from YouTube.</description>
+    </item>
+    <item>
+      <title>Author-led Training on Apache Camel</title>
+      <link>https://camel.apache.org/blog/2022/08/pluralsight-training/</link>
+      <pubDate>Wed, 31 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/08/pluralsight-training/</guid>
+      <description>Announcing Author-led Training on Camel I&amp;rsquo;m happy to announce the release of a new course on Apache Camel at Pluralsight. The course, &amp;ldquo;Fundamentals of Integration with Apache Camel&amp;rdquo;, by Michael Hoffman, is intended to help you learn the foundations of Camel as well as how to apply it at an enterprise scale. Demonstrations are provided for implementing ETL, Event-Driven Architecture with RabbitMQ and Kafka, and finally, serverless with Camel-K. Please note, Pluralsight is a paid subscription service.</description>
+    </item>
     <item>
       <title>ApacheCon Asia 2022 Videos</title>
       <link>https://camel.apache.org/blog/2022/08/ApacheCon-Asia-2022-videos/</link>
@@ -21,6 +63,20 @@
       <pubDate>Tue, 26 Jul 2022 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2022/07/ApacheCons/</guid>
       <description>This week ApacheCon Asia 2022 starts in virtual format from 29. till 31. July 2022. The free-to-participate conference hosts many tracks, amongst them the Integration track which features several Camel-related sessions. Register now and join the conversation.&#xA;Later in the year, from 3. till 6. of October 2022, ApacheCon North America 2022 will be held in person at Sheraton, Canal Street, New Orleans, USA. Register now to see three sessions on Camel and related technologies across Cloud Runtime/Cloud Native and Libraries and Frameworks and Developer Tools tracks.</description>
+    </item>
+    <item>
+      <title>Outreachy Internship Contributions Open</title>
+      <link>https://camel.apache.org/blog/2022/03/Outreachy-May2022/</link>
+      <pubDate>Tue, 29 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/Outreachy-May2022/</guid>
+      <description>Two years after its first participation to the Outreachy initiative, the Camel community is excited to support Outreachy&amp;rsquo;s mission once again this year.&#xA;Outreachy is a diversity initiative of the Software Freedom Conservancy, that aims at supporting people subject to systemic bias, and impacted by under-representation in the technology industry. It runs a bi-yearly internships program in open source and open science, where interships are paid and remote.&#xA;We are thrilled to propose the following projects for the next Outreachy May 2022 period:</description>
+    </item>
+    <item>
+      <title>Karavan Serverless mode</title>
+      <link>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</link>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</guid>
+      <description>Karavan Serverless What&amp;rsquo;s new in Karavan preview release 0.0.8? In addition to VSCode extension and Standalone application, Karavan could be deployed in Serverless mode alongside Camel-K on Kubernetes. Karavan Serverless gets and applies Integration Custom Resources directly from/to Kubernetes.&#xA;Try Karavan Serverless mode on Minikube Install Minikube&#xA;Install Camel-K&#xA;Install Karavan serverless&#xA;git clone --depth 1 https://github.com/apache/camel-karavan cd camel-karavan/karavan-demo/serverless kubectl apply -k karavan -n default Get Karavan URL&#xA;minikube service camel-karavan --url The output should be like the following:</description>
     </item>
     <item>
       <title>Getting Further With Camel on Quarkus at Apache CON @HOME 2021</title>
@@ -44,11 +100,25 @@
       <description>As we announced earlier this year, we have not one but two Apache conferences featuring Apache Camel on the Integration track.&#xA;ApacheCon Asia is from August 6 - 8, 2021 and has two days of Camel and software integration sessions held in Asia-Pacific timezone. And ApacheCon @Home from September 21 - 23, 2021 also features two days of Camel and software integration sessions with sessions held in Europe-Americas timezone.&#xA;The schedules for the Integration track at ApacheCon Asia, and ApacheCon @Home have been published, and are packed with interesting technology talks and use case presentations.</description>
     </item>
     <item>
+      <title>Webinar Integrate Systems in the Age of Camel and Quarkus</title>
+      <link>https://camel.apache.org/blog/2021/05/CamelWebinar/</link>
+      <pubDate>Fri, 28 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/CamelWebinar/</guid>
+      <description>Yesterday Claus Ibsen presented a webinar where he covered all the latest innovations with Apache Camel with focus on Camel Quarkus, Camel K, and Kamelets. This trio is a powerful combination that takes Camel to another level, which allows non developers and IT professionals, to manage and bind systems together without any Camel knowledge.&#xA;Kamelets being the Apache Camel solution for an app store experience with integration software.&#xA;The webinar is online on youtube and the slides is here.</description>
+    </item>
+    <item>
       <title>The call for papers is open for two ApacheCons / 两场Apache大会的演讲征集已经开始</title>
       <link>https://camel.apache.org/blog/2021/03/ApacheCons2021/</link>
       <pubDate>Tue, 30 Mar 2021 11:22:18 +0200</pubDate>
       <guid>https://camel.apache.org/blog/2021/03/ApacheCons2021/</guid>
       <description>This year we have two Apache conferences featuring Camel, ApacheCon Asia from 6th through 8th of August, and ApacheCon @Home from 21st through 23rd of September, 2021. Both of these conferences will be online.&#xA;If you wish to present at any of these, please submit your talk proposal for the Integration track. The call for presentations is open for both ApacheCon Asia and ApacheCon @Home. You’re welcome to propose a session for both conferences, though be aware of the differences in target audiences based on region, timezone, and language.</description>
+    </item>
+    <item>
+      <title>New committers to Apache Camel</title>
+      <link>https://camel.apache.org/blog/2020/12/NewCommitters/</link>
+      <pubDate>Tue, 15 Dec 2020 10:40:19 +0100</pubDate>
+      <guid>https://camel.apache.org/blog/2020/12/NewCommitters/</guid>
+      <description>We&amp;rsquo;re happy to announce that our little caravan has been enriched by two new committers. The Camel project warmly welcomes Jiri Ondrusek and Jeremy Ross.&#xA;Jiri Ondrusek&amp;rsquo;s has been contributing to Camel, Camel Spring Boot, and Camel Quarkus for a while now, and Jeremy Ross has been doing stellar work on the Salesforce component, his expertise in Salesforce will help us keep up with frequent changes made on that platform.</description>
     </item>
     <item>
       <title>Recordings from ApacheCon @Home 2020</title>
@@ -72,6 +142,41 @@
       <description>We are pleased to announce that ApacheCon 2020 will be held online, September 29th through October 1st, 2020.&#xA;If you wish to present at the event please submit your talk proposal for the Camel/Integration track when at ApacheCon 2020 website no later than Monday, July 13th by noon in the UTC timezone. Please do not wait for the last minute to submit.&#xA;We are most interested to see talks that offer a learning experience to the attendees, so talks that present new parts of the Camel ecosystem (Camel K, Camel Quarkus, Camel Kafka Connector), talks showing off lessons learned, use cases, and visions on where software integration is heading in the future.</description>
     </item>
     <item>
+      <title>What&#39;s new with Apache Camel 3 webinar</title>
+      <link>https://camel.apache.org/blog/2020/06/whatsnew-camel-3-webinar/</link>
+      <pubDate>Thu, 11 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/06/whatsnew-camel-3-webinar/</guid>
+      <description>Apache Camel is a leading open source integration framework that has been around for more than a decade.&#xA;With the release of Apache Camel 3, the Camel family has been extended to include a full range of projects that are tailored to popular platforms including Spring Boot, Quarkus, Kafka, Kubernetes, and others; creating an ecosystem.&#xA;Claus Ibsen and Andrea Cosentino presented What&amp;rsquo;s new in Camel 3, focusing on the most innovative Camel projects at the DevNation Tech Talk on June 5th.</description>
+    </item>
+    <item>
+      <title>How to quickly run 100 Camels with Apache Camel, Quarkus and GraalVM</title>
+      <link>https://camel.apache.org/blog/2020/04/100Camels/</link>
+      <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/04/100Camels/</guid>
+      <description>Today I continue me practice on youtube and recorded a 10 minute video on creating a new Camel and Quarkus project that includes Rest and HTTP services with health checks and metrics out of the box.&#xA;Then comparing the memory usage of running the example in JVM mode vs native compiled with GraalVM. Then showing for the finale how to quickly run 100 instances of the example each on their own TCP port and how quick Camel are to startup and service the first requests faster than you can type and click.</description>
+    </item>
+    <item>
+      <title>Outreachy update</title>
+      <link>https://camel.apache.org/blog/2020/03/Outreachy-May2020-Update/</link>
+      <pubDate>Mon, 30 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/03/Outreachy-May2020-Update/</guid>
+      <description>The Apache Camel community is excited to have such a great response and effort already put in by the Outreachy applicants. We are grateful to all that contributed with code, ideas, helping others and being a part of our community.&#xA;We received similar inquiries from several applicants, asking help with the timeline for the final application, intern selection criteria and similar. To help answer this and to be transparent to all involved, so each individual can reflect and make informed decisions, here are some of our thoughts.</description>
+    </item>
+    <item>
+      <title>Outreachy internship contributions open</title>
+      <link>https://camel.apache.org/blog/2020/03/Outreachy-May2020/</link>
+      <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/03/Outreachy-May2020/</guid>
+      <description>This year in addition to the Google Summer of Code we&amp;rsquo;re participating in the Outreachy internship program as well.&#xA;For those that might not be aware of the Outreachy, Outreachy is a paid, remote internship program. Outreachy&amp;rsquo;s goal is to support people from groups underrepresented in tech. They help newcomers to free software and open source make their first contributions.&#xA;Apache Camel is looking for contributions to the website you&amp;rsquo;re reading this blog post on.</description>
+    </item>
+    <item>
+      <title>Google Summer of Code 2020 announced</title>
+      <link>https://camel.apache.org/blog/2020/02/GSoC-2020-announced/</link>
+      <pubDate>Mon, 24 Feb 2020 14:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/02/GSoC-2020-announced/</guid>
+      <description>A few days ago Google Summer of Code announced that Apache Software Foundation is again elected to participate as a mentor organization.&#xA;We are looking for ideas, students and mentors willing to participate in GSoC 2020. Anyone in the Camel community can propose an idea, look at the JIRA issues labeled gsoc2020 or create new issues with ideas and set the gsoc2020 label. Have a look at the Mentor guide to understand the role of the mentor and the obligations you would take on.</description>
+    </item>
+    <item>
       <title>CFP for ApacheCon North America 2020</title>
       <link>https://camel.apache.org/blog/2020/02/ApacheConNA-2020-CFP/</link>
       <pubDate>Mon, 24 Feb 2020 12:00:00 +0000</pubDate>
@@ -84,6 +189,13 @@
       <pubDate>Wed, 08 Jan 2020 13:30:00 +0100</pubDate>
       <guid>https://camel.apache.org/blog/2020/01/FOSDEM-2020/</guid>
       <description>What FOSDEM is free as in beer grassroots event for free software/open source communities to meet, share ideas and collaborate. You&amp;rsquo;ll find over 800 talks spread over 35 rooms of Université libre de Bruxelles campus over the first weekend of February. And building on last year&amp;rsquo;s well-received BoF session Camel is returning to FOSDEM.&#xA;When FOSDEM 2020 is on 1st (from 9:30 to 19:00) and 2nd (from 9:00 to 18:00) of February.</description>
+    </item>
+    <item>
+      <title>JBoss Asylum Podcast about Apache Camel 3</title>
+      <link>https://camel.apache.org/blog/2019/12/Podcast47/</link>
+      <pubDate>Tue, 17 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2019/12/Podcast47/</guid>
+      <description>JBoss Asylm Podcast episode 47: What do you call an Apache Camel with 3 humps&#xA;Claus Ibsen and Luca Burgazzoli sits down with Emanual and Max (hosts) and talks about what is coming in Apache Camel 3 on topics like Camel K and Camel Quarkus. We also cover Camel&amp;rsquo;s place in the modern world with cloud native and serverless workloads. And at the end we have some bits about what&amp;rsquo;s coming next in Camel 3.</description>
     </item>
     <item>
       <title>Camel at ApacheCon North America 2019</title>

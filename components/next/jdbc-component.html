@@ -8,7 +8,7 @@
      .setHeader("min", constant(123))
      .setBody("select * from projects where license = :?lic and id &gt; :?min order by id")
      .to("jdbc:myDataSource?useHeadersAsParameters=true")</code></pre> </div> </div> <div class="paragraph"> <p>You can also store the header values in a <code>java.util.Map</code> and store the map on the headers with the key <code>CamelJdbcParameters</code>.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2> <div class="sectionbody"> <div class="paragraph"> <p>In the following example, we set up the DataSource that camel-jdbc requires. First we register our datasource in the Camel registry as <code>testdb</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
-      .setType(EmbeddedDatabaseType.DERBY).addScript("sql/init.sql").build();
+      .setType(EmbeddedDatabaseType.H2).addScript("sql/init.sql").build();
 
 CamelContext context = ...
 context.getRegistry().bind("testdb", db);</code></pre> </div> </div> <div class="paragraph"> <p>Then we configure a route that routes to the JDBC component, so the SQL will be executed. Note how we refer to the <code>testdb</code> datasource that was bound in the previous step:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:hello")

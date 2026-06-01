@@ -6,8 +6,15 @@
     <description>Recent content in Tooling on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Tooling/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel AI: Building an Email Triage Agent with OpenAI, Gmail Transformers, and Camel JBang</title>
+      <link>https://camel.apache.org/blog/2026/04/email-triage-agent/</link>
+      <pubDate>Thu, 16 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/email-triage-agent/</guid>
+      <description>Recent Camel releases introduced several features that work well together for AI-powered integrations: the camel-openai component (4.17), the SimpleFunction interface, chain operator, and structured output with JSON Schema (4.18), and Gmail DataType Transformers (4.19).&#xA;To show how these pieces fit, I built an email triage agent that classifies Gmail messages using an LLM, moves them to labels, and drafts smart replies. The whole thing runs with Camel JBang. No Maven project, no framework setup.</description>
+    </item>
     <item>
       <title>Kaoto v2.10 release</title>
       <link>https://camel.apache.org/blog/2026/03/kaoto-release-2.10.0/</link>
@@ -49,6 +56,13 @@
       <pubDate>Wed, 30 Apr 2025 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2025/04/kaoto-release-2.5.0/</guid>
       <description>Following the Apache Camel 4.11.0 release, we&amp;rsquo;re happy to announce the release of Kaoto 2.5.&#xA;What’s New in Kaoto 2.5? We&amp;rsquo;re thrilled to announce the release of Kaoto 2.5, bringing new features, improvements, and bug fixes to enhance your integration experience.&#xA;With significant improvements to the UI, expanded support for Camel XML, and new export and documentation tools, Kaoto continues to evolve as the go-to low-code integration editor for Apache Camel.</description>
+    </item>
+    <item>
+      <title>Connecting EDI to the Enterprise with Camel &amp; Smooks</title>
+      <link>https://camel.apache.org/blog/2025/02/connecting-edi-to-the-enterprise-with-camel-and-smooks/</link>
+      <pubDate>Wed, 19 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/02/connecting-edi-to-the-enterprise-with-camel-and-smooks/</guid>
+      <description>Electronic Data Interchange (EDI) underpins the flow of information in numerous industries. From healthcare, retail, and aviation, to finance, manufacturing, and logistics, EDI is the workhorse carrying billions of transactions across applications in these industries.&#xA;Historically viewed as a long, complex and costly journey, connecting EDI to the enterprise is traditionally thought to belong in the realm of expensive proprietary software or organisations with sizeable in-house IT teams. The goal of this blog post is to dispel this perception.</description>
     </item>
     <item>
       <title>Kaoto v2.3 release</title>
@@ -170,6 +184,13 @@
       <description>There is a new release of VS Code extension Tooling for Apache Camel K 0.0.36. Available at Visual Studio Marketplace and Open VSX Registry.&#xA;The list of new features is short but they are very important and required important rewrite. Here they are:&#xA;Compatibility with Camel K 2 It is the first version compatible with Camel K 2.x stream.&#xA;It is picking by default Camel K 2.1.&#xA;Java standalone file support on Windows The support of standalone Camel Route written with Java DSL is now available (and tested) on Windows.</description>
     </item>
     <item>
+      <title>Three Apache Camel JBang Videos</title>
+      <link>https://camel.apache.org/blog/2023/10/jbang-video/</link>
+      <pubDate>Wed, 18 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/jbang-video/</guid>
+      <description>For the past year, we have worked on Camel JBang, that is becoming ready to be more widespread known among Camel users.&#xA;In this blog I just want to quickly refer to a number of recent video recordings of Camel JBang in action.&#xA;Apache Camel 4.0 with Camel JBang MQTT demo - by Claus, How to quickly build a Camel prototype with MQTT using Docker Camel JBang - Run Camel as Script using JBang by Jasvinder, with first impressions of Camel JBang Apache Camel JBang - Reload quickly running Camel via copy/paste - by Claus, a poor man&amp;rsquo;s iPaaS with Apache Camel Karavan and Camel JBang </description>
+    </item>
+    <item>
       <title>Karavan 4.0.0: One size fits all</title>
       <link>https://camel.apache.org/blog/2023/09/camel-karavan-4.0.0/</link>
       <pubDate>Mon, 25 Sep 2023 00:00:00 +0000</pubDate>
@@ -233,11 +254,25 @@
       <description>Karavan is an Integration Toolkit for Apache Camel aimed to increase developer performance through the visualization of routes, integration with runtimes and pipelines for package, image build and deploy to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.&#xA;Developers can use Karavan in their local development environment by installing Karavan extension in VS Code or Eclipse Che and run their services using JBang powered camel CLI with camel-main or export and run it with canonical Camel Runtimes.</description>
     </item>
     <item>
+      <title>Karavan Introduction in 4 minutes</title>
+      <link>https://camel.apache.org/blog/2023/01/karavan-intro/</link>
+      <pubDate>Mon, 09 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/01/karavan-intro/</guid>
+      <description>Karavan is an Integration Toolkit for Apache Camel, which makes integration easy and fun through the visualization of pipelines, integration with runtimes and package, image build and deployment to kubernetes out-of-the-box.&#xA;This is a short Karavan introduction aimed to help to understand if this tool is right for your needs.</description>
+    </item>
+    <item>
       <title>New release of VS Code Language Support for Camel 0.6.0 and Tooling for Camel K 0.0.33</title>
       <link>https://camel.apache.org/blog/2023/01/vscode-camelk-0.0.33-language-0.6.0-releases/</link>
       <pubDate>Tue, 03 Jan 2023 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2023/01/vscode-camelk-0.0.33-language-0.6.0-releases/</guid>
       <description>There are new releases of two VS Code extensions:&#xA;VS Code Language support for Apache Camel 0.6.0 Microsoft Marketplace Open VSX Markeptlace VS Code Tooling for Apache Camel K 0.0.33 Microsoft Marketplace Open VSX Marketplace Camel versions upgrades Update default Camel Catalog version from 3.18.2 to 3.20.0 (which is an LTS) Update Kamelet Catalog from 0.9.0 to 0.10.0 Update Camel Quarkus Catalog from 2.13.0 to 2.15.0 Update default Camel K runtime and kamel CLI version to v1.</description>
+    </item>
+    <item>
+      <title>How to test an Integration for Camel K</title>
+      <link>https://camel.apache.org/blog/2022/11/camel-k-jbang/</link>
+      <pubDate>Thu, 24 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/11/camel-k-jbang/</guid>
+      <description>Testing is probably one of those operations we use to repeat most of the time while building any application. Applications in Camel world are no difference. With the advent of Camel JBang, we have a unified place that can be used to perform our testing/fine tuning locally before moving to a higher environment.&#xA;During the last years of development, we have noticed that testing or fine tuning an integration directly connected to a Cloud Native environment can result a bit cumbersome.</description>
     </item>
     <item>
       <title>Camel Textual Route debugging in Sublime</title>
@@ -475,7 +510,7 @@
       <link>https://camel.apache.org/blog/2021/11/low-code-camel/</link>
       <pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2021/11/low-code-camel/</guid>
-      <description>Apache Camel is a project in constant transformation. Anyone knows that Camel has been able to adapt to any new kinds of protocols and systems that have emerged in the past 15 years. But it&amp;rsquo;s not only that: Camel is also able to adapt to any new ways of dealing with integration problems in the cloud era. While Camel K represented a fundamental shift towards a new approach to cloud-native integration, &amp;ldquo;Kamelets&amp;rdquo; are driving a deeper transformation towards &amp;ldquo;low code&amp;rdquo; development.</description>
+      <description>Apache Camel is a project in constant transformation. Anyone knows that Camel has been able to adapt to any new kinds of protocols and systems that have emerged in the past 15 years. But it&amp;rsquo;s not only that: Camel is also able to adapt to any new ways of dealing with integration problems in the cloud era. While Camel K represented a fundamental shift towards a new approach to cloud-native integration, &amp;ldquo;Camel K&amp;rdquo; are driving a deeper transformation towards &amp;ldquo;low code&amp;rdquo; development.</description>
     </item>
     <item>
       <title>Karavan Designer VS Code extension Preview Release</title>

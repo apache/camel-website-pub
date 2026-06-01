@@ -185,7 +185,7 @@ In the following example, we set up the DataSource that camel-jdbc requires. Fir
 
 ```java
 EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
-      .setType(EmbeddedDatabaseType.DERBY).addScript("sql/init.sql").build();
+      .setType(EmbeddedDatabaseType.H2).addScript("sql/init.sql").build();
 
 CamelContext context = ...
 context.getRegistry().bind("testdb", db);

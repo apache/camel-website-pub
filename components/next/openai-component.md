@@ -457,17 +457,6 @@ from("direct:conversation")
     .log("Second response: ${body}"); // Will remember "Alice"
 ```
 
-### Using Third-Party or Local OpenAI-Compatible Endpoint
-
-Usage example:
-
-```java
-from("direct:local")
-    .setBody(constant("Hello from local LLM"))
-    .to("openai:chat-completion?baseUrl=http://localhost:1234/v1&model=local-model")
-    .log("${body}");
-```
-
 ## Input Handling
 
 The component accepts the following types of input in the message body:
@@ -698,19 +687,110 @@ String-valued fields are set directly. Non-string fields (numbers, booleans, obj
 > **Note**
 > This maps fields from the response message’s additional properties (fields not part of the standard schema). Standard response fields like `content`, `role`, and `tool_calls` are not accessible through this option.
 
-## Compatibility
+## OpenAI-Compatible Providers
 
-This component works with any OpenAI API-compatible endpoint by setting the `baseUrl` parameter. This includes:
-
--   OpenAI official API (`[https://api.openai.com/v1](https://api.openai.com/v1)`)
-    
--   Local LLM servers (e.g., Ollama, LM Studio, LocalAI)
-    
--   Third-party OpenAI-compatible providers
-    
+Because the component speaks the OpenAI API, you do not need a separate component to use third-party gateways or local model servers that expose an OpenAI-compatible API. Point `baseUrl` at the provider, set `apiKey` if it requires one, and use the same operations and options as with OpenAI.
 
 > **Note**
-> When using local or third-party providers, ensure they support the chat completions and/or embeddings API endpoint format. Some providers may have different authentication requirements or API variations.
+> Ensure the provider supports the chat completions and/or embeddings endpoint format you use. Authentication requirements and minor API variations differ between providers.
+
+  
+| Provider | `baseUrl` | Notes |
+| --- | --- | --- |
+| OpenAI | `[https://api.openai.com/v1](https://api.openai.com/v1)` | Default; `baseUrl` can be omitted |
+| OpenRouter | `[https://openrouter.ai/api/v1](https://openrouter.ai/api/v1)` | Multi-model gateway with provider routing and fallbacks |
+| Ollama | `[http://localhost:11434/v1](http://localhost:11434/v1)` | Local LLM server |
+| LM Studio | `[http://localhost:1234/v1](http://localhost:1234/v1)` | Local model runner |
+| vLLM | `[http://localhost:8000/v1](http://localhost:8000/v1)` | High-throughput, self-hosted serving engine |
+
+### Ollama (local)
+
+[Ollama](https://ollama.com) runs models locally and does not require an API key. Install Ollama and pull the model used in the example below:
+
+```bash
+ollama run llama3.2
+```
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .setBody(constant("What is Apache Camel?"))
+    .to("openai:chat-completion?baseUrl=http://localhost:11434/v1&model=llama3.2");
+```
+
+```yaml
+- to:
+    uri: openai:chat-completion
+    parameters:
+      baseUrl: http://localhost:11434/v1
+      model: llama3.2
+      userMessage: What is Apache Camel?
+```
+
+For local embeddings, use an embedding model such as `nomic-embed-text` (see the **Embedding Models by Provider** table below).
+
+### LM Studio (local)
+
+[LM Studio](https://lmstudio.ai) serves the model currently loaded in the app. Set `model` to the identifier shown in its UI.
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?baseUrl=http://localhost:1234/v1&model=local-model");
+```
+
+### vLLM (self-hosted)
+
+[vLLM](https://docs.vllm.ai) is a high-throughput LLM serving engine. Install it with `pip install vllm` and start the model used in the example below:
+
+```bash
+vllm serve meta-llama/Llama-3.1-8B-Instruct --port 8000
+```
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?baseUrl=http://localhost:8000/v1"
+        + "&model=meta-llama/Llama-3.1-8B-Instruct");
+```
+
+If vLLM was started with `--api-key`, pass the same value via the `apiKey` option.
+
+On Apple Silicon, the `vllm-mlx` variant uses Apple’s MLX framework and runs the same way:
+
+```bash
+vllm-mlx serve mlx-community/Qwen2.5-7B-Instruct-4bit --port 8000
+```
+
+### OpenRouter
+
+[OpenRouter](https://openrouter.ai) is an OpenAI-compatible gateway that routes requests across many model providers. Set `baseUrl` to its endpoint and select a model with a cross-provider identifier:
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?baseUrl=https://openrouter.ai/api/v1"
+        + "&apiKey={{openrouter.api.key}}"
+        + "&model=anthropic/claude-sonnet-4-20250514");
+```
+
+#### Provider Routing
+
+OpenRouter accepts a `provider` object in the request body to control routing order and fallbacks. Pass it through the `additionalBodyProperty` option as a JSON value — the component parses JSON-valued properties and adds them to the request body:
+
+```yaml
+- to:
+    uri: openai:chat-completion
+    parameters:
+      baseUrl: https://openrouter.ai/api/v1
+      apiKey: "{{openrouter.api.key}}"
+      model: anthropic/claude-sonnet-4-20250514
+      additionalBodyProperty.provider: '{"order":["anthropic","google"],"allow_fallbacks":false}'
+```
+
+> **Note**
+> OpenRouter’s optional attribution headers (`HTTP-Referer` and `X-Title`, which identify your app on the OpenRouter rankings) are sent as HTTP request headers, not body properties. The component does not currently expose a way to set custom HTTP request headers, so they cannot be configured today. They are optional and do not affect chat completions.
 
 ### Embedding Models by Provider
 

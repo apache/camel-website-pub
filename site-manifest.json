@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1780229534110,
+  "generated": 1780328947231,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32004,6 +32004,12 @@
               "path": "jbang-commands/camel-jbang-cmd-route-structure.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-route-structure.html",
               "title": "camel cmd route-structure"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-route-topology.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-route-topology.html",
+              "title": "camel cmd route-topology"
             },
             {
               "module": "ROOT",
