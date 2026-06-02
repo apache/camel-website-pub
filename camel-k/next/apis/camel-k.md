@@ -3518,7 +3518,7 @@ string | Path to the PEM-encoded CA certificate file to import. |
 -   [Traits](#_camel_apache_org_v1_Traits)
     
 
-The Camel trait can be used to configure versions of Apache Camel K runtime and related libraries, it cannot be disabled.
+The Camel trait can be used to configure versions of Camel runtime and related libraries, it cannot be disabled.
 
  
 | Field | Description |
@@ -3526,7 +3526,7 @@ The Camel trait can be used to configure versions of Apache Camel K runtime and 
 | `PlatformBaseTrait`  
 **[PlatformBaseTrait](#_camel_apache_org_v1_trait_PlatformBaseTrait)** | (Members of `PlatformBaseTrait` are embedded into this type.) |
 | `runtimeProvider`  
-string | The runtime provider to use for the integration. (Default, Camel K Runtime). |
+string | The runtime provider to use for the integration. (Default, plain Quarkus). |
 | `runtimeVersion`  
 string | The runtime version to use for the integration. It overrides the default version set in the Integration Platform. You can use a fixed version (for example "3.2.3") or a semantic version (for example "3.x") which will try to resolve to the best matching Catalog existing on the cluster (Default, the one provided by the operator version). |
 | `properties`  

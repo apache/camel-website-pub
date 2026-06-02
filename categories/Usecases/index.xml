@@ -65,20 +65,6 @@
       <description>Do you fancy running camel route as functions in AWS Lambda. Well I did a small Proof Of Concept to test this and the results were interesting. Thanks to the Quarkus and Camel-Quarkus communities for their efforts to make this technically possible.&#xA;You can find the working sample in the Camel Quarkus Examples github repo&#xA;#Deploying a Camel Route in AWS Lambda : A Camel Quarkus example&#xA;This project uses the following framework</description>
     </item>
     <item>
-      <title>camel-openhtmltopdf: A new component to generate PDF documents</title>
-      <link>https://camel.apache.org/blog/2021/07/camel-openhtmltopdf/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/07/camel-openhtmltopdf/</guid>
-      <description>We are pleased to announce that Elevation Solutions has released a new component, camel-openhtmltopdf. With this component, your integrations can easily produce beautiful, pixel-perfect PDF documents from HTML, CSS and images. This component leverages the popular openhtmltopdf, which in turn builds on Apache PDFBox.&#xA;Input HTML can be provided as a String, InputStream, or URI. For URIs, file, http, and https are supported. And there&amp;rsquo;s no need to worry if your markup is not compliant XHTML.</description>
-    </item>
-    <item>
-      <title>Rayvens: a new project powered by Camel K</title>
-      <link>https://camel.apache.org/blog/2021/07/rayvens/</link>
-      <pubDate>Thu, 01 Jul 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/07/rayvens/</guid>
-      <description>We&amp;rsquo;re happy to learn that a new open source project has been launched to add integration capabilities to AI applications.&#xA;Built on Ray and Apache Camel, Rayvens from @IBMResearch enables data scientists to interface with hundreds of data services with little effort to consume, process, and produce events and data in real time.&#xA;The project perfectly fits the mission of Camel K of bringing event sources and sinks to any platform that needs data.</description>
-    </item>
-    <item>
       <title>Routing multicast output after encountering partial failures</title>
       <link>https://camel.apache.org/blog/2021/05/multicast-failure-routing/</link>
       <pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate>

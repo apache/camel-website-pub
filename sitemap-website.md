@@ -1,4 +1,4 @@
-urls[1071]{loc,lastmod}:
+urls[747]{loc,lastmod}:
   https://camel.apache.org/categories/AI/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/blog/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/,2026-05-31T00:00:00+00:00
@@ -164,53 +164,34 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/releases/release-4.14.0/,2025-08-19T00:00:00+00:00
   https://camel.apache.org/blog/2025/08/RELEASE-4.14.0/,2025-08-19T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.13.0/,2025-08-01T00:00:00+00:00
-  https://camel.apache.org/blog/2025/07/camel-quarkus-3.25.0/,2025-07-30T00:00:00+00:00
   https://camel.apache.org/releases/q-3.25.0/,2025-07-28T00:00:00+00:00
   https://camel.apache.org/blog/2025/07/camel-jbang-infra/,2025-07-21T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.13.0/,2025-07-14T00:00:00+00:00
   https://camel.apache.org/blog/2025/07/camel413-whatsnew/,2025-07-08T00:00:00+00:00
   https://camel.apache.org/releases/release-4.13.0/,2025-07-08T00:00:00+00:00
-  https://camel.apache.org/blog/2025/07/RELEASE-4.13.0/,2025-07-08T00:00:00+00:00
-  https://camel.apache.org/blog/2025/07/camel-quarkus-3.20.2/,2025-07-07T00:00:00+00:00
   https://camel.apache.org/releases/q-3.20.2/,2025-07-07T00:00:00+00:00
-  https://camel.apache.org/blog/2025/07/camel-quarkus-release-3.15.4/,2025-07-01T00:00:00+00:00
   https://camel.apache.org/releases/q-3.15.4/,2025-07-01T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.10.6/,2025-07-01T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.8.8/,2025-07-01T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.12.1/,2025-07-01T00:00:00+00:00
   https://camel.apache.org/releases/release-4.10.6/,2025-06-27T00:00:00+00:00
-  https://camel.apache.org/blog/2025/06/RELEASE-4.10.6/,2025-06-27T00:00:00+00:00
-  https://camel.apache.org/blog/2025/06/camel-karaf-release-4.10.5/,2025-06-26T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.10.5/,2025-06-26T00:00:00+00:00
   https://camel.apache.org/releases/release-4.8.8/,2025-06-26T00:00:00+00:00
-  https://camel.apache.org/blog/2025/06/RELEASE-4.8.8/,2025-06-26T00:00:00+00:00
-  https://camel.apache.org/blog/2025/06/camel-quarkus-release-3.24.0/,2025-06-25T00:00:00+00:00
   https://camel.apache.org/releases/q-3.24.0/,2025-06-25T00:00:00+00:00
-  https://camel.apache.org/blog/2025/06/camel-k-2-7/,2025-06-24T00:00:00+00:00
   https://camel.apache.org/releases/k-2.7.0/,2025-06-24T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.10.5/,2025-06-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.10.5/,2025-06-03T00:00:00+00:00
-  https://camel.apache.org/blog/2025/06/RELEASE-4.10.5/,2025-06-03T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.12.0/,2025-06-02T00:00:00+00:00
   https://camel.apache.org/blog/2025/05/camel412-whatsnew/,2025-05-30T00:00:00+00:00
   https://camel.apache.org/releases/release-4.12.0/,2025-05-29T00:00:00+00:00
-  https://camel.apache.org/blog/2025/05/RELEASE-4.12.0/,2025-05-29T00:00:00+00:00
-  https://camel.apache.org/blog/2025/05/camel-quarkus-release-3.23.0/,2025-05-26T00:00:00+00:00
   https://camel.apache.org/releases/q-3.23.0/,2025-05-26T00:00:00+00:00
   https://camel.apache.org/releases/release-4.8.7/,2025-05-09T00:00:00+00:00
-  https://camel.apache.org/blog/2025/05/RELEASE-4.8.7/,2025-05-09T00:00:00+00:00
-  https://camel.apache.org/blog/2025/05/camel-quarkus-3.20.1/,2025-05-06T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.12.0/,2025-05-06T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.10.4/,2025-05-05T00:00:00+00:00
   https://camel.apache.org/releases/q-3.20.1/,2025-05-04T00:00:00+00:00
-  https://camel.apache.org/blog/2025/04/camel-quarkus-release-3.22.0/,2025-04-30T00:00:00+00:00
   https://camel.apache.org/releases/q-3.22.0/,2025-04-30T00:00:00+00:00
-  https://camel.apache.org/blog/2025/04/kaoto-release-2.5.0/,2025-04-30T00:00:00+00:00
   https://camel.apache.org/releases/release-4.10.4/,2025-04-30T00:00:00+00:00
-  https://camel.apache.org/blog/2025/04/RELEASE-4.10.4/,2025-04-30T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.11.0/,2025-04-17T00:00:00+00:00
-  https://camel.apache.org/blog/2025/04/camel-karaf-release-4.10.3/,2025-04-17T00:00:00+00:00
-  https://camel.apache.org/blog/2025/04/camel-karaf-release-4.8.6/,2025-04-17T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.10.3/,2025-04-17T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.8.6/,2025-04-17T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.11.0/,2025-04-17T00:00:00+00:00
@@ -219,18 +200,12 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/blog/2025/04/camel411-whatsnew/,2025-04-05T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.10.3/,2025-04-03T00:00:00+00:00
   https://camel.apache.org/releases/release-4.11.0/,2025-04-03T00:00:00+00:00
-  https://camel.apache.org/blog/2025/04/RELEASE-4.11.0/,2025-04-03T00:00:00+00:00
   https://camel.apache.org/blog/2025/04/camel-kserve/,2025-04-02T00:00:00+00:00
   https://camel.apache.org/security/CVE-2025-30177.md,2025-04-01T07:30:42+02:00
   https://camel.apache.org/releases/release-4.8.6/,2025-04-01T00:00:00+00:00
-  https://camel.apache.org/blog/2025/04/RELEASE-4.8.6/,2025-04-01T00:00:00+00:00
   https://camel.apache.org/releases/release-4.10.3/,2025-03-31T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/RELEASE-4.10.3/,2025-03-31T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/camel-quarkus-release-3.20.0/,2025-03-26T00:00:00+00:00
   https://camel.apache.org/releases/q-3.20.0/,2025-03-26T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-3.15.3/,2025-03-24T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/camel-quarkus-release-3.15.3/,2025-03-18T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/camel-karaf-release-4.8.5/,2025-03-16T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.8.5/,2025-03-16T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.10.2/,2025-03-15T00:00:00+00:00
   https://camel.apache.org/security/CVE-2025-29891.md,2025-03-12T07:30:42+02:00
@@ -242,20 +217,13 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/releases/kamelets-4.8.5/,2025-03-10T00:00:00+00:00
   https://camel.apache.org/security/CVE-2025-27636.md,2025-03-09T04:30:42+02:00
   https://camel.apache.org/releases/release-3.22.4/,2025-03-09T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/RELEASE-3.22.4/,2025-03-09T00:00:00+00:00
   https://camel.apache.org/releases/release-4.10.2/,2025-03-09T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/RELEASE-4.10.2/,2025-03-09T00:00:00+00:00
   https://camel.apache.org/releases/release-4.8.5/,2025-03-08T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/RELEASE-4.8.5/,2025-03-08T00:00:00+00:00
   https://camel.apache.org/blog/2025/03/camel-observability/,2025-03-05T00:00:00+00:00
   https://camel.apache.org/releases/release-4.10.1/,2025-03-04T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/RELEASE-4.10.1/,2025-03-04T00:00:00+00:00
   https://camel.apache.org/releases/release-4.8.4/,2025-03-04T00:00:00+00:00
-  https://camel.apache.org/blog/2025/03/RELEASE-4.8.4/,2025-03-04T00:00:00+00:00
-  https://camel.apache.org/blog/2025/02/camel-quarkus-3.19.0/,2025-02-26T00:00:00+00:00
   https://camel.apache.org/releases/q-3.19.0/,2025-02-26T00:00:00+00:00
   https://camel.apache.org/blog/2025/02/camel-tensorflow-serving/,2025-02-24T00:00:00+00:00
-  https://camel.apache.org/blog/2025/02/camel-k-2-6/,2025-02-19T00:00:00+00:00
   https://camel.apache.org/blog/2025/02/connecting-edi-to-the-enterprise-with-camel-and-smooks/,2025-02-19T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.10.0/,2025-02-17T00:00:00+00:00
   https://camel.apache.org/releases/k-2.6.0/,2025-02-15T00:00:00+00:00
@@ -264,84 +232,59 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/blog/2025/02/camel-torchserve/,2025-02-13T00:00:00+00:00
   https://camel.apache.org/blog/2025/02/camel410-whatsnew/,2025-02-12T00:00:00+00:00
   https://camel.apache.org/releases/release-4.10.0/,2025-02-11T00:00:00+00:00
-  https://camel.apache.org/blog/2025/02/RELEASE-4.10.0/,2025-02-11T00:00:00+00:00
   https://camel.apache.org/releases/k-2.5.1/,2025-02-07T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-3.15.2/,2025-02-01T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.8.3/,2025-01-31T00:00:00+00:00
-  https://camel.apache.org/blog/2025/01/camel-karaf-release-4.9.0/,2025-01-30T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.9.0/,2025-01-30T00:00:00+00:00
-  https://camel.apache.org/blog/2025/01/camel-karaf-release-4.8.2/,2025-01-29T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.8.2/,2025-01-29T00:00:00+00:00
-  https://camel.apache.org/blog/2025/01/camel-quarkus-release-3.18.0/,2025-01-29T00:00:00+00:00
   https://camel.apache.org/releases/q-3.18.0/,2025-01-29T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.9.0/,2025-01-28T00:00:00+00:00
   https://camel.apache.org/releases/release-4.4.5/,2025-01-22T00:00:00+00:00
-  https://camel.apache.org/blog/2025/01/RELEASE-4.4.5/,2025-01-22T00:00:00+00:00
-  https://camel.apache.org/blog/2025/01/camel-quarkus-release-3.15.2/,2025-01-21T00:00:00+00:00
   https://camel.apache.org/releases/q-3.15.2/,2025-01-21T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.8.3/,2025-01-17T00:00:00+00:00
   https://camel.apache.org/blog/2025/01/langchain4j-bean-name/,2025-01-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.8.3/,2025-01-12T00:00:00+00:00
-  https://camel.apache.org/blog/2025/01/RELEASE-4.8.3/,2025-01-12T00:00:00+00:00
   https://camel.apache.org/blog/2025/01/2024-numbers/,2025-01-01T00:00:00+00:00
   https://camel.apache.org/blog/2024/12/camel3-eol/,2024-12-23T00:00:00+00:00
   https://camel.apache.org/releases/release-3.22.3/,2024-12-20T00:00:00+00:00
-  https://camel.apache.org/blog/2024/12/RELEASE-3.22.3/,2024-12-20T00:00:00+00:00
   https://camel.apache.org/blog/2024/12/langchain4j-bean-interface/,2024-12-20T00:00:00+00:00
-  https://camel.apache.org/blog/2024/12/camel-quarkus-release-3.17.0/,2024-12-12T00:00:00+00:00
   https://camel.apache.org/releases/q-3.17.0/,2024-12-12T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.8.2/,2024-12-12T00:00:00+00:00
   https://camel.apache.org/blog/2024/12/kaoto-release-2.3.0/,2024-12-10T00:00:00+00:00
-  https://camel.apache.org/blog/2024/12/migrate-blueprint/,2024-12-09T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.9.0/,2024-12-06T00:00:00+00:00
   https://camel.apache.org/blog/2024/12/camel49-whatsnew/,2024-12-05T00:00:00+00:00
   https://camel.apache.org/releases/release-4.8.2/,2024-12-05T00:00:00+00:00
-  https://camel.apache.org/blog/2024/12/RELEASE-4.8.2/,2024-12-05T00:00:00+00:00
   https://camel.apache.org/releases/release-4.9.0/,2024-12-04T00:00:00+00:00
-  https://camel.apache.org/blog/2024/12/RELEASE-4.9.0/,2024-12-04T00:00:00+00:00
   https://camel.apache.org/blog/2024/11/langchain4j-granite3/,2024-11-15T00:00:00+00:00
-  https://camel.apache.org/blog/2024/11/camel-quarkus-3.8.4/,2024-11-15T00:00:00+00:00
   https://camel.apache.org/releases/q-3.8.4/,2024-11-15T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.8.1/,2024-11-12T00:00:00+00:00
-  https://camel.apache.org/blog/2024/11/camel-k-2-5/,2024-11-04T00:00:00+00:00
   https://camel.apache.org/releases/k-2.5.0/,2024-11-03T00:00:00+00:00
-  https://camel.apache.org/blog/2024/11/camel-quarkus-release-3.15.1/,2024-11-02T00:00:00+00:00
   https://camel.apache.org/releases/q-3.15.1/,2024-11-02T00:00:00+00:00
-  https://camel.apache.org/blog/2024/10/camel-quarkus-release-3.16.0/,2024-10-30T00:00:00+00:00
   https://camel.apache.org/releases/q-3.16.0/,2024-10-30T00:00:00+00:00
   https://camel.apache.org/releases/release-4.8.1/,2024-10-25T00:00:00+00:00
-  https://camel.apache.org/blog/2024/10/RELEASE-4.8.1/,2024-10-25T00:00:00+00:00
   https://camel.apache.org/blog/2024/10/modernizing-test-code-how-to/,2024-10-24T00:00:00+00:00
   https://camel.apache.org/releases/release-4.4.4/,2024-10-21T00:00:00+00:00
-  https://camel.apache.org/blog/2024/10/RELEASE-4.4.4/,2024-10-21T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-3.15.0/,2024-10-10T00:00:00+00:00
-  https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/,2024-10-10T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.8.0/,2024-10-06T00:00:00+00:00
   https://camel.apache.org/blog/2024/10/camel-upgrade-recipes-release-4.8.0/,2024-10-04T00:00:00+00:00
   https://camel.apache.org/blog/2024/09/camel-karavan-4.8.0/,2024-09-30T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.8.0/,2024-09-30T00:00:00+00:00
-  https://camel.apache.org/blog/2024/09/camel-quarkus-release-3.15.0/,2024-09-26T00:00:00+00:00
   https://camel.apache.org/releases/q-3.15.0/,2024-09-23T00:00:00+00:00
   https://camel.apache.org/blog/2024/09/kaoto-release-2.2.0/,2024-09-20T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.8.0/,2024-09-19T00:00:00+00:00
   https://camel.apache.org/blog/2024/09/camel48-whatsnew/,2024-09-16T00:00:00+00:00
   https://camel.apache.org/blog/2024/09/data-extraction-example/,2024-09-16T00:00:00+00:00
   https://camel.apache.org/releases/release-4.8.0/,2024-09-15T00:00:00+00:00
-  https://camel.apache.org/blog/2024/09/RELEASE-4.8.0/,2024-09-15T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.4.3/,2024-09-14T00:00:00+00:00
   https://camel.apache.org/blog/2024/09/modernizing-test-support/,2024-09-11T00:00:00+00:00
   https://camel.apache.org/blog/2024/09/chunking-dsl/,2024-09-06T00:00:00+00:00
   https://camel.apache.org/blog/2024/09/camel-ai-examples/,2024-09-04T00:00:00+00:00
-  https://camel.apache.org/blog/2024/08/camel-quarkus-release-3.14.0/,2024-08-28T00:00:00+00:00
   https://camel.apache.org/releases/q-3.14.0/,2024-08-28T00:00:00+00:00
   https://camel.apache.org/blog/2024/08/camel-springboot-remote-debug-to-openshift-from-vscode/,2024-08-12T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.6/,2024-08-12T00:00:00+00:00
-  https://camel.apache.org/blog/2024/08/RELEASE-4.0.6/,2024-08-12T00:00:00+00:00
-  https://camel.apache.org/blog/2024/08/camel-k-2-4/,2024-08-07T00:00:00+00:00
   https://camel.apache.org/releases/k-2.4.0/,2024-08-07T00:00:00+00:00
   https://camel.apache.org/categories/Camel-Quarkus/,2024-08-06T00:00:00+00:00
   https://camel.apache.org/blog/2024/08/camel-quarkus-remote-debug-to-openshift-from-vscode/,2024-08-06T00:00:00+00:00
-  https://camel.apache.org/blog/2024/07/camel-quarkus-release-3.13.0/,2024-07-31T00:00:00+00:00
   https://camel.apache.org/releases/q-3.13.0/,2024-07-31T00:00:00+00:00
   https://camel.apache.org/blog/2024/07/camel-karavan-4.7.0/,2024-07-29T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.8.1/,2024-07-19T00:00:00+00:00
@@ -350,58 +293,40 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/,2024-07-16T00:00:00+00:00
   https://camel.apache.org/blog/2024/07/camel47-whatsnew/,2024-07-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.7.0/,2024-07-13T00:00:00+00:00
-  https://camel.apache.org/blog/2024/07/RELEASE-4.7.0/,2024-07-13T00:00:00+00:00
-  https://camel.apache.org/blog/2024/07/camel-quarkus-release-3.8.3/,2024-07-08T00:00:00+00:00
   https://camel.apache.org/releases/q-3.8.3/,2024-07-08T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.4.3/,2024-07-04T00:00:00+00:00
-  https://camel.apache.org/blog/2024/06/camel-quarkus-release-3.12.0/,2024-06-27T00:00:00+00:00
   https://camel.apache.org/releases/q-3.12.0/,2024-06-27T00:00:00+00:00
   https://camel.apache.org/releases/release-4.4.3/,2024-06-27T00:00:00+00:00
-  https://camel.apache.org/blog/2024/06/RELEASE-4.4.3/,2024-06-27T00:00:00+00:00
   https://camel.apache.org/releases/release-3.21.5/,2024-06-21T00:00:00+00:00
-  https://camel.apache.org/blog/2024/06/RELEASE-3.21.5/,2024-06-21T00:00:00+00:00
   https://camel.apache.org/releases/k-2.3.3/,2024-06-10T00:00:00+00:00
   https://camel.apache.org/blog/2024/06/kaoto-release-2.0.0/,2024-06-10T00:00:00+00:00
   https://camel.apache.org/releases/k-2.3.2/,2024-06-04T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.4.2/,2024-06-03T00:00:00+00:00
-  https://camel.apache.org/blog/2024/05/camel-quarkus-release-3.11.0/,2024-05-30T00:00:00+00:00
   https://camel.apache.org/releases/q-3.11.0/,2024-05-30T00:00:00+00:00
   https://camel.apache.org/blog/2024/05/camel-karavan-4.6.0/,2024-05-28T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.6.0/,2024-05-16T00:00:00+00:00
   https://camel.apache.org/blog/2024/05/camel46-whatsnew/,2024-05-10T00:00:00+00:00
   https://camel.apache.org/releases/release-4.6.0/,2024-05-10T00:00:00+00:00
-  https://camel.apache.org/blog/2024/05/RELEASE-4.6.0/,2024-05-10T00:00:00+00:00
   https://camel.apache.org/releases/k-2.3.1/,2024-05-06T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.4.2/,2024-05-06T00:00:00+00:00
   https://camel.apache.org/releases/release-3.22.2/,2024-05-05T00:00:00+00:00
-  https://camel.apache.org/blog/2024/05/RELEASE-3.22.2/,2024-05-05T00:00:00+00:00
-  https://camel.apache.org/blog/2024/05/camel-quarkus-release-3.8.2/,2024-05-03T00:00:00+00:00
   https://camel.apache.org/releases/q-3.8.2/,2024-05-03T00:00:00+00:00
-  https://camel.apache.org/blog/2024/04/camel-quarkus-release-3.10.0/,2024-04-30T00:00:00+00:00
   https://camel.apache.org/releases/q-3.10.0/,2024-04-30T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.5/,2024-04-26T00:00:00+00:00
-  https://camel.apache.org/blog/2024/04/RELEASE-4.0.5/,2024-04-26T00:00:00+00:00
   https://camel.apache.org/releases/release-4.4.2/,2024-04-25T00:00:00+00:00
-  https://camel.apache.org/blog/2024/04/RELEASE-4.4.2/,2024-04-25T00:00:00+00:00
   https://camel.apache.org/blog/2024/04/camel-karavan-4.5.0/,2024-04-18T00:00:00+00:00
-  https://camel.apache.org/blog/2024/04/camel-k-2-3/,2024-04-08T00:00:00+00:00
   https://camel.apache.org/releases/k-2.3.0/,2024-04-08T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.5.0/,2024-04-08T00:00:00+00:00
   https://camel.apache.org/blog/2024/04/sourceless-ck-springboot/,2024-04-02T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-3.8.1/,2024-04-01T00:00:00+00:00
   https://camel.apache.org/blog/2024/03/camel45-whatsnew/,2024-03-28T00:00:00+00:00
   https://camel.apache.org/releases/release-4.5.0/,2024-03-28T00:00:00+00:00
-  https://camel.apache.org/blog/2024/03/RELEASE-4.5.0/,2024-03-28T00:00:00+00:00
-  https://camel.apache.org/blog/2024/03/camel-quarkus-release-3.9.0/,2024-03-27T00:00:00+00:00
   https://camel.apache.org/releases/q-3.9.0/,2024-03-27T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.4.1/,2024-03-27T00:00:00+00:00
-  https://camel.apache.org/blog/2024/03/camel-quarkus-release-3.8.1/,2024-03-19T00:00:00+00:00
   https://camel.apache.org/releases/q-3.8.1/,2024-03-19T00:00:00+00:00
   https://camel.apache.org/releases/release-4.4.1/,2024-03-14T00:00:00+00:00
-  https://camel.apache.org/blog/2024/03/RELEASE-4.4.1/,2024-03-14T00:00:00+00:00
   https://camel.apache.org/blog/2024/03/camel-karavan-4.4.0/,2024-03-04T00:00:00+00:00
   https://camel.apache.org/blog/2024/03/language-support-release-0.16.0/,2024-03-04T00:00:00+00:00
-  https://camel.apache.org/blog/2024/02/camel-quarkus-release-3.8.0/,2024-02-28T00:00:00+00:00
   https://camel.apache.org/releases/q-3.8.0/,2024-02-28T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.4.0/,2024-02-22T00:00:00+00:00
   https://camel.apache.org/security/CVE-2024-22371.md,2024-02-19T10:41:48+02:00
@@ -410,87 +335,55 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/blog/2024/02/camel44-whatsnew/,2024-02-19T00:00:00+00:00
   https://camel.apache.org/blog/2024/02/camel-whatsapp-langchain4j/,2024-02-19T00:00:00+00:00
   https://camel.apache.org/releases/release-4.4.0/,2024-02-17T00:00:00+00:00
-  https://camel.apache.org/blog/2024/02/RELEASE-4.4.0/,2024-02-17T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.0.3/,2024-02-11T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.4/,2024-02-01T00:00:00+00:00
-  https://camel.apache.org/blog/2024/02/RELEASE-4.0.4/,2024-02-01T00:00:00+00:00
-  https://camel.apache.org/blog/2024/01/camel-quarkus-release-3.7.0/,2024-01-31T00:00:00+00:00
   https://camel.apache.org/releases/q-3.7.0/,2024-01-31T00:00:00+00:00
   https://camel.apache.org/releases/release-3.22.1/,2024-01-30T00:00:00+00:00
-  https://camel.apache.org/blog/2024/01/RELEASE-3.22.1/,2024-01-30T00:00:00+00:00
   https://camel.apache.org/releases/release-3.21.4/,2024-01-29T00:00:00+00:00
-  https://camel.apache.org/blog/2024/01/RELEASE-3.21.4/,2024-01-29T00:00:00+00:00
-  https://camel.apache.org/blog/2024/01/kaoto/,2024-01-26T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.0.3/,2024-01-22T00:00:00+00:00
   https://camel.apache.org/blog/2024/01/hawtio-v3/,2024-01-12T00:00:00+00:00
-  https://camel.apache.org/blog/2024/01/camel-k-2-2/,2024-01-08T00:00:00+00:00
   https://camel.apache.org/releases/k-2.2.0/,2024-01-08T00:00:00+00:00
   https://camel.apache.org/blog/2024/01/2023-numbers/,2024-01-01T00:00:00+00:00
   https://camel.apache.org/blog/2023/12/camel3ending/,2023-12-27T00:00:00+00:00
   https://camel.apache.org/releases/release-3.22.0/,2023-12-26T00:00:00+00:00
-  https://camel.apache.org/blog/2023/12/RELEASE-3.22.0/,2023-12-26T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.3.0/,2023-12-22T00:00:00+00:00
   https://camel.apache.org/blog/2023/12/camel43-whatsnew/,2023-12-18T00:00:00+00:00
   https://camel.apache.org/releases/release-4.3.0/,2023-12-18T00:00:00+00:00
-  https://camel.apache.org/blog/2023/12/RELEASE-4.3.0/,2023-12-18T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-3.2.3/,2023-12-15T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-3.6.0/,2023-12-15T00:00:00+00:00
   https://camel.apache.org/releases/release-3.21.3/,2023-12-15T00:00:00+00:00
-  https://camel.apache.org/blog/2023/12/RELEASE-3.21.3/,2023-12-15T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.9/,2023-12-13T00:00:00+00:00
-  https://camel.apache.org/blog/2023/12/RELEASE-3.20.9/,2023-12-13T00:00:00+00:00
-  https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/,2023-12-07T00:00:00+00:00
-  https://camel.apache.org/categories/Events/,2023-12-07T00:00:00+00:00
-  https://camel.apache.org/blog/2023/12/camel-quarkus-release-3.2.3/,2023-12-05T00:00:00+00:00
   https://camel.apache.org/releases/q-3.2.3/,2023-12-05T00:00:00+00:00
   https://camel.apache.org/blog/2023/12/camel-data-types/,2023-12-04T00:00:00+00:00
-  https://camel.apache.org/blog/2023/11/camel-quarkus-release-3.6.0/,2023-11-29T00:00:00+00:00
   https://camel.apache.org/releases/q-3.6.0/,2023-11-29T00:00:00+00:00
   https://camel.apache.org/categories/Camel/,2023-11-26T00:00:00+00:00
   https://camel.apache.org/blog/2023/11/camel-4-performance-improvements-2/,2023-11-26T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.2.0/,2023-11-20T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.3/,2023-11-20T00:00:00+00:00
-  https://camel.apache.org/blog/2023/11/RELEASE-4.0.3/,2023-11-20T00:00:00+00:00
   https://camel.apache.org/blog/2023/11/camel42-whatsnew/,2023-11-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.2.0/,2023-11-14T00:00:00+00:00
-  https://camel.apache.org/blog/2023/11/RELEASE-4.2.0/,2023-11-14T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.10/,2023-11-09T00:00:00+00:00
-  https://camel.apache.org/blog/2023/11/RELEASE-3.14.10/,2023-11-09T00:00:00+00:00
-  https://camel.apache.org/blog/2023/11/camel-quarkus-release-3.2.2/,2023-11-08T00:00:00+00:00
   https://camel.apache.org/blog/2023/11/camel-karavan-4.1.0/,2023-11-07T00:00:00+00:00
   https://camel.apache.org/releases/q-3.2.2/,2023-11-07T00:00:00+00:00
-  https://camel.apache.org/blog/2023/11/vscode-camelk-release-0.0.36/,2023-11-07T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.8/,2023-11-03T00:00:00+00:00
-  https://camel.apache.org/blog/2023/11/RELEASE-3.20.8/,2023-11-03T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.1.0/,2023-10-30T00:00:00+00:00
   https://camel.apache.org/releases/release-3.21.2/,2023-10-30T00:00:00+00:00
-  https://camel.apache.org/blog/2023/10/RELEASE-3.21.2/,2023-10-30T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.2/,2023-10-27T00:00:00+00:00
-  https://camel.apache.org/blog/2023/10/RELEASE-4.0.2/,2023-10-27T00:00:00+00:00
-  https://camel.apache.org/blog/2023/10/camel-quarkus-release-3.5.0/,2023-10-25T00:00:00+00:00
   https://camel.apache.org/releases/q-3.5.0/,2023-10-25T00:00:00+00:00
-  https://camel.apache.org/blog/2023/10/camel-k-2-1/,2023-10-23T00:00:00+00:00
   https://camel.apache.org/releases/k-2.1.0/,2023-10-23T00:00:00+00:00
   https://camel.apache.org/blog/2023/10/jbang-video/,2023-10-18T00:00:00+00:00
   https://camel.apache.org/blog/2023/10/camel41-whatsnew/,2023-10-12T00:00:00+00:00
   https://camel.apache.org/releases/release-4.1.0/,2023-10-11T00:00:00+00:00
-  https://camel.apache.org/blog/2023/10/RELEASE-4.1.0/,2023-10-11T00:00:00+00:00
   https://camel.apache.org/blog/2023/10/migrate4/,2023-10-10T00:00:00+00:00
-  https://camel.apache.org/blog/2023/10/camel-quarkus-release-3.2.1/,2023-10-09T00:00:00+00:00
   https://camel.apache.org/releases/q-3.2.1/,2023-10-09T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.7/,2023-10-02T00:00:00+00:00
-  https://camel.apache.org/blog/2023/10/RELEASE-3.20.7/,2023-10-02T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.0.1/,2023-09-29T00:00:00+00:00
   https://camel.apache.org/releases/release-3.21.1/,2023-09-29T00:00:00+00:00
-  https://camel.apache.org/blog/2023/09/RELEASE-3.21.1/,2023-09-29T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.0.0/,2023-09-25T00:00:00+00:00
   https://camel.apache.org/blog/2023/09/camel-karavan-4.0.0/,2023-09-25T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.1/,2023-09-25T00:00:00+00:00
-  https://camel.apache.org/blog/2023/09/RELEASE-4.0.1/,2023-09-25T00:00:00+00:00
-  https://camel.apache.org/blog/2023/09/camel-quarkus-release-3.4.0/,2023-09-21T00:00:00+00:00
   https://camel.apache.org/blog/2023/09/camel-4-on-camel-k/,2023-09-19T00:00:00+00:00
   https://camel.apache.org/releases/q-3.4.0/,2023-09-18T00:00:00+00:00
-  https://camel.apache.org/blog/2023/09/camel-quarkus-release-3.2.0/,2023-09-15T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.0.0/,2023-09-11T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-3.2.0/,2023-09-09T00:00:00+00:00
   https://camel.apache.org/releases/k-2.0.1/,2023-09-04T00:00:00+00:00
@@ -498,252 +391,152 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/releases/ckc-3.21.0/,2023-08-28T00:00:00+00:00
   https://camel.apache.org/blog/2023/08/camel4-whatsnew/,2023-08-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.0/,2023-08-14T00:00:00+00:00
-  https://camel.apache.org/blog/2023/08/RELEASE-4.0.0/,2023-08-14T00:00:00+00:00
   https://camel.apache.org/blog/2023/08/camel-k-micrometer/,2023-08-03T00:00:00+00:00
   https://camel.apache.org/releases/q-3.0.0-RC2/,2023-08-02T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.0-RC2/,2023-07-29T00:00:00+00:00
-  https://camel.apache.org/blog/2023/07/RELEASE-4.0.0-RC2/,2023-07-29T00:00:00+00:00
-  https://camel.apache.org/blog/2023/07/camel-k-2-0/,2023-07-24T00:00:00+00:00
   https://camel.apache.org/releases/k-2.0.0/,2023-07-24T00:00:00+00:00
-  https://camel.apache.org/blog/2023/07/camel-karavan-3.21.0/,2023-07-11T00:00:00+00:00
   https://camel.apache.org/blog/2023/07/camel-k-gitops/,2023-07-10T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.0.0-RC1/,2023-07-10T00:00:00+00:00
   https://camel.apache.org/security/CVE-2023-34442.md,2023-07-07T11:15:42+02:00
   https://camel.apache.org/releases/q-3.0.0-RC1/,2023-07-07T00:00:00+00:00
-  https://camel.apache.org/blog/2023/07/multi-release-vscode-extensions/,2023-07-05T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-2.16.0/,2023-07-04T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.21.0/,2023-07-04T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.0-RC1/,2023-07-03T00:00:00+00:00
-  https://camel.apache.org/blog/2023/07/RELEASE-4.0.0-RC1/,2023-07-03T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.20.6/,2023-06-30T00:00:00+00:00
   https://camel.apache.org/releases/release-3.21.0/,2023-06-30T00:00:00+00:00
-  https://camel.apache.org/blog/2023/06/RELEASE-3.21.0/,2023-06-30T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.6/,2023-06-20T00:00:00+00:00
-  https://camel.apache.org/blog/2023/06/RELEASE-3.20.6/,2023-06-20T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.9/,2023-06-19T00:00:00+00:00
-  https://camel.apache.org/blog/2023/06/RELEASE-3.14.9/,2023-06-19T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.8/,2023-06-16T00:00:00+00:00
-  https://camel.apache.org/blog/2023/06/RELEASE-3.18.8/,2023-06-16T00:00:00+00:00
   https://camel.apache.org/releases/k-1.12.1/,2023-06-12T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.17.1/,2023-06-12T00:00:00+00:00
   https://camel.apache.org/blog/2023/06/camel-k-maven-proxy/,2023-06-12T00:00:00+00:00
-  https://camel.apache.org/blog/2023/06/language-support-0.8.0-release/,2023-06-07T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.20.5/,2023-06-05T00:00:00+00:00
-  https://camel.apache.org/blog/2023/06/debug-adapter-0.7.0-release/,2023-06-05T00:00:00+00:00
   https://camel.apache.org/blog/2023/05/camel-debezium-quarkus/,2023-05-31T00:00:00+00:00
-  https://camel.apache.org/blog/2023/05/camel-quarkus-release-3.0.0-M2/,2023-05-29T00:00:00+00:00
   https://camel.apache.org/releases/q-3.0.0-M2/,2023-05-29T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.8/,2023-05-29T00:00:00+00:00
-  https://camel.apache.org/blog/2023/05/RELEASE-3.14.8/,2023-05-29T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.5/,2023-05-26T00:00:00+00:00
-  https://camel.apache.org/blog/2023/05/RELEASE-3.20.5/,2023-05-26T00:00:00+00:00
   https://camel.apache.org/blog/2023/05/camel-4-performance-improvements/,2023-05-25T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.7/,2023-05-25T00:00:00+00:00
-  https://camel.apache.org/blog/2023/05/RELEASE-3.18.7/,2023-05-25T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.20.4/,2023-05-19T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.0.0-M3/,2023-05-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.0-M3/,2023-05-05T00:00:00+00:00
-  https://camel.apache.org/blog/2023/05/RELEASE-4.0.0-M3/,2023-05-05T00:00:00+00:00
   https://camel.apache.org/releases/ckc-3.20.3/,2023-04-30T00:00:00+00:00
   https://camel.apache.org/releases/ckc-3.20.6/,2023-04-30T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.4/,2023-04-27T00:00:00+00:00
-  https://camel.apache.org/blog/2023/04/RELEASE-3.20.4/,2023-04-27T00:00:00+00:00
-  https://camel.apache.org/blog/2023/04/camel-quarkus-release-2.13.3/,2023-04-24T00:00:00+00:00
-  https://camel.apache.org/blog/2023/04/debug-adapter-0.6.0-release/,2023-04-24T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.20.3/,2023-04-18T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.0.0-M2/,2023-04-18T00:00:00+00:00
   https://camel.apache.org/releases/q-2.13.3/,2023-04-17T00:00:00+00:00
-  https://camel.apache.org/blog/2023/04/camel-karavan-3.20.1/,2023-04-10T00:00:00+00:00
   https://camel.apache.org/blog/2023/04/camel-observation/,2023-04-04T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.6/,2023-04-03T00:00:00+00:00
-  https://camel.apache.org/blog/2023/04/RELEASE-3.18.6/,2023-04-03T00:00:00+00:00
-  https://camel.apache.org/blog/2023/03/language-support-0.7.0-release/,2023-03-31T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.3/,2023-03-29T00:00:00+00:00
-  https://camel.apache.org/blog/2023/03/RELEASE-3.20.3/,2023-03-29T00:00:00+00:00
-  https://camel.apache.org/blog/2023/03/camel-quarkus-release-3.0.0-M1/,2023-03-24T00:00:00+00:00
   https://camel.apache.org/releases/q-3.0.0-M1/,2023-03-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.0-M2/,2023-03-10T00:00:00+00:00
-  https://camel.apache.org/blog/2023/03/RELEASE-4.0.0-M2/,2023-03-10T00:00:00+00:00
   https://camel.apache.org/blog/2023/03/camel-k-telemetry/,2023-03-09T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.20.2/,2023-03-07T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.0.0-M1/,2023-03-06T00:00:00+00:00
-  https://camel.apache.org/blog/2023/02/camel-k-release-1-12/,2023-02-27T00:00:00+00:00
   https://camel.apache.org/releases/k-1.12.0/,2023-02-27T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.17.0/,2023-02-27T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.2/,2023-02-07T00:00:00+00:00
-  https://camel.apache.org/blog/2023/02/RELEASE-3.20.2/,2023-02-07T00:00:00+00:00
-  https://camel.apache.org/blog/2023/02/camel-k-roadmap-2023/,2023-02-06T00:00:00+00:00
-  https://camel.apache.org/blog/2023/02/camel-karavan-3.20.0/,2023-02-05T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.0-M1/,2023-02-04T00:00:00+00:00
-  https://camel.apache.org/blog/2023/02/RELEASE-4.0.0-M1/,2023-02-04T00:00:00+00:00
   https://camel.apache.org/blog/2023/01/camel-k-yaks/,2023-01-31T00:00:00+00:00
   https://camel.apache.org/releases/ckc-3.20.0/,2023-01-30T00:00:00+00:00
   https://camel.apache.org/releases/k-1.10.4/,2023-01-30T00:00:00+00:00
   https://camel.apache.org/releases/k-1.11.0/,2023-01-30T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.9.4/,2023-01-30T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.20.1.1/,2023-01-30T00:00:00+00:00
-  https://camel.apache.org/blog/2023/01/camel-quarkus-release-2.16.0/,2023-01-25T00:00:00+00:00
   https://camel.apache.org/releases/q-2.16.0/,2023-01-25T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.5/,2023-01-25T00:00:00+00:00
-  https://camel.apache.org/blog/2023/01/RELEASE-3.18.5/,2023-01-25T00:00:00+00:00
-  https://camel.apache.org/blog/2023/01/camel-quarkus-release-2.13.2/,2023-01-24T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.20.1/,2023-01-13T00:00:00+00:00
-  https://camel.apache.org/blog/2023/01/ck_2022_results/,2023-01-09T00:00:00+00:00
   https://camel.apache.org/blog/2023/01/karavan-intro/,2023-01-09T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.1/,2023-01-07T00:00:00+00:00
-  https://camel.apache.org/blog/2023/01/RELEASE-3.20.1/,2023-01-07T00:00:00+00:00
-  https://camel.apache.org/blog/2023/01/camel4roadmap/,2023-01-04T00:00:00+00:00
   https://camel.apache.org/blog/2023/01/2022-Numbers/,2023-01-03T00:00:00+00:00
-  https://camel.apache.org/blog/2023/01/vscode-camelk-0.0.33-language-0.6.0-releases/,2023-01-03T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-3.20.0/,2022-12-24T00:00:00+00:00
   https://camel.apache.org/blog/2022/12/camel320-whatsnew/,2022-12-21T00:00:00+00:00
   https://camel.apache.org/releases/release-3.20.0/,2022-12-21T00:00:00+00:00
-  https://camel.apache.org/blog/2022/12/RELEASE-3.20.0/,2022-12-21T00:00:00+00:00
   https://camel.apache.org/blog/2022/12/camel-context-reloading-secret-refresh/,2022-12-20T00:00:00+00:00
   https://camel.apache.org/releases/ckc-3.19.0/,2022-12-18T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.7/,2022-12-17T00:00:00+00:00
-  https://camel.apache.org/blog/2022/12/RELEASE-3.14.7/,2022-12-17T00:00:00+00:00
-  https://camel.apache.org/blog/2022/12/camel-quarkus-release-2.15.0/,2022-12-16T00:00:00+00:00
   https://camel.apache.org/blog/2022/12/quarkus-insights/,2022-12-16T00:00:00+00:00
   https://camel.apache.org/releases/q-2.13.2/,2022-12-16T00:00:00+00:00
-  https://camel.apache.org/blog/2022/12/camel-k-release-1.11/,2022-12-15T00:00:00+00:00
   https://camel.apache.org/blog/2022/12/run2007today/,2022-12-12T00:00:00+00:00
   https://camel.apache.org/releases/q-2.15.0/,2022-12-12T00:00:00+00:00
+  https://camel.apache.org/categories/Events/,2022-12-12T00:00:00+00:00
   https://camel.apache.org/releases/k-1.11.0/,2022-12-07T00:00:00+00:00
   https://camel.apache.org/security/CVE-2022-45046.md,2022-12-05T08:47:42+02:00
   https://camel.apache.org/releases/kamelets-0.10.0/,2022-12-05T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.4/,2022-12-01T00:00:00+00:00
-  https://camel.apache.org/blog/2022/12/RELEASE-3.18.4/,2022-12-01T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.16.0/,2022-11-28T00:00:00+00:00
   https://camel.apache.org/blog/2022/11/camel-k-jbang/,2022-11-24T00:00:00+00:00
   https://camel.apache.org/releases/k-1.10.3/,2022-11-14T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.15.2/,2022-11-14T00:00:00+00:00
-  https://camel.apache.org/blog/2022/11/camel-quarkus-release-2.14.0/,2022-11-10T00:00:00+00:00
-  https://camel.apache.org/blog/2022/11/camel-quarkus-release-2.13.1/,2022-11-07T00:00:00+00:00
   https://camel.apache.org/releases/q-2.14.0/,2022-11-07T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.9.3/,2022-11-07T00:00:00+00:00
   https://camel.apache.org/releases/q-2.13.1/,2022-11-07T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.6/,2022-11-05T00:00:00+00:00
-  https://camel.apache.org/blog/2022/11/RELEASE-3.14.6/,2022-11-05T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.3/,2022-10-31T00:00:00+00:00
-  https://camel.apache.org/blog/2022/10/RELEASE-3.18.3/,2022-10-31T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.9.2/,2022-10-28T00:00:00+00:00
   https://camel.apache.org/releases/ckc-3.18.2/,2022-10-21T00:00:00+00:00
   https://camel.apache.org/releases/k-1.10.2/,2022-10-20T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.15.1/,2022-10-20T00:00:00+00:00
-  https://camel.apache.org/blog/2022/10/Sublimedap/,2022-10-17T00:00:00+00:00
   https://camel.apache.org/releases/k-1.10.1/,2022-10-13T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.15.0/,2022-10-13T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.9.1/,2022-10-13T00:00:00+00:00
   https://camel.apache.org/blog/2022/10/ContentBasedRoutingWithCamelDroolsQuarkusKogitoAltasMapApacheKafka/,2022-10-10T11:56:35+02:00
   https://camel.apache.org/blog/2022/10/camel319-whatsnew/,2022-10-10T00:00:00+00:00
-  https://camel.apache.org/blog/2022/10/camel-karavan-roadmap/,2022-10-10T00:00:00+00:00
-  https://camel.apache.org/blog/2022/10/Emacsdap/,2022-10-07T00:00:00+00:00
   https://camel.apache.org/blog/2022/10/camel-k-cicd/,2022-10-06T00:00:00+00:00
   https://camel.apache.org/releases/release-3.19.0/,2022-10-03T00:00:00+00:00
-  https://camel.apache.org/blog/2022/10/RELEASE-3.19.0/,2022-10-03T00:00:00+00:00
-  https://camel.apache.org/blog/2022/09/camel-quarkus-release-2.13.0/,2022-09-29T00:00:00+00:00
   https://camel.apache.org/releases/q-2.13.0/,2022-09-26T00:00:00+00:00
-  https://camel.apache.org/blog/2022/09/vscode-atlasmap-release-0.2.1/,2022-09-22T00:00:00+00:00
-  https://camel.apache.org/blog/2022/09/camel-karavan-3.18.3/,2022-09-19T00:00:00+00:00
-  https://camel.apache.org/blog/2022/09/vimdap/,2022-09-14T00:00:00+00:00
   https://camel.apache.org/releases/ckc-3.18.1/,2022-09-12T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.2/,2022-09-08T00:00:00+00:00
-  https://camel.apache.org/blog/2022/09/RELEASE-3.18.2/,2022-09-08T00:00:00+00:00
-  https://camel.apache.org/blog/2022/09/camel-k-release-1-10/,2022-09-05T00:00:00+00:00
   https://camel.apache.org/releases/k-1.10.0/,2022-09-05T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.14.0/,2022-09-05T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.9.0/,2022-09-05T00:00:00+00:00
-  https://camel.apache.org/blog/2022/09/camel-quarkus-release-2.12.0/,2022-09-01T00:00:00+00:00
   https://camel.apache.org/releases/q-2.12.0/,2022-09-01T00:00:00+00:00
   https://camel.apache.org/blog/2022/08/pluralsight-training/,2022-08-31T00:00:00+00:00
   https://camel.apache.org/blog/2022/08/ApacheCon-Asia-2022-videos/,2022-08-22T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.5/,2022-08-20T00:00:00+00:00
-  https://camel.apache.org/blog/2022/08/RELEASE-3.14.5/,2022-08-20T00:00:00+00:00
-  https://camel.apache.org/blog/2022/08/camel-karavan-3.18.1/,2022-08-19T00:00:00+00:00
   https://camel.apache.org/blog/2022/08/camel-idea-plugin-release-0.8.13/,2022-08-17T00:00:00+00:00
-  https://camel.apache.org/blog/2022/08/sublime-editor/,2022-08-16T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.1/,2022-08-11T00:00:00+00:00
-  https://camel.apache.org/blog/2022/08/RELEASE-3.18.1/,2022-08-11T00:00:00+00:00
-  https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.11.0/,2022-07-27T00:00:00+00:00
   https://camel.apache.org/releases/q-2.11.0/,2022-07-27T00:00:00+00:00
-  https://camel.apache.org/blog/2022/07/ApacheCons/,2022-07-26T00:00:00+00:00
-  https://camel.apache.org/blog/2022/07/HowToUseCamelRouteTextualDebuggerWithUnitTest/,2022-07-26T00:00:00+00:00
   https://camel.apache.org/blog/2022/07/secrets-properties-functions-part-2/,2022-07-26T00:00:00+00:00
-  https://camel.apache.org/blog/2022/07/vscode-camel-language-support-0.4.0-release/,2022-07-25T00:00:00+00:00
-  https://camel.apache.org/blog/2022/07/coc-nvim-camel-lsp/,2022-07-15T00:00:00+00:00
   https://camel.apache.org/releases/release-3.18.0/,2022-07-06T00:00:00+00:00
-  https://camel.apache.org/blog/2022/07/RELEASE-3.18.0/,2022-07-06T00:00:00+00:00
   https://camel.apache.org/blog/2022/07/camel-k-monitoring-ops/,2022-07-05T00:00:00+00:00
-  https://camel.apache.org/blog/2022/07/camel-quarkus-release-2.7.2/,2022-07-04T00:00:00+00:00
   https://camel.apache.org/releases/q-2.7.2/,2022-07-04T00:00:00+00:00
   https://camel.apache.org/blog/2022/07/camel-designer-jbang/,2022-07-01T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.4/,2022-06-30T00:00:00+00:00
-  https://camel.apache.org/blog/2022/06/RELEASE-3.14.4/,2022-06-30T00:00:00+00:00
   https://camel.apache.org/blog/2022/06/Optimizing-Camel-K-Integration-Build-Time/,2022-06-28T00:00:00+00:00
-  https://camel.apache.org/blog/2022/06/camel-quarkus-release-2.10.0/,2022-06-23T00:00:00+00:00
   https://camel.apache.org/releases/q-2.10.0/,2022-06-23T00:00:00+00:00
-  https://camel.apache.org/blog/2022/06/HowToUseCamelRouteTextualDebuggerWithUnitTest/,2022-06-22T00:00:00+00:00
   https://camel.apache.org/blog/2022/06/camel3x-top10-features/,2022-06-16T00:00:00+00:00
-  https://camel.apache.org/blog/2022/06/emacs/,2022-06-09T00:00:00+00:00
   https://camel.apache.org/releases/k-1.9.2/,2022-05-23T00:00:00+00:00
   https://camel.apache.org/blog/2022/05/camel317-whatsnew/,2022-05-19T00:00:00+00:00
   https://camel.apache.org/releases/release-3.17.0/,2022-05-19T00:00:00+00:00
-  https://camel.apache.org/blog/2022/05/RELEASE-3.17.0/,2022-05-19T00:00:00+00:00
-  https://camel.apache.org/blog/2022/05/release-vscode-debug-adapter-0.3.0/,2022-05-17T00:00:00+00:00
   https://camel.apache.org/releases/k-1.9.1/,2022-05-13T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.8.1/,2022-05-13T00:00:00+00:00
-  https://camel.apache.org/blog/2022/05/camel-quarkus-release-2.9.0/,2022-05-11T00:00:00+00:00
   https://camel.apache.org/releases/q-2.9.0/,2022-05-11T00:00:00+00:00
-  https://camel.apache.org/blog/2022/05/start-camel-quarkus-application-with-camel-textual-debug-in-vscode/,2022-05-06T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.3/,2022-05-06T00:00:00+00:00
-  https://camel.apache.org/blog/2022/05/RELEASE-3.14.3/,2022-05-06T00:00:00+00:00
   https://camel.apache.org/releases/release-3.11.7/,2022-05-05T00:00:00+00:00
-  https://camel.apache.org/blog/2022/05/RELEASE-3.11.7/,2022-05-05T00:00:00+00:00
-  https://camel.apache.org/blog/2022/05/vscode-extension-release-debug-0.2.0/,2022-05-04T00:00:00+00:00
-  https://camel.apache.org/blog/2022/05/vscode-extensions-release-language-0.3.0/,2022-05-03T00:00:00+00:00
-  https://camel.apache.org/blog/2022/04/camel-k-release-1-9/,2022-04-28T00:00:00+00:00
   https://camel.apache.org/releases/k-1.9.0/,2022-04-26T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.13.0/,2022-04-19T00:00:00+00:00
-  https://camel.apache.org/blog/2022/04/start-camel-application-with-camel-textual-debug-in-eclipse/,2022-04-19T00:00:00+00:00
-  https://camel.apache.org/blog/2022/04/camel-designer-atlasmap/,2022-04-19T00:00:00+00:00
-  https://camel.apache.org/blog/2022/04/camel-karavan-0.0.14/,2022-04-18T00:00:00+00:00
-  https://camel.apache.org/blog/2022/04/start-camel-application-with-camel-textual-debug-in-vscode/,2022-04-14T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.8.0/,2022-04-13T00:00:00+00:00
-  https://camel.apache.org/blog/2022/04/camel-quarkus-release-2.8.0/,2022-04-12T00:00:00+00:00
   https://camel.apache.org/releases/q-2.8.0/,2022-04-12T00:00:00+00:00
-  https://camel.apache.org/blog/2022/04/camel-textual-debug-0.1.0/,2022-04-08T00:00:00+00:00
   https://camel.apache.org/releases/q-2.7.1/,2022-04-04T00:00:00+00:00
-  https://camel.apache.org/blog/2022/03/Outreachy-May2022/,2022-03-29T00:00:00+00:00
   https://camel.apache.org/blog/2022/03/camel316-whatsnew/,2022-03-28T00:00:00+00:00
   https://camel.apache.org/releases/release-3.16.0/,2022-03-28T00:00:00+00:00
-  https://camel.apache.org/blog/2022/03/RELEASE-3.16.0/,2022-03-28T00:00:00+00:00
   https://camel.apache.org/blog/2022/03/secrets-properties-functions/,2022-03-24T00:00:00+00:00
   https://camel.apache.org/blog/2022/03/camel-release-stats/,2022-03-23T00:00:00+00:00
   https://camel.apache.org/blog/2022/03/resume-api-v2/,2022-03-22T00:00:00+00:00
   https://camel.apache.org/releases/release-3.11.6/,2022-03-13T00:00:00+00:00
-  https://camel.apache.org/blog/2022/03/RELEASE-3.11.6/,2022-03-13T00:00:00+00:00
   https://camel.apache.org/releases/q/release-2.8.0-M1/,2022-03-08T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.2/,2022-03-08T00:00:00+00:00
-  https://camel.apache.org/blog/2022/03/RELEASE-3.14.2/,2022-03-08T00:00:00+00:00
   https://camel.apache.org/releases/k-1.8.2/,2022-03-07T00:00:00+00:00
-  https://camel.apache.org/blog/2022/03/camel-k-roadmap-2022/,2022-03-01T00:00:00+00:00
   https://camel.apache.org/releases/k-1.8.1/,2022-02-28T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.12.0/,2022-02-28T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.7.1/,2022-02-28T00:00:00+00:00
   https://camel.apache.org/blog/2022/02/camel-test-infra/,2022-02-16T00:00:00+00:00
-  https://camel.apache.org/blog/2022/02/camel-karavan-0.0.12/,2022-02-14T00:00:00+00:00
-  https://camel.apache.org/blog/2022/02/vscode-camel-language-0.1.5-release/,2022-02-14T00:00:00+00:00
-  https://camel.apache.org/blog/2022/02/camel-textual-debug-eclipse-vscode/,2022-02-09T00:00:00+00:00
-  https://camel.apache.org/blog/2022/02/camel-karavan-0.0.10/,2022-02-07T00:00:00+00:00
   https://camel.apache.org/blog/2022/02/camel315-whatsnew/,2022-02-04T00:00:00+00:00
   https://camel.apache.org/releases/release-3.15.0/,2022-02-04T00:00:00+00:00
-  https://camel.apache.org/blog/2022/02/RELEASE-3.15.0/,2022-02-04T00:00:00+00:00
-  https://camel.apache.org/blog/2022/02/camel-quarkus-release-2.7.0/,2022-02-02T00:00:00+00:00
   https://camel.apache.org/releases/q-2.7.0/,2022-02-02T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.1/,2022-01-27T00:00:00+00:00
-  https://camel.apache.org/blog/2022/01/RELEASE-3.14.1/,2022-01-27T00:00:00+00:00
-  https://camel.apache.org/blog/2022/01/camel-k-release-1-8/,2022-01-26T00:00:00+00:00
   https://camel.apache.org/blog/2022/01/camel-keda/,2022-01-21T00:00:00+00:00
   https://camel.apache.org/releases/k-1.8.0/,2022-01-18T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.11.0/,2022-01-18T00:00:00+00:00
@@ -753,257 +546,142 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/releases/q-2.2.1/,2022-01-14T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.6.0/,2022-01-03T00:00:00+00:00
   https://camel.apache.org/releases/release-3.11.5/,2021-12-31T00:00:00+00:00
-  https://camel.apache.org/blog/2021/12/RELEASE-3.11.5/,2021-12-31T00:00:00+00:00
   https://camel.apache.org/blog/2021/12/camelDebuggerForIntelliJ/,2021-12-29T00:00:00+00:00
-  https://camel.apache.org/blog/2021/12/camel-quarkus-release-2.6.0/,2021-12-23T00:00:00+00:00
   https://camel.apache.org/releases/q-2.6.0/,2021-12-23T00:00:00+00:00
   https://camel.apache.org/releases/release-3.7.7/,2021-12-23T00:00:00+00:00
-  https://camel.apache.org/blog/2021/12/RELEASE-3.7.7/,2021-12-23T00:00:00+00:00
   https://camel.apache.org/blog/2021/12/camel314-whatsnew/,2021-12-17T00:00:00+00:00
   https://camel.apache.org/releases/release-3.14.0/,2021-12-16T00:00:00+00:00
-  https://camel.apache.org/blog/2021/12/RELEASE-3.14.0/,2021-12-16T00:00:00+00:00
   https://camel.apache.org/blog/2021/12/api-management-infra/,2021-12-14T00:00:00+00:00
   https://camel.apache.org/blog/2021/12/log4j2/,2021-12-13T00:00:00+00:00
-  https://camel.apache.org/blog/2021/12/yamlTagSupportInVSCode/,2021-12-08T00:00:00+00:00
-  https://camel.apache.org/blog/2021/12/vscode-releases/,2021-12-06T00:00:00+00:00
-  https://camel.apache.org/blog/2021/11/camel-quarkus-release-2.5.0/,2021-11-26T00:00:00+00:00
   https://camel.apache.org/releases/q-2.5.0/,2021-11-26T00:00:00+00:00
-  https://camel.apache.org/blog/2021/11/vscode-atlasmap-release-0.1.0/,2021-11-26T00:00:00+00:00
   https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/,2021-11-24T00:00:00+00:00
   https://camel.apache.org/releases/release-3.11.4/,2021-11-24T00:00:00+00:00
-  https://camel.apache.org/blog/2021/11/RELEASE-3.11.4/,2021-11-24T00:00:00+00:00
-  https://camel.apache.org/blog/2021/11/camel-k-release-1-7/,2021-11-18T00:00:00+00:00
   https://camel.apache.org/releases/k-1.7.0/,2021-11-15T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.10.0/,2021-11-15T00:00:00+00:00
-  https://camel.apache.org/blog/2021/11/camel-quarkus-release-2.4.0/,2021-11-12T00:00:00+00:00
   https://camel.apache.org/releases/q-2.4.0/,2021-11-12T00:00:00+00:00
   https://camel.apache.org/releases/release-3.13.0/,2021-11-12T00:00:00+00:00
-  https://camel.apache.org/blog/2021/11/RELEASE-3.13.0/,2021-11-12T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.5.0/,2021-11-09T00:00:00+00:00
-  https://camel.apache.org/blog/2021/11/low-code-camel/,2021-11-08T00:00:00+00:00
-  https://camel.apache.org/blog/2021/10/camel-karavan-preview-release/,2021-10-28T00:00:00+00:00
   https://camel.apache.org/releases/k-1.6.1/,2021-10-27T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.9.1/,2021-10-27T00:00:00+00:00
-  https://camel.apache.org/blog/2021/10/vscode-camel-language-support-release-0.1.0/,2021-10-19T00:00:00+00:00
   https://camel.apache.org/releases/release-3.11.3/,2021-10-12T00:00:00+00:00
-  https://camel.apache.org/blog/2021/10/RELEASE-3.11.3/,2021-10-12T00:00:00+00:00
-  https://camel.apache.org/blog/2021/10/camel-quarkus-release-2.3.0/,2021-10-08T00:00:00+00:00
   https://camel.apache.org/releases/q-2.3.0/,2021-10-08T00:00:00+00:00
   https://camel.apache.org/releases/release-3.7.6/,2021-10-05T00:00:00+00:00
-  https://camel.apache.org/blog/2021/10/RELEASE-3.7.6/,2021-10-05T00:00:00+00:00
-  https://camel.apache.org/blog/2021/10/managing-kamelets-with-kn/,2021-10-04T00:00:00+00:00
   https://camel.apache.org/releases/release-3.12.0/,2021-10-04T00:00:00+00:00
-  https://camel.apache.org/blog/2021/10/RELEASE-3.12.0/,2021-10-04T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.11.0/,2021-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2021/09/camel-kafka-consumer-changes/,2021-09-24T00:00:00+00:00
-  https://camel.apache.org/blog/2021/09/eol-java8/,2021-09-22T00:00:00+00:00
   https://camel.apache.org/releases/release-3.11.2/,2021-09-13T00:00:00+00:00
-  https://camel.apache.org/blog/2021/09/RELEASE-3.11.2/,2021-09-13T00:00:00+00:00
-  https://camel.apache.org/blog/2021/09/camel-k-release-1-6/,2021-09-09T00:00:00+00:00
   https://camel.apache.org/releases/k-1.6.0/,2021-09-07T00:00:00+00:00
-  https://camel.apache.org/blog/2021/09/vscode-camel-language-support-release-0.0.35/,2021-09-02T00:00:00+00:00
-  https://camel.apache.org/blog/2021/09/camel-quarkus-release-2.2.0/,2021-09-01T00:00:00+00:00
   https://camel.apache.org/releases/q-2.2.0/,2021-09-01T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.4.0/,2021-09-01T00:00:00+00:00
   https://camel.apache.org/releases/k-1.5.1/,2021-08-31T00:00:00+00:00
   https://camel.apache.org/blog/2021/08/DeployingCamelRouteInAWSLambda/,2021-08-26T00:00:00+00:00
-  https://camel.apache.org/blog/2021/08/GettingFurtherWithCamelQuarkusIntro/,2021-08-06T00:00:00+00:00
   https://camel.apache.org/releases/release-3.11.1/,2021-08-05T00:00:00+00:00
-  https://camel.apache.org/blog/2021/08/RELEASE-3.11.1/,2021-08-05T00:00:00+00:00
-  https://camel.apache.org/blog/2021/07/camel-quarkus-release-2.1.0/,2021-07-30T00:00:00+00:00
   https://camel.apache.org/releases/q-2.1.0/,2021-07-30T00:00:00+00:00
-  https://camel.apache.org/blog/2021/07/VSCode-CamelK-0.0.26/,2021-07-27T00:00:00+00:00
   https://camel.apache.org/blog/2021/07/camel-jbang/,2021-07-26T00:00:00+00:00
-  https://camel.apache.org/blog/2021/07/camel-openhtmltopdf/,2021-07-21T00:00:00+00:00
-  https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/,2021-07-20T00:00:00+00:00
-  https://camel.apache.org/blog/2021/07/ApacheCon-Asia-2021/,2021-07-15T00:00:00+00:00
-  https://camel.apache.org/blog/2021/07/camel-k-release-1-5/,2021-07-13T00:00:00+00:00
   https://camel.apache.org/releases/release-3.7.5/,2021-07-12T00:00:00+00:00
-  https://camel.apache.org/blog/2021/07/RELEASE-3.7.5/,2021-07-12T00:00:00+00:00
   https://camel.apache.org/releases/k-1.5.0/,2021-07-09T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.8.0/,2021-07-09T00:00:00+00:00
   https://camel.apache.org/releases/k-1.4.1/,2021-07-05T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-0.3.0/,2021-07-01T00:00:00+00:00
-  https://camel.apache.org/blog/2021/07/rayvens/,2021-07-01T00:00:00+00:00
-  https://camel.apache.org/blog/2021/06/camel-quarkus-release-2.0.0/,2021-06-30T00:00:00+00:00
   https://camel.apache.org/blog/2021/06/Camel311-Whatsnew/,2021-06-29T00:00:00+00:00
   https://camel.apache.org/releases/q-2.0.0/,2021-06-28T00:00:00+00:00
   https://camel.apache.org/releases/release-3.11.0/,2021-06-28T00:00:00+00:00
-  https://camel.apache.org/blog/2021/06/RELEASE-3.11.0/,2021-06-28T00:00:00+00:00
   https://camel.apache.org/releases/release-3.4.6/,2021-06-21T00:00:00+00:00
-  https://camel.apache.org/blog/2021/06/RELEASE-3.4.5/,2021-06-21T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.10.1/,2021-06-19T00:00:00+00:00
-  https://camel.apache.org/blog/2021/06/ApacheCon-2021/,2021-06-15T00:00:00+00:00
   https://camel.apache.org/releases/release-2.25.4/,2021-05-28T00:00:00+00:00
-  https://camel.apache.org/blog/2021/05/RELEASE-2.25.4/,2021-05-28T00:00:00+00:00
-  https://camel.apache.org/blog/2021/05/CamelWebinar/,2021-05-28T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.10.0/,2021-05-25T00:00:00+00:00
   https://camel.apache.org/blog/2021/05/Camel310-Whatsnew/,2021-05-21T00:00:00+00:00
   https://camel.apache.org/releases/release-3.10.0/,2021-05-20T00:00:00+00:00
-  https://camel.apache.org/blog/2021/05/RELEASE-3.10.0/,2021-05-20T00:00:00+00:00
-  https://camel.apache.org/blog/2021/05/KameletToolingSupportInCamelURI/,2021-05-19T00:00:00+00:00
-  https://camel.apache.org/blog/2021/05/JavaDebuggingInVSCode-iteration2/,2021-05-17T00:00:00+00:00
   https://camel.apache.org/blog/2021/05/plantuml-diagram/,2021-05-14T00:00:00+00:00
   https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/,2021-05-10T00:00:00+00:00
   https://camel.apache.org/blog/2021/05/multicast-failure-routing/,2021-05-10T00:00:00+00:00
-  https://camel.apache.org/blog/2021/05/vscode-camel-release/,2021-05-03T00:00:00+00:00
   https://camel.apache.org/releases/release-3.7.4/,2021-05-03T00:00:00+00:00
-  https://camel.apache.org/blog/2021/05/RELEASE-3.7.4/,2021-05-03T00:00:00+00:00
-  https://camel.apache.org/blog/2021/04/camel-k-140-Whatsnew/,2021-04-20T00:00:00+00:00
   https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/,2021-04-20T00:00:00+00:00
   https://camel.apache.org/releases/k-1.4.0/,2021-04-20T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.7.0/,2021-04-20T00:00:00+00:00
-  https://camel.apache.org/blog/2021/04/camel-quarkus-release-1.8.1/,2021-04-12T00:00:00+00:00
   https://camel.apache.org/releases/q-1.8.1/,2021-04-07T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.9.0/,2021-04-02T00:00:00+00:00
-  https://camel.apache.org/blog/2021/03/camel-quarkus-release-1.8.0/,2021-03-31T00:00:00+00:00
-  https://camel.apache.org/blog/2021/03/ApacheCons2021/,2021-03-30T11:22:18+02:00
   https://camel.apache.org/blog/2021/03/Camel39-Whatsnew/,2021-03-29T00:00:00+00:00
   https://camel.apache.org/releases/q-1.8.0/,2021-03-29T00:00:00+00:00
   https://camel.apache.org/releases/release-3.9.0/,2021-03-28T00:00:00+00:00
-  https://camel.apache.org/blog/2021/03/RELEASE-3.9.0/,2021-03-28T00:00:00+00:00
   https://camel.apache.org/releases/k-1.3.2/,2021-03-23T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.7.3/,2021-03-15T00:00:00+00:00
   https://camel.apache.org/releases/release-3.7.3/,2021-03-10T00:00:00+00:00
-  https://camel.apache.org/blog/2021/03/RELEASE-3.7.3/,2021-03-10T00:00:00+00:00
-  https://camel.apache.org/blog/2021/03/VSCode-LanguageSupport-0.0.31/,2021-03-02T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.8.0/,2021-02-25T00:00:00+00:00
-  https://camel.apache.org/blog/2021/02/camel-quarkus-release-1.7.0/,2021-02-24T00:00:00+00:00
-  https://camel.apache.org/blog/2021/02/Kamelet-Catalog/,2021-02-24T00:00:00+00:00
   https://camel.apache.org/releases/q-1.7.0/,2021-02-19T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.7.2/,2021-02-17T00:00:00+00:00
   https://camel.apache.org/blog/2021/02/Camel38-Whatsnew/,2021-02-15T00:00:00+00:00
   https://camel.apache.org/releases/q-1.6.0/,2021-02-14T00:00:00+00:00
   https://camel.apache.org/releases/release-3.8.0/,2021-02-13T00:00:00+00:00
-  https://camel.apache.org/blog/2021/02/RELEASE-3.8.0/,2021-02-13T00:00:00+00:00
   https://camel.apache.org/releases/release-3.7.2/,2021-02-08T00:00:00+00:00
-  https://camel.apache.org/blog/2021/02/RELEASE-3.7.2/,2021-02-08T00:00:00+00:00
   https://camel.apache.org/releases/k-1.3.1/,2021-02-01T00:00:00+00:00
   https://camel.apache.org/blog/2021/01/camel-quarkus-configuration-tips/,2021-01-29T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.7.1/,2021-01-28T00:00:00+00:00
-  https://camel.apache.org/blog/2021/01/camel-quarkus-release-1.6.0/,2021-01-21T00:00:00+00:00
   https://camel.apache.org/releases/release-3.7.1/,2021-01-21T00:00:00+00:00
-  https://camel.apache.org/blog/2021/01/RELEASE-3.7.1/,2021-01-21T00:00:00+00:00
-  https://camel.apache.org/blog/2021/01/DebugInVSCodeWithCamelK1.3.0/,2021-01-20T00:00:00+00:00
-  https://camel.apache.org/blog/2021/01/VSCode-LanguageSupport-0.0.30/,2021-01-05T00:00:00+00:00
   https://camel.apache.org/releases/k-1.3.0/,2020-12-29T00:00:00+00:00
   https://camel.apache.org/blog/2020/12/Camel-kafka-connector-070-Whatsnew/,2020-12-24T00:00:00+00:00
   https://camel.apache.org/releases/release-2.25.3/,2020-12-24T00:00:00+00:00
-  https://camel.apache.org/blog/2020/12/RELEASE-2.25.3/,2020-12-24T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.7.0/,2020-12-23T00:00:00+00:00
   https://camel.apache.org/releases/release-3.4.5/,2020-12-23T00:00:00+00:00
-  https://camel.apache.org/blog/2020/12/RELEASE-3.4.5/,2020-12-23T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.6.0/,2020-12-22T00:00:00+00:00
   https://camel.apache.org/blog/2020/12/CKC-idempotency-070/,2020-12-21T00:00:00+00:00
-  https://camel.apache.org/blog/2020/12/camel-quarkus-release-1.5.0/,2020-12-18T00:00:00+00:00
   https://camel.apache.org/blog/2020/12/Camel37-Whatsnew/,2020-12-16T00:00:00+00:00
   https://camel.apache.org/releases/release-3.7.0/,2020-12-16T00:00:00+00:00
-  https://camel.apache.org/blog/2020/12/RELEASE-3.7.0/,2020-12-16T00:00:00+00:00
-  https://camel.apache.org/blog/2020/12/NewCommitters/,2020-12-15T10:40:19+01:00
-  https://camel.apache.org/blog/2020/12/VSCode-LanguageSupport-0.0.29/,2020-12-03T00:00:00+00:00
   https://camel.apache.org/releases/k-runtime-1.5.0/,2020-12-01T13:01:58+01:00
   https://camel.apache.org/releases/q-1.4.0/,2020-12-01T00:00:00+00:00
   https://camel.apache.org/releases/q-1.5.0/,2020-12-01T00:00:00+00:00
   https://camel.apache.org/releases/ckc-0.6.1/,2020-11-30T00:00:00+00:00
   https://camel.apache.org/releases/k-1.2.1/,2020-11-27T00:00:00+00:00
-  https://camel.apache.org/blog/2020/11/camel-quarkus-release-1.4.0/,2020-11-23T00:00:00+00:00
   https://camel.apache.org/blog/2020/10/mocking-beans-with-camel-quarkus/,2020-10-31T17:02:10+02:00
-  https://camel.apache.org/blog/2020/10/VSCode-LanguageSupport-0.0.28/,2020-10-27T00:00:00+00:00
   https://camel.apache.org/blog/2020/10/Camel36-Whatsnew/,2020-10-21T00:00:00+00:00
-  https://camel.apache.org/blog/2020/10/camel-quarkus-release-1.2.0-and-1.3.0/,2020-10-20T00:00:00+00:00
   https://camel.apache.org/blog/2020/10/ApacheCon-at-Home-videos/,2020-10-19T11:27:14+02:00
   https://camel.apache.org/blog/2020/10/camel-aws2-eventbridge-intro/,2020-10-17T00:00:00+00:00
-  https://camel.apache.org/blog/2020/10/camel-k-release-1.2.0/,2020-10-12T00:00:00+00:00
-  https://camel.apache.org/blog/2020/09/ApacheCon-at-Home-starts/,2020-09-28T00:00:00+00:00
   https://camel.apache.org/releases/release-3.4.4/,2020-09-28T00:00:00+00:00
-  https://camel.apache.org/blog/2020/09/RELEASE-3.4.4/,2020-09-28T00:00:00+00:00
   https://camel.apache.org/releases/release-3.6.0/,2020-09-20T00:00:00+00:00
-  https://camel.apache.org/blog/2020/09/RELEASE-3.6.0/,2020-09-20T00:00:00+00:00
   https://camel.apache.org/blog/2020/09/Camel-kafka-connector-050-Whatsnew/,2020-09-14T00:00:00+00:00
-  https://camel.apache.org/blog/2020/09/camel-quarkus-release-1.1.0/,2020-09-14T00:00:00+00:00
   https://camel.apache.org/blog/2020/09/Camel35-Whatsnew/,2020-09-07T00:00:00+00:00
-  https://camel.apache.org/blog/2020/09/windup/,2020-09-07T00:00:00+00:00
-  https://camel.apache.org/blog/2020/09/RELEASE-3.5.0/,2020-09-05T00:00:00+00:00
   https://camel.apache.org/releases/release-3.5.0/,2020-09-04T00:00:00+00:00
-  https://camel.apache.org/blog/2020/08/camel-quarkus-release-1.0.1/,2020-08-31T00:00:00+00:00
   https://camel.apache.org/releases/release-3.4.3/,2020-08-15T00:00:00+00:00
-  https://camel.apache.org/blog/2020/08/RELEASE-3.4.3/,2020-08-15T00:00:00+00:00
-  https://camel.apache.org/blog/2020/08/camel-quarkus-release-1.0.0/,2020-08-10T00:00:00+00:00
   https://camel.apache.org/blog/2020/08/Camel-kafka-connector-0.4.0-RELEASE/,2020-08-06T00:00:00+00:00
-  https://camel.apache.org/blog/2020/07/RELEASE-3.4.2/,2020-07-22T00:00:00+00:00
   https://camel.apache.org/releases/release-2.25.2/,2020-07-21T00:00:00+00:00
-  https://camel.apache.org/blog/2020/07/RELEASE-2.25.2/,2020-07-21T00:00:00+00:00
   https://camel.apache.org/releases/release-3.4.2/,2020-07-19T00:00:00+00:00
-  https://camel.apache.org/blog/2020/07/RELEASE-3.4.1/,2020-07-16T00:00:00+00:00
   https://camel.apache.org/blog/2020/07/command-line-utility-with-camel-quarkus/,2020-07-15T00:00:00+00:00
   https://camel.apache.org/releases/release-3.4.1/,2020-07-12T00:00:00+00:00
   https://camel.apache.org/security/CVE-2020-11994.md,2020-07-08T08:47:42+02:00
-  https://camel.apache.org/blog/2020/07/camel-quarkus-release-1.0.0-CR3/,2020-07-07T00:00:00+00:00
-  https://camel.apache.org/blog/2020/07/ApacheCon-2020-at-home/,2020-07-01T00:00:00+00:00
   https://camel.apache.org/blog/2020/06/camel34-whatsnew/,2020-06-18T00:00:00+00:00
   https://camel.apache.org/releases/release-3.4.0/,2020-06-18T00:00:00+00:00
-  https://camel.apache.org/blog/2020/06/RELEASE-3.4.0/,2020-06-18T00:00:00+00:00
-  https://camel.apache.org/blog/2020/06/whatsnew-camel-3-webinar/,2020-06-11T00:00:00+00:00
-  https://camel.apache.org/blog/2020/06/camel-k-release-1.0.0/,2020-06-08T17:00:00+02:00
-  https://camel.apache.org/blog/2020/06/camel-quarkus-release-1.0.0-CR2/,2020-06-02T00:00:00+00:00
   https://camel.apache.org/blog/2020/05/Camel33-Whatsnew/,2020-05-16T00:00:00+00:00
   https://camel.apache.org/releases/release-3.3.0/,2020-05-15T00:00:00+00:00
-  https://camel.apache.org/blog/2020/05/RELEASE-3.3.0/,2020-05-15T00:00:00+00:00
   https://camel.apache.org/security/CVE-2020-11971.md,2020-05-14T14:47:42+02:00
   https://camel.apache.org/security/CVE-2020-11972.md,2020-05-14T14:47:42+02:00
   https://camel.apache.org/security/CVE-2020-11973.md,2020-05-14T14:47:42+02:00
   https://camel.apache.org/blog/2020/05/CdcWithCamelAndDebezium/,2020-05-04T00:00:00+00:00
-  https://camel.apache.org/blog/2020/04/Camel-Quarkus-release-1.0.0-M7/,2020-04-30T00:00:00+00:00
   https://camel.apache.org/blog/2020/04/Camel-Kafka-connector-release-0.1.0/,2020-04-28T00:00:00+00:00
   https://camel.apache.org/releases/release-2.25.1/,2020-04-16T00:00:00+00:00
-  https://camel.apache.org/blog/2020/04/RELEASE-2.25.1/,2020-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2020/04/100Camels/,2020-04-15T00:00:00+00:00
   https://camel.apache.org/blog/2020/04/Camel32-Whatsnew/,2020-04-09T00:00:00+00:00
   https://camel.apache.org/releases/release-3.2.0/,2020-04-06T00:00:00+00:00
-  https://camel.apache.org/blog/2020/04/RELEASE-3.2.0/,2020-04-06T00:00:00+00:00
-  https://camel.apache.org/blog/2020/03/Outreachy-May2020-Update/,2020-03-30T00:00:00+00:00
-  https://camel.apache.org/blog/2020/03/LTS-Release-Schedule/,2020-03-06T00:00:00+00:00
   https://camel.apache.org/blog/2020/03/Camel3-AWS2-Whatsnew/,2020-03-06T00:00:00+00:00
-  https://camel.apache.org/blog/2020/03/Outreachy-May2020/,2020-03-06T00:00:00+00:00
   https://camel.apache.org/releases/release-3.1.0/,2020-02-27T00:00:00+00:00
-  https://camel.apache.org/blog/2020/02/RELEASE-3.1.0/,2020-02-27T00:00:00+00:00
-  https://camel.apache.org/blog/2020/02/GSoC-2020-announced/,2020-02-24T14:00:00+00:00
-  https://camel.apache.org/blog/2020/02/ApacheConNA-2020-CFP/,2020-02-24T12:00:00+00:00
   https://camel.apache.org/releases/release-2.25.0/,2020-01-23T00:00:00+00:00
-  https://camel.apache.org/blog/2020/01/RELEASE-2.25.0/,2020-01-23T00:00:00+00:00
   https://camel.apache.org/releases/release-3.0.1/,2020-01-16T00:00:00+00:00
-  https://camel.apache.org/blog/2020/01/RELEASE-3.0.1/,2020-01-16T00:00:00+00:00
-  https://camel.apache.org/blog/2020/01/FOSDEM-2020/,2020-01-08T13:30:00+01:00
   https://camel.apache.org/blog/2020/01/CustomWebApiComponent/,2020-01-07T00:00:00+00:00
   https://camel.apache.org/blog/2020/01/capi-gateway/,2020-01-02T00:00:00+00:00
   https://camel.apache.org/blog/2019/12/2019-Numbers/,2019-12-31T00:00:00+00:00
   https://camel.apache.org/releases/release-2.24.3/,2019-12-26T00:00:00+00:00
-  https://camel.apache.org/blog/2019/12/RELEASE-2.24.3/,2019-12-26T00:00:00+00:00
-  https://camel.apache.org/blog/2019/12/Podcast47/,2019-12-17T00:00:00+00:00
-  https://camel.apache.org/blog/2019/12/LanguageSupportTooling-0.0.20/,2019-12-16T00:00:00+00:00
-  https://camel.apache.org/blog/2019/12/Camel-Kafka-connector-intro/,2019-12-14T00:00:00+00:00
   https://camel.apache.org/blog/2019/12/Camel3-Whatsnew/,2019-12-02T00:00:00+00:00
   https://camel.apache.org/releases/release-3.0.0/,2019-11-28T00:00:00+00:00
-  https://camel.apache.org/blog/2019/11/RELEASE-3.0.0/,2019-11-28T00:00:00+00:00
   https://camel.apache.org/blog/2019/11/ASF-Report-2019/,2019-11-01T00:00:00+00:00
   https://camel.apache.org/releases/release-3.0.0-RC3/,2019-10-25T00:00:00+00:00
-  https://camel.apache.org/blog/2019/10/RELEASE-3.0.0-RC3/,2019-10-25T00:00:00+00:00
   https://camel.apache.org/releases/release-3.0.0-RC2/,2019-10-06T00:00:00+00:00
-  https://camel.apache.org/blog/2019/10/RELEASE-3.0.0-RC2/,2019-10-06T00:00:00+00:00
-  https://camel.apache.org/blog/2019/10/Camel3-2monthsaway/,2019-10-02T00:00:00+00:00
   https://camel.apache.org/releases/release-2.23.4/,2019-09-22T00:00:00+00:00
-  https://camel.apache.org/blog/2019/09/RELEASE-2.23.4/,2019-09-22T00:00:00+00:00
   https://camel.apache.org/releases/release-2.24.2/,2019-09-13T00:00:00+00:00
-  https://camel.apache.org/blog/2019/09/RELEASE-2.24.2/,2019-09-13T00:00:00+00:00
-  https://camel.apache.org/blog/2019/09/ApacheConNA-2019/,2019-09-10T16:45:32+02:00
-  https://camel.apache.org/blog/2019/09/RELEASE-3.0.0-RC1/,2019-09-02T00:00:00+00:00
   https://camel.apache.org/releases/release-3.0.0-RC1/,2019-09-01T00:00:00+00:00
   https://camel.apache.org/releases/release-2.24.1/,2019-06-20T00:00:00+00:00
   https://camel.apache.org/releases/release-2.23.3/,2019-06-09T00:00:00+00:00
   https://camel.apache.org/releases/release-2.22.5/,2019-06-08T00:00:00+00:00
   https://camel.apache.org/security/CVE-2019-0188.md,2019-05-27T12:58:33+02:00
   https://camel.apache.org/releases/release-2.24.0/,2019-05-12T00:00:00+00:00
-  https://camel.apache.org/blog/2019/05/RELEASE-2.24.0/,2019-05-12T00:00:00+00:00
   https://camel.apache.org/security/CVE-2019-0194.md,2019-04-30T18:29:00+00:00
   https://camel.apache.org/releases/release-2.22.4/,2019-04-07T00:00:00+00:00
   https://camel.apache.org/releases/release-2.23.2/,2019-04-06T00:00:00+00:00
@@ -1056,14 +734,12 @@ urls[1071]{loc,lastmod}:
   https://camel.apache.org/community/articles/,
   https://camel.apache.org/community/books/,
   https://camel.apache.org/docs/building/,
-  https://camel.apache.org/community/camel-extra/,
   https://camel.apache.org/community/,
   https://camel.apache.org/community/contributing/,
   https://camel.apache.org/docs/,
   https://camel.apache.org/download/,
   https://camel.apache.org/community/mailing-list/,
   https://camel.apache.org/misc/,
-  https://camel.apache.org/news/,
   https://camel.apache.org/sitemap/,
   https://camel.apache.org/community/sources/,
   https://camel.apache.org/docs/sources/,

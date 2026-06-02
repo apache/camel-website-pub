@@ -16,13 +16,6 @@
       <description>How to Camel Debug a Camel Quarkus route deployed on OpenShift from VS Code&#xA;Requirements This how-to will not cover in details the following points, it is assumed that it is installed/preconfigured:&#xA;VS Code with the Extension Pack for Apache Camel with a folder opened Active connection to an OpenShift cluster JBang available on Command-Line Interface (CLI) Maven available on CLI Note that this tutorial was made with the following versions:</description>
     </item>
     <item>
-      <title>Debugging Camel Quarkus native application in VS Code</title>
-      <link>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</link>
-      <pubDate>Thu, 07 Dec 2023 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2023/12/camel-quarkus-native-vscode-debug/</guid>
-      <description>Prerequisites Visual Studio Code GraalVM for JDK 20+ Maven 3.9.3+ Extension Pack for Apache Camel by Red Hat Step-by-Step These steps provide a structured approach to generating, setting up, building, and debugging a Camel Quarkus native application within the VS Code environment.&#xA;Generate Example Camel Route in VS Code Workspace Within your clean VS Code workspace, initiate the creation of an exemplary Camel route using the command Camel: Create a Camel Route using Java DSL.</description>
-    </item>
-    <item>
       <title>Content Based Routing with Camel, Drools, Quarkus, Kogito, AtlasMap and Apache Kafka!</title>
       <link>https://camel.apache.org/blog/2022/10/ContentBasedRoutingWithCamelDroolsQuarkusKogitoAltasMapApacheKafka/</link>
       <pubDate>Mon, 10 Oct 2022 11:56:35 +0200</pubDate>
@@ -35,13 +28,6 @@
       <pubDate>Thu, 26 Aug 2021 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2021/08/DeployingCamelRouteInAWSLambda/</guid>
       <description>Do you fancy running camel route as functions in AWS Lambda. Well I did a small Proof Of Concept to test this and the results were interesting. Thanks to the Quarkus and Camel-Quarkus communities for their efforts to make this technically possible.&#xA;You can find the working sample in the Camel Quarkus Examples github repo&#xA;#Deploying a Camel Route in AWS Lambda : A Camel Quarkus example&#xA;This project uses the following framework</description>
-    </item>
-    <item>
-      <title>Getting Further With Camel on Quarkus at Apache CON @HOME 2021</title>
-      <link>https://camel.apache.org/blog/2021/08/GettingFurtherWithCamelQuarkusIntro/</link>
-      <pubDate>Fri, 06 Aug 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/08/GettingFurtherWithCamelQuarkusIntro/</guid>
-      <description>I will have the pleasure to cast a new demonstration explaining further development tips for Camel Quarkus at Apache CON @HOME 2021. Some details still remain to be polished, however I can already share with you the preview below: This live coding presentation will be split in 2 parts.&#xA;First part where we step into the shoes of a day to day Camel Quarkus developer The idea is really to implement a typical Camel route on a local machine.</description>
     </item>
     <item>
       <title>Camel Quarkus Configuration Tips</title>
@@ -63,6 +49,13 @@
       <pubDate>Wed, 15 Jul 2020 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2020/07/command-line-utility-with-camel-quarkus/</guid>
       <description>Camel and Camel Quarkus are typically used to create integration applications that run as long living processes, a.k.a. daemons or services. In this blog post, we are going to explain a slightly different use case: using Camel Quarkus in programs that exit by themselves after performing some desired tasks.&#xA;Where can this be useful? The enterprise is full of scheduled batch processing. Say, some system exports some sort of reports daily at 4 a.</description>
+    </item>
+    <item>
+      <title>How to quickly run 100 Camels with Apache Camel, Quarkus and GraalVM</title>
+      <link>https://camel.apache.org/blog/2020/04/100Camels/</link>
+      <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/04/100Camels/</guid>
+      <description>Today I continue me practice on youtube and recorded a 10 minute video on creating a new Camel and Quarkus project that includes Rest and HTTP services with health checks and metrics out of the box.&#xA;Then comparing the memory usage of running the example in JVM mode vs native compiled with GraalVM. Then showing for the finale how to quickly run 100 instances of the example each on their own TCP port and how quick Camel are to startup and service the first requests faster than you can type and click.</description>
     </item>
   </channel>
 </rss>

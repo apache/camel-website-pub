@@ -1,16 +1,13 @@
 # Camel dependencies matrix
 
-Camel K was originally equipped with a dedicated runtime known as Camel K Runtime. This is a lightweight layer on top of Camel Quarkus. However, you can directly run plain regular Camel Quarkus runtime applications as well. This will become the standard only from version 3.x onward in order to avoid breaking backward compatibility. In the while you’re strongly encouraged to use `plain-quarkus` Camel runtime configuration to ease any future 3.x migration.
-
+Camel dependencies matrix      
+| Camel K Version | Last release | Default Quarkus Platform | Camel Quarkus | Camel | Branch |
+| --- | --- | --- | --- | --- | --- |
+| [Next (Pre-release)](../index.md) | 2.10.0 | 3.33.2 | 3.33.1 | 4.18.0 | [main](https://github.com/apache/camel-k) |
+| [2.10.x](../../2.10.x/index.md) | 2.10.1 | 3.15.4 | 3.15.3 | 4.8.5 | [release-2.10.x](https://github.com/apache/camel-k/tree/release-2.10.x) |
+| [2.9.x (LTS)](../../2.9.x/index.md) | 2.9.2 | 3.15.4 | 3.15.3 | 4.8.5 | [release-2.9.x](https://github.com/apache/camel-k/tree/release-2.9.x) |
 > **Note**
 > you can use any available Camel Quarkus runtime version. Alternatively you can also build any other Camel runtimes building from a Git hosted repository.
-
-Camel dependencies matrix       
-| Camel K Version | Last release | (Default) Camel K Runtime | Camel Quarkus | Camel | Quarkus | Branch |
-| --- | --- | --- | --- | --- | --- | --- |
-| [Next (Pre-release)](../index.md) | 2.10.0 | 3.15.3 | 3.15.3 | 4.8.5 | 3.15.4 | [main](https://github.com/apache/camel-k) |
-| [2.10.x](../../2.10.x/index.md) | 2.10.1 | 3.15.3 | 3.15.3 | 4.8.5 | 3.15.4 | [release-2.10.x](https://github.com/apache/camel-k/tree/release-2.10.x) |
-| [2.9.x (LTS)](../../2.9.x/index.md) | 2.9.2 | 3.15.3 | 3.15.3 | 4.8.5 | 3.15.4 | [release-2.9.x](https://github.com/apache/camel-k/tree/release-2.9.x) |
 
 ## Other APIs version matrix
 

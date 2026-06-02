@@ -9,7 +9,8 @@ Here a quick resume of the parameters you can configure as environment variables
   
 | Name | Description | Default |
 | --- | --- | --- |
-| BUILD\_RUNTIME\_VERSION | Version of the runtime used for builds. | The Camel K runtime specified by the Camel K operator version released |
+| BUILD\_RUNTIME\_PROVIDER | Provider of the Apache Camel runtime used for builds. | `plain-quarkus` |
+| BUILD\_RUNTIME\_VERSION | Version of the Apache Camel runtime used for builds. | The default version specified by the Camel K operator version released |
 | BUILD\_TIMEOUT\_SECONDS | Timeout (in seconds) for a build before it is terminated. | `300` |
 | BUILD\_STRATEGY | Strategy used to perform builds (`routine` or `pod`). | `routine` |
 | BUILD\_ORDER\_STRATEGY | Strategy used to determine build execution order (`fifo`, `dependencies`, `sequential`). | `dependencies` |

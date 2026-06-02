@@ -58,25 +58,11 @@
       <description>Tracing is an important approach for controlling and monitoring the experience of users, it allows us to gather more information about an integration&amp;rsquo;s performance.&#xA;Camel K has been providing support for distributed tracing using OpenTracing since long time. At the beginning of 2022, the CNCF announced that they were archiving the OpenTracing project in favor of the OpenTelemetry project. OpenTelemetry is the latest solution created by merging OpenTracing and OpenCensus. As a result, we decided in Camel K 1.</description>
     </item>
     <item>
-      <title>Camel K 2023 Roadmap</title>
-      <link>https://camel.apache.org/blog/2023/02/camel-k-roadmap-2023/</link>
-      <pubDate>Mon, 06 Feb 2023 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2023/02/camel-k-roadmap-2023/</guid>
-      <description>Signpost png from pngtree.com/&#xA;We&amp;rsquo;re in 2023 since a while (just if nobody has noticed yet&amp;hellip;) and we&amp;rsquo;ve taken the month of January to think about how to move Camel K development forward. We had a very good discussion about the new features we&amp;rsquo;d like to see during this year and this blog is trying to resume those ideas collected. I am going to do my best to resume everybody&amp;rsquo;s comments in a shared view in order to inspire any contributor to understand the direction we&amp;rsquo;re willing to take.</description>
-    </item>
-    <item>
       <title>Testing Camel K with YAKS</title>
       <link>https://camel.apache.org/blog/2023/01/camel-k-yaks/</link>
       <pubDate>Tue, 31 Jan 2023 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2023/01/camel-k-yaks/</guid>
       <description>This post describes the steps to test a Camel K integration with YAKS both locally and on the Kubernetes platform.&#xA;What is YAKS? YAKS is an Open Source test automation platform that leverages Behavior Driven Development concepts for running tests locally and on Cloud infrastructure (e.g. Kubernetes or OpenShift). This means that the testing tool is able to run your tests both as local tests and natively on Kubernetes. The framework is specifically designed to verify Serverless and Microservice applications and aims for integration testing with the application under test up and running in a production-like environment.</description>
-    </item>
-    <item>
-      <title>Camel K 2022 roadmap - retrospective</title>
-      <link>https://camel.apache.org/blog/2023/01/ck_2022_results/</link>
-      <pubDate>Mon, 09 Jan 2023 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2023/01/ck_2022_results/</guid>
-      <description>(c) @TivadarDanka&#xA;2023 has come, and with that it is time to make a little retrospective on the work we have completed in 2022 in Camel K project. We are already collecting ideas to submit to the community for 2023 in order to define the new roadmap. Stay tuned, more is coming shortly&amp;hellip;&#xA;Camel K 2022 roadmap update It&amp;rsquo;s been a long ride and here a short resume of what we accomplished during the last year in Camel K project.</description>
     </item>
     <item>
       <title>How to test an Integration for Camel K</title>
@@ -107,13 +93,6 @@
       <description>The Integration is the resource which represents the actual Camel application and building a container image that packages the integration within an elevated cloud platform (be it locally in a Minikube or K8s hosted cluster to Openshift clusters) takes ample amount of time.&#xA;Enhancing the Camel-K Integration build time Our goal was to reduce overhead and improve user experience. We were able to narrow down the major contributors that had a significant influence on the integration build time.</description>
     </item>
     <item>
-      <title>Camel K 2022 Roadmap</title>
-      <link>https://camel.apache.org/blog/2022/03/camel-k-roadmap-2022/</link>
-      <pubDate>Tue, 01 Mar 2022 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2022/03/camel-k-roadmap-2022/</guid>
-      <description>Signpost png from pngtree.com/&#xA;During the last weeks we&amp;rsquo;ve been asked questions around the direction we&amp;rsquo;re willing to take on the future development of Camel K. I think it would be good to have some blog in order to let the community understand where our efforts are going. It will be useful for every Camel K user and Camel K developer, as a guide for the future development of the project.</description>
-    </item>
-    <item>
       <title>Camel meets KEDA</title>
       <link>https://camel.apache.org/blog/2022/01/camel-keda/</link>
       <pubDate>Fri, 21 Jan 2022 00:00:00 +0000</pubDate>
@@ -121,67 +100,11 @@
       <description>NOTE: this post has first appeared in the author&amp;rsquo;s blog.&#xA;KEDA (Kubernetes Event Driven Autoscalers) is a fantastic project (currently CNCF incubating) that provides Kubernetes-based autoscalers to help applications to scale out according to the number of incoming events when they are listening to several kinds of event sources. In Camel K we&amp;rsquo;ve long supported Knative for providing a similar functionality for integrations that are triggered by HTTP calls, so supporting KEDA was something planned since long time, because it enables full autoscaling from a wider collection of sources.</description>
     </item>
     <item>
-      <title>Karavan Serverless mode</title>
-      <link>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</link>
-      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</guid>
-      <description>Karavan Serverless What&amp;rsquo;s new in Karavan preview release 0.0.8? In addition to VSCode extension and Standalone application, Karavan could be deployed in Serverless mode alongside Camel-K on Kubernetes. Karavan Serverless gets and applies Integration Custom Resources directly from/to Kubernetes.&#xA;Try Karavan Serverless mode on Minikube Install Minikube&#xA;Install Camel-K&#xA;Install Karavan serverless&#xA;git clone --depth 1 https://github.com/apache/camel-karavan cd camel-karavan/karavan-demo/serverless kubectl apply -k karavan -n default Get Karavan URL&#xA;minikube service camel-karavan --url The output should be like the following:</description>
-    </item>
-    <item>
-      <title>Low Code Camel</title>
-      <link>https://camel.apache.org/blog/2021/11/low-code-camel/</link>
-      <pubDate>Mon, 08 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/11/low-code-camel/</guid>
-      <description>Apache Camel is a project in constant transformation. Anyone knows that Camel has been able to adapt to any new kinds of protocols and systems that have emerged in the past 15 years. But it&amp;rsquo;s not only that: Camel is also able to adapt to any new ways of dealing with integration problems in the cloud era. While Camel K represented a fundamental shift towards a new approach to cloud-native integration, &amp;ldquo;Camel K&amp;rdquo; are driving a deeper transformation towards &amp;ldquo;low code&amp;rdquo; development.</description>
-    </item>
-    <item>
-      <title>Managing Kamelet event sources with kn</title>
-      <link>https://camel.apache.org/blog/2021/10/managing-kamelets-with-kn/</link>
-      <pubDate>Mon, 04 Oct 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/10/managing-kamelets-with-kn/</guid>
-      <description>The latest community version of the Knative client v0.26 includes a new kn plugin for managing Kamelets as Knative event sources (GitHub: knative-sandbox/kamelet-plugin-source-kamelet). With the new plugin users of the kn tooling can directly list the available Kamelet sources and bind these Kamelets to Knative resources such as brokers, channels or services.&#xA;The Kamelets facilitate a whole new world of event source possibilities allowing users to connect to external services (AWS, Twitter, Telegram, Postgres) as part of Knative eventing.</description>
-    </item>
-    <item>
-      <title>Camel K 1.5 - New configuration settings</title>
-      <link>https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/</link>
-      <pubDate>Tue, 20 Jul 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/07/camel-k-properties-refactoring/</guid>
-      <description>Camel K version 1.5 is out. And with it, a new way of providing configuration and resources to your Integration. We have worked on a deep code refactoring in order to harmonize the existing configuration settings and add new ones to exploit the power of camel-quarkus runtime, which has become the main way to materialize an Integration.&#xA;We added new features that will simplify your developer life. We also added new checks that will give you useful tips when using a feature in a wrong way.</description>
-    </item>
-    <item>
-      <title>Kamelet tooling support for Camel URI</title>
-      <link>https://camel.apache.org/blog/2021/05/KameletToolingSupportInCamelURI/</link>
-      <pubDate>Wed, 19 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/05/KameletToolingSupportInCamelURI/</guid>
-      <description>Kamelets (Kamel route snippets) are a new concept introduced in Camel K that allow users to connect to external systems via a simplified interface, hiding all the low level details about how those connections are implemented. There are several ways to consume them. One of them is as standard Camel Components. In this case, completion is provided to fill the template id and the parameter names. It is currently based on a fixed set of Kamelets provided by a snapshot of the kamelet catalog.</description>
-    </item>
-    <item>
-      <title>How to Java debug a Camel K integration in VS Code - second iteration</title>
-      <link>https://camel.apache.org/blog/2021/05/JavaDebuggingInVSCode-iteration2/</link>
-      <pubDate>Mon, 17 May 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/05/JavaDebuggingInVSCode-iteration2/</guid>
-      <description>Camel K is providing a new feature to Java debug deployed integrations. Before VS Code Tooling for Apache Camel K 0.0.25, more complex steps were required to leverage the VS Code Java debugging capabilities as explained in this previous blogpost.&#xA;I recorded a video which is following the steps in this blogpost.&#xA;Requirements VS Code Extension Pack for Apache Camel with VS Code Tooling for Apache Camel K 0.0.25+ Camel K deployed to a cluster.</description>
-    </item>
-    <item>
       <title>New Camel K Logging Features</title>
       <link>https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/</link>
       <pubDate>Mon, 10 May 2021 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2021/05/new-camel-k-logging-features/</guid>
       <description>New Camel K Logging Features for Camel K 1.5</description>
-    </item>
-    <item>
-      <title>Kamelet Catalog</title>
-      <link>https://camel.apache.org/blog/2021/02/Kamelet-Catalog/</link>
-      <pubDate>Wed, 24 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/02/Kamelet-Catalog/</guid>
-      <description>We&amp;rsquo;re starting a new initiative at Apache Camel to create a community-driven catalog of reusable Kamelets (Camel route snipp_ets_, i.e. connectors) that can be used to stream data from/to external systems into any platform powered by Apache Camel.&#xA;The &amp;ldquo;Apache Camel Kamelet catalog&amp;rdquo; is available here and it already contains a collection of useful Kamelets: we would like to extend it with help of the community.&#xA;Kamelets are currently supported out-of-the-box by the Apache Camel K project and we&amp;rsquo;re working to support them also in Camel core, so that they can run eventually in any Apache Camel subproject, like Camel Kafka Connector (but also camel-quarkus, camel-spring-boot, &amp;hellip;).</description>
-    </item>
-    <item>
-      <title>How to Java debug a Camel K integration in VS Code with Camel K 1.3.0</title>
-      <link>https://camel.apache.org/blog/2021/01/DebugInVSCodeWithCamelK1.3.0/</link>
-      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2021/01/DebugInVSCodeWithCamelK1.3.0/</guid>
-      <description>UPDATED ON 17 May 2021: More recent related content available in this blogpost.&#xA;Camel K 1.3.0 is providing a new feature to Java debug deployed integrations. Even if Camel K 1.3.0 is not fully compatible with VS Code Tooling for Apache Camel K extension, it remains possible to leverage the VS Code Java debugging capabilities.&#xA;I recorded a video which is following the steps in this blogpost. I let you choose your preferred way to discover how to java debug your Camel K integration in VS Code.</description>
     </item>
   </channel>
 </rss>

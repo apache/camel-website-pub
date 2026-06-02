@@ -37,13 +37,6 @@
       <description>Electronic Data Interchange (EDI) underpins the flow of information in numerous industries. From healthcare, retail, and aviation, to finance, manufacturing, and logistics, EDI is the workhorse carrying billions of transactions across applications in these industries.&#xA;Historically viewed as a long, complex and costly journey, connecting EDI to the enterprise is traditionally thought to belong in the realm of expensive proprietary software or organisations with sizeable in-house IT teams. The goal of this blog post is to dispel this perception.</description>
     </item>
     <item>
-      <title>Migrating from Camel Karaf to Camel Spring Boot or Quarkus</title>
-      <link>https://camel.apache.org/blog/2024/12/migrate-blueprint/</link>
-      <pubDate>Mon, 09 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2024/12/migrate-blueprint/</guid>
-      <description>This is the 2nd blog post in a series of migration blogs to provide details and help for users to Camel 4.&#xA;The first blog post that focus on general migration principles can be found here.&#xA;This blog post focuses on migrating from legacy Apache Karaf OSGi Blueprint to Camel 4.&#xA;Migration Tasks The migration from Camel Karaf and OSGi Blueprint to Camel 4 is not a trivial migration effort.</description>
-    </item>
-    <item>
       <title>Modernizing Camel&#39;s Test Support Code: How To</title>
       <link>https://camel.apache.org/blog/2024/10/modernizing-test-code-how-to/</link>
       <pubDate>Thu, 24 Oct 2024 00:00:00 +0000</pubDate>
@@ -126,6 +119,13 @@
       <pubDate>Tue, 31 Jan 2023 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2023/01/camel-k-yaks/</guid>
       <description>This post describes the steps to test a Camel K integration with YAKS both locally and on the Kubernetes platform.&#xA;What is YAKS? YAKS is an Open Source test automation platform that leverages Behavior Driven Development concepts for running tests locally and on Cloud infrastructure (e.g. Kubernetes or OpenShift). This means that the testing tool is able to run your tests both as local tests and natively on Kubernetes. The framework is specifically designed to verify Serverless and Microservice applications and aims for integration testing with the application under test up and running in a production-like environment.</description>
+    </item>
+    <item>
+      <title>How to quickly run 16 years old Camel 1.0 route today</title>
+      <link>https://camel.apache.org/blog/2022/12/quarkus-insights/</link>
+      <pubDate>Fri, 16 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/quarkus-insights/</guid>
+      <description>A few weeks ago I presented Camel JBang at the Quarkus Insights show and one of the demos I did was to quickly run Camel 1.0 route copied with the latest Camel.&#xA;This is a 4-minute recording of that demo.&#xA;If you want to see more, then I recommend to watch the Quarkus Insight session.</description>
     </item>
     <item>
       <title>How to test an Integration for Camel K</title>

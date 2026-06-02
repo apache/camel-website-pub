@@ -107,13 +107,6 @@
       <description>Introduction In a previous blog post, we have seen how Camel parameter binding annotations could be used in conjunction with LangChain4J AI services to easily create Camel routes using Large Language Models. All this work is best reflected in a Camel Quarkus example. While building this example, poor care was taken about the choice of the LLM as this was not the initial priority. Thinking a bit more, this situation is a great opportunity to experience the switch of an LLM inside of a Camel application.</description>
     </item>
     <item>
-      <title>Using Camel annotations with LangChain4j high level api available in next Camel Quarkus release</title>
-      <link>https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/</link>
-      <pubDate>Thu, 10 Oct 2024 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2024/10/langchain4j-camel-annotations/</guid>
-      <description>Introduction In a previous blog post, we have seen how Camel could be used to transform raw unstructured text into structured Java objects. The shown example actually uses the LangChain4j high level API where a Java interface will handle the interactions needed with the underlying Large Language Model. However, at this time, a Quarkus LangChain4j issue prevented the usage of the Camel parameter binding annotations. This issue will be fixed in the next Camel Quarkus release, so let&amp;rsquo;s see how it will work.</description>
-    </item>
-    <item>
       <title>Unstructured data extraction with Apache Camel Quarkus and LangChain4j</title>
       <link>https://camel.apache.org/blog/2024/09/data-extraction-example/</link>
       <pubDate>Mon, 16 Sep 2024 00:00:00 +0000</pubDate>

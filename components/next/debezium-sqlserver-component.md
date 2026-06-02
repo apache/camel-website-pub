@@ -97,7 +97,7 @@ The Debezium SQL Server Connector component supports 102 options, which are list
 | **connectionValidationTimeoutMs** (sqlserver) | The maximum time in milliseconds to wait for connection validation to complete. Defaults to 60 seconds. | 1m | long |
 | **converters** (sqlserver) | Optional list of custom converters that would be used instead of default ones. The converters are defined using '.type' config option and configured using options '.'. |  | String |
 | **customMetricTags** (sqlserver) | The custom metric tags will accept key-value pairs to customize the MBean object name which should be appended the end of regular name, each key would represent a tag for the MBean object name, and the corresponding value would be the value of that tag the key is. For example: k1=v1,k2=v2. |  | String |
-| **customSanitizePattern** (sqlserver) | Regular expression identifying configuration keys whose values should be masked. When set, this custom pattern replaces Debeziums default password masking pattern. | .\*secret$|.\*password$|.\*sasl\\.jaas\\.config$|.\*basic\\.auth\\.user\\.info|.\*registry\\.auth\\.client-secret | String |
+| **customSanitizePattern** (sqlserver) | Regular expression identifying configuration keys whose values should be masked. When set, this custom pattern replaces Debeziums default password masking pattern. | .\*secret$|.\*password$|.\*sasl\\.jaas\\.config$|.\*basic\\.auth\\.user\\.info|.\*registry\\.auth\\.client-secret|.\*credentials\\.json$ | String |
 | **databaseHostname** (sqlserver) | Resolvable hostname or IP address of the database server. |  | String |
 | **databaseInstance** (sqlserver) | The SQL Server instance name. |  | String |
 | **databaseNames** (sqlserver) | The names of the databases from which the connector should capture changes. |  | String |
@@ -234,7 +234,7 @@ Enum values:
 | **connectionValidationTimeoutMs** (sqlserver) | The maximum time in milliseconds to wait for connection validation to complete. Defaults to 60 seconds. | 1m | long |
 | **converters** (sqlserver) | Optional list of custom converters that would be used instead of default ones. The converters are defined using '.type' config option and configured using options '.'. |  | String |
 | **customMetricTags** (sqlserver) | The custom metric tags will accept key-value pairs to customize the MBean object name which should be appended the end of regular name, each key would represent a tag for the MBean object name, and the corresponding value would be the value of that tag the key is. For example: k1=v1,k2=v2. |  | String |
-| **customSanitizePattern** (sqlserver) | Regular expression identifying configuration keys whose values should be masked. When set, this custom pattern replaces Debeziums default password masking pattern. | .\*secret$|.\*password$|.\*sasl\\.jaas\\.config$|.\*basic\\.auth\\.user\\.info|.\*registry\\.auth\\.client-secret | String |
+| **customSanitizePattern** (sqlserver) | Regular expression identifying configuration keys whose values should be masked. When set, this custom pattern replaces Debeziums default password masking pattern. | .\*secret$|.\*password$|.\*sasl\\.jaas\\.config$|.\*basic\\.auth\\.user\\.info|.\*registry\\.auth\\.client-secret|.\*credentials\\.json$ | String |
 | **databaseHostname** (sqlserver) | Resolvable hostname or IP address of the database server. |  | String |
 | **databaseInstance** (sqlserver) | The SQL Server instance name. |  | String |
 | **databaseNames** (sqlserver) | The names of the databases from which the connector should capture changes. |  | String |
