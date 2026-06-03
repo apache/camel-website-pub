@@ -198,6 +198,10 @@ class MyTest {
 
 More examples of WireMock usage can be found in the Camel Quarkus integration test source tree such as in the [validator tests](https://github.com/apache/camel-quarkus/blob/main/integration-tests/validator/src/test/java/org/apache/camel/quarkus/component/validator/it/ValidatorTestResource.java).
 
+### Citrus Testing Framework
+
+The [Citrus Testing Framework](https://citrusframework.org/) provides advanced integration testing capabilities for Camel Quarkus applications. For detailed information about using Citrus with Quarkus test support, see [Integration Testing with Citrus](../../../manual/integration-test.html#_quarkus_test_support) in the Apache Camel documentation.
+
 ## `CamelTestSupport` style of testing
 
 If you used Camel standalone or on other runtimes before, you may know `CamelTestSupport` already. The original `CamelTestSupport` class is not well suited to Quarkus, so there’s an extended Quarkus friendly version called `CamelQuarkusTestSupport`.

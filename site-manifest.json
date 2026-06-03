@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1780497730818,
+  "generated": 1780518291843,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -13750,6 +13750,15 @@
               "title": "Configuration",
               "attributes": {
                 "page-aliases": "user-guide/bootstrap.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/custom-components.adoc",
+              "url": "/camel-quarkus/next/user-guide/custom-components.html",
+              "title": "Using custom Camel components",
+              "attributes": {
+                "page-aliases": "custom-components.adoc"
               }
             },
             {
