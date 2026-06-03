@@ -147,13 +147,26 @@ String patientId = msg.getQRD().getWhoSubjectFilter(0).getIDNumber().getValue();
 
 The `camel-hl7` JAR ships with a HL7 data format that can be used to marshal or unmarshal HL7 model objects.
 
-The HL7 dataformat supports 2 options, which are listed below.
+The HL7 dataformat supports 3 options, which are listed below.
 
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **parser** (advanced) |  | `Object` | To use a custom HL7 parser. |
 | **validate** (common) | `true` | `Boolean` | Whether to validate the HL7 message Is by default true. |
+| **targetFormat** (common) |  | `Enum` | 
+The target format for marshal output and unmarshal result type. By default, marshal encodes to HL7 ER7, and unmarshal returns a HAPI Message object. If this is set to XML, marshal encodes to HL7 XML, and unmarshal returns an XML DOM Document.
+
+Enum values:
+
+-   XML
+    
+
+
+
+
+
+ |
 
 -   `marshal` = from Message to byte stream (can be used when responding using the HL7 MLLP codec)
     
@@ -187,6 +200,58 @@ Here we unmarshal the byte stream into a HAPI Message object that is passed to o
 
 Unmarshalling does not automatically fix segment separators anymore by converting `\n` to `\r`. If you  
 need this conversion, `org.apache.camel.component.hl7.HL7#convertLFToCR` provides a handy `Expression` for this purpose.
+
+### Target Format
+
+By default, the HL7 DataFormat works with HAPI `Message` objects and ER7 (pipe-delimited) encoding. The `targetFormat` option can be set to `XML` to change the output format:
+
+-   **marshal** encodes the HAPI Message to HL7 XML bytes instead of ER7.
+    
+-   **unmarshal** returns an `org.w3c.dom.Document` instead of a HAPI `Message`.
+    
+
+The input format is always auto-detected. Both ER7 and XML inputs are accepted by the parser. For marshal, the input body can be a HAPI `Message` or an XML `Document` — the registered TypeConverter handles `Document` to `Message` conversion automatically.
+
+#### EDI to XML conversion
+
+```java
+  HL7DataFormat hl7xml = new HL7DataFormat();
+  hl7xml.setTargetFormat("XML");
+
+  from("direct:hl7in")
+    .unmarshal(hl7xml)
+    .to("direct:xmlout");
+```
+
+In this example, the HL7 EDI input is unmarshalled directly to an XML `Document`.
+
+#### XML to Message conversion
+
+```java
+  HL7DataFormat hl7xml = new HL7DataFormat();
+  hl7xml.setTargetFormat("XML");
+
+  from("direct:messageIn")
+    .marshal(hl7xml)
+    .to("direct:xmlout");
+```
+
+Here, a HAPI `Message` is marshalled to HL7 XML bytes.
+
+#### Round-trip EDI to XML to EDI
+
+```java
+  HL7DataFormat hl7xml = new HL7DataFormat();
+  hl7xml.setTargetFormat("XML");
+  HL7DataFormat hl7 = new HL7DataFormat();
+
+  from("direct:hl7in")
+    .unmarshal(hl7xml)
+    .marshal(hl7)
+    .to("direct:hl7out");
+```
+
+The EDI input is converted to an XML Document, then back to EDI.
 
 ### Charset
 
@@ -280,13 +345,14 @@ When using hl7 with Spring Boot make sure to use the following Maven dependency 
 </dependency>
 ```
 
-The component supports 6 options, which are listed below.
+The component supports 7 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.dataformat.hl7.enabled** | Whether to enable auto configuration of the hl7 data format. This is enabled by default. |  | Boolean |
 | **camel.dataformat.hl7.parser** | To use a custom HL7 parser. The option is a ca.uhn.hl7v2.parser.Parser type. |  | String |
+| **camel.dataformat.hl7.target-format** | The target format for marshal output and unmarshal result type. By default, marshal encodes to HL7 ER7, and unmarshal returns a HAPI Message object. If this is set to XML, marshal encodes to HL7 XML, and unmarshal returns an XML DOM Document. |  | String |
 | **camel.dataformat.hl7.validate** | Whether to validate the HL7 message Is by default true. | true | Boolean |
 | **camel.language.hl7terser.enabled** | Whether to enable auto configuration of the hl7terser language. This is enabled by default. |  | Boolean |
 | **camel.language.hl7terser.source** | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |  | String |

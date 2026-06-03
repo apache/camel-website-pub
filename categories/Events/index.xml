@@ -29,5 +29,12 @@
       <guid>https://camel.apache.org/blog/2020/10/ApacheCon-at-Home-videos/</guid>
       <description>This year&amp;rsquo;s ApacheCon was an overwhelming success, with many tracks running in parallel. If you missed some of the talks on the Camel/Integration or would like to revisit your favorites, video recordings from ApacheCon @Home 2020 are now available on The Apache Software Foundation YouTube channel.&#xA;You can watch the content from all three days in one playlist, with over 10 hours of content.&#xA;For convenience, we listed the talks as they appear in the schedule here along with the slides shared by the speakers.</description>
     </item>
+    <item>
+      <title>Camel at ApacheCon North America 2019</title>
+      <link>https://camel.apache.org/blog/2019/09/ApacheConNA-2019/</link>
+      <pubDate>Tue, 10 Sep 2019 16:45:32 +0200</pubDate>
+      <guid>https://camel.apache.org/blog/2019/09/ApacheConNA-2019/</guid>
+      <description>Apache Camel is part of ApacheCon 2019 in North America this year celebrating the 20th year anniversary of Apache Software Foundation.&#xA;On the Integration track you will find out all about the state of Apache Camel from Claus Ibsen, Sami Adranly will present Camel based data integration platform at Uber called Medley Nicola Ferraro and Andrea Tarocchi will be talking about Camel K and Camel K with Knative, Bob Paulin will make the cloud integration friendly in Configuring Apache Camel for the Cloud and Michael Costello will talk about serverless integration with Camel.</description>
+    </item>
   </channel>
 </rss>

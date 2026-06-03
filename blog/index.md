@@ -2,7 +2,7 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[199]{title,link,pubDate,description}:
+posts[200]{title,link,pubDate,description}:
   Wanaku 0.1.1: Bringing Apache Camel Integration Capabilities to AI Agents via MCP|https://camel.apache.org/blog/2026/05/wanaku-0.1.1/index.md|Sun, 31 May 2026 00:00:00 +0000|We&rsquo;re excited to announce Wanaku 0.1.1, a significant milestone that showcases how Apache Camel&rsquo;s powerful integration capabilities can be seamlessly exposed to AI agents through the Model
   Camel Quarkus 3.36.0 Released|https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/index.md|Thu, 28 May 2026 00:00:00 +0000|Camel Quarkus 3.36.0 release
   Camel Karaf 4.14.7 Released|https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/index.md|Sun, 24 May 2026 00:00:00 +0000|Camel Karaf 4.14.7 release
@@ -202,3 +202,4 @@ posts[199]{title,link,pubDate,description}:
   Camel 2019 in Numbers|https://camel.apache.org/blog/2019/12/2019-Numbers/index.md|Tue, 31 Dec 2019 00:00:00 +0000|It&rsquo;s the time of the year where we take a look back at 2019, and compile a brief summary of the Apache Camel project. The big news of 2019 was the much anticipated release of Apache Camel 3. Fam
   Apache Camel 3 What's New (top 10)|https://camel.apache.org/blog/2019/12/Camel3-Whatsnew/index.md|Mon, 02 Dec 2019 00:00:00 +0000|Apache Camel 3 was released last thursday November 28th 2019, which also happens to be the day of the US Thanksgiving. This was not intentionally but we can say its a big thanks from us to the communi
   Apache Camel on top-5 in the ASF annual 2019 report|https://camel.apache.org/blog/2019/11/ASF-Report-2019/index.md|Fri, 01 Nov 2019 00:00:00 +0000|The ASF Annual 2019 Report includes 25 highlights where Apache Camel is referred twice as a top-5 project: Top 5 Apache repositories by number of commits: Camel, Hadoop, HBase, Beam, and Flink; GitHub
+  Camel at ApacheCon North America 2019|https://camel.apache.org/blog/2019/09/ApacheConNA-2019/index.md|Tue, 10 Sep 2019 16:45:32 +0200|Apache Camel is part of ApacheCon 2019 in North America this year celebrating the 20th year anniversary of Apache Software Foundation. On the Integration track you will find out all about the state of

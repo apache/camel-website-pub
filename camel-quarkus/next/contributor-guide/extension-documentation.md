@@ -14,6 +14,12 @@ The `update-extension-doc-page` mojo merges the [FreeMarker template](https://ra
     
 -   `nativeSupported`: `false` if the given extension lives under `extensions-jvm`, `true` otherwise.
     
+-   `status`: the `<quarkus.metadata.status>` property in the runtime `pom.xml`. Possible values: `stable`, `preview`, `experimental`, `deprecated`. If not specified, defaults to `stable` for native-supported extensions or `preview` for JVM-only extensions.
+    
+-   `unlisted`: the `<quarkus.metadata.unlisted>` property in the runtime `pom.xml`. If `true`, the extension will not be listed in the extension catalog. Defaults to `true` for JVM-only extensions.
+    
+-   `deprecated`: the `<quarkus.metadata.deprecated>` property in the runtime `pom.xml`. If `true`, the extension is marked as deprecated in the documentation.
+    
 -   `models`: the list of Camel [components](https://github.com/apache/camel/blob/main/tooling/camel-tooling-model/src/main/java/org/apache/camel/tooling/model/ComponentModel.java), [data formats](https://github.com/apache/camel/blob/main/tooling/camel-tooling-model/src/main/java/org/apache/camel/tooling/model/DataFormatModel.java), [languages](https://github.com/apache/camel/blob/main/tooling/camel-tooling-model/src/main/java/org/apache/camel/tooling/model/LanguageModel.java), etc. the given extension delivers.
     
 -   `intro`: the first paragraph (optional); the content of `src/main/doc/intro.adoc` in the runtime module of the given extension. If `intro.adoc` does not exist, the `description` from the Camel Catalog is used as the first paragraph on the page.

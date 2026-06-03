@@ -10,9 +10,9 @@ Apache Camel is a widely used project. As such, several companies have built pro
 
 [Fluxygen](https://fluxygen.com) is a company based in the Netherlands. It offers a low-code integration platform based on Apache Camel, Apache ActiveMQ and [Assimbly](https://assimbly.org). The aim is to make integration as easy as possible, and enable businesses to automate processes. We also provide cloud services, support and training.
 
-## [IBM](http://ibm.biz/OSSupport)
+## [IBM](https://www.ibm.com)
 
-[IBM](http://ibm.biz/OSSupport) provides cross-platform support and consulting for Apache Camel and many other open source packages.
+[IBM](https://www.ibm.com) provides cross-platform support and consulting for Apache Camel and many other open source packages. IBM’s observability platform [Instana](https://www.ibm.com/products/instana/supported-technologies/camel-monitoring) includes dedicated Apache Camel monitoring with automatic discovery, service mapping, and tracing. IBM also maintains [Apache Camel integration examples for IBM i](https://github.com/IBM/ibmi-oss-examples/tree/master/camel) and offers enterprise Camel support through its subsidiary [Red Hat](https://www.redhat.com).
 
 ## [Linux Polska](https://linuxpolska.com/)
 

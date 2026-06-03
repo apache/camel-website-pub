@@ -137,13 +137,14 @@ When using hl7terser with Spring Boot make sure to use the following Maven depen
 </dependency>
 ```
 
-The component supports 6 options, which are listed below.
+The component supports 7 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.dataformat.hl7.enabled** | Whether to enable auto configuration of the hl7 data format. This is enabled by default. |  | Boolean |
 | **camel.dataformat.hl7.parser** | To use a custom HL7 parser. The option is a ca.uhn.hl7v2.parser.Parser type. |  | String |
+| **camel.dataformat.hl7.target-format** | The target format for marshal output and unmarshal result type. By default, marshal encodes to HL7 ER7, and unmarshal returns a HAPI Message object. If this is set to XML, marshal encodes to HL7 XML, and unmarshal returns an XML DOM Document. |  | String |
 | **camel.dataformat.hl7.validate** | Whether to validate the HL7 message Is by default true. | true | Boolean |
 | **camel.language.hl7terser.enabled** | Whether to enable auto configuration of the hl7terser language. This is enabled by default. |  | Boolean |
 | **camel.language.hl7terser.source** | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |  | String |

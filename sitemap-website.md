@@ -1,4 +1,4 @@
-urls[747]{loc,lastmod}:
+urls[748]{loc,lastmod}:
   https://camel.apache.org/categories/AI/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/blog/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/,2026-05-31T00:00:00+00:00
@@ -676,6 +676,7 @@ urls[747]{loc,lastmod}:
   https://camel.apache.org/releases/release-3.0.0-RC2/,2019-10-06T00:00:00+00:00
   https://camel.apache.org/releases/release-2.23.4/,2019-09-22T00:00:00+00:00
   https://camel.apache.org/releases/release-2.24.2/,2019-09-13T00:00:00+00:00
+  https://camel.apache.org/blog/2019/09/ApacheConNA-2019/,2019-09-10T16:45:32+02:00
   https://camel.apache.org/releases/release-3.0.0-RC1/,2019-09-01T00:00:00+00:00
   https://camel.apache.org/releases/release-2.24.1/,2019-06-20T00:00:00+00:00
   https://camel.apache.org/releases/release-2.23.3/,2019-06-09T00:00:00+00:00

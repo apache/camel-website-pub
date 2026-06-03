@@ -4650,6 +4650,13 @@
       <description>This release is a minor update of the 2.24.x branch.</description>
     </item>
     <item>
+      <title>Camel at ApacheCon North America 2019</title>
+      <link>https://camel.apache.org/blog/2019/09/ApacheConNA-2019/</link>
+      <pubDate>Tue, 10 Sep 2019 16:45:32 +0200</pubDate>
+      <guid>https://camel.apache.org/blog/2019/09/ApacheConNA-2019/</guid>
+      <description>Apache Camel is part of ApacheCon 2019 in North America this year celebrating the 20th year anniversary of Apache Software Foundation.&#xA;On the Integration track you will find out all about the state of Apache Camel from Claus Ibsen, Sami Adranly will present Camel based data integration platform at Uber called Medley Nicola Ferraro and Andrea Tarocchi will be talking about Camel K and Camel K with Knative, Bob Paulin will make the cloud integration friendly in Configuring Apache Camel for the Cloud and Michael Costello will talk about serverless integration with Camel.</description>
+    </item>
+    <item>
       <title>Release 3.0.0-RC1</title>
       <link>https://camel.apache.org/releases/release-3.0.0-RC1/</link>
       <pubDate>Sun, 01 Sep 2019 00:00:00 +0000</pubDate>
@@ -5032,7 +5039,7 @@
       <link>https://camel.apache.org/community/articles/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/articles/</guid>
-      <description>Camel Videos Cadec 2026 Large Project Migration from Mule to Apache Camel - Cadec (January 2026) use-case how they migrated 340 integrations from Mule to Camel (Swedish) Enterprise Integration Patterns (EIP) | What is Apache Camel? from January 2026 by Jasvinder Saggu; a great 50-minute video that greatly covers the importance of integration, EIP patterns and what Apache Camel can do. Highly recommended for new users to Camel. Enterprise Integration Is Dead!</description>
+      <description>Camel Videos Cadec 2026 Large Project Migration from Mule to Apache Camel - Cadec (January 2026) use-case how they migrated 340 integrations from Mule to Camel (Swedish) Enterprise Integration Patterns (EIP) | What is Apache Camel? from January 2026 by Jasvinder Saggu; a great 50-minute video that greatly covers the importance of integration, EIP patterns and what Apache Camel can do. Highly recommended for new users to Camel. Large-Scale Messaging with ActiveMQ for Particle Accelerators at CERN CamelOne 2012 keynote by Felix Ehm (CERN) - how the Large Hadron Collider uses ActiveMQ and Camel for 85,000 machines, 2+ million endpoints, and 190 million messages per day.</description>
     </item>
     <item>
       <title>Books</title>
@@ -5095,7 +5102,7 @@
       <link>https://camel.apache.org/community/user-stories/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/user-stories/</guid>
-      <description>This page is intended as a place to collect user stories and feedback on Apache Camel. If you are using or have tried Apache Camel please add an entry or comment; or post to the mailing list.&#xA;Company, Product, or Project Description UPS Processes tens of billions of messages per day on Apache Camel and ActiveMQ on OpenShift. The largest known Apache Camel deployment by message volume. Vocalink, a Mastercard company Camel is the backbone of Vocalink&amp;rsquo;s core real-time payment platform, processing millions of transactions.</description>
+      <description>This page is intended as a place to collect user stories and feedback on Apache Camel. If you are using or have tried Apache Camel please add an entry or comment; or post to the mailing list.&#xA;Company, Product, or Project Description UPS Processes tens of billions of messages per day on Apache Camel and ActiveMQ on OpenShift. The largest known Apache Camel deployment by message volume. Sabre Holdings National US travel gateway processing 32,000 transactions per second (1.</description>
     </item>
   </channel>
 </rss>
