@@ -1,7 +1,11 @@
-urls[748]{loc,lastmod}:
+urls[749]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-06-04T00:00:00+00:00
+  https://camel.apache.org/categories/Camel-K/,2026-06-04T00:00:00+00:00
+  https://camel.apache.org/blog/2026/06/camel-monitor-operator/,2026-06-04T00:00:00+00:00
+  https://camel.apache.org/,2026-06-04T00:00:00+00:00
+  https://camel.apache.org/categories/Howtos/,2026-06-04T00:00:00+00:00
+  https://camel.apache.org/categories/Tooling/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-05-31T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-05-31T00:00:00+00:00
-  https://camel.apache.org/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/blog/2026/05/wanaku-0.1.1/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/,2026-05-28T00:00:00+00:00
@@ -50,7 +54,6 @@ urls[748]{loc,lastmod}:
   https://camel.apache.org/blog/2026/04/email-triage-agent/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/releases/release-4.19.0/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/,2026-04-16T00:00:00+00:00
-  https://camel.apache.org/categories/Tooling/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/categories/Usecases/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-k-2-10/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/releases/k-2.10.0/,2026-04-13T00:00:00+00:00
@@ -69,8 +72,6 @@ urls[748]{loc,lastmod}:
   https://camel.apache.org/releases/q-3.27.3/,2026-03-06T00:00:00+00:00
   https://camel.apache.org/blog/2026/03/CAPIGateway/,2026-03-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/02/camel-k-gitops-apps/,2026-02-24T00:00:00+00:00
-  https://camel.apache.org/categories/Camel-K/,2026-02-24T00:00:00+00:00
-  https://camel.apache.org/categories/Howtos/,2026-02-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/02/camel-quarkus-3.32.0/,2026-02-23T00:00:00+00:00
   https://camel.apache.org/releases/q-3.32.0/,2026-02-23T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.14.5/,2026-02-23T00:00:00+00:00

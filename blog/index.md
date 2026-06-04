@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[200]{title,link,pubDate,description}:
+posts[201]{title,link,pubDate,description}:
+  Camel Monitor Operator|https://camel.apache.org/blog/2026/06/camel-monitor-operator/index.md|Thu, 04 Jun 2026 00:00:00 +0000|During the last years we&rsquo;ve worked hard to bring cloud native operations capabilities for your Camel workloads on Kubernetes. Camel K was the first historic initiative and it gave us the possibi
   Wanaku 0.1.1: Bringing Apache Camel Integration Capabilities to AI Agents via MCP|https://camel.apache.org/blog/2026/05/wanaku-0.1.1/index.md|Sun, 31 May 2026 00:00:00 +0000|We&rsquo;re excited to announce Wanaku 0.1.1, a significant milestone that showcases how Apache Camel&rsquo;s powerful integration capabilities can be seamlessly exposed to AI agents through the Model
   Camel Quarkus 3.36.0 Released|https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/index.md|Thu, 28 May 2026 00:00:00 +0000|Camel Quarkus 3.36.0 release
   Camel Karaf 4.14.7 Released|https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/index.md|Sun, 24 May 2026 00:00:00 +0000|Camel Karaf 4.14.7 release
