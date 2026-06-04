@@ -61,7 +61,7 @@
       <link>https://camel.apache.org/community/user-stories/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/user-stories/</guid>
-      <description>This page is intended as a place to collect user stories and feedback on Apache Camel. If you are using or have tried Apache Camel please add an entry or comment; or post to the mailing list.&#xA;Company, Product, or Project Description UPS Processes tens of billions of messages per day on Apache Camel and ActiveMQ on OpenShift. The largest known Apache Camel deployment by message volume. Sabre Holdings National US travel gateway processing 32,000 transactions per second (1.</description>
+      <description>This page is intended as a place to collect user stories and feedback on Apache Camel. If you are using or have tried Apache Camel please add an entry or comment; or post to the mailing list.&#xA;Company, Product, or Project Description UPS Processes tens of billions of messages per day on Apache Camel and ActiveMQ on OpenShift. The largest known Apache Camel deployment by message volume. Sabre Holdings National US travel gateway — migrated from proprietary TPF mainframe to Apache Camel with significant cost savings and zero system failures.</description>
     </item>
   </channel>
 </rss>
