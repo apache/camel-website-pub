@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1780636865428,
+  "generated": 1780675602833,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -12914,6 +12914,12 @@
               "path": "reference/extensions/observability-services.adoc",
               "url": "/camel-quarkus/next/reference/extensions/observability-services.html",
               "title": "Observability Services"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ocsf.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/ocsf.html",
+              "title": "OCSF"
             },
             {
               "module": "ROOT",

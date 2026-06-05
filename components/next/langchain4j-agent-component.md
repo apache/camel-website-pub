@@ -93,12 +93,13 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The LangChain4j Agent component supports 8 options, which are listed below.
+The LangChain4j Agent component supports 9 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **agent** (producer) | **Autowired** The agent to use for the component. |  | Agent |
+| **agentConfiguration** (producer) | **Autowired** AgentConfiguration used by Camel to create the agent internally. When set, Camel creates an AgentWithMemory if a ChatMemoryProvider is configured, otherwise an AgentWithoutMemory. If an agentFactory is also configured, the factory takes precedence. |  | AgentConfiguration |
 | **agentFactory** (producer) | **Autowired** The agent factory to use for creating agents if no Agent is provided. |  | AgentFactory |
 | **configuration** (producer) | The configuration. |  | LangChain4jAgentConfiguration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -122,12 +123,13 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **agentId** (producer) | **Required** The Agent id. |  | String |
 
-### Query Parameters (6 parameters)
+### Query Parameters (7 parameters)
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **agent** (producer) | **Autowired** The agent to use for the component. |  | Agent |
+| **agentConfiguration** (producer) | **Autowired** AgentConfiguration used by Camel to create the agent internally. When set, Camel creates an AgentWithMemory if a ChatMemoryProvider is configured, otherwise an AgentWithoutMemory. If an agentFactory is also configured, the factory takes precedence. |  | AgentConfiguration |
 | **agentFactory** (producer) | **Autowired** The agent factory to use for creating agents if no Agent is provided. |  | AgentFactory |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -329,6 +331,43 @@ context.getRegistry().bind("memoryAgent", memoryAgent);
 >     <version>x.x.x</version>
 > </dependency>
 > ```
+
+### Using AgentConfiguration Directly
+
+Instead of manually instantiating `AgentWithoutMemory` or `AgentWithMemory`, you can register an `AgentConfiguration` bean and let Camel create the right agent implementation automatically. Camel creates an `AgentWithMemory` when a `ChatMemoryProvider` is present, or an `AgentWithoutMemory` otherwise.
+
+#### Stateless agent
+
+```java
+AgentConfiguration config = new AgentConfiguration()
+    .withChatModel(chatModel);
+
+context.getRegistry().bind("myConfig", config);
+
+from("direct:chat")
+    .to("langchain4j-agent:assistant?agentConfiguration=#myConfig");
+```
+
+#### Stateful agent (with memory)
+
+```java
+ChatMemoryProvider memoryProvider = memoryId -> MessageWindowChatMemory.builder()
+    .id(memoryId)
+    .maxMessages(10)
+    .chatMemoryStore(persistentStore)
+    .build();
+
+AgentConfiguration config = new AgentConfiguration()
+    .withChatModel(chatModel)
+    .withChatMemoryProvider(memoryProvider);
+
+context.getRegistry().bind("myConfig", config);
+
+from("direct:chat")
+    .to("langchain4j-agent:assistant?agentConfiguration=#myConfig");
+```
+
+If an `agentFactory` is also configured on the endpoint, the factory takes precedence over `agentConfiguration`.
 
 ### Basic Chat with only a userMessage
 

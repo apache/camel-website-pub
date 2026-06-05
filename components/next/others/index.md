@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 71 in 70 JAR artifacts (5 deprecated)
+Number of Miscellaneous Components: 71 in 70 JAR artifacts (6 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -21,7 +21,7 @@ Number of Miscellaneous Components: 71 in 70 JAR artifacts (5 deprecated)
 | [Diagram](diagram.md) | camel-diagram | Preview | 4.21 | Camel Route Diagram rendering |
 | [DSL](dsl.md) |  |  |  |  |
 | [DSL Modeline](dsl-modeline.md) | camel-dsl-modeline | Stable | 3.16 | Camel DSL modeline |
-| [Headersmap](headersmap.md) | camel-headersmap | Stable | 2.20 | Fast case-insensitive headers map implementation |
+| [Headersmap](headersmap.md) | camel-headersmap | Stable-deprecated | 2.20 | Fast case-insensitive headers map implementation |
 | [Jandex](jandex.md) | camel-jandex | Stable | 4.12 | Custom class and resource loader using jandex.idx |
 | [Jasypt](jasypt.md) | camel-jasypt | Stable | 2.5 | Security using Jasypt |
 | [Java DSL (runtime compiled)](java-joor-dsl.md) | camel-java-joor-dsl | Stable | 3.9 | Camel Java DSL with jOOR |

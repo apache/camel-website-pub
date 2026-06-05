@@ -603,7 +603,7 @@ Number of miscellaneous extensions: 25 in 25 JAR artifacts (4 deprecated)
 | [Diagram](../../components/next/others/diagram.md) | camel-diagram-starter | Preview | 4.21 | Camel Route Diagram rendering |
 | [DSL](../../components/next/others/dsl.md) | undefined-starter |  |  |  |
 | [DSL Modeline](../../components/next/others/dsl-modeline.md) | camel-dsl-modeline-starter | Stable | 3.16 | Camel DSL modeline |
-| [Headersmap](../../components/next/others/headersmap.md) | camel-headersmap-starter | Stable | 2.20 | Fast case-insensitive headers map implementation |
+| [Headersmap](../../components/next/others/headersmap.md) | camel-headersmap-starter | Stable-deprecated | 2.20 | Fast case-insensitive headers map implementation |
 | [Jandex](../../components/next/others/jandex.md) | camel-jandex-starter | Stable | 4.12 | Custom class and resource loader using jandex.idx |
 | [Java DSL (runtime compiled)](../../components/next/others/java-joor-dsl.md) | camel-java-joor-dsl-starter | Stable | 3.9 | Camel Java DSL with jOOR |
 | [Jaxb XML Dsl](../../components/next/others/java-xml-jaxb-dsl.md) | camel-xml-jaxb-dsl-starter | Stable | 3.9 | Camel DSL with XML using camel-jaxb |
