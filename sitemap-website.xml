@@ -2229,6 +2229,8 @@
   </url><url>
     <loc>https://camel.apache.org/community/team/</loc>
   </url><url>
+    <loc>https://camel.apache.org/tooling/</loc>
+  </url><url>
     <loc>https://camel.apache.org/community/user-stories/</loc>
   </url>
 </urlset>

@@ -1,4 +1,4 @@
-urls[749]{loc,lastmod}:
+urls[750]{loc,lastmod}:
   https://camel.apache.org/blog/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-monitor-operator/,2026-06-04T00:00:00+00:00
@@ -747,4 +747,5 @@ urls[749]{loc,lastmod}:
   https://camel.apache.org/docs/sources/,
   https://camel.apache.org/community/support/,
   https://camel.apache.org/community/team/,
+  https://camel.apache.org/tooling/,
   https://camel.apache.org/community/user-stories/,

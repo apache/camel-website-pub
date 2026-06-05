@@ -224,12 +224,13 @@ When using langchain4j-agent with Spring Boot make sure to use the following Mav
 </dependency>
 ```
 
-The component supports 9 options, which are listed below.
+The component supports 10 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.component.langchain4j-agent.agent** | The agent to use for the component. The option is a org.apache.camel.component.langchain4j.agent.api.Agent type. |  | Agent |
+| **camel.component.langchain4j-agent.agent-configuration** | AgentConfiguration used by Camel to create the agent internally. When set, Camel creates an AgentWithMemory if a ChatMemoryProvider is configured, otherwise an AgentWithoutMemory. If an agentFactory is also configured, the factory takes precedence. The option is a org.apache.camel.component.langchain4j.agent.api.AgentConfiguration type. |  | AgentConfiguration |
 | **camel.component.langchain4j-agent.agent-factory** | The agent factory to use for creating agents if no Agent is provided. The option is a org.apache.camel.component.langchain4j.agent.api.AgentFactory type. |  | AgentFactory |
 | **camel.component.langchain4j-agent.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
 | **camel.component.langchain4j-agent.configuration** | The configuration. The option is a org.apache.camel.component.langchain4j.agent.LangChain4jAgentConfiguration type. |  | LangChain4jAgentConfiguration |
