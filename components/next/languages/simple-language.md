@@ -67,11 +67,15 @@ from("direct:a")
     steps:
       - choice:
           when:
-            - simple: "${header.foo} == 'bar'"
+            - expression:
+                simple:
+                  expression: "${header.foo} == 'bar'"
               steps:
                 - to:
                     uri: direct:b
-            - simple: "${header.foo} == 'cheese'"
+            - expression:
+                simple:
+                  expression: "${header.foo} == 'cheese'"
               steps:
                 - to:
                     uri: direct:c

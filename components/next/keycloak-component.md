@@ -181,6 +181,16 @@ Enum values:
     
 -   logoutUser
     
+-   logoutAllUsers
+    
+-   revokeAccessToken
+    
+-   revokeRefreshToken
+    
+-   introspectToken
+    
+-   pushNotBefore
+    
 -   createClientScope
     
 -   deleteClientScope
@@ -436,6 +446,16 @@ Enum values:
     
 -   logoutUser
     
+-   logoutAllUsers
+    
+-   revokeAccessToken
+    
+-   revokeRefreshToken
+    
+-   introspectToken
+    
+-   pushNotBefore
+    
 -   createClientScope
     
 -   deleteClientScope
@@ -648,7 +668,7 @@ Enum values:
 
 ## Message Headers
 
-The Keycloak component supports 62 message header(s), which is/are listed below:
+The Keycloak component supports 64 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -739,6 +759,16 @@ Enum values:
 -   listUserSessions
     
 -   logoutUser
+    
+-   logoutAllUsers
+    
+-   revokeAccessToken
+    
+-   revokeRefreshToken
+    
+-   introspectToken
+    
+-   pushNotBefore
     
 -   createClientScope
     
@@ -905,6 +935,8 @@ Enum values:
 | **CamelKeycloakContinueOnError** (common) Constant: [`CONTINUE_ON_ERROR`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#CONTINUE_ON_ERROR) | Continue on error during bulk operations. |  | Boolean |
 | **CamelKeycloakBatchSize** (common) Constant: [`BATCH_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#BATCH_SIZE) | Batch size for bulk operations. |  | Integer |
 | **CamelKeycloakAccessToken** (common) Constant: [`ACCESS_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ACCESS_TOKEN) | The access token for permission evaluation. |  | String |
+| **CamelKeycloakToken** (common) Constant: [`TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#TOKEN) | The token for revocation or introspection. |  | String |
+| **CamelKeycloakTokenTypeHint** (common) Constant: [`TOKEN_TYPE_HINT`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#TOKEN_TYPE_HINT) | The token type hint for revocation. |  | String |
 | **CamelKeycloakPermissionResourceNames** (common) Constant: [`PERMISSION_RESOURCE_NAMES`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#PERMISSION_RESOURCE_NAMES) | Comma-separated list of resource names or IDs to evaluate permissions for. |  | String |
 | **CamelKeycloakPermissionScopes** (common) Constant: [`PERMISSION_SCOPES`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#PERMISSION_SCOPES) | Comma-separated list of scopes to evaluate permissions for. |  | String |
 | **CamelKeycloakSubjectToken** (common) Constant: [`SUBJECT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#SUBJECT_TOKEN) | Subject token for permission evaluation on behalf of a user. |  | String |
@@ -1037,7 +1069,9 @@ The component supports the following operations:
     
 -   **Password Management**: `resetUserPassword`
     
--   **Session Management**: `listUserSessions`, `logoutUser`
+-   **Session Management**: `listUserSessions`, `logoutUser`, `logoutAllUsers`
+    
+-   **Token Management**: `revokeAccessToken`, `revokeRefreshToken`, `introspectToken`, `pushNotBefore`
     
 -   **Client Scope Management**: `createClientScope`, `getClientScope`, `updateClientScope`, `listClientScopes`, `deleteClientScope`
     
@@ -1826,6 +1860,10 @@ logoutHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
 logoutHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=logoutUser", null, logoutHeaders);
+
+// Logout all users in realm
+template.sendBodyAndHeader("keycloak:admin?operation=logoutAllUsers", null,
+    KeycloakConstants.REALM_NAME, "my-realm");
 ```
 
 ```yaml
@@ -1868,6 +1906,98 @@ template.sendBodyAndHeaders("keycloak:admin?operation=logoutUser", null, logoutH
               operation: logoutUser
         - log:
             message: "User logged out: ${header.CamelKeycloakUserId}"
+
+# Logout all users route
+- route:
+    from:
+      uri: direct:logout-all
+      steps:
+        - setHeader:
+            name: CamelKeycloakRealmName
+            constant: "my-realm"
+        - to:
+            uri: keycloak:admin
+            parameters:
+              operation: logoutAllUsers
+```
+
+### Token Management Operations
+
+Token management operations allow you to revoke specific tokens or introspect them for real-time validation.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+// Revoke an access token
+Map<String, Object> revokeHeaders = new HashMap<>();
+revokeHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+revokeHeaders.put(KeycloakConstants.TOKEN, accessToken);
+
+template.sendBodyAndHeaders("keycloak:admin?operation=revokeAccessToken", null, revokeHeaders);
+
+// Introspect a token
+Map<String, Object> introspectHeaders = new HashMap<>();
+introspectHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+introspectHeaders.put(KeycloakConstants.TOKEN, tokenToVerify);
+
+Map<String, Object> claims = template.requestBodyAndHeaders("keycloak:admin?operation=introspectToken",
+    null, introspectHeaders, Map.class);
+
+// Push not-before policy (invalidates all tokens issued before now)
+template.sendBodyAndHeader("keycloak:admin?operation=pushNotBefore", null,
+    KeycloakConstants.REALM_NAME, "my-realm");
+```
+
+```yaml
+# Revoke token route
+- route:
+    from:
+      uri: direct:revoke-token
+      steps:
+        - setHeader:
+            name: CamelKeycloakRealmName
+            constant: "my-realm"
+        - setHeader:
+            name: CamelKeycloakToken
+            simple: "${body}"
+        - to:
+            uri: keycloak:admin
+            parameters:
+              operation: revokeAccessToken
+
+# Introspect token route
+- route:
+    from:
+      uri: direct:introspect
+      steps:
+        - setHeader:
+            name: CamelKeycloakRealmName
+            constant: "my-realm"
+        - setHeader:
+            name: CamelKeycloakToken
+            simple: "${body}"
+        - to:
+            uri: keycloak:admin
+            parameters:
+              operation: introspectToken
+        - log:
+            message: "Token claims: ${body}"
+
+# Push not-before route
+- route:
+    from:
+      uri: direct:push-not-before
+      steps:
+        - setHeader:
+            name: CamelKeycloakRealmName
+            constant: "my-realm"
+        - to:
+            uri: keycloak:admin
+            parameters:
+              operation: pushNotBefore
 ```
 
 ### Client Scope Operations

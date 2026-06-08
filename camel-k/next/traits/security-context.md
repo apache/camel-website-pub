@@ -21,8 +21,8 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `security-context.enabled` | `bool` | Deprecated: no longer in use. |
-| `security-context.runAsUser` | `int64` | Security Context RunAsUser configuration (default none): this value is automatically retrieved in Openshift clusters when not explicitly set. |
-| `security-context.runAsNonRoot` | `bool` | Security Context RunAsNonRoot configuration (default false). |
+| `security-context.runAsUser` | `int64` | Security Context RunAsUser configuration (default user 1000): this value is automatically retrieved in Openshift clusters when not explicitly set. |
+| `security-context.runAsNonRoot` | `bool` | Security Context RunAsNonRoot configuration (default true). |
 | `security-context.seccompProfileType` | `SeccompProfileType` | Security Context SeccompProfileType configuration (default RuntimeDefault). |
 > **Note**
 > the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

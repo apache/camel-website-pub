@@ -93,7 +93,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The LangChain4j Agent component supports 9 options, which are listed below.
+The LangChain4j Agent component supports 10 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -102,6 +102,7 @@ The LangChain4j Agent component supports 9 options, which are listed below.
 | **agentConfiguration** (producer) | **Autowired** AgentConfiguration used by Camel to create the agent internally. When set, Camel creates an AgentWithMemory if a ChatMemoryProvider is configured, otherwise an AgentWithoutMemory. If an agentFactory is also configured, the factory takes precedence. |  | AgentConfiguration |
 | **agentFactory** (producer) | **Autowired** The agent factory to use for creating agents if no Agent is provided. |  | AgentFactory |
 | **configuration** (producer) | The configuration. |  | LangChain4jAgentConfiguration |
+| **jsonSchema** (producer) | JSON schema for structured output validation. This option works only when using agentConfiguration (inline agent creation mode). |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
@@ -123,7 +124,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **agentId** (producer) | **Required** The Agent id. |  | String |
 
-### Query Parameters (7 parameters)
+### Query Parameters (8 parameters)
 
    
 | Name | Description | Default | Type |
@@ -131,6 +132,7 @@ With the following _path_ and _query_ parameters:
 | **agent** (producer) | **Autowired** The agent to use for the component. |  | Agent |
 | **agentConfiguration** (producer) | **Autowired** AgentConfiguration used by Camel to create the agent internally. When set, Camel creates an AgentWithMemory if a ChatMemoryProvider is configured, otherwise an AgentWithoutMemory. If an agentFactory is also configured, the factory takes precedence. |  | AgentConfiguration |
 | **agentFactory** (producer) | **Autowired** The agent factory to use for creating agents if no Agent is provided. |  | AgentFactory |
+| **jsonSchema** (producer) | JSON schema for structured output validation. This option works only when using agentConfiguration (inline agent creation mode). |  | String |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **mcpClients** (advanced) | Pre-built MCP (Model Context Protocol) client instances for external tool integration. Reference beans from the registry, e.g., #myMcpClient1,#myMcpClient2. |  | List |
@@ -1342,79 +1344,59 @@ public class AgentConfig {
 
 ### Structured Outputs with JSON Schema
 
-The LangChain4j Agent component supports structured outputs by configuring the `ChatModel` with a `ResponseFormat` that enforces a JSON schema. This feature is available for providers that support structured outputs including Amazon Bedrock, Azure OpenAI, Google AI Gemini, Mistral, Ollama, and OpenAI.
+The LangChain4j Agent component supports structured outputs by enforcing a JSON schema on LLM responses. This feature is available for providers that support structured outputs including Amazon Bedrock, Azure OpenAI, Google AI Gemini, Mistral, Ollama, and OpenAI.
 
-> **Important**
-> The `ResponseFormat` must be configured on the `ChatModel` itself before passing it to the `AgentConfiguration`. The LangChain4j `AiServices` builder does not support setting response format directly.
+#### Using the jsonSchema endpoint option
 
-#### Configuring Structured Outputs
+The simplest way to enable structured output is to use the `jsonSchema` endpoint option. This works when using `agentConfiguration` (inline agent creation mode). The option supports classpath references, file paths, and inline JSON, the same way as the `camel-openai` component.
 
-To use structured outputs with the agent component:
+##### Example with classpath resource
 
-1.  Define your JSON schema
-    
-2.  Create a `ResponseFormat` with the schema
-    
-3.  Configure your `ChatModel` with the `ResponseFormat`
-    
-4.  Pass the configured model to `AgentConfiguration`
-    
+Create a JSON schema file, for example `src/main/resources/person-schema.json`:
 
-##### Complete Example with OpenAI
+```json
+{
+    "type": "object",
+    "properties": {
+        "name": {"type": "string", "description": "The person's full name"},
+        "age": {"type": "integer", "description": "The person's age in years"},
+        "occupation": {"type": "string", "description": "The person's job"}
+    },
+    "required": ["name", "age", "occupation"],
+    "additionalProperties": false
+}
+```
+
+Then use it in a route:
 
 ```java
-import dev.langchain4j.model.chat.ChatModel;
-import dev.langchain4j.model.chat.request.ResponseFormat;
-import dev.langchain4j.model.chat.request.json.JsonRawSchema;
-import dev.langchain4j.model.chat.request.json.JsonSchema;
-import dev.langchain4j.model.openai.OpenAiChatModel;
-import static dev.langchain4j.model.chat.request.ResponseFormatType.JSON;
-
-// Define JSON schema
-String personSchema = """
-    {
-        "type": "object",
-        "properties": {
-            "name": {"type": "string", "description": "The person's full name"},
-            "age": {"type": "integer", "description": "The person's age in years"},
-            "occupation": {"type": "string", "description": "The person's job"}
-        },
-        "required": ["name", "age", "occupation"],
-        "additionalProperties": false
-    }
-    """;
-
-// Create ResponseFormat with JSON Schema
-JsonRawSchema jsonRawSchema = JsonRawSchema.from(personSchema);
-ResponseFormat responseFormat = ResponseFormat.builder()
-        .type(JSON)
-        .jsonSchema(JsonSchema.builder()
-                .name("person_schema")
-                .rootElement(jsonRawSchema)
-                .build())
-        .build();
-
-// Configure ChatModel with ResponseFormat
-ChatModel chatModel = OpenAiChatModel.builder()
-        .apiKey(openAiApiKey)
-        .modelName("gpt-4o-mini")
-        .responseFormat(responseFormat)  // Apply structured output here
-        .build();
-
-// Create agent with the configured model
-AgentConfiguration configuration = new AgentConfiguration()
+AgentConfiguration agentConfiguration = new AgentConfiguration()
         .withChatModel(chatModel);
 
-Agent agent = new AgentWithoutMemory(configuration);
-context.getRegistry().bind("structuredAgent", agent);
+context.getRegistry().bind("myAgentConfig", agentConfiguration);
 
-// Use in route
 from("direct:extract-person-info")
     .setBody(constant("Extract information about John Smith, a 35-year-old software engineer"))
-    .to("langchain4j-agent:structured?agent=#structuredAgent")
-    .unmarshal().json()  // Parse the JSON response
+    .to("langchain4j-agent:structured?agentConfiguration=#myAgentConfig"
+            + "&jsonSchema=classpath:person-schema.json")
+    .unmarshal().json()
     .log("Extracted person: ${body}");
 ```
+
+The `jsonSchema` option accepts:
+
+-   Classpath resources: `jsonSchema=classpath:schemas/person.json`
+    
+-   File paths: `jsonSchema=file:///path/to/schema.json`
+    
+-   Inline JSON: `jsonSchema={"type":"object","properties":{"name":{"type":"string"}}}`
+    
+-   Property placeholders: `jsonSchema=resource:classpath:${schema.location}`
+    
+
+#### Alternative: configuring ResponseFormat on the ChatModel
+
+You can also define the `ResponseFormat` at the `ChatModel` level. See the [LangChain4j Structured Outputs documentation](https://docs.langchain4j.dev/tutorials/structured-outputs#using-json-schema-with-chatmodel) for details.
 
 > **Note**
 > -   The LLM response will be guaranteed to conform to the provided schema

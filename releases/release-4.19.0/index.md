@@ -91,7 +91,7 @@ git checkout camel-4.19.0
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (66)
+### Bug (67)
 
 [CAMEL-23310](https://issues.apache.org/jira/browse/CAMEL-23310)
 
@@ -340,6 +340,10 @@ camel-mcp - camel\_catalog\_components returns Internal Server Error
 [CAMEL-23002](https://issues.apache.org/jira/browse/CAMEL-23002)
 
 camel plugin add xyz - should ignore the gav in the camel-jbang-user.properties
+
+[CAMEL-22992](https://issues.apache.org/jira/browse/CAMEL-22992)
+
+camel-jbang - Unable to use camel test plugin on a Windows
 
 [CAMEL-22941](https://issues.apache.org/jira/browse/CAMEL-22941)
 

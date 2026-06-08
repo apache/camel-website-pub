@@ -157,6 +157,58 @@ Notice how we use `?` in the replyTo option below:
 > **Important**
 > In case no replyToQueue property is provided when creating the template the option replyTo is just ignored.
 
+#### Optional endpoint URIs
+
+The `{{?}}` syntax can also be used for the entire endpoint URI. When the template parameter is not provided, the step is silently skipped (removed from the route).
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+routeTemplate("myTemplate")
+    .templateParameter("name")
+    .templateOptionalParameter("optionalUri")
+    .from("direct:{{name}}")
+    .to("{{?optionalUri}}")
+    .to("mock:end");
+```
+
+```xml
+<routeTemplate id="myTemplate">
+    <templateParameter name="name"/>
+    <templateParameter name="optionalUri" required="false"/>
+    <route>
+        <from uri="direct:{{name}}"/>
+        <to uri="{{?optionalUri}}"/>
+        <to uri="mock:end"/>
+    </route>
+</routeTemplate>
+```
+
+```yaml
+- routeTemplate:
+    id: "myTemplate"
+    parameters:
+      - name: "name"
+      - name: "optionalUri"
+        required: false
+    from:
+      uri: "direct:{{name}}"
+      steps:
+        - to:
+            uri: "{{?optionalUri}}"
+        - to:
+            uri: "mock:end"
+```
+
+When creating a route from this template without providing the `optionalUri` parameter, the `to("{\{?optionalUri}}")` step is omitted and messages flow directly to `mock:end`. When the parameter is provided, the step is included as usual.
+
+This works with `to`, `toD`, `wireTap`, `enrich`, `pollEnrich`, and `poll` EIPs.
+
 A property can also have a logical negation using the exclamation mark (`!`):
 
 ```text

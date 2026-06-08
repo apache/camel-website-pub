@@ -27,6 +27,7 @@ camel cmd [options]
 | [route-structure](camel-jbang-cmd-route-structure.md) | Dump Camel route structure |
 | [route-topology](camel-jbang-cmd-route-topology.md) | Display inter-route topology connections |
 | [send](camel-jbang-cmd-send.md) | Send messages to endpoints |
+| [span](camel-jbang-cmd-span.md) | Display OpenTelemetry spans from running Camel integrations |
 | [start-group](camel-jbang-cmd-start-group.md) | Start Camel route groups |
 | [start-route](camel-jbang-cmd-start-route.md) | Start Camel routes |
 | [stop-group](camel-jbang-cmd-stop-group.md) | Stop Camel route groups |

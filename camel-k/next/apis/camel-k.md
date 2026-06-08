@@ -4778,9 +4778,9 @@ The Security Context trait can be used to configure the security setting of the 
 | `PlatformBaseTrait`  
 **[PlatformBaseTrait](#_camel_apache_org_v1_trait_PlatformBaseTrait)** | (Members of `PlatformBaseTrait` are embedded into this type.) |
 | `runAsUser`  
-int64 | Security Context RunAsUser configuration (default none): this value is automatically retrieved in Openshift clusters when not explicitly set. |
+int64 | Security Context RunAsUser configuration (default user 1000): this value is automatically retrieved in Openshift clusters when not explicitly set. |
 | `runAsNonRoot`  
-bool | Security Context RunAsNonRoot configuration (default false). |
+bool | Security Context RunAsNonRoot configuration (default true). |
 | `seccompProfileType`  
 **[Kubernetes core/v1.SeccompProfileType](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#seccompprofiletype-v1-core)** | Security Context SeccompProfileType configuration (default RuntimeDefault). |
 

@@ -4,7 +4,7 @@
 
 In Camel 4.4, we have introduced the concept of _variables_.
 
-A variable is a key/value that can hold a value that can either be private per `Exchange`, or shared per route, or per `CamelContext`.
+A variable is a key/value that can hold a value that can either be private per `Exchange`, or shared per route, per named group, or per `CamelContext`.
 
 > **Important**
 > You can also use _exchange properties_ as variables, but the exchange properties are also used internally by Camel, and some EIPs and components. With the newly introduced _variables_ then these are exclusively for end users.
@@ -16,6 +16,8 @@ The variables are stored in one or more `org.apache.camel.spi.VariableRepository
 -   `ExchangeVariableRepository` - A private repository per `Exchange` that holds variables that are private for the lifecycle of each `Exchange`.
     
 -   `RouteVariableRepository` - Uses `route` as id. A single repository, that holds variables per `Route`.
+    
+-   `GroupVariableRepository` - Uses `group` as id. A single repository, that holds variables per named group. This allows sharing variables across a subset of routes — wider than per-route but narrower than global scope.
     
 -   `GlobalVariableRepository` - Uses `global` as id. A single global repository for the entire `CamelContext`.
     
@@ -29,10 +31,10 @@ The `ExchangeVariableRepository` is special as its private per exchange and is t
 
 You can implement custom `org.apache.camel.spi.VariableRepository` and plugin to be used out of the box with Apache Camel. For example, you can build a custom repository that stores the variables in a database, so they are persisted.
 
-Each repository must have its own unique id. However, it’s also possible to replace the default `global`, or `route` repositories with another.
+Each repository must have its own unique id. However, it’s also possible to replace the default `global`, `route`, or `group` repositories with another.
 
 > **Important**
-> The id `exchange` and `header` is reserved by Camel internally and should not be used as id for custom repositories.
+> The id `exchange`, `header`, `global`, `route`, and `group` are reserved by Camel internally and should not be used as id for custom repositories.
 
 ## Getting and setting variables from Java API
 
@@ -84,6 +86,23 @@ Object val = context.getVariable("route:myRouteId:myRouteKey");
 // you can get the value as a specific type
 String str = context.getVariable("route:myRouteId:myRouteKey", String.class);
 ```
+
+You can assign a variable to a named group with `group:` as follows:
+
+```java
+exchange.setVariable("group:teamA:myKey", someObjectHere);
+```
+
+And you can get group variables as well:
+
+```java
+Object val = exchange.getVariable("group:teamA:myKey");
+
+// you can get the value as a specific type
+String str = exchange.getVariable("group:teamA:myKey", String.class);
+```
+
+Group variables are shared across all routes that use the same group name, which makes them useful for sharing state between a subset of related routes.
 
 ## Setting and getting variables from DSL
 
@@ -214,7 +233,7 @@ from("direct:second").routeId("second")
 
 ## Configuring initial variables on startup
 
-When Camel is starting then it’s possible to configure initial variables for `global` and `route` repositories only.
+When Camel is starting then it’s possible to configure initial variables for `global`, `route`, and `group` repositories only.
 
 This can be done in `application.properties` as shown below:
 
@@ -232,6 +251,13 @@ camel.variable.random = 999
 ```
 
 Here the gold variable is set on the `route` repository, and the other variables are set on the `global` repository.
+
+You can also set group scoped variables, using `group.` as prefix. The dot is used to separate the group id from the variable name, eg `teamA.threshold`.
+
+```properties
+camel.variable.group.teamA.threshold = 100
+camel.variable.group.teamB.region = EU
+```
 
 The value of a variable can also be loaded from the file system, such as a JSon file. To do this, you should prefix the value with `resource:file:` or `resource:classpath:` to load from the file system or classpath, as shown below:
 
