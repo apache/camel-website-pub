@@ -25,7 +25,7 @@ The variables are stored in one or more `org.apache.camel.spi.VariableRepository
 The `ExchangeVariableRepository` is special as its private per exchange and is the default repository when used during routing. The `RouteVariableRepository` is a single repository that holds variables that are route scoped.
 
 > **Tip**
-> There is also `org.apache.camel.spi.BrowsableVariableRepository` which is an extension to `VariableRepository` that has APIs to browse the current variables. Camel uses this with Camel JBang, and JMX to be able to see the current variables from management tooling, CLI, and the developer console.
+> There is also `org.apache.camel.spi.BrowsableVariableRepository` which is an extension to `VariableRepository` that has APIs to browse the current variables. Camel uses this with Camel CLI, and JMX to be able to see the current variables from management tooling, CLI, and the developer console.
 
 ### Custom variable repositories
 

@@ -1,6 +1,6 @@
 # camel shell
 
-Interactive Camel JBang shell.
+Interactive Camel CLI shell.
 
 ## Usage
 

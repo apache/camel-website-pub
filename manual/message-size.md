@@ -48,7 +48,7 @@ context.getManagementStrategy().getManagementAgent()
 > Message size tracking is automatically enabled when running with the `dev` profile.
 
 > **Tip**
-> You can run Camel JBang: `camel doc main --filter=messageSize` from CLI to see message size options.
+> You can run Camel CLI: `camel doc main --filter=messageSize` from CLI to see message size options.
 
 ## Default size computation
 

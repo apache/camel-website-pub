@@ -149,7 +149,7 @@ camel.main.streamCachingBufferSize = 16384;
 ```
 
 > **Tip**
-> You can run Camel JBang: `camel doc main --filter=stream` from CLI to see all the options.
+> You can run Camel CLI: `camel doc main --filter=stream` from CLI to see all the options.
 
 ## Configuring StreamCachingStrategy in Spring XML
 

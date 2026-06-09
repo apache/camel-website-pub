@@ -1,8 +1,10 @@
-urls[750]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-06-04T00:00:00+00:00
+urls[752]{loc,lastmod}:
+  https://camel.apache.org/blog/2026/06/camel-by-the-numbers/,2026-06-09T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-06-09T00:00:00+00:00
+  https://camel.apache.org/categories/Community/,2026-06-09T00:00:00+00:00
+  https://camel.apache.org/,2026-06-09T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-monitor-operator/,2026-06-04T00:00:00+00:00
-  https://camel.apache.org/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-05-31T00:00:00+00:00

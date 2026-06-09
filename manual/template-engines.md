@@ -18,7 +18,7 @@ Below is a list of some of the template engines that are provided by Camel:
 | [XSLT](../components/4.18.x/xslt-component.md) | camel-xslt | Transforms XML payload using an XSLT template. |
 | [XSLT Saxon](../components/4.18.x/xslt-saxon-component.md) | camel-xslt-saxon | Transform XML payloads using an XSLT template using Saxon. |
 > **Tip**
-> To see a wider list try Camel JBang to execute: `camel catalog component --filter=transform` from the CLI.
+> To see a wider list try Camel CLI to execute: `camel catalog component --filter=transform` from the CLI.
 
 ## Which template engine to choose
 

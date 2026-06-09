@@ -132,7 +132,7 @@ src.setInitialDelay(1000);
 src.setThreadPoolSize(2);
 ```
 
-When using Spring Boot, Quarkus or Camel JBang
+When using Spring Boot, Quarkus or Camel CLI
 
 ```properties
 camel.routecontroller.enabled = true
@@ -264,7 +264,7 @@ src.setBackOffDelay(5000);
 src.setExcludeRoutes("aws*");
 ```
 
-When using Spring Boot, Quarkus or Camel JBang
+When using Spring Boot, Quarkus or Camel CLI
 
 ```properties
 camel.routecontroller.excludeRoutes = aws*

@@ -231,9 +231,9 @@ When using _mock_, then Camel will (for missing operations) simulate a successfu
 
 This allows you to have a set of files that you can use for development and testing purposes.
 
-The files should be stored in `camel-mock` when using Camel JBang, and `src/main/resources/camel-mock` for Maven/Gradle based projects.
+The files should be stored in `camel-mock` when using Camel CLI, and `src/main/resources/camel-mock` for Maven/Gradle based projects.
 
-For example, the following [Camel JBang example](https://github.com/apache/camel-kamelets-examples/tree/main/jbang/open-api-contract-first) is structured as:
+For example, the following [Camel CLI example](https://github.com/apache/camel-kamelets-examples/tree/main/jbang/open-api-contract-first) is structured as:
 
 ```text
 README.md

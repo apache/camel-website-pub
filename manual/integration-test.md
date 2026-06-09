@@ -23,9 +23,9 @@ Please refer to the [Citrus documentation](https://citrusframework.org/citrus/re
 | [Citrus & Camel routes](https://citrusframework.org/citrus/reference/html/#apache-camel) | Start and stop Camel routes as part of the test. |
 | [Citrus & Camel test infra](https://citrusframework.org/citrus/reference/html/#camel-infra) | Start and stop Camel test infrastructure services as part of the Citrus test. |
 | [Citrus & Camel processors](https://citrusframework.org/citrus/reference/html/#camel-processor-support) | Use Camel processor, transformer and data format EIPs in Citrus tests. |
-| [Citrus & Camel JBang](https://citrusframework.org/citrus/reference/html/#apache-camel) | Run Camel integrations with JBang as part of a test. |
+| [Citrus & Camel CLI](https://citrusframework.org/citrus/reference/html/#apache-camel) | Run Camel integrations with JBang as part of a test. |
 > **Tip**
-> Citrus provides a good integration with [JBang](https://www.jbang.dev) and Camel JBang. This means you can use Citrus from the very beginning for writing automated tests also in the prototyping phase with Camel JBang. Read about it in the chapter [Camel JBang test plugin](camel-jbang-test.md).
+> Citrus provides a good integration with [JBang](https://www.jbang.dev) and Camel CLI. This means you can use Citrus from the very beginning for writing automated tests also in the prototyping phase with Camel CLI. Read about it in the chapter [Camel CLI test plugin](camel-jbang-test.md).
 
 Citrus integrates with Quarkus and Spring Boot so you can write the tests on top of known concepts and libraries. You can choose from a set of supported test engines such as JUnit Jupiter to run the tests as part of the build lifecycle or from your favorite IDE.
 

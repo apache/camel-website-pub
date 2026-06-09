@@ -90,9 +90,9 @@ String ascii = renderer.renderDiagram(List.of(lr), lr.maxY + RouteDiagramLayoutE
 System.out.println(ascii);
 ```
 
-### With Camel JBang
+### With Camel CLI
 
-The diagram rendering is used by the `camel cmd route-diagram` command in Camel JBang:
+The diagram rendering is used by the `camel cmd route-diagram` command in Camel CLI:
 
 ```bash
 camel cmd route-diagram MyRoute.java
@@ -214,7 +214,7 @@ Two highlight styles are available:
 
 Only the arrows between highlighted nodes are colored — the node boxes remain unchanged. When highlighting is active, only routes that contain highlighted nodes are rendered.
 
-### With Camel JBang
+### With Camel CLI
 
 Use the `--highlight` and `--highlight-style` options:
 

@@ -1,6 +1,6 @@
-# Camel JBang
+# Camel CLI
 
-A JBang-based Camel app for easily running Camel routes.
+The Camel CLI is used for easily running Camel routes and managing Camel projects. Camel CLI is powered by [JBang](https://www.jbang.dev/).
 
 ## Installation
 
@@ -14,7 +14,7 @@ jbang version
 
 Which should output the version of JBang.
 
-To make it easier to use Camel JBang, then install the following:
+To make it easier to use Camel CLI, then install the following:
 
 ```bash
 jbang app install camel@apache/camel
@@ -22,15 +22,15 @@ jbang app install camel@apache/camel
 
 This will install Apache Camel as the `camel` command within JBang, meaning that you can run Camel from the command line by just executing `camel` (see more next).
 
-Note: It requires access to the internet, in case of using a proxy, please ensure that the proxy is configured for your system. If Camel JBang is not working with your current configuration, please look to [Proxy configuration in JBang documentation](https://www.jbang.dev/documentation/jbang/latest/configuration.html#proxy-configuration).
+Note: It requires access to the internet, in case of using a proxy, please ensure that the proxy is configured for your system. If Camel CLI is not working with your current configuration, please look to [Proxy configuration in JBang documentation](https://www.jbang.dev/documentation/jbang/latest/configuration.html#proxy-configuration).
 
 ### Installing without JBang
 
-It is also possible to install and run Camel JBang without _JBang_ using the [Camel JBang Launcher](camel-jbang-launcher.md) which essentially is a standard Java _fat-jar_ with launch scripts.
+It is also possible to install and run Camel CLI without _JBang_ using the [Camel CLI Launcher](camel-jbang-launcher.md) which essentially is a standard Java _fat-jar_ with launch scripts.
 
-### Installing a specific Camel JBang version
+### Installing a specific Camel CLI version
 
-By default, Camel JBang installs the latest release, which may not be the desired version.
+By default, Camel CLI installs the latest release, which may not be the desired version.
 
 To use a specific version then you need to provide these when installing from jbang such as 4.14.1:
 
@@ -44,11 +44,11 @@ jbang app install --force --fresh -Dcamel.jbang.version=4.14.1 -Dcamel-kamelets.
 > **Important**
 > From Camel 4.17 onwards then Kamelets are optional, and only downloaded on demand. You define the version of kamelets via `--kamelets-version` parameter to `camel run` or can pre-configure the version via `camel config set kamelets-version=4.17.0`.
 
-### Installing Offline-Safe or Version-Pinned Camel JBang
+### Installing Offline-Safe or Version-Pinned Camel CLI
 
-When installing Camel JBang using `jbang app install`, JBang will occasionally check upstream sources and update the installed application automatically. This may be undesirable if you want to ensure your Camel JBang installation remains on a specific Camel release.
+When installing Camel CLI using `jbang app install`, JBang will occasionally check upstream sources and update the installed application automatically. This may be undesirable if you want to ensure your Camel CLI installation remains on a specific Camel release.
 
-The following options allow you to install Camel JBang in a way that prevents unexpected upgrades.
+The following options allow you to install Camel CLI in a way that prevents unexpected upgrades.
 
 #### Option 1: Pin by Installing from a Local `CamelJBang.java`
 
@@ -62,7 +62,7 @@ This approach pins the Camel version directly in the source file used to install
     
 2.  Edit the `CamelJBang.java` file and set the Camel version you want to use.
     
-3.  Install Camel JBang locally:
+3.  Install Camel CLI locally:
     
     ```bash
     jbang app install CamelJBang.java
@@ -73,7 +73,7 @@ This approach pins the Camel version directly in the source file used to install
 
 #### Option 2: Install from a Version-Pinned Catalog
 
-Another option is to install Camel JBang from a catalog tied to a specific Camel release tag.
+Another option is to install Camel CLI from a catalog tied to a specific Camel release tag.
 
 Example:
 
@@ -102,7 +102,7 @@ In this example:
 
 #### Option 3: Use Camel Launcher
 
-See [Camel JBang Launcher](camel-jbang-launcher.md)
+See [Camel CLI Launcher](camel-jbang-launcher.md)
 
 ## Container Image
 
@@ -133,7 +133,7 @@ podman run apache/camel-jbang:4.4.0 version
 This will print the following result:
 
 ```bash
-Camel JBang version: 4.4.0
+Camel CLI version: 4.4.0
 ```
 
 So running a simple route will be as easy as doing the following:
@@ -148,9 +148,9 @@ or
 podman run -v .:/integrations apache/camel-jbang:4.4.0 run /integrations/example.yaml
 ```
 
-## Using Camel JBang
+## Using Camel CLI
 
-The Camel JBang supports multiple commands. Running the command below will print all of them:
+The Camel CLI supports multiple commands. Running the command below will print all of them:
 
 ```bash
 camel --help
@@ -162,11 +162,11 @@ camel --help
 All the commands support the `--help` and will display the appropriate help if that flag is provided.
 
 > **Tip**
-> For a complete reference of all commands and their options, see the [Camel JBang Command Reference](jbang-commands/camel-jbang-commands.md).
+> For a complete reference of all commands and their options, see the [Camel CLI Command Reference](jbang-commands/camel-jbang-commands.md).
 
 ### Enable shell completion
 
-Camel JBang provides shell completion for bash and zsh out of the box. To enable shell completion for Camel JBang, run:
+Camel CLI provides shell completion for bash and zsh out of the box. To enable shell completion for Camel CLI, run:
 
 ```bash
 source <(camel completion)
@@ -256,7 +256,7 @@ camel run *
 
 ### Running a Maven based project
 
-Camel JBang is intended for flat-file-based projects, where you run small integrations. However, Camel JBang may be used as a tool for migrating existing Maven based projects. To make the migration easier, then JBang can do _best effort_ to run, export, or transform these projects.
+Camel CLI is intended for flat-file-based projects, where you run small integrations. However, Camel CLI may be used as a tool for migrating existing Maven based projects. To make the migration easier, then JBang can do _best effort_ to run, export, or transform these projects.
 
 For example, if you have a Maven-based project, you can execute
 
@@ -264,7 +264,7 @@ For example, if you have a Maven-based project, you can execute
 camel run pom.xml
 ```
 
-Camel JBang will then scan in `src/main/java` and `src/main/resources` for files to include (recursive).
+Camel CLI will then scan in `src/main/java` and `src/main/resources` for files to include (recursive).
 
 > **Note**
 > Using `camel run pom.xml` is not intended as a fully compatible way of running an existing Maven-based project. It cannot start Quarkus or Spring Boot applications; instead, use the proper plugins/commands. The command is mainly used to migrate from old projects.
@@ -313,7 +313,7 @@ And Camel will now prompt in the terminal for you to enter values for the placeh
 ```bash
 2023-12-15 21:46:44.218  INFO 15033 --- [           main] org.apache.camel.main.MainSupport   : Apache Camel (JBang) 4.7.0 is starting
 2023-12-15 21:46:44.331  INFO 15033 --- [           main] org.apache.camel.main.MainSupport   : Using Java 17.0.5 with PID 15033. Started by davsclaus in /Users/davsclaus/workspace/deleteme/prompt
-2023-12-15 21:46:45.360  INFO 15033 --- [           main] mel.cli.connector.LocalCliConnector : Management from Camel JBang enabled
+2023-12-15 21:46:45.360  INFO 15033 --- [           main] mel.cli.connector.LocalCliConnector : Management from Camel CLI enabled
 Enter optional value for time (1000):
 Enter required value for you: Jack
 2023-12-15 21:46:55.239  INFO 15033 --- [           main] el.impl.engine.AbstractCamelContext : Apache Camel 4.7.0 (foo) is starting
@@ -322,7 +322,7 @@ Enter required value for you: Jack
 2023-12-15 21:46:55.341  INFO 15033 --- [           main] el.impl.engine.AbstractCamelContext : Routes startup (started:1)
 ```
 
-From the snippet above, Camel JBang had two prompts. First for the `time` which has a default value of `1000` so you can just press ENTER to accept the default value. And for `you` a value must be entered, and we entered `Jack` in this example.
+From the snippet above, Camel CLI had two prompts. First for the `time` which has a default value of `1000` so you can just press ENTER to accept the default value. And for `you` a value must be entered, and we entered `Jack` in this example.
 
 You may want to use this for Camel prototypes where you want the user to be able to enter custom values quickly. Those values can of course be pre-configured in `application.properties` as well.
 
@@ -380,7 +380,7 @@ This starts Camel where it will load the files from the _source dir_ (also subfo
 
 Sometimes you need to troubleshoot an existing integration and is given some Camel code (routes). These routes may use different components, and those components may be tricky to run as they are configured in a custom way, or need connection to servers you may not have access to.
 
-You can run Camel JBang by stubbing those components (or all of them).
+You can run Camel CLI by stubbing those components (or all of them).
 
 For example, suppose you need access to a JMS broker in the given route below.
 
@@ -425,7 +425,7 @@ You can also use `--stub=all` to stub all components, or `--stub=remote` to stub
 camel run syncToDatabase.java --stub=remote
 ```
 
-Camel JBang comes with the `camel cmd stub` command that allows to list all endpoints that has been stubbed, and also browse any messages that are currently present in their internal queues. A stub endpoint is based on the `seda` component.
+Camel CLI comes with the `camel cmd stub` command that allows to list all endpoints that has been stubbed, and also browse any messages that are currently present in their internal queues. A stub endpoint is based on the `seda` component.
 
 ```bash
 camel cmd stub
@@ -485,7 +485,7 @@ This is driven by `camel.main.routesReloadEnabled` (set automatically by `--dev`
 
 **Available as of Camel 4.17**
 
-The `camel cmd load` command can be used to load new route(s) into an existing running Camel JBang application. For example during development to inject a new route for experimentation. This can also be used as part of testing scenarios using Citrus with the [Camel JBang Test](camel-jbang-test.md) plugin.
+The `camel cmd load` command can be used to load new route(s) into an existing running Camel CLI application. For example during development to inject a new route for experimentation. This can also be used as part of testing scenarios using Citrus with the [Camel CLI Test](camel-jbang-test.md) plugin.
 
 For example to load `bar.java` route into a Camel application:
 
@@ -503,11 +503,11 @@ You can load any of the DSLs such as Java, XML, or YAML.
 
 #### Uploading files to source directory via HTTP
 
-When running Camel JBang with `--source-dir`, `--console` and `--dev` (reloading) then you can change the source files on-the-fly by copying, modifying or deleting the files in the source directory.
+When running Camel CLI with `--source-dir`, `--console` and `--dev` (reloading) then you can change the source files on-the-fly by copying, modifying or deleting the files in the source directory.
 
 This can also be done via HTTP using the `q/upload/:filename` HTTP endpoint using PUT and DELETE verbs.
 
-Suppose that you run Camel JBang with:
+Suppose that you run Camel CLI with:
 
 ```bash
 camel run --source-dir=mycode --console --dev
@@ -694,7 +694,7 @@ You can then go forward (press ENTER), or go back (press P + ENTER).
 
 **Available from Camel 4.5**
 
-Camel JBang comes with three sets of profiles
+Camel CLI comes with three sets of profiles
 
 -   `dev`:for development (default)
     
@@ -703,9 +703,9 @@ Camel JBang comes with three sets of profiles
 -   `prod`:for production
     
 
-The developer profile will pre-configure Camel JBang with a number of developer assisted features when running Camel. For example, tracing messages during routing, additional metrics collected, and more. This is useful during development and also enhanced the Camel JBang CLI tool.
+The developer profile will pre-configure Camel CLI with a number of developer assisted features when running Camel. For example, tracing messages during routing, additional metrics collected, and more. This is useful during development and also enhanced the Camel CLI CLI tool.
 
-However, you may want to run Camel JBang in a production-like scenario, which you can do with:
+However, you may want to run Camel CLI in a production-like scenario, which you can do with:
 
 ```bash
 camel run hello.java --profile=prod
@@ -727,7 +727,7 @@ The profile-specific configuration will override values in the common configurat
 
 ### Downloading JARs over the internet
 
-By default, Camel JBang will automatically resolve dependencies needed to run Camel, which is done by JBang and Camel respectively. Camel itself detects at runtime if a component has a need for JARs that are not currently available on the classpath, and can then automatically download the JARs (incl transitive).
+By default, Camel CLI will automatically resolve dependencies needed to run Camel, which is done by JBang and Camel respectively. Camel itself detects at runtime if a component has a need for JARs that are not currently available on the classpath, and can then automatically download the JARs (incl transitive).
 
 Camel will download these JARs in the following order:
 
@@ -740,13 +740,13 @@ Camel will download these JARs in the following order:
 4.  from all the repositories found in active profiles of `~/.m2/settings.xml` or a settings file specified using `--maven-settings` option.
     
 
-If you do not want Camel JBang to download over the internet, you can turn this off with `--download`, as shown below:
+If you do not want Camel CLI to download over the internet, you can turn this off with `--download`, as shown below:
 
 ```bash
 camel run foo.java --download=false
 ```
 
-If you do not want Camel JBang to use your existing Maven settings file, you can use:
+If you do not want Camel CLI to use your existing Maven settings file, you can use:
 
 ```bash
 camel run foo.java --maven-settings=false
@@ -754,7 +754,7 @@ camel run foo.java --maven-settings=false
 
 ### Adding custom JARs
 
-Camel JBang will automatically detect dependencies for Camel components, languages, data formats, etc. that from its own release. This means you often do not have to specify which JARs to use.
+Camel CLI will automatically detect dependencies for Camel components, languages, data formats, etc. that from its own release. This means you often do not have to specify which JARs to use.
 
 However, if you need to add 3rd-party custom JARs, then you can specify these with `--dep` as CLI argument in Maven GAV syntax (`groupId:artifactId:version`), such as:
 
@@ -776,7 +776,7 @@ camel run foo.java --dep=camel-saxon,com.foo:acme:1.0
 
 ### Using 3rd-party Maven repositories
 
-Camel JBang will download from local repository first, and then online from Maven Central. To be able to download from 3rd-party Maven repositories then you need to specify this as CLI argument, \]or in `application.properties`
+Camel CLI will download from local repository first, and then online from Maven Central. To be able to download from 3rd-party Maven repositories then you need to specify this as CLI argument, \]or in `application.properties`
 
 ```bash
 camel run foo.java --repos=https://packages.atlassian.com/maven-external
@@ -865,7 +865,7 @@ For example, to run one of the Camel Kamelets examples, you can do:
 camel run github:apache:camel-kamelets-examples:jbang/hello-java/Hey.java
 ```
 
-You can also use the `https` URL for GitHub. For example, you can browse the examples from a web-browser and then copy the URL from the browser window and run the example with Camel JBang:
+You can also use the `https` URL for GitHub. For example, you can browse the examples from a web-browser and then copy the URL from the browser window and run the example with Camel CLI:
 
 ```bash
 camel run https://github.com/apache/camel-kamelets-examples/tree/main/jbang/hello-java
@@ -893,11 +893,11 @@ For example, to run a gist, you can execute:
 camel run https://gist.github.com/davsclaus/477ddff5cdeb1ae03619aa544ce47e92
 ```
 
-A gist can contain one or more files, and Camel JBang will gather all relevant files, so a gist can contain multiple routes, properties files, Java beans, etc.
+A gist can contain one or more files, and Camel CLI will gather all relevant files, so a gist can contain multiple routes, properties files, Java beans, etc.
 
 ### Downloading routes hosted on GitHub
 
-We have made it easy for Camel JBang to download existing examples from GitHub to local disk, which allows for modifying the example and to run locally.
+We have made it easy for Camel CLI to download existing examples from GitHub to local disk, which allows for modifying the example and to run locally.
 
 All you need to do is to copy the https link from the web browser. For example, you can download the _dependency injection_ example by:
 
@@ -964,7 +964,7 @@ jbang -Dcamel.jbang.version=3.18.4 camel@apache/camel [command]
 ```
 
 > **Note**
-> Older versions of Camel may not work as well with Camel JBang as the newest versions. Starting from Camel 3.20 onwards are the versions that are recommended to be used onwards.
+> Older versions of Camel may not work as well with Camel CLI as the newest versions. Starting from Camel 3.20 onwards are the versions that are recommended to be used onwards.
 
 > **Tip**
 > In Camel **3.20.3** onwards there is a `version` command, see the following section for more details.
@@ -986,14 +986,14 @@ jbang --fresh -Dcamel.jbang.version=3.21.0-SNAPSHOT camel@apache/camel [command]
 
 ### Using the version command
 
-In **Camel 3.20.3** onwards the `version` command makes it possible to configure a specific version of Camel to use when running or exporting. This makes it possible to use the latest Camel JBang CLI and run integrations using an older Camel version.
+In **Camel 3.20.3** onwards the `version` command makes it possible to configure a specific version of Camel to use when running or exporting. This makes it possible to use the latest Camel CLI CLI and run integrations using an older Camel version.
 
 ```bash
 camel version
-Camel JBang version: 3.20.3
+Camel CLI version: 3.20.3
 ```
 
-Here Camel JBang is using version 3.20.3. Now suppose we want to run Camel integrations with version 3.18.2.
+Here Camel CLI is using version 3.20.3. Now suppose we want to run Camel integrations with version 3.18.2.
 
 ```bash
 camel version set 3.18.2
@@ -1003,12 +1003,12 @@ And you can see what Camel version has been set by:
 
 ```bash
 camel version
-Camel JBang version: 3.20.3
+Camel CLI version: 3.20.3
 User configuration:
     camel-version = 3.18.2
 ```
 
-And when running an integration, then Camel JBang will show you the _overridden version_ when starting.
+And when running an integration, then Camel CLI will show you the _overridden version_ when starting.
 
 ```bash
 camel run foo.java
@@ -1032,7 +1032,7 @@ If you want to unset the version, you can use the `--reset` option:
 camel version set --reset
 ```
 
-Then the Camel version in use will be the same version as Camel JBang.
+Then the Camel version in use will be the same version as Camel CLI.
 
 #### Listing available Camel releases
 
@@ -1097,7 +1097,7 @@ camel version list --runtime=quarkus
 
 ### Manage plugins
 
-Camel JBang uses a plugin concept for some of the subcommands so users can add functionality on demand. Each provided plugin adds a list of commands to the Camel JBang command line tool.
+Camel CLI uses a plugin concept for some of the subcommands so users can add functionality on demand. Each provided plugin adds a list of commands to the Camel CLI command line tool.
 
 You can list the supported plugins with
 
@@ -1154,7 +1154,7 @@ You can list the currently installed plugins with:
 camel plugin get
 ```
 
-To remove a plugin from the current Camel JBang command line tooling, you can use the `plugin delete` command.
+To remove a plugin from the current Camel CLI command line tooling, you can use the `plugin delete` command.
 
 ```bash
 camel plugin delete <plugin-name>
@@ -1162,7 +1162,7 @@ camel plugin delete <plugin-name>
 
 #### Building custom plugins
 
-It is possible to build custom Camel JBang plugins. We suggest to take a look at one of the [existing plugins](https://github.com/apache/camel/tree/main/dsl/camel-jbang), to see how that is done.
+It is possible to build custom Camel CLI plugins. We suggest to take a look at one of the [existing plugins](https://github.com/apache/camel/tree/main/dsl/camel-jbang), to see how that is done.
 
 > **Important**
 > The name of the plugin Maven **artifactId** must start with `camel-jbang-plugin-`. For example if the plugin is named `cheese`, then the maven artifact must be named `camel-jbang-plugin-cheese`.
@@ -1207,7 +1207,7 @@ camel run joke.yaml
 > **Warning**
 > The bind command is deprecated from Camel 4.19 onwards
 
-Camel JBang is able to create the Pipe custom resource for you. You can use the `bind` command to specify a source and a sink that should be set in the pipe. As a result, Camel JBang will create a proper Pipe custom resource for you.
+Camel CLI is able to create the Pipe custom resource for you. You can use the `bind` command to specify a source and a sink that should be set in the pipe. As a result, Camel CLI will create a proper Pipe custom resource for you.
 
 The command expects a file name as command argument and provides several options to define the source and the sink that should be used in the pipe.
 
@@ -1363,13 +1363,13 @@ It is also possible to run from clipboard in _reload_ mode as shown:
 camel run clipboard.xml --dev
 ```
 
-Then you can quickly make changes and copy to clipboard, and Camel JBang will update while running.
+Then you can quickly make changes and copy to clipboard, and Camel CLI will update while running.
 
 ### Sending messages via Camel
 
 **Available since Camel 4**
 
-When building integrations with Camel JBang, you may find yourself in need of being able to send messages into Camel, to test your Camel routes. This can be challenging when the Camel routes are connected to external systems using different protocols.
+When building integrations with Camel CLI, you may find yourself in need of being able to send messages into Camel, to test your Camel routes. This can be challenging when the Camel routes are connected to external systems using different protocols.
 
 The best approach is to send messages into these external systems using standard tools provided by these systems, which often can be done using CLI tools. However, in some situations, where you may not be familiar with these tools, you can try to let Camel send the message. Note that this can only be possible in some scenarios, and should only be used as a _quick way_.
 
@@ -1520,9 +1520,9 @@ When you poll then you do not send any payload (body or headers).
 
 **Available since Camel 4.9**
 
-When building a prototype integration with Camel JBang, you may route messages to external systems. To know whether messages are being routed correctly, you may use system consoles to look inside these systems which messages have arrived, such as SQL prompts, web consoles, CLI tools etc.
+When building a prototype integration with Camel CLI, you may route messages to external systems. To know whether messages are being routed correctly, you may use system consoles to look inside these systems which messages have arrived, such as SQL prompts, web consoles, CLI tools etc.
 
-The Camel JBang now comes with a new command to receive messages from remote endpoints. This can be used to quickly look or tail in terminal the messages that an external systems has received. Camel does this by consuming the messages (if the component has support for consumer) and then let Camel JBang dump the messages from the CLI.
+The Camel CLI now comes with a new command to receive messages from remote endpoints. This can be used to quickly look or tail in terminal the messages that an external systems has received. Camel does this by consuming the messages (if the component has support for consumer) and then let Camel CLI dump the messages from the CLI.
 
 For example to start dumping all messages from ActiveMQ in one command, you can do:
 
@@ -1619,7 +1619,7 @@ camel ps --watch
 
 #### Controlling Spring Boot and Quarkus integrations
 
-The Camel JBang CLI will by default only control Camel integrations that are running using the CLI, eg `camel run foo.java`.
+The Camel CLI CLI will by default only control Camel integrations that are running using the CLI, eg `camel run foo.java`.
 
 For the CLI to be able to control and manage Spring Boot or Quarkus applications, then you need to add a dependency to these projects to integrate with Camel CLI.
 
@@ -1643,7 +1643,7 @@ In Quarkus, you need to add the following dependency:
 
 #### Getting status of Camel integrations
 
-The `get` command in Camel JBang is used for getting Camel specific status for one or all of the running Camel integrations.
+The `get` command in Camel CLI is used for getting Camel specific status for one or all of the running Camel integrations.
 
 To display the status of the running Camel integrations:
 
@@ -1863,7 +1863,7 @@ $ camel stop chuck
 Shutting down Camel integration (pid: 80093)
 ```
 
-When running in background, then Camel JBang (**4.10 onwards**) will now automatic wait for the integration to startup before returning from the CLI command. This ensures that if there are any startup errors such as compilation errors or DSL errors etc. then these are captured and printed in the shell. You can use the option `--background-wait=false` to turn this off.
+When running in background, then Camel CLI (**4.10 onwards**) will now automatic wait for the integration to startup before returning from the CLI command. This ensures that if there are any startup errors such as compilation errors or DSL errors etc. then these are captured and printed in the shell. You can use the option `--background-wait=false` to turn this off.
 
 #### Starting and Stopping routes
 
@@ -2007,7 +2007,7 @@ camel cmd enable-processor
 
 After developing the Camel routes locally with JBang, you may want to run these also on the Kubernetes platform at some point.
 
-Camel JBang provides a plugin for managing and easily running Camel applications on Kubernetes. The plugin uses the project export functionality to build and deploy the application on Kubernetes with Quarkus or SpringBoot.
+Camel CLI provides a plugin for managing and easily running Camel applications on Kubernetes. The plugin uses the project export functionality to build and deploy the application on Kubernetes with Quarkus or SpringBoot.
 
 Read about it in the [Camel Kubernetes plugin](camel-jbang-kubernetes.md) documentation.
 
@@ -2015,11 +2015,11 @@ Read about it in the [Camel Kubernetes plugin](camel-jbang-kubernetes.md) docume
 
 Testing is essential, from the very first line of code! When prototyping a Camel route locally with JBang, you can also start prototyping an automated test from the very beginning.
 
-Camel JBang provides a plugin for writing and executing automated tests. The plugin uses the capabilities of the Open Source test framework [Citrus](https://citrusframework.org) to develop fully self-contained tests that verify your Camel integrations.
+Camel CLI provides a plugin for writing and executing automated tests. The plugin uses the capabilities of the Open Source test framework [Citrus](https://citrusframework.org) to develop fully self-contained tests that verify your Camel integrations.
 
-The automated test is able to prepare required infrastructure (e.g. PostgreSQL database, Kafka message broker) using containers and Camel infra services. Also, the test is able to automatically start the Camel integration locally with Camel JBang. Following from that the test is able to invoke exposed services of the Camel integration and verify its outcome.
+The automated test is able to prepare required infrastructure (e.g. PostgreSQL database, Kafka message broker) using containers and Camel infra services. Also, the test is able to automatically start the Camel integration locally with Camel CLI. Following from that the test is able to invoke exposed services of the Camel integration and verify its outcome.
 
-Once the prototyping phase with Camel JBang is complete you can include the automated tests into the project export. Usually, the export creates a Maven project on top of Quarkus or SpringBoot and the automated tests become part of this project, so the tests are run with the project build lifecycle.
+Once the prototyping phase with Camel CLI is complete you can include the automated tests into the project export. Usually, the export creates a Maven project on top of Quarkus or SpringBoot and the automated tests become part of this project, so the tests are run with the project build lifecycle.
 
 Read about the plugin in the [Camel Testing plugin](camel-jbang-test.md) documentation.
 
@@ -2099,7 +2099,7 @@ Here you can see 2 Camel integrations. The netty integration hosts a TCP service
 
 #### Observability with metrics
 
-Camel JBang comes with support for using Micrometer for metrics that easily can be made available.
+Camel CLI comes with support for using Micrometer for metrics that easily can be made available.
 
 You simply either run with `--observe` option (use `--metrcis` in older Camel versions), or enable and have more control of the configuration in the `application.properties` file as shown below:
 
@@ -2138,7 +2138,7 @@ $ camel get metric
 
 #### Listing state of Circuit Breakers
 
-If your Camel integration uses [Circuit Breaker](../components/4.18.x/eips/circuitBreaker-eip.md), then you can output the status of the breakers with Camel JBang as follows:
+If your Camel integration uses [Circuit Breaker](../components/4.18.x/eips/circuitBreaker-eip.md), then you can output the status of the breakers with Camel CLI as follows:
 
 ```bash
 camel get circuit-breaker
@@ -2153,7 +2153,7 @@ Here we can see the circuit breaker is in _half-open_ state, i.e., a state where
 
 ### Using Jolokia and Hawtio
 
-The [Hawtio](https://hawt.io/) web console allows inspecting running Camel integrations, such as all the JMX management information, and not but least to visualize the Camel routes with live performance metrics. Hawtio is a handy tool for many years, and we have made it easy to use Hawtio with Camel JBang.
+The [Hawtio](https://hawt.io/) web console allows inspecting running Camel integrations, such as all the JMX management information, and not but least to visualize the Camel routes with live performance metrics. Hawtio is a handy tool for many years, and we have made it easy to use Hawtio with Camel CLI.
 
 To let Hawtio able to inspect the Camel integrations, then the Jolokia JVM Agent must be installed in the running integration, this can be done, either explicit as follows:
 
@@ -2180,7 +2180,7 @@ Started Jolokia for PID 62506
 http://127.0.0.1:8778/jolokia/
 ```
 
-Then you can launch [Hawtio](https://hawt.io/) using Camel JBang:
+Then you can launch [Hawtio](https://hawt.io/) using Camel CLI:
 
 ```bash
 camel hawtio
@@ -2212,10 +2212,10 @@ Where _dude_ is the name of the running Camel integration. When you stop Hawtio 
 
 ### Scripting from terminal using pipes
 
-You can also execute a Camel JBang file as a script that can be used for terminal scripting with pipes and filters.
+You can also execute a Camel CLI file as a script that can be used for terminal scripting with pipes and filters.
 
 > **Note**
-> Every time the script is executed, a JVM is started with Camel. This is not very fast or low on memory usage, so use Camel JBang terminal scripting where using Camel makes sense. For example, to use many Camel components or Kamelets, to more easily send or receive data from disparate IT systems.
+> Every time the script is executed, a JVM is started with Camel. This is not very fast or low on memory usage, so use Camel CLI terminal scripting where using Camel makes sense. For example, to use many Camel components or Kamelets, to more easily send or receive data from disparate IT systems.
 
 This requires adding the following line in top of the file, for example, as in the `UpperCase.java` file below:
 
@@ -2276,14 +2276,14 @@ When using `stream:in` to read data from _System in_ then the [Stream component]
 
 ### Running local Kamelets
 
-You can also use Camel JBang to try local Kamelets, without the need to publish them on GitHub or package them in a jar.
+You can also use Camel CLI to try local Kamelets, without the need to publish them on GitHub or package them in a jar.
 
 ```bash
 camel run --local-kamelet-dir=/path/to/local/kamelets earthquake.yaml
 ```
 
 > **Tip**
-> When the kamelets are from local file system, then they can be live reloaded if they are updated, when you run Camel JBang in `--dev` mode.
+> When the kamelets are from local file system, then they can be live reloaded if they are updated, when you run Camel CLI in `--dev` mode.
 
 You can also point to a folder in a GitHub repository. For example, we have provided some custom Kamelets at [https://github.com/apache/camel-kamelets-examples/tree/main/custom-kamelets](https://github.com/apache/camel-kamelets-examples/tree/main/custom-kamelets), which can be used easily:
 
@@ -2297,9 +2297,9 @@ camel run --local-kamelet-dir=https://github.com/apache/camel-kamelets-examples/
 ### Using the platform-http component
 
 > **Note**
-> Camel JBang is only intended for working with `platform-http` as HTTP server component for rest-dsl, and for HTTP serer in general. It is not intended to work with `camel-servlet` or `camel-jetty`. If you find a need for using Jetty, then Camel JBang will not support seamless rest-dsl support and exporting.
+> Camel CLI is only intended for working with `platform-http` as HTTP server component for rest-dsl, and for HTTP serer in general. It is not intended to work with `camel-servlet` or `camel-jetty`. If you find a need for using Jetty, then Camel CLI will not support seamless rest-dsl support and exporting.
 
-When a route is started from `platform-http` then Camel JBang will automatically include a VertX HTTP server running on port 8080. For example, the following route in a file named `server.yaml`:
+When a route is started from `platform-http` then Camel CLI will automatically include a VertX HTTP server running on port 8080. For example, the following route in a file named `server.yaml`:
 
 ```yaml
 - route:
@@ -2325,7 +2325,7 @@ Hello World%
 
 ### Using Java beans and processors
 
-There is basic support for including regular Java source files together with Camel routes, and let Camel JBang runtime compile the Java source. This means you can include smaller utility classes, POJOs, Camel Processors and whatnot that the application needs.
+There is basic support for including regular Java source files together with Camel routes, and let Camel CLI runtime compile the Java source. This means you can include smaller utility classes, POJOs, Camel Processors and whatnot that the application needs.
 
 ### Dependency Injection in Java classes
 
@@ -2552,7 +2552,7 @@ You would then also need to add the JAR dependency with Maven coordinates: `org.
 #### Using a Spring Boot JDBC data source
 
 > **Note**
-> The `spring.datasource.` configuration is intended for rapid prototyping with Camel JBang, and for users who plan to export to the Spring Boot runtime. It is not supported when exporting to the default Camel Main runtime or Camel Quarkus.
+> The `spring.datasource.` configuration is intended for rapid prototyping with Camel CLI, and for users who plan to export to the Spring Boot runtime. It is not supported when exporting to the default Camel Main runtime or Camel Quarkus.
 
 In `application.properties` you can set up the datasource such as:
 
@@ -2600,7 +2600,7 @@ There are two kinds of debugging:
 
 #### Java debugging
 
-Camel JBang makes it easy to do _Java debugging_ when you run your integration with the `--jvm-debug` option as shown below:
+Camel CLI makes it easy to do _Java debugging_ when you run your integration with the `--jvm-debug` option as shown below:
 
 ```bash
 camel run hello.yaml --jvm-debug
@@ -2620,7 +2620,7 @@ jbang --debug  camel@apache/camel run hello.yaml
 Listening for transport dt_socket at address: 4004
 ```
 
-This makes it possible to debug any of the Camel JBang commands, not only the `run` command as shown above.
+This makes it possible to debug any of the Camel CLI commands, not only the `run` command as shown above.
 
 #### Camel route debugging
 
@@ -2708,7 +2708,7 @@ camel debug hello.yaml --breakpoint=18,34
 
 ##### Camel Spring Boot route debugging
 
-In **Camel 4.14** we added support for using Camel JBang to debug an existing Camel Spring Boot Maven based project.
+In **Camel 4.14** we added support for using Camel CLI to debug an existing Camel Spring Boot Maven based project.
 
 All that is needed is to execute:
 
@@ -2716,7 +2716,7 @@ All that is needed is to execute:
 camel debug pom.xml
 ```
 
-This tells Camel JBang to look inside the Maven pom.xml file and if `camel-spring-boot-bom` is detected, then Camel JBang will automatically run Spring Boot with debugging enabled. This is done by letting Spring Boot compile and build a fat-jar, that then is launched in the background and the output is shown in the console; just as shown above. You will then get the same user experience as debugging plain Camel Main files.
+This tells Camel CLI to look inside the Maven pom.xml file and if `camel-spring-boot-bom` is detected, then Camel CLI will automatically run Spring Boot with debugging enabled. This is done by letting Spring Boot compile and build a fat-jar, that then is launched in the background and the output is shown in the console; just as shown above. You will then get the same user experience as debugging plain Camel Main files.
 
 #### Editing code using VSCode or IDEA editors
 
@@ -2793,7 +2793,7 @@ You may want to use this for making it easier to load the source into an IDE edi
 
 ##### Updating dependencies in Maven projects
 
-Camel JBang can also help with keeping Camel Maven dependencies up-to-date for Maven based projects.
+Camel CLI can also help with keeping Camel Maven dependencies up-to-date for Maven based projects.
 
 For example if start using new Camel components, in your Camel routes. Then you would have to add the corresponding Camel JAR dependencies to the pom.xml file.
 
@@ -2818,7 +2818,7 @@ A specific how-to is available for VS Code, see this [video](https://youtu.be/ow
 
 #### Health Checks
 
-The status of health checks can be accessed via Camel JBang from the CLI as follows:
+The status of health checks can be accessed via Camel CLI from the CLI as follows:
 
 ```bash
 camel get health
@@ -2905,7 +2905,7 @@ Here we can easily see that the health check is failing because of the `org.apac
 
 ## Running with Spring Boot or Quarkus
 
-Camel JBang is _primary_ intended to be Camel standalone only. In **Camel 4.6** onwards, we added limited support for running with Spring Boot or Quarkus, but there are some limitations.
+Camel CLI is _primary_ intended to be Camel standalone only. In **Camel 4.6** onwards, we added limited support for running with Spring Boot or Quarkus, but there are some limitations.
 
 You use the `--runtime` option to specify which platform to use, as shown below:
 
@@ -2919,7 +2919,7 @@ And for Quarkus:
 camel run foo.camel.yaml --runtime=quarkus
 ```
 
-When running this way, then Camel JBang is _essentially_ doing an _export_ to a temporary folder, and then running Spring Boot or Quarkus using Maven.
+When running this way, then Camel CLI is _essentially_ doing an _export_ to a temporary folder, and then running Spring Boot or Quarkus using Maven.
 
 You can do changes to the source file and have Quarkus and Spring Boot reload the routes, just as `camel run --dev` can do, but uses the natural Spring Boot _dev-tools_ and Quarkus _dev mode_ functionality.
 
@@ -3231,7 +3231,7 @@ Then you can transform this using an XSLT named `mystyle.xsl`:
 </xsl:stylesheet>
 ```
 
-Then you can do live changes to the stylesheet and see the output in real-time with Camel JBang by running:
+Then you can do live changes to the stylesheet and see the output in real-time with Camel CLI by running:
 
 ```bash
 $ camel transform message --body=file:sample.xml --component=xslt --template=file:mystyle.xsl --pretty --watch
@@ -3463,9 +3463,9 @@ camel doc kafka --filter=timeout
 
 ## Open API
 
-Camel JBang allows quickly exposing an Open API service using _contract-first_ approach, where you have an existing OpenAPI specification file.
+Camel CLI allows quickly exposing an Open API service using _contract-first_ approach, where you have an existing OpenAPI specification file.
 
-Then Camel JBang is able to bridge each API endpoint from the OpenAPI specification to a Camel route with the naming convention `direct:<operationId>`.
+Then Camel CLI is able to bridge each API endpoint from the OpenAPI specification to a Camel route with the naming convention `direct:<operationId>`.
 
 This make it quick to implement a Camel route for a given operation.
 
@@ -3473,7 +3473,7 @@ See the [open-api example](https://github.com/apache/camel-kamelets-examples/tre
 
 ## Gathering list of dependencies
 
-When working with Camel JBang, then dependencies are automatically resolved. This means that you do not have to use a build system like Maven to add every Camel component as a dependency.
+When working with Camel CLI, then dependencies are automatically resolved. This means that you do not have to use a build system like Maven to add every Camel component as a dependency.
 
 However, you may want to know what dependencies are required to run the Camel integration. To see this, you can use the `dependency` command. The command output does not output a detailed tree, such as `mvn dependencies:tree`, as the output is intended to list which Camel components, and other JARs needed (when using Kamelets).
 
@@ -3596,7 +3596,7 @@ by default `camel-main` will be used
 You can use the `camel dependency copy` command to copy the required JARs to a specific folder.
 
 > **Important**
-> The `camel dependency copy` and `camel dependency list` uses Apache Maven, This requires having Apache Maven installed, and `mvn` command in PATH environment, so Camel JBang can invoke `mvn` command.
+> The `camel dependency copy` and `camel dependency list` uses Apache Maven, This requires having Apache Maven installed, and `mvn` command in PATH environment, so Camel CLI can invoke `mvn` command.
 
 By default, the JARs are copied to `lib` folder:
 
@@ -3616,13 +3616,13 @@ camel-dsl-support-3.21.0.jar            camel-util-json-3.21.0.jar
 
 ## Creating Projects
 
-You can _export_ your Camel JBang integration to a traditional Java-based project such as Spring Boot or Quarkus.
+You can _export_ your Camel CLI integration to a traditional Java-based project such as Spring Boot or Quarkus.
 
-You may want to do this after you have built a prototype using Camel JBang, and are in need of a traditional Java-based project with more need for Java coding, or wanting to use the powerful runtimes of Spring Boot, Quarkus or vanilla Camel Main.
+You may want to do this after you have built a prototype using Camel CLI, and are in need of a traditional Java-based project with more need for Java coding, or wanting to use the powerful runtimes of Spring Boot, Quarkus or vanilla Camel Main.
 
 ### Exporting to Camel Spring Boot
 
-The command `export --runtime=spring-boot` will export your current Camel JBang file(s) to a Maven-based Spring Boot project with files organized in `src/main/` folder structure.
+The command `export --runtime=spring-boot` will export your current Camel CLI file(s) to a Maven-based Spring Boot project with files organized in `src/main/` folder structure.
 
 For example, to export to Spring Boot using the Maven groupId `_com.foo_` and the artifactId _acme_ and with version _1.0-SNAPSHOT_ you execute:
 
@@ -3639,7 +3639,7 @@ To export to another directory (copies the files), you execute:
 camel export --runtime=spring-boot --gav=com.foo:acme:1.0-SNAPSHOT --directory=../myproject
 ```
 
-When exporting to Spring Boot then the Camel version defined in the `pom.xml` is the same version as Camel JBang uses. However, you can specify the Camel version as shown below:
+When exporting to Spring Boot then the Camel version defined in the `pom.xml` is the same version as Camel CLI uses. However, you can specify the Camel version as shown below:
 
 ```bash
 camel export --runtime=spring-boot --gav=com.foo:acme:1.0-SNAPSHOT --directory=../myproject --camel-spring-boot-version=3.18.3
@@ -3650,7 +3650,7 @@ camel export --runtime=spring-boot --gav=com.foo:acme:1.0-SNAPSHOT --directory=.
 
 ### Exporting to Camel Quarkus
 
-The command `export --runtime=quarkus` will export your current Camel JBang file(s) to a Maven-based Quarkus project with files organized in `src/main/` folder structure.
+The command `export --runtime=quarkus` will export your current Camel CLI file(s) to a Maven-based Quarkus project with files organized in `src/main/` folder structure.
 
 For example, to export to Quarkus using the Maven groupId `_com.foo_` and the artifactId _acme_ and with version _1.0-SNAPSHOT_ you simply execute:
 
@@ -3678,7 +3678,7 @@ camel export --runtime=quarkus --gav=com.foo:acme:1.0-SNAPSHOT --directory=../my
 
 ### Exporting to Camel Main
 
-The command `export --runtime=camel-main` will export your current Camel JBang file(s) to a Maven-based vanilla Camel Main project with files organized in `src/main/` folder structure.
+The command `export --runtime=camel-main` will export your current Camel CLI file(s) to a Maven-based vanilla Camel Main project with files organized in `src/main/` folder structure.
 
 For example, to export to Camel Main using the Maven groupId _com.foo_ and the artifactId _acme_ and with version _1.0-SNAPSHOT_ you simply execute:
 
@@ -3718,7 +3718,7 @@ Then you can export to `--runtime=camel-main` as follows:
 camel export --runtime=camel-main --gav=com.foo:acme:1.0-SNAPSHOT --directory=../myproject
 ```
 
-Then Camel JBang will detect the `agent:` dependency and download this from Maven and save to a `../myproject/agent` folder. You can then start the Camel integration from Java via:
+Then Camel CLI will detect the `agent:` dependency and download this from Maven and save to a `../myproject/agent` folder. You can then start the Camel integration from Java via:
 
 ```bash
 cd ../myproject
@@ -3761,7 +3761,7 @@ camel export --runtime=quarkus --gav=com.foo:acme:1.0-SNAPSHOT --dep=camel:manag
 
 ### Exporting with Camel CLI included
 
-Usually when exporting to Spring Boot, Quarkus or Camel Main, then Camel JBang CLI is not included out of the box. To be able to continue to use Camel CLI (i.e. `camel`), you need to add `camel:cli-connector` in the `--dep` option, as shown below:
+Usually when exporting to Spring Boot, Quarkus or Camel Main, then Camel CLI CLI is not included out of the box. To be able to continue to use Camel CLI (i.e. `camel`), you need to add `camel:cli-connector` in the `--dep` option, as shown below:
 
 ```bash
 camel export --runtime=quarkus --gav=com.foo:acme:1.0-SNAPSHOT --dep=camel:cli-connector --directory=../myproject
@@ -3782,7 +3782,7 @@ The export command will by default load configuration from `application.properti
 
 The follow options related to _exporting_ or _running_, can be configured in `application.properties`:
 
-### Camel JBang configurations
+### Camel CLI configurations
 
 The camel.jbang supports 48 options, which are listed below.
 
@@ -3822,7 +3822,7 @@ The camel.jbang supports 48 options, which are listed below.
 | **camel.jbang.mavenWrapper** | Include Maven Wrapper files in the exported project | true | boolean |
 | **camel.jbang.metrics** | Metrics (Micrometer and Prometheus) at /observe/metrics on local HTTP server (port 8080 by default) when running standalone Camel | false | boolean |
 | **camel.jbang.openApi** | File name of open-api spec file (JSON or YAML) to generate routes from the swagger/openapi API spec file. |  | String |
-| **camel.jbang.packageScanJars** | Whether to automatic package scan JARs for custom Spring or Quarkus beans making them available for Camel JBang | false | boolean |
+| **camel.jbang.packageScanJars** | Whether to automatic package scan JARs for custom Spring or Quarkus beans making them available for Camel CLI | false | boolean |
 | **camel.jbang.prompt** | Allow user to type in required parameters in prompt if not present in application | false | boolean |
 | **camel.jbang.quarkusArtifactId** | artifactId of Quarkus Platform BOM |  | String |
 | **camel.jbang.quarkusExtensionRegistryBaseUri** | The base URI of Quarkus Extension Registry |  | String |
@@ -3840,7 +3840,7 @@ The camel.jbang supports 48 options, which are listed below.
 
 ## Configuration
 
-Camel JBang `config` command is used to store and use the user configuration. This eliminates the need to specify CLI options each time. For example, to run a different Camel version, instead of executing
+Camel CLI `config` command is used to store and use the user configuration. This eliminates the need to specify CLI options each time. For example, to run a different Camel version, instead of executing
 
 ```bash
 camel run * --camel-version=3.18.4
@@ -3860,7 +3860,7 @@ camel run *
 
 ### Configuration Locations
 
-Camel JBang uses two possible configuration files:
+Camel CLI uses two possible configuration files:
 
 -   Global configuration: ~/.camel-jbang-user.properties
     
@@ -3891,7 +3891,7 @@ camel run * --camel-version=4.3.0
 
 ### Set and unset configuration
 
-Every Camel JBang option is added to the user configuration. For example, to export a simple project such as
+Every Camel CLI option is added to the user configuration. For example, to export a simple project such as
 
 ```bash
 camel init foo.yaml
@@ -3952,7 +3952,7 @@ In this example, since `repos` is set in the user configuration (`config set`) a
 
 **Available as of Camel 4.14**
 
-In Camel 4.14 then support for using Groovy source together with Camel JBang has been improved. You can now include `.groovy` source files when you use `camel run` and let the Groovy source files be pre-compiled during startup. This allows to have a common set of groovy classes and functions which can be used by Camel and Java.
+In Camel 4.14 then support for using Groovy source together with Camel CLI has been improved. You can now include `.groovy` source files when you use `camel run` and let the Groovy source files be pre-compiled during startup. This allows to have a common set of groovy classes and functions which can be used by Camel and Java.
 
 Because this class-loader is required to be in use for being able to load the groovy pre-compiled classes, then this feature will only work via Camel which has control of classloading when used with Camel features that would support this such as in the route DSL and elsewhere.
 
@@ -3967,9 +3967,9 @@ You can find an example at: [https://github.com/apache/camel-kamelets-examples/t
 
 When using [JBang](https://www.jbang.dev/) then JBang stores state in `~/.jbang` directory. This is also the location where JBang stores downloaded JARs.
 
-Camel JBang also downloads needed dependencies while running. However, these dependencies are downloaded to your local Maven repository `~/.m2`.
+Camel CLI also downloads needed dependencies while running. However, these dependencies are downloaded to your local Maven repository `~/.m2`.
 
-So if you find problems with running Camel JBang using what is seems like an outdated JAR, then you can try to delete these directories or parts of it.
+So if you find problems with running Camel CLI using what is seems like an outdated JAR, then you can try to delete these directories or parts of it.
 
 ## Validate Plugin
 
@@ -4004,7 +4004,7 @@ Validation success (files:2)
 
 ## Infrastructure
 
-Camel JBang `infra` command can be used to `list`, `run` and `stop` external services that can be used for fast prototyping and testing. Apache Camel test-infra Services are exposed via the `infra` command, in this way, the same infrastructure that is used to test Apache Camel itself, is exposed via Camel JBang, and services that are already proved to work with Apache Camel can be easily used.
+Camel CLI `infra` command can be used to `list`, `run` and `stop` external services that can be used for fast prototyping and testing. Apache Camel test-infra Services are exposed via the `infra` command, in this way, the same infrastructure that is used to test Apache Camel itself, is exposed via Camel CLI, and services that are already proved to work with Apache Camel can be easily used.
 
 ### List Services
 
@@ -4143,7 +4143,7 @@ $ camel infra log service
 
 ## Update
 
-Apache Camel applications can be automatically updated using Camel JBang. The update command provides two main operations:
+Apache Camel applications can be automatically updated using Camel CLI. The update command provides two main operations:
 
 -   `list`: Shows available Apache Camel versions for updating
     

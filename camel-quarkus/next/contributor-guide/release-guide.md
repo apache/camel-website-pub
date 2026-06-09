@@ -1,5 +1,8 @@
 # Apache Camel Quarkus release process
 
+> **Note**
+> Unless a Long Term Support (LTS) version of the documentation exists for your target release version, it is generally better to use the 'next' version of the documentation.
+
 The process is _mutatis mutandis_ the same as for the main Apache Camel repository - see the [Release guide](../../../manual/release-guide.md) page of the Camel documentation.
 
 The process is oriented toward releasing the main branch, some adjustments might be needed when it comes to releasing maintenance branches.
@@ -399,7 +402,7 @@ This section needs to be executed only when a Quarkus Platform release has been 
     git fetch upstream
     git checkout camel-quarkus-main
     git reset --hard upstream/camel-quarkus-main
-    mvn org.l2x6.cq:cq-maven-plugin:2.10.0:examples-set-platform -Dcq.quarkus.platform.version=$NEW_PLATFORM_VERSION
+    ./mvnw org.l2x6.cq:cq-maven-plugin:2.10.0:examples-set-platform -Dcq.quarkus.platform.version=$NEW_PLATFORM_VERSION
     ./refresh-dockerfiles.sh
     git add -A
     git commit -m "Upgrade to Quarkus Platform $NEW_PLATFORM_VERSION"
@@ -408,7 +411,7 @@ This section needs to be executed only when a Quarkus Platform release has been 
 -   Make sure that the tests are still passing:
     
     ```shell
-    ./mvnw-for-each.sh clean verify
+    ./mvnw clean verify
     ```
     
 -   If everything works for you locally, open a PR to merge `camel-quarkus-main` to `main`
@@ -420,9 +423,9 @@ This section needs to be executed only when a Quarkus Platform release has been 
     git checkout main
     git fetch upstream
     git reset --hard upstream/main
-    ./mvnw-for-each.sh versions:set versions:update-child-modules -DnewVersion=$NEW_CQ_VERSION
+    ./mvnw versions:set versions:update-child-modules -DnewVersion=$NEW_CQ_VERSION
     # Update version labels in Kubernetes resources
-    ./mvnw-for-each.sh process-sources
+    ./mvnw process-sources
     git add -A
     git commit -m "Tag $NEW_CQ_VERSION"
     git tag $NEW_CQ_VERSION
@@ -441,9 +444,9 @@ This section needs to be executed only when a Quarkus Platform release has been 
     git checkout camel-quarkus-main
     git reset --hard main
     ./mvnw org.l2x6.cq:cq-maven-plugin:2.10.0:examples-set-platform -Dcq.camel-quarkus.version=${NEXT_CQ_VERSION}-SNAPSHOT -Dcq.newVersion=${NEXT_CQ_VERSION}-SNAPSHOT
-    ./mvnw-for-each.sh versions:update-child-modules -N
+    ./mvnw versions:update-child-modules -N
     # Update version labels in Kubernetes resources
-    ./mvnw-for-each.sh process-sources
+    ./mvnw process-sources
     git add -A
     git commit -m "Next is $NEXT_CQ_VERSION"
     git push upstream camel-quarkus-main --force-with-lease

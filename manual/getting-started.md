@@ -30,7 +30,7 @@ And there is [Code with Quarkus](https://code.quarkus.io/), the Quarkus generato
 
 The Camel CLI can either be installed and used together with JBang (step 1a), or as a pure standalone Camel installation (step 1b).
 
-### Installing and using Camel JBang CLI
+### Installing and using Camel CLI CLI
 
 Camel uses [JBang](https://www.jbang.dev/) for the Camel CLI. You can easily get up and running in a few steps.
 
@@ -56,7 +56,7 @@ Then you can check that Camel is installed and working by executing:
 ```bash
 $ camel version
 JBang version: 0.138.0
-Camel JBang version: 4.18.0
+Camel CLI version: 4.18.0
 ```
 
 ### Installing and using Camel standalone CLI
@@ -77,7 +77,7 @@ You can then execute the provided scripts from the bin folder:
 ```bash
 $ bin/camel.sh version
 JBang version: 0.138.0
-Camel JBang version: 4.18.2
+Camel CLI version: 4.18.2
 ```
 
 > **Tip**
@@ -118,7 +118,7 @@ While in live coding mode, whenever you save changes to `hello.yaml`, Camel will
 
 **Step 5**
 
-Make sure to check out the [Camel JBang](camel-jbang.md) documentation, for more details on the powers of the Camel CLI. You will also find information how you can _export_ what you have built with the Camel CLI into a vanilla Camel Spring Boot or Camel Quarkus project.
+Make sure to check out the [Camel CLI](camel-jbang.md) documentation, for more details on the powers of the Camel CLI. You will also find information how you can _export_ what you have built with the Camel CLI into a vanilla Camel Spring Boot or Camel Quarkus project.
 
 > **Tip**
 > See the `camel wrapper` command which can be used to install and pin Camel CLI to a given version which is local for a given project/directory (similar to how Maven Wrapper works).

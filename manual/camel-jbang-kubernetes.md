@@ -14,11 +14,11 @@ You can connect to a remote Kubernetes cluster or set up a local cluster. To set
 -   [Minikube](https://minikube.sigs.k8s.io/docs/start/)
     
 
-Camel JBang is able to interact with any of these Kubernetes platforms (remote or local).
+Camel CLI is able to interact with any of these Kubernetes platforms (remote or local).
 
-Running Camel routes on Kubernetes is quite simple with Camel JBang. In fact, you can develop and test your Camel route locally with Camel JBang and then promote the same source to running it as an integration on Kubernetes.
+Running Camel routes on Kubernetes is quite simple with Camel CLI. In fact, you can develop and test your Camel route locally with Camel CLI and then promote the same source to running it as an integration on Kubernetes.
 
-The Camel JBang Kubernetes functionality is provided as a command plugin. This means you need to enable the `kubernetes` plugin first to use the subcommands in Camel JBang.
+The Camel CLI Kubernetes functionality is provided as a command plugin. This means you need to enable the `kubernetes` plugin first to use the subcommands in Camel CLI.
 
 ```bash
 camel plugin add kubernetes
@@ -35,7 +35,7 @@ camel plugin get
  kubernetes  kubernetes  org.apache.camel:camel-jbang-plugin-kubernetes  Run Camel applications on Kubernetes
 ```
 
-Now Camel JBang is able to run the subcommands offered by the plugin. You can inspect the help page to see the list of available plugin subcommands.
+Now Camel CLI is able to run the subcommands offered by the plugin. You can inspect the help page to see the list of available plugin subcommands.
 
 ```bash
 camel kubernetes --help
@@ -43,7 +43,7 @@ camel kubernetes --help
 
 ## Kubernetes export
 
-The Kubernetes plugin works with the Camel JBang export functionality. The project export generates a proper Maven/Gradle project following one of the available runtime types Quarkus, SpringBoot or camel-main.
+The Kubernetes plugin works with the Camel CLI export functionality. The project export generates a proper Maven/Gradle project following one of the available runtime types Quarkus, SpringBoot or camel-main.
 
 In case you export the project with the Kubernetes plugin the exported project holds all information (e.g. sources, properties, dependencies, etc.) and is ready to build, push and deploy the application to Kubernetes, too. The export generates a Kubernetes manifest (kubernetes.yml) that holds all resources (e.g. Deployment, Service, ConfigMap) required to run the application on Kubernetes.
 
@@ -60,7 +60,7 @@ The default runtime of the project is Quarkus. You can adjust the runtime with a
 If you want to run this application on Kubernetes, you need to build the container image, push it to a registry and deploy the application to Kubernetes.
 
 > **Tip**
-> The Camel JBang Kubernetes plugin provides a `run` command that combines these steps (export, container image build, push, deploy) into a single command.
+> The Camel CLI Kubernetes plugin provides a `run` command that combines these steps (export, container image build, push, deploy) into a single command.
 
 You can now navigate to the generated project folder and build the project artifacts for instance with this Maven command.
 
@@ -84,7 +84,7 @@ For instance with the option `-Dquarkus.kubernetes.deploy=true` uses this manife
 
 You will see the Deployment on Kubernetes shortly after this command has finished.
 
-The Camel JBang Kubernetes export command provides several options to customize the exported project.
+The Camel CLI Kubernetes export command provides several options to customize the exported project.
 
  
 | Option | Description |
@@ -113,7 +113,7 @@ The Camel JBang Kubernetes export command provides several options to customize 
 | `--cluster-type` | The target cluster type. Special configurations may be applied to different cluster types such as Kind or Minikube. |
 | `--profile` | The developer [profile](camel-jbang.html#_using_profiles) to use a specific configuration in configuration files using the naming style `application-<profile>.properties`. |
 
-The Kubernetes plugin export command also inherits all options from the arbitrary Camel JBang export command.
+The Kubernetes plugin export command also inherits all options from the arbitrary Camel CLI export command.
 
 > **Tip**
 > See the possible options by running: `camel kubernetes export --help` for more details.
@@ -369,7 +369,7 @@ spec:
 
 The Service trait enhances the Kubernetes manifest with a Service resource so that the application can be accessed by other components in the same namespace. The service resource exposes the application with a protocol (e.g., TCP/IP) on a given port and uses either `ClusterIP`, `NodePort` or `LoadBalancer` type.
 
-The Camel JBang plugin automatically inspects the Camel routes for exposed Http services and adds the service resource when applicable. This means when one of the Camel routes exposes a Http service (for instance by using the `platform-http` component) the Kubernetes manifest also creates a Kubernetes Service resource besides the arbitrary Deployment.
+The Camel CLI plugin automatically inspects the Camel routes for exposed Http services and adds the service resource when applicable. This means when one of the Camel routes exposes a Http service (for instance by using the `platform-http` component) the Kubernetes manifest also creates a Kubernetes Service resource besides the arbitrary Deployment.
 
 You can customize the generated Kubernetes service resource with trait options:
 
@@ -387,7 +387,7 @@ You can customize the generated Kubernetes service resource with trait options:
 When Knative serving is available on the target Kubernetes cluster, you may want to use the Knative service resource instead of an arbitrary Kubernetes service resource. The Knative service trait will create such a resource as part of the Kubernetes manifest.
 
 > **Note**
-> The `knative-service` trait is disabled by default, you need to enable the Knative service trait with `--trait knative-service.enabled=true` option. Otherwise, the Camel JBang export will always create an arbitrary Kubernetes service resource.
+> The `knative-service` trait is disabled by default, you need to enable the Knative service trait with `--trait knative-service.enabled=true` option. Otherwise, the Camel CLI export will always create an arbitrary Kubernetes service resource.
 
 > **Note**
 > If you enable the knative-service trait and deploys to minikube and uses the docker builder to build the container image in the minikube registry addon, it’s likely the container image published won’t contain the digest value, and [knative-serving has a verification to check the image digest](https://knative.dev/docs/serving/configuration/deployment/#skipping-tag-resolution), so the pod will fail to start with the error message `failed to resolve image to digest`, so for development purposes the kubernetes plugin will skip this validation by adding the property `registries-skipping-tag-resolving: localhost:5000` to the `configmap/config-deployment` in `knative-serving` namespace, if you want to disable this automatic setting, you can set the `--disable-auto` parameter to disable the automatic cluster configuration, however disabling it won’t set other automatic configuration for the cluster. You may also want to manually set that property, so this plugin won’t set it even with the automatic cluster detection.
@@ -443,7 +443,7 @@ The previous section described how the exported Apache Camel application can lev
 
 Apache Camel also provides a Knative component that makes you easily interact with [Knative eventing](https://knative.dev/docs/eventing/) and [Knative serving](https://knative.dev/docs/serving/).
 
-The Knative component enables you to exchange data with the Knative eventing broker and other Knative services deployed on Kubernetes. The Camel JBang Kubernetes plugin provides some autoconfiguration options when connecting with the Knative component. The export command assists you in configuring both the Knative component and the Kubernetes manifest for connecting to Knative resources on the Kubernetes cluster.
+The Knative component enables you to exchange data with the Knative eventing broker and other Knative services deployed on Kubernetes. The Camel CLI Kubernetes plugin provides some autoconfiguration options when connecting with the Knative component. The export command assists you in configuring both the Knative component and the Kubernetes manifest for connecting to Knative resources on the Kubernetes cluster.
 
 You can configure the Knative component with the Knative trait.
 
@@ -474,7 +474,7 @@ Refer to the Knative documentation for more information.
 
 The concept of a Knative trigger allows you to consume events from the [Knative eventing](https://knative.dev/docs/eventing/) broker. In case your Camel route uses the Knative component as a consumer you may need to create a trigger in Kubernetes to connect your Camel application with the Knative broker.
 
-The Camel JBang Kubernetes plugin is able to automatically create this trigger for you.
+The Camel CLI Kubernetes plugin is able to automatically create this trigger for you.
 
 > **Note**
 > The `knative` trait is disabled by default, you need to enable the Knative trait with `--trait knative.enabled=true` option.
@@ -492,7 +492,7 @@ The following Camel route uses the Knative event component and references a Knat
             uri: log:info
 ```
 
-The route consumes Knative events of type `camel.evt.type`. If you export this route with the Camel JBang Kubernetes plugin, you will see a Knative trigger being generated as part of the Kubernetes manifest (kubernetes.yml).
+The route consumes Knative events of type `camel.evt.type`. If you export this route with the Camel CLI Kubernetes plugin, you will see a Knative trigger being generated as part of the Kubernetes manifest (kubernetes.yml).
 
 ```bash
 camel kubernetes export knative-route.yaml
@@ -563,7 +563,7 @@ The Camel route that connects to a Knative channel in order to receive events lo
             uri: log:info
 ```
 
-The Knative channel is referenced by its name. The Camel JBang Kubernetes plugin will inspect your code to automatically create a channel subscription as part of the Kubernetes manifest. You just need to export the Camel route as usual.
+The Knative channel is referenced by its name. The Camel CLI Kubernetes plugin will inspect your code to automatically create a channel subscription as part of the Kubernetes manifest. You just need to export the Camel route as usual.
 
 ```bash
 camel kubernetes export knative-route.yaml
@@ -618,7 +618,7 @@ Assuming that you have Knative eventing installed on your cluster and that you h
 
 When connecting to a Knative resource (Broker, Channel, Service) in order to produce events for Knative eventing you probably want to use a `SinkBinding` that resolves the URL to the Knative resource for you. The sink binding is a Kubernetes resource that makes Knative eventing automatically inject the resource URL into your Camel application on startup. The Knative URL injection uses environment variables (`K_SINK`, `K_CE_OVERRIDES`) on your deployment. The Knative eventing operator will automatically resolve the Knative resource (e.g. a Knative broker URL) and inject the value so your application does not need to know the actual URL when deploying.
 
-The Camel JBang Kubernetes plugin leverages the sink binding concept for all routes that use the Knative component as an output.
+The Camel CLI Kubernetes plugin leverages the sink binding concept for all routes that use the Knative component as an output.
 
 > **Note**
 > The `knative` trait is disabled by default, you need to enable the Knative trait with `--trait knative.enabled=true` option.
@@ -640,7 +640,7 @@ The following route produces events on a Knative broker:
 
 The route produces events of type `camel.evt.type` and pushes the events to the broker named `my-broker`. At this point, the actual Knative broker URL is unknown. The sink binding is going to resolve the URL and inject its value at deployment time using the `K_SINK` environment variable.
 
-The Camel JBang Kubernetes plugin export automatically inspects such a route and automatically creates the sink binding resource for us. The sink binding is part of the exported Kubernetes manifest and is created on the cluster as part of the deployment.
+The Camel CLI Kubernetes plugin export automatically inspects such a route and automatically creates the sink binding resource for us. The sink binding is part of the exported Kubernetes manifest and is created on the cluster as part of the deployment.
 
 A sink binding resource created by the export command looks like follows:
 
@@ -667,7 +667,7 @@ spec:
     name: knative-route
 ```
 
-In addition to creating the sink binding, the Camel JBang plugin also takes care of configuring the Knative Camel component. The Knative component uses a configuration file that you can find in `src/main/resources/knative.json`. As you can see the configuration uses the `K_SINK` injected property placeholder as a broker URL.
+In addition to creating the sink binding, the Camel CLI plugin also takes care of configuring the Knative Camel component. The Knative component uses a configuration file that you can find in `src/main/resources/knative.json`. As you can see the configuration uses the `K_SINK` injected property placeholder as a broker URL.
 
 ```json
 {

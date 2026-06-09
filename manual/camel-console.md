@@ -60,9 +60,9 @@ This will list the available consoles, and you can then call a console by its id
 http://localhost:8080/actuator/camel/routes
 ```
 
-### Dev Console and Camel JBang
+### Dev Console and Camel CLI
 
-The Developer Console is easily available when using [Camel JBang](camel-jbang.md), by the `--console` argument when running Camel JBang.
+The Developer Console is easily available when using [Camel CLI](camel-jbang.md), by the `--console` argument when running Camel CLI.
 
 For example to run a Camel route from `foo.yaml` and additional configurations from `myapp.properties` you can run as follows and have the console started and accessible from `[http://localhost:8080/q/dev](http://localhost:8080/q/dev)`
 

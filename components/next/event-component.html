@@ -45,7 +45,7 @@ from("event:ExchangeCompleted?batchSize=50&amp;batchTimeout=2000")
 
 // Combine async processing with batching
 from("event:Exchange*?async=true&amp;batchSize=100&amp;batchTimeout=5000")
-    .log("Batch of ${header.CamelEventBatchSize} exchange events");</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_jbang_quick_start"><a class="anchor" href="#_jbang_quick_start"></a>JBang Quick Start</h2> <div class="sectionbody"> <div class="paragraph"> <p>You can quickly try the Event component using <a href="../../manual/camel-jbang.html" class="xref page">Camel JBang</a>.</p> </div> <div class="paragraph"> <p>Create a file called <code>event-monitor.yaml</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    .log("Batch of ${header.CamelEventBatchSize} exchange events");</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_jbang_quick_start"><a class="anchor" href="#_jbang_quick_start"></a>JBang Quick Start</h2> <div class="sectionbody"> <div class="paragraph"> <p>You can quickly try the Event component using <a href="../../manual/camel-jbang.html" class="xref page">Camel CLI</a>.</p> </div> <div class="paragraph"> <p>Create a file called <code>event-monitor.yaml</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: event:Route*
       steps:

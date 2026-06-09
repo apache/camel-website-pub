@@ -58,8 +58,8 @@ The server exposes 30 catalog tools organized into twelve functional areas, 21 r
  
 | Tool | Description |
 | --- | --- |
-| `camel_catalog_examples` | List available Camel JBang examples with filtering by name, description, or tag (case-insensitive substring match). Supports filtering by difficulty level (`beginner`, `intermediate`, `advanced`) and limiting the number of results. Returns name, title, description, level, tags, and file list for each example. |
-| `camel_catalog_example_file` | Get the content of a specific file from a Camel JBang example. For bundled examples, returns the file content directly. For non-bundled examples, returns a GitHub URL where the file can be found. Use `camel_catalog_examples` first to discover example names and their files. |
+| `camel_catalog_examples` | List available Camel CLI examples with filtering by name, description, or tag (case-insensitive substring match). Supports filtering by difficulty level (`beginner`, `intermediate`, `advanced`) and limiting the number of results. Returns name, title, description, level, tags, and file list for each example. |
+| `camel_catalog_example_file` | Get the content of a specific file from a Camel CLI example. For bundled examples, returns the file content directly. For non-bundled examples, returns a GitHub URL where the file can be found. Use `camel_catalog_examples` first to discover example names and their files. |
 
 ### Route Understanding
 
@@ -351,7 +351,7 @@ This walkthrough demonstrates the full AI-assisted Camel workflow: use the catal
 
 -   [JBang](https://www.jbang.dev/) installed and on your PATH
     
--   manual/camel-jbang.html\[Camel JBang\] installed (`jbang app install camel@apache/camel`)
+-   manual/camel-jbang.html\[Camel CLI\] installed (`jbang app install camel@apache/camel`)
     
 -   An MCP-capable AI tool (Claude Code, VS Code with Copilot, JetBrains AI, etc.) configured as shown in the [Setup](#_setup) section above
     

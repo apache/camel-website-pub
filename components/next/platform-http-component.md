@@ -92,7 +92,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **path** (consumer) | **Required** The path under which this endpoint serves the HTTP requests, for proxy use 'proxy'. |  | String |
 
-### Query Parameters (24 parameters)
+### Query Parameters (25 parameters)
 
    
 | Name | Description | Default | Type |
@@ -152,6 +152,7 @@ Enum values:
 | **fileNameExtWhitelist** (consumer (advanced)) | A comma or whitespace separated list of file extensions. Uploads having these extensions will be stored locally. Null value or asterisk () will allow all files. |  | String |
 | **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter headers to and from Camel message. |  | HeaderFilterStrategy |
 | **platformHttpEngine** (advanced) | An HTTP Server engine implementation to serve the requests of this endpoint. |  | PlatformHttpEngine |
+| **oauthProfile** (security) | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. |  | String |
 
 ## Usage
 
@@ -183,6 +184,71 @@ To use it with different runtimes:
     <!-- use the same version as your Camel version -->
 </dependency>
 ```
+
+### OAuth Bearer token validation
+
+Platform HTTP consumers can validate incoming `Authorization: Bearer` tokens by setting the `oauthProfile` endpoint option. The profile is resolved through Camel’s `OAuthTokenValidationFactory` SPI. The [camel-oauth](../4.18.x/others/oauth.md) component provides the default implementation for standalone Camel applications; runtimes such as Camel Spring Boot or Camel Quarkus can provide their own implementation backed by their native security stack.
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-oauth</artifactId>
+    <version>x.x.x</version>
+</dependency>
+```
+
+> **Note**
+> If `oauthProfile` is set but no `OAuthTokenValidationFactory` is available on the classpath, the route fails to start. Add `camel-oauth` for the default provider or include a runtime-specific provider from the platform integration.
+
+Camel first checks whether the selected profile has a profile-specific validation factory:
+
+```properties
+camel.oauth.myprofile.validation-factory=#bean:myTokenValidationFactory
+```
+
+If this property is set, the referenced bean must exist and implement `OAuthTokenValidationFactory`. Otherwise, Camel looks for a single `OAuthTokenValidationFactory` in the registry before falling back to the classpath provider.
+
+```java
+from("platform-http:/secure?oauthProfile=myprofile")
+    .to("direct:businessLogic");
+```
+
+```yaml
+- from:
+    uri: "platform-http:/secure?oauthProfile=myprofile"
+    steps:
+      - to: "direct:businessLogic"
+```
+
+```properties
+camel.oauth.myprofile.jwks-endpoint=https://idp.example.com/.well-known/jwks.json
+camel.oauth.myprofile.expected-issuer=https://idp.example.com
+camel.oauth.myprofile.expected-audience=my-api
+camel.oauth.myprofile.connect-timeout-seconds=5
+camel.oauth.myprofile.read-timeout-seconds=10
+```
+
+See [camel-oauth](../4.18.x/others/oauth.md) for OIDC discovery and opaque-token introspection profile examples.
+
+> **Note**
+> Opaque-token introspection performs a blocking outbound HTTP call for every request. For high-traffic endpoints, prefer JWT validation with JWKS when the identity provider publishes signing keys. See [camel-oauth](../4.18.x/others/oauth.md) for timeout and validation profile options.
+
+When `oauthProfile` is set, static profile configuration is validated at route startup. Requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed. Token validation infrastructure failures are rejected with HTTP 503. With the Vert.x platform-http engine, Bearer token validation runs before the request body handler, so unauthenticated requests are rejected before body buffering, form parsing, or file uploads. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. Route code can use the result to read the principal name, token scopes, and immutable token attributes/claims. The raw `Authorization` header is removed before the route is invoked and from OAuth rejection responses.
+
+```java
+import org.apache.camel.component.platform.http.PlatformHttpConstants;
+import org.apache.camel.spi.OAuthTokenValidationResult;
+
+from("platform-http:/secure?oauthProfile=myprofile")
+    .process(exchange -> {
+        OAuthTokenValidationResult result = exchange.getProperty(
+                PlatformHttpConstants.OAUTH_TOKEN_VALIDATION_RESULT,
+                OAuthTokenValidationResult.class);
+        exchange.getMessage().setHeader("X-Principal", result.getName());
+    });
+```
+
+Configure `expected-issuer` and `expected-audience` for production resource-server routes, and use HTTPS for JWKS, OIDC discovery, and introspection endpoints. The camel-oauth provider rejects missing issuer/audience policy and plain HTTP endpoints by default; use its explicit opt-out properties only for legacy providers or local development. Do not return token validation diagnostic details directly to external clients.
 
 ### Implementing a reverse proxy
 

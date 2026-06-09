@@ -290,7 +290,7 @@ from("queue:foo")
 
 ## Migrating from DataWeave
 
-If you have existing DataWeave (`.dwl`) scripts, Camel provides a transpiler to convert them to DataSonnet format via the Camel JBang CLI.
+If you have existing DataWeave (`.dwl`) scripts, Camel provides a transpiler to convert them to DataSonnet format via the Camel CLI CLI.
 
 ### Converting an inline expression
 

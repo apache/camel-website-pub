@@ -3,7 +3,7 @@
 Camel’s tracer is used for logging message details during routing, where you can see the route path of each message as they happen. Details of the message is also logged such as the message body, and headers.
 
 > **Tip**
-> There is an alternative tracer that captures the messages in a [Backlog Tracer](backlog-tracer.md) for on-demand tracing. For example tools, Camel JBang, Hawtio and others are using this.
+> There is an alternative tracer that captures the messages in a [Backlog Tracer](backlog-tracer.md) for on-demand tracing. For example tools, Camel CLI, Hawtio and others are using this.
 
 ## Enabling Tracing
 
@@ -39,7 +39,7 @@ camel.main.tracing = true
 By default, Camel optimizes and opt-out tracing. Therefore, you would either have to enable tracing from the startup, or turn on standby mode, to allow tracing to be enabled later during runtime.
 
 > **Note**
-> When using Camel Main or Camel JBang with the `dev` profile (the default), tracing standby is automatically enabled. This means you can toggle tracing on and off at runtime without needing to restart.
+> When using Camel Main or Camel CLI with the `dev` profile (the default), tracing standby is automatically enabled. This means you can toggle tracing on and off at runtime without needing to restart.
 
 To set tracing in standby mode you can do:
 

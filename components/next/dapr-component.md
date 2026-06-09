@@ -59,7 +59,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Dapr component supports 39 options, which are listed below.
+The Dapr component supports 40 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -199,6 +199,7 @@ Enum values:
 | **workflowStartTime** (producer) | The start time of the new workflow. |  | Instant |
 | **workflowVersion** (producer) | The version of the workflow to start. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 
 ## Endpoint Options
 
@@ -241,7 +242,7 @@ Enum values:
 
  |  | DaprOperation |
 
-### Query Parameters (39 parameters)
+### Query Parameters (40 parameters)
 
    
 | Name | Description | Default | Type |
@@ -396,6 +397,7 @@ Enum values:
 | **workflowStartTime** (producer) | The start time of the new workflow. |  | Instant |
 | **workflowVersion** (producer) | The version of the workflow to start. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 
 ## Message Headers
 
@@ -961,7 +963,7 @@ When using dapr with Spring Boot make sure to use the following Maven dependency
 </dependency>
 ```
 
-The component supports 40 options, which are listed below.
+The component supports 41 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -982,6 +984,7 @@ The component supports 40 options, which are listed below.
 | **camel.component.dapr.event-name** | The name of the event. Event names are case-insensitive. |  | String |
 | **camel.component.dapr.expiry-in-seconds** | The expiry time in seconds for the lock. |  | Integer |
 | **camel.component.dapr.get-workflow-i-o** | Set true to fetch the workflow instance’s inputs, outputs, and custom status, or false to omit. | false | Boolean |
+| **camel.component.dapr.header-filter-strategy** | To use a custom HeaderFilterStrategy to filter header to and from Camel message. The option is a org.apache.camel.spi.HeaderFilterStrategy type. |  | HeaderFilterStrategy |
 | **camel.component.dapr.http-extension** | HTTP method to use when invoking the service. Accepts verbs like GET, POST, PUT, DELETE, etc. Creates a minimal HttpExtension with no headers or query params. Takes precedence over verb. The option is a io.dapr.client.domain.HttpExtension type. |  | HttpExtension |
 | **camel.component.dapr.key** | The key used to identify the state/secret object within the specified state/secret store. |  | String |
 | **camel.component.dapr.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |

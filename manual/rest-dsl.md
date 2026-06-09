@@ -326,7 +326,7 @@ rest("/customers/")
         to: "direct:customerNewOrder"
 ```
 
-If you use Camel Main, Camel Spring Boot, Camel Quarkus or Camel JBang, you can also enable this in `application.properties` such as:
+If you use Camel Main, Camel Spring Boot, Camel Quarkus or Camel CLI, you can also enable this in `application.properties` such as:
 
 ```properties
 camel.rest.inline-routes = true

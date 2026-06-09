@@ -1,6 +1,6 @@
-# Camel JBang Command Reference
+# Camel CLI Command Reference
 
-This page provides a reference for all Camel JBang CLI commands.
+This page provides a reference for all Camel CLI commands.
 
 > **Tip**
 > You can also use `camel --help` or `camel <command> --help` to see available commands and options.
@@ -39,7 +39,7 @@ This page provides a reference for all Camel JBang CLI commands.
 | [camel run](camel-jbang-run.md) | Run as local Camel integration |
 | [camel sbom](camel-jbang-sbom.md) | Generate a CycloneDX or SPDX SBOM for a specific project |
 | [camel script](camel-jbang-script.md) | Run Camel integration as shell script for terminal scripting |
-| [camel shell](camel-jbang-shell.md) | Interactive Camel JBang shell. |
+| [camel shell](camel-jbang-shell.md) | Interactive Camel CLI shell. |
 | [camel stop](camel-jbang-stop.md) | Shuts down running Camel integrations |
 | [camel top](camel-jbang-top.md) | Top status of Camel integrations |
 | [camel trace](camel-jbang-trace.md) | Tail message traces from running Camel integrations |

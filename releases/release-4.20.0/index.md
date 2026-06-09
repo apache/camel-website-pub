@@ -111,7 +111,7 @@ jbang export to quarkus generates wrong dockerfiles
 
 ci jobs - Upgrade to Maven Daemon 1.0.5
 
-### Improvement (12)
+### Improvement (13)
 
 [CAMEL-23351](https://issues.apache.org/jira/browse/CAMEL-23351)
 
@@ -128,6 +128,10 @@ camel-jbang - Custom plugins cannot use JDK ServiceLoader
 [CAMEL-23325](https://issues.apache.org/jira/browse/CAMEL-23325)
 
 camel-jbang - Only accept xxx.camel.yaml and xxx.yaml as valid YAML DSL files
+
+[CAMEL-23324](https://issues.apache.org/jira/browse/CAMEL-23324)
+
+camel-vertx-http, camel-netty-http - Add deserialization filtering in helper utilities
 
 [CAMEL-23322](https://issues.apache.org/jira/browse/CAMEL-23322)
 
