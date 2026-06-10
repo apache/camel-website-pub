@@ -1,4 +1,4 @@
-urls[752]{loc,lastmod}:
+urls[753]{loc,lastmod}:
   https://camel.apache.org/blog/2026/06/camel-by-the-numbers/,2026-06-09T00:00:00+00:00
   https://camel.apache.org/blog/,2026-06-09T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-06-09T00:00:00+00:00
@@ -750,4 +750,5 @@ urls[752]{loc,lastmod}:
   https://camel.apache.org/community/support/,
   https://camel.apache.org/community/team/,
   https://camel.apache.org/tooling/,
+  https://camel.apache.org/what-is-apache-camel/,
   https://camel.apache.org/community/user-stories/,
