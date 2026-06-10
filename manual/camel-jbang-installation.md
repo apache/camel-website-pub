@@ -1,0 +1,105 @@
+# Camel CLI - Installation Options
+
+Alternative ways to install the Camel CLI — pinning a specific version, offline-safe setups, and running from a container image.
+
+For the standard installation, see [Getting Started](camel-jbang-getting-started.md).
+
+## Installing a specific version
+
+By default, `jbang app install` installs the latest Camel release. To pin a specific version (for example 4.14.1):
+
+```bash
+jbang app install --force --fresh -Dcamel.jbang.version=4.14.1 -Dcamel-kamelets.version=4.14.1 camel@apache/camel
+```
+
+The `--force` and `--fresh` flags ensure JBang bypasses its download cache.
+
+> **Important**
+> From Camel 4.17, Kamelets are optional and downloaded on demand. Set the version with `--kamelets-version` on `camel run`, or pre-configure it: `camel config set kamelets-version=4.17.0`.
+
+## Preventing automatic upgrades
+
+JBang occasionally checks upstream sources and may auto-update the installed CLI. If you need a stable, repeatable installation, use one of the options below.
+
+### Option 1: Pin from a local `CamelJBang.java`
+
+This is the most deterministic approach — best for fully offline environments.
+
+1.  Download [`CamelJBang.java`](https://github.com/apache/camel/blob/main/dsl/camel-jbang/camel-jbang-main/dist/CamelJBang.java) to your local machine.
+    
+2.  Edit the file and set the Camel version you want.
+    
+3.  Install from the local file:
+    
+    ```bash
+    jbang app install CamelJBang.java
+    ```
+    
+
+The file can be deleted after installation.
+
+### Option 2: Pin from a version-tagged catalog
+
+Simpler than Option 1, but still prevents surprise upgrades:
+
+```bash
+CAMEL_VERSION="4.18.0"
+CAMEL_TAG="camel-${CAMEL_VERSION}"
+CAMEL_JBANG_CATALOG_URL="https://raw.githubusercontent.com/apache/camel/${CAMEL_TAG}/jbang-catalog.json"
+
+jbang app install --force --fresh \
+  -Dcamel.jbang.version="${CAMEL_VERSION}" \
+  -Dcamel-kamelets.version="${CAMEL_VERSION}" \
+  camel@"${CAMEL_JBANG_CATALOG_URL}"
+```
+
+The catalog URL points to a specific release tag, so JBang will not pull a newer version.
+
+### Option 3: Use the Camel Wrapper
+
+Similar to the Maven Wrapper, the Camel Wrapper creates version-pinning scripts in your project directory:
+
+```bash
+camel wrapper
+```
+
+This creates a `.camel/camel-wrapper.properties` file and launcher scripts so anyone working on the project uses the same Camel CLI version — no manual install needed.
+
+Pin a specific version:
+
+```bash
+camel wrapper --camel-version=4.18.0
+```
+
+### Option 4: Use the Camel Launcher
+
+The [Camel CLI Launcher](camel-jbang-launcher.md) is a self-contained executable JAR that runs without JBang entirely.
+
+## Container image
+
+The Camel CLI is also available as a container image on [Docker Hub](https://hub.docker.com/r/apache/camel-jbang/).
+
+> **Note**
+> All examples below use `docker`. Replace with `podman` if you prefer — the commands are identical.
+
+Pull the image:
+
+```bash
+docker pull apache/camel-jbang:4.21.0
+```
+
+Verify it works:
+
+```bash
+docker run apache/camel-jbang:4.21.0 version
+```
+
+```none
+Camel CLI version: 4.21.0
+```
+
+Run a route by mounting your local directory:
+
+```bash
+docker run -v .:/integrations apache/camel-jbang:4.21.0 run /integrations/example.yaml
+```

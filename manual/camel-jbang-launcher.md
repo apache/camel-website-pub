@@ -2,23 +2,11 @@
 
 **Available as of Camel 4.13**
 
-This module provides a self-contained executable JAR that includes all dependencies required to run Camel CLI without the need for the JBang two-step process.
+A self-contained executable JAR for running Camel CLI without JBang. Uses Spring Boot’s nested JAR loader for fast startup and isolated classpath.
 
-The launcher uses Spring Boot’s loader tools to create a self-executing JAR with a nested structure, similar to Spring Boot’s executable JARs. This provides better performance and avoids classpath conflicts compared to traditional fat JARs.
-
-## Downloading
-
-You can download the `camel-launcher` JAR from [Maven Central](https://repo1.maven.org/maven2/org/apache/camel/camel-launcher/).
+Download from [Maven Central](https://repo1.maven.org/maven2/org/apache/camel/camel-launcher/).
 
 ## Using the fat-jar directly
-
-Then you can run the JAR using standard Java as follows:
-
-```bash
-java -jar camel-launcher-<version>.jar [command] [options]
-```
-
-For example:
 
 ```bash
 java -jar camel-launcher-<version>.jar version
@@ -45,39 +33,22 @@ And then use the provided scripts:
 bin\camel.bat [command] [options]
 ```
 
-## Benefits of using Camel Launcher
+## Benefits
 
--   No need for JBang installation
+-   No JBang installation required
     
--   Single executable JAR with all dependencies included
+-   Faster startup (no dependency resolution, on-demand class loading)
     
--   Faster startup time (no dependency resolution step, on-demand class loading)
+-   Lower memory usage (only loads classes actually used)
     
--   Better memory usage (only loads classes that are actually used)
+-   No classpath conflicts (dependencies kept as separate nested JARs)
     
--   Avoids classpath conflicts (dependencies kept as separate JARs)
-    
--   Each self-executing JAR is its own release, avoiding version complexity
-    
--   Can still be used with JBang if preferred
-    
--   Locked to use pinned version of Camel which is the same version as the launcher; to upgrade, then download and use a newer launcher.
+-   Pinned Camel version — upgrade by downloading a newer launcher
     
 
 ## Limitations
 
-The following features are not supported when running from camel-launcher:
-
-### \--camel-version option
-
-The `--camel-version` option requires JBang to dynamically download and run a different Camel version.
-
-Alternatives:
-
--   Use a different camel-launcher JAR version
-    
--   Install Camel CLI via JBang: `jbang app install camel@apache/camel`
-    
+The `--camel-version` option is not supported — it requires JBang to dynamically download a different version. Use a different launcher JAR version instead, or install via JBang: `jbang app install camel@apache/camel`.
 
 ## More Information
 

@@ -1,0 +1,143 @@
+# Camel CLI - AI Tools
+
+The Camel CLI includes AI-powered commands that use large language models (LLMs) to help you understand, troubleshoot, and secure your integrations.
+
+All three commands work with local models (Ollama) or cloud APIs (OpenAI, Anthropic). The CLI auto-detects the LLM provider from environment variables or a locally running Ollama instance.
+
+## Ask — chat with a running integration
+
+The `camel ask` command is an AI agent that can inspect and interact with a live Camel process. It has access to routes, health checks, metrics, tracing, endpoints, and more — and can answer questions about what your integration is doing right now.
+
+```bash
+camel ask "what routes are running?"
+camel ask "why is my route failing?" --name=myApp
+camel ask "are there any blocked exchanges?"
+```
+
+Start an interactive chat session by running without a question:
+
+```bash
+camel ask
+```
+
+This opens a `ask>` prompt where you can have a multi-turn conversation, with the AI maintaining context across questions.
+
+### What the AI can do
+
+The agent has access to tools that let it:
+
+-   Inspect the running process — routes, health, endpoints, consumers, properties, inflight/blocked exchanges
+    
+-   Read route source code and dump route definitions as YAML or XML
+    
+-   Show route structure as a processor tree
+    
+-   Find the slowest processors with top statistics
+    
+-   Enable, disable, and dump message tracing
+    
+-   Start, stop, suspend, and resume individual routes
+    
+-   Search the Camel component catalog and read component documentation
+    
+-   List and read built-in CLI examples
+    
+-   Discover and run any CLI command
+    
+-   Read and write files in the current directory
+    
+
+Use `--show-tools` to see tool calls and results as they happen:
+
+```bash
+camel ask "show me the route structure" --show-tools
+```
+
+### Connecting to a specific process
+
+When multiple Camel processes are running, specify which one to inspect:
+
+```bash
+camel ask "check health" --name=myApp
+camel ask "check health" --name=12345
+```
+
+Without `--name`, the CLI auto-detects when exactly one Camel process is running.
+
+> **Note**
+> The catalog, example, file, and CLI tools work even without a running Camel process.
+
+## Explain — understand a route
+
+The `camel explain` command reads route files from disk and uses an LLM to explain what they do — step by step.
+
+```bash
+camel explain hello.yaml
+camel explain my-routes.java --format=markdown
+camel explain route1.yaml route2.xml
+```
+
+Use `--verbose` for detailed technical information, or `--catalog-context` to enrich the prompt with Camel component and EIP documentation:
+
+```bash
+camel explain hello.yaml --verbose --catalog-context
+```
+
+> **Tip**
+> Use `--format=markdown` for structured output with headers, lists, and code blocks.
+
+## Harden — security analysis
+
+The `camel harden` command analyzes route files for security concerns and suggests hardening measures. It covers authentication, encryption, secrets management, input validation, secure configuration, and logging.
+
+```bash
+camel harden hello.yaml
+camel harden my-routes.java --verbose
+camel harden *.yaml --format=markdown
+```
+
+Findings are prioritized by severity (Critical, High, Medium, Low). Use `--catalog-context` to include security-specific notes for each component detected in your routes:
+
+```bash
+camel harden my-routes.yaml --catalog-context
+```
+
+> **Note**
+> `camel harden` currently supports Ollama and OpenAI-compatible APIs only (no Anthropic).
+
+## Choosing an LLM provider
+
+All commands auto-detect the LLM provider. The detection order is:
+
+1.  `ANTHROPIC_API_KEY` environment variable → Anthropic API (`ask` and `explain` only)
+    
+2.  `CLOUD_ML_REGION` + `ANTHROPIC_VERTEX_PROJECT_ID` → Vertex AI (`ask` and `explain` only)
+    
+3.  `OPENAI_API_KEY` or `LLM_API_KEY` → OpenAI-compatible API
+    
+4.  Ollama running via `camel infra` → local Ollama
+    
+5.  Ollama at `localhost:11434` → local Ollama
+    
+
+Override with explicit options:
+
+```bash
+camel ask "check health" --api-type=anthropic --api-key=sk-...
+camel ask "check health" --api-type=openai --model=gpt-4
+camel ask "check health" --api-type=ollama --model=llama3.1
+```
+
+### Using a local model with Ollama
+
+Start Ollama as a dev service and the CLI detects it automatically:
+
+```bash
+camel infra run ollama
+camel ask "what routes are running?"
+```
+
+The default model is `llama3.2`. When using Ollama, the CLI checks what models are available locally and auto-selects a suitable one if a better model is installed.
+
+> **Tip**
+> For best results with the `ask` command’s tool-calling capabilities, use a model that supports function calling well (e.g., `llama3.1`, `qwen3`, `mistral-nemo`).

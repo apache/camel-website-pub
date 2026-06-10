@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781033698766,
+  "generated": 1781114443514,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -23114,6 +23114,12 @@
             },
             {
               "module": "ROOT",
+              "path": "shell-component.adoc",
+              "url": "/components/next/shell-component.html",
+              "title": "Shell"
+            },
+            {
+              "module": "ROOT",
               "path": "sjms-component.adoc",
               "url": "/components/next/sjms-component.html",
               "title": "Simple JMS"
@@ -31608,6 +31614,54 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-ai.adoc",
+              "url": "/manual/camel-jbang-ai.html",
+              "title": "Camel CLI - AI Tools"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-beans.adoc",
+              "url": "/manual/camel-jbang-beans.html",
+              "title": "Camel CLI - Java Beans"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-configuration.adoc",
+              "url": "/manual/camel-jbang-configuration.html",
+              "title": "Camel CLI - Configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-debugging.adoc",
+              "url": "/manual/camel-jbang-debugging.html",
+              "title": "Camel CLI - Debugging"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-dev-services.adoc",
+              "url": "/manual/camel-jbang-dev-services.html",
+              "title": "Camel CLI - Dev Services"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-devtools.adoc",
+              "url": "/manual/camel-jbang-devtools.html",
+              "title": "Camel CLI - Development Tools"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-getting-started.adoc",
+              "url": "/manual/camel-jbang-getting-started.html",
+              "title": "Camel CLI - Getting Started"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-installation.adoc",
+              "url": "/manual/camel-jbang-installation.html",
+              "title": "Camel CLI - Installation Options"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-kubernetes.adoc",
               "url": "/manual/camel-jbang-kubernetes.html",
               "title": "Camel Kubernetes plugin"
@@ -31620,15 +31674,45 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-managing.adoc",
+              "url": "/manual/camel-jbang-managing.html",
+              "title": "Camel CLI - Managing Integrations"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-mcp.adoc",
               "url": "/manual/camel-jbang-mcp.html",
               "title": "Camel MCP Server"
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-projects.adoc",
+              "url": "/manual/camel-jbang-projects.html",
+              "title": "Camel CLI - Export to Maven"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-running.adoc",
+              "url": "/manual/camel-jbang-running.html",
+              "title": "Camel CLI - Running Camel"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-test.adoc",
               "url": "/manual/camel-jbang-test.html",
               "title": "Camel Testing plugin"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tips.adoc",
+              "url": "/manual/camel-jbang-tips.html",
+              "title": "Camel CLI - Tips and Recipes"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-transforming.adoc",
+              "url": "/manual/camel-jbang-transforming.html",
+              "title": "Camel CLI - Data Transformation"
             },
             {
               "module": "ROOT",

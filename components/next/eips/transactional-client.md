@@ -239,7 +239,7 @@ As we use the new convention over configuration, we do **not** need to configure
 
 ```xml
 <!-- this example uses JDBC so we define a data source -->
-<jdbc:embedded-database id="dataSource" type="DERBY">
+<jdbc:embedded-database id="dataSource" type="H2">
     <jdbc:script location="classpath:sql/init.sql" />
 </jdbc:embedded-database>
 

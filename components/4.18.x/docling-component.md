@@ -191,7 +191,7 @@ Enum values:
 | **workingDirectory** (advanced) | Working directory for Docling execution. |  | String |
 | **batchFailOnFirstError** (batch) | Fail entire batch on first error (true) or continue processing remaining documents (false). | true | boolean |
 | **batchParallelism** (batch) | Number of parallel threads for batch processing. | 4 | int |
-| **batchSize** (batch) | Maximum number of documents to process in a single batch (batch operations only). | 10 | int |
+| **batchSize** (batch) | Number of documents to submit per sub-batch. Documents are partitioned into sub-batches of this size and each sub-batch is processed before starting the next one. Within each sub-batch, up to batchParallelism threads are used concurrently. This controls memory usage and back-pressure when processing large document sets. | 10 | int |
 | **batchTimeout** (batch) | Maximum time to wait for batch completion in milliseconds. | 300000 | long |
 | **splitBatchResults** (batch) | Split batch results into individual exchanges (one per document) instead of single BatchProcessingResults. | false | boolean |
 | **includeMetadataInHeaders** (metadata) | Include metadata in message headers when extracting metadata. | true | boolean |
@@ -309,7 +309,7 @@ Enum values:
 | **workingDirectory** (advanced) | Working directory for Docling execution. |  | String |
 | **batchFailOnFirstError** (batch) | Fail entire batch on first error (true) or continue processing remaining documents (false). | true | boolean |
 | **batchParallelism** (batch) | Number of parallel threads for batch processing. | 4 | int |
-| **batchSize** (batch) | Maximum number of documents to process in a single batch (batch operations only). | 10 | int |
+| **batchSize** (batch) | Number of documents to submit per sub-batch. Documents are partitioned into sub-batches of this size and each sub-batch is processed before starting the next one. Within each sub-batch, up to batchParallelism threads are used concurrently. This controls memory usage and back-pressure when processing large document sets. | 10 | int |
 | **batchTimeout** (batch) | Maximum time to wait for batch completion in milliseconds. | 300000 | long |
 | **splitBatchResults** (batch) | Split batch results into individual exchanges (one per document) instead of single BatchProcessingResults. | false | boolean |
 | **includeMetadataInHeaders** (metadata) | Include metadata in message headers when extracting metadata. | true | boolean |

@@ -19,7 +19,7 @@ The migration tool is easy to run. To upgrade to the latest version of Camel, yo
 $ mvn -U org.openrewrite.maven:rewrite-maven-plugin:run -Drewrite.recipeArtifactCoordinates=org.apache.camel.upgrade:camel-upgrade-recipes:LATEST -Drewrite.activeRecipes=org.apache.camel.upgrade.CamelMigrationRecipe
 ```
 
-or use camel-jbang [update](camel-jbang.html#_update) action:
+or use the Camel CLI [update](camel-jbang-projects.html#_automated_updates_openrewrite) action:
 
 ```bash
 $ camel update run $VERSION

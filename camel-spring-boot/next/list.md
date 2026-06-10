@@ -447,6 +447,7 @@ Number of Camel components: 386 in 320 JAR artifacts (12 deprecated)
 | [Hugging Face](../../components/next/huggingface-component.md) | camel-huggingface-starter | Preview | 4.19 | Integration with Hugging Face’s Model Hub by using the Deep Java Library (DJL) Python bridge |
 | [PGVector](../../components/next/pgvector-component.md) | camel-pgvector-starter | Preview | 4.19 | Perform operations on the PostgreSQL pgvector Vector Database. |
 | [Properties](../../components/next/properties-component.md) | camel-base-starter | Stable | 2.3 | The properties component is used for property placeholders in your Camel application, such as endpoint URIs. |
+| [Shell](../../components/next/shell-component.md) | camel-shell-starter | Preview | 4.21 | Camel Shell component |
 
 ## Camel Data Formats
 

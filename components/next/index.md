@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 373 in 299 JAR artifacts (12 deprecated)
+Number of Non-Core Components: 374 in 300 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -361,6 +361,7 @@ Number of Non-Core Components: 373 in 299 JAR artifacts (12 deprecated)
 | [ServiceNow](servicenow-component.md) | camel-servicenow | Stable | 2.18 | Interact with ServiceNow via its REST API. |
 | [Servlet](servlet-component.md) | camel-servlet | Stable | 2.0 | Serve HTTP requests by a Servlet. |
 | [SFTP](sftp-component.md) | camel-ftp | Stable | 1.1 | Upload and download files to/from SFTP servers. |
+| [Shell](shell-component.md) | camel-shell | Preview | 4.21 | Camel Shell component |
 | [Simple JMS](sjms-component.md) | camel-sjms | Stable | 2.11 | Send and receive messages to/from a JMS Queue or Topic using plain JMS 1.x API. |
 | [Simple JMS2](sjms2-component.md) | camel-sjms2 | Stable | 2.19 | Send and receive messages to/from a JMS Queue or Topic using plain JMS 2.x API. |
 | [Slack](slack-component.md) | camel-slack | Stable | 2.16 | Send and receive messages to/from Slack. |

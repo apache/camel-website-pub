@@ -751,8 +751,8 @@ First we need a persistence-unit in `META-INF/persistence.xml` where we need to 
   <class>org.apache.camel.processor.idempotent.jpa.MessageProcessed</class>
 
   <properties>
-    <property name="openjpa.ConnectionURL" value="jdbc:derby:target/idempotentTest;create=true"/>
-    <property name="openjpa.ConnectionDriverName" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+    <property name="openjpa.ConnectionURL" value="jdbc:h2:./target/idempotentTest"/>
+    <property name="openjpa.ConnectionDriverName" value="org.h2.Driver"/>
     <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema"/>
     <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO"/>
     <property name="openjpa.Multithreaded" value="true"/>

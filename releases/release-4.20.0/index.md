@@ -91,7 +91,11 @@ git checkout camel-4.20.0
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (3)
+### Bug (4)
+
+[CAMEL-23355](https://issues.apache.org/jira/browse/CAMEL-23355)
+
+camel-jbang: export with kamelet aws-ddb-sink - transformer aws2-ddb is not working
 
 [CAMEL-23334](https://issues.apache.org/jira/browse/CAMEL-23334)
 

@@ -30,7 +30,7 @@ And there is [Code with Quarkus](https://code.quarkus.io/), the Quarkus generato
 
 The Camel CLI can either be installed and used together with JBang (step 1a), or as a pure standalone Camel installation (step 1b).
 
-### Installing and using Camel CLI CLI
+### Installing and using Camel CLI
 
 Camel uses [JBang](https://www.jbang.dev/) for the Camel CLI. You can easily get up and running in a few steps.
 
