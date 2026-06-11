@@ -261,7 +261,7 @@ When using solr with Spring Boot make sure to use the following Maven dependency
 </dependency>
 ```
 
-The component supports 12 options, which are listed below.
+The component supports 14 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -277,4 +277,6 @@ The component supports 12 options, which are listed below.
 | **camel.component.solr.port** | The solr instance port number. |  | Integer |
 | **camel.component.solr.request-timeout** | The timeout in ms to wait before the socket will time out. | 600000 | Long |
 | **camel.component.solr.solr-client** | To use an existing configured solr client, instead of creating a client per endpoint. This allows customizing the client with specific advanced settings. The option is a org.apache.solr.client.solrj.SolrClient type. |  | SolrClient |
+| **camel.component.solr.ssl-context-parameters** | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. The option is a org.apache.camel.support.jsse.SSLContextParameters type. |  | SSLContextParameters |
+| **camel.component.solr.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |
 | **camel.component.solr.username** | Basic authenticate user. |  | String |

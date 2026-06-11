@@ -437,7 +437,7 @@ When using elasticsearch with Spring Boot make sure to use the following Maven d
 </dependency>
 ```
 
-The component supports 16 options, which are listed below.
+The component supports 18 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -457,4 +457,6 @@ The component supports 16 options, which are listed below.
 | **camel.component.elasticsearch.sniff-after-failure-delay** | The delay of a sniff execution scheduled after a failure (in milliseconds). | 60000 | Integer |
 | **camel.component.elasticsearch.sniffer-interval** | The interval between consecutive ordinary sniff executions in milliseconds. Will be honoured when sniffOnFailure is disabled or when there are no failures between consecutive sniff executions. | 300000 | Integer |
 | **camel.component.elasticsearch.socket-timeout** | The timeout in ms to wait before the socket will time out. | 30000 | Integer |
+| **camel.component.elasticsearch.ssl-context-parameters** | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. The option is a org.apache.camel.support.jsse.SSLContextParameters type. |  | SSLContextParameters |
+| **camel.component.elasticsearch.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |
 | **camel.component.elasticsearch.user** | Basic authenticate user. |  | String |
