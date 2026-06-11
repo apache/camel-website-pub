@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[202]{title,link,pubDate,description}:
+posts[203]{title,link,pubDate,description}:
+  Community Showcase: How to Rewrite 20+ Critical Banking ETL Applications|https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/index.md|Thu, 11 Jun 2026 00:00:00 +0000|Rewriting critical banking ETL applications is risky because these systems handle business data that must stay accurate, stable, and traceable. In his JEurope 2025 talk, Dzmitry Paddubnik explains how
   Apache Camel by the Numbers: 19 Years of Open Source Integration|https://camel.apache.org/blog/2026/06/camel-by-the-numbers/index.md|Tue, 09 Jun 2026 00:00:00 +0000|When the first commit landed on March 19, 2007, Apache Camel was a routing library with a handful of components and a single contributor. Nineteen years later, the git repository has crossed 100,000 c
   Camel Monitor Operator|https://camel.apache.org/blog/2026/06/camel-monitor-operator/index.md|Thu, 04 Jun 2026 00:00:00 +0000|During the last years we&rsquo;ve worked hard to bring cloud native operations capabilities for your Camel workloads on Kubernetes. Camel K was the first historic initiative and it gave us the possibi
   Wanaku 0.1.1: Bringing Apache Camel Integration Capabilities to AI Agents via MCP|https://camel.apache.org/blog/2026/05/wanaku-0.1.1/index.md|Sun, 31 May 2026 00:00:00 +0000|We&rsquo;re excited to announce Wanaku 0.1.1, a significant milestone that showcases how Apache Camel&rsquo;s powerful integration capabilities can be seamlessly exposed to AI agents through the Model

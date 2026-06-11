@@ -23,7 +23,7 @@ At runtime, the `github-tag-source` Kamelet relies upon the presence of the foll
 
 -   camel:jackson
     
--   camel:github
+-   camel:github2
     
 -   camel:kamelet
     

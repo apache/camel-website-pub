@@ -1,16 +1,18 @@
-urls[753]{loc,lastmod}:
+urls[754]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-06-11T00:00:00+00:00
+  https://camel.apache.org/categories/Community/,2026-06-11T00:00:00+00:00
+  https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/,2026-06-11T00:00:00+00:00
+  https://camel.apache.org/,2026-06-11T00:00:00+00:00
+  https://camel.apache.org/categories/Usecases/,2026-06-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-by-the-numbers/,2026-06-09T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-06-09T00:00:00+00:00
-  https://camel.apache.org/categories/Community/,2026-06-09T00:00:00+00:00
-  https://camel.apache.org/,2026-06-09T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-monitor-operator/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-05-31T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/blog/2026/05/wanaku-0.1.1/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/,2026-05-28T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-05-28T00:00:00+00:00
   https://camel.apache.org/releases/q-3.36.0/,2026-05-26T00:00:00+00:00
   https://camel.apache.org/releases/,2026-05-26T00:00:00+00:00
   https://camel.apache.org/blog/2026/05/camel-karaf-4.14.7/,2026-05-24T00:00:00+00:00
@@ -56,7 +58,6 @@ urls[753]{loc,lastmod}:
   https://camel.apache.org/blog/2026/04/email-triage-agent/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/releases/release-4.19.0/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/,2026-04-16T00:00:00+00:00
-  https://camel.apache.org/categories/Usecases/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-k-2-10/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/releases/k-2.10.0/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/categories/Roadmap/,2026-04-13T00:00:00+00:00

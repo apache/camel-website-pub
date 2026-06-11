@@ -2,16 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</loc>
-    <lastmod>2026-06-09T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-06-09T00:00:00+00:00</lastmod>
+    <lastmod>2026-06-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Community/</loc>
-    <lastmod>2026-06-09T00:00:00+00:00</lastmod>
+    <lastmod>2026-06-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/</loc>
+    <lastmod>2026-06-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-06-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Usecases/</loc>
+    <lastmod>2026-06-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</loc>
     <lastmod>2026-06-09T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Camel-K/</loc>
@@ -29,13 +35,13 @@
     <loc>https://camel.apache.org/categories/AI/</loc>
     <lastmod>2026-05-31T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
-    <lastmod>2026-05-31T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2026/05/wanaku-0.1.1/</loc>
     <lastmod>2026-05-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/</loc>
+    <lastmod>2026-05-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
     <lastmod>2026-05-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.36.0/</loc>
@@ -171,9 +177,6 @@
     <lastmod>2026-04-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/</loc>
-    <lastmod>2026-04-16T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Usecases/</loc>
     <lastmod>2026-04-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/04/camel-k-2-10/</loc>

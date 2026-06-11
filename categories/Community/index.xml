@@ -6,14 +6,28 @@
     <description>Recent content in Community on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 09 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Community/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Community Showcase: How to Rewrite 20&#43; Critical Banking ETL Applications</title>
+      <link>https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/</link>
+      <pubDate>Thu, 11 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/</guid>
+      <description>Rewriting critical banking ETL applications is risky because these systems handle business data that must stay accurate, stable, and traceable. In his JEurope 2025 talk, Dzmitry Paddubnik explains how his team rebuilt more than 20 banking ETL applications in Java without losing control of production risk.&#xA;The main lesson is simple: a rewrite is not just a coding project. It is a testing and validation project.&#xA;Key takeaways Legacy ETL systems often contain years of hidden business rules.</description>
+    </item>
     <item>
       <title>Apache Camel by the Numbers: 19 Years of Open Source Integration</title>
       <link>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</link>
       <pubDate>Tue, 09 Jun 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</guid>
       <description>When the first commit landed on March 19, 2007, Apache Camel was a routing library with a handful of components and a single contributor. Nineteen years later, the git repository has crossed 100,000 commits from 1,600+ contributors representing 450+ companies across more than 20 countries. The project ships 311 integration components, has published 300+ releases, and runs in production at organizations where downtime means grounded flights, blocked payments, or missed diagnoses.</description>
+    </item>
+    <item>
+      <title>Wanaku 0.1.1: Bringing Apache Camel Integration Capabilities to AI Agents via MCP</title>
+      <link>https://camel.apache.org/blog/2026/05/wanaku-0.1.1/</link>
+      <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/05/wanaku-0.1.1/</guid>
+      <description>We&amp;rsquo;re excited to announce Wanaku 0.1.1, a significant milestone that showcases how Apache Camel&amp;rsquo;s powerful integration capabilities can be seamlessly exposed to AI agents through the Model Context Protocol (MCP). This release introduces Service Catalogs and Service Templates — features that leverage Apache Camel as the integration runtime to bridge the gap between AI and enterprise systems.&#xA;What is Wanaku? Wanaku is an open-source MCP router and capability management platform that acts as a smart intermediary between AI agents and integration capabilities.</description>
     </item>
   </channel>
 </rss>

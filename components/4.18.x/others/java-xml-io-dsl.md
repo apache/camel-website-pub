@@ -97,7 +97,7 @@ camel.xml
 
 A `my-route` route is referring to `greeter` bean which is defined using Spring `<bean>` element.
 
-More examples can be found in [Camel CLI](../../../manual/camel-jbang-beans.html#_using_spring_beans_xml_in_camel_xml_dsl) page.
+More examples can be found in [Camel JBang](../../../manual/camel-jbang-beans.html#_using_spring_beans_xml_in_camel_xml_dsl) page.
 
 ### Using bean with constructors
 

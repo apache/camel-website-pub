@@ -35,5 +35,3 @@ Compatibility between Camel-Kafka-Connector and dependencies
 | Camel-Kafka-Connector Version | Camel Version | Kamelets Version | Kafka Version | LTS Until | Branch |
 | --- | --- | --- | --- | --- | --- |
 | [Next (Pre-release)](index.md) | [4.19.0-SNAPSHOT](../../components/next/index.md) | [4.19.0-SNAPSHOT](../../camel-kamelets/next/index.md) | [3.9.1](https://kafka.apache.org/28/documentation.md) |  | [main](https://github.com/apache/camel-kafka-connector) |
-| [4.18.x (LTS)](../4.18.x/index.md) | [4.18.0](../../components/4.18.x/index.md) | [4.18.0](../../camel-kamelets/4.18.x/index.md) | [3.9.1](https://kafka.apache.org/28/documentation.md) |  | [camel-kafka-connector-4.18.x](https://github.com/apache/camel-kafka-connector/tree/camel-kafka-connector-4.18.x) |
-| [4.14.x (LTS)](../4.14.x/index.md) | [4.14.0](../../components/4.14.x/index.md) | [4.14.0](../../camel-kamelets/4.14.x/index.md) | [3.9.1](https://kafka.apache.org/28/documentation.md) |  | [camel-kafka-connector-4.14.x](https://github.com/apache/camel-kafka-connector/tree/camel-kafka-connector-4.14.x) |

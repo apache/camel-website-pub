@@ -32,7 +32,7 @@ At runtime, the `databricks-source` Kamelet relies upon the presence of the foll
     
 -   camel:sql
     
--   mvn:com.databricks:databricks-jdbc:3.3.3
+-   mvn:com.databricks:databricks-jdbc:3.4.1
     
 -   mvn:org.apache.commons:commons-dbcp2:2.14.0
     

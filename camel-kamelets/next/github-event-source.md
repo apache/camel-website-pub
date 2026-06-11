@@ -23,7 +23,7 @@ At runtime, the `github-event-source` Kamelet relies upon the presence of the fo
 
 -   camel:jackson
     
--   camel:github
+-   camel:github2
     
 -   camel:kamelet
     

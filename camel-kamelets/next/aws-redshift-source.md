@@ -32,7 +32,7 @@ At runtime, the `aws-redshift-source` Kamelet relies upon the presence of the fo
     
 -   camel:sql
     
--   mvn:com.amazon.redshift:redshift-jdbc42:2.2.6
+-   mvn:com.amazon.redshift:redshift-jdbc42:2.2.7
     
 -   mvn:org.apache.commons:commons-dbcp2:2.14.0
     

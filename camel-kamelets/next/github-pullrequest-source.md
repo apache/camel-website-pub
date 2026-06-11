@@ -23,7 +23,7 @@ At runtime, the `github-pullrequest-source` Kamelet relies upon the presence of 
 
 -   camel:jackson
     
--   camel:github
+-   camel:github2
     
 -   camel:kamelet
     

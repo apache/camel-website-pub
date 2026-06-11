@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Solr component supports 11 options, which are listed below.
+The Solr component supports 13 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -83,6 +83,8 @@ The Solr component supports 11 options, which are listed below.
 | **solrClient** (advanced) | **Autowired** To use an existing configured solr client, instead of creating a client per endpoint. This allows customizing the client with specific advanced settings. |  | SolrClient |
 | **enableSSL** (security) | Enable SSL. | false | boolean |
 | **password** (security) | Password for authenticating. |  | String |
+| **sslContextParameters** (security) | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. |  | SSLContextParameters |
+| **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 | **username** (security) | Basic authenticate user. |  | String |
 
 ## Endpoint Options
@@ -102,7 +104,7 @@ With the following _path_ and _query_ parameters:
 | **port** (producer) | The solr instance port number. | 8983 | int |
 | **basePath** (producer) | The solr instance base path (usually /solr). | /solr | String |
 
-### Query Parameters (16 parameters)
+### Query Parameters (17 parameters)
 
    
 | Name | Description | Default | Type |
@@ -140,6 +142,7 @@ Enum values:
 | **certificatePath** (security) | The certificate that can be used to access the solr host. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
 | **enableSSL** (security) | Enable SSL. | false | boolean |
 | **password** (security) | Password for authenticating. |  | String |
+| **sslContextParameters** (security) | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. This allows configuring named groups, signature schemes, cipher suites, and protocols for the TLS connection. |  | SSLContextParameters |
 | **username** (security) | Basic authenticate user. |  | String |
 
 ## Message Headers

@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 09 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Community Showcase: How to Rewrite 20&#43; Critical Banking ETL Applications</title>
+      <link>https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/</link>
+      <pubDate>Thu, 11 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/</guid>
+      <description>Rewriting critical banking ETL applications is risky because these systems handle business data that must stay accurate, stable, and traceable. In his JEurope 2025 talk, Dzmitry Paddubnik explains how his team rebuilt more than 20 banking ETL applications in Java without losing control of production risk.&#xA;The main lesson is simple: a rewrite is not just a coding project. It is a testing and validation project.&#xA;Key takeaways Legacy ETL systems often contain years of hidden business rules.</description>
+    </item>
     <item>
       <title>Apache Camel by the Numbers: 19 Years of Open Source Integration</title>
       <link>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</link>

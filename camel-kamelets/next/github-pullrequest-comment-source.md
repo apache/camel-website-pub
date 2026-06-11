@@ -23,7 +23,7 @@ At runtime, the `github-pullrequest-comment-source` Kamelet relies upon the pres
 
 -   camel:jackson
     
--   camel:github
+-   camel:github2
     
 -   camel:kamelet
     

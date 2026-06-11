@@ -25,7 +25,7 @@ At runtime, the `github-commit-source` Kamelet relies upon the presence of the f
 
 -   camel:jackson
     
--   camel:github
+-   camel:github2
     
 -   camel:kamelet
     
