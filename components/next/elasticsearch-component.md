@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Elasticsearch component supports 15 options, which are listed below.
+The Elasticsearch component supports 17 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -87,6 +87,8 @@ The Elasticsearch component supports 15 options, which are listed below.
 | **certificatePath** (security) | The path of the self-signed certificate to use to access to Elasticsearch. |  | String |
 | **enableSSL** (security) | Enable SSL. | false | boolean |
 | **password** (security) | Password for authenticating. |  | String |
+| **sslContextParameters** (security) | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. |  | SSLContextParameters |
+| **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 | **user** (security) | Basic authenticate user. |  | String |
 
 ## Endpoint Options
@@ -104,7 +106,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **clusterName** (producer) | **Required** Name of the cluster. |  | String |
 
-### Query Parameters (20 parameters)
+### Query Parameters (21 parameters)
 
    
 | Name | Description | Default | Type |
@@ -161,6 +163,7 @@ Enum values:
 | **snifferInterval** (advanced) | The interval between consecutive ordinary sniff executions in milliseconds. Will be honoured when sniffOnFailure is disabled or when there are no failures between consecutive sniff executions. | 300000 | int |
 | **certificatePath** (security) | The certificate that can be used to access the ES Cluster. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
 | **enableSSL** (security) | Enable SSL. | false | boolean |
+| **sslContextParameters** (security) | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. This allows configuring named groups, signature schemes, cipher suites, and protocols for the TLS connection. |  | SSLContextParameters |
 
 ## Message Headers
 

@@ -696,6 +696,21 @@ The component supports the following operations:
 -   extractSecretKeyFromEncapsulation - Extract the secret key from encapsulation
     
 
+**Hybrid Operations (classical + post-quantum):**
+
+-   hybridSign - Create a hybrid signature combining a classical and a PQC signature
+    
+-   hybridVerify - Verify a hybrid signature (both components must be valid)
+    
+-   hybridGenerateSecretKeyEncapsulation - Generate a hybrid encapsulation and shared secret
+    
+-   hybridExtractSecretKeyEncapsulation - Extract the shared secret from a hybrid encapsulation
+    
+-   hybridExtractSecretKeyFromEncapsulation - Extract the secret key from a hybrid encapsulation
+    
+
+See [Hybrid Cryptography](#_hybrid_cryptography) for configuration details and examples.
+
 **Key Lifecycle Operations:**
 
 -   generateKeyPair - Generate a new PQC key pair
@@ -722,6 +737,9 @@ The component expects to find a KeyPair and a Signature Objects in to the Camel 
 In case the KeyPair and the Signature Objects are not in the registry, it will provide two instances of the Objects with default implementation.
 
 This will be true for standardized algorithms and for experimental ones.
+
+> **Tip**
+> To combine a classical signature (ECDSA, Ed25519, RSA) with a PQC signature for defense-in-depth during the post-quantum transition, use the hybrid signature operations described in [Hybrid Cryptography](#_hybrid_cryptography).
 
 ## Examples
 
@@ -925,6 +943,9 @@ The component expects to find a KeyGenerator and a KeyPair in to the Camel Regis
 In case the KeyPair and the KeyGenerator Objects are not in the registry, it will provide two instances of the Objects with default implementation.
 
 This will be true for standardized algorithms and for experimental ones.
+
+> **Tip**
+> To combine a classical key agreement (X25519, ECDH) with a PQC KEM (ML-KEM) for defense-in-depth, use the hybrid KEM operations described in [Hybrid Cryptography](#_hybrid_cryptography).
 
 A possible flow of the operation could be the following:
 
@@ -3146,7 +3167,7 @@ The DataFormat supports streaming for large payloads, avoiding memory issues:
 
 ```java
 from("file:large-files?noop=true")
-    .streamCache(true)e)  // Enable stream caching if needed
+    .streamCache(true)  // Enable stream caching if needed
     .marshal(pqcFormat)
     .to("file:encrypted");
 ```
@@ -3232,7 +3253,7 @@ void testPQCDataFormatRoundTrip() throws Exception {
     ```java
     pqcFormat.setBufferSize(16384);
     // or
-    from("file:large.streamCache(true)rue).marshal(pqcFormat)...
+    from("file:large-files?noop=true").streamCache(true).marshal(pqcFormat)...
     ```
     
 
