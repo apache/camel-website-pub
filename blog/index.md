@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[203]{title,link,pubDate,description}:
+posts[204]{title,link,pubDate,description}:
+  The DNA of Apache Camel: How a 42-File Commit Became the World's Integration Framework|https://camel.apache.org/blog/2026/06/camel-dna-19-years/index.md|Fri, 12 Jun 2026 00:00:00 +0000|On March 19, 2007, at 10:54 UTC, James Strachan pushed commit 77b260b6 with the message &ldquo;Initial checkin of Camel routing library.&rdquo; It contained 42 files across two modules: camel-core and
   Community Showcase: How to Rewrite 20+ Critical Banking ETL Applications|https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/index.md|Thu, 11 Jun 2026 00:00:00 +0000|Rewriting critical banking ETL applications is risky because these systems handle business data that must stay accurate, stable, and traceable. In his JEurope 2025 talk, Dzmitry Paddubnik explains how
   Apache Camel by the Numbers: 19 Years of Open Source Integration|https://camel.apache.org/blog/2026/06/camel-by-the-numbers/index.md|Tue, 09 Jun 2026 00:00:00 +0000|When the first commit landed on March 19, 2007, Apache Camel was a routing library with a handful of components and a single contributor. Nineteen years later, the git repository has crossed 100,000 c
   Camel Monitor Operator|https://camel.apache.org/blog/2026/06/camel-monitor-operator/index.md|Thu, 04 Jun 2026 00:00:00 +0000|During the last years we&rsquo;ve worked hard to bring cloud native operations capabilities for your Camel workloads on Kubernetes. Camel K was the first historic initiative and it gave us the possibi

@@ -1,8 +1,9 @@
-urls[755]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-06-11T00:00:00+00:00
-  https://camel.apache.org/categories/Community/,2026-06-11T00:00:00+00:00
+urls[756]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-06-12T00:00:00+00:00
+  https://camel.apache.org/categories/Community/,2026-06-12T00:00:00+00:00
+  https://camel.apache.org/,2026-06-12T00:00:00+00:00
+  https://camel.apache.org/blog/2026/06/camel-dna-19-years/,2026-06-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/,2026-06-11T00:00:00+00:00
-  https://camel.apache.org/,2026-06-11T00:00:00+00:00
   https://camel.apache.org/categories/Usecases/,2026-06-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-by-the-numbers/,2026-06-09T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-06-04T00:00:00+00:00
