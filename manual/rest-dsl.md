@@ -862,6 +862,47 @@ You can configure properties on these levels.
 
 You can set multiple options of the same level, so you can, for example, configure two component options, and three endpoint options, etc.
 
+### OAuth Bearer token validation
+
+For HTTP consumer components that support OAuth Bearer token validation, such as `platform-http`, `servlet`, `jetty`, `netty-http`, and `undertow`, set the `oauthProfile` endpoint option with `endpointProperty`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration()
+    .component("netty-http")
+    .endpointProperty("oauthProfile", "myprofile");
+```
+
+```xml
+<restConfiguration component="netty-http">
+  <endpointProperty key="oauthProfile" value="myprofile"/>
+</restConfiguration>
+```
+
+```yaml
+- restConfiguration:
+    component: netty-http
+    endpointProperty:
+      - key: oauthProfile
+        value: myprofile
+```
+
+When using the default validator implementation, add the [camel-oauth](../components/4.18.x/others/oauth.md) component to the application classpath and configure the named profile with `camel.oauth.<profile>.*` properties. The OAuth check runs before route processors. Depending on the selected HTTP consumer, the transport may already have accepted, decoded, or bound parts of the inbound request.
+
+For valid tokens, route code can read the validation result from the exchange property:
+
+```java
+OAuthTokenValidationResult result = exchange.getProperty(
+    "CamelOAuthTokenValidationResult",
+    OAuthTokenValidationResult.class);
+```
+
 ## Enabling or disabling Jackson JSON features
 
 When using JSON binding, you may want to turn specific Jackson features on or off. For example, to disable failing on unknown properties (e.g., JSON input has a property which cannot be mapped to a POJO) then configure this using the `dataFormatProperty` as shown below:

@@ -153,7 +153,7 @@ With the following _path_ and _query_ parameters:
 | **specificationUri** (common) | Path to the OpenApi specification file. The scheme, host base path are taken from this specification, but these can be overridden with properties on the component or endpoint level. If not given the component tries to load openapi.json resource from the classpath. Note that the host defined on the component and endpoint of this Component should contain the scheme, hostname and optionally the port in the URI syntax (i.e. [http://api.example.com:8080](http://api.example.com:8080)). Overrides component configuration. The OpenApi specification can be loaded from different sources by prefixing with file: classpath: http: https:. Support for https is limited to using the JDK installed UrlHandler, and as such it can be cumbersome to setup TLS/SSL certificates for https (such as setting a number of javax.net.ssl JVM system properties). How to do that consult the JDK documentation for UrlHandler. Default value notice: By default loads openapi.json file. | openapi.json | String |
 | **operationId** (producer) | ID of the operation from the OpenApi specification. This is required when using producer. |  | String |
 
-### Query Parameters (17 parameters)
+### Query Parameters (18 parameters)
 
    
 | Name | Description | Default | Type |
@@ -206,8 +206,30 @@ Enum values:
 | **requestValidationEnabled** (producer) | Enable validation of requests against the configured OpenAPI specification. | false | boolean |
 | **componentName** (producer (advanced)) | Name of the Camel component that will perform the requests. The component must be present in Camel registry and it must implement RestProducerFactory service provider interface. If not set CLASSPATH is searched for single component that implements RestProducerFactory SPI. Overrides component configuration. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **oauthProfile** (security) | OAuth profile name passed to the HTTP consumer delegate for validating incoming Authorization: Bearer tokens. The selected consumer component must support the oauthProfile option; delegates that ignore unknown options will start without endpoint protection. |  | String |
 
 ## Usage
+
+### Consumer OAuth Bearer token validation
+
+When `rest-openapi` is used as a consumer, HTTP requests are served by the selected `RestOpenApiConsumerFactory` delegate, such as the built-in `platform-http` delegate or a custom delegate. To validate incoming `Authorization: Bearer` tokens from Rest DSL contract-first routes, pass the delegate endpoint option `oauthProfile` through the REST configuration endpoint properties.
+
+```java
+restConfiguration()
+    .component("platform-http")
+    .endpointProperty("oauthProfile", "myprofile");
+
+rest().openApi("petstore-v3.json");
+```
+
+For direct `rest-openapi` consumer routes, pass the delegate endpoint option directly on the consumer endpoint URI. Consumer URIs identify the OpenAPI specification and do not include an `#operationId` fragment.
+
+```java
+from("rest-openapi:petstore-v3.json?consumerComponentName=platform-http&oauthProfile=myprofile")
+    .to("direct:businessLogic");
+```
+
+The selected delegate component must support the `oauthProfile` endpoint option. The built-in `platform-http` delegate supports this option. An `OAuthTokenValidationFactory` must be available, for example from [camel-oauth](../4.18.x/others/oauth.md) or from the runtime integration. OpenAPI `securitySchemes` and operation security requirements are not converted into `oauthProfile` configuration; select the OAuth profile explicitly with the REST endpoint property or direct endpoint URI option. The `oauthProfile` option is a first-class `rest-openapi` endpoint option that is forwarded to the selected delegate, which is responsible for enforcing it. The route fails at startup when the resolved `RestOpenApiConsumerFactory` does not declare that its consumers enforce `oauthProfile`, so a misconfigured delegate cannot start without the expected protection. Custom factories that enforce the option must override `RestOpenApiConsumerFactory.supportsOAuthProfile()` to return `true`.
 
 ## Request validation
 

@@ -105,17 +105,17 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **contextPath** (consumer) | **Required** The context-path to use. |  | String |
 
-### Query Parameters (23 parameters)
+### Query Parameters (24 parameters)
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **disableStreamCache** (common) | Determines whether or not the raw input stream is cached or not. The Camel consumer (camel-servlet, camel-jetty etc.) will by default cache the input stream to support reading it multiple times to ensure it Camel can retrieve all data from the stream. However you can set this option to true when you for example need to access the raw stream, such as streaming it directly to a file or other persistent store. DefaultHttpBinding will copy the request input stream into a stream cache and put it into message body if this option is false to support reading the stream multiple times. If you use Servlet to bridge/proxy an endpoint then consider enabling this option to improve performance, in case you do not need to read the message payload multiple times. The producer (camel-http) will by default cache the response body stream. If setting this option to true, then the producers will not cache the response body stream but use the response stream as-is (the stream can only be read once) as the message body. | false | boolean |
+| **transferException** (common) | If enabled and an Exchange failed processing on the consumer side, and if the caused Exception was send back serialized in the response as a application/x-java-serialized-object content type. On the producer side the exception will be deserialized and thrown as is, instead of the HttpOperationFailedException. The caused exception is required to be serialized. This is by default turned off. If you enable this then be aware that Java will deserialize the incoming data from the request to Java and that can be a potential security risk. | false | boolean |
 | **headerFilterStrategy** (common (advanced)) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **httpBinding** (common (advanced)) | To use a custom HttpBinding to control the mapping between Camel message and HttpClient. |  | HttpBinding |
-| **chunked** (consumer) | If this option is false the Servlet will disable the HTTP streaming and set the content-length header on the response. | true | boolean |
-| **transferException** (common) | If enabled and an Exchange failed processing on the consumer side, and if the caused Exception was send back serialized in the response as a application/x-java-serialized-object content type. On the producer side the exception will be deserialized and thrown as is, instead of the HttpOperationFailedException. The caused exception is required to be serialized. This is by default turned off. If you enable this then be aware that Java will deserialize the incoming data from the request to Java and that can be a potential security risk. | false | boolean |
 | **async** (consumer) | Configure the consumer to work in async mode. | false | boolean |
+| **chunked** (consumer) | If this option is false the Servlet will disable the HTTP streaming and set the content-length header on the response. | true | boolean |
 | **httpMethodRestrict** (consumer) | Used to only allow consuming if the HttpMethod matches, such as GET/POST/PUT etc. Multiple methods can be specified separated by comma. |  | String |
 | **logException** (consumer) | If enabled and an Exchange failed processing on the consumer side the exception’s stack trace will be logged when the exception stack trace is not sent in the response’s body. | false | boolean |
 | **matchOnUriPrefix** (consumer) | Whether or not the consumer should try to find a target consumer by matching the URI prefix if no exact match is found. | false | boolean |
@@ -147,6 +147,27 @@ Enum values:
 | **mapHttpMessageHeaders** (consumer (advanced)) | If this option is true then IN exchange Headers of the exchange will be mapped to HTTP headers. Setting this to false will avoid the HTTP Headers mapping. | true | boolean |
 | **optionsEnabled** (consumer (advanced)) | Specifies whether to enable HTTP OPTIONS for this Servlet consumer. By default OPTIONS is turned off. | false | boolean |
 | **traceEnabled** (consumer (advanced)) | Specifies whether to enable HTTP TRACE for this Servlet consumer. By default TRACE is turned off. | false | boolean |
+| **oauthProfile** (security) | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. This is Camel endpoint-level validation and does not replace servlet container or framework security. |  | String |
+
+## OAuth Bearer token validation
+
+Servlet consumers can validate incoming `Authorization: Bearer` tokens by setting the `oauthProfile` endpoint option. The profile is resolved through Camel’s `OAuthTokenValidationFactory` SPI. The [camel-oauth](../4.18.x/others/oauth.md) component provides the default implementation for standalone Camel applications; see its documentation for validation profile options and production hardening (expected issuer and audience, HTTPS for JWKS, OIDC discovery, and introspection endpoints). Runtimes can also provide their own implementation.
+
+> **Note**
+> If `oauthProfile` is set but no `OAuthTokenValidationFactory` is available, the route fails to start. Add `camel-oauth` for the default provider or include a runtime-specific provider from the platform integration.
+
+```java
+from("servlet:secure?oauthProfile=myprofile")
+    .to("direct:businessLogic");
+```
+
+When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. Requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. The raw `Authorization` header is removed from the Camel message before the route is invoked.
+
+> **Note**
+> Automatic `OPTIONS` handling runs before OAuth validation when `optionsEnabled=false`, so unauthenticated CORS preflight and Allow requests keep the existing servlet behavior. If an `OPTIONS` route is explicitly enabled, that route is protected by OAuth like other methods.
+
+> **Note**
+> This is Camel endpoint-level validation and does not replace servlet container security, filters, or runtime-specific authentication mechanisms. If route code accesses the native servlet request object directly, the container request still reflects the original inbound HTTP headers. If the servlet container or framework already authenticates requests, it may consume or transform the `Authorization` header before Camel sees it. In that case, prefer the container or framework security and do not set `oauthProfile` for the same path, to avoid double validation or missing-header failures; `oauthProfile` is intended for deployments where the container performs no authentication.
 
 ## Message Headers
 

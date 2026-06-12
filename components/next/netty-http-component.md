@@ -291,7 +291,7 @@ Enum values:
 | **port** (common) | The host port number. |  | int |
 | **path** (common) | Resource path. |  | String |
 
-### Query Parameters (85 parameters)
+### Query Parameters (86 parameters)
 
    
 | Name | Description | Default | Type |
@@ -455,6 +455,7 @@ Enum values:
 | **keyStoreFormat** (security) | Keystore format to be used for payload encryption. Defaults to JKS if not set. |  | String |
 | **keyStoreResource** (security) | Client side certificate keystore to be used for encryption. Is loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
 | **needClientAuth** (security) | Configures whether the server needs client authentication when using SSL. | false | boolean |
+| **oauthProfile** (security) | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. Requires usingExecutorService=true and sync=true (the defaults), and is not supported with nettySharedHttpServer. |  | String |
 | **passphrase** (security) | Password to use for the keyStore and trustStore. The same password must be configured for both resources. |  | String |
 | **securityConfiguration** (security) | Refers to a org.apache.camel.component.netty.http.NettyHttpSecurityConfiguration for configuring secure web resources. |  | NettyHttpSecurityConfiguration |
 | **securityOptions** (security) | To configure NettyHttpSecurityConfiguration using key/value pairs from the map. This is a multi-value option with prefix: securityConfiguration. |  | Map |
@@ -498,6 +499,25 @@ The Netty HTTP component supports 24 message header(s), which is/are listed belo
 | **CamelNettyChannel** (common) Constant: [`NETTY_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-netty-http/latest/org/apache/camel/component/netty/NettyConstants.html#NETTY_CHANNEL) | The Netty Channel object. |  | Channel |
 
 ## Usage
+
+### OAuth Bearer token validation
+
+Netty HTTP consumers can validate incoming `Authorization: Bearer` tokens by setting the `oauthProfile` endpoint option. The profile is resolved through Camel’s `OAuthTokenValidationFactory` SPI. The [camel-oauth](../4.18.x/others/oauth.md) component provides the default implementation for standalone Camel applications; see its documentation for validation profile options and production hardening (expected issuer and audience, HTTPS for JWKS, OIDC discovery, and introspection endpoints). Runtimes can also provide their own implementation.
+
+> **Note**
+> If `oauthProfile` is set but no `OAuthTokenValidationFactory` is available, the route fails to start. Add `camel-oauth` for the default provider or include a runtime-specific provider from the platform integration.
+
+```java
+from("netty-http:http://0.0.0.0:8080/secure?oauthProfile=myprofile")
+    .to("direct:businessLogic");
+```
+
+When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. Requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. The raw `Authorization` header is removed before the route is invoked.
+
+OAuth validation can perform blocking calls to identity-provider infrastructure during JWKS refresh, OIDC discovery, or token introspection. For this reason, netty-http consumers reject `oauthProfile` when `usingExecutorService=false`; keep `usingExecutorService=true` so validation does not run on a Netty event-loop thread. When several consumers share the same host and port, the first consumer decides the effective pipeline configuration, so a consumer with `oauthProfile` also fails at startup when another endpoint already initialized the shared server with `usingExecutorService=false`. The `oauthProfile` option is not supported with `nettySharedHttpServer`, because the shared pipeline does not use the endpoint executor service. The `oauthProfile` option also requires `sync=true`, which is the default, so token validation rejection responses can be returned to the client.
+
+> **Note**
+> Automatic `OPTIONS` handling runs before OAuth validation. `OPTIONS` requests, including browser CORS preflight requests, are answered with an `Allow` header without authentication and without invoking the route, unless the endpoint is restricted to the `OPTIONS` method with `httpMethodRestrict`. All other HTTP methods are authenticated when `oauthProfile` is set.
 
 ### Access to Netty types
 

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781206137121,
+  "generated": 1781248631858,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -2900,36 +2900,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/connectors/camel-github-commit-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/next/reference/connectors/camel-github-commit-source-kafka-source-connector.html",
-              "title": "camel-github-commit-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-event-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/next/reference/connectors/camel-github-event-source-kafka-source-connector.html",
-              "title": "camel-github-event-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-pullrequest-comment-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/next/reference/connectors/camel-github-pullrequest-comment-source-kafka-source-connector.html",
-              "title": "camel-github-pullrequest-comment-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-pullrequest-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/next/reference/connectors/camel-github-pullrequest-source-kafka-source-connector.html",
-              "title": "camel-github-pullrequest-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-github-tag-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/next/reference/connectors/camel-github-tag-source-kafka-source-connector.html",
-              "title": "camel-github-tag-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
               "path": "reference/connectors/camel-google-bigquery-sink-kafka-sink-connector.adoc",
               "url": "/camel-kafka-connector/next/reference/connectors/camel-google-bigquery-sink-kafka-sink-connector.html",
               "title": "camel-google-bigquery-sink-kafka-connector sink configuration"
@@ -3083,18 +3053,6 @@
               "path": "reference/connectors/camel-jms-amqp-10-source-kafka-source-connector.adoc",
               "url": "/camel-kafka-connector/next/reference/connectors/camel-jms-amqp-10-source-kafka-source-connector.html",
               "title": "camel-jms-amqp-10-source-kafka-connector source configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-amqp-10-ssl-sink-kafka-sink-connector.adoc",
-              "url": "/camel-kafka-connector/next/reference/connectors/camel-jms-amqp-10-ssl-sink-kafka-sink-connector.html",
-              "title": "camel-jms-amqp-10-ssl-sink-kafka-connector sink configuration"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/connectors/camel-jms-amqp-10-ssl-source-kafka-source-connector.adoc",
-              "url": "/camel-kafka-connector/next/reference/connectors/camel-jms-amqp-10-ssl-source-kafka-source-connector.html",
-              "title": "camel-jms-amqp-10-ssl-source-kafka-connector source configuration"
             },
             {
               "module": "ROOT",

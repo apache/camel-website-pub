@@ -8,7 +8,47 @@ The Rest DSL OpenAPI is a facade that builds [Rest OpenAPI](../components/4.18.x
 
 ### Limitations
 
-Camel does not support websockets from the OpenAPI 3.1 specification. Neither is (at this time of writing) any security aspects from the OpenAPI specification in use.
+Camel does not support websockets from the OpenAPI 3.1 specification. OpenAPI security schemes and operation security requirements are not interpreted from the specification; configure any Camel endpoint security explicitly.
+
+### OAuth Bearer token validation
+
+OpenAPI `securitySchemes` are not mapped automatically to Camel endpoint security options. To validate incoming `Authorization: Bearer` tokens, pass the `oauthProfile` endpoint option to the HTTP consumer component selected by Rest DSL.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration()
+    .endpointProperty("oauthProfile", "myprofile");
+
+rest().openApi("petstore-v3.json");
+```
+
+```xml
+<restConfiguration>
+  <endpointProperty key="oauthProfile" value="myprofile"/>
+</restConfiguration>
+
+<rest>
+  <openApi specification="petstore-v3.json"/>
+</rest>
+```
+
+```yaml
+- restConfiguration:
+    endpointProperty:
+      - key: oauthProfile
+        value: myprofile
+- rest:
+    openApi:
+      specification: petstore-v3.json
+```
+
+The built-in Rest OpenAPI consumer uses [platform-http](../components/4.18.x/platform-http-component.md), which supports the `oauthProfile` option. Custom `RestOpenApiConsumerFactory` delegates can also receive the endpoint property if they support it. Direct `rest-openapi` consumer endpoint URIs can also pass the option to the delegate, for example `rest-openapi:petstore-v3.json?consumerComponentName=platform-http&oauthProfile=myprofile`. Consumer endpoint URIs identify the OpenAPI specification and do not include an `#operationId` fragment. The `oauthProfile` option is forwarded to the selected delegate, which is responsible for enforcing it. The route fails at startup when the resolved `RestOpenApiConsumerFactory` does not declare that its consumers enforce `oauthProfile`, so a misconfigured delegate cannot start without the expected protection.
 
 ## Contract first
 

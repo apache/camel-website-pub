@@ -131,7 +131,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **httpUri** (common) | **Required** The url of the HTTP endpoint to call. |  | URI |
 
-### Query Parameters (38 parameters)
+### Query Parameters (39 parameters)
 
    
 | Name | Description | Default | Type |
@@ -187,6 +187,7 @@ Enum values:
 | **multipartFilter** (consumer (advanced)) | Allows using a custom multipart filter. Note: setting multipartFilter forces the value of enableMultipartFilter to true. |  | Filter |
 | **optionsEnabled** (consumer (advanced)) | Specifies whether to enable HTTP OPTIONS for this Servlet consumer. By default OPTIONS is turned off. | false | boolean |
 | **traceEnabled** (consumer (advanced)) | Specifies whether to enable HTTP TRACE for this Servlet consumer. By default TRACE is turned off. | false | boolean |
+| **oauthProfile** (security) | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. This is Camel endpoint-level validation and does not replace Jetty handlers or container security. |  | String |
 | **sslContextParameters** (security) | To configure security using SSLContextParameters. |  | SSLContextParameters |
 
 ## Message Headers
@@ -198,6 +199,26 @@ The Jetty component supports 2 message header(s), which is/are listed below:
 | --- | --- | --- | --- |
 | **CamelServletContextPath** (consumer) Constant: [`SERVLET_CONTEXT_PATH`](https://javadoc.io/doc/org.apache.camel/camel-jetty/latest/org/apache/camel/component/jetty/JettyHttpConstants.html#SERVLET_CONTEXT_PATH) | The servlet context path used. |  | String |
 | **CamelHttpPath** (consumer) Constant: [`HTTP_PATH`](https://javadoc.io/doc/org.apache.camel/camel-jetty/latest/org/apache/camel/component/jetty/JettyHttpConstants.html#HTTP_PATH) | Request URI’s path, the header will be used to build the request URI with the HTTP\_URI. |  | String |
+
+## OAuth Bearer token validation
+
+Jetty consumers can validate incoming `Authorization: Bearer` tokens by setting the `oauthProfile` endpoint option. The profile is resolved through Camel’s `OAuthTokenValidationFactory` SPI. The [camel-oauth](../4.18.x/others/oauth.md) component provides the default implementation for standalone Camel applications; see its documentation for validation profile options and production hardening (expected issuer and audience, HTTPS for JWKS, OIDC discovery, and introspection endpoints). Runtimes can also provide their own implementation.
+
+> **Note**
+> If `oauthProfile` is set but no `OAuthTokenValidationFactory` is available, the route fails to start. Add `camel-oauth` for the default provider or include a runtime-specific provider from the platform integration.
+
+```java
+from("jetty:http://0.0.0.0:8080/secure?oauthProfile=myprofile")
+    .to("direct:businessLogic");
+```
+
+When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. Requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. The raw `Authorization` header is removed from the Camel message before the route is invoked.
+
+> **Note**
+> Automatic `OPTIONS` handling runs before OAuth validation when `optionsEnabled=false`, so unauthenticated CORS preflight and Allow requests keep the existing Jetty behavior. If an `OPTIONS` route is explicitly enabled, that route is protected by OAuth like other methods.
+
+> **Note**
+> This is Camel endpoint-level validation and does not replace Jetty handlers or other container security mechanisms. If route code accesses the native servlet request object directly, the container request still reflects the original inbound HTTP headers. When combining OAuth validation with custom Jetty handlers or container-managed security, see the Jetty handlers and security configuration section below.
 
 ## Message Headers
 

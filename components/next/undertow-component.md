@@ -112,7 +112,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **httpURI** (common) | **Required** The url of the HTTP endpoint to use. |  | URI |
 
-### Query Parameters (29 parameters)
+### Query Parameters (30 parameters)
 
    
 | Name | Description | Default | Type |
@@ -154,6 +154,7 @@ Enum values:
 | **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **undertowHttpBinding** (advanced) | To use a custom UndertowHttpBinding to control the mapping between Camel message and undertow. |  | UndertowHttpBinding |
 | **allowedRoles** (security) | Configuration used by UndertowSecurityProvider. Comma separated list of allowed roles. |  | String |
+| **oauthProfile** (security) | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the HTTP request or WebSocket upgrade request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. |  | String |
 | **securityConfiguration** (security) | OConfiguration used by UndertowSecurityProvider. Security configuration object for use from UndertowSecurityProvider. Configuration is UndertowSecurityProvider specific. Each provider decides whether accepts configuration. |  | Object |
 | **securityProvider** (security) | Security provider allows plug in the provider, which will be used to secure requests. SPI approach could be used too (endpoint then finds security provider using SPI). |  | UndertowSecurityProvider |
 | **sslContextParameters** (security) | To configure security using SSLContextParameters. |  | SSLContextParameters |
@@ -199,6 +200,31 @@ Enum values:
 | **CamelHttpUri** (common) Constant: [`HTTP_URI`](https://javadoc.io/doc/org.apache.camel/camel-undertow/latest/org/apache/camel/component/undertow/UndertowConstants.html#HTTP_URI) | The http URI. |  | String |
 | **CamelHttpMethod** (producer) Constant: [`HTTP_METHOD`](https://javadoc.io/doc/org.apache.camel/camel-undertow/latest/org/apache/camel/component/undertow/UndertowConstants.html#HTTP_METHOD) | The http method. |  | String |
 | **Host** (producer) Constant: [`HOST_STRING`](https://javadoc.io/doc/org.apache.camel/camel-undertow/latest/org/apache/camel/component/undertow/UndertowConstants.html#HOST_STRING) | The host http header. |  | String |
+
+## OAuth Bearer token validation
+
+Undertow HTTP and WebSocket consumers can validate incoming `Authorization: Bearer` tokens by setting the `oauthProfile` endpoint option. The profile is resolved through Camel’s `OAuthTokenValidationFactory` SPI. The [camel-oauth](../4.18.x/others/oauth.md) component provides the default implementation for standalone Camel applications; see its documentation for validation profile options and production hardening (expected issuer and audience, HTTPS for JWKS, OIDC discovery, and introspection endpoints). Runtimes can also provide their own implementation.
+
+> **Note**
+> If `oauthProfile` is set but no `OAuthTokenValidationFactory` is available, the route fails to start. Add `camel-oauth` for the default provider or include a runtime-specific provider from the platform integration.
+
+```java
+from("undertow:http://0.0.0.0:8080/secure?oauthProfile=myprofile")
+    .to("direct:businessLogic");
+
+from("undertow:ws://0.0.0.0:8080/secure-ws?oauthProfile=myprofile")
+    .to("direct:webSocketLogic");
+```
+
+When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. HTTP requests and WebSocket upgrade requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. The raw `Authorization` header is removed before the route is invoked.
+
+> **Note**
+> For WebSocket consumers, the token is validated during the HTTP upgrade handshake. The validation result is available on the `ONOPEN` event exchange when `fireWebSocketChannelEvents=true`, and on subsequent message exchanges for that connection; individual WebSocket messages are not revalidated.
+
+> **Note**
+> For HTTP consumers, automatic `OPTIONS` handling still runs before OAuth validation when `optionsEnabled=false`, so unauthenticated preflight and Allow requests keep the existing Undertow behavior. If an `OPTIONS` route is explicitly enabled, that route is protected by OAuth like other methods.
+>
+> Custom Undertow `handlers` and `UndertowSecurityProvider#wrapHttpHandler` wrap outside the OAuth handler and can observe the original request headers before OAuth validation. The `UndertowSecurityProvider#authenticate` callback runs after OAuth validation and sees the request after Camel has removed the `Authorization` header. See the Security provider section below for how `UndertowSecurityProvider` is configured.
 
 ## Host Options
 
