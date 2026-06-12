@@ -218,7 +218,7 @@ Enum values:
 
 ## Message Headers
 
-The OpenAI component supports 39 message header(s), which is/are listed below:
+The OpenAI component supports 40 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -234,6 +234,7 @@ The OpenAI component supports 39 message header(s), which is/are listed below:
 | **CamelOpenAIOutputClass** (producer) Constant: [`OUTPUT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#OUTPUT_CLASS) | The Java class to use for structured output parsing. |  | Class |
 | **CamelOpenAIJsonSchema** (producer) Constant: [`JSON_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA) | The JSON schema to use for structured output validation. |  | String |
 | **CamelOpenAIStripThinking** (producer) Constant: [`STRIP_THINKING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STRIP_THINKING) | Whether to strip …​ blocks from the response body. |  | Boolean |
+| **CamelOpenAIMediaType** (producer) Constant: [`MEDIA_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MEDIA_TYPE) | The MIME type of the message body when sending a file or binary content (File, WrappedFile, byte or InputStream) to the model. Takes precedence over component content-type headers and automatic MIME type detection. |  | String |
 | **CamelOpenAIThinkingContent** (producer) Constant: [`THINKING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#THINKING_CONTENT) | The thinking content extracted from …​ blocks in the model response. |  | String |
 | **CamelOpenAIReasoningContent** (producer) Constant: [`REASONING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REASONING_CONTENT) | The reasoning content from the model response reasoning\_content field, used by thinking models like Qwen3 and DeepSeek-R1. |  | String |
 | **CamelOpenAIResponseModel** (producer) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_MODEL) | The model used for the completion response. |  | String |
@@ -353,12 +354,34 @@ Usage example:
 
 ```java
 from("file:images?noop=true")
-    .to("openai:chat-completion?model=gpt-4.1-mini?userMessage=Describe what you see in this image")
+    .to("openai:chat-completion?model=gpt-4.1-mini&userMessage=Describe what you see in this image")
+    .log("Response: ${body}");
+```
+
+Image input also works with bodies produced by remote file and cloud storage components, such as FTP/SFTP (`WrappedFile`), AWS S3, Azure Blob Storage or MinIO (`byte[]` or `InputStream`). The MIME type is detected from the component’s content-type header or the file name:
+
+Usage example:
+
+```java
+from("aws2-s3:my-bucket")
+    .to("openai:chat-completion?model=gpt-4.1-mini&userMessage=Describe what you see in this image")
+    .log("Response: ${body}");
+```
+
+When no content-type header is available, set the `CamelOpenAIMediaType` header explicitly:
+
+Usage example:
+
+```java
+from("direct:image")
+    .setHeader("CamelOpenAIMediaType", constant("image/png"))
+    .setHeader("CamelOpenAIUserMessage", constant("Describe what you see in this image"))
+    .to("openai:chat-completion?model=gpt-4.1-mini")
     .log("Response: ${body}");
 ```
 
 > **Note**
-> When using image files, the userMessage is required. Supported image formats are detected by MIME type (e.g., `image/png`, `image/jpeg`, `image/gif`, `image/webp`).
+> When using image input, the userMessage is required. Supported image formats are detected by MIME type (e.g., `image/png`, `image/jpeg`, `image/gif`, `image/webp`).
 
 ### Streaming Response
 
@@ -463,16 +486,42 @@ The component accepts the following types of input in the message body:
 
 1.  **String**: The prompt text is taken directly from the body
     
-2.  **File**: Used for file-based prompts. The component handles two types of files:
+2.  **File**, **Path** or **WrappedFile** (the body type produced by the file, FTP, SFTP and SMB components): Used for file-based prompts. The component handles two types of files:
     
-    -   **Text files** (MIME type starting with `text/`): The file content is read and used as the prompt. If userMessage endpoint option or `CamelOpenAIUserMessage` is set, it overrides the file content
+    -   **Text files** (MIME type starting with `text/`, plus `application/xml` and `application/json`): The file content is read and used as the prompt. If userMessage endpoint option or `CamelOpenAIUserMessage` is set, it overrides the file content
         
     -   **Image files** (MIME type starting with `image/`): The file is encoded as a base64 data URL and sent to vision-capable models. The userMessage is **required** when using image files
         
     
+3.  **byte\[\]** or **InputStream** (the body types produced by cloud storage components such as AWS S3, Azure Blob Storage, Google Cloud Storage and MinIO): When the detected MIME type is an image, the content is encoded as a base64 data URL and sent to vision-capable models (userMessage is **required**). Otherwise, the content is converted to a String and used as the prompt
+    
+
+### MIME Type Detection
+
+For `File`, `Path` and locally backed `WrappedFile` bodies, the MIME type is resolved in the following order:
+
+1.  The `CamelOpenAIMediaType` header
+    
+2.  The `CamelFileContentType` header
+    
+3.  The file name extension, using the Camel built-in MIME type table (e.g., `.png`, `.jpg`, `.gif`, `.webp`, `.txt`, `.csv`, `.md`, `.xml`, `.json`)
+    
+
+For `byte[]`, `InputStream` and remote `WrappedFile` bodies, the MIME type is resolved in the following order:
+
+1.  The `CamelOpenAIMediaType` header
+    
+2.  Cloud storage content-type headers: `CamelAwsS3ContentType`, `CamelAzureStorageBlobContentType`, `CamelAzureStorageDataLakeContentType`, `CamelGoogleCloudStorageContentType`, `CamelMinioContentType`, `CamelIBMCOSContentType`
+    
+3.  The `Content-Type` header
+    
+4.  The `CamelFileContentType` header
+    
+5.  The extension of the file name in the `CamelFileName` header
+    
 
 > **Note**
-> When using `File` input, the component uses `Files.probeContentType()` to detect the file type. Ensure your system has proper MIME type detection configured.
+> Set the `CamelOpenAIMediaType` header to override the MIME type detection, for example when the payload has no content-type metadata or the detection picks the wrong type.
 
 ## Output Handling
 
