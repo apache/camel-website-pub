@@ -50,9 +50,14 @@ The data-formats offering encryption/decryption of payloads utilizing [Marshal](
 
 Some components in Camel offer an ability to secure their endpoints (using interceptors etc.) and therefore ensure that they offer the ability to secure payloads as well as provide authentication/authorization capabilities at endpoints created using the components.
 
-### Post-Quantum TLS
+### Post-Quantum Cryptography
 
-Camel supports Post-Quantum Cryptography (PQC) at the TLS transport layer. On JDK 25+, Camel automatically configures hybrid post-quantum key exchange (`X25519MLKEM768`) to protect connections against harvest-now-decrypt-later attacks. See [JSSE Utility](camel-configuration-utilities.md) for configuration details.
+Camel provides Post-Quantum Cryptography (PQC) protection at two complementary layers:
+
+-   **Transport layer (TLS).** On JDK 25+, Camel automatically configures hybrid post-quantum key exchange (`X25519MLKEM768`) on all `SSLContextParameters` to protect connections against harvest-now-decrypt-later attacks. See [PQC TLS Configuration](camel-configuration-utilities.html#_post_quantum_cryptography_pqc_tls_configuration) for the full configuration guide.
+    
+-   **Message layer.** The [PQC component](../components/4.18.x/pqc-component.md) and [PQC data format](../components/4.18.x/dataformats/pqc-dataformat.md) encrypt and sign message payloads using post-quantum algorithms (ML-KEM, ML-DSA, SLH-DSA, and more), protecting data independently of the transport.
+    
 
 ## Configuration Security
 
