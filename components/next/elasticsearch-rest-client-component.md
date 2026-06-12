@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Elasticsearch Low level Rest Client component supports 12 options, which are listed below.
+The Elasticsearch Low level Rest Client component supports 14 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -84,6 +84,8 @@ The Elasticsearch Low level Rest Client component supports 12 options, which are
 | **snifferInterval** (advanced) | Sniffer interval (in millis). | 60000 | int |
 | **certificatePath** (security) | Certificate Path. |  | String |
 | **password** (security) | Password. |  | String |
+| **sslContextParameters** (security) | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. |  | SSLContextParameters |
+| **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 | **user** (security) | Username. |  | String |
 
 ## Endpoint Options
@@ -101,7 +103,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **clusterName** (producer) | **Required** Cluster Name. |  | String |
 
-### Query Parameters (13 parameters)
+### Query Parameters (14 parameters)
 
    
 | Name | Description | Default | Type |
@@ -140,6 +142,7 @@ Enum values:
 | **snifferInterval** (advanced) | Sniffer interval (in millis). | 60000 | int |
 | **certificatePath** (security) | Certificate Path. |  | String |
 | **password** (security) | Password. |  | String |
+| **sslContextParameters** (security) | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. This allows configuring named groups, signature schemes, cipher suites, and protocols for the TLS connection. |  | SSLContextParameters |
 | **user** (security) | Username. |  | String |
 
 ## Message Headers
