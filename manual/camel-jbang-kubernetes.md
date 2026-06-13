@@ -163,8 +163,6 @@ Use [Knative serving](https://knative.dev/docs/serving/) for serverless workload
 > **Note**
 > Disabled by default — enable with `--trait knative-service.enabled=true`.
 
-WARN: Currently does not work on OpenShift.
-
   
 | Property | Type | Description |
 | --- | --- | --- |
@@ -450,14 +448,15 @@ Quick start for local development with Minikube (Camel 4.10+):
 ```bash
 minikube start --addons registry --driver=docker
 eval $(minikube -p minikube docker-env)
-camel kubernetes run demo.camel.yaml --cluster-type=minikube \
-  --build-property=quarkus.kubernetes.image-pull-policy=Never \
-  --image-registry "$(kubectl -n kube-system get service registry -o jsonpath='{.spec.clusterIP}')" \
-  --image-builder=docker
+camel kubernetes run demo.camel.yaml
 ```
 
-> **Important**
-> The `--build-property=quarkus.kubernetes.image-pull-policy=Never` flag is required for Minikube deployments.
+## Deployment tips and troubleshooting
 
-> **Note**
-> Docker multi-platform build is used. Follow the [Docker multi-platform requirements](https://docs.docker.com/build/building/multi-platform/#build-multi-platform-images).
+-   If there is any error with `camel kubernetes run`, set `--verbose` to display additional logging.
+    
+-   You may want to examine the generated maven project in `.camel-jbang-run/<name>`.
+    
+-   If there are issues building the container image or deploying the kubernetes manifests, consider disabling the kubernetes cluster detection with `--disable-auto`.
+    
+-   Note that Docker multi-platform build is used. It requires to have followed these [Docker requirements](https://docs.docker.com/build/building/multi-platform/#build-multi-platform-images).

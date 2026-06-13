@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The HTTP component supports 49 options, which are listed below.
+The HTTP component supports 50 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -148,6 +148,24 @@ Enum values:
 | **proxyAuthUsername** (proxy) | Proxy server username. |  | String |
 | **proxyHost** (proxy) | Proxy server host. |  | String |
 | **proxyPort** (proxy) | Proxy server port. |  | Integer |
+| **hostnameVerificationPolicy** (security) | 
+
+Controls how hostname verification is performed during the TLS handshake. CLIENT (default) delegates entirely to the configured x509HostnameVerifier, preserving the behaviour of httpclient 5.5 and earlier a NoopHostnameVerifier will disable verification. BUILTIN uses the JDK SSLParameters hostname check only, ignoring the configured verifier. BOTH runs the JDK built-in check first and then the configured verifier; a NoopHostnameVerifier cannot bypass the built-in check under BUILTIN or BOTH. Prefer BOTH when no custom verifier semantics are needed for stronger out-of-the-box security.
+
+Enum values:
+
+-   CLIENT
+    
+-   BUILTIN
+    
+-   BOTH
+    
+
+
+
+
+
+ | CLIENT | HostnameVerificationPolicy |
 | **sslContextParameters** (security) | To configure security using SSLContextParameters. Important: Only one instance of org.apache.camel.support.jsse.SSLContextParameters is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 | **x509HostnameVerifier** (security) | To use a custom X509HostnameVerifier such as DefaultHostnameVerifier or NoopHostnameVerifier. |  | HostnameVerifier |
@@ -171,7 +189,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **httpUri** (common) | **Required** The url of the HTTP endpoint to call. |  | URI |
 
-### Query Parameters (66 parameters)
+### Query Parameters (67 parameters)
 
    
 | Name | Description | Default | Type |
@@ -306,6 +324,24 @@ Enum values:
  |  | String |
 | **authPassword** (security) | Authentication password. |  | String |
 | **authUsername** (security) | Authentication username. |  | String |
+| **hostnameVerificationPolicy** (security) | 
+
+Controls how hostname verification is performed during the TLS handshake. CLIENT (default) delegates entirely to the configured x509HostnameVerifier, preserving the behaviour of httpclient 5.5 and earlier a NoopHostnameVerifier will disable verification. BUILTIN uses the JDK SSLParameters hostname check only, ignoring the configured verifier. BOTH runs the JDK built-in check first and then the configured verifier; a NoopHostnameVerifier cannot bypass the built-in check under BUILTIN or BOTH. Prefer BOTH when no custom verifier semantics are needed for stronger out-of-the-box security.
+
+Enum values:
+
+-   CLIENT
+    
+-   BUILTIN
+    
+-   BOTH
+    
+
+
+
+
+
+ | CLIENT | HostnameVerificationPolicy |
 | **oauth2BodyAuthentication** (security) | Whether to use OAuth2 body authentication. | false | boolean |
 | **oauth2CachedTokensDefaultExpirySeconds** (security) | Default expiration time for cached OAuth2 tokens, in seconds. Used if token response does not contain 'expires\_in' field. | 3600 | long |
 | **oauth2CachedTokensExpirationMarginSeconds** (security) | Amount of time which is deducted from OAuth2 tokens expiry time to compensate for the time it takes OAuth2 Token Endpoint to send the token over http, in seconds. Set this parameter to high value if you OAuth2 Token Endpoint answers slowly or you tokens expire quickly. If you set this parameter to too small value, you can get 4xx http errors because camel will think that the received token is still valid, while in reality the token is expired for the Authentication server. | 5 | long |
