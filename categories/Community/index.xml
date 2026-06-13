@@ -27,7 +27,7 @@
       <link>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</link>
       <pubDate>Tue, 09 Jun 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</guid>
-      <description>When the first commit landed on March 19, 2007, Apache Camel was a routing library with a handful of components and a single contributor. Nineteen years later, the git repository has crossed 100,000 commits from 1,600+ contributors representing 450+ companies across more than 20 countries. The project ships 311 integration components, has published 300+ releases, and runs in production at organizations where downtime means grounded flights, blocked payments, or missed diagnoses.</description>
+      <description>When the first commit landed on March 19, 2007, Apache Camel was a routing library with a handful of components and a single contributor. Nineteen years later, the git repository has crossed 100,000 commits from 1,500+ contributors representing 450+ companies across more than 20 countries. The project ships 311 integration components, has published 300+ releases, and runs in production at organizations where downtime means grounded flights, blocked payments, or missed diagnoses.</description>
     </item>
     <item>
       <title>Wanaku 0.1.1: Bringing Apache Camel Integration Capabilities to AI Agents via MCP</title>

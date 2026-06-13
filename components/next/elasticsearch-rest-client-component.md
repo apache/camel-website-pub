@@ -299,7 +299,7 @@ When using elasticsearch-rest-client with Spring Boot make sure to use the follo
 </dependency>
 ```
 
-The component supports 13 options, which are listed below.
+The component supports 15 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -316,4 +316,6 @@ The component supports 13 options, which are listed below.
 | **camel.component.elasticsearch-rest-client.sniff-after-failure-delay** | Sniffer after failure delay (in millis). | 60000 | Integer |
 | **camel.component.elasticsearch-rest-client.sniffer-interval** | Sniffer interval (in millis). | 60000 | Integer |
 | **camel.component.elasticsearch-rest-client.socket-timeout** | Socket timeout. | 30000 | Integer |
+| **camel.component.elasticsearch-rest-client.ssl-context-parameters** | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. The option is a org.apache.camel.support.jsse.SSLContextParameters type. |  | SSLContextParameters |
+| **camel.component.elasticsearch-rest-client.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |
 | **camel.component.elasticsearch-rest-client.user** | Username. |  | String |

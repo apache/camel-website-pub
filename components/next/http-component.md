@@ -966,7 +966,7 @@ When using http with Spring Boot make sure to use the following Maven dependency
 </dependency>
 ```
 
-The component supports 52 options, which are listed below.
+The component supports 53 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -990,6 +990,7 @@ The component supports 52 options, which are listed below.
 | **camel.component.http.enabled** | Whether to enable auto configuration of the http component. This is enabled by default. |  | Boolean |
 | **camel.component.http.follow-redirects** | Whether to the HTTP request should follow redirects. By default the HTTP request does not follow redirects. | false | Boolean |
 | **camel.component.http.header-filter-strategy** | To use a custom org.apache.camel.spi.HeaderFilterStrategy to filter header to and from Camel message. The option is a org.apache.camel.spi.HeaderFilterStrategy type. |  | HeaderFilterStrategy |
+| **camel.component.http.hostname-verification-policy** | Controls how hostname verification is performed during the TLS handshake. CLIENT (default) delegates entirely to the configured x509HostnameVerifier, preserving the behaviour of httpclient 5.5 and earlier a NoopHostnameVerifier will disable verification. BUILTIN uses the JDK SSLParameters hostname check only, ignoring the configured verifier. BOTH runs the JDK built-in check first and then the configured verifier; a NoopHostnameVerifier cannot bypass the built-in check under BUILTIN or BOTH. Prefer BOTH when no custom verifier semantics are needed for stronger out-of-the-box security. | client | HostnameVerificationPolicy |
 | **camel.component.http.http-activity-listener** | To use a custom activity listener. The option is a org.apache.camel.component.http.HttpActivityListener type. |  | HttpActivityListener |
 | **camel.component.http.http-binding** | To use a custom HttpBinding to control the mapping between Camel message and HttpClient. The option is a org.apache.camel.http.common.HttpBinding type. |  | HttpBinding |
 | **camel.component.http.http-client-configurer** | To use the custom HttpClientConfigurer to perform configuration of the HttpClient that will be used. The option is a org.apache.camel.component.http.HttpClientConfigurer type. |  | HttpClientConfigurer |

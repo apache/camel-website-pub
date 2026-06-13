@@ -104,6 +104,7 @@ The CsvRecord annotation is used to identify the root class of the model. It rep
 | separator | String | ✓ |  | Separator used to split a record in tokens (mandatory) - can be ',' or ';' or 'anything'. The only whitespace character supported is tab (\\t). No other whitespace characters (spaces) are not supported. This value is interpreted as a regular expression. If you want to use a sign which has a special meaning in regular expressions, e.g., the '|' sign, then you have to mask it, like '|' |
 | allowEmptyStream | boolean |  | false | The allowEmptyStream parameter will allow to prcoess the unavaiable stream for CSV file. |
 | autospanLine | boolean |  | false | Last record spans rest of line (optional) - if enabled then the last column is auto spanned to end of line, for example if it is a comment, etc this allows the line to contain all characters, also the delimiter char. |
+| continueParseOnFailure | boolean |  | false | If true, a parse failure on any field in this record is replaced with the field’s defaultValue (or the type-appropriate default if no defaultValue is set), instead of aborting the unmarshal. Individual fields can opt out per-field via @DataField.continueParseOnFailure. Default false preserves the existing fail-fast behavior. |
 | crlf | String |  | WINDOWS | Character to be used to add a carriage return after each record (optional) - allow defining the carriage return character to use. If you specify a value other than the three listed before, the value you enter (custom) will be used as the CRLF character(s). Three values can be used : WINDOWS, UNIX, MAC, or custom. |
 | endWithLineBreak | boolean |  | true | The endWithLineBreak parameter flags if the CSV file should end with a line break or not (optional) |
 | generateHeaderColumns | boolean |  | false | The generateHeaderColumns parameter allow to add in the CSV generated the header containing names of the columns |
@@ -321,6 +322,10 @@ The DataField annotation defines the property of the field. Each datafield is id
 | align | String |  | R | Align the text to the right or left. Use values <tt>R</tt> or <tt>L</tt>. |
 | clip | boolean |  | false | Indicates to clip data in the field if it exceeds the allowed length when using fixed length. |
 | columnName | String |  |  | Name of the header column (optional). Uses the name of the property as default. Only applicable when `CsvRecord` has `generateHeaderColumns = true` |
+| continueParseOnFailure | ContinueOnFailure |  | INHERIT | Whether to keep going when parsing this field fails.
+TRUE forces tolerance for this field — a parse error is replaced with the field’s defaultValue, or the type-appropriate default if no defaultValue is set. FALSE forces strict behavior: the exception propagates and aborts the unmarshal as it always has. INHERIT (the default) defers to the record-level setting on @CsvRecord or @FixedLengthRecord.
+
+ |
 | decimalSeparator | String |  |  | Decimal Separator to be used with BigDecimal number |
 | defaultValue | String |  |  | Field’s default value in case no value is set |
 | delimiter | String |  |  | Optional delimiter to be used if the field has a variable length |
@@ -587,6 +592,7 @@ When the size of the data does not completely fill the length of the field, we c
 | **FixedLengthRecord** | fixed | Class |    
 | Parameter name | Type | Required | Default value | Info |
 | --- | --- | --- | --- | --- |
+| continueParseOnFailure | boolean |  | false | If true, a parse failure on any field in this record is replaced with the field’s defaultValue (or the type-appropriate default if no defaultValue is set), instead of aborting the unmarshal. Individual fields can opt out per-field via @DataField.continueParseOnFailure. Default false preserves the existing fail-fast behavior. |
 | countGrapheme | boolean |  | false | Indicates how chars are counted |
 | crlf | String |  | WINDOWS | Character to be used to add a carriage return after each record (optional). Possible values: WINDOWS, UNIX, MAC, or custom. This option is used only during marshalling, whereas unmarshalling uses system default JDK provided line delimiter unless eol is customized. |
 | eol | String |  |  | Character to be used to process considering end of line after each record while unmarshalling (optional - default: "", which helps default JDK provided line delimiter to be used unless any other line delimiter provided) This option is used only during unmarshalling, where marshalling uses system default provided line delimiter as "WINDOWS" unless any other value is provided. |
@@ -949,6 +955,7 @@ The Message annotation is used to identify the class of your model who will cont
 | --- | --- | --- | --- | --- |
 | keyValuePairSeparator | String | ✓ |  | Key value pair separator is used to split the values from their keys (mandatory). Can be '\\u0001', '\\u0009', '#', or 'anything'. |
 | pairSeparator | String | ✓ |  | Pair separator used to split the key value pairs in tokens (mandatory). Can be '=', ';', or 'anything'. |
+| continueParseOnFailure | boolean |  | false | If true, a parse failure on any field in this message is replaced with the type-appropriate default (null, "", false, or MIN\_VALUE for numeric primitives), instead of aborting the unmarshal. Individual fields can opt out per-field via @KeyValuePairField.continueParseOnFailure. Default false preserves the existing fail-fast behavior. |
 | crlf | String |  | WINDOWS | Character to be used to add a carriage return after each record (optional). Possible values = WINDOWS, UNIX, MAC, or custom. If you specify a value other than the three listed before, the value you enter (custom) will be used as the CRLF character(s). |
 | isOrdered | boolean |  | false | Indicates if the message must be ordered in output. This annotation is associated to the message class of the model and must be declared one time. |
 | name | String |  |  | Name describing the message (optional) |
@@ -987,6 +994,10 @@ The KeyValuePairField annotation defines the property of a key value pair field.
 | Parameter name | Type | Required | Default value | Info |
 | --- | --- | --- | --- | --- |
 | tag | int | ✓ |  | tag identifying the field in the message (mandatory) - must be unique |
+| continueParseOnFailure | ContinueOnFailure |  | INHERIT | Whether to keep going when parsing this field fails.
+TRUE forces tolerance — a parse error is replaced with the type-appropriate default (null, "", false, or MIN\_VALUE for numeric primitives). KeyValuePairField doesn’t currently have a defaultValue element, so there’s no user-supplied substitute available here. FALSE forces strict behavior. INHERIT (the default) defers to @Message.continueParseOnFailure.
+
+ |
 | impliedDecimalSeparator | boolean |  | false | <b>Camel 2.11:</b> Indicates if there is a decimal point implied at a specified location |
 | name | String |  |  | name of the field (optional) |
 | pattern | String |  |  | pattern that the formater will use to transform the data (optional) |
@@ -1311,6 +1322,63 @@ public static class OrderNumberFormatFactory extends AbstractFormatFactory {
     }
 }
 ```
+
+### Handling parse failures
+
+By default, when Bindy can’t parse a field — say a malformed date, or `"abc"` in an `int` column — it throws and the whole unmarshal aborts, even if the rest of the row would have parsed fine. You can opt into a tolerant mode where the bad field is replaced with a fallback value and the row is delivered intact.
+
+#### Turning it on
+
+There are two annotation elements, on different levels:
+
+-   `continueParseOnFailure` on the **record** annotation (`@CsvRecord`, `@FixedLengthRecord`, `@Message`) — a plain boolean that sets the default for every field in that record.
+    
+-   `continueParseOnFailure` on the **field** annotation (`@DataField`, `@KeyValuePairField`) — a tri-state enum (`ContinueOnFailure`) that can override the record default for one specific field.
+    
+
+The tri-state lets a single strict field live inside an otherwise-tolerant record, or vice versa:
+
+  
+| `@CsvRecord` | `@DataField` | Effective behavior |
+| --- | --- | --- |
+| (unset, `false`) | `INHERIT` (default) | Strict — exception propagates, like today |
+| `true` | `INHERIT` | Tolerant |
+| `true` | `FALSE` | Strict (the field overrides the record) |
+| `false` | `TRUE` | Tolerant (the field overrides the record) |
+
+#### What the tolerant path substitutes
+
+When a parse fails and the field is tolerant, Bindy picks a substitute value in this order:
+
+1.  If the field has a `@DataField.defaultValue` set, it’s parsed through the **same** `Format` that just failed. So a `defaultValue = "1970-01-01"` on a `Date` field becomes a real `Date`, a `defaultValue = "0.00"` on a `BigDecimal` becomes a real `BigDecimal`, and so on. The type is always correct.
+    
+2.  Otherwise the field gets the same fallback an unfilled field would get: `null` for object types (`Date`, `BigDecimal`, `String` with `defaultValueStringAsNull=true`, custom converters), `""` for `String`, `false` for `boolean`, and `MIN_VALUE` for numeric primitives (`int`, `long`, `byte`, `short`, `float`, `double`, `char`).
+    
+
+> **Note**
+> The `MIN_VALUE` sentinel for numeric primitives is Bindy’s existing convention from `getDefaultValueForPrimitive`; it’s not specific to this feature. If you want `0` instead, set an explicit `defaultValue = "0"` on the field.
+
+#### Example
+
+```java
+@CsvRecord(separator = ",", continueParseOnFailure = true)
+public class Order {
+    @DataField(pos = 1)
+    private int id;                       // bad int -> Integer.MIN_VALUE
+
+    @DataField(pos = 2, pattern = "yyyy-MM-dd", defaultValue = "1970-01-01")
+    private Date orderDate;               // bad date -> 1970-01-01
+
+    @DataField(pos = 3, continueParseOnFailure = ContinueOnFailure.FALSE)
+    private BigDecimal amount;            // bad number still throws; this field is exempt
+}
+```
+
+A row like `1,2026-01-15,42.50` parses normally. A row like `xyz,not-a-date,42.50` produces an `Order` with `id = Integer.MIN_VALUE`, `orderDate = 1970-01-01`, and `amount = 42.50`. A row with a bad `amount` (e.g. `1,2026-01-15,xyz`) still throws, because that field is annotated strict.
+
+#### KVP caveat
+
+`@KeyValuePairField` does not currently have a `defaultValue` element, so KVP fields can only fall back to the type-appropriate default (`null`, `""`, `false`, or `MIN_VALUE`). Everything else works the same as CSV and fixed-length.
 
 ### Supported Datatypes
 
