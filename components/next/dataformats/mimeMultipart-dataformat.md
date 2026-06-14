@@ -132,7 +132,7 @@ When using mimeMultipart with Spring Boot make sure to use the following Maven d
 </dependency>
 ```
 
-The component supports 56 options, which are listed below.
+The component supports 60 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -184,6 +184,10 @@ The component supports 56 options, which are listed below.
 | **camel.component.mail.to** | Sets the destination email address. Separate multiple email addresses with comma. |  | String |
 | **camel.component.mail.unseen** | Whether to limit by unseen mails only. | true | Boolean |
 | **camel.component.mail.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |
+| **camel.component.mail.use-header-from** | Whether message headers From and Sender override the sender pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI sender, ignoring any From or Sender headers from the message. | true | Boolean |
+| **camel.component.mail.use-header-recipients** | Whether message headers To, CC, and BCC override the recipients pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI recipients, ignoring any recipient headers from the message. | true | Boolean |
+| **camel.component.mail.use-header-reply-to** | Whether message header Reply-To overrides the replyTo pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI replyTo, ignoring any Reply-To header from the message. | true | Boolean |
+| **camel.component.mail.use-header-subject** | Whether message header Subject overrides the subject pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI subject, ignoring any Subject header from the message. | true | Boolean |
 | **camel.component.mail.use-inline-attachments** | Whether to use disposition inline or attachment. | false | Boolean |
 | **camel.component.mail.use-java-mail-session-properties-from-headers** | Whether to allow dynamic JavaMail session properties (message headers whose key starts with mail.smtp. or mail.smtps.) to override the endpoint configuration on a per-message basis. This is disabled by default. Only enable it when these headers originate exclusively from trusted route logic, never from data crossing a trust boundary (for example HTTP query parameters, or JMS/Kafka messages from untrusted producers). When enabled, an attacker able to set these headers could weaken transport security (such as mail.smtp.ssl.trust or mail.smtp.starttls.enable) or redirect the SMTP connection. | false | Boolean |
 | **camel.component.mail.username** | The username for login. See also setAuthenticator(MailAuthenticator). |  | String |
