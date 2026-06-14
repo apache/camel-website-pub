@@ -437,7 +437,7 @@ When using sjms2 with Spring Boot make sure to use the following Maven dependenc
 </dependency>
 ```
 
-The component supports 15 options, which are listed below.
+The component supports 16 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -454,6 +454,7 @@ The component supports 15 options, which are listed below.
 | **camel.component.sjms2.jms-key-format-strategy** | Pluggable strategy for encoding and decoding JMS keys so they can be compliant with the JMS specification. Camel provides one implementation out of the box: default. The default strategy will safely marshal dots and hyphens (. and -). Can be used for JMS brokers which do not care whether JMS header keys contain illegal characters. You can provide your own implementation of the org.apache.camel.component.jms.JmsKeyFormatStrategy and refer to it using the # notation. The option is a org.apache.camel.component.sjms.jms.JmsKeyFormatStrategy type. |  | JmsKeyFormatStrategy |
 | **camel.component.sjms2.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
 | **camel.component.sjms2.message-created-strategy** | To use the given MessageCreatedStrategy which are invoked when Camel creates new instances of jakarta.jms.Message objects when Camel is sending a JMS message. The option is a org.apache.camel.component.sjms.jms.MessageCreatedStrategy type. |  | MessageCreatedStrategy |
+| **camel.component.sjms2.object-message-enabled** | Whether to enable sending and receiving JMS ObjectMessage. By default this is disabled because Java object serialization is a known source of security vulnerabilities. Enable this option only if you trust the source of the messages and need to send or receive Java serialized objects via JMS. When disabled, Camel will refuse to create or read JMS ObjectMessage instances. Options that rely on ObjectMessage internally (such as transferException) require this option to be enabled. | false | Boolean |
 | **camel.component.sjms2.recovery-interval** | Specifies the interval between recovery attempts, i.e. when a connection is being refreshed, in milliseconds. The default is 5000 ms, that is, 5 seconds. The option is a long type. | 5000 | Long |
 | **camel.component.sjms2.reply-to-on-timeout-max-concurrent-consumers** | Specifies the maximum number of concurrent consumers for continue routing when timeout occurred when using request/reply over JMS. | 1 | Integer |
 | **camel.component.sjms2.request-timeout-checker-interval** | Configures how often Camel should check for timed out Exchanges when doing request/reply over JMS. By default Camel checks once per second. But if you must react faster when a timeout occurs, then you can lower this interval, to check more frequently. The timeout is determined by the option requestTimeout. The option is a long type. | 1000 | Long |

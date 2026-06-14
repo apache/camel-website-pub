@@ -918,7 +918,7 @@ When using amqp with Spring Boot make sure to use the following Maven dependency
 </dependency>
 ```
 
-The component supports 120 options, which are listed below.
+The component supports 121 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -993,6 +993,7 @@ The component supports 120 options, which are listed below.
 | **camel.component.amqp.message-id-enabled** | When sending, specifies whether message IDs should be added. This is just an hint to the JMS broker. If the JMS provider accepts this hint, these messages must have the message ID set to null; if the provider ignores the hint, the message ID must be set to its normal unique value. | true | Boolean |
 | **camel.component.amqp.message-listener-container-factory** | Registry ID of the MessageListenerContainerFactory used to determine what org.springframework.jms.listener.AbstractMessageListenerContainer to use to consume messages. Setting this will automatically set consumerType to Custom. The option is a org.apache.camel.component.jms.MessageListenerContainerFactory type. |  | MessageListenerContainerFactory |
 | **camel.component.amqp.message-timestamp-enabled** | Specifies whether timestamps should be enabled by default on sending messages. This is just an hint to the JMS broker. If the JMS provider accepts this hint, these messages must have the timestamp set to zero; if the provider ignores the hint the timestamp must be set to its normal value. | true | Boolean |
+| **camel.component.amqp.object-message-enabled** | Whether to enable sending and receiving JMS ObjectMessage. By default this is disabled because Java object serialization is a known source of security vulnerabilities. Enable this option only if you trust the source of the messages and need to send or receive Java serialized objects via JMS. When disabled, Camel will refuse to create or read JMS ObjectMessage instances. Options that rely on ObjectMessage internally (such as transferExchange and transferException) require this option to be enabled. | false | Boolean |
 | **camel.component.amqp.password** | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **camel.component.amqp.port** | The port number on which the AMPQ Broker listens. |  | Integer |
 | **camel.component.amqp.preserve-message-qos** | Set to true, if you want to send message using the QoS settings specified on the message, instead of the QoS settings on the JMS endpoint. The following three headers are considered JMSPriority, JMSDeliveryMode, and JMSExpiration. You can provide all or only some of them. If not provided, Camel will fall back to use the values from the endpoint instead. So, when using this option, the headers override the values from the endpoint. The explicitQosEnabled option, by contrast, will only use options set on the endpoint, and not values from the message header. | false | Boolean |

@@ -2367,7 +2367,7 @@ The component supports 47 options, which are listed below.
 | **camel.component.docling.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
 | **camel.component.docling.batch-fail-on-first-error** | Fail entire batch on first error (true) or continue processing remaining documents (false). | true | Boolean |
 | **camel.component.docling.batch-parallelism** | Number of parallel threads for batch processing. | 4 | Integer |
-| **camel.component.docling.batch-size** | Maximum number of documents to process in a single batch (batch operations only). | 10 | Integer |
+| **camel.component.docling.batch-size** | Number of documents to submit per sub-batch. Documents are partitioned into sub-batches of this size and each sub-batch is processed before starting the next one. Within each sub-batch, up to batchParallelism threads are used concurrently. This controls memory usage and back-pressure when processing large document sets. | 10 | Integer |
 | **camel.component.docling.batch-timeout** | Maximum time to wait for batch completion in milliseconds. | 300000 | Long |
 | **camel.component.docling.configuration** | The configuration for the Docling Endpoint. The option is a org.apache.camel.component.docling.DoclingConfiguration type. |  | DoclingConfiguration |
 | **camel.component.docling.content-in-body** | Include the content of the output file in the exchange body and delete the output file. | false | Boolean |

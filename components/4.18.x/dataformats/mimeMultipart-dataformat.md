@@ -132,7 +132,7 @@ When using mimeMultipart with Spring Boot make sure to use the following Maven d
 </dependency>
 ```
 
-The component supports 55 options, which are listed below.
+The component supports 56 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -185,6 +185,7 @@ The component supports 55 options, which are listed below.
 | **camel.component.mail.unseen** | Whether to limit by unseen mails only. | true | Boolean |
 | **camel.component.mail.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |
 | **camel.component.mail.use-inline-attachments** | Whether to use disposition inline or attachment. | false | Boolean |
+| **camel.component.mail.use-java-mail-session-properties-from-headers** | Whether to allow dynamic JavaMail session properties (message headers whose key starts with mail.smtp. or mail.smtps.) to override the endpoint configuration on a per-message basis. This is disabled by default. Only enable it when these headers originate exclusively from trusted route logic, never from data crossing a trust boundary (for example HTTP query parameters, or JMS/Kafka messages from untrusted producers). When enabled, an attacker able to set these headers could weaken transport security (such as mail.smtp.ssl.trust or mail.smtp.starttls.enable) or redirect the SMTP connection. | false | Boolean |
 | **camel.component.mail.username** | The username for login. See also setAuthenticator(MailAuthenticator). |  | String |
 | **camel.dataformat.mime-multipart.binary-content** | Defines whether the content of binary parts in the MIME multipart is binary (true) or Base-64 encoded (false) Default is false. | false | Boolean |
 | **camel.dataformat.mime-multipart.enabled** | Whether to enable auto configuration of the mimeMultipart data format. This is enabled by default. |  | Boolean |
