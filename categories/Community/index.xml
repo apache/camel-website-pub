@@ -6,8 +6,15 @@
     <description>Recent content in Community on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 12 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Community/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel&#39;s Bug Fix Track Record: 7,070 Bugs Fixed, Median 1-Day Resolution, 99.8% Fix Rate</title>
+      <link>https://camel.apache.org/blog/2026/06/camel-bug-fix-track-record/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/camel-bug-fix-track-record/</guid>
+      <description>Apache Camel has fixed 7,070 out of 7,081 reported bugs — a 99.8% resolution rate — with a median fix time of 1 day. That track record spans 19 years, 350+ connectors, and 272 production releases. This is not a recent improvement — the project has maintained a 1-day median resolution for 17 of the last 19 years. Here is the data.&#xA;We pulled the numbers from JIRA, GitHub, and Maven Central to see what 19 years of Apache Camel bug data actually looks like.</description>
+    </item>
     <item>
       <title>The DNA of Apache Camel: How a 42-File Commit Became the World&#39;s Integration Framework</title>
       <link>https://camel.apache.org/blog/2026/06/camel-dna-19-years/</link>
