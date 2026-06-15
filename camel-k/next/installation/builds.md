@@ -18,6 +18,7 @@ Here a quick resume of the parameters you can configure as environment variables
 | PUBLISH\_STRATEGY | Strategy used to publish built artifacts/images. | `jib` |
 | BUILD\_IMAGE\_PLATFORMS | Comma-separated list of target platforms for the build (e.g. `linux/amd64,linux/arm64`). | auto-detected |
 | MAX\_RUNNING\_BUILDS | Maximum number of builds that can run concurrently. | `3` if build strategy is `routine`, `10` if `pod` |
+| BUILDER\_NODE\_SELECTOR\_ALLOWED\_LABELS | Comma-separated list of node-selector label keys that CR authors are permitted to set via the `builder.nodeSelector` trait. When unset or empty all keys are accepted. Unlisted keys are dropped and an info message is logged. Example: `kubernetes.io/hostname,topology.kubernetes.io/zone`. |  |
 
 Certain configuration can be also specified via trait configuration on [`builder`](../traits/builder.md) and [`camel`](../traits/builder.md) trait. Those values have precedence over global configuration.
 

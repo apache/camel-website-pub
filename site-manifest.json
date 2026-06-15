@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781523685028,
+  "generated": 1781533276852,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -28897,6 +28897,12 @@
               "path": "camel-jbang-configuration.adoc",
               "url": "/manual/camel-jbang-configuration.html",
               "title": "Camel CLI - Configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-container.adoc",
+              "url": "/manual/camel-jbang-container.html",
+              "title": "Running Camel JBang in a Container"
             },
             {
               "module": "ROOT",
