@@ -133,6 +133,8 @@ The component can be used to trigger events at specified times, as in the follow
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("cron:tab?schedule=0/1+*+*+*+*+?")
@@ -148,6 +150,20 @@ from("cron:tab?schedule=0/1+*+*+*+*+?")
     </setBody>
     <to uri="log:info"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: cron:tab
+      parameters:
+        schedule: "0/1+*+*+*+*+?"
+      steps:
+        - setBody:
+            constant:
+              expression: event
+        - to:
+            uri: log:info
 ```
 
 The schedule expression `0/3+10+*+*+*+?` can be also written as `0/3 10 * * * ?` and triggers an event every three seconds only in the tenth minute of each hour.

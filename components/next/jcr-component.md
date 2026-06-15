@@ -146,19 +146,82 @@ The JCR component supports 3 message header(s), which is/are listed below:
 
 The snippet below creates a node named `node` under the `/home/test` node in the content repository. One additional property is added to the node as well: `my.contents.property` which will contain the body of the message being sent.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:a").setHeader(JcrConstants.JCR_NODE_NAME, constant("node"))
     .setHeader("my.contents.property", body())
     .to("jcr://user:pass@repository/home/test");
 ```
 
+```xml
+<route>
+    <from uri="direct:a"/>
+    <setHeader name="JcrConstants.JCR_NODE_NAME">
+        <constant>node</constant>
+    </setHeader>
+    <setHeader name="my.contents.property">
+        <simple>${body}</simple>
+    </setHeader>
+    <to uri="jcr://user:pass@repository/home/test"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - setHeader:
+            name: JcrConstants.JCR_NODE_NAME
+            expression:
+              constant:
+                expression: node
+        - setHeader:
+            name: my.contents.property
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: jcr://user:pass@repository/home/test
+```
+
 The following code will register an EventListener under the path import-application/inbox for `Event.NODE_ADDED` and `Event.NODE_REMOVED` events (event types 1 and 2, both masked as 3) and listening deep for all the children.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jcr://user:pass@repository/import-application/inbox?eventTypes=3&deep=true")
+    .to("direct:execute-import-application");
+```
 
 ```xml
 <route>
-    <from uri="jcr://user:pass@repository/import-application/inbox?eventTypes=3&deep=true" />
-    <to uri="direct:execute-import-application" />
+    <from uri="jcr://user:pass@repository/import-application/inbox?eventTypes=3&amp;deep=true"/>
+    <to uri="direct:execute-import-application"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jcr://user:pass@repository/import-application/inbox
+      parameters:
+        eventTypes: 3
+        deep: true
+      steps:
+        - to:
+            uri: direct:execute-import-application
 ```
 
 ## Spring Boot Auto-Configuration

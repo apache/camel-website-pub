@@ -254,19 +254,44 @@ In the **enveloping XML signature** case, the supported generated XML signature 
 
 The following example shows the basic usage of the component.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:enveloping").to("xmlsecurity-sign://enveloping?keyAccessor=#accessor",
-                             "xmlsecurity-verify://enveloping?keySelector=#selector",
-                             "mock:result")
+from("direct:enveloping")
+    .to("xmlsecurity-sign://enveloping?keyAccessor=#accessor")
+    .to("xmlsecurity-verify://enveloping?keySelector=#selector")
+    .to("mock:result");
 ```
 
-In Spring XML:
-
 ```xml
-<from uri="direct:enveloping" />
-    <to uri="xmlsecurity-sign://enveloping?keyAccessor=#accessor" />
-    <to uri="xmlsecurity-verify://enveloping?keySelector=#selector" />
-<to uri="mock:result" />
+<route>
+  <from uri="direct:enveloping"/>
+  <to uri="xmlsecurity-sign://enveloping?keyAccessor=#accessor"/>
+  <to uri="xmlsecurity-verify://enveloping?keySelector=#selector"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:enveloping
+      steps:
+        - to:
+            uri: xmlsecurity-sign://enveloping
+            parameters:
+              keyAccessor: "#accessor"
+        - to:
+            uri: xmlsecurity-verify://enveloping
+            parameters:
+              keySelector: "#selector"
+        - to:
+            uri: mock:result
 ```
 
 For the signing process, a private key is necessary. You specify a key accessor bean which provides this private key. For the validation, the corresponding public key is necessary; you specify a key selector bean which provides this public key.

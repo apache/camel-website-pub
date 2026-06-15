@@ -1332,7 +1332,10 @@ rest()
       - path: "/{id}"
         description: "Find user by id"
         outType: "org.apache.camel.example.rest.User"
-        to: "bean:userService?method=getUser(${header.id})"
+        to:
+          uri: bean:userService
+          parameters:
+            method: "getUser(${header.id})"
         param:
           - name: "id"
             type: "path"
@@ -1372,7 +1375,10 @@ rest()
     put:
       - description: "Updates or create a user"
         type: "org.apache.camel.example.rest.User"
-        to: "bean:userService?method=updateUser"
+        to:
+          uri: bean:userService
+          parameters:
+            method: updateUser
         param:
           - name: "body"
             type: "body"

@@ -315,6 +315,8 @@ The following is a basic example of how to send an HTTP request to an existing H
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -326,6 +328,15 @@ from("direct:start")
     <from uri="direct:start"/>
     <to uri="undertow:http://www.google.com"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: undertow:http://www.google.com
 ```
 
 ### HTTP Consumer Example

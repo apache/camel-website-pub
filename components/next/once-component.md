@@ -122,13 +122,16 @@ Enum values:
 
 To set up a route that generates an event every 60 seconds:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("once:foo?body=file:data.json").to("bean:myBean?method=someMethodName");
 ```
-
-The above route will trigger once and load the `data.json` from file system and use as message body. And then route to call the bean.
-
-And the route in XML DSL:
 
 ```xml
 <route>
@@ -136,6 +139,21 @@ And the route in XML DSL:
   <to uri="bean:myBean?method=someMethodName"/>
 </route>
 ```
+
+```yaml
+- route:
+    from:
+      uri: once:foo
+      parameters:
+        body: "file:data.json"
+      steps:
+        - to:
+            uri: bean:myBean
+            parameters:
+              method: someMethodName
+```
+
+The above route will trigger once and load the `data.json` from file system and use as message body. And then route to call the bean.
 
 ### Using headers and variables
 
@@ -216,11 +234,36 @@ And for any other its `String` or the output from executing a language.
 
 By default, the component is fired after 1 seconds when Camel has been fully started. If you want to fire messages in a Camel route as soon as possible, you can use a negative delay:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("once:foo?body=file.data.json&delay=-1").to("bean:myBean?method=someMethodName");
+```
+
 ```xml
 <route>
   <from uri="once:foo?body=file.data.json&amp;delay=-1"/>
   <to uri="bean:myBean?method=someMethodName"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: once:foo
+      parameters:
+        body: file.data.json
+        delay: -1
+      steps:
+        - to:
+            uri: bean:myBean
+            parameters:
+              method: someMethodName
 ```
 
 In this way, the timer will fire messages immediately.

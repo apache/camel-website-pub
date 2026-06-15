@@ -57,7 +57,9 @@ The following sample performs signing + encryption, and then signature verificat
 
 -   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -72,6 +74,22 @@ from("direct:pgp-encrypt")
   <marshal><pgp keyFileName="file:pubring.gpg" keyUserid="alice@example.com"/></marshal>
   <unmarshal><pgp keyFileName="file:secring.gpg" keyUserid="alice@example.com" password="letmein"/></unmarshal>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:pgp-encrypt
+      steps:
+        - marshal:
+            pgp:
+              keyFileName: "file:pubring.gpg"
+              keyUserid: "alice@example.com"
+        - unmarshal:
+            pgp:
+              keyFileName: "file:secring.gpg"
+              keyUserid: "alice@example.com"
+              password: letmein
 ```
 
 ### Working with the previous example

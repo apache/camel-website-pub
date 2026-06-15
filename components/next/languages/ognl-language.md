@@ -54,13 +54,18 @@ The OGNL language supports 2 options, which are listed below.
 
 For example, you could use OGNL inside a [Message Filter](../eips/filter-eip.md)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("seda:foo")
   .filter().ognl("request.headers.foo == 'bar'")
     .to("seda:bar");
 ```
-
-And in XML:
 
 ```xml
 <route>
@@ -70,6 +75,20 @@ And in XML:
     <to uri="seda:bar"/>
   </filter>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - filter:
+            expression:
+              ognl:
+                expression: request.headers.foo == 'bar'
+            steps:
+              - to:
+                  uri: seda:bar
 ```
 
 ## Loading script from external resource

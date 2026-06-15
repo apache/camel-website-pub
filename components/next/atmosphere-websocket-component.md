@@ -166,40 +166,64 @@ An atmopshere-websocket endpoint can either write data to the socket or read fro
 
 In the route below, Camel will read from the specified websocket connection.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("atmosphere-websocket:///servicepath")
         .to("direct:next");
 ```
 
-And the equivalent Spring sample:
-
 ```xml
-<camelContext xmlns="http://camel.apache.org/schema/spring">
-  <route>
-    <from uri="atmosphere-websocket:///servicepath"/>
-    <to uri="direct:next"/>
-  </route>
-</camelContext>
+<route>
+  <from uri="atmosphere-websocket:///servicepath"/>
+  <to uri="direct:next"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: atmosphere-websocket:///servicepath
+      steps:
+        - to:
+            uri: direct:next
 ```
 
 ### Producer Example
 
 In the route below, Camel will write to the specified websocket connection.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:next")
         .to("atmosphere-websocket:///servicepath");
 ```
 
-And the equivalent Spring sample:
-
 ```xml
-<camelContext xmlns="http://camel.apache.org/schema/spring">
-  <route>
-    <from uri="direct:next"/>
-    <to uri="atmosphere-websocket:///servicepath"/>
-  </route>
-</camelContext>
+<route>
+  <from uri="direct:next"/>
+  <to uri="atmosphere-websocket:///servicepath"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:next
+      steps:
+        - to:
+            uri: atmosphere-websocket:///servicepath
 ```
 
 ## Spring Boot Auto-Configuration

@@ -252,7 +252,21 @@ The SSH component supports 4 message header(s), which is/are listed below:
 
 When the SSH Component is used as a Producer (`.to("ssh://…​")`), it will send the message body as the command to execute on the remote SSH server.
 
-Here is an example of this within the XML DSL. Note that the command has an XML encoded newline (`&#10;`).
+Here is an example of this. Note that the command has a newline (`&#10;`).
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:exampleSshProducer")
+    .setBody(constant("features:list\n"))
+    .to("ssh://user:pass@localhost:8101")
+    .log("${body}");
+```
 
 ```xml
 <route id="camel-example-ssh-producer">
@@ -263,6 +277,22 @@ Here is an example of this within the XML DSL. Note that the command has an XML 
   <to uri="ssh://user:pass@localhost:8101"/>
   <log message="${body}"/>
 </route>
+```
+
+```yaml
+- route:
+    id: camel-example-ssh-producer
+    from:
+      uri: direct:exampleSshProducer
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "features:list\n"
+        - to:
+            uri: ssh://user:pass@localhost:8101
+        - log:
+            message: "${body}"
 ```
 
 ### Authentication
@@ -278,7 +308,17 @@ The SSH Component can authenticate against the remote SSH server using one of tw
 
 The following route fragment shows an SSH polling consumer using a certificate from the classpath.
 
-In the XML DSL,
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("ssh://scott@localhost:8101?certResource=classpath:test_rsa&useFixedDelay=true&delay=5000&pollCommand=features:list%0A")
+    .log("${body}");
+```
 
 ```xml
 <route>
@@ -287,11 +327,18 @@ In the XML DSL,
 </route>
 ```
 
-In the Java DSL,
-
-```java
-from("ssh://scott@localhost:8101?certResource=classpath:test_rsa&useFixedDelay=true&delay=5000&pollCommand=features:list%0A")
-    .log("${body}");
+```yaml
+- route:
+    from:
+      uri: ssh://scott@localhost:8101
+      parameters:
+        certResource: "classpath:test_rsa"
+        useFixedDelay: true
+        delay: 5000
+        pollCommand: "features:list%0A"
+      steps:
+        - log:
+            message: "${body}"
 ```
 
 An example of using Public Key authentication is provided in `examples/camel-example-ssh-security`.

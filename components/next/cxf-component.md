@@ -661,6 +661,8 @@ The following example illustrates how to get/set SOAP headers. Suppose we have a
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("cxf:bean:routerRelayEndpointWithInsertion")
@@ -676,6 +678,19 @@ from("cxf:bean:routerRelayEndpointWithInsertion")
     <to uri="cxf:bean:serviceRelayEndpointWithInsertion"/>
     <process ref="InsertResponseOutHeaderProcessor" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: cxf:bean:routerRelayEndpointWithInsertion
+      steps:
+        - process:
+            ref: InsertRequestOutHeaderProcessor
+        - to:
+            uri: cxf:bean:serviceRelayEndpointWithInsertion
+        - process:
+            ref: InsertResponseOutHeaderProcessor
 ```
 
 SOAP headers are propagated to and from Camel Message headers. The Camel message header name is `org.apache.cxf.headers.Header.list` which is a constant defined in CXF (`org.apache.cxf.headers.Header.HEADER_LIST`). The header value is a List of CXF `SoapHeader` objects (`org.apache.cxf.binding.soap.SoapHeader`). The following snippet is the `InsertResponseOutHeaderProcessor` (that inserts a new SOAP header in the response message). The way to access SOAP headers in both `InsertResponseOutHeaderProcessor` and `InsertRequestOutHeaderProcessor` are actually the same. The only difference between the two processors is setting the direction of the inserted SOAP header.

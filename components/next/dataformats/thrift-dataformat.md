@@ -83,7 +83,7 @@ You can also run the compiler for any additional supported languages you require
 
 This will generate separate Java class for each type defined in .thrift file, i.e., struct or enum. The generated classes implement org.apache.thrift.TBase which is required by the serialization mechanism. For this reason, it is important that only these classes are used in the body of your exchanges. Camel will throw an exception on route creation if you attempt to tell the Data Format to use a class that does not implement org.apache.thrift.TBase.
 
-## Java DSL
+## Examples
 
 You can use create the ThriftDataFormat instance and pass it to Camel DataFormat marshal and unmarshal API like this.
 
@@ -106,20 +106,41 @@ Or use the DSL thrift() passing the unmarshal default instance or default instan
    from("direct:unmarshalB").unmarshal().thrift(new Work()).to("mock:reverse");
 ```
 
-## Spring DSL
+The following example shows how to use Thrift to unmarshal:
 
-The following example shows how to use Thrift to unmarshal using Spring configuring the thrift data type
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .unmarshal().thrift("org.apache.camel.dataformat.thrift.generated.Work")
+    .to("mock:result");
+```
 
 ```xml
-<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-  <route>
-    <from uri="direct:start"/>
-    <unmarshal>
-      <thrift instanceClass="org.apache.camel.dataformat.thrift.generated.Work" />
-    </unmarshal>
-    <to uri="mock:result"/>
-  </route>
-</camelContext>
+<route>
+  <from uri="direct:start"/>
+  <unmarshal>
+    <thrift instanceClass="org.apache.camel.dataformat.thrift.generated.Work"/>
+  </unmarshal>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - unmarshal:
+            thrift:
+              instanceClass: org.apache.camel.dataformat.thrift.generated.Work
+        - to:
+            uri: mock:result
 ```
 
 ## Dependencies

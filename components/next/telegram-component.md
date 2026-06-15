@@ -265,19 +265,34 @@ The Telegram component supports both consumer and producer endpoints. It can als
 
 The following is a basic example of how to send a message to a Telegram chat through the Telegram Bot API.
 
-Telegram producer example in Java DSL
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:start").to("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere");
+from("direct:start")
+    .to("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere");
 ```
-
-Telegram producer example in Spring XML
 
 ```xml
 <route>
-    <from uri="direct:start"/>
-    <to uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
-<route>
+  <from uri="direct:start"/>
+  <to uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: telegram:bots
+            parameters:
+              authorizationToken: "123456789:insertYourAuthorizationTokenHere"
 ```
 
 The code `123456789:insertYourAuthorizationTokenHere` is the **authorization token** corresponding to the Bot.
@@ -317,24 +332,36 @@ When using the producer endpoint without specifying the **chat id** option, the 
 
 ### Consumer
 
-The following is a basic example of how to receive all messages that telegram users are sending to the configured Bot. In Java DSL
+The following is a basic example of how to receive all messages that telegram users are sending to the configured Bot.
 
-Telegram consumer example in Java DSL
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere")
-.bean(ProcessorBean.class)
+    .bean(ProcessorBean.class);
 ```
-
-Telegram producer example in Spring XML
 
 ```xml
 <route>
-    <from uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
-    <bean ref="myBean" />
-<route>
+  <from uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
+  <bean ref="myBean"/>
+</route>
+```
 
-<bean id="myBean" class="com.example.MyBean"/>
+```yaml
+- route:
+    from:
+      uri: telegram:bots
+      parameters:
+        authorizationToken: "123456789:insertYourAuthorizationTokenHere"
+      steps:
+        - bean:
+            ref: myBean
 ```
 
 The `MyBean` is a simple bean that will receive the messages

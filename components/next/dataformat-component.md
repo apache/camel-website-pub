@@ -114,6 +114,8 @@ For example, to use the [JAXB](dataformats/jaxb-dataformat.md) [Data Format](../
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("activemq:My.Queue").
@@ -122,13 +124,24 @@ from("activemq:My.Queue").
 ```
 
 ```xml
-<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-  <route>
-    <from uri="activemq:My.Queue"/>
-    <to uri="dataformat:jaxb:unmarshal?contextPath=com.acme.model"/>
-    <to uri="mqseries:Another.Queue"/>
-  </route>
-</camelContext>
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="dataformat:jaxb:unmarshal?contextPath=com.acme.model"/>
+  <to uri="mqseries:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: dataformat:jaxb:unmarshal
+            parameters:
+              contextPath: com.acme.model
+        - to:
+            uri: mqseries:Another.Queue
 ```
 
 ## Spring Boot Auto-Configuration

@@ -217,25 +217,65 @@ Incoming parameters in the service consumer will also be passed to the message b
 
 Below is a simple synchronous method invoke with host and port parameters
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:thrift-calculate")
-.to("thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator?method=calculate&synchronous=true");
+    .to("thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator?method=calculate&synchronous=true");
 ```
-
-Below is a simple synchronous method invoke for the XML DSL configuration
 
 ```xml
 <route>
-    <from uri="direct:thrift-add" />
-    <to uri="thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator?method=add&synchronous=true"/>
+  <from uri="direct:thrift-calculate"/>
+  <to uri="thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator?method=calculate&amp;synchronous=true"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:thrift-calculate
+      steps:
+        - to:
+            uri: thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator
+            parameters:
+              method: calculate
+              synchronous: true
 ```
 
 Thrift service consumer with asynchronous communication
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator")
-.to("direct:thrift-service");
+    .to("direct:thrift-service");
+```
+
+```xml
+<route>
+  <from uri="thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator"/>
+  <to uri="direct:thrift-service"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator
+      steps:
+        - to:
+            uri: direct:thrift-service
 ```
 
 It’s possible to automate Java code generation for .thrift files using **thrift-maven-plugin**, but before start the thrift compiler binary distribution for your operating system must be present on the running host.

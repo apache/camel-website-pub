@@ -55,13 +55,18 @@ The following Camel related variables are made available:
 
 For example, you could use MVEL inside a [Message Filter](../eips/filter-eip.md)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("seda:foo")
   .filter().mvel("headers.foo == 'bar'")
     .to("seda:bar");
 ```
-
-And in XML:
 
 ```xml
 <route>
@@ -71,6 +76,20 @@ And in XML:
     <to uri="seda:bar"/>
   </filter>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - filter:
+            expression:
+              mvel:
+                expression: headers.foo == 'bar'
+            steps:
+              - to:
+                  uri: seda:bar
 ```
 
 ## Loading script from external resource

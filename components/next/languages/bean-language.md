@@ -45,6 +45,8 @@ In the given route below, we call a Java Bean Method with `method`, where "myBea
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("activemq:topic:OrdersTopic")
@@ -63,6 +65,21 @@ from("activemq:topic:OrdersTopic")
     <to uri="activemq:BigSpendersQueue"/>
   </filter>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:topic:OrdersTopic
+      steps:
+        - filter:
+            expression:
+              method:
+                ref: myBean
+                method: isGoldCustomer
+            steps:
+              - to:
+                  uri: activemq:BigSpendersQueue
 ```
 
 The bean could be implemented as follows:

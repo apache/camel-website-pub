@@ -219,13 +219,16 @@ The consumer will otherwise as by default return 1 message polled to the schedul
 
 To set up a route that generates an event every 60 seconds:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("scheduler://foo?delay=60000").to("bean:myBean?method=someMethodName");
 ```
-
-The above route will generate an event and then invoke the `someMethodName` method on the bean called `myBean` in the Registry such as JNDI or Spring.
-
-And the route in Spring DSL:
 
 ```xml
 <route>
@@ -233,6 +236,21 @@ And the route in Spring DSL:
   <to uri="bean:myBean?method=someMethodName"/>
 </route>
 ```
+
+```yaml
+- route:
+    from:
+      uri: scheduler:foo
+      parameters:
+        delay: 60000
+      steps:
+        - to:
+            uri: bean:myBean
+            parameters:
+              method: someMethodName
+```
+
+The above route will generate an event and then invoke the `someMethodName` method on the bean called `myBean` in the Registry such as JNDI or Spring.
 
 ## Spring Boot Auto-Configuration
 

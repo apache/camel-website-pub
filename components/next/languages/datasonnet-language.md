@@ -211,6 +211,8 @@ Here’s an example showing some of these functions in use:
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("direct:in")
@@ -226,6 +228,20 @@ from("direct:in")
     </setBody>
     <to uri="mock:camel"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setBody:
+            expression:
+              datasonnet:
+                expression: "'hello, ' + cml.properties('toGreet')"
+                resultType: java.lang.String
+        - to:
+            uri: mock:camel
 ```
 
 ### Loading script from external resource
@@ -245,6 +261,8 @@ Here is a simple example using a DataSonnet expression as a predicate in a Messa
     
 -   XML
     
+-   YAML
+    
 
 ```java
 // let's route if a line item is over $100
@@ -263,11 +281,27 @@ from("queue:foo")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: queue:foo
+      steps:
+        - filter:
+            expression:
+              datasonnet:
+                expression: "ds.arrays.firstWith(body.lineItems, function(item) item > 100) != null"
+            steps:
+              - to:
+                  uri: queue:bar
+```
+
 Here is an example of a simple DataSonnet expression as a transformation EIP. This example will transform an XML body with `lineItems` into JSON while filtering out lines that are under 100.
 
 -   Java
     
 -   XML
+    
+-   YAML
     
 
 ```java
@@ -286,6 +320,22 @@ from("queue:foo")
         <to uri="queue:bar"/>
     </filter>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: queue:foo
+      steps:
+        - transform:
+            expression:
+              datasonnet:
+                expression: "ds.filter(body.lineItems, function(item) item > 100)"
+                resultType: java.lang.String
+                bodyMediaType: application/xml
+                outputMediaType: application/json
+        - to:
+            uri: queue:bar
 ```
 
 ## Migrating from DataWeave

@@ -42,6 +42,19 @@ The following Camel related variables are made available:
 
 You can use SpEL as an expression for [Recipient List](../eips/recipientList-eip.md) or as a predicate inside a [Message Filter](../eips/filter-eip.md):
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:foo")
+    .filter().spel("#{request.headers.foo == 'bar'}")
+    .to("direct:bar");
+```
+
 ```xml
 <route>
   <from uri="direct:foo"/>
@@ -52,12 +65,18 @@ You can use SpEL as an expression for [Recipient List](../eips/recipientList-eip
 </route>
 ```
 
-And the equivalent in Java DSL:
-
-```java
-from("direct:foo")
-    .filter().spel("#{request.headers.foo == 'bar'}")
-    .to("direct:bar");
+```yaml
+- route:
+    from:
+      uri: direct:foo
+      steps:
+        - filter:
+            expression:
+              spel:
+                expression: "#{request.headers.foo == 'bar'}"
+            steps:
+              - to:
+                  uri: direct:bar
 ```
 
 ### Expression templating

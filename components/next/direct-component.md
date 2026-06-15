@@ -124,7 +124,9 @@ In the route below, we use the direct component to link the two routes together:
 
 -   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -149,6 +151,29 @@ from("direct:processOrder")
  <to uri="bean:orderService?method=process"/>
  <to uri="activemq:queue:order.out"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:queue:order.in
+      steps:
+        - to:
+            uri: bean:orderService
+            parameters:
+              method: validate
+        - to:
+            uri: direct:processOrder
+- route:
+    from:
+      uri: direct:processOrder
+      steps:
+        - to:
+            uri: bean:orderService
+            parameters:
+              method: process
+        - to:
+            uri: activemq:queue:order.out
 ```
 
 See also samples from the [SEDA](seda-component.md) component, how they can be used together.

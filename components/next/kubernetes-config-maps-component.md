@@ -191,10 +191,39 @@ Enum values:
 -   `listConfigMaps`: this operation lists the configmaps
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:list").
-    to("kubernetes-config-maps:///?kubernetesClient=#kubernetesClient&operation=listConfigMaps").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-config-maps:///?kubernetesClient=#kubernetesClient&operation=listConfigMaps")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-config-maps:///?kubernetesClient=#kubernetesClient&amp;operation=listConfigMaps"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+      steps:
+        - to:
+            uri: kubernetes-config-maps:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listConfigMaps
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a List of ConfigMaps from your cluster
@@ -202,19 +231,48 @@ This operation returns a List of ConfigMaps from your cluster
 -   `listConfigMapsByLabels`: this operation lists the configmaps selected by label
     
 
-```java
-from("direct:listByLabels").process(new Processor() {
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_CONFIGMAPS_LABELS, labels);
-            }
-        });
-    to("kubernetes-config-maps:///?kubernetesClient=#kubernetesClient&operation=listConfigMapsByLabels").
-    to("mock:result");
+```java
+from("direct:listByLabels")
+    .setHeader(KubernetesConstants.KUBERNETES_CONFIGMAPS_LABELS, constant("key1=value1,key2=value2"))
+    .to("kubernetes-config-maps:///?kubernetesClient=#kubernetesClient&operation=listConfigMapsByLabels")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:listByLabels"/>
+  <setHeader name="CamelKubernetesConfigMapsLabels">
+    <constant>key1=value1,key2=value2</constant>
+  </setHeader>
+  <to uri="kubernetes-config-maps:///?kubernetesClient=#kubernetesClient&amp;operation=listConfigMapsByLabels"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listByLabels
+      steps:
+        - setHeader:
+            name: CamelKubernetesConfigMapsLabels
+            expression:
+              constant:
+                expression: key1=value1,key2=value2
+        - to:
+            uri: kubernetes-config-maps:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listConfigMapsByLabels
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a List of ConfigMaps from your cluster, using a label selector (with key1 and key2, with value value1 and value2)

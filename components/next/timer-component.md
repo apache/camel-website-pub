@@ -177,13 +177,16 @@ When the timer is fired, it adds the following information as properties to the 
 
 To set up a route that generates an event every 60 seconds:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("timer://foo?fixedRate=true&period=60000").to("bean:myBean?method=someMethodName");
 ```
-
-The above route will generate an event and then invoke the `someMethodName` method on the bean called `myBean` in the Registry.
-
-And the route in Spring DSL:
 
 ```xml
 <route>
@@ -192,15 +195,55 @@ And the route in Spring DSL:
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: timer:foo
+      parameters:
+        fixedRate: true
+        period: 60000
+      steps:
+        - to:
+            uri: bean:myBean
+            parameters:
+              method: someMethodName
+```
+
+The above route will generate an event and then invoke the `someMethodName` method on the bean called `myBean` in the Registry.
+
 ### Firing as soon as possible
 
 You may want to fire messages in a Camel route as soon as possible, you can use a negative delay:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("timer://foo?delay=-1").to("bean:myBean?method=someMethodName");
+```
 
 ```xml
 <route>
   <from uri="timer://foo?delay=-1"/>
   <to uri="bean:myBean?method=someMethodName"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:foo
+      parameters:
+        delay: -1
+      steps:
+        - to:
+            uri: bean:myBean
+            parameters:
+              method: someMethodName
 ```
 
 In this way, the timer will fire messages immediately.
@@ -213,11 +256,35 @@ If you don’t specify a `repeatCount` then the timer will continue firing messa
 
 You may want to fire a message in a Camel route only once, such as when starting the route. To do that, you use the `repeatCount` option as shown:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("timer://foo?repeatCount=1").to("bean:myBean?method=someMethodName");
+```
+
 ```xml
 <route>
   <from uri="timer://foo?repeatCount=1"/>
   <to uri="bean:myBean?method=someMethodName"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:foo
+      parameters:
+        repeatCount: 1
+      steps:
+        - to:
+            uri: bean:myBean
+            parameters:
+              method: someMethodName
 ```
 
 ## Spring Boot Auto-Configuration

@@ -208,7 +208,9 @@ For example, to transform the message using jOOR language to the upper case
 
 -   Java
     
--   XML DSL
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -225,6 +227,19 @@ from("seda:orders")
    </transform>
    <to uri="seda:upper"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:orders
+      steps:
+        - transform:
+            expression:
+              joor:
+                expression: "message.getBody(String.class).toUpperCase()"
+        - to:
+            uri: seda:upper
 ```
 
 ### Multi statements
@@ -253,6 +268,8 @@ You can turn off pre-compilation for the jOOR language and then Camel will recom
     
 -   XML
     
+-   YAML
+    
 
 ```java
 JoorLanguage joor = (JoorLanguage) context.resolveLanguage("joor");
@@ -275,6 +292,20 @@ In XML DSL it’s easier because you can turn off pre-compilation in the `<joor>
     </transform>
     <to uri="jms:orders"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:incoming
+      steps:
+        - transform:
+            expression:
+              joor:
+                expression: "resource:file:src/main/resources/orders.joor"
+                preCompile: false
+        - to:
+            uri: jms:orders
 ```
 
 ### Lambda-based AggregationStrategy

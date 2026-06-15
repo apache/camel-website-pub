@@ -44,25 +44,50 @@ Most of the time, you won’t need to declare the data format if you use the def
 
 In this example, we marshal the file content to a base64 object.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://data.bin")
     .marshal().base64()
     .to("jms://myqueue");
 ```
 
-In Spring DSL:
-
 ```xml
- <from uri="file://data.bin">
- <marshal>
-     <base64/>
- </marshal>
- <to uri="jms://myqueue"/>
+<route>
+  <from uri="file://data.bin"/>
+  <marshal>
+    <base64/>
+  </marshal>
+  <to uri="jms://myqueue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://data.bin
+      steps:
+        - marshal:
+            base64: {}
+        - to:
+            uri: jms://myqueue
 ```
 
 ## Unmarshal
 
 In this example, we unmarshal the payload from the JMS queue to a byte\[\] object, before its processed by the `newOrder` processor.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("jms://queue/order")
@@ -70,14 +95,25 @@ from("jms://queue/order")
     .process("newOrder");
 ```
 
-In Spring DSL:
-
 ```xml
- <from uri="jms://queue/order">
- <unmarshal>
-     <base64/>
- </unmarshal>
- <to uri="bean:newOrder"/>
+<route>
+  <from uri="jms://queue/order"/>
+  <unmarshal>
+    <base64/>
+  </unmarshal>
+  <to uri="bean:newOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms://queue/order
+      steps:
+        - unmarshal:
+            base64: {}
+        - to:
+            uri: bean:newOrder
 ```
 
 ## Dependencies

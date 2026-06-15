@@ -735,7 +735,8 @@ from("direct:start")
               steps:
               - setProperty:
                   name: "HttpMessageMethod"
-                  constant: "SET"
+                  expression:
+                    constant: "SET"
               - process:
                   ref: "SetOriginalMessageProcessor"
 ```

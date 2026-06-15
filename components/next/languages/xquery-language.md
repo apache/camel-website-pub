@@ -42,20 +42,37 @@ from("queue:foo")
 
 You can also use functions inside your query, in which case you need an explicit type conversion, or you will get an `org.w3c.dom.DOMException: HIERARCHY_REQUEST_ERR`). You need to pass in the expected output type of the function. For example, the concat function returns a `String` which is done as shown:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
   .recipientList().xquery("concat('mock:foo.', /person/@city)", String.class);
 ```
 
-And in XML DSL:
-
 ```xml
 <route>
   <from uri="direct:start"/>
   <recipientList>
-    <xquery resultType="java.lang.String">concat('mock:foo.', /person/@city</xquery>
+    <xquery resultType="java.lang.String">concat('mock:foo.', /person/@city)</xquery>
   </recipientList>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - recipientList:
+            expression:
+              xquery:
+                expression: "concat('mock:foo.', /person/@city)"
+                resultType: java.lang.String
 ```
 
 ### Using namespaces

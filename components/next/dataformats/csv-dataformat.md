@@ -124,6 +124,8 @@ and this route definition:
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -139,6 +141,17 @@ from("direct:start")
     </marshal>
     <to uri="mock:result" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            csv: {}
+        - to:
+            uri: mock:result
 ```
 
 then it will produce
@@ -224,6 +237,8 @@ And this Java route definition:
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -239,6 +254,18 @@ from("direct:start")
   </marshal>
   <to uri="mock:result" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            csv:
+              delimiter: "|"
+        - to:
+            uri: mock:result
 ```
 
 Then it will produce:
@@ -315,6 +342,8 @@ You can instruct the CSV Data Format to skip the first line which contains the C
     
 -   XML
     
+-   YAML
+    
 
 ```java
 CsvDataFormat csv = new CsvDataFormat();
@@ -335,11 +364,27 @@ from("direct:start")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - unmarshal:
+            csv:
+              skipFirstLine: true
+        - to:
+            uri: bean:myCsvHandler
+            parameters:
+              method: doHandleCsv
+```
+
 ### Unmarshaling with a pipe as delimiter
 
 -   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -372,6 +417,20 @@ from("direct:start")
   </unmarshal>
   <to uri="bean:myCsvHandler?method=doHandleCsv" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - unmarshal:
+            csv:
+              delimiter: "|"
+        - to:
+            uri: bean:myCsvHandler
+            parameters:
+              method: doHandleCsv
 ```
 
 **Issue in CSVConfig**

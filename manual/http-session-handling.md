@@ -94,21 +94,29 @@ The following three routes will each do two invocations of an echo REST service.
       uri: direct://proxyinstance
       steps:
         - to:
-            uri: "cxfrs://bean://rsClientProxy?cookieHandler=#instanceCookieHandler"
+            uri: cxfrs://bean://rsClientProxy
+            parameters:
+              cookieHandler: "#instanceCookieHandler"
         - convertBodyTo:
             type: java.lang.String
         - to:
-            uri: "cxfrs://bean://rsClientProxy?cookieHandler=#instanceCookieHandler"
+            uri: cxfrs://bean://rsClientProxy
+            parameters:
+              cookieHandler: "#instanceCookieHandler"
 - route:
     from:
       uri: direct://proxyexchange
       steps:
         - to:
-            uri: "cxfrs://bean://rsClientProxy?cookieHandler=#exchangeCookieHandler"
+            uri: cxfrs://bean://rsClientProxy
+            parameters:
+              cookieHandler: "#exchangeCookieHandler"
         - convertBodyTo:
             type: java.lang.String
         - to:
-            uri: "cxfrs://bean://rsClientProxy?cookieHandler=#exchangeCookieHandler"
+            uri: cxfrs://bean://rsClientProxy
+            parameters:
+              cookieHandler: "#exchangeCookieHandler"
 ```
 
 Both `CookieHandler` implementations support setting a CookiePolicy to control the policy for storing cookies. Default is `CookiePolicy.ACCEPT_ORIGINAL_SERVER`.

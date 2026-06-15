@@ -149,6 +149,8 @@ Then the bean can be called in a Camel route by the fully qualified class name:
     
 -   XML
     
+-   YAML
+    
 
 ```java
 from("direct:hello")
@@ -160,6 +162,15 @@ from("direct:hello")
    <from uri="direct:hello"/>
    <to uri="bean:com.foo.MyBean"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:hello
+      steps:
+        - to:
+            uri: bean:com.foo.MyBean
 ```
 
 What happens is that when the exchange is routed to the MyBean, then Camel will use the Bean Binding to invoke the bean, in this case the _saySomething_ method, by converting the `Exchange` in body to the `String` type and storing the output of the method back to the Exchange again.

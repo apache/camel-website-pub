@@ -143,7 +143,7 @@ You can also run the compiler for any additional supported languages you require
 
 This will generate a single Java class named AddressBookProtos which contains inner classes for Person and AddressBook. Builders are also implemented for you. The generated classes implement com.google.protobuf.Message which is required by the serialization mechanism. For this reason it is important that only these classes are used in the body of your exchanges. Camel will throw an exception on route creation if you attempt to tell the Data Format to use a class that does not implement com.google.protobuf.Message. Use the generated builders to translate the data from any of your existing domain classes.
 
-## Java DSL
+## Examples
 
 You can use create the ProtobufDataFormat instance and pass it to Camel DataFormat marshal and unmarshal API like this.
 
@@ -166,20 +166,41 @@ Or use the DSL `protobuf()` passing the unmarshal default instance or default in
    from("direct:unmarshalB").unmarshal().protobuf(Person.getDefaultInstance()).to("mock:reverse");
 ```
 
-## Spring DSL
+The following example shows how to use Protobuf to unmarshal:
 
-The following example shows how to use Protobuf to unmarshal using Spring configuring the protobuf data type
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .unmarshal().protobuf("org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person")
+    .to("mock:result");
+```
 
 ```xml
-<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-  <route>
-    <from uri="direct:start"/>
-    <unmarshal>
-      <protobuf instanceClass="org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person" />
-    </unmarshal>
-    <to uri="mock:result"/>
-  </route>
-</camelContext>
+<route>
+  <from uri="direct:start"/>
+  <unmarshal>
+    <protobuf instanceClass="org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person"/>
+  </unmarshal>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - unmarshal:
+            protobuf:
+              instanceClass: org.apache.camel.dataformat.protobuf.generated.AddressBookProtos$Person
+        - to:
+            uri: mock:result
 ```
 
 ## Dependencies

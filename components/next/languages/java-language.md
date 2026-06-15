@@ -197,22 +197,40 @@ camelContext.getRegistry().put("MyJoorConfig", config);
 
 For example, to transform the message using jOOR language to the upper case
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("seda:orders")
   .transform().java("message.getBody(String.class).toUpperCase()")
   .to("seda:upper");
 ```
 
-And in XML DSL:
-
 ```xml
 <route>
-   <from uri="seda:orders"/>
-   <transform>
-     <java>message.getBody(String.class).toUpperCase()</joor>
-   </transform>
-   <to uri="seda:upper"/>
+  <from uri="seda:orders"/>
+  <transform>
+    <java>message.getBody(String.class).toUpperCase()</java>
+  </transform>
+  <to uri="seda:upper"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:orders
+      steps:
+        - transform:
+            expression:
+              java:
+                expression: "message.getBody(String.class).toUpperCase()"
+        - to:
+            uri: seda:upper
 ```
 
 ### Multi statements

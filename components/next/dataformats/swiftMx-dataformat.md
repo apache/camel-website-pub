@@ -53,20 +53,38 @@ Most of the time, you won’t need to declare the data format if you use the def
 
 In this example, we marshal the messages read from a JMS queue in SWIFT format before storing the result into a file.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jms://myqueue")
     .marshal().swiftMx()
     .to("file://data.bin");
 ```
 
-In Spring DSL:
-
 ```xml
- <from uri="jms://myqueue">
- <marshal>
-     <swiftMx/>
- </marshal>
- <to uri="file://data.bin"/>
+<route>
+  <from uri="jms://myqueue"/>
+  <marshal>
+    <swiftMx/>
+  </marshal>
+  <to uri="file://data.bin"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms://myqueue
+      steps:
+        - marshal:
+            swiftMx: {}
+        - to:
+            uri: file://data.bin
 ```
 
 ## Unmarshal
@@ -75,20 +93,38 @@ The unmarshaller converts the input data into the concrete class of type `com.pr
 
 In this example, we unmarshal the content of a file to get SWIFT MX objects before processing them with the `newOrder` processor.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://data.bin")
     .unmarshal().swiftMx()
     .process("newOrder");
 ```
 
-In Spring DSL:
-
 ```xml
- <from uri="file://data.bin">
- <unmarshal>
-     <swiftMx/>
- </unmarshal>
- <to uri="bean:newOrder"/>
+<route>
+  <from uri="file://data.bin"/>
+  <unmarshal>
+    <swiftMx/>
+  </unmarshal>
+  <to uri="bean:newOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://data.bin
+      steps:
+        - unmarshal:
+            swiftMx: {}
+        - to:
+            uri: bean:newOrder
 ```
 
 ## Dependencies

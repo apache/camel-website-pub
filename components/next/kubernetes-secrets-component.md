@@ -142,10 +142,39 @@ The Kubernetes Secrets component supports 6 message header(s), which is/are list
 -   `listSecrets`: this operation lists the secrets on a kubernetes cluster
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:list").
-    toF("kubernetes-secrets:///?kubernetesClient=#kubernetesClient&operation=listSecrets").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-secrets:///?kubernetesClient=#kubernetesClient&operation=listSecrets")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-secrets:///?kubernetesClient=#kubernetesClient&amp;operation=listSecrets"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+      steps:
+        - to:
+            uri: kubernetes-secrets:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listSecrets
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of secrets from your cluster
@@ -153,18 +182,48 @@ This operation returns a list of secrets from your cluster
 -   `listSecretsByLabels`: this operation lists the Secrets by labels on a kubernetes cluster
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_SECRETS_LABELS, labels);
-            }
-        });
-    toF("kubernetes-secrets:///?kubernetesClient=#kubernetesClient&operation=listSecretsByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .setHeader(KubernetesConstants.KUBERNETES_SECRETS_LABELS, constant("key1=value1,key2=value2"))
+    .to("kubernetes-secrets:///?kubernetesClient=#kubernetesClient&operation=listSecretsByLabels")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:listByLabels"/>
+  <setHeader name="CamelKubernetesSecretsLabels">
+    <constant>key1=value1,key2=value2</constant>
+  </setHeader>
+  <to uri="kubernetes-secrets:///?kubernetesClient=#kubernetesClient&amp;operation=listSecretsByLabels"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listByLabels
+      steps:
+        - setHeader:
+            name: CamelKubernetesSecretsLabels
+            expression:
+              constant:
+                expression: key1=value1,key2=value2
+        - to:
+            uri: kubernetes-secrets:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listSecretsByLabels
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of Secrets from your cluster using a label selector (with key1 and key2, with value value1 and value2)

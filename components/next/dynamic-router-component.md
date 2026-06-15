@@ -179,7 +179,9 @@ The Dynamic Router component is used in the same way that other components are u
 
 -   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 Example Java DSL Route Definition
@@ -194,8 +196,17 @@ Example XML Route Definition
 ```xml
 <route>
    <from uri="direct:start"/>
-   <to uri="dynamic-router:nameOfYourChannel"/>
+   <to uri="dynamic-router:orders"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dynamic-router:orders
 ```
 
 ## Examples

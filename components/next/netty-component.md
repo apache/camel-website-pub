@@ -600,6 +600,8 @@ The bean names can then be used in netty endpoint definitions either as a comma-
     
 -   XML
     
+-   YAML
+    
 
 ```java
  from("direct:multiple-codec").to("netty:tcp://0.0.0.0:{{port}}?encoders=#encoders&sync=false");
@@ -608,16 +610,35 @@ The bean names can then be used in netty endpoint definitions either as a comma-
 ```
 
 ```xml
-<camelContext id="multiple-netty-codecs-context" xmlns="http://camel.apache.org/schema/spring">
-    <route>
-        <from uri="direct:multiple-codec"/>
-        <to uri="netty:tcp://0.0.0.0:5150?encoders=#encoders&amp;sync=false"/>
-    </route>
-    <route>
-        <from uri="netty:tcp://0.0.0.0:5150?decoders=#length-decoder,#string-decoder&amp;sync=false"/>
-        <to uri="mock:multiple-codec"/>
-    </route>
-</camelContext>
+<route>
+    <from uri="direct:multiple-codec"/>
+    <to uri="netty:tcp://0.0.0.0:5150?encoders=#encoders&amp;sync=false"/>
+</route>
+<route>
+    <from uri="netty:tcp://0.0.0.0:5150?decoders=#length-decoder,#string-decoder&amp;sync=false"/>
+    <to uri="mock:multiple-codec"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:multiple-codec
+      steps:
+        - to:
+            uri: "netty:tcp://0.0.0.0:5150"
+            parameters:
+              encoders: "#encoders"
+              sync: false
+- route:
+    from:
+      uri: "netty:tcp://0.0.0.0:5150"
+      parameters:
+        decoders: "#length-decoder,#string-decoder"
+        sync: false
+      steps:
+        - to:
+            uri: mock:multiple-codec
 ```
 
 ### Closing Channel When Complete

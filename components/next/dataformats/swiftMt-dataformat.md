@@ -50,20 +50,38 @@ Most of the time, you won’t need to declare the data format if you use the def
 
 In this example, we marshal the messages read from a JMS queue in SWIFT format before storing the result into a file.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jms://myqueue")
     .marshal().swiftMt()
     .to("file://data.bin");
 ```
 
-In Spring DSL:
-
 ```xml
- <from uri="jms://myqueue">
- <marshal>
-     <swiftMt/>
- </marshal>
- <to uri="file://data.bin"/>
+<route>
+  <from uri="jms://myqueue"/>
+  <marshal>
+    <swiftMt/>
+  </marshal>
+  <to uri="file://data.bin"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms://myqueue
+      steps:
+        - marshal:
+            swiftMt: {}
+        - to:
+            uri: file://data.bin
 ```
 
 ## Unmarshal
@@ -72,7 +90,12 @@ The unmarshaller converts the input data into the concrete class of type `com.pr
 
 In this example, we unmarshal the content of a file to get SWIFT MT objects before processing them with the `newOrder` processor.
 
-SwiftMt example in Java
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("file://data.bin")
@@ -80,14 +103,25 @@ from("file://data.bin")
     .process("newOrder");
 ```
 
-SwiftMt example in In Spring DSL
-
 ```xml
- <from uri="file://data.bin">
- <unmarshal>
-     <swiftMt/>
- </unmarshal>
- <to uri="bean:newOrder"/>
+<route>
+  <from uri="file://data.bin"/>
+  <unmarshal>
+    <swiftMt/>
+  </unmarshal>
+  <to uri="bean:newOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://data.bin
+      steps:
+        - unmarshal:
+            swiftMt: {}
+        - to:
+            uri: bean:newOrder
 ```
 
 ## Dependencies

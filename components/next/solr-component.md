@@ -194,6 +194,13 @@ The following Solr operations are currently supported. Set an exchange header wi
 
 Below is a simple `INSERT`, `DELETE` and `SEARCH` example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:insert")
     .setHeader(SolrConstants.PARAM_OPERATION, constant(SolrOperation.INSERT))
@@ -234,6 +241,47 @@ from("direct:search")
     </setHeader>
     <to uri="solr://localhost:8983/solr"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:insert
+      steps:
+        - setHeader:
+            name: CamelSolrOperation
+            expression:
+              constant:
+                expression: INSERT
+        - setHeader:
+            name: CamelSolrField.id
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: solr://localhost:8983/solr
+- route:
+    from:
+      uri: direct:delete
+      steps:
+        - setHeader:
+            name: CamelSolrOperation
+            expression:
+              constant:
+                expression: DELETE
+        - to:
+            uri: solr://localhost:8983/solr
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - setHeader:
+            name: CamelSolrOperation
+            expression:
+              constant:
+                expression: SEARCH
+        - to:
+            uri: solr://localhost:8983/solr
 ```
 
 A client would simply need to pass a body message to the insert or delete routes and then call the commit route.

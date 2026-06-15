@@ -106,8 +106,9 @@ When a route uses `platform-http`, Camel CLI automatically starts a VertX HTTP s
     from:
       uri: platform-http:/hello
       steps:
-        - set-body:
-            constant: "Hello World"
+        - setBody:
+            expression:
+              constant: "Hello World"
 ```
 
 ```bash

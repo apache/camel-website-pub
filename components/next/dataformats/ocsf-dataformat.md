@@ -64,10 +64,39 @@ from("kafka:security-events")
 
 ### Unmarshalling to a Specific Event Class
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("kafka:security-events")
     .unmarshal().ocsf(DetectionFinding.class)
     .to("direct:process");
+```
+
+```xml
+<route>
+  <from uri="kafka:security-events"/>
+  <unmarshal>
+    <ocsf unmarshalType="org.apache.camel.dataformat.ocsf.model.DetectionFinding"/>
+  </unmarshal>
+  <to uri="direct:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:security-events
+      steps:
+        - unmarshal:
+            ocsf:
+              unmarshalType: org.apache.camel.dataformat.ocsf.model.DetectionFinding
+        - to:
+            uri: direct:process
 ```
 
 ### Using with AWS Security Hub
@@ -98,34 +127,6 @@ The OCSF dataformat supports 7 options, which are listed below.
 | **useList** (common) | `false` | `Boolean` | To unmarshal to a List of OCSF events. |
 | **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then the unmarshal type can be specified via the CamelOcsfUnmarshalType header. This should only be enabled when desired to be used. |
 | **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
-
-## Using OCSF in Spring DSL
-
-You can use the OCSF data format directly in Spring XML:
-
-```xml
-<route>
-    <from uri="kafka:security-events"/>
-    <unmarshal>
-        <ocsf unmarshalType="org.apache.camel.dataformat.ocsf.model.DetectionFinding"/>
-    </unmarshal>
-    <to uri="direct:process"/>
-</route>
-```
-
-Or define a reusable data format:
-
-```xml
-<dataFormats>
-    <ocsf id="ocsfDetection" unmarshalType="org.apache.camel.dataformat.ocsf.model.DetectionFinding"/>
-</dataFormats>
-
-<route>
-    <from uri="kafka:security-events"/>
-    <unmarshal ref="ocsfDetection"/>
-    <to uri="direct:process"/>
-</route>
-```
 
 ## OCSF Event Categories
 

@@ -191,11 +191,18 @@ Enum values:
 
 In the route below we log the incoming orders at `DEBUG` level before the order is processed:
 
-```java
-from("activemq:orders").to("log:com.mycompany.order?level=DEBUG").to("bean:processOrder");
-```
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-Or using Spring XML to define the route:
+```java
+from("activemq:orders")
+    .to("log:com.mycompany.order?level=DEBUG")
+    .to("bean:processOrder");
+```
 
 ```xml
 <route>
@@ -203,6 +210,19 @@ Or using Spring XML to define the route:
   <to uri="log:com.mycompany.order?level=DEBUG"/>
   <to uri="bean:processOrder"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:orders
+      steps:
+        - to:
+            uri: log:com.mycompany.order
+            parameters:
+              level: DEBUG
+        - to:
+            uri: bean:processOrder
 ```
 
 ### Regular logger with formatter example

@@ -34,6 +34,8 @@ This can be done as shown below. The streamName is `employeeFile`.
     
 -   XML
     
+-   YAML
+    
 
 ```java
 DataFormat format = new BeanIODataFormat(
@@ -75,7 +77,33 @@ from("direct:marshal")
 </route>
 ```
 
-To use the BeanIO data format in XML, you need to configure it using the `<beanio>` XML tag as shown below. The routes are similar to the example above.
+```yaml
+- route:
+    from:
+      uri: direct:unmarshal
+      steps:
+        - unmarshal:
+            beanio:
+              mapping: org/apache/camel/dataformat/beanio/mappings.xml
+              streamName: employeeFile
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - to:
+                  uri: mock:beanio-unmarshal
+- route:
+    from:
+      uri: direct:marshal
+      steps:
+        - marshal:
+            beanio:
+              mapping: org/apache/camel/dataformat/beanio/mappings.xml
+              streamName: employeeFile
+        - to:
+            uri: mock:beanio-marshal
+```
 
 The first route is for transforming CSV data into a `List<Employee>` Java objects. Which we then split, so the mock endpoint receives a message for each row.
 
