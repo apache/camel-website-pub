@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel: 19 Years of Continuous Development — 272 Releases, 100,000 Commits, Zero Gaps</title>
+      <link>https://camel.apache.org/blog/2026/06/camel-always-on/</link>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/camel-always-on/</guid>
+      <description>Apache Camel has shipped 272 production releases over 19 years without a single month of inactivity. The project averages a new release every 15 days, maintains up to 10 release lines in parallel, and has accumulated 100,000+ commits from over 1,500 contributors since 2007. This track record is not a recent development — it has been sustained continuously since well before the current wave of AI-driven open-source activity. This post presents the evidence.</description>
+    </item>
     <item>
       <title>Apache Camel&#39;s Bug Fix Track Record: 7,070 Bugs Fixed, Median 1-Day Resolution, 99.8% Fix Rate</title>
       <link>https://camel.apache.org/blog/2026/06/camel-bug-fix-track-record/</link>

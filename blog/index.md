@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[205]{title,link,pubDate,description}:
+posts[206]{title,link,pubDate,description}:
+  Apache Camel: 19 Years of Continuous Development — 272 Releases, 100,000 Commits, Zero Gaps|https://camel.apache.org/blog/2026/06/camel-always-on/index.md|Mon, 15 Jun 2026 00:00:00 +0000|Apache Camel has shipped 272 production releases over 19 years without a single month of inactivity. The project averages a new release every 15 days, maintains up to 10 release lines in parallel, and
   Apache Camel's Bug Fix Track Record: 7,070 Bugs Fixed, Median 1-Day Resolution, 99.8% Fix Rate|https://camel.apache.org/blog/2026/06/camel-bug-fix-track-record/index.md|Sun, 14 Jun 2026 00:00:00 +0000|Apache Camel has fixed 7,070 out of 7,081 reported bugs — a 99.8% resolution rate — with a median fix time of 1 day. That track record spans 19 years, 350+ connectors, and 272 production releases. Thi
   The DNA of Apache Camel: How a 42-File Commit Became the World's Integration Framework|https://camel.apache.org/blog/2026/06/camel-dna-19-years/index.md|Fri, 12 Jun 2026 00:00:00 +0000|On March 19, 2007, at 10:54 UTC, James Strachan pushed commit 77b260b6 with the message &ldquo;Initial checkin of Camel routing library.&rdquo; It contained 42 files across two modules: camel-core and
   Community Showcase: How to Rewrite 20+ Critical Banking ETL Applications|https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/index.md|Thu, 11 Jun 2026 00:00:00 +0000|Rewriting critical banking ETL applications is risky because these systems handle business data that must stay accurate, stable, and traceable. In his JEurope 2025 talk, Dzmitry Paddubnik explains how
