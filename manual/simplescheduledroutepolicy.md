@@ -59,7 +59,14 @@ Once the `org.apache.camel.routepolicy.quartz.SimpleScheduledRoutePolicy` is cre
 
 ## Using the SimpleScheduledRoutePolicy
 
-The `SimpleScheduledRoutePolicy` can be used in Java DSL as show:
+The `SimpleScheduledRoutePolicy` can be used as shown:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 SimpleScheduledRoutePolicy policy = new SimpleScheduledRoutePolicy();
@@ -73,8 +80,6 @@ from("direct:start")
    .routePolicy(policy)
    .to("mock:success");
 ```
-
-And in Spring XML:
 
 ```xml
 <bean id="date" class="org.apache.camel.routepolicy.quartz.SimpleDate"/>
@@ -91,6 +96,17 @@ And in Spring XML:
         <to uri="mock:success"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    id: myroute
+    routePolicyRef: startPolicy
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: mock:success
 ```
 
 ## Dependency

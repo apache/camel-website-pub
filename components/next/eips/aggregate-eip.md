@@ -324,6 +324,13 @@ The `org.apache.camel.processor.aggregate.AggregateController` allows you to con
 
 The aggregator provides a default implementation if no custom one has been configured, which can be accessed using `getAggregateController()` method. Though it may be easier to configure a controller in the route using `aggregateController` as shown below:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 private AggregateController controller = new DefaultAggregateController();
 
@@ -333,24 +340,6 @@ from("direct:start")
       .aggregateController(controller)
       .to("mock:aggregated");
 ```
-
-Then there is API on `AggregateController` to force completion. For example, to complete a group with key foo:
-
-```java
-int groups = controller.forceCompletionOfGroup("foo");
-```
-
-The returned value is the number of groups completed. A value of 1 is returned if the foo group existed, otherwise 0 is returned.
-
-There is also a method to complete all groups:
-
-```java
-int groups = controller.forceCompletionOfAllGroups();
-```
-
-The controller can also be used in XML DSL using the `aggregateController` to refer to a bean with the controller implementation, which is looked up in the registry.
-
-When using Spring XML, you can create the bean with `<bean>` as shown:
 
 ```xml
 <bean id="myController" class="org.apache.camel.processor.aggregate.DefaultAggregateController"/>
@@ -367,6 +356,37 @@ When using Spring XML, you can create the bean with `<bean>` as shown:
         </aggregate>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregateController: myController
+            aggregationStrategy: myAppender
+            completionSize: 10
+            correlationExpression:
+              header:
+                expression: id
+            steps:
+              - to:
+                  uri: mock:result
+```
+
+Then there is API on `AggregateController` to force completion. For example, to complete a group with key foo:
+
+```java
+int groups = controller.forceCompletionOfGroup("foo");
+```
+
+The returned value is the number of groups completed. A value of 1 is returned if the foo group existed, otherwise 0 is returned.
+
+There is also a method to complete all groups:
+
+```java
+int groups = controller.forceCompletionOfAllGroups();
 ```
 
 There is also JMX API on the aggregator which is available under the processors node in the Camel JMX tree.
@@ -436,6 +456,13 @@ public class MyBodyAppender {
 
 And then in the Camel route we create an instance of our bean, and then refer to the bean in the route using `bean` method from `org.apache.camel.builder.AggregationStrategies` as shown:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 private MyBodyAppender appender = new MyBodyAppender();
 
@@ -447,7 +474,40 @@ public void configure() throws Exception {
 }
 ```
 
-We can also provide the bean class type directly:
+```xml
+<bean id="myAppender" class="com.foo.MyBodyAppender"/>
+
+<camelContext xmlns="http://camel.apache.org/schema/spring">
+    <route>
+        <from uri="direct:start"/>
+        <aggregate aggregationStrategy="myAppender" aggregationStrategyMethodName="append" completionSize="3">
+            <correlationExpression>
+                <constant>true</constant>
+            </correlationExpression>
+            <to uri="mock:result"/>
+        </aggregate>
+    </route>
+</camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: myAppender
+            aggregationStrategyMethodName: append
+            completionSize: 3
+            correlationExpression:
+              constant:
+                expression: "true"
+            steps:
+              - to:
+                  uri: mock:result
+```
+
+In Java DSL, you can also provide the bean class type directly:
 
 ```java
 public void configure() throws Exception {
@@ -481,29 +541,12 @@ public class MyBodyAppender {
 }
 ```
 
-If you are using XML DSL, then we need to declare a `<bean>` with the bean:
+When using XML or YAML DSL, you can also specify the bean class directly in `aggregationStrategy` using the `#class:` syntax as shown:
 
-```xml
-<bean id="myAppender" class="com.foo.MyBodyAppender"/>
-```
-
-And in the Camel route we use `aggregationStrategy` to refer to the bean by its id, and the `strategyMethodName` can be used to define the method name to call:
-
-```xml
-<camelContext xmlns="http://camel.apache.org/schema/spring">
-    <route>
-        <from uri="direct:start"/>
-        <aggregate aggregationStrategy="myAppender" aggregationStrategyMethodName="append" completionSize="3">
-            <correlationExpression>
-                <constant>true</constant>
-            </correlationExpression>
-            <to uri="mock:result"/>
-        </aggregate>
-    </route>
-</camelContext>
-```
-
-When using XML DSL, you can also specify the bean class directly in `aggregationStrategy` using the `#class:` syntax as shown:
+-   XML
+    
+-   YAML
+    
 
 ```xml
 <route>
@@ -517,7 +560,22 @@ When using XML DSL, you can also specify the bean class directly in `aggregation
 </route>
 ```
 
-You can use this in XML DSL when you are not using the classic Spring XML files ( where you use XML only for Camel routes).
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: "#class:com.foo.MyBodyAppender"
+            aggregationStrategyMethodName: append
+            completionSize: 3
+            correlationExpression:
+              constant:
+                expression: "true"
+            steps:
+              - to:
+                  uri: mock:result
+```
 
 ### Aggregating when no data
 
@@ -553,7 +611,12 @@ In the example above we use the [Content Enricher](content-enricher.md) EIP usin
 
 So if we need to do special merge logic, we would need to set `setAllowNullNewExchange=true`. If we didn’t do this, then on timeout the append method would normally not be invoked, meaning the [Content Enricher](content-enricher.md) did not merge/change the message.
 
-In XML DSL you would configure the `strategyMethodAllowNull` option and set it to `true` as shown below:
+In XML and YAML DSL you would configure the `strategyMethodAllowNull` option and set it to `true` as shown below:
+
+-   XML
+    
+-   YAML
+    
 
 ```xml
 <camelContext xmlns="http://camel.apache.org/schema/spring">
@@ -570,6 +633,24 @@ In XML DSL you would configure the `strategyMethodAllowNull` option and set it t
         </aggregate>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: myAppender
+            aggregationStrategyMethodName: append
+            aggregationStrategyMethodAllowNull: true
+            completionSize: 3
+            correlationExpression:
+              constant:
+                expression: "true"
+            steps:
+              - to:
+                  uri: mock:result
 ```
 
 ### Aggregating with different body types

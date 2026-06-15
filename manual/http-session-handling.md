@@ -45,6 +45,8 @@ The following three routes will each do two invocations of an echo REST service.
 
 -   Spring XML
     
+-   YAML
+    
 
 ```xml
   <cxf:rsClient id="rsClientProxy" address="http://127.0.0.1:8080/CxfRsProducerSessionTest/"
@@ -74,6 +76,39 @@ The following three routes will each do two invocations of an echo REST service.
 
   <bean id="instanceCookieHandler" class="org.apache.camel.http.common.cookie.InstanceCookieHandler"/>
   <bean id="exchangeCookieHandler" class="org.apache.camel.http.common.cookie.ExchangeCookieHandler"/>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct://proxy
+      steps:
+        - to:
+            uri: cxfrs://bean://rsClientProxy
+        - convertBodyTo:
+            type: java.lang.String
+        - to:
+            uri: cxfrs://bean://rsClientProxy
+- route:
+    from:
+      uri: direct://proxyinstance
+      steps:
+        - to:
+            uri: "cxfrs://bean://rsClientProxy?cookieHandler=#instanceCookieHandler"
+        - convertBodyTo:
+            type: java.lang.String
+        - to:
+            uri: "cxfrs://bean://rsClientProxy?cookieHandler=#instanceCookieHandler"
+- route:
+    from:
+      uri: direct://proxyexchange
+      steps:
+        - to:
+            uri: "cxfrs://bean://rsClientProxy?cookieHandler=#exchangeCookieHandler"
+        - convertBodyTo:
+            type: java.lang.String
+        - to:
+            uri: "cxfrs://bean://rsClientProxy?cookieHandler=#exchangeCookieHandler"
 ```
 
 Both `CookieHandler` implementations support setting a CookiePolicy to control the policy for storing cookies. Default is `CookiePolicy.ACCEPT_ORIGINAL_SERVER`.

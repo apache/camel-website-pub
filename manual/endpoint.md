@@ -143,14 +143,16 @@ In the URIs used for specifying Camel endpoints, the `&` is used to separate the
 
 Because of this, you have to replace all `&` in your URIs by `&amp;` when using the XML DSL to configure Camel routes.
 
-An example: this snippet of code in Java DSL:
+For example, the following is the same endpoint URI in Java DSL and XML DSL where `&` has been replaced with `&amp;`:
+
+-   Java
+    
+-   XML
+    
 
 ```java
 from("timer://myTimer?fixedRate=true&delay=0&period=2000")
 ```
-
-1.  matches this example in the XML syntax where `&` has been replaced with `&amp;`
-    
 
 ```xml
 <from uri="timer://myTimer?fixedRate=true&amp;delay=0&amp;period=2000"/>

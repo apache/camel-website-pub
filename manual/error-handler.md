@@ -54,13 +54,16 @@ Spring XML
 
 ### No Error Handler
 
-The no error handler is to be used for disabling error handling in Java DSL:
+The no error handler is to be used for disabling error handling.
+
+-   Java
+    
+-   Spring XML
+    
 
 ```java
 errorHandler(noErrorHandler());
 ```
-
-And in Spring XML DSL:
 
 ```xml
 <camel:errorHandler id="noErrorHandler" type="NoErrorHandler"/>

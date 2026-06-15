@@ -194,6 +194,8 @@ Then we have routes where each of the routes uses their different policy:
 
 -   Spring XML
     
+-   YAML
+    
 
 ```xml
 <camelContext xmlns="http://camel.apache.org/schema/spring">
@@ -217,6 +219,39 @@ Then we have routes where each of the routes uses their different policy:
         <bean ref="orderService" method="insertOrder"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:queue:inbox
+      steps:
+        - transacted:
+            ref: txRequired
+        - to:
+            uri: direct:audit
+        - to:
+            uri: direct:order
+        - to:
+            uri: activemq:queue:order
+- route:
+    from:
+      uri: direct:audit
+      steps:
+        - transacted:
+            ref: txRequiresNew
+        - bean:
+            ref: auditLogService
+            method: insertAuditLog
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - transacted:
+            ref: txMandatory
+        - bean:
+            ref: orderService
+            method: insertOrder
 ```
 
 Notice how the ref attribute on `<transacted>` refers to the corresponding bean id of the transaction policy.
@@ -261,6 +296,8 @@ This is, after all, based on a unit test. Notice that we mark each route as tran
 
 -   Spring XML
     
+-   YAML
+    
 
 ```xml
 <camelContext xmlns="http://camel.apache.org/schema/spring">
@@ -298,6 +335,43 @@ This is, after all, based on a unit test. Notice that we mark each route as tran
     </route>
 
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:okay
+      steps:
+        - transacted: {}
+        - setBody:
+            expression:
+              constant:
+                expression: Tiger in Action
+        - bean:
+            ref: bookService
+        - setBody:
+            expression:
+              constant:
+                expression: Elephant in Action
+        - bean:
+            ref: bookService
+- route:
+    from:
+      uri: direct:fail
+      steps:
+        - transacted: {}
+        - setBody:
+            expression:
+              constant:
+                expression: Tiger in Action
+        - bean:
+            ref: bookService
+        - setBody:
+            expression:
+              constant:
+                expression: Donkey in Action
+        - bean:
+            ref: bookService
 ```
 
 That is all that is needed to configure a Camel route as being transacted. Remember to use `<transacted/>`. The rest is standard Spring XML to set up the transaction manager.
@@ -343,6 +417,8 @@ And then we configure our routes. Notice that all we have to do is mark the rout
 
 -   Spring XML
     
+-   YAML
+    
 
 ```xml
 <camelContext xmlns="http://camel.apache.org/schema/spring">
@@ -357,4 +433,16 @@ And then we configure our routes. Notice that all we have to do is mark the rout
         <to uri="mock:result"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:queue:okay
+      steps:
+        - transacted: {}
+        - process:
+            ref: myProcessor
+        - to:
+            uri: mock:result
 ```

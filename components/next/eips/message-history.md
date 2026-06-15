@@ -244,6 +244,8 @@ The [Error Handler](../../../manual/error-handler.md) does not log the message b
     
 -   Spring XML
     
+-   YAML
+    
 
 ```java
 errorHandler(defaultErrorHandler().logExhaustedMessageBody(true));
@@ -265,6 +267,24 @@ In XML configuring this is a bit different, as you configure this in the `redeli
       <to uri="jms:wine"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- errorHandler:
+    defaultErrorHandler:
+      redeliveryPolicy:
+        logExhaustedMessageHistory: false
+        logExhaustedMessageBody: true
+- route:
+    from:
+      uri: jms:cheese
+      steps:
+        - to:
+            uri: bean:validate
+        - to:
+            uri: bean:transform
+        - to:
+            uri: jms:wine
 ```
 
 ## MessageHistory API

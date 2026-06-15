@@ -115,6 +115,13 @@ from("direct:start").
 
 Here is another example of calling a [method on a bean](../languages/bean-language.md) to define the filter behavior:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .filter().method(MyBean.class, "isGoldCustomer")
@@ -122,20 +129,6 @@ from("direct:start")
     .end()
     .to("mock:all");
 ```
-
-And then bean can have a method that returns a `boolean` as the predicate:
-
-```java
-public static class MyBean {
-
-    public boolean isGoldCustomer(@Header("level") String level) {
-        return level.equals("gold");
-    }
-
-}
-```
-
-And in XML we can call the bean in `<method>` where we can specify the FQN class name of the bean as shown:
 
 ```xml
 <route>
@@ -147,8 +140,6 @@ And in XML we can call the bean in `<method>` where we can specify the FQN class
     <to uri="mock:all"/>
 </route>
 ```
-
-And similar in YAML DSL:
 
 ```yaml
 - route:
@@ -165,6 +156,18 @@ And similar in YAML DSL:
                   uri: mock:gold
         - to:
             uri: mock:all
+```
+
+The bean can have a method that returns a `boolean` as the predicate:
+
+```java
+public static class MyBean {
+
+    public boolean isGoldCustomer(@Header("level") String level) {
+        return level.equals("gold");
+    }
+
+}
 ```
 
 ### Filtering with status property

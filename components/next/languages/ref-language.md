@@ -18,7 +18,18 @@ The Ref language supports 2 options, which are listed below.
 
 ## Example usage
 
-The Splitter EIP in XML DSL can utilize a custom expression using `<ref>` like:
+The Splitter EIP can utilize a custom expression using `ref` like:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("seda:a").split().ref("myExpression").to("seda:b");
+```
 
 ```xml
 <bean id="myExpression" class="com.mycompany.MyCustomExpression"/>
@@ -32,13 +43,21 @@ The Splitter EIP in XML DSL can utilize a custom expression using `<ref>` like:
 </route>
 ```
 
-in this case, the message coming from the seda:a endpoint will be split using a custom `Expression` which has the id `myExpression` in the [Registry](../../../manual/registry.md).
-
-And the same example using Java DSL:
-
-```java
-from("seda:a").split().ref("myExpression").to("seda:b");
+```yaml
+- route:
+    from:
+      uri: seda:a
+      steps:
+        - split:
+            expression:
+              ref:
+                expression: myExpression
+            steps:
+              - to:
+                  uri: mock:b
 ```
+
+In this case, the message coming from the seda:a endpoint will be split using a custom `Expression` which has the id `myExpression` in the [Registry](../../../manual/registry.md).
 
 ## Dependencies
 

@@ -21,6 +21,19 @@ The Constant language supports 2 options, which are listed below.
 
 The `setHeader` EIP can utilize a constant expression like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("seda:a")
+  .setHeader("theHeader", constant("the value"))
+  .to("mock:b");
+```
+
 ```xml
 <route>
   <from uri="seda:a"/>
@@ -31,21 +44,32 @@ The `setHeader` EIP can utilize a constant expression like:
 </route>
 ```
 
-in this case, the message coming from the seda:a endpoint will have the header with key `theHeader` set its value as `the value` (string type).
-
-And the same example using Java DSL:
-
-```java
-from("seda:a")
-  .setHeader("theHeader", constant("the value"))
-  .to("mock:b");
+```yaml
+- route:
+    from:
+      uri: seda:a
+      steps:
+        - setHeader:
+            name: theHeader
+            expression:
+              constant:
+                expression: the value
+        - to:
+            uri: mock:b
 ```
+
+In this case, the message coming from the seda:a endpoint will have the header with key `theHeader` set its value as `the value` (string type).
 
 ### Specifying type of value
 
 The option `resultType` can be used to specify the type of the value, when the value is given as a `String` value, which happens when using XML or YAML DSL:
 
 For example to set a header with `int` type you can do:
+
+-   XML
+    
+-   YAML
+    
 
 ```xml
 <route>
@@ -55,6 +79,21 @@ For example to set a header with `int` type you can do:
   </setHeader>
   <to uri="mock:b"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:a
+      steps:
+        - setHeader:
+            name: zipCode
+            expression:
+              constant:
+                resultType: int
+                expression: "90210"
+        - to:
+            uri: mock:b
 ```
 
 ## Loading constant from external resource

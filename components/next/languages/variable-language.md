@@ -17,6 +17,17 @@ The Variable language supports 1 options, which are listed below.
 
 The `recipientList` EIP can utilize a variable:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:a").recipientList(variable("myVar"));
+```
+
 ```xml
 <route>
   <from uri="direct:a" />
@@ -26,13 +37,18 @@ The `recipientList` EIP can utilize a variable:
 </route>
 ```
 
-In this case, the list of recipients are contained in the variable 'myVar'.
-
-And the same example in Java DSL:
-
-```java
-from("direct:a").recipientList(variable("myVar"));
+```yaml
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - recipientList:
+            expression:
+              variable:
+                expression: myVar
 ```
+
+In this case, the list of recipients are contained in the variable 'myVar'.
 
 ## Dependencies
 

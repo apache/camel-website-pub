@@ -39,24 +39,18 @@
                 expression: "/person[@name='James']"
             steps:
               - to:
-                  uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Here is another example of calling a <a href="../languages/bean-language.html" class="xref page">method on a bean</a> to define the filter behavior:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+                  uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Here is another example of calling a <a href="../languages/bean-language.html" class="xref page">method on a bean</a> to define the filter behavior:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .filter().method(MyBean.class, "isGoldCustomer")
       .to("mock:gold")
     .end()
-    .to("mock:all");</code></pre> </div> </div> <div class="paragraph"> <p>And then bean can have a method that returns a <code>boolean</code> as the predicate:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static class MyBean {
-
-    public boolean isGoldCustomer(@Header("level") String level) {
-        return level.equals("gold");
-    }
-
-}</code></pre> </div> </div> <div class="paragraph"> <p>And in XML we can call the bean in <code>&lt;method&gt;</code> where we can specify the FQN class name of the bean as shown:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    .to("mock:all");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:start"/&gt;
     &lt;filter&gt;
         &lt;method beanType="com.foo.MyBean" method="isGoldCustomer"/&gt;
         &lt;to uri="mock:gold"/&gt;
     &lt;/filter&gt;
     &lt;to uri="mock:all"/&gt;
-&lt;/route&gt;</code></pre> </div> </div> <div class="paragraph"> <p>And similar in YAML DSL:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
       steps:
@@ -69,18 +63,24 @@
               - to:
                   uri: mock:gold
         - to:
-            uri: mock:all</code></pre> </div> </div> <div class="sect2"> <h3 id="_filtering_with_status_property"><a class="anchor" href="#_filtering_with_status_property"></a>Filtering with status property</h3> <div class="paragraph"> <p>To know whether an <code>Exchange</code> was filtered or not, then you can choose to specify a name of a property to store on the exchange with the result (boolean), using <code>statusPropertyName</code> as shown below:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+            uri: mock:all</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The bean can have a method that returns a <code>boolean</code> as the predicate:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public static class MyBean {
+
+    public boolean isGoldCustomer(@Header("level") String level) {
+        return level.equals("gold");
+    }
+
+}</code></pre> </div> </div> <div class="sect2"> <h3 id="_filtering_with_status_property"><a class="anchor" href="#_filtering_with_status_property"></a>Filtering with status property</h3> <div class="paragraph"> <p>To know whether an <code>Exchange</code> was filtered or not, then you can choose to specify a name of a property to store on the exchange with the result (boolean), using <code>statusPropertyName</code> as shown below:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .filter().method(MyBean.class, "isGoldCustomer").statusPropertyName("gold")
       .to("mock:gold")
     .end()
-    .to("mock:all");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    .to("mock:all");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:start"/&gt;
     &lt;filter statusPropertyName="gold"&gt;
         &lt;method beanType="com.foo.MyBean" method="isGoldCustomer"/&gt;
         &lt;to uri="mock:gold"/&gt;
     &lt;/filter&gt;
     &lt;to uri="mock:all"/&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
       steps:
@@ -94,12 +94,12 @@
               - to:
                   uri: mock:gold
         - to:
-            uri: mock:all</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>In the example above then Camel will store an exchange property with key <code>gold</code> with the result of the filtering, whether it was <code>true</code> or <code>false</code>.</p> </div> </div> <div class="sect2"> <h3 id="_filtering_and_stopping"><a class="anchor" href="#_filtering_and_stopping"></a>Filtering and stopping</h3> <div class="paragraph"> <p>When using the Message Filter EIP, then it only applies to its children.</p> </div> <div class="paragraph"> <p>For example, in the previous example then for a message that is a gold customer will be routed to both <code>mock:gold</code> and <code>mock:all</code> (predicate is true). However, for a non-gold message (predicate is false) then the message will not be routed in the filter block, but will be routed to mock:all.</p> </div> <div class="paragraph"> <p>Sometimes you may want to stop routing for messages that were filtered. To do this, you can use the <a href="stop-eip.html" class="xref page">Stop</a> EIP as shown:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+            uri: mock:all</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>In the example above then Camel will store an exchange property with key <code>gold</code> with the result of the filtering, whether it was <code>true</code> or <code>false</code>.</p> </div> </div> <div class="sect2"> <h3 id="_filtering_and_stopping"><a class="anchor" href="#_filtering_and_stopping"></a>Filtering and stopping</h3> <div class="paragraph"> <p>When using the Message Filter EIP, then it only applies to its children.</p> </div> <div class="paragraph"> <p>For example, in the previous example then for a message that is a gold customer will be routed to both <code>mock:gold</code> and <code>mock:all</code> (predicate is true). However, for a non-gold message (predicate is false) then the message will not be routed in the filter block, but will be routed to mock:all.</p> </div> <div class="paragraph"> <p>Sometimes you may want to stop routing for messages that were filtered. To do this, you can use the <a href="stop-eip.html" class="xref page">Stop</a> EIP as shown:</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .filter().method(MyBean.class, "isGoldCustomer").statusPropertyName("gold")
       .to("mock:gold")
       .stop()
     .end()
-    .to("mock:all");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    .to("mock:all");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:start"/&gt;
     &lt;filter&gt;
         &lt;method beanType="com.foo.MyBean" method="isGoldCustomer"/&gt;
@@ -107,7 +107,7 @@
         &lt;stop/&gt;
     &lt;/filter&gt;
     &lt;to uri="mock:all"/&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
       steps:

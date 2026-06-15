@@ -27,6 +27,8 @@ For example, here’s how to log the message at `ERROR` level:
     
 -   Spring XML
     
+-   YAML
+    
 
 ```java
 errorHandler(deadLetterChannel("log:dead?level=ERROR"));
@@ -35,6 +37,12 @@ errorHandler(deadLetterChannel("log:dead?level=ERROR"));
 ```xml
 <errorHandler id="myErrorHandler" type="DeadLetterChannel"
               deadLetterUri="log:dead?level=ERROR"/>
+```
+
+```yaml
+- errorHandler:
+    deadLetterChannel:
+      deadLetterUri: "log:dead?level=ERROR"
 ```
 
 Pay attention to Spring XML DSL. The type attribute is used to declare which error handler to use, here its `DeadLetterChannel`. And in XML the `<errorHandler>` must be configured with an id. The id must then be enabled on either the `<camelContext>` (global scope), or per route that should use this error handler.
@@ -134,6 +142,8 @@ For instance, configuring the dead letter channel as:
     
 -   Spring XML
     
+-   YAML
+    
 
 ```java
 errorHandler(deadLetterChannel("jms:queue:dead")
@@ -145,6 +155,15 @@ errorHandler(deadLetterChannel("jms:queue:dead")
               deadLetterUri="jms:queue:dead">
   <redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="5000"/>
 </errorHandler>
+```
+
+```yaml
+- errorHandler:
+    deadLetterChannel:
+      deadLetterUri: jms:queue:dead
+      redeliveryPolicy:
+        maximumRedeliveries: 3
+        redeliveryDelay: "5000"
 ```
 
 The Dead Letter error handler will clear the caused exception (`setException(null)`), by moving the caused exception to a property on the [Exchange](../../../manual/exchange.md), with the key `Exchange.EXCEPTION_CAUGHT`. Then the [Exchange](../../../manual/exchange.md) is moved to the `jms:queue:dead` destination, and the client will not notice the failure.
@@ -175,6 +194,8 @@ By enabling `useOriginalMessage` on the dead letter channel, then the message mo
     
 -   Spring XML
     
+-   YAML
+    
 
 ```java
 // will use the original message (body and headers)
@@ -189,6 +210,16 @@ And in XML, you set `useOriginalMessage=true` on the `<errorHandler>` as shown:
               deadLetterUri="jms:queue:dead">
   <redeliveryPolicy maximumRedeliveries="5" redeliveryDelay="5000"/>
 </errorHandler>
+```
+
+```yaml
+- errorHandler:
+    deadLetterChannel:
+      deadLetterUri: jms:queue:dead
+      useOriginalMessage: true
+      redeliveryPolicy:
+        maximumRedeliveries: 5
+        redeliveryDelay: "5000"
 ```
 
 Then the messages routed to the `jms:queue:dead` is the original input. If we want to manually retry, we can move the JMS message from the failed to the input queue, with no problem as the message is the same as the original we received.
@@ -207,6 +238,8 @@ For example, you can do:
     
 -   Spring XML
     
+-   YAML
+    
 
 ```java
 errorHandler(deadLetterChannel("jms:queue:dead")
@@ -223,6 +256,15 @@ And in XML DSL, you specify a bean id via `onRedeliveryRef` on the `<errorHandle
               deadLetterUri="jms:queue:dead">
   <redeliveryPolicy maximumRedeliveries="3"/>
 </errorHandler>
+```
+
+```yaml
+- errorHandler:
+    deadLetterChannel:
+      deadLetterUri: jms:queue:dead
+      onRedeliveryRef: myRedeliveryProcessor
+      redeliveryPolicy:
+        maximumRedeliveries: 3
 ```
 
 > **Tip**
@@ -250,6 +292,8 @@ Then configure the error handler to use the processor as follows:
     
 -   Spring XML
     
+-   YAML
+    
 
 ```java
 errorHandler(deadLetterChannel("jms:dead").onPrepareFailure(new MyPrepareProcessor()));
@@ -262,6 +306,13 @@ Configuring this from Spring XML is done with the `onPrepareFailureRef` to refer
       class="org.apache.camel.processor.DeadLetterChannelOnPrepareTest.MyPrepareProcessor"/>
 
 <errorHandler id="dlc" type="DeadLetterChannel" deadLetterUri="jms:dead" onPrepareFailureRef="myPrepare"/>
+```
+
+```yaml
+- errorHandler:
+    deadLetterChannel:
+      deadLetterUri: jms:dead
+      onPrepareFailureRef: myPrepare
 ```
 
 ### Calling a processor when an exception occurred
@@ -289,6 +340,8 @@ You can then configure the Dead Letter Channel to use this as shown:
     
 -   Spring XML
     
+-   YAML
+    
 
 ```java
 errorHandler(deadLetterChannel("jms:dead").onExceptionOccurred(new OnErrorLogger()));
@@ -300,6 +353,13 @@ Configuring this from Spring XML is done with the `onExceptionOccurredRef` to re
 <bean id="myErrorLogger" class="com.foo.OnErrorLogger"/>
 
 <errorHandler id="dlc" type="DeadLetterChannel" deadLetterUri="jms:dead" onExceptionOccurredRef="myErrorLogger"/>
+```
+
+```yaml
+- errorHandler:
+    deadLetterChannel:
+      deadLetterUri: jms:dead
+      onExceptionOccurredRef: myErrorLogger
 ```
 
 ### Redeliver Delay Pattern

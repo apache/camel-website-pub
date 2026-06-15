@@ -14,7 +14,14 @@ You use Camel for integration, and a key concept in Camel is [routes](routes.md)
 
 A route has exactly one input [endpoint](endpoint.md), and 0, 1 or more output [endpoints](endpoint.md).
 
-You use Camel [DSL](dsl.md) to _code_ the [routes](routes.md). For example the route below is coded in [Java DSL](java-dsl.md):
+You use Camel [DSL](dsl.md) to _code_ the [routes](routes.md). For example the route below can be coded in [Java DSL](java-dsl.md), [XML DSL](../components/4.18.x/others/java-xml-io-dsl.md), or [YAML DSL](../components/4.18.x/others/yaml-dsl.md):
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 public class MyRoute extends RouteBuilder {
@@ -26,16 +33,12 @@ public class MyRoute extends RouteBuilder {
 }
 ```
 
-You can also use [XML DSL](../components/4.18.x/others/java-xml-io-dsl.md) to _code_ the [routes](routes.md).
-
 ```xml
 <route>
     <from uri="ftp:myserver/folder"/>
     <to uri="activemq:queue:cheese"/>
 </route>
 ```
-
-For low-code users then [YAML DSL](../components/4.18.x/others/yaml-dsl.md) is also possible:
 
 ```yaml
 - route:

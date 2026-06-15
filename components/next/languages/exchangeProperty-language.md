@@ -17,6 +17,17 @@ The ExchangeProperty language supports 1 options, which are listed below.
 
 The `recipientList` EIP can utilize a exchangeProperty like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:a").recipientList(exchangeProperty("myProperty"));
+```
+
 ```xml
 <route>
   <from uri="direct:a" />
@@ -26,13 +37,18 @@ The `recipientList` EIP can utilize a exchangeProperty like:
 </route>
 ```
 
-In this case, the list of recipients are contained in the property 'myProperty'.
-
-And the same example in Java DSL:
-
-```java
-from("direct:a").recipientList(exchangeProperty("myProperty"));
+```yaml
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - recipientList:
+            expression:
+              exchangeProperty:
+                expression: myProperty
 ```
+
+In this case, the list of recipients are contained in the property 'myProperty'.
 
 ## Dependencies
 

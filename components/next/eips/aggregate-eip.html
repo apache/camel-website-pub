@@ -82,13 +82,13 @@ boolean preComplete(Exchange oldExchange, Exchange newExchange);</code></pre> </
         oldExchange.getIn().setBody(body1 + body2);
         return oldExchange;
     }
-}</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_manually_force_the_completion_of_all_aggregated_exchanges_immediately"><a class="anchor" href="#_manually_force_the_completion_of_all_aggregated_exchanges_immediately"></a>Manually force the completion of all aggregated Exchanges immediately</h3> <div class="paragraph"> <p>You can manually trigger completion of all current aggregated exchanges by sending an exchange containing the exchange property <code>Exchange.AGGREGATION_COMPLETE_ALL_GROUPS</code> set to <code>true</code>. The message is considered a signal message only, the message headers/contents will not be processed otherwise.</p> </div> <div class="paragraph"> <p>You can alternatively set the exchange property <code>Exchange.AGGREGATION_COMPLETE_ALL_GROUPS_INCLUSIVE</code> to <code>true</code> to trigger completion of all groups after processing the current message.</p> </div> </div> <div class="sect2"> <h3 id="_using_a_controller_to_force_the_aggregator_to_complete"><a class="anchor" href="#_using_a_controller_to_force_the_aggregator_to_complete"></a>Using a controller to force the aggregator to complete</h3> <div class="paragraph"> <p>The <code>org.apache.camel.processor.aggregate.AggregateController</code> allows you to control the aggregate at runtime using Java or JMX API. This can be used to force completing groups of exchanges, or query its current runtime statistics.</p> </div> <div class="paragraph"> <p>The aggregator provides a default implementation if no custom one has been configured, which can be accessed using <code>getAggregateController()</code> method. Though it may be easier to configure a controller in the route using <code>aggregateController</code> as shown below:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private AggregateController controller = new DefaultAggregateController();
+}</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_manually_force_the_completion_of_all_aggregated_exchanges_immediately"><a class="anchor" href="#_manually_force_the_completion_of_all_aggregated_exchanges_immediately"></a>Manually force the completion of all aggregated Exchanges immediately</h3> <div class="paragraph"> <p>You can manually trigger completion of all current aggregated exchanges by sending an exchange containing the exchange property <code>Exchange.AGGREGATION_COMPLETE_ALL_GROUPS</code> set to <code>true</code>. The message is considered a signal message only, the message headers/contents will not be processed otherwise.</p> </div> <div class="paragraph"> <p>You can alternatively set the exchange property <code>Exchange.AGGREGATION_COMPLETE_ALL_GROUPS_INCLUSIVE</code> to <code>true</code> to trigger completion of all groups after processing the current message.</p> </div> </div> <div class="sect2"> <h3 id="_using_a_controller_to_force_the_aggregator_to_complete"><a class="anchor" href="#_using_a_controller_to_force_the_aggregator_to_complete"></a>Using a controller to force the aggregator to complete</h3> <div class="paragraph"> <p>The <code>org.apache.camel.processor.aggregate.AggregateController</code> allows you to control the aggregate at runtime using Java or JMX API. This can be used to force completing groups of exchanges, or query its current runtime statistics.</p> </div> <div class="paragraph"> <p>The aggregator provides a default implementation if no custom one has been configured, which can be accessed using <code>getAggregateController()</code> method. Though it may be easier to configure a controller in the route using <code>aggregateController</code> as shown below:</p> </div> <div id="_tabs_1" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private AggregateController controller = new DefaultAggregateController();
 
 from("direct:start")
    .aggregate(header("id"), new MyAggregationStrategy())
       .completionSize(10).id("myAggregator")
       .aggregateController(controller)
-      .to("mock:aggregated");</code></pre> </div> </div> <div class="paragraph"> <p>Then there is API on <code>AggregateController</code> to force completion. For example, to complete a group with key foo:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">int groups = controller.forceCompletionOfGroup("foo");</code></pre> </div> </div> <div class="paragraph"> <p>The returned value is the number of groups completed. A value of 1 is returned if the foo group existed, otherwise 0 is returned.</p> </div> <div class="paragraph"> <p>There is also a method to complete all groups:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">int groups = controller.forceCompletionOfAllGroups();</code></pre> </div> </div> <div class="paragraph"> <p>The controller can also be used in XML DSL using the <code>aggregateController</code> to refer to a bean with the controller implementation, which is looked up in the registry.</p> </div> <div class="paragraph"> <p>When using Spring XML, you can create the bean with <code>&lt;bean&gt;</code> as shown:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="myController" class="org.apache.camel.processor.aggregate.DefaultAggregateController"/&gt;
+      .to("mock:aggregated");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="myController" class="org.apache.camel.processor.aggregate.DefaultAggregateController"/&gt;
 
 &lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;route&gt;
@@ -101,7 +101,20 @@ from("direct:start")
             &lt;to uri="mock:result"/&gt;
         &lt;/aggregate&gt;
     &lt;/route&gt;
-&lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>There is also JMX API on the aggregator which is available under the processors node in the Camel JMX tree.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_aggregating_with_beans"><a class="anchor" href="#_aggregating_with_beans"></a>Aggregating with Beans</h2> <div class="sectionbody"> <div class="paragraph"> <p>To use the <code>AggregationStrategy</code> you had to implement the <code>org.apache.camel.AggregationStrategy</code> interface, which means your logic would be tied to the Camel API. You can use a bean for the logic and let Camel adapt to your bean. To use a bean, then a convention must be followed:</p> </div> <div class="ulist"> <ul> <li> <p>there must be a public method to use</p> </li> <li> <p>the method must not be void</p> </li> <li> <p>the method can be static or non-static</p> </li> <li> <p>the method must have two or more parameters</p> </li> <li> <p>the parameters are paired, so the first half is applied to the <code>oldExchange</code>, and the reminder half is for the <code>newExchange</code>. Therefore, there must be an equal number of parameters, e.g., 2, 4, 6, etc.</p> </li> </ul> </div> <div class="paragraph"> <p>The paired methods are expected to be ordered as follows:</p> </div> <div class="ulist"> <ul> <li> <p>the first parameter is the message body</p> </li> <li> <p>optional, the second parameter is a <code>Map</code> of the headers</p> </li> <li> <p>optional, the third parameter is a <code>Map</code> of the exchange properties</p> </li> </ul> </div> <div class="paragraph"> <p>This convention is best explained with some examples.</p> </div> <div class="paragraph"> <p>In the method below, we have only two parameters, so the first parameter is the body of the <code>oldExchange</code>, and the second is paired to the body of the <code>newExchange</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public String append(String existing, String next) {
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregateController: myController
+            aggregationStrategy: myAppender
+            completionSize: 10
+            correlationExpression:
+              header:
+                expression: id
+            steps:
+              - to:
+                  uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Then there is API on <code>AggregateController</code> to force completion. For example, to complete a group with key foo:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">int groups = controller.forceCompletionOfGroup("foo");</code></pre> </div> </div> <div class="paragraph"> <p>The returned value is the number of groups completed. A value of 1 is returned if the foo group existed, otherwise 0 is returned.</p> </div> <div class="paragraph"> <p>There is also a method to complete all groups:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">int groups = controller.forceCompletionOfAllGroups();</code></pre> </div> </div> <div class="paragraph"> <p>There is also JMX API on the aggregator which is available under the processors node in the Camel JMX tree.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_aggregating_with_beans"><a class="anchor" href="#_aggregating_with_beans"></a>Aggregating with Beans</h2> <div class="sectionbody"> <div class="paragraph"> <p>To use the <code>AggregationStrategy</code> you had to implement the <code>org.apache.camel.AggregationStrategy</code> interface, which means your logic would be tied to the Camel API. You can use a bean for the logic and let Camel adapt to your bean. To use a bean, then a convention must be followed:</p> </div> <div class="ulist"> <ul> <li> <p>there must be a public method to use</p> </li> <li> <p>the method must not be void</p> </li> <li> <p>the method can be static or non-static</p> </li> <li> <p>the method must have two or more parameters</p> </li> <li> <p>the parameters are paired, so the first half is applied to the <code>oldExchange</code>, and the reminder half is for the <code>newExchange</code>. Therefore, there must be an equal number of parameters, e.g., 2, 4, 6, etc.</p> </li> </ul> </div> <div class="paragraph"> <p>The paired methods are expected to be ordered as follows:</p> </div> <div class="ulist"> <ul> <li> <p>the first parameter is the message body</p> </li> <li> <p>optional, the second parameter is a <code>Map</code> of the headers</p> </li> <li> <p>optional, the third parameter is a <code>Map</code> of the exchange properties</p> </li> </ul> </div> <div class="paragraph"> <p>This convention is best explained with some examples.</p> </div> <div class="paragraph"> <p>In the method below, we have only two parameters, so the first parameter is the body of the <code>oldExchange</code>, and the second is paired to the body of the <code>newExchange</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public String append(String existing, String next) {
     return existing + next;
 }</code></pre> </div> </div> <div class="paragraph"> <p>In the method below, we have only four parameters, so the first parameter is the body of the <code>oldExchange</code>, and the second is the <code>Map</code> of the <code>oldExchange</code> headers, and the third is paired to the body of the <code>newExchange</code>, and the fourth parameter is the <code>Map</code> of the <code>newExchange</code> headers:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public String append(String existing, Map existingHeaders, String next, Map nextHeaders) {
     return existing + next;
@@ -114,14 +127,39 @@ from("direct:start")
         return next + existing;
     }
 
-}</code></pre> </div> </div> <div class="paragraph"> <p>And then in the Camel route we create an instance of our bean, and then refer to the bean in the route using <code>bean</code> method from <code>org.apache.camel.builder.AggregationStrategies</code> as shown:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private MyBodyAppender appender = new MyBodyAppender();
+}</code></pre> </div> </div> <div class="paragraph"> <p>And then in the Camel route we create an instance of our bean, and then refer to the bean in the route using <code>bean</code> method from <code>org.apache.camel.builder.AggregationStrategies</code> as shown:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private MyBodyAppender appender = new MyBodyAppender();
 
 public void configure() throws Exception {
     from("direct:start")
         .aggregate(constant(true), AggregationStrategies.bean(appender, "append"))
             .completionSize(3)
             .to("mock:result");
-}</code></pre> </div> </div> <div class="paragraph"> <p>We can also provide the bean class type directly:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void configure() throws Exception {
+}</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="myAppender" class="com.foo.MyBodyAppender"/&gt;
+
+&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+    &lt;route&gt;
+        &lt;from uri="direct:start"/&gt;
+        &lt;aggregate aggregationStrategy="myAppender" aggregationStrategyMethodName="append" completionSize="3"&gt;
+            &lt;correlationExpression&gt;
+                &lt;constant&gt;true&lt;/constant&gt;
+            &lt;/correlationExpression&gt;
+            &lt;to uri="mock:result"/&gt;
+        &lt;/aggregate&gt;
+    &lt;/route&gt;
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: myAppender
+            aggregationStrategyMethodName: append
+            completionSize: 3
+            correlationExpression:
+              constant:
+                expression: "true"
+            steps:
+              - to:
+                  uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>In Java DSL, you can also provide the bean class type directly:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void configure() throws Exception {
     from("direct:start")
         .aggregate(constant(true), AggregationStrategies.bean(MyBodyAppender.class, "append"))
             .completionSize(3)
@@ -137,17 +175,7 @@ public void configure() throws Exception {
         return next + existing;
     }
 
-}</code></pre> </div> </div> <div class="paragraph"> <p>If you are using XML DSL, then we need to declare a <code>&lt;bean&gt;</code> with the bean:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="myAppender" class="com.foo.MyBodyAppender"/&gt;</code></pre> </div> </div> <div class="paragraph"> <p>And in the Camel route we use <code>aggregationStrategy</code> to refer to the bean by its id, and the <code>strategyMethodName</code> can be used to define the method name to call:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
-    &lt;route&gt;
-        &lt;from uri="direct:start"/&gt;
-        &lt;aggregate aggregationStrategy="myAppender" aggregationStrategyMethodName="append" completionSize="3"&gt;
-            &lt;correlationExpression&gt;
-                &lt;constant&gt;true&lt;/constant&gt;
-            &lt;/correlationExpression&gt;
-            &lt;to uri="mock:result"/&gt;
-        &lt;/aggregate&gt;
-    &lt;/route&gt;
-&lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>When using XML DSL, you can also specify the bean class directly in <code>aggregationStrategy</code> using the <code>#class:</code> syntax as shown:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+}</code></pre> </div> </div> <div class="paragraph"> <p>When using XML or YAML DSL, you can also specify the bean class directly in <code>aggregationStrategy</code> using the <code>#class:</code> syntax as shown:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:start"/&gt;
     &lt;aggregate aggregationStrategy="#class:com.foo.MyBodyAppender" aggregationStrategyMethodName="append" completionSize="3"&gt;
         &lt;correlationExpression&gt;
@@ -155,7 +183,20 @@ public void configure() throws Exception {
         &lt;/correlationExpression&gt;
         &lt;to uri="mock:result"/&gt;
     &lt;/aggregate&gt;
-&lt;/route&gt;</code></pre> </div> </div> <div class="paragraph"> <p>You can use this in XML DSL when you are not using the classic Spring XML files ( where you use XML only for Camel routes).</p> </div> <div class="sect2"> <h3 id="_aggregating_when_no_data"><a class="anchor" href="#_aggregating_when_no_data"></a>Aggregating when no data</h3> <div class="paragraph"> <p>When using bean as <code>AggregationStrategy</code>, then the method is <strong>only</strong> invoked when there is data to be aggregated, meaning that the message body is not <code>null</code>. In cases where you want to have the method invoked, even when there are no data (message body is <code>null</code>), then set the <code>strategyMethodAllowNull</code> to <code>true</code>.</p> </div> <div class="paragraph"> <p>When using beans, this can be configured a bit easier using the <code>beanAllowNull</code> method from <code>AggregationStrategies</code> as shown:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void configure() throws Exception {
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: "#class:com.foo.MyBodyAppender"
+            aggregationStrategyMethodName: append
+            completionSize: 3
+            correlationExpression:
+              constant:
+                expression: "true"
+            steps:
+              - to:
+                  uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_aggregating_when_no_data"><a class="anchor" href="#_aggregating_when_no_data"></a>Aggregating when no data</h3> <div class="paragraph"> <p>When using bean as <code>AggregationStrategy</code>, then the method is <strong>only</strong> invoked when there is data to be aggregated, meaning that the message body is not <code>null</code>. In cases where you want to have the method invoked, even when there are no data (message body is <code>null</code>), then set the <code>strategyMethodAllowNull</code> to <code>true</code>.</p> </div> <div class="paragraph"> <p>When using beans, this can be configured a bit easier using the <code>beanAllowNull</code> method from <code>AggregationStrategies</code> as shown:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public void configure() throws Exception {
     from("direct:start")
         .pollEnrich("seda:foo", 1000, AggregationStrategies.beanAllowNull(appender, "append"))
             .to("mock:result");
@@ -169,7 +210,7 @@ public void configure() throws Exception {
         }
     }
 
-}</code></pre> </div> </div> <div class="paragraph"> <p>In the example above we use the <a href="content-enricher.html" class="xref page">Content Enricher</a> EIP using <code>pollEnrich</code>. The <code>newExchange</code> will be <code>null</code> in the situation we could not get any data from the "seda:foo" endpoint, and a timeout was hit after 1 second.</p> </div> <div class="paragraph"> <p>So if we need to do special merge logic, we would need to set <code>setAllowNullNewExchange=true</code>. If we didn&#8217;t do this, then on timeout the append method would normally not be invoked, meaning the <a href="content-enricher.html" class="xref page">Content Enricher</a> did not merge/change the message.</p> </div> <div class="paragraph"> <p>In XML DSL you would configure the <code>strategyMethodAllowNull</code> option and set it to <code>true</code> as shown below:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+}</code></pre> </div> </div> <div class="paragraph"> <p>In the example above we use the <a href="content-enricher.html" class="xref page">Content Enricher</a> EIP using <code>pollEnrich</code>. The <code>newExchange</code> will be <code>null</code> in the situation we could not get any data from the "seda:foo" endpoint, and a timeout was hit after 1 second.</p> </div> <div class="paragraph"> <p>So if we need to do special merge logic, we would need to set <code>setAllowNullNewExchange=true</code>. If we didn&#8217;t do this, then on timeout the append method would normally not be invoked, meaning the <a href="content-enricher.html" class="xref page">Content Enricher</a> did not merge/change the message.</p> </div> <div class="paragraph"> <p>In XML and YAML DSL you would configure the <code>strategyMethodAllowNull</code> option and set it to <code>true</code> as shown below:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;route&gt;
         &lt;from uri="direct:start"/&gt;
         &lt;aggregate aggregationStrategy="myAppender"
@@ -182,7 +223,21 @@ public void configure() throws Exception {
             &lt;to uri="mock:result"/&gt;
         &lt;/aggregate&gt;
     &lt;/route&gt;
-&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_aggregating_with_different_body_types"><a class="anchor" href="#_aggregating_with_different_body_types"></a>Aggregating with different body types</h3> <div class="paragraph"> <p>When, for example, using <code>strategyMethodAllowNull</code> as <code>true</code>, then the parameter type of the message bodies does not have to be the same. For example suppose we want to aggregate from a <code>com.foo.User</code> type to a <code>List&lt;String&gt;</code> that contains the name of the user. We could code a bean as follows:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class MyUserAppender {
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: myAppender
+            aggregationStrategyMethodName: append
+            aggregationStrategyMethodAllowNull: true
+            completionSize: 3
+            correlationExpression:
+              constant:
+                expression: "true"
+            steps:
+              - to:
+                  uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_aggregating_with_different_body_types"><a class="anchor" href="#_aggregating_with_different_body_types"></a>Aggregating with different body types</h3> <div class="paragraph"> <p>When, for example, using <code>strategyMethodAllowNull</code> as <code>true</code>, then the parameter type of the message bodies does not have to be the same. For example suppose we want to aggregate from a <code>com.foo.User</code> type to a <code>List&lt;String&gt;</code> that contains the name of the user. We could code a bean as follows:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public final class MyUserAppender {
 
     public List addUsers(List names, User user) {
         if (names == null) {
