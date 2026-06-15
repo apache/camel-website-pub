@@ -62,6 +62,20 @@ Starting service kafka with implementation redpanda
 camel infra stop arangodb
 ```
 
+## Restarting a service
+
+Stops a running service and starts it again. This is handy after changing configuration or to recover a service into a clean state:
+
+```bash
+camel infra restart kafka
+```
+
+Use `--background` to restart the service detached from the terminal:
+
+```bash
+camel infra restart kafka --background
+```
+
 ## Listing running services
 
 ```bash

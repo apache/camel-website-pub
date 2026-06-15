@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781511889321,
+  "generated": 1781518357014,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -29797,6 +29797,12 @@
               "path": "jbang-commands/camel-jbang-infra-ps.adoc",
               "url": "/manual/jbang-commands/camel-jbang-infra-ps.html",
               "title": "camel infra ps"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-infra-restart.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-infra-restart.html",
+              "title": "camel infra restart"
             },
             {
               "module": "ROOT",

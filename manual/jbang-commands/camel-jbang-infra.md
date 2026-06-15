@@ -17,6 +17,7 @@ camel infra [options]
 | [list](camel-jbang-infra-list.md) | Displays available external services |
 | [log](camel-jbang-infra-log.md) | Displays external service logs |
 | [ps](camel-jbang-infra-ps.md) | Displays running services |
+| [restart](camel-jbang-infra-restart.md) | Restarts a running external service |
 | [run](camel-jbang-infra-run.md) | Run an external service |
 | [stop](camel-jbang-infra-stop.md) | Shuts down running external services |
 
