@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781597018279,
+  "generated": 1781637184178,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -29248,6 +29248,12 @@
             },
             {
               "module": "ROOT",
+              "path": "java-dsl-model-writer.adoc",
+              "url": "/manual/java-dsl-model-writer.html",
+              "title": "Java DSL Model Writer"
+            },
+            {
+              "module": "ROOT",
               "path": "java-dsl.adoc",
               "url": "/manual/java-dsl.html",
               "title": "Java DSL"
@@ -29377,6 +29383,12 @@
               "path": "jbang-commands/camel-jbang-cmd-route-diagram.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-route-diagram.html",
               "title": "camel cmd route-diagram"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-route-dump.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-route-dump.html",
+              "title": "camel cmd route-dump"
             },
             {
               "module": "ROOT",
@@ -29713,12 +29725,6 @@
               "path": "jbang-commands/camel-jbang-get-route-controller.adoc",
               "url": "/manual/jbang-commands/camel-jbang-get-route-controller.html",
               "title": "camel get route-controller"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-get-route-dump.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-get-route-dump.html",
-              "title": "camel get route-dump"
             },
             {
               "module": "ROOT",

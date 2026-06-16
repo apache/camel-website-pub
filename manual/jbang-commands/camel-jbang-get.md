@@ -37,7 +37,6 @@ camel get [options]
 | [rest](camel-jbang-get-rest.md) | Get REST services of Camel integrations |
 | [route](camel-jbang-get-route.md) | Get status of Camel routes |
 | [route-controller](camel-jbang-get-route-controller.md) | List status of route controller |
-| [route-dump](camel-jbang-get-route-dump.md) | Dump Camel route in XML or YAML format |
 | [service](camel-jbang-get-service.md) | Get services of Camel integrations |
 | [source](camel-jbang-get-source.md) | Display Camel route source code |
 | [startup-recorder](camel-jbang-get-startup-recorder.md) | Display startup recording |

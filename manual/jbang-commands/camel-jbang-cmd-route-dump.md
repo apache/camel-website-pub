@@ -1,11 +1,11 @@
-# camel get route-dump
+# camel cmd route-dump
 
-Dump Camel route in XML or YAML format
+Dump Camel route in XML, YAML, or Java DSL format
 
 ## Usage
 
 ```bash
-camel get route-dump [options]
+camel cmd route-dump [options]
 ```
 
 ## Options
@@ -14,7 +14,7 @@ camel get route-dump [options]
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
 | `--filter` | Filter route by filename or route id (multiple names can be separated by comma) |  | String |
-| `--format` | Output format (xml, or yaml) | yaml | String |
+| `--format` | Output format (xml, yaml, or java) | yaml | String |
 | `--raw` | To output raw without metadata |  | boolean |
 | `--sort` | Sort route by name or id | name | String |
 | `--uri-as-parameters` | Whether to expand URIs into separated key/value parameters (only in use for YAML format) | true | boolean |

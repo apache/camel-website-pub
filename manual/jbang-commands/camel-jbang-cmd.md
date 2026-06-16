@@ -24,6 +24,7 @@ camel cmd [options]
 | [reset-stats](camel-jbang-cmd-reset-stats.md) | Reset performance statistics |
 | [resume-route](camel-jbang-cmd-resume-route.md) | Resume Camel routes |
 | [route-diagram](camel-jbang-cmd-route-diagram.md) | Display Camel route diagram in the terminal |
+| [route-dump](camel-jbang-cmd-route-dump.md) | Dump Camel route in XML, YAML, or Java DSL format |
 | [route-structure](camel-jbang-cmd-route-structure.md) | Dump Camel route structure |
 | [route-topology](camel-jbang-cmd-route-topology.md) | Display inter-route topology connections |
 | [send](camel-jbang-cmd-send.md) | Send messages to endpoints |

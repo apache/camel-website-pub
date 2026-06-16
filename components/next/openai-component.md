@@ -190,7 +190,7 @@ Enum values:
 | **maxToolIterations** (producer) | Maximum number of tool call loop iterations to prevent infinite loops. | 50 | int |
 | **mcpProtocolVersions** (producer) | Comma-separated list of MCP protocol versions to advertise when connecting to MCP servers using Streamable HTTP transport. When not set, the SDK default is used. Example: 2024-11-05,2025-03-26,2025-06-18. |  | String |
 | **mcpReconnect** (producer) | Automatically reconnect to MCP servers when a tool call fails due to a transport error, and retry the call once. | true | boolean |
-| **mcpServer** (producer) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdiossestreamableHttp, mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
+| **mcpServer** (producer) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdiossestreamableHttp, (Note that sse is deprecated) mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **mcpTimeout** (producer) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
 | **model** (producer) | The model to use for chat completion. |  | String |
 | **outputClass** (producer) | Fully qualified class name for structured output using response format. |  | String |
@@ -1124,7 +1124,7 @@ from("direct:chat")
         + "&mcpServer.api.url=http://localhost:9090/mcp");
 ```
 
-#### SSE Transport
+#### SSE Transport (Deprecated)
 
 ```java
 from("direct:chat")
