@@ -139,11 +139,12 @@ Enum values:
 | **lookupKey** (consumer) | Endpoint mapping key if endpoint mapping is used. |  | String |
 | **webServiceEndpointUri** (producer) | The default Web Service endpoint uri to use for the producer. |  | String |
 
-### Query Parameters (22 parameters)
+### Query Parameters (23 parameters)
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **headerFilterStrategy** (common) | To use a custom HeaderFilterStrategy to filter headers mapped to and from the Camel message. By default the internal Camel and camel header namespace (case-insensitive) is filtered out from inbound SOAP headers. |  | HeaderFilterStrategy |
 | **messageFilter** (common) | Option to provide a custom MessageFilter. For example when you want to process your headers or attachments by your own. |  | MessageFilter |
 | **messageIdStrategy** (common) | Option to provide a custom MessageIdStrategy to control generation of WS-Addressing unique message ids. |  | MessageIdStrategy |
 | **endpointDispatcher** (consumer) | Spring org.springframework.ws.server.endpoint.MessageEndpoint for dispatching messages received by Spring-WS to a Camel endpoint, to integrate with existing (legacy) endpoint mappings like PayloadRootQNameEndpointMapping, SoapActionEndpointMapping, etc. |  | CamelEndpointDispatcher |

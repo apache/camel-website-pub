@@ -12,7 +12,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 
 There are 394 spring boot starter json files.
 
-Of these 391 are used in components, dataformats, etc.
+Of these 392 are used in components, dataformats, etc.
 
 > **Note**
 > Cluster service starters (consul, file, infinispan, jgroups-raft, kubernetes, zookeeper) are documented in the [Cluster Services](#_cluster_services) section below.
@@ -47,11 +47,12 @@ Apache Camel Spring Boot supports the following Camel artifacts as Spring Boot S
 
 ## Camel Components
 
-Number of Camel components: 386 in 320 JAR artifacts (12 deprecated)
+Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
+| [A2A](../../components/next/a2a-component.md) | camel-a2a-starter | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](../../components/next/activemq-component.md) | camel-activemq-starter | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](../../components/next/activemq6-component.md) | camel-activemq6-starter | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AMQP](../../components/next/amqp-component.md) | camel-amqp-starter | Stable | 1.2 | Messaging with AMQP protocol using Apache QPid Client. |

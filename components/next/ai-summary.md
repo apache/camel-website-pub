@@ -6,6 +6,10 @@ The Camel AI components are a group of components for applying Apache Camel to v
 
 See the following for usage of each component:
 
+[A2A](a2a-component.md)
+
+A2A endpoint for agent-to-agent communication.
+
 [ChatScript](chatscript-component.md)
 
 Chat with a ChatScript Server.

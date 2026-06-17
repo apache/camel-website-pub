@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781640060267,
+  "generated": 1781698227814,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -18387,6 +18387,12 @@
               "path": "yaml-dsl.adoc",
               "url": "/components/next/others/yaml-dsl.html",
               "title": "YAML DSL"
+            },
+            {
+              "module": "ROOT",
+              "path": "a2a-component.adoc",
+              "url": "/components/next/a2a-component.html",
+              "title": "A2A"
             },
             {
               "module": "ROOT",

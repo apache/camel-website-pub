@@ -47,11 +47,12 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 374 in 300 JAR artifacts (12 deprecated)
+Number of Non-Core Components: 375 in 301 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
+| [A2A](a2a-component.md) | camel-a2a | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](activemq-component.md) | camel-activemq | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](activemq6-component.md) | camel-activemq6 | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI](ai-summary.md) |  |  |  |  |
