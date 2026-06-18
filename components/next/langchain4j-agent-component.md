@@ -254,7 +254,7 @@ When using langchain4j-agent with Spring Boot make sure to use the following Mav
 </dependency>
 ```
 
-The component supports 11 options, which are listed below.
+The component supports 12 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -265,10 +265,11 @@ The component supports 11 options, which are listed below.
 | **camel.component.langchain4j-agent.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
 | **camel.component.langchain4j-agent.configuration** | The configuration. The option is a org.apache.camel.component.langchain4j.agent.LangChain4jAgentConfiguration type. |  | LangChain4jAgentConfiguration |
 | **camel.component.langchain4j-agent.enabled** | Whether to enable auto configuration of the langchain4j-agent component. This is enabled by default. |  | Boolean |
-| **camel.component.langchain4j-agent.json-schema** | JSON schema for structured output validation. This option works only when using agentConfiguration (inline agent creation mode). |  | String |
+| **camel.component.langchain4j-agent.json-schema** | JSON schema for structured output validation. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. Mutually exclusive with outputClass. |  | String |
 | **camel.component.langchain4j-agent.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
 | **camel.component.langchain4j-agent.mcp-clients** | Pre-built MCP (Model Context Protocol) client instances for external tool integration. Reference beans from the registry, e.g., #myMcpClient1,#myMcpClient2. |  | List |
 | **camel.component.langchain4j-agent.mcp-server** | MCP server definitions in the form of mcpServer..=. Supported properties: transportType (stdio, http, streamableHttp, or sse, default: stdio), command (comma-separated, for stdio), url (for http/sse), environment.= (for stdio), timeout (in seconds, default: 60), logRequests, logResponses, oauthProfile (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
+| **camel.component.langchain4j-agent.output-class** | Java class to use for structured output. Camel derives the JSON schema from the class and instructs the model to produce matching JSON; the response body is left as a raw JSON string. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. The class must be a POJO with public fields or getters; simple types, enums, and collections are not supported. Mutually exclusive with jsonSchema. |  | Class |
 | **camel.component.langchain4j-agent.tags** | Tags for discovering and calling Camel route tools. |  | String |
 
 ## Usage
