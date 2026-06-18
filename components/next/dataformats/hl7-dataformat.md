@@ -46,11 +46,15 @@ HL7 MLLP codec can be configured as follows:
 
 In the Spring XML file, we configure a mina endpoint to listen for HL7 requests using TCP on port `8888`:
 
+_XML-only: Spring XML endpoint declaration for HL7 Mina listener_
+
 ```xml
 <endpoint id="hl7MinaListener" uri="mina:tcp://localhost:8888?sync=true&amp;codec=#hl7codec"/>
 ```
 
 **sync=true** indicates that this listener is synchronous and therefore will return a HL7 response to the caller. The HL7 codec is set up with **codec=#hl7codec**. Note that `hl7codec` is just a Spring bean ID, so it could be named `mygreatcodecforhl7` or whatever. The codec is also set up in the Spring XML file:
+
+_XML-only: Spring bean declaration for HL7 MLLP codec_
 
 ```xml
 <bean id="hl7codec" class="org.apache.camel.component.hl7.HL7MLLPCodec">
@@ -68,6 +72,8 @@ from("hl7MinaListener")
 ```
 
 This is a basic route that will listen for HL7 and route it to a service named **patientLookupService**. This is also Spring bean ID, configured in the Spring XML as:
+
+_XML-only: Spring bean declaration for the patient lookup service_
 
 ```xml
 <bean id="patientLookupService" class="com.mycompany.healthcare.service.PatientLookupService"/>
@@ -97,11 +103,15 @@ public class PatientLookupService {
 
 In the Spring XML file, we configure a netty endpoint to listen for HL7 requests using TCP on port `8888`:
 
+_XML-only: Spring XML endpoint declaration for HL7 Netty listener_
+
 ```xml
 <endpoint id="hl7NettyListener" uri="netty:tcp://localhost:8888?sync=true&amp;encoders=#hl7encoder&amp;decoders=#hl7decoder"/>
 ```
 
 **sync=true** indicates that this listener is synchronous and therefore will return a HL7 response to the caller. The HL7 codec is set up with **encoders=#hl7encoder\*and\*decoders=#hl7decoder**. Note that `hl7encoder` and `hl7decoder` are just bean IDs, so they could be named differently. The beans can be set in the Spring XML file:
+
+_XML-only: Spring bean declarations for HL7 Netty encoder and decoder_
 
 ```xml
 <bean id="hl7decoder" class="org.apache.camel.component.hl7.HL7MLLPNettyDecoderFactory"/>

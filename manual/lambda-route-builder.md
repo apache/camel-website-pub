@@ -2,6 +2,8 @@
 
 The `LambdaRouteBuilder` is a functional interface which is used for creating a routing rule using the [DSL](dsl.md), using Java lambda style.
 
+_Java-only: a route defined using lambda style_
+
 ```java
 rb -> rb.from("timer:foo").log("Hello Lambda");
 ```
@@ -15,6 +17,8 @@ To use `LambdaRouteBuilder` you need to create a method that returns `LambdaRout
 In the example below the method `myRoute` is used to create a Camel route that consumes from Kafka and sends the messages to JMS.
 
 To make the route discoverable by Camel during startup, then the method must be annotated. The method should be annotated with `@BindToRegistry` in standalone mode with `camel-main`, `@Bean` in case of Spring Boot or `@Produce` in case of Quarkus.
+
+_Java-only: registering a LambdaRouteBuilder with @BindToRegistry_
 
 ```java
 public class MyConfiguration {
@@ -30,6 +34,8 @@ public class MyConfiguration {
 
 The [Endpoint DSL](Endpoint-dsl.md) can also be used as a lambda route builder with the `org.apache.camel.builder.endpoint.LambdaEndpointRouteBuilder` class from the `camel-endpointdsl` JAR.
 
+_Java-only: using LambdaEndpointRouteBuilder with type-safe endpoint DSL_
+
 ```java
 public class MyConfiguration {
     @BindToRegistry
@@ -42,11 +48,15 @@ public class MyConfiguration {
 
 The `LambdaEndpointRouteBuilder` has _type safe_ endpoint but requires to prefix with the instance name (`rb`) when choosing an endpoint name. Notice above how to select the kafka endpoint
 
+_Java-only: using type-safe endpoint builder with prefix_
+
 ```java
 rb.from(rb.kafka("cheese"))
 ```
 
 With the regular `LambdaRouteBuilder` it’s just a `String` type, so the `rb` prefix is not needed anymore:
+
+_Java-only: using string-based endpoint URI without prefix_
 
 ```java
 rb.from("kafka:cheese")

@@ -41,6 +41,8 @@ from("direct:basic-encryption")
 
 In Spring the dataformat is configured first and then used in routes
 
+_XML-only: Spring XML data format configuration_
+
 ```xml
 <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
   <dataFormats>

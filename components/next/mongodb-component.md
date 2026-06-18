@@ -442,11 +442,44 @@ from("direct:findById")
 
 Please note that the default \_id is treated by Mongo as and `ObjectId` type, so you may need to convert it properly.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:findById")
     .convertBodyTo(ObjectId.class)
     .to("mongodb:myDb?database=flights&collection=tickets&operation=findById")
     .to("mock:resultFindById");
+```
+
+```xml
+<route>
+  <from uri="direct:findById"/>
+  <convertBodyTo type="org.bson.types.ObjectId"/>
+  <to uri="mongodb:myDb?database=flights&amp;collection=tickets&amp;operation=findById"/>
+  <to uri="mock:resultFindById"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:findById
+      steps:
+        - convertBodyTo:
+            type: org.bson.types.ObjectId
+        - to:
+            uri: mongodb:myDb
+            parameters:
+              database: flights
+              collection: tickets
+              operation: findById
+        - to:
+            uri: mock:resultFindById
 ```
 
 > **Tip**
@@ -945,6 +978,8 @@ For example:
 
 Usage example:
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 // from("direct:getDbStats").to("mongodb:myDb?database=flights&collection=tickets&operation=getDbStats");
 Object result = template.requestBody("direct:getDbStats", "irrelevantBody");
@@ -979,6 +1014,8 @@ For example:
 
 Usage example:
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 // from("direct:getColStats").to("mongodb:myDb?database=flights&collection=tickets&operation=getColStats");
 Object result = template.requestBody("direct:getColStats", "irrelevantBody");
@@ -992,6 +1029,8 @@ The operation will return a data structure similar to the one displayed in the s
 Run the body as a command on the database. Useful for admin operation as getting host information, replication or sharding status.
 
 Collection parameter is not used for this operation.
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 // route: from("command").to("mongodb:myDb?database=science&operation=command");
@@ -1044,11 +1083,40 @@ The consumer will remember the last value of this field, and whenever the cursor
 
 An example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mongodb:myDb?database=flights&collection=cancellations&tailTrackIncreasingField=departureTime")
     .id("tailableCursorConsumer1")
     .autoStartup(false)
     .to("mock:test");
+```
+
+```xml
+<route id="tailableCursorConsumer1" autoStartup="false">
+  <from uri="mongodb:myDb?database=flights&amp;collection=cancellations&amp;tailTrackIncreasingField=departureTime"/>
+  <to uri="mock:test"/>
+</route>
+```
+
+```yaml
+- route:
+    id: tailableCursorConsumer1
+    autoStartup: false
+    from:
+      uri: mongodb:myDb
+      parameters:
+        database: flights
+        collection: cancellations
+        tailTrackIncreasingField: departureTime
+      steps:
+        - to:
+            uri: mock:test
 ```
 
 The above route will consume from the `flights.cancellations` capped collection, using `departureTime` as the increasing field, with a default regeneration cursor delay of 1000ms.
@@ -1074,6 +1142,13 @@ Additionally, you can set the `tailTrackDb`, `tailTrackCollection` and `tailTrac
 
 For example, the following route will consume from the "flights.cancellations" capped collection, using "departureTime" as the increasing field, with a default regeneration cursor delay of 1000ms, with persistent tail tracking turned on, and persisting under the "cancellationsTracker" id on the "flights.camelTailTracking", storing the last processed value under the "lastTrackingValue" field (`camelTailTracking` and `lastTrackingValue` are defaults).
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mongodb:myDb?database=flights&collection=cancellations&tailTrackIncreasingField=departureTime&persistentTailTracking=true" +
      "&persistentId=cancellationsTracker")
@@ -1082,7 +1157,38 @@ from("mongodb:myDb?database=flights&collection=cancellations&tailTrackIncreasing
     .to("mock:test");
 ```
 
+```xml
+<route id="tailableCursorConsumer2" autoStartup="false">
+  <from uri="mongodb:myDb?database=flights&amp;collection=cancellations&amp;tailTrackIncreasingField=departureTime&amp;persistentTailTracking=true&amp;persistentId=cancellationsTracker"/>
+  <to uri="mock:test"/>
+</route>
+```
+
+```yaml
+- route:
+    id: tailableCursorConsumer2
+    autoStartup: false
+    from:
+      uri: mongodb:myDb
+      parameters:
+        database: flights
+        collection: cancellations
+        tailTrackIncreasingField: departureTime
+        persistentTailTracking: true
+        persistentId: cancellationsTracker
+      steps:
+        - to:
+            uri: mock:test
+```
+
 Below is another example identical to the one above, but where the persistent tail tracking runtime information will be stored under the "trackers.camelTrackers" collection, in the "lastProcessedDepartureTime" field:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mongodb:myDb?database=flights&collection=cancellations&tailTrackIncreasingField=departureTime&persistentTailTracking=true" +
@@ -1093,24 +1199,71 @@ from("mongodb:myDb?database=flights&collection=cancellations&tailTrackIncreasing
     .to("mock:test");
 ```
 
+```xml
+<route id="tailableCursorConsumer3" autoStartup="false">
+  <from uri="mongodb:myDb?database=flights&amp;collection=cancellations&amp;tailTrackIncreasingField=departureTime&amp;persistentTailTracking=true&amp;persistentId=cancellationsTracker&amp;tailTrackDb=trackers&amp;tailTrackCollection=camelTrackers&amp;tailTrackField=lastProcessedDepartureTime"/>
+  <to uri="mock:test"/>
+</route>
+```
+
+```yaml
+- route:
+    id: tailableCursorConsumer3
+    autoStartup: false
+    from:
+      uri: mongodb:myDb
+      parameters:
+        database: flights
+        collection: cancellations
+        tailTrackIncreasingField: departureTime
+        persistentTailTracking: true
+        persistentId: cancellationsTracker
+        tailTrackDb: trackers
+        tailTrackCollection: camelTrackers
+        tailTrackField: lastProcessedDepartureTime
+      steps:
+        - to:
+            uri: mock:test
+```
+
 #### Change Streams Consumer
 
 Change Streams allow applications to access real-time data changes without the complexity and risk of tailing the MongoDB oplog. Applications can use change streams to subscribe to all data changes on a collection and immediately react to them. Because change streams use the aggregation framework, applications can also filter for specific changes or transform the notifications at will. The exchange body will contain the full document of any change.
 
-To configure Change Streams Consumer you need to specify `consumerType`, `database`, `collection` and optional JSON property `streamFilter` to filter events. That JSON property is standard MongoDB `$match` aggregation. It could be easily specified using XML DSL configuration:
+To configure Change Streams Consumer you need to specify `consumerType`, `database`, `collection` and optional JSON property `streamFilter` to filter events. That JSON property is standard MongoDB `$match` aggregation. It could be easily specified using the DSL configuration:
 
-```xml
-<route id="filterConsumer">
-    <from uri="mongodb:myDb?consumerType=changeStreams&amp;database=flights&amp;collection=tickets&amp;streamFilter={ '$match':{'$or':[{'fullDocument.stringValue': 'specificValue'}]} }"/>
-    <to uri="mock:test"/>
-</route>
-```
-
-Java configuration:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mongodb:myDb?consumerType=changeStreams&database=flights&collection=tickets&streamFilter={ '$match':{'$or':[{'fullDocument.stringValue': 'specificValue'}]} }")
     .to("mock:test");
+```
+
+```xml
+<route id="filterConsumer">
+  <from uri="mongodb:myDb?consumerType=changeStreams&amp;database=flights&amp;collection=tickets&amp;streamFilter={ '$match':{'$or':[{'fullDocument.stringValue': 'specificValue'}]} }"/>
+  <to uri="mock:test"/>
+</route>
+```
+
+```yaml
+- route:
+    id: filterConsumer
+    from:
+      uri: mongodb:myDb
+      parameters:
+        consumerType: changeStreams
+        database: flights
+        collection: tickets
+        streamFilter: "{ '$match':{'$or':[{'fullDocument.stringValue': 'specificValue'}]} }"
+      steps:
+        - to:
+            uri: mock:test
 ```
 
 > **Tip**
@@ -1141,6 +1294,19 @@ The following route defined in Spring XML executes the operation [getDbStats](#_
 
 **Get DB stats for specified collection**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("mongodb:mongoBean?database=${mongodb.database}&collection=${mongodb.collection}&operation=getDbStats")
+    .to("direct:result");
+```
+
 ```xml
 <route>
   <from uri="direct:start" />
@@ -1148,6 +1314,21 @@ The following route defined in Spring XML executes the operation [getDbStats](#_
   <to uri="mongodb:mongoBean?database=${mongodb.database}&amp;collection=${mongodb.collection}&amp;operation=getDbStats" />
   <to uri="direct:result" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: mongodb:mongoBean
+            parameters:
+              database: "${mongodb.database}"
+              collection: "${mongodb.collection}"
+              operation: getDbStats
+        - to:
+            uri: direct:result
 ```
 
 ## Spring Boot Auto-Configuration

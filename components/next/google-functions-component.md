@@ -23,6 +23,8 @@ Google Functions component authentication is targeted for use with the GCP Servi
 
 When you have the **service account key**, you can provide authentication credentials to your application code. Google security credentials can be set through the component endpoint:
 
+_Java-only: constructing the endpoint URI programmatically_
+
 ```java
 String endpoint = "google-functions://myCamelFunction?serviceAccountKey=/home/user/Downloads/my-key.json";
 ```

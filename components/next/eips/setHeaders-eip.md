@@ -174,7 +174,7 @@ from("direct:a")
 
 It’s also possible to build a Map and pass it as the single argument to `setHeaders().` If the order in which the headers should be set is important, use a `LinkedHashMap`.
 
-Java
+_Java-only: using a LinkedHashMap to set headers in order_
 
 ```java
 private Map<String, Expression> headerMap = new java.util.LinkedHashMap<>();
@@ -188,7 +188,7 @@ from("direct:startMap")
 
 If the ordering is not critical, then `Map.of(name1, expr1, name2, expr2…​)` can be used.
 
-Java
+_Java-only: using Map.of for unordered headers_
 
 ```java
 from("direct:startMap")

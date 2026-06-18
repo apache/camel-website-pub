@@ -56,6 +56,8 @@ For example, using `mockEndpointsAndSkip("activemq:queue:foo?*")` To match the f
 
 To _advice_ you need to use the `AdviceWithRouteBuilder` for manipulating the route. But first, you need to select which route to manipulate which you can do by the route ID or the route index.
 
+_Java-only: advising a route using AdviceWithRouteBuilder_
+
 ```java
 AdviceWith.adviceWith("myRoute", context, new AdviceWithRouteBuilder() {
         @Override
@@ -68,6 +70,8 @@ AdviceWith.adviceWith("myRoute", context, new AdviceWithRouteBuilder() {
 We introduce a more modern API for _advicing_ routes using Java lambda style.
 
 Below, we are _advicing_ the route with ID myRoute:
+
+_Java-only: advising a route using lambda style_
 
 ```java
 AdviceWith.adviceWith(context, "myRoute", a ->
@@ -104,6 +108,8 @@ This happens for every _adviced_ route during startup of your unit tests. It hap
 
 When using [camel-test-junit5](../components/4.18.x/others/test-junit5.md) for unit testing, then you can tell Camel that advice is in use by either overriding the `isUsedAdviceWith` method from `CamelTestSupport` as shown:
 
+_Java-only: enabling AdviceWith in CamelTestSupport_
+
 ```java
 public class MyAdviceWithTest extends CamelTestSupport {
     @Override
@@ -115,6 +121,8 @@ public class MyAdviceWithTest extends CamelTestSupport {
 
 Or when using [camel-test-spring-junit5](../components/4.18.x/others/test-spring-junit5.md) for unit testing you can use the `@UseAdviceWith` annotation as shown:
 
+_Java-only: enabling AdviceWith using @UseAdviceWith annotation_
+
 ```java
 @UseAdviceWith
 public class MyAdviceWithTest extends CamelSpringTestSupport {
@@ -122,6 +130,8 @@ public class MyAdviceWithTest extends CamelSpringTestSupport {
 ```
 
 Then you advise the routes followed by starting Camel:
+
+_Java-only: advising a route and then starting CamelContext_
 
 ```java
 @Test
@@ -153,6 +163,8 @@ However, this requires to have `camel-xml-jaxb` as dependency, which you can add
 
 It is possible to turn of logging as XML, by setting the logging to `false` as shown:
 
+_Java-only: disabling XML logging when advising routes_
+
 ```java
 AdviceWith.adviceWith(context, "myRoute", false, a ->
      a.mockEndpoints();
@@ -166,6 +178,8 @@ You may have built Camel routes that start from endpoints that consume from data
 To make unit testing these kinds of routes easier, you can replace the route input endpoints with internal endpoints such as [direct](../components/4.18.x/direct-component.md), [seda](../components/4.18.x/seda-component.md), [stub](../components/4.18.x/stub-component.md).
 
 The following illustrates how to do this:
+
+_Java-only: replacing the route input endpoint for testing_
 
 ```java
 @Test
@@ -196,6 +210,8 @@ Here Camel have _adviced_ two endpoints:
     
 
 This allows using the mock endpoints in your unit tests for testing, such as:
+
+_Java-only: using auto-mocked endpoints in unit tests_
 
 ```java
 public void testMockEndpoints() throws Exception {
@@ -230,6 +246,8 @@ The following methods are available for the `weave` methods:
 
 For example, given the following route:
 
+_Java-only: example route used for weave demonstrations_
+
 ```java
 from("direct:start")
   .to("mock:foo")
@@ -240,6 +258,8 @@ from("direct:start")
 Then let’s go over the four methods to see how you can use them in unit tests
 
 #### Replace
+
+_Java-only: weaving a node by ID and replacing it_
 
 ```java
 AdviceWith.adviceWith(context.getRouteDefinitions().get(0), context, new AdviceWithRouteBuilder() {
@@ -258,6 +278,8 @@ In this example we replace the `.to("mock:bar").id("bar")` with the `.multicast(
 
 In the example below, we simply just remove the `.to("mock:bar").id("bar")` from the route:
 
+_Java-only: weaving a node by ID and removing it_
+
 ```java
 AdviceWith.adviceWith(context.getRouteDefinitions().get(0), context, new AdviceWithRouteBuilder() {
     @Override
@@ -271,6 +293,8 @@ AdviceWith.adviceWith(context.getRouteDefinitions().get(0), context, new AdviceW
 #### Before
 
 In the example below, we add the following nodes `to("mock:a").transform(constant("Bye World"))` before the node with the id bar.
+
+_Java-only: weaving nodes before a specific node_
 
 ```java
 AdviceWith.adviceWith(context.getRouteDefinitions().get(0), context, new AdviceWithRouteBuilder() {
@@ -288,6 +312,8 @@ That means the message being sent before to mock:bar would have been transformed
 #### After
 
 In the example below, we add the following nodes `to("mock:a").transform(constant("Bye World"))` after the node with the id bar.
+
+_Java-only: weaving nodes after a specific node_
 
 ```java
 AdviceWith.adviceWith(context.getRouteDefinitions().get(0), context, new AdviceWithRouteBuilder() {
@@ -308,6 +334,8 @@ When weaving a route, you need to use one of the `weaveBy` methods as criteria t
 
 Suppose you use the [Split](../components/4.18.x/eips/split-eip.md) EIP in a route; then you can use `weaveByType` to select this EIP. Given the following route:
 
+_Java-only: route with a Split EIP used for weaveByType example_
+
 ```java
 from("file:inbox").routeId("inbox")
     .split(body())
@@ -318,6 +346,8 @@ from("file:inbox").routeId("inbox")
 ```
 
 Due to that route has only one [Split](../components/4.18.x/eips/split-eip.md) EIP, you can use `weaveByType` to find this single splitter in the route. Using `weaveByType` requires you to pass in the model type of the EIP. The name of the model type is using the pattern \_name\_Definition.
+
+_Java-only: using weaveByType to insert a node before the Split EIP_
 
 ```java
 weaveByType(SplitDefinition.class)
@@ -333,6 +363,8 @@ The `weaveByToUri` is a handy method that makes it easy to _weave_ a Camel route
 
 Given the following route having two branches in the [Content Based Router](../components/4.18.x/eips/choice-eip.md) EIP:
 
+_Java-only: route with content-based router for weaveByToUri example_
+
 ```java
 from("direct:start")
     .choice()
@@ -342,6 +374,8 @@ from("direct:start")
 ```
 
 Then we want to easily unit test this route, that messages are sent branch-1 or branch-2. This can be done with the `weaveByToUri` as shown:
+
+_Java-only: using weaveByToUri with wildcard matching_
 
 ```java
 weaveByToUri("direct:branch*").replace().to("mock:cheese");
@@ -375,6 +409,8 @@ The `weaveBy` methods, select all matching nodes, which can be anything from non
 
 Given the following route which has multiple [Filter](../components/4.18.x/eips/filter-eip.md) EIP, then we want to only advise the second filter.
 
+_Java-only: route with multiple Filter EIPs for selectIndex example_
+
 ```java
 from("file:inbox").routeId("inbox")
     .filter(header("foo"))
@@ -392,6 +428,8 @@ from("file:inbox").routeId("inbox")
 ```
 
 You can then use `weaveByType` to match the Filter EIPs and selectIndex to match the second found:
+
+_Java-only: using selectIndex to target a specific matched node_
 
 ```java
 weaveByType(FilterDefinition.class).selectIndex(1).replace().to("mock:changed");

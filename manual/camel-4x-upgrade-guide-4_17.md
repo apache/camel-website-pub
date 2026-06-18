@@ -13,6 +13,8 @@ The `transform` EIP has moved the data-type function to a new specialized `trans
 
 For Java DSL that means code should be changed
 
+_Java-only: Old transform with DataType_
+
 ```java
 from("direct:start")
     .transform(new DataType("myDataType"))
@@ -20,6 +22,8 @@ from("direct:start")
 ```
 
 to:
+
+_Java-only: New transformDataType EIP_
 
 ```java
 from("direct:start")

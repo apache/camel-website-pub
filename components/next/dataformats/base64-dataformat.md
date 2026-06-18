@@ -17,6 +17,8 @@ The Base64 dataformat supports 3 options, which are listed below.
 
 In Spring DSL, you configure the data format using this tag:
 
+_XML-only: Spring XML data format configuration_
+
 ```xml
 <camelContext>
     <dataFormats>
@@ -30,12 +32,36 @@ In Spring DSL, you configure the data format using this tag:
 
 Then you can use it later by its reference:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:startEncode")
+    .marshal("base64withLineLength64")
+    .to("mock:result");
+```
+
 ```xml
 <route>
      <from uri="direct:startEncode" />
      <marshal ref="base64withLineLength64" />
      <to uri="mock:result" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:startEncode
+      steps:
+        - marshal:
+            ref: base64withLineLength64
+        - to:
+            uri: mock:result
 ```
 
 Most of the time, you won’t need to declare the data format if you use the default options. In that case, you can declare the data format inline as shown below.

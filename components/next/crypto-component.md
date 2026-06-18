@@ -272,6 +272,8 @@ from("direct:sign")
 
 The following code shows how to load the keystore created using the above `keytool` command and bind it into the registry with the name `myKeystore` for use in the above route. The example makes use of the `@Configuration` and `@BindToRegistry` annotations introduced in Camel 3 to instantiate the KeyStore and register it with the name `myKeyStore`.
 
+_Java-only: KeyStore bean configuration with \`@BindToRegistry\`_
+
 ```java
 @Configuration
 public class KeystoreConfig {
@@ -401,6 +403,8 @@ Add the Bouncy Castle provider dependencies to your project:
 ```
 
 Register the Bouncy Castle provider at application startup:
+
+_Java-only: static provider registration_
 
 ```java
 import org.bouncycastle.jce.provider.BouncyCastleProvider;

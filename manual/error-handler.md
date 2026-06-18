@@ -115,6 +115,8 @@ The error handler is scoped as either:
 
 The following example shows how you can register a global error handler for the `RouteBuilder`:
 
+_Java-only: RouteBuilder with global error handler_
+
 ```java
 RouteBuilder builder = new RouteBuilder() {
     public void configure() {
@@ -127,6 +129,8 @@ RouteBuilder builder = new RouteBuilder() {
 ```
 
 The following example shows how you can register a route specific error handler:
+
+_Java-only: RouteBuilder with route-specific error handler_
 
 ```java
 RouteBuilder builder = new RouteBuilder() {

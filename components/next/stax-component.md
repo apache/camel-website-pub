@@ -234,6 +234,8 @@ from("file:target/in")
 
 Alternatively, the example above could be implemented as follows in Spring XML
 
+_XML-only: Spring bean configuration with StAXBuilder factory method_
+
 ```xml
   <!-- use STaXBuilder to create the expression we want to use in the route below for splitting the XML file -->
   <!-- notice we use the factory-method to define the stax method, and to pass in the parameter as a constructor-arg -->

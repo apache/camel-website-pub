@@ -35,6 +35,8 @@ Some of the Java DSL for `tokenize`, `xmlTokenize`, `xpath`, `xquery` and `jsonp
 
 Here are a few examples of migration before vs after:
 
+_Java-only: Old xpath DSL with inline parameters_
+
 ```java
  from("direct:in")
     .choice()
@@ -48,6 +50,8 @@ Here are a few examples of migration before vs after:
 ```
 
 You can use the _fluent expression_ builder to configure all the options:
+
+_Java-only: New fluent expression builder for xpath_
 
 ```java
 // use fluent builder expression to create the languages
@@ -69,6 +73,8 @@ In the example above notice how we use `source` to specify the input to use, in 
 
 And another example with `tokenize`:
 
+_Java-only: Old tokenize DSL with inline parameters_
+
 ```java
 from("direct:start")
     .split().tokenize("\r\n|\n", true, 2, "\n", true)
@@ -77,6 +83,8 @@ from("direct:start")
 ```
 
 You can use the _fluent expression_ builder to configure all the options:
+
+_Java-only: New fluent expression builder for tokenize_
 
 ```java
 // use fluent builder expression to create the languages

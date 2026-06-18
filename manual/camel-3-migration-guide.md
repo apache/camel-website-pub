@@ -231,6 +231,8 @@ Endpoints with `consumer.` prefix such as `consumer.delay=5000` are no longer su
 
 Calling a processor as an endpoint from a route such as:
 
+_Java-only: calling a processor as an endpoint (no longer supported)_
+
 ```java
 from("jms:cheese")
   .to("myProcessor");
@@ -238,12 +240,16 @@ from("jms:cheese")
 
 Is no longer supported. Instead either use the bean component to call the processor or use `process`:
 
+_Java-only: using the bean component to call a processor_
+
 ```java
 from("jms:cheese")
   .to("bean:myProcessor");
 ```
 
 Or
+
+_Java-only: using process to call a processor_
 
 ```java
 from("jms:cheese")

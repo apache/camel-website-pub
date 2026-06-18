@@ -49,6 +49,8 @@ Pay attention to Spring XML DSL. The type attribute is used to declare which err
 
 The following listing is an equivalent of the prior Java DSL listing:
 
+_XML-only:_
+
 ```xml
 <camelContext errorHandlerRef="myErrorHandler">
   <errorHandler id="myErrorHandler" type="DeadLetterChannel"
@@ -174,11 +176,40 @@ The option `useOriginalMessage` is used for routing the original input message i
 
 For instance, if you have this route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jms:queue:order:input")
    .to("bean:validateOrder")
    .to("bean:transformOrder")
    .to("bean:handleOrder");
+```
+
+```xml
+<route>
+  <from uri="jms:queue:order:input"/>
+  <to uri="bean:validateOrder"/>
+  <to uri="bean:transformOrder"/>
+  <to uri="bean:handleOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:queue:order:input
+      steps:
+        - to:
+            uri: bean:validateOrder
+        - to:
+            uri: bean:transformOrder
+        - to:
+            uri: bean:handleOrder
 ```
 
 The route listens for JMS messages and validates, transforms and handles it. During this the [Exchange](../../../manual/exchange.md) payload is transformed/modified in the various bean stages.
@@ -276,6 +307,8 @@ Before the exchange is sent to the dead letter queue, you can use `onPrepare` to
 
 For example, the following processor adds a header with the exception message:
 
+_Java-only: custom Processor to prepare the Exchange before sending to the dead letter queue_
+
 ```java
 public static class MyPrepareProcessor implements Processor {
     @Override
@@ -322,6 +355,8 @@ With the `onExceptionOccurred` you can call a custom processor right after an ex
 In other words, this happens right after the exception was thrown, where you may want to do some custom logging, or something else.
 
 For example, you may have a `Processor` that does some special logging:
+
+_Java-only: custom Processor for logging when an exception occurs_
 
 ```java
 public static class OnErrorLogger implements Processor {
@@ -438,6 +473,8 @@ When a message is redelivered, the Dead Letter Channel will append the following
 
 During routing messages, Camel will store an exchange property with the most recent endpoint in use (send to):
 
+_Java-only: accessing the last endpoint URI from the Exchange_
+
 ```java
 String lastEndpointUri = exchange.getProperty(Exchange.TO_ENDPOINT, String.class);
 ```
@@ -447,6 +484,8 @@ The `Exchange.TO_ENDPOINT` have the constant value `CamelToEndpoint`.
 This information is updated when Apache Camel sends a message to any endpoint.
 
 When, for example, processing the [Exchange](../../../manual/exchange.md) at a given [Endpoint](../../../manual/endpoint.md) and the message is to be moved into the dead letter queue, then Camel also decorates the Exchange with another property that contains that **last** endpoint:
+
+_Java-only: accessing the failure endpoint URI from the Exchange_
 
 ```java
 String failedEndpointUri = exchange.getProperty(Exchange.FAILURE_ENDPOINT, String.class);
@@ -458,10 +497,36 @@ This allows, for example, you to fetch this information in your dead letter queu
 
 This information is kept on the Exchange even if the message was successfully processed by a given endpoint, and then later fails, for example, in local [Bean](bean-eip.md) EIP processing instead. So beware that this is a hint that helps pinpoint errors to [Endpoints](../../../manual/endpoint.md), and not EIPs.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:queue:foo")
     .to("http://someserver/somepath")
     .bean("foo");
+```
+
+```xml
+<route>
+  <from uri="activemq:queue:foo"/>
+  <to uri="http://someserver/somepath"/>
+  <bean ref="foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:queue:foo
+      steps:
+        - to:
+            uri: http://someserver/somepath
+        - bean:
+            ref: foo
 ```
 
 Now suppose the route above, and a failure happens in the `foo` bean. Then the `Exchange.TO_ENDPOINT` and `Exchange.FAILURE_ENDPOINT` will still contain the value of `http://someserver/somepath`.
@@ -469,6 +534,8 @@ Now suppose the route above, and a failure happens in the `foo` bean. Then the `
 ### Which route failed?
 
 When a message is moved into the dead letter queue, then Camel will store the id of the route, where the message failed. This information can be obtained in Java via:
+
+_Java-only: accessing the failure route id from the Exchange_
 
 ```java
 String failedRouteId = exchange.getProperty(Exchange.FAILURE_ROUTE_ID, String.class);

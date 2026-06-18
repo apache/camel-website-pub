@@ -55,6 +55,8 @@ from("activemq:My.Queue")
 
 You can also enrich the message in Java DSL directly (using fluent builder) as an [Expression](../../../manual/expression.md). In the example below, the message is enriched by appending \` World!\` to the message body:
 
+_Java-only: fluent builder to append to the message body_
+
 ```java
 from("direct:start")
     .setBody(body().append(" World!"))
@@ -107,6 +109,8 @@ from("direct:start")
 
 In this example, we add our own [Processor](../../../manual/processor.md) using explicit Java to enrich the message:
 
+_Java-only: using an inline Processor to enrich the message_
+
 ```java
 from("direct:start")
     .process(new Processor() {
@@ -119,6 +123,8 @@ from("direct:start")
 ```
 
 In the Java code above we used an inlined `Processor` which is harder to do with XML or YAML DSL. A good practice is to use a class for your custom `Processor` which can then be referenced in the DSL:
+
+_Java-only: custom Processor class registered in the Registry_
 
 ```java
 @BindToRegistry("myProcessor")

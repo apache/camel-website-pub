@@ -132,6 +132,8 @@ This allows you to test various things like:
 
 Here’s a simple example of Mock endpoint in use. First, the endpoint is resolved on the context. Then we set an expectation, and then, after the test has run, we assert that our expectations have been met:
 
+_Java-only: MockEndpoint assertion API_
+
 ```java
 MockEndpoint resultEndpoint = context.getEndpoint("mock:foo", MockEndpoint.class);
 
@@ -151,6 +153,8 @@ Camel will by default wait 10 seconds when the `assertIsSatisfied()` is invoked.
 ### Using assertPeriod
 
 When the assertion is satisfied then Camel will stop waiting and continue from the `assertIsSatisfied` method. That means if a new message arrives at the mock endpoint, just a bit later. That arrival will not affect the outcome of the assertion. Suppose you do want to test that no new messages arrives after a period thereafter, then you can do that by setting the `setAssertPeriod` method, for example:
+
+_Java-only: programmatic mock expectations with assert period_
 
 ```java
 MockEndpoint resultEndpoint = context.getEndpoint("mock:foo", MockEndpoint.class);
@@ -180,6 +184,8 @@ You can see from the Javadoc of [MockEndpoint](https://www.javadoc.io/doc/org.ap
 
 Here’s another example:
 
+_Java-only: MockEndpoint assertion API_
+
 ```java
 resultEndpoint.expectedBodiesReceived("firstMessageBody", "secondMessageBody", "thirdMessageBody");
 ```
@@ -189,6 +195,8 @@ resultEndpoint.expectedBodiesReceived("firstMessageBody", "secondMessageBody", "
 In addition, you can use the [`message(int messageIndex)`](https://javadoc.io/doc/org.apache.camel/camel-mock/latest/org/apache/camel/component/mock/MockEndpoint.md) method to add assertions about a specific message that is received.
 
 For example, to add expectations of the headers or body of the first message (using zero-based indexing like `java.util.List`), you can use the following code:
+
+_Java-only: programmatic mock expectations on specific messages_
 
 ```java
 resultEndpoint.message(0).header("foo").isEqualTo("bar");
@@ -204,6 +212,8 @@ This section covers the built-in support in the mock component for commonly used
 
 You can use regular expressions as expectations, as follows:
 
+_Java-only: mock endpoint regex expectations_
+
 ```java
 mock.message(1).header("cheese").regex("value[2,3]");
 mock.message(2).header("cheese").regex("value[2,3]");
@@ -216,6 +226,8 @@ Here we use the _built-in_ `regex` function from the mock component, that makes 
 
 You can also use XPath as follows:
 
+_Java-only: mock endpoint XPath expectations_
+
 ```java
 String filter = "/person[@name='James']";
 ...
@@ -225,6 +237,8 @@ mock.message(2).header("cheese").xpath(filter).isFalse();
 ```
 
 You can also use xpath to check if it matches a given value such as:
+
+_Java-only: mock endpoint XPath value expectations_
 
 ```java
 String name = "/person/@name";
@@ -242,6 +256,8 @@ When you want to check that a given message body or header is as expected, and t
 
 For example to check whether a header matches a XPath you can do as follows:
 
+_Java-only: mock endpoint language builder expectations_
+
 ```java
 // setup the xpath once
 var xpath = expression().xpath("/person[@name='James']").source("header:cheese").end();
@@ -256,6 +272,8 @@ Notice how we can create the expectation using the `expression()` fluent builder
 
 If you only need to use the expectation once, you can inline this directly in the mock as follows:
 
+_Java-only: inline mock endpoint language builder expectation_
+
 ```java
 mock.message(1).predicate(expression().xpath("/person[@name='James']").source("header:cheese").end());
 ```
@@ -269,6 +287,8 @@ To use any of the Camel languages then do as shown previously with the XPath exa
 You can also use a custom `java.util.Function` as part of mock expectations. This allows you full power to use Java programming to compute the returned value.
 
 For example, you can write a custom function that takes an int as input and return the double value. And then use this in mock as follows:
+
+_Java-only: custom Function for mock expectations_
 
 ```java
 mock.message(0).header("num").expression(o -> {
@@ -587,6 +607,8 @@ We have introduced two options `retainFirst` and `retainLast` that can be used t
 
 For example, in the code below, we only want to retain a copy of the first five and last five Exchanges the mock receives.
 
+_Java-only: programmatic mock expectations with retain limits_
+
 ```java
   MockEndpoint mock = getMockEndpoint("mock:data");
   mock.setRetainFirst(5);
@@ -603,6 +625,8 @@ The `retainFirst` and `retainLast` options also have limitations on which expect
 
 The [Mock](#) endpoint stores the arrival time of the message as a property on the Exchange.
 
+_Java-only: Exchange property access API_
+
 ```java
 Date time = exchange.getProperty(Exchange.RECEIVED_TIMESTAMP, Date.class);
 ```
@@ -611,11 +635,15 @@ You can use this information to know when the message arrived at the mock. But i
 
 For example, to say that the first message should arrive between 0 and 2 seconds before the next you can do:
 
+_Java-only: mock endpoint arrival time expectations_
+
 ```java
 mock.message(0).arrives().noLaterThan(2).seconds().beforeNext();
 ```
 
 You can also define this as that second message (0 index based) should arrive no later than 0 and 2 seconds after the previous:
+
+_Java-only: mock endpoint arrival time expectations_
 
 ```java
 mock.message(1).arrives().noLaterThan(2).seconds().afterPrevious();
@@ -623,11 +651,15 @@ mock.message(1).arrives().noLaterThan(2).seconds().afterPrevious();
 
 You can also use between to set a lower bound. For example, suppose that it should be between 1 and 4 seconds:
 
+_Java-only: mock endpoint arrival time range expectations_
+
 ```java
 mock.message(1).arrives().between(1, 4).seconds().afterPrevious();
 ```
 
 You can also set the expectation on all messages, for example, to say that the gap between them should be at most 1 second:
+
+_Java-only: mock endpoint arrival time expectations for all messages_
 
 ```java
 mock.allMessages().arrives().noLaterThan(1).seconds().beforeNext();

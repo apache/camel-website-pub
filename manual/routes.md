@@ -151,6 +151,8 @@ You can create a route using the Java language by extending the [`RouteBuilder` 
 
 Here’s an example:
 
+_Java-only: anonymous RouteBuilder class_
+
 ```java
 RouteBuilder builder = new RouteBuilder() {
     public void configure() {
@@ -160,6 +162,8 @@ RouteBuilder builder = new RouteBuilder() {
 ```
 
 The code above is an anonymous class, and its more common to create your own class when using Java DSL for example we can create a class called `MyRoute` which then implements the route as follows:
+
+_Java-only: named RouteBuilder class_
 
 ```java
 import org.apache.camel.builder.RouteBuilder;

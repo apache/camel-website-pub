@@ -757,6 +757,8 @@ In Spring XML, the equivalent route would be written as follows:
 > **Note**
 > Notice how the namespace in XML can also be defined in the root tag such as `<camelContext>`.
 
+_XML-only:_
+
 ```xml
 <camelContext xmlns:ns1="urn:shop">
   <route>
@@ -840,6 +842,13 @@ This sample shows how you can split an Exchange, process each split message, agg
 
 The route below illustrates this and how the split supports a custom `AggregationStrategy` to build up the combined response message.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // this routes starts from the direct:start endpoint
 // the body is then split based on @ separator
@@ -857,6 +866,34 @@ from("direct:start")
     // response back to the original caller, so we let this bean build it for us,
     // this bean will receive the result of the aggregate strategy: MyOrderStrategy
     .to("bean:MyOrderService?method=buildCombinedResponse")
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <split aggregationStrategy="#class:com.foo.MyOrderStrategy">
+        <tokenize token="@"/>
+        <to uri="bean:MyOrderService?method=handleOrder"/>
+    </split>
+    <to uri="bean:MyOrderService?method=buildCombinedResponse"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - split:
+            aggregationStrategy: "#class:com.foo.MyOrderStrategy"
+            expression:
+              tokenize:
+                token: "@"
+            steps:
+              - to:
+                  uri: bean:MyOrderService?method=handleOrder
+        - to:
+            uri: bean:MyOrderService?method=buildCombinedResponse
 ```
 
 And the OrderService bean is as follows:

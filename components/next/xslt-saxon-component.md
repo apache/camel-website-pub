@@ -241,17 +241,73 @@ To make the parameters usable, you will need to declare them.
 -   Header
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .setHeader("myParam", constant("42"))
+    .to("xslt-saxon:MyTransform.xsl");
+```
+
 ```xml
-<setHeader name="myParam"><constant>42</constant></setHeader>
-<to uri="xslt-saxon:MyTransform.xsl"/>
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="myParam"><constant>42</constant></setHeader>
+  <to uri="xslt-saxon:MyTransform.xsl"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: myParam
+            constant: "42"
+        - to:
+            uri: xslt-saxon:MyTransform.xsl
 ```
 
 -   Variable
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .setVariable("myParam", constant("42"))
+    .to("xslt-saxon:MyTransform.xsl");
+```
+
 ```xml
-<setVariable name="myParam"><constant>42</constant></setVariable>
-<to uri="xslt-saxon:MyTransform.xsl"/>
+<route>
+  <from uri="direct:start"/>
+  <setVariable name="myParam"><constant>42</constant></setVariable>
+  <to uri="xslt-saxon:MyTransform.xsl"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setVariable:
+            name: myParam
+            constant: "42"
+        - to:
+            uri: xslt-saxon:MyTransform.xsl
 ```
 
 The parameter also needs to be declared in the top level of the XSLT for it to be available:
@@ -268,14 +324,38 @@ The parameter also needs to be declared in the top level of the XSLT for it to b
 
 To use the above examples in Spring XML, you would use something like the following code:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("activemq:My.Queue")
+    .to("xslt-saxon:org/apache/camel/spring/processor/example.xsl")
+    .to("activemq:Another.Queue");
+```
+
 ```xml
-  <camelContext xmlns="http://activemq.apache.org/camel/schema/spring">
-    <route>
-      <from uri="activemq:My.Queue"/>
-      <to uri="xslt-saxon:org/apache/camel/spring/processor/example.xsl"/>
-      <to uri="activemq:Another.Queue"/>
-    </route>
-  </camelContext>
+<camelContext xmlns="http://activemq.apache.org/camel/schema/spring">
+  <route>
+    <from uri="activemq:My.Queue"/>
+    <to uri="xslt-saxon:org/apache/camel/spring/processor/example.xsl"/>
+    <to uri="activemq:Another.Queue"/>
+  </route>
+</camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: xslt-saxon:org/apache/camel/spring/processor/example.xsl
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 ### Using `xsl:include`
@@ -326,6 +406,8 @@ context.addRoutes(new RouteBuilder() {
 ```
 
 With Spring XML:
+
+_XML-only: registering Saxon extension functions as Spring beans_
 
 ```xml
 <bean id="function1" class="org.apache.camel.component.xslt.extensions.MyExtensionFunction1"/>

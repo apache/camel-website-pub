@@ -205,13 +205,43 @@ echo()=${bodyAs(String)} ${bodyAs(String)}
 
 Which allows to use _echo()_ in the csimple language script such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:hello")
     .transform(csimple("Hello echo()"))
     .log("You said ${body}");
 ```
 
+```xml
+<route>
+  <from uri="direct:hello"/>
+  <transform>
+    <csimple>Hello echo()</csimple>
+  </transform>
+  <log message="You said ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:hello
+      steps:
+        - transform:
+            csimple: "Hello echo()"
+        - log:
+            message: "You said ${body}"
+```
+
 The _echo()_ alias will be replaced with its value resulting in a script as:
+
+_Java-only: expanded echo() alias_
 
 ```java
     .transform(csimple("Hello ${bodyAs(String)} ${bodyAs(String)}"))

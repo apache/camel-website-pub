@@ -449,6 +449,18 @@ camel.vault.ibm.serviceUrl = serviceUrl
 
 At this point, you’ll be able to reference a property in the following way:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{ibm:default:route}}");
+```
+
 ```xml
 <camelContext>
     <route>
@@ -458,9 +470,30 @@ At this point, you’ll be able to reference a property in the following way:
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{ibm:default:route}}"
+```
+
 Where route will be the name of the secret stored in the IBM Secrets Manager Vault instance, in the 'default' secret group.
 
 You could specify a default value in case the secret is not present on IBM Secrets Manager Vault instance:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{ibm:default:route:default}}");
+```
 
 ```xml
 <camelContext>
@@ -469,6 +502,15 @@ You could specify a default value in case the secret is not present on IBM Secre
         <to uri="{{ibm:default:route:default}}"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{ibm:default:route:default}}"
 ```
 
 In this case, if the secret doesn’t exist in the 'default' secret group, the property will fall back to "default" as value.
@@ -488,6 +530,18 @@ Also, you are able to get a particular field of the secret, if you have, for exa
 
 You’re able to do get single secret value in your route, in the 'default' secret group, like for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{ibm:default:database#username}}");
+```
+
 ```xml
 <camelContext>
     <route>
@@ -497,9 +551,30 @@ You’re able to do get single secret value in your route, in the 'default' secr
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{ibm:default:database#username}}"
+```
+
 Or re-use the property as part of an endpoint.
 
 You could specify a default value in case the particular field of secret is not present on IBM Secrets Manager Vault instance, in the 'secret' engine:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{ibm:default:database#username:admin}}");
+```
 
 ```xml
 <camelContext>
@@ -510,9 +585,30 @@ You could specify a default value in case the particular field of secret is not 
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{ibm:default:database#username:admin}}"
+```
+
 In this case, if the secret doesn’t exist or the secret exists (in the 'default' secret group) but the username field is not part of the secret, the property will fall back to "admin" as value.
 
 There is also the syntax to get a particular version of the secret for both the approaches, with field/default value specified or only with secret:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{ibm:default:route@2}}");
+```
 
 ```xml
 <camelContext>
@@ -523,7 +619,28 @@ There is also the syntax to get a particular version of the secret for both the 
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{ibm:default:route@2}}"
+```
+
 This approach will return the RAW route secret with version '2', in the 'default' secret group.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{ibm:default:route:default@2}}");
+```
 
 ```xml
 <camelContext>
@@ -534,7 +651,28 @@ This approach will return the RAW route secret with version '2', in the 'default
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{ibm:default:route:default@2}}"
+```
+
 This approach will return the route secret value with version '2' or default value in case the secret doesn’t exist or the version doesn’t exist (in the 'default' secret group).
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{ibm:default:database#username:admin@2}}");
+```
 
 ```xml
 <camelContext>
@@ -543,6 +681,15 @@ This approach will return the route secret value with version '2' or default val
         <log message="Username is {{ibm:default:database#username:admin@2}}"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{ibm:default:database#username:admin@2}}"
 ```
 
 This approach will return the username field of the database secret with version '2' or admin in case the secret doesn’t exist or the version doesn’t exist (in the 'default' secret group).

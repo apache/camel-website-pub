@@ -148,11 +148,33 @@ The DNS component supports 6 message header(s), which is/are listed below:
 
 ### IP lookup
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("dns:ip");
+```
+
 ```xml
 <route id="IPCheck">
     <from uri="direct:start"/>
     <to uri="dns:ip"/>
 </route>
+```
+
+```yaml
+- route:
+    id: IPCheck
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dns:ip
 ```
 
 This looks up a domain’s IP. For example, _www.example.com_ resolves to 192.0.32.10.
@@ -161,11 +183,33 @@ The IP address to lookup must be provided in the header with key `"CamelDnsDomai
 
 ### DNS lookup
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("dns:lookup");
+```
+
 ```xml
 <route id="IPCheck">
     <from uri="direct:start"/>
     <to uri="dns:lookup"/>
 </route>
+```
+
+```yaml
+- route:
+    id: IPCheck
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dns:lookup
 ```
 
 This returns a set of DNS records associated with a domain.  
@@ -175,11 +219,33 @@ The name to lookup must be provided in the header with key `"CamelDnsName"`.
 
 Dig is a Unix command-line utility to run DNS queries.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("dns:dig");
+```
+
 ```xml
 <route id="IPCheck">
     <from uri="direct:start"/>
     <to uri="dns:dig"/>
 </route>
+```
+
+```yaml
+- route:
+    id: IPCheck
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dns:dig
 ```
 
 The query must be provided in the header with key `"CamelDnsName"`.
@@ -192,16 +258,49 @@ If you have instances of the same component running in different regions, you ca
 
 For example, you may have an instance in NYC and an instance in SFO. You would configure a service CNAME service.example.com to point to nyc-service.example.com to bring NYC instance up and SFO instance down. When you change the CNAME service.example.com to point to sfo-service.example.com — nyc instance would stop its routes and sfo will bring its routes up. This allows you to switch regions without restarting actual components.
 
-```xml
- <bean id="dnsActivationPolicy" class="org.apache.camel.component.dns.policy.DnsActivationPolicy">
-     <property name="hostname" value="service.example.com" />
-     <property name="resolvesTo" value="nyc-service.example.com" />
-     <property name="ttl" value="60000" />
-     <property name="stopRoutesOnException" value="false" />
- </bean>
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
- <route id="routeId" autoStartup="false" routePolicyRef="dnsActivationPolicy">
- </route>
+```java
+DnsActivationPolicy policy = new DnsActivationPolicy();
+policy.setHostname("service.example.com");
+policy.setResolvesTo("nyc-service.example.com");
+policy.setTtl(60000);
+policy.setStopRoutesOnException(false);
+
+from("direct:start")
+    .routeId("routeId")
+    .autoStartup(false)
+    .routePolicy(policy)
+    .to("...");
+```
+
+```xml
+<bean id="dnsActivationPolicy" class="org.apache.camel.component.dns.policy.DnsActivationPolicy">
+    <property name="hostname" value="service.example.com" />
+    <property name="resolvesTo" value="nyc-service.example.com" />
+    <property name="ttl" value="60000" />
+    <property name="stopRoutesOnException" value="false" />
+</bean>
+
+<route id="routeId" autoStartup="false" routePolicyRef="dnsActivationPolicy">
+</route>
+```
+
+```yaml
+- route:
+    id: routeId
+    autoStartup: false
+    routePolicyRef: dnsActivationPolicy
+    from:
+      uri: direct:start
+    steps:
+      - to:
+          uri: "..."
 ```
 
 ## Spring Boot Auto-Configuration

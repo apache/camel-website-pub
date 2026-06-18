@@ -142,6 +142,8 @@ When using namespaces in XML DSL then it is different, as you set up the namespa
 
 In the XML example below we use Spring XML where the namespace is declared in the root tag `beans`, in the line with `xmlns:foo="http://example.com/person"`:
 
+_XML-only:_
+
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

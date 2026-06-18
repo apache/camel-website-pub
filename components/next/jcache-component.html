@@ -41,7 +41,10 @@ jcachePolicy.setKeyExpression(simple("${header.orderId}))
 from("direct:get-orders")
     .policy(jcachePolicy)
     .log("Getting order with id: ${header.orderId}")
-    .bean(OrderService.class,"findOrderById(${header.orderId})");</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_bypassexpression"><a class="anchor" href="#_bypassexpression"></a>BypassExpression</h3> <div class="paragraph"> <p>The <code>JCachePolicy</code> can be configured with an <code>Expression</code> that can per <code>Exchange</code> determine whether to look up the value from the cache or bypass. If the expression is evaluated to <code>false</code> then the route is executed as normal, and the returned value is inserted into the cache for future lookup.</p> </div> </div> <div class="sect2"> <h3 id="_camel_xml_dsl_examples"><a class="anchor" href="#_camel_xml_dsl_examples"></a>Camel XML DSL examples</h3> </div> <div class="sect2"> <h3 id="_use_jcachepolicy_in_an_xml_route"><a class="anchor" href="#_use_jcachepolicy_in_an_xml_route"></a>Use JCachePolicy in an XML route</h3> <div class="paragraph"> <p>In Camel XML DSL, we need a named reference to the JCachePolicy instance (registered in CamelContext or simply in Spring). We have to wrap the route between <code>&lt;policy&gt;&#8230;&#8203;&lt;/policy&gt;</code> tags after <code>&lt;from&gt;</code>.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+    .bean(OrderService.class,"findOrderById(${header.orderId})");</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_bypassexpression"><a class="anchor" href="#_bypassexpression"></a>BypassExpression</h3> <div class="paragraph"> <p>The <code>JCachePolicy</code> can be configured with an <code>Expression</code> that can per <code>Exchange</code> determine whether to look up the value from the cache or bypass. If the expression is evaluated to <code>false</code> then the route is executed as normal, and the returned value is inserted into the cache for future lookup.</p> </div> </div> <div class="sect2"> <h3 id="_camel_xml_dsl_examples"><a class="anchor" href="#_camel_xml_dsl_examples"></a>Camel XML DSL examples</h3> </div> <div class="sect2"> <h3 id="_use_jcachepolicy_in_an_xml_route"><a class="anchor" href="#_use_jcachepolicy_in_an_xml_route"></a>Use JCachePolicy in an XML route</h3> <div class="paragraph"> <p>In Camel XML DSL, we need a named reference to the JCachePolicy instance (registered in CamelContext or simply in Spring). We have to wrap the route between <code>&lt;policy&gt;&#8230;&#8203;&lt;/policy&gt;</code> tags after <code>&lt;from&gt;</code>.</p> </div> <div id="_tabs_1" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:get-order")
+    .policy("jCachePolicy")
+        .setBody().method("orderService", "findOrderById(${body})")
+    .end();</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;route&gt;
         &lt;from uri="direct:get-order"/&gt;
         &lt;policy ref="jCachePolicy" &gt;
@@ -50,7 +53,23 @@ from("direct:get-orders")
             &lt;/setBody&gt;
         &lt;/policy&gt;
     &lt;/route&gt;
-&lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>See this example when only a part of the route is wrapped:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:get-order
+      steps:
+        - policy:
+            ref: jCachePolicy
+            steps:
+              - setBody:
+                  method:
+                    ref: orderService
+                    method: "findOrderById(${body})"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>See this example when only a part of the route is wrapped:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:get-order")
+    .log("Start - This is always called. body:${body}")
+    .policy("jCachePolicy")
+        .log("Executing route, not found in cache. body:${body}")
+        .setBody().method("orderService", "findOrderById(${body})")
+    .end()
+    .log("End - This is always called. body:${body}");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;route&gt;
         &lt;from uri="direct:get-order"/&gt;
         &lt;log message="Start - This is always called. body:${body}"/&gt;
@@ -62,7 +81,23 @@ from("direct:get-orders")
         &lt;/policy&gt;
         &lt;log message="End - This is always called. body:${body}"/&gt;
     &lt;/route&gt;
-&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_define_cachepolicy_in_spring"><a class="anchor" href="#_define_cachepolicy_in_spring"></a>Define CachePolicy in Spring</h3> <div class="paragraph"> <p>It&#8217;s more convenient to create a JCachePolicy in Java, especially within a RouteBuilder using the Camel DSL expressions, but see this example to define it in a Spring XML:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="jCachePolicy" class="org.apache.camel.component.jcache.policy.JCachePolicy"&gt;
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:get-order
+      steps:
+        - log:
+            message: "Start - This is always called. body:${body}"
+        - policy:
+            ref: jCachePolicy
+            steps:
+              - log:
+                  message: "Executing route, not found in cache. body:${body}"
+              - setBody:
+                  method:
+                    ref: orderService
+                    method: "findOrderById(${body})"
+        - log:
+            message: "End - This is always called. body:${body}"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_define_cachepolicy_in_spring"><a class="anchor" href="#_define_cachepolicy_in_spring"></a>Define CachePolicy in Spring</h3> <div class="paragraph"> <p>It&#8217;s more convenient to create a JCachePolicy in Java, especially within a RouteBuilder using the Camel DSL expressions, but see this example to define it in a Spring XML:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="jCachePolicy" class="org.apache.camel.component.jcache.policy.JCachePolicy"&gt;
     &lt;property name="cacheName" value="spring"/&gt;
     &lt;property name="keyExpression"&gt;
         &lt;bean class="org.apache.camel.model.language.SimpleExpression"&gt;

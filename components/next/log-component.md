@@ -359,6 +359,8 @@ camelContext.setLogMask(true);
 
 And in XML:
 
+_XML-only: enabling log masking on \`CamelContext\`_
+
 ```xml
 <camelContext logMask="true">
 ```
@@ -424,6 +426,8 @@ You can have the Log component pick up your custom `ExchangeFormatter` in either
 
 **Explicitly instantiating the LogComponent in your Registry:**
 
+_XML-only: Spring bean declaration for custom `LogComponent` with \`ExchangeFormatter\`_
+
 ```xml
 <bean name="log" class="org.apache.camel.component.log.LogComponent">
    <property name="exchangeFormatter" ref="myCustomFormatter" />
@@ -434,6 +438,8 @@ You can have the Log component pick up your custom `ExchangeFormatter` in either
 
 Simply by registering a bean with the name `logFormatter`; the Log Component is intelligent enough to pick it up automatically.
 
+_XML-only: Spring bean registration for auto-detected \`ExchangeFormatter\`_
+
 ```xml
 <bean name="logFormatter" class="com.xyz.MyCustomExchangeFormatter" />
 ```
@@ -443,11 +449,15 @@ Simply by registering a bean with the name `logFormatter`; the Log Component is 
 
 When using a custom log formatter, you can specify parameters in the log uri, which gets configured on the custom log formatter. Though when you do that, you should define the "logFormatter" as prototype scoped, so it’s not shared if you have different parameters, e.g.:
 
+_XML-only: Spring bean with prototype scope for per-endpoint \`ExchangeFormatter\`_
+
 ```xml
 <bean name="logFormatter" class="com.xyz.MyCustomExchangeFormatter" scope="prototype"/>
 ```
 
 And then we can have Camel routes using the log uri with different options:
+
+_XML-only: example `<to>` elements showing different log endpoint URIs_
 
 ```xml
 <to uri="log:foo?param1=foo&amp;param2=100"/>

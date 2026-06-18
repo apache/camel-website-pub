@@ -73,6 +73,8 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 ### By its name
 
+_XML-only: Spring bean configuration with Hazelcast instance by name_
+
 ```xml
 <bean id="hazelcastLifecycle" class="com.hazelcast.core.LifecycleService"
       factory-bean="hazelcastInstance" factory-method="getLifecycleService"
@@ -106,6 +108,8 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 ```
 
 ### By instance
+
+_XML-only: Spring bean configuration with Hazelcast instance by reference_
 
 ```xml
 <bean id="hazelcastInstance" class="com.hazelcast.core.Hazelcast"

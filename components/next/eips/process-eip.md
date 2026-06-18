@@ -12,6 +12,8 @@ A route first starts with a consumer (think `from` in the DSL) that populates th
 
 The `Processor` interface is a central API in Camel. Its API is purposely designed to be both straightforward and flexible in the form of a single functional method:
 
+_Java-only: the Processor interface_
+
 ```java
 @FunctionalInterface
 public interface Processor {
@@ -32,6 +34,8 @@ The `Processor` is used heavily internally in Camel, such as the base for all im
 
 Once you have written a class which implements `Processor` like this:
 
+_Java-only: implementing a custom Processor class_
+
 ```java
 public class MyProcessor implements Processor {
   public void process(Exchange exchange) throws Exception {
@@ -41,6 +45,8 @@ public class MyProcessor implements Processor {
 ```
 
 Then in Camel you can call this processor:
+
+_Java-only: calling a Processor by instantiating it directly_
 
 ```java
 from("activemq:myQueue")
@@ -103,6 +109,8 @@ Or if you use Spring XML you can create the processor via `<bean>`:
 ### Why use `process` when you can use `to` instead?
 
 The process can be used in routes as an anonymous inner class such:
+
+_Java-only: using an anonymous inner class as a Processor_
 
 ```java
     from("activemq:myQueue").process(new Processor() {

@@ -26,6 +26,8 @@ The `<authorizationPolicy>` element may contain the following attributes:
 
 A Spring Security `AuthenticationManager` and `AuthorizationManager` are required to use this component. Here is an example of how to configure these objects in Spring XML using the Spring Security namespace:
 
+_XML-only: Spring Security authentication and authorization manager configuration_
+
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -50,6 +52,8 @@ A Spring Security `AuthenticationManager` and `AuthorizationManager` are require
 ```
 
 Now that the underlying security objects are set up, we can use them to configure an authorization policy and use that policy to control access to a route:
+
+_XML-only: Spring XML authorization policy with Camel route_
 
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -129,6 +133,22 @@ The default behavior of **camel-spring-security** is to look for a `Subject` in 
 
 If authentication or authorization fails in the `SpringSecurityAuthorizationPolicy`, a `CamelAuthorizationException` will be thrown. This can be handled using Camel’s standard exception handling methods, like the Exception Clause. The `CamelAuthorizationException` will have a reference to the ID of the policy which threw the exception, so you can handle errors based on the policy as well as the type of exception:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+onException(AccessDeniedException.class)
+    .choice()
+        .when(simple("${exception.policyId} == 'user'"))
+            .transform(constant("You do not have ROLE_USER access!"))
+        .when(simple("${exception.policyId} == 'admin'"))
+            .transform(constant("You do not have ROLE_ADMIN access!"));
+```
+
 ```xml
 <onException>
   <exception>org.springframework.security.authentication.AccessDeniedException</exception>
@@ -147,6 +167,23 @@ If authentication or authorization fails in the `SpringSecurityAuthorizationPoli
     </when>
   </choice>
 </onException>
+```
+
+```yaml
+- onException:
+    exception:
+      - org.springframework.security.authentication.AccessDeniedException
+    steps:
+      - choice:
+          when:
+            - simple: "${exception.policyId} == 'user'"
+              steps:
+                - transform:
+                    constant: "You do not have ROLE_USER access!"
+            - simple: "${exception.policyId} == 'admin'"
+              steps:
+                - transform:
+                    constant: "You do not have ROLE_ADMIN access!"
 ```
 
 ## Spring Boot Auto-Configuration

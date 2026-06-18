@@ -259,6 +259,24 @@ mypass = tiger
 
 This can be used in Camel with for example the Postrgres Sink Kamelet:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:rome")
+    .setBody(constant("{ \"username\":\"oscerd\", \"city\":\"Rome\"}"))
+    .to("kamelet:postgresql-sink?serverName={{secret:mydb/myhost}}"
+        + "&serverPort={{secret:mydb/myport}}"
+        + "&username={{secret:mydb/myuser}}"
+        + "&password={{secret:mydb/mypass}}"
+        + "&databaseName=cities"
+        + "&query=INSERT INTO accounts (username,city) VALUES (:#username,:#city)");
+```
+
 ```xml
 <camelContext>
   <route>
@@ -276,6 +294,24 @@ This can be used in Camel with for example the Postrgres Sink Kamelet:
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:rome
+      steps:
+        - setBody:
+            constant: '{ "username":"oscerd", "city":"Rome"}'
+        - to:
+            uri: kamelet:postgresql-sink
+            parameters:
+              serverName: "{{secret:mydb/myhost}}"
+              serverPort: "{{secret:mydb/myport}}"
+              username: "{{secret:mydb/myuser}}"
+              password: "{{secret:mydb/mypass}}"
+              databaseName: cities
+              query: "INSERT INTO accounts (username,city) VALUES (:#username,:#city)"
+```
+
 The postgres-sink Kamelet can also be configured in `application.properties` which reduces the configuration in the route above:
 
 ```properties
@@ -286,6 +322,20 @@ camel.component.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
 ```
 
 Which reduces the route to:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:rome")
+    .setBody(constant("{ \"username\":\"oscerd\", \"city\":\"Rome\"}"))
+    .to("kamelet:postgresql-sink?databaseName=cities"
+        + "&query=INSERT INTO accounts (username,city) VALUES (:#username,:#city)");
+```
 
 ```xml
 <camelContext>
@@ -298,6 +348,20 @@ Which reduces the route to:
              &amp;query=INSERT INTO accounts (username,city) VALUES (:#username,:#city)"/>
   </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:rome
+      steps:
+        - setBody:
+            constant: '{ "username":"oscerd", "city":"Rome"}'
+        - to:
+            uri: kamelet:postgresql-sink
+            parameters:
+              databaseName: cities
+              query: "INSERT INTO accounts (username,city) VALUES (:#username,:#city)"
 ```
 
 ## Automatic Camel context reloading on Secret Refresh

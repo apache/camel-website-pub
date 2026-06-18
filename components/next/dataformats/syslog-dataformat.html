@@ -3,7 +3,9 @@
     &lt;artifactId&gt;camel-syslog&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_rfc3164_syslog_protocol"><a class="anchor" href="#_rfc3164_syslog_protocol"></a>RFC3164 Syslog protocol</h2> <div class="sectionbody"> <div class="paragraph"> <p>Syslog uses the user datagram protocol (UDP) as its underlying transport layer mechanism. The UDP port that has been assigned to syslog is 514.</p> </div> <div class="paragraph"> <p>To expose a Syslog listener service, we reuse the existing <a href="../mina-component.html" class="xref page">Mina Component</a> or <a href="../netty-component.html" class="xref page">Netty Component</a> where we just use the <code>Rfc3164SyslogDataFormat</code> to marshal and unmarshal messages. Notice that from <strong>Camel 2.14</strong> onwards the syslog dataformat is renamed to <code>SyslogDataFormat</code>.</p> </div> </div> </div> <div class="sect1"> <h2 id="_options"><a class="anchor" href="#_options"></a>Options</h2> <div class="sectionbody"> <div class="paragraph"> <p>The Syslog dataformat has no options.</p> </div> </div> </div> <div class="sect1"> <h2 id="_rfc5424_syslog_protocol"><a class="anchor" href="#_rfc5424_syslog_protocol"></a>RFC5424 Syslog protocol</h2> <div class="sectionbody"> <div class="paragraph"> <p><strong>Since Camel 2.14</strong></p> </div> <div class="paragraph"> <p>To expose a Syslog listener service, we reuse the existing <a href="../mina-component.html" class="xref page">Mina Component</a> or <a href="../netty-component.html" class="xref page">Netty Component</a> where we just use the <code>SyslogDataFormat</code> to marshal and unmarshal messages</p> </div> <div class="sect2"> <h3 id="_exposing_a_syslog_listener"><a class="anchor" href="#_exposing_a_syslog_listener"></a>Exposing a Syslog listener</h3> <div class="paragraph"> <p>In our Spring XML file, we configure an endpoint to listen for udp messages on port 10514, note that in netty we disable the defaultCodec, this <br> will allow a fallback to a NettyTypeConverter and delivers the message as an InputStream:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring"&gt;
+&lt;/dependency&gt;</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_rfc3164_syslog_protocol"><a class="anchor" href="#_rfc3164_syslog_protocol"></a>RFC3164 Syslog protocol</h2> <div class="sectionbody"> <div class="paragraph"> <p>Syslog uses the user datagram protocol (UDP) as its underlying transport layer mechanism. The UDP port that has been assigned to syslog is 514.</p> </div> <div class="paragraph"> <p>To expose a Syslog listener service, we reuse the existing <a href="../mina-component.html" class="xref page">Mina Component</a> or <a href="../netty-component.html" class="xref page">Netty Component</a> where we just use the <code>Rfc3164SyslogDataFormat</code> to marshal and unmarshal messages. Notice that from <strong>Camel 2.14</strong> onwards the syslog dataformat is renamed to <code>SyslogDataFormat</code>.</p> </div> </div> </div> <div class="sect1"> <h2 id="_options"><a class="anchor" href="#_options"></a>Options</h2> <div class="sectionbody"> <div class="paragraph"> <p>The Syslog dataformat has no options.</p> </div> </div> </div> <div class="sect1"> <h2 id="_rfc5424_syslog_protocol"><a class="anchor" href="#_rfc5424_syslog_protocol"></a>RFC5424 Syslog protocol</h2> <div class="sectionbody"> <div class="paragraph"> <p><strong>Since Camel 2.14</strong></p> </div> <div class="paragraph"> <p>To expose a Syslog listener service, we reuse the existing <a href="../mina-component.html" class="xref page">Mina Component</a> or <a href="../netty-component.html" class="xref page">Netty Component</a> where we just use the <code>SyslogDataFormat</code> to marshal and unmarshal messages</p> </div> <div class="sect2"> <h3 id="_exposing_a_syslog_listener"><a class="anchor" href="#_exposing_a_syslog_listener"></a>Exposing a Syslog listener</h3> <div class="paragraph"> <p>In our Spring XML file, we configure an endpoint to listen for udp messages on port 10514, note that in netty we disable the defaultCodec, this <br> will allow a fallback to a NettyTypeConverter and delivers the message as an InputStream:</p> </div> <div id="_tabs_1" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:udp://localhost:10514?sync=false&amp;allowDefaultCodec=false")
+    .unmarshal(new SyslogDataFormat())
+    .to("mock:stop1");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring"&gt;
 
     &lt;dataFormats&gt;
           &lt;syslog id="mySyslog"/&gt;
@@ -15,7 +17,19 @@
           &lt;to uri="mock:stop1"/&gt;
     &lt;/route&gt;
 
-&lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>The same route using <a href="../mina-component.html" class="xref page">Mina Component</a></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring"&gt;
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: netty:udp://localhost:10514
+      parameters:
+        sync: false
+        allowDefaultCodec: false
+      steps:
+        - unmarshal:
+            syslog: {}
+        - to:
+            uri: mock:stop1</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The same route using <a href="../mina-component.html" class="xref page">Mina Component</a></p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("mina:udp://localhost:10514")
+    .unmarshal(new SyslogDataFormat())
+    .to("mock:stop1");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring"&gt;
 
     &lt;dataFormats&gt;
           &lt;syslog id="mySyslog"/&gt;
@@ -27,7 +41,16 @@
           &lt;to uri="mock:stop1"/&gt;
     &lt;/route&gt;
 
-&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_sending_syslog_messages_to_a_remote_destination"><a class="anchor" href="#_sending_syslog_messages_to_a_remote_destination"></a>Sending syslog messages to a remote destination</h3> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring"&gt;
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: mina:udp://localhost:10514
+      steps:
+        - unmarshal:
+            syslog: {}
+        - to:
+            uri: mock:stop1</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_sending_syslog_messages_to_a_remote_destination"><a class="anchor" href="#_sending_syslog_messages_to_a_remote_destination"></a>Sending syslog messages to a remote destination</h3> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:syslogMessages")
+    .marshal(new SyslogDataFormat())
+    .to("mina:udp://remotehost:10514");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring"&gt;
 
     &lt;dataFormats&gt;
         &lt;syslog id="mySyslog"/&gt;
@@ -39,7 +62,14 @@
         &lt;to uri="mina:udp://remotehost:10514"/&gt;
     &lt;/route&gt;
 
-&lt;/camelContext&gt;</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using syslog with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:syslogMessages
+      steps:
+        - marshal:
+            syslog: {}
+        - to:
+            uri: mina:udp://remotehost:10514</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using syslog with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-syslog-starter&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

@@ -349,11 +349,34 @@ assertEquals("Bye World", response);
 
 Spring DSL can also be used for [MINA](#). In the sample below, we expose a TCP server on port 5555:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("mina:tcp://localhost:5555?textline=true")
+    .to("bean:myTCPOrderHandler");
+```
+
 ```xml
-   <route>
-     <from uri="mina:tcp://localhost:5555?textline=true"/>
-     <to uri="bean:myTCPOrderHandler"/>
-  </route>
+<route>
+  <from uri="mina:tcp://localhost:5555?textline=true"/>
+  <to uri="bean:myTCPOrderHandler"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina:tcp://localhost:5555
+      parameters:
+        textline: true
+      steps:
+        - to:
+            uri: bean:myTCPOrderHandler
 ```
 
 In the route above, we expose a TCP server on port 5555 using the textline codec. We let the Spring bean with ID, `myTCPOrderHandler`, handle the request and return a reply. For instance, the handler bean could be implemented as follows:

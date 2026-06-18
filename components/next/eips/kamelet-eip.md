@@ -13,6 +13,8 @@ In special situations like these, then you **must** use this Kamelet EIP instead
 
 Given the following Kamelet (as a route template):
 
+_Java-only: defining a route template (Kamelet) with an aggregation strategy_
+
 ```java
 routeTemplate("my-aggregate")
         .templateParameter("count")

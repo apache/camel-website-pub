@@ -8,6 +8,8 @@ The `Processor` is a central API both internally and externally with Camel. The 
 
 Once you have written a class which implements processor like this:
 
+_Java-only: implementing the Processor interface_
+
 ```java
 public class MyProcessor implements Processor {
 
@@ -93,6 +95,8 @@ from("activemq:myQueue").process(new MyProcessor());
 ## Why use process when you can use to instead?
 
 The process can be used in routes as an anonymous inner class such:
+
+_Java-only: using an anonymous inner class as a Processor_
 
 ```java
     from("activemq:myQueue").process(new Processor() {

@@ -23,6 +23,8 @@ Google Cloud Speech To Text component authentication is targeted for use with th
 
 When you have the **service account key**, you can provide authentication credentials to your application code. Google security credentials can be set through the component endpoint:
 
+_Java-only: constructing the endpoint URI programmatically_
+
 ```java
 String endpoint = "google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json";
 ```

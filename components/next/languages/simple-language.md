@@ -604,6 +604,13 @@ Then `${jq(.id)}` will return `123`.
 
 You can also use this for basic data mapping such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:map")
         .transform().simple("""
@@ -615,9 +622,46 @@ from("direct:map")
         .to("log:data");
 ```
 
+```xml
+<route>
+  <from uri="direct:map"/>
+  <transform>
+    <simple>{
+              "roll": ${jq(.id)},
+              "country": "${jq(.country // constant(sweden))}",
+              "fullname": "${jq(.name)}"
+            }</simple>
+  </transform>
+  <to uri="log:data"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:map
+      steps:
+        - transform:
+            simple: |-
+              {
+                "roll": ${jq(.id)},
+                "country": "${jq(.country // constant(sweden))}",
+                "fullname": "${jq(.name)}"
+              }
+        - to:
+            uri: log:data
+```
+
 The `jsonpath` function works similar to `jq` but uses JSONPath. When using `${jsonpath($.id)}` will also return `123`.
 
 And the data mapping can be done as follows with JSonPath instead of JQ:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:map")
@@ -630,9 +674,46 @@ from("direct:map")
         .to("log:data");
 ```
 
+```xml
+<route>
+  <from uri="direct:map"/>
+  <transform>
+    <simple>{
+              "roll": ${jsonpath($.id)},
+              "years": ${jsonpath($.age)},
+              "fullname": "${jsonpath($.name)}"
+            }</simple>
+  </transform>
+  <to uri="log:data"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:map
+      steps:
+        - transform:
+            simple: |-
+              {
+                "roll": ${jsonpath($.id)},
+                "years": ${jsonpath($.age)},
+                "fullname": "${jsonpath($.name)}"
+              }
+        - to:
+            uri: log:data
+```
+
 The `simpleJsonpath` function is using Camel’s built in JSON library from `camel-util-json` that is a basic JSON parser. The syntax for the path is similar to Camel’s bean OGNL syntax to use a dot notation to walk down a nested structure.
 
 Because the input JSON is not nested then the mapping example is just:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:map")
@@ -643,6 +724,36 @@ from("direct:map")
               "fullname": "${simpleJsonpath(name)}"
             }""")
         .to("log:data");
+```
+
+```xml
+<route>
+  <from uri="direct:map"/>
+  <transform>
+    <simple>{
+              "roll": ${simpleJsonpath(id)},
+              "years": ${simpleJsonpath(age)},
+              "fullname": "${simpleJsonpath(name)}"
+            }</simple>
+  </transform>
+  <to uri="log:data"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:map
+      steps:
+        - transform:
+            simple: |-
+              {
+                "roll": ${simpleJsonpath(id)},
+                "years": ${simpleJsonpath(age)},
+                "fullname": "${simpleJsonpath(name)}"
+              }
+        - to:
+            uri: log:data
 ```
 
 However, if there are nested JSON such as:
@@ -740,6 +851,13 @@ Then `${xpath(/order/@id)}` will return `123`.
 
 And the data mapping can be done with XPath as follows:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:map")
     .transform().simple("""
@@ -749,6 +867,36 @@ from("direct:map")
           "fullname": "${xpath(/order/first)} ${xpath(/order/last)}"
         }""")
     .to("log:data");
+```
+
+```xml
+<route>
+  <from uri="direct:map"/>
+  <transform>
+    <simple>{
+          "id": ${xpath(/order/@id)},
+          "item": "${xpath(/order/item)}",
+          "fullname": "${xpath(/order/first)} ${xpath(/order/last)}"
+        }</simple>
+  </transform>
+  <to uri="log:data"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:map
+      steps:
+        - transform:
+            simple: |-
+              {
+                "id": ${xpath(/order/@id)},
+                "item": "${xpath(/order/item)}",
+                "fullname": "${xpath(/order/first)} ${xpath(/order/last)}"
+              }
+        - to:
+            uri: log:data
 ```
 
 The `pretty` function is used for pretty printing JSON or XML data as a String value. For example given the following JSON payload (in a single line): `{"id": 123, "age": 42, "name": "scott"}` then `${pretty}` will output this nicely formatted:
@@ -1150,6 +1298,8 @@ simple("${header.number} range '100..199'")
 
 As the XML DSL does not have all the power as the Java DSL with all its various builder methods, you have to resort to using some other languages for testing with simple operators. Now you can do this with the simple language. In the sample below, we want to test it if the header is a widget order:
 
+_XML-only:_
+
 ```xml
 <from uri="seda:orders">
    <filter>
@@ -1520,20 +1670,14 @@ simple("${body.address.zip} > 1000")
 
 ## EIP Examples
 
-In the XML DSL sample below, we filter based on a header value:
+Below we filter based on a header value:
 
-```xml
-<from uri="seda:orders">
-   <filter>
-       <simple>${header.foo}</simple>
-       <to uri="mock:fooOrders"/>
-   </filter>
-</from>
-```
-
-The Simple language can be used for the predicate test above in the Message Filter pattern, where we test if the in message has a `foo` header (a header with the key `foo` exists). If the expression evaluates to `**true**`, then the message is routed to the `mock:fooOrders` endpoint, otherwise the message is dropped.
-
-The same example in Java DSL:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("seda:orders")
@@ -1541,7 +1685,38 @@ from("seda:orders")
         .to("seda:fooOrders");
 ```
 
+```xml
+<route>
+  <from uri="seda:orders"/>
+  <filter>
+    <simple>${header.foo}</simple>
+    <to uri="seda:fooOrders"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:orders
+      steps:
+        - filter:
+            simple: "${header.foo}"
+            steps:
+              - to:
+                  uri: seda:fooOrders
+```
+
+The Simple language can be used for the predicate test above in the Message Filter pattern, where we test if the in message has a `foo` header (a header with the key `foo` exists). If the expression evaluates to `**true**`, then the message is routed to the `seda:fooOrders` endpoint, otherwise the message is dropped.
+
 You can also use the simple language for simple text concatenations such as:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:hello")
@@ -1549,9 +1724,37 @@ from("direct:hello")
     .to("mock:reply");
 ```
 
+```xml
+<route>
+  <from uri="direct:hello"/>
+  <transform>
+    <simple>Hello ${header.user} how are you?</simple>
+  </transform>
+  <to uri="mock:reply"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:hello
+      steps:
+        - transform:
+            simple: "Hello ${header.user} how are you?"
+        - to:
+            uri: mock:reply
+```
+
 Notice that we must use `${ }` placeholders in the expression now to allow Camel to parse it correctly.
 
 And this sample uses the date command to output current date.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:hello")
@@ -1559,7 +1762,35 @@ from("direct:hello")
     .to("mock:reply");
 ```
 
+```xml
+<route>
+  <from uri="direct:hello"/>
+  <transform>
+    <simple>The today is ${date:now:yyyyMMdd} and it is a great day.</simple>
+  </transform>
+  <to uri="mock:reply"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:hello
+      steps:
+        - transform:
+            simple: "The today is ${date:now:yyyyMMdd} and it is a great day."
+        - to:
+            uri: mock:reply
+```
+
 And in the sample below, we invoke the bean language to invoke a method on a bean to be included in the returned string:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:order")
@@ -1567,9 +1798,37 @@ from("direct:order")
     .to("mock:reply");
 ```
 
+```xml
+<route>
+  <from uri="direct:order"/>
+  <transform>
+    <simple>OrderId: ${bean:orderIdGenerator}</simple>
+  </transform>
+  <to uri="mock:reply"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - transform:
+            simple: "OrderId: ${bean:orderIdGenerator}"
+        - to:
+            uri: mock:reply
+```
+
 Where `orderIdGenerator` is the id of the bean registered in the Registry. If using Spring, then it is the Spring bean id.
 
 If we want to declare which method to invoke on the order id generator bean we must prepend `.method name` such as below where we invoke the `generateId` method.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:order")
@@ -1577,12 +1836,61 @@ from("direct:order")
     .to("mock:reply");
 ```
 
+```xml
+<route>
+  <from uri="direct:order"/>
+  <transform>
+    <simple>OrderId: ${bean:orderIdGenerator.generateId}</simple>
+  </transform>
+  <to uri="mock:reply"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - transform:
+            simple: "OrderId: ${bean:orderIdGenerator.generateId}"
+        - to:
+            uri: mock:reply
+```
+
 We can use the `?method=methodname` option that we are familiar with the [Bean](../../4.18.x/bean-component.md) component itself:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:order")
     .transform().simple("OrderId: ${bean:orderIdGenerator?method=generateId}")
     .to("mock:reply");
+```
+
+```xml
+<route>
+  <from uri="direct:order"/>
+  <transform>
+    <simple>OrderId: ${bean:orderIdGenerator?method=generateId}</simple>
+  </transform>
+  <to uri="mock:reply"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - transform:
+            simple: "OrderId: ${bean:orderIdGenerator?method=generateId}"
+        - to:
+            uri: mock:reply
 ```
 
 You can also convert the body to a given type, for example, to ensure that it is a String you can do:
@@ -1643,10 +1951,38 @@ You can use the `replace` function to more easily replace all single or double q
 
 For example, to replace all double quotes with single quotes:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:order")
   .transform().simple("${replace(&quot; , &apos;)}")
   .to("mock:reply");
+```
+
+```xml
+<route>
+  <from uri="direct:order"/>
+  <transform>
+    <simple>${replace(&amp;quot; , &amp;apos;)}</simple>
+  </transform>
+  <to uri="mock:reply"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - transform:
+            simple: "${replace(&quot; , &apos;)}"
+        - to:
+            uri: mock:reply
 ```
 
 And to replace all single quotes with double quotes:
@@ -1670,6 +2006,8 @@ Or to remove all double quotes:
 You can now provide a result type to the [Simple](#) expression, which means the result of the evaluation will be converted to the desired type. This is most usable to define types such as booleans, integers, etc.
 
 For example, to set a header as a boolean type, you can do:
+
+_Java-only: setting result type on a simple expression_
 
 ```java
 .setHeader("cool", simple("true", Boolean.class))
@@ -1708,6 +2046,8 @@ The trim attribute of the expression can be used to control whether the leading 
 
 You can externalize the script and have Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`. This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
 
+_Java-only: loading a simple script from an external resource_
+
 ```java
 .setHeader("myHeader").simple("resource:classpath:mysimple.txt")
 ```
@@ -1716,38 +2056,20 @@ You can externalize the script and have Camel load it from a resource such as `"
 
 From **Camel 4.18** onwards then the Simple language can _pretty format_ the output.
 
-In Java DSL you turn this on via the `boolean` parameter that is set as `true` below:
+You turn this on via the `pretty` option set to `true`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:xml")
-    .setBody().simple("<person><name>Jack</name></person>", true)
-    .to("mock:result");
-
 from("direct:json")
     .setBody().simple("{ \"name\": \"Jack\", \"age\": 44 }", true)
     .to("mock:result");
-
-from("direct:text")
-    .setBody().simple("Hello ${body}", true)
-    .to("mock:result");
 ```
-
-In YAML DSL you specific `pretty: true` as follows:
-
-```yaml
-route:
-  from:
-    uri: direct:xml
-    steps:
-      - setBody:
-          simple:
-            expression: "<person><name>Jack</name></person>"
-            pretty: true
-      - to:
-          uri: mock:result
-```
-
-And in XML DSL you use the pretty attribute to true as show below:
 
 ```xml
 <route>
@@ -1759,6 +2081,33 @@ And in XML DSL you use the pretty attribute to true as show below:
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:json
+      steps:
+        - setBody:
+            simple:
+              expression: "{ \"name\": \"Jack\", \"age\": 44 }"
+              pretty: true
+        - to:
+            uri: mock:result
+```
+
+This works with XML, JSON and text content:
+
+_Java-only: pretty formatting with different content types_
+
+```java
+from("direct:xml")
+    .setBody().simple("<person><name>Jack</name></person>", true)
+    .to("mock:result");
+
+from("direct:text")
+    .setBody().simple("Hello ${body}", true)
+    .to("mock:result");
+```
+
 ## Adding custom functions to Simple language
 
 You can add custom functions to the Simple language by adding to the `org.apache.camel.spi.SimpleFunctionRegistry`.
@@ -1766,6 +2115,8 @@ You can add custom functions to the Simple language by adding to the `org.apache
 A custom function should either be an `Expression` or a `org.apache.camel.spi.SimpleFunction` implementation.
 
 You may want to use `Expression` when you build custom functions from the built-in functions in Camel. This can be done programmatically such as:
+
+_Java-only: registering a custom function with SimpleFunctionRegistry_
 
 ```java
 SimpleFunctionRegistry reg = PluginHelper.getSimpleFunctionRegistry(getCamelContext());
@@ -1782,15 +2133,45 @@ Here we add a custom function named `foo` which is implemented as a `org.apache.
 
 The foo function can now be used in simple such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
         .setBody(simple("Hello ${foo}"))
         .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <simple>Hello ${foo}</simple>
+  </setBody>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            simple: "Hello ${foo}"
+        - to:
+            uri: mock:result
+```
+
 Notice how the foo function is used just like it was a built-in function using `${foo}` syntax.
 
 Since a custom function is just an `Expression` then it’s possible to build custom functions from all the Camel languages such as Groovy, JSonPath and even Simple as well.
+
+_Java-only: building a custom function from Simple expressions_
 
 ```java
 var bar = context.resolveLanguage("simple").createExpression("${trim()} ~> ${normalizeWhitespace()} ~> ${capitalize()} ~> ${quote()}");
@@ -1803,6 +2184,13 @@ Custom functions will by default use the message body as the payload. But they a
 
 For example the foo function uses variable with name `msg` as the input:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
         .setVariable("msg", constant("Moon"))
@@ -1810,7 +2198,41 @@ from("direct:start")
         .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setVariable name="msg">
+    <constant>Moon</constant>
+  </setVariable>
+  <setBody>
+    <simple>Bye ${foo(${variable.msg})}</simple>
+  </setBody>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setVariable:
+            name: msg
+            constant: "Moon"
+        - setBody:
+            simple: "Bye ${foo(${variable.msg})}"
+        - to:
+            uri: mock:result
+```
+
 And instead of nesting the variable inside the foo function, we can also use the `~>` chain operator:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -1819,7 +2241,36 @@ from("direct:start")
         .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setVariable name="msg">
+    <constant>Moon</constant>
+  </setVariable>
+  <setBody>
+    <simple>Bye ${variable.msg} ~> ${foo}</simple>
+  </setBody>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setVariable:
+            name: msg
+            constant: "Moon"
+        - setBody:
+            simple: "Bye ${variable.msg} ~> ${foo}"
+        - to:
+            uri: mock:result
+```
+
 You can also build custom functions as a Java class as below:
+
+_Java-only: implementing SimpleFunction interface_
 
 ```java
 public class FooSimpleFunction implements SimpleFunction {
@@ -1839,6 +2290,8 @@ public class FooSimpleFunction implements SimpleFunction {
 This gives you the full power to implement the function logic in standard Java.
 
 This function can be added programmatically:
+
+_Java-only: adding a SimpleFunction to the registry_
 
 ```java
 SimpleFunctionRegistry reg = PluginHelper.getSimpleFunctionRegistry(getCamelContext());

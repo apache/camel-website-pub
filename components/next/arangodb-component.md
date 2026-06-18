@@ -19,9 +19,7 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 ## URI format
 
-```java
-arangodb:database[?options]
-```
+arangodb:database\[?options\]
 
 ## Configuring Options
 

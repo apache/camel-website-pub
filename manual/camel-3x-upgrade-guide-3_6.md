@@ -170,11 +170,15 @@ To configure the component to use a pre-configured cache, it is no longer requir
 
 For example, the following code:
 
+_Java-only: Caffeine cache endpoint before migration_
+
 ```java
 .to("caffeine-cache://cache?cache=#myCache&action=PUT&key=1")
 ```
 
 Should be replaced by:
+
+_Java-only: Caffeine cache endpoint after migration_
 
 ```java
 .to("caffeine-cache://myCache?action=PUT&key=1")

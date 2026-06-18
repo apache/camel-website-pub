@@ -10,6 +10,8 @@ The class `org.apache.camel.test.junit5.CamelTestSupport` provides a base JUnit 
 
 As shown below is a basic junit test which uses `camel-test-junit5`. The `createRouteBuilder` method is used for build the routes to be tested. Then the methods with `@Test` annotations are JUnit test methods which will be executed. The base class `CamelTestSupport` has a number of helper methods to configure testing, see more at the Javadoc of this class.
 
+_Java-only: CamelTestSupport is a Java test framework class._
+
 ```java
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.builder.RouteBuilder;
@@ -113,6 +115,8 @@ Users willing to future-proof their code can leverage the two configuration meth
 
 Consider, for instance, a test enabling JMX. Previously, that test would be written like this:
 
+_Java-only: overriding CamelTestSupport methods is Java-specific._
+
 ```java
 public class MyTestClass extends CamelTestSupport {
     // Other code here ...
@@ -127,6 +131,8 @@ public class MyTestClass extends CamelTestSupport {
 ```
 
 This test can be migrated to the new API like this:
+
+_Java-only: CamelTestSupport configuration API is Java-specific._
 
 ```java
 public class MyTestClass extends CamelTestSupport {

@@ -74,13 +74,25 @@ String response = template.requestBodyAndHeader(
     AUGMENTED_DATA,
     context,
     String.class
-);</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_controlling_response_parameters"><a class="anchor" href="#_controlling_response_parameters"></a>Controlling Response Parameters</h3> <div class="sect3"> <h4 id="_via_endpoint_configuration"><a class="anchor" href="#_via_endpoint_configuration"></a>Via Endpoint Configuration</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
-    .to("spring-ai-chat:test?chatModel=#chatModel&amp;temperature=0.8&amp;maxTokens=500");</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_adding_system_messages"><a class="anchor" href="#_adding_system_messages"></a>Adding System Messages</h3> <div class="paragraph"> <p>System messages provide instructions or context to the LLM. You can configure them via endpoint parameters for default behavior:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
+);</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_controlling_response_parameters"><a class="anchor" href="#_controlling_response_parameters"></a>Controlling Response Parameters</h3> <div class="sect3"> <h4 id="_via_endpoint_configuration"><a class="anchor" href="#_via_endpoint_configuration"></a>Via Endpoint Configuration</h4> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
+    .to("spring-ai-chat:test?chatModel=#chatModel&amp;temperature=0.8&amp;maxTokens=500");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;to uri="spring-ai-chat:test?chatModel=#chatModel&amp;amp;temperature=0.8&amp;amp;maxTokens=500"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+              temperature: 0.8
+              maxTokens: 500</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_adding_system_messages"><a class="anchor" href="#_adding_system_messages"></a>Adding System Messages</h3> <div class="paragraph"> <p>System messages provide instructions or context to the LLM. You can configure them via endpoint parameters for default behavior:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: route definition with ProducerTemplate usage</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
     .to("spring-ai-chat:test?chatModel=#chatModel&amp;systemMessage=You are a professional chef specializing in Italian cuisine.");
 
 // Usage:
 String response = template.requestBody("direct:chat",
-    "What should I cook tonight?", String.class);</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_response_headers_and_metadata"><a class="anchor" href="#_response_headers_and_metadata"></a>Response Headers and Metadata</h3> <div class="paragraph"> <p>The component automatically tracks token usage and response metadata, providing them via headers. You can access these headers in your Camel routes:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
+    "What should I cook tonight?", String.class);</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_response_headers_and_metadata"><a class="anchor" href="#_response_headers_and_metadata"></a>Response Headers and Metadata</h3> <div class="paragraph"> <p>The component automatically tracks token usage and response metadata, providing them via headers. You can access these headers in your Camel routes:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: route with <code>.log()</code> header interpolation and ProducerTemplate usage</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
     .to("spring-ai-chat:test?chatModel=#chatModel")
     .log("Token usage - Input: ${header.CamelSpringAiInputTokenCount}")
     .log("Token usage - Output: ${header.CamelSpringAiOutputTokenCount}")
@@ -89,17 +101,43 @@ String response = template.requestBody("direct:chat",
     .log("Model used: ${header.CamelSpringAiChatModelName}");
 
 // Usage:
-template.requestBody("direct:chat", "Explain quantum computing", String.class);</code></pre> </div> </div> <div class="paragraph"> <p>The following headers are set after each chat operation:</p> </div> <div class="paragraph"> <p><strong>Token Usage Headers:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>CamelSpringAiInputTokenCount</code> - Number of tokens in the prompt</p> </li> <li> <p><code>CamelSpringAiOutputTokenCount</code> - Number of tokens in the response</p> </li> <li> <p><code>CamelSpringAiTotalTokenCount</code> - Total tokens used (input + output)</p> </li> </ul> </div> <div class="paragraph"> <p><strong>Response Metadata Headers:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>CamelSpringAiChatFinishReason</code> - Why the generation stopped (e.g., "STOP", "LENGTH", "TOOL_CALLS")</p> </li> <li> <p><code>CamelSpringAiChatModelName</code> - The name of the AI model used for the response</p> </li> <li> <p><code>CamelSpringAiChatResponseId</code> - Unique identifier for the response</p> </li> <li> <p><code>CamelSpringAiChatResponseMetadata</code> - Full metadata Map containing all available fields</p> </li> </ul> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> Not all AI models provide all metadata fields. The availability of specific metadata depends on the underlying model and provider. Most models provide at least finish reason and token counts. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_message_metadata"><a class="anchor" href="#_message_metadata"></a>Message Metadata</h3> <div class="paragraph"> <p>The component supports attaching metadata to both user and system messages. This is useful for tracking message identifiers, conversation context, priority levels, or other application-specific data.</p> </div> <div class="sect3"> <h4 id="_user_message_metadata"><a class="anchor" href="#_user_message_metadata"></a>User Message Metadata</h4> <div class="paragraph"> <p>You can attach metadata to user messages via headers or endpoint configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Using URL parameters - nested property syntax
+template.requestBody("direct:chat", "Explain quantum computing", String.class);</code></pre> </div> </div> <div class="paragraph"> <p>The following headers are set after each chat operation:</p> </div> <div class="paragraph"> <p><strong>Token Usage Headers:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>CamelSpringAiInputTokenCount</code> - Number of tokens in the prompt</p> </li> <li> <p><code>CamelSpringAiOutputTokenCount</code> - Number of tokens in the response</p> </li> <li> <p><code>CamelSpringAiTotalTokenCount</code> - Total tokens used (input + output)</p> </li> </ul> </div> <div class="paragraph"> <p><strong>Response Metadata Headers:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>CamelSpringAiChatFinishReason</code> - Why the generation stopped (e.g., "STOP", "LENGTH", "TOOL_CALLS")</p> </li> <li> <p><code>CamelSpringAiChatModelName</code> - The name of the AI model used for the response</p> </li> <li> <p><code>CamelSpringAiChatResponseId</code> - Unique identifier for the response</p> </li> <li> <p><code>CamelSpringAiChatResponseMetadata</code> - Full metadata Map containing all available fields</p> </li> </ul> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> Not all AI models provide all metadata fields. The availability of specific metadata depends on the underlying model and provider. Most models provide at least finish reason and token counts. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_message_metadata"><a class="anchor" href="#_message_metadata"></a>Message Metadata</h3> <div class="paragraph"> <p>The component supports attaching metadata to both user and system messages. This is useful for tracking message identifiers, conversation context, priority levels, or other application-specific data.</p> </div> <div class="sect3"> <h4 id="_user_message_metadata"><a class="anchor" href="#_user_message_metadata"></a>User Message Metadata</h4> <div class="paragraph"> <p>You can attach metadata to user messages via headers or endpoint configuration:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Using URL parameters - nested property syntax
 from("direct:chat")
     .to("spring-ai-chat:test?chatModel=#chatModel"
         + "&amp;userMetadata.messageId=msg-123"
         + "&amp;userMetadata.userId=user-456"
-        + "&amp;userMetadata.priority=high");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_system_message_metadata"><a class="anchor" href="#_system_message_metadata"></a>System Message Metadata</h4> <div class="paragraph"> <p>Similarly, you can attach metadata to system messages:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Using URL parameters - nested property syntax
+        + "&amp;userMetadata.priority=high");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;to uri="spring-ai-chat:test?chatModel=#chatModel&amp;amp;userMetadata.messageId=msg-123&amp;amp;userMetadata.userId=user-456&amp;amp;userMetadata.priority=high"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+              userMetadata.messageId: msg-123
+              userMetadata.userId: user-456
+              userMetadata.priority: high</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_system_message_metadata"><a class="anchor" href="#_system_message_metadata"></a>System Message Metadata</h4> <div class="paragraph"> <p>Similarly, you can attach metadata to system messages:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Using URL parameters - nested property syntax
 from("direct:chat")
     .to("spring-ai-chat:test?chatModel=#chatModel"
         + "&amp;systemMetadata.version=1.0"
         + "&amp;systemMetadata.model=gpt-4"
-        + "&amp;systemMetadata.promptVersion=2024-01");</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_conversation_memory"><a class="anchor" href="#_conversation_memory"></a>Conversation Memory</h3> <div class="paragraph"> <p>The component provides automatic conversation memory management via Spring AI&#8217;s ChatClient and ChatMemory. Two memory strategies are supported:</p> </div> <div class="ulist"> <ul> <li> <p><strong>MessageChatMemoryAdvisor</strong> - Traditional message-based memory using ChatMemory implementations</p> </li> <li> <p><strong>VectorStoreChatMemoryAdvisor</strong> - Vector-based semantic memory using VectorStore for long-term retrieval</p> </li> </ul> </div> <div class="admonitionblock important"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-important" title="Important"></i> </td> <td class="content"> Do not configure both <code>chatMemory</code> and <code>chatMemoryVectorStore</code> on the same endpoint. If both are provided, <code>chatMemory</code> (MessageChatMemoryAdvisor) will take precedence. </td> </tr> </table></div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> Chat memory is only activated when the <code>CamelSpringAiChatConversationId</code> header is set on the exchange. Without this header, the memory advisor is not applied, even if <code>chatMemory</code> or <code>chatMemoryVectorStore</code> is configured. This allows you to selectively enable memory on a per-request basis. </td> </tr> </table></div> </div> <div class="sect3"> <h4 id="_message_based_memory_chatmemory"><a class="anchor" href="#_message_based_memory_chatmemory"></a>Message-based Memory (ChatMemory)</h4> <div class="paragraph"> <p>Configure a <code>ChatMemory</code> on the endpoint for automatic conversation tracking using traditional message window approach. This strategy keeps a configurable number of recent messages in memory.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic Spring AI <code>ChatMemory</code> setup and ProducerTemplate usage</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Create chat memory with message window
+        + "&amp;systemMetadata.promptVersion=2024-01");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;to uri="spring-ai-chat:test?chatModel=#chatModel&amp;amp;systemMetadata.version=1.0&amp;amp;systemMetadata.model=gpt-4&amp;amp;systemMetadata.promptVersion=2024-01"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+              systemMetadata.version: "1.0"
+              systemMetadata.model: gpt-4
+              systemMetadata.promptVersion: "2024-01"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_conversation_memory"><a class="anchor" href="#_conversation_memory"></a>Conversation Memory</h3> <div class="paragraph"> <p>The component provides automatic conversation memory management via Spring AI&#8217;s ChatClient and ChatMemory. Two memory strategies are supported:</p> </div> <div class="ulist"> <ul> <li> <p><strong>MessageChatMemoryAdvisor</strong> - Traditional message-based memory using ChatMemory implementations</p> </li> <li> <p><strong>VectorStoreChatMemoryAdvisor</strong> - Vector-based semantic memory using VectorStore for long-term retrieval</p> </li> </ul> </div> <div class="admonitionblock important"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-important" title="Important"></i> </td> <td class="content"> Do not configure both <code>chatMemory</code> and <code>chatMemoryVectorStore</code> on the same endpoint. If both are provided, <code>chatMemory</code> (MessageChatMemoryAdvisor) will take precedence. </td> </tr> </table></div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> Chat memory is only activated when the <code>CamelSpringAiChatConversationId</code> header is set on the exchange. Without this header, the memory advisor is not applied, even if <code>chatMemory</code> or <code>chatMemoryVectorStore</code> is configured. This allows you to selectively enable memory on a per-request basis. </td> </tr> </table></div> </div> <div class="sect3"> <h4 id="_message_based_memory_chatmemory"><a class="anchor" href="#_message_based_memory_chatmemory"></a>Message-based Memory (ChatMemory)</h4> <div class="paragraph"> <p>Configure a <code>ChatMemory</code> on the endpoint for automatic conversation tracking using traditional message window approach. This strategy keeps a configurable number of recent messages in memory.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic Spring AI <code>ChatMemory</code> setup and ProducerTemplate usage</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Create chat memory with message window
 ChatMemory chatMemory = MessageWindowChatMemory.builder()
     .chatMemoryRepository(new InMemoryChatMemoryRepository())
     .maxMessages(10)  // Keep last 10 messages
@@ -148,7 +186,7 @@ template.requestBodyAndHeader("direct:vector-memory",
 
 template.requestBodyAndHeader("direct:vector-memory",
     "What programming language did I mention?",
-    SpringAiChatConstants.CONVERSATION_ID, "user-123", String.class); // Will use semantic search to retrieve: "Java"</code></pre> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> The component automatically configures conversation isolation using metadata filters, ensuring each conversation ID maintains separate memory context. However, conversation isolation via metadata filtering requires a VectorStore implementation that supports filter expressions. </td> </tr> </table></div> </div> </div> </div> <div class="sect2"> <h3 id="_function_calling_tool_integration"><a class="anchor" href="#_function_calling_tool_integration"></a>Function Calling / Tool Integration</h3> <div class="paragraph"> <p>The component integrates with the <a href="spring-ai-tools-component.html" class="xref page">Spring AI Tools Component</a> to enable LLMs to call Camel routes as functions/tools. This extends the LLM&#8217;s capabilities with custom logic, external APIs, database queries, and more.</p> </div> <div class="paragraph"> <p>When you configure the <code>tags</code> parameter, the chat component discovers all matching tools from <code>spring-ai-tools</code> routes, registers them with Spring AI&#8217;s ChatClient, and allows the LLM to call them during conversation.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Define tools
+    SpringAiChatConstants.CONVERSATION_ID, "user-123", String.class); // Will use semantic search to retrieve: "Java"</code></pre> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> The component automatically configures conversation isolation using metadata filters, ensuring each conversation ID maintains separate memory context. However, conversation isolation via metadata filtering requires a VectorStore implementation that supports filter expressions. </td> </tr> </table></div> </div> </div> </div> <div class="sect2"> <h3 id="_function_calling_tool_integration"><a class="anchor" href="#_function_calling_tool_integration"></a>Function Calling / Tool Integration</h3> <div class="paragraph"> <p>The component integrates with the <a href="spring-ai-tools-component.html" class="xref page">Spring AI Tools Component</a> to enable LLMs to call Camel routes as functions/tools. This extends the LLM&#8217;s capabilities with custom logic, external APIs, database queries, and more.</p> </div> <div class="paragraph"> <p>When you configure the <code>tags</code> parameter, the chat component discovers all matching tools from <code>spring-ai-tools</code> routes, registers them with Spring AI&#8217;s ChatClient, and allows the LLM to call them during conversation.</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Define tools
 from("spring-ai-tools:weather?tags=weather&amp;description=Get current weather for a location")
     .setBody(constant("Sunny"));
 
@@ -166,7 +204,97 @@ from("direct:mathChat")
     .to("spring-ai-chat:chat?tags=math&amp;chatClient=#chatClient");
 
 from("direct:multiToolChat")
-    .to("spring-ai-chat:chat?tags=weather,math,finance&amp;chatClient=#chatClient");</code></pre> </div> </div> <div class="paragraph"> <p><strong>How it works:</strong></p> </div> <div class="olist arabic"> <ol class="arabic"> <li> <p>LLM analyzes the question and decides which tools to call</p> </li> <li> <p>LLM generates function call requests with parameters</p> </li> <li> <p>Component executes Camel routes with parameters as headers</p> </li> <li> <p>Tool results are sent back to the LLM</p> </li> <li> <p>LLM processes results and generates final response</p> </li> <li> <p>Multiple tool calls can happen in sequence if needed</p> </li> </ol> </div> <div class="paragraph"> <p><strong>Tool Definition Parameters:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>tags</code>: Comma-separated tags for organizing tools (required)</p> </li> <li> <p><code>description</code>: What the tool does - shown to the LLM (required for consumer)</p> </li> <li> <p><code>name</code>: Tool name (auto-generated from description if not provided)</p> </li> <li> <p><code>inputType</code>: Java class for input validation (optional)</p> </li> </ul> </div> <div class="paragraph"> <p><strong>Best Practices:</strong></p> </div> <div class="olist arabic"> <ol class="arabic"> <li> <p><strong>Clear Descriptions</strong>: Provide detailed tool descriptions so the LLM knows when to use them</p> </li> <li> <p><strong>Appropriate Tags</strong>: Organize tools with meaningful tags</p> </li> <li> <p><strong>Error Handling</strong>: Implement proper error handling in tool routes</p> </li> <li> <p><strong>Parameter Validation</strong>: Validate input parameters in tool processors</p> </li> <li> <p><strong>Response Format</strong>: Return clear, concise text responses from tools</p> </li> </ol> </div> </div> <div class="sect2"> <h3 id="_multimodal_support_images_audio_and_documents"><a class="anchor" href="#_multimodal_support_images_audio_and_documents"></a>Multimodal Support (Images, Audio, and Documents)</h3> <div class="paragraph"> <p>The component supports multimodal input for models that support vision, audio, and document capabilities.</p> </div> <div class="paragraph"> <p>The component seamlessly integrates with Camel file components (file, ftp, sftp, smb) through <code>WrappedFile</code> support, enabling direct routing from file sources to AI chat. Media can also be sent as byte arrays or as lists of files with appropriate headers.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses ProducerTemplate, <code>WrappedFile</code> aggregation, and Spring AI <code>UserMessage</code>/<code>Media</code> types</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Direct file-to-AI pipeline (MIME type auto-detected)
+    .to("spring-ai-chat:chat?tags=weather,math,finance&amp;chatClient=#chatClient");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!-- Define tools --&gt;
+&lt;route&gt;
+  &lt;from uri="spring-ai-tools:weather?tags=weather&amp;amp;description=Get current weather for a location"/&gt;
+  &lt;setBody&gt;&lt;constant&gt;Sunny&lt;/constant&gt;&lt;/setBody&gt;
+&lt;/route&gt;
+
+&lt;route&gt;
+  &lt;from uri="spring-ai-tools:calculator?tags=math&amp;amp;description=Evaluate mathematical expressions"/&gt;
+  &lt;setBody&gt;&lt;constant&gt;42&lt;/constant&gt;&lt;/setBody&gt;
+&lt;/route&gt;
+
+&lt;route&gt;
+  &lt;from uri="spring-ai-tools:stock?tags=finance&amp;amp;description=Get current stock price"/&gt;
+  &lt;setBody&gt;&lt;constant&gt;42&lt;/constant&gt;&lt;/setBody&gt;
+&lt;/route&gt;
+
+&lt;!-- Chat endpoints with different tool combinations --&gt;
+&lt;route&gt;
+  &lt;from uri="direct:weatherChat"/&gt;
+  &lt;to uri="spring-ai-chat:chat?tags=weather&amp;amp;chatClient=#chatClient"/&gt;
+&lt;/route&gt;
+
+&lt;route&gt;
+  &lt;from uri="direct:mathChat"/&gt;
+  &lt;to uri="spring-ai-chat:chat?tags=math&amp;amp;chatClient=#chatClient"/&gt;
+&lt;/route&gt;
+
+&lt;route&gt;
+  &lt;from uri="direct:multiToolChat"/&gt;
+  &lt;to uri="spring-ai-chat:chat?tags=weather,math,finance&amp;amp;chatClient=#chatClient"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># Define tools
+- route:
+    from:
+      uri: spring-ai-tools:weather
+      parameters:
+        tags: weather
+        description: Get current weather for a location
+      steps:
+        - setBody:
+            constant: Sunny
+
+- route:
+    from:
+      uri: spring-ai-tools:calculator
+      parameters:
+        tags: math
+        description: Evaluate mathematical expressions
+      steps:
+        - setBody:
+            constant: "42"
+
+- route:
+    from:
+      uri: spring-ai-tools:stock
+      parameters:
+        tags: finance
+        description: Get current stock price
+      steps:
+        - setBody:
+            constant: "42"
+
+# Chat endpoints with different tool combinations
+- route:
+    from:
+      uri: direct:weatherChat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              tags: weather
+              chatClient: "#chatClient"
+
+- route:
+    from:
+      uri: direct:mathChat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              tags: math
+              chatClient: "#chatClient"
+
+- route:
+    from:
+      uri: direct:multiToolChat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              tags: weather,math,finance
+              chatClient: "#chatClient"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p><strong>How it works:</strong></p> </div> <div class="olist arabic"> <ol class="arabic"> <li> <p>LLM analyzes the question and decides which tools to call</p> </li> <li> <p>LLM generates function call requests with parameters</p> </li> <li> <p>Component executes Camel routes with parameters as headers</p> </li> <li> <p>Tool results are sent back to the LLM</p> </li> <li> <p>LLM processes results and generates final response</p> </li> <li> <p>Multiple tool calls can happen in sequence if needed</p> </li> </ol> </div> <div class="paragraph"> <p><strong>Tool Definition Parameters:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>tags</code>: Comma-separated tags for organizing tools (required)</p> </li> <li> <p><code>description</code>: What the tool does - shown to the LLM (required for consumer)</p> </li> <li> <p><code>name</code>: Tool name (auto-generated from description if not provided)</p> </li> <li> <p><code>inputType</code>: Java class for input validation (optional)</p> </li> </ul> </div> <div class="paragraph"> <p><strong>Best Practices:</strong></p> </div> <div class="olist arabic"> <ol class="arabic"> <li> <p><strong>Clear Descriptions</strong>: Provide detailed tool descriptions so the LLM knows when to use them</p> </li> <li> <p><strong>Appropriate Tags</strong>: Organize tools with meaningful tags</p> </li> <li> <p><strong>Error Handling</strong>: Implement proper error handling in tool routes</p> </li> <li> <p><strong>Parameter Validation</strong>: Validate input parameters in tool processors</p> </li> <li> <p><strong>Response Format</strong>: Return clear, concise text responses from tools</p> </li> </ol> </div> </div> <div class="sect2"> <h3 id="_multimodal_support_images_audio_and_documents"><a class="anchor" href="#_multimodal_support_images_audio_and_documents"></a>Multimodal Support (Images, Audio, and Documents)</h3> <div class="paragraph"> <p>The component supports multimodal input for models that support vision, audio, and document capabilities.</p> </div> <div class="paragraph"> <p>The component seamlessly integrates with Camel file components (file, ftp, sftp, smb) through <code>WrappedFile</code> support, enabling direct routing from file sources to AI chat. Media can also be sent as byte arrays or as lists of files with appropriate headers.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses ProducerTemplate, <code>WrappedFile</code> aggregation, and Spring AI <code>UserMessage</code>/<code>Media</code> types</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Direct file-to-AI pipeline (MIME type auto-detected)
 from("file:input-images?noop=true")
     .setHeader(SpringAiChatConstants.USER_MESSAGE, constant("What's in this image?"))
     .to("spring-ai-chat:vision?chatModel=#chatModel");
@@ -191,7 +319,7 @@ from("file:comparison-images?noop=true")
 // UserMessage with Media for maximum control
 Media media = new Media(MimeTypeUtils.IMAGE_PNG, imageData);
 UserMessage message = new UserMessage("Analyze this scan", media);
-template.requestBody("direct:scan-analyzer", message, String.class);</code></pre> </div> </div> <div class="paragraph"> <p><strong>Supported Input Types:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>String</code> - Simple text message</p> </li> <li> <p><code>byte[]</code> - Single media file (image, audio, etc.)</p> </li> <li> <p><code>WrappedFile</code> - Single file from file components</p> </li> <li> <p><code>List&lt;WrappedFile&gt;</code> - Multiple files for comparison or analysis</p> </li> <li> <p><code>UserMessage</code> - Spring AI UserMessage with text and/or media</p> </li> <li> <p><code>Message</code> - Any Spring AI Message type</p> </li> <li> <p><code>List&lt;Message&gt;</code> - Full conversation history (CHAT_MULTIPLE_MESSAGES operation)</p> </li> </ul> </div> <div class="paragraph"> <p><strong>MIME Type Detection Priority:</strong></p> </div> <div class="olist arabic"> <ol class="arabic"> <li> <p><code>CamelSpringAiChatMediaType</code> header (highest priority)</p> </li> <li> <p><code>CamelFileContentType</code> header from file components</p> </li> <li> <p>Auto-detection from file extension</p> </li> <li> <p>Default to <code>image/png</code> if not recognized</p> </li> </ol> </div> <div class="paragraph"> <p><strong>Supported File Formats (Auto-Detection):</strong></p> </div> <div class="ulist"> <ul> <li> <p><strong>Images</strong>: PNG, JPEG, GIF, WebP, BMP, TIFF, SVG</p> </li> <li> <p><strong>Videos</strong>: MP4, WebM, MOV, MKV, FLV, MPEG, WMV, 3GP</p> </li> <li> <p><strong>Audio</strong>: WAV, MP3, OGG, M4A, FLAC</p> </li> <li> <p><strong>Documents</strong>: PDF, CSV, DOC, DOCX, XLS, XLSX, HTML, TXT, Markdown</p> </li> </ul> </div> <div class="paragraph"> <p><strong>File Size Validation:</strong></p> </div> <div class="paragraph"> <p>To prevent out-of-memory errors with large media files, the component validates file sizes before loading them into memory. The default maximum file size is 1MB, configurable via:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Configure via endpoint parameter (in bytes)
+template.requestBody("direct:scan-analyzer", message, String.class);</code></pre> </div> </div> <div class="paragraph"> <p><strong>Supported Input Types:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>String</code> - Simple text message</p> </li> <li> <p><code>byte[]</code> - Single media file (image, audio, etc.)</p> </li> <li> <p><code>WrappedFile</code> - Single file from file components</p> </li> <li> <p><code>List&lt;WrappedFile&gt;</code> - Multiple files for comparison or analysis</p> </li> <li> <p><code>UserMessage</code> - Spring AI UserMessage with text and/or media</p> </li> <li> <p><code>Message</code> - Any Spring AI Message type</p> </li> <li> <p><code>List&lt;Message&gt;</code> - Full conversation history (CHAT_MULTIPLE_MESSAGES operation)</p> </li> </ul> </div> <div class="paragraph"> <p><strong>MIME Type Detection Priority:</strong></p> </div> <div class="olist arabic"> <ol class="arabic"> <li> <p><code>CamelSpringAiChatMediaType</code> header (highest priority)</p> </li> <li> <p><code>CamelFileContentType</code> header from file components</p> </li> <li> <p>Auto-detection from file extension</p> </li> <li> <p>Default to <code>image/png</code> if not recognized</p> </li> </ol> </div> <div class="paragraph"> <p><strong>Supported File Formats (Auto-Detection):</strong></p> </div> <div class="ulist"> <ul> <li> <p><strong>Images</strong>: PNG, JPEG, GIF, WebP, BMP, TIFF, SVG</p> </li> <li> <p><strong>Videos</strong>: MP4, WebM, MOV, MKV, FLV, MPEG, WMV, 3GP</p> </li> <li> <p><strong>Audio</strong>: WAV, MP3, OGG, M4A, FLAC</p> </li> <li> <p><strong>Documents</strong>: PDF, CSV, DOC, DOCX, XLS, XLSX, HTML, TXT, Markdown</p> </li> </ul> </div> <div class="paragraph"> <p><strong>File Size Validation:</strong></p> </div> <div class="paragraph"> <p>To prevent out-of-memory errors with large media files, the component validates file sizes before loading them into memory. The default maximum file size is 1MB, configurable via:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Configure via endpoint parameter (in bytes)
 from("file:uploads")
     .to("spring-ai-chat:vision?chatModel=#chatModel&amp;maxFileSize=5242880"); // 5MB
 
@@ -202,11 +330,75 @@ from("direct:upload")
 
 // Disable size checking (not recommended)
 from("file:trusted")
-    .to("spring-ai-chat:vision?chatModel=#chatModel&amp;maxFileSize=0");</code></pre> </div> </div> <div class="paragraph"> <p>Files exceeding the configured limit will be rejected with an <code>IllegalArgumentException</code>.</p> </div> </div> <div class="sect2"> <h3 id="_safeguard_content_filtering"><a class="anchor" href="#_safeguard_content_filtering"></a>SafeGuard - Content Filtering</h3> <div class="paragraph"> <p>The component provides content filtering capabilities through Spring AI&#8217;s SafeGuard advisor. SafeGuard monitors LLM responses for sensitive words and blocks responses containing restricted content, returning a customizable failure message instead.</p> </div> <div class="paragraph"> <p>This feature is useful for: * Preventing disclosure of sensitive information (passwords, secrets, API keys) * Enforcing content policies in customer-facing applications * Compliance with data protection requirements * Filtering inappropriate or restricted topics</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Configure safeguard with sensitive words
+    .to("spring-ai-chat:vision?chatModel=#chatModel&amp;maxFileSize=0");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!-- Configure via endpoint parameter (in bytes) - 5MB --&gt;
+&lt;route&gt;
+  &lt;from uri="file:uploads"/&gt;
+  &lt;to uri="spring-ai-chat:vision?chatModel=#chatModel&amp;amp;maxFileSize=5242880"/&gt;
+&lt;/route&gt;
+
+&lt;!-- Override via header for dynamic control - 10MB --&gt;
+&lt;route&gt;
+  &lt;from uri="direct:upload"/&gt;
+  &lt;setHeader name="CamelSpringAiChatMaxFileSize"&gt;
+    &lt;constant&gt;10485760&lt;/constant&gt;
+  &lt;/setHeader&gt;
+  &lt;to uri="spring-ai-chat:vision?chatModel=#chatModel"/&gt;
+&lt;/route&gt;
+
+&lt;!-- Disable size checking (not recommended) --&gt;
+&lt;route&gt;
+  &lt;from uri="file:trusted"/&gt;
+  &lt;to uri="spring-ai-chat:vision?chatModel=#chatModel&amp;amp;maxFileSize=0"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># Configure via endpoint parameter (in bytes) - 5MB
+- route:
+    from:
+      uri: file:uploads
+      steps:
+        - to:
+            uri: spring-ai-chat:vision
+            parameters:
+              chatModel: "#chatModel"
+              maxFileSize: 5242880
+
+# Override via header for dynamic control - 10MB
+- route:
+    from:
+      uri: direct:upload
+      steps:
+        - setHeader:
+            name: CamelSpringAiChatMaxFileSize
+            constant: "10485760"
+        - to:
+            uri: spring-ai-chat:vision
+            parameters:
+              chatModel: "#chatModel"
+
+# Disable size checking (not recommended)
+- route:
+    from:
+      uri: file:trusted
+      steps:
+        - to:
+            uri: spring-ai-chat:vision
+            parameters:
+              chatModel: "#chatModel"
+              maxFileSize: 0</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Files exceeding the configured limit will be rejected with an <code>IllegalArgumentException</code>.</p> </div> </div> <div class="sect2"> <h3 id="_safeguard_content_filtering"><a class="anchor" href="#_safeguard_content_filtering"></a>SafeGuard - Content Filtering</h3> <div class="paragraph"> <p>The component provides content filtering capabilities through Spring AI&#8217;s SafeGuard advisor. SafeGuard monitors LLM responses for sensitive words and blocks responses containing restricted content, returning a customizable failure message instead.</p> </div> <div class="paragraph"> <p>This feature is useful for: * Preventing disclosure of sensitive information (passwords, secrets, API keys) * Enforcing content policies in customer-facing applications * Compliance with data protection requirements * Filtering inappropriate or restricted topics</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Configure safeguard with sensitive words
 from("direct:safeguard")
     .to("spring-ai-chat:test?chatModel=#chatModel"
         + "&amp;safeguardSensitiveWords=password,secret,confidential,api-key"
-        + "&amp;safeguardFailureResponse=I cannot provide information containing sensitive words");</code></pre> </div> </div> <div class="paragraph"> <p><strong>Configuration Options:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>safeguardSensitiveWords</code>: Comma-separated list of words to block in responses</p> </li> <li> <p><code>safeguardFailureResponse</code>: Message returned when sensitive content is detected</p> </li> <li> <p>Headers: <code>CamelSpringAiChatSafeguardSensitiveWords</code>, <code>CamelSpringAiChatSafeguardFailureResponse</code></p> </li> </ul> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> SafeGuard checks the LLM&#8217;s response content. If any configured sensitive word is found in the response, the entire response is replaced with the failure message. The check is case-insensitive. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_structured_output_conversion"><a class="anchor" href="#_structured_output_conversion"></a>Structured Output Conversion</h3> <div class="paragraph"> <p>The component supports structured output conversion, allowing you to convert LLM responses into typed Java objects, Maps, or Lists. This feature is based on <a href="https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html">Spring AI&#8217;s Structured Output Converter</a>.</p> </div> <div class="paragraph"> <p>Three output formats are supported: <strong>BEAN</strong> (Java records/POJOs), <strong>MAP</strong> (key-value structures), and <strong>LIST</strong> (arrays). Each can be configured via converter bean, endpoint parameters, or headers.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses Java record definition and ProducerTemplate</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Bean output - convert to typed Java objects
+        + "&amp;safeguardFailureResponse=I cannot provide information containing sensitive words");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:safeguard"/&gt;
+  &lt;to uri="spring-ai-chat:test?chatModel=#chatModel&amp;amp;safeguardSensitiveWords=password,secret,confidential,api-key&amp;amp;safeguardFailureResponse=I cannot provide information containing sensitive words"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:safeguard
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+              safeguardSensitiveWords: "password,secret,confidential,api-key"
+              safeguardFailureResponse: "I cannot provide information containing sensitive words"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p><strong>Configuration Options:</strong></p> </div> <div class="ulist"> <ul> <li> <p><code>safeguardSensitiveWords</code>: Comma-separated list of words to block in responses</p> </li> <li> <p><code>safeguardFailureResponse</code>: Message returned when sensitive content is detected</p> </li> <li> <p>Headers: <code>CamelSpringAiChatSafeguardSensitiveWords</code>, <code>CamelSpringAiChatSafeguardFailureResponse</code></p> </li> </ul> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> SafeGuard checks the LLM&#8217;s response content. If any configured sensitive word is found in the response, the entire response is replaced with the failure message. The check is case-insensitive. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_structured_output_conversion"><a class="anchor" href="#_structured_output_conversion"></a>Structured Output Conversion</h3> <div class="paragraph"> <p>The component supports structured output conversion, allowing you to convert LLM responses into typed Java objects, Maps, or Lists. This feature is based on <a href="https://docs.spring.io/spring-ai/reference/api/structured-output-converter.html">Spring AI&#8217;s Structured Output Converter</a>.</p> </div> <div class="paragraph"> <p>Three output formats are supported: <strong>BEAN</strong> (Java records/POJOs), <strong>MAP</strong> (key-value structures), and <strong>LIST</strong> (arrays). Each can be configured via converter bean, endpoint parameters, or headers.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses Java record definition and ProducerTemplate</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Bean output - convert to typed Java objects
 @JsonPropertyOrder({ "actor", "movies" })
 public record ActorFilms(String actor, List&lt;String&gt; movies) {}
 
@@ -252,7 +444,7 @@ from("direct:chat")
 context.getRegistry().bind("myTools", Arrays.asList(provider.getToolCallbacks()));
 
 from("direct:chat")
-    .to("spring-ai-chat:chat?chatModel=#chatModel&amp;toolCallbacks=#myTools");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_tool_selection_by_name"><a class="anchor" href="#_tool_selection_by_name"></a>Tool Selection by Name</h4> <div class="paragraph"> <p>Select specific tools by name using the <code>toolNames</code> parameter, instead of (or in addition to) tag-based discovery. This is useful for selecting individual <code>@Tool</code> methods or controlling which tools are available per endpoint:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Select only the getCapital tool by name
+    .to("spring-ai-chat:chat?chatModel=#chatModel&amp;toolCallbacks=#myTools");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_tool_selection_by_name"><a class="anchor" href="#_tool_selection_by_name"></a>Tool Selection by Name</h4> <div class="paragraph"> <p>Select specific tools by name using the <code>toolNames</code> parameter, instead of (or in addition to) tag-based discovery. This is useful for selecting individual <code>@Tool</code> methods or controlling which tools are available per endpoint:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: route definition with dynamic tool selection via ProducerTemplate header</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Select only the getCapital tool by name
 from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel&amp;toolNames=getCapital");
 
@@ -277,12 +469,26 @@ template.request("direct:chat", e -&gt; {
     e.getIn().setBody("Get my profile");
     e.getIn().setHeader(SpringAiChatConstants.TOOL_CONTEXT,
         Map.of("userId", "user-99", "role", "admin"));
-});</code></pre> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> Tool context works with Spring AI <code>@Tool</code> methods and MCP tools. Camel route tools (defined via <code>spring-ai-tools</code> consumer) do not receive the <code>ToolContext</code>. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_structured_output_validation"><a class="anchor" href="#_structured_output_validation"></a>Structured Output Validation</h3> <div class="paragraph"> <p>Enable automatic validation of structured output with retry on failure. When the LLM produces invalid output (doesn&#8217;t match the expected JSON Schema), the advisor re-prompts the LLM with validation errors:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
+});</code></pre> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> Tool context works with Spring AI <code>@Tool</code> methods and MCP tools. Camel route tools (defined via <code>spring-ai-tools</code> consumer) do not receive the <code>ToolContext</code>. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_structured_output_validation"><a class="anchor" href="#_structured_output_validation"></a>Structured Output Validation</h3> <div class="paragraph"> <p>Enable automatic validation of structured output with retry on failure. When the LLM produces invalid output (doesn&#8217;t match the expected JSON Schema), the advisor re-prompts the LLM with validation errors:</p> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel"
         + "&amp;outputFormat=BEAN"
         + "&amp;outputClass=com.example.ActorFilms"
         + "&amp;structuredOutputValidation=true"
-        + "&amp;structuredOutputValidationMaxAttempts=3");</code></pre> </div> </div> <div class="paragraph"> <p>If all retry attempts fail, the exception propagates to Camel&#8217;s error handler:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
+        + "&amp;structuredOutputValidationMaxAttempts=3");</code></pre> </div> </div> </div> <div id="_tabs_8_xml--panel" class="tabpanel" aria-labelledby="_tabs_8_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;amp;outputFormat=BEAN&amp;amp;outputClass=com.example.ActorFilms&amp;amp;structuredOutputValidation=true&amp;amp;structuredOutputValidationMaxAttempts=3"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_8_yaml--panel" class="tabpanel" aria-labelledby="_tabs_8_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              outputFormat: BEAN
+              outputClass: com.example.ActorFilms
+              structuredOutputValidation: true
+              structuredOutputValidationMaxAttempts: 3</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If all retry attempts fail, the exception propagates to Camel&#8217;s error handler:</p> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
     .doTry()
         .to("spring-ai-chat:chat?chatModel=#chatModel"
             + "&amp;outputFormat=BEAN&amp;outputClass=com.example.ActorFilms"
@@ -290,26 +496,110 @@ template.request("direct:chat", e -&gt; {
     .doCatch(Exception.class)
         .log("Structured output validation failed: ${exception.message}")
         .to("direct:fallback")
-    .end();</code></pre> </div> </div> <div class="paragraph"> <p>The advisor requires <code>outputClass</code> or <code>entityClass</code> to be set so it can generate a JSON Schema for validation. A warning is logged if neither is configured.</p> </div> </div> <div class="sect2"> <h3 id="_mcp_client_model_context_protocol"><a class="anchor" href="#_mcp_client_model_context_protocol"></a>MCP Client (Model Context Protocol)</h3> <div class="paragraph"> <p>The component supports connecting to MCP servers, enabling the LLM to use tools provided by external MCP-compatible services. This follows the same pattern as the <a href="openai-component.html" class="xref page">OpenAI component</a>'s MCP support.</p> </div> <div class="paragraph"> <p>Configure MCP servers using the <code>mcpServer.&lt;name&gt;.&lt;property&gt;</code> prefix notation:</p> </div> <div class="sect3"> <h4 id="_stdio_transport"><a class="anchor" href="#_stdio_transport"></a>Stdio Transport</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Connect to MCP filesystem server via stdio
+    .end();</code></pre> </div> </div> </div> <div id="_tabs_9_xml--panel" class="tabpanel" aria-labelledby="_tabs_9_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;doTry&gt;
+    &lt;to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;amp;outputFormat=BEAN&amp;amp;outputClass=com.example.ActorFilms&amp;amp;structuredOutputValidation=true&amp;amp;structuredOutputValidationMaxAttempts=2"/&gt;
+    &lt;doCatch&gt;
+      &lt;exception&gt;java.lang.Exception&lt;/exception&gt;
+      &lt;log message="Structured output validation failed: ${exception.message}"/&gt;
+      &lt;to uri="direct:fallback"/&gt;
+    &lt;/doCatch&gt;
+  &lt;/doTry&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_9_yaml--panel" class="tabpanel" aria-labelledby="_tabs_9_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - doTry:
+            steps:
+              - to:
+                  uri: spring-ai-chat:chat
+                  parameters:
+                    chatModel: "#chatModel"
+                    outputFormat: BEAN
+                    outputClass: com.example.ActorFilms
+                    structuredOutputValidation: true
+                    structuredOutputValidationMaxAttempts: 2
+            doCatch:
+              - exception:
+                  - java.lang.Exception
+                steps:
+                  - log:
+                      message: "Structured output validation failed: ${exception.message}"
+                  - to:
+                      uri: direct:fallback</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The advisor requires <code>outputClass</code> or <code>entityClass</code> to be set so it can generate a JSON Schema for validation. A warning is logged if neither is configured.</p> </div> </div> <div class="sect2"> <h3 id="_mcp_client_model_context_protocol"><a class="anchor" href="#_mcp_client_model_context_protocol"></a>MCP Client (Model Context Protocol)</h3> <div class="paragraph"> <p>The component supports connecting to MCP servers, enabling the LLM to use tools provided by external MCP-compatible services. This follows the same pattern as the <a href="openai-component.html" class="xref page">OpenAI component</a>'s MCP support.</p> </div> <div class="paragraph"> <p>Configure MCP servers using the <code>mcpServer.&lt;name&gt;.&lt;property&gt;</code> prefix notation:</p> </div> <div class="sect3"> <h4 id="_stdio_transport"><a class="anchor" href="#_stdio_transport"></a>Stdio Transport</h4> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Connect to MCP filesystem server via stdio
 from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel"
         + "&amp;mcpServer.fs.transportType=stdio"
         + "&amp;mcpServer.fs.command=npx"
-        + "&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_sse_transport"><a class="anchor" href="#_sse_transport"></a>SSE Transport</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Connect to MCP server via SSE
+        + "&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp");</code></pre> </div> </div> </div> <div id="_tabs_10_xml--panel" class="tabpanel" aria-labelledby="_tabs_10_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;amp;mcpServer.fs.transportType=stdio&amp;amp;mcpServer.fs.command=npx&amp;amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_10_yaml--panel" class="tabpanel" aria-labelledby="_tabs_10_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.fs.transportType: stdio
+              mcpServer.fs.command: npx
+              mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_sse_transport"><a class="anchor" href="#_sse_transport"></a>SSE Transport</h4> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Connect to MCP server via SSE
 from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel"
         + "&amp;mcpServer.weather.transportType=sse"
-        + "&amp;mcpServer.weather.url=http://mcp-server:3001/sse");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_multiple_mcp_servers"><a class="anchor" href="#_multiple_mcp_servers"></a>Multiple MCP Servers</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
+        + "&amp;mcpServer.weather.url=http://mcp-server:3001/sse");</code></pre> </div> </div> </div> <div id="_tabs_11_xml--panel" class="tabpanel" aria-labelledby="_tabs_11_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;amp;mcpServer.weather.transportType=sse&amp;amp;mcpServer.weather.url=http://mcp-server:3001/sse"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_11_yaml--panel" class="tabpanel" aria-labelledby="_tabs_11_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.weather.transportType: sse
+              mcpServer.weather.url: "http://mcp-server:3001/sse"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_multiple_mcp_servers"><a class="anchor" href="#_multiple_mcp_servers"></a>Multiple MCP Servers</h4> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel"
         + "&amp;mcpServer.fs.transportType=stdio"
         + "&amp;mcpServer.fs.command=npx"
         + "&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp"
         + "&amp;mcpServer.weather.transportType=sse"
-        + "&amp;mcpServer.weather.url=http://weather-mcp:3001/sse");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_oauth_authentication_for_mcp_servers"><a class="anchor" href="#_oauth_authentication_for_mcp_servers"></a>OAuth Authentication for MCP Servers</h4> <div class="paragraph"> <p>For MCP servers requiring authentication, configure an OAuth profile per server. This requires <code>camel-oauth</code> on the classpath:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
+        + "&amp;mcpServer.weather.url=http://weather-mcp:3001/sse");</code></pre> </div> </div> </div> <div id="_tabs_12_xml--panel" class="tabpanel" aria-labelledby="_tabs_12_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;amp;mcpServer.fs.transportType=stdio&amp;amp;mcpServer.fs.command=npx&amp;amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp&amp;amp;mcpServer.weather.transportType=sse&amp;amp;mcpServer.weather.url=http://weather-mcp:3001/sse"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_12_yaml--panel" class="tabpanel" aria-labelledby="_tabs_12_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.fs.transportType: stdio
+              mcpServer.fs.command: npx
+              mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
+              mcpServer.weather.transportType: sse
+              mcpServer.weather.url: "http://weather-mcp:3001/sse"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_oauth_authentication_for_mcp_servers"><a class="anchor" href="#_oauth_authentication_for_mcp_servers"></a>OAuth Authentication for MCP Servers</h4> <div class="paragraph"> <p>For MCP servers requiring authentication, configure an OAuth profile per server. This requires <code>camel-oauth</code> on the classpath:</p> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel"
         + "&amp;mcpServer.api.transportType=sse"
         + "&amp;mcpServer.api.url=http://secure-mcp:3001/sse"
-        + "&amp;mcpServer.api.oauthProfile=keycloak");</code></pre> </div> </div> <div class="paragraph"> <p>With corresponding properties:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">camel.oauth.keycloak.client-id=my-client
+        + "&amp;mcpServer.api.oauthProfile=keycloak");</code></pre> </div> </div> </div> <div id="_tabs_13_xml--panel" class="tabpanel" aria-labelledby="_tabs_13_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:chat"/&gt;
+  &lt;to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;amp;mcpServer.api.transportType=sse&amp;amp;mcpServer.api.url=http://secure-mcp:3001/sse&amp;amp;mcpServer.api.oauthProfile=keycloak"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_13_yaml--panel" class="tabpanel" aria-labelledby="_tabs_13_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.api.transportType: sse
+              mcpServer.api.url: "http://secure-mcp:3001/sse"
+              mcpServer.api.oauthProfile: keycloak</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>With corresponding properties:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">camel.oauth.keycloak.client-id=my-client
 camel.oauth.keycloak.client-secret=my-secret
 camel.oauth.keycloak.token-endpoint=https://keycloak/realms/myrealm/protocol/openid-connect/token</code></pre> </div> </div> <div class="admonitionblock important"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-important" title="Important"></i> </td> <td class="content"> The Spring AI chat component uses the MCP SDK version managed by the Spring AI BOM. Using this component&#8217;s MCP support alongside <code>camel-openai</code> MCP support in the same application may cause version conflicts. Choose one approach per application. </td> </tr> </table></div> </div> </div> </div> <div class="sect2"> <h3 id="_observability"><a class="anchor" href="#_observability"></a>Observability</h3> <div class="paragraph"> <p>When using Camel Spring Boot with <code>spring-boot-starter-actuator</code>, Spring AI&#8217;s built-in observability support is automatically enabled. No additional Camel-side configuration is needed — the <code>ChatModel</code> and <code>ChatClient</code> calls are instrumented by Spring AI through Micrometer.</p> </div> <div class="paragraph"> <p>Add the actuator dependency to your Spring Boot application:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;

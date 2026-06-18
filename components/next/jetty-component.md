@@ -379,6 +379,18 @@ So if a client sends the HTTP request, `http://serverUri?one=hello`, the Jetty c
 
 The session support option, `sessionSupport`, can be used to enable a `HttpSession` object and access the session object while processing the exchange. For example, the following route enables sessions:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jetty:http://0.0.0.0/myapp/myservice/?sessionSupport=true")
+    .process("myCode");
+```
+
 ```xml
 <route>
     <from uri="jetty:http://0.0.0.0/myapp/myservice/?sessionSupport=true"/>
@@ -386,7 +398,20 @@ The session support option, `sessionSupport`, can be used to enable a `HttpSessi
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: jetty:http://0.0.0.0/myapp/myservice/
+      parameters:
+        sessionSupport: true
+      steps:
+        - process:
+            ref: myCode
+```
+
 The `myCode` Processor can be instantiated by a Spring `bean` element:
+
+_XML-only: Spring bean definition for Processor_
 
 ```xml
 <bean id="myCode" class="com.mycompany.MyCodeProcessor"/>
@@ -431,6 +456,8 @@ jettyComponent.setSslContextParameters(scp);
 
 Spring DSL based configuration of endpoint
 
+_XML-only: Spring XML configuration for SSL context parameters_
+
 ```xml
   <camel:sslContextParameters
       id="sslContextParameters">
@@ -449,8 +476,24 @@ Configuring Jetty Directly
 
 Jetty provides SSL support out of the box. To enable Jetty to run in SSL mode, format the URI with the `\https://` prefix---for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jetty:https://0.0.0.0/myapp/myservice/");
+```
+
 ```xml
 <from uri="jetty:https://0.0.0.0/myapp/myservice/"/>
+```
+
+```yaml
+- from:
+    uri: jetty:https://0.0.0.0/myapp/myservice/
 ```
 
 Jetty also needs to know where to load your keystore from and what passwords to use to load the correct SSL certificate. Set the following JVM System Properties:
@@ -465,6 +508,8 @@ Jetty also needs to know where to load your keystore from and what passwords to 
 For details of how to configure SSL on a Jetty endpoint, read the following documentation at the Jetty Site: [http://docs.codehaus.org/display/JETTY/How+to+configure+SSL](http://docs.codehaus.org/display/JETTY/How+to+configure+SSL)
 
 Camel doesn’t expose some SSL properties directly. However, Camel does expose the underlying SslSocketConnector, which will allow you to set properties like needClientAuth for mutual authentication requiring a client certificate or wantClientAuth for mutual authentication where a client doesn’t need a certificate but can have one.
+
+_XML-only: Spring bean configuration for Jetty SSL socket connectors_
 
 ```xml
 <bean id="jetty" class="org.apache.camel.component.jetty.JettyHttpComponent">
@@ -489,6 +534,8 @@ The value you use as keys in the above map is the port you configure Jetty to li
 #### Configuring general SSL properties
 
 Instead of a per-port number specific SSL socket connector (as shown above), you can now configure general properties that apply for all SSL socket connectors (that are not explicitly configured as above with the port number as entry).
+
+_XML-only: Spring bean configuration for general Jetty SSL properties_
 
 ```xml
 <bean id="jetty" class="org.apache.camel.component.jetty.JettyHttpComponent">
@@ -519,6 +566,8 @@ X509Certificate cert = (X509Certificate) req.getAttribute("javax.servlet.request
 
 Instead of a per-port number specific HTTP socket connector (as shown above), you can now configure general properties that apply for all HTTP socket connectors (that are not explicitly configured as above with the port number as entry).
 
+_XML-only: Spring bean configuration for general Jetty HTTP connector properties_
+
 ```xml
 <bean id="jetty" class="org.apache.camel.component.jetty.JettyHttpComponent">
     <property name="socketConnectorProperties">
@@ -535,6 +584,8 @@ Instead of a per-port number specific HTTP socket connector (as shown above), yo
 If the HTTP requests are handled by an Apache server and forwarded to jetty with mod\_proxy, the original client IP address is in the X-Forwarded-For header and the HttpServletRequest.getRemoteAddr() will return the address of the Apache proxy.
 
 Jetty has a forwarded property which takes the value from X-Forwarded-For and places it in the HttpServletRequest remoteAddr property. This property is not available directly through the endpoint configuration, but it can be easily added using the socketConnectors property:
+
+_XML-only: Spring bean configuration for Jetty X-Forwarded-For support_
 
 ```xml
 <bean id="jetty" class="org.apache.camel.component.jetty.JettyHttpComponent">
@@ -567,11 +618,25 @@ The following example shows how to customize the `DefaultHttpBinding` in order t
 
 We can then create an instance of our binding and register it in the Spring registry as follows:
 
+_XML-only: Spring bean definition for custom HttpBinding_
+
 ```xml
 <bean id="mybinding" class="com.mycompany.MyHttpBinding"/>
 ```
 
 And then we can reference this binding when we define the route:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jetty:http://0.0.0.0:8080/myapp/myservice?httpBinding=#mybinding")
+    .to("bean:doSomething");
+```
 
 ```xml
 <route>
@@ -580,9 +645,22 @@ And then we can reference this binding when we define the route:
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: jetty:http://0.0.0.0:8080/myapp/myservice
+      parameters:
+        httpBinding: "#mybinding"
+      steps:
+        - to:
+            uri: bean:doSomething
+```
+
 ### Jetty handlers and security configuration
 
 You can configure a list of Jetty handlers on the endpoint, which can be useful for enabling advanced Jetty security features. These handlers are configured in Spring XML as follows:
+
+_XML-only: Spring bean definitions for Jetty JAAS security handler_
 
 ```xml
 <bean id="userRealm" class="org.mortbay.jetty.plus.jaas.JAASUserRealm">
@@ -608,6 +686,8 @@ You can configure a list of Jetty handlers on the endpoint, which can be useful 
 ```
 
 You can configure a list of Jetty handlers as follows:
+
+_XML-only: Spring bean definitions for Jetty constraint-based security handler_
 
 ```xml
 <bean id="constraint" class="org.eclipse.jetty.http.security.Constraint">
@@ -677,12 +757,48 @@ The camel-jetty component supports multipart form post out of the box. The submi
 
 The camel-jetty component supports the enabling of Jetty’s JMX capabilities at the component and endpoint level with the endpoint configuration taking priority. Note that JMX must be enabled within the Camel context to enable JMX support in this component as the component provides Jetty with a reference to the MBeanServer registered with the Camel context. Because the camel-jetty component caches and reuses Jetty resources for a given protocol/host/port pairing, this configuration option will only be evaluated during the creation of the first endpoint to use a protocol/host/port pairing. For example, given two routes created from the following XML fragments, JMX support would remain enabled for all endpoints listening on `[https://0.0.0.0](https://0.0.0.0)`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jetty:https://0.0.0.0/myapp/myservice1/?enableJmx=true");
+```
+
 ```xml
 <from uri="jetty:https://0.0.0.0/myapp/myservice1/?enableJmx=true"/>
 ```
 
+```yaml
+- from:
+    uri: jetty:https://0.0.0.0/myapp/myservice1/
+    parameters:
+      enableJmx: true
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jetty:https://0.0.0.0/myapp/myservice2/?enableJmx=false");
+```
+
 ```xml
 <from uri="jetty:https://0.0.0.0/myapp/myservice2/?enableJmx=false"/>
+```
+
+```yaml
+- from:
+    uri: jetty:https://0.0.0.0/myapp/myservice2/
+    parameters:
+      enableJmx: false
 ```
 
 The camel-jetty component also provides for direct configuration of the Jetty MBeanContainer. Jetty creates MBean names dynamically. If you are running another instance of Jetty outside of the Camel context and sharing the same MBeanServer between the instances, you can provide both instances with a reference to the same MBeanContainer to avoid name collisions when registering Jetty MBeans.

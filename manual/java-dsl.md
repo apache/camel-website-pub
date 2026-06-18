@@ -10,6 +10,8 @@ This is best illustrated by an example. In the code below we create a new class 
 
 In the `configure` method the Java DSL is at our disposal.
 
+_Java-only: defining a route with content-based routing using Java DSL_
+
 ```java
 import org.apache.camel.builder.RouteBuilder;
 
@@ -41,11 +43,15 @@ In the `configure` method we can define Camel [Routes](routes.md).
 
 In the example above we have a single route, which pickup files (the `from`).
 
+_Java-only: the from endpoint that consumes files_
+
 ```java
 from("file:src/data?noop=true")
 ```
 
 Then we use the [Content-Based Router](../components/4.18.x/eips/choice-eip.md) EIP (the `choice`) to route the message whether the person is from London or not.
+
+_Java-only: content-based router using choice and xpath_
 
 ```java
 .choice()
@@ -58,6 +64,8 @@ Then we use the [Content-Based Router](../components/4.18.x/eips/choice-eip.md) 
 ### Using Text Blocks for long URIs
 
 If you have very long endpoint [uris](uris.md), then you can declare those in Java text blocks, instead of breaking a String into multiple added elements:
+
+_Java-only: using text blocks for long endpoint URIs_
 
 ```java
     from("""
@@ -77,6 +85,8 @@ Camel now supports to define Camel routes in Java DSL using Lambda style. This c
 
 For example, using lambda style you can define a Camel route that takes messages from Kafka and send to JMS in a single line of code:
 
+_Java-only: defining a route using lambda style_
+
 ```java
 rb -> rb.from("kafka:cheese").to("jms:queue:foo");
 ```
@@ -89,7 +99,7 @@ As mentioned in the Getting Started guide, you can use Camel’s Java DSL in a w
 
 **Note**: comments afterward explain some of the constructs used in the example.
 
-**Example of Camel’s "Java DSL"**
+_Java-only: example of Camel’s Java DSL_
 
 ```java
 RouteBuilder builder = new RouteBuilder() {

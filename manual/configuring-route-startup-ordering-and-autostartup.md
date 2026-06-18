@@ -131,6 +131,8 @@ camel.main.auto-startup = false
 
 To startup based on a boolean, String or [Property](../components/4.18.x/properties-component.md), do one of the following:
 
+_Java-only: autoStartup with boolean, string, and property placeholder variants_
+
 ```java
 // using a boolean
 from("activemq:queue:special").autoStartup(false)

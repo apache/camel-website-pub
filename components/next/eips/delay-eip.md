@@ -62,6 +62,8 @@ from("seda:b")
 
 Note that delay creates its own block, so some DSLs (including Java) require the delay block be closed:
 
+_Java-only: closing the delay block with end() in Java DSL_
+
 ```java
 .from("direct:delayBlockExample")
     .to("direct:getJobState")
@@ -159,6 +161,8 @@ from("activemq:foo")
 ```
 
 Then the bean would look something like this:
+
+_Java-only: bean class to compute the delay value_
 
 ```java
 public class SomeBean {

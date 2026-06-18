@@ -302,6 +302,8 @@ exchange.setProperty(QuickfixjProducer.CORRELATION_CRITERIA_KEY,
 
 The QuickFIX/J component includes a Spring `FactoryBean` for configuring the session settings within a Spring context. A type converter for QuickFIX/J session ID strings is also included. The following example shows a simple configuration of an acceptor and initiator session with default settings for both sessions.
 
+_XML-only: Spring XML configuration with QuickFIX/J component and session settings_
+
 ```xml
 <!--  camel route  -->
 <camelContext xmlns="http://camel.apache.org/schema/spring" id="quickfixjContext">

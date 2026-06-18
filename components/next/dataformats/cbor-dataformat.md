@@ -60,6 +60,8 @@ The CBOR dataformat supports 10 options, which are listed below.
 
 When using Data Format in Spring DSL, you need to declare the data formats first. This is done in the **DataFormats** XML tag.
 
+_XML-only: Spring XML data format configuration_
+
 ```xml
 <dataFormats>
     <!-- here we define a CBOR data format with the id test, and that it should use the TestPojo as the class type when
@@ -70,12 +72,36 @@ When using Data Format in Spring DSL, you need to declare the data formats first
 
 And then you can refer to this id in the route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:back")
+    .unmarshal("test")
+    .to("mock:reverse");
+```
+
 ```xml
 <route>
     <from uri="direct:back"/>
     <unmarshal><custom ref="test"/></unmarshal>
     <to uri="mock:reverse"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:back
+      steps:
+        - unmarshal:
+            ref: test
+        - to:
+            uri: mock:reverse
 ```
 
 ## Dependencies

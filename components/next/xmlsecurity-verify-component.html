@@ -148,7 +148,7 @@ xmlsecurity-verify:name[?options]</pre> </div> </div> <div class="ulist"> <ul> <
               keySelector: "#keySelectorBean"
               schemaResourceUri: org/apache/camel/component/xmlsecurity/Test.xsd
         - to:
-            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p><strong>Spring Example</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="xpathsToIdAttributesBean" class="java.util.ArrayList"&gt;
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p><strong>Spring Example</strong></p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring bean configuration for detached XML signature verification</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="xpathsToIdAttributesBean" class="java.util.ArrayList"&gt;
       &lt;constructor-arg type="java.util.Collection"&gt;
           &lt;list&gt;
               &lt;bean
@@ -258,7 +258,7 @@ beanRegistry.bind("keyAccessorDefault",keyAccessor);
 
 // you must reference the properties bean in the "xmlsecurity" URI
 from("direct:xades").to("xmlsecurity-sign://xades?keyAccessor=#keyAccessorDefault&amp;properties=#xmlSignatureProperties")
-             .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p><strong>XAdES-BES/EPES Example in Spring XML</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">...
+             .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p><strong>XAdES-BES/EPES Example in Spring XML</strong></p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring bean configuration for XAdES signature properties</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">...
 &lt;from uri="direct:xades" /&gt;
     &lt;to
         uri="xmlsecurity-sign://xades?keyAccessor=#accessorRsa&amp;amp;properties=#xadesProperties" /&gt;

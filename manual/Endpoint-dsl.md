@@ -10,6 +10,8 @@ The DSL can be accessed in several ways, but the main one is to switch to using 
 
 The following is an example of an FTP route using the standard `RouteBuilder` Java DSL:
 
+_Java-only: FTP route using standard string-based URI_
+
 ```java
 public class MyRoutes extends RouteBuilder {
     @Override
@@ -23,6 +25,8 @@ public class MyRoutes extends RouteBuilder {
 ```
 
 The same Java statement can be rewritten in the following more type-safe and readable way using the new `EndpointRouteBuilder` that allows using the Endpoint-DSL:
+
+_Java-only: same FTP route rewritten with type-safe Endpoint DSL_
 
 ```java
 public class MyRoutes extends EndpointRouteBuilder {
@@ -49,6 +53,8 @@ Then you can set up two Camel JMS components with unique names such as: `myAMQ` 
 
 The Endpoint-DSL can use these names with the `jms` fluent builder as shown:
 
+_Java-only: using custom component names with Endpoint DSL_
+
 ```java
 from(jms("myWMQ", "cheese").concurrentConsumers(5))
     .to(jms("myAMQ", "smelly"));
@@ -58,22 +64,34 @@ Notice how we can refer to their names as the first parameter in the `jms` fluen
 
 ### Headers' name
 
-The endpoint-dsl can also be used to be assisted when selecting the name of a header to set or to get. The headers' name builder is accessible directly from the method of the class `EndpointRouteBuilder` without argument whose name is the scheme of the target component.
+The endpoint-dsl provides type-safe access to component header names, so you don’t need to remember the exact header name strings or import each component’s constants class.
 
-In the example below the method `file()` available from `EndpointRouteBuilder`, gives access to the methods corresponding to the name of the headers of the file component. Here the method `fileName()` is called to get the name of the header for the name of the file.
+The recommended way is to use the `headers()` method which provides a dedicated entry point for all component header name builders:
+
+_Java-only: using type-safe header name builder_
 
 ```java
 public class MyRoutes extends EndpointRouteBuilder {
     @Override
     public void configure() {
         from(/*some endpoint*/)
-            // Some route start
-            .setHeader(file().fileName(), constant("foo.txt"))
-            // Some route end
+            .setHeader(headers().file().fileName(), constant("foo.txt"))
+            .setHeader(headers().kafka().kafkaKey(), constant("myKey"))
             ;
     }
 }
 ```
+
+The `headers()` method is also available as a static method, so you can use it with a static import from `EndpointHeaderBuilders`:
+
+```java
+import static org.apache.camel.builder.endpoint.EndpointHeaderBuilders.*;
+
+.setHeader(kafka().kafkaKey(), constant("myKey"))
+```
+
+> **Tip**
+> Each component’s header name builder includes Javadoc with the header description, type, and whether it applies to consumers, producers, or both.
 
 ### Using Endpoint-DSL outside route builders
 
@@ -85,6 +103,8 @@ You can use the type-safe endpoint-dsl outside route builders with:
     
 
 For example to send a message to Kafka you can use the `FluentProducerTemplate`
+
+_Java-only: sending a message using FluentProducerTemplate with Endpoint DSL_
 
 ```java
 import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.kafka;
@@ -99,6 +119,8 @@ To use the endpoint-dsl with kafka you need to static import `kafka` from the cl
 
 An endpoint can also be created in Java code via the endpoint-dsl as shown:
 
+_Java-only: creating an endpoint using Endpoint DSL and resolving it_
+
 ```java
 import static org.apache.camel.builder.endpoint.StaticEndpointBuilders.paho;
 
@@ -109,6 +131,8 @@ Endpoint mqtt = paho("sensor").clientId("myClient").userName("scott").password("
 You can then set all the options via the type-safe DSL and then the endpoint can be resolved (created) by calling `resolve` with `CamelContext` as parameter.
 
 If you want to inject an endpoint into your POJO or `RouteBuilder` class using endpoint-dsl, then this can be done similar to the previous example, but with one important difference:
+
+_Java-only: injecting an Endpoint DSL builder into a POJO_
 
 ```java
 import org.apache.camel.BindToRegistry;

@@ -357,20 +357,34 @@ Here is the XML syntax for the example route definition where **OrderedChecks** 
 
 Note that the body should include an instance of a class to validate.
 
-```xml
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-        <route>
-            <from uri="direct:start"/>
-            <to uri="bean-validator://x?group=org.apache.camel.component.bean.validator.OrderedChecks"/>
-        </route>
-    </camelContext>
-</beans>
+```java
+from("direct:start")
+    .to("bean-validator://x?group=org.apache.camel.component.bean.validator.OrderedChecks");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="bean-validator://x?group=org.apache.camel.component.bean.validator.OrderedChecks"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: bean-validator://x
+            parameters:
+              group: org.apache.camel.component.bean.validator.OrderedChecks
 ```
 
 ## Spring Boot Auto-Configuration

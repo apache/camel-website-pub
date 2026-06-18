@@ -106,6 +106,8 @@ HTTP server components can be configured to use virtual threads for request hand
 
 Jetty 12+ supports virtual threads via `VirtualThreadPool`. Configure a custom thread pool:
 
+_Java-only: programmatic Jetty VirtualThreadPool configuration_
+
 ```java
 import org.eclipse.jetty.util.thread.VirtualThreadPool;
 
@@ -133,10 +135,37 @@ Or in Spring configuration:
 
 The camel-platform-http-vertx component uses Vert.x’s event loop model. Virtual threads aren’t directly applicable, but you can offload blocking work:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/api/orders")
     .threads()  // Offload to virtual thread pool
     .to("jpa:Order");  // Blocking JPA operation
+```
+
+```xml
+<route>
+    <from uri="platform-http:/api/orders"/>
+    <threads>
+        <to uri="jpa:Order"/>
+    </threads>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: platform-http:/api/orders
+      steps:
+        - threads:
+            steps:
+              - to:
+                  uri: jpa:Order
 ```
 
 #### Undertow
@@ -156,12 +185,44 @@ Undertow can use virtual threads via XNIO worker configuration. Check Undertow d
 
 Virtual threads shine with blocking database operations:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // With virtual threads, these blocking calls don't waste platform threads
 from("seda:process?virtualThreadPerTask=true&concurrentConsumers=500")
     .to("jpa:Order")           // Blocking JDBC under the hood
     .to("sql:SELECT * FROM inventory WHERE id = :#${body.itemId}")
     .to("mongodb:orders");
+```
+
+```xml
+<route>
+    <from uri="seda:process?virtualThreadPerTask=true&amp;concurrentConsumers=500"/>
+    <to uri="jpa:Order"/>
+    <to uri="sql:SELECT * FROM inventory WHERE id = :#${body.itemId}"/>
+    <to uri="mongodb:orders"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:process
+      parameters:
+        virtualThreadPerTask: true
+        concurrentConsumers: 500
+      steps:
+        - to:
+            uri: jpa:Order
+        - to:
+            uri: "sql:SELECT * FROM inventory WHERE id = :#${body.itemId}"
+        - to:
+            uri: mongodb:orders
 ```
 
 ## SEDA Deep Dive: Two Execution Models
@@ -185,10 +246,38 @@ The default SEDA consumer model uses a **fixed pool of long-running consumer thr
 
 #### Configuration
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("seda:orders?concurrentConsumers=10")
     .process(this::processOrder)
     .to("direct:fulfillment");
+```
+
+```xml
+<route>
+    <from uri="seda:orders?concurrentConsumers=10"/>
+    <process ref="processOrder"/>
+    <to uri="direct:fulfillment"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:orders
+      parameters:
+        concurrentConsumers: 10
+      steps:
+        - process:
+            ref: processOrder
+        - to:
+            uri: direct:fulfillment
 ```
 
 #### Best For
@@ -221,10 +310,39 @@ The `virtualThreadPerTask` mode uses a fundamentally different approach: **spawn
 
 #### Configuration
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("seda:orders?virtualThreadPerTask=true&concurrentConsumers=100")
     .process(this::processOrder)  // I/O-bound operation
     .to("direct:fulfillment");
+```
+
+```xml
+<route>
+    <from uri="seda:orders?virtualThreadPerTask=true&amp;concurrentConsumers=100"/>
+    <process ref="processOrder"/>
+    <to uri="direct:fulfillment"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:orders
+      parameters:
+        virtualThreadPerTask: true
+        concurrentConsumers: 100
+      steps:
+        - process:
+            ref: processOrder
+        - to:
+            uri: direct:fulfillment
 ```
 
 #### Best For
@@ -315,9 +433,27 @@ When using virtual threads with high concurrency, proper backpressure is essenti
 
 The SEDA queue itself acts as a buffer with configurable size:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Queue holds up to 10,000 messages
 from("seda:orders?size=10000")
+```
+
+```xml
+<from uri="seda:orders?size=10000"/>
+```
+
+```yaml
+from:
+  uri: seda:orders
+  parameters:
+    size: 10000
 ```
 
 When the queue is full, producers can be configured to:
@@ -332,15 +468,49 @@ When the queue is full, producers can be configured to:
 
 Example with blocking and timeout:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Producer blocks up to 10 seconds when queue is full
 from("direct:incoming")
     .to("seda:processing?size=5000&blockWhenFull=true&offerTimeout=10000");
 ```
 
+```xml
+<route>
+    <from uri="direct:incoming"/>
+    <to uri="seda:processing?size=5000&amp;blockWhenFull=true&amp;offerTimeout=10000"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:incoming
+      steps:
+        - to:
+            uri: seda:processing
+            parameters:
+              size: 5000
+              blockWhenFull: true
+              offerTimeout: 10000
+```
+
 #### Layer 2: Concurrency Limiting (Consumer Side)
 
 In `virtualThreadPerTask` mode, the `concurrentConsumers` parameter controls maximum concurrent processing tasks:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 // Max 200 concurrent virtual threads processing messages
@@ -348,11 +518,37 @@ from("seda:orders?virtualThreadPerTask=true&concurrentConsumers=200")
     .to("http://downstream-service/api");
 ```
 
+```xml
+<route>
+    <from uri="seda:orders?virtualThreadPerTask=true&amp;concurrentConsumers=200"/>
+    <to uri="http://downstream-service/api"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:orders
+      parameters:
+        virtualThreadPerTask: true
+        concurrentConsumers: 200
+      steps:
+        - to:
+            uri: http://downstream-service/api
+```
+
 This uses a `Semaphore` internally to gate message dispatch, ensuring you don’t overwhelm downstream services even with thousands of queued messages.
 
 #### Layer 3: Combination Strategy
 
 For robust production systems, combine both:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 // Producer side: buffer up to 10,000, block if full (with timeout)
@@ -364,6 +560,51 @@ from("seda:order-queue?virtualThreadPerTask=true&concurrentConsumers=500")
     .to("http://inventory-service/check")
     .to("http://payment-service/process")
     .to("jpa:Order");
+```
+
+```xml
+<!-- Producer side: buffer up to 10,000, block if full (with timeout) -->
+<route>
+    <from uri="rest:post:/orders"/>
+    <to uri="seda:order-queue?size=10000&amp;blockWhenFull=true&amp;offerTimeout=30000"/>
+</route>
+
+<!-- Consumer side: process with virtual threads, max 500 concurrent -->
+<route>
+    <from uri="seda:order-queue?virtualThreadPerTask=true&amp;concurrentConsumers=500"/>
+    <to uri="http://inventory-service/check"/>
+    <to uri="http://payment-service/process"/>
+    <to uri="jpa:Order"/>
+</route>
+```
+
+```yaml
+# Producer side: buffer up to 10,000, block if full (with timeout)
+- route:
+    from:
+      uri: rest:post:/orders
+      steps:
+        - to:
+            uri: seda:order-queue
+            parameters:
+              size: 10000
+              blockWhenFull: true
+              offerTimeout: 30000
+
+# Consumer side: process with virtual threads, max 500 concurrent
+- route:
+    from:
+      uri: seda:order-queue
+      parameters:
+        virtualThreadPerTask: true
+        concurrentConsumers: 500
+      steps:
+        - to:
+            uri: http://inventory-service/check
+        - to:
+            uri: http://payment-service/process
+        - to:
+            uri: jpa:Order
 ```
 
 This configuration:
@@ -388,6 +629,8 @@ This configuration:
 | `concurrentConsumers` (virtualThreadPerTask) | Max concurrent tasks (semaphore) | Consumer side |
 
 ### Example: High-Throughput Order Processing
+
+_Java-only: RouteBuilder class with REST and SEDA virtual thread processing_
 
 ```java
 public class OrderProcessingRoute extends RouteBuilder {
@@ -489,6 +732,8 @@ Apache Camel provides the `ContextValue` abstraction that automatically chooses 
 
 #### Basic Usage
 
+_Java-only: ContextValue API for scoped context propagation_
+
 ```java
 import org.apache.camel.util.concurrent.ContextValue;
 
@@ -511,6 +756,8 @@ public void processRequest() {
 
 #### When to Use ThreadLocal vs ContextValue
 
+_Java-only: choosing between ContextValue factory methods_
+
 ```java
 // Use ContextValue.newInstance() for READ-ONLY context passing
 private static final ContextValue<RequestContext> REQUEST_CTX = ContextValue.newInstance("requestCtx");
@@ -522,6 +769,8 @@ private static final ContextValue<Counter> COUNTER = ContextValue.newThreadLocal
 #### Integration with Camel Internals
 
 Camel uses `ContextValue` internally for various purposes:
+
+_Java-only: ContextValue usage in Camel’s internal processor creation_
 
 ```java
 // Example: Passing context during route creation
@@ -540,6 +789,8 @@ ProcessorDefinition<?> current = CREATE_PROCESSOR.orElse(null);
 ### Migration from ThreadLocal
 
 If you have existing code using `ThreadLocal`, migration is straightforward:
+
+_Java-only: migrating from ThreadLocal to ContextValue_
 
 ```java
 // Before: ThreadLocal
@@ -591,12 +842,42 @@ camel.threads.virtual.enabled=true
 
 #### SEDA Tuning
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // For I/O-bound: use virtualThreadPerTask with high concurrency limit
 from("seda:io-bound?virtualThreadPerTask=true&concurrentConsumers=1000")
 
 // For CPU-bound: stick with traditional model, tune pool size
 from("seda:cpu-bound?concurrentConsumers=4")  // ~number of CPU cores
+```
+
+```xml
+<!-- For I/O-bound: use virtualThreadPerTask with high concurrency limit -->
+<from uri="seda:io-bound?virtualThreadPerTask=true&amp;concurrentConsumers=1000"/>
+
+<!-- For CPU-bound: stick with traditional model, tune pool size -->
+<from uri="seda:cpu-bound?concurrentConsumers=4"/>
+```
+
+```yaml
+# For I/O-bound: use virtualThreadPerTask with high concurrency limit
+from:
+  uri: seda:io-bound
+  parameters:
+    virtualThreadPerTask: true
+    concurrentConsumers: 1000
+
+# For CPU-bound: stick with traditional model, tune pool size
+from:
+  uri: seda:cpu-bound
+  parameters:
+    concurrentConsumers: 4
 ```
 
 #### Avoid Pinning
@@ -609,6 +890,8 @@ Virtual threads "pin" to carrier threads when:
     
 
 Prefer `ReentrantLock` over `synchronized`:
+
+_Java-only: using ReentrantLock instead of synchronized to avoid pinning_
 
 ```java
 // Avoid: can pin virtual thread
@@ -659,6 +942,8 @@ java -Djdk.tracePinnedThreads=short \
 
 ### Example 1: High-Concurrency REST API
 
+_Java-only: RouteBuilder class for high-concurrency REST API with virtual threads_
+
 ```java
 public class RestApiRoute extends RouteBuilder {
     @Override
@@ -681,6 +966,8 @@ public class RestApiRoute extends RouteBuilder {
 ```
 
 ### Example 2: Parallel Enrichment with Virtual Threads
+
+_Java-only: RouteBuilder class with programmatic executor service for parallel enrichment_
 
 ```java
 public class ParallelEnrichmentRoute extends RouteBuilder {
@@ -707,6 +994,8 @@ public class ParallelEnrichmentRoute extends RouteBuilder {
 ```
 
 ### Example 3: Context Propagation Within a Route
+
+_Java-only: RouteBuilder class demonstrating context propagation with exchange properties_
 
 ```java
 public class TenantAwareRoute extends RouteBuilder {

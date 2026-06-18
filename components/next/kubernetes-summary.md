@@ -109,6 +109,8 @@ Here we show some examples of producer using camel-kubernetes.
 
 ### Create a pod
 
+_Java-only: uses toF() with runtime variables for host and auth token_
+
 ```java
 from("direct:createPod")
     .toF("kubernetes-pods://%s?oauthToken=%s&operation=createPod", host, authToken);
@@ -117,6 +119,8 @@ from("direct:createPod")
 By using the `KubernetesConstants.KUBERNETES_POD_SPEC` header, you can specify your PodSpec and pass it to this operation.
 
 ### Delete a pod
+
+_Java-only: uses toF() with runtime variables for host and auth token_
 
 ```java
 from("direct:createPod")

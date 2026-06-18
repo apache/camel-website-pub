@@ -209,125 +209,195 @@ The operations for this producer are:
 
 ### Example for **set**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:set")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.SET_VALUE))
-.toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.SET_VALUE))
+    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:set" />
+    <from uri="direct:set"/>
     <setHeader name="hazelcast.operation.type">
         <constant>setvalue</constant>
     </setHeader>
-    <to uri="hazelcast-atomicvalue:foo" />
+    <to uri="hazelcast-atomicvalue:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:set
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: setvalue
+        - to:
+            uri: hazelcast-atomicvalue:foo
 ```
 
 Provide the value to set inside the message body (here the value is 10): `template.sendBody("direct:set", 10);`
 
 ### Example for **get**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:get")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-.toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
+    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:get" />
+    <from uri="direct:get"/>
     <setHeader name="hazelcast.operation.type">
         <constant>get</constant>
     </setHeader>
-    <to uri="hazelcast-atomicvalue:foo" />
+    <to uri="hazelcast-atomicvalue:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: get
+        - to:
+            uri: hazelcast-atomicvalue:foo
 ```
 
 You can get the number with `long body = template.requestBody("direct:get", null, Long.class);`.
 
 ### Example for **increment**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:increment")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.INCREMENT))
-.toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.INCREMENT))
+    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:increment" />
+    <from uri="direct:increment"/>
     <setHeader name="hazelcast.operation.type">
         <constant>increment</constant>
     </setHeader>
-    <to uri="hazelcast-atomicvalue:foo" />
+    <to uri="hazelcast-atomicvalue:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:increment
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: increment
+        - to:
+            uri: hazelcast-atomicvalue:foo
 ```
 
 The actual value (after increment) will be provided inside the message body.
 
 ### Example for **decrement**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:decrement")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DECREMENT))
-.toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DECREMENT))
+    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:decrement" />
+    <from uri="direct:decrement"/>
     <setHeader name="hazelcast.operation.type">
         <constant>decrement</constant>
     </setHeader>
-    <to uri="hazelcast-atomicvalue:foo" />
+    <to uri="hazelcast-atomicvalue:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:decrement
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: decrement
+        - to:
+            uri: hazelcast-atomicvalue:foo
 ```
 
 The actual value (after decrement) will be provided inside the message body.
 
 ### Example for **destroy**
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:destroy")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DESTROY))
-.toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DESTROY))
+    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:destroy" />
+    <from uri="direct:destroy"/>
     <setHeader name="hazelcast.operation.type">
         <constant>destroy</constant>
     </setHeader>
-    <to uri="hazelcast-atomicvalue:foo" />
+    <to uri="hazelcast-atomicvalue:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:destroy
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: destroy
+        - to:
+            uri: hazelcast-atomicvalue:foo
 ```
 
 ## Spring Boot Auto-Configuration

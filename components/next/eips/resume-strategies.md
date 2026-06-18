@@ -38,6 +38,8 @@ The route needs to use the `resumable()` method followed by passing a strategy c
 
 Using the resume API with the configuration should look like this:
 
+_Java-only: configuring resume strategy with KafkaResumeStrategyConfigurationBuilder_
+
 ```java
 KafkaResumeStrategyConfigurationBuilder kafkaConfigurationBuilder = KafkaResumeStrategyConfigurationBuilder.newBuilder()
     .withBootstrapServers("kafka-address:9092")
@@ -55,6 +57,8 @@ from("some:component")
 
 This instance can be bound in the Context registry as follows:
 
+_Java-only: binding resume strategy to the registry_
+
 ```java
 getCamelContext().getRegistry().bind("testResumeStrategy", new MyTestResumeStrategy());
 getCamelContext().getRegistry().bind("resumeCache", new MyChoiceOfResumeCache<>(100));
@@ -65,6 +69,8 @@ from("some:component")
 ```
 
 Or the instance can be constructed as follows:
+
+_Java-only: constructing resume strategy inline_
 
 ```java
 getCamelContext().getRegistry().bind("resumeCache", new MyChoiceOfResumeCache<>(100));
@@ -85,6 +91,8 @@ In some circumstances, such as when dealing with File I/O, it may be necessary t
 
 In some cases, it may be necessary to avoid updating the offset for every exchange. You can enable the intermittent mode to modify the route behavior so that missing offsets will not cause an exception:
 
+_Java-only: enabling intermittent mode on resumable_
+
 ```java
 from("some:component")
 .resumable(new MyTestResumeStrategy()).intermittent(true)
@@ -103,6 +111,8 @@ Camel comes with a few builtin strategies that can be used to store, retrieve an
 ### Configuring the Strategies
 
 Some of the builtin strategies may need additional configuration. This can be done using the configuration builders available for each strategy. For instance, to configure either one of the Kafka strategies mentioned earlier, the `KafkaResumeStrategyConfiguration` needs to be used. It can be created using a code similar to the following:
+
+_Java-only: building KafkaResumeStrategyConfiguration_
 
 ```java
     KafkaResumeStrategyConfiguration resumeStrategyConfiguration = KafkaResumeStrategyConfigurationBuilder.newBuilder()
@@ -128,6 +138,8 @@ When using the converters with the file component, beware of the differences in 
 
 For instance, the behavior of:
 
+_Java-only: resumable with Reader body type_
+
 ```java
 from("file:{{input.dir}}?noop=true&fileName={{input.file}}")
     .resumable("testResumeStrategy")
@@ -136,6 +148,8 @@ from("file:{{input.dir}}?noop=true&fileName={{input.file}}")
 ```
 
 It is different from the behavior of:
+
+_Java-only: resumable with InputStream body type_
 
 ```java
 from("file:{{input.dir}}?noop=true&fileName={{input.file}}")
@@ -164,6 +178,8 @@ To use the API, it needs an instance of a Consumer listener along with a predica
 
 Usage example:
 
+_Java-only: using pausable consumer API_
+
 ```java
 from(from)
     .pausable(new KafkaConsumerListener(), o -> canContinue())
@@ -176,6 +192,8 @@ You can also integrate the pausable API and the consumer listener with the circu
 One example would be to create an event watcher that checks for a downstream system availability. It watches for error events and, when they happen, it triggers a scheduled check. On success, it shuts down the scheduled check.
 
 An example implementation of this approach would be similar to this:
+
+_Java-only: integrating pausable consumer with circuit breaker_
 
 ```java
 CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults("pausable");

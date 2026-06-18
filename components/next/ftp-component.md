@@ -843,6 +843,18 @@ In the sample, we have built our own filter that only accepts files starting wit
 
 And then we can configure our route using the **filter** attribute to reference our filter (using `#` notation) that we have defined in the spring XML file:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("ftp://someuser@someftpserver.com?password=secret&filter=#myFilter")
+    .to("bean:processInbox");
+```
+
 ```xml
    <!-- define our sorter as a plain spring bean -->
    <bean id="myFilter" class="com.mycompany.MyFileFilter"/>
@@ -851,6 +863,18 @@ And then we can configure our route using the **filter** attribute to reference 
     <from uri="ftp://someuser@someftpserver.com?password=secret&amp;filter=#myFilter"/>
     <to uri="bean:processInbox"/>
   </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp://someuser@someftpserver.com
+      parameters:
+        password: secret
+        filter: "#myFilter"
+      steps:
+        - to:
+            uri: bean:processInbox
 ```
 
 #### Filtering using ANT path matcher
@@ -901,6 +925,18 @@ from("ftp://admin@localhost:2222/public/camel?antInclude=**/*.txt").to("...");
 
 To use an HTTP proxy to connect to your remote host, you can configure your route in the following way:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("sftp://localhost:9999/root?username=admin&password=admin&proxy=#proxy")
+    .to("bean:processFile");
+```
+
 ```xml
 <!-- define our sorter as a plain spring bean -->
 <bean id="proxy" class="com.jcraft.jsch.ProxyHTTP">
@@ -912,6 +948,19 @@ To use an HTTP proxy to connect to your remote host, you can configure your rout
   <from uri="sftp://localhost:9999/root?username=admin&password=admin&proxy=#proxy"/>
   <to uri="bean:processFile"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sftp://localhost:9999/root
+      parameters:
+        username: admin
+        password: admin
+        proxy: "#proxy"
+      steps:
+        - to:
+            uri: bean:processFile
 ```
 
 You can also assign a username and password to the proxy, if necessary. Please consult the documentation for `com.jcraft.jsch.Proxy` to discover all options.

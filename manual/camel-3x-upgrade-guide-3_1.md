@@ -458,6 +458,8 @@ The `@Experimental` annotation is moved from `meta-annotations` JAR to `camel-ap
 
 The support for out-of-band property placeholders has been removed. This means that XML that were using the `[http://camel.apache.org/schema/placeholder](http://camel.apache.org/schema/placeholder)` namespace and that the java builders using the `.placeholder(key, value).` have to be modified.
 
+_Java-only: using property placeholders with multicast (old style)_
+
 ```java
     from("direct:start")
         .multicast()
@@ -466,6 +468,8 @@ The support for out-of-band property placeholders has been removed. This means t
 ```
 
 should be rewritten as:
+
+_Java-only: using property placeholders with multicast (new style)_
 
 ```java
     from("direct:start")

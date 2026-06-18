@@ -732,9 +732,36 @@ This behavior matches the JSch-based sftp component.
 
 You can customize the authentication order using the `preferredAuthentications` option:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&privateKeyFile=/path/to/key&preferredAuthentications=password,publickey")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;privateKeyFile=/path/to/key&amp;preferredAuthentications=password,publickey"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        privateKeyFile: /path/to/key
+        preferredAuthentications: "password,publickey"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 #### Available Authentication Methods
@@ -752,9 +779,35 @@ If `preferredAuthentications` is not specified, the default order from Apache MI
 
 You can restrict which public key algorithms are accepted for authentication using the `publicKeyAcceptedAlgorithms` option:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?privateKeyFile=/path/to/key&publicKeyAcceptedAlgorithms=ssh-ed25519,rsa-sha2-256,rsa-sha2-512")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?privateKeyFile=/path/to/key&amp;publicKeyAcceptedAlgorithms=ssh-ed25519,rsa-sha2-256,rsa-sha2-512"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        privateKeyFile: /path/to/key
+        publicKeyAcceptedAlgorithms: "ssh-ed25519,rsa-sha2-256,rsa-sha2-512"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 #### Available Public Key Algorithms
@@ -775,9 +828,35 @@ from("mina-sftp://user@host/path?privateKeyFile=/path/to/key&publicKeyAcceptedAl
 
 For security-conscious deployments, restrict to modern algorithms only:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?privateKeyFile=/path/to/key&publicKeyAcceptedAlgorithms=ssh-ed25519,rsa-sha2-256,rsa-sha2-512,ecdsa-sha2-nistp256")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?privateKeyFile=/path/to/key&amp;publicKeyAcceptedAlgorithms=ssh-ed25519,rsa-sha2-256,rsa-sha2-512,ecdsa-sha2-nistp256"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        privateKeyFile: /path/to/key
+        publicKeyAcceptedAlgorithms: "ssh-ed25519,rsa-sha2-256,rsa-sha2-512,ecdsa-sha2-nistp256"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 If `publicKeyAcceptedAlgorithms` is not specified, the default list from Apache MINA SSHD is used.
@@ -1243,9 +1322,36 @@ When migrating from `sftp` to `mina-sftp`, verify the following:
 
 ### Connection Retry
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&maximumReconnectAttempts=5&reconnectDelay=2000")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;maximumReconnectAttempts=5&amp;reconnectDelay=2000"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        maximumReconnectAttempts: 5
+        reconnectDelay: 2000
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Error Messages
@@ -1301,9 +1407,35 @@ The mina-sftp component supports SSH data compression to reduce bandwidth usage 
 
 To enable compression, set the `compression` option to a value between 1 and 10:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&compression=5")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;compression=5"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        compression: 5
+      steps:
+        - to:
+            uri: file:local
 ```
 
 The compression level is advisory; the actual compression behavior depends on the SSH library’s implementation. When compression is enabled, the component configures the following algorithms in order of preference:
@@ -1355,9 +1487,35 @@ The mina-sftp component allows you to specify which SSH cipher algorithms to use
 
 To specify a custom list of ciphers, use the `ciphers` option with a comma-separated list of cipher names:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&ciphers=aes256-ctr,aes256-gcm@openssh.com")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;ciphers=aes256-ctr,aes256-gcm@openssh.com"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        ciphers: "aes256-ctr,aes256-gcm@openssh.com"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 Ciphers are offered to the server in the order specified. The first mutually supported cipher will be used.
@@ -1385,10 +1543,38 @@ The following ciphers are supported by Apache MINA SSHD:
 
 For security-hardened environments, use only modern authenticated encryption modes:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Recommended secure configuration
 from("mina-sftp://user@host/path?password=secret&ciphers=aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr")
     .to("file:local");
+```
+
+```xml
+<!-- Recommended secure configuration -->
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;ciphers=aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+# Recommended secure configuration
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        ciphers: "aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Default Cipher Behavior
@@ -1406,9 +1592,35 @@ The mina-sftp component allows you to specify which SSH key exchange algorithms 
 
 To specify a custom list of key exchange protocols, use the `keyExchangeProtocols` option with a comma-separated list:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&keyExchangeProtocols=curve25519-sha256,ecdh-sha2-nistp256")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;keyExchangeProtocols=curve25519-sha256,ecdh-sha2-nistp256"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        keyExchangeProtocols: "curve25519-sha256,ecdh-sha2-nistp256"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 Key exchange protocols are offered to the server in the order specified. The first mutually supported algorithm will be used.
@@ -1448,9 +1660,35 @@ The mina-sftp component allows you to specify which server host key algorithms a
 
 To specify a custom list of server host key algorithms, use the `serverHostKeys` option with a comma-separated list:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&serverHostKeys=ssh-ed25519,rsa-sha2-512")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;serverHostKeys=ssh-ed25519,rsa-sha2-512"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        serverHostKeys: "ssh-ed25519,rsa-sha2-512"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 Server host key algorithms are offered to the server in the order specified. The first mutually supported algorithm will be used for server authentication.
@@ -1578,20 +1816,77 @@ These option names follow the standard OpenSSH client configuration naming (`Ser
 
 For routes with long idle periods between file transfers, configure keep-alive to prevent firewalls or servers from terminating the connection:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Send keep-alive every 30 seconds
 from("mina-sftp://user@host/path?password=secret&serverAliveInterval=30000")
     .to("file:local");
 ```
 
+```xml
+<!-- Send keep-alive every 30 seconds -->
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;serverAliveInterval=30000"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+# Send keep-alive every 30 seconds
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        serverAliveInterval: 30000
+      steps:
+        - to:
+            uri: file:local
+```
+
 ### Detecting Unresponsive Servers
 
 Configure `serverAliveCountMax` to control how quickly the component detects an unresponsive server:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 // Terminate connection after 3 unanswered keep-alives (90 seconds max)
 from("mina-sftp://user@host/path?password=secret&serverAliveInterval=30000&serverAliveCountMax=3")
     .to("file:local");
+```
+
+```xml
+<!-- Terminate connection after 3 unanswered keep-alives (90 seconds max) -->
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;serverAliveInterval=30000&amp;serverAliveCountMax=3"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+# Terminate connection after 3 unanswered keep-alives (90 seconds max)
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        serverAliveInterval: 30000
+        serverAliveCountMax: 3
+      steps:
+        - to:
+            uri: file:local
 ```
 
 With this configuration:
@@ -1646,9 +1941,35 @@ The MINA SFTP component supports comprehensive host key verification to protect 
 
 When `strictHostKeyChecking=yes`, the server’s host key must match an entry in the known hosts source. If the key is unknown or mismatches, the connection is rejected.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&strictHostKeyChecking=yes")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;strictHostKeyChecking=yes"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        strictHostKeyChecking: "yes"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Known Hosts Sources (Priority Order)
@@ -1666,34 +1987,141 @@ The component checks for known hosts in this priority order:
 
 #### Using Custom Known Hosts File
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&strictHostKeyChecking=yes&knownHostsFile=/path/to/known_hosts")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;strictHostKeyChecking=yes&amp;knownHostsFile=/path/to/known_hosts"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        strictHostKeyChecking: "yes"
+        knownHostsFile: /path/to/known_hosts
+      steps:
+        - to:
+            uri: file:local
+```
+
 #### Using Known Hosts from Classpath
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina-sftp://user@host/path?password=secret&strictHostKeyChecking=yes&knownHostsUri=classpath:ssh/known_hosts")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;strictHostKeyChecking=yes&amp;knownHostsUri=classpath:ssh/known_hosts"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        strictHostKeyChecking: "yes"
+        knownHostsUri: "classpath:ssh/known_hosts"
+      steps:
+        - to:
+            uri: file:local
+```
+
 #### Using User’s Default Known Hosts
 
 By default, `useUserKnownHostsFile=true` which uses `~/.ssh/known_hosts`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina-sftp://user@host/path?password=secret&strictHostKeyChecking=yes")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;strictHostKeyChecking=yes"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        strictHostKeyChecking: "yes"
+      steps:
+        - to:
+            uri: file:local
+```
+
 ### Auto-Create Known Hosts File (Development Only)
 
 For development environments, you can enable automatic trust-on-first-use:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&autoCreateKnownHostsFile=true&knownHostsFile=/tmp/dev_known_hosts")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;autoCreateKnownHostsFile=true&amp;knownHostsFile=/tmp/dev_known_hosts"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        autoCreateKnownHostsFile: true
+        knownHostsFile: /tmp/dev_known_hosts
+      steps:
+        - to:
+            uri: file:local
 ```
 
 > **Caution**
@@ -1701,9 +2129,36 @@ from("mina-sftp://user@host/path?password=secret&autoCreateKnownHostsFile=true&k
 
 ### Disable Host Key Checking (Testing Only)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@localhost/test?password=secret&strictHostKeyChecking=no&useUserKnownHostsFile=false")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@localhost/test?password=secret&amp;strictHostKeyChecking=no&amp;useUserKnownHostsFile=false"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@localhost/test
+      parameters:
+        password: secret
+        strictHostKeyChecking: "no"
+        useUserKnownHostsFile: false
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 > **Caution**
@@ -1727,9 +2182,36 @@ The standard OpenSSH known\_hosts format supports `@cert-authority` entries that
 
 #### Example Configuration
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host.example.com/path?password=secret&strictHostKeyChecking=yes&knownHostsFile=/path/to/known_hosts")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host.example.com/path?password=secret&amp;strictHostKeyChecking=yes&amp;knownHostsFile=/path/to/known_hosts"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host.example.com/path
+      parameters:
+        password: secret
+        strictHostKeyChecking: "yes"
+        knownHostsFile: /path/to/known_hosts
+      steps:
+        - to:
+            uri: file:local
 ```
 
 Where the known\_hosts file contains:
@@ -1854,9 +2336,35 @@ In multi-homed environments (servers with multiple network interfaces), you may 
 
 Use the `bindAddress` option to specify the local IP address or hostname to bind the outgoing connection:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?password=secret&bindAddress=192.168.1.100")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;bindAddress=192.168.1.100"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        bindAddress: "192.168.1.100"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Bind Address Formats
@@ -1915,6 +2423,8 @@ The mina-sftp component’s `bindAddress` parameter has an enhanced format compa
 
 If you are migrating from the `sftp` component to `mina-sftp`, your existing `bindAddress` configurations will work without changes. The port specification is an optional enhancement.
 
+_Java-only: bindAddress configuration values_
+
 ```java
 // Works in both sftp and mina-sftp
 bindAddress=192.168.1.100
@@ -1931,6 +2441,13 @@ The mina-sftp component allows you to configure buffer sizes for SFTP read and w
 
 Use `readBufferSize` and `writeBufferSize` to control the buffer allocation for SFTP transfers:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Configure 64KB read buffer and 32KB write buffer
 from("mina-sftp://user@host/path?password=secret&readBufferSize=65536&writeBufferSize=32768")
@@ -1939,6 +2456,46 @@ from("mina-sftp://user@host/path?password=secret&readBufferSize=65536&writeBuffe
 // Configure symmetric buffer sizes for balanced transfers
 from("mina-sftp://user@host/path?password=secret&readBufferSize=65536&writeBufferSize=65536")
     .to("file:local");
+```
+
+```xml
+<!-- Configure 64KB read buffer and 32KB write buffer -->
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;readBufferSize=65536&amp;writeBufferSize=32768"/>
+  <to uri="file:local"/>
+</route>
+
+<!-- Configure symmetric buffer sizes for balanced transfers -->
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;readBufferSize=65536&amp;writeBufferSize=65536"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+# Configure 64KB read buffer and 32KB write buffer
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        readBufferSize: 65536
+        writeBufferSize: 32768
+      steps:
+        - to:
+            uri: file:local
+
+# Configure symmetric buffer sizes for balanced transfers
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        readBufferSize: 65536
+        writeBufferSize: 65536
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Buffer Size Options
@@ -2149,20 +2706,74 @@ The mina-sftp component supports reading and writing through symbolic links on S
 
 When consuming files, the consumer follows symbolic links to their target files:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Will consume files through symlinks
 from("mina-sftp://user@host/data?password=secret")
     .to("file:local");
 ```
 
+```xml
+<!-- Will consume files through symlinks -->
+<route>
+  <from uri="mina-sftp://user@host/data?password=secret"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+# Will consume files through symlinks
+- route:
+    from:
+      uri: mina-sftp://user@host/data
+      parameters:
+        password: secret
+      steps:
+        - to:
+            uri: file:local
+```
+
 ### Producer Behavior
 
 When producing files, you can write to paths that are symbolic links. The file will be written to the symlink’s target:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 // Can write to symlink targets
 from("file:local")
     .to("mina-sftp://user@host/upload-link?password=secret");
+```
+
+```xml
+<!-- Can write to symlink targets -->
+<route>
+  <from uri="file:local"/>
+  <to uri="mina-sftp://user@host/upload-link?password=secret"/>
+</route>
+```
+
+```yaml
+# Can write to symlink targets
+- route:
+    from:
+      uri: file:local
+      steps:
+        - to:
+            uri: mina-sftp://user@host/upload-link
+            parameters:
+              password: secret
 ```
 
 ### Symlink Limitations
@@ -2274,6 +2885,13 @@ By default, MINA SSHD uses UTF-8 encoding for filenames, which is the standard f
 
 Use the `filenameEncoding` option to specify the charset:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Connect to a legacy server using GBK encoding for Chinese filenames
 from("mina-sftp://user@host/path?password=secret&filenameEncoding=GBK")
@@ -2282,6 +2900,44 @@ from("mina-sftp://user@host/path?password=secret&filenameEncoding=GBK")
 // Connect to a Japanese server
 from("mina-sftp://user@host/path?password=secret&filenameEncoding=Shift-JIS")
     .to("file:local");
+```
+
+```xml
+<!-- Connect to a legacy server using GBK encoding for Chinese filenames -->
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;filenameEncoding=GBK"/>
+  <to uri="file:local"/>
+</route>
+
+<!-- Connect to a Japanese server -->
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;filenameEncoding=Shift-JIS"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+# Connect to a legacy server using GBK encoding for Chinese filenames
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        filenameEncoding: GBK
+      steps:
+        - to:
+            uri: file:local
+
+# Connect to a Japanese server
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        filenameEncoding: Shift-JIS
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Default Behavior
@@ -2316,6 +2972,8 @@ WARN  The 'jschLoggingLevel' parameter is specific to the JSch-based sftp compon
 ```
 
 ### Migration Example
+
+_Java-only: before and after migration from JSch-specific parameters_
 
 ```java
 // Before (sftp component with JSch-specific parameters)
@@ -2445,14 +3103,14 @@ If you are migrating from the `sftp` component and were using `loggingLevel` or 
 4.  The standard SLF4J approach provides more flexibility and follows Java logging best practices
     
 
-Before (JSch sftp component)
+_Java-only: JSch sftp component with logging parameters_
 
 ```java
 from("sftp://user@host/path?password=secret&loggingLevel=DEBUG&serverMessageLoggingLevel=INFO")
     .to("file:local");
 ```
 
-After (MINA SSHD mina-sftp component)
+_Java-only: mina-sftp component with logging parameters removed_
 
 ```java
 // Remove logging parameters from URI

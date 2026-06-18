@@ -132,6 +132,8 @@ A **bean:** endpoint cannot be defined as the input to the route; i.e., you cann
 
 Suppose you have the following POJO class to be used by Camel
 
+_Java-only: POJO bean class used by the route_
+
 ```java
 package com.foo;
 

@@ -11,7 +11,7 @@
         - to:
             uri: velocity:com/acme/MyResponse.vm
         - to:
-            uri: activemq:Another.Queue</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>You can also enrich the message in Java DSL directly (using fluent builder) as an <a href="../../../manual/expression.html" class="xref page">Expression</a>. In the example below, the message is enriched by appending ` World!` to the message body:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+            uri: activemq:Another.Queue</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>You can also enrich the message in Java DSL directly (using fluent builder) as an <a href="../../../manual/expression.html" class="xref page">Expression</a>. In the example below, the message is enriched by appending ` World!` to the message body:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: fluent builder to append to the message body</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .setBody(body().append(" World!"))
     .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>The fluent builder is not available in XML or YAML DSL, instead you can use <a href="../languages/simple-language.html" class="xref page">Simple</a> language:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .setBody(simple("${body} World!"))
@@ -34,14 +34,14 @@
         - to:
             uri: mock
             parameters:
-              name: result</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_content_enrichment_using_a_processor"><a class="anchor" href="#_content_enrichment_using_a_processor"></a>Content enrichment using a Processor</h2> <div class="sectionbody"> <div class="paragraph"> <p>In this example, we add our own <a href="../../../manual/processor.html" class="xref page">Processor</a> using explicit Java to enrich the message:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+              name: result</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_content_enrichment_using_a_processor"><a class="anchor" href="#_content_enrichment_using_a_processor"></a>Content enrichment using a Processor</h2> <div class="sectionbody"> <div class="paragraph"> <p>In this example, we add our own <a href="../../../manual/processor.html" class="xref page">Processor</a> using explicit Java to enrich the message:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: using an inline Processor to enrich the message</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .process(new Processor() {
         public void process(Exchange exchange) {
             Message msg = exchange.getMessage();
             msg.setBody(msg.getBody(String.class) + " World!");
         }
     })
-    .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>In the Java code above we used an inlined <code>Processor</code> which is harder to do with XML or YAML DSL. A good practice is to use a class for your custom <code>Processor</code> which can then be referenced in the DSL:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BindToRegistry("myProcessor")
+    .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>In the Java code above we used an inlined <code>Processor</code> which is harder to do with XML or YAML DSL. A good practice is to use a class for your custom <code>Processor</code> which can then be referenced in the DSL:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: custom Processor class registered in the Registry</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BindToRegistry("myProcessor")
 public class MyProcessor implements Processor {
 
     @Override

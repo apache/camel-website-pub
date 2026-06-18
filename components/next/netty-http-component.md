@@ -558,11 +558,34 @@ io.netty.handler.codec.http.HttpRequest request = exchange.getIn(NettyHttpMessag
 
 The Netty HTTP consumer supports HTTP basic authentication by specifying the security realm name to use, as shown below
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("netty-http:http://0.0.0.0:{{port}}/foo?securityConfiguration.realm=someRealm")
+    .to("direct:secured");
+```
+
 ```xml
 <route>
    <from uri="netty-http:http://0.0.0.0:{{port}}/foo?securityConfiguration.realm=someRealm"/>
-   ...
+   <to uri="direct:secured"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:{{port}}/foo
+      parameters:
+        securityConfiguration.realm: someRealm
+      steps:
+        - to:
+            uri: direct:secured
 ```
 
 The realm name is mandatory to enable basic authentication. By default, the JAAS based authenticator is used, which will use the realm name specified (`_someRealm_` in the example above) and use the JAAS realm and the `JAAS \{{LoginModule}}s` of this realm for authentication.
@@ -606,11 +629,36 @@ The constraint above is defined so that
 
 To use this constraint, we just need to refer to the bean id as shown below:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("netty-http:http://0.0.0.0:{{port}}/foo?matchOnUriPrefix=true&securityConfiguration.realm=someRealm&securityConfiguration.securityConstraint=#constraint")
+    .to("direct:secured");
+```
+
 ```xml
 <route>
    <from uri="netty-http:http://0.0.0.0:{{port}}/foo?matchOnUriPrefix=true&amp;securityConfiguration.realm=someRealm&amp;securityConfiguration.securityConstraint=#constraint"/>
-   ...
+   <to uri="direct:secured"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:{{port}}/foo
+      parameters:
+        matchOnUriPrefix: true
+        securityConfiguration.realm: someRealm
+        securityConfiguration.securityConstraint: "#constraint"
+      steps:
+        - to:
+            uri: direct:secured
 ```
 
 ## Examples
@@ -823,6 +871,8 @@ And here is an example of a mis-configured second route that does not have ident
 
 **Two routes are sharing the same port, but the second route is misconfigured and will fail on starting**
 
+_Java-only: demonstrates a misconfiguration that causes startup failure_
+
 ```java
 from("netty-http:http://0.0.0.0:{{port}}/foo")
   .to("mock:foo")
@@ -848,21 +898,66 @@ By configuring the common server bootstrap option in a single instance of a `org
 
 And in the routes you refer to this option as shown below
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("netty-http:http://0.0.0.0:{{port}}/foo?bootstrapConfiguration=#nettyHttpBootstrapOptions")
+    .to("direct:foo");
+
+from("netty-http:http://0.0.0.0:{{port}}/bar?bootstrapConfiguration=#nettyHttpBootstrapOptions")
+    .to("direct:bar");
+
+from("netty-http:http://0.0.0.0:{{port}}/beer?bootstrapConfiguration=#nettyHttpBootstrapOptions")
+    .to("direct:beer");
+```
+
 ```xml
 <route>
   <from uri="netty-http:http://0.0.0.0:{{port}}/foo?bootstrapConfiguration=#nettyHttpBootstrapOptions"/>
-  ...
+  <to uri="direct:foo"/>
 </route>
 
 <route>
   <from uri="netty-http:http://0.0.0.0:{{port}}/bar?bootstrapConfiguration=#nettyHttpBootstrapOptions"/>
-  ...
+  <to uri="direct:bar"/>
 </route>
 
 <route>
   <from uri="netty-http:http://0.0.0.0:{{port}}/beer?bootstrapConfiguration=#nettyHttpBootstrapOptions"/>
-  ...
+  <to uri="direct:beer"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:{{port}}/foo
+      parameters:
+        bootstrapConfiguration: "#nettyHttpBootstrapOptions"
+      steps:
+        - to:
+            uri: direct:foo
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:{{port}}/bar
+      parameters:
+        bootstrapConfiguration: "#nettyHttpBootstrapOptions"
+      steps:
+        - to:
+            uri: direct:bar
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:{{port}}/beer
+      parameters:
+        bootstrapConfiguration: "#nettyHttpBootstrapOptions"
+      steps:
+        - to:
+            uri: direct:beer
 ```
 
 ### Implementing a reverse proxy

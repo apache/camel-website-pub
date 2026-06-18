@@ -58,6 +58,8 @@ However, there has been some regressions from upgrading older Camel releases to 
 
 For example the following code
 
+_Java-only: nested Choice EIP before migration_
+
 ```java
 from("direct:start")
     .choice()
@@ -74,6 +76,8 @@ from("direct:start")
 ```
 
 Should now be
+
+_Java-only: nested Choice EIP after migration_
 
 ```java
 from("direct:start")

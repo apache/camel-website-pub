@@ -10,11 +10,15 @@ If you are developing unit tests using the `camel-test-junit5` component, then t
 
 In this unit test
 
+_Java-only: extending CamelTestSupport for debugging_
+
 ```java
 public class DebugTest extends CamelTestSupport
 ```
 
 We want to debug the following route
+
+_Java-only: creating a route to debug in a unit test_
 
 ```java
 @Override
@@ -33,6 +37,8 @@ protected RouteBuilder createRouteBuilder() throws Exception {
 ```
 
 Which can easily done by overriding the `debugBefore` method as shown
+
+_Java-only: enabling the debugger and setting a breakpoint in debugBefore_
 
 ```java
 @Override
@@ -64,6 +70,8 @@ The screenshot below shows the Debugger in action. The IDE (IDEA) has hit the br
 A trick to debug a Camel route written with Java DSL is to modify the route to insert a `processor` and then to set the breakpoint in it.
 
 For instance:
+
+_Java-only: inserting a processor breakpoint into a route for debugging_
 
 ```java
 public class MyRouteBuilder extends RouteBuilder {

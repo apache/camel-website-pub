@@ -235,6 +235,19 @@ In a similar manner when using camel avro consumers for avro ipc, the request pa
 
 An example of using camel avro producers via http:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("avro:http:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol")
+    .to("log:avro");
+```
+
 ```xml
         <route>
             <from uri="direct:start"/>
@@ -243,9 +256,35 @@ An example of using camel avro producers via http:
         </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: avro:http:localhost:{{avroport}}
+            parameters:
+              protocolClassName: org.apache.camel.avro.generated.KeyValueProtocol
+        - to:
+            uri: log:avro
+```
+
 In the example above you need to fill `CamelAvroMessageName` header.
 
 You can use the following syntax to call constant messages:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("avro:http:localhost:{{avroport}}/put?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol")
+    .to("log:avro");
+```
 
 ```xml
         <route>
@@ -255,7 +294,36 @@ You can use the following syntax to call constant messages:
         </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: avro:http:localhost:{{avroport}}/put
+            parameters:
+              protocolClassName: org.apache.camel.avro.generated.KeyValueProtocol
+        - to:
+            uri: log:avro
+```
+
 An example of consuming messages using camel avro consumers via netty:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("avro:netty:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol")
+    .choice()
+        .when().el("${in.headers.CamelAvroMessageName == 'put'}")
+            .process("putProcessor")
+        .when().el("${in.headers.CamelAvroMessageName == 'get'}")
+            .process("getProcessor");
+```
 
 ```xml
         <route>
@@ -273,7 +341,41 @@ An example of consuming messages using camel avro consumers via netty:
         </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: avro:netty:localhost:{{avroport}}
+      parameters:
+        protocolClassName: org.apache.camel.avro.generated.KeyValueProtocol
+      steps:
+        - choice:
+            when:
+              - el: "${in.headers.CamelAvroMessageName == 'put'}"
+                steps:
+                  - process:
+                      ref: putProcessor
+              - el: "${in.headers.CamelAvroMessageName == 'get'}"
+                steps:
+                  - process:
+                      ref: getProcessor
+```
+
 You can set up two distinct routes to perform the same task:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("avro:netty:localhost:{{avroport}}/put?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol")
+    .process("putProcessor");
+
+from("avro:netty:localhost:{{avroport}}/get?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol&singleParameter=true")
+    .process("getProcessor");
+```
 
 ```xml
         <route>
@@ -284,6 +386,26 @@ You can set up two distinct routes to perform the same task:
             <from uri="avro:netty:localhost:{{avroport}}/get?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol&singleParameter=true"/>
             <process ref="getProcessor"/>
         </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: avro:netty:localhost:{{avroport}}/put
+      parameters:
+        protocolClassName: org.apache.camel.avro.generated.KeyValueProtocol
+      steps:
+        - process:
+            ref: putProcessor
+- route:
+    from:
+      uri: avro:netty:localhost:{{avroport}}/get
+      parameters:
+        protocolClassName: org.apache.camel.avro.generated.KeyValueProtocol
+        singleParameter: true
+      steps:
+        - process:
+            ref: getProcessor
 ```
 
 In the example above, get takes only one parameter, so `singleParameter` is used and `getProcessor` will receive Value class directly in body, while `putProcessor` will receive an array of size 2 with `String` key and `Value` value filled as array contents.

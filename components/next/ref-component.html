@@ -6,7 +6,7 @@ Producer producer = endpoint.createProducer();
 Exchange exchange = producer.createExchange();
 exchange.getIn().setBody(payloadToSend);
 // send the exchange
-producer.process(exchange);</code></pre> </div> </div> <div class="paragraph"> <p>With Spring XML, you could have a list of endpoints defined in the Registry such as:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="camel" xmlns="http://activemq.apache.org/camel/schema/spring"&gt;
+producer.process(exchange);</code></pre> </div> </div> <div class="paragraph"> <p>With Spring XML, you could have a list of endpoints defined in the Registry such as:</p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring XML endpoint registry definitions</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="camel" xmlns="http://activemq.apache.org/camel/schema/spring"&gt;
     &lt;endpoint id="normalOrder" uri="activemq:order.slow"/&gt;
     &lt;endpoint id="bigspenderOrder" uri="activemq:order.high"/&gt;
 &lt;/camelContext&gt;</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_example"><a class="anchor" href="#_example"></a>Example</h2> <div class="sectionbody"> <div class="paragraph"> <p>Bind endpoints to the Camel registry:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic registry binding</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">context.getRegistry().bind("endpoint1", context.getEndpoint("direct:start"));

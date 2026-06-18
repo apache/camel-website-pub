@@ -44,22 +44,36 @@ for (List&lt;String&gt; line : data) {
 public void doHandleCsvData(List&lt;List&lt;String&gt;&gt; csvData)
 {
     // do magic here
-}</code></pre> </div> </div> <div class="olist lowerroman"> <ol class="lowerroman" type="i"> <li> <p>your route then looks as follows</p> </li> </ol> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
-        &lt;!-- poll every 10 seconds --&gt;
-        &lt;from uri="file:///some/path/to/pickup/csvfiles?delete=true&amp;amp;delay=10000" /&gt;
-        &lt;unmarshal&gt;&lt;csv /&gt;&lt;/unmarshal&gt;
-        &lt;to uri="bean:myCsvHandler?method=doHandleCsvData" /&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_marshaling_with_a_pipe_as_delimiter"><a class="anchor" href="#_marshaling_with_a_pipe_as_delimiter"></a>Marshaling with a pipe as delimiter</h3> <div class="paragraph"> <p>Considering the following body:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java collection API</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Map&lt;String, Object&gt; body = new LinkedHashMap&lt;&gt;();
+}</code></pre> </div> </div> <div class="olist lowerroman"> <ol class="lowerroman" type="i"> <li> <p>your route then looks as follows</p> </li> </ol> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///some/path/to/pickup/csvfiles?delete=true&amp;delay=10000")
+    .unmarshal().csv()
+    .to("bean:myCsvHandler?method=doHandleCsvData");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;!-- poll every 10 seconds --&gt;
+  &lt;from uri="file:///some/path/to/pickup/csvfiles?delete=true&amp;amp;delay=10000"/&gt;
+  &lt;unmarshal&gt;&lt;csv/&gt;&lt;/unmarshal&gt;
+  &lt;to uri="bean:myCsvHandler?method=doHandleCsvData"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: file:///some/path/to/pickup/csvfiles
+      parameters:
+        delete: true
+        delay: 10000
+      steps:
+        - unmarshal:
+            csv: {}
+        - to:
+            uri: bean:myCsvHandler
+            parameters:
+              method: doHandleCsvData</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_marshaling_with_a_pipe_as_delimiter"><a class="anchor" href="#_marshaling_with_a_pipe_as_delimiter"></a>Marshaling with a pipe as delimiter</h3> <div class="paragraph"> <p>Considering the following body:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java collection API</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Map&lt;String, Object&gt; body = new LinkedHashMap&lt;&gt;();
 body.put("foo", "abc");
-body.put("bar", 123);</code></pre> </div> </div> <div class="paragraph"> <p>And this Java route definition:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+body.put("bar", 123);</code></pre> </div> </div> <div class="paragraph"> <p>And this Java route definition:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .marshal(new CsvDataFormat().setDelimiter(&amp;#39;|&amp;#39;))
-    .to("mock:result")</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    .to("mock:result")</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start" /&gt;
   &lt;marshal&gt;
     &lt;csv delimiter="|" /&gt;
   &lt;/marshal&gt;
   &lt;to uri="mock:result" /&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
       steps:
@@ -67,7 +81,14 @@ body.put("bar", 123);</code></pre> </div> </div> <div class="paragraph"> <p>And 
             csv:
               delimiter: "|"
         - to:
-            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Then it will produce:</p> </div> <div class="listingblock"> <div class="content"> <pre>abc|123</pre> </div> </div> <div id="CSV-UsingautogenColumns" class="paragraph"> <p>Using autogenColumns, configRef and strategyRef attributes inside XML == DSL</p> </div> <div class="paragraph"> <p><strong>Since Camel 2.9.2 / 2.10 and deleted for Camel 2.15</strong></p> </div> <div class="paragraph"> <p>You can customize the CSV Data Format to make use of your own <code>CSVConfig</code> and/or <code>CSVStrategy</code>. Also note that the default value of the <code>autogenColumns</code> option is true. The following example should illustrate this customization.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Then it will produce:</p> </div> <div class="listingblock"> <div class="content"> <pre>abc|123</pre> </div> </div> <div id="CSV-UsingautogenColumns" class="paragraph"> <p>Using autogenColumns, configRef and strategyRef attributes inside XML == DSL</p> </div> <div class="paragraph"> <p><strong>Since Camel 2.9.2 / 2.10 and deleted for Camel 2.15</strong></p> </div> <div class="paragraph"> <p>You can customize the CSV Data Format to make use of your own <code>CSVConfig</code> and/or <code>CSVStrategy</code>. Also note that the default value of the <code>autogenColumns</code> option is true. The following example should illustrate this customization.</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CsvDataFormat csv = new CsvDataFormat();
+csv.setDelimiter("|");
+csv.setAutogenColumns(false);
+
+from("direct:start")
+    .marshal(csv)
+    .convertBodyTo(String.class)
+    .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start" /&gt;
   &lt;marshal&gt;
     &lt;!-- make use of a strategy other than the default one which is 'org.apache.commons.csv.CSVStrategy.DEFAULT_STRATEGY' --&gt;
@@ -92,29 +113,54 @@ body.put("bar", 123);</code></pre> </div> </div> <div class="paragraph"> <p>And 
 
 &lt;bean id="excelStrategy" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean"&gt;
   &lt;property name="staticField" value="org.apache.commons.csv.CSVStrategy.EXCEL_STRATEGY" /&gt;
-&lt;/bean&gt;</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_collecting_header_record"><a class="anchor" href="#_collecting_header_record"></a>Collecting header record</h3> <div class="paragraph"> <p>You can instruct the CSV Data Format to collect the headers into a message header called CamelCsvHeaderRecord.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java programmatic data format configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CsvDataFormat csv = new CsvDataFormat();
+&lt;/bean&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- from:
+    uri: direct:start
+    steps:
+      - marshal:
+          csv:
+            delimiter: "|"
+            autogenColumns: false
+      - convertBodyTo:
+          type: java.lang.String
+      - to:
+          uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_collecting_header_record"><a class="anchor" href="#_collecting_header_record"></a>Collecting header record</h3> <div class="paragraph"> <p>You can instruct the CSV Data Format to collect the headers into a message header called CamelCsvHeaderRecord.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java programmatic data format configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CsvDataFormat csv = new CsvDataFormat();
 csv.setCaptureHeaderRecord(true);
 
 from("direct:start")
   .unmarshal(csv)
-  .log("${header[CamelCsvHeaderRecord]}");</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_using_skipfirstline_or_skipheaderrecord_option_while_unmarshaling"><a class="anchor" href="#_using_skipfirstline_or_skipheaderrecord_option_while_unmarshaling"></a>Using skipFirstLine or skipHeaderRecord option while unmarshaling</h3> <div class="paragraph"> <p>*For Camel &gt;= 2.16.5 The instruction for CSV Data format to skip headers or first line is the following. Usign the Spring/XML DSL:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  .log("${header[CamelCsvHeaderRecord]}");</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_using_skipfirstline_or_skipheaderrecord_option_while_unmarshaling"><a class="anchor" href="#_using_skipfirstline_or_skipheaderrecord_option_while_unmarshaling"></a>Using skipFirstLine or skipHeaderRecord option while unmarshaling</h3> <div class="paragraph"> <p>*For Camel &gt;= 2.16.5 The instruction for CSV Data format to skip headers or first line is the following. Using the DSL:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CsvDataFormat csv = new CsvDataFormat();
+csv.setSkipHeaderRecord(true);
+
+from("direct:start")
+    .unmarshal(csv)
+    .to("bean:myCsvHandler?method=doHandleCsv");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start" /&gt;
   &lt;unmarshal&gt;
     &lt;csv skipHeaderRecord="true" /&gt;
   &lt;/unmarshal&gt;
   &lt;to uri="bean:myCsvHandler?method=doHandleCsv" /&gt;
-&lt;/route&gt;</code></pre> </div> </div> <div class="paragraph"> <p><strong>Since Camel 2.10 and deleted for Camel 2.15</strong></p> </div> <div class="paragraph"> <p>You can instruct the CSV Data Format to skip the first line which contains the CSV headers. Using the Spring/XML DSL:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CsvDataFormat csv = new CsvDataFormat();
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - unmarshal:
+            csv:
+              skipHeaderRecord: true
+        - to:
+            uri: bean:myCsvHandler
+            parameters:
+              method: doHandleCsv</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p><strong>Since Camel 2.10 and deleted for Camel 2.15</strong></p> </div> <div class="paragraph"> <p>You can instruct the CSV Data Format to skip the first line which contains the CSV headers. Using the Spring/XML DSL:</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CsvDataFormat csv = new CsvDataFormat();
 csv.setSkipFirstLine(true);
 
 from("direct:start")
   .unmarshal(csv)
-.to("bean:myCsvHandler?method=doHandleCsv");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+.to("bean:myCsvHandler?method=doHandleCsv");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start" /&gt;
   &lt;unmarshal&gt;
     &lt;csv skipFirstLine="true" /&gt;
   &lt;/unmarshal&gt;
   &lt;to uri="bean:myCsvHandler?method=doHandleCsv" /&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
       steps:
@@ -124,7 +170,7 @@ from("direct:start")
         - to:
             uri: bean:myCsvHandler
             parameters:
-              method: doHandleCsv</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_unmarshaling_with_a_pipe_as_delimiter"><a class="anchor" href="#_unmarshaling_with_a_pipe_as_delimiter"></a>Unmarshaling with a pipe as delimiter</h3> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CsvDataFormat csv = new CsvDataFormat();
+              method: doHandleCsv</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_unmarshaling_with_a_pipe_as_delimiter"><a class="anchor" href="#_unmarshaling_with_a_pipe_as_delimiter"></a>Unmarshaling with a pipe as delimiter</h3> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CsvDataFormat csv = new CsvDataFormat();
 CSVStrategy strategy = CSVStrategy.DEFAULT_STRATEGY;
 strategy.setDelimiter('|');
 csv.setStrategy(strategy);
@@ -136,13 +182,13 @@ csv.setDelimiter("|");
 
 from("direct:start")
   .unmarshal(csv)
-  .to("bean:myCsvHandler?method=doHandleCsv");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  .to("bean:myCsvHandler?method=doHandleCsv");</code></pre> </div> </div> </div> <div id="_tabs_8_xml--panel" class="tabpanel" aria-labelledby="_tabs_8_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start" /&gt;
   &lt;unmarshal&gt;
     &lt;csv delimiter="|" /&gt;
   &lt;/unmarshal&gt;
   &lt;to uri="bean:myCsvHandler?method=doHandleCsv" /&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_8_yaml--panel" class="tabpanel" aria-labelledby="_tabs_8_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
       steps:

@@ -576,12 +576,46 @@ Message header can be used to override value specified in Metrics component URI.
 | --- | --- | --- |
 | CamelMetricsHistogramValue | Override histogram value in URI | Long |
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // adds value 992 to simple.histogram
 from("direct:in")
     .setHeader(MetricsConstants.HEADER_HISTOGRAM_VALUE, constant(992L))
     .to("metrics:histogram:simple.histogram?value=700")
-    .to("direct:out")
+    .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMetricsHistogramValue">
+    <constant resultType="java.lang.Long">992</constant>
+  </setHeader>
+  <to uri="metrics:histogram:simple.histogram?value=700"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMetricsHistogramValue
+            constant: 992
+        - to:
+            uri: metrics:histogram:simple.histogram
+            parameters:
+              value: 700
+        - to:
+            uri: direct:out
 ```
 
 ### Metric type meter
@@ -674,12 +708,46 @@ Message header can be used to override `mark` value specified in Metrics compone
 | --- | --- | --- |
 | CamelMetricsMeterMark | Override mark value in URI | Long |
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // updates meter simple.meter with value 345
 from("direct:in")
     .setHeader(MetricsConstants.HEADER_METER_MARK, constant(345L))
     .to("metrics:meter:simple.meter?mark=123")
     .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMetricsMeterMark">
+    <constant resultType="java.lang.Long">345</constant>
+  </setHeader>
+  <to uri="metrics:meter:simple.meter?mark=123"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMetricsMeterMark
+            constant: 345
+        - to:
+            uri: metrics:meter:simple.meter
+            parameters:
+              mark: 123
+        - to:
+            uri: direct:out
 ```
 
 ### Metrics type timer
@@ -895,6 +963,8 @@ This factory allows adding a `RoutePolicy` for each route that exposes route uti
 
 From Java, you add the factory to the `CamelContext` as shown below:
 
+_Java-only: adding MetricsRoutePolicyFactory to CamelContext_
+
 ```java
 context.addRoutePolicyFactory(new MetricsRoutePolicyFactory());
 ```
@@ -922,6 +992,8 @@ Notice that if JMX is enabled on CamelContext then a `MetricsRegistryService` mb
 
 From Java code you can get hold of the `com.codahale.metrics.MetricRegistry` from the `org.apache.camel.component.metrics.routepolicy.MetricsRegistryService` as shown below:
 
+_Java-only: accessing MetricRegistry from MetricsRegistryService_
+
 ```java
 MetricRegistryService registryService = context.hasService(MetricsRegistryService.class);
 if (registryService != null) {
@@ -935,6 +1007,8 @@ if (registryService != null) {
 This factory allows using metrics to capture Message History performance statistics while routing messages. It works by using a metrics Timer for each node in all the routes. This factory can be used in Java and XML as the examples below demonstrates.
 
 From Java, you set the factory to the `CamelContext` as shown below:
+
+_Java-only: setting MetricsMessageHistoryFactory on CamelContext_
 
 ```java
 context.setMessageHistoryFactory(new MetricsMessageHistoryFactory());
@@ -964,6 +1038,8 @@ Notice that if JMX is enabled on CamelContext then a `MetricsRegistryService` mb
 At runtime the metrics can be accessed from Java API or JMX, which allows to gather the data as json output.
 
 From Java code, you can get the service from the CamelContext as shown:
+
+_Java-only: dumping message history statistics as JSON_
 
 ```java
 MetricsMessageHistoryService service = context.hasService(MetricsMessageHistoryService.class);

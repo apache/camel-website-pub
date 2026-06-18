@@ -45,6 +45,8 @@ Update throttle expressions configured with `maxRequestsPerPeriod` to use `maxCo
 
 For example, update the following:
 
+_Java-only: Old throttle with maxRequestsPerPeriod_
+
 ```java
 long maxRequestsPerPeriod = 100L;
 
@@ -59,6 +61,8 @@ from("seda:c")
 ```
 
 to use `maxConcurrentRequests`:
+
+_Java-only: New throttle with maxConcurrentRequests_
 
 ```java
 long maxConcurrentRequests = 30L;

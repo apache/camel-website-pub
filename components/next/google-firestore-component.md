@@ -25,6 +25,8 @@ Google Firestore component authentication is targeted for use with GCP Service A
 
 When you have the **service account key**, you can provide authentication credentials to your application code. Google security credentials can be set through the component endpoint:
 
+_Java-only: constructing the endpoint URI programmatically_
+
 ```java
 String endpoint = "google-firestore://myCollection?serviceAccountKey=/home/user/Downloads/my-key.json&projectId=my-project";
 ```
@@ -1153,6 +1155,8 @@ For write operations (`setDocument`, `createDocument`, `updateDocument`), the co
 
 You can send a JSON string directly as the message body. The component will automatically parse it:
 
+_Java-only: JSON string input with text blocks_
+
 ```java
 // Simple JSON
 from("direct:start")
@@ -1183,21 +1187,86 @@ from("direct:start")
 
 #### Reading JSON from Files
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Read JSON files and store in Firestore
 from("file:data/users?noop=true&include=.*\\.json")
     .setHeader("CamelGoogleFirestoreDocumentId", simple("${file:name.noext}"))
     .to("google-firestore://users?operation=setDocument")
     .log("Imported: ${file:name}");
 ```
 
+```xml
+<route>
+  <from uri="file:data/users?noop=true&amp;include=.*\.json"/>
+  <setHeader name="CamelGoogleFirestoreDocumentId">
+    <simple>${file:name.noext}</simple>
+  </setHeader>
+  <to uri="google-firestore://users?operation=setDocument"/>
+  <log message="Imported: ${file:name}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:data/users
+      parameters:
+        noop: true
+        include: ".*\\.json"
+      steps:
+        - setHeader:
+            name: CamelGoogleFirestoreDocumentId
+            simple: "${file:name.noext}"
+        - to:
+            uri: google-firestore://users
+            parameters:
+              operation: setDocument
+        - log:
+            message: "Imported: ${file:name}"
+```
+
 #### REST API Integration
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Receive JSON from REST endpoint and store in Firestore
 from("rest:post:/api/users")
     .to("google-firestore://users?operation=createDocument")
     .setBody(simple("{\"id\": \"${header.CamelGoogleFirestoreResponseDocumentId}\"}"));
+```
+
+```xml
+<route>
+  <from uri="rest:post:/api/users"/>
+  <to uri="google-firestore://users?operation=createDocument"/>
+  <setBody>
+    <simple>{"id": "${header.CamelGoogleFirestoreResponseDocumentId}"}</simple>
+  </setBody>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rest:post:/api/users
+      steps:
+        - to:
+            uri: google-firestore://users
+            parameters:
+              operation: createDocument
+        - setBody:
+            simple: '{"id": "${header.CamelGoogleFirestoreResponseDocumentId}"}'
 ```
 
 ### Supported Firestore Data Types

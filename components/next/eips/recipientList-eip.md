@@ -152,6 +152,8 @@ The dynamic list of recipients that are defined in the header must be iterable s
 
 In XML DSL you can set the delimiter attribute for setting a delimiter to be used if the header value is a single `String` with multiple separated endpoints. By default, Camel uses comma as delimiter, but this option lets you specify a custom delimiter to use instead.
 
+_XML-only:_
+
 ```xml
 <route>
   <from uri="direct:a"/>
@@ -179,6 +181,8 @@ And in YAML DSL you set the `delimiter` parameter:
 So if **myHeader** contains a `String` with the value `"activemq:queue:foo;activemq:topic:hello ; log:bar"` then Camel will split the `String` using the delimiter given in the XML that was comma, resulting into three endpoints to send to. You can use spaces between the endpoints as Camel will trim the value when it looks up the endpoint to send to.
 
 In Java DSL, you specify the delimiter as second parameter as shown below:
+
+_Java-only: the delimiter is passed as a second parameter to recipientList_
 
 ```java
 from("direct:a")
@@ -373,6 +377,8 @@ Camel will then process the messages in parallel until the timeout is hit. This 
 > If the timeout is reached with running tasks still remaining, certain tasks for which it is challenging for Camel to shut down in a graceful manner may continue to run. So use this option with a bit of care.
 
 For example, in the unit test below, you can see that we multicast the message to three destinations. We have a timeout of 2 seconds, which means only the last two messages can be completed within the timeframe. This means we will only aggregate the last two which yields a result aggregation which outputs "BC".
+
+_Java-only: multicast with inline AggregationStrategy and timeout_
 
 ```java
 from("direct:start")

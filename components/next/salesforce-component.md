@@ -846,6 +846,8 @@ salesforce:operationName?options
 
 As a general example on using the operations in this salesforce component, the following producer endpoint uses the upsertSObject API, with the sObjectIdName parameter specifying 'Name' as the external id field. The request message body should be an SObject DTO generated using the maven plugin.
 
+_Java-only: endpoint URI snippet_
+
 ```java
 ...to("salesforce:upsertSObject?sObjectIdName=Name")...
 ```
@@ -2440,6 +2442,8 @@ Gets results for a Result Id
 Type: `InputStream`
 
 For example, the following producer endpoint uses the createBatch API to create a Job Batch. The in message must contain a body that can be converted into an `InputStream` (usually UTF-8 CSV or XML content from a file, etc.) and header fields 'jobId' for the Job and 'contentType' for the Job content type, which can be XML, CSV, ZIP\_XML or ZIP\_CSV. The put message body will contain `BatchInfo` on success, or throw a `SalesforceException` on error.
+
+_Java-only: endpoint URI snippet_
 
 ```java
 ...to("salesforce:createBatch")..

@@ -24,6 +24,8 @@ Camel offers the following cluster related SPI:
 
 A _Cluster Service_ is just like any other camel service so set it up you only need to register your implementations to the `CamelContext`:
 
+_Java-only: registering a cluster service on the CamelContext_
+
 ```java
 MyClusterServiceImpl service = new MyClusterServiceImpl();
 context.addService(service);
@@ -187,6 +189,8 @@ The _Cluster SPI_ is leveraged by the following new implementations:
     
     This is an implementation of a RoutePolicy that starts the routes it is associated to when the Cluster View it uses takes the leadership
     
+    _Java-only: using ClusteredRoutePolicy with a route_
+    
     ```java
     context.addRoutes(new RouteBuilder {
         @Override
@@ -203,6 +207,8 @@ The _Cluster SPI_ is leveraged by the following new implementations:
     ```
     
     To apply the same policy to all the routes a dedicated _RoutePolicyFactory_ can be used:
+    
+    _Java-only: using ClusteredRoutePolicyFactory_
     
     ```java
     // add the clustered route policy factory to context
@@ -221,6 +227,8 @@ The _Cluster SPI_ is leveraged by the following new implementations:
 -   **ClusteredRouteController**
     
     This is an implementation of the _RouteController SPI_ that lets the camel context start then starts/stops the routes when the leadership is taken/lost. This is well integrated with spring-boot apps so assuming you have your routes set-up like:
+    
+    _Java-only: Spring Boot route definition for ClusteredRouteController_
     
     ```java
     @Bean
@@ -261,6 +269,8 @@ The _Cluster SPI_ is leveraged by the following new implementations:
     ```
     
     A concrete example:
+    
+    _Java-only: Spring Boot route using the master component_
     
     ```java
     @Bean

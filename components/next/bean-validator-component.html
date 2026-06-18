@@ -103,19 +103,18 @@ public interface AllChecks {
             &lt;/constraint&gt;
         &lt;/field&gt;
     &lt;/bean&gt;
-&lt;/constraint-mappings&gt;</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Here is the XML syntax for the example route definition where <strong>OrderedChecks</strong> can be <a href="https://github.com/apache/camel/blob/main/components/camel-bean-validator/src/test/java/org/apache/camel/component/bean/validator/OrderedChecks.java" class="bare">https://github.com/apache/camel/blob/main/components/camel-bean-validator/src/test/java/org/apache/camel/component/bean/validator/OrderedChecks.java</a></p> </div> <div class="paragraph"> <p>Note that the body should include an instance of a class to validate.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd"&gt;
-
-    &lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
-        &lt;route&gt;
-            &lt;from uri="direct:start"/&gt;
-            &lt;to uri="bean-validator://x?group=org.apache.camel.component.bean.validator.OrderedChecks"/&gt;
-        &lt;/route&gt;
-    &lt;/camelContext&gt;
-&lt;/beans&gt;</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using bean-validator with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+&lt;/constraint-mappings&gt;</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Here is the XML syntax for the example route definition where <strong>OrderedChecks</strong> can be <a href="https://github.com/apache/camel/blob/main/components/camel-bean-validator/src/test/java/org/apache/camel/component/bean/validator/OrderedChecks.java" class="bare">https://github.com/apache/camel/blob/main/components/camel-bean-validator/src/test/java/org/apache/camel/component/bean/validator/OrderedChecks.java</a></p> </div> <div class="paragraph"> <p>Note that the body should include an instance of a class to validate.</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+    .to("bean-validator://x?group=org.apache.camel.component.bean.validator.OrderedChecks");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    &lt;from uri="direct:start"/&gt;
+    &lt;to uri="bean-validator://x?group=org.apache.camel.component.bean.validator.OrderedChecks"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: bean-validator://x
+            parameters:
+              group: org.apache.camel.component.bean.validator.OrderedChecks</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using bean-validator with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-bean-validator-starter&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

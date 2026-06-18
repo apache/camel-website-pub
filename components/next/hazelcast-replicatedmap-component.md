@@ -223,76 +223,120 @@ The replicatedmap producer provides 6 operations:
 
 ### Example for **put**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:put")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
-.to(String.format("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX));
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
+    .to(String.format("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX));
 ```
 
 ```xml
 <route>
-    <from uri="direct:put" />
+    <from uri="direct:put"/>
     <log message="put.."/>
     <setHeader name="hazelcast.operation.type">
         <constant>put</constant>
     </setHeader>
-    <to uri="hazelcast-replicatedmap:foo" />
+    <to uri="hazelcast-replicatedmap:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:put
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: put
+        - to:
+            uri: hazelcast-replicatedmap:foo
 ```
 
 ### Example for **get**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:get")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-.toF("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX)
-.to("seda:out");
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
+    .toF("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX)
+    .to("seda:out");
 ```
 
 ```xml
 <route>
-    <from uri="direct:get" />
+    <from uri="direct:get"/>
     <log message="get.."/>
     <setHeader name="hazelcast.operation.type">
         <constant>get</constant>
     </setHeader>
-    <to uri="hazelcast-replicatedmap:foo" />
-    <to uri="seda:out" />
+    <to uri="hazelcast-replicatedmap:foo"/>
+    <to uri="seda:out"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: get
+        - to:
+            uri: hazelcast-replicatedmap:foo
+        - to:
+            uri: seda:out
 ```
 
 ### Example for **delete**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:delete")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DELETE))
-.toF("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DELETE))
+    .toF("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:delete" />
+    <from uri="direct:delete"/>
     <log message="delete.."/>
     <setHeader name="hazelcast.operation.type">
         <constant>delete</constant>
     </setHeader>
-    <to uri="hazelcast-replicatedmap:foo" />
+    <to uri="hazelcast-replicatedmap:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:delete
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: delete
+        - to:
+            uri: hazelcast-replicatedmap:foo
 ```
 
 You can call them in your test class with:

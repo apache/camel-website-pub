@@ -197,9 +197,11 @@ The ringbuffer producer provides 5 operations:
 
 ### Example for **put**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -210,13 +212,25 @@ from("direct:put")
 
 ```xml
 <route>
-    <from uri="direct:put" />
+    <from uri="direct:put"/>
     <log message="put.."/>
     <setHeader name="hazelcast.operation.type">
         <constant>add</constant>
     </setHeader>
-    <to uri="hazelcast-ringbuffer:foo" />
+    <to uri="hazelcast-ringbuffer:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:put
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: add
+        - to:
+            uri: hazelcast-ringbuffer:foo
 ```
 
 ### Example for **readonce from head**:

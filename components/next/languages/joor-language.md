@@ -61,11 +61,15 @@ These functions are convenient for getting the message body, header or exchange 
 
 Here we want to get the message body as a `com.foo.MyUser` type we can do as follows:
 
+_Java-only: jOOR type conversion function_
+
 ```java
 var user = bodyAs(com.foo.MyUser.class);
 ```
 
 You can omit _.class_ to make the function a little smaller:
+
+_Java-only: jOOR shorthand type conversion_
 
 ```java
 var user = bodyAs(com.foo.MyUser);
@@ -79,6 +83,8 @@ import com.foo.MyUser;
 
 And then the function can be shortened:
 
+_Java-only: jOOR type conversion with imported class_
+
 ```java
 var user = bodyAs(MyUser);
 ```
@@ -90,6 +96,8 @@ The Camel jOOR language allows dependency injection by referring to beans by the
 In the jOOR script you declare the injected beans using the syntax `#bean:beanId`.
 
 For example, suppose we have the following bean
+
+_Java-only: bean class used for dependency injection_
 
 ```java
 public class MyEchoBean {
@@ -108,6 +116,8 @@ And this bean is registered with the name `myEcho` in the Camel registry.
 
 The jOOR script can then inject this bean directly in the script where the bean is in use:
 
+_Java-only: jOOR bean injection in route_
+
 ```java
 from("direct:start")
     .transform().joor("'Hello ' + #bean:myEcho.echo(bodyAs(String))")
@@ -117,6 +127,8 @@ from("direct:start")
 Now this code may seem a bit magic, but what happens is that the `myEcho` bean is injected via a constructor, and then called directly in the script, so it is as fast as possible.
 
 Under the hood, Camel jOOR generates the following source code compiled once:
+
+_Java-only: generated compiled jOOR script class_
 
 ```java
 public class JoorScript1 implements org.apache.camel.language.joor.JoorMethod {
@@ -136,6 +148,8 @@ public class JoorScript1 implements org.apache.camel.language.joor.JoorMethod {
 
 You can also store a reference to the bean in a variable which would more resemble how you would code in Java
 
+_Java-only: jOOR bean variable reference in route_
+
 ```java
 from("direct:start")
     .transform().joor("var bean = #bean:myEcho; return 'Hello ' + bean.echo(bodyAs(String))")
@@ -147,6 +161,8 @@ Notice how we declare the bean as if it is a local variable via `var bean = #bea
 ### Auto imports
 
 The jOOR language will automatically import from:
+
+_Java-only: jOOR auto-imported packages_
 
 ```java
 import java.util.*;
@@ -176,6 +192,8 @@ echo()=bodyAs(String) + bodyAs(String)
 
 Which allows using `echo()` in the jOOR language script such as:
 
+_Java-only: jOOR alias usage in route_
+
 ```java
 from("direct:hello")
     .transform(joor("'Hello ' + echo()"))
@@ -184,11 +202,15 @@ from("direct:hello")
 
 The `echo()` alias will be replaced with its value resulting in a script as:
 
+_Java-only: jOOR alias expansion result_
+
 ```java
 .transform(joor("'Hello ' + bodyAs(String) + bodyAs(String)"))
 ```
 
 You can configure a custom configuration location for the `camel-joor.properties` file or reference to a bean in the registry:
+
+_Java-only: programmatic language configuration_
 
 ```java
 JoorLanguage joor = (JoorLanguage) context.resolveLanguage("joor");
@@ -196,6 +218,8 @@ joor.setConfigResource("ref:MyJoorConfig");
 ```
 
 And then register a bean in the registry with id `MyJoorConfig` that is a String value with the content.
+
+_Java-only: programmatic bean registration_
 
 ```java
 String config = "....";
@@ -246,6 +270,8 @@ from("seda:orders")
 
 It is possible to include multiple statements. The code below shows an example where the `user` header is retrieved in a first statement. And then, in a second statement we return a value whether the user is `null` or not.
 
+_Java-only: jOOR multi-statement expression in route_
+
 ```java
 from("seda:orders")
   .transform().joor("var user = message.getHeader(\"user\"); return user != null ? \"User: \" + user : \"No user exists\";")
@@ -253,6 +279,8 @@ from("seda:orders")
 ```
 
 Notice how we have to quote strings in strings, and that is annoying, so instead we can use single quotes:
+
+_Java-only: jOOR single-quoted string syntax_
 
 ```java
 from("seda:orders")
@@ -321,6 +349,8 @@ Where `e1` and `e2` are the _old_ Exchange and _new_ Exchange from the `aggregat
 The lambda syntax is representing a Java util `BiFunction<Exchange, Exchange, Object>` type.
 
 For example, to aggregate message bodies together, we can do this as shown:
+
+_Java-only: jOOR lambda-based aggregation strategy_
 
 ```java
 (e1, e2) -> {

@@ -210,6 +210,19 @@ Spring XML
 
 A namespace prefix defined as part of the `camelContext` definition can be re-used in context within the data format `secureTag` attribute of the `xmlSecurity` element.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .marshal().xmlSecurity("//cheese:cheesesites/italy", true)
+    .to("...");
+```
+
 ```xml
 <camelContext id="springXmlSecurityDataFormatTestCamelContext"
               xmlns="http://camel.apache.org/schema/spring"
@@ -223,9 +236,34 @@ A namespace prefix defined as part of the `camelContext` definition can be re-us
             ...
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            xmlSecurity:
+              secureTag: "//cheese:cheesesites/italy"
+              secureTagContents: true
+```
+
 ### Asymmetric Key Encryption
 
 Spring XML Sender
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .marshal().xmlSecurity("//cheese:cheesesites/italy", namespaces, true,
+            "recipient", XMLCipher.AES_128_CBC, XMLCipher.RSA_v1dot5, trustStoreParams)
+    .to("...");
+```
 
 ```xml
 <!--  trust store configuration -->
@@ -247,7 +285,36 @@ Spring XML Sender
             ...
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            xmlSecurity:
+              secureTag: "//cheese:cheesesites/italy"
+              secureTagContents: true
+              xmlCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+              keyCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
+              recipientKeyAlias: recipient
+              keyOrTrustStoreParametersRef: "#trustStoreParams"
+```
+
 Spring XML Recipient
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:encrypted")
+    .unmarshal().xmlSecurity("//cheese:cheesesites/italy", namespaces, true,
+            "recipient", XMLCipher.AES_128_CBC, XMLCipher.RSA_v1dot5, keyStoreParams)
+    .to("...");
+```
 
 ```xml
 <!--  key store configuration -->
@@ -268,6 +335,22 @@ Spring XML Recipient
                            keyPassword="privateKeyPassword" />
             </unmarshal>
             ...
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:encrypted
+      steps:
+        - unmarshal:
+            xmlSecurity:
+              secureTag: "//cheese:cheesesites/italy"
+              secureTagContents: true
+              xmlCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+              keyCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
+              recipientKeyAlias: recipient
+              keyOrTrustStoreParametersRef: "#keyStoreParams"
+              keyPassword: privateKeyPassword
 ```
 
 ## Dependencies

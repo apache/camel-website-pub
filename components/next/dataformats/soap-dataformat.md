@@ -87,6 +87,8 @@ from("direct:start")
 
 When using XML DSL, there is a version attribute you can set on the <soap> element.
 
+_XML-only: Spring bean definition for ServiceInterfaceStrategy_
+
 ```xml
     <!-- Defining a ServiceInterfaceStrategy for retrieving the element name when marshalling -->
     <bean id="myNameStrategy" class="org.apache.camel.dataformat.soap.name.ServiceInterfaceStrategy">
@@ -97,6 +99,21 @@ When using XML DSL, there is a version attribute you can set on the <soap> eleme
 
 And in the Camel route
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+SoapDataFormat soap = new SoapDataFormat("com.example.customerservice", new ServiceInterfaceStrategy(CustomerService.class));
+soap.setVersion("1.2");
+from("direct:start")
+    .marshal(soap)
+    .to("jms:myQueue");
+```
+
 ```xml
 <route>
   <from uri="direct:start"/>
@@ -105,6 +122,20 @@ And in the Camel route
   </marshal>
   <to uri="jms:myQueue"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            soap:
+              contextPath: com.example.customerservice
+              version: "1.2"
+              elementNameStrategyRef: myNameStrategy
+        - to:
+            uri: jms:myQueue
 ```
 
 ## Multi-part Messages

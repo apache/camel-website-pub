@@ -96,6 +96,8 @@ For example, as shown in the route below where we use the [Load Balancer](loadBa
 
 **Code will not compile**
 
+_Java-only: incorrect use of loadBalance inside choice_
+
 ```java
 from("direct:start")
     .choice()
@@ -107,6 +109,8 @@ from("direct:start")
 
 Well, the first issue is that the [Load Balancer](loadBalance-eip.md) EIP uses the additional routing to know what to use in the load balancing. In this example, that would be:
 
+_Java-only: load balancer routing snippet_
+
 ```java
 .to("mock:foo").to("mock:bar")
 ```
@@ -114,6 +118,8 @@ Well, the first issue is that the [Load Balancer](loadBalance-eip.md) EIP uses t
 To indicate when the balancing stops, you should use `.end()` to denote the end. So the route is updated as follows:
 
 **Code will still not compile**
+
+_Java-only: using end() does not fix the compilation issue_
 
 ```java
 from("direct:start")
@@ -131,6 +137,8 @@ The reason is we have stretched how far we can take the good old Java language i
 That’s not doable in Java. So we need to help Java a bit, which you do by using `.endChoice()`, which tells Camel to "pop the stack" and return to the scope of the Choice EIP.
 
 **Code compiles**
+
+_Java-only: using endChoice() to fix the compilation issue_
 
 ```java
 from("direct:start")

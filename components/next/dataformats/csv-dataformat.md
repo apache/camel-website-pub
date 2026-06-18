@@ -249,13 +249,42 @@ public void doHandleCsvData(List<List<String>> csvData)
 1.  your route then looks as follows
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file:///some/path/to/pickup/csvfiles?delete=true&delay=10000")
+    .unmarshal().csv()
+    .to("bean:myCsvHandler?method=doHandleCsvData");
+```
+
 ```xml
 <route>
-        <!-- poll every 10 seconds -->
-        <from uri="file:///some/path/to/pickup/csvfiles?delete=true&amp;delay=10000" />
-        <unmarshal><csv /></unmarshal>
-        <to uri="bean:myCsvHandler?method=doHandleCsvData" />
+  <!-- poll every 10 seconds -->
+  <from uri="file:///some/path/to/pickup/csvfiles?delete=true&amp;delay=10000"/>
+  <unmarshal><csv/></unmarshal>
+  <to uri="bean:myCsvHandler?method=doHandleCsvData"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:///some/path/to/pickup/csvfiles
+      parameters:
+        delete: true
+        delay: 10000
+      steps:
+        - unmarshal:
+            csv: {}
+        - to:
+            uri: bean:myCsvHandler
+            parameters:
+              method: doHandleCsvData
 ```
 
 ### Marshaling with a pipe as delimiter
@@ -317,6 +346,24 @@ Using autogenColumns, configRef and strategyRef attributes inside XML == DSL
 
 You can customize the CSV Data Format to make use of your own `CSVConfig` and/or `CSVStrategy`. Also note that the default value of the `autogenColumns` option is true. The following example should illustrate this customization.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+CsvDataFormat csv = new CsvDataFormat();
+csv.setDelimiter("|");
+csv.setAutogenColumns(false);
+
+from("direct:start")
+    .marshal(csv)
+    .convertBodyTo(String.class)
+    .to("mock:result");
+```
+
 ```xml
 <route>
   <from uri="direct:start" />
@@ -346,6 +393,20 @@ You can customize the CSV Data Format to make use of your own `CSVConfig` and/or
 </bean>
 ```
 
+```yaml
+- from:
+    uri: direct:start
+    steps:
+      - marshal:
+          csv:
+            delimiter: "|"
+            autogenColumns: false
+      - convertBodyTo:
+          type: java.lang.String
+      - to:
+          uri: mock:result
+```
+
 ### Collecting header record
 
 You can instruct the CSV Data Format to collect the headers into a message header called CamelCsvHeaderRecord.
@@ -363,7 +424,23 @@ from("direct:start")
 
 ### Using skipFirstLine or skipHeaderRecord option while unmarshaling
 
-\*For Camel >= 2.16.5 The instruction for CSV Data format to skip headers or first line is the following. Usign the Spring/XML DSL:
+\*For Camel >= 2.16.5 The instruction for CSV Data format to skip headers or first line is the following. Using the DSL:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+CsvDataFormat csv = new CsvDataFormat();
+csv.setSkipHeaderRecord(true);
+
+from("direct:start")
+    .unmarshal(csv)
+    .to("bean:myCsvHandler?method=doHandleCsv");
+```
 
 ```xml
 <route>
@@ -373,6 +450,20 @@ from("direct:start")
   </unmarshal>
   <to uri="bean:myCsvHandler?method=doHandleCsv" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - unmarshal:
+            csv:
+              skipHeaderRecord: true
+        - to:
+            uri: bean:myCsvHandler
+            parameters:
+              method: doHandleCsv
 ```
 
 **Since Camel 2.10 and deleted for Camel 2.15**

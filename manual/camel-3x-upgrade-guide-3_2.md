@@ -441,6 +441,8 @@ Endpoint endpoint = camelContext.getEndpoint("myCoolEndpoint");
 
 The context scope error handling has been modified a bit. The processors in those `onException` and `onCompletion` are not shared between routes anymore. This should have little effect in most cases. If there is a need to have a single set of processors involved (such as when using a loadbalancer or other stateful patterns), then an intermediary route needs to be used. The following excerpt:
 
+_Java-only: onException with embedded load balancer before migration_
+
 ```java
 onException(Exception.class).handled(true)
     .loadBalance().roundRobin().id("round")
@@ -449,6 +451,8 @@ onException(Exception.class).handled(true)
 
 1.  needs to be rewritten as:
     
+
+_Java-only: onException with intermediary route after migration_
 
 ```java
 onException(Exception.class).handled(true).to("direct:error");
@@ -474,11 +478,15 @@ To make Camel routing engine as fast as possible this feature has been removed.
 
 For example a timer with a 5 second period
 
+_Java-only: timer period with time pattern before migration_
+
 ```java
 from("timer:foo?period=5s")
 ```
 
 Should now be specified as numeric only:
+
+_Java-only: timer period with numeric value after migration_
 
 ```java
 from("timer:foo?period=5000")

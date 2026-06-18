@@ -74,7 +74,12 @@ We use [Recipient List](recipientList-eip.md) to get the request for a quote to 
 
 The routes for this are defined as:
 
-Java
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -106,8 +111,6 @@ from("seda:quoteAggregator")
     </aggregate>
   </route>
 ```
-
-YAML
 
 ```yaml
 - route:
@@ -168,6 +171,8 @@ public class MyVendor {
 ```
 
 And are loaded up in Spring XML like this:
+
+_XML-only: Spring XML bean definitions for vendor and aggregation strategy_
 
 ```xml
 <camelContext>

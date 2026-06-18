@@ -155,6 +155,8 @@ Camel uses **`DefaultExceptionPolicyStrategy`** to determine a strategy how an e
 
 This is best illustrated with an exception:
 
+_Java-only: exception policy selection order_
+
 ```java
 onException(IOException.class)
     .maximumRedeliveries(3);
@@ -175,6 +177,8 @@ So if an exception is thrown with this hierarchy:
 Then Camel will try testing the exception in this order: **`FileNotFoundException`**, **`IOException`**, **`OrderFailedException`** and **`RuntimeCamelException`**. As we have defined a **`onException(IOException.class)`** Camel will select this as it’s the **closest** match.
 
 If we add a third **`onException`** clause with the **`FileNotFoundException`**
+
+_Java-only: adding a more specific exception clause_
 
 ```java
 onException(IOException.class)
@@ -278,6 +282,8 @@ onException(ValidationException.class)
 
 All redelivery attempts start at the point of the failure. So the route:
 
+_Java-only: redelivery starts at the point of failure_
+
 ```java
 onException(ConnectException.class)
     .from("direct:start")
@@ -342,6 +348,8 @@ And in YAML DSL you just add another exception in the array:
 
 We want to handle certain exceptions in a specific way, so we add a **`onException`** clause for the particular exception.
 
+_Java-only: using a processor as failure handler_
+
 ```java
 // here we register exception cause for MyFunctionException
 // when this exception occurs we want it to be processed by our
@@ -352,6 +360,8 @@ onException(MyFunctionalException.class)
 ```
 
 So what happens is that whenever a **`MyFunctionalException`** is thrown it is being routed to our processor **`MyFunctionFailureHandler`**. So you can say that the exchange is diverted when a **`MyFunctionalException`** is thrown during processing. It’s important to distinct this as perfectly valid. The default redelivery policy from the [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) will not kick in, so our processor receives the Exchange directly, without any redeliver attempted. In our processor we need to determine what to do. Camel regards the Exchange as **failure handled**. So our processor is the end of the route. So lets look the code for our processor.
+
+_Java-only: custom failure handler processor_
 
 ```java
 public static class MyFunctionFailureHandler implements Processor {
@@ -418,6 +428,8 @@ onException(ValidationException)
 
 In this route below we want to do special handling of all **`OrderFailedException`** as we want to return a customized response to the caller. First we set up our routing as:
 
+_Java-only: handling OrderFailedException with custom response_
+
 ```java
     // we do special error handling for when OrderFailedException is
     // thrown
@@ -448,6 +460,8 @@ In this route below we want to do special handling of all **`OrderFailedExceptio
 ```
 
 Then we have our service bean that is just a plain POJO demonstrating how you can use [Bean Integration](bean-integration.md) in Camel to avoid being tied to the Camel API:
+
+_Java-only: OrderService POJO using Bean Integration_
 
 ```java
     /**
@@ -482,6 +496,8 @@ Then we have our service bean that is just a plain POJO demonstrating how you ca
 
 And finally the exception that is being thrown is just a regular exception:
 
+_Java-only: custom exception class_
+
 ```java
     public static class OrderFailedException extends Exception {
 
@@ -501,6 +517,8 @@ If the order could **not** be processed and thus an **`OrderFailedException`** w
 ### Using Handled with Spring XML DSL
 
 The same route as above in Spring XML DSL:
+
+_XML-only: handling OrderFailedException with custom response_
 
 ```xml
  <!-- setup our error handler as the deal letter channel -->
@@ -547,6 +565,8 @@ The same route as above in Spring XML DSL:
 
 And the same example in YAML DSL
 
+_YAML-only: handling OrderFailedException with custom response_
+
 ```yaml
 - beans:
   - name: "orderService"
@@ -583,6 +603,8 @@ And the same example in YAML DSL
 
 If you use `onException` to handle exceptions, and want to get the caused `Exception` from a `Processor` in Java code, such as shown below:
 
+_Java-only: exception is null in onException processor_
+
 ```java
 .onException(Exception.class)
     .handled(true)
@@ -600,11 +622,15 @@ Then beware the caused exception is no longer available from `exchange.getExcept
 
 Instead, you can access the caused exception from exchange property on the exchange with the key `Exchange.EXCEPTION_CAUGHT`, as follows:
 
+_Java-only: accessing the caught exception from a property_
+
 ```java
 Exception cause = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
 ```
 
 The correct code to use in the example is there:
+
+_Java-only: correct way to get exception in onException_
 
 ```java
 .onException(Exception.class).handled(true)
@@ -622,6 +648,8 @@ The correct code to use in the example is there:
 
 In the route above we handled the exception but routed it to a different endpoint. What if you need to alter the response and send a fixed response back to the original caller (the client). No secret here just do as you do in normal Camel routing, use [transform](../components/4.18.x/eips/message-translator.md) to set the response, as shown in the sample below:
 
+_Java-only: returning a fixed response with transform_
+
 ```java
 // we catch MyFunctionalException and want to mark it as handled
 // (= no failure returned to client)
@@ -634,6 +662,8 @@ onException(MyFunctionalException.class)
 
 We modify the sample slightly to return the original caused exception message instead of the fixed text `Sorry`:
 
+_Java-only: returning the exception message_
+
 ```java
 // we catch MyFunctionalException and want to mark it as handled
 // (= no failure returned to client)
@@ -645,6 +675,8 @@ onException(MyFunctionalException.class)
 ```
 
 And we can use the [Simple](../components/4.18.x/languages/simple-language.md) language to set a readable error message with the caused exception message:
+
+_Java-only: using Simple language in error response_
 
 ```java
 // we catch MyFunctionalException and want to mark it as handled
@@ -958,6 +990,8 @@ You can define exception clauses either as:
 
 We start off with the sample that we change over time. First off we use only global exception clauses:
 
+_Java-only: global exception policies_
+
 ```java
 // default should errors go to mock:error
 errorHandler(deadLetterChannel("mock:error").redeliveryDelay(0));
@@ -985,6 +1019,8 @@ In the next sample we change the global exception policies to be pure route spec
 ### Must use `.end()` for route specific exception policies
 
 \[IMPORTANT\] This requires to end the **`onException`** route with **`.end()`** to indicate where it stops and when the regular route continues.
+
+_Java-only: route-specific exception policies with .end()_
 
 ```java
 // default should errors go to mock:error
@@ -1017,6 +1053,8 @@ from("direct:start")
 
 And now it gets complex as we combine global and route specific exception policies as we introduce a second route in the sample:
 
+_Java-only: combining global and route-specific exception policies_
+
 ```java
 // global error handler
 // as its based on a unit test we do not have any delays between
@@ -1045,6 +1083,8 @@ from("direct:start2")
 Notice that we can define the same exception **`MyFunctionalException`** in both routes, but they are configured differently and thus is handled different depending on the route. You can of course also add a new **`onException`** to one of the routes so it has an additional exception policy.
 
 And finally we top this by throwing in a nested error handler as well, as we add the 3rd route shown below:
+
+_Java-only: nested error handler with route-specific exceptions_
 
 ```java
 from("direct:start3")
@@ -1189,6 +1229,8 @@ In YAML then you refer to the redelivery process using `onRedeliveryRef` which i
 
 And in our custom processor we set a special timeout header to the message. You can of course do anything what you like in your code.
 
+_Java-only: custom redelivery processor_
+
 ```java
 // This is our processor that is executed before every redelivery attempt
 // here we can do what we want in the java code, such as altering the
@@ -1255,6 +1297,8 @@ When you need fine-grained control for determining if an exchange should be retr
 
 Example:
 
+_Java-only: using retryWhile predicate for fine-grained retry_
+
 ```java
 // we want to use a predicate for retries so we can determine in
 // our bean when retry should stop, notice it will overrule the global
@@ -1264,6 +1308,8 @@ onException(MyFunctionalException.class).retryWhile(method("myRetryHandler")).ha
 ```
 
 Where the bean **`myRetryHandler`** is computing if we should retry or not:
+
+_Java-only: retry handler bean with Bean Binding_
 
 ```java
 public class MyRetryBean {
@@ -1283,12 +1329,16 @@ public class MyRetryBean {
 
 The default `org.apache.camel.processor.errorhandler.ExceptionPolicyStrategy` in Camel should be sufficient in nearly all use-cases. However, if you need to use your own (use only for rare and advanced use-cases) this can be configured as the sample below illustrates:
 
+_Java-only: configuring a custom ExceptionPolicyStrategy_
+
 ```java
 // configure the error handler to use my policy instead of the default from Camel
 errorHandler(deadLetterChannel("mock:error").exceptionPolicyStrategy(new MyPolicy()));
 ```
 
 Using our own strategy **`MyPolicy`** we can change the default behavior of Camel with our own code to resolve which exception type from above should be handling the given thrown exception.
+
+_Java-only: custom ExceptionPolicyStrategy implementation_
 
 ```java
 public static class MyPolicy implements ExceptionPolicyStrategy {

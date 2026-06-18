@@ -302,6 +302,8 @@ myFtpPassword=RAW(se+re?t&23)
 
 We could still have used the `RAW(value)` in the Camel route instead:
 
+_Java-only: using RAW() inline in the route URI_
+
 ```java
 .to("ftp:joe@myftpserver.com?password=RAW({{myFtpPassword}})&binary=true")
 ```
@@ -317,6 +319,8 @@ myFtpPassword=se+re?t&23
 The [CamelContext](camelcontext.md) will by default cache the last 1000 used endpoints (based on a LRUCache).
 
 This must be done on the `CamelContext` as a global option as shown in the following Java code:
+
+_Java-only: configuring the endpoint cache size via CamelContext API_
 
 ```java
 getCamelContext().getGlobalOptions().put(Exchange.MAXIMUM_ENDPOINT_CACHE_SIZE, "500");
@@ -343,16 +347,84 @@ In Camel you can configure this in a more readable syntax as explained:
 
 So for example the [Timer](../components/4.18.x/timer-component.md) endpoint can be configured as follows:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("timer:foo?period=45m").to("log:foo");
 ```
 
+```xml
+<route>
+    <from uri="timer:foo?period=45m"/>
+    <to uri="log:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:foo?period=45m
+      steps:
+        - to:
+            uri: log:foo
+```
+
 You can mix and match the units so you can do this as well:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("timer:foo?period=1h15m").to("log:foo");
 from("timer:bar?period=2h30s").to("log:bar");
 from("timer:bar?period=3h45m58s").to("log:bar");
+```
+
+```xml
+<route>
+    <from uri="timer:foo?period=1h15m"/>
+    <to uri="log:foo"/>
+</route>
+
+<route>
+    <from uri="timer:bar?period=2h30s"/>
+    <to uri="log:bar"/>
+</route>
+
+<route>
+    <from uri="timer:bar?period=3h45m58s"/>
+    <to uri="log:bar"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:foo?period=1h15m
+      steps:
+        - to:
+            uri: log:foo
+- route:
+    from:
+      uri: timer:bar?period=2h30s
+      steps:
+        - to:
+            uri: log:bar
+- route:
+    from:
+      uri: timer:bar?period=3h45m58s
+      steps:
+        - to:
+            uri: log:bar
 ```
 
 However, you can also use long syntax:
@@ -364,8 +436,31 @@ However, you can also use long syntax:
 | minute _or_ minutes | minute |
 | second _or_ seconds | second |
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("timer:foo?period=45minutes").to("log:foo");
+```
+
+```xml
+<route>
+    <from uri="timer:foo?period=45minutes"/>
+    <to uri="log:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:foo?period=45minutes
+      steps:
+        - to:
+            uri: log:foo
 ```
 
 ## Java Endpoint API

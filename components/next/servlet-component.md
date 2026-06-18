@@ -216,6 +216,8 @@ If you’re running Camel standalone on a Servlet container or application serve
 
 For example, to define a route that exposes an HTTP service under the path `/services`.
 
+_XML-only: web.xml servlet configuration_
+
 ```xml
 <web-app>
   <servlet>
@@ -273,6 +275,8 @@ On the Camel Quarkus runtime, these init parameters can be set via configuration
 
 On other runtimes you can configure these parameters in `web.xml` as follows.
 
+_XML-only: web.xml with async servlet init parameters_
+
 ```xml
 <web-app>
     <servlet>
@@ -303,6 +307,8 @@ If deploying into an application server / servlet container and you choose to ha
 > Having Camel JARs on the boot classpath of the application server is not best practice.
 
 In this scenario, you **must** define a custom and unique servlet name in each of your Camel applications. For example, in `web.xml`:
+
+_XML-only: web.xml with custom servlet name_
 
 ```xml
 <web-app>
@@ -351,6 +357,8 @@ from("servlet://foo?servletName=MyServlet")
 ```
 
 Camel detects duplicate Servlet names and will fail to start the application. You can control and ignore such duplicates by setting the servlet init parameter `ignoreDuplicateServletName` to `true` as follows:
+
+_XML-only: web.xml init parameter to ignore duplicate servlet names_
 
 ```xml
   <servlet>

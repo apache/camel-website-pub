@@ -30,6 +30,13 @@ A `Predicate` is being evaluated to a boolean value so the result is either `tru
 
 A simple example is to route an [Exchange](exchange.md) based on a header value with the [Content Based Router](../components/4.18.x/eips/choice-eip.md) EIP:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jms:queue:order")
    .choice()
@@ -38,6 +45,46 @@ from("jms:queue:order")
    .otherwise()
       .to("bean:miscOrder")
    .end();
+```
+
+```xml
+<route>
+    <from uri="jms:queue:order"/>
+    <choice>
+        <when>
+            <simple>${header.type} == 'widget'</simple>
+            <to uri="bean:widgetOrder"/>
+        </when>
+        <when>
+            <simple>${header.type} == 'wombat'</simple>
+            <to uri="bean:wombatOrder"/>
+        </when>
+        <otherwise>
+            <to uri="bean:miscOrder"/>
+        </otherwise>
+    </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:queue:order
+      steps:
+        - choice:
+            when:
+              - simple: "${header.type} == 'widget'"
+                steps:
+                  - to:
+                      uri: bean:widgetOrder
+              - simple: "${header.type} == 'wombat'"
+                steps:
+                  - to:
+                      uri: bean:wombatOrder
+            otherwise:
+              steps:
+                - to:
+                    uri: bean:miscOrder
 ```
 
 In the route above the [Predicate](#) is the `header("type").isEqualTo("widget")` as it is constructed as an [Expression](expression.md) that is evaluated as a [Predicate](#). To do this the various _Builder classes_ help us here to create a nice and fluent syntax. `isEqualTo` is a builder method that returns a [Predicate](#) based on the input.
@@ -49,6 +96,8 @@ Predicate isWidget = header("type").isEqualTo("widget");
 ```
 
 And then you can refer to it in the route as:
+
+_Java-only: using a predicate variable in a route_
 
 ```java
 from("jms:queue:order")
@@ -72,12 +121,51 @@ import static org.apache.camel.builder.PredicateBuilder.not;
 
 And then we can use it to enclose an existing predicate and negate it as the example shows:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .choice()
         .when(not(header("username").regex("goofy|pluto"))).to("mock:people")
         .otherwise().to("mock:animals")
     .end();
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <choice>
+        <when>
+            <simple>${header.username} not regex 'goofy|pluto'</simple>
+            <to uri="mock:people"/>
+        </when>
+        <otherwise>
+            <to uri="mock:animals"/>
+        </otherwise>
+    </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            when:
+              - simple: "${header.username} not regex 'goofy|pluto'"
+                steps:
+                  - to:
+                      uri: mock:people
+            otherwise:
+              steps:
+                - to:
+                    uri: mock:animals
 ```
 
 ## Compound Predicates
@@ -114,6 +202,8 @@ PredicateBuilder.and(XPathBuilder.xpath("/bookings/flights"), simple("${exchange
 ```
 
 The sample below demonstrates further use cases:
+
+_Java-only: compound predicates with PredicateBuilder_
 
 ```java
 // We define 3 predicates based on some user roles

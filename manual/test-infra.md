@@ -80,6 +80,8 @@ This registration is done in the `registerProperties` methods during the service
 
 Registering the properties in the concrete service implementation:
 
+_Java-only: registering service properties for test infrastructure_
+
 ```java
     public void registerProperties() {
         // MyServiceProperties.MY_SERVICE_HOST is a string with value "my.service.host"
@@ -128,12 +130,16 @@ This should be similar to:
 
 On the test class, add a member variable for the service and annotate it with the `@RegisterExtension` to let JUnit manage its lifecycle.
 
+_Java-only: registering a test infrastructure service as a JUnit extension_
+
 ```java
 @RegisterExtension
 static MyService service = MyServiceServiceFactory.createService();
 ```
 
 More complex test services can be created using something similar to:
+
+_Java-only: creating a complex test service with builder pattern_
 
 ```java
 @RegisterExtension
@@ -153,6 +159,8 @@ You can use the methods as well as the registered properties to access the test 
 
 It’s also possible to use these properties in the test code itself. For example, when setting up the test url for the Camel component:
 
+_Java-only: using test infrastructure properties in a Camel route_
+
 ```java
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
@@ -169,6 +177,8 @@ It’s also possible to use these properties in the test code itself. For exampl
 When combining the different modules of the test infra, you may need to ensure that they execute in the proper order. You can do so by using JUnit’s `@Order` annotation.
 
 For instance:
+
+_Java-only: controlling execution order of test extensions_
 
 ```java
     @Order(1)

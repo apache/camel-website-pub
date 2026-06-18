@@ -388,14 +388,43 @@ String response = template.requestBodyAndHeader(
 
 #### Via Endpoint Configuration
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:chat")
     .to("spring-ai-chat:test?chatModel=#chatModel&temperature=0.8&maxTokens=500");
 ```
 
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:test?chatModel=#chatModel&amp;temperature=0.8&amp;maxTokens=500"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+              temperature: 0.8
+              maxTokens: 500
+```
+
 ### Adding System Messages
 
 System messages provide instructions or context to the LLM. You can configure them via endpoint parameters for default behavior:
+
+_Java-only: route definition with ProducerTemplate usage_
 
 ```java
 from("direct:chat")
@@ -409,6 +438,8 @@ String response = template.requestBody("direct:chat",
 ### Response Headers and Metadata
 
 The component automatically tracks token usage and response metadata, providing them via headers. You can access these headers in your Camel routes:
+
+_Java-only: route with `.log()` header interpolation and ProducerTemplate usage_
 
 ```java
 from("direct:chat")
@@ -456,6 +487,13 @@ The component supports attaching metadata to both user and system messages. This
 
 You can attach metadata to user messages via headers or endpoint configuration:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Using URL parameters - nested property syntax
 from("direct:chat")
@@ -465,9 +503,37 @@ from("direct:chat")
         + "&userMetadata.priority=high");
 ```
 
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:test?chatModel=#chatModel&amp;userMetadata.messageId=msg-123&amp;userMetadata.userId=user-456&amp;userMetadata.priority=high"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+              userMetadata.messageId: msg-123
+              userMetadata.userId: user-456
+              userMetadata.priority: high
+```
+
 #### System Message Metadata
 
 Similarly, you can attach metadata to system messages:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 // Using URL parameters - nested property syntax
@@ -476,6 +542,27 @@ from("direct:chat")
         + "&systemMetadata.version=1.0"
         + "&systemMetadata.model=gpt-4"
         + "&systemMetadata.promptVersion=2024-01");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:test?chatModel=#chatModel&amp;systemMetadata.version=1.0&amp;systemMetadata.model=gpt-4&amp;systemMetadata.promptVersion=2024-01"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+              systemMetadata.version: "1.0"
+              systemMetadata.model: gpt-4
+              systemMetadata.promptVersion: "2024-01"
 ```
 
 ### Conversation Memory
@@ -571,6 +658,13 @@ The component integrates with the [Spring AI Tools Component](spring-ai-tools-co
 
 When you configure the `tags` parameter, the chat component discovers all matching tools from `spring-ai-tools` routes, registers them with Spring AI’s ChatClient, and allows the LLM to call them during conversation.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Define tools
 from("spring-ai-tools:weather?tags=weather&description=Get current weather for a location")
@@ -591,6 +685,104 @@ from("direct:mathChat")
 
 from("direct:multiToolChat")
     .to("spring-ai-chat:chat?tags=weather,math,finance&chatClient=#chatClient");
+```
+
+```xml
+<!-- Define tools -->
+<route>
+  <from uri="spring-ai-tools:weather?tags=weather&amp;description=Get current weather for a location"/>
+  <setBody><constant>Sunny</constant></setBody>
+</route>
+
+<route>
+  <from uri="spring-ai-tools:calculator?tags=math&amp;description=Evaluate mathematical expressions"/>
+  <setBody><constant>42</constant></setBody>
+</route>
+
+<route>
+  <from uri="spring-ai-tools:stock?tags=finance&amp;description=Get current stock price"/>
+  <setBody><constant>42</constant></setBody>
+</route>
+
+<!-- Chat endpoints with different tool combinations -->
+<route>
+  <from uri="direct:weatherChat"/>
+  <to uri="spring-ai-chat:chat?tags=weather&amp;chatClient=#chatClient"/>
+</route>
+
+<route>
+  <from uri="direct:mathChat"/>
+  <to uri="spring-ai-chat:chat?tags=math&amp;chatClient=#chatClient"/>
+</route>
+
+<route>
+  <from uri="direct:multiToolChat"/>
+  <to uri="spring-ai-chat:chat?tags=weather,math,finance&amp;chatClient=#chatClient"/>
+</route>
+```
+
+```yaml
+# Define tools
+- route:
+    from:
+      uri: spring-ai-tools:weather
+      parameters:
+        tags: weather
+        description: Get current weather for a location
+      steps:
+        - setBody:
+            constant: Sunny
+
+- route:
+    from:
+      uri: spring-ai-tools:calculator
+      parameters:
+        tags: math
+        description: Evaluate mathematical expressions
+      steps:
+        - setBody:
+            constant: "42"
+
+- route:
+    from:
+      uri: spring-ai-tools:stock
+      parameters:
+        tags: finance
+        description: Get current stock price
+      steps:
+        - setBody:
+            constant: "42"
+
+# Chat endpoints with different tool combinations
+- route:
+    from:
+      uri: direct:weatherChat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              tags: weather
+              chatClient: "#chatClient"
+
+- route:
+    from:
+      uri: direct:mathChat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              tags: math
+              chatClient: "#chatClient"
+
+- route:
+    from:
+      uri: direct:multiToolChat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              tags: weather,math,finance
+              chatClient: "#chatClient"
 ```
 
 **How it works:**
@@ -712,6 +904,13 @@ template.requestBody("direct:scan-analyzer", message, String.class);
 
 To prevent out-of-memory errors with large media files, the component validates file sizes before loading them into memory. The default maximum file size is 1MB, configurable via:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Configure via endpoint parameter (in bytes)
 from("file:uploads")
@@ -727,6 +926,66 @@ from("file:trusted")
     .to("spring-ai-chat:vision?chatModel=#chatModel&maxFileSize=0");
 ```
 
+```xml
+<!-- Configure via endpoint parameter (in bytes) - 5MB -->
+<route>
+  <from uri="file:uploads"/>
+  <to uri="spring-ai-chat:vision?chatModel=#chatModel&amp;maxFileSize=5242880"/>
+</route>
+
+<!-- Override via header for dynamic control - 10MB -->
+<route>
+  <from uri="direct:upload"/>
+  <setHeader name="CamelSpringAiChatMaxFileSize">
+    <constant>10485760</constant>
+  </setHeader>
+  <to uri="spring-ai-chat:vision?chatModel=#chatModel"/>
+</route>
+
+<!-- Disable size checking (not recommended) -->
+<route>
+  <from uri="file:trusted"/>
+  <to uri="spring-ai-chat:vision?chatModel=#chatModel&amp;maxFileSize=0"/>
+</route>
+```
+
+```yaml
+# Configure via endpoint parameter (in bytes) - 5MB
+- route:
+    from:
+      uri: file:uploads
+      steps:
+        - to:
+            uri: spring-ai-chat:vision
+            parameters:
+              chatModel: "#chatModel"
+              maxFileSize: 5242880
+
+# Override via header for dynamic control - 10MB
+- route:
+    from:
+      uri: direct:upload
+      steps:
+        - setHeader:
+            name: CamelSpringAiChatMaxFileSize
+            constant: "10485760"
+        - to:
+            uri: spring-ai-chat:vision
+            parameters:
+              chatModel: "#chatModel"
+
+# Disable size checking (not recommended)
+- route:
+    from:
+      uri: file:trusted
+      steps:
+        - to:
+            uri: spring-ai-chat:vision
+            parameters:
+              chatModel: "#chatModel"
+              maxFileSize: 0
+```
+
 Files exceeding the configured limit will be rejected with an `IllegalArgumentException`.
 
 ### SafeGuard - Content Filtering
@@ -735,12 +994,39 @@ The component provides content filtering capabilities through Spring AI’s Safe
 
 This feature is useful for: \* Preventing disclosure of sensitive information (passwords, secrets, API keys) \* Enforcing content policies in customer-facing applications \* Compliance with data protection requirements \* Filtering inappropriate or restricted topics
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Configure safeguard with sensitive words
 from("direct:safeguard")
     .to("spring-ai-chat:test?chatModel=#chatModel"
         + "&safeguardSensitiveWords=password,secret,confidential,api-key"
         + "&safeguardFailureResponse=I cannot provide information containing sensitive words");
+```
+
+```xml
+<route>
+  <from uri="direct:safeguard"/>
+  <to uri="spring-ai-chat:test?chatModel=#chatModel&amp;safeguardSensitiveWords=password,secret,confidential,api-key&amp;safeguardFailureResponse=I cannot provide information containing sensitive words"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:safeguard
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+              safeguardSensitiveWords: "password,secret,confidential,api-key"
+              safeguardFailureResponse: "I cannot provide information containing sensitive words"
 ```
 
 **Configuration Options:**
@@ -865,6 +1151,8 @@ from("direct:chat")
 
 Select specific tools by name using the `toolNames` parameter, instead of (or in addition to) tag-based discovery. This is useful for selecting individual `@Tool` methods or controlling which tools are available per endpoint:
 
+_Java-only: route definition with dynamic tool selection via ProducerTemplate header_
+
 ```java
 // Select only the getCapital tool by name
 from("direct:chat")
@@ -913,6 +1201,13 @@ template.request("direct:chat", e -> {
 
 Enable automatic validation of structured output with retry on failure. When the LLM produces invalid output (doesn’t match the expected JSON Schema), the advisor re-prompts the LLM with validation errors:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel"
@@ -922,7 +1217,36 @@ from("direct:chat")
         + "&structuredOutputValidationMaxAttempts=3");
 ```
 
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;outputFormat=BEAN&amp;outputClass=com.example.ActorFilms&amp;structuredOutputValidation=true&amp;structuredOutputValidationMaxAttempts=3"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              outputFormat: BEAN
+              outputClass: com.example.ActorFilms
+              structuredOutputValidation: true
+              structuredOutputValidationMaxAttempts: 3
+```
+
 If all retry attempts fail, the exception propagates to Camel’s error handler:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:chat")
@@ -936,6 +1260,45 @@ from("direct:chat")
     .end();
 ```
 
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <doTry>
+    <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;outputFormat=BEAN&amp;outputClass=com.example.ActorFilms&amp;structuredOutputValidation=true&amp;structuredOutputValidationMaxAttempts=2"/>
+    <doCatch>
+      <exception>java.lang.Exception</exception>
+      <log message="Structured output validation failed: ${exception.message}"/>
+      <to uri="direct:fallback"/>
+    </doCatch>
+  </doTry>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - doTry:
+            steps:
+              - to:
+                  uri: spring-ai-chat:chat
+                  parameters:
+                    chatModel: "#chatModel"
+                    outputFormat: BEAN
+                    outputClass: com.example.ActorFilms
+                    structuredOutputValidation: true
+                    structuredOutputValidationMaxAttempts: 2
+            doCatch:
+              - exception:
+                  - java.lang.Exception
+                steps:
+                  - log:
+                      message: "Structured output validation failed: ${exception.message}"
+                  - to:
+                      uri: direct:fallback
+```
+
 The advisor requires `outputClass` or `entityClass` to be set so it can generate a JSON Schema for validation. A warning is logged if neither is configured.
 
 ### MCP Client (Model Context Protocol)
@@ -946,6 +1309,13 @@ Configure MCP servers using the `mcpServer.<name>.<property>` prefix notation:
 
 #### Stdio Transport
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Connect to MCP filesystem server via stdio
 from("direct:chat")
@@ -955,7 +1325,35 @@ from("direct:chat")
         + "&mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp");
 ```
 
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.fs.transportType=stdio&amp;mcpServer.fs.command=npx&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.fs.transportType: stdio
+              mcpServer.fs.command: npx
+              mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
+```
+
 #### SSE Transport
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 // Connect to MCP server via SSE
@@ -965,7 +1363,34 @@ from("direct:chat")
         + "&mcpServer.weather.url=http://mcp-server:3001/sse");
 ```
 
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.weather.transportType=sse&amp;mcpServer.weather.url=http://mcp-server:3001/sse"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.weather.transportType: sse
+              mcpServer.weather.url: "http://mcp-server:3001/sse"
+```
+
 #### Multiple MCP Servers
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:chat")
@@ -977,9 +1402,39 @@ from("direct:chat")
         + "&mcpServer.weather.url=http://weather-mcp:3001/sse");
 ```
 
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.fs.transportType=stdio&amp;mcpServer.fs.command=npx&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp&amp;mcpServer.weather.transportType=sse&amp;mcpServer.weather.url=http://weather-mcp:3001/sse"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.fs.transportType: stdio
+              mcpServer.fs.command: npx
+              mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
+              mcpServer.weather.transportType: sse
+              mcpServer.weather.url: "http://weather-mcp:3001/sse"
+```
+
 #### OAuth Authentication for MCP Servers
 
 For MCP servers requiring authentication, configure an OAuth profile per server. This requires `camel-oauth` on the classpath:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:chat")
@@ -987,6 +1442,27 @@ from("direct:chat")
         + "&mcpServer.api.transportType=sse"
         + "&mcpServer.api.url=http://secure-mcp:3001/sse"
         + "&mcpServer.api.oauthProfile=keycloak");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.api.transportType=sse&amp;mcpServer.api.url=http://secure-mcp:3001/sse&amp;mcpServer.api.oauthProfile=keycloak"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.api.transportType: sse
+              mcpServer.api.url: "http://secure-mcp:3001/sse"
+              mcpServer.api.oauthProfile: keycloak
 ```
 
 With corresponding properties:

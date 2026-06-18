@@ -67,7 +67,7 @@
 &lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
     &lt;!-- and then let Camel use those @Component scanned route builders --&gt;
     &lt;contextScan/&gt;
-&lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>This allows you to just annotate your routes using the Spring <strong><code>@Component</code></strong> and have those routes included by Camel:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component
+&lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>This allows you to just annotate your routes using the Spring <strong><code>@Component</code></strong> and have those routes included by Camel:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Spring @Component annotated RouteBuilder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component
 public class MyRoute extends RouteBuilder {
 
     @Override

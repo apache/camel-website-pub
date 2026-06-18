@@ -17,6 +17,8 @@ To enable autoconfiguration of the Camel context and other Spring boot auto-conf
 -   a class annotated with `SpringBootConfiguration` accessible in the package of the test class or a parent package.
     
 
+_Java-only: Spring Boot test using annotations, dependency injection, and inner configuration class._
+
 ```java
 package com.foo;
 
@@ -71,6 +73,8 @@ class CamelSpringBootSimpleTest {
 
 There are multiple approaches to test Camel Spring 5.x based routes with JUnit 5. An approach is to extend `org.apache.camel.test.spring.junit5.CamelSpringTestSupport`, for instance:
 
+_Java-only: extends CamelSpringTestSupport which is a Java test base class._
+
 ```java
 public class SimpleMockTest extends CamelSpringTestSupport {
 
@@ -102,6 +106,8 @@ This approach provides feature parity with `org.apache.camel.test.junit5.CamelTe
 
 Instead of instantiating the `CamelContext` and routes programmatically, this class relies on a Spring context to wire the needed components together. If your test extends this class, you must provide the Spring context by implementing the following method:
 
+_Java-only: abstract method to override in Java test subclasses._
+
 ```java
 protected abstract AbstractApplicationContext createApplicationContext();
 ```
@@ -109,6 +115,8 @@ protected abstract AbstractApplicationContext createApplicationContext();
 ### Using the `@CamelSpringTest` annotation
 
 A better and recommended approach involves the usage of the `org.apache.camel.test.spring.junit5.CamelSpringTest` annotation, as shown:
+
+_Java-only: Spring test using annotations and dependency injection._
 
 ```java
 package com.foo;
@@ -147,6 +155,8 @@ public class CamelSpringPlainTest {
 The above test will by default load a Spring XML file using the naming pattern _className_\-context.xml, which means the example above loads the file `com/foo/CamelSpringPlainTest-context.xml`.
 
 This XML file is Spring XML file as shown:
+
+_XML-only: Spring XML context file with Camel route definition_
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>

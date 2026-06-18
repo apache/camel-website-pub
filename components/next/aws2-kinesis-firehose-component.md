@@ -12,7 +12,7 @@ You must have a valid Amazon Web Services developer account, and be signed up to
 
 ## URI Format
 
-```java
+```text
 aws2-kinesis-firehose://delivery-stream-name[?options]
 ```
 

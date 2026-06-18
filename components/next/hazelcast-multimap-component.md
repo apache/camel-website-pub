@@ -232,105 +232,165 @@ The multimap producer provides eight operations:
 
 ### Example for **put**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:put")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
-.to(String.format("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX));
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
+    .to(String.format("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX));
 ```
 
 ```xml
 <route>
-    <from uri="direct:put" />
+    <from uri="direct:put"/>
     <log message="put.."/>
     <setHeader name="hazelcast.operation.type">
         <constant>put</constant>
     </setHeader>
-    <to uri="hazelcast-multimap:foo" />
+    <to uri="hazelcast-multimap:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:put
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: put
+        - to:
+            uri: hazelcast-multimap:foo
 ```
 
 ### Example for **removevalue**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:removevalue")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.REMOVE_VALUE))
-.toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.REMOVE_VALUE))
+    .toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:removevalue" />
+    <from uri="direct:removevalue"/>
     <log message="removevalue..."/>
     <setHeader name="hazelcast.operation.type">
         <constant>removevalue</constant>
     </setHeader>
-    <to uri="hazelcast-multimap:foo" />
+    <to uri="hazelcast-multimap:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:removevalue
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: removevalue
+        - to:
+            uri: hazelcast-multimap:foo
 ```
 
 To remove a value you have to provide the value you want to remove inside the message body. If you have a multimap object ``\{`key: "4711" values: { "my-foo", "my-bar"``}}\` you have to put `my-foo` inside the message body to remove the `my-foo` value.
 
 ### Example for **get**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:get")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-.toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX)
-.to("seda:out");
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
+    .toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX)
+    .to("seda:out");
 ```
 
 ```xml
 <route>
-    <from uri="direct:get" />
+    <from uri="direct:get"/>
     <log message="get.."/>
     <setHeader name="hazelcast.operation.type">
         <constant>get</constant>
     </setHeader>
-    <to uri="hazelcast-multimap:foo" />
-    <to uri="seda:out" />
+    <to uri="hazelcast-multimap:foo"/>
+    <to uri="seda:out"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: get
+        - to:
+            uri: hazelcast-multimap:foo
+        - to:
+            uri: seda:out
 ```
 
 ### Example for **delete**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:delete")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DELETE))
-.toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DELETE))
+    .toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:delete" />
+    <from uri="direct:delete"/>
     <log message="delete.."/>
     <setHeader name="hazelcast.operation.type">
         <constant>delete</constant>
     </setHeader>
-    <to uri="hazelcast-multimap:foo" />
+    <to uri="hazelcast-multimap:foo"/>
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:delete
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: delete
+        - to:
+            uri: hazelcast-multimap:foo
+```
+
 You can call them in your test class with:
+
+_Java-only: uses ProducerTemplate API and Java constants_
 
 ```java
 template.sendBodyAndHeader("direct:[put|get|removevalue|delete]", "my-foo", HazelcastConstants.OBJECT_ID, "4711");

@@ -38,6 +38,8 @@ This applies to the following templating components: camel-freemarker, camel-vel
 
 The Java DSL `RouteBuilder` allows referring to a custom language as shown below:
 
+_Java-only: using custom language in a route_
+
 ```java
 from("direct:start")
     .filter(language("foo", "Bla bla bla"))

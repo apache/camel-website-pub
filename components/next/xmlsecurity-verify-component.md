@@ -397,6 +397,8 @@ from("direct:detached")
 
 **Spring Example**
 
+_XML-only: Spring bean configuration for detached XML signature verification_
+
 ```xml
 <bean id="xpathsToIdAttributesBean" class="java.util.ArrayList">
       <constructor-arg type="java.util.Collection">
@@ -536,6 +538,8 @@ from("direct:xades").to("xmlsecurity-sign://xades?keyAccessor=#keyAccessorDefaul
 ```
 
 **XAdES-BES/EPES Example in Spring XML**
+
+_XML-only: Spring bean configuration for XAdES signature properties_
 
 ```xml
 ...

@@ -53,6 +53,19 @@ To expose a Syslog listener service, we reuse the existing [Mina Component](../m
 In our Spring XML file, we configure an endpoint to listen for udp messages on port 10514, note that in netty we disable the defaultCodec, this  
 will allow a fallback to a NettyTypeConverter and delivers the message as an InputStream:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("netty:udp://localhost:10514?sync=false&allowDefaultCodec=false")
+    .unmarshal(new SyslogDataFormat())
+    .to("mock:stop1");
+```
+
 ```xml
 <camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring">
 
@@ -69,7 +82,34 @@ will allow a fallback to a NettyTypeConverter and delivers the message as an Inp
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: netty:udp://localhost:10514
+      parameters:
+        sync: false
+        allowDefaultCodec: false
+      steps:
+        - unmarshal:
+            syslog: {}
+        - to:
+            uri: mock:stop1
+```
+
 The same route using [Mina Component](../mina-component.md)
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("mina:udp://localhost:10514")
+    .unmarshal(new SyslogDataFormat())
+    .to("mock:stop1");
+```
 
 ```xml
 <camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring">
@@ -87,7 +127,31 @@ The same route using [Mina Component](../mina-component.md)
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: mina:udp://localhost:10514
+      steps:
+        - unmarshal:
+            syslog: {}
+        - to:
+            uri: mock:stop1
+```
+
 ### Sending syslog messages to a remote destination
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:syslogMessages")
+    .marshal(new SyslogDataFormat())
+    .to("mina:udp://remotehost:10514");
+```
 
 ```xml
 <camelContext id="myCamel" xmlns="http://camel.apache.org/schema/spring">
@@ -103,6 +167,17 @@ The same route using [Mina Component](../mina-component.md)
     </route>
 
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:syslogMessages
+      steps:
+        - marshal:
+            syslog: {}
+        - to:
+            uri: mina:udp://remotehost:10514
 ```
 
 ## Spring Boot Auto-Configuration

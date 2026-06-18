@@ -39,6 +39,8 @@ The `choice` and `filter` EIPs no longer store exchange property `Exchange.FILTE
 
 Camel now validates that a route has only 1 onCompletion. Previously users could have code such as:
 
+_Java-only: multiple onCompletion per route (no longer allowed)_
+
 ```java
 from("direct:start")
         .onCompletion().onCompleteOnly().to("mock:ok").end()

@@ -1063,11 +1063,32 @@ Camel is also able to write files, i.e., produce files. In the sample below, we 
 
 Using a single route, it is possible to write a file to any number of subdirectories. If you have a route setup as such:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("bean:myBean")
+    .to("file:/rootDirectory");
+```
+
 ```xml
 <route>
   <from uri="bean:myBean"/>
   <to uri="file:/rootDirectory"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: bean:myBean
+      steps:
+        - to:
+            uri: file:/rootDirectory
 ```
 
 You can have `myBean` set the header `Exchange.FILE_NAME` to values such as:
@@ -1139,6 +1160,18 @@ from("file://inbox?idempotent=true").to("...");
 
 Camel uses the absolute file name as the idempotent key, to detect duplicate files. You can customize this key by using an expression in the idempotentKey option. For example, to use both the name and the file size as the key
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file://inbox?idempotent=true&idempotentKey=${file:name}-${file:size}")
+    .to("bean:processInbox");
+```
+
 ```xml
 <route>
   <from uri="file://inbox?idempotent=true&amp;idempotentKey=${file:name}-${file:size}"/>
@@ -1146,16 +1179,51 @@ Camel uses the absolute file name as the idempotent key, to detect duplicate fil
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: file://inbox
+      parameters:
+        idempotent: true
+        idempotentKey: "${file:name}-${file:size}"
+      steps:
+        - to:
+            uri: bean:processInbox
+```
+
 By default, Camel uses an in-memory store for keeping track of consumed files. It uses the least recently used cache holding up to 1000 entries. You can plug in your own implementation of this store by using the `idempotentRepository` option using the `#` sign in the value to indicate it’s a referring to a bean in the Registry with the specified `id`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file://inbox?idempotent=true&idempotentRepository=#myStore")
+    .to("bean:processInbox");
+```
+
 ```xml
- <!-- define our store as a plain spring bean -->
- <bean id="myStore" class="com.mycompany.MyIdempotentStore"/>
+<!-- define our store as a plain spring bean -->
+<bean id="myStore" class="com.mycompany.MyIdempotentStore"/>
 
 <route>
   <from uri="file://inbox?idempotent=true&amp;idempotentRepository=#myStore"/>
   <to uri="bean:processInbox"/>
 </route>
+```
+
+```yaml
+- from:
+    uri: file://inbox
+    parameters:
+      idempotent: true
+      idempotentRepository: "#myStore"
+    steps:
+      - to:
+          uri: bean:processInbox
 ```
 
 Camel will log at `DEBUG` level if it skips a file because it has been consumed before:
@@ -1192,6 +1260,8 @@ First we need a persistence-unit in `META-INF/persistence.xml` where we need to 
 
 Next, we can create our JPA idempotent repository in the spring XML file as well:
 
+_XML-only: Spring bean definition for JPA-based idempotent repository_
+
 ```xml
 <!-- we define our jpa based idempotent repository we want to use in the file consumer -->
 <bean id="jpaStore" class="org.apache.camel.processor.idempotent.jpa.JpaMessageIdRepository">
@@ -1205,11 +1275,35 @@ Next, we can create our JPA idempotent repository in the spring XML file as well
 
 And yes then we just need to refer to the **jpaStore** bean in the file consumer endpoint using the `idempotentRepository` using the `#` syntax option:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file://inbox?idempotent=true&idempotentRepository=#jpaStore")
+    .to("bean:processInbox");
+```
+
 ```xml
 <route>
   <from uri="file://inbox?idempotent=true&amp;idempotentRepository=#jpaStore"/>
   <to uri="bean:processInbox"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://inbox
+      parameters:
+        idempotent: true
+        idempotentRepository: "#jpaStore"
+      steps:
+        - to:
+            uri: bean:processInbox
 ```
 
 ### Filtering Strategies
@@ -1239,6 +1333,18 @@ In the sample we have built our own filter that skips files starting with `skip`
 
 And then we can configure our route using the `filter` attribute to reference our filter (using `#` notation) that we have defined in the spring XML file:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file://inbox?filter=#myFilter")
+    .to("bean:processInbox");
+```
+
 ```xml
 <!-- define our filter as a plain spring bean -->
 <bean id="myFilter" class="com.mycompany.MyFileFilter"/>
@@ -1247,6 +1353,16 @@ And then we can configure our route using the `filter` attribute to reference ou
   <from uri="file://inbox?filter=#myFilter"/>
   <to uri="bean:processInbox"/>
 </route>
+```
+
+```yaml
+- from:
+    uri: file://inbox
+    parameters:
+      filter: "#myFilter"
+    steps:
+      - to:
+          uri: bean:processInbox
 ```
 
 #### Filtering using ANT path matcher
@@ -1300,14 +1416,36 @@ In the sample, we have built our own comparator that just sorts by file name:
 
 And then we can configure our route using the **sorter** option to reference to our sorter (`mySorter`) we have defined in the spring XML file:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file://inbox?sorter=#mySorter")
+    .to("bean:processInbox");
+```
+
 ```xml
- <!-- define our sorter as a plain spring bean -->
- <bean id="mySorter" class="com.mycompany.MyFileSorter"/>
+<!-- define our sorter as a plain spring bean -->
+<bean id="mySorter" class="com.mycompany.MyFileSorter"/>
 
 <route>
   <from uri="file://inbox?sorter=#mySorter"/>
   <to uri="bean:processInbox"/>
 </route>
+```
+
+```yaml
+- from:
+    uri: file://inbox
+    parameters:
+      sorter: "#mySorter"
+    steps:
+      - to:
+          uri: bean:processInbox
 ```
 
 > **Tip**

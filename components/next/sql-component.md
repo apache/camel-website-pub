@@ -599,6 +599,8 @@ from("sql:select * from projects where id = :#${bean:myIdGenerator.nextId}")
 
 And the bean has the following method:
 
+_Java-only: bean class used as expression parameter_
+
 ```java
 public static class MyIdGenerator {
 
@@ -882,6 +884,8 @@ CREATE TABLE aggregationRepo3_completed (
 
 And then configure the repository to enable this behavior as shown below:
 
+_XML-only: Spring bean declaration for `JdbcAggregationRepository` with text storage_
+
 ```xml
 <bean id="repo3"
   class="org.apache.camel.processor.aggregate.jdbc.JdbcAggregationRepository">
@@ -921,6 +925,8 @@ Depending on the targeted environment, the aggregator might need some configurat
 
 Here is the declaration for Oracle:
 
+_XML-only: Spring bean declarations for Oracle `LobHandler` and \`JdbcAggregationRepository\`_
+
 ```xml
 <bean id="lobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler">
   <property name="nativeJdbcExtractor" ref="nativeJdbcExtractor"/>
@@ -956,6 +962,8 @@ You can, in addition, add FQN class names, and if any of the caused exceptions (
 
 Here is an example, where we define two extra FQN class names from the JDBC vendor.
 
+_XML-only: Spring bean declarations for `JdbcAggregationRepository` with custom optimistic locking exception mapper_
+
 ```xml
 <bean id="repo"
 class="org.apache.camel.processor.aggregate.jdbc.JdbcAggregationRepository">
@@ -982,6 +990,8 @@ class="org.apache.camel.processor.aggregate.jdbc.JdbcAggregationRepository">
 However, when using `JdbcAggregationRepository` within a route that itself uses `<transacted />` and there’s common `PlatformTransactionManager` used, there may be a need to configure _propagation behavior_ used by transaction templates inside `JdbcAggregationRepository`.
 
 Here’s a way to do it:
+
+_XML-only: Spring bean declaration for `JdbcAggregationRepository` with propagation behavior_
 
 ```xml
 <bean id="repo"

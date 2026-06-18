@@ -540,6 +540,8 @@ The SFTP component supports 17 message header(s), which is/are listed below:
 
 You can configure host key verification settings globally on the SFTP component, which will apply to all SFTP endpoints unless overridden at the endpoint level:
 
+_Java-only: programmatic `SftpComponent` configuration via \`CamelContext\`_
+
 ```java
 // Configure component for all SFTP endpoints
 SftpComponent sftp = context.getComponent("sftp", SftpComponent.class);
@@ -754,6 +756,8 @@ Or provided as raw bytes using `certBytes` (useful when the certificate is loade
 ### Restoring Deprecated Key Types and Algorithms
 
 As of Camel 3.17.0, key types and algorithms that use SHA1 have been deprecated. These can be restored, if necessary, by setting JSch configuration directly. E.g.:
+
+_Java-only: restoring deprecated JSch key types and algorithms_
 
 ```java
 JSch.setConfig("server_host_key",  JSch.getConfig("server_host_key") + ",ssh-rsa");

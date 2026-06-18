@@ -19,6 +19,8 @@ The binding API is used to add new beans into the registry. The lookup is used f
 
 The binding API is as follows:
 
+_Java-only: the Registry binding API_
+
 ```java
 public interface Registry extends BeanRepository {
 
@@ -50,12 +52,16 @@ public interface Registry extends BeanRepository {
 
 If you, for example, need to add a bean to the `Registry` then you can easily do this from Java as follows:
 
+_Java-only: binding a bean to the Registry_
+
 ```java
 Object myFoo = ...
 camelContext.getRegistry().bind("foo", myFoo);
 ```
 
 Then you can access the bean by the id, such as from a Camel route:
+
+_Java-only: using a bean from the Registry in a route_
 
 ```java
 from("jms:cheese").bean("foo");
@@ -73,6 +79,8 @@ If you use the Spring XML file, then any `<bean>` is automatic handled by Spring
 
 When using Spring Boot, then you can also use annotations to declare beans such as with the `@Bean` annotation on the method that creates the bean:
 
+_Java-only: declaring a bean using Spring Boot @Bean annotation_
+
 ```java
 @Bean
 public MyFoo foo() {
@@ -86,6 +94,8 @@ This is a common functionality of Spring Boot, and you can find information abou
 
 Quarkus has similar functionality like Spring Boot to declare beans, which can be done with the `javax.inject.enterprise.Produces` and `javax.inject.Named` annotations:
 
+_Java-only: declaring a bean using Quarkus CDI annotations_
+
 ```java
 @Produces @Named("foo")
 public MyFoo foo() {
@@ -98,6 +108,8 @@ public MyFoo foo() {
 Registry is mostly used for looking up beans by their IDs, or by type. This is frequently used during startup of Camel where Camel is wiring up all components, endpoints, routes, processors, beans and so forth.
 
 The lookup API is the following methods:
+
+_Java-only: the BeanRepository lookup API_
 
 ```java
 public interface BeanRepository {
@@ -143,6 +155,8 @@ public interface BeanRepository {
 ```
 
 You can lookup beans from Java code as shown:
+
+_Java-only: looking up beans from the Registry_
 
 ```java
 // lookup by id only

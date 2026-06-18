@@ -45,6 +45,8 @@ See the [POJO Messaging Example](https://github.com/apache/camel-examples/tree/m
 
 Camel allows injecting property placeholders in POJOs using the `@PropertyInject` annotation which can be set on fields and setter methods. For example, you can use that with `RouteBuilder` classes, such as shown below:
 
+_Java-only: injecting a property placeholder value with @PropertyInject_
+
 ```java
 public class MyRouteBuilder extends RouteBuilder {
 
@@ -64,6 +66,8 @@ Notice we have annotated the greeting field with `@PropertyInject` and define it
 
 You can also use multiple placeholders and text in the key, for example we can do:
 
+_Java-only: using multiple placeholders and text in @PropertyInject_
+
 ```java
 @PropertyInject("Hello {{name}} how are you?")
 private String greeting;
@@ -73,6 +77,8 @@ This will lookup the placeholder with they key `name`.
 
 You can also add a default value if the key does not exist, such as:
 
+_Java-only: using a default value with @PropertyInject_
+
 ```java
 @PropertyInject(value = "myTimeout", defaultValue = "5000")
 private int timeout;
@@ -81,6 +87,8 @@ private int timeout;
 ### Using @PropertyInject with arrays, lists, sets or maps
 
 You can also use `@PropertyInject` to inject an array of values. For example, you may configure multiple hostnames in the configuration file, and need to inject this into an `String[]` or `List<String>` field. To do this, you need to tell Camel that the property value should be split using a separator, as follows:
+
+_Java-only: injecting an array of values using separator_
 
 ```java
 @PropertyInject(value = "myHostnames", separator = ",")
@@ -107,12 +115,16 @@ myServers = serverA=http://coolstore:4444,serverB=http://megastore:5555
 
 You can then inject this into a `Map` as follows:
 
+_Java-only: injecting key-value pairs into a Map_
+
 ```java
 @PropertyInject(value = "myServers", separator = ",")
 private Map servers;
 ```
 
 You can use generic types in the Map such as the values should be `Integer` values:
+
+_Java-only: injecting a Map with typed values_
 
 ```java
 @PropertyInject(value = "ports", separator = ",")

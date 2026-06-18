@@ -200,6 +200,18 @@ camel.vault.azure.vaultName = vaultName
 
 At this point, you’ll be able to reference a property in the following way:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{azure:route}}");
+```
+
 ```xml
 <camelContext>
     <route>
@@ -209,9 +221,30 @@ At this point, you’ll be able to reference a property in the following way:
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{azure:route}}"
+```
+
 Where route will be the name of the secret stored in the Azure Key Vault Service.
 
 You could specify a default value in case the secret is not present on Azure Key Vault Service:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{azure:route:default}}");
+```
 
 ```xml
 <camelContext>
@@ -220,6 +253,15 @@ You could specify a default value in case the secret is not present on Azure Key
         <to uri="{{azure:route:default}}"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{azure:route:default}}"
 ```
 
 In this case, if the secret doesn’t exist, the property will fall back to "default" as value.
@@ -239,6 +281,18 @@ Also, you are able to get a particular field of the secret, if you have, for exa
 
 You’re able to do get single secret value in your route, like for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{azure:database#username}}");
+```
+
 ```xml
 <camelContext>
     <route>
@@ -248,9 +302,30 @@ You’re able to do get single secret value in your route, like for example:
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{azure:database#username}}"
+```
+
 Or re-use the property as part of an endpoint.
 
 You could specify a default value in case the particular field of secret is not present on Azure Key Vault:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{azure:database#username:admin}}");
+```
 
 ```xml
 <camelContext>
@@ -261,9 +336,30 @@ You could specify a default value in case the particular field of secret is not 
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{azure:database#username:admin}}"
+```
+
 In this case, if the secret doesn’t exist or the secret exists, but the username field is not part of the secret, the property will fall back to "admin" as value.
 
 There is also the syntax to get a particular version of the secret for both the approach, with field/default value specified or only with secret:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{azure:route@bf9b4f4b-8e63-43fd-a73c-3e2d3748b451}}");
+```
 
 ```xml
 <camelContext>
@@ -274,7 +370,28 @@ There is also the syntax to get a particular version of the secret for both the 
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{azure:route@bf9b4f4b-8e63-43fd-a73c-3e2d3748b451}}"
+```
+
 This approach will return the RAW route secret with the version 'bf9b4f4b-8e63-43fd-a73c-3e2d3748b451'.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{azure:route:default@bf9b4f4b-8e63-43fd-a73c-3e2d3748b451}}");
+```
 
 ```xml
 <camelContext>
@@ -285,7 +402,28 @@ This approach will return the RAW route secret with the version 'bf9b4f4b-8e63-4
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{azure:route:default@bf9b4f4b-8e63-43fd-a73c-3e2d3748b451}}"
+```
+
 This approach will return the route secret value with version 'bf9b4f4b-8e63-43fd-a73c-3e2d3748b451' or default value in case the secret doesn’t exist or the version doesn’t exist.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{azure:database#username:admin@bf9b4f4b-8e63-43fd-a73c-3e2d3748b451}}");
+```
 
 ```xml
 <camelContext>
@@ -294,6 +432,15 @@ This approach will return the route secret value with version 'bf9b4f4b-8e63-43f
         <log message="Username is {{azure:database#username:admin@bf9b4f4b-8e63-43fd-a73c-3e2d3748b451}}"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{azure:database#username:admin@bf9b4f4b-8e63-43fd-a73c-3e2d3748b451}}"
 ```
 
 This approach will return the username field of the database secret with version 'bf9b4f4b-8e63-43fd-a73c-3e2d3748b451' or admin in case the secret doesn’t exist or the version doesn’t exist.

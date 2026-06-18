@@ -35,7 +35,9 @@ context.addRoutes(new RouteBuilder() {
                                 testCypherAlgorithm, XMLCipher.RSA_v1dot5, tsParameters)
            .to("mock:encrypted");
     }
-}</code></pre> </div> </div> <div id="XMLSecurityDataFormat-SpringXML" class="paragraph"> <p>Spring XML</p> </div> <div class="paragraph"> <p>A namespace prefix defined as part of the <code>camelContext</code> definition can be re-used in context within the data format <code>secureTag</code> attribute of the <code>xmlSecurity</code> element.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="springXmlSecurityDataFormatTestCamelContext"
+}</code></pre> </div> </div> <div id="XMLSecurityDataFormat-SpringXML" class="paragraph"> <p>Spring XML</p> </div> <div class="paragraph"> <p>A namespace prefix defined as part of the <code>camelContext</code> definition can be re-used in context within the data format <code>secureTag</code> attribute of the <code>xmlSecurity</code> element.</p> </div> <div id="_tabs_1" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+    .marshal().xmlSecurity("//cheese:cheesesites/italy", true)
+    .to("...");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="springXmlSecurityDataFormatTestCamelContext"
               xmlns="http://camel.apache.org/schema/spring"
               xmlns:cheese="http://cheese.xmlsecurity.camel.apache.org/"&gt;
     &lt;route&gt;
@@ -44,7 +46,17 @@ context.addRoutes(new RouteBuilder() {
                 &lt;xmlSecurity secureTag="//cheese:cheesesites/italy"
                            secureTagContents="true"/&gt;
             &lt;/marshal&gt;
-            ...</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_asymmetric_key_encryption"><a class="anchor" href="#_asymmetric_key_encryption"></a>Asymmetric Key Encryption</h3> <div id="XMLSecurityDataFormat-SpringXMLSender" class="paragraph"> <p>Spring XML Sender</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!--  trust store configuration --&gt;
+            ...</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            xmlSecurity:
+              secureTag: "//cheese:cheesesites/italy"
+              secureTagContents: true</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_asymmetric_key_encryption"><a class="anchor" href="#_asymmetric_key_encryption"></a>Asymmetric Key Encryption</h3> <div id="XMLSecurityDataFormat-SpringXMLSender" class="paragraph"> <p>Spring XML Sender</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+    .marshal().xmlSecurity("//cheese:cheesesites/italy", namespaces, true,
+            "recipient", XMLCipher.AES_128_CBC, XMLCipher.RSA_v1dot5, trustStoreParams)
+    .to("...");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!--  trust store configuration --&gt;
 &lt;camel:keyStoreParameters id="trustStoreParams" resource="./sender.truststore" password="password"/&gt;
 
 &lt;camelContext id="springXmlSecurityDataFormatTestCamelContext"
@@ -60,7 +72,21 @@ context.addRoutes(new RouteBuilder() {
                            recipientKeyAlias="recipient"
                            keyOrTrustStoreParametersRef="trustStoreParams"/&gt;
             &lt;/marshal&gt;
-            ...</code></pre> </div> </div> <div id="XMLSecurityDataFormat-SpringXMLRecipient" class="paragraph"> <p>Spring XML Recipient</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!--  key store configuration --&gt;
+            ...</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            xmlSecurity:
+              secureTag: "//cheese:cheesesites/italy"
+              secureTagContents: true
+              xmlCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+              keyCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
+              recipientKeyAlias: recipient
+              keyOrTrustStoreParametersRef: "#trustStoreParams"</code></pre> </div> </div> </div> </div> </div> <div id="XMLSecurityDataFormat-SpringXMLRecipient" class="paragraph"> <p>Spring XML Recipient</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:encrypted")
+    .unmarshal().xmlSecurity("//cheese:cheesesites/italy", namespaces, true,
+            "recipient", XMLCipher.AES_128_CBC, XMLCipher.RSA_v1dot5, keyStoreParams)
+    .to("...");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!--  key store configuration --&gt;
 &lt;camel:keyStoreParameters id="keyStoreParams" resource="./recipient.keystore" password="password" /&gt;
 
 &lt;camelContext id="springXmlSecurityDataFormatTestCamelContext"
@@ -77,7 +103,19 @@ context.addRoutes(new RouteBuilder() {
                            keyOrTrustStoreParametersRef="keyStoreParams"
                            keyPassword="privateKeyPassword" /&gt;
             &lt;/unmarshal&gt;
-            ...</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>This data format is provided within the <strong>camel-xmlsecurity</strong> component.</p> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using xmlSecurity with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+            ...</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:encrypted
+      steps:
+        - unmarshal:
+            xmlSecurity:
+              secureTag: "//cheese:cheesesites/italy"
+              secureTagContents: true
+              xmlCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
+              keyCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
+              recipientKeyAlias: recipient
+              keyOrTrustStoreParametersRef: "#keyStoreParams"
+              keyPassword: privateKeyPassword</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>This data format is provided within the <strong>camel-xmlsecurity</strong> component.</p> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using xmlSecurity with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-xmlsecurity-starter&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

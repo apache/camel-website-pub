@@ -6,24 +6,33 @@
 &lt;/dependency&gt;</code></pre> </div> </div> <div class="paragraph"> <p>You can easily generate classes from a schema, using maven, ant etc. More details can be found at the <a href="http://avro.apache.org/docs/current/">Apache Avro documentation</a>.</p> </div> </div> </div> <div class="sect1"> <h2 id="_avro_dataformat_options"><a class="anchor" href="#_avro_dataformat_options"></a>Avro Dataformat Options</h2> <div class="sectionbody"> <div class="paragraph"> <p>The Avro dataformat supports 1 options, which are listed below.</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Name</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Java Type</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><div class="content"><div id="_dataformat_option_instanceClassName" class="paragraph"> <p><a href="#_dataformat_option_instanceClassName" class="anchor"></a><strong>instanceClassName</strong> (common)</p> </div></div></td> <td class="tableblock halign-left valign-top"></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td> <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph"> <p>Class name to use for marshal and unmarshalling.</p> </div></div></td> </tr> </tbody> </table></div> </div> </div> <div class="sect1"> <h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2> <div class="sectionbody"> <div class="sect2"> <h3 id="_avro_data_format_usage"><a class="anchor" href="#_avro_data_format_usage"></a>Avro Data Format usage</h3> <div class="paragraph"> <p>Using the avro data format is as easy as specifying that the class that you want to marshal or unmarshal in your route.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic AvroDataFormat with schema</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">AvroDataFormat format = new AvroDataFormat(Value.SCHEMA$);
 
 from("direct:in").marshal(format).to("direct:marshal");
-from("direct:back").unmarshal(format).to("direct:unmarshal");</code></pre> </div> </div> <div class="paragraph"> <p>Where Value is an Avro Maven Plugin Generated class.</p> </div> <div class="paragraph"> <p>or in XML</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
-        &lt;route&gt;
-            &lt;from uri="direct:in"/&gt;
-            &lt;marshal&gt;
-                &lt;avro instanceClass="org.apache.camel.dataformat.avro.Message" library="ApacheAvro"/&gt;
-            &lt;/marshal&gt;
-            &lt;to uri="log:out"/&gt;
-        &lt;/route&gt;
-    &lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>An alternative can be to specify the dataformat inside the context and reference it from your route.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">    &lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
-         &lt;dataFormats&gt;
-            &lt;avro id="avro" instanceClass="org.apache.camel.dataformat.avro.Message" library="ApacheAvro"/&gt;
-        &lt;/dataFormats&gt;
-        &lt;route&gt;
-            &lt;from uri="direct:in"/&gt;
-            &lt;marshal&gt;&lt;custom ref="avro"/&gt;&lt;/marshal&gt;
-            &lt;to uri="log:out"/&gt;
-        &lt;/route&gt;
-    &lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>In the same manner, you can unmarshal using the avro data format.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using avro with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+from("direct:back").unmarshal(format).to("direct:unmarshal");</code></pre> </div> </div> <div class="paragraph"> <p>Where Value is an Avro Maven Plugin Generated class.</p> </div> <div class="paragraph"> <p>The same route can be expressed in XML or YAML:</p> </div> <div id="_tabs_1" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
+    .marshal().avro("org.apache.camel.dataformat.avro.Message")
+    .to("log:out");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    &lt;from uri="direct:in"/&gt;
+    &lt;marshal&gt;
+        &lt;avro instanceClass="org.apache.camel.dataformat.avro.Message" library="ApacheAvro"/&gt;
+    &lt;/marshal&gt;
+    &lt;to uri="log:out"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:in
+      steps:
+        - marshal:
+            avro:
+              instanceClass: org.apache.camel.dataformat.avro.Message
+              library: ApacheAvro
+        - to:
+            uri: log:out</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>An alternative can be to specify the dataformat inside the context and reference it from your route.</p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring XML data format configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
+     &lt;dataFormats&gt;
+        &lt;avro id="avro" instanceClass="org.apache.camel.dataformat.avro.Message" library="ApacheAvro"/&gt;
+    &lt;/dataFormats&gt;
+    &lt;route&gt;
+        &lt;from uri="direct:in"/&gt;
+        &lt;marshal&gt;&lt;custom ref="avro"/&gt;&lt;/marshal&gt;
+        &lt;to uri="log:out"/&gt;
+    &lt;/route&gt;
+&lt;/camelContext&gt;</code></pre> </div> </div> <div class="paragraph"> <p>In the same manner, you can unmarshal using the avro data format.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using avro with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-avro-starter&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

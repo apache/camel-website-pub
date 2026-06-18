@@ -193,100 +193,156 @@ The operations for this producer are:
 
 ### Example for **increment**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:increment")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.INCREMENT))
-.toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.INCREMENT))
+    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:increment" />
+    <from uri="direct:increment"/>
     <setHeader name="hazelcast.operation.type">
         <constant>increment</constant>
     </setHeader>
-    <to uri="hazelcast-pncounter:foo" />
+    <to uri="hazelcast-pncounter:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:increment
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: increment
+        - to:
+            uri: hazelcast-pncounter:foo
 ```
 
 The actual value (after increment) will be provided inside the message body.
 
 ### Example for **decrement**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:decrement")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DECREMENT))
-.toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DECREMENT))
+    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:decrement" />
+    <from uri="direct:decrement"/>
     <setHeader name="hazelcast.operation.type">
         <constant>decrement</constant>
     </setHeader>
-    <to uri="hazelcast-pncounter:foo" />
+    <to uri="hazelcast-pncounter:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:decrement
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: decrement
+        - to:
+            uri: hazelcast-pncounter:foo
 ```
 
 The actual value (after decrement) will be provided inside the message body.
 
 ### Example for **get**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:get")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-.toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
+    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:get" />
+    <from uri="direct:get"/>
     <setHeader name="hazelcast.operation.type">
         <constant>get</constant>
     </setHeader>
-    <to uri="hazelcast-pncounter:foo" />
+    <to uri="hazelcast-pncounter:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: get
+        - to:
+            uri: hazelcast-pncounter:foo
 ```
 
 You can get the counter value with `long body = template.requestBody("direct:get", null, Long.class);`.
 
 ### Example for **getAndAdd**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:getAndAdd")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET_AND_ADD))
-.toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET_AND_ADD))
+    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:getAndAdd" />
+    <from uri="direct:getAndAdd"/>
     <setHeader name="hazelcast.operation.type">
         <constant>getAndAdd</constant>
     </setHeader>
-    <to uri="hazelcast-pncounter:foo" />
+    <to uri="hazelcast-pncounter:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:getAndAdd
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: getAndAdd
+        - to:
+            uri: hazelcast-pncounter:foo
 ```
 
 Provide the delta value in the message body (e.g., 5 to add 5 to the counter): `long previousValue = template.requestBody("direct:getAndAdd", 5L, Long.class);`
@@ -295,25 +351,39 @@ The previous value (before the add) will be returned in the message body.
 
 ### Example for **destroy**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:destroy")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DESTROY))
-.toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DESTROY))
+    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
 ```
 
 ```xml
 <route>
-    <from uri="direct:destroy" />
+    <from uri="direct:destroy"/>
     <setHeader name="hazelcast.operation.type">
         <constant>destroy</constant>
     </setHeader>
-    <to uri="hazelcast-pncounter:foo" />
+    <to uri="hazelcast-pncounter:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:destroy
+      steps:
+        - setHeader:
+            name: hazelcast.operation.type
+            constant: destroy
+        - to:
+            uri: hazelcast-pncounter:foo
 ```
 
 Destroys the PN Counter instance: `template.sendBody("direct:destroy", null);`

@@ -23,6 +23,8 @@ Google Storage component authentication is targeted for use with the GCP Service
 
 When you have the **service account key**, you can provide authentication credentials to your application code. Google security credentials can be set through the component endpoint:
 
+_Java-only: constructing the endpoint URI programmatically_
+
 ```java
 String endpoint = "google-storage://myCamelBucket?serviceAccountKey=/home/user/Downloads/my-key.json";
 ```

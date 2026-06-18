@@ -269,6 +269,8 @@ The `camel get history` command shows a step-by-step summary of the last complet
 
 Example route that reads a file, splits by line, filters, calls HTTP, and logs:
 
+_Java-only: route with split, filter, and HTTP call_
+
 ```java
 import org.apache.camel.builder.RouteBuilder;
 

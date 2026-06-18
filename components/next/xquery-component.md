@@ -272,6 +272,19 @@ The IN message body will be set as the `contextItem`. Besides this, these Variab
 
 If you prefer to configure your routes in your Spring XML file, then you can use XPath expressions as follows
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("activemq:MyQueue")
+    .filter().xquery("/foo:person[@name='James']")
+        .to("mqseries:SomeOtherQueue");
+```
+
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -292,6 +305,19 @@ If you prefer to configure your routes in your Spring XML file, then you can use
 </beans>
 ```
 
+```yaml
+- route:
+    from:
+      uri: activemq:MyQueue
+      steps:
+        - filter:
+            xquery:
+              expression: "/foo:person[@name='James']"
+            steps:
+              - to:
+                  uri: mqseries:SomeOtherQueue
+```
+
 Notice how we can reuse the namespace prefixes, **foo** in this case, in the XPath expression for easier namespace-based XQuery expressions!
 
 When you use functions in your XQuery expression, you need an explicit type conversion which is done in the xml configuration via the **@type** attribute:
@@ -306,14 +332,38 @@ Sometimes an XQuery expression can be quite large; it can essentially be used fo
 
 The following example shows how to take a message of an ActiveMQ queue (MyQueue) and transform it using XQuery and send it to MQSeries.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("activemq:MyQueue")
+    .to("xquery:com/acme/someTransform.xquery")
+    .to("mqseries:SomeOtherQueue");
+```
+
 ```xml
-  <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-    <route>
-      <from uri="activemq:MyQueue"/>
-      <to uri="xquery:com/acme/someTransform.xquery"/>
-      <to uri="mqseries:SomeOtherQueue"/>
-    </route>
-  </camelContext>
+<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+  <route>
+    <from uri="activemq:MyQueue"/>
+    <to uri="xquery:com/acme/someTransform.xquery"/>
+    <to uri="mqseries:SomeOtherQueue"/>
+  </route>
+</camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:MyQueue
+      steps:
+        - to:
+            uri: xquery:com/acme/someTransform.xquery
+        - to:
+            uri: mqseries:SomeOtherQueue
 ```
 
 ### Loading script from external resource

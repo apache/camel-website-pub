@@ -269,15 +269,19 @@ The map cache producer provides follow operations specified by **CamelHazelcastO
 
 You can call the samples with:
 
+_Java-only: calling producer operations using ProducerTemplate_
+
 ```java
 template.sendBodyAndHeader("direct:[put|get|update|delete|query|evict]", "my-foo", HazelcastConstants.OBJECT_ID, "4711");
 ```
 
 ### Example for **put**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -288,19 +292,33 @@ from("direct:put")
 
 ```xml
 <route>
-    <from uri="direct:put" />
-    <setHeader name="hazelcast.operation.type">
+    <from uri="direct:put"/>
+    <setHeader name="CamelHazelcastOperationType">
         <constant>put</constant>
     </setHeader>
-    <to uri="hazelcast-map:foo" />
+    <to uri="hazelcast-map:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:put
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: put
+        - to:
+            uri: hazelcast-map:foo
 ```
 
 Sample for **put** with eviction:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -313,25 +331,45 @@ from("direct:put")
 
 ```xml
 <route>
-    <from uri="direct:put" />
-    <setHeader name="hazelcast.operation.type">
+    <from uri="direct:put"/>
+    <setHeader name="CamelHazelcastOperationType">
         <constant>put</constant>
     </setHeader>
-    <setHeader name="HazelcastConstants.TTL_VALUE">
-        <simple resultType="java.lang.Long">1</simple>
+    <setHeader name="CamelHazelcastObjectTtlValue">
+        <constant>1</constant>
     </setHeader>
-    <setHeader name="HazelcastConstants.TTL_UNIT">
-        <simple resultType="java.util.concurrent.TimeUnit">TimeUnit.MINUTES</simple>
+    <setHeader name="CamelHazelcastObjectTtlUnit">
+        <constant>MINUTES</constant>
     </setHeader>
-    <to uri="hazelcast-map:foo" />
+    <to uri="hazelcast-map:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:put
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: put
+        - setHeader:
+            name: CamelHazelcastObjectTtlValue
+            constant: 1
+        - setHeader:
+            name: CamelHazelcastObjectTtlUnit
+            constant: MINUTES
+        - to:
+            uri: hazelcast-map:foo
 ```
 
 ### Example for **get**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -343,20 +381,36 @@ from("direct:get")
 
 ```xml
 <route>
-    <from uri="direct:get" />
-    <setHeader name="hazelcast.operation.type">
+    <from uri="direct:get"/>
+    <setHeader name="CamelHazelcastOperationType">
         <constant>get</constant>
     </setHeader>
-    <to uri="hazelcast-map:foo" />
-    <to uri="seda:out" />
+    <to uri="hazelcast-map:foo"/>
+    <to uri="seda:out"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: get
+        - to:
+            uri: hazelcast-map:foo
+        - to:
+            uri: seda:out
 ```
 
 ### Example for **update**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -367,19 +421,33 @@ from("direct:update")
 
 ```xml
 <route>
-    <from uri="direct:update" />
-    <setHeader name="hazelcast.operation.type">
+    <from uri="direct:update"/>
+    <setHeader name="CamelHazelcastOperationType">
         <constant>update</constant>
     </setHeader>
-    <to uri="hazelcast-map:foo" />
+    <to uri="hazelcast-map:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:update
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: update
+        - to:
+            uri: hazelcast-map:foo
 ```
 
 ### Example for **delete**:
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -390,19 +458,33 @@ from("direct:delete")
 
 ```xml
 <route>
-    <from uri="direct:delete" />
-    <setHeader name="hazelcast.operation.type">
+    <from uri="direct:delete"/>
+    <setHeader name="CamelHazelcastOperationType">
         <constant>delete</constant>
     </setHeader>
-    <to uri="hazelcast-map:foo" />
+    <to uri="hazelcast-map:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:delete
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: delete
+        - to:
+            uri: hazelcast-map:foo
 ```
 
 ### Example for **query**
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -414,16 +496,32 @@ from("direct:query")
 
 ```xml
 <route>
-    <from uri="direct:query" />
-    <setHeader name="hazelcast.operation.type">
+    <from uri="direct:query"/>
+    <setHeader name="CamelHazelcastOperationType">
         <constant>query</constant>
     </setHeader>
-    <to uri="hazelcast-map:foo" />
-    <to uri="seda:out" />
+    <to uri="hazelcast-map:foo"/>
+    <to uri="seda:out"/>
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:query
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: query
+        - to:
+            uri: hazelcast-map:foo
+        - to:
+            uri: seda:out
+```
+
 For the query operation Hazelcast offers an SQL like syntax to query your distributed map.
+
+_Java-only: sending a query predicate using ProducerTemplate_
 
 ```java
 String q1 = "bar > 1000";

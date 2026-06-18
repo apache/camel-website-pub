@@ -110,10 +110,7 @@ This component comes with preregistered patterns, which are based on Logstash pa
 
 Camel Grok DataFormat supports plugable patterns, which are auto loaded from Camel Registry. You can register patterns with Java DSL and Spring DSL:
 
--   Java DSL
-    
--   Spring XML
-    
+_Java-only: registering a custom Grok pattern in a \`RouteBuilder\`_
 
 ```java
 public class MyRouteBuilder extends RouteBuilder {
@@ -129,22 +126,17 @@ public class MyRouteBuilder extends RouteBuilder {
 }
 ```
 
+In Spring XML, you register the custom pattern as a bean:
+
+_XML-only: Spring XML bean registration_
+
 ```xml
 <beans>
     <bean id="myCustomPatternBean" class="org.apache.camel.component.grok.GrokPattern">
         <constructor-arg value="FOOBAR"/>
         <constructor-arg value="foo|bar"/>
     </bean>
-<beans>
-<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-    <route>
-        <from uri="direct:in"/>
-        <unmarshal>
-            <grok pattern="%{FOOBAR:fooBar}"/>
-        </unmarshal>
-        <to uri="log:out"/>
-    </route>
-</camelContext>
+</beans>
 ```
 
 ## Grok Data format Options

@@ -232,6 +232,18 @@ camel.vault.gcp.projectId = region
 
 At this point you’ll be able to reference a property in the following way by using `gcp:` as prefix in the `{{ }}` syntax:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{gcp:route}}");
+```
+
 ```xml
 <camelContext>
     <route>
@@ -241,9 +253,30 @@ At this point you’ll be able to reference a property in the following way by u
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{gcp:route}}"
+```
+
 Where `route` will be the name of the secret stored in the GCP Secret Manager Service.
 
 You could specify a default value in case the secret is not present on GCP Secret Manager:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{gcp:route:default}}");
+```
 
 ```xml
 <camelContext>
@@ -252,6 +285,15 @@ You could specify a default value in case the secret is not present on GCP Secre
         <to uri="{{gcp:route:default}}"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{gcp:route:default}}"
 ```
 
 In this case, if the secret doesn’t exist, the property will fall back to `default` as value.
@@ -271,6 +313,18 @@ Also, you are able to get a particular field of the secret, if you have, for exa
 
 You’re able to do get single secret value in your route, like for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{gcp:database#username}}");
+```
+
 ```xml
 <camelContext>
     <route>
@@ -280,9 +334,30 @@ You’re able to do get single secret value in your route, like for example:
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{gcp:database#username}}"
+```
+
 Or re-use the property as part of an endpoint.
 
 You could specify a default value in case the particular field of secret is not present on GCP Secret Manager:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{gcp:database#username:admin}}");
+```
 
 ```xml
 <camelContext>
@@ -293,9 +368,30 @@ You could specify a default value in case the particular field of secret is not 
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{gcp:database#username:admin}}"
+```
+
 In this case, if the secret doesn’t exist or the secret exists, but the username field is not part of the secret, the property will fall back to "admin" as value.
 
 There is also the syntax to get a particular version of the secret for both the approach, with field/default value specified or only with secret:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{gcp:route@1}}");
+```
 
 ```xml
 <camelContext>
@@ -306,7 +402,28 @@ There is also the syntax to get a particular version of the secret for both the 
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{gcp:route@1}}"
+```
+
 This approach will return the RAW route secret with version '1'.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("{{gcp:route:default@1}}");
+```
 
 ```xml
 <camelContext>
@@ -317,7 +434,28 @@ This approach will return the RAW route secret with version '1'.
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "{{gcp:route:default@1}}"
+```
+
 This approach will return the route secret value with version '1' or default value in case the secret doesn’t exist or the version doesn’t exist.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .log("Username is {{gcp:database#username:admin@1}}");
+```
 
 ```xml
 <camelContext>
@@ -326,6 +464,15 @@ This approach will return the route secret value with version '1' or default val
         <log message="Username is {{gcp:database#username:admin@1}}"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "Username is {{gcp:database#username:admin@1}}"
 ```
 
 This approach will return the username field of the database secret with version '1' or admin in case the secret doesn’t exist or the version doesn’t exist.

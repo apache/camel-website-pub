@@ -44,6 +44,8 @@ This configuration is a basic configuration that just catches and handles all ex
 
 To use this configuration in your routes, then you can assign it with `routeConfigurationId` as shown:
 
+_Java-only: RouteBuilder using routeConfigurationId_
+
 ```java
 public class MyJavaRouteBuilder extends RouteBuilder {
 
@@ -123,6 +125,8 @@ Route configurations are either given an explicit unique ID, or the configuratio
 
 Suppose you have one _nameless_ configuration and another named `_retryError_`:
 
+_Java-only: RouteConfigurationBuilder class definition_
+
 ```java
 public class MyJavaErrorHandler extends RouteConfigurationBuilder {
 
@@ -140,6 +144,13 @@ public class MyJavaErrorHandler extends RouteConfigurationBuilder {
 
 And the following two routes:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
    from("file:cheese").routeId("cheese")
         .to("kafka:cheese");
@@ -147,6 +158,37 @@ And the following two routes:
    from("file:beer").routeId("beer")
         .routeConfigurationId("retryError")
         .to("jms:beer");
+```
+
+```xml
+<route id="cheese">
+    <from uri="file:cheese"/>
+    <to uri="kafka:cheese"/>
+</route>
+
+<route id="beer" routeConfigurationId="retryError">
+    <from uri="file:beer"/>
+    <to uri="jms:beer"/>
+</route>
+```
+
+```yaml
+- route:
+    id: cheese
+    from:
+      uri: file:cheese
+      steps:
+        - to:
+            uri: kafka:cheese
+
+- route:
+    id: beer
+    routeConfigurationId: retryError
+    from:
+      uri: file:beer
+      steps:
+        - to:
+            uri: jms:beer
 ```
 
 In the example above, the `_cheese_` route has no route configurations assigned, so the route will use the default configuration, which in case of an exception will log a warning.

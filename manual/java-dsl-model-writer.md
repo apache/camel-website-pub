@@ -27,6 +27,8 @@ All EIPs, expressions, data formats, and load balancers within routes are suppor
 
 The entry point is `JavaDslModelWriter`. Each top-level construct has a dedicated `write` method that returns a `String` containing compilable Java DSL code:
 
+_Java-only: using JavaDslModelWriter to convert model definitions_
+
 ```java
 import org.apache.camel.java.out.JavaDslModelWriter;
 
@@ -60,6 +62,8 @@ String validatorDsl = writer.writeValidator(validatorDefinition);
 ### Converting an XML file
 
 A typical conversion reads XML, parses it with `ModelParser`, then writes each definition:
+
+_Java-only: converting an XML route file to Java DSL_
 
 ```java
 import org.apache.camel.model.RoutesDefinition;
@@ -97,6 +101,8 @@ Given the XML:
 
 The writer produces:
 
+_Java-only: generated Java DSL output for a route with filter_
+
 ```java
 from("timer:tick?period=1000")
     .routeId("myRoute")
@@ -107,6 +113,8 @@ from("timer:tick?period=1000")
 ```
 
 ### REST DSL
+
+_Java-only: generated Java DSL output for REST DSL_
 
 ```java
 rest("/api")
@@ -119,6 +127,8 @@ rest("/api")
 
 ### Route Template
 
+_Java-only: generated Java DSL output for a route template_
+
 ```java
 routeTemplate("myTemplate")
     .templateParameter("foo")
@@ -129,6 +139,8 @@ routeTemplate("myTemplate")
 
 ### Transformer
 
+_Java-only: generated Java DSL output for a transformer_
+
 ```java
 transformer()
     .fromType("xml")
@@ -137,6 +149,8 @@ transformer()
 ```
 
 ### Validator
+
+_Java-only: generated Java DSL output for a validator_
 
 ```java
 validator()

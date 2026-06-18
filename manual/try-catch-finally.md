@@ -179,6 +179,8 @@ When nesting `doTry …​ doCatch` from an outer `doTry …​ doCatch` EIP, th
 
 Given the following Java DSL:
 
+_Java-only: nested doTry scoping issue_
+
 ```java
 from("direct:test").routeId("myroute")
     .doTry().
@@ -197,6 +199,8 @@ Then you may think that `_docatch2_` is associated on the outer doTry because of
 So in this example, the route will throw the first exception which is then handled in `_docatch1_` which then throws a second exception, that is not caught.
 
 So what you must do is to end the doCatch block correct (notice how we use `endDoTry()` two times) as shown below:
+
+_Java-only: correct nesting with endDoTry()_
 
 ```java
 from("direct:test")

@@ -163,6 +163,8 @@ Enum values:
 
 By default, the SEDA component always instantiates a `LinkedBlockingQueue`, but you can use different implementation, you can reference your own `BlockingQueue` implementation, in this case the size option is not used:
 
+_XML-only: Spring bean definition for custom BlockingQueue_
+
 ```xml
 <bean id="arrayQueue" class="java.util.ArrayBlockingQueue">
   <constructor-arg index="0" value="10" /><!-- size -->
@@ -181,6 +183,8 @@ You can also reference a `BlockingQueueFactory` implementation. Three implementa
     
 -   `PriorityBlockingQueueFactory`
     
+
+_XML-only: Spring bean definition for custom BlockingQueueFactory_
 
 ```xml
 <bean id="priorityQueueFactory" class="org.apache.camel.component.seda.PriorityBlockingQueueFactory">
@@ -276,11 +280,15 @@ As for the difference between the two, note a _thread pool_ can increase/shrink 
 
 Be aware that adding a thread pool to a SEDA endpoint by doing something like:
 
+_Java-only: thread pool added to SEDA endpoint_
+
 ```java
 from("seda:stageName").thread(5).process(...)
 ```
 
 Can wind up with two `BlockQueues`: one from the SEDA endpoint, and one from the work queue of the thread pool, which may not be what you want. Instead, you might wish to configure a [Direct](direct-component.md) endpoint with a thread pool, which can process messages both synchronously and asynchronously. For example:
+
+_Java-only: thread pool on a Direct endpoint_
 
 ```java
 from("direct:stageName").thread(5).process(...)

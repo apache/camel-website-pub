@@ -355,6 +355,8 @@ The `camel-optaplanner` component has been change to use `SolverManager`. If you
 
 The new URI path is:
 
+_Java-only: new OptaPlanner URI syntax_
+
 ```java
 from("optaplanner:myProblemName")
   .to("...")
@@ -370,6 +372,8 @@ You can pass the OptaPlanner SolverManager in 2 ways:
 When running `camel-optaplanner` on Spring Boot or Quarkus, it is preferable to use the Spring Boot or Quarkus way of creating the SolverManager.
 
 It is possible to migrate legacy Camel OptaPlanner Routes, by putting the XML config file, as show in the code below. Camel OptaPlanner will handle creating the SolverManager for those legacy Routes:
+
+_Java-only: legacy OptaPlanner route with XML config file_
 
 ```java
 from("optaplanner:myProblemName?configFile=PATH/TO/CONFIG.FILE.xml")
@@ -413,6 +417,8 @@ The `uri` tags are now static instead of dynamic (by default), as potential too 
 The `platform-http-starter` has been changed from using `camel-servlet` to use Spring HTTP server directly. Therefore, all the HTTP endpoints are no longer prefixed with the servlet context-path (default is `camel`).
 
 For example:
+
+_Java-only: platform-http endpoint without servlet context-path_
 
 ```java
 from("platform-http:myservice")

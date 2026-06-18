@@ -10,7 +10,7 @@ To use the barcode data format in your camel routes, you need to add a dependenc
 
 If you use maven, you could just add the following to your pom.xml, substituting the version number for the latest & greatest release (see the download page for the latest versions).
 
-```java
+```xml
 <dependency>
   <groupId>org.apache.camel</groupId>
   <artifactId>camel-barcode</artifactId>

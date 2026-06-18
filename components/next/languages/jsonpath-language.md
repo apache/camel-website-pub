@@ -371,6 +371,8 @@ In the `jsonpath` expression above we specify the name of the header as `books`,
 
 The same example in XML DSL would be easier to do:
 
+_XML-only:_
+
 ```xml
 <route>
   <from uri="direct:start"/>

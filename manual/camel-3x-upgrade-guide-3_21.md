@@ -175,6 +175,8 @@ The `platform-http-starter` has been changed from using `camel-servlet` to use S
 
 For example:
 
+_Java-only: platform-http endpoint without servlet context-path_
+
 ```java
 from("platform-http:myservice")
   .to("...")

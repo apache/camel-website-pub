@@ -304,6 +304,20 @@ The `JCachePolicy` can be configured with an `Expression` that can per `Exchange
 
 In Camel XML DSL, we need a named reference to the JCachePolicy instance (registered in CamelContext or simply in Spring). We have to wrap the route between `<policy>…​</policy>` tags after `<from>`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:get-order")
+    .policy("jCachePolicy")
+        .setBody().method("orderService", "findOrderById(${body})")
+    .end();
+```
+
 ```xml
 <camelContext xmlns="http://camel.apache.org/schema/spring">
     <route>
@@ -317,7 +331,38 @@ In Camel XML DSL, we need a named reference to the JCachePolicy instance (regist
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:get-order
+      steps:
+        - policy:
+            ref: jCachePolicy
+            steps:
+              - setBody:
+                  method:
+                    ref: orderService
+                    method: "findOrderById(${body})"
+```
+
 See this example when only a part of the route is wrapped:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:get-order")
+    .log("Start - This is always called. body:${body}")
+    .policy("jCachePolicy")
+        .log("Executing route, not found in cache. body:${body}")
+        .setBody().method("orderService", "findOrderById(${body})")
+    .end()
+    .log("End - This is always called. body:${body}");
+```
 
 ```xml
 <camelContext xmlns="http://camel.apache.org/schema/spring">
@@ -333,6 +378,26 @@ See this example when only a part of the route is wrapped:
         <log message="End - This is always called. body:${body}"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get-order
+      steps:
+        - log:
+            message: "Start - This is always called. body:${body}"
+        - policy:
+            ref: jCachePolicy
+            steps:
+              - log:
+                  message: "Executing route, not found in cache. body:${body}"
+              - setBody:
+                  method:
+                    ref: orderService
+                    method: "findOrderById(${body})"
+        - log:
+            message: "End - This is always called. body:${body}"
 ```
 
 ### Define CachePolicy in Spring

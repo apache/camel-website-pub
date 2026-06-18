@@ -131,6 +131,21 @@ Here’s an example showing some of these functions in use.
 
 If you prefer to configure your routes in your Spring XML file, then you can use XPath expressions as follows
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+Namespaces ns = new Namespaces("foo", "http://example.com/person");
+
+from("activemq:MyQueue")
+    .filter(xpath("/foo:person[@name='James']", ns))
+        .to("mqseries:SomeOtherQueue");
+```
+
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -149,6 +164,20 @@ If you prefer to configure your routes in your Spring XML file, then you can use
     </route>
   </camelContext>
 </beans>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:MyQueue
+      steps:
+        - filter:
+            expression:
+              xpath:
+                expression: "/foo:person[@name='James']"
+            steps:
+              - to:
+                  uri: mqseries:SomeOtherQueue
 ```
 
 Notice how we can reuse the namespace prefixes, **foo** in this case, in the XPath expression for easier namespace-based XPath expressions.
@@ -249,6 +278,8 @@ The XPath expression will return a result type using native XML objects such as 
 
 In Java DSL:
 
+_Java-only: XPath expression builder API_
+
 ```java
 xpath("/foo:person/@id", String.class)
 ```
@@ -281,6 +312,8 @@ Some users may have XML stored in a header. To apply an XPath to a header’s va
 ```
 
 And in Java DSL you specify the headerName as the second parameter as shown:
+
+_Java-only: XPath expression builder API_
 
 ```java
 xpath("/invoice/@orderType = 'premium'", "invoiceDetails")
@@ -362,6 +395,8 @@ Namespaces ns = new Namespaces("c", "http://acme.com/cheese")
 When using namespaces in XML DSL, then it is different, as you set up the namespaces in the XML root tag (or one of the `camelContext`, `routes`, `route` tags).
 
 In the XML example below we use Spring XML where the namespace is declared in the root tag `beans`, in the line with `xmlns:foo="http://example.com/person"`:
+
+_XML-only:_
 
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -537,6 +572,8 @@ Some points to take into account:
 You can enable this option in Java DSL and XML DSL:
 
 Java DSL:
+
+_Java-only: XPathBuilder API_
 
 ```java
 XPathBuilder.xpath("/foo:person/@id", String.class).logNamespaces()

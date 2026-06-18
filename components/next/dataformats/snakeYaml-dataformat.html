@@ -21,7 +21,7 @@ yaml.addTypeFilters(TypeFilters.types(MyPojo.class, MyOtherPojo.class));
 
 from("activemq:My.Queue")
   .unmarshal(yaml)
-  .to("mqseries:Another.Queue");</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_using_yaml_in_spring_dsl"><a class="anchor" href="#_using_yaml_in_spring_dsl"></a>Using YAML in Spring DSL</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using Data Format in Spring DSL, you need to declare the data formats first. This is done in the <strong>DataFormats</strong> XML tag.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dataFormats&gt;
+  .to("mqseries:Another.Queue");</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_using_yaml_in_spring_dsl"><a class="anchor" href="#_using_yaml_in_spring_dsl"></a>Using YAML in Spring DSL</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using Data Format in Spring DSL, you need to declare the data formats first. This is done in the <strong>DataFormats</strong> XML tag.</p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring XML data format definitions with type filters</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dataFormats&gt;
   &lt;!--
     here we define a YAML data format with the id snake and that it should use
     the TestPojo as the class type when doing unmarshal. The unmarshalType
@@ -41,20 +41,43 @@ from("activemq:My.Queue")
     &lt;typeFilter value="org.apache.camel.component.yaml.model.TestPojo"/&gt;
     &lt;typeFilter value="com.mycompany\..*" type="regexp"/&gt;
   &lt;/yaml&gt;
-&lt;/dataFormats&gt;</code></pre> </div> </div> <div class="paragraph"> <p>And then you can refer to those ids in the route:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;route&gt;
-    &lt;from uri="direct:unmarshal"/&gt;
-    &lt;unmarshal&gt;
-      &lt;custom ref="snake"/&gt;
-    &lt;/unmarshal&gt;
-    &lt;to uri="mock:unmarshal"/&gt;
-  &lt;/route&gt;
-  &lt;route&gt;
-    &lt;from uri="direct:unmarshal-safe"/&gt;
-    &lt;unmarshal&gt;
-      &lt;custom ref="snake-safe"/&gt;
-    &lt;/unmarshal&gt;
-    &lt;to uri="mock:unmarshal-safe"/&gt;
-  &lt;/route&gt;</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies_for_snakeyaml"><a class="anchor" href="#_dependencies_for_snakeyaml"></a>Dependencies for SnakeYAML</h2> <div class="sectionbody"> <div class="paragraph"> <p>To use YAML in your camel routes, you need to add a dependency on <code>camel-snakeyaml</code> which implements this data format.</p> </div> <div class="paragraph"> <p>If you use maven, you could add the following to your <code>pom.xml</code>, substituting the version number for the latest release (see the download page for the latest versions).</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+&lt;/dataFormats&gt;</code></pre> </div> </div> <div class="paragraph"> <p>And then you can refer to those ids in the route:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml_dsl" class="tab"> <p>YAML DSL</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:unmarshal")
+    .unmarshal("snake")
+    .to("mock:unmarshal");
+
+from("direct:unmarshal-safe")
+    .unmarshal("snake-safe")
+    .to("mock:unmarshal-safe");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:unmarshal"/&gt;
+  &lt;unmarshal&gt;
+    &lt;custom ref="snake"/&gt;
+  &lt;/unmarshal&gt;
+  &lt;to uri="mock:unmarshal"/&gt;
+&lt;/route&gt;
+&lt;route&gt;
+  &lt;from uri="direct:unmarshal-safe"/&gt;
+  &lt;unmarshal&gt;
+    &lt;custom ref="snake-safe"/&gt;
+  &lt;/unmarshal&gt;
+  &lt;to uri="mock:unmarshal-safe"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml_dsl--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml_dsl"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:unmarshal
+      steps:
+        - unmarshal:
+            custom:
+              ref: snake
+        - to:
+            uri: mock:unmarshal
+- route:
+    from:
+      uri: direct:unmarshal-safe
+      steps:
+        - unmarshal:
+            custom:
+              ref: snake-safe
+        - to:
+            uri: mock:unmarshal-safe</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies_for_snakeyaml"><a class="anchor" href="#_dependencies_for_snakeyaml"></a>Dependencies for SnakeYAML</h2> <div class="sectionbody"> <div class="paragraph"> <p>To use YAML in your camel routes, you need to add a dependency on <code>camel-snakeyaml</code> which implements this data format.</p> </div> <div class="paragraph"> <p>If you use maven, you could add the following to your <code>pom.xml</code>, substituting the version number for the latest release (see the download page for the latest versions).</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
   &lt;artifactId&gt;camel-snakeyaml&lt;/artifactId&gt;
   &lt;version&gt;${camel-version}&lt;/version&gt;

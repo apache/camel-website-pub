@@ -66,6 +66,8 @@ Spring XML offers two variations to configure. You can define a spring bean as a
 
 Using the `<propertyPlaceholder>` allows to configure this within the `<camelContext>` tag.
 
+_XML-only:_
+
 ```xml
 <camelContext>
    <propertyPlaceholder id="properties" location="com/mycompany/myprop.properties"/>
@@ -73,6 +75,8 @@ Using the `<propertyPlaceholder>` allows to configure this within the `<camelCon
 ```
 
 For fine-grained configuration of the location, then this can be done as follows:
+
+_XML-only:_
 
 ```xml
 <camelContext>

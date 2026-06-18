@@ -746,12 +746,50 @@ This will be true for standardized algorithms and for experimental ones.
 -   ML-DSA
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
-      .to("mock:verify");
+from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
+    .to("mock:verify");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:sign?operation=sign"/>
+  <to uri="mock:sign"/>
+  <to uri="pqc:verify?operation=verify"/>
+  <to uri="mock:verify"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:sign
+          parameters:
+            operation: sign
+      - to:
+          uri: mock:sign
+      - to:
+          uri: pqc:verify
+          parameters:
+            operation: verify
+      - to:
+          uri: mock:verify
 ```
 
 With the following beans registered in the Registry
+
+_Java-only: registering ML-DSA KeyPair and Signature beans_
 
 ```java
     @BindToRegistry("Keypair")
@@ -771,10 +809,48 @@ With the following beans registered in the Registry
 
 This could be done even without the Registry beans, by specifying the `signatureAlgorithm` parameter in the following way
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=MLDSA").to("mock:sign")
+from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=MLDSA").to("mock:sign")
     .to("pqc:verify?operation=verify&signatureAlgorithm=MLDSA")
     .to("mock:verify");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:sign?operation=sign&amp;signatureAlgorithm=MLDSA"/>
+  <to uri="mock:sign"/>
+  <to uri="pqc:verify?operation=verify&amp;signatureAlgorithm=MLDSA"/>
+  <to uri="mock:verify"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:sign
+          parameters:
+            operation: sign
+            signatureAlgorithm: MLDSA
+      - to:
+          uri: mock:sign
+      - to:
+          uri: pqc:verify
+          parameters:
+            operation: verify
+            signatureAlgorithm: MLDSA
+      - to:
+          uri: mock:verify
 ```
 
 With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultMLDSAMaterial`, which will create the Signature and KeyPair objects to be used.
@@ -784,12 +860,50 @@ The Spec used for the KeyPair will be, in this case, `ML-DSA-65`.
 -   SLH-DSA
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
-      .to("mock:verify");
+from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
+    .to("mock:verify");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:sign?operation=sign"/>
+  <to uri="mock:sign"/>
+  <to uri="pqc:verify?operation=verify"/>
+  <to uri="mock:verify"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:sign
+          parameters:
+            operation: sign
+      - to:
+          uri: mock:sign
+      - to:
+          uri: pqc:verify
+          parameters:
+            operation: verify
+      - to:
+          uri: mock:verify
 ```
 
 With the following beans registered in the Registry
+
+_Java-only: registering SLH-DSA KeyPair and Signature beans_
 
 ```java
     @BindToRegistry("Keypair")
@@ -809,10 +923,48 @@ With the following beans registered in the Registry
 
 This could be done even without the Registry beans, by specifying the `signatureAlgorithm` parameter in the following way
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=SLHDSA").to("mock:sign")
+from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=SLHDSA").to("mock:sign")
     .to("pqc:verify?operation=verify&signatureAlgorithm=SLHDSA")
     .to("mock:verify");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:sign?operation=sign&amp;signatureAlgorithm=SLHDSA"/>
+  <to uri="mock:sign"/>
+  <to uri="pqc:verify?operation=verify&amp;signatureAlgorithm=SLHDSA"/>
+  <to uri="mock:verify"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:sign
+          parameters:
+            operation: sign
+            signatureAlgorithm: SLHDSA
+      - to:
+          uri: mock:sign
+      - to:
+          uri: pqc:verify
+          parameters:
+            operation: verify
+            signatureAlgorithm: SLHDSA
+      - to:
+          uri: mock:verify
 ```
 
 With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultSLHDSAMaterial`, which will create the Signature and KeyPair objects to be used.
@@ -822,12 +974,50 @@ The Spec used for the KeyPair will be, in this case, `SLH-DSA-SHA2-128s`.
 -   LMS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
-      .to("mock:verify");
+from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
+    .to("mock:verify");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:sign?operation=sign"/>
+  <to uri="mock:sign"/>
+  <to uri="pqc:verify?operation=verify"/>
+  <to uri="mock:verify"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:sign
+          parameters:
+            operation: sign
+      - to:
+          uri: mock:sign
+      - to:
+          uri: pqc:verify
+          parameters:
+            operation: verify
+      - to:
+          uri: mock:verify
 ```
 
 With the following beans registered in the Registry
+
+_Java-only: registering LMS KeyPair and Signature beans_
 
 ```java
     @BindToRegistry("Keypair")
@@ -847,10 +1037,48 @@ With the following beans registered in the Registry
 
 This could be done even without the Registry beans, by specifying the `signatureAlgorithm` parameter in the following way
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=LMS").to("mock:sign")
+from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=LMS").to("mock:sign")
     .to("pqc:verify?operation=verify&signatureAlgorithm=LMS")
     .to("mock:verify");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:sign?operation=sign&amp;signatureAlgorithm=LMS"/>
+  <to uri="mock:sign"/>
+  <to uri="pqc:verify?operation=verify&amp;signatureAlgorithm=LMS"/>
+  <to uri="mock:verify"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:sign
+          parameters:
+            operation: sign
+            signatureAlgorithm: LMS
+      - to:
+          uri: mock:sign
+      - to:
+          uri: pqc:verify
+          parameters:
+            operation: verify
+            signatureAlgorithm: LMS
+      - to:
+          uri: mock:verify
 ```
 
 With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultLMSMaterial`, which will create the Signature and KeyPair objects to be used.
@@ -860,12 +1088,50 @@ The Parameters used will be `LMS-SHA256-N32-H5` for the signature and `SHA256-n3
 -   XMSS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
-      .to("mock:verify");
+from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify?operation=verify")
+    .to("mock:verify");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:sign?operation=sign"/>
+  <to uri="mock:sign"/>
+  <to uri="pqc:verify?operation=verify"/>
+  <to uri="mock:verify"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:sign
+          parameters:
+            operation: sign
+      - to:
+          uri: mock:sign
+      - to:
+          uri: pqc:verify
+          parameters:
+            operation: verify
+      - to:
+          uri: mock:verify
 ```
 
 With the following beans registered in the Registry
+
+_Java-only: registering XMSS KeyPair and Signature beans_
 
 ```java
     @BindToRegistry("Keypair")
@@ -885,10 +1151,48 @@ With the following beans registered in the Registry
 
 This could be done even without the Registry beans, by specifying the `signatureAlgorithm` parameter in the following way
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=XMSS").to("mock:sign")
+from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=XMSS").to("mock:sign")
     .to("pqc:verify?operation=verify&signatureAlgorithm=XMSS")
     .to("mock:verify");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:sign?operation=sign&amp;signatureAlgorithm=XMSS"/>
+  <to uri="mock:sign"/>
+  <to uri="pqc:verify?operation=verify&amp;signatureAlgorithm=XMSS"/>
+  <to uri="mock:verify"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:sign
+          parameters:
+            operation: sign
+            signatureAlgorithm: XMSS
+      - to:
+          uri: mock:sign
+      - to:
+          uri: pqc:verify
+          parameters:
+            operation: verify
+            signatureAlgorithm: XMSS
+      - to:
+          uri: mock:verify
 ```
 
 With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultXMSSMaterial`, which will create the Signature and KeyPair objects to be used.
@@ -952,13 +1256,53 @@ A possible flow of the operation could be the following:
 -   ML-KEM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:encapsulate").to("pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
-  .to("mock:encapsulate")
-  .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES").to("mock:extract");
+    .to("mock:encapsulate")
+    .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES").to("mock:extract");
+```
+
+```xml
+<route>
+  <from uri="direct:encapsulate"/>
+  <to uri="pqc:keyenc?operation=generateSecretKeyEncapsulation&amp;symmetricKeyAlgorithm=AES"/>
+  <to uri="mock:encapsulate"/>
+  <to uri="pqc:keyenc?operation=extractSecretKeyEncapsulation&amp;symmetricKeyAlgorithm=AES"/>
+  <to uri="mock:extract"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:encapsulate
+    steps:
+      - to:
+          uri: pqc:keyenc
+          parameters:
+            operation: generateSecretKeyEncapsulation
+            symmetricKeyAlgorithm: AES
+      - to:
+          uri: mock:encapsulate
+      - to:
+          uri: pqc:keyenc
+          parameters:
+            operation: extractSecretKeyEncapsulation
+            symmetricKeyAlgorithm: AES
+      - to:
+          uri: mock:extract
 ```
 
 With the following beans registered in the Registry
+
+_Java-only: registering ML-KEM KeyPair and KeyGenerator beans_
 
 ```java
     @BindToRegistry("Keypair")
@@ -981,12 +1325,52 @@ With the following beans registered in the Registry
 
 This could be done even without the Registry beans, by specifying the `symmetricKeyAlgorithm` and `keyEncapsulationAlgorithm` parameters in the following way
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-   from("direct:encapsulate").to(
-     "pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES&keyEncapsulationAlgorithm=MLKEM")
-     .to("mock:encapsulate")
-     .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES&keyEncapsulationAlgorithm=MLKEM")
-     .to("mock:extract");
+from("direct:encapsulate").to(
+    "pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES&keyEncapsulationAlgorithm=MLKEM")
+    .to("mock:encapsulate")
+    .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES&keyEncapsulationAlgorithm=MLKEM")
+    .to("mock:extract");
+```
+
+```xml
+<route>
+  <from uri="direct:encapsulate"/>
+  <to uri="pqc:keyenc?operation=generateSecretKeyEncapsulation&amp;symmetricKeyAlgorithm=AES&amp;keyEncapsulationAlgorithm=MLKEM"/>
+  <to uri="mock:encapsulate"/>
+  <to uri="pqc:keyenc?operation=extractSecretKeyEncapsulation&amp;symmetricKeyAlgorithm=AES&amp;keyEncapsulationAlgorithm=MLKEM"/>
+  <to uri="mock:extract"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:encapsulate
+    steps:
+      - to:
+          uri: pqc:keyenc
+          parameters:
+            operation: generateSecretKeyEncapsulation
+            symmetricKeyAlgorithm: AES
+            keyEncapsulationAlgorithm: MLKEM
+      - to:
+          uri: mock:encapsulate
+      - to:
+          uri: pqc:keyenc
+          parameters:
+            operation: extractSecretKeyEncapsulation
+            symmetricKeyAlgorithm: AES
+            keyEncapsulationAlgorithm: MLKEM
+      - to:
+          uri: mock:extract
 ```
 
 With this approach the component will use the class `org.apache.camel.component.pqc.crypto.kem.PQCDefaultMLKEMMaterial`, which will create the KeyGenerator and KeyPair objects to be used.
@@ -1000,6 +1384,8 @@ Once you have the encapsulation you’re able to decapsulate the secret key by u
 All of this could be done to use the secret key coming from the encapsulation in the downstream route.
 
 As example you could use the secret key to dynamically instruct the CryptoDataFormat to use it, like in the following route.
+
+_Java-only: extracting secret key from encapsulation for downstream CryptoDataFormat usage_
 
 ```java
         CryptoDataFormat cryptoFormat = new CryptoDataFormat("AES", null);
@@ -1085,6 +1471,8 @@ A production-ready implementation that persists keys and metadata to disk.
 
 **Example:**
 
+_Java-only: FileBasedKeyLifecycleManager usage_
+
 ```java
 KeyLifecycleManager keyManager = new FileBasedKeyLifecycleManager("/secure/keys");
 
@@ -1126,6 +1514,8 @@ A lightweight implementation that stores keys in memory only.
     
 
 **Example:**
+
+_Java-only: InMemoryKeyLifecycleManager usage_
 
 ```java
 InMemoryKeyLifecycleManager keyManager = new InMemoryKeyLifecycleManager();
@@ -1217,6 +1607,8 @@ To use HashicorpVaultKeyLifecycleManager, add the following optional dependency:
 
 **Example with VaultTemplate:**
 
+_Java-only: HashicorpVaultKeyLifecycleManager with VaultTemplate_
+
 ```java
 // Option 1: Using existing VaultTemplate (recommended when using camel-hashicorp-vault)
 @BindToRegistry("vaultTemplate")
@@ -1247,6 +1639,8 @@ KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
 
 **Example with Direct Configuration:**
 
+_Java-only: HashicorpVaultKeyLifecycleManager with direct configuration_
+
 ```java
 // Option 2: Direct configuration with connection parameters
 HashicorpVaultKeyLifecycleManager keyManager =
@@ -1265,6 +1659,8 @@ KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "vault-key",
 ```
 
 **Example with HashiCorp Cloud Platform (HCP) Vault:**
+
+_Java-only: HashicorpVaultKeyLifecycleManager with HCP Vault_
 
 ```java
 // Option 3: Configuration for HCP Vault with namespace
@@ -1418,6 +1814,8 @@ admin/                                     # Namespace
 **Integration with camel-hashicorp-vault:**
 
 HashicorpVaultKeyLifecycleManager can share the same VaultTemplate with the camel-hashicorp-vault component:
+
+_Java-only: reusing VaultTemplate from camel-hashicorp-vault_
 
 ```java
 // Reuse VaultTemplate from camel-hashicorp-vault
@@ -1653,6 +2051,8 @@ To use AwsSecretsManagerKeyLifecycleManager, add the following optional dependen
 
 **Example with SecretsManagerClient:**
 
+_Java-only: AwsSecretsManagerKeyLifecycleManager with SecretsManagerClient_
+
 ```java
 // Option 1: Using existing SecretsManagerClient (recommended when using camel-aws-secrets-manager)
 @BindToRegistry("secretsManagerClient")
@@ -1679,6 +2079,8 @@ KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
 
 **Example with Direct Configuration:**
 
+_Java-only: AwsSecretsManagerKeyLifecycleManager with direct configuration_
+
 ```java
 // Option 2: Direct configuration with AWS credentials
 AwsSecretsManagerKeyLifecycleManager keyManager =
@@ -1695,6 +2097,8 @@ KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "aws-key",
 ```
 
 **Example with LocalStack (Testing):**
+
+_Java-only: AwsSecretsManagerKeyLifecycleManager with LocalStack_
 
 ```java
 // Option 3: Configuration for LocalStack testing
@@ -1985,6 +2389,8 @@ Limit access to specific key IDs only:
 
 AwsSecretsManagerKeyLifecycleManager can share the same SecretsManagerClient with the camel-aws-secrets-manager component:
 
+_Java-only: reusing SecretsManagerClient from camel-aws-secrets-manager_
+
 ```java
 // Reuse SecretsManagerClient from camel-aws-secrets-manager
 @BindToRegistry("keyLifecycleManager")
@@ -2023,6 +2429,8 @@ The key lifecycle manager supports all PQC algorithms with sensible default para
 
 #### Signature Algorithms
 
+_Java-only: generating key pairs for various PQC signature algorithms_
+
 ```java
 // ML-DSA (uses default ML-DSA-65)
 KeyPair mldsaKey = keyManager.generateKeyPair("MLDSA", "mldsa-key");
@@ -2046,6 +2454,8 @@ KeyPair lmsKey = keyManager.generateKeyPair("LMS", "lms-key");
 
 #### Key Encapsulation Algorithms
 
+_Java-only: generating key pairs for various PQC KEM algorithms_
+
 ```java
 // ML-KEM (uses default)
 KeyPair mlkemKey = keyManager.generateKeyPair("MLKEM", "mlkem-key");
@@ -2063,6 +2473,8 @@ KeyPair bikeKey = keyManager.generateKeyPair("BIKE", "bike-key");
 ### Key Metadata
 
 Each key is associated with metadata that tracks its lifecycle:
+
+_Java-only: retrieving and inspecting key metadata_
 
 ```java
 KeyMetadata metadata = keyManager.getKeyMetadata("my-key");
@@ -2093,6 +2505,8 @@ System.out.println("Next rotation: " + metadata.getNextRotationAt());
 ### Key Rotation
 
 Key rotation is essential for maintaining security. The lifecycle manager supports automated rotation:
+
+_Java-only: checking rotation need and rotating a key_
 
 ```java
 // Check if key needs rotation
@@ -2127,6 +2541,8 @@ Keys can be exported and imported in multiple formats:
 
 **Export Example:**
 
+_Java-only: exporting keys in PEM and DER formats_
+
 ```java
 KeyPair keyPair = keyManager.getKey("my-key");
 
@@ -2148,6 +2564,8 @@ byte[] fullExport = keyManager.exportKey(keyPair, KeyFormat.DER, true);
 
 **Import Example:**
 
+_Java-only: importing a key from PEM format_
+
 ```java
 // Import from PEM format
 byte[] pemData = Files.readAllBytes(Paths.get("public-key.pem"));
@@ -2161,6 +2579,8 @@ keyManager.storeKey("imported-key", imported, metadata);
 ### Key Expiration and Revocation
 
 **Expire a Key:**
+
+_Java-only: setting expiration and manually expiring a key_
 
 ```java
 // Set expiration time
@@ -2179,6 +2599,8 @@ if (metadata.isExpired()) {
 
 **Revoke a Key:**
 
+_Java-only: revoking a compromised key_
+
 ```java
 // Revoke a compromised key
 keyManager.revokeKey("compromised-key", "Private key exposed in log file");
@@ -2189,6 +2611,8 @@ assert metadata.getDescription().contains("Revoked: Private key exposed");
 ```
 
 ### Listing and Managing Keys
+
+_Java-only: listing, filtering, and deleting keys_
 
 ```java
 // List all keys
@@ -2336,6 +2760,8 @@ The lifecycle manager provides sensible defaults for all algorithms:
 
 Implement automated key rotation policies:
 
+_Java-only: automated key rotation policy_
+
 ```java
 // Rotate keys every 90 days or after 10,000 uses
 Duration maxAge = Duration.ofDays(90);
@@ -2362,6 +2788,8 @@ For FileBasedKeyLifecycleManager:
 **3\. Key Metadata Tracking**
 
 Always update metadata when using keys:
+
+_Java-only: updating key usage metadata_
 
 ```java
 KeyMetadata metadata = keyManager.getKeyMetadata(keyId);
@@ -2399,6 +2827,8 @@ When exporting keys:
 
 Use InMemoryKeyLifecycleManager for tests:
 
+_Java-only: test setup and cleanup with InMemoryKeyLifecycleManager_
+
 ```java
 @BeforeEach
 public void setup() {
@@ -2422,6 +2852,8 @@ Both implementations are thread-safe:
 
 Concurrent key operations are safe:
 
+_Java-only: concurrent key generation with thread pool_
+
 ```java
 ExecutorService executor = Executors.newFixedThreadPool(10);
 
@@ -2444,6 +2876,8 @@ executor.awaitTermination(1, TimeUnit.MINUTES);
 ### Migration Between Implementations
 
 To migrate from InMemoryKeyLifecycleManager to FileBasedKeyLifecycleManager:
+
+_Java-only: migrating keys between lifecycle manager implementations_
 
 ```java
 InMemoryKeyLifecycleManager memoryManager = new InMemoryKeyLifecycleManager();
@@ -2502,6 +2936,13 @@ The component supports hybrid signatures that combine a classical signature (e.g
 
 **Example - Hybrid Signature with ECDSA P-256 + ML-DSA:**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:sign")
     .to("pqc:hybrid?operation=hybridSign"
@@ -2516,7 +2957,54 @@ from("direct:verify")
     .to("mock:verified");
 ```
 
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:hybrid?operation=hybridSign&amp;signatureAlgorithm=MLDSA&amp;classicalSignatureAlgorithm=ECDSA_P256"/>
+  <to uri="mock:signed"/>
+</route>
+<route>
+  <from uri="direct:verify"/>
+  <to uri="pqc:hybrid?operation=hybridVerify&amp;signatureAlgorithm=MLDSA&amp;classicalSignatureAlgorithm=ECDSA_P256"/>
+  <to uri="mock:verified"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:hybrid
+          parameters:
+            operation: hybridSign
+            signatureAlgorithm: MLDSA
+            classicalSignatureAlgorithm: ECDSA_P256
+      - to:
+          uri: mock:signed
+- route:
+    from:
+      uri: direct:verify
+    steps:
+      - to:
+          uri: pqc:hybrid
+          parameters:
+            operation: hybridVerify
+            signatureAlgorithm: MLDSA
+            classicalSignatureAlgorithm: ECDSA_P256
+      - to:
+          uri: mock:verified
+```
+
 **Example - Hybrid Signature with Ed25519 + ML-DSA:**
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:sign")
@@ -2524,6 +3012,29 @@ from("direct:sign")
         + "&signatureAlgorithm=MLDSA"
         + "&classicalSignatureAlgorithm=ED25519")
     .to("mock:signed");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="pqc:hybrid?operation=hybridSign&amp;signatureAlgorithm=MLDSA&amp;classicalSignatureAlgorithm=ED25519"/>
+  <to uri="mock:signed"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+    steps:
+      - to:
+          uri: pqc:hybrid
+          parameters:
+            operation: hybridSign
+            signatureAlgorithm: MLDSA
+            classicalSignatureAlgorithm: ED25519
+      - to:
+          uri: mock:signed
 ```
 
 **Hybrid Signature Wire Format:**
@@ -2578,6 +3089,13 @@ The component supports hybrid Key Encapsulation Mechanisms that combine classica
 
 **Example - Hybrid KEM with X25519 + ML-KEM:**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:encapsulate")
     .to("pqc:hybridkem?operation=hybridGenerateSecretKeyEncapsulation"
@@ -2596,7 +3114,58 @@ from("direct:extract")
     .to("mock:extracted");
 ```
 
+```xml
+<route>
+  <from uri="direct:encapsulate"/>
+  <to uri="pqc:hybridkem?operation=hybridGenerateSecretKeyEncapsulation&amp;keyEncapsulationAlgorithm=MLKEM&amp;classicalKEMAlgorithm=X25519&amp;symmetricKeyAlgorithm=AES&amp;symmetricKeyLength=256"/>
+  <to uri="mock:encapsulated"/>
+</route>
+<route>
+  <from uri="direct:extract"/>
+  <to uri="pqc:hybridkem?operation=hybridExtractSecretKeyEncapsulation&amp;keyEncapsulationAlgorithm=MLKEM&amp;classicalKEMAlgorithm=X25519&amp;symmetricKeyAlgorithm=AES&amp;symmetricKeyLength=256"/>
+  <to uri="mock:extracted"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:encapsulate
+    steps:
+      - to:
+          uri: pqc:hybridkem
+          parameters:
+            operation: hybridGenerateSecretKeyEncapsulation
+            keyEncapsulationAlgorithm: MLKEM
+            classicalKEMAlgorithm: X25519
+            symmetricKeyAlgorithm: AES
+            symmetricKeyLength: 256
+      - to:
+          uri: mock:encapsulated
+- route:
+    from:
+      uri: direct:extract
+    steps:
+      - to:
+          uri: pqc:hybridkem
+          parameters:
+            operation: hybridExtractSecretKeyEncapsulation
+            keyEncapsulationAlgorithm: MLKEM
+            classicalKEMAlgorithm: X25519
+            symmetricKeyAlgorithm: AES
+            symmetricKeyLength: 256
+      - to:
+          uri: mock:extracted
+```
+
 **Example - Hybrid KEM with ECDH P-256 + ML-KEM:**
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:encapsulate")
@@ -2607,6 +3176,32 @@ from("direct:encapsulate")
         + "&symmetricKeyLength=128"
         + "&hybridKdfAlgorithm=HKDF-SHA256")
     .to("mock:encapsulated");
+```
+
+```xml
+<route>
+  <from uri="direct:encapsulate"/>
+  <to uri="pqc:hybridkem?operation=hybridGenerateSecretKeyEncapsulation&amp;keyEncapsulationAlgorithm=MLKEM&amp;classicalKEMAlgorithm=ECDH_P256&amp;symmetricKeyAlgorithm=AES&amp;symmetricKeyLength=128&amp;hybridKdfAlgorithm=HKDF-SHA256"/>
+  <to uri="mock:encapsulated"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:encapsulate
+    steps:
+      - to:
+          uri: pqc:hybridkem
+          parameters:
+            operation: hybridGenerateSecretKeyEncapsulation
+            keyEncapsulationAlgorithm: MLKEM
+            classicalKEMAlgorithm: ECDH_P256
+            symmetricKeyAlgorithm: AES
+            symmetricKeyLength: 128
+            hybridKdfAlgorithm: HKDF-SHA256
+      - to:
+          uri: mock:encapsulated
 ```
 
 **Hybrid KEM Wire Format:**
@@ -2681,6 +3276,8 @@ The `PQCAlgorithmId` enum maps every supported algorithm — classical signature
 
 **Lookup by JCA name:**
 
+_Java-only: resolving PQCAlgorithmId from JCA algorithm names_
+
 ```java
 // Resolve from a JCA algorithm string (case-insensitive)
 PQCAlgorithmId algId = PQCAlgorithmId.fromJcaName("ML-DSA");   // ML_DSA (0x0201)
@@ -2693,6 +3290,8 @@ PQCAlgorithmId unknown = PQCAlgorithmId.fromJcaName("FutureAlg"); // UNKNOWN
 
 **Lookup by wire format ID:**
 
+_Java-only: resolving PQCAlgorithmId from wire format identifier_
+
 ```java
 // Resolve from a 16-bit identifier read from the wire
 PQCAlgorithmId alg = PQCAlgorithmId.fromId(0x0201);  // ML_DSA
@@ -2701,6 +3300,8 @@ String jca = alg.getJcaName();  // "ML-DSA"
 ```
 
 **Inspecting algorithm metadata from a parsed hybrid output:**
+
+_Java-only: parsing and inspecting v2 hybrid signature components_
 
 ```java
 // After parsing a v2 hybrid signature
@@ -2797,6 +3398,8 @@ This format allows the receiver to identify the algorithms used, extract the enc
 
 #### Java DSL
 
+_Java-only: PQC DataFormat basic encrypt and decrypt routes_
+
 ```java
 // Create PQC DataFormat
 PQCDataFormat pqcFormat = new PQCDataFormat();
@@ -2869,6 +3472,8 @@ The DataFormat requires a KeyPair to be available either:
 
 #### Option 1: Registry-based Configuration
 
+_Java-only: registering ML-KEM KeyPair in Camel registry_
+
 ```java
 @BindToRegistry("pqcKeyPair")
 public KeyPair createMLKEMKeyPair() throws Exception {
@@ -2885,6 +3490,8 @@ pqcFormat.setSymmetricKeyAlgorithm("AES");
 
 #### Option 2: Direct Configuration
 
+_Java-only: configuring PQCDataFormat with KeyPair directly_
+
 ```java
 KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
 kpg.initialize(MLKEMParameterSpec.ml_kem_768, new SecureRandom());
@@ -2897,6 +3504,8 @@ pqcFormat.setSymmetricKeyAlgorithm("AES");
 ```
 
 #### Option 3: Header-based Configuration
+
+_Java-only: providing KeyPair via message header_
 
 ```java
 from("direct:encrypt")
@@ -2966,6 +3575,8 @@ from("direct:encrypt")
 
 #### Secure File Transfer
 
+_Java-only: PQC DataFormat for secure file encrypt and decrypt_
+
 ```java
 PQCDataFormat pqcFormat = new PQCDataFormat();
 pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
@@ -2987,6 +3598,8 @@ from("file:encrypted?noop=true")
 
 #### API Message Encryption
 
+_Java-only: PQC DataFormat for API message encrypt and decrypt_
+
 ```java
 from("direct:secure-api")
     .marshal().json()  // Convert to JSON
@@ -2999,6 +3612,8 @@ from("direct:secure-api")
 ```
 
 #### Multiple Algorithm Support
+
+_Java-only: PQC DataFormat with multiple security levels_
 
 ```java
 // Different algorithms for different security levels
@@ -3026,6 +3641,8 @@ from("direct:classify")
 
 #### Dynamic Algorithm Selection via Headers
 
+_Java-only: PQC DataFormat with dynamic algorithm selection_
+
 ```java
 PQCDataFormat pqcFormat = new PQCDataFormat();
 
@@ -3039,6 +3656,8 @@ from("direct:dynamic-encrypt")
 ### Integration with Key Lifecycle Management
 
 The PQC DataFormat can be integrated with the Key Lifecycle Manager for automated key management:
+
+_Java-only: integrating PQC DataFormat with Key Lifecycle Manager_
 
 ```java
 @BindToRegistry("keyLifecycleManager")
@@ -3073,6 +3692,8 @@ public KeyPair createKeyPair() throws Exception {
 
 **Manual Approach (using PQC component endpoints):**
 
+_Java-only: manual KEM encrypt with multiple endpoint steps_
+
 ```java
 from("direct:manual-encrypt")
     .to("pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
@@ -3085,6 +3706,8 @@ from("direct:manual-encrypt")
 ```
 
 **DataFormat Approach (simplified):**
+
+_Java-only: simplified encrypt using PQCDataFormat_
 
 ```java
 from("direct:dataformat-encrypt")
@@ -3142,6 +3765,8 @@ The DataFormat approach is significantly simpler and handles all KEM operations 
 
 Adjust bufferSize based on message size:
 
+_Java-only: configuring PQCDataFormat buffer size_
+
 ```java
 PQCDataFormat pqcFormat = new PQCDataFormat();
 pqcFormat.setBufferSize(8192);  // Larger buffer for big files
@@ -3150,6 +3775,8 @@ pqcFormat.setBufferSize(8192);  // Larger buffer for big files
 **2\. Caching KeyGenerator**
 
 Configure a KeyGenerator once to avoid repeated initialization:
+
+_Java-only: caching a KeyGenerator to avoid repeated initialization_
 
 ```java
 @BindToRegistry("kemKeyGenerator")
@@ -3165,6 +3792,8 @@ pqcFormat.setKeyGenerator(kemKeyGenerator);
 
 The DataFormat supports streaming for large payloads, avoiding memory issues:
 
+_Java-only: streaming large files with PQCDataFormat_
+
 ```java
 from("file:large-files?noop=true")
     .streamCache(true)  // Enable stream caching if needed
@@ -3175,6 +3804,8 @@ from("file:large-files?noop=true")
 ### Testing
 
 Example test demonstrating round-trip encryption/decryption:
+
+_Java-only: JUnit 5 test for PQC DataFormat round-trip encryption_
 
 ```java
 @Test
@@ -3233,6 +3864,8 @@ void testPQCDataFormatRoundTrip() throws Exception {
 
 -   **Solution**: Add Bouncy Castle providers:
     
+    _Java-only: adding Bouncy Castle security providers_
+    
     ```java
     Security.addProvider(new BouncyCastleProvider());
     Security.addProvider(new BouncyCastlePQCProvider());
@@ -3249,6 +3882,8 @@ void testPQCDataFormatRoundTrip() throws Exception {
 **Issue**: OutOfMemoryError with large files
 
 -   **Solution**: Increase buffer size or enable stream caching:
+    
+    _Java-only: increasing buffer size or enabling stream caching_
     
     ```java
     pqcFormat.setBufferSize(16384);

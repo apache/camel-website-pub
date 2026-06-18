@@ -272,18 +272,46 @@ The example below illustrates this fact that we have a header and a trailer. You
 
 A common use case is sending a file to this endpoint for further processing in a separate route. For example:
 
-```xml
-  <camelContext xmlns="http://activemq.apache.org/camel/schema/spring">
-    <route>
-      <from uri="file://someDirectory"/>
-      <to uri="flatpack:foo"/>
-    </route>
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-    <route>
-      <from uri="flatpack:foo"/>
-      ...
-    </route>
-  </camelContext>
+```java
+from("file://someDirectory")
+    .to("flatpack:foo");
+
+from("flatpack:foo")
+    ...
+```
+
+```xml
+<route>
+    <from uri="file://someDirectory"/>
+    <to uri="flatpack:foo"/>
+</route>
+
+<route>
+    <from uri="flatpack:foo"/>
+    ...
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://someDirectory
+      steps:
+        - to:
+            uri: flatpack:foo
+
+- route:
+    from:
+      uri: flatpack:foo
+      steps:
+        - ...
 ```
 
 You can also convert the payload of each message created to a `Map` for easy Bean Integration

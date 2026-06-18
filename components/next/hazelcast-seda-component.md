@@ -199,42 +199,64 @@ Enum values:
 
 The SEDA producer provides no operations. You only send data to the specified queue.
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:foo")
-.to("hazelcast-seda:foo");
+    .to("hazelcast-seda:foo");
 ```
 
 ```xml
 <route>
-   <from uri="direct:start" />
-   <to uri="hazelcast-seda:foo" />
+  <from uri="direct:start"/>
+  <to uri="hazelcast-seda:foo"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:foo
+      steps:
+        - to:
+            uri: hazelcast-seda:foo
 ```
 
 ## SEDA consumer – from(“hazelcast-seda:foo”)
 
 The SEDA consumer provides no operations. You only retrieve data from the specified queue.
 
--   Java DSL
+-   Java
     
--   Spring XML
+-   XML
+    
+-   YAML
     
 
 ```java
 from("hazelcast-seda:foo")
-.to("mock:result");
+    .to("mock:result");
 ```
 
 ```xml
 <route>
-  <from uri="hazelcast-seda:foo" />
-  <to uri="mock:result" />
+  <from uri="hazelcast-seda:foo"/>
+  <to uri="mock:result"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: hazelcast-seda:foo
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

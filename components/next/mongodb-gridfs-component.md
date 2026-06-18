@@ -275,6 +275,19 @@ The following route defined in Spring XML executes the operation [**findOne**](#
 
 **Get a file from GridFS**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("mongodb-gridfs:mongoBean?database=${mongodb.database}&operation=findOne")
+    .to("direct:result");
+```
+
 ```xml
 <route>
   <from uri="direct:start" />
@@ -282,6 +295,20 @@ The following route defined in Spring XML executes the operation [**findOne**](#
   <to uri="mongodb-gridfs:mongoBean?database=${mongodb.database}&amp;operation=findOne" />
   <to uri="direct:result" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: mongodb-gridfs:mongoBean
+            parameters:
+              database: "${mongodb.database}"
+              operation: findOne
+        - to:
+            uri: direct:result
 ```
 
 ### Configuration of a database in Spring XML

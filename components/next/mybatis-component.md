@@ -717,6 +717,8 @@ Setting up a transaction manager under camel-mybatis can be a little bit fiddly,
 
 The first part requires the setup of a `DataSource`. This is typically a pool (either DBCP, or c3p0), which needs to be wrapped in a Spring proxy. This proxy enables non-Spring use of the `DataSource` to participate in Spring transactions (the MyBatis `SqlSessionFactory` does just this).
 
+_XML-only: Spring bean declaration for transaction-aware `DataSource` proxy_
+
 ```xml
 <bean id="dataSource" class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
     <constructor-arg>
@@ -734,6 +736,8 @@ This has the additional benefit of enabling the database configuration to be ext
 
 A transaction manager is then configured to manage the outermost `DataSource`:
 
+_XML-only: Spring bean declaration for \`DataSourceTransactionManager\`_
+
 ```xml
 <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     <property name="dataSource" ref="dataSource"/>
@@ -741,6 +745,8 @@ A transaction manager is then configured to manage the outermost `DataSource`:
 ```
 
 A [mybatis-spring](http://www.mybatis.org/spring/index.md) [`SqlSessionFactoryBean`](http://www.mybatis.org/spring/factorybean.md) then wraps that same `DataSource`:
+
+_XML-only: Spring bean declaration for MyBatis \`SqlSessionFactoryBean\`_
 
 ```xml
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -754,6 +760,8 @@ A [mybatis-spring](http://www.mybatis.org/spring/index.md) [`SqlSessionFactoryBe
 
 The camel-mybatis component is then configured with that factory:
 
+_XML-only: Spring bean declaration for `MyBatisComponent` with \`SqlSessionFactory\`_
+
 ```xml
 <bean id="mybatis" class="org.apache.camel.component.mybatis.MyBatisComponent">
     <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
@@ -761,6 +769,19 @@ The camel-mybatis component is then configured with that factory:
 ```
 
 Finally, a transaction policy is defined over the top of the transaction manager, which can then be used as usual:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:insert")
+    .policy("PROPAGATION_REQUIRED")
+    .to("mybatis:myModel.insert?statementType=Insert");
+```
 
 ```xml
 <bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
@@ -775,6 +796,20 @@ Finally, a transaction policy is defined over the top of the transaction manager
         <to uri="mybatis:myModel.insert?statementType=Insert"/>
     </route>
 </camelContext>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:insert
+      steps:
+        - policy:
+            ref: PROPAGATION_REQUIRED
+            steps:
+              - to:
+                  uri: mybatis:myModel.insert
+                  parameters:
+                    statementType: Insert
 ```
 
 ## MyBatis Spring Boot Starter integration

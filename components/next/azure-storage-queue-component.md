@@ -416,6 +416,8 @@ from("azure-storage-queue://storageAccount/messageQueue?accessKey=yourAccessKey"
 
 If your Camel Application is running behind a firewall or if you need to have more control over the `QueueServiceClient` instance configuration, you can create your own instance:
 
+_Java-only: programmatic Azure SDK client configuration_
+
 ```java
 StorageSharedKeyCredential credential = new StorageSharedKeyCredential("yourAccountName", "yourAccessKey");
 String uri = String.format("https://%s.queue.core.windows.net", "yourAccountName");

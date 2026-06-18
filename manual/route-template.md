@@ -397,6 +397,8 @@ When using Java DSL and [Simple](../components/4.18.x/languages/simple-language.
 
 For example, given the following route template in Java DSL:
 
+_Java-only: route template with Simple fluent builder (unsupported usage)_
+
 ```java
 public class MyRouteTemplates extends RouteBuilder {
 
@@ -423,11 +425,15 @@ public class MyRouteTemplates extends RouteBuilder {
 
 Instead, the simple expression should be a literal String value _only_ as follows:
 
+_Java-only: correct Simple expression syntax for route templates_
+
 ```java
 .when(simple("'{{color}}' == 'red'")
 ```
 
 So the correct solution would be as follows:
+
+_Java-only: correct route template with Simple String literal_
 
 ```java
 public class MyRouteTemplates extends RouteBuilder {
@@ -572,6 +578,8 @@ The route template allows binding beans that are locally scoped and only used as
 
 For example, given the following route template where we use `templateBean` to set up the local bean as shown:
 
+_Java-only: templateBean with lambda supplier_
+
 ```java
 routeTemplate("s3template")
     .templateParameter("region")
@@ -600,6 +608,8 @@ If multiple routes are created from this template, then each of the created rout
 The `TemplatedRouteBuilder` also allows to bind local beans (which allows specifying those beans) when creating routes from existing templates.
 
 Suppose the route template below is defined in XML:
+
+_XML-only: route template without bean binding_
 
 ```xml
   <routeTemplate id="s3template">
@@ -733,6 +743,8 @@ The bean instance can be configured with properties via getter/setter style. The
 > In **Camel 4.6** onwards, you can also use constructor arguments for beans
 
 So suppose we have a class as follows:
+
+_Java-only: bean class with getter/setter properties_
 
 ```java
 public class MyBar {
@@ -1053,6 +1065,8 @@ routeTemplate("s3template")
 
 The method signature of `createS3Client` method **MUST** then have one parameter for the `RouteTemplateContext` as shown:
 
+_Java-only: bean factory method signature_
+
 ```java
 public static S3Client createS3Client(RouteTemplateContext rtc) {
     return S3Client.builder()
@@ -1132,6 +1146,8 @@ There may be some special situations where you want to be able to do some custom
 
 To support this you can use the `configure` in the route template DSL where you can specify the code to execute as show:
 
+_Java-only: custom configuration callback when creating route from template_
+
 ```java
 routeTemplate("myTemplate")
     .templateParameter("myTopic")
@@ -1150,7 +1166,14 @@ The route templates can be dumped as XML from the `ManagedCamelContextMBean` MBe
 
 When using `camel-main` you can specify the parameters for route templates in `application.properties` file.
 
-For example, given the route template below (from a `RouteBuilder` class):
+For example, given the route template below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 routeTemplate("mytemplate")
@@ -1158,6 +1181,30 @@ routeTemplate("mytemplate")
     .templateParameter("result")
     .from("direct:{{input}}")
         .to("mock:{{result}}");
+```
+
+```xml
+<routeTemplate id="mytemplate">
+    <templateParameter name="input"/>
+    <templateParameter name="result"/>
+    <route>
+        <from uri="direct:{{input}}"/>
+        <to uri="mock:{{result}}"/>
+    </route>
+</routeTemplate>
+```
+
+```yaml
+- routeTemplate:
+    id: mytemplate
+    parameters:
+      - name: input
+      - name: result
+    from:
+      uri: "direct:{{input}}"
+      steps:
+        - to:
+            uri: "mock:{{result}}"
 ```
 
 Then we can create two routes from this template by configuring the values in the `application.properties` file:

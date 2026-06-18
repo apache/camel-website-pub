@@ -76,6 +76,8 @@ The Jackson XML 2 dataformat supports 17 options, which are listed below.
 
 When using Data Format in Spring DSL, you need to declare the data formats first. This is done in the `dataFormats` XML tag:
 
+_XML-only: declaring a named data format in Spring XML_
+
 ```xml
         <dataFormats>
             <!-- here we define an XML data format with the id jack and that it should use the TestPojo as the class type when
@@ -86,12 +88,36 @@ When using Data Format in Spring DSL, you need to declare the data formats first
 
 And then you can refer to this id in the route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:back")
+    .unmarshal("jack")
+    .to("mock:reverse");
+```
+
 ```xml
-       <route>
-            <from uri="direct:back"/>
-            <unmarshal><custom ref="jack"/></unmarshal>
-            <to uri="mock:reverse"/>
-        </route>
+<route>
+    <from uri="direct:back"/>
+    <unmarshal><custom ref="jack"/></unmarshal>
+    <to uri="mock:reverse"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:back
+      steps:
+        - unmarshal:
+            ref: jack
+        - to:
+            uri: mock:reverse
 ```
 
 ### Excluding POJO fields from marshalling
@@ -130,15 +156,39 @@ from("direct:inPojoAgeView")
   .marshal().jacksonXml(TestPojoView.class, Views.Age.class);
 ```
 
-And the same in XML DSL:
+And the same in the route DSL:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:inPojoAgeView")
+    .marshal().jacksonXml(TestPojoView.class, Views.Age.class);
+```
 
 ```xml
 <route>
-<from uri="direct:inPojoAgeView"/>
+    <from uri="direct:inPojoAgeView"/>
     <marshal>
-      <jacksonXml unmarshalType="org.apache.camel.component.jacksonxml.TestPojoView" jsonView="org.apache.camel.component.jacksonxml.Views$Age"/>
+        <jacksonXml unmarshalType="org.apache.camel.component.jacksonxml.TestPojoView"
+                    jsonView="org.apache.camel.component.jacksonxml.Views$Age"/>
     </marshal>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:inPojoAgeView
+      steps:
+        - marshal:
+            jacksonXml:
+              unmarshalType: org.apache.camel.component.jacksonxml.TestPojoView
+              jsonView: org.apache.camel.component.jacksonxml.Views$Age
 ```
 
 ### Setting serialization include option
@@ -165,6 +215,8 @@ format.setInclude("NON_NULL");
 
 Or from XML DSL you configure this as
 
+_XML-only: configuring include option in Spring XML_
+
 ```xml
 <dataFormats>
   <jacksonXml id="jacksonxml" include="NON_NULL"/>
@@ -185,6 +237,8 @@ format.setAllowJmsType(true);
 ```
 
 Or from XML DSL you configure this as:
+
+_XML-only: configuring allowJmsType in Spring XML_
 
 ```xml
 <dataFormats>
@@ -209,6 +263,8 @@ format.setUnmarshalType(MyPojo.class);
 
 And if you use XML DSL then you configure to use a list using `useList` attribute as shown below:
 
+_XML-only: configuring useList in Spring XML_
+
 ```xml
 <dataFormats>
     <jacksonXml id="jack" useList="true"/>
@@ -216,6 +272,8 @@ And if you use XML DSL then you configure to use a list using `useList` attribut
 ```
 
 And you can specify the POJO type also
+
+_XML-only: configuring useList with unmarshalType in Spring XML_
 
 ```xml
 <dataFormats>
@@ -227,6 +285,8 @@ And you can specify the POJO type also
 
 You can use custom Jackson modules by specifying the class names of those using the moduleClassNames option as shown below.
 
+_XML-only: configuring moduleClassNames in Spring XML_
+
 ```xml
 <dataFormats>
     <jacksonXml id="jack" useList="true" unmarshalType="com.foo.MyPojo" moduleClassNames="com.foo.MyModule,com.foo.MyOtherModule"/>
@@ -234,6 +294,8 @@ You can use custom Jackson modules by specifying the class names of those using 
 ```
 
 When using `moduleClassNames` then the custom Jackson modules are not configured, by created using default constructor and used as-is. If a custom module needs any custom configuration, then an instance of the module can be created and configured, and then use modulesRefs to refer to the module as shown below:
+
+_XML-only: configuring moduleRefs with bean declaration in Spring XML_
 
 ```xml
 <bean id="myJacksonModule" class="com.foo.MyModule">
@@ -250,6 +312,8 @@ Multiple modules can be specified separated by comma, such as `moduleRefs="myJac
 ### Enabling or disable features using Jackson
 
 Jackson XML has a number of features you can enable or disable, which its XmlMapper uses. For example, to disable failing on unknown properties when marshalling, you can configure this using the disableFeatures:
+
+_XML-only: configuring disableFeatures in Spring XML_
 
 ```xml
 <dataFormats>
@@ -300,6 +364,8 @@ If there is a single `XmlMapper` instance available in the Camel registry, it wi
 ### Formatted XML marshalling (pretty-printing)
 
 Using the `prettyPrint` option one can output a well-formatted XML while marshalling:
+
+_XML-only: configuring prettyPrint in Spring XML_
 
 ```xml
 <dataFormats>

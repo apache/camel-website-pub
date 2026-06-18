@@ -91,6 +91,8 @@ You configure a Camel transport server endpoint using the `camel:destination` el
 
 **camel:destination Element**
 
+_XML-only: CXF transport destination configuration with embedded Camel route_
+
 ```xml
 ...
   <camel:destination name="{http://widgets/widgetvendor.net}widgetSOAPPort.http-destination>
@@ -126,6 +128,8 @@ The camel context id which you want inject into the camel destination
 You configure a Camel transport client using the `camel:conduit` element and its children. The `camel:conduit` element takes a single attribute, `name`, that specifies the WSDL port element that corresponds to the endpoint. The value for the `name` attribute takes the form _portQName_\`.camel-conduit\`. For example, the code below shows the `camel:conduit` element that would be used to add configuration for an endpoint that was specified by the WSDL fragment `<port binding="widgetSOAPBinding" name="widgetSOAPPort">` if the endpoint’s target namespace was `http://widgets.widgetvendor.net`.
 
 **http-conf:conduit Element**
+
+_XML-only: CXF transport conduit configuration with embedded Camel route_
 
 ```xml
 ...

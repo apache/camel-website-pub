@@ -145,6 +145,8 @@ The SQL Stored Procedure component supports 3 message header(s), which is/are li
 
 The template is declared using a syntax that would be similar to a Java method signature. The name of the stored procedure, and then the arguments enclosed in parentheses. An example explains this well:
 
+_XML-only: stored procedure call with IN, INOUT and OUT parameters_
+
 ```xml
 <to uri="sql-stored:STOREDSAMPLE(INTEGER ${headers.num1},INTEGER ${headers.num2},INOUT INTEGER ${headers.num3} result1,OUT INTEGER result2)"/>
 ```
@@ -180,11 +182,15 @@ When using named parameters, Camel will look up the names in the given precedenc
 4.  from exchange variables
     
 
+_XML-only: stored procedure call with named parameter, custom SQL type and scale_
+
 ```xml
 <to uri="sql-stored:MYFUNC('param1' org.example.Types.INTEGER(10) ${header.srcValue})"/>
 ```
 
 URI means that the stored procedure will be called with parameter name `param1`, it’s SQL type is read from field `INTEGER` of class `org.example.Types` and scale will be set to 10. The input value for the parameter is passed from the header `srcValue`.
+
+_XML-only: stored procedure call with explicit SQL type number and type name_
 
 ```xml
 <to uri="sql-stored:MYFUNC('param1' 100 'mytypename' ${header.srcValue})"/>
@@ -204,11 +210,15 @@ Type name is optional and also works the same as IN parameters.
 
 Output parameter name is used for the OUT parameter name, as well as the header name where the result will be stored.
 
+_XML-only: stored procedure call with OUT parameter_
+
 ```xml
 <to uri="sql-stored:MYFUNC(OUT org.example.Types.DECIMAL(10) outheader1)"/>
 ```
 
 URI means that the OUT parameter’s name is `outheader1` and result will be but into header `outheader1`.
+
+_XML-only: stored procedure call with OUT parameter and custom type name_
 
 ```xml
 <to uri="sql-stored:MYFUNC(OUT org.example.Types.NUMERIC(10) 'mytype' outheader1)"/>
@@ -222,6 +232,8 @@ Actual call will be done using `org.springframework.jdbc.core.SqlOutParameter`.
 
 INOUT parameters are a combination of all of the above. They receive a value from the exchange, as well as store a result as a message header. The only caveat is that the IN parameter’s "name" is skipped. Instead, the OUT parameter’s _name_ defines both the SQL parameter name, and the result header name.
 
+_XML-only: stored procedure call with INOUT parameter_
+
 ```xml
 <to uri="sql-stored:MYFUNC(INOUT DECIMAL(10) ${headers.inheader} outheader)"/>
 ```
@@ -231,6 +243,8 @@ Actual call will be done using org.springframework.jdbc.core.SqlInOutParameter.
 #### Query Timeout
 
 You can configure query timeout (via `template.queryTimeout`) on statements used for query processing as shown:
+
+_XML-only: stored procedure call with query timeout_
 
 ```xml
 <to uri="sql-stored:MYFUNC(INOUT DECIMAL(10) ${headers.inheader} outheader)?template.queryTimeout=5000"/>

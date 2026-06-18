@@ -605,6 +605,8 @@ from("direct:xades").to("xmlsecurity-sign://xades?keyAccessor=#keyAccessorDefaul
 
 **XAdES-BES/EPES Example in Spring XML**
 
+_XML-only: Spring bean configuration for XAdES signature properties_
+
 ```xml
 ...
 <from uri="direct:xades" />

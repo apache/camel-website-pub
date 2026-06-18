@@ -752,22 +752,72 @@ For example, using Spring XML we can create a shared worker thread pool using th
 
 Then in the Camel routes we can refer to this worker pools by configuring the `workerPool` option in the URI as shown below:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("netty:tcp://0.0.0.0:5021?textline=true&sync=true&workerPool=#sharedPool&usingExecutorService=false")
+    .to("log:result");
+```
+
 ```xml
 <route>
   <from uri="netty:tcp://0.0.0.0:5021?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false"/>
   <to uri="log:result"/>
-  ...
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: netty:tcp://0.0.0.0:5021
+      parameters:
+        textline: true
+        sync: true
+        workerPool: "#sharedPool"
+        usingExecutorService: false
+      steps:
+        - to:
+            uri: log:result
+```
+
 And if we have another route, we can refer to the shared worker pool:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("netty:tcp://0.0.0.0:5022?textline=true&sync=true&workerPool=#sharedPool&usingExecutorService=false")
+    .to("log:result");
+```
 
 ```xml
 <route>
   <from uri="netty:tcp://0.0.0.0:5022?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false"/>
   <to uri="log:result"/>
-  ...
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty:tcp://0.0.0.0:5022
+      parameters:
+        textline: true
+        sync: true
+        workerPool: "#sharedPool"
+        usingExecutorService: false
+      steps:
+        - to:
+            uri: log:result
 ```
 
 And so forth.

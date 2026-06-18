@@ -78,6 +78,8 @@ from("activemq:My.Queue").
 
 The following example shows how to configure the `JaxbDataFormat` and use it in multiple routes.
 
+_XML-only: Spring XML bean and route configuration_
+
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

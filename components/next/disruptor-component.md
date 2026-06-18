@@ -360,6 +360,8 @@ The "Hello World" message will be consumed from the Disruptor from another threa
 
 In this example, we have defined two consumers and registered them as spring beans.
 
+_XML-only: Spring bean configuration with shared Disruptor endpoint_
+
 ```xml
 <!-- define the consumers as spring beans -->
 <bean id="consumer1" class="org.apache.camel.spring.example.FooEventConsumer"/>

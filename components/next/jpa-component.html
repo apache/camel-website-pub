@@ -83,15 +83,27 @@ public class MultiSteps {
           uri: jpa://org.apache.camel.examples.MultiSteps
           parameters:
             resultClass: org.apache.camel.examples.MultiSteps
-            nativeQuery: "select * from MultiSteps where step = 1"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you use the native query option without specifying <code>resultClass</code>, you will receive an object array in the message body.</p> </div> </div> <div class="sect2"> <h3 id="_using_the_jpa_based_idempotent_repository"><a class="anchor" href="#_using_the_jpa_based_idempotent_repository"></a>Using the JPA-Based Idempotent Repository</h3> <div class="paragraph"> <p>The Idempotent Consumer from the <a href="http://camel.apache.org/enterprise-integration-patterns.html">EIP patterns</a> is used to filter out duplicate messages. A JPA-based idempotent repository is provided.</p> </div> <div class="paragraph"> <p>To use the JPA based idempotent repository.</p> </div> <div class="olist arabic"> <div class="title">Procedure</div> <ol class="arabic"> <li> <p>Set up a <code>persistence-unit</code> in the persistence.xml file:</p> </li> <li> <p>Set up a <code>org.springframework.orm.jpa.JpaTemplate</code> which is used by the <code>org.apache.camel.processor.idempotent.jpa.JpaMessageIdRepository</code>:</p> </li> <li> <p>Configure the error formatting macro: snippet: java.lang.IndexOutOfBoundsException: Index: 20, Size: 20</p> </li> <li> <p>Configure the idempotent repository: <code>org.apache.camel.processor.idempotent.jpa.JpaMessageIdRepository</code>:</p> </li> <li> <p>Create the JPA idempotent repository in the Spring XML file:</p> </li> </ol> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext xmlns="http://camel.apache.org/schema/spring"&gt;
-    &lt;route id="JpaMessageIdRepositoryTest"&gt;
-        &lt;from uri="direct:start" /&gt;
-        &lt;idempotentConsumer idempotentRepository="jpaStore"&gt;
-            &lt;header&gt;messageId&lt;/header&gt;
-            &lt;to uri="mock:result" /&gt;
-        &lt;/idempotentConsumer&gt;
-    &lt;/route&gt;
-&lt;/camelContext&gt;</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_important_development_notes"><a class="anchor" href="#_important_development_notes"></a>Important Development Notes</h2> <div class="sectionbody"> <div class="paragraph"> <p>If you run the <a href="https://github.com/apache/camel/tree/main/components/camel-jpa/src/test">tests of this component</a> directly inside your IDE, and not through Maven, then you could see exceptions like these:</p> </div> <div class="listingblock"> <div class="content"> <pre>org.springframework.transaction.CannotCreateTransactionException: Could not open JPA EntityManager for transaction; nested exception is
+            nativeQuery: "select * from MultiSteps where step = 1"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you use the native query option without specifying <code>resultClass</code>, you will receive an object array in the message body.</p> </div> </div> <div class="sect2"> <h3 id="_using_the_jpa_based_idempotent_repository"><a class="anchor" href="#_using_the_jpa_based_idempotent_repository"></a>Using the JPA-Based Idempotent Repository</h3> <div class="paragraph"> <p>The Idempotent Consumer from the <a href="http://camel.apache.org/enterprise-integration-patterns.html">EIP patterns</a> is used to filter out duplicate messages. A JPA-based idempotent repository is provided.</p> </div> <div class="paragraph"> <p>To use the JPA based idempotent repository.</p> </div> <div class="olist arabic"> <div class="title">Procedure</div> <ol class="arabic"> <li> <p>Set up a <code>persistence-unit</code> in the persistence.xml file:</p> </li> <li> <p>Set up a <code>org.springframework.orm.jpa.JpaTemplate</code> which is used by the <code>org.apache.camel.processor.idempotent.jpa.JpaMessageIdRepository</code>:</p> </li> <li> <p>Configure the error formatting macro: snippet: java.lang.IndexOutOfBoundsException: Index: 20, Size: 20</p> </li> <li> <p>Configure the idempotent repository: <code>org.apache.camel.processor.idempotent.jpa.JpaMessageIdRepository</code>:</p> </li> <li> <p>Create the JPA idempotent repository in the Spring XML file:</p> </li> </ol> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+    .idempotentConsumer(header("messageId")).idempotentRepository("jpaStore")
+        .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route id="JpaMessageIdRepositoryTest"&gt;
+    &lt;from uri="direct:start" /&gt;
+    &lt;idempotentConsumer idempotentRepository="jpaStore"&gt;
+        &lt;header&gt;messageId&lt;/header&gt;
+        &lt;to uri="mock:result" /&gt;
+    &lt;/idempotentConsumer&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    id: JpaMessageIdRepositoryTest
+    from:
+      uri: direct:start
+      steps:
+        - idempotentConsumer:
+            idempotentRepository: "#jpaStore"
+            expression:
+              header:
+                expression: messageId
+            steps:
+              - to:
+                  uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_important_development_notes"><a class="anchor" href="#_important_development_notes"></a>Important Development Notes</h2> <div class="sectionbody"> <div class="paragraph"> <p>If you run the <a href="https://github.com/apache/camel/tree/main/components/camel-jpa/src/test">tests of this component</a> directly inside your IDE, and not through Maven, then you could see exceptions like these:</p> </div> <div class="listingblock"> <div class="content"> <pre>org.springframework.transaction.CannotCreateTransactionException: Could not open JPA EntityManager for transaction; nested exception is
 &lt;openjpa-2.2.1-r422266:1396819 nonfatal user error&gt; org.apache.openjpa.persistence.ArgumentException: This configuration disallows runtime optimization,
 but the following listed types were not enhanced at build time or at class load time with a javaagent: "org.apache.camel.examples.SendEmail".
     at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:427)

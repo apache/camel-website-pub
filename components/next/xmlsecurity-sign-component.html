@@ -271,7 +271,7 @@ beanRegistry.bind("keyAccessorDefault",keyAccessor);
 
 // you must reference the properties bean in the "xmlsecurity" URI
 from("direct:xades").to("xmlsecurity-sign://xades?keyAccessor=#keyAccessorDefault&amp;properties=#xmlSignatureProperties")
-             .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p><strong>XAdES-BES/EPES Example in Spring XML</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">...
+             .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p><strong>XAdES-BES/EPES Example in Spring XML</strong></p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring bean configuration for XAdES signature properties</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">...
 &lt;from uri="direct:xades" /&gt;
     &lt;to
         uri="xmlsecurity-sign://xades?keyAccessor=#accessorRsa&amp;amp;properties=#xadesProperties" /&gt;

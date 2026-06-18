@@ -121,6 +121,8 @@ langchain4j:
 
 The auto-configured beans are automatically available in your Camel routes:
 
+_Java-only: Spring Boot RouteBuilder using auto-configured LangChain4j beans_
+
 ```java
 @Component
 public class MyRoutes extends RouteBuilder {
@@ -170,7 +172,7 @@ langchain4j.open-ai.chat-model.model-name=gpt-4o
 langchain4j.open-ai.chat-model.temperature=0.7
 ```
 
-ChatRoute.java
+_Java-only: Spring Boot ChatRoute with OpenAI_
 
 ```java
 import org.apache.camel.builder.RouteBuilder;
@@ -230,7 +232,7 @@ langchain4j:
       deployment-name: text-embedding-ada-002
 ```
 
-RagRoute.java
+_Java-only: Spring Boot RagRoute with Azure OpenAI_
 
 ```java
 import org.apache.camel.builder.RouteBuilder;
@@ -355,7 +357,7 @@ langchain4j:
       model-name: llama2
 ```
 
-MultiProviderRoute.java
+_Java-only: Spring Boot RouteBuilder with multiple LLM providers_
 
 ```java
 @Component
@@ -454,6 +456,8 @@ langchain4j.open-ai.chat-model.log-responses=false
 ### 3\. Use Streaming for Long Responses
 
 For long-running conversations, consider using streaming chat models:
+
+_Java-only: Spring Boot streaming chat RouteBuilder_
 
 ```java
 @Component

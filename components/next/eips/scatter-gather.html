@@ -16,7 +16,7 @@
               constant:
                 expression: "http:server1,http:server2"
         - to:
-            uri: log:response</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This is a basic example that only uses basic functionality of the <a href="recipientList-eip.html" class="xref page">Recipient List</a>. For more details on how the aggregation works, see the <a href="recipientList-eip.html" class="xref page">Recipient List</a> documentation.</p> </div> </div> </div> <div class="sect1"> <h2 id="_using_recipient_list_and_aggregate_eip"><a class="anchor" href="#_using_recipient_list_and_aggregate_eip"></a>Using Recipient List and Aggregate EIP</h2> <div class="sectionbody"> <div class="paragraph"> <p>In this example, we want to get the best quote for beer from several vendors.</p> </div> <div class="paragraph"> <p>We use <a href="recipientList-eip.html" class="xref page">Recipient List</a> to get the request for a quote to all vendors and an <a href="aggregate-eip.html" class="xref page">Aggregate</a> to pick the best quote out of all the responses.</p> </div> <div class="paragraph"> <p>The routes for this are defined as:</p> </div> <div class="exampleblock"> <div class="content"> <div class="dlist"> <dl> <dt class="hdlist1">Java</dt> <dd> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+            uri: log:response</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This is a basic example that only uses basic functionality of the <a href="recipientList-eip.html" class="xref page">Recipient List</a>. For more details on how the aggregation works, see the <a href="recipientList-eip.html" class="xref page">Recipient List</a> documentation.</p> </div> </div> </div> <div class="sect1"> <h2 id="_using_recipient_list_and_aggregate_eip"><a class="anchor" href="#_using_recipient_list_and_aggregate_eip"></a>Using Recipient List and Aggregate EIP</h2> <div class="sectionbody"> <div class="paragraph"> <p>In this example, we want to get the best quote for beer from several vendors.</p> </div> <div class="paragraph"> <p>We use <a href="recipientList-eip.html" class="xref page">Recipient List</a> to get the request for a quote to all vendors and an <a href="aggregate-eip.html" class="xref page">Aggregate</a> to pick the best quote out of all the responses.</p> </div> <div class="paragraph"> <p>The routes for this are defined as:</p> </div> <div id="_tabs_2" class="openblock tabs is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .recipientList(header("listOfVendors"));
 
 from("seda:quoteAggregator")
@@ -24,7 +24,7 @@ from("seda:quoteAggregator")
         .aggregationStrategy("beerAggregator")
         .completionTimeout(1000)
         .to("direct:bestBeer")
-    .end();</code></pre> </div> </div> </dd> </dl> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;route&gt;
+    .end();</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">  &lt;route&gt;
     &lt;from uri="direct:start"/&gt;
     &lt;recipientList&gt;
       &lt;header&gt;listOfVendors&lt;/header&gt;
@@ -39,7 +39,7 @@ from("seda:quoteAggregator")
       &lt;/correlationExpression&gt;
       &lt;to uri="direct:bestBeer"/&gt;
     &lt;/aggregate&gt;
-  &lt;/route&gt;</code></pre> </div> </div> <div class="dlist"> <dl> <dt class="hdlist1">YAML</dt> <dd> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+  &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
       steps:
@@ -59,7 +59,7 @@ from("seda:quoteAggregator")
                 expression: quoteRequestId
             steps:
               - to:
-                  uri: direct:bestBeer</code></pre> </div> </div> </dd> </dl> </div> </div> </div> <div class="paragraph"> <p>So in the first route, you see that the <a href="recipientList-eip.html" class="xref page">Recipient List</a> is looking at the listOfVendors header for the list of recipients. So, we need to send a message like:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Map&lt;String, Object&gt; headers = new HashMap&lt;&gt;();
+                  uri: direct:bestBeer</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>So in the first route, you see that the <a href="recipientList-eip.html" class="xref page">Recipient List</a> is looking at the listOfVendors header for the list of recipients. So, we need to send a message like:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Map&lt;String, Object&gt; headers = new HashMap&lt;&gt;();
 headers.put("listOfVendors", "bean:vendor1,bean:vendor2,bean:vendor3");
 headers.put("quoteRequestId", "quoteRequest-1");
 
@@ -81,7 +81,7 @@ template.sendBodyAndHeaders("direct:start", "&lt;quote_request item=\"beer\"/&gt
             // ignore no quote
         }
     }
-}</code></pre> </div> </div> <div class="paragraph"> <p>And are loaded up in Spring XML like this:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext&gt;
+}</code></pre> </div> </div> <div class="paragraph"> <p>And are loaded up in Spring XML like this:</p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring XML bean definitions for vendor and aggregation strategy</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext&gt;
 
     &lt;bean id="aggregatorStrategy" class="org.apache.camel.spring.processor.scattergather.LowestQuoteAggregationStrategy"/&gt;
 

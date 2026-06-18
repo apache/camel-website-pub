@@ -9,23 +9,79 @@
      */
     boolean matches(Exchange exchange);
 
-}</code></pre> </div> </div> <div class="paragraph"> <p>A <code>Predicate</code> is being evaluated to a boolean value so the result is either <code>true</code> or <code>false</code>. This makes predicates so powerful as it is often used to control the routing of message in which path they should be routed.</p> </div> <div class="paragraph"> <p>A simple example is to route an <a href="exchange.html" class="xref page">Exchange</a> based on a header value with the <a href="../components/4.18.x/eips/choice-eip.html" class="xref page">Content Based Router</a> EIP:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jms:queue:order")
+}</code></pre> </div> </div> <div class="paragraph"> <p>A <code>Predicate</code> is being evaluated to a boolean value so the result is either <code>true</code> or <code>false</code>. This makes predicates so powerful as it is often used to control the routing of message in which path they should be routed.</p> </div> <div class="paragraph"> <p>A simple example is to route an <a href="exchange.html" class="xref page">Exchange</a> based on a header value with the <a href="../components/4.18.x/eips/choice-eip.html" class="xref page">Content Based Router</a> EIP:</p> </div> <div id="_tabs_1" class="openblock tabs is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jms:queue:order")
    .choice()
       .when(header("type").isEqualTo("widget")).to("bean:widgetOrder")
       .when(header("type").isEqualTo("wombat")).to("bean:wombatOrder")
    .otherwise()
       .to("bean:miscOrder")
-   .end();</code></pre> </div> </div> <div class="paragraph"> <p>In the route above the <a href="#">Predicate</a> is the <code>header("type").isEqualTo("widget")</code> as it is constructed as an <a href="expression.html" class="xref page">Expression</a> that is evaluated as a <a href="#">Predicate</a>. To do this the various <em>Builder classes</em> help us here to create a nice and fluent syntax. <code>isEqualTo</code> is a builder method that returns a <a href="#">Predicate</a> based on the input.</p> </div> <div class="paragraph"> <p>Sometimes the fluent builders can get long, and a bit complex to read, then you can just define your predicate outside the route and then just refer to the predicate in the route:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Predicate isWidget = header("type").isEqualTo("widget");</code></pre> </div> </div> <div class="paragraph"> <p>And then you can refer to it in the route as:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jms:queue:order")
+   .end();</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    &lt;from uri="jms:queue:order"/&gt;
+    &lt;choice&gt;
+        &lt;when&gt;
+            &lt;simple&gt;${header.type} == 'widget'&lt;/simple&gt;
+            &lt;to uri="bean:widgetOrder"/&gt;
+        &lt;/when&gt;
+        &lt;when&gt;
+            &lt;simple&gt;${header.type} == 'wombat'&lt;/simple&gt;
+            &lt;to uri="bean:wombatOrder"/&gt;
+        &lt;/when&gt;
+        &lt;otherwise&gt;
+            &lt;to uri="bean:miscOrder"/&gt;
+        &lt;/otherwise&gt;
+    &lt;/choice&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: jms:queue:order
+      steps:
+        - choice:
+            when:
+              - simple: "${header.type} == 'widget'"
+                steps:
+                  - to:
+                      uri: bean:widgetOrder
+              - simple: "${header.type} == 'wombat'"
+                steps:
+                  - to:
+                      uri: bean:wombatOrder
+            otherwise:
+              steps:
+                - to:
+                    uri: bean:miscOrder</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>In the route above the <a href="#">Predicate</a> is the <code>header("type").isEqualTo("widget")</code> as it is constructed as an <a href="expression.html" class="xref page">Expression</a> that is evaluated as a <a href="#">Predicate</a>. To do this the various <em>Builder classes</em> help us here to create a nice and fluent syntax. <code>isEqualTo</code> is a builder method that returns a <a href="#">Predicate</a> based on the input.</p> </div> <div class="paragraph"> <p>Sometimes the fluent builders can get long, and a bit complex to read, then you can just define your predicate outside the route and then just refer to the predicate in the route:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Predicate isWidget = header("type").isEqualTo("widget");</code></pre> </div> </div> <div class="paragraph"> <p>And then you can refer to it in the route as:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a predicate variable in a route</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jms:queue:order")
    .choice()
       .when(isWidget).to("bean:widgetOrder")
       .when(isWombat).to("bean:wombatOrder")
    .otherwise()
       .to("bean:miscOrder")
-   .end();</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_negating_a_predicate"><a class="anchor" href="#_negating_a_predicate"></a>Negating a Predicate</h2> <div class="sectionbody"> <div class="paragraph"> <p>You can use the <strong>not</strong> method on the <code>PredicateBuilder</code> to negate a predicate.</p> </div> <div class="paragraph"> <p>First, we import the static method <code>not</code>, so it makes our route nice and easy to read:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import static org.apache.camel.builder.PredicateBuilder.not;</code></pre> </div> </div> <div class="paragraph"> <p>And then we can use it to enclose an existing predicate and negate it as the example shows:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+   .end();</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_negating_a_predicate"><a class="anchor" href="#_negating_a_predicate"></a>Negating a Predicate</h2> <div class="sectionbody"> <div class="paragraph"> <p>You can use the <strong>not</strong> method on the <code>PredicateBuilder</code> to negate a predicate.</p> </div> <div class="paragraph"> <p>First, we import the static method <code>not</code>, so it makes our route nice and easy to read:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import static org.apache.camel.builder.PredicateBuilder.not;</code></pre> </div> </div> <div class="paragraph"> <p>And then we can use it to enclose an existing predicate and negate it as the example shows:</p> </div> <div id="_tabs_2" class="openblock tabs is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .choice()
         .when(not(header("username").regex("goofy|pluto"))).to("mock:people")
         .otherwise().to("mock:animals")
-    .end();</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_compound_predicates"><a class="anchor" href="#_compound_predicates"></a>Compound Predicates</h2> <div class="sectionbody"> <div class="paragraph"> <p>You can also create compound predicates using boolean operators such as <code>and, or, not</code> and many others.</p> </div> <div class="paragraph"> <p>Currently, this feature is only available in the Java-based DSLs, and not in other DSLs such as XML.</p> </div> <div class="paragraph"> <p>Using the <a href="https://www.javadoc.io/doc/org.apache.camel/camel-support/current/org/apache/camel/support/builder/PredicateBuilder.html"><code>PredicateBuilder</code></a> class, you can combine predicates <strong>from different Expression Languages</strong> based on logical operators and comparison operators:</p> </div> <div class="ulist"> <ul> <li> <p><code>not</code>, <code>and</code>, <code>or</code></p> </li> <li> <p><code>isNull</code>, <code>isNotNull</code></p> </li> <li> <p><code>isEqualTo</code>, <code>isGreaterThan</code>, <code>isLessThan</code></p> </li> <li> <p><code>startsWith</code>, <code>endsWith</code></p> </li> <li> <p><code>in</code> ("any of X predicates stands true")</p> </li> </ul> </div> <div class="paragraph"> <p>Additionally, with <code>PredicateBuilder</code> you can create regular expressions and use them as predicates, applying them to the result of an expression, e.g.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PredicateBuilder.regex(header("foo"), "\d\{4}");</code></pre> </div> </div> <div class="paragraph"> <p>applies the regular expression to the foo header.</p> </div> <div class="paragraph"> <p>Combining different Expression Languages is also possible, e.g.:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PredicateBuilder.and(XPathBuilder.xpath("/bookings/flights"), simple("${exchangeProperty.country = 'Spain'}"))</code></pre> </div> </div> <div class="paragraph"> <p>The sample below demonstrates further use cases:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// We define 3 predicates based on some user roles
+    .end();</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    &lt;from uri="direct:start"/&gt;
+    &lt;choice&gt;
+        &lt;when&gt;
+            &lt;simple&gt;${header.username} not regex 'goofy|pluto'&lt;/simple&gt;
+            &lt;to uri="mock:people"/&gt;
+        &lt;/when&gt;
+        &lt;otherwise&gt;
+            &lt;to uri="mock:animals"/&gt;
+        &lt;/otherwise&gt;
+    &lt;/choice&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            when:
+              - simple: "${header.username} not regex 'goofy|pluto'"
+                steps:
+                  - to:
+                      uri: mock:people
+            otherwise:
+              steps:
+                - to:
+                    uri: mock:animals</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_compound_predicates"><a class="anchor" href="#_compound_predicates"></a>Compound Predicates</h2> <div class="sectionbody"> <div class="paragraph"> <p>You can also create compound predicates using boolean operators such as <code>and, or, not</code> and many others.</p> </div> <div class="paragraph"> <p>Currently, this feature is only available in the Java-based DSLs, and not in other DSLs such as XML.</p> </div> <div class="paragraph"> <p>Using the <a href="https://www.javadoc.io/doc/org.apache.camel/camel-support/current/org/apache/camel/support/builder/PredicateBuilder.html"><code>PredicateBuilder</code></a> class, you can combine predicates <strong>from different Expression Languages</strong> based on logical operators and comparison operators:</p> </div> <div class="ulist"> <ul> <li> <p><code>not</code>, <code>and</code>, <code>or</code></p> </li> <li> <p><code>isNull</code>, <code>isNotNull</code></p> </li> <li> <p><code>isEqualTo</code>, <code>isGreaterThan</code>, <code>isLessThan</code></p> </li> <li> <p><code>startsWith</code>, <code>endsWith</code></p> </li> <li> <p><code>in</code> ("any of X predicates stands true")</p> </li> </ul> </div> <div class="paragraph"> <p>Additionally, with <code>PredicateBuilder</code> you can create regular expressions and use them as predicates, applying them to the result of an expression, e.g.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PredicateBuilder.regex(header("foo"), "\d\{4}");</code></pre> </div> </div> <div class="paragraph"> <p>applies the regular expression to the foo header.</p> </div> <div class="paragraph"> <p>Combining different Expression Languages is also possible, e.g.:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PredicateBuilder.and(XPathBuilder.xpath("/bookings/flights"), simple("${exchangeProperty.country = 'Spain'}"))</code></pre> </div> </div> <div class="paragraph"> <p>The sample below demonstrates further use cases:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: compound predicates with PredicateBuilder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// We define 3 predicates based on some user roles
 // we have static imported and/or from org.apache.camel.builder.PredicateBuilder
 
 // First we have a regular user that is just identified having a username header

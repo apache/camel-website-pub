@@ -214,6 +214,8 @@ from("direct:start")
 
 In Java DSL the logger instance may be used as well:
 
+_Java-only: using a logger instance directly in Java DSL_
+
 ```java
 from("direct:start")
     .log(LoggingLevel.DEBUG, org.slf4j.LoggerFactory.getLogger("com.mycompany.mylogger"), "Processing ${id}")
@@ -450,6 +452,8 @@ from("direct:start").logMask()
 The know set of keywords to mask is gathered from all the different component options that are marked as secret. The list is generated into the source code in `org.apache.camel.util.SensitiveUtils`. At this time of writing, there are more than 65 different keywords.
 
 Custom keywords can be added as shown:
+
+_Java-only: registering a custom masking formatter with additional keywords_
 
 ```java
 DefaultMaskingFormatter formatter = new DefaultMaskingFormatter();

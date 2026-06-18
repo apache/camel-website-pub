@@ -17,6 +17,8 @@ Camel supports the [Content Filter](http://www.enterpriseintegrationpatterns.com
 
 In this example, we add our own [Processor](../../../manual/processor.md) using explicit Java to filter the message:
 
+_Java-only: using an inline Processor to filter the message_
+
 ```java
 from("direct:start")
     .process(new Processor() {
@@ -31,6 +33,8 @@ from("direct:start")
 ```
 
 In the Java code above we used an inlined `Processor` which is harder to do with XML or YAML DSL. A good practice is to use a class for your custom `Processor` which can then be referenced in the DSL:
+
+_Java-only: custom Processor class registered in the Registry_
 
 ```java
 @BindToRegistry("myProcessor")

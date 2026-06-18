@@ -156,6 +156,8 @@ You can allow Camel to scan the container context, e.g. the Spring ApplicationCo
 
 This allows you to just annotate your routes using the Spring **`@Component`** and have those routes included by Camel:
 
+_Java-only: Spring @Component annotated RouteBuilder_
+
 ```java
 @Component
 public class MyRoute extends RouteBuilder {

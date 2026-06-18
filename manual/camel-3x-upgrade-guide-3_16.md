@@ -22,6 +22,8 @@ The Rest DSL no longer allows embedding routes directly into each REST service. 
 
 For example
 
+_Java-only: Rest DSL with embedded route before migration_
+
 ```java
 rest("/users")
   .get("/{id}")
@@ -30,6 +32,8 @@ rest("/users")
 ```
 
 Should now be:
+
+_Java-only: Rest DSL with separate route after migration_
 
 ```java
 rest("/users")
@@ -170,6 +174,8 @@ Replaced by Choice EIP in precondition mode.
 
 Before it was:
 
+_Java-only: DoSwitch EIP before migration_
+
 ```java
 .doSwitch()
     .when(simple("{{?red}}")).to("mock:red")
@@ -178,6 +184,8 @@ Before it was:
 ```
 
 Now it is:
+
+_Java-only: Choice EIP in precondition mode after migration_
 
 ```java
 .choice().precondition()

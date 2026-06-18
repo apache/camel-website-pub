@@ -15,6 +15,8 @@ The SWIFT MT dataformat supports 1 options, which are listed below.
 
 In Spring DSL, you configure the data format using this tag:
 
+_XML-only: Spring XML data format configuration_
+
 ```xml
 <camelContext>
     <dataFormats>
@@ -26,6 +28,19 @@ In Spring DSL, you configure the data format using this tag:
 
 Then you can use it later by its reference:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:startEncode")
+    .marshal("swiftInJson")
+    .to("mock:result");
+```
+
 ```xml
 <route>
      <from uri="direct:startEncode" />
@@ -34,7 +49,31 @@ Then you can use it later by its reference:
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:startEncode
+      steps:
+        - marshal:
+            ref: swiftInJson
+        - to:
+            uri: mock:result
+```
+
 Most of the time, you won’t need to declare the data format if you use the default options. In that case, you can declare the data format inline as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:startEncode")
+    .marshal().swiftMt()
+    .to("mock:result");
+```
 
 ```xml
 <route>
@@ -44,6 +83,17 @@ Most of the time, you won’t need to declare the data format if you use the def
     </marshal>
     <to uri="mock:result" />
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:startEncode
+      steps:
+        - marshal:
+            swiftMt: {}
+        - to:
+            uri: mock:result
 ```
 
 ## Marshal

@@ -39,6 +39,8 @@ Limitations:
 
 From Camel 4.7, `--code` can also reference a `.java` file that contains bare route definitions (no `public class` wrapper):
 
+_Java-only: bare route definition for --code_
+
 ```java
 from("timer:java?period=1000")
     .setBody()

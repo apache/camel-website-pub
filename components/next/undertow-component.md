@@ -438,6 +438,18 @@ from("direct:start")
 
 In this sample we define a route that exposes a HTTP service at `http://localhost:8080/myapp/myservice`:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("undertow:http://localhost:8080/myapp/myservice")
+    .to("bean:myBean");
+```
+
 ```xml
 <route>
   <from uri="undertow:http://localhost:8080/myapp/myservice"/>
@@ -445,9 +457,31 @@ In this sample we define a route that exposes a HTTP service at `http://localhos
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: undertow:http://localhost:8080/myapp/myservice
+      steps:
+        - to:
+            uri: bean:myBean
+```
+
 ### WebSocket Example
 
 In this sample we define a route that exposes a WebSocket service at `http://localhost:8080/myapp/mysocket` and returns back a response to the same channel:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("undertow:ws://localhost:8080/myapp/mysocket")
+    .transform(simple("Echo ${body}"))
+    .to("undertow:ws://localhost:8080/myapp/mysocket");
+```
 
 ```xml
 <route>
@@ -455,6 +489,17 @@ In this sample we define a route that exposes a WebSocket service at `http://loc
   <transform><simple>Echo ${body}</simple></transform>
   <to uri="undertow:ws://localhost:8080/myapp/mysocket"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: undertow:ws://localhost:8080/myapp/mysocket
+      steps:
+        - transform:
+            simple: "Echo ${body}"
+        - to:
+            uri: undertow:ws://localhost:8080/myapp/mysocket
 ```
 
 ## Spring Boot Auto-Configuration

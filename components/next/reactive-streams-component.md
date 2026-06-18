@@ -365,9 +365,33 @@ Flowable.just(new File("file1.txt"), new File("file2.txt"))
 
 In order this to work, a route like the following should be defined in the Camel context:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("reactive-streams:readAndMarshal")
     .marshal() // ... other details
+```
+
+```xml
+<route>
+  <from uri="reactive-streams:readAndMarshal"/>
+  <marshal>
+    <!-- ... other details -->
+  </marshal>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: reactive-streams:readAndMarshal
+      steps:
+        - marshal: {}
 ```
 
 #### Request a transformation to Camel using the direct API
@@ -391,9 +415,33 @@ When using the `to()` method instead of the `toStream`, there is no need to defi
 
 In this case, the Camel transformation can be just:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:process")
     .marshal() // ... other details
+```
+
+```xml
+<route>
+  <from uri="direct:process"/>
+  <marshal>
+    <!-- ... other details -->
+  </marshal>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:process
+      steps:
+        - marshal: {}
 ```
 
 ### Process Camel data into the reactive framework

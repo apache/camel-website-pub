@@ -218,6 +218,8 @@ Apart from the Component, Camel Spring Batch provides also support classes, whic
 
 For example, the snippet below is configuring Spring Batch to read data from JMS queue.
 
+_XML-only: Spring Batch job with CamelItemReader bean_
+
 ```xml
 <bean id="camelReader" class="org.apache.camel.component.spring.batch.support.CamelItemReader">
   <constructor-arg ref="consumerTemplate"/>
@@ -239,6 +241,8 @@ For example, the snippet below is configuring Spring Batch to read data from JMS
 
 For example, the snippet below is configuring Spring Batch to read data from JMS queue.
 
+_XML-only: Spring Batch job with CamelItemWriter bean_
+
 ```xml
 <bean id="camelwriter" class="org.apache.camel.component.spring.batch.support.CamelItemWriter">
   <constructor-arg ref="producerTemplate"/>
@@ -259,6 +263,8 @@ For example, the snippet below is configuring Spring Batch to read data from JMS
 `CamelItemProcessor` is the implementation of Spring Batch `org.springframework.batch.item.ItemProcessor` interface. The latter implementation relays on the [Request Reply pattern](http://camel.apache.org/request-reply.md) to delegate the processing of the batch item to the Camel infrastructure. The item to process is sent to the Camel endpoint as the body of the message.
 
 For example, the snippet below performs simple processing of the batch item using the [Direct endpoint](http://camel.apache.org/direct.md) and the [Simple expression language](http://camel.apache.org/simple.md).
+
+_XML-only: Spring Batch job with CamelItemProcessor and Camel route_
 
 ```xml
 <camel:camelContext>
@@ -292,6 +298,8 @@ For example, the snippet below performs simple processing of the batch item usin
 The `org.springframework.batch.core.JobExecution` instance produced by the Spring Batch is sent as a body of the message. To distinguish between before- and after-callbacks `SPRING_BATCH_JOB_EVENT_TYPE` header is set to the `BEFORE` or `AFTER` value.
 
 The example snippet below sends Spring Batch job execution events to the JMS queue.
+
+_XML-only: Spring Batch job with CamelJobExecutionListener_
 
 ```xml
 <bean id="camelJobExecutionListener" class="org.apache.camel.component.spring.batch.support.CamelJobExecutionListener">

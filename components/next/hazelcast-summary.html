@@ -3,7 +3,7 @@
     &lt;artifactId&gt;camel-hazelcast&lt;/artifactId&gt;
     &lt;version&gt;x.x.x&lt;/version&gt;
     &lt;!-- use the same version as your Camel core version --&gt;
-&lt;/dependency&gt;</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_using_hazelcast_reference"><a class="anchor" href="#_using_hazelcast_reference"></a>Using hazelcast reference</h2> <div class="sectionbody"> <div class="sect2"> <h3 id="_by_its_name"><a class="anchor" href="#_by_its_name"></a>By its name</h3> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="hazelcastLifecycle" class="com.hazelcast.core.LifecycleService"
+&lt;/dependency&gt;</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_using_hazelcast_reference"><a class="anchor" href="#_using_hazelcast_reference"></a>Using hazelcast reference</h2> <div class="sectionbody"> <div class="sect2"> <h3 id="_by_its_name"><a class="anchor" href="#_by_its_name"></a>By its name</h3> <div class="listingblock"> <div class="title"><em>XML-only: Spring bean configuration with Hazelcast instance by name</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="hazelcastLifecycle" class="com.hazelcast.core.LifecycleService"
       factory-bean="hazelcastInstance" factory-method="getLifecycleService"
       destroy-method="shutdown" /&gt;
 
@@ -31,7 +31,7 @@
         &lt;to uri="hazelcast-map:testmap?hazelcastInstanceName=HZ.INSTANCE"/&gt;
         &lt;to uri="seda:out" /&gt;
     &lt;/route&gt;
-&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_by_instance"><a class="anchor" href="#_by_instance"></a>By instance</h3> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="hazelcastInstance" class="com.hazelcast.core.Hazelcast"
+&lt;/camelContext&gt;</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_by_instance"><a class="anchor" href="#_by_instance"></a>By instance</h3> <div class="listingblock"> <div class="title"><em>XML-only: Spring bean configuration with Hazelcast instance by reference</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;bean id="hazelcastInstance" class="com.hazelcast.core.Hazelcast"
       factory-method="newHazelcastInstance" /&gt;
 &lt;bean id="hazelcastLifecycle" class="com.hazelcast.core.LifecycleService"
       factory-bean="hazelcastInstance" factory-method="getLifecycleService"

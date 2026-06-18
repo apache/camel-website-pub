@@ -74,6 +74,8 @@ Camel has changed the default value for `inlineRoutes=false` to `inlineRoutes=tr
 
 However, the inlining requires that each REST endpoint inlined with `direct` endpoints must use unique direct names, ie.
 
+_Java-only: Rest DSL with shared direct endpoint names_
+
 ```java
 rest("/rest")
     .get("/").to("direct:printMethod")
@@ -82,6 +84,8 @@ rest("/rest")
 ```
 
 Should be changed to:
+
+_Java-only: Rest DSL with unique direct endpoint names_
 
 ```java
 rest("/rest")
@@ -186,6 +190,8 @@ The `camel-jsonpath` will now work more similar as `camel-jq` when you specify a
 For example, the snippet below selects all books from a JSON document, which will be in a `List<Map>` object where each book is an entry as a `Map`. Before Camel would attempt to convert `List` to `Book` which would not be possible. From this release onwards, Camel will convert each entry to a `Book` so the result is `List<Book>`.
 
 This is also how `camel-jq` works.
+
+_Java-only: Using jsonpath with resultType_
 
 ```java
 .transform().jsonpath(".book", Book.class)

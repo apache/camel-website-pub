@@ -748,6 +748,8 @@ context.getGlobalOptions().put("http.proxyPort", "8080");
 
 Spring XML
 
+_XML-only: Spring XML global options configuration (deprecated)_
+
 ```xml
 <camelContext>
     <properties>
@@ -1016,6 +1018,8 @@ httpComponent.setSslContextParameters(scp);
 
 Spring DSL based configuration of endpoint
 
+_XML-only: Spring XML SSL context parameters and endpoint reference_
+
 ```xml
   <camel:sslContextParameters
       id="sslContextParameters">
@@ -1057,6 +1061,8 @@ httpComponent.setHttpClientConfigurer(new MyHttpClientConfigurer());
 ```
 
 If you are doing this using the Spring DSL, you can specify your `HttpClientConfigurer` using the URI. For example:
+
+_XML-only: Spring bean and endpoint reference for \`HttpClientConfigurer\`_
 
 ```xml
 <bean id="myHttpClientConfigurer"
@@ -1110,12 +1116,16 @@ public class HttpContextFactory {
 -   2\. Declare an\` HttpContext\` in the Spring application context file:
     
 
+_XML-only: Spring bean declaration for `HttpContext` factory_
+
 ```xml
 <bean id="myHttpContext" factory-bean="httpContextFactory" factory-method="getObject"/>
 ```
 
 -   3\. Reference the context in the http URL:
     
+
+_XML-only: endpoint URI referencing the `HttpContext` bean_
 
 ```xml
 <to uri="https://myhostname.com:443/myURL?httpContext=myHttpContext"/>
@@ -1124,6 +1134,8 @@ public class HttpContextFactory {
 Using different SSLContextParameters
 
 The [HTTP](#) component only supports one instance of `org.apache.camel.support.jsse.SSLContextParameters` per component. If you need to use two or more different instances, then you need to set up multiple [HTTP](#) components as shown below. Where we have two components, each using their own instance of `sslContextParameters` property.
+
+_XML-only: Spring bean declarations for multiple HTTP components with different SSL contexts_
 
 ```xml
 <bean id="http-foo" class="org.apache.camel.component.http.HttpComponent">

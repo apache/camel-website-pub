@@ -629,6 +629,8 @@ To have a better understanding of the behavior for each type of attribute, pleas
 
 In the next example, the property `some-property` is set to `foo` for all the tests in `SomeTest` including the tests in `SomeNestedTest`. Additionally, the property `some-other-property` is set to `bar` but only for all the tests in `SomeNestedTest`.
 
+_Java-only: JUnit 6 nested test class with @CamelMainTest annotation_
+
 ```java
 @CamelMainTest(properties = { "some-property=foo" })
 class SomeTest {
@@ -647,6 +649,8 @@ class SomeTest {
 ### Mono-valued
 
 In the next example, `SomeMainClass` is used as the main class for all the tests directly inside `SomeTest`, but also the tests in the `@Nested` test class `SomeOtherNestedTest` as it is not redefined. `SomeOtherMainClass` is used as the main class for all the tests directly inside `SomeNestedTest`, but also the tests in the `@Nested` test class `SomeDeeplyNestedTest` as it is not redefined.
+
+_Java-only: JUnit 6 nested test class with mono-valued @CamelMainTest attribute override_
 
 ```java
 @CamelMainTest(mainClass = SomeMainClass.class)

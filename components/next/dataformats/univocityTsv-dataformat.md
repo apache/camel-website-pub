@@ -64,6 +64,19 @@ Any other body will throws an exception.
 
 ### Usage example: marshalling a Map into CSV format
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:input")
+    .marshal().univocityCsv()
+    .to("mock:result");
+```
+
 ```xml
 <route>
     <from uri="direct:input"/>
@@ -74,7 +87,31 @@ Any other body will throws an exception.
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:input
+      steps:
+        - marshal:
+            univocityCsv: {}
+        - to:
+            uri: mock:result
+```
+
 ### Usage example: marshalling a Map into fixed-width format
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:input")
+    .marshal().univocityFixed()
+    .to("mock:result");
+```
 
 ```xml
 <route>
@@ -90,7 +127,32 @@ Any other body will throws an exception.
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:input
+      steps:
+        - marshal:
+            univocityFixed:
+              padding: "_"
+        - to:
+            uri: mock:result
+```
+
 ### Usage example: marshalling a Map into TSV format
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:input")
+    .marshal().univocityTsv()
+    .to("mock:result");
+```
 
 ```xml
 <route>
@@ -100,6 +162,17 @@ Any other body will throws an exception.
     </marshal>
     <to uri="mock:result"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:input
+      steps:
+        - marshal:
+            univocityTsv: {}
+        - to:
+            uri: mock:result
 ```
 
 ## Unmarshalling usages
@@ -122,6 +195,19 @@ All the rows can either:
 
 ### Usage example: unmarshalling a CSV format into maps with automatic headers
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:input")
+    .unmarshal().univocityCsv()
+    .to("mock:result");
+```
+
 ```xml
 <route>
     <from uri="direct:input"/>
@@ -132,7 +218,33 @@ All the rows can either:
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:input
+      steps:
+        - unmarshal:
+            univocityCsv:
+              headerExtractionEnabled: true
+              asMap: true
+        - to:
+            uri: mock:result
+```
+
 ### Usage example: unmarshalling a fixed-width format into lists
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:input")
+    .unmarshal().univocityFixed()
+    .to("mock:result");
+```
 
 ```xml
 <route>
@@ -146,6 +258,17 @@ All the rows can either:
     </unmarshal>
     <to uri="mock:result"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:input
+      steps:
+        - unmarshal:
+            univocityFixed: {}
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

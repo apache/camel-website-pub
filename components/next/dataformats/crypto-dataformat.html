@@ -6,7 +6,7 @@ from("direct:basic-encryption")
     .marshal(cryptoFormat)
     .to("mock:encrypted")
     .unmarshal(cryptoFormat)
-    .to("mock:unencrypted");</code></pre> </div> </div> <div class="paragraph"> <p>In Spring the dataformat is configured first and then used in routes</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
+    .to("mock:unencrypted");</code></pre> </div> </div> <div class="paragraph"> <p>In Spring the dataformat is configured first and then used in routes</p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring XML data format configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"&gt;
   &lt;dataFormats&gt;
     &lt;crypto id="basic" algorithm="DES" key="desKey" /&gt;
   &lt;/dataFormats&gt;

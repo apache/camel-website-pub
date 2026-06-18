@@ -14,7 +14,7 @@
             expression:
               constant: "1000"
         - to:
-            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Note that delay creates its own block, so some DSLs (including Java) require the delay block be closed:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">.from("direct:delayBlockExample")
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Note that delay creates its own block, so some DSLs (including Java) require the delay block be closed:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: closing the delay block with end() in Java DSL</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">.from("direct:delayBlockExample")
     .to("direct:getJobState")
     .loopDoWhile(simple("${body.state} = 'NOT_DONE'"))
         .log(LoggingLevel.DEBUG, "Pausing")
@@ -62,7 +62,7 @@
         - to:
             uri: activemq
             parameters:
-              destinationName: bar</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Then the bean would look something like this:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class SomeBean {
+              destinationName: bar</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Then the bean would look something like this:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: bean class to compute the delay value</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class SomeBean {
   public long computeDelay() {
      long delay = 0;
      // use java code to compute a delay value in millis

@@ -33,6 +33,8 @@ However, there has been some regressions from upgrading older Camel releases to 
 
 For example the following code
 
+_Java-only: nested Choice EIP before migration_
+
 ```java
 from("direct:start")
     .choice()
@@ -49,6 +51,8 @@ from("direct:start")
 ```
 
 Should now be
+
+_Java-only: nested Choice EIP after migration_
 
 ```java
 from("direct:start")
@@ -96,6 +100,8 @@ When MDC is enabled, then the WireTap and OnCompletion (in parallel mode) will n
 ### camel-bean
 
 The header `Exchange.BEAN_METHOD_NAME` with constant value `CamelBeanMethodName` has been deprecated, and support for using this header has been removed. Instead, you can specify the `method` option directly as shown, or using any other header of your choosing as follows.
+
+_Java-only: specifying bean method via header_
 
 ```java
     toD("bean:myBean?method=${header.myMethodName}");

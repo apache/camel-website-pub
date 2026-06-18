@@ -44,11 +44,15 @@ Examples:
 
 Simple asynchronous processor, modifying message body.
 
+_Java-only: async method signature_
+
 ```java
 public CompletableFuture<String> doSomethingAsync(String body)
 ```
 
 Composite processor that do not modify exchange
+
+_Java-only: composite async method_
 
 ```java
  public CompletableFuture<Void> doSomethingAsync(String body) {
@@ -83,11 +87,15 @@ Let’s review some examples:
 
 Below is a simple method with a body binding. Camel will bind the IN body to the `body` parameter and convert it to a `String`.
 
+_Java-only: method signature with body binding_
+
 ```java
 public String doSomething(String body)
 ```
 
 In the following sample we got one of the automatically bound types as well. For instance, a `Registry` that we can use to lookup beans.
+
+_Java-only: method signature with Registry parameter_
 
 ```java
 public String doSomething(String body, Registry registry)
@@ -95,17 +103,23 @@ public String doSomething(String body, Registry registry)
 
 We can use [Exchange](exchange.md) as well:
 
+_Java-only: method signature with Exchange parameter_
+
 ```java
 public String doSomething(String body, Exchange exchange)
 ```
 
 You can also have multiple types:
 
+_Java-only: method signature with multiple parameter types_
+
 ```java
 public String doSomething(String body, Exchange exchange, TypeConverter converter)
 ```
 
 And imagine you use a [Pojo](../components/4.18.x/bean-component.md) to handle a given custom exception `InvalidOrderException` - we can then bind that as well:
+
+_Java-only: method signature with exception binding_
 
 ```java
 public String badOrder(String body, InvalidOrderException invalid)
@@ -125,6 +139,8 @@ You can use the [Parameter Binding Annotations](parameter-binding-annotations.md
 
 For example, a [Bean](../components/4.18.x/eips/bean-eip.md) such as:
 
+_Java-only: bean class with method binding_
+
 ```java
 public class Bar {
     public String doSomething(String body) {
@@ -135,6 +151,8 @@ public class Bar {
 ```
 
 Or the Exchange example. Notice that the return type must be **void** when there is only a single parameter of the type `org.apache.camel.Exchange`:
+
+_Java-only: bean class with Exchange parameter_
 
 ```java
  public class Bar {
@@ -150,6 +168,8 @@ Or the Exchange example. Notice that the return type must be **void** when there
 You can mark a method in your bean with the `@Handler` annotation to indicate that this method should be used for [Bean Binding](#).
 
 This has an advantage as you don’t need to specify a method name in the Camel route, and therefore do not run into problems after renaming the method in an IDE that can’t find all its references.
+
+_Java-only: bean class with @Handler annotation_
 
 ```java
 public class Bar {
@@ -180,11 +200,15 @@ Camel uses the following rules to determine if it’s a parameter value in the m
 
 When invoking a [Bean](../components/4.18.x/eips/bean-eip.md) you can instruct Camel to invoke a specific method by providing the method name:
 
+_Java-only: specifying method name on bean call_
+
 ```java
 .bean(OrderService.class, "doSomething")
 ```
 
 Here we tell Camel to invoke the `_doSomething_` method. Camel handles the parameters' binding. Now suppose the method has 2 parameters, and the second parameter is a boolean where we want to pass in a true value:
+
+_Java-only: method signature with boolean parameter_
 
 ```java
 public void doSomething(String payload, boolean highPriority) {
@@ -194,11 +218,15 @@ public void doSomething(String payload, boolean highPriority) {
 
 This can be done as follows:
 
+_Java-only: bean binding with wildcard and fixed parameter_
+
 ```java
 .bean(OrderService.class, "doSomething(*, true)")
 ```
 
 In the example above, we defined the first parameter using the wild card symbol `*`, which tells Camel to bind this parameter to any type, and let Camel figure this out. The second parameter has a fixed value of `true`. Instead of the wildcard symbol, we can instruct Camel to use the message body as shown:
+
+_Java-only: bean binding with Simple expression parameter_
 
 ```java
 .bean(OrderService.class, "doSomething(${body}, true)")
@@ -208,6 +236,8 @@ The syntax of the parameters is using the [Simple](../components/4.18.x/language
 
 If you want to pass in a `null` value, then you can explicitly define this in the method option as shown below:
 
+_Java-only: bean binding with null parameter_
+
 ```java
 .to("bean:orderService?method=doSomething(null, true)")
 ```
@@ -216,11 +246,15 @@ Specifying `null` as a parameter value instructs Camel to force passing a `null`
 
 Besides the message body, you can pass in the message headers as a `java.util.Map`:
 
+_Java-only: bean binding with headers map parameter_
+
 ```java
 .bean(OrderService.class, "doSomethingWithHeaders(${body}, ${headers})")
 ```
 
 You can also pass in other fixed values besides booleans. For example, you can pass in a String and an integer:
+
+_Java-only: bean binding with String and integer parameters_
 
 ```java
 .bean(MyBean.class, "echo('World', 5)")
@@ -230,17 +264,23 @@ In the example above, we invoke the echo method with two parameters. The first h
 
 Having the power of the [Simple](../components/4.18.x/languages/simple-language.md) language allows us to bind to message headers and other values such as:
 
+_Java-only: bean binding with header value parameter_
+
 ```java
 .bean(OrderService.class, "doSomething(${body}, ${header.high})")
 ```
 
 You can also use the OGNL support of the [Simple](../components/4.18.x/languages/simple-language.md) expression language. Now suppose the message body is an object that has a method named `asXml`. To invoke the `asXml` method we can do as follows:
 
+_Java-only: bean binding with OGNL expression_
+
 ```java
 .bean(OrderService.class, "doSomething(${body.asXml}, ${header.high})")
 ```
 
 Instead of using `.bean` as shown in the examples above, you may want to use `.to` instead as shown:
+
+_Java-only: bean binding using .to() with method parameter_
 
 ```java
 .to("bean:orderService?method=doSomething(${body.asXml}, ${header.high})")
@@ -252,6 +292,8 @@ If you have a [Bean](../components/4.18.x/eips/bean-eip.md) with overloaded meth
 
 Given the following bean:
 
+_Java-only: bean binding with type qualifier_
+
 ```java
  from("direct:start")
     .bean(MyBean.class, "hello(String.class)")
@@ -259,6 +301,8 @@ Given the following bean:
 ```
 
 Then the `MyBean` has 2 overloaded methods with the names `hello` and `times`. So if we want to use the method which has two parameters, we can do as follows in the Camel route:
+
+_Java-only: bean binding with multiple type qualifiers_
 
 ```java
 from("direct:start")
@@ -268,6 +312,8 @@ from("direct:start")
 
 We can also use a `*` as wildcard, so we can just say we want to execute the method with two parameters we do:
 
+_Java-only: bean binding with wildcard type qualifiers_
+
 ```java
  from("direct:start")
     .bean(MyBean.class, "hello(*,*)")
@@ -275,6 +321,8 @@ We can also use a `*` as wildcard, so we can just say we want to execute the met
 ```
 
 By default, Camel will match the type name using the simple name, e.g., any leading package name will be disregarded. However, if you want to match using the FQN, then specify the FQN type and Camel will leverage that. So if you have a parameter of type `com.foo.MyOrder` and you want to match against the FQN, and **not** the simple name "MyOrder", then follow this example:
+
+_Java-only: bean binding with fully qualified type name_
 
 ```java
 .bean(OrderService.class, "doSomething(com.foo.MyOrder.class)")

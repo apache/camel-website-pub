@@ -176,6 +176,8 @@ We aligned the MDC keys with OpenTelemetry, so they are changed from:
 
 This component was refactored to support the Resume API v2. As such, the options `filter` and `lastUpdate` where removed.
 
+_Java-only: using the Resume API with the atom component_
+
 ```java
 from("atom:file:src/test/data/feed.atom?splitEntries=true&delay=500")
     .resumable().resumeStrategy(new UpdatedDateFilter(new Date()))

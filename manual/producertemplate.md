@@ -9,6 +9,8 @@ It can be configured with a default endpoint if you just want to send lots of me
 
 The `sendBody()` method allows you to send any object to an endpoint easily as shown:
 
+_Java-only: sending messages using ProducerTemplate_
+
 ```java
 ProducerTemplate template = exchange.getContext().createProducerTemplate();
 
@@ -39,6 +41,8 @@ In other words, all the methods on the `ProducerTemplate` that starts with `send
 
 Let’s see an example where we invoke an endpoint to get the response (InOut):
 
+_Java-only: using requestBody for request-reply messaging_
+
 ```java
 Object response = template.requestBody("<hello/>");
 
@@ -59,6 +63,8 @@ Here are some examples:
 
 This is the most common style with fluent builders to set headers, and message body as show:
 
+_Java-only: using FluentProducerTemplate with headers and body_
+
 ```java
 Integer result = FluentProducerTemplate.on(context)
     .withHeader("key-1", "value-1")
@@ -72,6 +78,8 @@ Integer result = FluentProducerTemplate.on(context)
 
 Here we use [Processor](processor.md) to prepare the message to be sent.
 
+_Java-only: using FluentProducerTemplate with a Processor_
+
 ```java
 Integer result = FluentProducerTemplate.on(context)
     .withProcessor(exchange -> exchange.getIn().setBody("Hello World"))
@@ -82,6 +90,8 @@ Integer result = FluentProducerTemplate.on(context)
 ### Advanced with a template customizer
 
 This is rarely in use, but a `TemplateCustomizer` can be used for advanced use-cases to control various aspects of the `FluentProducerTemplate` such as configuring to use a custom thread pool:
+
+_Java-only: using FluentProducerTemplate with a template customizer_
 
 ```java
 Object result = FluentProducerTemplate.on(context)
@@ -103,6 +113,8 @@ You have sent an Exchange to Camel, but it fails during processing caused by a t
 If you are using CamelTemplate (or CamelProducer), then it is common to use the sendBody/requestBody methods that returns the exchange body response **only**. So if there was a thrown exception during processing Camel is not rethrowing this Exception. To remedy this you can use the plain send/request methods that accepts an Exchange object and returns an Exchange object.
 
 From the returned Exchange you can test if it has failed and get the caused exception. This is illustrated in the code sample:
+
+_Java-only: retrieving a thrown exception from the returned Exchange_
 
 ```java
 @Test
@@ -147,6 +159,8 @@ public static class ExceptionBean {
 You can configure globally the default cache size for both `ProducerTemplate` and `ConsumerTemplate` which will be created or dependency inject by `CamelContext`.
 
 This can be done on the `CamelContext` as a global option as shown in the following Java code:
+
+_Java-only: configuring cache size via CamelContext global options_
 
 ```java
 getCamelContext().getGlobalOptions().put(Exchange.MAXIMUM_CACHE_POOL_SIZE, "50");

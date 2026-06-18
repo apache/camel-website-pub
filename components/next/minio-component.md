@@ -990,6 +990,8 @@ In this case, the objects consumed will be moved to `myothercamelbucket` bucket 
 
 Sometimes build a Minio Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In Minio, there are multiple operations you can submit, as an example for List brokers request, you can do something like:
 
+_Java-only: uses Minio Java SDK builder API for POJO request body_
+
 ```java
 from("direct:minio")
      .setBody(ListObjectsArgs.builder()

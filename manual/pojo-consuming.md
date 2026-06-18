@@ -7,6 +7,8 @@ To consume a message you use the `@Consume` annotation to mark a particular meth
 
 For example lets invoke the `onCheese()` method with the String body of the inbound JMS message from ActiveMQ on the cheese queue; this will use the [Type Converter](type-converter.md) to convert the JMS payload to `String` as declared in the method signature.
 
+_Java-only: consuming messages using @Consume annotation_
+
 ```java
 public class Foo {
 
@@ -21,6 +23,8 @@ The [Bean Binding](bean-binding.md) is then used to convert the inbound [Message
 
 This basically creates a route that looks kinda like this (based on the example above):
 
+_Java-only: equivalent route created by the @Consume annotation_
+
 ```java
 from("activemq:cheese").bean(Foo.class, "onCheese");
 ```
@@ -30,6 +34,8 @@ from("activemq:cheese").bean(Foo.class, "onCheese");
 The following annotations `@Consume`, `@Produce`, `@EndpointInject`, provides a `property` attribute you can use to define the endpoint uri as a property on the bean. Then Camel will use the getter method to access the property.
 
 For example:
+
+_Java-only: using a property to define the @Consume endpoint_
 
 ```java
 public class MyService {
@@ -95,6 +101,8 @@ Camel offers a naming convention which allows you to not have to explicit name t
 
 So in the example above, we could have defined the `@Consume` annotation as:
 
+_Java-only: using shortened property name with @Consume_
+
 ```java
   @Consume(property = "service")
   public void onService(String input) {
@@ -103,6 +111,8 @@ So in the example above, we could have defined the `@Consume` annotation as:
 Now the property is named "service" which then would match step 3 from the algorithm, and have Camel invoke the `getServiceEndpoint` method.
 
 We could also have omitted the property attribute, to make it implicit:
+
+_Java-only: using implicit property resolution with @Consume_
 
 ```java
   @Consume

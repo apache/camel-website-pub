@@ -325,19 +325,46 @@ exchange.getIn().addAttachment("myAttachment", new DataHandler(...));
 
 The header transformation filter (`HeaderTransformationMessageFilter`) can be used to transform the soap header for a soap request. If you want to use the header transformation filter, see the below example:
 
+_XML-only: Spring bean definition for HeaderTransformationMessageFilter_
+
 ```xml
 <bean id="headerTransformationFilter" class="org.apache.camel.component.spring.ws.filter.impl.HeaderTransformationMessageFilter">
     <constructor-arg index="0" value="org/apache/camel/component/spring/ws/soap-header-transform.xslt"/>
 </bean>
 ```
 
-Use the bead defined above in the camel endpoint
+Use the bean defined above in the camel endpoint
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:stockQuoteWebserviceHeaderTransformation")
+    .to("spring-ws:http://localhost?webServiceTemplate=#webServiceTemplate&soapAction=http://www.stockquotes.edu/GetQuote&messageFilter=#headerTransformationFilter");
+```
 
 ```xml
 <route>
     <from uri="direct:stockQuoteWebserviceHeaderTransformation"/>
     <to uri="spring-ws:http://localhost?webServiceTemplate=#webServiceTemplate&amp;soapAction=http://www.stockquotes.edu/GetQuote&amp;messageFilter=#headerTransformationFilter"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:stockQuoteWebserviceHeaderTransformation
+      steps:
+        - to:
+            uri: spring-ws:http://localhost
+            parameters:
+              webServiceTemplate: "#webServiceTemplate"
+              soapAction: "http://www.stockquotes.edu/GetQuote"
+              messageFilter: "#headerTransformationFilter"
 ```
 
 ### The custom header and attachment filtering
@@ -355,6 +382,8 @@ You can specify either a global a or a local message filter as follows:
 
 -   the local messageFilter directly on the endpoint as follows:
     
+
+_Java-only: endpoint URI fragment with bean reference_
 
 ```java
 to("spring-ws:http://yourdomain.com?messageFilter=#myEndpointSpecificMessageFilter");
@@ -472,30 +501,143 @@ With the XML configuration in place, you can now use Camel’s DSL to define wha
 
 The following route will receive all web service requests that have a root element named "GetFoo" within the `http://example.com/` namespace.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("spring-ws:rootqname:{http://example.com/}GetFoo?endpointMapping=#endpointMapping")
     .convertBodyTo(String.class).to("mock:example");
 ```
 
+```xml
+<route>
+  <from uri="spring-ws:rootqname:{http://example.com/}GetFoo?endpointMapping=#endpointMapping"/>
+  <convertBodyTo type="String"/>
+  <to uri="mock:example"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "spring-ws:rootqname:{http://example.com/}GetFoo"
+      parameters:
+        endpointMapping: "#endpointMapping"
+      steps:
+        - convertBodyTo:
+            type: String
+        - to:
+            uri: mock:example
+```
+
 The following route will receive web service requests containing the `http://example.com/GetFoo` SOAP action.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("spring-ws:soapaction:http://example.com/GetFoo?endpointMapping=#endpointMapping")
     .convertBodyTo(String.class).to("mock:example");
 ```
 
+```xml
+<route>
+  <from uri="spring-ws:soapaction:http://example.com/GetFoo?endpointMapping=#endpointMapping"/>
+  <convertBodyTo type="String"/>
+  <to uri="mock:example"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "spring-ws:soapaction:http://example.com/GetFoo"
+      parameters:
+        endpointMapping: "#endpointMapping"
+      steps:
+        - convertBodyTo:
+            type: String
+        - to:
+            uri: mock:example
+```
+
 The following route will receive all requests sent to `http://example.com/foobar`.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("spring-ws:uri:http://example.com/foobar?endpointMapping=#endpointMapping")
     .convertBodyTo(String.class).to("mock:example");
 ```
 
+```xml
+<route>
+  <from uri="spring-ws:uri:http://example.com/foobar?endpointMapping=#endpointMapping"/>
+  <convertBodyTo type="String"/>
+  <to uri="mock:example"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "spring-ws:uri:http://example.com/foobar"
+      parameters:
+        endpointMapping: "#endpointMapping"
+      steps:
+        - convertBodyTo:
+            type: String
+        - to:
+            uri: mock:example
+```
+
 The route below will receive requests that contain the element `<foobar>abc</foobar>` anywhere inside the message (and the default namespace).
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("spring-ws:xpathresult:abc?expression=//foobar&endpointMapping=#endpointMapping")
     .convertBodyTo(String.class).to("mock:example");
+```
+
+```xml
+<route>
+  <from uri="spring-ws:xpathresult:abc?expression=//foobar&amp;endpointMapping=#endpointMapping"/>
+  <convertBodyTo type="String"/>
+  <to uri="mock:example"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "spring-ws:xpathresult:abc"
+      parameters:
+        expression: "//foobar"
+        endpointMapping: "#endpointMapping"
+      steps:
+        - convertBodyTo:
+            type: String
+        - to:
+            uri: mock:example
 ```
 
 ### Alternative configuration, using existing endpoint mappings
@@ -506,6 +648,8 @@ For every endpoint with mapping-type `beanname` one bean of type `CamelEndpointD
 > The use of the `beanname` mapping-type is primarily meant for (legacy) situations where you’re already using Spring-WS and have endpoint mappings defined in a Spring XML file. The `beanname` mapping-type allows you to wire your Camel route into an existing endpoint mapping. When you’re starting from scratch, it’s recommended to define your endpoint mappings as Camel URI’s (as illustrated above with `endpointMapping`) since it requires less configuration and is more expressive. Alternatively, you could use vanilla Spring-WS with the help of annotations.
 
 An example of a route using `beanname`:
+
+_XML-only: Spring XML with legacy endpoint mapping and CamelEndpointDispatcher beans_
 
 ```xml
 <camelContext xmlns="http://camel.apache.org/schema/spring">

@@ -348,6 +348,18 @@ To connect to RabbitMQ, you need to set up a `ConnectionFactory` (same as with J
 
 The `ConnectionFactory` is auto-detected by default, so you can do:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:cheese")
+    .to("spring-rabbitmq:foo?routingKey=cheese");
+```
+
 ```xml
 <camelContext>
   <route>
@@ -357,12 +369,41 @@ The `ConnectionFactory` is auto-detected by default, so you can do:
 </camelContext>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:cheese
+      steps:
+        - to:
+            uri: spring-rabbitmq:foo
+            parameters:
+              routingKey: cheese
+```
+
 ### Default Exchange Name
 
 To use default exchange name (which would be an empty exchange name in RabbitMQ) then you should use `default` as name in the endpoint uri, such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 to("spring-rabbitmq:default?routingKey=foo")
+```
+
+```xml
+<to uri="spring-rabbitmq:default?routingKey=foo"/>
+```
+
+```yaml
+- to:
+    uri: spring-rabbitmq:default
+    parameters:
+      routingKey: foo
 ```
 
 ### Auto declare exchanges, queues and bindings
@@ -422,6 +463,8 @@ So if we send `World` as message body to _direct:start_ then, we will se the mes
     
 -   `log:response → Hello World`
     
+
+_Java-only: Java DSL with ExchangePattern.InOut and body().prepend()_
 
 ```java
 from("direct:start")

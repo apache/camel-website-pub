@@ -164,9 +164,34 @@ When using dynamic computed endpoints with `toD` then you may compute a lot of d
 
 For example, HTTP-based endpoints where you may have dynamic values in URI parameters when calling the HTTP service, such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:login")
   .toD("http:myloginserver:8080/login?userid=${header.userName}");
+```
+
+```xml
+<route>
+  <from uri="direct:login"/>
+  <toD uri="http:myloginserver:8080/login?userid=${header.userName}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:login
+      steps:
+        - toD:
+            uri: http:myloginserver:8080/login
+            parameters:
+              userid: "${header.userName}"
 ```
 
 In the example above then the parameter `userid` is dynamically computed, and would result in one instance of endpoint and producer for each different userid. To avoid having too many dynamic endpoints you can configure `toD` to reduce its cache size, for example, to use a cache size of 10:
@@ -349,6 +374,8 @@ from("direct:login")
 ```
 
 This will essentially be optimized to (**internally** pseudo route):
+
+_Java-only: pseudo code showing the internal optimization_
 
 ```java
 from("direct:login")
