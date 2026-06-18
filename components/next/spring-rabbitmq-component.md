@@ -451,15 +451,43 @@ You can specify using the following headers:
 
 For example, the following route shows how you can compute a destination at run time and use it to override the exchange appearing in the endpoint URL:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://inbox")
-  .to("bean:computeDestination")
-  .to("spring-rabbitmq:dummy");
+    .to("bean:computeDestination")
+    .to("spring-rabbitmq:dummy");
+```
+
+```xml
+<route>
+  <from uri="file:inbox"/>
+  <to uri="bean:computeDestination"/>
+  <to uri="spring-rabbitmq:dummy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:inbox
+      steps:
+        - to:
+            uri: bean:computeDestination
+        - to:
+            uri: spring-rabbitmq:dummy
 ```
 
 The exchange name, `dummy`, is just a placeholder. It must be provided as part of the RabbitMQ endpoint URL, but it will be ignored in this example.
 
 In the `computeDestination` bean, specify the real destination by setting the `CamelRabbitmqExchangeOverrideName` header as follows:
+
+_Java-only: Java handler method_
 
 ```java
 public void setExchangeHeader(Exchange exchange) {
@@ -478,16 +506,39 @@ If you need to send messages to a lot of different exchanges, it makes sense to 
 
 For example, suppose you need to send messages to exchanges with order types, then using toD could, for example, be done as follows:
 
-Example SJMS2 route with `toD`
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:order")
   .toD("spring-rabbit:order-${header.orderType}");
 ```
 
+```xml
+<route>
+  <from uri="direct:order"/>
+  <toD uri="spring-rabbit:order-${header.orderType}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - toD:
+            uri: "spring-rabbit:order-${header.orderType}"
+```
+
 ### Manual Acknowledgement
 
 If we need to manually acknowledge a message for some use case, we can do it by setting and acknowledgeMode to Manual and using the below snippet of code to get Channel and deliveryTag to manually acknowledge the message:
+
+_Java-only: inline Processor with Spring RabbitMQ API_
 
 ```java
 from("spring-rabbitmq:%s?queues=%s&acknowledgeMode=MANUAL")

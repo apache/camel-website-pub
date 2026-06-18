@@ -176,16 +176,35 @@ Enum values:
 
 Below is an example route that stores a point into the db (taking the db name from the URI) specific key:
 
-```java
-from("direct:start")
-        .to("influxdb2://connectionBean?org=<org>&bucket=<bucket>");
-```
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
-        .setHeader(InfluxDbConstants.ORG, "myTestOrg")
-        .setHeader(InfluxDbConstants.BUCKET, "myTestBucket")
-        .to("influxdb2://connectionBean?");
+        .to("influxdb2://connectionBean?org=myOrg&bucket=myBucket");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="influxdb2://connectionBean?org=myOrg&amp;bucket=myBucket"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: influxdb2://connectionBean
+            parameters:
+              org: myOrg
+              bucket: myBucket
 ```
 
 ## Spring Boot Auto-Configuration

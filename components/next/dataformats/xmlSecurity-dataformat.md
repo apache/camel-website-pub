@@ -137,6 +137,8 @@ Given below are several examples of how marshalling could be performed at the Do
 
 ### Full Payload encryption/decryption
 
+_Java-only: full payload encryption using generated AES key_
+
 ```java
 KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 keyGenerator.init(256);
@@ -150,6 +152,8 @@ from("direct:start")
 
 ### Partial Payload Content Only encryption/decryption with choice of passPhrase(password)
 
+_Java-only: partial payload encryption with passPhrase_
+
 ```java
 String tagXPATH = "//cheesesites/italy/cheese";
 boolean secureTagContent = true;
@@ -162,6 +166,8 @@ from("direct:start")
 ```
 
 ### Partial Payload Content Only encryption/decryption with passPhrase(password) and Algorithm
+
+_Java-only: partial payload encryption with passPhrase and algorithm_
 
 ```java
 import org.apache.xml.security.encryption.XMLCipher;
@@ -179,6 +185,8 @@ from("direct:start")
 ### Partial Payload Content with Namespace support
 
 Java DSL
+
+_Java-only: namespace-aware encryption with asymmetric key and KeyStore_
 
 ```java
 final Map<String, String> namespaces = new HashMap<String, String>();

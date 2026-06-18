@@ -136,6 +136,8 @@ The Camel Spring AI Tools component is used as a consumer to expose Camel routes
 
 ### Basic Tool Definition
 
+_Java-only: Java DSL with class literal parameter_
+
 ```java
 from("spring-ai-tools:weatherTool?tags=weather&description=Get current weather for a location")
     .log("Getting weather for ${header.location}")
@@ -148,6 +150,8 @@ The AI model can invoke this tool when it needs weather information, and the rou
 ### Tool with Parameters
 
 Tools can define typed parameters using the `parameter.*` prefix:
+
+_Java-only: Java lambda Processor with string concatenation_
 
 ```java
 from("spring-ai-tools:weatherTool?tags=weather" +
@@ -175,6 +179,8 @@ Parameter metadata is passed to the AI model to help it understand how to call t
 
 Instead of parameter maps, you can use a Java class to define the tool’s input schema:
 
+_Java-only: Java class definition with lambda Processor_
+
 ```java
 public class WeatherRequest {
     private String location;
@@ -197,6 +203,8 @@ from("spring-ai-tools:weatherTool?tags=weather" +
 
 By default, tool results are passed back to the AI model for further processing. Use `returnDirect=true` to return the tool’s result directly to the user:
 
+_Java-only: Java lambda Processor_
+
 ```java
 from("spring-ai-tools:calculator?tags=math" +
     "&description=Calculate mathematical expressions" +
@@ -210,6 +218,8 @@ from("spring-ai-tools:calculator?tags=math" +
 ### Tool Organization with Tags
 
 Tags are used to organize and group tools. The [Spring AI Chat Component](spring-ai-chat-component.md) uses tags to discover which tools should be available to the AI model:
+
+_Java-only: Java lambda Processor with multiple routes_
 
 ```java
 // Define tools with tags
@@ -235,6 +245,8 @@ A single tool can have multiple tags, allowing flexible tool organization and re
 
 If a tool execution fails, the error is propagated back to the AI model, which can handle it or report it to the user:
 
+_Java-only: Java onException handler_
+
 ```java
 from("spring-ai-tools:riskyOperation?tags=ops&description=Perform risky operation")
     .onException(Exception.class)
@@ -247,6 +259,8 @@ from("spring-ai-tools:riskyOperation?tags=ops&description=Perform risky operatio
 ## Complete Example
 
 Here’s a complete example showing tool registration and usage:
+
+_Java-only: Java RouteBuilder class_
 
 ```java
 // Register a database query tool
@@ -279,6 +293,8 @@ When a user sends "Show me all customers and notify me when done" to the assista
 
 When a tool is invoked, all tool parameters are set as message headers. The parameter names correspond to header names:
 
+_Java-only: Java lambda Processor_
+
 ```java
 // Tool definition with parameter.location=string
 from("spring-ai-tools:myTool?tags=t&parameter.location=string")
@@ -310,6 +326,8 @@ When you configure the `tags` parameter on a `spring-ai-chat` endpoint:
     
 
 ### Complete Integration Example
+
+_Java-only: Java RouteBuilder class_
 
 ```java
 public class ChatWithToolsConfig {

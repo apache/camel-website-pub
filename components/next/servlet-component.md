@@ -156,9 +156,34 @@ Servlet consumers can validate incoming `Authorization: Bearer` tokens by settin
 > **Note**
 > If `oauthProfile` is set but no `OAuthTokenValidationFactory` is available, the route fails to start. Add `camel-oauth` for the default provider or include a runtime-specific provider from the platform integration.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("servlet:secure?oauthProfile=myprofile")
     .to("direct:businessLogic");
+```
+
+```xml
+<route>
+  <from uri="servlet:secure?oauthProfile=myprofile"/>
+  <to uri="direct:businessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: servlet:secure
+      parameters:
+        oauthProfile: myprofile
+      steps:
+        - to:
+            uri: direct:businessLogic
 ```
 
 When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. Requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. The raw `Authorization` header is removed from the Camel message before the route is invoked.
@@ -206,6 +231,8 @@ For example, to define a route that exposes an HTTP service under the path `/ser
 ```
 
 ### Example route
+
+_Java-only: inline Processor with Exchange API and string concatenation_
 
 ```java
 from("servlet:hello").process(new Processor() {
@@ -294,8 +321,33 @@ In this scenario, you **must** define a custom and unique servlet name in each o
 
 In your Camel servlet endpoints, include the servlet name:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("servlet://foo?servletName=MyServlet")
+```
+
+```xml
+<route>
+  <from uri="servlet://foo?servletName=MyServlet"/>
+  <!-- ... -->
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: servlet://foo
+      parameters:
+        servletName: MyServlet
+      steps:
+        - to:
+            uri: direct:businessLogic
 ```
 
 Camel detects duplicate Servlet names and will fail to start the application. You can control and ignore such duplicates by setting the servlet init parameter `ignoreDuplicateServletName` to `true` as follows:

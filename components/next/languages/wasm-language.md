@@ -57,6 +57,8 @@ pub unsafe extern "C" fn dealloc(ptr: &mut u8, len: i32) {
 
 It is not possible to share a Java object with the Wasm module directly, and as mentioned before, data exchange leverages Wasm’s memory that can be accessed by both the host and the guest runtimes. At this stage, the data structure that the component exchange with the Wasm function is a subset of the Apache Camel Message, containing headers the body encoded as a base64 string:
 
+_Java-only: data wrapper class definition_
+
 ```java
 public static class Wrapper {
     @JsonProperty
@@ -132,6 +134,8 @@ pub extern fn transform(ptr: u32, len: u32) -> u64 {
 ## Examples
 
 Supposing we have compiled a Wasm module containing the function above, then it can be called in a Camel Route by its name and module resource location:
+
+_Java-only: programmatic CamelContext and FluentProducerTemplate usage_
 
 ```java
  try (CamelContext cc = new DefaultCamelContext()) {

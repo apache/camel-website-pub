@@ -122,7 +122,7 @@ For example, executing the following command creates an _autoscaler_ for the Int
 $ kubectl autoscale it <integration_name> --min=2 --max=5 --cpu-percent=80
 ```
 
-[Integration metrics](../observability/monitoring/integration.md) can also be exported for horizontal pod autoscaling (HPA), using the [custom metrics Prometheus adapter](https://github.com/DirectXMan12/k8s-prometheus-adapter), so that the Integration can scale automatically based on its own metrics.
+Integration metrics can also be exported for horizontal pod autoscaling (HPA), using the [custom metrics Prometheus adapter](https://github.com/DirectXMan12/k8s-prometheus-adapter), so that the Integration can scale automatically based on its own metrics.
 
 If you have an OpenShift cluster, you can follow [Exposing custom application metrics for autoscaling](https://docs.openshift.com/container-platform/4.4/monitoring/exposing-custom-application-metrics-for-autoscaling.md) to set it up.
 

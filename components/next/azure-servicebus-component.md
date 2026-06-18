@@ -447,6 +447,8 @@ In the consumer, the returned message body will be of type `String`.
 -   `sendMessages`
     
 
+_Java-only: building a batch message list with a Processor_
+
 ```java
 from("direct:start")
   .process(exchange -> {
@@ -461,6 +463,8 @@ from("direct:start")
   .to("azure-servicebus:test//?connectionString=test")
   .to("mock:result");
 ```
+
+_Java-only: sending a batch message with a session ID_
 
 ```java
 from("direct:start")
@@ -479,6 +483,8 @@ from("direct:start")
 
 -   `scheduleMessages`
     
+
+_Java-only: scheduling messages with a Processor and ServiceBusConstants_
 
 ```java
 from("direct:start")
@@ -499,16 +505,73 @@ from("direct:start")
 -   `receiveMessages`
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("azure-servicebus:test//?connectionString=test")
   .log("${body}")
   .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="azure-servicebus:test//?connectionString=test"/>
+  <log message="${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-servicebus:test//
+      parameters:
+        connectionString: test
+      steps:
+        - log:
+            message: "${body}"
+        - to:
+            uri: mock:result
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("azure-servicebus:test//?connectionString=test&sessionEnabled=true")
   .log("${body}")
   .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="azure-servicebus:test//?connectionString=test&amp;sessionEnabled=true"/>
+  <log message="${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-servicebus:test//
+      parameters:
+        connectionString: test
+        sessionEnabled: true
+      steps:
+        - log:
+            message: "${body}"
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

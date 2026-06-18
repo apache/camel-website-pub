@@ -186,6 +186,8 @@ The Camunda component supports 8 message header(s), which is/are listed below:
 
 Set the `clusterId`, `clientId`, `clientSecret`, and `region` component options.
 
+_Java-only: programmatic component configuration_
+
 ```java
 CamundaComponent camunda = context.getComponent("camunda", CamundaComponent.class);
 camunda.setClusterId("your-cluster-id");
@@ -197,6 +199,8 @@ camunda.setRegion("bru-2");
 ### Self-Managed
 
 Set the `grpcAddress` and `restAddress` component options. For authenticated self-managed clusters, also set `clientId`, `clientSecret`, and `oAuthAPI`.
+
+_Java-only: programmatic component configuration_
 
 ```java
 CamundaComponent camunda = context.getComponent("camunda", CamundaComponent.class);

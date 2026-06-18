@@ -208,7 +208,7 @@ from("direct:triggerRoute")
 
 ### publishAsTemplatedMessage
 
-Java DSL
+_Java-only: requires Java Map variable for template tags_
 
 ```java
 from("direct:triggerRoute")
@@ -231,10 +231,12 @@ Access key and secret keys are required to authenticate against cloud smn servic
 </bean>
 ```
 
+_Java-only: requires Java constants and test configuration properties_
+
 ```java
 from("direct:triggerRoute")
  .setProperty(SmnProperties.NOTIFICATION_SUBJECT, constant("Notification Subject"))
- .setProperty(SmnProperties.NOTIFICATION_TOPIC_NAME,constant(testConfiguration.getProperty("topic")))
+ .setProperty(SmnProperties.NOTIFICATION_TOPIC_NAME, constant(testConfiguration.getProperty("topic")))
  .setProperty(SmnProperties.NOTIFICATION_TTL, constant(60))
  .to("hwcloud-smn:publishMessageService?operation=publishAsTextMessage&projectId=9071a38e7f6a4ba7b7bcbeb7d4ea6efc&region=cn-north-4&serviceKeys=#myServiceKeyConfig")
 ```

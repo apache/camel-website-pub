@@ -352,11 +352,47 @@ The example shows that you can sign several elements and that for each element a
 
 **Java DSL Example**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:detached")
   .to("xmlsecurity-sign://detached?keyAccessor=#keyAccessorBeant&xpathsToIdAttributes=#xpathsToIdAttributesBean&schemaResourceUri=Test.xsd")
   .to("xmlsecurity-verify://detached?keySelector=#keySelectorBean&schemaResourceUri=org/apache/camel/component/xmlsecurity/Test.xsd")
   .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:detached"/>
+  <to uri="xmlsecurity-sign://detached?keyAccessor=#keyAccessorBeant&amp;xpathsToIdAttributes=#xpathsToIdAttributesBean&amp;schemaResourceUri=Test.xsd"/>
+  <to uri="xmlsecurity-verify://detached?keySelector=#keySelectorBean&amp;schemaResourceUri=org/apache/camel/component/xmlsecurity/Test.xsd"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:detached
+      steps:
+        - to:
+            uri: xmlsecurity-sign://detached
+            parameters:
+              keyAccessor: "#keyAccessorBeant"
+              xpathsToIdAttributes: "#xpathsToIdAttributesBean"
+              schemaResourceUri: Test.xsd
+        - to:
+            uri: xmlsecurity-verify://detached
+            parameters:
+              keySelector: "#keySelectorBean"
+              schemaResourceUri: org/apache/camel/component/xmlsecurity/Test.xsd
+        - to:
+            uri: mock:result
 ```
 
 **Spring Example**
@@ -419,6 +455,8 @@ The properties of the XAdES-BES form are the same except that the `SignaturePoli
 You can configure the XAdES-BES/EPES properties via the bean `org.apache.camel.component.xmlsecurity.api.XAdESSignatureProperties` or `org.apache.camel.component.xmlsecurity.api.DefaultXAdESSignatureProperties. XAdESSignatureProperties` does support all properties mentioned above except the `SigningCertificate` property. To get the `SigningCertificate` property, you must overwrite either the method `XAdESSignatureProperties.getSigningCertificate()` or `XAdESSignatureProperties.getSigningCertificateChain()`. The class `DefaultXAdESSignatureProperties` overwrites the method `getSigningCertificate()` and allows you to specify the signing certificate via a keystore and alias. The following example shows all parameters you can specify. If you do not need certain parameters, you can just omit them.
 
 **XAdES-BES/EPES Example in Java DSL**
+
+_Java-only: programmatic XAdES signature properties configuration_
 
 ```java
  Keystore keystore = ... // load a keystore

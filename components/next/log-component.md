@@ -229,27 +229,116 @@ from("activemq:orders")
 
 In the route below we log the incoming orders at `INFO` level before the order is processed.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:orders").
     to("log:com.mycompany.order?showAll=true&multiline=true").to("bean:processOrder");
+```
+
+```xml
+<route>
+  <from uri="activemq:orders"/>
+  <to uri="log:com.mycompany.order?showAll=true&amp;multiline=true"/>
+  <to uri="bean:processOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:orders
+      steps:
+        - to:
+            uri: log:com.mycompany.order
+            parameters:
+              showAll: true
+              multiline: true
+        - to:
+            uri: bean:processOrder
 ```
 
 ### Throughput logger with groupSize example
 
 In the route below we log the throughput of the incoming orders at `DEBUG` level grouped by 10 messages.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:orders").
     to("log:com.mycompany.order?level=DEBUG&groupSize=10").to("bean:processOrder");
+```
+
+```xml
+<route>
+  <from uri="activemq:orders"/>
+  <to uri="log:com.mycompany.order?level=DEBUG&amp;groupSize=10"/>
+  <to uri="bean:processOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:orders
+      steps:
+        - to:
+            uri: log:com.mycompany.order
+            parameters:
+              level: DEBUG
+              groupSize: 10
+        - to:
+            uri: bean:processOrder
 ```
 
 ### Throughput logger with groupInterval example
 
 This route will result in message stats logged every 10s, with an initial 60s delay, and stats should be displayed even if there isn’t any message traffic.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:orders").
     to("log:com.mycompany.order?level=DEBUG&groupInterval=10000&groupDelay=60000&groupActiveOnly=false").to("bean:processOrder");
+```
+
+```xml
+<route>
+  <from uri="activemq:orders"/>
+  <to uri="log:com.mycompany.order?level=DEBUG&amp;groupInterval=10000&amp;groupDelay=60000&amp;groupActiveOnly=false"/>
+  <to uri="bean:processOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:orders
+      steps:
+        - to:
+            uri: log:com.mycompany.order
+            parameters:
+              level: DEBUG
+              groupInterval: 10000
+              groupDelay: 60000
+              groupActiveOnly: false
+        - to:
+            uri: bean:processOrder
 ```
 
 The following will be logged:
@@ -261,6 +350,8 @@ The following will be logged:
 You can enable security masking for logging by setting `logMask` flag to `true`. Note that this option also affects Log EIP.
 
 To enable mask in Java DSL at CamelContext level:
+
+_Java-only: enabling log masking on CamelContext_
 
 ```java
 camelContext.setLogMask(true);
@@ -274,17 +365,33 @@ And in XML:
 
 You can also turn it on|off at endpoint level. To enable mask in Java DSL at endpoint level, add logMask=true option in the URI for the log endpoint:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start").to("log:foo?logMask=true");
 ```
 
-And in XML:
-
 ```xml
 <route>
-  <from uri="direct:foo"/>
+  <from uri="direct:start"/>
   <to uri="log:foo?logMask=true"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: log:foo
+            parameters:
+              logMask: true
 ```
 
 `org.apache.camel.support.processor.DefaultMaskingFormatter` is used for the masking by default. If you want to use a custom masking formatter, put it into registry with the name `CamelCustomLogMask`. Note that the masking formatter must implement `org.apache.camel.spi.MaskingFormatter`.

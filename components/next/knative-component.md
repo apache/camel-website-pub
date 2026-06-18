@@ -257,7 +257,7 @@ The `metadata` fields has some additional advanced fields:
 | **knative.reply** | If the consumer should construct a full reply to knative request. | `` `knative.reply=false` `` |
 | **ce.override.** | The prefix to define CloudEvents values that have to be overridden. | `` `ce.override.ce-type=MyType` `` |
 
-Example
+_Java-only: programmatic Knative component configuration with CamelContext API_
 
 ```java
 CamelContext context = new DefaultCamelContext();
@@ -284,6 +284,8 @@ camel.component.knative.environmentPath=classpath:knative.json
 ### Using custom Knative transports
 
 As today the Knative component only supports `http` as transport as this is the only supported protocol on Knative side. The transport implementation is pluggable though by implementing the following interface:
+
+_Java-only: KnativeTransport SPI interface for custom transport implementations_
 
 ```java
 public interface KnativeTransport extends Service {
@@ -341,7 +343,7 @@ knative.json
 
 The `Knative Environment` configuration is set on the Knative component and specifies the Knative broker URL. You can then use the `event` resource type in your Camel route to send data to the Knative broker.
 
-Example
+_Java-only: programmatic CamelContext setup with CloudEvents data type transformation_
 
 ```java
 CamelContext context = new DefaultCamelContext();
@@ -434,7 +436,7 @@ The binding resource specifies the reference to the Knative broker and a subject
 
 When using Knative producer with a ProducerTemplate, it is necessary to specify a value for the CloudEvent source, simply by setting a value for the header 'CamelCloudEventSource'.
 
-Example
+_Java-only: ProducerTemplate API for sending events with CloudEvent headers_
 
 ```java
 producerTemplate.sendBodyAndHeader("knative:event/broker-test", body, CloudEvent.CAMEL_CLOUD_EVENT_SOURCE, "my-source-name");
@@ -471,7 +473,7 @@ The Service resource is part of the Camel application running on the Kubernetes 
 
 Just use the `event` resource type in your Camel route like this:
 
-Example
+_Java-only: programmatic route setup with RouteBuilder.addRoutes API_
 
 ```java
 RouteBuilder.addRoutes(context, b -> {

@@ -234,6 +234,8 @@ The usage of this Kamelet into a Camel route is going to be the same as any othe
 
 _Kamelets_ can be used as if they were standard Camel components. For example, suppose that we have created a Route Template as follows:
 
+_Java-only: programmatic route template definition_
+
 ```java
 routeTemplate("setMyBody")
     .templateParameter("bodyValue")
@@ -246,9 +248,34 @@ routeTemplate("setMyBody")
 
 Then the template can be instantiated and invoked as shown below:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:setMyBody")
     .to("kamelet:setMyBody?bodyValue=myKamelet");
+```
+
+```xml
+<route>
+  <from uri="direct:setMyBody"/>
+  <to uri="kamelet:setMyBody?bodyValue=myKamelet"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:setMyBody
+      steps:
+        - to:
+            uri: kamelet:setMyBody
+            parameters:
+              bodyValue: myKamelet
 ```
 
 Behind the scenes, the **Kamelet** component does the following things:
@@ -259,6 +286,8 @@ Behind the scenes, the **Kamelet** component does the following things:
     
 
 If you had to do it programmatically, it would have been something like:
+
+_Java-only: programmatic TemplatedRouteBuilder usage_
 
 ```java
 routeTemplate("setMyBody")

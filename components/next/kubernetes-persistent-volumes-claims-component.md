@@ -141,6 +141,8 @@ The Kubernetes Persistent Volume Claim component supports 5 message header(s), w
 -   `listPersistentVolumesClaims`: this operation lists the PVCs on a kubernetes cluster
     
 
+_Java-only: uses `toF()` for URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-persistent-volumes-claims:///?kubernetesClient=#kubernetesClient&operation=listPersistentVolumesClaims").
@@ -151,6 +153,8 @@ This operation returns a list of PVC from your cluster
 
 -   `listPersistentVolumesClaimsByLabels`: this operation lists the PVCs by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor, Java constants, and \`toF()\`_
 
 ```java
 from("direct:listByLabels").process(new Processor() {

@@ -10,6 +10,8 @@ By default, Camel will use its own thread pool for EIPs that can use parallel pr
 
 This implementation has been designed to use VertX worker threads for EIPs where concurrency has been enabled (using default settings). However, this is limited to only apply when the EIP is not configured with a specific thread pool. For example, the first example below will use VertX worker threads, and the 2nd below will not:
 
+_Java-only: split with parallel processing using VertX worker threads_
+
 ```java
 from("direct:start")
     .to("log:foo")
@@ -20,6 +22,8 @@ from("direct:start")
 ```
 
 The following Split EIP will refer to a custom thread pool, and therefore VertX is not in use, and Camel will use the custom thread pool:
+
+_Java-only: split with a custom thread pool profile (not using VertX)_
 
 ```java
 // register a custom thread pool profile with id myLowPool

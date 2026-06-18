@@ -247,12 +247,44 @@ All URI options can also be set as exchange headers.
 
 Listen for new mined blocks and send the block hash to a jms queue:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("web3j://http://127.0.0.1:7545?operation=ETH_BLOCK_HASH_OBSERVABLE")
     .to("jms:queue:blocks");
 ```
 
+```xml
+<route>
+  <from uri="web3j://http://127.0.0.1:7545?operation=ETH_BLOCK_HASH_OBSERVABLE"/>
+  <to uri="jms:queue:blocks"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "web3j://http://127.0.0.1:7545"
+      parameters:
+        operation: ETH_BLOCK_HASH_OBSERVABLE
+      steps:
+        - to:
+            uri: jms:queue:blocks
+```
+
 Use the block hash code to retrieve the block and full transaction details:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("jms:queue:blocks")
@@ -260,11 +292,63 @@ from("jms:queue:blocks")
     .to("web3j://http://127.0.0.1:7545?operation=ETH_GET_BLOCK_BY_HASH&fullTransactionObjects=true");
 ```
 
+```xml
+<route>
+  <from uri="jms:queue:blocks"/>
+  <setHeader name="BLOCK_HASH">
+    <simple>${body}</simple>
+  </setHeader>
+  <to uri="web3j://http://127.0.0.1:7545?operation=ETH_GET_BLOCK_BY_HASH&amp;fullTransactionObjects=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:queue:blocks
+      steps:
+        - setHeader:
+            name: BLOCK_HASH
+            simple: "${body}"
+        - to:
+            uri: "web3j://http://127.0.0.1:7545"
+            parameters:
+              operation: ETH_GET_BLOCK_BY_HASH
+              fullTransactionObjects: true
+```
+
 Read the balance of an address at a specific block number:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .to("web3j://http://127.0.0.1:7545?operation=ETH_GET_BALANCE&address=0xc8CDceCE5d006dAB638029EBCf6Dd666efF5A952&atBlock=10");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="web3j://http://127.0.0.1:7545?operation=ETH_GET_BALANCE&amp;address=0xc8CDceCE5d006dAB638029EBCf6Dd666efF5A952&amp;atBlock=10"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "web3j://http://127.0.0.1:7545"
+            parameters:
+              operation: ETH_GET_BALANCE
+              address: "0xc8CDceCE5d006dAB638029EBCf6Dd666efF5A952"
+              atBlock: 10
 ```
 
 ## Spring Boot Auto-Configuration

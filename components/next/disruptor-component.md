@@ -255,11 +255,48 @@ The wait strategy effects the type of waiting performed by the consumer threads 
 
 The Disruptor component supports using [Request/Reply](eips/requestReply-eip.md), where the caller will wait for the Async route to complete. For instance:
 
-Request/Reply example with disruptor
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina:tcp://0.0.0.0:9876?textline=true&sync=true").to("disruptor:input");
 from("disruptor:input").to("bean:processInput").to("bean:createResponse");
+```
+
+```xml
+<route>
+  <from uri="mina:tcp://0.0.0.0:9876?textline=true&amp;sync=true"/>
+  <to uri="disruptor:input"/>
+</route>
+<route>
+  <from uri="disruptor:input"/>
+  <to uri="bean:processInput"/>
+  <to uri="bean:createResponse"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina:tcp://0.0.0.0:9876
+      parameters:
+        textline: true
+        sync: true
+      steps:
+        - to:
+            uri: disruptor:input
+- route:
+    from:
+      uri: disruptor:input
+      steps:
+        - to:
+            uri: bean:processInput
+        - to:
+            uri: bean:createResponse
 ```
 
 In the route above, we have a TCP listener on port 9876 that accepts incoming requests. The request is routed to the _disruptor:input_ buffer. As it is a Request Reply message, we wait for the response. When the consumer on the _disruptor:input_ buffer is complete, it copies the response to the original message response.
@@ -268,7 +305,7 @@ In the route above, we have a TCP listener on port 9876 that accepts incoming re
 
 By default, the Disruptor endpoint uses a single consumer thread, but you can configure it to use concurrent consumer threads. So instead of thread pools, you can use:
 
-Concurrent consumers example
+_Java-only: concurrent consumers example (incomplete route)_
 
 ```java
 from("disruptor:stageName?concurrentConsumers=5").process(...)
@@ -279,6 +316,8 @@ As for the difference between the two, note that a thread pool can increase/shri
 ### Thread pools
 
 Be aware that adding a thread pool to a Disruptor endpoint by doing something like:
+
+_Java-only: incomplete route (thread pool example)_
 
 ```java
 from("disruptor:stageName").thread(5).process(...)
@@ -291,6 +330,8 @@ Can wind up with adding a normal [BlockingQueue](http://docs.oracle.com/javase/1
 ### Requests to async queue
 
 In the route below, we use the Disruptor to send the request to this async queue. As such, it is able to send a _fire-and-forget_ message for further processing in another thread, and return a constant reply in this thread to the original caller.
+
+_Java-only: Java RouteBuilder with multiple routes_
 
 ```java
 public void configure() {
@@ -305,6 +346,8 @@ public void configure() {
 ```
 
 Here we send a _Hello World_ message and expect the reply to be _OK_.
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 Object out = template.requestBody("direct:start", "Hello World");
@@ -331,6 +374,8 @@ In this example, we have defined two consumers and registered them as spring bea
 
 Since we have specified multipleConsumers=true on the Disruptor foo endpoint, we can have those two or more consumers receive their own copy of the message as a kind of _publish/subscriber_ style messaging. As the beans are part of a unit test, they simply send the message to a mock endpoint, but notice how we can use _@Consume_ to consume from the Disruptor.
 
+_Java-only: Java annotation-based consumer class_
+
 ```java
 public class FooEventConsumer {
 
@@ -348,6 +393,8 @@ public class FooEventConsumer {
 ### Extracting disruptor information
 
 If needed, information such as buffer size, etc. can be obtained without using JMX in this fashion:
+
+_Java-only: Java endpoint API_
 
 ```java
 DisruptorEndpoint disruptor = context.getEndpoint("disruptor:xxxx");

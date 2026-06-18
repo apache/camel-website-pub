@@ -503,6 +503,13 @@ If the SSH config file exists but does not contain a `User` directive for the ta
 
 For production deployments, always specify the username explicitly in the URI to ensure predictable behavior across different environments:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Recommended: explicit username
 from("mina-sftp://deployuser@host/path?password=secret")
@@ -511,6 +518,42 @@ from("mina-sftp://deployuser@host/path?password=secret")
 // Not recommended: relies on SSH config or OS username
 from("mina-sftp://host/path?password=secret")
     .to("file:local");
+```
+
+```xml
+<!-- Recommended: explicit username -->
+<route>
+  <from uri="mina-sftp://deployuser@host/path?password=secret"/>
+  <to uri="file:local"/>
+</route>
+
+<!-- Not recommended: relies on SSH config or OS username -->
+<route>
+  <from uri="mina-sftp://host/path?password=secret"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+# Recommended: explicit username
+- route:
+    from:
+      uri: mina-sftp://deployuser@host/path
+      parameters:
+        password: secret
+      steps:
+        - to:
+            uri: file:local
+
+# Not recommended: relies on SSH config or OS username
+- route:
+    from:
+      uri: mina-sftp://host/path
+      parameters:
+        password: secret
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Compatibility with camel-sftp
@@ -530,35 +573,138 @@ The MINA SFTP component supports multiple authentication methods:
 
 ### Password Authentication
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://admin@host/path?password=secret")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://admin@host/path?password=secret"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://admin@host/path
+      parameters:
+        password: secret
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Public Key Authentication
 
 #### Using Private Key File
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("mina-sftp://user@host/path?privateKeyFile=/home/user/.ssh/id_rsa")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?privateKeyFile=/home/user/.ssh/id_rsa"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        privateKeyFile: /home/user/.ssh/id_rsa
+      steps:
+        - to:
+            uri: file:local
+```
+
 #### Using Private Key from Classpath
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina-sftp://user@host/path?privateKeyUri=classpath:keys/id_rsa")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?privateKeyUri=classpath:keys/id_rsa"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        privateKeyUri: "classpath:keys/id_rsa"
+      steps:
+        - to:
+            uri: file:local
+```
+
 #### Using Encrypted Private Key
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina-sftp://user@host/path?privateKeyFile=/path/to/encrypted_key&privateKeyPassphrase=mypassphrase")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?privateKeyFile=/path/to/encrypted_key&amp;privateKeyPassphrase=mypassphrase"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        privateKeyFile: /path/to/encrypted_key
+        privateKeyPassphrase: mypassphrase
+      steps:
+        - to:
+            uri: file:local
+```
+
 #### Using Direct KeyPair Object
+
+_Java-only: programmatic `KeyPairGenerator` and endpoint configuration_
 
 ```java
 KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
@@ -706,23 +852,73 @@ The first non-empty option wins. This matches the priority order used for privat
 
 #### Example: Certificate from File
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .to("mina-sftp://user@host/path"
-        + "?privateKeyFile=/path/to/id_rsa"
-        + "&certFile=/path/to/id_rsa-cert.pub");
+    .to("mina-sftp://user@host/path?privateKeyFile=/path/to/id_rsa&certFile=/path/to/id_rsa-cert.pub");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="mina-sftp://user@host/path?privateKeyFile=/path/to/id_rsa&amp;certFile=/path/to/id_rsa-cert.pub"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: mina-sftp://user@host/path
+            parameters:
+              privateKeyFile: /path/to/id_rsa
+              certFile: /path/to/id_rsa-cert.pub
 ```
 
 #### Example: Certificate from Classpath
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .to("mina-sftp://user@host/path"
-        + "?privateKeyUri=classpath:keys/id_rsa"
-        + "&certUri=classpath:keys/id_rsa-cert.pub");
+    .to("mina-sftp://user@host/path?privateKeyUri=classpath:keys/id_rsa&certUri=classpath:keys/id_rsa-cert.pub");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="mina-sftp://user@host/path?privateKeyUri=classpath:keys/id_rsa&amp;certUri=classpath:keys/id_rsa-cert.pub"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: mina-sftp://user@host/path
+            parameters:
+              privateKeyUri: "classpath:keys/id_rsa"
+              certUri: "classpath:keys/id_rsa-cert.pub"
 ```
 
 #### Example: Certificate from Byte Array
+
+_Java-only: programmatic endpoint configuration with byte arrays from secret manager_
 
 ```java
 // Load certificate from external secret manager
@@ -753,30 +949,133 @@ Invalid certificates result in clear error messages indicating the issue.
 
 ### Upload Files
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file:inbox")
     .to("mina-sftp://user@sftp.example.com/upload?password=secret");
 ```
 
+```xml
+<route>
+  <from uri="file:inbox"/>
+  <to uri="mina-sftp://user@sftp.example.com/upload?password=secret"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:inbox
+      steps:
+        - to:
+            uri: mina-sftp://user@sftp.example.com/upload
+            parameters:
+              password: secret
+```
+
 ### Download Files
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina-sftp://user@sftp.example.com/download?password=secret&delete=true")
     .to("file:outbox");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@sftp.example.com/download?password=secret&amp;delete=true"/>
+  <to uri="file:outbox"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@sftp.example.com/download
+      parameters:
+        password: secret
+        delete: true
+      steps:
+        - to:
+            uri: file:outbox
+```
+
 ### Poll and Move
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina-sftp://user@host/inbox?password=secret&move=.done")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@host/inbox?password=secret&amp;move=.done"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/inbox
+      parameters:
+        password: secret
+        move: .done
+      steps:
+        - to:
+            uri: file:local
+```
+
 ### Filter by Extension
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina-sftp://user@host/data?password=secret&antInclude=*.csv")
     .to("direct:process-csv");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/data?password=secret&amp;antInclude=*.csv"/>
+  <to uri="direct:process-csv"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/data
+      parameters:
+        password: secret
+        antInclude: "*.csv"
+      steps:
+        - to:
+            uri: direct:process-csv
 ```
 
 ## Migration from JSch SFTP
@@ -785,16 +1084,66 @@ Users migrating from the JSch-based `sftp` component can switch by changing only
 
 Before (JSch)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("sftp://user@host/path?password=secret")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="sftp://user@host/path?password=secret"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sftp://user@host/path
+      parameters:
+        password: secret
+      steps:
+        - to:
+            uri: file:local
+```
+
 After (MINA SSHD)
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("mina-sftp://user@host/path?password=secret")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+      steps:
+        - to:
+            uri: file:local
 ```
 
 All standard configuration options remain the same for supported features.
@@ -1149,13 +1498,37 @@ For security-hardened environments, configure only modern, recommended algorithm
 
 ### Recommended Configuration
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Security-hardened SFTP connection
-from("mina-sftp://user@host/path?password=secret"
-    + "&keyExchangeProtocols=curve25519-sha256,ecdh-sha2-nistp256,diffie-hellman-group16-sha512"
-    + "&serverHostKeys=ssh-ed25519,rsa-sha2-512,ecdsa-sha2-nistp256"
-    + "&ciphers=aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr")
+from("mina-sftp://user@host/path?password=secret&keyExchangeProtocols=curve25519-sha256,ecdh-sha2-nistp256,diffie-hellman-group16-sha512&serverHostKeys=ssh-ed25519,rsa-sha2-512,ecdsa-sha2-nistp256&ciphers=aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr")
     .to("file:local");
+```
+
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;keyExchangeProtocols=curve25519-sha256,ecdh-sha2-nistp256,diffie-hellman-group16-sha512&amp;serverHostKeys=ssh-ed25519,rsa-sha2-512,ecdsa-sha2-nistp256&amp;ciphers=aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        keyExchangeProtocols: "curve25519-sha256,ecdh-sha2-nistp256,diffie-hellman-group16-sha512"
+        serverHostKeys: "ssh-ed25519,rsa-sha2-512,ecdsa-sha2-nistp256"
+        ciphers: "aes256-gcm@openssh.com,chacha20-poly1305@openssh.com,aes256-ctr"
+      steps:
+        - to:
+            uri: file:local
 ```
 
 ### Algorithms to Avoid
@@ -1388,6 +1761,8 @@ For advanced use cases, you can provide a custom `ServerKeyVerifier` implementat
 
 #### Using Custom Verifier via Bean Reference
 
+_Java-only: `ServerKeyVerifier` lambda and registry bean binding_
+
 ```java
 // Register custom verifier in Camel registry
 ServerKeyVerifier myVerifier = (session, remoteAddress, serverKey) -> {
@@ -1395,13 +1770,42 @@ ServerKeyVerifier myVerifier = (session, remoteAddress, serverKey) -> {
     return verifyAgainstEnterpriseKeyStore(serverKey);
 };
 context.getRegistry().bind("myVerifier", myVerifier);
+```
 
-// Use in endpoint URI
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
 from("mina-sftp://user@host/path?password=secret&serverKeyVerifier=#myVerifier")
     .to("file:local");
 ```
 
+```xml
+<route>
+  <from uri="mina-sftp://user@host/path?password=secret&amp;serverKeyVerifier=#myVerifier"/>
+  <to uri="file:local"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina-sftp://user@host/path
+      parameters:
+        password: secret
+        serverKeyVerifier: "#myVerifier"
+      steps:
+        - to:
+            uri: file:local
+```
+
 #### Using Custom Verifier Programmatically
+
+_Java-only: programmatic endpoint configuration with `ServerKeyVerifier` lambda_
 
 ```java
 MinaSftpEndpoint endpoint = context.getEndpoint(
@@ -1589,6 +1993,13 @@ The mina-sftp component supports setting POSIX file permissions on uploaded file
 
 Use the `chmod` option to set permissions on files after they are uploaded:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Set file permissions to rw-r--r-- (644)
 from("file:/data/outbound")
@@ -1599,9 +2010,54 @@ from("file:/data/secrets")
     .to("mina-sftp://user@host/secure?password=secret&chmod=600");
 ```
 
+```xml
+<!-- Set file permissions to rw-r--r-- (644) -->
+<route>
+  <from uri="file:/data/outbound"/>
+  <to uri="mina-sftp://user@host/uploads?password=secret&amp;chmod=644"/>
+</route>
+
+<!-- Set file permissions to rw------- (600) for sensitive files -->
+<route>
+  <from uri="file:/data/secrets"/>
+  <to uri="mina-sftp://user@host/secure?password=secret&amp;chmod=600"/>
+</route>
+```
+
+```yaml
+# Set file permissions to rw-r--r-- (644)
+- route:
+    from:
+      uri: file:/data/outbound
+      steps:
+        - to:
+            uri: mina-sftp://user@host/uploads
+            parameters:
+              password: secret
+              chmod: "644"
+
+# Set file permissions to rw------- (600) for sensitive files
+- route:
+    from:
+      uri: file:/data/secrets
+      steps:
+        - to:
+            uri: mina-sftp://user@host/secure
+            parameters:
+              password: secret
+              chmod: "600"
+```
+
 ### Setting Directory Permissions
 
 Use the `chmodDirectory` option to set permissions on directories when they are created:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 // Set directory permissions to rwxr-xr-x (755)
@@ -1611,6 +2067,45 @@ from("file:/data/outbound")
 // Combine with chmod for complete control
 from("file:/data/outbound")
     .to("mina-sftp://user@host/uploads?password=secret&chmod=644&chmodDirectory=755");
+```
+
+```xml
+<!-- Set directory permissions to rwxr-xr-x (755) -->
+<route>
+  <from uri="file:/data/outbound"/>
+  <to uri="mina-sftp://user@host/uploads?password=secret&amp;chmodDirectory=755"/>
+</route>
+
+<!-- Combine with chmod for complete control -->
+<route>
+  <from uri="file:/data/outbound"/>
+  <to uri="mina-sftp://user@host/uploads?password=secret&amp;chmod=644&amp;chmodDirectory=755"/>
+</route>
+```
+
+```yaml
+# Set directory permissions to rwxr-xr-x (755)
+- route:
+    from:
+      uri: file:/data/outbound
+      steps:
+        - to:
+            uri: mina-sftp://user@host/uploads
+            parameters:
+              password: secret
+              chmodDirectory: "755"
+
+# Combine with chmod for complete control
+- route:
+    from:
+      uri: file:/data/outbound
+      steps:
+        - to:
+            uri: mina-sftp://user@host/uploads
+            parameters:
+              password: secret
+              chmod: "644"
+              chmodDirectory: "755"
 ```
 
 ### Permission Format
@@ -1691,8 +2186,14 @@ The mina-sftp component handles thread safety internally. The underlying MINA SS
 
 Multiple Camel routes can safely share the same SFTP endpoint. The component serializes access to the underlying SFTP connection:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Safe: Multiple routes can use the same endpoint
 from("timer:upload1?period=5000")
     .setBody(constant("data1"))
     .to("mina-sftp://user@host/uploads?password=secret");
@@ -1700,6 +2201,52 @@ from("timer:upload1?period=5000")
 from("timer:upload2?period=5000")
     .setBody(constant("data2"))
     .to("mina-sftp://user@host/uploads?password=secret");
+```
+
+```xml
+<route>
+  <from uri="timer:upload1?period=5000"/>
+  <setBody>
+    <constant>data1</constant>
+  </setBody>
+  <to uri="mina-sftp://user@host/uploads?password=secret"/>
+</route>
+
+<route>
+  <from uri="timer:upload2?period=5000"/>
+  <setBody>
+    <constant>data2</constant>
+  </setBody>
+  <to uri="mina-sftp://user@host/uploads?password=secret"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:upload1
+      parameters:
+        period: 5000
+      steps:
+        - setBody:
+            constant: data1
+        - to:
+            uri: mina-sftp://user@host/uploads
+            parameters:
+              password: secret
+
+- route:
+    from:
+      uri: timer:upload2
+      parameters:
+        period: 5000
+      steps:
+        - setBody:
+            constant: data2
+        - to:
+            uri: mina-sftp://user@host/uploads
+            parameters:
+              password: secret
 ```
 
 ### Connection Pooling

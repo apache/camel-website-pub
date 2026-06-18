@@ -129,16 +129,64 @@ Many DFDL schemas are freely available at [DFDLSchemas on GitHub](https://github
 
 The following format is an example of using DFDL to convert an EDI message to an XML using `X12-837P-dfdl.xsd` DFDL schema file.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:parse").
-  to("dfdl:X12-837P.dfdl.xsd");
+from("direct:parse")
+    .to("dfdl:X12-837P.dfdl.xsd");
+```
+
+```xml
+<route>
+  <from uri="direct:parse"/>
+  <to uri="dfdl:X12-837P.dfdl.xsd"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:parse
+      steps:
+        - to:
+            uri: dfdl:X12-837P.dfdl.xsd
 ```
 
 The following format is an example of using DFDL to convert an XML to an EDI message using `X12-837P-dfdl.xsd` DFDL schema file. Note that `UNPARSE` is specified for the `parseDirection` parameter.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:unparse").
-  to("dfdl:X12-837P.dfdl.xsd?parseDirection=UNPARSE");
+from("direct:unparse")
+    .to("dfdl:X12-837P.dfdl.xsd?parseDirection=UNPARSE");
+```
+
+```xml
+<route>
+  <from uri="direct:unparse"/>
+  <to uri="dfdl:X12-837P.dfdl.xsd?parseDirection=UNPARSE"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:unparse
+      steps:
+        - to:
+            uri: dfdl:X12-837P.dfdl.xsd
+            parameters:
+              parseDirection: UNPARSE
 ```
 
 ## Spring Boot Auto-Configuration

@@ -31,11 +31,15 @@ Or they are set implicitly, where the connection factory falls back on [Applicat
 
 When you have the **service account key**, you can provide authentication credentials to your application code. Google security credentials can be set through the component endpoint:
 
+_Java-only: constructing the endpoint URI as a Java string_
+
 ```java
 String endpoint = "google-bigquery://project-id:datasetId[:tableId]?serviceAccountKey=/home/user/Downloads/my-key.json";
 ```
 
 You can also use the base64 encoded content of the authentication credentials file if you don’t want to set a file system path.
+
+_Java-only: constructing the endpoint URI with base64 credentials_
 
 ```java
 String endpoint = "google-bigquery://project-id:datasetId[:tableId]?serviceAccountKey=base64:<base64 encoded>";
@@ -163,6 +167,8 @@ Reference: [https://cloud.google.com/bigquery/streaming-data-into-bigquery#templ
 Templated tables can be specified using the `GoogleBigQueryConstants.TABLE_SUFFIX` header.
 
 I.e. the following route will create tables and insert records sharded on a per-day basis:
+
+_Java-only: uses GoogleBigQueryConstants to set the table suffix header_
 
 ```java
 from("direct:start")

@@ -208,16 +208,34 @@ camel.oauth.myprofile.validation-factory=#bean:myTokenValidationFactory
 
 If this property is set, the referenced bean must exist and implement `OAuthTokenValidationFactory`. Otherwise, Camel looks for a single `OAuthTokenValidationFactory` in the registry before falling back to the classpath provider.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/secure?oauthProfile=myprofile")
     .to("direct:businessLogic");
 ```
 
+```xml
+<route>
+  <from uri="platform-http:/secure?oauthProfile=myprofile"/>
+  <to uri="direct:businessLogic"/>
+</route>
+```
+
 ```yaml
-- from:
-    uri: "platform-http:/secure?oauthProfile=myprofile"
-    steps:
-      - to: "direct:businessLogic"
+- route:
+    from:
+      uri: platform-http:/secure
+      parameters:
+        oauthProfile: myprofile
+      steps:
+        - to:
+            uri: direct:businessLogic
 ```
 
 ```properties
@@ -234,6 +252,8 @@ See [camel-oauth](../4.18.x/others/oauth.md) for OIDC discovery and opaque-token
 > Opaque-token introspection performs a blocking outbound HTTP call for every request. For high-traffic endpoints, prefer JWT validation with JWKS when the identity provider publishes signing keys. See [camel-oauth](../4.18.x/others/oauth.md) for timeout and validation profile options.
 
 When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. Requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. With the Vert.x platform-http engine, Bearer token validation runs before the request body handler, so unauthenticated requests are rejected before body buffering, form parsing, or file uploads. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. Route code can use the result to read the principal name, token scopes, and immutable token attributes/claims. The raw `Authorization` header is removed before the route is invoked and from OAuth rejection responses.
+
+_Java-only: accessing OAuth token validation result in a processor_
 
 ```java
 import org.apache.camel.component.platform.http.PlatformHttpConstants;

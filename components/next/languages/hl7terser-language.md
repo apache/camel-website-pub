@@ -19,6 +19,8 @@ The HL7 Terser language supports 3 options, which are listed below.
 
 In the example below, we want to set a header with the patent id from field QRD-8 in the QRY\_A19 message:
 
+_Java-only: HL7 Terser expression builder API for extracting and filtering fields_
+
 ```java
 import static org.apache.camel.component.hl7.HL7.hl7terser;
 
@@ -39,6 +41,8 @@ Often it is preferable to first parse a HL7v2 message and in a separate step val
 
 The example below shows how to do that. Notice how we use the static method `messageConformsTo` which validates that the message is a HL7v2 message.
 
+_Java-only: HL7 message validation with HAPI ValidationContext_
+
 ```java
 import static org.apache.camel.component.hl7.HL7.messageConformsTo;
 import ca.uhn.hl7v2.validation.impl.DefaultValidation;
@@ -57,6 +61,8 @@ from("direct:test1")
 The HAPI Context is always configured with a [ValidationContext](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/validation/ValidationContext.md) (or a [ValidationRuleBuilder](https://hapifhir.github.io/hapi-hl7v2/base/apidocs/ca/uhn/hl7v2/validation/builder/ValidationRuleBuilder.md)), so you can access the validation rules indirectly.
 
 Furthermore, when unmarshalling the HL7 data format forwards the configured HAPI context in the `CamelHL7Context` header, and the validation rules of this context can be reused:
+
+_Java-only: HapiContext configuration with custom ValidationRuleBuilder_
 
 ```java
 import static org.apache.camel.component.hl7.HL7.messageConformsTo;
@@ -90,6 +96,8 @@ from("direct:test1")
 
 A common task in HL7v2 processing is to generate an acknowledgement message as a response to an incoming HL7v2 message, e.g., based on a validation result. The `ack` expression lets us accomplish this very elegantly:
 
+_Java-only: HL7 acknowledgement expression builder API_
+
 ```java
 import static org.apache.camel.component.hl7.HL7.messageConformsTo;
 import static org.apache.camel.component.hl7.HL7.ack;
@@ -113,6 +121,8 @@ from("direct:test1")
 ### Custom Acknowledgement for MLLP
 
 In special situations, you may want to set a custom acknowledgement without using Exceptions. This can be achieved using the `ack` expression:
+
+_Java-only: Custom MLLP acknowledgement using HAPI AcknowledgmentCode API_
 
 ```java
 import org.apache.camel.component.mllp.MllpConstants;

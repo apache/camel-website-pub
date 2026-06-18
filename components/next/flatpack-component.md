@@ -221,12 +221,16 @@ Each `Map` contains the key for the column name and its corresponding value.
 
 For example, to get the firstname from the sample below:
 
+_Java-only: accessing row data from the exchange body_
+
 ```java
   Map row = exchange.getIn().getBody(Map.class);
   String firstName = row.get("FIRSTNAME");
 ```
 
 However, you can also always get it as a `List` (even for `splitRows=true`). The same example:
+
+_Java-only: accessing row data as a List from the exchange body_
 
 ```java
   List data = exchange.getIn().getBody(List.class);
@@ -316,6 +320,8 @@ The data format has the following options:
 
 To use the data format, instantiate an instance and invoke the marshal or unmarshal operation in the route builder:
 
+_Java-only: programmatic FlatpackDataFormat configuration and unmarshal_
+
 ```java
   FlatpackDataFormat fp = new FlatpackDataFormat();
   fp.setDefinition(new ClassPathResource("INVENTORY-Delimited.pzmap.xml"));
@@ -324,6 +330,8 @@ To use the data format, instantiate an instance and invoke the marshal or unmars
 ```
 
 The sample above will read files from the `order/in` folder and unmarshal the input using the Flatpack configuration file `INVENTORY-Delimited.pzmap.xml` that configures the structure of the files. The result is a `DataSetList` object we store on the SEDA queue.
+
+_Java-only: programmatic FlatpackDataFormat configuration and marshal_
 
 ```java
 FlatpackDataFormat df = new FlatpackDataFormat();

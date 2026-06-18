@@ -274,10 +274,36 @@ The order messages get sent to the dynamic router:
 
 Routing order/return request messages
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .process(myOrderProcessor)
     .to("dynamic-router:orders");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="bean:myOrderProcessor"/>
+  <to uri="dynamic-router:orders"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: bean:myOrderProcessor
+        - to:
+            uri: dynamic-router:orders
 ```
 
 Note the `.process(myOrderProcessor)` step. If incoming messages need to be validated, enriched, transformed, or otherwise augmented, that can be done before the Dynamic Router receives the message. Then, when the Dynamic Router receives a message, it checks the `Exchange` against all subscriptions for the _orders_ channel to determine if it is suitable for any of the recipients. Orders should have a header (`command` → `processOrder`), so the message will be routed to the _orders_ service, and the inventory service. The system will process the order details, and then the inventory service will deduct from merchandize counts. Likewise, returns should have a header (`command` → `processReturn`), so the message will be routed to the returns service, where the return details will be processed, and the inventory service will increase the relevant merchandise counts.
@@ -341,28 +367,84 @@ In another module, additional routing will serve as a bridge to get the message 
 
 Bridge from Kafka to the Dynamic Router control channel
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-RouteBuilder subscriptionRouter() {
-    return new RouteBuilder(camelContext) {
-        @Override
-        public void configure() {
-            from("kafka:subscriptions")
-                .unmarshal().json(DynamicRouterControlMessage.class)
-                .to("dynamic-router-control:subscribe");
-        }
-    };
-}
+from("kafka:subscriptions")
+    .unmarshal().json(DynamicRouterControlMessage.class)
+    .to("dynamic-router-control:subscribe");
+```
+
+```xml
+<route>
+  <from uri="kafka:subscriptions"/>
+  <unmarshal>
+    <json library="Jackson" unmarshalType="org.apache.camel.component.dynamicrouter.control.DynamicRouterControlMessage"/>
+  </unmarshal>
+  <to uri="dynamic-router-control:subscribe"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:subscriptions
+      steps:
+        - unmarshal:
+            json:
+              library: Jackson
+              unmarshalType: org.apache.camel.component.dynamicrouter.control.DynamicRouterControlMessage
+        - to:
+            uri: dynamic-router-control:subscribe
 ```
 
 Order requests or return requests might also arrive via Kafka. The route is essentially the same as the route in the single-JVM example. Instead of forwarding the incoming message, as-is, from the "direct" component to the router, the messages are deserialized from a String, and converted to an instance of the "order" object. Then, it can be sent to the Dynamic Router for evaluation and distribution to the appropriate subscribing recipients:
 
 Routing order/return request messages from Kafka to the Dynamic Router
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("kafka://orders")
     .unmarshal().json(MyOrderMessage.class)
     .process(myOrderProcessor)
     .to("dynamic-router:orders");
+```
+
+```xml
+<route>
+  <from uri="kafka://orders"/>
+  <unmarshal>
+    <json library="Jackson" unmarshalType="com.example.MyOrderMessage"/>
+  </unmarshal>
+  <to uri="bean:myOrderProcessor"/>
+  <to uri="dynamic-router:orders"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka://orders
+      steps:
+        - unmarshal:
+            json:
+              library: Jackson
+              unmarshalType: com.example.MyOrderMessage
+        - to:
+            uri: bean:myOrderProcessor
+        - to:
+            uri: dynamic-router:orders
 ```
 
 Note the `.process(myOrderProcessor)` step. If incoming messages need to be validated, enriched, transformed, or otherwise augmented, that can be done before the Dynamic Router receives the message. Then, when the Dynamic Router receives a message, it checks the `Exchange` against all subscriptions for the "orders" channel to determine if it is suitable for any of the recipients. Orders should have a header (`command` → `processOrder`), so the message will be routed to the orders service, and the inventory service. The system will process the order details, and then the inventory service will deduct from merchandise counts. Likewise, returns should have a header (`command` → `processReturn`), so the message will be routed to the returns service, where the return details will be processed, and the inventory service will increase the relevant merchandise counts.

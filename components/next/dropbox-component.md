@@ -222,18 +222,88 @@ Below are listed the options for this operation:
 | --- | --- | --- |
 | `remotePath` | `true` | Folder or file to delete on Dropbox |
 
-Examples
+Deleting a folder
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
-  .to("dropbox://del?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1")
-  .to("mock:result");
+    .to("dropbox://del?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1")
+    .to("mock:result");
+```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="dropbox://del?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;remotePath=/root/folder1"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dropbox://del
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              remotePath: /root/folder1
+        - to:
+            uri: mock:result
+```
+
+Deleting a file
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
 from("direct:start")
-  .to("dropbox://del?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1/file1.tar.gz")
-  .to("mock:result");
+    .to("dropbox://del?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1/file1.tar.gz")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="dropbox://del?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;remotePath=/root/folder1/file1.tar.gz"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dropbox://del
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              remotePath: /root/folder1/file1.tar.gz
+        - to:
+            uri: mock:result
 ```
 
 #### Result Message Body
@@ -258,22 +328,126 @@ Below are listed the options for this operation:
 | --- | --- | --- |
 | `remotePath` | `true` | Folder or file to download from Dropbox |
 
-Examples
+Downloading a single file
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
-  .to("dropbox://get?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1/file1.tar.gz")
-  .to("file:///home/kermit/?fileName=file1.tar.gz");
+    .to("dropbox://get?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1/file1.tar.gz")
+    .to("file:///home/kermit/?fileName=file1.tar.gz");
+```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;remotePath=/root/folder1/file1.tar.gz"/>
+  <to uri="file:///home/kermit/?fileName=file1.tar.gz"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dropbox://get
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              remotePath: /root/folder1/file1.tar.gz
+        - to:
+            uri: "file:///home/kermit/?fileName=file1.tar.gz"
+```
+
+Downloading a folder
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
 from("direct:start")
-  .to("dropbox://get?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1")
-  .to("mock:result");
+    .to("dropbox://get?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1")
+    .to("mock:result");
+```
 
-from("dropbox://get?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1")
-  .to("file:///home/kermit/");
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;remotePath=/root/folder1"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dropbox://get
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              remotePath: /root/folder1
+        - to:
+            uri: mock:result
+```
+
+Using as a consumer to download files
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("dropbox://get?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1")
+    .to("file:///home/kermit/");
+```
+
+```xml
+<route>
+  <from uri="dropbox://get?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;remotePath=/root/folder1"/>
+  <to uri="file:///home/kermit/"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: dropbox://get
+      parameters:
+        accessToken: XXX
+        clientIdentifier: XXX
+        expireIn: 1000
+        refreshToken: XXXX
+        apiKey: XXXXX
+        apiSecret: XXXXXX
+        remotePath: /root/folder1
+      steps:
+        - to:
+            uri: "file:///home/kermit/"
 ```
 
 #### Result Message Body
@@ -302,11 +476,45 @@ Below are listed the options for this operation:
 
 Examples
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-  .to("dropbox://move?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1&newRemotePath=/root/folder2")
-  .to("mock:result");
+    .to("dropbox://move?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/root/folder1&newRemotePath=/root/folder2")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="dropbox://move?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;remotePath=/root/folder1&amp;newRemotePath=/root/folder2"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dropbox://move
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              remotePath: /root/folder1
+              newRemotePath: /root/folder2
+        - to:
+            uri: mock:result
 ```
 
 #### Result Message Body
@@ -336,29 +544,144 @@ OR
 Caused by: java.lang.IllegalArgumentException: 'path': bad path: must start with "/": "MyFile"  
  |
 
-Examples
+Uploading from local path
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:start").to("dropbox://put?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&uploadMode=add&localPath=/root/folder1")
-  .to("mock:result");
+from("direct:start")
+    .to("dropbox://put?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&uploadMode=add&localPath=/root/folder1")
+    .to("mock:result");
+```
 
-from("direct:start").to("dropbox://put?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&uploadMode=add&localPath=/root/folder1&remotePath=/root/folder2")
-  .to("mock:result");
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="dropbox://put?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;uploadMode=add&amp;localPath=/root/folder1"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dropbox://put
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              uploadMode: add
+              localPath: /root/folder1
+        - to:
+            uri: mock:result
+```
+
+Uploading to a specific remote path
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("dropbox://put?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&uploadMode=add&localPath=/root/folder1&remotePath=/root/folder2")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="dropbox://put?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;uploadMode=add&amp;localPath=/root/folder1&amp;remotePath=/root/folder2"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: dropbox://put
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              uploadMode: add
+              localPath: /root/folder1
+              remotePath: /root/folder2
+        - to:
+            uri: mock:result
 ```
 
 And to upload a single file with content from the message body
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-   .setHeader(DropboxConstants.HEADER_PUT_FILE_NAME, constant("myfile.txt"))
-   .to("dropbox://put?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&uploadMode=add&remotePath=/root/folder2")
-   .to("mock:result");
+    .setHeader("CamelDropboxPutFileName", constant("myfile.txt"))
+    .to("dropbox://put?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&uploadMode=add&remotePath=/root/folder2")
+    .to("mock:result");
 ```
 
-The name of the file can be provided in the header `DropboxConstants.HEADER_PUT_FILE_NAME` or `Exchange.FILE_NAME` in that order of precedence. If no header has been provided then the message id (uuid) is used as the file name.
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelDropboxPutFileName">
+    <constant>myfile.txt</constant>
+  </setHeader>
+  <to uri="dropbox://put?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;uploadMode=add&amp;remotePath=/root/folder2"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelDropboxPutFileName
+            constant: myfile.txt
+        - to:
+            uri: dropbox://put
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              uploadMode: add
+              remotePath: /root/folder2
+        - to:
+            uri: mock:result
+```
+
+The name of the file can be provided in the header `CamelDropboxPutFileName` or `CamelFileName` in that order of precedence. If no header has been provided then the message id (uuid) is used as the file name.
 
 #### Result Message Body
 
@@ -384,18 +707,92 @@ Below are listed the options for this operation:
 | `remotePath` | `true` | Folder on Dropbox where to search in. |
 | `query` | `true` | A space-separated list of sub-strings to search for. A file matches only if it contains all the sub-strings. If this option is not set, all files will be matched. The query is required to be provided in either the endpoint configuration or as a header `CamelDropboxQuery` on the Camel message. |
 
-Examples
+Searching with a query in the URI
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("dropbox://search?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/XXX&query=XXX")
-  .to("mock:result");
+from("dropbox://search?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/XXX&query=XXX")
+    .to("mock:result");
+```
 
+```xml
+<route>
+  <from uri="dropbox://search?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;remotePath=/XXX&amp;query=XXX"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: dropbox://search
+      parameters:
+        accessToken: XXX
+        clientIdentifier: XXX
+        expireIn: 1000
+        refreshToken: XXXX
+        apiKey: XXXXX
+        apiSecret: XXXXXX
+        remotePath: /XXX
+        query: XXX
+      steps:
+        - to:
+            uri: mock:result
+```
+
+Searching with a query set via header
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
 from("direct:start")
-  .setHeader("CamelDropboxQuery", constant("XXX"))
-  .to("dropbox://search?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX"
-      +"&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/XXX")
-  .to("mock:result");
+    .setHeader("CamelDropboxQuery", constant("XXX"))
+    .to("dropbox://search?accessToken=XXX&clientIdentifier=XXX&expireIn=1000&refreshToken=XXXX&apiKey=XXXXX&apiSecret=XXXXXX&remotePath=/XXX")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelDropboxQuery">
+    <constant>XXX</constant>
+  </setHeader>
+  <to uri="dropbox://search?accessToken=XXX&amp;clientIdentifier=XXX&amp;expireIn=1000&amp;refreshToken=XXXX&amp;apiKey=XXXXX&amp;apiSecret=XXXXXX&amp;remotePath=/XXX"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelDropboxQuery
+            constant: XXX
+        - to:
+            uri: dropbox://search
+            parameters:
+              accessToken: XXX
+              clientIdentifier: XXX
+              expireIn: 1000
+              refreshToken: XXXX
+              apiKey: XXXXX
+              apiSecret: XXXXXX
+              remotePath: /XXX
+        - to:
+            uri: mock:result
 ```
 
 #### Result Message Body

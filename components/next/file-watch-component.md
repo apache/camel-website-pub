@@ -137,24 +137,107 @@ The File Watch component supports 10 message header(s), which is/are listed belo
 
 ### Recursive watch all events (file creation, file deletion, file modification):
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file-watch://some-directory")
     .log("File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}");
 ```
 
+```xml
+<route>
+  <from uri="file-watch://some-directory"/>
+  <log message="File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file-watch://some-directory
+      steps:
+        - log:
+            message: "File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}"
+```
+
 ### Recursive watch for creation and deletion of txt files:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("file-watch://some-directory?events=DELETE,CREATE&antInclude=**/*.txt")
     .log("File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}");
 ```
 
+```xml
+<route>
+  <from uri="file-watch://some-directory?events=DELETE,CREATE&amp;antInclude=**/*.txt"/>
+  <log message="File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file-watch://some-directory
+      parameters:
+        events: "DELETE,CREATE"
+        antInclude: "**/*.txt"
+      steps:
+        - log:
+            message: "File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}"
+```
+
 ### Create a snapshot of file when modified:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("file-watch://some-directory?events=MODIFY&recursive=false")
     .setHeader(Exchange.FILE_NAME, simple("${header.CamelFileName}.${header.CamelFileLastModified}"))
     .to("file:some-directory/snapshots");
+```
+
+```xml
+<route>
+  <from uri="file-watch://some-directory?events=MODIFY&amp;recursive=false"/>
+  <setHeader name="CamelFileName">
+    <simple>${header.CamelFileName}.${header.CamelFileLastModified}</simple>
+  </setHeader>
+  <to uri="file:some-directory/snapshots"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file-watch://some-directory
+      parameters:
+        events: MODIFY
+        recursive: false
+      steps:
+        - setHeader:
+            name: CamelFileName
+            expression:
+              simple:
+                expression: "${header.CamelFileName}.${header.CamelFileLastModified}"
+        - to:
+            uri: file:some-directory/snapshots
 ```
 
 ## Spring Boot Auto-Configuration

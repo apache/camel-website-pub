@@ -544,8 +544,33 @@ Camel will store to a local file with the same name as the remote file, though w
 
 So if you want to download files from a remote files server and store it as local files, then you need to route to a file endpoint such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("azure-files://...&localWorkDirectory=/tmp").to("file://inbox");
+```
+
+```xml
+<route>
+  <from uri="azure-files://...&amp;localWorkDirectory=/tmp"/>
+  <to uri="file://inbox"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-files://...
+      parameters:
+        localWorkDirectory: /tmp
+      steps:
+        - to:
+            uri: file://inbox
 ```
 
 > **Tip**
@@ -586,8 +611,33 @@ The file paths are matched with the following rules:
 
 The sample below demonstrates how to use it:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("azure-files://...&antInclude=**/*.txt").to("...");
+```
+
+```xml
+<route>
+  <from uri="azure-files://...&amp;antInclude=**/*.txt"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-files://...
+      parameters:
+        antInclude: "**/*.txt"
+      steps:
+        - to:
+            uri: "..."
 ```
 
 ### Using a Proxy

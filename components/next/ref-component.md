@@ -113,6 +113,8 @@ Enum values:
 
 This component can be used when you need dynamic discovery of endpoints in the Registry where you can compute the URI at runtime. Then you can look up the endpoint using the following code:
 
+_Java-only: programmatic endpoint lookup and producer usage_
+
 ```java
 // lookup the endpoint
 String myEndpointRef = "bigspenderOrder";
@@ -127,7 +129,7 @@ producer.process(exchange);
 
 With Spring XML, you could have a list of endpoints defined in the Registry such as:
 
-```java
+```xml
 <camelContext id="camel" xmlns="http://activemq.apache.org/camel/schema/spring">
     <endpoint id="normalOrder" uri="activemq:order.slow"/>
     <endpoint id="bigspenderOrder" uri="activemq:order.high"/>
@@ -138,12 +140,16 @@ With Spring XML, you could have a list of endpoints defined in the Registry such
 
 Bind endpoints to the Camel registry:
 
+_Java-only: programmatic registry binding_
+
 ```java
 context.getRegistry().bind("endpoint1", context.getEndpoint("direct:start"));
 context.getRegistry().bind("endpoint2", context.getEndpoint("log:end"));
 ```
 
 Use the `ref` URI scheme to refer to endpoint’s bond to the Camel registry:
+
+_Java-only: RouteBuilder class definition_
 
 ```java
 public class MyRefRoutes extends RouteBuilder {

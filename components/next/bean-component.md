@@ -182,30 +182,29 @@ What happens is that when the exchange is routed to the MyBean, then Camel will 
 
 Java DSL comes with syntactic sugar for the [Bean](#) component. Instead of specifying the bean explicitly as the endpoint (i.e., `to("bean:beanName")`) you can use the following syntax:
 
+_Java-only: `.bean()` DSL shorthand for bean invocation_
+
 ```java
-// Send a message to the bean endpoint
-// and invoke method using Bean Binding.
 from("direct:start").bean("beanName");
 
-// Send a message to the bean endpoint
-// and invoke given method.
 from("direct:start").bean("beanName", "methodName");
 ```
 
 Instead of passing the name of the reference to the bean (so that Camel will look up for it in the [Registry](../../manual/registry.md)), you can specify the bean itself:
 
+_Java-only: `.bean()` DSL with inline bean instances and class references_
+
 ```java
-// Send a message to the given bean instance.
 from("direct:start").bean(new ExampleBean());
 
-// Explicit selection of bean method to be invoked.
 from("direct:start").bean(new ExampleBean(), "methodName");
 
-// Camel will create the instance of bean and cache it for you.
 from("direct:start").bean(ExampleBean.class);
 ```
 
 This bean could be a lambda if you cast the lambda to a `@FunctionalInterface`
+
+_Java-only: lambda-based bean with \`@FunctionalInterface\`_
 
 ```java
 @FunctionalInterface

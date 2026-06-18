@@ -297,6 +297,8 @@ from("direct:delete")
 
 You can call them in your test class with:
 
+_Java-only: uses ProducerTemplate API and Java constants_
+
 ```java
 template.sendBodyAndHeader("direct:[put|get|delete|clear]", "my-foo", HazelcastConstants.OBJECT_ID, "4711");
 ```
@@ -304,6 +306,8 @@ template.sendBodyAndHeader("direct:[put|get|delete|clear]", "my-foo", HazelcastC
 ## replicatedmap cache consumer
 
 For the multimap cache, this component provides the same listeners / variables as for the map cache consumer (except the update and enviction listener). The only difference is the **multimap** prefix inside the URI. Here is a sample:
+
+_Java-only: uses Java constants, string formatting, and choice/when/otherwise_
 
 ```java
 fromF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX)

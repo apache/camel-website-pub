@@ -160,6 +160,8 @@ wordpress:post?criteria.perPage=10&criteria.orderBy=author&criteria.categories=c
 
 The `WordpressConfiguration` class can be used to set initial properties configuration to the component instead of passing it as query parameter. The following listing shows how to set the component to be used in your routes.
 
+_Java-only: configuring the WordPress component programmatically_
+
 ```java
 public void configure() {
     final WordpressConfiguration configuration = new WordpressConfiguration();

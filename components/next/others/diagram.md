@@ -36,12 +36,16 @@ Add the `camel-diagram` dependency to your project:
 
 You can use the diagram renderer with the Camel API to render as PNG images:
 
+_Java-only: using RouteDiagramDumper to render as PNG image_
+
 ```java
 RouteDiagramDumper dumper = PluginHelper.getRouteDiagramDumper(context);
 BufferedImage image = dumper.dumpRoutesAsImage("*", RouteDiagramDumper.Theme.DARK);
 ```
 
 Or render as ASCII art text:
+
+_Java-only: using RouteDiagramDumper to render as ASCII art_
 
 ```java
 RouteDiagramDumper dumper = PluginHelper.getRouteDiagramDumper(context);
@@ -51,6 +55,8 @@ String ascii = dumper.dumpRoutesAsAsciiArt("*");
 #### Using standalone Java API
 
 Then use the API to render diagrams:
+
+_Java-only: standalone rendering to PNG image_
 
 ```java
 import org.apache.camel.diagram.*;
@@ -73,6 +79,8 @@ ImageIO.write(image, "PNG", new File("diagram.png"));
 ```
 
 To render as ASCII art instead:
+
+_Java-only: standalone rendering to ASCII art_
 
 ```java
 import org.apache.camel.diagram.*;
@@ -231,6 +239,8 @@ camel cmd route-diagram MyRoute.yaml --theme=unicode --highlight "from1,filter1,
 The node IDs (e.g., `from1`, `setBody1`, `log1`) correspond to the IDs assigned in the route structure. You can discover them by inspecting the route structure JSON from a running Camel application, or they typically follow the pattern `<eipName><index>`.
 
 ### With Java API
+
+_Java-only: path highlighting with ASCII and PNG renderers_
 
 ```java
 import org.apache.camel.diagram.*;

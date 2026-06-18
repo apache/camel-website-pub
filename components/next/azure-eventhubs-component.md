@@ -302,14 +302,45 @@ The component is capable of detecting the presence of an EventHubProducerAsyncCl
 
 To consume events:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("azure-eventhubs:/camel/camelHub?sharedAccessName=SASaccountName&sharedAccessKey=SASaccessKey&blobAccountName=accountName&blobAccessKey=accessKey&blobContainerName=containerName")
     .to("file://queuedirectory");
 ```
 
+```xml
+<route>
+  <from uri="azure-eventhubs:/camel/camelHub?sharedAccessName=SASaccountName&amp;sharedAccessKey=SASaccessKey&amp;blobAccountName=accountName&amp;blobAccessKey=accessKey&amp;blobContainerName=containerName"/>
+  <to uri="file://queuedirectory"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-eventhubs:/camel/camelHub
+      parameters:
+        sharedAccessName: SASaccountName
+        sharedAccessKey: SASaccessKey
+        blobAccountName: accountName
+        blobAccessKey: accessKey
+        blobContainerName: containerName
+      steps:
+        - to:
+            uri: file://queuedirectory
+```
+
 ### Producer Example
 
 To produce events:
+
+_Java-only: producing events with a Processor and EventHubsConstants_
 
 ```java
 from("direct:start")
@@ -321,6 +352,8 @@ from("direct:start")
 ```
 
 The azure-eventhubs producer supports sending sending events as an `Iterable` (E.g. as a `List`). For example:
+
+_Java-only: producing batch events with an Iterable body_
 
 ```java
 from("direct:start")
@@ -338,6 +371,8 @@ from("direct:start")
 ### Azure-AD Authentication example
 
 The example below makes use of the Azure-AD authentication. See [here](https://docs.microsoft.com/en-us/java/api/overview/azure/identity-readme?view=azure-java-stable#environment-variables) about what environment variables you need to set for this to work:
+
+_Java-only: registering a TokenCredential bean and using Azure-AD authentication_
 
 ```java
 @BindToRegistry("myTokenCredential")

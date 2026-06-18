@@ -293,6 +293,8 @@ The Git component supports 13 message header(s), which is/are listed below:
 
 Below is an example route of a producer that adds a file test.java to a local repository, commits it with a specific message on the `main` branch and then pushes it to remote repository.
 
+_Java-only: setting headers with GitConstants and chaining multiple git operations_
+
 ```java
 from("direct:start")
     .setHeader(GitConstants.GIT_FILE_NAME, constant("test.java"))
@@ -308,18 +310,70 @@ from("direct:start")
 
 Below is an example route of a consumer that consumes commit:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("git:///tmp/testRepo?type=commit")
-    .to(....)
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="git:///tmp/testRepo?type=commit"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: git:///tmp/testRepo
+      parameters:
+        type: commit
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ### Shallow Clone
 
 Use the `depth` option to perform a shallow clone, fetching only a limited number of commits. This reduces clone time and disk usage for large repositories when full history is not needed.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:clone")
     .to("git:///tmp/myRepo?operation=clone&remotePath=https://github.com/example/repo.git&depth=1");
+```
+
+```xml
+<route>
+  <from uri="direct:clone"/>
+  <to uri="git:///tmp/myRepo?operation=clone&amp;remotePath=https://github.com/example/repo.git&amp;depth=1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:clone
+      steps:
+        - to:
+            uri: git:///tmp/myRepo
+            parameters:
+              operation: clone
+              remotePath: "https://github.com/example/repo.git"
+              depth: 1
 ```
 
 A `depth` of 1 fetches only the latest commit. The value must be a positive integer. When set to 0 or omitted, a full clone is performed.
@@ -327,6 +381,8 @@ A `depth` of 1 fetches only the latest commit. The value must be a positive inte
 ### Custom config file
 
 By default, camel-git will load `.gitconfig` file from user home folder. You can override this by providing your own `.gitconfig` file.
+
+_Java-only: configuring custom gitConfigFile with different resource schemes_
 
 ```java
 from("git:///tmp/testRepo?type=commit&gitConfigFile=file:/tmp/configfile")

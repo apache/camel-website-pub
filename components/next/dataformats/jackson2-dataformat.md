@@ -4,10 +4,37 @@
 
 Jackson is a Data Format that uses the [Jackson Library](https://github.com/FasterXML/jackson-core)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  marshal().json(JsonLibrary.Jackson).
-  to("mqseries:Another.Queue");
+from("activemq:My.Queue")
+    .marshal().json(JsonLibrary.Jackson)
+    .to("mqseries:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <marshal><json library="Jackson"/></marshal>
+  <to uri="mqseries:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - marshal:
+            json:
+              library: Jackson
+        - to:
+            uri: mqseries:Another.Queue
 ```
 
 ## Jackson Options
@@ -61,6 +88,8 @@ This gives a set of out-of-the-box converters to/from the Jackson type `JSonNode
 #### Enabling more type converters and support for POJOs
 
 To enable POJO conversion support for `camel-jackson` then this must be enabled, which is done by setting the following options on the `CamelContext` global options, as shown:
+
+_Java-only: enabling Jackson POJO type conversion on the CamelContext_
 
 ```java
 // Enable Jackson JSON type converter for more types.

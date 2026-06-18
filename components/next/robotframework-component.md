@@ -291,14 +291,39 @@ The Robot Framework component supports 3 message header(s), which is/are listed 
 
 For example, you could use something like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:setVariableCamelBody")
-    .to("robotframework:src/test/resources/org/apache/camel/component/robotframework/set_variable_camel_body.robot")
+    .to("robotframework:src/test/resources/org/apache/camel/component/robotframework/set_variable_camel_body.robot");
+```
+
+```xml
+<route>
+  <from uri="direct:setVariableCamelBody"/>
+  <to uri="robotframework:src/test/resources/org/apache/camel/component/robotframework/set_variable_camel_body.robot"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:setVariableCamelBody
+      steps:
+        - to:
+            uri: robotframework:src/test/resources/org/apache/camel/component/robotframework/set_variable_camel_body.robot
 ```
 
 To use a robot test case to execute and collect the results and pass them to generate a custom report if such need happens
 
 It’s possible to specify what template the component should use dynamically via a header, so for example:
+
+_Java-only: Java constants for header names_
 
 ```java
 from("direct:in")
@@ -307,6 +332,8 @@ from("direct:in")
 ```
 
 Robotframework component helps you pass values into robot test cases with the similar approach how you would be able to pass values using Camel Simple Language. Components support passing values in three different ways. Exchange body, headers, and properties.
+
+_Java-only: Java constants for header names_
 
 ```java
 from("direct:in")
@@ -324,6 +351,8 @@ And the `template.robot` file:
     Should Be True    ${myvar} == ${body}
 ```
 
+_Java-only: Java constants for header names_
+
 ```java
 from("direct:in")
     .setHeader("testHeader", constant("testHeaderValue"))
@@ -339,6 +368,8 @@ And the `template.robot` file:
     ${myvar} =    Set Variable    ${headers.testHeader}
     Should Be True    ${myvar} == ${headers.testHeader}
 ```
+
+_Java-only: Java constants for header names_
 
 ```java
 from("direct:in")

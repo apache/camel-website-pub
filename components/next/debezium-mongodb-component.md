@@ -324,6 +324,13 @@ See below for more details.
 
 Here is a basic route that you can use to listen to Debezium events from MongoDB connector:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&mongodbHosts=rs0/localhost:27017&mongodbUser=debezium&mongodbPassword=dbz&mongodbName=dbserver1&databaseHistoryFileFilename=/usr/history-file-1.dat")
     .log("Event received from Debezium : ${body}")
@@ -338,6 +345,59 @@ from("debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&m
             .log("Event received from Debezium : ${body}")
          .end()
     .end();
+```
+
+```xml
+<route>
+  <from uri="debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&amp;mongodbHosts=rs0/localhost:27017&amp;mongodbUser=debezium&amp;mongodbPassword=dbz&amp;mongodbName=dbserver1&amp;databaseHistoryFileFilename=/usr/history-file-1.dat"/>
+  <log message="Event received from Debezium : ${body}"/>
+  <log message="    with this identifier ${headers.CamelDebeziumIdentifier}"/>
+  <log message="    with these source metadata ${headers.CamelDebeziumSourceMetadata}"/>
+  <log message="    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'"/>
+  <log message="    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'"/>
+  <log message="    with the key ${headers.CamelDebeziumKey}"/>
+  <choice>
+    <when>
+      <simple>${headers.CamelDebeziumSourceOperation} in 'c,u,r'</simple>
+      <unmarshal><json/></unmarshal>
+      <log message="Event received from Debezium : ${body}"/>
+    </when>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: debezium-mongodb:dbz-test-1
+      parameters:
+        offsetStorageFileName: /usr/offset-file-1.dat
+        mongodbHosts: rs0/localhost:27017
+        mongodbUser: debezium
+        mongodbPassword: dbz
+        mongodbName: dbserver1
+        databaseHistoryFileFilename: /usr/history-file-1.dat
+      steps:
+        - log:
+            message: "Event received from Debezium : ${body}"
+        - log:
+            message: "    with this identifier ${headers.CamelDebeziumIdentifier}"
+        - log:
+            message: "    with these source metadata ${headers.CamelDebeziumSourceMetadata}"
+        - log:
+            message: "    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'"
+        - log:
+            message: "    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'"
+        - log:
+            message: "    with the key ${headers.CamelDebeziumKey}"
+        - choice:
+            when:
+              - simple: "${headers.CamelDebeziumSourceOperation} in 'c,u,r'"
+                steps:
+                  - unmarshal:
+                      json: {}
+                  - log:
+                      message: "Event received from Debezium : ${body}"
 ```
 
 By default, the component will emit the events in the body String JSON format in case of `u`, `c` or `r` operations. This can be easily converted to JSON using Camel JSON Data Format e.g.: `.unmarshal().json()` like the above example. In case of operation `d`, the body will be `null`.

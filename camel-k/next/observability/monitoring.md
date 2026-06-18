@@ -41,9 +41,3 @@ EOF
 ```
 
 By default, the Prometheus instance discovers applications to be monitored in the same namespace. You can use the `podMonitorNamespaceSelector` field from the `Prometheus` resource to enable cross-namespace monitoring. You may also need to specify a ServiceAccount with the `serviceAccountName` field, that’s bound to a Role with the necessary permissions.
-
-### What’s Next
-
--   [Camel K operator monitoring](monitoring/operator.md)
-    
--   [Camel K integration monitoring](monitoring/integration.md)

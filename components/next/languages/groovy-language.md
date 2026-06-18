@@ -6,6 +6,8 @@ Camel has support for using [Groovy](http://www.groovy-lang.org/).
 
 For example, you can use Groovy in a [Predicate](../../../manual/predicate.md) with the [Message Filter](../eips/filter-eip.md) EIP.
 
+_Java-only: creating a Groovy expression_
+
 ```java
 groovy("someGroovyExpression")
 ```
@@ -59,6 +61,8 @@ result = body * 2 + 1
 
 For very special use-cases you may need to use a custom `GroovyShell` instance in your Groovy expressions. To provide the custom `GroovyShell`, add an implementation of the `org.apache.camel.language.groovy.GroovyShellFactory` SPI interface to the Camel registry.
 
+_Java-only: implementing a custom GroovyShellFactory_
+
 ```java
 public class CustomGroovyShellFactory implements GroovyShellFactory {
 
@@ -78,6 +82,8 @@ Camel will then use your custom GroovyShell instance (containing your custom sta
 ### Loading script from external resource
 
 You can externalize the script and have Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`. This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
+
+_Java-only: loading a Groovy script from an external resource_
 
 ```java
 .setHeader("myHeader").groovy("resource:classpath:mygroovy.groovy")

@@ -114,11 +114,39 @@ Enum values:
 
 In the route below, we insert a `browse:` component to be able to browse the Exchanges that are passing through:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:order.in").to("browse:orderReceived").to("bean:processOrder");
 ```
 
+```xml
+<route>
+  <from uri="activemq:order.in"/>
+  <to uri="browse:orderReceived"/>
+  <to uri="bean:processOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:order.in
+      steps:
+        - to:
+            uri: browse:orderReceived
+        - to:
+            uri: bean:processOrder
+```
+
 We can now inspect the received exchanges from within the Java code:
+
+_Java-only: inspecting received exchanges using the BrowsableEndpoint API_
 
 ```java
 private CamelContext context;

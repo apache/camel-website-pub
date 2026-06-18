@@ -189,6 +189,8 @@ Enum values:
 -   `listNodes`: this operation lists the nodes on a kubernetes cluster
     
 
+_Java-only: uses toF() for endpoint URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-nodes:///?kubernetesClient=#kubernetesClient&operation=listNodes").
@@ -199,6 +201,8 @@ This operation returns a List of Nodes from your cluster
 
 -   `listNodesByLabels`: this operation lists the nodes by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor with KubernetesConstants and HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -217,6 +221,8 @@ from("direct:listByLabels").process(new Processor() {
 This operation returns a list of nodes from your cluster, using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Nodes Consumer Example
+
+_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
 
 ```java
 fromF("kubernetes-nodes://%s?oauthToken=%s", host, authToken)

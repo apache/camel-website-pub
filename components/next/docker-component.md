@@ -333,14 +333,66 @@ All URI options can be passed as Header properties. Values found in a message he
 
 The following example consumes events from Docker:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("docker://events?host=192.168.59.103&port=2375").to("log:event");
 ```
 
+```xml
+<route>
+  <from uri="docker://events?host=192.168.59.103&amp;port=2375"/>
+  <to uri="log:event"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: docker://events
+      parameters:
+        host: 192.168.59.103
+        port: 2375
+      steps:
+        - to:
+            uri: log:event
+```
+
 The following example queries Docker for system-wide information
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("docker://info?host=192.168.59.103&port=2375").to("log:info");
+```
+
+```xml
+<route>
+  <from uri="docker://info?host=192.168.59.103&amp;port=2375"/>
+  <to uri="log:info"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: docker://info
+      parameters:
+        host: 192.168.59.103
+        port: 2375
+      steps:
+        - to:
+            uri: log:info
 ```
 
 ## Dependencies

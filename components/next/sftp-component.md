@@ -569,35 +569,106 @@ Endpoint-level configurations will override component-level settings. This allow
 
 To enable strict host key checking at the endpoint level, set `strictHostKeyChecking=yes` and provide a known hosts file:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("sftp://host:22/path"
-     + "?username=myuser"
-     + "&password=secret"
-     + "&knownHostsFile=/path/to/known_hosts"
-     + "&strictHostKeyChecking=yes")
+from("sftp://host:22/path?username=myuser&password=secret&knownHostsFile=/path/to/known_hosts&strictHostKeyChecking=yes")
     .to("direct:result");
+```
+
+```xml
+<route>
+  <from uri="sftp://host:22/path?username=myuser&amp;password=secret&amp;knownHostsFile=/path/to/known_hosts&amp;strictHostKeyChecking=yes"/>
+  <to uri="direct:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sftp://host:22/path
+      parameters:
+        username: myuser
+        password: secret
+        knownHostsFile: /path/to/known_hosts
+        strictHostKeyChecking: "yes"
+      steps:
+        - to:
+            uri: direct:result
 ```
 
 Alternatively, load the known hosts from the classpath:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("sftp://host:22/path"
-     + "?username=myuser"
-     + "&privateKeyFile=/path/to/id_rsa"
-     + "&knownHostsUri=classpath:known_hosts"
-     + "&strictHostKeyChecking=yes")
+from("sftp://host:22/path?username=myuser&privateKeyFile=/path/to/id_rsa&knownHostsUri=classpath:known_hosts&strictHostKeyChecking=yes")
     .to("direct:result");
+```
+
+```xml
+<route>
+  <from uri="sftp://host:22/path?username=myuser&amp;privateKeyFile=/path/to/id_rsa&amp;knownHostsUri=classpath:known_hosts&amp;strictHostKeyChecking=yes"/>
+  <to uri="direct:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sftp://host:22/path
+      parameters:
+        username: myuser
+        privateKeyFile: /path/to/id_rsa
+        knownHostsUri: "classpath:known_hosts"
+        strictHostKeyChecking: "yes"
+      steps:
+        - to:
+            uri: direct:result
 ```
 
 If you do not have a known hosts file, you can create one by connecting to the server using the `ssh` command, which will add the host key to `~/.ssh/known_hosts`. By default, the SFTP component will use this file if `useUserKnownHostsFile=true` (which is the default).
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Uses ~/.ssh/known_hosts by default
-from("sftp://host:22/path"
-     + "?username=myuser"
-     + "&privateKeyFile=/path/to/id_rsa"
-     + "&strictHostKeyChecking=yes")
+from("sftp://host:22/path?username=myuser&privateKeyFile=/path/to/id_rsa&strictHostKeyChecking=yes")
     .to("direct:result");
+```
+
+```xml
+<route>
+  <from uri="sftp://host:22/path?username=myuser&amp;privateKeyFile=/path/to/id_rsa&amp;strictHostKeyChecking=yes"/>
+  <to uri="direct:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sftp://host:22/path
+      parameters:
+        username: myuser
+        privateKeyFile: /path/to/id_rsa
+        strictHostKeyChecking: "yes"
+      steps:
+        - to:
+            uri: direct:result
 ```
 
 > **Note**
@@ -609,22 +680,70 @@ Camel supports OpenSSH certificate-based authentication for SFTP connections, wh
 
 To use certificate authentication, provide the certificate file alongside the private key:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("sftp://host:22/path"
-     + "?username=myuser"
-     + "&privateKeyFile=/path/to/user_key"
-     + "&certFile=/path/to/user_key-cert.pub")
+from("sftp://host:22/path?username=myuser&privateKeyFile=/path/to/user_key&certFile=/path/to/user_key-cert.pub")
     .to("direct:result");
+```
+
+```xml
+<route>
+  <from uri="sftp://host:22/path?username=myuser&amp;privateKeyFile=/path/to/user_key&amp;certFile=/path/to/user_key-cert.pub"/>
+  <to uri="direct:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sftp://host:22/path
+      parameters:
+        username: myuser
+        privateKeyFile: /path/to/user_key
+        certFile: /path/to/user_key-cert.pub
+      steps:
+        - to:
+            uri: direct:result
 ```
 
 The certificate can also be loaded from a classpath resource using `certUri`:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("sftp://host:22/path"
-     + "?username=myuser"
-     + "&privateKeyFile=/path/to/user_key"
-     + "&certUri=classpath:user_key-cert.pub")
+from("sftp://host:22/path?username=myuser&privateKeyFile=/path/to/user_key&certUri=classpath:user_key-cert.pub")
     .to("direct:result");
+```
+
+```xml
+<route>
+  <from uri="sftp://host:22/path?username=myuser&amp;privateKeyFile=/path/to/user_key&amp;certUri=classpath:user_key-cert.pub"/>
+  <to uri="direct:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sftp://host:22/path
+      parameters:
+        username: myuser
+        privateKeyFile: /path/to/user_key
+        certUri: "classpath:user_key-cert.pub"
+      steps:
+        - to:
+            uri: direct:result
 ```
 
 Or provided as raw bytes using `certBytes` (useful when the certificate is loaded programmatically, e.g., from a vault).

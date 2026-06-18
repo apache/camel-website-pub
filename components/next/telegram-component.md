@@ -366,6 +366,8 @@ from("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHer
 
 The `MyBean` is a simple bean that will receive the messages
 
+_Java-only: bean class definition_
+
 ```java
 public class MyBean {
 
@@ -390,29 +392,47 @@ Supported types for incoming messages are
 
 The reactive chatbot mode is a simple way of using the Camel component to build a simple chatbot that replies directly to chat messages received from the Telegram users.
 
-The following is a basic configuration of the chatbot in Java DSL
+The following is a basic configuration of the chatbot:
 
-Telegram reactive example in Java
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere")
-.bean(ChatBotLogic.class)
-.to("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere");
+    .bean(ChatBotLogic.class)
+    .to("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere");
 ```
-
-Telegram reactive example in Spring XML
 
 ```xml
 <route>
-    <from uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
-    <bean ref="chatBotLogic" />
-    <to uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
-<route>
+  <from uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
+  <bean ref="chatBotLogic"/>
+  <to uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
+</route>
+```
 
-<bean id="chatBotLogic" class="com.example.ChatBotLogic"/>
+```yaml
+- route:
+    from:
+      uri: telegram:bots
+      parameters:
+        authorizationToken: "123456789:insertYourAuthorizationTokenHere"
+      steps:
+        - bean:
+            ref: chatBotLogic
+        - to:
+            uri: telegram:bots
+            parameters:
+              authorizationToken: "123456789:insertYourAuthorizationTokenHere"
 ```
 
 The `ChatBotLogic` is a simple bean that implements a generic String-to-String method.
+
+_Java-only: bean class definition_
 
 ```java
 public class ChatBotLogic {
@@ -436,19 +456,77 @@ If you want to push messages to a specific Telegram chat when an event occurs, y
 
 First, add the bot to the chat where you want to push messages, then run a route like the following one.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere")
-.to("log:INFO?showHeaders=true");
+    .to("log:INFO?showHeaders=true");
+```
+
+```xml
+<route>
+  <from uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
+  <to uri="log:INFO?showHeaders=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: telegram:bots
+      parameters:
+        authorizationToken: "123456789:insertYourAuthorizationTokenHere"
+      steps:
+        - to:
+            uri: log:INFO
+            parameters:
+              showHeaders: true
 ```
 
 Any message received by the bot will be dumped to your log together with information about the chat (`CamelTelegramChatId` header).
 
 Once you get the chat ID, you can use the following sample route to push a message to it.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("timer:tick")
-.setBody().constant("Hello")
-to("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere&chatId=123456")
+    .setBody().constant("Hello")
+    .to("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere&chatId=123456");
+```
+
+```xml
+<route>
+    <from uri="timer:tick"/>
+    <setBody>
+        <constant>Hello</constant>
+    </setBody>
+    <to uri="telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere&amp;chatId=123456"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:tick
+    steps:
+      - setBody:
+          constant: Hello
+      - to:
+          uri: telegram:bots
+          parameters:
+            authorizationToken: "123456789:insertYourAuthorizationTokenHere"
+            chatId: "123456"
 ```
 
 Note that the corresponding URI parameter is simply `chatId`.
@@ -456,6 +534,8 @@ Note that the corresponding URI parameter is simply `chatId`.
 ### Customizing keyboard
 
 You can customize the user keyboard instead of asking him to write an option. `OutgoingTextMessage` has the property `ReplyMarkup` which can be used for such a thing.
+
+_Java-only: inline Processor with keyboard builder API_
 
 ```java
 from("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere")
@@ -489,6 +569,8 @@ from("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHer
 ```
 
 If you want to disable it, the next message must have the property `removeKeyboard` set on `ReplyKeyboardMarkup` object.
+
+_Java-only: inline Processor with keyboard removal_
 
 ```java
 from("telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere")
@@ -525,10 +607,36 @@ To enable webhook mode, users need first to add a REST implementation to their a
 
 Once done, you need to prepend the webhook URI to the telegram URI you want to use.
 
-In Java DSL:
+In the route below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("webhook:telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere").to("log:info");
+from("webhook:telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere")
+    .to("log:info");
+```
+
+```xml
+<route>
+    <from uri="webhook:telegram:bots?authorizationToken=123456789:insertYourAuthorizationTokenHere"/>
+    <to uri="log:info"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: webhook:telegram:bots
+      parameters:
+        authorizationToken: "123456789:insertYourAuthorizationTokenHere"
+    steps:
+      - to:
+          uri: log:info
 ```
 
 Some endpoints will be exposed by your application and Telegram will be configured to send messages to them. You need to ensure that your server is exposed to the internet and to pass the right value of the **camel.component.webhook.configuration.webhook-external-url** property.

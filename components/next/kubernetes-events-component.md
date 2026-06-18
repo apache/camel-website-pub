@@ -197,10 +197,39 @@ Enum values:
 -   `listEvents`: this operation lists the events
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:list").
-    to("kubernetes-events:///?kubernetesClient=#kubernetesClient&operation=listEvents").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-events:///?kubernetesClient=#kubernetesClient&operation=listEvents")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=listEvents"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+      steps:
+        - to:
+            uri: kubernetes-events:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listEvents
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of events from your cluster. The type of the events is `io.fabric8.kubernetes.api.model.events.v1.Event`.
@@ -209,6 +238,8 @@ To indicate from which namespace, the events are expected, it is possible to set
 
 -   `listEventsByLabels`: this operation lists the events selected by labels
     
+
+_Java-only: using a Processor to set label headers on the exchange_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -232,6 +263,8 @@ This operation expects the message header `CamelKubernetesEventsLabels` to be se
 -   `getEvent`: this operation gives a specific event
     
 
+_Java-only: using a Processor to set namespace and event name headers_
+
 ```java
 from("direct:get").process(new Processor() {
 
@@ -253,6 +286,8 @@ If no matching event could be found, `null` is returned.
 
 -   `createEvent`: this operation creates a new event
     
+
+_Java-only: using a Processor to set event headers for creation_
 
 ```java
 from("direct:get").process(new Processor() {
@@ -296,6 +331,8 @@ The behavior is exactly the same as `createEvent`, only the name of the operatio
 -   `deleteEvent`: this operation deletes an existing event.
     
 
+_Java-only: using a Processor to set namespace and event name headers_
+
 ```java
 from("direct:get").process(new Processor() {
 
@@ -314,6 +351,8 @@ This operation removes an existing event from your cluster. It returns a `boolea
 This operation expects two message headers which are `CamelKubernetesNamespaceName` and `CamelKubernetesEventName`, the first one needs to be set to the name of the target namespace and second one needs to be set to the target name of event.
 
 ### Kubernetes Events Consumer Example
+
+_Java-only: using fromF with parameters and a custom Processor to handle Event objects_
 
 ```java
 fromF("kubernetes-events://%s?oauthToken=%s", host, authToken)

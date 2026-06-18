@@ -141,6 +141,8 @@ The component requires a Spring AI `ImageModel` bean. When using Spring Boot wit
 
 Send a text prompt as the message body to generate an image:
 
+_Java-only: Java lambda Processor with Spring AI Image API_
+
 ```java
 from("direct:generate")
     .setBody(constant("A camel walking through the desert at sunset"))
@@ -165,6 +167,8 @@ Control image generation parameters via endpoint configuration or headers. Heade
 
 #### Via Endpoint Configuration
 
+_Java-only: Java string concatenation in URI_
+
 ```java
 from("direct:generate")
     .to("spring-ai-image:gen?imageModel=#imageModel"
@@ -175,6 +179,8 @@ from("direct:generate")
 ```
 
 #### Via Headers
+
+_Java-only: Java test API (ProducerTemplate with lambda)_
 
 ```java
 Exchange exchange = template.request("direct:generate", e -> {
@@ -190,6 +196,13 @@ Exchange exchange = template.request("direct:generate", e -> {
 
 The component includes a built-in `TypeConverter` that automatically converts `Image` objects to `byte[]`. This means you can pipe generated images directly to the `file:` component without any intermediate processing:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Generate and save — no processor needed
 from("direct:generate")
@@ -197,11 +210,36 @@ from("direct:generate")
     .to("file:output?fileName=generated.png");
 ```
 
+```xml
+<route>
+    <from uri="direct:generate"/>
+    <to uri="spring-ai-image:gen?imageModel=#imageModel&amp;width=512&amp;height=512"/>
+    <to uri="file:output?fileName=generated.png"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:generate
+    steps:
+      - to:
+          uri: spring-ai-image:gen
+          parameters:
+            imageModel: "#imageModel"
+            width: 512
+            height: 512
+      - to:
+          uri: file:output?fileName=generated.png
+```
+
 The `Image` → `byte[]` conversion decodes the base64 data automatically.
 
 ### Using with Ollama (Local Image Generation)
 
 Ollama supports image generation models via its OpenAI-compatible API. Configure the Spring AI OpenAI `ImageModel` to point at Ollama:
+
+_Java-only: Java Spring AI SDK configuration_
 
 ```java
 // Ollama returns application/x-ndjson — register a converter that handles it
@@ -228,15 +266,47 @@ ImageModel imageModel = new OpenAiImageModel(imageApi, defaultOptions,
 
 Then use the Camel endpoint to control resolution:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:generate")
     .to("spring-ai-image:gen?imageModel=#imageModel&width=512&height=512")
     .to("file:output?fileName=camel-image.png");
 ```
 
+```xml
+<route>
+    <from uri="direct:generate"/>
+    <to uri="spring-ai-image:gen?imageModel=#imageModel&amp;width=512&amp;height=512"/>
+    <to uri="file:output?fileName=camel-image.png"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:generate
+    steps:
+      - to:
+          uri: spring-ai-image:gen
+          parameters:
+            imageModel: "#imageModel"
+            width: 512
+            height: 512
+      - to:
+          uri: file:output?fileName=camel-image.png
+```
+
 ### Multiple Image Generation
 
 Set the `n` parameter to generate multiple images. When `n > 1`, the body contains a `List<Image>` instead of a single `Image`:
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 from("direct:batch")

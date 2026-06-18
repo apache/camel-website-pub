@@ -189,6 +189,8 @@ You can easily generate classes from a schema, using maven, ant etc. More detail
 
 However, it doesn’t enforce a schema-first approach, and you can create schema for your existing classes. You can use existing protocol interfaces to make RCP calls. You should use interface for the protocol itself and POJO beans or primitive/String classes for parameter and result types. Here is an example of the class that corresponds to the schema above:
 
+_Java-only: protocol interface and POJO class definition for Avro RPC_
+
 ```java
 package org.apache.camel.avro.reflection;
 

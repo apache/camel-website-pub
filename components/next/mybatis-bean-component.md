@@ -141,9 +141,32 @@ The response from MyBatis will only be set as the body if it’s a `SELECT` stat
 
 For example, if you wish to consume beans from a JMS queue and insert them into a database, you could do the following:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:queue:newAccount")
-  .to("mybatis-bean:AccountService:insertBeanAccount");
+    .to("mybatis-bean:AccountService:insertBeanAccount");
+```
+
+```xml
+<route>
+  <from uri="activemq:queue:newAccount"/>
+  <to uri="mybatis-bean:AccountService:insertBeanAccount"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:queue:newAccount
+      steps:
+        - to:
+            uri: mybatis-bean:AccountService:insertBeanAccount
 ```
 
 Notice we have to specify the bean name and method name, as we need to instruct Camel which kind of operation to invoke.
@@ -158,6 +181,8 @@ Where `AccountService` is the type alias for the bean that has the MyBatis bean 
 ```
 
 On the `AccountService` bean you can declare the MyBatis mappins using annotations as shown:
+
+_Java-only: MyBatis bean annotation mappings_
 
 ```java
 public interface AccountService {

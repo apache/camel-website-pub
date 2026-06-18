@@ -1385,6 +1385,8 @@ Camel-AWS Polly component provides the following operations on the producer side
 
 ### Synthesize Speech example
 
+_Java-only: uses AWS SDK enum constants for header values_
+
 ```java
 from("direct:start")
   .setHeader(Polly2Constants.VOICE_ID, constant(VoiceId.JOANNA))
@@ -1397,6 +1399,8 @@ As a result, you’ll get an exchange containing the audio stream (InputStream) 
 
 ### Using Neural Voices
 
+_Java-only: uses AWS SDK enum constants for header values_
+
 ```java
 from("direct:start")
   .setHeader(Polly2Constants.VOICE_ID, constant(VoiceId.MATTHEW))
@@ -1407,15 +1411,45 @@ from("direct:start")
 
 ### Describe Voices example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
   .to("aws2-polly://test?operation=describeVoices")
   .log("Available voices: ${body}");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="aws2-polly://test?operation=describeVoices"/>
+  <log message="Available voices: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: aws2-polly://test
+            parameters:
+              operation: describeVoices
+        - log:
+            message: "Available voices: ${body}"
+```
+
 ### Asynchronous Speech Synthesis with S3
 
 For long text, you can use asynchronous synthesis which stores the result in S3:
+
+_Java-only: uses Java constants for header names_
 
 ```java
 from("direct:start")
@@ -1429,6 +1463,8 @@ from("direct:start")
 ### Using a POJO as body
 
 Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS Polly, you can do something like:
+
+_Java-only: uses AWS SDK request builder API_
 
 ```java
 from("direct:start")

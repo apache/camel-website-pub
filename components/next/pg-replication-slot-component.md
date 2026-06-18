@@ -203,9 +203,37 @@ The order of the messages is guaranteed, but the same message might come more th
 
 Example route
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("pg-replication-slot://localhost:5432/finance/sync_slot:test_decoding?user={{username}}&password={{password}}&slotOptions.skip-empty-xacts=true&slotOptions.include-xids=false")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="pg-replication-slot://localhost:5432/finance/sync_slot:test_decoding?user={{username}}&amp;password={{password}}&amp;slotOptions.skip-empty-xacts=true&amp;slotOptions.include-xids=false"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: pg-replication-slot://localhost:5432/finance/sync_slot:test_decoding
+      parameters:
+        user: "{{username}}"
+        password: "{{password}}"
+        slotOptions.skip-empty-xacts: true
+        slotOptions.include-xids: false
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

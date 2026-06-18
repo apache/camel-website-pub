@@ -169,12 +169,54 @@ Using generated keys does not work together with named parameters.
 
 In the given route below, we want to get all the projects from the `projects` table. Notice the SQL query has two named parameters, `:?lic` and `:?min`. Camel will then look up these parameters from the message headers. Notice in the example above we set two headers with constant value for the named parameters:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:projects")
-     .setHeader("lic", constant("ASF"))
-     .setHeader("min", constant(123))
-     .setBody("select * from projects where license = :?lic and id > :?min order by id")
-     .to("jdbc:myDataSource?useHeadersAsParameters=true")
+from("direct:projects")
+    .setHeader("lic", constant("ASF"))
+    .setHeader("min", constant(123))
+    .setBody("select * from projects where license = :?lic and id > :?min order by id")
+    .to("jdbc:myDataSource?useHeadersAsParameters=true");
+```
+
+```xml
+<route>
+    <from uri="direct:projects"/>
+    <setHeader name="lic">
+        <constant>ASF</constant>
+    </setHeader>
+    <setHeader name="min">
+        <constant>123</constant>
+    </setHeader>
+    <setBody>
+        <constant>select * from projects where license = :?lic and id &gt; :?min order by id</constant>
+    </setBody>
+    <to uri="jdbc:myDataSource?useHeadersAsParameters=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:projects
+    steps:
+      - setHeader:
+          name: lic
+          constant: ASF
+      - setHeader:
+          name: min
+          constant: "123"
+      - setBody:
+          constant: "select * from projects where license = :?lic and id > :?min order by id"
+      - to:
+          uri: jdbc:myDataSource
+          parameters:
+            useHeadersAsParameters: true
 ```
 
 You can also store the header values in a `java.util.Map` and store the map on the headers with the key `CamelJdbcParameters`.
@@ -182,6 +224,8 @@ You can also store the header values in a `java.util.Map` and store the map on t
 ## Examples
 
 In the following example, we set up the DataSource that camel-jdbc requires. First we register our datasource in the Camel registry as `testdb`:
+
+_Java-only: programmatic DataSource registration using EmbeddedDatabaseBuilder_
 
 ```java
 EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
@@ -193,12 +237,37 @@ context.getRegistry().bind("testdb", db);
 
 Then we configure a route that routes to the JDBC component, so the SQL will be executed. Note how we refer to the `testdb` datasource that was bound in the previous step:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:hello")
     .to("jdbc:testdb");
 ```
 
+```xml
+<route>
+  <from uri="direct:hello"/>
+  <to uri="jdbc:testdb"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:hello
+      steps:
+        - to:
+            uri: jdbc:testdb
+```
+
 We create an endpoint, add the SQL query to the body of the IN message, and then send the exchange. The result of the query is returned in the _OUT_ body:
+
+_Java-only: using ProducerTemplate to send an exchange to the endpoint_
 
 ```java
 Endpoint endpoint = context.getEndpoint("direct:hello");
@@ -211,6 +280,13 @@ Exchange out = template.send(endpoint, exchange);
 
 If you want to work on the rows one by one instead of the entire ResultSet at once, you need to use the Splitter EIP such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:hello")
 // here we split the data from the testdb into new messages one by one,
@@ -222,20 +298,84 @@ from("direct:hello")
   .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:hello"/>
+  <to uri="jdbc:testdb?outputType=StreamList"/>
+  <split streaming="true">
+    <body/>
+    <to uri="mock:result"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:hello
+    steps:
+      - to:
+          uri: jdbc:testdb
+          parameters:
+            outputType: StreamList
+      - split:
+          expression:
+            body: {}
+          streaming: true
+          steps:
+            - to:
+                uri: mock:result
+```
+
 ### Polling the database every minute
 
 If we want to poll a database using the JDBC component, we need to combine it with a polling scheduler such as the [Timer](timer-component.md) or [Quartz](quartz-component.md) etc. In the following example, we retrieve data from the database every 60 seconds:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("timer://foo?period=60000")
-  .setBody(constant("select * from customer"))
-  .to("jdbc:testdb")
-  .to("activemq:queue:customers");
+    .setBody(constant("select * from customer"))
+    .to("jdbc:testdb")
+    .to("activemq:queue:customers");
+```
+
+```xml
+<route>
+    <from uri="timer://foo?period=60000"/>
+    <setBody>
+        <constant>select * from customer</constant>
+    </setBody>
+    <to uri="jdbc:testdb"/>
+    <to uri="activemq:queue:customers"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer://foo
+      parameters:
+        period: "60000"
+    steps:
+      - setBody:
+          constant: "select * from customer"
+      - to:
+          uri: jdbc:testdb
+      - to:
+          uri: activemq:queue:customers
 ```
 
 ### Move Data Between Data Sources
 
 A common use case is to query for data, process it and move it to another data source (ETL operations). In the following example, we retrieve new customer records from the source table every hour, filter/transform them and move them to a destination table:
+
+_Java-only: ETL route using inline Processor to filter and transform results_
 
 ```java
 from("timer://MoveNewCustomersEveryHour?period=3600000")

@@ -141,6 +141,8 @@ The Kubernetes Service Account component supports 5 message header(s), which is/
 -   `listServiceAccounts`: this operation lists the SAs on a kubernetes cluster
     
 
+_Java-only: uses `toF()` for URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-service-accounts:///?kubernetesClient=#kubernetesClient&operation=listServiceAccounts").
@@ -151,6 +153,8 @@ This operation returns a list of services from your cluster
 
 -   `listServiceAccountsByLabels`: this operation lists the SAs by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor, Java constants, and \`toF()\`_
 
 ```java
 from("direct:listByLabels").process(new Processor() {

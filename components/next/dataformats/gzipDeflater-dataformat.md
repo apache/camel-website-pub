@@ -15,13 +15,41 @@ The GZip Deflater dataformat has no options.
 
 In this example, we marshal a regular text/XML payload to a compressed payload employing gzip compression format and send it an ActiveMQ queue called MY\_QUEUE.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start").marshal().gzipDeflater().to("activemq:queue:MY_QUEUE");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <marshal><gzipDeflater/></marshal>
+  <to uri="activemq:queue:MY_QUEUE"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            gzipDeflater: {}
+        - to:
+            uri: activemq:queue:MY_QUEUE
 ```
 
 ## Unmarshal
 
 In this example we unmarshal a gzipped payload from an ActiveMQ queue called MY\_QUEUE to its original format, and forward it for processing to the `UnGZippedMessageProcessor`.
+
+_Java-only: unmarshalling a gzipped payload and forwarding to a custom processor_
 
 ```java
 from("activemq:queue:MY_QUEUE").unmarshal().gzipDeflater().process(new UnGZippedMessageProcessor());

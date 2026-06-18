@@ -52,19 +52,49 @@ Enum values:
 
 In this example we marshal a regular text/XML payload to a compressed payload employing zip compression `Deflater.BEST_COMPRESSION` and send it an ActiveMQ queue called MY\_QUEUE.
 
+_Java-only: specifying compression level via Java constant_
+
 ```java
 from("direct:start").marshal().zipDeflater(Deflater.BEST_COMPRESSION).to("activemq:queue:MY_QUEUE");
 ```
 
 Alternatively, if you would like to use the default setting, you could send it as
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start").marshal().zipDeflater().to("activemq:queue:MY_QUEUE");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <marshal><zipDeflater/></marshal>
+  <to uri="activemq:queue:MY_QUEUE"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            zipDeflater: {}
+        - to:
+            uri: activemq:queue:MY_QUEUE
 ```
 
 ## Unmarshal
 
 In this example, we unmarshal a zipped payload from an ActiveMQ queue called MY\_QUEUE to its original format, and forward it for processing to the UnZippedMessageProcessor. Note that the compression Level employed during marshaling should be identical to the one employed during unmarshalling to avoid errors.
+
+_Java-only: inline Processor instance_
 
 ```java
 from("activemq:queue:MY_QUEUE").unmarshal().zipDeflater().process(new UnZippedMessageProcessor());

@@ -224,12 +224,49 @@ The `FileDataSet` extends `ListDataSet`, and adds support for loading the bodies
 
 For example, to test that a set of messages are sent to a queue and then consumed from the queue without losing any messages:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // send the dataset to a queue
 from("dataset:foo").to("activemq:SomeQueue");
 
 // now lets test that the messages are consumed correctly
 from("activemq:SomeQueue").to("dataset:foo");
+```
+
+```xml
+<!-- send the dataset to a queue -->
+<route>
+  <from uri="dataset:foo"/>
+  <to uri="activemq:SomeQueue"/>
+</route>
+<!-- now lets test that the messages are consumed correctly -->
+<route>
+  <from uri="activemq:SomeQueue"/>
+  <to uri="dataset:foo"/>
+</route>
+```
+
+```yaml
+# send the dataset to a queue
+- route:
+    from:
+      uri: dataset:foo
+      steps:
+        - to:
+            uri: activemq:SomeQueue
+# now lets test that the messages are consumed correctly
+- route:
+    from:
+      uri: activemq:SomeQueue
+      steps:
+        - to:
+            uri: dataset:foo
 ```
 
 The above would look in the Registry to find the `foo` `DataSet` instance which is used to create the messages.

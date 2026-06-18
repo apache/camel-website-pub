@@ -207,13 +207,45 @@ Enum values:
 
 ## Examples
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("queue:foo")
   .filter().xquery("//foo")
-    .to("queue:bar")
+    .to("queue:bar");
+```
+
+```xml
+<route>
+  <from uri="queue:foo"/>
+  <filter>
+    <xquery>//foo</xquery>
+    <to uri="queue:bar"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: queue:foo
+      steps:
+        - filter:
+            xquery:
+              expression: //foo
+            steps:
+              - to:
+                  uri: queue:bar
 ```
 
 You can also use functions inside your query, in which case you need an explicit type conversion (otherwise you will get a `org.w3c.dom.DOMException: HIERARCHY_REQUEST_ERR`), by passing the Class as a second argument to the **xquery()** method.
+
+_Java-only: xquery() with class literal parameter_
 
 ```java
 from("direct:start")
@@ -287,6 +319,8 @@ The following example shows how to take a message of an ActiveMQ queue (MyQueue)
 ### Loading script from external resource
 
 You can externalize the script and have Apache Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`. This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
+
+_Java-only: setHeader with xquery() and class literal_
 
 ```java
 .setHeader("myHeader").xquery("resource:classpath:myxquery.txt", String.class)

@@ -35,6 +35,8 @@ The Avro dataformat supports 1 options, which are listed below.
 
 Using the avro data format is as easy as specifying that the class that you want to marshal or unmarshal in your route.
 
+_Java-only: programmatic AvroDataFormat with schema_
+
 ```java
 AvroDataFormat format = new AvroDataFormat(Value.SCHEMA$);
 

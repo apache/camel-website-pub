@@ -10,6 +10,8 @@ The class `org.apache.camel.test.junit6.CamelTestSupport` provides a base JUnit 
 
 As shown below is a basic junit test which uses `camel-test-junit6`. The `createRouteBuilder` method is used for build the routes to be tested. Then the methods with `@Test` annotations are JUnit test methods which will be executed. The base class `CamelTestSupport` has a number of helper methods to configure testing, see more at the Javadoc of this class.
 
+_Java-only: CamelTestSupport unit test example_
+
 ```java
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.builder.RouteBuilder;

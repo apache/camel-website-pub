@@ -486,9 +486,34 @@ For more information about this you can look at [AWS credentials documentation](
 
 If you need more control over the `SnsClient` instance configuration you can create your own instance and refer to it from the URI:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-.to("aws2-sns://MyTopic?amazonSNSClient=#client");
+    .to("aws2-sns://MyTopic?amazonSNSClient=#client");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="aws2-sns://MyTopic?amazonSNSClient=#client"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: aws2-sns://MyTopic
+            parameters:
+              amazonSNSClient: "#client"
 ```
 
 The `#client` refers to a `AmazonSNS` in the Registry.
@@ -497,18 +522,72 @@ The `#client` refers to a `AmazonSNS` in the Registry.
 
 You can create a subscription of an SQS Queue to an SNS Topic in this way:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-.to("aws2-sns://test-camel-sns1?amazonSNSClient=#amazonSNSClient&subscribeSNStoSQS=true&queueArn=arn:aws:sqs:eu-central-1:123456789012:test_camel");
+    .to("aws2-sns://test-camel-sns1?amazonSNSClient=#amazonSNSClient&subscribeSNStoSQS=true&queueArn=arn:aws:sqs:eu-central-1:123456789012:test_camel");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="aws2-sns://test-camel-sns1?amazonSNSClient=#amazonSNSClient&amp;subscribeSNStoSQS=true&amp;queueArn=arn:aws:sqs:eu-central-1:123456789012:test_camel"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - to:
+          uri: aws2-sns://test-camel-sns1
+          parameters:
+            amazonSNSClient: "#amazonSNSClient"
+            subscribeSNStoSQS: true
+            queueArn: "arn:aws:sqs:eu-central-1:123456789012:test_camel"
 ```
 
 The `#amazonSNSClient` refers to a `SnsClient` in the Registry. By specifying `subscribeSNStoSQS` to true and a `queueArn` of an existing SQS Queue, you’ll be able to subscribe your SQS Queue to your SNS Topic.
 
 At this point, you can consume messages coming from SNS Topic through your SQS Queue
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("aws2-sqs://test-camel?amazonSQSClient=#amazonSQSClient&delay=50&maxMessagesPerPoll=5")
-    .to(...);
+    .to("...");
+```
+
+```xml
+<route>
+  <from uri="aws2-sqs://test-camel?amazonSQSClient=#amazonSQSClient&amp;delay=50&amp;maxMessagesPerPoll=5"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: aws2-sqs://test-camel
+      parameters:
+        amazonSQSClient: "#amazonSQSClient"
+        delay: 50
+        maxMessagesPerPoll: 5
+      steps:
+        - to:
+            uri: "..."
 ```
 
 ### Topic Auto-creation
@@ -576,39 +655,50 @@ This behavior ensures compatibility with AWS SNS constraints while allowing seam
 
 Sending to a topic
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-  .to("aws2-sns://camel-topic?subject=The+subject+message&autoCreateTopic=true");
+    .to("aws2-sns://camel-topic?subject=The+subject+message&autoCreateTopic=true");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="aws2-sns://camel-topic?subject=The+subject+message&amp;autoCreateTopic=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - to:
+          uri: aws2-sns://camel-topic
+          parameters:
+            subject: "The+subject+message"
+            autoCreateTopic: true
 ```
 
 Sending batch to a topic
 
+_Java-only: requires constructing `PublishBatchRequestEntry` objects programmatically_
+
 ```java
 from("direct:start")
-     .process(new Processor() {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-          PublishBatchRequestEntry publishBatchRequestEntry1 = PublishBatchRequestEntry.builder()
-               .id("message1")
-               .message("This is message 1")
-               .build();
-
-          PublishBatchRequestEntry publishBatchRequestEntry2 = PublishBatchRequestEntry.builder()
-               .id("message2")
-               .message("This is message 2")
-               .build();
-
-          PublishBatchRequestEntry publishBatchRequestEntry3 = PublishBatchRequestEntry.builder()
-               .id("message3")
-               .message("This is message 3")
-               .build();
-
-          List<PublishBatchRequestEntry> pubList = new ArrayList<>();
-          pubList.add(publishBatchRequestEntry1);
-          pubList.add(publishBatchRequestEntry2);
-          pubList.add(publishBatchRequestEntry3);
+     .process(exchange -> {
+          List<PublishBatchRequestEntry> pubList = List.of(
+               PublishBatchRequestEntry.builder().id("message1").message("This is message 1").build(),
+               PublishBatchRequestEntry.builder().id("message2").message("This is message 2").build(),
+               PublishBatchRequestEntry.builder().id("message3").message("This is message 3").build()
+          );
           exchange.getIn().setBody(pubList);
-          }
   })
   .to("aws2-sns://camel-topic?subject=The+subject+message&autoCreateTopic=true&batchEnabled=true");
 ```

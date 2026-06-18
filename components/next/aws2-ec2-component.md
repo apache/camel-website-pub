@@ -2941,17 +2941,70 @@ For more information about this you can look at [AWS credentials documentation](
 -   createAndRunInstances: this operation will create an EC2 instance and run it
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createAndRun")
      .setHeader(EC2Constants.IMAGE_ID, constant("ami-fd65ba94"))
-     .setHeader(EC2Constants.INSTANCE_TYPE, constant(InstanceType.T2Micro))
+     .setHeader(EC2Constants.INSTANCE_TYPE, constant(InstanceType.T2_MICRO))
      .setHeader(EC2Constants.INSTANCE_MIN_COUNT, constant("1"))
      .setHeader(EC2Constants.INSTANCE_MAX_COUNT, constant("1"))
      .to("aws2-ec2://TestDomain?accessKey=xxxx&secretKey=xxxx&operation=createAndRunInstances");
 ```
 
+```xml
+<route>
+  <from uri="direct:createAndRun"/>
+  <setHeader name="CamelAwsEC2ImageId">
+    <constant>ami-fd65ba94</constant>
+  </setHeader>
+  <setHeader name="CamelAwsEC2InstanceType">
+    <constant>t2.micro</constant>
+  </setHeader>
+  <setHeader name="CamelAwsEC2InstanceMinCount">
+    <constant>1</constant>
+  </setHeader>
+  <setHeader name="CamelAwsEC2InstanceMaxCount">
+    <constant>1</constant>
+  </setHeader>
+  <to uri="aws2-ec2://TestDomain?accessKey=xxxx&amp;secretKey=xxxx&amp;operation=createAndRunInstances"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createAndRun
+      steps:
+        - setHeader:
+            name: CamelAwsEC2ImageId
+            constant: "ami-fd65ba94"
+        - setHeader:
+            name: CamelAwsEC2InstanceType
+            constant: "t2.micro"
+        - setHeader:
+            name: CamelAwsEC2InstanceMinCount
+            constant: "1"
+        - setHeader:
+            name: CamelAwsEC2InstanceMaxCount
+            constant: "1"
+        - to:
+            uri: aws2-ec2://TestDomain
+            parameters:
+              accessKey: xxxx
+              secretKey: xxxx
+              operation: createAndRunInstances
+```
+
 -   startInstances: this operation will start a list of EC2 instances
     
+
+_Java-only: using a Processor to set the instance IDs collection_
 
 ```java
 from("direct:start")
@@ -2969,6 +3022,8 @@ from("direct:start")
 -   stopInstances: this operation will stop a list of EC2 instances
     
 
+_Java-only: using a Processor to set the instance IDs collection_
+
 ```java
 from("direct:stop")
      .process(new Processor() {
@@ -2984,6 +3039,8 @@ from("direct:stop")
 
 -   terminateInstances: this operation will terminate a list of EC2 instances
     
+
+_Java-only: using a Processor to set the instance IDs collection_
 
 ```java
 from("direct:stop")
@@ -3001,6 +3058,8 @@ from("direct:stop")
 ### Using a POJO as body
 
 Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as a body. In AWS EC2 there are multiple operations you can submit, as an example for Create and run an instance, you can do something like:
+
+_Java-only: using AWS SDK RunInstancesRequest as POJO body_
 
 ```java
 from("direct:start")

@@ -279,6 +279,8 @@ The component provide a producer to read values from multiple opc-ua nodes. The 
 
 Example:
 
+_Java-only: reading values from OPC UA nodes using enrich with an AggregationStrategy_
+
 ```java
 from("direct:start")
     .setHeader("CamelMiloNodeIds", constant(Arrays.asList("nsu=urn:org:apache:camel;s=myitem1")))
@@ -297,6 +299,8 @@ from("direct:start")
 Built-in OPC UA data types are read and written transparently. Values whose node has a **custom** (server-defined) data type are instead returned as an `org.eclipse.milo.opcua.stack.core.types.builtin.ExtensionObject`, which can only be decoded (or, for writes, encoded) with an `EncodingContext` obtained from the underlying milo client.
 
 The component does not decode these values automatically, because it cannot reliably determine which encoding context applies. Instead, the active `OpcUaClient` is exposed through `MiloClientConnection.getOpcUaClient()`, so you can obtain its encoding contexts and perform the encode/decode yourself:
+
+_Java-only: accessing the underlying OpcUaClient for custom data type encoding/decoding_
 
 ```java
 MiloClientEndpoint endpoint = context.getEndpoint("milo-client:opc.tcp://localhost:4334", MiloClientEndpoint.class);

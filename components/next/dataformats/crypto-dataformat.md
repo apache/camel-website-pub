@@ -25,6 +25,8 @@ The Crypto (Java Cryptographic Extension) dataformat supports 9 options, which a
 
 At its most basic, all that is required to encrypt/decrypt an exchange is a shared secret key. If one or more instances of the Crypto data format are configured with this key, the format can be used to encrypt the payload in one route (or part of one) and decrypted in another. For example, using the Java DSL as follows:
 
+_Java-only: programmatic CryptoDataFormat configuration with KeyGenerator_
+
 ```java
 KeyGenerator generator = KeyGenerator.getInstance("DES");
 
@@ -59,6 +61,8 @@ In Spring the dataformat is configured first and then used in routes
 
 Changing the algorithm is a matter of supplying the JCE algorithm name. If you change the algorithm, you will need to use a compatible key.
 
+_Java-only: programmatic CryptoDataFormat with custom algorithm and HMAC_
+
 ```java
 KeyGenerator generator = KeyGenerator.getInstance("DES");
 
@@ -78,6 +82,8 @@ A list of the available algorithms in Java 17 is available via the [Java Securit
 ## Specifying an Initialization Vector
 
 Some crypto algorithms, particularly block algorithms, require configuration with an initial block of data known as an Initialization Vector. In the JCE this is passed as an AlgorithmParameterSpec when the Cipher is initialized. To use such a vector with the CryptoDataFormat, you can configure it with a byte\[\] containing the required data, e.g.
+
+_Java-only: programmatic CryptoDataFormat with initialization vector_
 
 ```java
 KeyGenerator generator = KeyGenerator.getInstance("DES");

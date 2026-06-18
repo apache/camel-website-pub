@@ -241,10 +241,38 @@ By default, the consumer uses SQL++ queries. You can either provide an explicit 
 
 The simplest way to consume documents is to just use the existing endpoint options. The consumer auto-generates a SQL++ query from `bucket`, `collection`, `limit`, `skip`, `descending`, `rangeStartKey`, and `rangeEndKey`:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Consumes up to 10 documents in descending order
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass&limit=10&descending=true")
     .to("direct:result");
+```
+
+```xml
+<route>
+  <from uri="couchbase:http://localhost?bucket=myBucket&amp;username=user&amp;password=pass&amp;limit=10&amp;descending=true"/>
+  <to uri="direct:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: couchbase:http://localhost
+      parameters:
+        bucket: myBucket
+        username: user
+        password: pass
+        limit: 10
+        descending: true
+      steps:
+        - to:
+            uri: direct:result
 ```
 
 This generates: ``SELECT META().id AS \__id, * FROM \`myBucket\`` ORDER BY META().id DESC LIMIT 10\`
@@ -252,6 +280,8 @@ This generates: ``SELECT META().id AS \__id, * FROM \`myBucket\`` ORDER BY META(
 #### Explicit SQL++ statements
 
 For complex queries (filters, joins, aggregations), set the `statement` option directly:
+
+_Java-only: string concatenation in endpoint URI_
 
 ```java
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
@@ -269,6 +299,8 @@ When `fullDocument` is `true` (the default), the consumer fetches the complete d
 ### MapReduce Views (deprecated)
 
 The consumer can also poll documents using MapReduce Views by setting `useView=true` with the `designDocumentName` and `viewName` endpoint options. This mode is deprecated and will be removed in a future release.
+
+_Java-only: string concatenation in endpoint URI_
 
 ```java
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
@@ -292,6 +324,8 @@ To migrate from MapReduce Views to SQL, simply remove \`designDocumentName\` and
 
 For example, a view-based consumer:
 
+_Java-only: string concatenation in endpoint URI_
+
 ```java
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
     + "&useView=true&designDocumentName=myDoc&viewName=myView&limit=10&descending=true")
@@ -299,12 +333,16 @@ from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
 
 Can be migrated by simply removing the view-specific options:
 
+_Java-only: string concatenation in endpoint URI_
+
 ```java
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
     + "&limit=10&descending=true")
 ```
 
 Or with an explicit SQL++ statement for more control:
+
+_Java-only: string concatenation in endpoint URI_
 
 ```java
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"

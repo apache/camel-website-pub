@@ -969,36 +969,48 @@ JMS is used in many examples for other components as well. But we provide a few 
 
 In the following sample, we configure a route that receives JMS messages and routes the message to a POJO:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("jms:queue:foo").
-   to("bean:myBusinessLogic");
+from("jms:queue:foo")
+  .to("bean:myBusinessLogic");
+```
+
+```xml
+<route>
+  <from uri="jms:queue:foo"/>
+  <to uri="bean:myBusinessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:queue:foo
+      steps:
+        - to:
+            uri: bean:myBusinessLogic
 ```
 
 You can use any of the EIP patterns so the route can be context based. For example, here’s how to filter an order topic for the big spenders:
 
-```java
-from("jms:topic:OrdersTopic").
-  filter().method("myBean", "isGoldCustomer").
-  to("jms:queue:BigSpendersQueue");
-```
-
-### Sending to JMS
-
-In the sample below, we poll a file folder and send the file content to a JMS topic. As we want the content of the file as a `TextMessage` instead of a `BytesMessage`, we need to convert the body to a `String`:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("file://orders").
-  convertBodyTo(String.class).
-  to("jms:topic:OrdersTopic");
+from("jms:topic:OrdersTopic")
+  .filter().method("myBean", "isGoldCustomer")
+  .to("jms:queue:BigSpendersQueue");
 ```
-
-### Using Annotations
-
-Camel also has annotations, so you can use [POJO Consuming](../../manual/pojo-consuming.md) and [POJO Producing](../../manual/pojo-producing.md).
-
-### Spring DSL Example
-
-The preceding examples use the Java DSL. Camel also supports Spring XML DSL. Here is the big spender sample using Spring DSL:
 
 ```xml
 <route>
@@ -1010,6 +1022,60 @@ The preceding examples use the Java DSL. Camel also supports Spring XML DSL. Her
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: jms:topic:OrdersTopic
+      steps:
+        - filter:
+            method:
+              ref: myBean
+              method: isGoldCustomer
+            steps:
+              - to:
+                  uri: jms:queue:BigSpendersQueue
+```
+
+### Sending to JMS
+
+In the sample below, we poll a file folder and send the file content to a JMS topic. As we want the content of the file as a `TextMessage` instead of a `BytesMessage`, we need to convert the body to a `String`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file://orders")
+  .convertBodyTo(String.class)
+  .to("jms:topic:OrdersTopic");
+```
+
+```xml
+<route>
+  <from uri="file://orders"/>
+  <convertBodyTo type="String"/>
+  <to uri="jms:topic:OrdersTopic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://orders
+      steps:
+        - convertBodyTo:
+            type: String
+        - to:
+            uri: jms:topic:OrdersTopic
+```
+
+### Using Annotations
+
+Camel also has annotations, so you can use [POJO Consuming](../../manual/pojo-consuming.md) and [POJO Producing](../../manual/pojo-producing.md).
+
 ### Other Examples
 
 JMS appears in many of the examples for other components and EIP patterns, as well in this Camel documentation. So feel free to browse the documentation.
@@ -1018,6 +1084,8 @@ JMS appears in many of the examples for other components and EIP patterns, as we
 
 Normally, when using [JMS](#) as the transport, it only transfers the body and headers as the payload. If you want to use [JMS](#) with a [Dead Letter Channel](eips/dead-letter-channel.md), using a JMS queue as the Dead Letter Queue, then normally the caused Exception is not stored in the JMS message. You can, however, use the `transferExchange` option on the JMS dead letter queue to instruct Camel to store the entire Exchange in the queue as a `javax.jms.ObjectMessage` that holds a `org.apache.camel.support.DefaultExchangeHolder`. This allows you to consume from the Dead Letter Queue and retrieve the caused exception from the Exchange property with the key `Exchange.EXCEPTION_CAUGHT`. The demo below illustrates this:
 
+_Java-only: `errorHandler` configuration is Java DSL specific_
+
 ```java
 // setup error handler to use JMS as queue and store the entire Exchange
 errorHandler(deadLetterChannel("jms:queue:dead?transferExchange=true"));
@@ -1025,10 +1093,38 @@ errorHandler(deadLetterChannel("jms:queue:dead?transferExchange=true"));
 
 Then you can consume from the JMS queue and analyze the problem:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jms:queue:dead").to("bean:myErrorAnalyzer");
+```
 
-// and in our bean
+```xml
+<route>
+  <from uri="jms:queue:dead"/>
+  <to uri="bean:myErrorAnalyzer"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:queue:dead
+      steps:
+        - to:
+            uri: bean:myErrorAnalyzer
+```
+
+And in the `myErrorAnalyzer` bean:
+
+_Java-only: programmatic access to exchange properties and exception_
+
+```java
 String body = exchange.getIn().getBody();
 Exception cause = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
 // the cause message is
@@ -1038,6 +1134,8 @@ String problem = cause.getMessage();
 ### Using JMS as a Dead Letter Channel storing error only
 
 You can use JMS to store the cause error message or to store a custom body, which you can initialize yourself. The following example uses the Message Translator EIP to do a transformation on the failed exchange before it is moved to the [JMS](#) dead letter queue:
+
+_Java-only: `errorHandler` and `exceptionMessage()` are Java DSL specific_
 
 ```java
 // we sent it to a seda dead queue first
@@ -1090,8 +1188,33 @@ You can use the `messageConverter` option to do the mapping yourself in a Spring
 
 For example, in the route below, we use a custom message converter when sending a message to the JMS order queue:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://inbox/order").to("jms:queue:order?messageConverter=#myMessageConverter");
+```
+
+```xml
+<route>
+  <from uri="file://inbox/order"/>
+  <to uri="jms:queue:order?messageConverter=#myMessageConverter"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://inbox/order
+      steps:
+        - to:
+            uri: jms:queue:order
+            parameters:
+              messageConverter: "#myMessageConverter"
 ```
 
 You can also use a custom message converter when consuming from a JMS destination.
@@ -1102,11 +1225,38 @@ You can use the `jmsMessageType` option on the endpoint URL to force a specific 
 
 In the route below, we poll files from a folder and send them as `javax.jms.TextMessage` as we have forced the JMS producer endpoint to use text messages:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://inbox/order").to("jms:queue:order?jmsMessageType=Text");
 ```
 
+```xml
+<route>
+  <from uri="file://inbox/order"/>
+  <to uri="jms:queue:order?jmsMessageType=Text"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://inbox/order
+      steps:
+        - to:
+            uri: jms:queue:order
+            parameters:
+              jmsMessageType: Text
+```
+
 You can also specify the message type to use for each message by setting the header with the key `CamelJmsMessageType`. For example:
+
+_Java-only: uses the `JmsMessageType` enum which requires Java code_
 
 ```java
 from("file://inbox/order").setHeader("CamelJmsMessageType", JmsMessageType.Text).to("jms:queue:order");
@@ -1212,11 +1362,40 @@ So pay attention to the message exchange pattern set on your exchanges.
 If you send a message to a JMS destination in the middle of your route, you can specify the exchange pattern to use, see more at Request Reply.  
 This is useful if you want to send an `InOnly` message to a JMS topic:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:queue:in")
    .to("bean:validateOrder")
    .to(ExchangePattern.InOnly, "activemq:topic:order")
    .to("bean:handleOrder");
+```
+
+```xml
+<route>
+  <from uri="activemq:queue:in"/>
+  <to uri="bean:validateOrder"/>
+  <inOnly uri="activemq:topic:order"/>
+  <to uri="bean:handleOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:queue:in
+      steps:
+        - to:
+            uri: bean:validateOrder
+        - inOnly:
+            uri: activemq:topic:order
+        - to:
+            uri: bean:handleOrder
 ```
 
 ### Reuse endpoint and send to different destinations computed at runtime
@@ -1233,20 +1412,48 @@ You can specify the destination in the following headers:
 
 For example, the following route shows how you can compute a destination at run time and use it to override the destination appearing in the JMS URL:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://inbox")
   .to("bean:computeDestination")
   .to("activemq:queue:dummy");
 ```
 
+```xml
+<route>
+  <from uri="file://inbox"/>
+  <to uri="bean:computeDestination"/>
+  <to uri="activemq:queue:dummy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://inbox
+      steps:
+        - to:
+            uri: bean:computeDestination
+        - to:
+            uri: activemq:queue:dummy
+```
+
 The queue name, `dummy`, is just a placeholder. It must be provided as part of the JMS endpoint URL, but it will be ignored in this example.
 
 In the `computeDestination` bean, specify the real destination by setting the `CamelJmsDestinationName` header as follows:
 
+_Java-only: bean method that sets the destination header programmatically_
+
 ```java
 public void setJmsHeader(Exchange exchange) {
    String id = ....
-   exchange.getIn().setHeader("CamelJmsDestinationName", "order:" + id");
+   exchange.getIn().setHeader("CamelJmsDestinationName", "order:" + id);
 }
 ```
 
@@ -1282,9 +1489,34 @@ See [The jee schema](http://static.springsource.org/spring/docs/3.0.x/spring-fra
 
 A common requirement with JMS is to consume messages concurrently in multiple threads to make an application more responsive. You can set the `concurrentConsumers` option to specify the number of threads servicing the JMS endpoint, as follows:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("jms:SomeQueue?concurrentConsumers=20").
-  bean(MyClass.class);
+from("jms:SomeQueue?concurrentConsumers=20")
+  .bean(MyClass.class);
+```
+
+```xml
+<route>
+  <from uri="jms:SomeQueue?concurrentConsumers=20"/>
+  <to uri="bean:MyClass"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:SomeQueue
+      parameters:
+        concurrentConsumers: 20
+      steps:
+        - to:
+            uri: bean:MyClass
 ```
 
 You can configure this option in one of the following ways:
@@ -1300,9 +1532,35 @@ You can configure this option in one of the following ways:
 
 Notice that each concurrent consumer will only pick up the next available message from the JMS broker, when the current message has been fully processed. You can set the option `asyncConsumer=true` to let the consumer pick up the next message from the JMS queue, while the previous message is being processed asynchronously (by the Asynchronous Routing Engine). See more details in the table on top of the page about the `asyncConsumer` option.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("jms:SomeQueue?concurrentConsumers=20&asyncConsumer=true").
-  bean(MyClass.class);
+from("jms:SomeQueue?concurrentConsumers=20&asyncConsumer=true")
+  .bean(MyClass.class);
+```
+
+```xml
+<route>
+  <from uri="jms:SomeQueue?concurrentConsumers=20&amp;asyncConsumer=true"/>
+  <to uri="bean:MyClass"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:SomeQueue
+      parameters:
+        concurrentConsumers: 20
+        asyncConsumer: true
+      steps:
+        - to:
+            uri: bean:MyClass
 ```
 
 ### Request-reply over JMS
@@ -1326,6 +1584,8 @@ Camel will automatically set up a consumer that listens to on the reply queue, s
 This consumer is a Spring `DefaultMessageListenerContainer` which listen for replies. However, it’s fixed to one concurrent consumer.  
 That means replies will be processed in sequence as there is only one thread to process the replies. You can configure the listener to use concurrent threads using the `concurrentConsumers` and `maxConcurrentConsumers` options. This allows you to easier configure this in Camel as shown below:
 
+_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
+
 ```java
 from(xxx)
 .inOut().to("activemq:queue:foo?concurrentConsumers=5")
@@ -1339,6 +1599,8 @@ In this route, we instruct Camel to route replies asynchronously using a thread 
 
 If you use a fixed reply queue when doing Request Reply over JMS as shown in the example below, then pay attention.
 
+_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
+
 ```java
 from(xxx)
 .inOut().to("activemq:queue:foo?replyTo=bar")
@@ -1346,6 +1608,8 @@ from(xxx)
 ```
 
 In this example, the fixed reply queue named "bar" is used. By default, Camel assumes the queue is shared when using fixed reply queues, and therefore it uses a `JMSSelector` to only pick up the expected reply messages (e.g., based on the `JMSCorrelationID`). See the next section for exclusive fixed reply queues. That means it’s not as fast as temporary queues. You can speed up how often Camel will pull for reply messages using the `receiveTimeout` option. By default, its 1000 milliseconds. So to make it faster, you can set it to 250 millis to pull 4 times per second as shown:
+
+_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
 
 ```java
 from(xxx)
@@ -1361,6 +1625,8 @@ It is generally recommended to use temporary queues if possible.
 In the previous example, Camel would anticipate the fixed reply queue named "bar" was shared, and thus it uses a `JMSSelector` to only consume reply messages which it expects. However, there is a drawback to doing this as the JMS selector is slower. Also, the consumer on the reply queue is slower to update with new JMS selector ids. In fact, it only updates when the `receiveTimeout` option times out, which by default is 1 second. So in theory, the reply messages could take up till about 1 sec to be detected. On the other hand, if the fixed reply queue is exclusive to the Camel reply consumer, then we can avoid using the JMS selectors, and thus be more performant. In fact, as fast as using temporary queues. There is the `ReplyToType` option which you can configure to `Exclusive`  
 to tell Camel that the reply queue is exclusive as shown in the example below:
 
+_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
+
 ```java
 from(xxx)
 .inOut().to("activemq:queue:foo?replyTo=bar&replyToType=Exclusive")
@@ -1368,6 +1634,8 @@ from(xxx)
 ```
 
 Mind that the queue must be exclusive to each and every endpoint. So if you have two routes, then they each need a unique reply queue as shown in the next example:
+
+_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
 
 ```java
 from(xxx)
@@ -1396,23 +1664,92 @@ When you do request/reply (InOut) over [JMS](#) with Camel, then Camel uses a ti
 
 You can provide a header in the message to override and use as the request timeout value instead of the endpoint configured value. For example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-   from("direct:someWhere")
-     .to("jms:queue:foo?replyTo=bar&requestTimeout=30s")
-     .to("bean:processReply");
+from("direct:someWhere")
+  .to("jms:queue:foo?replyTo=bar&requestTimeout=30s")
+  .to("bean:processReply");
+```
+
+```xml
+<route>
+  <from uri="direct:someWhere"/>
+  <to uri="jms:queue:foo?replyTo=bar&amp;requestTimeout=30s"/>
+  <to uri="bean:processReply"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:someWhere
+      steps:
+        - to:
+            uri: jms:queue:foo
+            parameters:
+              replyTo: bar
+              requestTimeout: 30s
+        - to:
+            uri: bean:processReply
 ```
 
 In the route above we have an endpoint configured `requestTimeout` of 30 seconds. So Camel will wait up till 30 seconds for that reply message to come back on the bar queue. If no reply message is received then a `org.apache.camel.ExchangeTimedOutException` is set on the Exchange, and Camel continues routing the message, which would then fail due the exception, and Camel’s error handler reacts.
 
-If you want to use a per message timeout value, you can set the header with key `org.apache.camel.component.jms.JmsConstants#JMS_REQUEST_TIMEOUT` which has constant value `"CamelJmsRequestTimeout"` with a timeout value as a long type.
+If you want to use a per message timeout value, you can set the header `CamelJmsRequestTimeout` with a timeout value as a long type.
+
+> **Tip**
+> In Java code, you can use the constant `JmsConstants.JMS_REQUEST_TIMEOUT` for the header name.
 
 For example, we can use a bean to compute the timeout value per individual message, such as calling the `"whatIsTheTimeout"` method on the service bean as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:someWhere")
   .setHeader("CamelJmsRequestTimeout", method(ServiceBean.class, "whatIsTheTimeout"))
   .to("jms:queue:foo?replyTo=bar&requestTimeout=30s")
   .to("bean:processReply");
+```
+
+```xml
+<route>
+  <from uri="direct:someWhere"/>
+  <setHeader name="CamelJmsRequestTimeout">
+    <method ref="serviceBean" method="whatIsTheTimeout"/>
+  </setHeader>
+  <to uri="jms:queue:foo?replyTo=bar&amp;requestTimeout=30s"/>
+  <to uri="bean:processReply"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:someWhere
+      steps:
+        - setHeader:
+            name: CamelJmsRequestTimeout
+            method:
+              ref: serviceBean
+              method: whatIsTheTimeout
+        - to:
+            uri: jms:queue:foo
+            parameters:
+              replyTo: bar
+              requestTimeout: 30s
+        - to:
+            uri: bean:processReply
 ```
 
 When you do fire and forget (InOut) over [JMS](#) with Camel, then Camel by default does **not** set any time to live value on the message. You can configure a value by using the `timeToLive` option. For example, to indicate a 5 sec., you set `timeToLive=5000`. The option `disableTimeToLive` can be used to force disabling the time to live, also for InOnly messaging. The `requestTimeout` option is not being used for InOnly messaging.
@@ -1449,11 +1786,15 @@ The benefit of doing so is that the cacheLevel setting will be honored when usin
 
 When using Camel as a JMS listener, it sets an Exchange property with the value of the ReplyTo `javax.jms.Destination` object, having the key `ReplyTo`. You can obtain this `Destination` as follows:
 
+_Java-only: uses JMS `Destination` object and Camel Java API_
+
 ```java
-Destination replyDestination = exchange.getIn().getHeader(JmsConstants.JMS_REPLY_DESTINATION, Destination.class);
+Destination replyDestination = exchange.getIn().getHeader("JMSReplyTo", Destination.class);
 ```
 
 And then later use it to send a reply using regular JMS or Camel.
+
+_Java-only: uses `JmsEndpoint` and `ProducerTemplate` Java API_
 
 ```java
 // we need to pass in the JMS component, and in this sample we use ActiveMQ
@@ -1464,15 +1805,15 @@ template.sendBody(endpoint, "Here is the late reply.");
 
 A different solution to sending a reply is to provide the `replyDestination` object in the same Exchange property when sending. Camel will then pick up this property and use it for the real destination. The endpoint URI must include a dummy destination, however. For example:
 
+_Java-only: uses `ProducerTemplate` and `Processor` to set the JMS destination object programmatically_
+
 ```java
 // we pretend to send it to some non-existing dummy queue
-template.send("activemq:queue:dummy, new Processor() {
-   public void process(Exchange exchange) throws Exception {
+template.send("activemq:queue:dummy", exchange -> {
       // and here we override the destination with the ReplyTo destination object so the message is sent to there instead of dummy
-      exchange.getIn().setHeader(JmsConstants.JMS_DESTINATION, replyDestination);
+      exchange.getIn().setHeader("CamelJmsDestination", replyDestination);
       exchange.getIn().setBody("Here is the late reply.");
-    }
-}
+});
 ```
 
 ### Using a request timeout
@@ -1485,12 +1826,12 @@ When sending to a [JMS](#) destination using **camel-jms**, the producer will us
 
 For example, to send an `InOnly` message to the foo queue, but with a `JMSReplyTo` with bar queue you can do as follows:
 
+_Java-only: uses `ProducerTemplate` test API to send with custom JMS headers_
+
 ```java
-template.send("activemq:queue:foo?preserveMessageQos=true", new Processor() {
-   public void process(Exchange exchange) throws Exception {
+template.send("activemq:queue:foo?preserveMessageQos=true", exchange -> {
       exchange.getIn().setBody("World");
       exchange.getIn().setHeader("JMSReplyTo", "bar");
-    }
 });
 ```
 
@@ -1500,10 +1841,36 @@ Notice we use `preserveMessageQos=true` to instruct Camel to keep the `JMSReplyT
 
 Some JMS providers, like IBM’s WebSphere MQ, need options to be set on the JMS destination. For example, you may need to specify the `targetClient` option. Since `targetClient` is a WebSphere MQ option and not a Camel URI option, you need to set that on the JMS destination name like so:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // ...
 .setHeader("CamelJmsDestinationName", constant("queue:///MY_QUEUE?targetClient=1"))
 .to("wmq:queue:MY_QUEUE?useMessageIDAsCorrelationID=true");
+```
+
+```xml
+<!-- ... -->
+<setHeader name="CamelJmsDestinationName">
+  <constant>queue:///MY_QUEUE?targetClient=1</constant>
+</setHeader>
+<to uri="wmq:queue:MY_QUEUE?useMessageIDAsCorrelationID=true"/>
+```
+
+```yaml
+# ...
+- setHeader:
+    name: CamelJmsDestinationName
+    constant: "queue:///MY_QUEUE?targetClient=1"
+- to:
+    uri: wmq:queue:MY_QUEUE
+    parameters:
+      useMessageIDAsCorrelationID: true
 ```
 
 Some versions of WMQ won’t accept this option on the destination name, and you will get an exception like:
@@ -1514,14 +1881,14 @@ value 'MY\_QUEUE?targetClient=1' is not allowed for
 
 A workaround is to use a custom DestinationResolver:
 
+_Java-only: programmatic JMS component configuration with custom \`DestinationResolver\`_
+
 ```java
 JmsComponent wmq = new JmsComponent(connectionFactory);
 
-wmq.setDestinationResolver(new DestinationResolver() {
-    public Destination resolveDestinationName(Session session, String destinationName, boolean pubSubDomain) throws JMSException {
-        MQQueueSession wmqSession = (MQQueueSession) session;
-        return wmqSession.createQueue("queue:///" + destinationName + "?targetClient=1");
-    }
+wmq.setDestinationResolver((session, destinationName, pubSubDomain) -> {
+    MQQueueSession wmqSession = (MQQueueSession) session;
+    return wmqSession.createQueue("queue:///" + destinationName + "?targetClient=1");
 });
 ```
 

@@ -332,30 +332,120 @@ Camel will deliver the body as a json formatted `java.lang.String` (see the `mod
 
 In this sample we find the 7-day weather forecast for Madrid, Spain:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("weather:foo?location=Madrid,Spain&period=7 days&appid=APIKEY&geolocationAccessKey=IPSTACK_ACCESS_KEY&geolocationRequestHostIP=LOCAL_IP").to("jms:queue:weather");
+from("weather:foo?location=Madrid,Spain&period=7 days&appid=APIKEY&geolocationAccessKey=IPSTACK_ACCESS_KEY&geolocationRequestHostIP=LOCAL_IP")
+    .to("jms:queue:weather");
+```
+
+```xml
+<route>
+  <from uri="weather:foo?location=Madrid,Spain&amp;period=7 days&amp;appid=APIKEY&amp;geolocationAccessKey=IPSTACK_ACCESS_KEY&amp;geolocationRequestHostIP=LOCAL_IP"/>
+  <to uri="jms:queue:weather"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: weather:foo
+      parameters:
+        location: "Madrid,Spain"
+        period: "7 days"
+        appid: APIKEY
+        geolocationAccessKey: IPSTACK_ACCESS_KEY
+        geolocationRequestHostIP: LOCAL_IP
+      steps:
+        - to:
+            uri: jms:queue:weather
 ```
 
 To just find the current weather for your current location, you can use this:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("weather:foo?appid=APIKEY&geolocationAccessKey=IPSTACK_ACCESS_KEY&geolocationRequestHostIP=LOCAL_IP").to("jms:queue:weather");
+from("weather:foo?appid=APIKEY&geolocationAccessKey=IPSTACK_ACCESS_KEY&geolocationRequestHostIP=LOCAL_IP")
+    .to("jms:queue:weather");
+```
+
+```xml
+<route>
+  <from uri="weather:foo?appid=APIKEY&amp;geolocationAccessKey=IPSTACK_ACCESS_KEY&amp;geolocationRequestHostIP=LOCAL_IP"/>
+  <to uri="jms:queue:weather"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: weather:foo
+      parameters:
+        appid: APIKEY
+        geolocationAccessKey: IPSTACK_ACCESS_KEY
+        geolocationRequestHostIP: LOCAL_IP
+      steps:
+        - to:
+            uri: jms:queue:weather
 ```
 
 And to find the weather using the producer, we do:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
   .to("weather:foo?location=Madrid,Spain&appid=APIKEY&geolocationAccessKey=IPSTACK_ACCESS_KEY&geolocationRequestHostIP=LOCAL_IP");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="weather:foo?location=Madrid,Spain&amp;appid=APIKEY&amp;geolocationAccessKey=IPSTACK_ACCESS_KEY&amp;geolocationRequestHostIP=LOCAL_IP"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: weather:foo
+            parameters:
+              location: "Madrid,Spain"
+              appid: APIKEY
+              geolocationAccessKey: IPSTACK_ACCESS_KEY
+              geolocationRequestHostIP: LOCAL_IP
+```
+
 And we can send in a message with a header to get the weather for any location as shown:
+
+_Java-only: ProducerTemplate API usage_
 
 ```java
 String json = template.requestBodyAndHeader("direct:start", "", "CamelWeatherLocation", "Paris,France&appid=APIKEY", String.class);
 ```
 
 And to get the weather at the current location, then:
+
+_Java-only: ProducerTemplate API usage_
 
 ```java
 String json = template.requestBodyAndHeader("direct:start", "", "CamelWeatherLocation", "current&appid=APIKEY", String.class);

@@ -664,11 +664,49 @@ Camel-AWS Timestream component provides the following operation on the producer 
         
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createDatabase")
     .setHeader(Timestream2Constants.DATABASE_NAME, constant("testDb"))
     .setHeader(Timestream2Constants.KMS_KEY_ID, constant("testKmsKey"))
-    .to("aws2-timestream://write:test?awsTimestreamWriteClient=#awsTimestreamWriteClient&operation=createDatabase")
+    .to("aws2-timestream://write:test?awsTimestreamWriteClient=#awsTimestreamWriteClient&operation=createDatabase");
+```
+
+```xml
+<route>
+    <from uri="direct:createDatabase"/>
+    <setHeader name="CamelAwsTimestreamDatabaseName">
+        <constant>testDb</constant>
+    </setHeader>
+    <setHeader name="CamelAwsTimestreamKmsKeyId">
+        <constant>testKmsKey</constant>
+    </setHeader>
+    <to uri="aws2-timestream://write:test?awsTimestreamWriteClient=#awsTimestreamWriteClient&amp;operation=createDatabase"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createDatabase
+    steps:
+      - setHeader:
+          name: CamelAwsTimestreamDatabaseName
+          constant: testDb
+      - setHeader:
+          name: CamelAwsTimestreamKmsKeyId
+          constant: testKmsKey
+      - to:
+          uri: aws2-timestream://write:test
+          parameters:
+            awsTimestreamWriteClient: "#awsTimestreamWriteClient"
+            operation: createDatabase
 ```
 
 -   Query Operation
@@ -677,10 +715,42 @@ from("direct:createDatabase")
         
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:query")
     .setHeader(Timestream2Constants.QUERY_STRING, constant("SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10"))
-    .to("aws2-timestream://query:test?awsTimestreamQueryClient=#awsTimestreamQueryClient&operation=query")
+    .to("aws2-timestream://query:test?awsTimestreamQueryClient=#awsTimestreamQueryClient&operation=query");
+```
+
+```xml
+<route>
+    <from uri="direct:query"/>
+    <setHeader name="CamelAwsTimestreamQueryString">
+        <constant>SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10</constant>
+    </setHeader>
+    <to uri="aws2-timestream://query:test?awsTimestreamQueryClient=#awsTimestreamQueryClient&amp;operation=query"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:query
+    steps:
+      - setHeader:
+          name: CamelAwsTimestreamQueryString
+          constant: "SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10"
+      - to:
+          uri: aws2-timestream://query:test
+          parameters:
+            awsTimestreamQueryClient: "#awsTimestreamQueryClient"
+            operation: query
 ```
 
 ### Using a POJO as body
@@ -693,6 +763,8 @@ Sometimes building an AWS Request can be complex because of multiple options. We
         
     
 
+_Java-only: uses AWS SDK POJO request builder as message body_
+
 ```java
 from("direct:start")
   .setBody(CreateDatabaseRequest.builder().database(Database.builder().databaseName("testDb").kmsKeyId("testKmsKey").build()).build())
@@ -704,6 +776,8 @@ from("direct:start")
     -   query: this operation will execute a timestream query
         
     
+
+_Java-only: uses AWS SDK POJO request builder as message body_
 
 ```java
 from("direct:query")

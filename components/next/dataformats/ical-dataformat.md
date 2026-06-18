@@ -6,6 +6,8 @@ The ICal dataformat is used for working with [iCalendar](http://en.wikipedia.org
 
 A typical iCalendar message looks like:
 
+_Java-only: example of an iCalendar message format_
+
 ```java
 BEGIN:VCALENDAR
 VERSION:2.0
@@ -37,12 +39,44 @@ The iCal dataformat supports 1 options, which are listed below.
 
 To unmarshal and marshal the message shown above, your route will look like the following:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:ical-unmarshal")
-  .unmarshal("ical")
-  .to("mock:unmarshaled")
-  .marshal("ical")
-  .to("mock:marshaled");
+    .unmarshal("ical")
+    .to("mock:unmarshaled")
+    .marshal("ical")
+    .to("mock:marshaled");
+```
+
+```xml
+<route>
+  <from uri="direct:ical-unmarshal"/>
+  <unmarshal><ical/></unmarshal>
+  <to uri="mock:unmarshaled"/>
+  <marshal><ical/></marshal>
+  <to uri="mock:marshaled"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:ical-unmarshal
+      steps:
+        - unmarshal:
+            ical: {}
+        - to:
+            uri: mock:unmarshaled
+        - marshal:
+            ical: {}
+        - to:
+            uri: mock:marshaled
 ```
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:

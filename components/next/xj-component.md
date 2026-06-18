@@ -189,9 +189,34 @@ The XJ component supports 3 message header(s), which is/are listed below:
 
 The following route does an "identity" transform of the message because no xslt stylesheet is given. In the context of XML to XML transformations, "Identity" transform means that the output document is just a copy of the input document. In the case of XJ, it means it transforms the JSON document to an equivalent XML representation.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:start").
-  to("xj:identity?transformDirection=JSON2XML");
+from("direct:start")
+    .to("xj:identity?transformDirection=JSON2XML");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="xj:identity?transformDirection=JSON2XML"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: xj:identity
+            parameters:
+              transformDirection: JSON2XML
 ```
 
 Sample:
@@ -280,9 +305,34 @@ Now we can apply a stylesheet, e.g.:
 
 To the above sample by specifying the template on the endpoint:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:start").
-  to("xj:com/example/json2xml.xsl?transformDirection=JSON2XML");
+from("direct:start")
+    .to("xj:com/example/json2xml.xsl?transformDirection=JSON2XML");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="xj:com/example/json2xml.xsl?transformDirection=JSON2XML"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: xj:com/example/json2xml.xsl
+            parameters:
+              transformDirection: JSON2XML
 ```
 
 And get the following output:
@@ -304,9 +354,34 @@ And get the following output:
 
 Based on the explanations above, an _identity_ transform will be performed when no stylesheet is given:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:start").
-  to("xj:identity?transformDirection=XML2JSON");
+from("direct:start")
+    .to("xj:identity?transformDirection=XML2JSON");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="xj:identity?transformDirection=XML2JSON"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: xj:identity
+            parameters:
+              transformDirection: XML2JSON
 ```
 
 Given the sample input
@@ -433,9 +508,34 @@ Now we can apply again a stylesheet, e.g.:
 
 to the sample above by specifying the template on the endpoint:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:start").
-  to("xj:com/example/xml2json.xsl?transformDirection=XML2JSON");
+from("direct:start")
+    .to("xj:com/example/xml2json.xsl?transformDirection=XML2JSON");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="xj:com/example/xml2json.xsl?transformDirection=XML2JSON"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: xj:com/example/xml2json.xsl
+            parameters:
+              transformDirection: XML2JSON
 ```
 
 and get the following output:

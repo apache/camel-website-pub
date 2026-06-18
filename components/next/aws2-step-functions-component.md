@@ -548,14 +548,42 @@ Camel-AWS Step Functions component provides the following operation on the produ
 -   createStateMachine: this operation will create a state machine
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createStateMachine")
-    .to("aws2-step-functions://test?awsSfnClient=#awsSfnClient&operation=createMachine")
+    .to("aws2-step-functions://test?awsSfnClient=#awsSfnClient&operation=createMachine");
+```
+
+```xml
+<route>
+  <from uri="direct:createStateMachine"/>
+  <to uri="aws2-step-functions://test?awsSfnClient=#awsSfnClient&amp;operation=createMachine"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createStateMachine
+      steps:
+        - to:
+            uri: aws2-step-functions://test
+            parameters:
+              awsSfnClient: "#awsSfnClient"
+              operation: createMachine
 ```
 
 ### Using a POJO as body
 
 Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS Step Functions, there are multiple operations you can submit, as an example for Create state machine request, you can do something like:
+
+_Java-only: using a POJO request body with the AWS SDK builder_
 
 ```java
 from("direct:start")

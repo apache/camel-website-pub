@@ -1500,13 +1500,41 @@ Guardrails work with all models that support the Converse API:
 -   invokeTextModel: this operation will invoke a model from Bedrock. This is an example for both Titan Express and Titan Lite.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:invoke")
-    .to("aws-bedrock://test?bedrockRuntimeClient=#amazonBedrockRuntimeClient&operation=invokeTextModel&modelId="
-                            + BedrockModels.TITAN_TEXT_EXPRESS_V1.model))
+    .to("aws-bedrock://test?bedrockRuntimeClient=#amazonBedrockRuntimeClient&operation=invokeTextModel&modelId=amazon.titan-text-express-v1");
+```
+
+```xml
+<route>
+  <from uri="direct:invoke"/>
+  <to uri="aws-bedrock://test?bedrockRuntimeClient=#amazonBedrockRuntimeClient&amp;operation=invokeTextModel&amp;modelId=amazon.titan-text-express-v1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:invoke
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              bedrockRuntimeClient: "#amazonBedrockRuntimeClient"
+              operation: invokeTextModel
+              modelId: amazon.titan-text-express-v1
 ```
 
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:invoke", exchange -> {
@@ -1524,26 +1552,30 @@ and you can then send to the direct endpoint something like
 
             rootNode.put("textGenerationConfig", childNode);
             exchange.getMessage().setBody(mapper.writer().writeValueAsString(rootNode));
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_CONTENT_TYPE, "application/json");
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_ACCEPT_CONTENT_TYPE, "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockContentType", "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockAcceptContentType", "application/json");
         });
 ```
 
 where template is a ProducerTemplate.
 
--   invokeImageModel: this operation will invoke a model from Bedrock. This is an example for both Titan Express and Titan Lite.
+-   invokeImageModel: this operation will invoke a model from Bedrock. This is an example for Titan Image Generator.
     
+
+_Java-only: uses `unmarshal().base64()` method chain and `simple()` expression builder_
 
 ```java
 from("direct:invoke")
-    .to("aws-bedrock://test?bedrockRuntimeClient=#amazonBedrockRuntimeClient&operation=invokeImageModel&modelId="
-                            + BedrockModels.TITAN_IMAGE_GENERATOR_V1.model))
-                        .split(body())
-                        .unmarshal().base64()
-                        .setHeader("CamelFileName", simple("image-${random(128)}.png")).to("file:target/generated_images")
+    .to("aws-bedrock://test?bedrockRuntimeClient=#amazonBedrockRuntimeClient&operation=invokeImageModel&modelId=amazon.titan-image-generator-v1")
+    .split(body())
+        .unmarshal().base64()
+        .setHeader("CamelFileName", simple("image-${random(128)}.png"))
+        .to("file:target/generated_images");
 ```
 
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:send_titan_image", exchange -> {
@@ -1565,8 +1597,8 @@ and you can then send to the direct endpoint something like
             rootNode.putIfAbsent("imageGenerationConfig", childNode);
 
             exchange.getMessage().setBody(mapper.writer().writeValueAsString(rootNode));
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_CONTENT_TYPE, "application/json");
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_ACCEPT_CONTENT_TYPE, "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockContentType", "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockAcceptContentType", "application/json");
         });
 ```
 
@@ -1575,14 +1607,46 @@ where template is a ProducerTemplate.
 -   invokeEmbeddingsModel: this operation will invoke an Embeddings model from Bedrock. This is an example for Titan Embeddings G1.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:send_titan_embeddings")
-    .to("aws-bedrock:label?useDefaultCredentialsProvider=true&region=us-east-1&operation=invokeEmbeddingsModel&modelId="
-    + BedrockModels.TITAN_EMBEDDINGS_G1.model)
-    .to(result);
+    .to("aws-bedrock:label?useDefaultCredentialsProvider=true&region=us-east-1&operation=invokeEmbeddingsModel&modelId=amazon.titan-embed-text-v1")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:send_titan_embeddings"/>
+  <to uri="aws-bedrock:label?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=invokeEmbeddingsModel&amp;modelId=amazon.titan-embed-text-v1"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:send_titan_embeddings
+      steps:
+        - to:
+            uri: aws-bedrock:label
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: invokeEmbeddingsModel
+              modelId: amazon.titan-embed-text-v1
+        - to:
+            uri: mock:result
 ```
 
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:send_titan_embeddings", exchange -> {
@@ -1592,8 +1656,8 @@ and you can then send to the direct endpoint something like
                     new TextNode("A Sci-fi camel running in the desert"));
 
             exchange.getMessage().setBody(mapper.writer().writeValueAsString(rootNode));
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_CONTENT_TYPE, "application/json");
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_ACCEPT_CONTENT_TYPE, "*/*");
+            exchange.getMessage().setHeader("CamelAwsBedrockContentType", "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockAcceptContentType", "*/*");
         });
 ```
 
@@ -1602,15 +1666,47 @@ where template is a ProducerTemplate.
 -   invokeTextModelStreaming (Complete Mode): this operation will invoke a model from Bedrock with streaming, accumulating the complete response.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:stream_complete")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=invokeTextModelStreaming&modelId=" + BedrockModels.TITAN_TEXT_EXPRESS_V1.model
-        + "&streamOutputMode=complete")
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=invokeTextModelStreaming&modelId=amazon.titan-text-express-v1&streamOutputMode=complete")
     .to("log:response");
 ```
 
+```xml
+<route>
+  <from uri="direct:stream_complete"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=invokeTextModelStreaming&amp;modelId=amazon.titan-text-express-v1&amp;streamOutputMode=complete"/>
+  <to uri="log:response"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:stream_complete
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: invokeTextModelStreaming
+              modelId: amazon.titan-text-express-v1
+              streamOutputMode: complete
+        - to:
+            uri: log:response
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:stream_complete", exchange -> {
@@ -1627,32 +1723,71 @@ and you can then send to the direct endpoint something like
 
             rootNode.put("textGenerationConfig", childNode);
             exchange.getMessage().setBody(mapper.writer().writeValueAsString(rootNode));
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_CONTENT_TYPE, "application/json");
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_ACCEPT_CONTENT_TYPE, "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockContentType", "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockAcceptContentType", "application/json");
         });
 
         // Get the complete response
         String response = result.getMessage().getBody(String.class);
 
         // Get streaming metadata
-        Integer tokenCount = result.getMessage().getHeader(BedrockConstants.STREAMING_TOKEN_COUNT, Integer.class);
-        String completionReason = result.getMessage().getHeader(BedrockConstants.STREAMING_COMPLETION_REASON, String.class);
-        Integer chunkCount = result.getMessage().getHeader(BedrockConstants.STREAMING_CHUNK_COUNT, Integer.class);
+        Integer tokenCount = result.getMessage().getHeader("CamelAwsBedrockTokenCount", Integer.class);
+        String completionReason = result.getMessage().getHeader("CamelAwsBedrockCompletionReason", String.class);
+        Integer chunkCount = result.getMessage().getHeader("CamelAwsBedrockChunkCount", Integer.class);
 ```
 
 -   invokeTextModelStreaming (Chunks Mode): this operation will invoke a model from Bedrock with streaming, emitting individual chunks.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:stream_chunks")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=invokeTextModelStreaming&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V35_2.model
-        + "&streamOutputMode=chunks")
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=invokeTextModelStreaming&modelId=anthropic.claude-3-5-sonnet-20241022-v2:0&streamOutputMode=chunks")
     .split(body())
-        .to("websocket:chat-output");  // Send each chunk to websocket
+        .to("websocket:chat-output");
+```
+
+```xml
+<route>
+  <from uri="direct:stream_chunks"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=invokeTextModelStreaming&amp;modelId=anthropic.claude-3-5-sonnet-20241022-v2:0&amp;streamOutputMode=chunks"/>
+  <split>
+    <simple>${body}</simple>
+    <to uri="websocket:chat-output"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:stream_chunks
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: invokeTextModelStreaming
+              modelId: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+              streamOutputMode: chunks
+        - split:
+            expression:
+              simple: "${body}"
+            steps:
+              - to:
+                  uri: websocket:chat-output
 ```
 
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:stream_chunks", exchange -> {
@@ -1677,8 +1812,8 @@ and you can then send to the direct endpoint something like
             rootNode.put("anthropic_version", "bedrock-2023-05-31");
 
             exchange.getMessage().setBody(mapper.writer().writeValueAsString(rootNode));
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_CONTENT_TYPE, "application/json");
-            exchange.getMessage().setHeader(BedrockConstants.MODEL_ACCEPT_CONTENT_TYPE, "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockContentType", "application/json");
+            exchange.getMessage().setHeader("CamelAwsBedrockAcceptContentType", "application/json");
         });
 
         // Get the list of chunks
@@ -1693,14 +1828,46 @@ and you can then send to the direct endpoint something like
 -   converse: this operation uses the unified Converse API for model-agnostic conversations.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:converse")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=converse&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V3.model)
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=converse&modelId=anthropic.claude-3-sonnet-20240229-v1:0")
     .to("log:response");
 ```
 
+```xml
+<route>
+  <from uri="direct:converse"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=converse&amp;modelId=anthropic.claude-3-sonnet-20240229-v1:0"/>
+  <to uri="log:response"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:converse
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: converse
+              modelId: "anthropic.claude-3-sonnet-20240229-v1:0"
+        - to:
+            uri: log:response
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with AWS SDK objects_
 
 ```java
         final Exchange result = template.send("direct:converse", exchange -> {
@@ -1712,7 +1879,7 @@ and you can then send to the direct endpoint something like
                             .fromText("What is Apache Camel and what are its main features?"))
                     .build());
 
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_MESSAGES, messages);
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseMessages", messages);
 
             // Optional: Add inference configuration
             software.amazon.awssdk.services.bedrockruntime.model.InferenceConfiguration inferenceConfig
@@ -1720,22 +1887,22 @@ and you can then send to the direct endpoint something like
                             .maxTokens(500)
                             .temperature(0.7f)
                             .build();
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_INFERENCE_CONFIG, inferenceConfig);
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseInferenceConfig", inferenceConfig);
 
             // Optional: Add system prompt
             List<software.amazon.awssdk.services.bedrockruntime.model.SystemContentBlock> systemPrompt = new ArrayList<>();
             systemPrompt.add(software.amazon.awssdk.services.bedrockruntime.model.SystemContentBlock
                     .fromText("You are a helpful assistant that explains software concepts clearly and concisely."));
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_SYSTEM, systemPrompt);
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseSystem", systemPrompt);
         });
 
         // Get the response text
         String response = result.getMessage().getBody(String.class);
 
         // Get metadata from headers
-        String stopReason = result.getMessage().getHeader(BedrockConstants.CONVERSE_STOP_REASON, String.class);
+        String stopReason = result.getMessage().getHeader("CamelAwsBedrockConverseStopReason", String.class);
         software.amazon.awssdk.services.bedrockruntime.model.TokenUsage usage
-                = result.getMessage().getHeader(BedrockConstants.CONVERSE_USAGE,
+                = result.getMessage().getHeader("CamelAwsBedrockConverseUsage",
                         software.amazon.awssdk.services.bedrockruntime.model.TokenUsage.class);
 
         System.out.println("Response: " + response);
@@ -1747,14 +1914,46 @@ and you can then send to the direct endpoint something like
 -   converseStream (Complete Mode): this operation uses the Converse API with streaming, accumulating the complete response.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:converse_stream")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=converseStream&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V3.model)
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=converseStream&modelId=anthropic.claude-3-sonnet-20240229-v1:0")
     .to("log:response");
 ```
 
+```xml
+<route>
+  <from uri="direct:converse_stream"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=converseStream&amp;modelId=anthropic.claude-3-sonnet-20240229-v1:0"/>
+  <to uri="log:response"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:converse_stream
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: converseStream
+              modelId: "anthropic.claude-3-sonnet-20240229-v1:0"
+        - to:
+            uri: log:response
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with AWS SDK objects_
 
 ```java
         final Exchange result = template.send("direct:converse_stream", exchange -> {
@@ -1766,8 +1965,8 @@ and you can then send to the direct endpoint something like
                             .fromText("Explain the Enterprise Integration Patterns in three sentences."))
                     .build());
 
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_MESSAGES, messages);
-            exchange.getMessage().setHeader(BedrockConstants.STREAM_OUTPUT_MODE, "complete");
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseMessages", messages);
+            exchange.getMessage().setHeader("CamelAwsBedrockStreamOutputMode", "complete");
 
             // Optional: Add inference configuration
             software.amazon.awssdk.services.bedrockruntime.model.InferenceConfiguration inferenceConfig
@@ -1775,12 +1974,12 @@ and you can then send to the direct endpoint something like
                             .maxTokens(300)
                             .temperature(0.5f)
                             .build();
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_INFERENCE_CONFIG, inferenceConfig);
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseInferenceConfig", inferenceConfig);
         });
 
         // Get the complete streamed response
         String response = result.getMessage().getBody(String.class);
-        Integer chunkCount = result.getMessage().getHeader(BedrockConstants.STREAMING_CHUNK_COUNT, Integer.class);
+        Integer chunkCount = result.getMessage().getHeader("CamelAwsBedrockChunkCount", Integer.class);
 
         System.out.println("Response: " + response);
         System.out.println("Received " + chunkCount + " chunks");
@@ -1789,15 +1988,54 @@ and you can then send to the direct endpoint something like
 -   converseStream (Chunks Mode): this operation uses the Converse API with streaming, emitting individual chunks.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:converse_stream_chunks")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=converseStream&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V3.model)
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=converseStream&modelId=anthropic.claude-3-sonnet-20240229-v1:0")
     .split(body())
-        .to("websocket:chat-output");  // Send each chunk to websocket
+        .to("websocket:chat-output");
+```
+
+```xml
+<route>
+  <from uri="direct:converse_stream_chunks"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=converseStream&amp;modelId=anthropic.claude-3-sonnet-20240229-v1:0"/>
+  <split>
+    <simple>${body}</simple>
+    <to uri="websocket:chat-output"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:converse_stream_chunks
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: converseStream
+              modelId: "anthropic.claude-3-sonnet-20240229-v1:0"
+        - split:
+            expression:
+              simple: "${body}"
+            steps:
+              - to:
+                  uri: websocket:chat-output
 ```
 
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with AWS SDK objects_
 
 ```java
         final Exchange result = template.send("direct:converse_stream_chunks", exchange -> {
@@ -1809,8 +2047,8 @@ and you can then send to the direct endpoint something like
                             .fromText("Write a haiku about software integration."))
                     .build());
 
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_MESSAGES, messages);
-            exchange.getMessage().setHeader(BedrockConstants.STREAM_OUTPUT_MODE, "chunks");
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseMessages", messages);
+            exchange.getMessage().setHeader("CamelAwsBedrockStreamOutputMode", "chunks");
         });
 
         // Get the list of chunks
@@ -1825,14 +2063,46 @@ and you can then send to the direct endpoint something like
 -   Multi-turn Conversation with Converse API: demonstrates maintaining conversation history.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:conversation")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=converse&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V3.model)
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=converse&modelId=anthropic.claude-3-sonnet-20240229-v1:0")
     .to("log:response");
 ```
 
+```xml
+<route>
+  <from uri="direct:conversation"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=converse&amp;modelId=anthropic.claude-3-sonnet-20240229-v1:0"/>
+  <to uri="log:response"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:conversation
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: converse
+              modelId: "anthropic.claude-3-sonnet-20240229-v1:0"
+        - to:
+            uri: log:response
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with multi-turn conversation history_
 
 ```java
         // Maintain conversation history
@@ -1846,13 +2116,13 @@ and you can then send to the direct endpoint something like
                 .build());
 
         Exchange result1 = template.send("direct:conversation", exchange -> {
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_MESSAGES,
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseMessages",
                     new ArrayList<>(conversationHistory));
         });
 
         // Add assistant's response to history
         software.amazon.awssdk.services.bedrockruntime.model.Message assistantMessage
-                = result1.getMessage().getHeader(BedrockConstants.CONVERSE_OUTPUT_MESSAGE,
+                = result1.getMessage().getHeader("CamelAwsBedrockConverseOutputMessage",
                         software.amazon.awssdk.services.bedrockruntime.model.Message.class);
         conversationHistory.add(assistantMessage);
 
@@ -1864,7 +2134,7 @@ and you can then send to the direct endpoint something like
                 .build());
 
         Exchange result2 = template.send("direct:conversation", exchange -> {
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_MESSAGES,
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseMessages",
                     new ArrayList<>(conversationHistory));
         });
 
@@ -1877,15 +2147,49 @@ and you can then send to the direct endpoint something like
 -   Converse with Guardrails (Endpoint Configuration): Apply guardrails configured at the endpoint level.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:converse_with_guardrails")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=converse&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V3.model
-        + "&guardrailIdentifier=abc123xyz&guardrailVersion=DRAFT&guardrailTrace=true")
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=converse&modelId=anthropic.claude-3-sonnet-20240229-v1:0&guardrailIdentifier=abc123xyz&guardrailVersion=DRAFT&guardrailTrace=true")
     .to("log:response");
 ```
 
+```xml
+<route>
+  <from uri="direct:converse_with_guardrails"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=converse&amp;modelId=anthropic.claude-3-sonnet-20240229-v1:0&amp;guardrailIdentifier=abc123xyz&amp;guardrailVersion=DRAFT&amp;guardrailTrace=true"/>
+  <to uri="log:response"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:converse_with_guardrails
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: converse
+              modelId: "anthropic.claude-3-sonnet-20240229-v1:0"
+              guardrailIdentifier: abc123xyz
+              guardrailVersion: DRAFT
+              guardrailTrace: true
+        - to:
+            uri: log:response
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with AWS SDK objects_
 
 ```java
         final Exchange result = template.send("direct:converse_with_guardrails", exchange -> {
@@ -1897,7 +2201,7 @@ and you can then send to the direct endpoint something like
                             .fromText("Tell me about Paris"))
                     .build());
 
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_MESSAGES, messages);
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseMessages", messages);
 
             // Optional: Add inference configuration
             software.amazon.awssdk.services.bedrockruntime.model.InferenceConfiguration inferenceConfig
@@ -1905,7 +2209,7 @@ and you can then send to the direct endpoint something like
                             .maxTokens(200)
                             .temperature(0.7f)
                             .build();
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_INFERENCE_CONFIG, inferenceConfig);
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseInferenceConfig", inferenceConfig);
         });
 
         // Get the response
@@ -1913,7 +2217,7 @@ and you can then send to the direct endpoint something like
 
         // Check if guardrail trace is available
         software.amazon.awssdk.services.bedrockruntime.model.GuardrailTrace trace
-                = result.getMessage().getHeader(BedrockConstants.GUARDRAIL_TRACE,
+                = result.getMessage().getHeader("CamelAwsBedrockGuardrailTrace",
                         software.amazon.awssdk.services.bedrockruntime.model.GuardrailTrace.class);
 
         if (trace != null) {
@@ -1924,14 +2228,46 @@ and you can then send to the direct endpoint something like
 -   Converse with Guardrails (Header Configuration): Apply guardrails configured per-message via headers.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:converse_dynamic_guardrails")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=converse&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V3.model)
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=converse&modelId=anthropic.claude-3-sonnet-20240229-v1:0")
     .to("log:response");
 ```
 
+```xml
+<route>
+  <from uri="direct:converse_dynamic_guardrails"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=converse&amp;modelId=anthropic.claude-3-sonnet-20240229-v1:0"/>
+  <to uri="log:response"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:converse_dynamic_guardrails
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: converse
+              modelId: "anthropic.claude-3-sonnet-20240229-v1:0"
+        - to:
+            uri: log:response
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with AWS SDK `GuardrailConfiguration` objects_
 
 ```java
         final Exchange result = template.send("direct:converse_dynamic_guardrails", exchange -> {
@@ -1943,7 +2279,7 @@ and you can then send to the direct endpoint something like
                             .fromText("What is the capital of France?"))
                     .build());
 
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_MESSAGES, messages);
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseMessages", messages);
 
             // Configure guardrail via header (can be dynamic per message)
             software.amazon.awssdk.services.bedrockruntime.model.GuardrailConfiguration guardrailConfig
@@ -1952,7 +2288,7 @@ and you can then send to the direct endpoint something like
                             .guardrailVersion("DRAFT")
                             .trace(software.amazon.awssdk.services.bedrockruntime.model.GuardrailTrace.ENABLED)
                             .build();
-            exchange.getMessage().setHeader(BedrockConstants.GUARDRAIL_CONFIG, guardrailConfig);
+            exchange.getMessage().setHeader("CamelAwsBedrockGuardrailConfig", guardrailConfig);
         });
 
         String response = result.getMessage().getBody(String.class);
@@ -1962,15 +2298,48 @@ and you can then send to the direct endpoint something like
 -   Converse Stream with Guardrails: Apply guardrails to streaming conversations.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:stream_with_guardrails")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=converseStream&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V3.model
-        + "&guardrailIdentifier=abc123xyz&guardrailVersion=DRAFT")
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=converseStream&modelId=anthropic.claude-3-sonnet-20240229-v1:0&guardrailIdentifier=abc123xyz&guardrailVersion=DRAFT")
     .to("log:response");
 ```
 
+```xml
+<route>
+  <from uri="direct:stream_with_guardrails"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=converseStream&amp;modelId=anthropic.claude-3-sonnet-20240229-v1:0&amp;guardrailIdentifier=abc123xyz&amp;guardrailVersion=DRAFT"/>
+  <to uri="log:response"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:stream_with_guardrails
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: converseStream
+              modelId: "anthropic.claude-3-sonnet-20240229-v1:0"
+              guardrailIdentifier: abc123xyz
+              guardrailVersion: DRAFT
+        - to:
+            uri: log:response
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with AWS SDK objects_
 
 ```java
         final Exchange result = template.send("direct:stream_with_guardrails", exchange -> {
@@ -1981,8 +2350,8 @@ and you can then send to the direct endpoint something like
                             .fromText("Tell me a story about space exploration"))
                     .build());
 
-            exchange.getMessage().setHeader(BedrockConstants.CONVERSE_MESSAGES, messages);
-            exchange.getMessage().setHeader(BedrockConstants.STREAM_OUTPUT_MODE, "complete");
+            exchange.getMessage().setHeader("CamelAwsBedrockConverseMessages", messages);
+            exchange.getMessage().setHeader("CamelAwsBedrockStreamOutputMode", "complete");
         });
 
         String streamedResponse = result.getMessage().getBody(String.class);
@@ -1992,14 +2361,47 @@ and you can then send to the direct endpoint something like
 -   Apply Guardrail: Validate content against a guardrail without invoking a model.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:validate_content")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=applyGuardrail&guardrailIdentifier=abc123xyz&guardrailVersion=DRAFT")
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=applyGuardrail&guardrailIdentifier=abc123xyz&guardrailVersion=DRAFT")
     .to("log:validation_result");
 ```
 
+```xml
+<route>
+  <from uri="direct:validate_content"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=applyGuardrail&amp;guardrailIdentifier=abc123xyz&amp;guardrailVersion=DRAFT"/>
+  <to uri="log:validation_result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:validate_content
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: applyGuardrail
+              guardrailIdentifier: abc123xyz
+              guardrailVersion: DRAFT
+        - to:
+            uri: log:validation_result
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with AWS SDK `GuardrailContentBlock` objects_
 
 ```java
         final Exchange result = template.send("direct:validate_content", exchange -> {
@@ -2012,8 +2414,8 @@ and you can then send to the direct endpoint something like
                             .build())
                     .build());
 
-            exchange.getMessage().setHeader(BedrockConstants.GUARDRAIL_CONTENT, content);
-            exchange.getMessage().setHeader(BedrockConstants.GUARDRAIL_SOURCE, "INPUT");
+            exchange.getMessage().setHeader("CamelAwsBedrockGuardrailContent", content);
+            exchange.getMessage().setHeader("CamelAwsBedrockGuardrailSource", "INPUT");
         });
 
         // Get the action result (GUARDRAIL_INTERVENED or NONE)
@@ -2023,11 +2425,11 @@ and you can then send to the direct endpoint something like
             System.out.println("Content was blocked by guardrail!");
 
             // Get the assessments to see why it was blocked
-            List<?> assessments = result.getMessage().getHeader(BedrockConstants.GUARDRAIL_ASSESSMENTS, List.class);
+            List<?> assessments = result.getMessage().getHeader("CamelAwsBedrockGuardrailAssessments", List.class);
             System.out.println("Reasons: " + assessments);
 
             // Get the filtered output
-            List<?> outputs = result.getMessage().getHeader(BedrockConstants.GUARDRAIL_OUTPUT, List.class);
+            List<?> outputs = result.getMessage().getHeader("CamelAwsBedrockGuardrailOutput", List.class);
             System.out.println("Filtered content: " + outputs);
         } else {
             System.out.println("Content passed guardrail validation");
@@ -2037,14 +2439,46 @@ and you can then send to the direct endpoint something like
 -   Apply Guardrail with POJO Request: Use the SDK request object directly for maximum control.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:validate_pojo")
-    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=applyGuardrail&pojoRequest=true")
+    .to("aws-bedrock://test?useDefaultCredentialsProvider=true&region=us-east-1&operation=applyGuardrail&pojoRequest=true")
     .to("log:validation_result");
 ```
 
+```xml
+<route>
+  <from uri="direct:validate_pojo"/>
+  <to uri="aws-bedrock://test?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=applyGuardrail&amp;pojoRequest=true"/>
+  <to uri="log:validation_result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:validate_pojo
+      steps:
+        - to:
+            uri: aws-bedrock://test
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: applyGuardrail
+              pojoRequest: true
+        - to:
+            uri: log:validation_result
+```
+
 and you can then send to the direct endpoint something like
+
+_Java-only: uses `ProducerTemplate` test API with AWS SDK `ApplyGuardrailRequest` POJO_
 
 ```java
         final Exchange result = template.send("direct:validate_pojo", exchange -> {
@@ -2076,23 +2510,78 @@ and you can then send to the direct endpoint something like
 -   Content Moderation Pipeline: Combine guardrails with model invocation in a pipeline.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:moderated_conversation")
-    // First, validate input with guardrail
-    .to("aws-bedrock://validate?useDefaultCredentialsProvider=true&region=us-east-1"
-        + "&operation=applyGuardrail&guardrailIdentifier=abc123xyz")
+    .to("aws-bedrock://validate?useDefaultCredentialsProvider=true&region=us-east-1&operation=applyGuardrail&guardrailIdentifier=abc123xyz")
     .choice()
         .when(simple("${body} == 'GUARDRAIL_INTERVENED'"))
             .log("Input blocked by guardrail")
             .setBody(constant("Sorry, I cannot process this request."))
         .otherwise()
-            // Input passed, proceed with model invocation
-            .to("aws-bedrock://converse?useDefaultCredentialsProvider=true&region=us-east-1"
-                + "&operation=converse&modelId=" + BedrockModels.ANTROPHIC_CLAUDE_V3.model
-                + "&guardrailIdentifier=abc123xyz")
+            .to("aws-bedrock://converse?useDefaultCredentialsProvider=true&region=us-east-1&operation=converse&modelId=anthropic.claude-3-sonnet-20240229-v1:0&guardrailIdentifier=abc123xyz")
             .log("Model response: ${body}")
     .end()
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:moderated_conversation"/>
+  <to uri="aws-bedrock://validate?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=applyGuardrail&amp;guardrailIdentifier=abc123xyz"/>
+  <choice>
+    <when>
+      <simple>${body} == 'GUARDRAIL_INTERVENED'</simple>
+      <log message="Input blocked by guardrail"/>
+      <setBody><constant>Sorry, I cannot process this request.</constant></setBody>
+    </when>
+    <otherwise>
+      <to uri="aws-bedrock://converse?useDefaultCredentialsProvider=true&amp;region=us-east-1&amp;operation=converse&amp;modelId=anthropic.claude-3-sonnet-20240229-v1:0&amp;guardrailIdentifier=abc123xyz"/>
+      <log message="Model response: ${body}"/>
+    </otherwise>
+  </choice>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:moderated_conversation
+      steps:
+        - to:
+            uri: aws-bedrock://validate
+            parameters:
+              useDefaultCredentialsProvider: true
+              region: us-east-1
+              operation: applyGuardrail
+              guardrailIdentifier: abc123xyz
+        - choice:
+            when:
+              - simple: "${body} == 'GUARDRAIL_INTERVENED'"
+                steps:
+                  - log: "Input blocked by guardrail"
+                  - setBody:
+                      constant: "Sorry, I cannot process this request."
+            otherwise:
+              steps:
+                - to:
+                    uri: aws-bedrock://converse
+                    parameters:
+                      useDefaultCredentialsProvider: true
+                      region: us-east-1
+                      operation: converse
+                      modelId: "anthropic.claude-3-sonnet-20240229-v1:0"
+                      guardrailIdentifier: abc123xyz
+                - log: "Model response: ${body}"
+        - to:
+            uri: mock:result
 ```
 
 ## Dependencies

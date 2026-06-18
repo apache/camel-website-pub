@@ -324,7 +324,7 @@ For example, if the message body is an instance of `java.util.List`, the first i
 
 If `batch` is set to `true`, then the interpretation of the inbound message body changes slightly – instead of an iterator of parameters, the component expects an iterator that contains the parameter iterators; the size of the outer iterator determines the batch size.
 
-You can use the option `useMessageBodyForSql` that allows to use the message body as the SQL statement, and then the SQL parameters must be provided in a header with the key `SqlConstants.SQL_PARAMETERS`. This allows the SQL component to work more dynamically as the SQL query is from the message body. Use templating (such as [Velocity](../4.18.x/velocity-component.md), [Freemarker](../4.18.x/freemarker-component.md)) for conditional processing, e.g., to include or exclude `where` clauses depending on the presence of query parameters.
+You can use the option `useMessageBodyForSql` that allows to use the message body as the SQL statement, and then the SQL parameters must be provided in a header with the key `CamelSqlParameters`. This allows the SQL component to work more dynamically as the SQL query is from the message body. Use templating (such as [Velocity](../4.18.x/velocity-component.md), [Freemarker](../4.18.x/freemarker-component.md)) for conditional processing, e.g., to include or exclude `where` clauses depending on the presence of query parameters.
 
 ### Result of the query
 
@@ -332,15 +332,51 @@ For `select` operations, the result is an instance of `List<Map<String, Object>>
 
 By default, the result is placed in the message body. If the outputHeader parameter is set, the result is placed in the header. This is an alternative to using a full message enrichment pattern to add headers, it provides a concise syntax for querying a sequence or some other small value into a header. It is convenient to use outputHeader and outputType together:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jms:order.inbox")
     .to("sql:select order_seq.nextval from dual?outputHeader=OrderId&outputType=SelectOne")
     .to("jms:order.booking");
 ```
 
+```xml
+<route>
+  <from uri="jms:order.inbox"/>
+  <to uri="sql:select order_seq.nextval from dual?outputHeader=OrderId&amp;outputType=SelectOne"/>
+  <to uri="jms:order.booking"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:order.inbox
+      steps:
+        - to:
+            uri: "sql:select order_seq.nextval from dual"
+            parameters:
+              outputHeader: OrderId
+              outputType: SelectOne
+        - to:
+            uri: jms:order.booking
+```
+
 ### Using StreamList
 
 The producer supports `outputType=StreamList` that uses an iterator to stream the output of the query. This allows processing the data in a streaming fashion which, for example, can be used by the Splitter EIP to process each row one at a time, and load data from the database as needed.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:withSplitModel")
@@ -350,6 +386,42 @@ from("direct:withSplitModel")
         .to("log:row")
         .to("mock:result")
     .end();
+```
+
+```xml
+<route>
+  <from uri="direct:withSplitModel"/>
+  <to uri="sql:select * from projects order by id?outputType=StreamList&amp;outputClass=org.apache.camel.component.sql.ProjectModel"/>
+  <to uri="log:stream"/>
+  <split streaming="true">
+    <simple>${body}</simple>
+    <to uri="log:row"/>
+    <to uri="mock:result"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:withSplitModel
+      steps:
+        - to:
+            uri: "sql:select * from projects order by id"
+            parameters:
+              outputType: StreamList
+              outputClass: org.apache.camel.component.sql.ProjectModel
+        - to:
+            uri: log:stream
+        - split:
+            expression:
+              simple: "${body}"
+            streaming: true
+            steps:
+              - to:
+                  uri: log:row
+              - to:
+                  uri: mock:result
 ```
 
 ### Generated keys
@@ -374,6 +446,13 @@ In the given route below, we want to get all the projects from the `projects` ta
 
 Notice in the example above we set two headers with constant value for the named parameters:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:projects")
     .setHeader("lic", constant("ASF"))
@@ -381,22 +460,107 @@ from("direct:projects")
     .to("sql:select * from projects where license = :#lic and id > :#min order by id")
 ```
 
+```xml
+<route>
+  <from uri="direct:projects"/>
+  <setHeader name="lic">
+    <constant>ASF</constant>
+  </setHeader>
+  <setHeader name="min">
+    <constant>123</constant>
+  </setHeader>
+  <to uri="sql:select * from projects where license = :#lic and id > :#min order by id"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:projects
+      steps:
+        - setHeader:
+            name: lic
+            constant: "ASF"
+        - setHeader:
+            name: min
+            constant: 123
+        - to:
+            uri: "sql:select * from projects where license = :#lic and id > :#min order by id"
+```
+
 Though if the message body is a `java.util.Map` then the named parameters will be taken from the body.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:projects")
     .to("sql:select * from projects where license = :#lic and id > :#min order by id")
 ```
 
+```xml
+<route>
+  <from uri="direct:projects"/>
+  <to uri="sql:select * from projects where license = :#lic and id > :#min order by id"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:projects
+      steps:
+        - to:
+            uri: "sql:select * from projects where license = :#lic and id > :#min order by id"
+```
+
 ### Using expression parameters in producers
 
 In the given route below, we want to get all the projects from the database. It uses the body of the exchange for defining the license and uses the value of a property as the second parameter.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:projects")
-  .setBody(constant("ASF"))
-  .setProperty("min", constant(123))
-  .to("sql:select * from projects where license = :#${body} and id > :#${exchangeProperty.min} order by id")
+    .setBody(constant("ASF"))
+    .setProperty("min", constant(123))
+    .to("sql:select * from projects where license = :#${body} and id > :#${exchangeProperty.min} order by id");
+```
+
+```xml
+<route>
+    <from uri="direct:projects"/>
+    <setBody>
+        <constant>ASF</constant>
+    </setBody>
+    <setProperty name="min">
+        <constant>123</constant>
+    </setProperty>
+    <to uri="sql:select * from projects where license = :#${body} and id &gt; :#${exchangeProperty.min} order by id"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:projects
+    steps:
+      - setBody:
+          constant: ASF
+      - setProperty:
+          name: min
+          constant: "123"
+      - to:
+          uri: "sql:select * from projects where license = :#${body} and id > :#${exchangeProperty.min} order by id"
 ```
 
 #### Using expression parameters in consumers
@@ -405,9 +569,32 @@ When using the SQL component as consumer, you can now also use expression parame
 
 For example, in the sample below we call the nextId method on the bean myIdGenerator:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("sql:select * from projects where id = :#${bean:myIdGenerator.nextId}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="sql:select * from projects where id = :#${bean:myIdGenerator.nextId}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "sql:select * from projects where id = :#${bean:myIdGenerator.nextId}"
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 And the bean has the following method:
@@ -449,6 +636,13 @@ order by id
 
 In the following route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:query")
     .to("sql:classpath:sql/selectProjectsIn.sql")
@@ -456,7 +650,31 @@ from("direct:query")
     .to("mock:query");
 ```
 
+```xml
+<route>
+  <from uri="direct:query"/>
+  <to uri="sql:classpath:sql/selectProjectsIn.sql"/>
+  <to uri="log:query"/>
+  <to uri="mock:query"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:query
+      steps:
+        - to:
+            uri: sql:classpath:sql/selectProjectsIn.sql
+        - to:
+            uri: log:query
+        - to:
+            uri: mock:query
+```
+
 Then the IN query can use a header with the key names with the dynamic values such as:
+
+_Java-only: uses `ProducerTemplate` test API_
 
 ```java
 // use an array
@@ -475,11 +693,40 @@ template.requestBodyAndHeader("direct:query", "Hi there!", "names", "Camel,AMQ")
 
 The query can also be specified in the endpoint instead of being externalized (notice that externalizing makes maintaining the SQL queries easier)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:query")
     .to("sql:select * from projects where project in (:#in:names) order by id")
     .to("log:query")
     .to("mock:query");
+```
+
+```xml
+<route>
+  <from uri="direct:query"/>
+  <to uri="sql:select * from projects where project in (:#in:names) order by id"/>
+  <to uri="log:query"/>
+  <to uri="mock:query"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:query
+      steps:
+        - to:
+            uri: "sql:select * from projects where project in (:#in:names) order by id"
+        - to:
+            uri: log:query
+        - to:
+            uri: mock:query
 ```
 
 If the dynamic list of values is stored in the message body, you can use `(:#in:${body})` to refer to the message body, such as:
@@ -498,11 +745,13 @@ The producer supports to use a different `javax.sql.DataSource` than the default
 
 For example in the code snippet below, we set the header `CamelSqlDataSource` with a custom `javax.sql.DataSource` instance.
 
+_Java-only: requires setting a `DataSource` object reference programmatically_
+
 ```java
 DataSource custom = ...
 
 from("direct:query")
-    .setHeader("CamelSqlDataSource", custom)
+    .setHeader("CamelSqlDataSource", constant(custom))
     .to("sql:query.sql")
     .to("bean:processData");
 ```

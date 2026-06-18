@@ -39,9 +39,34 @@ You can append query options to the URI in the following format, `?options=value
 
 For example, in order to perform speech recognition on audio data, use the following snippet:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-speech-to-text://recognize
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
 ```
 
 ## Configuring Options
@@ -170,25 +195,80 @@ The operation is specified as part of the endpoint URI (e.g., `google-speech-to-
 
 If you need to have more control over the `SpeechClient` instance configuration, you can create your own instance and refer to it in your Camel google-speech-to-text component configuration:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("google-speech-to-text://recognize?client=#mySpeechClient");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-speech-to-text://recognize?client=#mySpeechClient"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-speech-to-text://recognize
+            parameters:
+              client: "#mySpeechClient"
+```
+
 ### Google Cloud Speech To Text Producer Operation examples
 
--   `recognize`: this operation transcribes audio data to text
+-   `recognize`: this operation transcribes audio data to text. The message body should contain the audio data as a `byte[]`.
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] audioData = Files.readAllBytes(Path.of("/path/to/audio.wav"));
-        exchange.getIn().setBody(audioData);
-    })
     .to("google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json&encoding=LINEAR16&sampleRateHertz=16000&languageCode=en-US")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json&amp;encoding=LINEAR16&amp;sampleRateHertz=16000&amp;languageCode=en-US"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-speech-to-text://recognize
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              encoding: LINEAR16
+              sampleRateHertz: 16000
+              languageCode: en-US
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 This operation will return the transcribed text as a `String`. The full `RecognizeResponse` is available via the `GoogleCloudSpeechToTextResponseObject` message header.
@@ -196,19 +276,50 @@ This operation will return the transcribed text as a `String`. The full `Recogni
 -   Using different audio encodings:
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] audioData = Files.readAllBytes(Path.of("/path/to/audio.flac"));
-        exchange.getIn().setBody(audioData);
-    })
     .to("google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json&encoding=FLAC&languageCode=fr-FR")
     .log("body:${body}")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json&amp;encoding=FLAC&amp;languageCode=fr-FR"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-speech-to-text://recognize
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              encoding: FLAC
+              languageCode: fr-FR
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
+```
+
 -   Using POJO request for full control:
     
+
+_Java-only: Google Cloud SDK RecognizeRequest builder_
 
 ```java
 from("direct:start")
@@ -237,16 +348,49 @@ When using `pojoRequest=true`, the body should be a `RecognizeRequest` and the t
 -   Overriding the operation at runtime via header:
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] audioData = Files.readAllBytes(Path.of("/path/to/audio.wav"));
-        exchange.getIn().setBody(audioData);
-        exchange.getIn().setHeader(GoogleCloudSpeechToTextConstants.OPERATION, GoogleCloudSpeechToTextOperations.recognize);
-    })
+    .setHeader("CamelGoogleCloudSpeechToTextOperation", constant("recognize"))
     .to("google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelGoogleCloudSpeechToTextOperation">
+    <constant>recognize</constant>
+  </setHeader>
+  <to uri="google-speech-to-text://recognize?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelGoogleCloudSpeechToTextOperation
+            constant: recognize
+        - to:
+            uri: google-speech-to-text://recognize
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

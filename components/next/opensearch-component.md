@@ -236,6 +236,8 @@ The following [OpenSearch](https://opensearch.org/) operations are currently sup
 
 To use the OpenSearch component, it has to be configured with a minimum configuration.
 
+_Java-only: programmatic CamelContext configuration_
+
 ```java
 OpensearchComponent opensearchComponent = new OpensearchComponent();
 opensearchComponent.setHostAddresses("opensearch-host:9200");
@@ -243,6 +245,8 @@ camelContext.addComponent("opensearch", opensearchComponent);
 ```
 
 For basic authentication with OpenSearch or using reverse http proxy in front of the OpenSearch cluster, simply setup basic authentication and SSL on the component like the example below
+
+_Java-only: programmatic CamelContext configuration_
 
 ```java
 OpenSearchComponent opensearchComponent = new OpenSearchComponent();
@@ -265,9 +269,16 @@ The document type can be set using the header "documentClass" or via the uri par
 
 Below is a simple INDEX example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:index")
-  .to("opensearch://opensearch?operation=Index&indexName=twitter");
+    .to("opensearch://opensearch?operation=Index&indexName=twitter");
 ```
 
 ```xml
@@ -277,10 +288,24 @@ from("direct:index")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:index
+      steps:
+        - to:
+            uri: opensearch://opensearch
+            parameters:
+              operation: Index
+              indexName: twitter
+```
+
 > **Note**
 > For this operation, you’ll need to specify an indexId header.
 
 A client would simply need to pass a body message containing a Map to the route. The result body contains the indexId created.
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 Map<String, String> map = new HashMap<String, String>();
@@ -292,9 +317,16 @@ String indexId = template.requestBody("direct:index", map, String.class);
 
 Searching on specific field(s) and value use the Operation ´Search´. Pass in the query JSON String or the Map
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:search")
-  .to("opensearch://opensearch?operation=Search&indexName=twitter");
+    .to("opensearch://opensearch?operation=Search&indexName=twitter");
 ```
 
 ```xml
@@ -304,12 +336,28 @@ from("direct:search")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - to:
+            uri: opensearch://opensearch
+            parameters:
+              operation: Search
+              indexName: twitter
+```
+
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 String query = "{\"query\":{\"match\":{\"doc.content\":\"new release of ApacheCamel\"}}}";
 HitsMetadata<?> response = template.requestBody("direct:search", query, HitsMetadata.class);
 ```
 
 Search on specific field(s) using Map.
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 Map<String, Object> actualQuery = new HashMap<>();
@@ -325,9 +373,16 @@ HitsMetadata<?> response = template.requestBody("direct:search", query, HitsMeta
 
 Search using OpenSearch scroll api to fetch all results.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:search")
-  .to("opensearch://opensearch?operation=Search&indexName=twitter&useScroll=true&scrollKeepAliveMs=30000");
+    .to("opensearch://opensearch?operation=Search&indexName=twitter&useScroll=true&scrollKeepAliveMs=30000");
 ```
 
 ```xml
@@ -337,6 +392,22 @@ from("direct:search")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - to:
+            uri: opensearch://opensearch
+            parameters:
+              operation: Search
+              indexName: twitter
+              useScroll: true
+              scrollKeepAliveMs: 30000
+```
+
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 String query = "{\"query\":{\"match\":{\"doc.content\":\"new release of ApacheCamel\"}}}";
 try (OpenSearchScrollRequestIterator response = template.requestBody("direct:search", query, OpenSearchScrollRequestIterator.class)) {
@@ -345,6 +416,13 @@ try (OpenSearchScrollRequestIterator response = template.requestBody("direct:sea
 ```
 
 [Split EIP](eips/split-eip.md) can also be used.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:search")
@@ -356,13 +434,51 @@ from("direct:search")
   .end();
 ```
 
+```xml
+<route>
+  <from uri="direct:search"/>
+  <to uri="opensearch://opensearch?operation=Search&amp;indexName=twitter&amp;useScroll=true&amp;scrollKeepAliveMs=30000"/>
+  <split streaming="true">
+    <simple>${body}</simple>
+    <to uri="mock:output"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - to:
+            uri: opensearch://opensearch
+            parameters:
+              operation: Search
+              indexName: twitter
+              useScroll: true
+              scrollKeepAliveMs: 30000
+        - split:
+            simple: "${body}"
+            streaming: true
+            steps:
+              - to:
+                  uri: mock:output
+```
+
 ### MultiSearch Example
 
 MultiSearching on specific field(s) and value uses the Operation `MultiSearch`. Pass in the MultiSearchRequest instance
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:multiSearch")
-  .to("opensearch://opensearch?operation=MultiSearch");
+    .to("opensearch://opensearch?operation=MultiSearch");
 ```
 
 ```xml
@@ -372,7 +488,20 @@ from("direct:multiSearch")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:multiSearch
+      steps:
+        - to:
+            uri: opensearch://opensearch
+            parameters:
+              operation: MultiSearch
+```
+
 MultiSearch on specific field(s)
+
+_Java-only: Java SDK builder API (ProducerTemplate)_
 
 ```java
 MsearchRequest.Builder builder = new MsearchRequest.Builder().index("twitter").searches(

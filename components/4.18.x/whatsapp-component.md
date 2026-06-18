@@ -99,7 +99,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **phoneNumberId** (producer) | **Required** The phone number ID taken from whatsapp-business dashboard. |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters (9 parameters)
 
    
 | Name | Description | Default | Type |
@@ -112,6 +112,7 @@ With the following _path_ and _query_ parameters:
 | **webhookVerifyToken** (advanced) | Webhook verify token. |  | String |
 | **whatsappService** (advanced) | WhatsApp service implementation. |  | WhatsAppService |
 | **authorizationToken** (security) | **Required** The authorization access token taken from whatsapp-business dashboard. |  | String |
+| **webhookSecret** (security) | The app secret used to verify the X-Hub-Signature-256 signature of inbound webhook event payloads (from the Meta/WhatsApp app dashboard). When set, event callbacks with a missing or invalid signature are rejected with HTTP 403; when not set, no signature verification is performed. |  | String |
 
 ## Message Headers
 

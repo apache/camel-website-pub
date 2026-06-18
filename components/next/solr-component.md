@@ -286,6 +286,8 @@ from("direct:search")
 
 A client would simply need to pass a body message to the insert or delete routes and then call the commit route.
 
+_Java-only: sending messages to Solr routes using ProducerTemplate_
+
 ```java
 template.sendBodyAndHeader("direct:insert", "1234", "CamelSolrParam.commit", true);
 template.sendBodyAndHeader("direct:delete", "1234", "CamelSolrParam.commit", true);

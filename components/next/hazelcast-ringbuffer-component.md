@@ -221,13 +221,43 @@ from("direct:put")
 
 ### Example for **readonce from head**:
 
-Java DSL:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:get")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.READ_ONCE_HEAD))
-.toF("hazelcast-%sbar", HazelcastConstants.RINGBUFFER_PREFIX)
-.to("seda:out");
+    .setHeader("CamelHazelcastOperationType", constant("readOnceHead"))
+    .to("hazelcast-ringbuffer:bar")
+    .to("seda:out");
+```
+
+```xml
+<route>
+  <from uri="direct:get"/>
+  <setHeader name="CamelHazelcastOperationType">
+    <constant>readOnceHead</constant>
+  </setHeader>
+  <to uri="hazelcast-ringbuffer:bar"/>
+  <to uri="seda:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: readOnceHead
+        - to:
+            uri: hazelcast-ringbuffer:bar
+        - to:
+            uri: seda:out
 ```
 
 ## Spring Boot Auto-Configuration

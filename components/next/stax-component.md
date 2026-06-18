@@ -115,6 +115,8 @@ The message body after the handling is the handler itself.
 
 Here is an example:
 
+_Java-only: inline Processor class_
+
 ```java
 from("file:target/in")
   .to("stax:org.superbiz.handler.CountingHandler")
@@ -133,6 +135,8 @@ from("file:target/in")
 First, we suppose you have JAXB objects.
 
 For instance, a list of records in a wrapper object:
+
+_Java-only: Java JAXB annotated class_
 
 ```java
 import java.util.ArrayList;
@@ -158,6 +162,8 @@ public class Records {
 ```
 
 and
+
+_Java-only: Java JAXB annotated class_
 
 ```java
 import javax.xml.bind.annotation.XmlAccessType;
@@ -208,6 +214,8 @@ Then you get an XML file to process:
 
 The StAX component provides an `StAXBuilder` which can be used when iterating XML elements with the Camel Splitter
 
+_Java-only: Java static method with class literal_
+
 ```java
 from("file:target/in")
     .split(stax(Record.class)).streaming()
@@ -215,6 +223,8 @@ from("file:target/in")
 ```
 
 Where `stax` is a static method on `org.apache.camel.component.stax.StAXBuilder` which you can have static import in the Java code. The stax builder is by default namespace aware on the XMLReader it uses. You can turn this off by setting the boolean parameter to false, as shown below:
+
+_Java-only: Java static method with class literal_
 
 ```java
 from("file:target/in")

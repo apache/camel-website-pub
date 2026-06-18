@@ -2506,7 +2506,10 @@ string | The reason for the condition’s last transition. |
 | `message`  
 string | A human readable message indicating details about the transition. |
 | `pods`  
-**[\[\]PodCondition](#_camel_apache_org_v1_PodCondition)** | Pods collect health and conditions information from the owned PODs |
+**[\[\]PodCondition](#_camel_apache_org_v1_PodCondition)** | DeprecatedPods collect health and conditions information from the owned PODs
+Deprecated: may be removed in future releases.
+
+ |
 
 ### PipeConditionType(`string` alias)
 
@@ -3856,10 +3859,14 @@ string | The email used to commit the GitOps changes (default `camel-k-operator@
 -   [Traits](#_camel_apache_org_v1_Traits)
     
 
-The health trait is responsible for configuring the health probes on the integration container.
+The health trait is responsible for configuring the container probes on the Integration container.
 
 > **Note**
-> this trait is disabled by default.
+> this trait is enabled by default in `plain-quarkus` runtime, leveraging the `camel-observability-services` component. You can disable turning it off.
+
+The trait uses Camel health component in order to provide a readiness probe. You can also configure liveness and startup probes which are disabled by default. The default values (delay, timeout, etc…​), whereas not specified are the default ones provided by Kubernetes.
+
+You can also configure manually the trait parameters in order to provide a customized probes configuration.
 
  
 | Field | Description |
@@ -3881,7 +3888,7 @@ int32 | Minimum consecutive successes for the liveness probe to be considered su
 | `livenessFailureThreshold`  
 int32 | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded. |
 | `livenessProbe`  
-string | The liveness probe path to use (default provided by the Catalog runtime used). |
+string | The liveness probe path to use (default provided by the dependency used). |
 | `livenessPort`  
 int32 | The liveness port to use (default 8080). |
 | `readinessProbeEnabled`  
@@ -3899,7 +3906,7 @@ int32 | Minimum consecutive successes for the readiness probe to be considered s
 | `readinessFailureThreshold`  
 int32 | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded. |
 | `readinessProbe`  
-string | The readiness probe path to use (default provided by the Catalog runtime used). |
+string | The readiness probe path to use (default provided by the dependency used). |
 | `readinessPort`  
 int32 | The readiness port to use (default 8080). |
 | `startupProbeEnabled`  
@@ -3915,9 +3922,9 @@ int32 | How often to perform the startup probe. |
 | `startupSuccessThreshold`  
 int32 | Minimum consecutive successes for the startup probe to be considered successful after having failed. |
 | `startupFailureThreshold`  
-int32 | Minimum consecutive failures for the startup probe to be considered failed after having succeeded. |
+int32 | Minimum consecutive failures for the startup probe to be considered failed after having succeeded (default 10 if not specified). |
 | `startupProbe`  
-string | The startup probe path to use (default provided by the Catalog runtime used). |
+string | The startup probe path to use (default provided by the dependency used). |
 | `startupPort`  
 int32 | The startup port to use (default 8080). |
 

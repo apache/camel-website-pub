@@ -27,6 +27,8 @@ Camel also populates **all** `request.parameter` and Camel also populates **all*
 
 In addition to the implementation of the `PlatformHttp` SPI based on Vert.x, this module provides a Vert.x based HTTP server compatible with the `VertxPlatformHttpEngine`:
 
+_Java-only: programmatic CamelContext and VertxPlatformHttpServer setup_
+
 ```java
 final int port = AvailablePortFinder.getNextAvailable();
 final CamelContext context = new DefaultCamelContext();
@@ -53,6 +55,8 @@ Platform HTTP component can act as a reverse proxy, in that case `Exchange.HTTP_
 
 Here’s an example of an HTTP proxy that simply redirects the Exchange to the origin server.
 
+_Java-only: reverse proxy using string concatenation with Exchange constants_
+
 ```java
 from("platform-http:proxy")
     .toD("http://"
@@ -62,6 +66,8 @@ from("platform-http:proxy")
 ## Access to Request and Response
 
 The Vertx HTTP server has its own API abstraction for HTTP request/response objects which you can access via Camel `HttpMessage` as shown in the custom `Processor` below :
+
+_Java-only: inline Processor accessing Vertx request and response objects_
 
 ```java
 .process(exchange -> {
@@ -80,11 +86,39 @@ The Vertx HTTP server has its own API abstraction for HTTP request/response obje
 
 When large request / response payloads are expected, there is a `useStreaming` option, which can be enabled to improve performance. When `useStreaming` is `true`, it will take advantage of [stream caching](../../../manual/stream-caching.md). In conjunction with enabling disk spooling, you can avoid having to store the entire request body payload in memory.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Handle a large request body and stream it to a file
 from("platform-http:/upload?httpMethodRestrict=POST&useStreaming=true")
     .log("Processing large request body...")
-    .to("file:/uploads?fileName=uploaded.txt")
+    .to("file:/uploads?fileName=uploaded.txt");
+```
+
+```xml
+<route>
+  <from uri="platform-http:/upload?httpMethodRestrict=POST&amp;useStreaming=true"/>
+  <log message="Processing large request body..."/>
+  <to uri="file:/uploads?fileName=uploaded.txt"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: platform-http:/upload
+      parameters:
+        httpMethodRestrict: POST
+        useStreaming: true
+      steps:
+        - log:
+            message: "Processing large request body..."
+        - to:
+            uri: file:/uploads?fileName=uploaded.txt
 ```
 
 > **Note**
@@ -95,6 +129,8 @@ from("platform-http:/upload?httpMethodRestrict=POST&useStreaming=true")
 Http authentication is disabled by default. In can be enabled by calling `setEnabled(true)` of `AuthenticationConfig`. Default http authentication takes http-basic credentials and compares them with those provided in camel-platform-http-vertx-auth.properties file. To be more specific, default http authentication
 
 To set up authentication, you need to create `AuthenticationConfigEntries`, as shown in the example below. This example uses Vert.x [BasicAuthHandler](https://vertx.io/docs/apidocs/io/vertx/ext/web/handler/BasicAuthHandler.md) and [PropertyFileAuthentication](https://vertx.io/docs/vertx-auth-properties/java/) to configure Basic http authentication with users info stored in `myPropFile.properties` file. Mind that in Vert.x order of adding `AuthenticationHandlers` matters, so `AuthenticationConfigEntries` with a more specific url path are applied first.
+
+_Java-only: programmatic authentication configuration with Vertx handlers_
 
 ```java
 final int port = AvailablePortFinder.getNextAvailable();

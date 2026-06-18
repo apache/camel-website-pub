@@ -199,6 +199,8 @@ The MongoDB GridFS component supports 11 message header(s), which is/are listed 
 
 Returns the total number of files in the collection, returning an Integer as the OUT message body.
 
+_Java-only: using ProducerTemplate to invoke the count operation_
+
 ```java
 // from("direct:count").to("mongodb-gridfs?database=tickets&operation=count");
 Integer result = template.requestBodyAndHeader("direct:count", "irrelevantBody");
@@ -206,6 +208,8 @@ assertTrue("Result is not of type Long", result instanceof Integer);
 ```
 
 You can provide a filename header to provide a count of files matching that filename.
+
+_Java-only: using ProducerTemplate with filename header_
 
 ```java
 Map<String, Object> headers = new HashMap<String, Object>();
@@ -227,6 +231,8 @@ filename2.txt   2897651254
 
 Finds a file in the GridFS system and sets the body to an InputStream of the content. Also provides the metadata has headers. It uses `Exchange.FILE_NAME` from the incoming headers to determine the file to find.
 
+_Java-only: using ProducerTemplate to find a file by name_
+
 ```java
 // from("direct:findOne").to("mongodb-gridfs?database=tickets&operation=findOne");
 Map<String, Object> headers = new HashMap<String, Object>();
@@ -237,6 +243,8 @@ InputStream result = template.requestBodyAndHeaders("direct:findOne", "irrelevan
 #### create
 
 Create a new file in the GridFs database. It uses the `Exchange.FILE_NAME` from the incoming headers for the name and the body contents (as an InputStream) as the content.
+
+_Java-only: using ProducerTemplate to create a file_
 
 ```java
 // from("direct:create").to("mongodb-gridfs?database=tickets&operation=create");
@@ -249,6 +257,8 @@ template.requestBodyAndHeaders("direct:create", stream, headers);
 #### remove
 
 Removes a file from the GridFS database.
+
+_Java-only: using ProducerTemplate to remove a file_
 
 ```java
 // from("direct:remove").to("mongodb-gridfs?database=tickets&operation=remove");

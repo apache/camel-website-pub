@@ -209,6 +209,8 @@ Here is list of examples showing data that can be proceeded to Stitch:
 
 #### Input body type `org.apache.camel.component.stitch.client.models.StitchRequestBody`:
 
+_Java-only: Java lambda Processor with Stitch SDK builders_
+
 ```java
 from("direct:sendStitch")
      .process(exchange -> {
@@ -230,6 +232,8 @@ from("direct:sendStitch")
 
 #### Input body type `org.apache.camel.component.stitch.client.models.StitchMessage`:
 
+_Java-only: Java lambda Processor with Stitch SDK API_
+
 ```java
 from("direct:sendStitch")
      .process(exchange -> {
@@ -247,6 +251,8 @@ from("direct:sendStitch")
 ```
 
 #### Input body type `Map`:
+
+_Java-only: Java lambda Processor with Map construction_
 
 ```java
 from("direct:sendStitch")
@@ -270,6 +276,8 @@ from("direct:sendStitch")
 ```
 
 #### Input body type `Iterable`:
+
+_Java-only: Java lambda Processor with Iterable construction_
 
 ```java
 from("direct:sendStitch")

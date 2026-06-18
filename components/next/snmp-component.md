@@ -353,10 +353,40 @@ You can get the community of SNMP TRAP with message header `securityName`, peer 
 
 Routing example in Java: (converts the SNMP PDU to XML String)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("snmp:192.168.178.23:161?protocol=udp&type=POLL&oids=1.3.6.1.2.1.1.5.0").
-convertBodyTo(String.class).
-to("activemq:snmp.states");
+from("snmp:192.168.178.23:161?protocol=udp&type=POLL&oids=1.3.6.1.2.1.1.5.0")
+    .convertBodyTo(String.class)
+    .to("activemq:snmp.states");
+```
+
+```xml
+<route>
+  <from uri="snmp:192.168.178.23:161?protocol=udp&amp;type=POLL&amp;oids=1.3.6.1.2.1.1.5.0"/>
+  <convertBodyTo type="String"/>
+  <to uri="activemq:snmp.states"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: snmp:192.168.178.23:161
+      parameters:
+        protocol: udp
+        type: POLL
+        oids: "1.3.6.1.2.1.1.5.0"
+      steps:
+        - convertBodyTo:
+            type: String
+        - to:
+            uri: activemq:snmp.states
 ```
 
 ## Spring Boot Auto-Configuration

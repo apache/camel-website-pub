@@ -12,8 +12,32 @@ This can be beneficial if you need to consume from some legacy back end that eit
 
 Prefix any camel endpoint with **zookeeper-master:someName:** where _someName_ is a logical name and is used to acquire the master lock. e.g.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("zookeeper-master:cheese:jms:foo").to("activemq:wine");
+from("zookeeper-master:cheese:jms:foo")
+    .to("activemq:wine");
+```
+
+```xml
+<route>
+  <from uri="zookeeper-master:cheese:jms:foo"/>
+  <to uri="activemq:wine"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: zookeeper-master:cheese:jms:foo
+      steps:
+        - to:
+            uri: activemq:wine
 ```
 
 The above simulates the \[Exclusive Consumers\]([http://activemq.apache.org/exclusive-consumer.html](http://activemq.apache.org/exclusive-consumer.md)) type feature in ActiveMQ; but on any third party JMS provider that maybe doesn’t support exclusive consumers.
@@ -128,24 +152,47 @@ Enum values:
 
 You can protect a clustered Camel application to only consume files from one active node.
 
-```java
-    // the file endpoint we want to consume from
-    String url = "file:target/inbox?delete=true";
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-    // use the zookeeper master component in the clustered group named myGroup
-    // to run a master/slave mode in the following Camel url
-    from("zookeeper-master:myGroup:" + url)
-        .log(name + " - Received file: ${file:name}")
-        .delay(delay)
-        .log(name + " - Done file:     ${file:name}")
-        .to("file:target/outbox");
+```java
+from("zookeeper-master:myGroup:file:target/inbox?delete=true")
+    .log(name + " - Received file: ${file:name}")
+    .delay(delay)
+    .log(name + " - Done file:     ${file:name}")
+    .to("file:target/outbox");
+```
+
+```xml
+<route>
+  <from uri="zookeeper-master:myGroup:file:target/inbox?delete=true"/>
+  <log message="${file:name}"/>
+  <to uri="file:target/outbox"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: zookeeper-master:myGroup:file:target/inbox?delete=true
+      steps:
+        - log:
+            message: "${file:name}"
+        - to:
+            uri: file:target/outbox
 ```
 
 ZooKeeper will by default connect to `localhost:2181`, but you can configure this on the component level.
 
+_Java-only: programmatic component configuration_
+
 ```java
-    MasterComponent master = new MasterComponent();
-    master.setZooKeeperUrl("myzookeeper:2181");
+MasterComponent master = new MasterComponent();
+master.setZooKeeperUrl("myzookeeper:2181");
 ```
 
 However, you can also configure the url of the ZooKeeper ensemble using environment variables.
@@ -169,21 +216,23 @@ When doing so, you must configure the route policy with
 
 A little example
 
-```java
-    MasterRoutePolicy master = new MasterRoutePolicy();
-    master.setZooKeeperUrl("localhost:2181");
-    master.setGroupName("myGroup");
+_Java-only: programmatic RoutePolicy configuration_
 
-    // its import to set the route to not auto startup
-    // as we let the route policy start/stop the routes when it becomes a master/slave, etc.
-    from("file:target/inbox?delete=true").noAutoStartup()
-        // use the zookeeper master route policy in the clustered group
-        // to run this route in master/slave mode
-        .routePolicy(master)
-        .log(name + " - Received file: ${file:name}")
-        .delay(delay)
-        .log(name + " - Done file:     ${file:name}")
-        .to("file:target/outbox");
+```java
+MasterRoutePolicy master = new MasterRoutePolicy();
+master.setZooKeeperUrl("localhost:2181");
+master.setGroupName("myGroup");
+
+// its import to set the route to not auto startup
+// as we let the route policy start/stop the routes when it becomes a master/slave, etc.
+from("file:target/inbox?delete=true").noAutoStartup()
+    // use the zookeeper master route policy in the clustered group
+    // to run this route in master/slave mode
+    .routePolicy(master)
+    .log(name + " - Received file: ${file:name}")
+    .delay(delay)
+    .log(name + " - Done file:     ${file:name}")
+    .to("file:target/outbox");
 ```
 
 ## Spring Boot Auto-Configuration

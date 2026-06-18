@@ -141,6 +141,8 @@ The Kubernetes Resources Quota component supports 5 message header(s), which is/
 -   `listResourcesQuota`: this operation lists the resource quotas on a kubernetes cluster
     
 
+_Java-only: uses `toF()` for URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-resources-quota:///?kubernetesClient=#kubernetesClient&operation=listResourcesQuota").
@@ -151,6 +153,8 @@ This operation returns a list of resource quotas from your cluster
 
 -   `listResourcesQuotaByLabels`: this operation lists the resource quotas by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor, Java constants, and \`toF()\`_
 
 ```java
 from("direct:listByLabels").process(new Processor() {

@@ -706,15 +706,17 @@ If your Camel Application is running behind a firewall or if you need to have mo
 
 In the example below, we use _myClient_ as the bean id:
 
+_Java-only: programmatic `SqsClient` creation and registry binding_
+
 ```java
-// crate my own instance of SqsClient
+// create my own instance of SqsClient
 SqsClient sqs = ...
 
 // register the client into Camel registry
 camelContext.getRegistry().bind("myClient", sqs);
 
 // refer to the custom client via myClient as the bean id
-from("aws2-sqs://MyQueue?amazonSQSClient=#m4yClient&delay=5000&maxMessagesPerPoll=5")
+from("aws2-sqs://MyQueue?amazonSQSClient=#myClient&delay=5000&maxMessagesPerPoll=5")
 .to("mock:result");
 ```
 
@@ -737,16 +739,59 @@ There is a set of Server Side Encryption attributes for a queue. The related opt
 
 SQS does not allow selectors, but you can effectively achieve this by using the Camel Filter EIP and setting an appropriate `visibilityTimeout`. When SQS dispatches a message, it will wait up to the visibility timeout before it tries to dispatch the message to a different consumer unless a DeleteMessage is received. By default, Camel will always send the DeleteMessage at the end of the route, unless the route ended in failure. To achieve appropriate filtering and not send the DeleteMessage even on successful completion of the route, use a Filter:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("aws2-sqs://MyQueue?amazonSQSClient=#client&defaultVisibilityTimeout=5000&deleteIfFiltered=false&deleteAfterRead=false")
 .filter("${header.login} == true")
-  .setProperty(Sqs2Constants.SQS_DELETE_FILTERED, constant(true))
+  .setProperty("CamelAwsSqsDeleteFiltered", constant(true))
   .to("mock:filter");
 ```
 
+```xml
+<route>
+  <from uri="aws2-sqs://MyQueue?amazonSQSClient=#client&amp;defaultVisibilityTimeout=5000&amp;deleteIfFiltered=false&amp;deleteAfterRead=false"/>
+  <filter>
+    <simple>${header.login} == true</simple>
+    <setProperty name="CamelAwsSqsDeleteFiltered">
+      <constant>true</constant>
+    </setProperty>
+    <to uri="mock:filter"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: aws2-sqs://MyQueue
+      parameters:
+        amazonSQSClient: "#client"
+        defaultVisibilityTimeout: 5000
+        deleteIfFiltered: false
+        deleteAfterRead: false
+      steps:
+        - filter:
+            simple: "${header.login} == true"
+            steps:
+              - setProperty:
+                  name: CamelAwsSqsDeleteFiltered
+                  constant: true
+              - to:
+                  uri: mock:filter
+```
+
+> **Tip**
+> In Java code, you can use the constant `Sqs2Constants.SQS_DELETE_FILTERED` for the property name.
+
 In the above code, if an exchange doesn’t have an appropriate header, it will not make it through the filter AND also not be deleted from the SQS queue. After 5000 milliseconds, the message will become visible to other consumers.
 
-Note we must set the property `Sqs2Constants.SQS_DELETE_FILTERED` to `true` to instruct Camel to send the DeleteMessage, if being filtered.
+Note we must set the property `CamelAwsSqsDeleteFiltered` to `true` to instruct Camel to send the DeleteMessage, if being filtered.
 
 ### Available Producer Operations
 
@@ -761,29 +806,60 @@ Note we must set the property `Sqs2Constants.SQS_DELETE_FILTERED` to `true` to i
 
 ### Send Message
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-  .setBody(constant("Camel rocks!"))
-  .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
+    .setBody(constant("Camel rocks!"))
+    .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>Camel rocks!</constant>
+  </setBody>
+  <to uri="aws2-sqs://camel-1?accessKey=RAW(xxx)&amp;secretKey=RAW(xxx)&amp;region=eu-west-1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: "Camel rocks!"
+        - to:
+            uri: aws2-sqs://camel-1
+            parameters:
+              accessKey: RAW(xxx)
+              secretKey: RAW(xxx)
+              region: eu-west-1
 ```
 
 ### Send Batch Message
 
 You can set a `SendMessageBatchRequest` or an `Iterable`
 
+_Java-only: requires constructing a `List` body programmatically for batch messages_
+
 ```java
 from("direct:start")
-  .setHeader(SqsConstants.SQS_OPERATION, constant("sendBatchMessage"))
-  .process(new Processor() {
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          List c = new ArrayList();
-          c.add("team1");
-          c.add("team2");
-          c.add("team3");
-          c.add("team4");
-          exchange.getIn().setBody(c);
-      }
+  .setHeader("CamelAwsSqsOperation", constant("sendBatchMessage"))
+  .process(exchange -> {
+      List<String> c = new ArrayList<>();
+      c.add("team1");
+      c.add("team2");
+      c.add("team3");
+      c.add("team4");
+      exchange.getIn().setBody(c);
   })
   .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
 ```
@@ -794,11 +870,50 @@ As result, you’ll get an exchange containing a `SendMessageBatchResponse` inst
 
 Use deleteMessage operation to delete a single message. You’ll need to set a receipt handle header for the message you want to delete.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-  .setHeader(SqsConstants.SQS_OPERATION, constant("deleteMessage"))
-  .setHeader(SqsConstants.RECEIPT_HANDLE, constant("123456"))
-  .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
+    .setHeader("CamelAwsSqsOperation", constant("deleteMessage"))
+    .setHeader("CamelAwsSqsReceiptHandle", constant("123456"))
+    .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <setHeader name="CamelAwsSqsOperation">
+        <constant>deleteMessage</constant>
+    </setHeader>
+    <setHeader name="CamelAwsSqsReceiptHandle">
+        <constant>123456</constant>
+    </setHeader>
+    <to uri="aws2-sqs://camel-1?accessKey=RAW(xxx)&amp;secretKey=RAW(xxx)&amp;region=eu-west-1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - setHeader:
+          name: CamelAwsSqsOperation
+          constant: deleteMessage
+      - setHeader:
+          name: CamelAwsSqsReceiptHandle
+          constant: "123456"
+      - to:
+          uri: aws2-sqs://camel-1
+          parameters:
+            accessKey: RAW(xxx)
+            secretKey: RAW(xxx)
+            region: eu-west-1
 ```
 
 As result, you’ll get an exchange containing a `DeleteMessageResponse` instance, that you can use to check if the message was deleted or not.
@@ -807,10 +922,43 @@ As result, you’ll get an exchange containing a `DeleteMessageResponse` instanc
 
 Use listQueues operation to list queues.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-  .setHeader(SqsConstants.SQS_OPERATION, constant("listQueues"))
-  .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
+    .setHeader("CamelAwsSqsOperation", constant("listQueues"))
+    .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <setHeader name="CamelAwsSqsOperation">
+        <constant>listQueues</constant>
+    </setHeader>
+    <to uri="aws2-sqs://camel-1?accessKey=RAW(xxx)&amp;secretKey=RAW(xxx)&amp;region=eu-west-1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - setHeader:
+          name: CamelAwsSqsOperation
+          constant: listQueues
+      - to:
+          uri: aws2-sqs://camel-1
+          parameters:
+            accessKey: RAW(xxx)
+            secretKey: RAW(xxx)
+            region: eu-west-1
 ```
 
 As result, you’ll get an exchange containing a `ListQueuesResponse` instance, that you can examine to check the actual queues.
@@ -819,10 +967,43 @@ As result, you’ll get an exchange containing a `ListQueuesResponse` instance, 
 
 Use purgeQueue operation to purge queue.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-  .setHeader(SqsConstants.SQS_OPERATION, constant("purgeQueue"))
-  .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
+    .setHeader("CamelAwsSqsOperation", constant("purgeQueue"))
+    .to("aws2-sqs://camel-1?accessKey=RAW(xxx)&secretKey=RAW(xxx)&region=eu-west-1");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <setHeader name="CamelAwsSqsOperation">
+        <constant>purgeQueue</constant>
+    </setHeader>
+    <to uri="aws2-sqs://camel-1?accessKey=RAW(xxx)&amp;secretKey=RAW(xxx)&amp;region=eu-west-1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - setHeader:
+          name: CamelAwsSqsOperation
+          constant: purgeQueue
+      - to:
+          uri: aws2-sqs://camel-1
+          parameters:
+            accessKey: RAW(xxx)
+            secretKey: RAW(xxx)
+            region: eu-west-1
 ```
 
 As result you’ll get an exchange containing a `PurgeQueueResponse` instance.

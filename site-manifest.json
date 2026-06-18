@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781698227814,
+  "generated": 1781777630980,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -485,12 +485,6 @@
               "path": "observability/monitoring.adoc",
               "url": "/camel-k/next/observability/monitoring.html",
               "title": "Camel K Operator Monitoring"
-            },
-            {
-              "module": "ROOT",
-              "path": "observability/monitoring/integration.adoc",
-              "url": "/camel-k/next/observability/monitoring/integration.html",
-              "title": "Camel K Integration Monitoring"
             },
             {
               "module": "ROOT",
@@ -9363,6 +9357,12 @@
               "attributes": {
                 "page-aliases": "extensions/github.adoc"
               }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/github2.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/github2.html",
+              "title": "GitHub2"
             },
             {
               "module": "ROOT",

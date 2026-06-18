@@ -210,21 +210,65 @@ The OAI-PMH component supports both consumer and producer endpoints.
 
 The following is a basic example of how to send a request to an OAI-PMH Server.
 
-in Java DSL
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start").to("oaipmh:baseUrlRepository/oai/request");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="oaipmh:baseUrlRepository/oai/request"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: oaipmh:baseUrlRepository/oai/request
 ```
 
 The result is a set of pages in XML format with all the records of the consulted repository.
 
 ### Consumer Example
 
-The following is a basic example of how to receive all messages from an OAI-PMH Server. In Java DSL
+The following is a basic example of how to receive all messages from an OAI-PMH Server.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("oaipmh:baseUrlRepository/oai/request")
-.to(mock:result)
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="oaipmh:baseUrlRepository/oai/request"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: oaipmh:baseUrlRepository/oai/request
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ## More Information

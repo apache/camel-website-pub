@@ -340,21 +340,74 @@ template.sendBodyAndHeader("direct:[put|get|removevalue|delete]", "my-foo", Haze
 
 For the multimap cache this component provides the same listeners / variables as for the map cache consumer (except the update and eviction listener). The only difference is the **multimap** prefix inside the URI. Here is a sample:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-fromF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX)
-.log("object...")
-.choice()
-    .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
-        .log("...added")
-                .to("mock:added")
-        //.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ENVICTED))
-        //        .log("...envicted")
-        //        .to("mock:envicted")
-        .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.REMOVED))
-                .log("...removed")
-                .to("mock:removed")
+from("hazelcast-multimap:bar")
+    .log("object...")
+    .choice()
+        .when(header("CamelHazelcastListenerAction").isEqualTo("added"))
+            .log("...added")
+            .to("mock:added")
+        .when(header("CamelHazelcastListenerAction").isEqualTo("removed"))
+            .log("...removed")
+            .to("mock:removed")
         .otherwise()
-                .log("fail!");
+            .log("fail!");
+```
+
+```xml
+<route>
+  <from uri="hazelcast-multimap:bar"/>
+  <log message="object..."/>
+  <choice>
+    <when>
+      <simple>${header.CamelHazelcastListenerAction} == 'added'</simple>
+      <log message="...added"/>
+      <to uri="mock:added"/>
+    </when>
+    <when>
+      <simple>${header.CamelHazelcastListenerAction} == 'removed'</simple>
+      <log message="...removed"/>
+      <to uri="mock:removed"/>
+    </when>
+    <otherwise>
+      <log message="fail!"/>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: hazelcast-multimap:bar
+      steps:
+        - log:
+            message: "object..."
+        - choice:
+            when:
+              - simple: "${header.CamelHazelcastListenerAction} == 'added'"
+                steps:
+                  - log:
+                      message: "...added"
+                  - to:
+                      uri: mock:added
+              - simple: "${header.CamelHazelcastListenerAction} == 'removed'"
+                steps:
+                  - log:
+                      message: "...removed"
+                  - to:
+                      uri: mock:removed
+            otherwise:
+              steps:
+                - log:
+                    message: "fail!"
 ```
 
 ## Spring Boot Auto-Configuration

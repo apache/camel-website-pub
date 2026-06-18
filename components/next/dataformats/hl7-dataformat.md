@@ -60,6 +60,8 @@ In the Spring XML file, we configure a mina endpoint to listen for HL7 requests 
 
 The endpoint **hl7MinaLlistener** can then be used in a route as a consumer, as this Java DSL example illustrates:
 
+_Java-only: Java DSL with Spring bean endpoint reference_
+
 ```java
 from("hl7MinaListener")
   .bean("patientLookupService");
@@ -72,6 +74,8 @@ This is a basic route that will listen for HL7 and route it to a service named *
 ```
 
 The business logic can be implemented in POJO classes that do not depend on Camel, as shown here:
+
+_Java-only: Java service class_
 
 ```java
 import ca.uhn.hl7v2.HL7Exception;
@@ -106,6 +110,8 @@ In the Spring XML file, we configure a netty endpoint to listen for HL7 requests
 
 The endpoint **hl7NettyListener** can then be used in a route as a consumer, as this Java DSL example illustrates:
 
+_Java-only: Java DSL with Spring bean endpoint reference_
+
 ```java
 from("hl7NettyListener")
   .bean("patientLookupService");
@@ -130,6 +136,8 @@ QRD|200612211200|R|I|GetPatient|||1^RD|0101701234|DEM||
 
 Using the HL7 model, you can work with a `ca.uhn.hl7v2.model.Message` object, e.g., to retrieve a patient ID:
 
+_Java-only: Java HAPI model API_
+
 ```java
 Message msg = exchange.getIn().getBody(Message.class);
 QRD qrd = (QRD)msg.get("QRD");
@@ -137,6 +145,8 @@ String patientId = qrd.getWhoSubjectFilter(0).getIDNumber().getValue();  // 0101
 ```
 
 This is powerful when combined with the HL7 listener, because you don’t have to work with `byte[]`, `String` or any other simple object formats. You can just use the HAPI HL7v2 model objects. If you know the message type in advance, you can be more type-safe:
+
+_Java-only: Java HAPI model API_
 
 ```java
 QRY_A19 msg = exchange.getIn().getBody(QRY_A19.class);
@@ -175,6 +185,8 @@ Enum values:
 
 To use the data format, simply instantiate an instance and invoke the marshal or unmarshal operation in the route builder:
 
+_Java-only: Java programmatic data format instantiation_
+
 ```java
   DataFormat hl7 = new HL7DataFormat();
 
@@ -185,6 +197,8 @@ To use the data format, simply instantiate an instance and invoke the marshal or
 
 In the sample above, the HL7 is marshalled from a HAPI Message object to a byte stream and put on a JMS queue.  
 The next example is the opposite:
+
+_Java-only: Java programmatic data format instantiation_
 
 ```java
   DataFormat hl7 = new HL7DataFormat();
@@ -214,6 +228,8 @@ The input format is always auto-detected. Both ER7 and XML inputs are accepted b
 
 #### EDI to XML conversion
 
+_Java-only: Java programmatic data format configuration_
+
 ```java
   HL7DataFormat hl7xml = new HL7DataFormat();
   hl7xml.setTargetFormat("XML");
@@ -227,6 +243,8 @@ In this example, the HL7 EDI input is unmarshalled directly to an XML `Document`
 
 #### XML to Message conversion
 
+_Java-only: Java programmatic data format configuration_
+
 ```java
   HL7DataFormat hl7xml = new HL7DataFormat();
   hl7xml.setTargetFormat("XML");
@@ -239,6 +257,8 @@ In this example, the HL7 EDI input is unmarshalled directly to an XML `Document`
 Here, a HAPI `Message` is marshalled to HL7 XML bytes.
 
 #### Round-trip EDI to XML to EDI
+
+_Java-only: Java programmatic data format configuration_
 
 ```java
   HL7DataFormat hl7xml = new HL7DataFormat();
@@ -259,14 +279,57 @@ Both `marshal and unmarshal` evaluate the charset provided in the field `MSH-18`
 
 There is a shorthand syntax in Camel for well-known data formats that are commonly used. Then you don’t need to create an instance of the `HL7DataFormat` object:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:hl7in")
+from("direct:hl7in")
     .marshal().hl7()
     .to("jms:queue:hl7out");
 
-  from("jms:queue:hl7out")
+from("jms:queue:hl7out")
     .unmarshal().hl7()
     .to("patientLookupService");
+```
+
+```xml
+<route>
+  <from uri="direct:hl7in"/>
+  <marshal>
+    <hl7/>
+  </marshal>
+  <to uri="jms:queue:hl7out"/>
+</route>
+<route>
+  <from uri="jms:queue:hl7out"/>
+  <unmarshal>
+    <hl7/>
+  </unmarshal>
+  <to uri="patientLookupService"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:hl7in
+      steps:
+        - marshal:
+            hl7: {}
+        - to:
+            uri: jms:queue:hl7out
+- route:
+    from:
+      uri: jms:queue:hl7out
+      steps:
+        - unmarshal:
+            hl7: {}
+        - to:
+            uri: patientLookupService
 ```
 
 ## Message Headers

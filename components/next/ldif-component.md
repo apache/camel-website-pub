@@ -148,6 +148,8 @@ The `LdapConnection` bean may be defined as follows in Spring XML:
 
 Following on from the Spring configuration above, the code sample below sends an LDAP request to filter search a group for a member. The Common Name is then extracted from the response.
 
+_Java-only: sending LDIF content using the ProducerTemplate_
+
 ```java
 ProducerTemplate<Exchange> template = exchange.getContext().createProducerTemplate();
 

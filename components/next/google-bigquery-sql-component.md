@@ -29,11 +29,15 @@ Or they are set implicitly, where the connection factory falls back on [Applicat
 
 When you have the **service account key** you can provide authentication credentials to your application code. Google security credentials can be set through the component endpoint:
 
+_Java-only: endpoint URI as Java string variable_
+
 ```java
 String endpoint = "google-bigquery-sql://project-id:query?serviceAccountKey=/home/user/Downloads/my-key.json";
 ```
 
 You can also use the base64 encoded content of the authentication credentials file if you don’t want to set a file system path.
+
+_Java-only: endpoint URI as Java string variable_
 
 ```java
 String endpoint = "google-bigquery-sql://project-id:query?serviceAccountKey=base64:<base64 encoded>";

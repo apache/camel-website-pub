@@ -194,6 +194,8 @@ Enum values:
 -   `listDeployments`: this operation lists the deployments on a kubernetes cluster
     
 
+_Java-only: uses toF() for endpoint URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-deployments:///?kubernetesClient=#kubernetesClient&operation=listDeployments").
@@ -204,6 +206,8 @@ This operation returns a List of Deployment from your cluster
 
 -   `listDeploymentsByLabels`: this operation lists the deployments by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor with KubernetesConstants and HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -222,6 +226,8 @@ from("direct:listByLabels").process(new Processor() {
 This operation returns a List of Deployments from your cluster, using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Deployments Consumer Example
+
+_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
 
 ```java
 fromF("kubernetes-deployments://%s?oauthToken=%s", host, authToken)

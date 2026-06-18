@@ -193,16 +193,18 @@ The Crypto (JCE) component supports 4 message header(s), which is/are listed bel
 
 The most basic way to sign and verify an exchange is with a KeyPair as follows.
 
+_Java-only: requires Java KeyPair objects_
+
 ```java
 KeyPair keyPair = KeyGenerator.getInstance("RSA").generateKeyPair();
 
 from("direct:sign")
-    .setHeader(DigitalSignatureConstants.SIGNATURE_PRIVATE_KEY, constant(keys.getPrivate()))
+    .setHeader("CamelSignaturePrivateKey", constant(keyPair.getPrivate()))
     .to("crypto:sign:message")
     .to("direct:verify");
 
 from("direct:verify")
-    .setHeader(DigitalSignatureConstants.SIGNATURE_PUBLIC_KEY_OR_CERT, constant(keys.getPublic()))
+    .setHeader("CamelSignaturePublicKeyOrCert", constant(keyPair.getPublic()))
     .to("crypto:verify:check");
 ```
 
@@ -220,12 +222,52 @@ keytool -genkey -keyalg RSA -keysize 2048 -keystore keystore.jks -storepass letm
 
 The following route first signs an exchange using Bob’s alias from the KeyStore bound into the Camel Registry, and then verifies it using the same alias.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:sign")
     .to("crypto:sign:keystoreSign?alias=bob&keystoreName=myKeystore&password=letmein")
     .log("Signature: ${header.CamelDigitalSignature}")
     .to("crypto:verify:keystoreVerify?alias=bob&keystoreName=myKeystore&password=letmein")
     .log("Verified: ${body}");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="crypto:sign:keystoreSign?alias=bob&amp;keystoreName=myKeystore&amp;password=letmein"/>
+  <log message="Signature: ${header.CamelDigitalSignature}"/>
+  <to uri="crypto:verify:keystoreVerify?alias=bob&amp;keystoreName=myKeystore&amp;password=letmein"/>
+  <log message="Verified: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+      steps:
+        - to:
+            uri: crypto:sign:keystoreSign
+            parameters:
+              alias: bob
+              keystoreName: myKeystore
+              password: letmein
+        - log:
+            message: "Signature: ${header.CamelDigitalSignature}"
+        - to:
+            uri: crypto:verify:keystoreVerify
+            parameters:
+              alias: bob
+              keystoreName: myKeystore
+              password: letmein
+        - log:
+            message: "Verified: ${body}"
 ```
 
 The following code shows how to load the keystore created using the above `keytool` command and bind it into the registry with the name `myKeystore` for use in the above route. The example makes use of the `@Configuration` and `@BindToRegistry` annotations introduced in Camel 3 to instantiate the KeyStore and register it with the name `myKeyStore`.
@@ -255,11 +297,50 @@ Changing the Signature algorithm or the Security provider is a simple matter of 
 
 It may be desirable to change the message header used to store the signature. A different header name can be specified in the route definition as follows
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:sign")
     .to("crypto:sign:keystoreSign?alias=bob&keystoreName=myKeystore&password=letmein&signatureHeaderName=mySignature")
     .log("Signature: ${header.mySignature}")
     .to("crypto:verify:keystoreVerify?alias=bob&keystoreName=myKeystore&password=letmein&signatureHeaderName=mySignature");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="crypto:sign:keystoreSign?alias=bob&amp;keystoreName=myKeystore&amp;password=letmein&amp;signatureHeaderName=mySignature"/>
+  <log message="Signature: ${header.mySignature}"/>
+  <to uri="crypto:verify:keystoreVerify?alias=bob&amp;keystoreName=myKeystore&amp;password=letmein&amp;signatureHeaderName=mySignature"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+      steps:
+        - to:
+            uri: crypto:sign:keystoreSign
+            parameters:
+              alias: bob
+              keystoreName: myKeystore
+              password: letmein
+              signatureHeaderName: mySignature
+        - log:
+            message: "Signature: ${header.mySignature}"
+        - to:
+            uri: crypto:verify:keystoreVerify
+            parameters:
+              alias: bob
+              keystoreName: myKeystore
+              password: letmein
+              signatureHeaderName: mySignature
 ```
 
 ### Changing the bufferSize
@@ -282,15 +363,17 @@ Even better would be to dynamically supply a keystore alias. Again, the alias ca
 
 The header would be set as follows:
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 Exchange unsigned = getMandatoryEndpoint("direct:alias-sign").createExchange();
 unsigned.getIn().setBody(payload);
-unsigned.getIn().setHeader(DigitalSignatureConstants.KEYSTORE_ALIAS, "bob");
-unsigned.getIn().setHeader(DigitalSignatureConstants.KEYSTORE_PASSWORD, "letmein".toCharArray());
+unsigned.getIn().setHeader("CamelSignatureKeyStoreAlias", "bob");
+unsigned.getIn().setHeader("CamelSignatureKeyStorePassword", "letmein".toCharArray());
 template.send("direct:alias-sign", unsigned);
 Exchange signed = getMandatoryEndpoint("direct:alias-sign").createExchange();
 signed.getIn().copyFrom(unsigned.getMessage());
-signed.getIn().setHeader(DigitalSignatureConstants.KEYSTORE_ALIAS, "bob");
+signed.getIn().setHeader("CamelSignatureKeyStoreAlias", "bob");
 template.send("direct:alias-verify", signed);
 ```
 
@@ -430,6 +513,8 @@ The following ML-DSA parameter sets are available:
 
 SLH-DSA (Stateless Hash-Based Digital Signature Algorithm, formerly SPHINCS+) is the secondary NIST-standardized PQC signature algorithm, based on hash functions.
 
+_Java-only: requires Java KeyPair and registry binding_
+
 ```java
 private KeyPair slhDsaKeyPair;
 
@@ -533,24 +618,80 @@ See the [PQC component](../4.18.x/pqc-component.md) for the full list of support
 
 Alternatively, you can chain two `crypto:sign` / `crypto:verify` endpoints to produce both a classical and a PQC signature, storing each in a separate header:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:sign")
-    // Classical ECDSA signature
-    .to("crypto:sign:classical?algorithm=SHA256withECDSA&privateKeyName=#ecPrivateKey"
-        + "&signatureHeaderName=ClassicalSignature")
-    // PQC ML-DSA signature
-    .to("crypto:sign:pqc?algorithm=ML-DSA&provider=BC&privateKeyName=#mlDsaPrivateKey"
-        + "&signatureHeaderName=PQCSignature")
+    .to("crypto:sign:classical?algorithm=SHA256withECDSA&privateKeyName=#ecPrivateKey&signatureHeaderName=ClassicalSignature")
+    .to("crypto:sign:pqc?algorithm=ML-DSA&provider=BC&privateKeyName=#mlDsaPrivateKey&signatureHeaderName=PQCSignature")
     .to("direct:verify");
 
 from("direct:verify")
-    // Verify classical signature
-    .to("crypto:verify:classical?algorithm=SHA256withECDSA&publicKeyName=#ecPublicKey"
-        + "&signatureHeaderName=ClassicalSignature")
-    // Verify PQC signature
-    .to("crypto:verify:pqc?algorithm=ML-DSA&provider=BC&publicKeyName=#mlDsaPublicKey"
-        + "&signatureHeaderName=PQCSignature")
+    .to("crypto:verify:classical?algorithm=SHA256withECDSA&publicKeyName=#ecPublicKey&signatureHeaderName=ClassicalSignature")
+    .to("crypto:verify:pqc?algorithm=ML-DSA&provider=BC&publicKeyName=#mlDsaPublicKey&signatureHeaderName=PQCSignature")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:sign"/>
+  <to uri="crypto:sign:classical?algorithm=SHA256withECDSA&amp;privateKeyName=#ecPrivateKey&amp;signatureHeaderName=ClassicalSignature"/>
+  <to uri="crypto:sign:pqc?algorithm=ML-DSA&amp;provider=BC&amp;privateKeyName=#mlDsaPrivateKey&amp;signatureHeaderName=PQCSignature"/>
+  <to uri="direct:verify"/>
+</route>
+
+<route>
+  <from uri="direct:verify"/>
+  <to uri="crypto:verify:classical?algorithm=SHA256withECDSA&amp;publicKeyName=#ecPublicKey&amp;signatureHeaderName=ClassicalSignature"/>
+  <to uri="crypto:verify:pqc?algorithm=ML-DSA&amp;provider=BC&amp;publicKeyName=#mlDsaPublicKey&amp;signatureHeaderName=PQCSignature"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sign
+      steps:
+        - to:
+            uri: crypto:sign:classical
+            parameters:
+              algorithm: SHA256withECDSA
+              privateKeyName: "#ecPrivateKey"
+              signatureHeaderName: ClassicalSignature
+        - to:
+            uri: crypto:sign:pqc
+            parameters:
+              algorithm: ML-DSA
+              provider: BC
+              privateKeyName: "#mlDsaPrivateKey"
+              signatureHeaderName: PQCSignature
+        - to:
+            uri: direct:verify
+- route:
+    from:
+      uri: direct:verify
+      steps:
+        - to:
+            uri: crypto:verify:classical
+            parameters:
+              algorithm: SHA256withECDSA
+              publicKeyName: "#ecPublicKey"
+              signatureHeaderName: ClassicalSignature
+        - to:
+            uri: crypto:verify:pqc
+            parameters:
+              algorithm: ML-DSA
+              provider: BC
+              publicKeyName: "#mlDsaPublicKey"
+              signatureHeaderName: PQCSignature
+        - to:
+            uri: mock:result
 ```
 
 > **Note**

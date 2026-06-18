@@ -246,11 +246,15 @@ Enum values:
 
 The route command allows you to do common tasks on a given route very easily. For example, to start a route, you can send an empty message to this endpoint:
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 template.sendBody("controlbus:route?routeId=foo&action=start", null);
 ```
 
 To get the status of the route, you can do:
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 String status = template.requestBody("controlbus:route?routeId=foo&action=status", null, String.class);
@@ -260,6 +264,8 @@ String status = template.requestBody("controlbus:route?routeId=foo&action=status
 
 This requires JMX to be enabled (it is enabled by default) then you can get the performance statics per route, or for the CamelContext. For example, to get the statics for a route named foo, we can use:
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 String xml = template.requestBody("controlbus:route?routeId=foo&action=stats", null, String.class);
 ```
@@ -267,6 +273,8 @@ String xml = template.requestBody("controlbus:route?routeId=foo&action=stats", n
 The returned statics is in XML format. It is the same data you can get from JMX with the `dumpRouteStatsAsXml` operation on the `ManagedRouteMBean`.
 
 To get statics for the entire `CamelContext` you just omit the routeId parameter as shown below:
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 String xml = template.requestBody("controlbus:route?action=stats", null, String.class);
@@ -276,11 +284,15 @@ String xml = template.requestBody("controlbus:route?action=stats", null, String.
 
 You can use the [Simple](languages/simple-language.md) language with the control bus. For example, to stop a specific route, you can send a message to the `"controlbus:language:simple"` endpoint containing the following message:
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 template.sendBody("controlbus:language:simple", "${camelContext.getRouteController().stopRoute('myRoute')}");
 ```
 
 As this is a void operation, no result is returned. However, if you want the route status, you can use:
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 String status = template.requestBody("controlbus:language:simple", "${camelContext.getRouteController().getRouteStatus('myRoute')}", String.class);
@@ -289,6 +301,8 @@ String status = template.requestBody("controlbus:language:simple", "${camelConte
 It’s easier to use the `route` command to control lifecycle of routes. The `language` command allows you to execute a language script that has stronger powers such as [Groovy](languages/groovy-language.md) or to some extend the [Simple](languages/simple-language.md) language.
 
 For example, to shut down Apache Camel itself, you can do:
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 template.sendBody("controlbus:language:simple?async=true", "${camelContext.stop()}");

@@ -532,9 +532,35 @@ The default is `CLIENT_SECRET`.
 
 For example, to download content from file `test.txt` located on the `filesystem` in `camelTesting` storage account, use the following snippet:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("azure-storage-datalake:camelTesting/filesystem?fileName=test.txt&accountKey=key").
-to("file://fileDirectory");
+from("azure-storage-datalake:camelTesting/filesystem?fileName=test.txt&accountKey=key")
+    .to("file://fileDirectory");
+```
+
+```xml
+<route>
+    <from uri="azure-storage-datalake:camelTesting/filesystem?fileName=test.txt&amp;accountKey=key"/>
+    <to uri="file://fileDirectory"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-storage-datalake:camelTesting/filesystem
+      parameters:
+        fileName: test.txt
+        accountKey: key
+    steps:
+      - to:
+          uri: file://fileDirectory
 ```
 
 ### Automatic detection of a service client
@@ -598,23 +624,103 @@ Refer to the examples section below for more details on how to use these operati
 
 To consume a file from the storage datalake into a file using the file component, this can be done like this:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("azure-storage-datalake":cameltesting/filesystem?fileName=test.txt&accountKey=yourAccountKey").
-to("file:/filelocation");
+from("azure-storage-datalake:cameltesting/filesystem?fileName=test.txt&accountKey=yourAccountKey")
+    .to("file:/filelocation");
+```
+
+```xml
+<route>
+  <from uri="azure-storage-datalake:cameltesting/filesystem?fileName=test.txt&amp;accountKey=yourAccountKey"/>
+  <to uri="file:/filelocation"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-storage-datalake:cameltesting/filesystem
+      parameters:
+        fileName: test.txt
+        accountKey: yourAccountKey
+      steps:
+        - to:
+            uri: file:/filelocation
 ```
 
 You can also directly write to a file without using the file component. For this, you will need to specify the path in `fileDir` option, to save it to your machine.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("azure-storage-datalake":cameltesting/filesystem?fileName=test.txt&accountKey=yourAccountKey&fileDir=/test/directory").
-to("mock:results");
+from("azure-storage-datalake:cameltesting/filesystem?fileName=test.txt&accountKey=yourAccountKey&fileDir=/test/directory")
+    .to("mock:results");
+```
+
+```xml
+<route>
+  <from uri="azure-storage-datalake:cameltesting/filesystem?fileName=test.txt&amp;accountKey=yourAccountKey&amp;fileDir=/test/directory"/>
+  <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-storage-datalake:cameltesting/filesystem
+      parameters:
+        fileName: test.txt
+        accountKey: yourAccountKey
+        fileDir: /test/directory
+      steps:
+        - to:
+            uri: mock:results
 ```
 
 This component also supports batch consumer. So, you can consume multiple files from a file system by specifying the path from where you want to consume the files.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("azure-storage-datalake":cameltesting/filesystem?accountKey=yourAccountKey&fileDir=/test/directory&path=abc/test").
-to("mock:results");
+from("azure-storage-datalake:cameltesting/filesystem?accountKey=yourAccountKey&fileDir=/test/directory&path=abc/test")
+    .to("mock:results");
+```
+
+```xml
+<route>
+  <from uri="azure-storage-datalake:cameltesting/filesystem?accountKey=yourAccountKey&amp;fileDir=/test/directory&amp;path=abc/test"/>
+  <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: azure-storage-datalake:cameltesting/filesystem
+      parameters:
+        accountKey: yourAccountKey
+        fileDir: /test/directory
+        path: abc/test
+      steps:
+        - to:
+            uri: mock:results
 ```
 
 ### Producer Examples
@@ -622,11 +728,13 @@ to("mock:results");
 -   `listFileSystem`
     
 
+_Java-only: uses `ListFileSystemsOptions` SDK type_
+
 ```java
 from("direct:start")
     .process(exchange -> {
-        //required headers can be added here
-        exchange.getIn().setHeader(DataLakeConstants.LIST_FILESYSTEMS_OPTIONS, new ListFileSystemsOptions().setMaxResultsPerPage(10));
+        exchange.getIn().setHeader(DataLakeConstants.LIST_FILESYSTEMS_OPTIONS,
+                new ListFileSystemsOptions().setMaxResultsPerPage(10));
     })
     .to("azure-storage-datalake:cameltesting?operation=listFileSystem&serviceClient=#serviceClient")
     .to("mock:results");
@@ -635,34 +743,103 @@ from("direct:start")
 -   `createFileSystem`
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setHeader(DataLakeConstants.FILESYSTEM_NAME, "test1");
-    })
+    .setHeader("CamelAzureStorageDataLakeFileSystemName", constant("test1"))
     .to("azure-storage-datalake:cameltesting?operation=createFileSystem&serviceClient=#serviceClient")
     .to("mock:results");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelAzureStorageDataLakeFileSystemName">
+    <constant>test1</constant>
+  </setHeader>
+  <to uri="azure-storage-datalake:cameltesting?operation=createFileSystem&amp;serviceClient=#serviceClient"/>
+  <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAzureStorageDataLakeFileSystemName
+            constant: test1
+        - to:
+            uri: azure-storage-datalake:cameltesting
+            parameters:
+              operation: createFileSystem
+              serviceClient: "#serviceClient"
+        - to:
+            uri: mock:results
 ```
 
 -   `deleteFileSystem`
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setHeader(DataLakeConstants.FILESYSTEM_NAME, "test1");
-    })
+    .setHeader("CamelAzureStorageDataLakeFileSystemName", constant("test1"))
     .to("azure-storage-datalake:cameltesting?operation=deleteFileSystem&serviceClient=#serviceClient")
     .to("mock:results");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelAzureStorageDataLakeFileSystemName">
+    <constant>test1</constant>
+  </setHeader>
+  <to uri="azure-storage-datalake:cameltesting?operation=deleteFileSystem&amp;serviceClient=#serviceClient"/>
+  <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAzureStorageDataLakeFileSystemName
+            constant: test1
+        - to:
+            uri: azure-storage-datalake:cameltesting
+            parameters:
+              operation: deleteFileSystem
+              serviceClient: "#serviceClient"
+        - to:
+            uri: mock:results
 ```
 
 -   `listPaths`
     
 
+_Java-only: uses `ListPathsOptions` SDK type_
+
 ```java
 from("direct:start")
     .process(exchange -> {
-        exchange.getIn().setHeader(DataLakeConstants.LIST_PATH_OPTIONS, new ListPathsOptions().setPath("/main"));
+        exchange.getIn().setHeader(DataLakeConstants.LIST_PATH_OPTIONS,
+                new ListPathsOptions().setPath("/main"));
     })
     .to("azure-storage-datalake:cameltesting/filesystem?operation=listPaths&serviceClient=#serviceClient")
     .to("mock:results");
@@ -671,12 +848,13 @@ from("direct:start")
 -   `getFile`
     
 
-This can be done in two ways, We can either set an `OutputStream` in the exchange body
+This can be done in two ways. We can either set an `OutputStream` in the exchange body:
+
+_Java-only: sets an `OutputStream` for the file content to be written to_
 
 ```java
 from("direct:start")
     .process(exchange -> {
-        // set an OutputStream where the file data can should be written
         exchange.getIn().setBody(outputStream);
     })
     .to("azure-storage-datalake:cameltesting/filesystem?operation=getFile&fileName=test.txt&serviceClient=#serviceClient")
@@ -685,17 +863,26 @@ from("direct:start")
 
 Or if the body is not set, the operation will give an `InputStream`, given that you have already registered for query acceleration in azure portal.
 
+_Java-only: reads the file content as an \`InputStream\`_
+
 ```java
 from("direct:start")
     .to("azure-storage-datalake:cameltesting/filesystem?operation=getFile&fileName=test.txt&serviceClient=#serviceClient")
     .process(exchange -> {
         InputStream inputStream = exchange.getMessage().getBody(InputStream.class);
-        System.out.Println(IOUtils.toString(inputStream, StandardCharcets.UTF_8.name()));
+        System.out.println(IOUtils.toString(inputStream, StandardCharsets.UTF_8.name()));
     })
     .to("mock:results");
 ```
 
 -   `deleteFile`
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -704,7 +891,37 @@ from("direct:start")
     .to("mock:results");
 ```
 
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="azure-storage-datalake:cameltesting/filesystem?operation=deleteFile&amp;fileName=test.txt&amp;serviceClient=#serviceClient"/>
+    <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - to:
+          uri: azure-storage-datalake:cameltesting/filesystem
+          parameters:
+            operation: deleteFile
+            fileName: test.txt
+            serviceClient: "#serviceClient"
+      - to:
+          uri: mock:results
+```
+
 -   `downloadToFile`
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -713,8 +930,34 @@ from("direct:start")
     .to("mock:results");
 ```
 
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="azure-storage-datalake:cameltesting/filesystem?operation=downloadToFile&amp;fileName=test.txt&amp;fileDir=/test/mydir&amp;serviceClient=#serviceClient"/>
+    <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - to:
+          uri: azure-storage-datalake:cameltesting/filesystem
+          parameters:
+            operation: downloadToFile
+            fileName: test.txt
+            fileDir: /test/mydir
+            serviceClient: "#serviceClient"
+      - to:
+          uri: mock:results
+```
+
 -   `downloadLink`
     
+
+_Java-only: processes the generated download link from the response body_
 
 ```java
 from("direct:start")
@@ -728,6 +971,8 @@ from("direct:start")
 
 -   `appendToFile`
     
+
+_Java-only: creates an `InputStream` body for the data to append_
 
 ```java
 from("direct:start")
@@ -743,24 +988,61 @@ from("direct:start")
 -   `flushToFile`
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setHeader(DataLakeConstants.POSITION, 0);
-    })
+    .setHeader("CamelAzureStorageDataLakePosition", constant(0))
     .to("azure-storage-datalake:cameltesting/filesystem?operation=flushToFile&fileName=test.txt&serviceClient=#serviceClient")
     .to("mock:results");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelAzureStorageDataLakePosition">
+    <constant>0</constant>
+  </setHeader>
+  <to uri="azure-storage-datalake:cameltesting/filesystem?operation=flushToFile&amp;fileName=test.txt&amp;serviceClient=#serviceClient"/>
+  <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAzureStorageDataLakePosition
+            constant: 0
+        - to:
+            uri: azure-storage-datalake:cameltesting/filesystem
+            parameters:
+              operation: flushToFile
+              fileName: test.txt
+              serviceClient: "#serviceClient"
+        - to:
+            uri: mock:results
 ```
 
 -   `openQueryInputStream`
     
 
-For this operation, you should have already registered for query acceleration on the azure portal
+For this operation, you should have already registered for query acceleration on the azure portal.
+
+_Java-only: uses `FileQueryOptions` SDK type_
 
 ```java
 from("direct:start")
     .process(exchange -> {
-        exchange.getIn().setHeader(DataLakeConstants.QUERY_OPTIONS, new FileQueryOptions("SELECT * from BlobStorage"));
+        exchange.getIn().setHeader(DataLakeConstants.QUERY_OPTIONS,
+                new FileQueryOptions("SELECT * from BlobStorage"));
     })
     .to("azure-storage-datalake:cameltesting/filesystem?operation=openQueryInputStream&fileName=test.txt&serviceClient=#serviceClient")
     .to("mock:results");
@@ -768,6 +1050,8 @@ from("direct:start")
 
 -   `upload`
     
+
+_Java-only: creates an `InputStream` body for the data to upload_
 
 ```java
 from("direct:start")
@@ -783,37 +1067,138 @@ from("direct:start")
 -   `uploadFromFile`
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setHeader(DataLakeConstants.PATH, "test/file.txt");
-    })
+    .setHeader("CamelAzureStorageDataLakePath", constant("test/file.txt"))
     .to("azure-storage-datalake:cameltesting/filesystem?operation=uploadFromFile&fileName=test.txt&serviceClient=#serviceClient")
     .to("mock:results");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelAzureStorageDataLakePath">
+    <constant>test/file.txt</constant>
+  </setHeader>
+  <to uri="azure-storage-datalake:cameltesting/filesystem?operation=uploadFromFile&amp;fileName=test.txt&amp;serviceClient=#serviceClient"/>
+  <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAzureStorageDataLakePath
+            constant: test/file.txt
+        - to:
+            uri: azure-storage-datalake:cameltesting/filesystem
+            parameters:
+              operation: uploadFromFile
+              fileName: test.txt
+              serviceClient: "#serviceClient"
+        - to:
+            uri: mock:results
 ```
 
 -   `createFile`
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setHeader(DataLakeConstants.DIRECTORY_NAME, "test/file/");
-    })
+    .setHeader("CamelAzureStorageDataLakeDirectoryName", constant("test/file/"))
     .to("azure-storage-datalake:cameltesting/filesystem?operation=createFile&fileName=test.txt&serviceClient=#serviceClient")
     .to("mock:results");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelAzureStorageDataLakeDirectoryName">
+    <constant>test/file/</constant>
+  </setHeader>
+  <to uri="azure-storage-datalake:cameltesting/filesystem?operation=createFile&amp;fileName=test.txt&amp;serviceClient=#serviceClient"/>
+  <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAzureStorageDataLakeDirectoryName
+            constant: "test/file/"
+        - to:
+            uri: azure-storage-datalake:cameltesting/filesystem
+            parameters:
+              operation: createFile
+              fileName: test.txt
+              serviceClient: "#serviceClient"
+        - to:
+            uri: mock:results
 ```
 
 -   `deleteDirectory`
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setHeader(DataLakeConstants.DIRECTORY_NAME, "test/file/");
-    })
+    .setHeader("CamelAzureStorageDataLakeDirectoryName", constant("test/file/"))
     .to("azure-storage-datalake:cameltesting/filesystem?operation=deleteDirectory&serviceClient=#serviceClient")
     .to("mock:results");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelAzureStorageDataLakeDirectoryName">
+    <constant>test/file/</constant>
+  </setHeader>
+  <to uri="azure-storage-datalake:cameltesting/filesystem?operation=deleteDirectory&amp;serviceClient=#serviceClient"/>
+  <to uri="mock:results"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAzureStorageDataLakeDirectoryName
+            constant: "test/file/"
+        - to:
+            uri: azure-storage-datalake:cameltesting/filesystem
+            parameters:
+              operation: deleteDirectory
+              serviceClient: "#serviceClient"
+        - to:
+            uri: mock:results
 ```
 
 ### Testing

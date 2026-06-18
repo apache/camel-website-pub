@@ -130,15 +130,34 @@ The InfluxDB component supports 3 message header(s), which is/are listed below:
 
 Below is an example route that stores a point into the db (taking the db name from the URI) specific key:
 
-```java
-from("direct:start")
-        .setHeader(InfluxDbConstants.DBNAME_HEADER, constant("myTimeSeriesDB"))
-        .to("influxdb://connectionBean);
-```
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
         .to("influxdb://connectionBean?databaseName=myTimeSeriesDB");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="influxdb://connectionBean?databaseName=myTimeSeriesDB"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: influxdb://connectionBean
+            parameters:
+              databaseName: myTimeSeriesDB
 ```
 
 ## Spring Boot Auto-Configuration

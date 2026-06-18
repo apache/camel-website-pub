@@ -181,26 +181,97 @@ The Language component supports 1 message header(s), which is/are listed below:
 
 For example, you can use the [Simple](languages/simple-language.md) language as [Message Translator](eips/message-translator.md) EIP:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:hello")
-    .to("language:simple:Hello ${body}")
+    .to("language:simple:Hello ${body}");
+```
+
+```xml
+<route>
+  <from uri="direct:hello"/>
+  <to uri="language:simple:Hello ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:hello
+      steps:
+        - to:
+            uri: "language:simple:Hello ${body}"
 ```
 
 In case you want to convert the message body type, you can do this as well. However, it is better to use [Convert Body To](eips/convertBodyTo-eip.md):
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:toString")
-    .to("language:simple:${bodyAs(String.class)}")
+    .to("language:simple:${bodyAs(String.class)}");
+```
+
+```xml
+<route>
+  <from uri="direct:toString"/>
+  <to uri="language:simple:${bodyAs(String.class)}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:toString
+      steps:
+        - to:
+            uri: "language:simple:${bodyAs(String.class)}"
 ```
 
 You can also use the [Groovy](languages/groovy-language.md) language, such as this example where the input message will be multiplied with 2:
 
-```groovy
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
 from("direct:double")
-    .to("language:groovy:${body} * 2}")
+    .to("language:groovy:${body} * 2}");
+```
+
+```xml
+<route>
+  <from uri="direct:double"/>
+  <to uri="language:groovy:${body} * 2}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:double
+      steps:
+        - to:
+            uri: "language:groovy:${body} * 2}"
 ```
 
 You can also provide the script as a header as shown below. Here we use [XPath](languages/xpath-language.md) language to extract the text from the `<foo>` tag.
+
+_Java-only: providing the script as a message header_
 
 ```java
 Object out = producer.requestBodyAndHeader("language:xpath", "<foo>Hello World</foo>", Exchange.LANGUAGE_SCRIPT, "/foo/text()");
@@ -211,28 +282,106 @@ assertEquals("Hello World", out);
 
 You can specify a resource uri for a script to load in either the endpoint uri, or in the `Exchange.LANGUAGE_SCRIPT` header. The uri must start with one of the following schemes: `file:`, `classpath:`, or `http:`
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-        // load the script from the classpath
-        .to("language:simple:resource:classpath:org/apache/camel/component/language/mysimplescript.txt")
-        .to("mock:result");
+    .to("language:simple:resource:classpath:org/apache/camel/component/language/mysimplescript.txt")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="language:simple:resource:classpath:org/apache/camel/component/language/mysimplescript.txt"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: language:simple:resource:classpath:org/apache/camel/component/language/mysimplescript.txt
+        - to:
+            uri: mock:result
 ```
 
 By default, the script is loaded once and cached. However, you can disable the `contentCache` option and have the script loaded on each evaluation. For example, if the file `myscript.txt` is changed on disk, then the updated script is used:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-        // the script will be loaded on each message, as we disabled cache
-        .to("language:simple:myscript.txt?contentCache=false")
-        .to("mock:result");
+    .to("language:simple:myscript.txt?contentCache=false")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="language:simple:myscript.txt?contentCache=false"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: language:simple:myscript.txt
+            parameters:
+              contentCache: false
+        - to:
+            uri: mock:result
 ```
 
 You can also refer to the script as a resource similar to how all the other [Language](#)s in Camel functions, by prefixing with `resource:` as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .to("language:constant:resource:classpath:org/apache/camel/component/language/hello.txt")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="language:constant:resource:classpath:org/apache/camel/component/language/hello.txt"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: language:constant:resource:classpath:org/apache/camel/component/language/hello.txt
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

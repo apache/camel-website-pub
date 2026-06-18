@@ -153,6 +153,8 @@ Camel provides two headers by which you can define a different resource location
 
 You can define the custom context map by setting the message header "**CamelStringTemplateVariableMap**" just like the below code.
 
+_Java-only: setting up a custom StringTemplate variable map_
+
 ```java
 Map<String, Object> variableMap = new HashMap<String, Object>();
 Map<String, Object> headersMap = new HashMap<String, Object>();
@@ -167,9 +169,32 @@ exchange.getIn().setHeader("CamelStringTemplateVariableMap", variableMap);
 
 For example, you could use a string template as follows in order to formulate a response to a message:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("string-template:com/acme/MyResponse.tm");
+from("activemq:My.Queue")
+    .to("string-template:com/acme/MyResponse.tm");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="string-template:com/acme/MyResponse.tm"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: string-template:com/acme/MyResponse.tm
 ```
 
 ### The Email Example

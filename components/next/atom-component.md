@@ -22,9 +22,7 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 ## URI format
 
-```java
-atom://atomUri[?options]
-```
+atom://atomUri\[?options\]
 
 Where **atomUri** is the URI to the Atom feed to poll.
 
@@ -234,24 +232,99 @@ Camel can set the `Feed` object on the In header (see `feedHeader` option to dis
 
 Camel supports Idempotent Consumer directly within the component, so it will skip already processed entries. This feature is enabled by default, but can be disabled by setting the `idempotent=false` option.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://inbox?idempotent=false").to("...");
+```
+
+```xml
+<route>
+  <from uri="file://inbox?idempotent=false"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://inbox
+      parameters:
+        idempotent: false
+      steps:
+        - to:
+            uri: "..."
 ```
 
 The default Idempotency strategy uses Atom published and updated timestamps to identify already read entries, by filtering all entries older that the _last read_ entry.
 
 The idempotency strategy can be changed by setting the `idempotentStrategy` option. The components support two strategies _out-of-the-box_, but custom strategies can be used, by referencing a subclass of `org.apache.camel.component.atom.AtomIdempotentStrategy`, with Apache Camel’s # notation.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://inbox?idempotentStrategy=#myIdempotentStrategy").to("...");
+```
+
+```xml
+<route>
+  <from uri="file://inbox?idempotentStrategy=#myIdempotentStrategy"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://inbox
+      parameters:
+        idempotentStrategy: "#myIdempotentStrategy"
+      steps:
+        - to:
+            uri: "..."
 ```
 
 #### Repository idempotent strategy
 
 As an alternative to the default idempotent strategy, a repository based strategy can be use:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://inbox?idempotentStrategy=repository").to("...");
+```
+
+```xml
+<route>
+  <from uri="file://inbox?idempotentStrategy=repository"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://inbox
+      parameters:
+        idempotentStrategy: repository
+      steps:
+        - to:
+            uri: "..."
 ```
 
 This strategy checks for idempotency by storing the Atom Entry GUID in an `IdempotentRepository`. The strategy defaults a MemoryIdempotentRepository, but the repository can be changes to any subclass of `IdempotentRepository`, using the `idempotentRepository` option.
@@ -262,8 +335,31 @@ This strategy checks for idempotency by storing the Atom Entry GUID in an `Idemp
 
 In this sample, we poll James Strachan’s blog.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("atom://http://macstrac.blogspot.com/feeds/posts/default").to("seda:feeds");
+```
+
+```xml
+<route>
+  <from uri="atom://http://macstrac.blogspot.com/feeds/posts/default"/>
+  <to uri="seda:feeds"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: atom://http://macstrac.blogspot.com/feeds/posts/default
+      steps:
+        - to:
+            uri: seda:feeds
 ```
 
 In this sample, we want to filter only good blogs we like to a SEDA queue. The sample also shows how to set up Camel standalone, not running in any Container or using Spring.

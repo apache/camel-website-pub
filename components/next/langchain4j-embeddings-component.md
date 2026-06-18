@@ -262,6 +262,8 @@ pom.xml
 
 Initialize the OpenAI Embedding Model:
 
+_Java-only: programmatic EmbeddingModel initialization and registry binding_
+
 ```java
 EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
     .apiKey(openApiKey)

@@ -178,8 +178,35 @@ secretKey = nKLki\*\*\*\*\*\*\*\*\*\*\*\*
 
 In this sample we find the current Bitcoin market price in USDT:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:ticker").to("xchange:binance?service=marketdata&method=ticker&currencyPair=BTC/USDT")
+from("direct:ticker").to("xchange:binance?service=marketdata&method=ticker&currencyPair=BTC/USDT");
+```
+
+```xml
+<route>
+  <from uri="direct:ticker"/>
+  <to uri="xchange:binance?service=marketdata&amp;method=ticker&amp;currencyPair=BTC/USDT"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:ticker
+      steps:
+        - to:
+            uri: xchange:binance
+            parameters:
+              service: marketdata
+              method: ticker
+              currencyPair: BTC/USDT
 ```
 
 ## Spring Boot Auto-Configuration

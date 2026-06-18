@@ -711,11 +711,20 @@ For advanced control a custom implementation of `org.apache.camel.component.kafk
 
 By default, Camel will poll using the **ERROR\_HANDLER** to process exceptions. How Camel handles a message that results in an exception can be altered using the `breakOnFirstError` attribute in the configuration. Instead of continuing to poll the next message, Camel will instead commit the offset so that the message that caused the exception will be retried. This is similar to the **RETRY** polling strategy above.
 
+You can configure this on the component level, either programmatically in Java, or via configuration properties:
+
+_Java-only: programmatic component configuration_
+
 ```java
 KafkaComponent kafka = new KafkaComponent();
 kafka.setBreakOnFirstError(true);
-...
 camelContext.addComponent("kafka", kafka);
+```
+
+Or using configuration properties:
+
+```properties
+camel.component.kafka.break-on-first-error=true
 ```
 
 It is recommended that you read the section below "Using manual commit with Kafka consumer" to understand how `breakOnFirstError` will work based on the `CommitManager` that is configured.
@@ -742,21 +751,19 @@ The repository can be instantiated by defining the `topic` and `bootstrapServers
 
 Sample usage is as follows:
 
+> **Note**
+> The `KafkaIdempotentRepository` bean must be registered in the Camel registry before it can be referenced by the route.
+
+_Java-only: registering the bean_
+
 ```java
 KafkaIdempotentRepository kafkaIdempotentRepository = new KafkaIdempotentRepository("idempotent-db-inserts", "localhost:9091");
 
 SimpleRegistry registry = new SimpleRegistry();
-registry.put("insertDbIdemRepo", kafkaIdempotentRepository); // must be registered in the registry, to enable access to the CamelContext
-CamelContext context = new CamelContext(registry);
-
-// later in RouteBuilder...
-from("direct:performInsert")
-    .idempotentConsumer(header("id")).idempotentRepository("insertDbIdemRepo")
-        // once-only insert into the database
-    .end()
+registry.put("insertDbIdemRepo", kafkaIdempotentRepository);
 ```
 
-In XML:
+_XML: registering the bean_
 
 ```xml
 <!-- simple -->
@@ -784,16 +791,58 @@ In XML:
 </bean>
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:performInsert")
+    .idempotentConsumer(header("id")).idempotentRepository("insertDbIdemRepo")
+        .to("sql:INSERT INTO ...")
+    .end();
+```
+
+```xml
+<route>
+  <from uri="direct:performInsert"/>
+  <idempotentConsumer idempotentRepository="insertDbIdemRepo">
+    <header>id</header>
+    <to uri="sql:INSERT INTO ..."/>
+  </idempotentConsumer>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:performInsert
+      steps:
+        - idempotentConsumer:
+            idempotentRepository: "#insertDbIdemRepo"
+            expression:
+              header: id
+            steps:
+              - to:
+                  uri: "sql:INSERT INTO ..."
+```
+
 There are 3 alternatives to choose from when using idempotency with numeric identifiers. The first one is to use the static method `numericHeader` method from `org.apache.camel.component.kafka.serde.KafkaSerdeHelper` to perform the conversion for you:
+
+_Java-only: numericHeader helper method_
 
 ```java
 from("direct:performInsert")
     .idempotentConsumer(numericHeader("id")).idempotentRepository("insertDbIdemRepo")
-        // once-only insert into the database
-    .end()
+        .to("sql:INSERT INTO ...")
+    .end();
 ```
 
 Alternatively, it is possible to use a custom serializer configured via the route URL to perform the conversion:
+
+_Java-only: custom header deserializer class_
 
 ```java
 public class CustomHeaderDeserializer extends DefaultKafkaHeaderDeserializer {
@@ -814,17 +863,18 @@ public class CustomHeaderDeserializer extends DefaultKafkaHeaderDeserializer {
 
 Lastly, it is also possible to do so in a processor:
 
+_Java-only: processor for header type conversion_
+
 ```java
-from(from).routeId("foo")
+from("kafka:my-topic")
     .process(exchange -> {
         byte[] id = exchange.getIn().getHeader("id", byte[].class);
-
         BigInteger bi = new BigInteger(id);
         exchange.getIn().setHeader("id", String.valueOf(bi.longValue()));
     })
     .idempotentConsumer(header("id"))
     .idempotentRepository("kafkaIdempotentRepository")
-    .to(to);
+    .to("direct:process");
 ```
 
 ### Manual commits with the Kafka consumer
@@ -833,23 +883,36 @@ By default, the Kafka consumer will use auto commit, where the offset will be co
 
 In case you want to force manual commits, you can use `KafkaManualCommit` API from the Camel Exchange, stored on the message header. This requires turning on manual commits by either setting the option `allowManualCommit` to `true` on the `KafkaComponent` or on the endpoint, for example:
 
+_Java-only: programmatic component configuration_
+
 ```java
 KafkaComponent kafka = new KafkaComponent();
 kafka.setAutoCommitEnable(false);
 kafka.setAllowManualCommit(true);
-// ...
 camelContext.addComponent("kafka", kafka);
 ```
 
-By default, it uses the `NoopCommitManager` behind the scenes. To commit an offset, you will require you to use the `KafkaManualCommit` from Java code such as a Camel `Processor`:
+Or using configuration properties:
+
+```properties
+camel.component.kafka.auto-commit-enable=false
+camel.component.kafka.allow-manual-commit=true
+```
+
+By default, it uses the `NoopCommitManager` behind the scenes. To commit an offset, you will need to use the `KafkaManualCommit` from Java code such as a Camel `Processor`:
+
+_Java-only: manual commit processor_
 
 ```java
 public void process(Exchange exchange) {
     KafkaManualCommit manual =
-        exchange.getIn().getHeader(KafkaConstants.MANUAL_COMMIT, KafkaManualCommit.class);
+        exchange.getIn().getHeader("CamelKafkaManualCommit", KafkaManualCommit.class);
     manual.commit();
 }
 ```
+
+> **Tip**
+> The header name `CamelKafkaManualCommit` is also available as the constant `KafkaConstants.MANUAL_COMMIT`.
 
 The `KafkaManualCommit` will force a synchronous commit which will block until the commit is acknowledged on Kafka, or if it fails an exception is thrown. You can use an asynchronous commit as well by configuring the `KafkaManualCommitFactory` with the `DefaultKafkaManualAsyncCommitFactory` implementation.
 
@@ -859,14 +922,24 @@ If you want to use a custom implementation of `KafkaManualCommit` then you can c
 
 When configuring a consumer to use manual commit and a specific `CommitManager` it is important to understand how these influence the behavior of `breakOnFirstError`
 
+_Java-only: programmatic component configuration_
+
 ```java
 KafkaComponent kafka = new KafkaComponent();
 kafka.setAutoCommitEnable(false);
 kafka.setAllowManualCommit(true);
 kafka.setBreakOnFirstError(true);
 kafka.setKafkaManualCommitFactory(new DefaultKafkaManualCommitFactory());
-...
 camelContext.addComponent("kafka", kafka);
+```
+
+Or using configuration properties:
+
+```properties
+camel.component.kafka.auto-commit-enable=false
+camel.component.kafka.allow-manual-commit=true
+camel.component.kafka.break-on-first-error=true
+camel.component.kafka.kafka-manual-commit-factory=#class:org.apache.camel.component.kafka.consumer.DefaultKafkaManualCommitFactory
 ```
 
 When the `CommitManager` is left to the default `NoopCommitManager` then `breakOnFirstError` will not automatically commit the offset so that the message with an error is retried. The consumer must manage that in the route using `KafkaManualCommit`.
@@ -881,12 +954,14 @@ When the `CommitManager` is changed to either the synchronous or asynchronous ma
 
 The Kafka component supports pausable consumers. This type of consumer can pause consuming data based on conditions external to the component itself, such as an external system being unavailable or other transient conditions.
 
+_Java-only: pausable consumer with lambda_
+
 ```java
 from("kafka:topic")
-    .pausable(new KafkaConsumerListener(), () -> canContinue()) // the pausable check gets called if the exchange fails to be processed ...
+    .pausable(new KafkaConsumerListener(), () -> canContinue())
     .routeId("pausable-route")
-    .process(this::process) // Kafka consumer will be paused if this one throws an exception ...
-    .to("some:destination"); // or this one
+    .process(this::process)
+    .to("some:destination");
 ```
 
 In this example, consuming messages can pause (by calling the Kafka’s Consumer pause method) if the result from `canContinue` is false.
@@ -906,18 +981,70 @@ When consuming messages from Kafka, headers will be propagated to camel exchange
 
 Since kafka headers allow only `byte[]` values, in order camel exchange header to be propagated its value should be serialized to `bytes[]`, otherwise header will be skipped. The following header value types are supported: `String`, `Integer`, `Long`, `Double`, `Boolean`, `byte[]`. Note: all headers propagated **from** kafka **to** camel exchange will contain `byte[]` value by default. To override default functionality, these uri parameters can be set: `headerDeserializer` for `from` route and `headerSerializer` for `to` route. For example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("kafka:my_topic?headerDeserializer=#myDeserializer")
-...
-.to("kafka:my_topic?headerSerializer=#mySerializer")
+    .to("kafka:my_topic?headerSerializer=#mySerializer");
+```
+
+```xml
+<route>
+  <from uri="kafka:my_topic?headerDeserializer=#myDeserializer"/>
+  <to uri="kafka:my_topic?headerSerializer=#mySerializer"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:my_topic
+      parameters:
+        headerDeserializer: "#myDeserializer"
+      steps:
+        - to:
+            uri: kafka:my_topic
+            parameters:
+              headerSerializer: "#mySerializer"
 ```
 
 By default, all headers are being filtered by `KafkaHeaderFilterStrategy`. Strategy filters out headers which start with `Camel` or `org.apache.camel` prefixes. Default strategy can be overridden by using `headerFilterStrategy` uri parameter in both `to` and `from` routes:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("kafka:my_topic?headerFilterStrategy=#myStrategy")
-...
-.to("kafka:my_topic?headerFilterStrategy=#myStrategy")
+    .to("kafka:my_topic?headerFilterStrategy=#myStrategy");
+```
+
+```xml
+<route>
+  <from uri="kafka:my_topic?headerFilterStrategy=#myStrategy"/>
+  <to uri="kafka:my_topic?headerFilterStrategy=#myStrategy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:my_topic
+      parameters:
+        headerFilterStrategy: "#myStrategy"
+      steps:
+        - to:
+            uri: kafka:my_topic
+            parameters:
+              headerFilterStrategy: "#myStrategy"
 ```
 
 `myStrategy` object should be a subclass of `HeaderFilterStrategy` and must be placed in the Camel registry, either manually or by registration as a bean in Spring, as it is `CamelContext` aware.
@@ -926,9 +1053,34 @@ from("kafka:my_topic?headerFilterStrategy=#myStrategy")
 
 You need to add `transactionalId=<tx-id>` or `transacted=true` to enable kafka transaction with the producer.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:transaction")
 .to("kafka:my_topic?transacted=true");
+```
+
+```xml
+<route>
+  <from uri="direct:transaction"/>
+  <to uri="kafka:my_topic?transacted=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:transaction
+      steps:
+        - to:
+            uri: kafka:my_topic
+            parameters:
+              transacted: true
 ```
 
 At the end of exchange routing, the kafka producer would commit the transaction or abort it if there is an Exception throwing or the exchange is `RollbackOnly`. Since Kafka does not support transactions in multi threads, it will throw `ProducerFencedException` if there is another producer with the same `transaction.id` to make the transactional request.
@@ -943,10 +1095,18 @@ If both `transacted=true` and `transactionalId` are present, the latter takes pr
 
 Configure the 'krb5.conf' file directly through the API:
 
+_Java-only: static Kerberos configuration_
+
 ```java
 static {
     KafkaComponent.setKerberosConfigLocation("path/to/config/file");
 }
+```
+
+Alternatively, you can set the JVM system property:
+
+```properties
+java.security.krb5.conf=/path/to/config/file
 ```
 
 ### Authentication to Kafka
@@ -973,9 +1133,37 @@ The following authentication types are supported:
 
 **SCRAM Authentication Example**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("kafka:my-topic?brokers=localhost:9092&saslAuthType=SCRAM_SHA_512&saslUsername=myuser&saslPassword=mypassword")
     .to("log:received");
+```
+
+```xml
+<route>
+  <from uri="kafka:my-topic?brokers=localhost:9092&amp;saslAuthType=SCRAM_SHA_512&amp;saslUsername=myuser&amp;saslPassword=mypassword"/>
+  <to uri="log:received"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:my-topic
+      parameters:
+        brokers: "localhost:9092"
+        saslAuthType: SCRAM_SHA_512
+        saslUsername: myuser
+        saslPassword: mypassword
+      steps:
+        - to:
+            uri: log:received
 ```
 
 Or using Spring Boot configuration:
@@ -988,22 +1176,73 @@ camel.component.kafka.sasl-password=mypassword
 
 **OAuth Authentication Example**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("kafka:my-topic?brokers=localhost:9092" +
-     "&saslAuthType=OAUTH" +
-     "&oauthClientId=my-client" +
-     "&oauthClientSecret=my-secret" +
-     "&oauthTokenEndpointUri=https://auth.example.com/oauth/token")
+from("kafka:my-topic?brokers=localhost:9092&saslAuthType=OAUTH&oauthClientId=my-client&oauthClientSecret=my-secret&oauthTokenEndpointUri=https://auth.example.com/oauth/token")
     .to("log:received");
+```
+
+```xml
+<route>
+  <from uri="kafka:my-topic?brokers=localhost:9092&amp;saslAuthType=OAUTH&amp;oauthClientId=my-client&amp;oauthClientSecret=my-secret&amp;oauthTokenEndpointUri=https://auth.example.com/oauth/token"/>
+  <to uri="log:received"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:my-topic
+      parameters:
+        brokers: "localhost:9092"
+        saslAuthType: OAUTH
+        oauthClientId: my-client
+        oauthClientSecret: my-secret
+        oauthTokenEndpointUri: "https://auth.example.com/oauth/token"
+      steps:
+        - to:
+            uri: log:received
 ```
 
 **AWS MSK IAM Authentication**
 
 When using AWS MSK with IAM authentication, ensure the `aws-msk-iam-auth` library is on the classpath:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("kafka:my-topic?brokers=b-1.mycluster.kafka.us-east-1.amazonaws.com:9098&saslAuthType=AWS_MSK_IAM")
     .to("log:received");
+```
+
+```xml
+<route>
+  <from uri="kafka:my-topic?brokers=b-1.mycluster.kafka.us-east-1.amazonaws.com:9098&amp;saslAuthType=AWS_MSK_IAM"/>
+  <to uri="log:received"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:my-topic
+      parameters:
+        brokers: "b-1.mycluster.kafka.us-east-1.amazonaws.com:9098"
+        saslAuthType: AWS_MSK_IAM
+      steps:
+        - to:
+            uri: log:received
 ```
 
 The simplified configuration is optional. If you need more control or are using a custom JAAS login module, you can still use the traditional approach with explicit `securityProtocol`, `saslMechanism`, and `saslJaasConfig` properties as shown below.
@@ -1080,25 +1319,22 @@ In case of failures, the records will not be processed.
 
 The code below provides an example of this approach:
 
-```java
-public void configure() {
-    from("kafka:topic?groupId=myGroup&pollTimeoutMs=1000&batching=true&maxPollRecords=10&autoOffsetReset=earliest").process(e -> {
-        // The received records are stored as exchanges in a list. This gets the list of those exchanges
-        final List<?> exchanges = e.getMessage().getBody(List.class);
+_Java-only: batch processing with inline processor_
 
-        // Ensure we are actually receiving what we are asking for
+```java
+from("kafka:topic?groupId=myGroup&pollTimeoutMs=1000&batching=true&maxPollRecords=10&autoOffsetReset=earliest")
+    .process(e -> {
+        final List<?> exchanges = e.getMessage().getBody(List.class);
         if (exchanges == null || exchanges.isEmpty()) {
             return;
         }
-
-        // The records from the batch are stored in a list of exchanges in the original exchange. To process, we iterate over that list
         for (Object obj : exchanges) {
             if (obj instanceof Exchange exchange) {
                 LOG.info("Processing exchange with body {}", exchange.getMessage().getBody(String.class));
             }
         }
-    }).to(KafkaTestUtil.MOCK_RESULT);
-}
+    })
+    .to("mock:result");
 ```
 
 ##### Handling Errors with Automatic Commits
@@ -1109,42 +1345,31 @@ It is recommended to implement appropriate error handling mechanisms and pattern
 
 The code below provides an example of handling errors with automatic commits:
 
+_Java-only: error handling with batch processing_
+
 ```java
-public void configure() {
-    /*
-     We want to use continued here, so that Camel auto-commits the batch even though part of it has failed. In a
-     production scenario, applications should probably send these records to a separate topic or fix the condition
-     that lead to the failure
-     */
-    onException(IllegalArgumentException.class).process(exchange -> {
-        LOG.warn("Failed to process batch {}", exchange.getMessage().getBody());
-        LOG.warn("Failed to process due to {}", exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class).getMessage());
-    }).continued(true);
+onException(IllegalArgumentException.class).process(exchange -> {
+    LOG.warn("Failed to process batch {}", exchange.getMessage().getBody());
+    LOG.warn("Failed to process due to {}", exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Throwable.class).getMessage());
+}).continued(true);
 
-    from("kafka:topic?groupId=myGroup&pollTimeoutMs=1000&batching=true&maxPollRecords=10&autoOffsetReset=earliest").process(e -> {
-        // The received records are stored as exchanges in a list. This gets the list of those exchanges
+from("kafka:topic?groupId=myGroup&pollTimeoutMs=1000&batching=true&maxPollRecords=10&autoOffsetReset=earliest")
+    .process(e -> {
         final List<?> exchanges = e.getMessage().getBody(List.class);
-
-        // Ensure we are actually receiving what we are asking for
         if (exchanges == null || exchanges.isEmpty()) {
             return;
         }
-
-        // The records from the batch are stored in a list of exchanges in the original exchange.
-        int i = 0;
         for (Object o : exchanges) {
             if (o instanceof Exchange exchange) {
-                i++;
                 LOG.info("Processing exchange with body {}", exchange.getMessage().getBody(String.class));
-
-                if (i == 4) {
-                    throw new IllegalArgumentException("Failed to process record");
-                }
             }
         }
-    }).to(KafkaTestUtil.MOCK_RESULT);
-}
+    })
+    .to("mock:result");
 ```
+
+> **Tip**
+> In a production scenario, applications should send failed records to a separate topic (dead-letter queue) or fix the condition that led to the failure.
 
 ##### Break on First Error in Batching Mode
 
@@ -1251,7 +1476,7 @@ onException(Exception.class)
     .process(exchange -> {
         // Commit manually when error occurs
         KafkaManualCommit manual = exchange.getMessage()
-            .getHeader(KafkaConstants.MANUAL_COMMIT, KafkaManualCommit.class);
+            .getHeader("CamelKafkaManualCommit", KafkaManualCommit.class);
         manual.commit();
     });
 
@@ -1266,7 +1491,7 @@ from("kafka:topic?groupId=myGroup&batching=true&breakOnFirstError=true&autoCommi
     .process(exchange -> {
         // Manual commit on successful processing
         KafkaManualCommit manual = exchange.getMessage()
-            .getHeader(KafkaConstants.MANUAL_COMMIT, KafkaManualCommit.class);
+            .getHeader("CamelKafkaManualCommit", KafkaManualCommit.class);
         manual.commit();
     })
     .to("mock:result");
@@ -1340,7 +1565,7 @@ public class ErrorCommitProcessor implements Processor {
         LOG.warn("Error occurred, performing manual commit before reconnection");
 
         KafkaManualCommit manual = exchange.getMessage()
-            .getHeader(KafkaConstants.MANUAL_COMMIT, KafkaManualCommit.class);
+            .getHeader("CamelKafkaManualCommit", KafkaManualCommit.class);
 
         if (manual != null) {
             manual.commit();
@@ -1358,7 +1583,7 @@ public class SuccessCommitProcessor implements Processor {
         LOG.debug("Batch processed successfully, performing manual commit");
 
         KafkaManualCommit manual = exchange.getMessage()
-            .getHeader(KafkaConstants.MANUAL_COMMIT, KafkaManualCommit.class);
+            .getHeader("CamelKafkaManualCommit", KafkaManualCommit.class);
 
         if (manual != null) {
             manual.commit();
@@ -1374,32 +1599,25 @@ When working with batch processing with manual commits, it’s up to the applica
 
 The code below provides an example of this approach:
 
-```java
-public void configure() {
-    from("kafka:topic?batching=true&allowManualCommit=true&maxPollRecords=100&kafkaManualCommitFactory=#class:org.apache.camel.component.kafka.consumer.DefaultKafkaManualCommitFactory")
-    .process(e -> {
-        // The received records are stored as exchanges in a list. This gets the list of those exchanges
-        final List<?> exchanges = e.getMessage().getBody(List.class);
+_Java-only: batch processing with manual commits_
 
-        // Ensure we are actually receiving what we are asking for
+```java
+from("kafka:topic?batching=true&allowManualCommit=true&maxPollRecords=100&kafkaManualCommitFactory=#class:org.apache.camel.component.kafka.consumer.DefaultKafkaManualCommitFactory")
+    .process(e -> {
+        final List<?> exchanges = e.getMessage().getBody(List.class);
         if (exchanges == null || exchanges.isEmpty()) {
             return;
         }
-
-        /*
-        Every exchange in that list should contain a reference to the manual commit object. We use the reference
-        for the last exchange in the list to commit the whole batch
-         */
+        // Use the last exchange in the list to commit the whole batch
         final Object tmp = exchanges.getLast();
         if (tmp instanceof Exchange exchange) {
             KafkaManualCommit manual =
-                    exchange.getMessage().getHeader(KafkaConstants.MANUAL_COMMIT, KafkaManualCommit.class);
+                    exchange.getMessage().getHeader("CamelKafkaManualCommit", KafkaManualCommit.class);
             LOG.debug("Performing manual commit");
             manual.commit();
             LOG.debug("Done performing manual commit");
         }
     });
-}
 ```
 
 #### Dealing with long polling timeouts
@@ -1410,20 +1628,23 @@ To properly do so, first make sure to have a max polling interval that is higher
 
 Then, increase the shutdown timeout to ensure that committing, closing and other Kafka operations are not abruptly aborted. For instance:
 
-```java
-public void configure() {
-    // Note that this can be configured in other ways
-    getCamelContext().getShutdownStrategy().setTimeout(10000);
+_Java-only: programmatic shutdown timeout configuration_
 
-    // route setup ...
-}
+```java
+getCamelContext().getShutdownStrategy().setTimeout(10000);
+```
+
+Or using configuration properties:
+
+```properties
+camel.main.shutdown-timeout=10000
 ```
 
 ### Custom Subscription Adapters
 
 Applications with complex subscription logic may provide a custom bean to handle the subscription process. To so, it is necessary to implement the interface `SubscribeAdapter`.
 
-Example subscriber adapter that subscribes to a set of Kafka topics or patterns
+_Java-only: custom subscribe adapter class_
 
 ```java
 public class CustomSubscribeAdapter implements SubscribeAdapter {
@@ -1438,12 +1659,12 @@ public class CustomSubscribeAdapter implements SubscribeAdapter {
 }
 ```
 
-Then, it is necessary to add it as named bean instance to the registry:
+Then, it is necessary to add it as a named bean instance to the registry:
 
-Add to registry example
+_Java-only: registering the bean_
 
 ```java
-context.getRegistry().bind(KafkaConstants.KAFKA_SUBSCRIBE_ADAPTER, new CustomSubscribeAdapter());
+context.getRegistry().bind("subscribeAdapter", new CustomSubscribeAdapter());
 ```
 
 ### Interoperability
@@ -1460,25 +1681,81 @@ Due to the inherent complexity of each possible system and endpoint, it may not 
 
 To utilize this solution, you need to modify the route URI on the consumer end of the pipeline by including the `headerDeserializer` option. For example:
 
-Route snippet
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("kafka:topic?headerDeserializer=#class:org.apache.camel.component.kafka.consumer.support.interop.JMSDeserializer")
-    .to("...");
+    .to("direct:process");
+```
+
+```xml
+<route>
+  <from uri="kafka:topic?headerDeserializer=#class:org.apache.camel.component.kafka.consumer.support.interop.JMSDeserializer"/>
+  <to uri="direct:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:topic
+      parameters:
+        headerDeserializer: "#class:org.apache.camel.component.kafka.consumer.support.interop.JMSDeserializer"
+      steps:
+        - to:
+            uri: direct:process
 ```
 
 ### Producer Performance
 
 If the producer is performing too slowly for your needs, you may want to aggregate the exchanges before sending.
 
-Route snippet
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("source")
-    // .other route stuff
+from("direct:start")
     .aggregate(constant(true), new GroupedExchangeAggregationStrategy())
-    .to("kafka:topic");
+    .to("kafka:my-topic");
 ```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <aggregate aggregationStrategy="#groupedExchange">
+    <correlationExpression>
+      <constant>true</constant>
+    </correlationExpression>
+    <to uri="kafka:my-topic"/>
+  </aggregate>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: "#groupedExchange"
+            correlationExpression:
+              constant: "true"
+            steps:
+              - to:
+                  uri: kafka:my-topic
+```
+
+> **Tip**
+> In XML and YAML, register the `GroupedExchangeAggregationStrategy` as a bean named `groupedExchange` in the registry.
 
 The reason for this is related to how the producer handles the two different cases:
 
@@ -1496,6 +1773,13 @@ The reason for this is related to how the producer handles the two different cas
 
 Here is the minimal route you need to read messages from Kafka.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("kafka:test?brokers=localhost:9092")
     .log("Message received from Kafka : ${body}")
@@ -1505,7 +1789,39 @@ from("kafka:test?brokers=localhost:9092")
     .log("    with the key ${headers[CamelKafkaKey]}")
 ```
 
+```xml
+<route>
+  <from uri="kafka:test?brokers=localhost:9092"/>
+  <log message="Message received from Kafka : ${body}"/>
+  <log message="    on the topic ${headers[CamelKafkaTopic]}"/>
+  <log message="    on the partition ${headers[CamelKafkaPartition]}"/>
+  <log message="    with the offset ${headers[CamelKafkaOffset]}"/>
+  <log message="    with the key ${headers[CamelKafkaKey]}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:test
+      parameters:
+        brokers: "localhost:9092"
+      steps:
+        - log: "Message received from Kafka : ${body}"
+        - log: "    on the topic ${headers[CamelKafkaTopic]}"
+        - log: "    on the partition ${headers[CamelKafkaPartition]}"
+        - log: "    with the offset ${headers[CamelKafkaOffset]}"
+        - log: "    with the key ${headers[CamelKafkaKey]}"
+```
+
 If you need to consume messages from multiple topics, you can use a comma separated list of topic names.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("kafka:test,test1,test2?brokers=localhost:9092")
@@ -1516,7 +1832,39 @@ from("kafka:test,test1,test2?brokers=localhost:9092")
     .log("    with the key ${headers[CamelKafkaKey]}")
 ```
 
+```xml
+<route>
+  <from uri="kafka:test,test1,test2?brokers=localhost:9092"/>
+  <log message="Message received from Kafka : ${body}"/>
+  <log message="    on the topic ${headers[CamelKafkaTopic]}"/>
+  <log message="    on the partition ${headers[CamelKafkaPartition]}"/>
+  <log message="    with the offset ${headers[CamelKafkaOffset]}"/>
+  <log message="    with the key ${headers[CamelKafkaKey]}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "kafka:test,test1,test2"
+      parameters:
+        brokers: "localhost:9092"
+      steps:
+        - log: "Message received from Kafka : ${body}"
+        - log: "    on the topic ${headers[CamelKafkaTopic]}"
+        - log: "    on the partition ${headers[CamelKafkaPartition]}"
+        - log: "    with the offset ${headers[CamelKafkaOffset]}"
+        - log: "    with the key ${headers[CamelKafkaKey]}"
+```
+
 It’s also possible to subscribe to multiple topics giving a pattern as the topic name and using the `topicIsPattern` option.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("kafka:test.*?brokers=localhost:9092&topicIsPattern=true")
@@ -1527,44 +1875,129 @@ from("kafka:test.*?brokers=localhost:9092&topicIsPattern=true")
     .log("    with the key ${headers[CamelKafkaKey]}")
 ```
 
+```xml
+<route>
+  <from uri="kafka:test.*?brokers=localhost:9092&amp;topicIsPattern=true"/>
+  <log message="Message received from Kafka : ${body}"/>
+  <log message="    on the topic ${headers[CamelKafkaTopic]}"/>
+  <log message="    on the partition ${headers[CamelKafkaPartition]}"/>
+  <log message="    with the offset ${headers[CamelKafkaOffset]}"/>
+  <log message="    with the key ${headers[CamelKafkaKey]}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "kafka:test.*"
+      parameters:
+        brokers: "localhost:9092"
+        topicIsPattern: true
+      steps:
+        - log: "Message received from Kafka : ${body}"
+        - log: "    on the topic ${headers[CamelKafkaTopic]}"
+        - log: "    on the partition ${headers[CamelKafkaPartition]}"
+        - log: "    with the offset ${headers[CamelKafkaOffset]}"
+        - log: "    with the key ${headers[CamelKafkaKey]}"
+```
+
 When consuming messages from Kafka, you can use your own offset management and not delegate this management to Kafka. To keep the offsets, the component needs a `StateRepository` implementation such as `FileStateRepository`. This bean should be available in the registry. Here how to use it :
 
+> **Note**
+> The `FileStateRepository` bean must be registered in the Camel registry before it can be referenced by the route.
+
+_Java-only: registering the bean_
+
 ```java
-// Create the repository in which the Kafka offsets will be persisted
 FileStateRepository repository = FileStateRepository.fileStateRepository(new File("/path/to/repo.dat"));
 
 // Bind this repository into the Camel registry
 Registry registry = createCamelRegistry();
 registry.bind("offsetRepo", repository);
+```
 
-// Configure the camel context
-DefaultCamelContext camelContext = new DefaultCamelContext(registry);
-camelContext.addRoutes(new RouteBuilder() {
-    @Override
-    public void configure() throws Exception {
-        fromF("kafka:%s?brokers=localhost:{{kafkaPort}}" +
-                     // Set up the topic and broker address
-                     "&groupId=A" +
-                     // The consumer processor group ID
-                     "&autoOffsetReset=earliest" +
-                     // Ask to start from the beginning if we have unknown offset
-                     "&offsetRepository=#offsetRepo", TOPIC)
-                     // Keep the offsets in the previously configured repository
-                .to("mock:result");
-    }
-});
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("kafka:my-topic?brokers=localhost:9092&groupId=A&autoOffsetReset=earliest&offsetRepository=#offsetRepo")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="kafka:my-topic?brokers=localhost:9092&amp;groupId=A&amp;autoOffsetReset=earliest&amp;offsetRepository=#offsetRepo"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:my-topic
+      parameters:
+        brokers: "localhost:9092"
+        groupId: A
+        autoOffsetReset: earliest
+        offsetRepository: "#offsetRepo"
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ### Producing messages to Kafka
 
 Here is the minimal route you need to produce messages to Kafka.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .setBody(constant("Message from Camel"))          // Message to send
-    .setHeader(KafkaConstants.KEY, constant("Camel")) // Key of the message
+    .setBody(constant("Message from Camel"))
+    .setHeader("CamelKafkaKey", constant("Camel"))
     .to("kafka:test?brokers=localhost:9092");
 ```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>Message from Camel</constant>
+  </setBody>
+  <setHeader name="CamelKafkaKey">
+    <constant>Camel</constant>
+  </setHeader>
+  <to uri="kafka:test?brokers=localhost:9092"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: "Message from Camel"
+        - setHeader:
+            name: CamelKafkaKey
+            constant: "Camel"
+        - to:
+            uri: kafka:test
+            parameters:
+              brokers: "localhost:9092"
+```
+
+> **Tip**
+> In Java, you can use the constant `KafkaConstants.KEY` instead of the string `"CamelKafkaKey"`.
 
 ### SSL configuration
 
@@ -1572,20 +2005,46 @@ You have two different ways to configure the SSL communication on the Kafka comp
 
 The first way is through the many SSL endpoint parameters:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("kafka:" + TOPIC + "?brokers=localhost:{{kafkaPort}}" +
-             "&groupId=A" +
-             "&sslKeystoreLocation=/path/to/keystore.jks" +
-             "&sslKeystorePassword=changeit" +
-             "&sslKeyPassword=changeit" +
-             "&securityProtocol=SSL")
-        .to("mock:result");
+from("kafka:my-topic?brokers=localhost:9092&groupId=A&sslKeystoreLocation=/path/to/keystore.jks&sslKeystorePassword=changeit&sslKeyPassword=changeit&securityProtocol=SSL")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="kafka:my-topic?brokers=localhost:9092&amp;groupId=A&amp;sslKeystoreLocation=/path/to/keystore.jks&amp;sslKeystorePassword=changeit&amp;sslKeyPassword=changeit&amp;securityProtocol=SSL"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:my-topic
+      parameters:
+        brokers: "localhost:9092"
+        groupId: A
+        sslKeystoreLocation: "/path/to/keystore.jks"
+        sslKeystorePassword: changeit
+        sslKeyPassword: changeit
+        securityProtocol: SSL
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 The second way is to use the `sslContextParameters` endpoint parameter:
 
+_Java-only: SSLContextParameters bean setup_
+
 ```java
-// Configure the SSLContextParameters object
 KeyStoreParameters ksp = new KeyStoreParameters();
 ksp.setResource("/path/to/keystore.jks");
 ksp.setPassword("changeit");
@@ -1595,26 +2054,41 @@ kmp.setKeyPassword("changeit");
 SSLContextParameters scp = new SSLContextParameters();
 scp.setKeyManagers(kmp);
 
-// Bind this SSLContextParameters into the Camel registry
 Registry registry = createCamelRegistry();
 registry.bind("ssl", scp);
+```
 
-// Configure the camel context
-DefaultCamelContext camelContext = new DefaultCamelContext(registry);
-camelContext.addRoutes(new RouteBuilder() {
-    @Override
-    public void configure() throws Exception {
-        from("kafka:" + TOPIC + "?brokers=localhost:{{kafkaPort}}" +
-                     // Set up the topic and broker address
-                     "&groupId=A" +
-                     // The consumer processor group ID
-                     "&sslContextParameters=#ssl" +
-                     // The security protocol
-                     "&securityProtocol=SSL)
-                     // Reference the SSL configuration
-                .to("mock:result");
-    }
-});
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("kafka:my-topic?brokers=localhost:9092&groupId=A&sslContextParameters=#ssl&securityProtocol=SSL")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="kafka:my-topic?brokers=localhost:9092&amp;groupId=A&amp;sslContextParameters=#ssl&amp;securityProtocol=SSL"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:my-topic
+      parameters:
+        brokers: "localhost:9092"
+        groupId: A
+        sslContextParameters: "#ssl"
+        securityProtocol: SSL
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

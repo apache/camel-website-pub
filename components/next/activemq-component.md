@@ -872,17 +872,70 @@ You’ll need to provide a connectionFactory to the ActiveMQ Component, to have 
 
 ### Producer Example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("timer:mytimer?period=5000")
-        .setBody(constant("HELLO from Camel!"))
-        .to("activemq:queue:HELLO.WORLD");
+    .setBody(constant("HELLO from Camel!"))
+    .to("activemq:queue:HELLO.WORLD");
+```
+
+```xml
+<route>
+  <from uri="timer:mytimer?period=5000"/>
+  <setBody>
+    <constant>HELLO from Camel!</constant>
+  </setBody>
+  <to uri="activemq:queue:HELLO.WORLD"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:mytimer
+      parameters:
+        period: 5000
+      steps:
+        - setBody:
+            constant: "HELLO from Camel!"
+        - to:
+            uri: activemq:queue:HELLO.WORLD
 ```
 
 ### Consumer Example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:queue:HELLO.WORLD")
-        .log("Received a message - ${body}");
+    .log("Received a message - ${body}");
+```
+
+```xml
+<route>
+  <from uri="activemq:queue:HELLO.WORLD"/>
+  <log message="Received a message - ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:queue:HELLO.WORLD
+      steps:
+        - log:
+            message: "Received a message - ${body}"
 ```
 
 ## Spring Boot Auto-Configuration

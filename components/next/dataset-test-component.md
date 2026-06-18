@@ -117,9 +117,34 @@ With the following _path_ and _query_ parameters:
 
 For example, you could write a test case as follows:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("seda:someEndpoint").
-  to("dataset-test:file://data/expectedOutput?noop=true");
+from("seda:someEndpoint")
+    .to("dataset-test:file://data/expectedOutput?noop=true");
+```
+
+```xml
+<route>
+  <from uri="seda:someEndpoint"/>
+  <to uri="dataset-test:file://data/expectedOutput?noop=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:someEndpoint
+      steps:
+        - to:
+            uri: dataset-test:file://data/expectedOutput
+            parameters:
+              noop: true
 ```
 
 If your test then invokes the [MockEndpoint.assertIsSatisfied(camelContext) method](https://www.javadoc.io/doc/org.apache.camel/camel-mock/current/org/apache/camel/component/mock/MockEndpoint.html#assertIsSatisfied-org.apache.camel.CamelContext-), your test case will perform the necessary assertions.

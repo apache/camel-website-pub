@@ -248,9 +248,41 @@ When publishing events, the message body should contain a SplunkEvent. See comme
 
 **Example**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-      from("direct:start").convertBodyTo(SplunkEvent.class)
-          .to("splunk://submit?username=user&password=123&index=myindex&sourceType=someSourceType&source=mySource")...
+from("direct:start").convertBodyTo(SplunkEvent.class)
+    .to("splunk://submit?username=user&password=123&index=myindex&sourceType=someSourceType&source=mySource");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <convertBodyTo type="SplunkEvent"/>
+  <to uri="splunk://submit?username=user&amp;password=123&amp;index=myindex&amp;sourceType=someSourceType&amp;source=mySource"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - convertBodyTo:
+            type: SplunkEvent
+        - to:
+            uri: splunk://submit
+            parameters:
+              username: user
+              password: "123"
+              index: myindex
+              sourceType: someSourceType
+              source: mySource
 ```
 
 In this example, a converter is required to convert to a SplunkEvent class.
@@ -266,9 +298,38 @@ In this example, a converter is required to convert to a SplunkEvent class.
 
 **Example**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-      from("splunk://normal?delay=5000&username=user&password=123&initEarliestTime=-10s&search=search index=myindex sourcetype=someSourcetype")
-          .to("direct:search-result");
+from("splunk://normal?delay=5000&username=user&password=123&initEarliestTime=-10s&search=search index=myindex sourcetype=someSourcetype")
+    .to("direct:search-result");
+```
+
+```xml
+<route>
+  <from uri="splunk://normal?delay=5000&amp;username=user&amp;password=123&amp;initEarliestTime=-10s&amp;search=search index=myindex sourcetype=someSourcetype"/>
+  <to uri="direct:search-result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: splunk://normal
+      parameters:
+        delay: 5000
+        username: user
+        password: "123"
+        initEarliestTime: "-10s"
+        search: "search index=myindex sourcetype=someSourcetype"
+      steps:
+        - to:
+            uri: direct:search-result
 ```
 
 Camel Splunk component creates a route exchange per search result with a SplunkEvent in the body.
@@ -283,13 +344,55 @@ You can send raw data to Splunk by setting the raw option on the producer endpoi
 
 Search Twitter for tweets with music and publish events to Splunk
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-      from("twitter://search?type=polling&keywords=music&delay=10&consumerKey=abc&consumerSecret=def&accessToken=hij&accessTokenSecret=xxx")
-          .convertBodyTo(SplunkEvent.class)
-          .to("splunk://submit?username=foo&password=bar&index=camel-tweets&sourceType=twitter&source=music-tweets");
+from("twitter://search?type=polling&keywords=music&delay=10&consumerKey=abc&consumerSecret=def&accessToken=hij&accessTokenSecret=xxx")
+    .convertBodyTo(SplunkEvent.class)
+    .to("splunk://submit?username=foo&password=bar&index=camel-tweets&sourceType=twitter&source=music-tweets");
+```
+
+```xml
+<route>
+  <from uri="twitter://search?type=polling&amp;keywords=music&amp;delay=10&amp;consumerKey=abc&amp;consumerSecret=def&amp;accessToken=hij&amp;accessTokenSecret=xxx"/>
+  <convertBodyTo type="SplunkEvent"/>
+  <to uri="splunk://submit?username=foo&amp;password=bar&amp;index=camel-tweets&amp;sourceType=twitter&amp;source=music-tweets"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: twitter://search
+      parameters:
+        type: polling
+        keywords: music
+        delay: 10
+        consumerKey: abc
+        consumerSecret: def
+        accessToken: hij
+        accessTokenSecret: xxx
+      steps:
+        - convertBodyTo:
+            type: SplunkEvent
+        - to:
+            uri: splunk://submit
+            parameters:
+              username: foo
+              password: bar
+              index: camel-tweets
+              sourceType: twitter
+              source: music-tweets
 ```
 
 To convert a Tweet to a `SplunkEvent`, you could use a converter like:
+
+_Java-only: custom type converter from Tweet to SplunkEvent_
 
 ```java
 @Converter
@@ -320,9 +423,37 @@ public class Tweet2SplunkEvent {
 
 Search Splunk for tweets:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-      from("splunk://normal?username=foo&password=bar&initEarliestTime=-2m&search=search index=camel-tweets sourcetype=twitter")
-          .log("${body}");
+from("splunk://normal?username=foo&password=bar&initEarliestTime=-2m&search=search index=camel-tweets sourcetype=twitter")
+    .log("${body}");
+```
+
+```xml
+<route>
+  <from uri="splunk://normal?username=foo&amp;password=bar&amp;initEarliestTime=-2m&amp;search=search index=camel-tweets sourcetype=twitter"/>
+  <log message="${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: splunk://normal
+      parameters:
+        username: foo
+        password: bar
+        initEarliestTime: "-2m"
+        search: "search index=camel-tweets sourcetype=twitter"
+      steps:
+        - log:
+            message: "${body}"
 ```
 
 ### Other comments

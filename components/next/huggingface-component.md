@@ -27,9 +27,34 @@ Where _model_ is the model name hosted on Hugging Face and _task_ is one of the 
 
 Object detection
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start-chat")
     .to("huggingface:chat?modelId=Qwen/Qwen2.5-3B-Instruct");
+```
+
+```xml
+<route>
+  <from uri="direct:start-chat"/>
+  <to uri="huggingface:chat?modelId=Qwen/Qwen2.5-3B-Instruct"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start-chat
+      steps:
+        - to:
+            uri: huggingface:chat
+            parameters:
+              modelId: Qwen/Qwen2.5-3B-Instruct
 ```
 
 ### Supported Tasks
@@ -216,19 +241,74 @@ camel.oauth.hf.client-secret=my-secret
 camel.oauth.hf.token-endpoint=https://idp.example.com/token
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:chat")
     .to("huggingface:chat?modelId=mistralai/Mistral-7B-Instruct-v0.2&oauthProfile=hf");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="huggingface:chat?modelId=mistralai/Mistral-7B-Instruct-v0.2&amp;oauthProfile=hf"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: huggingface:chat
+            parameters:
+              modelId: mistralai/Mistral-7B-Instruct-v0.2
+              oauthProfile: hf
 ```
 
 ## Examples
 
 Classify sentiment of text:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("huggingface:text-classification?modelId=modelId=cardiffnlp/twitter-roberta-base-sentiment-latest&topK=2")
     .to("log:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="huggingface:text-classification?modelId=modelId=cardiffnlp/twitter-roberta-base-sentiment-latest&amp;topK=2"/>
+  <to uri="log:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: huggingface:text-classification
+            parameters:
+              modelId: "cardiffnlp/twitter-roberta-base-sentiment-latest"
+              topK: 2
+        - to:
+            uri: log:result
 ```
 
 ```cmd
@@ -240,10 +320,41 @@ Chat Example
 
 Simple chat route with automatic history:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start-chat")
     .to("huggingface:chat?modelId=mistralai/Mistral-7B-Instruct-v0.2&systemPrompt=You are a helpful assistant&maxTokens=100&temperature=0.7")
     .to("log:response");
+```
+
+```xml
+<route>
+  <from uri="direct:start-chat"/>
+  <to uri="huggingface:chat?modelId=mistralai/Mistral-7B-Instruct-v0.2&amp;systemPrompt=You are a helpful assistant&amp;maxTokens=100&amp;temperature=0.7"/>
+  <to uri="log:response"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start-chat
+      steps:
+        - to:
+            uri: huggingface:chat
+            parameters:
+              modelId: mistralai/Mistral-7B-Instruct-v0.2
+              systemPrompt: You are a helpful assistant
+              maxTokens: 100
+              temperature: 0.7
+        - to:
+            uri: log:response
 ```
 
 Send multiple messages to "direct:start-chat" — history is maintained automatically.
@@ -251,6 +362,8 @@ Send multiple messages to "direct:start-chat" — history is maintained automati
 Custom Task
 
 For a custom task (e.g., _translation_): Define a custom predictor bean in your application or test:
+
+_Java-only: defining a custom predictor bean_
 
 ```java
 public class TranslationPredictor extends AbstractTaskPredictor {
@@ -265,10 +378,39 @@ public TranslationPredictor myCustomPredictor() {
 
 Route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start-custom")
     .to("huggingface:custom?modelId=Helsinki-NLP/opus-mt-en-fr&predictorBean=myCustomPredictor")
     .to("log:translated");
+```
+
+```xml
+<route>
+  <from uri="direct:start-custom"/>
+  <to uri="huggingface:custom?modelId=Helsinki-NLP/opus-mt-en-fr&amp;predictorBean=myCustomPredictor"/>
+  <to uri="log:translated"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start-custom
+      steps:
+        - to:
+            uri: huggingface:custom
+            parameters:
+              modelId: Helsinki-NLP/opus-mt-en-fr
+              predictorBean: myCustomPredictor
+        - to:
+            uri: log:translated
 ```
 
 This allows extending the component for most HF tasks.

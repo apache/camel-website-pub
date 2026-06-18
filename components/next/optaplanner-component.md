@@ -153,16 +153,68 @@ Camel takes the planning problem for the `IN` body, solves it and returns it on 
 
 Solve a planning problem on the ActiveMQ queue with OptaPlanner, passing the `SolverManager`:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  .to("optaplanner:problemName?solverManager=#solverManager");
+from("activemq:My.Queue")
+    .to("optaplanner:problemName?solverManager=#solverManager");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="optaplanner:problemName?solverManager=#solverManager"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: optaplanner:problemName
+            parameters:
+              solverManager: "#solverManager"
 ```
 
 Expose OptaPlanner as a REST service, passing the Solver configuration file:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("cxfrs:bean:rsServer?bindingStyle=SimpleConsumer")
-  .to("optaplanner:problemName?configFile=/org/foo/barSolverConfig.xml");
+    .to("optaplanner:problemName?configFile=/org/foo/barSolverConfig.xml");
+```
+
+```xml
+<route>
+  <from uri="cxfrs:bean:rsServer?bindingStyle=SimpleConsumer"/>
+  <to uri="optaplanner:problemName?configFile=/org/foo/barSolverConfig.xml"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: cxfrs:bean:rsServer
+      parameters:
+        bindingStyle: SimpleConsumer
+      steps:
+        - to:
+            uri: optaplanner:problemName
+            parameters:
+              configFile: /org/foo/barSolverConfig.xml
 ```
 
 ## Spring Boot Auto-Configuration

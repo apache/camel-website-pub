@@ -226,18 +226,72 @@ It should be either a String or an array of Strings. In the latter case, the bat
 
 Consume 50 messages per poll from the queue `testqueue` on aws eu, and save the messages to files.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ironmq:testqueue?ironMQCloud=https://mq-aws-eu-west-1-1.iron.io&projectId=myIronMQProjectid&token=myIronMQToken&maxMessagesPerPoll=50")
   .to("file:somefolder");
+```
+
+```xml
+<route>
+  <from uri="ironmq:testqueue?ironMQCloud=https://mq-aws-eu-west-1-1.iron.io&amp;projectId=myIronMQProjectid&amp;token=myIronMQToken&amp;maxMessagesPerPoll=50"/>
+  <to uri="file:somefolder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ironmq:testqueue
+      parameters:
+        ironMQCloud: "https://mq-aws-eu-west-1-1.iron.io"
+        projectId: myIronMQProjectid
+        token: myIronMQToken
+        maxMessagesPerPoll: 50
+      steps:
+        - to:
+            uri: file:somefolder
 ```
 
 ### Producer example
 
 Dequeue from activemq jms and enqueue the messages on IronMQ.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:foo")
   .to("ironmq:testqueue?projectId=myIronMQProjectid&token=myIronMQToken");
+```
+
+```xml
+<route>
+  <from uri="activemq:foo"/>
+  <to uri="ironmq:testqueue?projectId=myIronMQProjectid&amp;token=myIronMQToken"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:foo
+      steps:
+        - to:
+            uri: ironmq:testqueue
+            parameters:
+              projectId: myIronMQProjectid
+              token: myIronMQToken
 ```
 
 ## Spring Boot Auto-Configuration

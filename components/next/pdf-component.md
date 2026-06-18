@@ -228,10 +228,36 @@ The PDF component supports 4 message header(s), which is/are listed below:
 
 Since Camel 4.8, the component is capable of doing simple document conversions. For instance, suppose you are receiving a PDF byte as a byte array:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("pdf:extractText")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="pdf:extractText"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: pdf:extractText
+        - to:
+            uri: mock:result
 ```
 
 It is now possible to get the body as a PD Document by using `PDDocument doc = exchange.getIn().getBody(PDDocument.class);`, which saves the trouble of converting the byte-array to a document.

@@ -103,6 +103,8 @@ password=sysenv:CAMEL_ENCRYPTION_PASSWORD
 
 Or if configuring `JasyptPropertiesParser` manually, you can set the password like this.
 
+_Java-only: setting the master password on JasyptPropertiesParser_
+
 ```java
 jasyptPropertiesParser.setPassword("sysenv:CAMEL_ENCRYPTION_PASSWORD");
 ```

@@ -256,6 +256,8 @@ You configure the NATS servers on either the component or the endpoint.
 
 For example, to configure this once on the component, you can do:
 
+_Java-only: configuring NATS servers on the component_
+
 ```java
 NatsComponent nats = context.getComponent("nats", NatsComponent.class);
 nats.setServers("someserver:4222,someotherserver:42222");
@@ -265,8 +267,33 @@ Notice how you can specify multiple servers separated by comma.
 
 Or you can specify the servers in the endpoint URI
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:send").to("nats:test?servers=localhost:4222");
+```
+
+```xml
+<route>
+  <from uri="direct:send"/>
+  <to uri="nats:test?servers=localhost:4222"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:send
+      steps:
+        - to:
+            uri: nats:test
+            parameters:
+              servers: localhost:4222
 ```
 
 The endpoint configuration will override any server configuration on the component level.
@@ -274,6 +301,8 @@ The endpoint configuration will override any server configuration on the compone
 ### Configuring username and password or token
 
 You can specify username and password for the servers in the server URLs, where its `username:password@url`, or `token@url` etc:
+
+_Java-only: configuring NATS servers with credentials_
 
 ```java
 NatsComponent nats = context.getComponent("nats", NatsComponent.class);
@@ -296,30 +325,129 @@ The consumer will, when routing the message is complete, send back the message a
 
 ### Producer example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:send")
   .to("nats:mytopic");
 ```
 
+```xml
+<route>
+  <from uri="direct:send"/>
+  <to uri="nats:mytopic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:send
+      steps:
+        - to:
+            uri: nats:mytopic
+```
+
 In case of using authorization, you can directly specify your credentials in the server URL
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:send")
   .to("nats:mytopic?servers=username:password@localhost:4222");
 ```
 
+```xml
+<route>
+  <from uri="direct:send"/>
+  <to uri="nats:mytopic?servers=username:password@localhost:4222"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:send
+      steps:
+        - to:
+            uri: nats:mytopic
+            parameters:
+              servers: "username:password@localhost:4222"
+```
+
 or your token
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:send")
-  .to("nats:mytopic?servers=token@localhost:4222);
+  .to("nats:mytopic?servers=token@localhost:4222");
+```
+
+```xml
+<route>
+  <from uri="direct:send"/>
+  <to uri="nats:mytopic?servers=token@localhost:4222"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:send
+      steps:
+        - to:
+            uri: nats:mytopic
+            parameters:
+              servers: "token@localhost:4222"
 ```
 
 ### Consumer example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("nats:mytopic?maxMessages=5&queueName=myqueue")
   .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="nats:mytopic?maxMessages=5&amp;queueName=myqueue"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: nats:mytopic
+      parameters:
+        maxMessages: 5
+        queueName: myqueue
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ### Manual Acknowledgment (JetStream)
@@ -327,6 +455,8 @@ from("nats:mytopic?maxMessages=5&queueName=myqueue")
 When consuming from JetStream, by default messages are automatically acknowledged after successful route processing, or negatively acknowledged (redelivered) on failure.
 
 To take full control of acknowledgment, set `manualAck=true` on the consumer endpoint. This disables automatic acknowledgment and exposes a `NatsManualAck` object as the `CamelNatsManualAck` message header.
+
+_Java-only: manual acknowledgment with NatsManualAck in a processor_
 
 ```java
 from("nats:mytopic?jetstreamEnabled=true&jetstreamName=mystream&durableName=myconsumer&pullSubscription=false&manualAck=true")

@@ -201,13 +201,42 @@ If you don’t specify an operation explicitly, you must set it via the `operati
 
 Transcribe a WAV audio file to text:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file:/var/audio?noop=true")
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=recognize&contentType=audio/wav")
-  .process(exchange -> {
-      String transcript = exchange.getMessage().getHeader(WatsonSpeechToTextConstants.TRANSCRIPT, String.class);
-      System.out.println("Transcription: " + transcript);
-  });
+  .log("Transcription: ${header.CamelIBMWatsonSTTTranscript}");
+```
+
+```xml
+<route>
+  <from uri="file:/var/audio?noop=true"/>
+  <to uri="ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&amp;operation=recognize&amp;contentType=audio/wav"/>
+  <log message="Transcription: ${header.CamelIBMWatsonSTTTranscript}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:/var/audio
+      parameters:
+        noop: true
+      steps:
+        - to:
+            uri: ibm-watson-speech-to-text:mySTT
+            parameters:
+              apiKey: "RAW(yourApiKey)"
+              operation: recognize
+              contentType: audio/wav
+        - log:
+            message: "Transcription: ${header.CamelIBMWatsonSTTTranscript}"
 ```
 
 This will transcribe the audio file and extract the text.
@@ -216,10 +245,12 @@ This will transcribe the audio file and extract the text.
 
 Transcribe audio and get word-level timestamps:
 
+_Java-only: requires File object and processes typed SpeechRecognitionResults SDK object_
+
 ```java
 from("direct:start")
-  .setHeader(WatsonSpeechToTextConstants.AUDIO_FILE, constant(new File("/path/to/audio.wav")))
-  .setHeader(WatsonSpeechToTextConstants.TIMESTAMPS, constant(true))
+  .setHeader("CamelIBMWatsonSTTAudioFile", constant(new File("/path/to/audio.wav")))
+  .setHeader("CamelIBMWatsonSTTTimestamps", constant(true))
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=recognize")
   .process(exchange -> {
       SpeechRecognitionResults results = exchange.getMessage().getBody(SpeechRecognitionResults.class);
@@ -239,11 +270,13 @@ from("direct:start")
 
 Get confidence scores for each transcribed word:
 
+_Java-only: requires Java variable and processes typed SpeechRecognitionResults SDK object_
+
 ```java
 from("direct:start")
   .setBody(constant(audioInputStream))
-  .setHeader(WatsonSpeechToTextConstants.WORD_CONFIDENCE, constant(true))
-  .setHeader(WatsonSpeechToTextConstants.CONTENT_TYPE, constant("audio/mp3"))
+  .setHeader("CamelIBMWatsonSTTWordConfidence", constant(true))
+  .setHeader("CamelIBMWatsonSTTContentType", constant("audio/mp3"))
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=recognize")
   .process(exchange -> {
       SpeechRecognitionResults results = exchange.getMessage().getBody(SpeechRecognitionResults.class);
@@ -276,6 +309,8 @@ Some commonly used models include:
 
 Get a list of all available language models:
 
+_Java-only: processes typed SpeechModel SDK objects_
+
 ```java
 from("direct:listModels")
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=listModels")
@@ -293,9 +328,11 @@ from("direct:listModels")
 
 Get detailed information about a specific model:
 
+_Java-only: processes typed SpeechModel SDK object_
+
 ```java
 from("direct:getModel")
-  .setHeader(WatsonSpeechToTextConstants.MODEL_NAME, constant("en-US_BroadbandModel"))
+  .setHeader("CamelIBMWatsonSTTModelName", constant("en-US_BroadbandModel"))
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=getModel")
   .process(exchange -> {
       SpeechModel model = exchange.getMessage().getBody(SpeechModel.class);
@@ -320,21 +357,55 @@ The component supports various audio formats via the `contentType` parameter:
 
 Example with MP3 input:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file:/var/audio?include=.*\\.mp3")
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=recognize&contentType=audio/mp3")
   .log("Transcript: ${header.CamelIBMWatsonSTTTranscript}");
 ```
 
+```xml
+<route>
+  <from uri="file:/var/audio?include=.*\.mp3"/>
+  <to uri="ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&amp;operation=recognize&amp;contentType=audio/mp3"/>
+  <log message="Transcript: ${header.CamelIBMWatsonSTTTranscript}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:/var/audio
+      parameters:
+        include: ".*\\.mp3"
+      steps:
+        - to:
+            uri: ibm-watson-speech-to-text:mySTT
+            parameters:
+              apiKey: "RAW(yourApiKey)"
+              operation: recognize
+              contentType: audio/mp3
+        - log:
+            message: "Transcript: ${header.CamelIBMWatsonSTTTranscript}"
+```
+
 ### Recognize Different Languages
 
 Transcribe audio in different languages by specifying the appropriate model:
+
+_Java-only: requires Java audio file variables_
 
 ```java
 // Transcribe Spanish audio
 from("direct:spanish")
   .setBody(constant(spanishAudioFile))
-  .setHeader(WatsonSpeechToTextConstants.MODEL, constant("es-ES_BroadbandModel"))
+  .setHeader("CamelIBMWatsonSTTModel", constant("es-ES_BroadbandModel"))
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=recognize")
   .log("Spanish transcript: ${header.CamelIBMWatsonSTTTranscript}");
 
@@ -349,10 +420,12 @@ from("direct:french")
 
 Identify different speakers in multi-speaker audio:
 
+_Java-only: processes typed SpeechRecognitionResults SDK object_
+
 ```java
 from("direct:speakers")
-  .setHeader(WatsonSpeechToTextConstants.SPEAKER_LABELS, constant(true))
-  .setHeader(WatsonSpeechToTextConstants.TIMESTAMPS, constant(true))
+  .setHeader("CamelIBMWatsonSTTSpeakerLabels", constant(true))
+  .setHeader("CamelIBMWatsonSTTTimestamps", constant(true))
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=recognize")
   .process(exchange -> {
       SpeechRecognitionResults results = exchange.getMessage().getBody(SpeechRecognitionResults.class);
@@ -369,16 +442,53 @@ from("direct:speakers")
 
 If you have created a custom language model, you can use it for recognition:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:customModel")
-  .setHeader(WatsonSpeechToTextConstants.MODEL, constant("your-custom-model-guid"))
+  .setHeader("CamelIBMWatsonSTTModel", constant("your-custom-model-guid"))
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=recognize")
   .log("Custom model transcript: ${header.CamelIBMWatsonSTTTranscript}");
+```
+
+```xml
+<route>
+  <from uri="direct:customModel"/>
+  <setHeader name="CamelIBMWatsonSTTModel">
+    <constant>your-custom-model-guid</constant>
+  </setHeader>
+  <to uri="ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&amp;operation=recognize"/>
+  <log message="Custom model transcript: ${header.CamelIBMWatsonSTTTranscript}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:customModel
+      steps:
+        - setHeader:
+            name: CamelIBMWatsonSTTModel
+            constant: your-custom-model-guid
+        - to:
+            uri: ibm-watson-speech-to-text:mySTT
+            parameters:
+              apiKey: "RAW(yourApiKey)"
+              operation: recognize
+        - log:
+            message: "Custom model transcript: ${header.CamelIBMWatsonSTTTranscript}"
 ```
 
 ### List Custom Models
 
 List all your custom language models:
+
+_Java-only: processes typed LanguageModel SDK objects_
 
 ```java
 from("direct:listCustomModels")
@@ -398,9 +508,11 @@ from("direct:listCustomModels")
 
 Get detailed information about a custom model:
 
+_Java-only: processes typed LanguageModel SDK object_
+
 ```java
 from("direct:getCustomModel")
-  .setHeader(WatsonSpeechToTextConstants.MODEL_NAME, constant("your-custom-model-guid"))
+  .setHeader("CamelIBMWatsonSTTModelName", constant("your-custom-model-guid"))
   .to("ibm-watson-speech-to-text:mySTT?apiKey=RAW(yourApiKey)&operation=getCustomModel")
   .process(exchange -> {
       LanguageModel model = exchange.getMessage().getBody(LanguageModel.class);
@@ -421,6 +533,8 @@ For more information about authentication, see the [IBM Watson STT documentation
 ### Watson Speech to Text Endpoints
 
 If you have a dedicated or regional instance, you can specify a custom service URL:
+
+_Java-only: requires Java audio file variable_
 
 ```java
 from("direct:start")

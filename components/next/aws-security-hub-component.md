@@ -479,6 +479,8 @@ Camel-AWS Security Hub component provides the following operation on the produce
 
 Import security findings into Security Hub. This is the primary way to send findings from custom integrations.
 
+_Java-only: uses inline Processor with AWS SDK builder API_
+
 ```java
 from("direct:importFindings")
     .process(exchange -> {
@@ -509,6 +511,8 @@ from("direct:importFindings")
 
 Retrieve security findings from Security Hub with optional filtering.
 
+_Java-only: uses inline Processor with AWS SDK builder API_
+
 ```java
 from("direct:getFindings")
     .process(exchange -> {
@@ -528,6 +532,8 @@ from("direct:getFindings")
 #### BatchUpdateFindings
 
 Update security findings with notes, severity changes, workflow status, etc.
+
+_Java-only: uses inline Processor with AWS SDK builder API and Java constants_
 
 ```java
 from("direct:updateFindings")
@@ -559,15 +565,45 @@ from("direct:updateFindings")
 
 Get information about the Security Hub configuration in your account.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:describeHub")
     .to("aws-security-hub://hub?operation=describeHub")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:describeHub"/>
+  <to uri="aws-security-hub://hub?operation=describeHub"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:describeHub
+      steps:
+        - to:
+            uri: aws-security-hub://hub
+            parameters:
+              operation: describeHub
+        - to:
+            uri: mock:result
+```
+
 ### OCSF Integration
 
 AWS Security Hub uses the [Open Cybersecurity Schema Framework (OCSF)](https://schema.ocsf.io/) for findings. You can use the Camel OCSF DataFormat to work with security events in a vendor-neutral format, then convert them for import into Security Hub.
+
+_Java-only: uses inline Processor with class literal and method reference_
 
 ```java
 from("direct:ocsfToSecurityHub")

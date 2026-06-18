@@ -466,6 +466,8 @@ When a server responds with HTTP 429 (Too Many Requests) and includes a `Retry-A
 
 To avoid this, you can disable automatic retries on the component:
 
+_Java-only: programmatic `HttpComponent` configuration_
+
 ```java
 HttpComponent httpComponent = context.getComponent("https", HttpComponent.class);
 httpComponent.setAutomaticRetriesDisabled(true);
@@ -506,12 +508,17 @@ The following algorithm is used to determine what HTTP method should be used:
 
 You can set the HTTP producer’s URI directly from the endpoint URI. In the route below, Camel will call out to the external server, `oldhost`, using HTTP.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("http://oldhost");
 ```
-
-And the equivalent XML DSL:
 
 ```xml
 <route>
@@ -520,12 +527,50 @@ And the equivalent XML DSL:
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: http://oldhost
+```
+
 You can override the HTTP endpoint URI by adding a header with the key `Exchange.HTTP_URI` on the message.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
-  .setHeader(Exchange.HTTP_URI, constant("http://newhost"))
+  .setHeader("CamelHttpUri", constant("http://newhost"))
   .to("http://oldhost");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelHttpUri">
+    <constant>http://newhost</constant>
+  </setHeader>
+  <to uri="http://oldhost"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelHttpUri
+            constant: "http://newhost"
+        - to:
+            uri: http://oldhost
 ```
 
 In the sample above, Camel will call the [http://newhost](http://newhost) despite the endpoint is configured with [http://oldhost](http://oldhost).  
@@ -535,37 +580,91 @@ If the http endpoint is working in bridge mode, it will ignore the message heade
 
 The **http** producer supports URI parameters to be sent to the HTTP server. The URI parameters can either be set directly on the endpoint URI or as a header with the key `Exchange.HTTP_QUERY` on the message.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
   .to("http://oldhost?order=123&detail=short");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="http://oldhost?order=123&amp;detail=short"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: http://oldhost
+            parameters:
+              order: 123
+              detail: short
+```
+
 Or options provided in a header:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
-  .setHeader(Exchange.HTTP_QUERY, constant("order=123&detail=short"))
+  .setHeader("CamelHttpQuery", constant("order=123&detail=short"))
   .to("http://oldhost");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelHttpQuery">
+    <constant>order=123&amp;detail=short</constant>
+  </setHeader>
+  <to uri="http://oldhost"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelHttpQuery
+            constant: "order=123&detail=short"
+        - to:
+            uri: http://oldhost
 ```
 
 ### How to set the http method (GET/PATCH/POST/PUT/DELETE/HEAD/OPTIONS/TRACE) to the HTTP producer
 
 The HTTP component provides a way to set the HTTP request method by setting the message header. Here is an example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-  .setHeader(Exchange.HTTP_METHOD, constant(org.apache.camel.component.http.HttpMethods.POST))
+  .setHeader("CamelHttpMethod", constant("POST"))
   .to("http://www.google.com")
   .to("mock:results");
 ```
-
-The method can be written a bit shorter using the string constants:
-
-```java
-.setHeader("CamelHttpMethod", constant("POST"))
-```
-
-And the equivalent XML DSL:
 
 ```xml
 <route>
@@ -578,6 +677,20 @@ And the equivalent XML DSL:
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelHttpMethod
+            constant: POST
+        - to:
+            uri: http://www.google.com
+        - to:
+            uri: mock:results
+```
+
 ### Using client timeout - SO\_TIMEOUT
 
 See the [HttpSOTimeoutTest](https://github.com/apache/camel/blob/main/components/camel-http/src/test/java/org/apache/camel/component/http/HttpSOTimeoutTest.java) unit test.
@@ -586,9 +699,35 @@ See the [HttpSOTimeoutTest](https://github.com/apache/camel/blob/main/components
 
 The HTTP component provides a way to configure a proxy.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
   .to("http://oldhost?proxyAuthHost=www.myproxy.com&proxyAuthPort=80");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="http://oldhost?proxyAuthHost=www.myproxy.com&amp;proxyAuthPort=80"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: http://oldhost
+            parameters:
+              proxyAuthHost: www.myproxy.com
+              proxyAuthPort: 80
 ```
 
 There is also support for proxy authentication via the `proxyAuthUsername` and `proxyAuthPassword` options.
@@ -599,6 +738,8 @@ There is also support for proxy authentication via the `proxyAuthUsername` and `
 
 To avoid System properties conflicts, you can set proxy configuration only from the CamelContext or URI.  
 Java DSL :
+
+_Java-only: programmatic `CamelContext` global options configuration (deprecated)_
 
 ```java
 context.getGlobalOptions().put("http.proxyHost", "172.168.18.9");
@@ -627,6 +768,8 @@ There is also a `http.proxyScheme` property you can set to explicitly configure 
 
 If you are using `POST` to send data you can configure the `charset` using the `Exchange` property:
 
+_Java-only: setting exchange property programmatically_
+
 ```java
 exchange.setProperty(Exchange.CHARSET_NAME, "ISO-8859-1");
 ```
@@ -635,16 +778,54 @@ exchange.setProperty(Exchange.CHARSET_NAME, "ISO-8859-1");
 
 This sample polls the Google homepage every 10 seconds and write the page to the file `message.html`:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("timer://foo?fixedRate=true&delay=0&period=10000")
   .to("http://www.google.com")
-  .setHeader(FileComponent.HEADER_FILE_NAME, "message.html")
+  .setHeader("CamelFileName", constant("message.html"))
   .to("file:target/google");
+```
+
+```xml
+<route>
+  <from uri="timer://foo?fixedRate=true&amp;delay=0&amp;period=10000"/>
+  <to uri="http://www.google.com"/>
+  <setHeader name="CamelFileName">
+    <constant>message.html</constant>
+  </setHeader>
+  <to uri="file:target/google"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer://foo
+      parameters:
+        fixedRate: true
+        delay: 0
+        period: 10000
+      steps:
+        - to:
+            uri: http://www.google.com
+        - setHeader:
+            name: CamelFileName
+            constant: message.html
+        - to:
+            uri: file:target/google
 ```
 
 #### URI Parameters from the endpoint URI
 
 In this sample, we have the complete URI endpoint that is just what you would have typed in a web browser. Multiple URI parameters can of course be set using the `&` character as separator, just as you would in the web browser. Camel does no tricks here.
+
+_Java-only: uses `ProducerTemplate` test API_
 
 ```java
 // we query for Camel at the Google page
@@ -652,6 +833,8 @@ template.sendBody("http://www.google.com/search?q=Camel", null);
 ```
 
 #### URI Parameters from the Message
+
+_Java-only: uses `ProducerTemplate` test API with headers_
 
 ```java
 Map headers = new HashMap();
@@ -666,14 +849,14 @@ In the header value above notice that it should **not** be prefixed with `?` and
 
 You can get the HTTP response code from the HTTP component by getting the value from the Out message header with `Exchange.HTTP_RESPONSE_CODE`.
 
+_Java-only: uses `ProducerTemplate` and `Processor` to inspect response code_
+
 ```java
-Exchange exchange = template.send("http://www.google.com/search", new Processor() {
-  public void process(Exchange exchange) throws Exception {
-    exchange.getIn().setHeader(Exchange.HTTP_QUERY, constant("hl=en&q=activemq"));
-  }
+Exchange exchange = template.send("http://www.google.com/search", e -> {
+    e.getIn().setHeader("CamelHttpQuery", "hl=en&q=activemq");
 });
-Message out = exchange.getOut();
-int responseCode = out.getHeader(Exchange.HTTP_RESPONSE_CODE, Integer.class);
+Message out = exchange.getMessage();
+int responseCode = out.getHeader("CamelHttpResponseCode", Integer.class);
 ```
 
 ### Defining specific properties of Apache HTTP client via Camel parameters
@@ -723,27 +906,73 @@ To get an access token from an Authorization Server and fill that in Authorizati
 
 In below example camel will do an underlying request to `[https://localhost:8080/realms/master/protocol/openid-connect/token](https://localhost:8080/realms/master/protocol/openid-connect/token)` using provided credentials (client id and client secret), then will get `access_token` from response and lastly will fill it at `Authorization` header of request which will be done to `[https://localhost:9090](https://localhost:9090)`.
 
-```java
-String clientId = "my-client-id";
-String clientSecret = "my-client-secret";
-String tokenEndpoint = "https://localhost:8080/realms/master/protocol/openid-connect/token";
-String scope = "my-scope"; // optional scope
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
+```java
 from("direct:start")
-  .to("https://localhost:9090/?oauth2ClientId=" + clientId + "&oauth2ClientSecret=" + clientSecret + "&oauth2TokenEndpoint=" + tokenEndpoint + "&oauth2Scope=" + scope);
+  .to("https://localhost:9090/?oauth2ClientId=my-client-id&oauth2ClientSecret=my-client-secret&oauth2TokenEndpoint=https://localhost:8080/realms/master/protocol/openid-connect/token&oauth2Scope=my-scope");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="https://localhost:9090/?oauth2ClientId=my-client-id&amp;oauth2ClientSecret=my-client-secret&amp;oauth2TokenEndpoint=https://localhost:8080/realms/master/protocol/openid-connect/token&amp;oauth2Scope=my-scope"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "https://localhost:9090/"
+            parameters:
+              oauth2ClientId: my-client-id
+              oauth2ClientSecret: my-client-secret
+              oauth2TokenEndpoint: "https://localhost:8080/realms/master/protocol/openid-connect/token"
+              oauth2Scope: my-scope
 ```
 
 Additional support for OAuth2 is for RFC 8707 where a _Resource Indicator_ must be provided in the body:
 
-```java
-String clientId = "my-client-id";
-String clientSecret = "my-client-secret";
-String tokenEndpoint = "https://localhost:8080/realms/master/protocol/openid-connect/token";
-String scope = "my-scope"; // optional scope
-String resourceIndicator = "https://localhost:9090"; // optional, for RFC 8707
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
+```java
 from("direct:start")
-  .to("https://localhost:9090/?oauth2ClientId=" + clientId + "&oauth2ClientSecret=" + clientSecret + "&oauth2TokenEndpoint=" + tokenEndpoint + "&oauth2Scope=" + scope + "&oauth2ResourceIndicator=" + resourceIndicator);
+  .to("https://localhost:9090/?oauth2ClientId=my-client-id&oauth2ClientSecret=my-client-secret&oauth2TokenEndpoint=https://localhost:8080/realms/master/protocol/openid-connect/token&oauth2Scope=my-scope&oauth2ResourceIndicator=https://localhost:9090");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="https://localhost:9090/?oauth2ClientId=my-client-id&amp;oauth2ClientSecret=my-client-secret&amp;oauth2TokenEndpoint=https://localhost:8080/realms/master/protocol/openid-connect/token&amp;oauth2Scope=my-scope&amp;oauth2ResourceIndicator=https://localhost:9090"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "https://localhost:9090/"
+            parameters:
+              oauth2ClientId: my-client-id
+              oauth2ClientSecret: my-client-secret
+              oauth2TokenEndpoint: "https://localhost:8080/realms/master/protocol/openid-connect/token"
+              oauth2Scope: my-scope
+              oauth2ResourceIndicator: "https://localhost:9090"
 ```
 
 > **Note**
@@ -766,6 +995,8 @@ Using the JSSE Configuration Utility
 The HTTP component supports SSL/TLS configuration through the [Camel JSSE Configuration Utility](../../manual/camel-configuration-utilities.md). This utility greatly decreases the amount of component-specific code you need to write and is configurable at the endpoint and component levels. The following examples demonstrate how to use the utility with the HTTP component.
 
 Programmatic configuration of the component
+
+_Java-only: programmatic `SSLContextParameters` setup_
 
 ```java
 KeyStoreParameters ksp = new KeyStoreParameters();
@@ -806,6 +1037,8 @@ You can also implement a custom `org.apache.camel.component.http.HttpClientConfi
 
 However, if you _just_ want to specify the keystore and truststore, you can do this with Apache HTTP `HttpClientConfigurer`, for example:
 
+_Java-only: programmatic `KeyStore` and `SchemeRegistry` setup_
+
 ```java
 KeyStore keystore = ...;
 KeyStore truststore = ...;
@@ -815,6 +1048,8 @@ registry.register(new Scheme("https", 443, new SSLSocketFactory(keystore, "mypas
 ```
 
 And then you need to create a class that implements `HttpClientConfigurer`, and registers https protocol providing a keystore or truststore per the example above. Then, from your camel route builder class, you can hook it up like so:
+
+_Java-only: programmatic `HttpClientConfigurer` setup_
 
 ```java
 HttpComponent httpComponent = getContext().getComponent("http", HttpComponent.class);
@@ -839,6 +1074,8 @@ An end user reported that he had a problem with authenticating with HTTPS. The p
 
 -   1\. Create a (Spring) factory for HttpContexts:
     
+
+_Java-only: custom `HttpContext` factory for preemptive basic authentication_
 
 ```java
 public class HttpContextFactory {

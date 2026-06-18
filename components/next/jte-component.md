@@ -161,12 +161,37 @@ Camel provides two headers by which you can define a different resource location
 
 For example, you could use something like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("rest:get:item/{id}").
-  to("jte:com/acme/response.jte");
+from("rest:get:item/{id}")
+    .to("jte:com/acme/response.jte");
+```
+
+```xml
+<route>
+  <from uri="rest:get:item/{id}"/>
+  <to uri="jte:com/acme/response.jte"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rest:get:item/{id}
+      steps:
+        - to:
+            uri: jte:com/acme/response.jte
 ```
 
 To use a JTE template to formulate a response to the REST get call:
+
+_Java-only: example JTE template file content_
 
 ```java
 @import org.apache.camel.component.jte.Model

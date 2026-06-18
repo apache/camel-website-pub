@@ -374,18 +374,73 @@ If you don’t specify an operation explicitly, the producer will do:
 
 For example, to read file `hello.txt` from bucket `helloBucket`, use the following snippet:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ibm-cos://helloBucket?apiKey=yourApiKey&serviceInstanceId=yourServiceInstanceId&endpointUrl=https://s3.us-south.cloud-object-storage.appdomain.cloud&prefix=hello.txt")
   .to("file:/var/downloaded");
+```
+
+```xml
+<route>
+  <from uri="ibm-cos://helloBucket?apiKey=yourApiKey&amp;serviceInstanceId=yourServiceInstanceId&amp;endpointUrl=https://s3.us-south.cloud-object-storage.appdomain.cloud&amp;prefix=hello.txt"/>
+  <to uri="file:/var/downloaded"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ibm-cos://helloBucket
+      parameters:
+        apiKey: yourApiKey
+        serviceInstanceId: yourServiceInstanceId
+        endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
+        prefix: hello.txt
+      steps:
+        - to:
+            uri: file:/var/downloaded
 ```
 
 ### Advanced IBM COS Client configuration
 
 If your Camel Application is running behind a firewall or if you need to have more control over the `AmazonS3` client instance configuration, you can create your own instance and refer to it in your Camel ibm-cos component configuration:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ibm-cos://MyBucket?cosClient=#client&delay=5000&maxMessagesPerPoll=5")
 .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="ibm-cos://MyBucket?cosClient=#client&amp;delay=5000&amp;maxMessagesPerPoll=5"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ibm-cos://MyBucket
+      parameters:
+        cosClient: "#client"
+        delay: 5000
+        maxMessagesPerPoll: 5
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ### IBM COS Authentication
@@ -423,17 +478,53 @@ Note that several operations requires a regional endpoint, as opposed to a cross
 -   Single Upload: This operation will upload a file to IBM COS based on the body content
     
 
-```java
-  from("direct:start").process(new Processor() {
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          exchange.getIn().setHeader(IBMCOSConstants.KEY, "camel.txt");
-          exchange.getIn().setBody("Camel rocks!");
-      }
-  })
-  .to("ibm-cos://mycamelbucket?apiKey=RAW(myApiKey)&serviceInstanceId=RAW(myServiceInstanceId)&endpointUrl=https://s3.us-south.cloud-object-storage.appdomain.cloud")
-  .to("mock:result");
+```java
+from("direct:start")
+    .setHeader("CamelIBMCOSKey", constant("camel.txt"))
+    .setBody(constant("Camel rocks!"))
+    .to("ibm-cos://mycamelbucket?apiKey=RAW(myApiKey)&serviceInstanceId=RAW(myServiceInstanceId)&endpointUrl=https://s3.us-south.cloud-object-storage.appdomain.cloud")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelIBMCOSKey">
+    <constant>camel.txt</constant>
+  </setHeader>
+  <setBody>
+    <constant>Camel rocks!</constant>
+  </setBody>
+  <to uri="ibm-cos://mycamelbucket?apiKey=RAW(myApiKey)&amp;serviceInstanceId=RAW(myServiceInstanceId)&amp;endpointUrl=https://s3.us-south.cloud-object-storage.appdomain.cloud"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelIBMCOSKey
+            constant: camel.txt
+        - setBody:
+            constant: "Camel rocks!"
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              apiKey: RAW(myApiKey)
+              serviceInstanceId: RAW(myServiceInstanceId)
+              endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
+        - to:
+            uri: mock:result
 ```
 
 This operation will upload the file camel.txt with the content "Camel rocks!" in the _mycamelbucket_ bucket.
@@ -444,17 +535,14 @@ This operation will upload the file camel.txt with the content "Camel rocks!" in
 -   Multipart Upload: This operation will perform a multipart upload of a file to IBM COS based on the body content
     
 
-```java
-  from("direct:start").process(new Processor() {
+_Java-only: requires Java File object as body_
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          exchange.getIn().setHeader(IBMCOSConstants.KEY, "largefile.zip");
-          exchange.getIn().setBody(new File("src/largefile.zip"));
-      }
-  })
-  .to("ibm-cos://mycamelbucket?cosClient=#cosClient&multiPartUpload=true&partSize=5242880")
-  .to("mock:result");
+```java
+from("direct:start")
+    .setHeader("CamelIBMCOSKey", constant("largefile.zip"))
+    .process(exchange -> exchange.getIn().setBody(new File("src/largefile.zip")))
+    .to("ibm-cos://mycamelbucket?cosClient=#cosClient&multiPartUpload=true&partSize=5242880")
+    .to("mock:result");
 ```
 
 This operation will perform a multipart upload of the file largefile.zip in the _mycamelbucket_ bucket with a part size of 5MB.
@@ -462,18 +550,60 @@ This operation will perform a multipart upload of the file largefile.zip in the 
 -   CopyObject: this operation copies an object from one bucket to a different one
     
 
-```java
-  from("direct:start").process(new Processor() {
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          exchange.getIn().setHeader(IBMCOSConstants.BUCKET_DESTINATION_NAME, "camelDestinationBucket");
-          exchange.getIn().setHeader(IBMCOSConstants.KEY, "camelKey");
-          exchange.getIn().setHeader(IBMCOSConstants.DESTINATION_KEY, "camelDestinationKey");
-      }
-  })
-  .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=copyObject")
-  .to("mock:result");
+```java
+from("direct:start")
+    .setHeader("CamelIBMCOSBucketDestinationName", constant("camelDestinationBucket"))
+    .setHeader("CamelIBMCOSKey", constant("camelKey"))
+    .setHeader("CamelIBMCOSDestinationKey", constant("camelDestinationKey"))
+    .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=copyObject")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelIBMCOSBucketDestinationName">
+    <constant>camelDestinationBucket</constant>
+  </setHeader>
+  <setHeader name="CamelIBMCOSKey">
+    <constant>camelKey</constant>
+  </setHeader>
+  <setHeader name="CamelIBMCOSDestinationKey">
+    <constant>camelDestinationKey</constant>
+  </setHeader>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=copyObject"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelIBMCOSBucketDestinationName
+            constant: camelDestinationBucket
+        - setHeader:
+            name: CamelIBMCOSKey
+            constant: camelKey
+        - setHeader:
+            name: CamelIBMCOSDestinationKey
+            constant: camelDestinationKey
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: copyObject
+        - to:
+            uri: mock:result
 ```
 
 This operation will copy the object with the name expressed in the header camelKey to camelDestinationKey in the camelDestinationBucket bucket, from the bucket _mycamelbucket_.
@@ -481,16 +611,46 @@ This operation will copy the object with the name expressed in the header camelK
 -   DeleteObject: this operation deletes an object from a bucket
     
 
-```java
-  from("direct:start").process(new Processor() {
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          exchange.getIn().setHeader(IBMCOSConstants.KEY, "camelKey");
-      }
-  })
-  .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=deleteObject")
-  .to("mock:result");
+```java
+from("direct:start")
+    .setHeader("CamelIBMCOSKey", constant("camelKey"))
+    .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=deleteObject")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelIBMCOSKey">
+    <constant>camelKey</constant>
+  </setHeader>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=deleteObject"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelIBMCOSKey
+            constant: camelKey
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: deleteObject
+        - to:
+            uri: mock:result
 ```
 
 This operation will delete the object camelKey from the bucket _mycamelbucket_.
@@ -498,17 +658,16 @@ This operation will delete the object camelKey from the bucket _mycamelbucket_.
 -   DeleteObjects: this operation deletes multiple objects from a bucket in a single request
     
 
-```java
-  from("direct:start").process(new Processor() {
+_Java-only: requires Java List for keys to delete_
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          List<String> keys = Arrays.asList("file1.txt", "file2.txt", "file3.txt");
-          exchange.getIn().setHeader(IBMCOSConstants.KEYS_TO_DELETE, keys);
-      }
-  })
-  .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=deleteObjects")
-  .to("mock:result");
+```java
+from("direct:start")
+    .process(exchange -> {
+        List<String> keys = Arrays.asList("file1.txt", "file2.txt", "file3.txt");
+        exchange.getIn().setHeader("CamelIBMCOSKeysToDelete", keys);
+    })
+    .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=deleteObjects")
+    .to("mock:result");
 ```
 
 This operation will delete the objects file1.txt, file2.txt, and file3.txt from the bucket _mycamelbucket_ in a single batch request.
@@ -516,10 +675,39 @@ This operation will delete the objects file1.txt, file2.txt, and file3.txt from 
 -   ListBuckets: this operation lists the buckets for this account in this region
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:start")
+from("direct:start")
   .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=listBuckets")
   .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=listBuckets"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: listBuckets
+        - to:
+            uri: mock:result
 ```
 
 This operation will list the buckets for this account.
@@ -527,10 +715,39 @@ This operation will list the buckets for this account.
 -   DeleteBucket: this operation deletes the bucket specified as URI parameter or header
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:start")
+from("direct:start")
   .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=deleteBucket")
   .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=deleteBucket"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: deleteBucket
+        - to:
+            uri: mock:result
 ```
 
 This operation will delete the bucket _mycamelbucket_.
@@ -538,16 +755,46 @@ This operation will delete the bucket _mycamelbucket_.
 -   CreateBucket: this operation creates a new bucket
     
 
-```java
-  from("direct:start").process(new Processor() {
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          exchange.getIn().setHeader(IBMCOSConstants.BUCKET_NAME, "newBucket");
-      }
-  })
-  .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=createBucket")
-  .to("mock:result");
+```java
+from("direct:start")
+    .setHeader("CamelIBMCOSBucketName", constant("newBucket"))
+    .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=createBucket")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelIBMCOSBucketName">
+    <constant>newBucket</constant>
+  </setHeader>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=createBucket"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelIBMCOSBucketName
+            constant: newBucket
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: createBucket
+        - to:
+            uri: mock:result
 ```
 
 This operation will create a new bucket named _newBucket_.
@@ -555,10 +802,39 @@ This operation will create a new bucket named _newBucket_.
 -   ListObjects: this operation lists objects in a specific bucket
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:start")
+from("direct:start")
   .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=listObjects")
   .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=listObjects"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: listObjects
+        - to:
+            uri: mock:result
 ```
 
 This operation will list the objects in the _mycamelbucket_ bucket.
@@ -566,16 +842,46 @@ This operation will list the objects in the _mycamelbucket_ bucket.
 -   ListObjects with prefix: this operation lists objects in a specific bucket with a prefix filter
     
 
-```java
-  from("direct:start").process(new Processor() {
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          exchange.getIn().setHeader(IBMCOSConstants.PREFIX, "backup/");
-      }
-  })
-  .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=listObjects")
-  .to("mock:result");
+```java
+from("direct:start")
+    .setHeader("CamelIBMCOSPrefix", constant("backup/"))
+    .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=listObjects")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelIBMCOSPrefix">
+    <constant>backup/</constant>
+  </setHeader>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=listObjects"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelIBMCOSPrefix
+            constant: "backup/"
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: listObjects
+        - to:
+            uri: mock:result
 ```
 
 This operation will list only the objects in the _mycamelbucket_ bucket that start with "backup/".
@@ -583,16 +889,46 @@ This operation will list only the objects in the _mycamelbucket_ bucket that sta
 -   GetObject: this operation gets a single object in a specific bucket
     
 
-```java
-  from("direct:start").process(new Processor() {
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          exchange.getIn().setHeader(IBMCOSConstants.KEY, "camelKey");
-      }
-  })
-  .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=getObject")
-  .to("mock:result");
+```java
+from("direct:start")
+    .setHeader("CamelIBMCOSKey", constant("camelKey"))
+    .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=getObject")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelIBMCOSKey">
+    <constant>camelKey</constant>
+  </setHeader>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=getObject"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelIBMCOSKey
+            constant: camelKey
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: getObject
+        - to:
+            uri: mock:result
 ```
 
 This operation will return an InputStream with the content of the camelKey object in _mycamelbucket_ bucket.
@@ -600,18 +936,60 @@ This operation will return an InputStream with the content of the camelKey objec
 -   GetObjectRange: this operation gets a single object range in a specific bucket
     
 
-```java
-  from("direct:start").process(new Processor() {
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-      @Override
-      public void process(Exchange exchange) throws Exception {
-          exchange.getIn().setHeader(IBMCOSConstants.KEY, "camelKey");
-          exchange.getIn().setHeader(IBMCOSConstants.RANGE_START, 0L);
-          exchange.getIn().setHeader(IBMCOSConstants.RANGE_END, 9L);
-      }
-  })
-  .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=getObjectRange")
-  .to("mock:result");
+```java
+from("direct:start")
+    .setHeader("CamelIBMCOSKey", constant("camelKey"))
+    .setHeader("CamelIBMCOSRangeStart", constant(0L))
+    .setHeader("CamelIBMCOSRangeEnd", constant(9L))
+    .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=getObjectRange")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelIBMCOSKey">
+    <constant>camelKey</constant>
+  </setHeader>
+  <setHeader name="CamelIBMCOSRangeStart">
+    <constant resultType="java.lang.Long">0</constant>
+  </setHeader>
+  <setHeader name="CamelIBMCOSRangeEnd">
+    <constant resultType="java.lang.Long">9</constant>
+  </setHeader>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=getObjectRange"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelIBMCOSKey
+            constant: camelKey
+        - setHeader:
+            name: CamelIBMCOSRangeStart
+            constant: 0
+        - setHeader:
+            name: CamelIBMCOSRangeEnd
+            constant: 9
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: getObjectRange
+        - to:
+            uri: mock:result
 ```
 
 This operation will return an InputStream with the content of the camelKey object in _mycamelbucket_ bucket, containing bytes from 0 to 9.
@@ -619,10 +997,39 @@ This operation will return an InputStream with the content of the camelKey objec
 -   HeadBucket: this operation checks if a bucket exists and you have permission to access it
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-  from("direct:start")
+from("direct:start")
   .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=headBucket")
   .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=headBucket"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: ibm-cos://mycamelbucket
+            parameters:
+              cosClient: "#cosClient"
+              operation: headBucket
+        - to:
+            uri: mock:result
 ```
 
 This operation will check if the bucket _mycamelbucket_ exists and is accessible. The result (true/false) will be in the message body.
@@ -631,9 +1038,37 @@ This operation will check if the bucket _mycamelbucket_ exists and is accessible
 
 The IBM COS consumer will poll a bucket for new objects and process them.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ibm-cos://mycamelbucket?cosClient=#cosClient&delay=5000&maxMessagesPerPoll=10&deleteAfterRead=true")
   .to("file:/var/downloaded");
+```
+
+```xml
+<route>
+  <from uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;delay=5000&amp;maxMessagesPerPoll=10&amp;deleteAfterRead=true"/>
+  <to uri="file:/var/downloaded"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ibm-cos://mycamelbucket
+      parameters:
+        cosClient: "#cosClient"
+        delay: 5000
+        maxMessagesPerPoll: 10
+        deleteAfterRead: true
+      steps:
+        - to:
+            uri: file:/var/downloaded
 ```
 
 This route will poll the _mycamelbucket_ bucket every 5 seconds, processing up to 10 objects per poll, and deleting each object after it’s been successfully processed.
@@ -642,9 +1077,38 @@ This route will poll the _mycamelbucket_ bucket every 5 seconds, processing up t
 
 Instead of deleting objects after reading, you can move them to a different bucket or prefix:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ibm-cos://mycamelbucket?cosClient=#cosClient&deleteAfterRead=false&moveAfterRead=true&destinationBucket=processed-bucket&destinationBucketPrefix=done-")
   .to("direct:process");
+```
+
+```xml
+<route>
+  <from uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;deleteAfterRead=false&amp;moveAfterRead=true&amp;destinationBucket=processed-bucket&amp;destinationBucketPrefix=done-"/>
+  <to uri="direct:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ibm-cos://mycamelbucket
+      parameters:
+        cosClient: "#cosClient"
+        deleteAfterRead: false
+        moveAfterRead: true
+        destinationBucket: processed-bucket
+        destinationBucketPrefix: "done-"
+      steps:
+        - to:
+            uri: direct:process
 ```
 
 This route will move processed objects from _mycamelbucket_ to _processed-bucket_, prefixing each object key with "done-".
@@ -653,9 +1117,36 @@ This route will move processed objects from _mycamelbucket_ to _processed-bucket
 
 You can filter which objects to consume by using a prefix:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ibm-cos://mycamelbucket?cosClient=#cosClient&prefix=inbox/&deleteAfterRead=true")
   .to("direct:process");
+```
+
+```xml
+<route>
+  <from uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;prefix=inbox/&amp;deleteAfterRead=true"/>
+  <to uri="direct:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ibm-cos://mycamelbucket
+      parameters:
+        cosClient: "#cosClient"
+        prefix: "inbox/"
+        deleteAfterRead: true
+      steps:
+        - to:
+            uri: direct:process
 ```
 
 This route will only consume objects whose keys start with "inbox/".

@@ -151,6 +151,8 @@ Camel will provide exchange information in the FreeMarker context (just a `Map`)
 
 You can set up your custom FreeMarker context in the message header with the key "**CamelFreemarkerDataModel**" just like this
 
+_Java-only: setting a custom FreeMarker data model via headers_
+
 ```java
 Map<String, Object> variableMap = new HashMap<String, Object>();
 variableMap.put("headers", headersMap);
@@ -171,43 +173,181 @@ Camel provides two headers by which you can define a different resource location
 
 For example, you could use something like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("freemarker:com/acme/MyResponse.ftl");
+from("activemq:My.Queue")
+    .to("freemarker:com/acme/MyResponse.ftl");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="freemarker:com/acme/MyResponse.ftl"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: freemarker:com/acme/MyResponse.ftl
 ```
 
 To use a FreeMarker template to formulate a response for a message for InOut message exchanges (where there is a `JMSReplyTo` header).
 
 If you want to use InOnly and consume the message and send it to another destination, you could use:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("freemarker:com/acme/MyResponse.ftl").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("freemarker:com/acme/MyResponse.ftl")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="freemarker:com/acme/MyResponse.ftl"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: freemarker:com/acme/MyResponse.ftl
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 And to disable the content cache, e.g., for development usage where the `.ftl` template should be hot reloaded:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("freemarker:com/acme/MyResponse.ftl?contentCache=false").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("freemarker:com/acme/MyResponse.ftl?contentCache=false")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="freemarker:com/acme/MyResponse.ftl?contentCache=false"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: freemarker:com/acme/MyResponse.ftl
+            parameters:
+              contentCache: false
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 And a file-based resource:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("freemarker:file://myfolder/MyResponse.ftl?contentCache=false").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("freemarker:file://myfolder/MyResponse.ftl?contentCache=false")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="freemarker:file://myfolder/MyResponse.ftl?contentCache=false"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: freemarker:file://myfolder/MyResponse.ftl
+            parameters:
+              contentCache: false
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 It’s possible to specify what template the component should use dynamically via a header, so for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  setHeader(FreemarkerConstants.FREEMARKER_RESOURCE_URI).constant("path/to/my/template.ftl").
-  to("freemarker:dummy?allowTemplateFromHeader=true");
+from("direct:in")
+    .setHeader("FreemarkerResourceUri").constant("path/to/my/template.ftl")
+    .to("freemarker:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="FreemarkerResourceUri">
+    <constant>path/to/my/template.ftl</constant>
+  </setHeader>
+  <to uri="freemarker:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: FreemarkerResourceUri
+            expression:
+              constant:
+                expression: path/to/my/template.ftl
+        - to:
+            uri: freemarker:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 ### The Email Example

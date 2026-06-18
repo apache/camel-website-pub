@@ -116,8 +116,37 @@ For the startCase operation, the input variables are retrieved from the body mes
 
 The following example starts a new case in Bonita:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:start").to("bonita:startCase?hostname=localhost&amp;port=8080&amp;processName=TestProcess&amp;username=install&amp;password=install");
+from("direct:start").to("bonita:startCase?hostname=localhost&port=8080&processName=TestProcess&username=install&password=install");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="bonita:startCase?hostname=localhost&amp;port=8080&amp;processName=TestProcess&amp;username=install&amp;password=install"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: bonita:startCase
+            parameters:
+              hostname: localhost
+              port: 8080
+              processName: TestProcess
+              username: install
+              password: install
 ```
 
 ## Dependencies

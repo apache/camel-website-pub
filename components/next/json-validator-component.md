@@ -158,10 +158,36 @@ Assuming we have the following JSON Schema:
 
 We can validate incoming JSON with the following Camel route, where `myschema.json` is loaded from the classpath.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-  .to("json-validator:myschema.json")
-  .to("mock:end")
+    .to("json-validator:myschema.json")
+    .to("mock:end");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="json-validator:myschema.json"/>
+  <to uri="mock:end"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: json-validator:myschema.json
+        - to:
+            uri: mock:end
 ```
 
 If you use the default schema loader, it will try to determine the schema version from the $schema property and instruct the [validator](https://github.com/networknt) appropriately. If it can’t find (or doesn’t recognize) the $schema property, it will assume your schema is version [2019-09](https://json-schema.org/specification-links.html#draft-2019-09-formerly-known-as-draft-8).

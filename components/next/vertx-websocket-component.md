@@ -176,29 +176,112 @@ Enum values:
 
 The following example shows how to expose a WebSocket on [http://localhost:8080/echo](http://localhost:8080/echo) and returns an '_echo_' response back to the same channel:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("vertx-websocket:localhost:8080/echo")
     .transform().simple("Echo: ${body}")
     .to("vertx-websocket:localhost:8080/echo");
 ```
 
+```xml
+<route>
+  <from uri="vertx-websocket:localhost:8080/echo"/>
+  <transform>
+    <simple>Echo: ${body}</simple>
+  </transform>
+  <to uri="vertx-websocket:localhost:8080/echo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: vertx-websocket:localhost:8080/echo
+      steps:
+        - transform:
+            simple: "Echo: ${body}"
+        - to:
+            uri: vertx-websocket:localhost:8080/echo
+```
+
 It’s also possible to configure the consumer to connect as a WebSocket client on a remote address with the `consumeAsClient` option:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("vertx-websocket:my.websocket.com:8080/chat?consumeAsClient=true")
     .log("Got WebSocket message ${body}");
 ```
 
+```xml
+<route>
+  <from uri="vertx-websocket:my.websocket.com:8080/chat?consumeAsClient=true"/>
+  <log message="Got WebSocket message ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: vertx-websocket:my.websocket.com:8080/chat
+      parameters:
+        consumeAsClient: true
+      steps:
+        - log:
+            message: "Got WebSocket message ${body}"
+```
+
 ### Path & query parameters
 
 The WebSocket server consumer supports the configuration of parameterized paths. The path parameter value will be set as a Camel exchange header:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("vertx-websocket:localhost:8080/chat/{user}")
     .log("New message from ${header.user} >>> ${body}")
 ```
 
+```xml
+<route>
+  <from uri="vertx-websocket:localhost:8080/chat/{user}"/>
+  <log message="New message from ${header.user} >>> ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: vertx-websocket:localhost:8080/chat/{user}
+      steps:
+        - log:
+            message: "New message from ${header.user} >>> ${body}"
+```
+
 Similarly, you can retrieve any query parameter values used by the WebSocket client to connect to the server endpoint:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:sendChatMessage")
@@ -208,12 +291,48 @@ from("vertx-websocket:localhost:8080/chat/{user}")
     .log("New message from ${header.user} (${header.role}) >>> ${body}")
 ```
 
+```xml
+<route>
+  <from uri="direct:sendChatMessage"/>
+  <to uri="vertx-websocket:localhost:8080/chat/camel?role=admin"/>
+</route>
+
+<route>
+  <from uri="vertx-websocket:localhost:8080/chat/{user}"/>
+  <log message="New message from ${header.user} (${header.role}) >>> ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:sendChatMessage
+      steps:
+        - to:
+            uri: vertx-websocket:localhost:8080/chat/camel
+            parameters:
+              role: admin
+- route:
+    from:
+      uri: vertx-websocket:localhost:8080/chat/{user}
+      steps:
+        - log:
+            message: "New message from ${header.user} (${header.role}) >>> ${body}"
+```
+
 ### Sending messages to peers connected to the vertx-websocket server consumer
 
 > **Note**
 > This section only applies when producing messages to a WebSocket hosted by the camel-vertx-websocket consumer. It is not relevant when producing messages to an externally hosted WebSocket.
 
 To send a message to all peers connected to a WebSocket hosted by the vertx-websocket server consumer, use the `sendToAll=true` endpoint option, or the `CamelVertxWebsocket.sendToAll` header.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("vertx-websocket:localhost:8080/chat")
@@ -224,9 +343,50 @@ from("direct:broadcastMessage")
     .to("vertx-websocket:localhost:8080/chat?sendToAll=true");
 ```
 
+```xml
+<route>
+  <from uri="vertx-websocket:localhost:8080/chat"/>
+  <log message="Got WebSocket message ${body}"/>
+</route>
+
+<route>
+  <from uri="direct:broadcastMessage"/>
+  <setBody>
+    <constant>This is a broadcast message!</constant>
+  </setBody>
+  <to uri="vertx-websocket:localhost:8080/chat?sendToAll=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: vertx-websocket:localhost:8080/chat
+      steps:
+        - log:
+            message: "Got WebSocket message ${body}"
+- route:
+    from:
+      uri: direct:broadcastMessage
+      steps:
+        - setBody:
+            constant: "This is a broadcast message!"
+        - to:
+            uri: vertx-websocket:localhost:8080/chat
+            parameters:
+              sendToAll: true
+```
+
 Alternatively, you can send messages to specific peers by using the `CamelVertxWebsocket.connectionKey` header. Multiple peers can be specified as a comma separated list.
 
 The value of the `connectionKey` can be determined whenever a peer triggers an event on the vertx-websocket consumer, where a unique key identifying the peer will be propagated via the `CamelVertxWebsocket.connectionKey` header.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("vertx-websocket:localhost:8080/chat")
@@ -234,8 +394,46 @@ from("vertx-websocket:localhost:8080/chat")
 
 from("direct:broadcastMessage")
     .setBody().constant("This is a broadcast message!")
-    .setHeader(VertxWebsocketConstants.CONNECTION_KEY).constant("key-1,key-2,key-3")
+    .setHeader("CamelVertxWebsocket.connectionKey").constant("key-1,key-2,key-3")
     .to("vertx-websocket:localhost:8080/chat");
+```
+
+```xml
+<route>
+  <from uri="vertx-websocket:localhost:8080/chat"/>
+  <log message="Got WebSocket message ${body}"/>
+</route>
+
+<route>
+  <from uri="direct:broadcastMessage"/>
+  <setBody>
+    <constant>This is a broadcast message!</constant>
+  </setBody>
+  <setHeader name="CamelVertxWebsocket.connectionKey">
+    <constant>key-1,key-2,key-3</constant>
+  </setHeader>
+  <to uri="vertx-websocket:localhost:8080/chat"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: vertx-websocket:localhost:8080/chat
+      steps:
+        - log:
+            message: "Got WebSocket message ${body}"
+- route:
+    from:
+      uri: direct:broadcastMessage
+      steps:
+        - setBody:
+            constant: "This is a broadcast message!"
+        - setHeader:
+            name: CamelVertxWebsocket.connectionKey
+            constant: "key-1,key-2,key-3"
+        - to:
+            uri: vertx-websocket:localhost:8080/chat
 ```
 
 ### SSL

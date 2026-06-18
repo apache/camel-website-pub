@@ -335,15 +335,43 @@ You can specify the destination in the following headers:
 
 For example, the following route shows how you can compute a destination at run time and use it to override the destination appearing in the JMS URL:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file://inbox")
   .to("bean:computeDestination")
   .to("sjms:queue:dummy");
 ```
 
+```xml
+<route>
+  <from uri="file:inbox"/>
+  <to uri="bean:computeDestination"/>
+  <to uri="sjms:queue:dummy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:inbox
+      steps:
+        - to:
+            uri: bean:computeDestination
+        - to:
+            uri: sjms:queue:dummy
+```
+
 The queue name, `dummy`, is just a placeholder. It must be provided as part of the JMS endpoint URL, but it will be ignored in this example.
 
 In the `computeDestination` bean, specify the real destination by setting the `CamelJmsDestinationName` header as follows:
+
+_Java-only: setting JMS destination header dynamically_
 
 ```java
 public void setJmsHeader(Exchange exchange) {
@@ -364,9 +392,32 @@ For example, suppose you need to send messages to queues with order types, then 
 
 Example SJMS route with `toD`
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:order")
   .toD("sjms:order-${header.orderType}");
+```
+
+```xml
+<route>
+  <from uri="direct:order"/>
+  <toD uri="sjms:order-${header.orderType}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - toD:
+            uri: "sjms:order-${header.orderType}"
 ```
 
 ### Local transactions
@@ -379,11 +430,44 @@ You can combine consumer and producer, such as:
 
 Example transacted SJMS route with consumer and producer
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("sjms:cheese?transacted=true")
   .to("bean:foo")
   .to("sjms:foo?transacted=true")
   .to("bean:bar");
+```
+
+```xml
+<route>
+  <from uri="sjms:cheese?transacted=true"/>
+  <to uri="bean:foo"/>
+  <to uri="sjms:foo?transacted=true"/>
+  <to uri="bean:bar"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sjms:cheese
+      parameters:
+        transacted: true
+      steps:
+        - to:
+            uri: bean:foo
+        - to:
+            uri: sjms:foo
+            parameters:
+              transacted: true
+        - to:
+            uri: bean:bar
 ```
 
 Here the consumer and producer are both transacted, which means that only at the end of processing the message, then both the consumer and the producer will commit (or rollback in case of an exception during routing).

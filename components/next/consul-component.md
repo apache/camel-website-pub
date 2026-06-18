@@ -327,6 +327,8 @@ If you set `CONSUL_ACTION` to `ConsulAgentActions.REGISTER`, the agent action `R
 > **Tip**
 > Which producer action invoked by which consul api is defined by the respective producer. E.g., the `ConsulAgentProducer` maps `ConsulAgentActions.REGISTER` to an invocation of `AgentClient.register`.
 
+_Java-only: route using ImmutableRegistration builder and Java constants_
+
 ```java
 from("direct:registerFooService")
     .setBody().constant(ImmutableRegistration.builder()
@@ -346,6 +348,8 @@ consul:agent?action=REGISTER
 ## Registering Camel Routes with Consul
 
 You can employ a `ServiceRegistrationRoutePolicy` to register Camel routes as services with Consul automatically.
+
+_Java-only: route with programmatic routePolicy and Java constants_
 
 ```java
 from("jetty:http://0.0.0.0:8080/service/endpoint").routeId("foo-1")

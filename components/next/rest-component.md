@@ -228,19 +228,76 @@ The path and uriTemplate option is defined using a REST syntax where you define 
 
 The following is a Camel route using a path only
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("rest:get:hello")
   .transform().constant("Bye World");
 ```
 
+```xml
+<route>
+  <from uri="rest:get:hello"/>
+  <transform>
+    <constant>Bye World</constant>
+  </transform>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rest:get:hello
+      steps:
+        - transform:
+            constant: "Bye World"
+```
+
 And the following route uses a parameter which is mapped to a Camel header with the key "me".
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("rest:get:hello/{me}")
   .transform().simple("Bye ${header.me}");
 ```
 
+```xml
+<route>
+  <from uri="rest:get:hello/{me}"/>
+  <transform>
+    <simple>Bye ${header.me}</simple>
+  </transform>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rest:get:hello/{me}
+      steps:
+        - transform:
+            simple: "Bye ${header.me}"
+```
+
 The following examples have configured a base path as "hello" and then have two REST services configured using uriTemplates.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("rest:get:hello:/{me}")
@@ -248,6 +305,36 @@ from("rest:get:hello:/{me}")
 
 from("rest:get:hello:/french/{me}")
   .transform().simple("Bonjour ${header.me}");
+```
+
+```xml
+<route>
+  <from uri="rest:get:hello:/{me}"/>
+  <transform>
+    <simple>Hi ${header.me}</simple>
+  </transform>
+</route>
+<route>
+  <from uri="rest:get:hello:/french/{me}"/>
+  <transform>
+    <simple>Bonjour ${header.me}</simple>
+  </transform>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rest:get:hello:/{me}
+      steps:
+        - transform:
+            simple: "Hi ${header.me}"
+- route:
+    from:
+      uri: rest:get:hello:/french/{me}
+      steps:
+        - transform:
+            simple: "Bonjour ${header.me}"
 ```
 
 ## Examples
@@ -258,12 +345,37 @@ You can use the REST component to call REST services like any other Camel compon
 
 For example, to call a REST service on using `hello/{me}` you can do
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
   .to("rest:get:hello/{me}");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="rest:get:hello/{me}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: rest:get:hello/{me}
+```
+
 And then the dynamic value `{me}` is mapped to a header or variable with the same name. So to call this REST service, you can send an empty message body and a header as shown:
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 template.sendBodyAndHeader("direct:start", null, "me", "Donald Duck");
@@ -271,18 +383,47 @@ template.sendBodyAndHeader("direct:start", null, "me", "Donald Duck");
 
 Instead of a header you can also use exchange variable such as:
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 String response = template.withVariable("me", "Donald Duck").to("direct:start").request(String.class);
 ```
 
 The Rest producer needs to know the hostname and port of the REST service, which you can configure using the host option as shown:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
   .to("rest:get:hello/{me}?host=myserver:8080/foo");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="rest:get:hello/{me}?host=myserver:8080/foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: rest:get:hello/{me}
+            parameters:
+              host: "myserver:8080/foo"
+```
+
 Instead of using the host option, you can configure the host on the `restConfiguration` as shown:
+
+_Java-only: Java programmatic REST configuration API_
 
 ```java
 restConfiguration().host("myserver:8080/foo");
@@ -292,6 +433,8 @@ from("direct:start")
 ```
 
 You can use the `producerComponent` to select which Camel component to use as the HTTP client, for example to use http, you can do:
+
+_Java-only: Java programmatic REST configuration API_
 
 ```java
 restConfiguration().host("myserver:8080/foo").producerComponent("http");
@@ -306,6 +449,8 @@ The REST producer supports binding using JSON or XML like the rest-dsl does.
 
 For example, to use jetty with JSON binding mode turned on, you can configure this in the REST configuration:
 
+_Java-only: Java programmatic REST configuration API_
+
 ```java
 restConfiguration().component("jetty").host("localhost").port(8080).bindingMode(RestBindingMode.json);
 
@@ -314,6 +459,8 @@ from("direct:start")
 ```
 
 Then when calling the REST service using the REST producer, it will automatically bind any POJOs to JSON before calling the REST service:
+
+_Java-only: Java POJO API (ProducerTemplate)_
 
 ```java
   UserPojo user = new UserPojo();
@@ -328,6 +475,8 @@ In the example above we send a POJO instance `UserPojo` as the message body. And
 However, if you want to also perform binding for the response message (e.g., what the REST service sends back, as response) you would need to configure the `outType` option to specify what is the class name of the POJO to unmarshal from JSON to POJO.
 
 For example, if the REST service returns a JSON payload that binds to `com.foo.MyResponsePojo` you can configure this as shown:
+
+_Java-only: Java programmatic REST configuration API_
 
 ```java
   restConfiguration().component("jetty").host("localhost").port(8080).bindingMode(RestBindingMode.json);

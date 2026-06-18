@@ -144,6 +144,8 @@ gpg --export-secret-keys > secring.gpg
 
 A PGP Data Formatter can decrypt/verify messages which have been encrypted by different public keys or signed by different private keys. Provide the corresponding private keys in the secret keyring, the corresponding public keys in the public keyring, and the passphrases in the passphrase accessor.
 
+_Java-only: programmatic PGPDataFormat with passphrase accessor and multiple keyrings_
+
 ```java
 Map<String, String> userId2Passphrase = new HashMap<String, String>(2);
 // add passphrases of several private keys whose corresponding public keys have been used to encrypt the messages
@@ -176,6 +178,8 @@ If you verify a signature, you not only want to verify the correctness of the si
 
 **Signature User IDs**
 
+_Java-only: programmatic PGPDataFormat restricting signer identities for verification_
+
 ```java
 // specify the User IDs of the expected signer identities
  List<String> expectedSigUserIds = new ArrayList<String>();
@@ -204,6 +208,8 @@ from("direct:start")
 The PGP specification allows that one PGP data format can contain several signatures from different keys. Since Camel 2.13.3, it’s been possible to create such kind of PGP content via specifying signature User IDs which relate to several private keys in the secret keyring.
 
 **Several Signatures**
+
+_Java-only: programmatic PGPDataFormat with multiple signer keys_
 
 ```java
  PGPDataFormat pgpSignAndEncryptSeveralSignerKeys = new PGPDataFormat();

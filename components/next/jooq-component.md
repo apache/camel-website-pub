@@ -224,6 +224,8 @@ JOOQ provides DSL to create queries. There are two types of queries:
 
 For example:
 
+_Java-only: JOOQ DSL API for creating Query and ResultQuery objects_
+
 ```java
 // Create a Query object and execute it:
 Query query = create.query("DELETE FROM BOOK");
@@ -238,8 +240,34 @@ Result<Record> result = resultQuery.fetch();
 
 SQL could be executed using JOOQ’s objects "Query" or "ResultQuery". Also, the SQL query could be specified inside URI:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?query=select * from book_store x where x.name = 'test'").to("bean:myBusinessLogic");
+from("jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?query=select * from book_store x where x.name = 'test'")
+    .to("bean:myBusinessLogic");
+```
+
+```xml
+<route>
+    <from uri="jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?query=select * from book_store x where x.name = 'test'"/>
+    <to uri="bean:myBusinessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord
+      parameters:
+        query: "select * from book_store x where x.name = 'test'"
+    steps:
+      - to:
+          uri: bean:myBusinessLogic
 ```
 
 See the examples below.
@@ -387,7 +415,7 @@ Camel context configuration:
 </beans>
 ```
 
-Sample bean:
+_Java-only: JOOQ bean with Query and ResultQuery factory methods_
 
 ```java
 @Component

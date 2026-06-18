@@ -302,6 +302,8 @@ While deserializing, it’s important to notice that the `unmarshallExchange` me
 
 To insert something on a table, you can use the following code:
 
+_Java-only: route with CQL query string concatenation_
+
 ```java
 String CQL = "insert into camel_user(login, first_name, last_name) values (?, ?, ?)";
 from("direct:input")
@@ -309,6 +311,8 @@ from("direct:input")
 ```
 
 At this point, you should be able to insert data by using a list as body
+
+_Java-only: creating a parameter list for CQL binding_
 
 ```java
 Arrays.asList("davsclaus", "Claus", "Ibsen");

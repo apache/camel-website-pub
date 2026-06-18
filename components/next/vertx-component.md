@@ -129,6 +129,8 @@ Enum values:
 
 If you would like to connect to the Vert.x instance already existing in your JVM, you can set the instance on the component level:
 
+_Java-only: connecting to an existing Vert.x instance_
+
 ```java
 Vertx vertx = ...;
 VertxComponent vertxComponent = new VertxComponent();

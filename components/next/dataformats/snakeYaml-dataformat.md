@@ -49,32 +49,63 @@ Enum values:
 
 -   Turn Object messages into yaml then send to MQSeries
     
-    ```java
-    from("activemq:My.Queue")
-      .marshal().yaml()
-      .to("mqseries:Another.Queue");
-    ```
+    -   Java
+        
+    -   XML
+        
+    -   YAML DSL
+        
     
     ```java
     from("activemq:My.Queue")
-      .marshal().yaml(YAMLLibrary.SnakeYAML)
-      .to("mqseries:Another.Queue");
+        .marshal().yaml()
+        .to("mqseries:Another.Queue");
     ```
     
+    ```xml
+    <route>
+      <from uri="activemq:My.Queue"/>
+      <marshal><yaml/></marshal>
+      <to uri="mqseries:Another.Queue"/>
+    </route>
+    ```
+    
+    ```yaml
+    - route:
+        from:
+          uri: activemq:My.Queue
+          steps:
+            - marshal:
+                yaml: {}
+            - to:
+                uri: mqseries:Another.Queue
+    ```
+    
+
+_Java-only: selecting the SnakeYAML library explicitly_
+
+```java
+from("activemq:My.Queue")
+  .marshal().yaml(YAMLLibrary.SnakeYAML)
+  .to("mqseries:Another.Queue");
+```
+
 -   Restrict classes to be loaded from YAML
     
-    ```java
-    // Creat a SnakeYAMLDataFormat instance
-    SnakeYAMLDataFormat yaml = new SnakeYAMLDataFormat();
-    
-    // Restrict classes to be loaded from YAML
-    yaml.addTypeFilters(TypeFilters.types(MyPojo.class, MyOtherPojo.class));
-    
-    from("activemq:My.Queue")
-      .unmarshal(yaml)
-      .to("mqseries:Another.Queue");
-    ```
-    
+
+_Java-only: programmatic type filter configuration_
+
+```java
+// Creat a SnakeYAMLDataFormat instance
+SnakeYAMLDataFormat yaml = new SnakeYAMLDataFormat();
+
+// Restrict classes to be loaded from YAML
+yaml.addTypeFilters(TypeFilters.types(MyPojo.class, MyOtherPojo.class));
+
+from("activemq:My.Queue")
+  .unmarshal(yaml)
+  .to("mqseries:Another.Queue");
+```
 
 ## Using YAML in Spring DSL
 

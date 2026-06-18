@@ -188,6 +188,8 @@ Enum values:
 -   `listServices`: this operation lists the services on a kubernetes cluster
     
 
+_Java-only: uses toF() for endpoint URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-services:///?kubernetesClient=#kubernetesClient&operation=listServices").
@@ -198,6 +200,8 @@ This operation returns a List of services from your cluster
 
 -   `listServicesByLabels`: this operation lists the deployments by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor with KubernetesConstants and HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -216,6 +220,8 @@ from("direct:listByLabels").process(new Processor() {
 This operation returns a list of services from your cluster using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Services Consumer Example
+
+_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
 
 ```java
 fromF("kubernetes-services://%s?oauthToken=%s", host, authToken)

@@ -217,9 +217,35 @@ The ArangoDb component supports 8 message header(s), which is/are listed below:
 
 #### Save document on a collection
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:insert")
-  .to("arangodb:testDb?documentCollection=collection&operation=SAVE_DOCUMENT");
+    .to("arangodb:testDb?documentCollection=collection&operation=SAVE_DOCUMENT");
+```
+
+```xml
+<route>
+  <from uri="direct:insert"/>
+  <to uri="arangodb:testDb?documentCollection=collection&amp;operation=SAVE_DOCUMENT"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:insert
+      steps:
+        - to:
+            uri: arangodb:testDb
+            parameters:
+              documentCollection: collection
+              operation: SAVE_DOCUMENT
 ```
 
 And you can set as body a BaseDocument class
@@ -230,21 +256,50 @@ myObject.addAttribute("b", 42);
 
 #### Query a collection
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:query")
-  .to("arangodb:testDb?operation=AQL_QUERY
+    .to("arangodb:testDb?operation=AQL_QUERY");
+```
+
+```xml
+<route>
+  <from uri="direct:query"/>
+  <to uri="arangodb:testDb?operation=AQL_QUERY"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:query
+      steps:
+        - to:
+            uri: arangodb:testDb
+            parameters:
+              operation: AQL_QUERY
 ```
 
 And you can invoke an AQL Query in this way
 
-String query = "FOR t IN " + COLLECTION\_NAME + " FILTER t.value == @value";
+_Java-only: ProducerTemplate with AQL query parameters and string concatenation_
+
+```java
+String query = "FOR t IN " + COLLECTION_NAME + " FILTER t.value == @value";
 Map<String, Object> bindVars = new MapBuilder().put("value", "hello")
         .get();
 
 Exchange result = template.request("direct:query", exchange -> {
-    exchange.getMessage().setHeader(AQL\_QUERY, query);
-    exchange.getMessage().setHeader(AQL\_QUERY\_BIND\_PARAMETERS, bindVars);
+    exchange.getMessage().setHeader(AQL_QUERY, query);
+    exchange.getMessage().setHeader(AQL_QUERY_BIND_PARAMETERS, bindVars);
 });
+```
 
 ## Spring Boot Auto-Configuration
 

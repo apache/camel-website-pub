@@ -74,6 +74,8 @@ Camel components are configured on two separate levels:
 
 At the component level, you set general and shared configurations that are, then, inherited by the endpoints. You can set them directly via Java code, or through the properties component.
 
+_Java-only: programmatic component configuration_
+
 ```java
 StripeComponent stripe = context.getComponent("stripe", StripeComponent.class);
 stripe.setApiKey("sk_test_...");
@@ -284,6 +286,8 @@ You can configure the API key in several ways:
 
 #### Option 1: Component Level (Recommended for Single Key)
 
+_Java-only: programmatic API key configuration_
+
 ```java
 StripeComponent stripe = context.getComponent("stripe", StripeComponent.class);
 stripe.setApiKey("sk_test_...");
@@ -291,9 +295,34 @@ stripe.setApiKey("sk_test_...");
 
 #### Option 2: Endpoint Level with Property Placeholder
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("stripe:customers?apiKey={{stripe.apiKey}}");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="stripe:customers?apiKey={{stripe.apiKey}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: stripe:customers
+            parameters:
+              apiKey: "{{stripe.apiKey}}"
 ```
 
 Then in `application.properties`:
@@ -302,9 +331,34 @@ stripe.apiKey=sk\_test\_...
 
 #### Option 3: System Property (Recommended for Production)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("stripe:customers?apiKey={{STRIPE_API_KEY}}");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="stripe:customers?apiKey={{STRIPE_API_KEY}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: stripe:customers
+            parameters:
+              apiKey: "{{STRIPE_API_KEY}}"
 ```
 
 Set via system property:
@@ -319,6 +373,8 @@ The Stripe component accepts both Map objects and JSON strings as input, providi
 
 Using a Map:
 
+_Java-only: uses `Map.of()` to construct request parameters_
+
 ```java
 from("direct:createCustomer")
     .setBody(constant(Map.of(
@@ -331,6 +387,13 @@ from("direct:createCustomer")
 ```
 
 Using JSON:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:createCustomerJson")
@@ -345,9 +408,37 @@ from("direct:createCustomerJson")
     .log("Created customer: ${body.id}");
 ```
 
+```xml
+<route>
+  <from uri="direct:createCustomerJson"/>
+  <setBody>
+    <constant>{"email": "customer@example.com", "name": "John Doe", "description": "New customer"}</constant>
+  </setBody>
+  <to uri="stripe:customers?apiKey={{stripe.apiKey}}"/>
+  <log message="Created customer: ${body.id}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createCustomerJson
+      steps:
+        - setBody:
+            constant: '{"email": "customer@example.com", "name": "John Doe", "description": "New customer"}'
+        - to:
+            uri: stripe:customers
+            parameters:
+              apiKey: "{{stripe.apiKey}}"
+        - log:
+            message: "Created customer: ${body.id}"
+```
+
 ### Creating a Payment Intent
 
 Using a Map:
+
+_Java-only: uses `Map.of()` and `List.of()` to construct request parameters_
 
 ```java
 from("direct:payment")
@@ -363,30 +454,102 @@ from("direct:payment")
 
 Using JSON (useful when integrating with REST endpoints):
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("rest:post:/payments")
     .log("Received payment request: ${body}")
-    // Body is already JSON from REST endpoint
     .to("stripe:paymentIntents?apiKey={{stripe.apiKey}}")
     .log("Payment intent created: ${body.id}");
 ```
 
+```xml
+<route>
+  <from uri="rest:post:/payments"/>
+  <log message="Received payment request: ${body}"/>
+  <to uri="stripe:paymentIntents?apiKey={{stripe.apiKey}}"/>
+  <log message="Payment intent created: ${body.id}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rest:post:/payments
+      steps:
+        - log:
+            message: "Received payment request: ${body}"
+        - to:
+            uri: stripe:paymentIntents
+            parameters:
+              apiKey: "{{stripe.apiKey}}"
+        - log:
+            message: "Payment intent created: ${body.id}"
+```
+
 ### Retrieving a Customer
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:getCustomer")
-    .setHeader(StripeConstants.OBJECT_ID, constant("cus_xxxxx"))
-    .setHeader(StripeConstants.METHOD_HEADER, constant(StripeConstants.METHOD_RETRIEVE))
+    .setHeader("CamelStripeObjectId", constant("cus_xxxxx"))
+    .setHeader("CamelStripeMethod", constant("retrieve"))
     .to("stripe:customers?apiKey={{stripe.apiKey}}")
     .log("Retrieved customer: ${body.email}");
 ```
 
+```xml
+<route>
+  <from uri="direct:getCustomer"/>
+  <setHeader name="CamelStripeObjectId">
+    <constant>cus_xxxxx</constant>
+  </setHeader>
+  <setHeader name="CamelStripeMethod">
+    <constant>retrieve</constant>
+  </setHeader>
+  <to uri="stripe:customers?apiKey={{stripe.apiKey}}"/>
+  <log message="Retrieved customer: ${body.email}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:getCustomer
+      steps:
+        - setHeader:
+            name: CamelStripeObjectId
+            constant: "cus_xxxxx"
+        - setHeader:
+            name: CamelStripeMethod
+            constant: "retrieve"
+        - to:
+            uri: stripe:customers
+            parameters:
+              apiKey: "{{stripe.apiKey}}"
+        - log:
+            message: "Retrieved customer: ${body.email}"
+```
+
 ### Updating a Payment Intent
+
+_Java-only: uses `Map.of()` with nested `Map.of()` to construct request parameters_
 
 ```java
 from("direct:updatePayment")
-    .setHeader(StripeConstants.OBJECT_ID, simple("${exchangeProperty.paymentIntentId}"))
-    .setHeader(StripeConstants.METHOD_HEADER, constant(StripeConstants.METHOD_UPDATE))
+    .setHeader("CamelStripeObjectId", simple("${exchangeProperty.paymentIntentId}"))
+    .setHeader("CamelStripeMethod", constant("update"))
     .setBody(constant(Map.of(
         "description", "Updated description",
         "metadata", Map.of("order_id", "12345")
@@ -396,9 +559,11 @@ from("direct:updatePayment")
 
 ### Listing Customers
 
+_Java-only: uses `Map.of()` to construct request parameters_
+
 ```java
 from("direct:listCustomers")
-    .setHeader(StripeConstants.METHOD_HEADER, constant(StripeConstants.METHOD_LIST))
+    .setHeader("CamelStripeMethod", constant("list"))
     .setBody(constant(Map.of("limit", 10)))
     .to("stripe:customers?apiKey={{stripe.apiKey}}")
     .log("Found ${body.data.size()} customers");
@@ -406,21 +571,21 @@ from("direct:listCustomers")
 
 ### Creating a Product with Price
 
+_Java-only: uses `Map.of()` and `process` lambda to construct multi-step request_
+
 ```java
 from("direct:createProduct")
-    // Create product
     .setBody(constant(Map.of(
         "name", "Premium Subscription",
         "description", "Monthly premium access"
     )))
     .to("stripe:products?apiKey={{stripe.apiKey}}")
     .setProperty("productId", simple("${body.id}"))
-    // Create price for the product
     .process(exchange -> {
         Map<String, Object> priceParams = new HashMap<>();
         priceParams.put("product", exchange.getProperty("productId", String.class));
         priceParams.put("currency", "usd");
-        priceParams.put("unit_amount", 2999L);  // $29.99
+        priceParams.put("unit_amount", 2999L);
         priceParams.put("recurring", Map.of("interval", "month"));
         exchange.getMessage().setBody(priceParams);
     })
@@ -430,11 +595,13 @@ from("direct:createProduct")
 
 ### Processing a Refund
 
+_Java-only: uses `Map.of()` to construct request parameters_
+
 ```java
 from("direct:refund")
     .setBody(constant(Map.of(
         "charge", "ch_xxxxx",
-        "amount", 1000L,  // Partial refund of $10.00
+        "amount", 1000L,
         "reason", "requested_by_customer"
     )))
     .to("stripe:refunds?apiKey={{stripe.apiKey}}")
@@ -443,12 +610,52 @@ from("direct:refund")
 
 ### Canceling a Payment Intent
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:cancelPayment")
-    .setHeader(StripeConstants.OBJECT_ID, simple("${header.paymentIntentId}"))
-    .setHeader(StripeConstants.METHOD_HEADER, constant(StripeConstants.METHOD_CANCEL))
+    .setHeader("CamelStripeObjectId", simple("${header.paymentIntentId}"))
+    .setHeader("CamelStripeMethod", constant("cancel"))
     .to("stripe:paymentIntents?apiKey={{stripe.apiKey}}")
     .log("Payment intent canceled: ${body.id}");
+```
+
+```xml
+<route>
+  <from uri="direct:cancelPayment"/>
+  <setHeader name="CamelStripeObjectId">
+    <simple>${header.paymentIntentId}</simple>
+  </setHeader>
+  <setHeader name="CamelStripeMethod">
+    <constant>cancel</constant>
+  </setHeader>
+  <to uri="stripe:paymentIntents?apiKey={{stripe.apiKey}}"/>
+  <log message="Payment intent canceled: ${body.id}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:cancelPayment
+      steps:
+        - setHeader:
+            name: CamelStripeObjectId
+            simple: "${header.paymentIntentId}"
+        - setHeader:
+            name: CamelStripeMethod
+            constant: "cancel"
+        - to:
+            uri: stripe:paymentIntents
+            parameters:
+              apiKey: "{{stripe.apiKey}}"
+        - log:
+            message: "Payment intent canceled: ${body.id}"
 ```
 
 ## Running Integration Tests
@@ -632,6 +839,8 @@ You can see all the test data created during integration test runs.
 ## Error Handling
 
 The Stripe API may return various errors. The component propagates these as exceptions:
+
+_Java-only: uses Stripe SDK exception types in `doCatch` blocks_
 
 ```java
 from("direct:createPayment")

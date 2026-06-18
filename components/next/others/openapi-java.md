@@ -24,6 +24,8 @@ The camel-openapi-java module can be used from the REST components (without the 
 
 You can enable the OpenApi api from the rest-dsl by configuring the `apiContextPath` dsl as shown below:
 
+_Java-only: RouteBuilder with Rest DSL configuration and class literals_
+
 ```java
 public class UserRouteBuilder extends RouteBuilder {
     @Override
@@ -85,6 +87,8 @@ The OpenApi module can be configured using the following options. To configure u
 
 The Rest DSL now supports declaring OpenApi `securityDefinitions` in the generated API document. For example, as shown below:
 
+_Java-only: Rest DSL security definitions builder API_
+
 ```java
 rest("/user").tag("dude").description("User rest service")
     // setup security definitions
@@ -103,6 +107,8 @@ Here we have set up two security definitions
     
 
 Then you need to specify on the rest operations which security to use by referring to their key (petstore\_auth or api\_key).
+
+_Java-only: Rest DSL security on operations with class literals_
 
 ```java
 .get("/{id}/{date}").description("Find user by id and date").outType(User.class)
@@ -127,6 +133,8 @@ The OpenApi specification allows you to specify the host, port & path that is se
 By default, the value for these fields is determined by `X-Forwarded` headers, `X-Forwarded-Host` & `X-Forwarded-Proto`.
 
 This can be overridden by specifying your own host, port & scheme on the REST configuration.
+
+_Java-only: programmatic restConfiguration builder API_
 
 ```java
 restConfiguration().component("netty-http")

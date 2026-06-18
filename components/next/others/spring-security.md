@@ -87,6 +87,8 @@ In this example, the endpoint `mock:end` will not be executed unless a Spring Se
 
 This component does not specify the process of obtaining security credentials that are used for authorization. You can write your own processors or components which get authentication information from the exchange depending on your needs. For example, you might create a processor that gets credentials from an HTTP request header originating in the [Jetty](../jetty-component.md) component. No matter how the credentials are collected, they need to be placed in the In message or the `SecurityContextHolder` so the Camel [Spring Security](#) component can access them:
 
+_Java-only: extracting credentials from HTTP header and creating a Subject_
+
 ```java
 import javax.security.auth.Subject;
 import org.apache.camel.*;

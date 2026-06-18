@@ -100,6 +100,8 @@ The camel-mapstruct component must be configured with one or more package names 
 
 For example, to set up two packages, you can do the following:
 
+_Java-only: configuring MapStruct mapper packages programmatically_
+
 ```java
 MapstructComponent mc = context.getComponent("mapstruct", MapstructComponent.class);
 mc.setMapperPackageName("com.foo.mapper,com.bar.mapper");
@@ -113,9 +115,32 @@ camel.component.mapstruct.mapper-package-name = com.foo.mapper,com.bar.mapper
 
 Camel will on startup scan these packages for classes which names ends with _Mapper_. These classes are then introspected to discover the mapping methods. These mapping methods are then registered into the Camel [Type Converter](../../manual/type-converter.md) registry. This means that you can also use type converter to convert the POJOs with MapStruct, such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:foo")
-  .convertBodyTo(MyFooDto.class);
+    .convertBodyTo(MyFooDto.class);
+```
+
+```xml
+<route>
+  <from uri="direct:foo"/>
+  <convertBodyTo type="MyFooDto"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:foo
+      steps:
+        - convertBodyTo:
+            type: MyFooDto
 ```
 
 Where `MyFooDto` is a POJO that MapStruct is able to convert to/from.

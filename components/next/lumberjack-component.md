@@ -129,14 +129,40 @@ Lumberjack usage samples.
 
 ### Example 1: Streaming the log messages
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-RouteBuilder builder = new RouteBuilder() {
-    public void configure() {
-       from("lumberjack:0.0.0.0").                  // Listen on all network interfaces using the default port
-           setBody(simple("${body[message]}")).     // Select only the log message
-           to("stream:out");                        // Write it into the output stream
-    }
-};
+from("lumberjack:0.0.0.0")
+    .setBody(simple("${body[message]}"))
+    .to("stream:out");
+```
+
+```xml
+<route>
+  <from uri="lumberjack:0.0.0.0"/>
+  <setBody>
+    <simple>${body[message]}</simple>
+  </setBody>
+  <to uri="stream:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: lumberjack:0.0.0.0
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "${body[message]}"
+        - to:
+            uri: stream:out
 ```
 
 ## Spring Boot Auto-Configuration

@@ -193,11 +193,20 @@ If any of the above properties are set, they will override their corresponding q
 
 To create an instance, you can pass the parameters through the endpoint, the exchange properties, and the exchange body as a CreateInstanceRequestBody object or a valid JSON String representation of it. Refer to this for the [Kafka parameters](https://support.huaweicloud.com/en-us/api-kafka/kafka-api-180514002.md) and the [RabbitMQ parameters](https://support.huaweicloud.com/en-us/api-rabbitmq/rabbitmq-api-180514002.md). If you choose to pass these parameters through the endpoint or through exchange properties, you can only input the mandatory parameters shown in those links. If you would like to have access to all the parameters, you must pass a CreateInstanceRequestBody object or a valid JSON String representation of it through the exchange body, as shown below:
 
+_Java-only: requires SDK CreateInstanceRequestBody builder_
+
 ```java
 from("direct:triggerRoute")
  .setBody(new CreateInstanceRequestBody().withName("new-instance").withDescription("description").with*) // add remaining options
  .to("hwcloud-dms:createInstance?region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
 ```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:triggerRoute")
@@ -205,9 +214,37 @@ from("direct:triggerRoute")
  .to("hwcloud-dms:createInstance?region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
 ```
 
+```xml
+<route>
+  <from uri="direct:triggerRoute"/>
+  <setBody>
+    <constant>{"name":"new-instance","description":"description"}</constant>
+  </setBody>
+  <to uri="hwcloud-dms:createInstance?region=cn-north-4&amp;accessKey=********&amp;secretKey=********&amp;projectId=*******"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:triggerRoute
+      steps:
+        - setBody:
+            constant: '{"name":"new-instance","description":"description"}'
+        - to:
+            uri: hwcloud-dms:createInstance
+            parameters:
+              region: cn-north-4
+              accessKey: "********"
+              secretKey: "********"
+              projectId: "*******"
+```
+
 ### Update Instance
 
 To update an instance, you must pass the parameters through the exchange body as an UpdateInstanceRequestBody or a valid JSON String representation of it. Refer to this for the [Kafka parameters](https://support.huaweicloud.com/en-us/api-kafka/kafka-api-180514004.md) and the [RabbitMQ parameters](https://support.huaweicloud.com/en-us/api-rabbitmq/rabbitmq-api-180514004.md). An example of how to do this is shown below:
+
+_Java-only: requires SDK UpdateInstanceRequestBody builder_
 
 ```java
 from("direct:triggerRoute")
@@ -215,10 +252,44 @@ from("direct:triggerRoute")
  .to("hwcloud-dms:updateInstance?instanceId=******&region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:triggerRoute")
  .setBody("{\"name\":\"new-instance\",\"description\":\"description\"}") // add remaining options
  .to("hwcloud-dms:updateInstance?instanceId=******&region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
+```
+
+```xml
+<route>
+  <from uri="direct:triggerRoute"/>
+  <setBody>
+    <constant>{"name":"new-instance","description":"description"}</constant>
+  </setBody>
+  <to uri="hwcloud-dms:updateInstance?instanceId=******&amp;region=cn-north-4&amp;accessKey=********&amp;secretKey=********&amp;projectId=*******"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:triggerRoute
+      steps:
+        - setBody:
+            constant: '{"name":"new-instance","description":"description"}'
+        - to:
+            uri: hwcloud-dms:updateInstance
+            parameters:
+              instanceId: "******"
+              region: cn-north-4
+              accessKey: "********"
+              secretKey: "********"
+              projectId: "*******"
 ```
 
 ### Using ServiceKey Configuration Bean
@@ -234,9 +305,35 @@ Check the following code snippets:
 </bean>
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:triggerRoute")
  .to("hwcloud-dms:listInstances?region=cn-north-4&serviceKeys=#myServiceKeyConfig")
+```
+
+```xml
+<route>
+  <from uri="direct:triggerRoute"/>
+  <to uri="hwcloud-dms:listInstances?region=cn-north-4&amp;serviceKeys=#myServiceKeyConfig"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:triggerRoute
+      steps:
+        - to:
+            uri: hwcloud-dms:listInstances
+            parameters:
+              region: cn-north-4
+              serviceKeys: "#myServiceKeyConfig"
 ```
 
 ## Spring Boot Auto-Configuration

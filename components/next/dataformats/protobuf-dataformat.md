@@ -2,7 +2,7 @@
 
 **Since Camel 2.2**
 
-## Protobuf - Protocol Buffers
+Protobuf - Protocol Buffers
 
 "Protocol Buffers - Google’s data interchange format"
 
@@ -42,6 +42,8 @@ Enum values:
 
 It’s possible to parse JSON message to convert it to the protobuf format and unparse it back using native util converter. To use this option, set contentTypeFormat value to `json` or call protobuf with second parameter. If the default instance is not specified, always use the native protobuf format. The sample code shows below:
 
+_Java-only: programmatic protobuf configuration with content type format_
+
 ```java
 from("direct:marshal")
     .unmarshal()
@@ -67,7 +69,7 @@ The first step is to define the format for the body of your exchange. This is de
 
 **addressbook.proto**
 
-```java
+```protobuf
 syntax = "proto2";
 
 package org.apache.camel.component.protobuf;
@@ -147,6 +149,8 @@ This will generate a single Java class named AddressBookProtos which contains in
 
 You can use create the ProtobufDataFormat instance and pass it to Camel DataFormat marshal and unmarshal API like this.
 
+_Java-only: programmatic ProtobufDataFormat instantiation_
+
 ```java
    ProtobufDataFormat format = new ProtobufDataFormat(Person.getDefaultInstance());
 
@@ -155,6 +159,8 @@ You can use create the ProtobufDataFormat instance and pass it to Camel DataForm
 ```
 
 Or use the DSL `protobuf()` passing the unmarshal default instance or default instance class name like this. However, if you have input data as `Map` type, you will need to **specify** the ProtobufDataFormat otherwise it will throw an error.
+
+_Java-only: DSL protobuf() with class name and default instance_
 
 ```java
    // You don't need to specify the default instance for protobuf marshaling, but you will need in case your input data is a Map type

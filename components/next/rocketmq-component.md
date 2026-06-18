@@ -225,6 +225,8 @@ When a message from `ReplyToTpic` contains the key, it means that the reply rece
 
 If `requestTimeoutMillis` elapsed and no reply received, an exception will be thrown.
 
+_Java-only: uses ExchangePattern.InOut enum and string concatenation for the URI_
+
 ```java
 from("rocketmq:START_TOPIC?producerGroup=p1&consumerGroup=c1")
 
@@ -242,12 +244,43 @@ from("rocketmq:START_TOPIC?producerGroup=p1&consumerGroup=c1")
 
 Receive messages from a topic named `from_topic`, route to `to_topic`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("rocketmq:FROM_TOPIC?namesrvAddr=localhost:9876&consumerGroup=consumer")
     .to("rocketmq:TO_TOPIC?namesrvAddr=localhost:9876&producerGroup=producer");
 ```
 
+```xml
+<route>
+  <from uri="rocketmq:FROM_TOPIC?namesrvAddr=localhost:9876&amp;consumerGroup=consumer"/>
+  <to uri="rocketmq:TO_TOPIC?namesrvAddr=localhost:9876&amp;producerGroup=producer"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rocketmq:FROM_TOPIC
+      parameters:
+        namesrvAddr: "localhost:9876"
+        consumerGroup: consumer
+      steps:
+        - to:
+            uri: rocketmq:TO_TOPIC
+            parameters:
+              namesrvAddr: "localhost:9876"
+              producerGroup: producer
+```
+
 Setting specific headers can change routing behaviour. For example, if header `RocketMQConstants.OVERRIDE_TOPIC_NAME` was set, the message will be sent to `ACTUAL_TARGET` instead of `ORIGIN_TARGET`.
+
+_Java-only: uses inline Processor lambda and RocketMQConstants Java constants_
 
 ```java
 from("rocketmq:FROM?consumerGroup=consumer")

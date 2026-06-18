@@ -253,6 +253,8 @@ The component supports 7 options, which are listed below.
 
 The COAP server has many configuration options, and this can be configured from a properties file such as `Californium3.properties`. You can specfiy the location of this configuration file on the Camel CoAPComponent, such as:
 
+_Java-only: configuring the CoAP component programmatically_
+
 ```java
 CoAPComponent coap = context.getComponent("coap", CoAPComponent.class);
 coap.setCconfigurationFile("/etc/myapp/Californium3.properties");

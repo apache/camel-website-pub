@@ -651,50 +651,165 @@ Table 11. Query Operation
 
 -   Put a key/value into a named cache:
     
+    -   Java
+        
+    -   XML
+        
+    -   YAML
+        
+    
     ```java
     from("direct:start")
-        .setHeader(InfinispanConstants.OPERATION).constant(InfinispanOperation.PUT) (1)
-        .setHeader(InfinispanConstants.KEY).constant("123") (2)
-        .to("infinispan:myCacheName&cacheContainer=#cacheContainer"); (3)
+        .setHeader("CamelInfinispanOperation").constant("PUT") (1)
+        .setHeader("CamelInfinispanKey").constant("123") (2)
+        .to("infinispan:myCacheName?cacheContainer=#cacheContainer"); (3)
     ```
     
     <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the operation to perform</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the key used to identify the element in the cache</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Use the configured cache manager <code>cacheContainer</code> from the registry to put an element to the cache named <code>myCacheName</code></td></tr></tbody></table>
     
+    ```xml
+    <route>
+      <from uri="direct:start"/>
+      <setHeader name="CamelInfinispanOperation">
+        <constant>PUT</constant>
+      </setHeader>
+      <setHeader name="CamelInfinispanKey">
+        <constant>123</constant>
+      </setHeader>
+      <to uri="infinispan:myCacheName?cacheContainer=#cacheContainer"/>
+    </route>
+    ```
+    
+    ```yaml
+    - route:
+        from:
+          uri: direct:start
+          steps:
+            - setHeader:
+                name: CamelInfinispanOperation
+                constant: PUT
+            - setHeader:
+                name: CamelInfinispanKey
+                constant: "123"
+            - to:
+                uri: infinispan:myCacheName
+                parameters:
+                  cacheContainer: "#cacheContainer"
+    ```
+    
     It is possible to configure the lifetime and/or the idle time before the entry expires and gets evicted from the cache, as example:
+    
+    -   Java
+        
+    -   XML
+        
+    -   YAML
+        
     
     ```java
     from("direct:start")
-        .setHeader(InfinispanConstants.OPERATION).constant(InfinispanOperation.GET)
-        .setHeader(InfinispanConstants.KEY).constant("123")
-        .setHeader(InfinispanConstants.LIFESPAN_TIME).constant(100L) (1)
-        .setHeader(InfinispanConstants.LIFESPAN_TIME_UNIT).constant(TimeUnit.MILLISECONDS.toString()) (2)
+        .setHeader("CamelInfinispanOperation").constant("GET")
+        .setHeader("CamelInfinispanKey").constant("123")
+        .setHeader("CamelInfinispanLifespanTime").constant(100L) (1)
+        .setHeader("CamelInfinispanTimeUnit").constant("MILLISECONDS") (2)
         .to("infinispan:myCacheName");
     ```
     
     <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the lifespan of the entry</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the time unit for the lifespan</td></tr></tbody></table>
     
--   Queries
-    
-    ```java
-    from("direct:start")
-        .setHeader(InfinispanConstants.OPERATION, InfinispanConstants.QUERY)
-        .setHeader(InfinispanConstants.QUERY_BUILDER, new InfinispanQueryBuilder() {
-            @Override
-            public Query build(QueryFactory<Query> qf) {
-                return qf.from(User.class).having("name").like("%abc%").build();
-            }
-        })
-        .to("infinispan:myCacheName?cacheContainer=#cacheManager") ;
+    ```xml
+    <route>
+      <from uri="direct:start"/>
+      <setHeader name="CamelInfinispanOperation">
+        <constant>GET</constant>
+      </setHeader>
+      <setHeader name="CamelInfinispanKey">
+        <constant>123</constant>
+      </setHeader>
+      <setHeader name="CamelInfinispanLifespanTime">
+        <constant resultType="java.lang.Long">100</constant>
+      </setHeader>
+      <setHeader name="CamelInfinispanTimeUnit">
+        <constant>MILLISECONDS</constant>
+      </setHeader>
+      <to uri="infinispan:myCacheName"/>
+    </route>
     ```
     
-    > **Note**
-    > The .proto descriptors for domain objects must be registered with the remote Data Grid server, see [Remote Query Example](https://infinispan.org/docs/stable/titles/developing/developing.html#remote_query_example) in the official Infinispan documentation.
+    ```yaml
+    - route:
+        from:
+          uri: direct:start
+          steps:
+            - setHeader:
+                name: CamelInfinispanOperation
+                constant: GET
+            - setHeader:
+                name: CamelInfinispanKey
+                constant: "123"
+            - setHeader:
+                name: CamelInfinispanLifespanTime
+                constant: 100
+            - setHeader:
+                name: CamelInfinispanTimeUnit
+                constant: MILLISECONDS
+            - to:
+                uri: infinispan:myCacheName
+    ```
     
+-   Queries
+    
+
+_Java-only: requires InfinispanQueryBuilder implementation_
+
+```java
+from("direct:start")
+    .setHeader("CamelInfinispanOperation").constant("QUERY")
+    .setHeader("CamelInfinispanQueryBuilder", new InfinispanQueryBuilder() {
+        @Override
+        public Query build(QueryFactory<Query> qf) {
+            return qf.from(User.class).having("name").like("%abc%").build();
+        }
+    })
+    .to("infinispan:myCacheName?cacheContainer=#cacheManager");
+```
+
++
+
+> **Note**
+> The .proto descriptors for domain objects must be registered with the remote Data Grid server, see [Remote Query Example](https://infinispan.org/docs/stable/titles/developing/developing.html#remote_query_example) in the official Infinispan documentation.
+
 -   Custom Listeners
+    
+    -   Java
+        
+    -   XML
+        
+    -   YAML
+        
     
     ```java
     from("infinispan://?cacheContainer=#cacheManager&customListener=#myCustomListener")
-      .to("mock:result");
+        .to("mock:result");
+    ```
+    
+    ```xml
+    <route>
+      <from uri="infinispan://?cacheContainer=#cacheManager&amp;customListener=#myCustomListener"/>
+      <to uri="mock:result"/>
+    </route>
+    ```
+    
+    ```yaml
+    - route:
+        from:
+          uri: "infinispan://"
+          parameters:
+            cacheContainer: "#cacheManager"
+            customListener: "#myCustomListener"
+          steps:
+            - to:
+                uri: mock:result
     ```
     
     The instance of `myCustomListener` must exist and Camel should be able to look it up from the `Registry`. Users are encouraged to extend the `org.apache.camel.component.infinispan.remote.InfinispanRemoteCustomListener` class and annotate the resulting class with `@ClientListener` which can be found in the package `org.infinispan.client.hotrod.annotation`.
@@ -847,14 +962,13 @@ If you want to disable this functionality, set the `embeddingStoreEnabled` optio
 
 To store an embedding:
 
+_Java-only: requires DataType constructor for embedding transformation_
+
 ```java
 from("direct:put")
-    // Create an embedding from the message body
     .to("langchain4j-embeddings:create")
-    .setHeader(InfinispanConstants.OPERATION).constant(InfinispanOperation.PUT)
-    // Transform the embedding to a format usable by Infinispan
+    .setHeader("CamelInfinispanOperation").constant("PUT")
     .transformDataType(new DataType("infinispan:embeddings"))
-    // Store the embedding
     .to("infinispan:myCache?embeddingStoreDimension=384");
 ```
 
@@ -862,14 +976,13 @@ The `embeddingStoreDimension` option **must** be specified. It must also match t
 
 To query embeddings:
 
+_Java-only: requires DataType constructor for embedding transformation_
+
 ```java
 from("direct:query")
-    // Create an embedding from the message body
     .to("langchain4j-embeddings:create")
-    .setHeader(InfinispanConstants.OPERATION).constant(InfinispanOperation.QUERY)
-    // Transforms the embedding to a vector kNN search
+    .setHeader("CamelInfinispanOperation").constant("QUERY")
     .transformDataType(new DataType("infinispan:embeddings"))
-    // Query embeddings
     .to("infinispan:myCache?embeddingStoreDimension=384");
 ```
 

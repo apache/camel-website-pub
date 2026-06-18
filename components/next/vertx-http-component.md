@@ -304,9 +304,32 @@ The following example shows how to send a request to an HTTP endpoint.
 
 You can override the URI configured on the `vertx-http` producer via headers `Exchange.HTTP_URI` and `Exchange.HTTP_PATH`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("vertx-http:https://camel.apache.org");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="vertx-http:https://camel.apache.org"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: vertx-http:https://camel.apache.org
 ```
 
 ### URI Parameters
@@ -368,6 +391,8 @@ You can upload text or binary files by setting the message body as a [MultipartF
 
 When finer control of the Vert.x Web Client configuration is required, you can bind a custom [WebClientOptions](https://vertx.io/docs/apidocs/io/vertx/ext/web/client/WebClientOptions.md) instance to the registry.
 
+_Java-only: programmatic `WebClientOptions` configuration and registry binding_
+
 ```java
 WebClientOptions options = new WebClientOptions().setMaxRedirects(5)
     .setIdleTimeout(10)
@@ -378,9 +403,34 @@ camelContext.getRegistry.bind("clientOptions", options);
 
 Then reference the options on the `vertx-http` producer.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .to("vertx-http:http://localhost:8080?webClientOptions=#clientOptions")
+    .to("vertx-http:http://localhost:8080?webClientOptions=#clientOptions");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="vertx-http:http://localhost:8080?webClientOptions=#clientOptions"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: vertx-http:http://localhost:8080
+            parameters:
+              webClientOptions: "#clientOptions"
 ```
 
 ### SSL

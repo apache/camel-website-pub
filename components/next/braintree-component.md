@@ -1890,9 +1890,32 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
 
 ## Examples
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct://GENERATE")
-    .to("braintree://sclientToken/generate");
+    .to("braintree://clientToken/generate");
+```
+
+```xml
+<route>
+  <from uri="direct://GENERATE"/>
+  <to uri="braintree://clientToken/generate"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:GENERATE
+      steps:
+        - to:
+            uri: braintree:clientToken/generate
 ```
 
 ## More Information

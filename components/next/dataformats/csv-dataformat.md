@@ -112,6 +112,8 @@ The component allows you to marshal a Java Map (or any other message type that c
 
 Considering the following body:
 
+_Java-only: Java collection API_
+
 ```java
 Map<String, Object> body = new LinkedHashMap<>();
 body.put("foo", "abc");
@@ -174,13 +176,46 @@ Lucky Luke, 120, capturing the Daltons
 
 We can now use the CSV component to unmarshal this file:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file:src/test/resources/?fileName=daltons.csv&noop=true")
     .unmarshal().csv()
     .to("mock:daltons");
 ```
 
+```xml
+<route>
+    <from uri="file:src/test/resources/?fileName=daltons.csv&amp;noop=true"/>
+    <unmarshal>
+        <csv/>
+    </unmarshal>
+    <to uri="mock:daltons"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:src/test/resources/
+      parameters:
+        fileName: daltons.csv
+        noop: true
+    steps:
+      - unmarshal:
+          csv: {}
+      - to:
+          uri: mock:daltons
+```
+
 The resulting message will contain a `List<List<String>>` like…​
+
+_Java-only: Java collection API_
 
 ```java
 List<List<String>> data = (List<List<String>>) exchange.getIn().getBody();
@@ -200,6 +235,8 @@ If you have multiple rows of data you want to be marshalled into CSV format, you
 Given a bean which can handle the incoming data…​
 
 **MyCsvHandler.java**
+
+_Java-only: Java handler class_
 
 ```java
 // Some comments here
@@ -224,6 +261,8 @@ public void doHandleCsvData(List<List<String>> csvData)
 ### Marshaling with a pipe as delimiter
 
 Considering the following body:
+
+_Java-only: Java collection API_
 
 ```java
 Map<String, Object> body = new LinkedHashMap<>();
@@ -310,6 +349,8 @@ You can customize the CSV Data Format to make use of your own `CSVConfig` and/or
 ### Collecting header record
 
 You can instruct the CSV Data Format to collect the headers into a message header called CamelCsvHeaderRecord.
+
+_Java-only: Java programmatic data format configuration_
 
 ```java
 CsvDataFormat csv = new CsvDataFormat();
@@ -436,6 +477,8 @@ from("direct:start")
 **Issue in CSVConfig**
 
 It looks like that
+
+_Java-only: Java programmatic configuration_
 
 ```java
 CSVConfig csvConfig = new CSVConfig();

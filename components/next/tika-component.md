@@ -136,18 +136,64 @@ Enum values:
 
 The file should be placed in the Body.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
         .to("tika:detect");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="tika:detect"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: tika:detect
 ```
 
 ### To Parse a File
 
 The file should be placed in the Body.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
         .to("tika:parse");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="tika:parse"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: tika:parse
 ```
 
 ## Spring Boot Auto-Configuration

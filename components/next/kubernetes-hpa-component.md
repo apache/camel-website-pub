@@ -190,6 +190,8 @@ Enum values:
 -   `listHPA`: this operation lists the HPAs on a kubernetes cluster
     
 
+_Java-only: uses toF() for endpoint URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-hpa:///?kubernetesClient=#kubernetesClient&operation=listHPA").
@@ -200,6 +202,8 @@ This operation returns a list of HPAs from your cluster
 
 -   `listDeploymentsByLabels`: this operation lists the HPAs by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor with KubernetesConstants and HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -218,6 +222,8 @@ from("direct:listByLabels").process(new Processor() {
 This operation returns a List of HPAs from your cluster using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes HPA Consumer Example
+
+_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
 
 ```java
 fromF("kubernetes-hpa://%s?oauthToken=%s", host, authToken)

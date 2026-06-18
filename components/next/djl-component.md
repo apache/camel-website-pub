@@ -387,19 +387,69 @@ More information about [MXNet engine installation](https://docs.djl.ai/engines/m
 
 MNIST image classification from file
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file:/data/mnist/0/10.png")
     .to("djl:cv/image_classification?artifactId=ai.djl.mxnet:mlp:0.0.1");
+```
+
+```xml
+<route>
+  <from uri="file:/data/mnist/0/10.png"/>
+  <to uri="djl:cv/image_classification?artifactId=ai.djl.mxnet:mlp:0.0.1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "file:/data/mnist/0/10.png"
+      steps:
+        - to:
+            uri: djl:cv/image_classification
+            parameters:
+              artifactId: "ai.djl.mxnet:mlp:0.0.1"
 ```
 
 Object detection
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file:/data/mnist/0/10.png")
     .to("djl:cv/image_classification?artifactId=ai.djl.mxnet:mlp:0.0.1");
 ```
 
-Custom deep learning model
+```xml
+<route>
+  <from uri="file:/data/mnist/0/10.png"/>
+  <to uri="djl:cv/image_classification?artifactId=ai.djl.mxnet:mlp:0.0.1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "file:/data/mnist/0/10.png"
+      steps:
+        - to:
+            uri: djl:cv/image_classification
+            parameters:
+              artifactId: "ai.djl.mxnet:mlp:0.0.1"
+```
+
+_Java-only: creating a custom DJL model with translator and binding to the registry_
 
 ```java
 // create a deep learning model

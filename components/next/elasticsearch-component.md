@@ -240,6 +240,8 @@ The following ElasticSearch operations are currently supported. Set an endpoint 
 
 To use the Elasticsearch component, it has to be configured with a minimum configuration.
 
+_Java-only: programmatic component configuration_
+
 ```java
 ElasticsearchComponent elasticsearchComponent = new ElasticsearchComponent();
 elasticsearchComponent.setHostAddresses("myelkhost:9200");
@@ -247,6 +249,8 @@ camelContext.addComponent("elasticsearch", elasticsearchComponent);
 ```
 
 For basic authentication with elasticsearch or using reverse http proxy in front of the elasticsearch cluster, simply setup basic authentication and SSL on the component like the example below
+
+_Java-only: programmatic component configuration with basic authentication and SSL_
 
 ```java
 ElasticsearchComponent elasticsearchComponent = new ElasticsearchComponent();
@@ -307,9 +311,16 @@ spring:
 
 Below is a simple INDEX example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:index")
-  .to("elasticsearch://elasticsearch?operation=Index&indexName=twitter");
+    .to("elasticsearch://elasticsearch?operation=Index&indexName=twitter");
 ```
 
 ```xml
@@ -319,9 +330,23 @@ from("direct:index")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:index
+      steps:
+        - to:
+            uri: elasticsearch://elasticsearch
+            parameters:
+              operation: Index
+              indexName: twitter
+```
+
 **For this operation, you’ll need to specify an `indexId` header.**
 
 A client would simply need to pass a body message containing a Map to the route. The result body contains the indexId created.
+
+_Java-only: ProducerTemplate test API_
 
 ```java
 Map<String, String> map = new HashMap<String, String>();
@@ -333,9 +358,16 @@ String indexId = template.requestBody("direct:index", map, String.class);
 
 Searching on specific field(s) and value use the Operation ´Search´. Pass in the query JSON String or the Map
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:search")
-  .to("elasticsearch://elasticsearch?operation=Search&indexName=twitter");
+    .to("elasticsearch://elasticsearch?operation=Search&indexName=twitter");
 ```
 
 ```xml
@@ -345,12 +377,28 @@ from("direct:search")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - to:
+            uri: elasticsearch://elasticsearch
+            parameters:
+              operation: Search
+              indexName: twitter
+```
+
+_Java-only: ProducerTemplate test API_
+
 ```java
 String query = "{\"query\":{\"match\":{\"content\":\"new release of ApacheCamel\"}}}";
 HitsMetadata<?> response = template.requestBody("direct:search", query, HitsMetadata.class);
 ```
 
 Search on specific field(s) using Map.
+
+_Java-only: ProducerTemplate test API with `Map` query_
 
 ```java
 Map<String, Object> actualQuery = new HashMap<>();
@@ -366,9 +414,16 @@ HitsMetadata<?> response = template.requestBody("direct:search", query, HitsMeta
 
 Search using Elasticsearch scroll api to fetch all results.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:search")
-  .to("elasticsearch://elasticsearch?operation=Search&indexName=twitter&useScroll=true&scrollKeepAliveMs=30000");
+    .to("elasticsearch://elasticsearch?operation=Search&indexName=twitter&useScroll=true&scrollKeepAliveMs=30000");
 ```
 
 ```xml
@@ -377,6 +432,22 @@ from("direct:search")
     <to uri="elasticsearch://elasticsearch?operation=Search&amp;indexName=twitter&amp;useScroll=true&amp;scrollKeepAliveMs=30000"/>
 </route>
 ```
+
+```yaml
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - to:
+            uri: elasticsearch://elasticsearch
+            parameters:
+              operation: Search
+              indexName: twitter
+              useScroll: true
+              scrollKeepAliveMs: 30000
+```
+
+_Java-only: ProducerTemplate test API with scroll iterator_
 
 ```java
 String query = "{\"query\":{\"match\":{\"content\":\"new release of ApacheCamel\"}}}";
@@ -387,23 +458,67 @@ try (ElasticsearchScrollRequestIterator response = template.requestBody("direct:
 
 [Split EIP](eips/split-eip.md) can also be used.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:search")
-  .to("elasticsearch://elasticsearch?operation=Search&indexName=twitter&useScroll=true&scrollKeepAliveMs=30000")
-  .split()
-  .body()
-  .streaming()
-  .to("mock:output")
-  .end();
+    .to("elasticsearch://elasticsearch?operation=Search&indexName=twitter&useScroll=true&scrollKeepAliveMs=30000")
+    .split(body()).streaming()
+        .to("mock:output")
+    .end();
+```
+
+```xml
+<route>
+  <from uri="direct:search"/>
+  <to uri="elasticsearch://elasticsearch?operation=Search&amp;indexName=twitter&amp;useScroll=true&amp;scrollKeepAliveMs=30000"/>
+  <split streaming="true">
+    <body/>
+    <to uri="mock:output"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - to:
+            uri: elasticsearch://elasticsearch
+            parameters:
+              operation: Search
+              indexName: twitter
+              useScroll: true
+              scrollKeepAliveMs: 30000
+        - split:
+            expression:
+              body: {}
+            streaming: true
+            steps:
+              - to:
+                  uri: mock:output
 ```
 
 ### MultiSearch Example
 
 MultiSearching on specific field(s) and value uses the Operation ´MultiSearch´. Pass in the MultiSearchRequest instance
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:multiSearch")
-  .to("elasticsearch://elasticsearch?operation=MultiSearch");
+    .to("elasticsearch://elasticsearch?operation=MultiSearch");
 ```
 
 ```xml
@@ -413,7 +528,20 @@ from("direct:multiSearch")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:multiSearch
+      steps:
+        - to:
+            uri: elasticsearch://elasticsearch
+            parameters:
+              operation: MultiSearch
+```
+
 MultiSearch on specific field(s)
+
+_Java-only: ProducerTemplate test API with Elasticsearch `MsearchRequest` builders_
 
 ```java
 MsearchRequest.Builder builder = new MsearchRequest.Builder().index("twitter").searches(

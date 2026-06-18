@@ -130,18 +130,72 @@ Enum values:
 
 You simply use the **class** component just as the [Bean](bean-component.md) component but by specifying the fully qualified class name instead. For example to use the `MyFooBean` you have to do as follows:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("class:org.apache.camel.component.bean.MyFooBean")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="class:org.apache.camel.component.bean.MyFooBean"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: class:org.apache.camel.component.bean.MyFooBean
+        - to:
+            uri: mock:result
+```
+
 You can also specify which method to invoke on the `MyFooBean`, for example `hello`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .to("class:org.apache.camel.component.bean.MyFooBean?method=hello")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="class:org.apache.camel.component.bean.MyFooBean?method=hello"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: class:org.apache.camel.component.bean.MyFooBean
+            parameters:
+              method: hello
+        - to:
+            uri: mock:result
 ```
 
 ## Examples
@@ -150,18 +204,74 @@ from("direct:start")
 
 In the endpoint uri you can specify properties to set on the created instance, for example, if it has a `setPrefix` method:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("class:org.apache.camel.component.bean.MyPrefixBean?bean.prefix=Bye")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="class:org.apache.camel.component.bean.MyPrefixBean?bean.prefix=Bye"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: class:org.apache.camel.component.bean.MyPrefixBean
+            parameters:
+              bean.prefix: Bye
+        - to:
+            uri: mock:result
+```
+
 And you can also use the `#` syntax to refer to properties to be looked up in the Registry.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .to("class:org.apache.camel.component.bean.MyPrefixBean?bean.cool=#foo")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="class:org.apache.camel.component.bean.MyPrefixBean?bean.cool=#foo"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: class:org.apache.camel.component.bean.MyPrefixBean
+            parameters:
+              bean.cool: "#foo"
+        - to:
+            uri: mock:result
 ```
 
 Which will look up a bean from the Registry with the id `foo` and invoke the `setCool` method on the created instance of the `MyPrefixBean` class.

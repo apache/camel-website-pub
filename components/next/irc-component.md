@@ -168,6 +168,8 @@ The IRC component supports SSL/TLS configuration through the [Camel JSSE Configu
 
 Programmatic configuration of the endpoint
 
+_Java-only: Java programmatic SSL configuration_
+
 ```java
 KeyStoreParameters ksp = new KeyStoreParameters();
 ksp.setResource("/users/home/server/truststore.jks");
@@ -208,11 +210,15 @@ Spring DSL based configuration of endpoint
 
 You can also connect to an SSL enabled IRC server, as follows:
 
+_Java-only: endpoint URI syntax_
+
 ```java
 ircs:host[:port]/#room?username=user&password=pass
 ```
 
 By default, the IRC transport uses [SSLDefaultTrustManager](http://moepii.sourceforge.net/irclib/javadoc/org/schwering/irc/lib/ssl/SSLDefaultTrustManager.md). If you need to provide your own custom trust manager, use the `trustManager` parameter as follows:
+
+_Java-only: endpoint URI syntax with trustManager_
 
 ```java
 ircs:host[:port]/#room?username=user&password=pass&trustManager=#referenceToMyTrustManagerBean
@@ -226,6 +232,8 @@ Some IRC rooms require you to provide a key to be able to join that channel. The
 
 For example, we join three channels whereas only channel 1 and 3 use a key.
 
+_Java-only: endpoint URI syntax with channel keys_
+
 ```java
 irc:nick@irc.server.org?channels=#chan1,#chan2,#chan3&keys=chan1Key,,chan3key
 ```
@@ -235,6 +243,8 @@ irc:nick@irc.server.org?channels=#chan1,#chan2,#chan3&keys=chan1Key,,chan3key
 Using the `namesOnJoin` option one can invoke the IRC-`NAMES` command after the component has joined a channel. The server will reply with `CamelIrcNum = 353`. So to process the result the property `onReply` has to be `true`. Furthermore, one has to filter the `onReply` exchanges to get the names.
 
 For example, we want to get all exchanges that contain the usernames of the channel:
+
+_Java-only: Java DSL with choice and filter EIPs_
 
 ```java
 from("ircs:nick@myserver:1234/#mychannelname?namesOnJoin=true&onReply=true")

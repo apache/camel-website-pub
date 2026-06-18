@@ -652,6 +652,13 @@ You have to provide the amazonAthenaClient in the Registry or your accessKey and
 
 For example, to run a simple query, wait up to 60 seconds for completion, and log the results:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(constant("SELECT 1"))
@@ -662,7 +669,57 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?waitTimeout=60000&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="aws2-athena://label?operation=getQueryResults&amp;outputType=StreamList"/>
+  <split streaming="true">
+    <simple>${body}</simple>
+    <to uri="log:out"/>
+    <to uri="mock:result"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              waitTimeout: "60000"
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryResults
+              outputType: StreamList
+        - split:
+            simple: "${body}"
+            streaming: true
+            steps:
+              - to:
+                  uri: log:out
+              - to:
+                  uri: mock:result
+```
+
 Similarly, running the query and returning a path to the results in S3:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -670,6 +727,39 @@ from("direct:start")
     .to("aws2-athena://label?waitTimeout=60000&outputLocation=s3://bucket/path/")
     .to("aws2-athena://label?operation=getQueryResults&outputType=S3Pointer")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?waitTimeout=60000&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="aws2-athena://label?operation=getQueryResults&amp;outputType=S3Pointer"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              waitTimeout: "60000"
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryResults
+              outputType: S3Pointer
+        - to:
+            uri: mock:result
 ```
 
 ### Static credentials, Default Credential Provider and Profile Credentials Provider
@@ -714,9 +804,34 @@ The Camel-AWS Athena component provides the following operation on the producer 
 
 If your Camel Application is running behind a firewall or if you need to have more control over the `AthenaClient` instance configuration, you can create your own instance and refer to it in your Camel aws2-athena component configuration:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("aws2-athena://MyQuery?amazonAthenaClient=#client&...")
-.to("mock:result");
+from("aws2-athena://MyQuery?amazonAthenaClient=#client")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="aws2-athena://MyQuery?amazonAthenaClient=#client"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: aws2-athena://MyQuery
+      parameters:
+        amazonAthenaClient: "#client"
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ### Overriding query parameters with message headers
@@ -725,11 +840,45 @@ Message headers listed in "Message headers evaluated by the Athena producer" ove
 
 For example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
      .setHeader(Athena2Constants.OUTPUT_LOCATION, constant("s3://other/location/"))
      .to("aws2-athena:label?outputLocation=s3://foo/bar/")
      .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelAwsAthenaOutputLocation">
+    <constant>s3://other/location/</constant>
+  </setHeader>
+  <to uri="aws2-athena:label?outputLocation=s3://foo/bar/"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAwsAthenaOutputLocation
+            constant: "s3://other/location/"
+        - to:
+            uri: aws2-athena:label
+            parameters:
+              outputLocation: "s3://foo/bar/"
+        - to:
+            uri: mock:result
 ```
 
 Will cause the output location to be `s3://other/location/`.
@@ -739,15 +888,51 @@ Will cause the output location to be `s3://other/location/`.
 -   getQueryExecution: this operation returns information about a query given its query execution ID
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("aws2-athena://label?operation=getQueryExecution&queryExecutionId=11111111-1111-1111-1111-111111111111")
     .to("mock:result");
 ```
 
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="aws2-athena://label?operation=getQueryExecution&amp;queryExecutionId=11111111-1111-1111-1111-111111111111"/>
+    <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - to:
+          uri: aws2-athena://label
+          parameters:
+            operation: getQueryExecution
+            queryExecutionId: 11111111-1111-1111-1111-111111111111
+      - to:
+          uri: mock:result
+```
+
 The preceding example will yield an [Athena QueryExecution](https://docs.aws.amazon.com/athena/latest/APIReference/API_QueryExecution.md) in the body.
 
 The getQueryExecution operation also supports retrieving the query execution ID from a header (`CamelAwsAthenaQueryExecutionId`), and since startQueryExecution sets the same header, upon starting a query, these operations can be used together:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -757,12 +942,51 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?operation=startQueryExecution&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="aws2-athena://label?operation=getQueryExecution"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryExecution
+        - to:
+            uri: mock:result
+```
+
 The preceding example will yield an Athena QueryExecution in the body for the query that was just started.
 
 -   getQueryResults: this operation returns the results of a query that has succeeded. The results are returned in the body in one of three formats.
     
 
 `StreamList` - the default - returns a [GetQueryResultsIterable](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/athena/paginators/GetQueryResultsIterable.md) in the body that can page through all results:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -772,34 +996,58 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?operation=startQueryExecution&amp;waitTimeout=60000&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="aws2-athena://label?operation=getQueryResults&amp;outputType=StreamList"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              waitTimeout: "60000"
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryResults
+              outputType: StreamList
+        - to:
+            uri: mock:result
+```
+
 The output of StreamList can be processed in various ways:
+
+_Java-only: AWS SDK GetQueryResultsResponse processing_
 
 ```java
 from("direct:start")
-    .setBody(constant(
-        "SELECT * FROM ("
-            + "    VALUES"
-            + "        (1, 'a'),"
-            + "        (2, 'b')"
-            + ") AS t (id, name)"))
+    .setBody(constant("SELECT * FROM (VALUES (1, 'a'), (2, 'b')) AS t (id, name)"))
     .to("aws2-athena://label?operation=startQueryExecution&waitTimeout=60000&outputLocation=s3://bucket/path/")
     .to("aws2-athena://label?operation=getQueryResults&outputType=StreamList")
     .split(body()).streaming()
-    .process(new Processor() {
-
-      @Override
-      public void process(Exchange exchange) {
-        GetQueryResultsResponse page = exchange
-                                        .getMessage()
-                                        .getBody(GetQueryResultsResponse.class);
+    .process(exchange -> {
+        GetQueryResultsResponse page = exchange.getMessage().getBody(GetQueryResultsResponse.class);
         for (Row row : page.resultSet().rows()) {
-          String line = row.data()
-                          .stream()
-                          .map(Datum::varCharValue)
-                          .collect(Collectors.joining(","));
+          String line = row.data().stream()
+              .map(Datum::varCharValue)
+              .collect(Collectors.joining(","));
           System.out.println(line);
         }
-      }
     })
     .to("mock:result");
 ```
@@ -807,6 +1055,13 @@ from("direct:start")
 The preceding example will print the results of the query as CSV to the console.
 
 `SelectList` - returns a [GetQueryResponse](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/athena/model/GetQueryResultsResponse.md) in the body containing at most 1,000 rows, plus the NextToken value as a header (`CamelAwsAthenaNextToken`), which can be used for manual pagination of results:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -816,9 +1071,50 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?operation=startQueryExecution&amp;waitTimeout=60000&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="aws2-athena://label?operation=getQueryResults&amp;outputType=SelectList"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              waitTimeout: "60000"
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryResults
+              outputType: SelectList
+        - to:
+            uri: mock:result
+```
+
 The preceding example will return a [GetQueryResponse](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/athena/model/GetQueryResultsResponse.md) in the body plus the NextToken value as a header (`CamelAwsAthenaNextToken`), which can be used to manually page through the results 1,000 rows at a time.
 
 `S3Pointer` - return an S3 path (e.g. `s3://bucket/path/`) pointing to the results:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -828,9 +1124,50 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?operation=startQueryExecution&amp;waitTimeout=60000&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="aws2-athena://label?operation=getQueryResults&amp;outputType=S3Pointer"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              waitTimeout: "60000"
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryResults
+              outputType: S3Pointer
+        - to:
+            uri: mock:result
+```
+
 The preceding example will return an S3 path (e.g. `s3://bucket/path/`) in the body pointing to the results. The path will also be set in a header (`CamelAwsAthenaOutputLocation`).
 
 -   listQueryExecutions: this operation returns a list of query execution IDs
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -839,9 +1176,37 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="aws2-athena://label?operation=listQueryExecutions"/>
+    <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - to:
+          uri: aws2-athena://label
+          parameters:
+            operation: listQueryExecutions
+      - to:
+          uri: mock:result
+```
+
 The preceding example will return a list of query executions in the body, plus the NextToken value as a header (`CamelAwsAthenaNextToken`) than can be used for manual pagination of results.
 
 -   startQueryExecution: this operation starts the execution of a query. It supports waiting for the query to complete before proceeding, and retrying the query based on a set of configurable failure conditions:
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -851,7 +1216,41 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+    <from uri="direct:start"/>
+    <setBody>
+        <constant>SELECT 1</constant>
+    </setBody>
+    <to uri="aws2-athena://label?operation=startQueryExecution&amp;outputLocation=s3://bucket/path/"/>
+    <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - setBody:
+          constant: SELECT 1
+      - to:
+          uri: aws2-athena://label
+          parameters:
+            operation: startQueryExecution
+            outputLocation: "s3://bucket/path/"
+      - to:
+          uri: mock:result
+```
+
 The preceding example will start the query `SELECT 1` and configure the results to be saved to `s3://bucket/path/`, but will not wait for the query to complete.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -860,7 +1259,42 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?operation=startQueryExecution&amp;waitTimeout=60000&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              waitTimeout: "60000"
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: mock:result
+```
+
 The preceding example will start a query and wait up to 60 seconds for it to reach a status that indicates it is complete (one of SUCCEEDED, FAILED, CANCELLED, or UNKNOWN\_TO\_SDK\_VERSION). Upon failure, the query would not be retried.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -869,32 +1303,163 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?operation=startQueryExecution&amp;waitTimeout=60000&amp;initialDelay=10000&amp;delay=1000&amp;maxAttempts=3&amp;retry=retryable&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              waitTimeout: "60000"
+              initialDelay: "10000"
+              delay: "1000"
+              maxAttempts: 3
+              retry: retryable
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: mock:result
+```
+
 The preceding example will start a query and wait up to 60 seconds for it to reach a status that indicates it is complete (one of SUCCEEDED, FAILED, CANCELLED, or UNKNOWN\_TO\_SDK\_VERSION). Upon failure, the query would be automatically retried up to two more times if the failure state indicates the query may succeed upon retry (Athena queries that fail with states such as `GENERIC_INTERNAL_ERROR` or "resource limit exhaustion" will sometimes succeed if retried). While waiting for the query to complete, the query status would first be checked after an initial delay of 10 seconds, and subsequently every 1 second until the query completes.
 
 ### Putting it all together
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(constant("SELECT 1"))
-    .to("aws2-athena://label?waitTimeout=60000&&maxAttempts=3&retry=retryable&outputLocation=s3://bucket/path/")
+    .to("aws2-athena://label?waitTimeout=60000&maxAttempts=3&retry=retryable&outputLocation=s3://bucket/path/")
     .to("aws2-athena://label?operation=getQueryResults&outputType=StreamList")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?waitTimeout=60000&amp;maxAttempts=3&amp;retry=retryable&amp;outputLocation=s3://bucket/path/"/>
+  <to uri="aws2-athena://label?operation=getQueryResults&amp;outputType=StreamList"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              waitTimeout: "60000"
+              maxAttempts: 3
+              retry: retryable
+              outputLocation: s3://bucket/path/
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryResults
+              outputType: StreamList
+        - to:
+            uri: mock:result
 ```
 
 The preceding example will start the query and wait up to 60 seconds for it to complete. Upon completion, getQueryResults put the results of the query into the body of the message for further processing.
 
 For the sake of completeness, a similar outcome could be achieved with the following:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(constant("SELECT 1"))
     .to("aws2-athena://label?operation=startQueryExecution&outputLocation=s3://bucket/path/")
-    .loopDoWhile(simple("${header." + Athena2Constants.QUERY_EXECUTION_STATE + "} != 'SUCCEEDED'"))
+    .loopDoWhile(simple("${header.CamelAwsAthenaQueryExecutionState} != 'SUCCEEDED'"))
       .delay(1_000)
       .to("aws2-athena://label?operation=getQueryExecution")
     .end()
     .to("aws2-athena://label?operation=getQueryResults&outputType=StreamList")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>SELECT 1</constant>
+  </setBody>
+  <to uri="aws2-athena://label?operation=startQueryExecution&amp;outputLocation=s3://bucket/path/"/>
+  <loop doWhile="true">
+    <simple>${header.CamelAwsAthenaQueryExecutionState} != 'SUCCEEDED'</simple>
+    <delay>
+      <constant>1000</constant>
+    </delay>
+    <to uri="aws2-athena://label?operation=getQueryExecution"/>
+  </loop>
+  <to uri="aws2-athena://label?operation=getQueryResults&amp;outputType=StreamList"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              outputLocation: s3://bucket/path/
+        - loop:
+            doWhile: true
+            simple: "${header.CamelAwsAthenaQueryExecutionState} != 'SUCCEEDED'"
+            steps:
+              - delay:
+                  constant: 1000
+              - to:
+                  uri: aws2-athena://label
+                  parameters:
+                    operation: getQueryExecution
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryResults
+              outputType: StreamList
+        - to:
+            uri: mock:result
 ```
 
 Caution: the preceding example would block indefinitely, however, if the query did not complete with a status of SUCCEEDED.

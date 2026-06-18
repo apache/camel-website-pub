@@ -136,6 +136,8 @@ The following is a basic example of how to send a message to a WhatsApp chat thr
 
 in Java DSL
 
+_Java-only: inline Processor lambda with TextMessageRequest construction_
+
 ```java
 from("direct:start")
 	.process(exchange -> {
@@ -167,6 +169,8 @@ To enable webhook mode, users need first to add a REST implementation to their a
 Once done, you need to prepend the webhook URI to the whatsapp URI you want to use.
 
 In Java DSL:
+
+_Java-only: uses fromF with string formatting_
 
 ```java
 fromF("webhook:whatsapp:%s?authorizationToken=%s&webhookVerifyToken=%s", "<phoneNumberId>", "<AuthorizationToken>", "<webhookVerifyToken>").log("${body}")

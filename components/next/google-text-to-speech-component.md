@@ -39,9 +39,34 @@ You can append query options to the URI in the following format, `?options=value
 
 For example, in order to synthesize speech from text, use the following snippet:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("google-text-to-speech://synthesize?serviceAccountKey=/home/user/Downloads/my-key.json");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-text-to-speech://synthesize?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-text-to-speech://synthesize
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
 ```
 
 ## Configuring Options
@@ -178,24 +203,85 @@ The operation is specified as part of the endpoint URI (e.g., `google-text-to-sp
 
 If you need to have more control over the `TextToSpeechClient` instance configuration, you can create your own instance and refer to it in your Camel google-text-to-speech component configuration:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("google-text-to-speech://synthesize?client=#myTextToSpeechClient");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-text-to-speech://synthesize?client=#myTextToSpeechClient"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-text-to-speech://synthesize
+            parameters:
+              client: "#myTextToSpeechClient"
+```
+
 ### Google Cloud Text-to-Speech Producer Operation examples
 
--   `synthesize`: this operation converts text to speech audio
+-   `synthesize`: this operation converts text to speech audio. The message body should contain the text to synthesize as a `String`.
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setBody("Hello, how are you today?");
-    })
+    .setBody(constant("Hello, how are you today?"))
     .to("google-text-to-speech://synthesize?serviceAccountKey=/home/user/Downloads/my-key.json&languageCode=en-US&audioEncoding=MP3")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>Hello, how are you today?</constant>
+  </setBody>
+  <to uri="google-text-to-speech://synthesize?serviceAccountKey=/home/user/Downloads/my-key.json&amp;languageCode=en-US&amp;audioEncoding=MP3"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: "Hello, how are you today?"
+        - to:
+            uri: google-text-to-speech://synthesize
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              languageCode: en-US
+              audioEncoding: MP3
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 This operation will return a `byte[]` containing the synthesized audio content.
@@ -203,19 +289,65 @@ This operation will return a `byte[]` containing the synthesized audio content.
 -   `synthesize` with voice customization:
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setBody("Bonjour, comment allez-vous?");
-    })
+    .setBody(constant("Bonjour, comment allez-vous?"))
     .to("google-text-to-speech://synthesize?serviceAccountKey=/home/user/Downloads/my-key.json&languageCode=fr-FR&voiceName=fr-FR-Wavenet-A&audioEncoding=OGG_OPUS&speakingRate=1.2&pitch=-2.0")
     .log("body:${body}")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>Bonjour, comment allez-vous?</constant>
+  </setBody>
+  <to uri="google-text-to-speech://synthesize?serviceAccountKey=/home/user/Downloads/my-key.json&amp;languageCode=fr-FR&amp;voiceName=fr-FR-Wavenet-A&amp;audioEncoding=OGG_OPUS&amp;speakingRate=1.2&amp;pitch=-2.0"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: "Bonjour, comment allez-vous?"
+        - to:
+            uri: google-text-to-speech://synthesize
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              languageCode: fr-FR
+              voiceName: fr-FR-Wavenet-A
+              audioEncoding: OGG_OPUS
+              speakingRate: 1.2
+              pitch: -2.0
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
+```
+
 This operation will return a `byte[]` with the audio in OGG\_OPUS format using a specific French voice.
 
 -   `listVoices`: this operation lists available voices
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -225,10 +357,37 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-text-to-speech://listVoices?serviceAccountKey=/home/user/Downloads/my-key.json&amp;languageCode=en-US"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-text-to-speech://listVoices
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              languageCode: en-US
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
+```
+
 This operation will return a `List<Voice>` with the available voices for the specified language.
 
 -   Using POJO request for full control:
     
+
+_Java-only: Google Cloud SDK SynthesizeSpeechRequest builder_
 
 ```java
 from("direct:start")
@@ -260,15 +419,55 @@ When using `pojoRequest=true`, the body should be a `SynthesizeSpeechRequest` an
 -   Overriding the operation at runtime via header:
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setBody("Hello world");
-        exchange.getIn().setHeader(GoogleCloudTextToSpeechConstants.OPERATION, GoogleCloudTextToSpeechOperations.synthesize);
-    })
+    .setBody(constant("Hello world"))
+    .setHeader("CamelGoogleCloudTextToSpeechOperation", constant("synthesize"))
     .to("google-text-to-speech://listVoices?serviceAccountKey=/home/user/Downloads/my-key.json")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>Hello world</constant>
+  </setBody>
+  <setHeader name="CamelGoogleCloudTextToSpeechOperation">
+    <constant>synthesize</constant>
+  </setHeader>
+  <to uri="google-text-to-speech://listVoices?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: Hello world
+        - setHeader:
+            name: CamelGoogleCloudTextToSpeechOperation
+            constant: synthesize
+        - to:
+            uri: google-text-to-speech://listVoices
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

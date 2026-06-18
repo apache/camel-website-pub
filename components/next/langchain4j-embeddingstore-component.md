@@ -225,6 +225,8 @@ The component supports 10 options, which are listed below.
 
 The component requires an `EmbeddingStore` instance. Register it in the Camel registry:
 
+_Java-only: programmatic EmbeddingStore configuration and registry binding_
+
 ```java
 EmbeddingStore<TextSegment> embeddingStore = PgVectorEmbeddingStore.builder()
     .host("localhost")
@@ -367,6 +369,8 @@ from("direct:remove")
 ### Complete RAG Pipeline Example
 
 A complete example showing document ingestion and retrieval:
+
+_Java-only: multi-route RAG pipeline with split and tokenize_
 
 ```java
 // Ingestion route: chunk, embed, and store documents

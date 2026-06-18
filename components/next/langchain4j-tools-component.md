@@ -166,16 +166,68 @@ Consider, for instance, two consumer routes capable of query an user database by
 
 Queries user by ID
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("langchain4j-tools:userInfo?tags=users&description=Query database by user ID")
     .to("sql:SELECT name FROM users WHERE id = :#number");
 ```
 
+```xml
+<route>
+  <from uri="langchain4j-tools:userInfo?tags=users&amp;description=Query database by user ID"/>
+  <to uri="sql:SELECT name FROM users WHERE id = :#number"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: langchain4j-tools:userInfo
+      parameters:
+        tags: users
+        description: Query database by user ID
+      steps:
+        - to:
+            uri: "sql:SELECT name FROM users WHERE id = :#number"
+```
+
 Queries user by SSN
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("langchain4j-tools:userInfo?tags=users&description=Query database by user social security ID")
     .to("sql:SELECT name FROM users WHERE ssn = :#ssn");
+```
+
+```xml
+<route>
+  <from uri="langchain4j-tools:userInfo?tags=users&amp;description=Query database by user social security ID"/>
+  <to uri="sql:SELECT name FROM users WHERE ssn = :#ssn"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: langchain4j-tools:userInfo
+      parameters:
+        tags: users
+        description: Query database by user social security ID
+      steps:
+        - to:
+            uri: "sql:SELECT name FROM users WHERE ssn = :#ssn"
 ```
 
 Now, consider a producer route that receives unstructured data as input. Such a route could consume this data, pass it to a LLM with function-calling capabilities (such as [llama3.1](https://huggingface.co/meta-llama/Meta-Llama-3.1-8B), [Granite Code 20b function calling, etc](https://huggingface.co/ibm-granite/granite-20b-functioncalling)) and have the model decide which route to call.
@@ -187,7 +239,7 @@ Such a route could receive questions in english such as:
 -   _"What is the name of the user with SSN 34.400.96?"_
     
 
-Produce
+_Java-only: uses a Java variable for the source endpoint_
 
 ```java
 from(source)
@@ -215,6 +267,13 @@ Parameters support optional metadata:
 
 Producer and consumer example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:test")
     .to("langchain4j-tools:test1?tags=users");
@@ -223,7 +282,41 @@ from("langchain4j-tools:test1?tags=users&description=Query user database by user
     .to("sql:SELECT name FROM users WHERE id = :#userId");
 ```
 
-Example with required parameters and descriptions:
+```xml
+<route>
+  <from uri="direct:test"/>
+  <to uri="langchain4j-tools:test1?tags=users"/>
+</route>
+
+<route>
+  <from uri="langchain4j-tools:test1?tags=users&amp;description=Query user database by user ID&amp;parameter.userId=integer"/>
+  <to uri="sql:SELECT name FROM users WHERE id = :#userId"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:test
+      steps:
+        - to:
+            uri: langchain4j-tools:test1
+            parameters:
+              tags: users
+
+- route:
+    from:
+      uri: langchain4j-tools:test1
+      parameters:
+        tags: users
+        description: Query user database by user ID
+        parameter.userId: integer
+      steps:
+        - to:
+            uri: "sql:SELECT name FROM users WHERE id = :#userId"
+```
+
+_Java-only: uses string concatenation for URI and process callback_
 
 ```java
 from("langchain4j-tools:weather?tags=weather&description=Get weather forecast"
@@ -282,9 +375,39 @@ Each tool route is registered with a name that the LLM uses to invoke it. By def
 
 You can override the generated name by setting the `name` option explicitly on the consumer endpoint:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("langchain4j-tools:test1?tags=orders&name=amendOrder&description=Amend an order by its ID&parameter.orderId=string")
     .setBody(constant("order amended"));
+```
+
+```xml
+<route>
+  <from uri="langchain4j-tools:test1?tags=orders&amp;name=amendOrder&amp;description=Amend an order by its ID&amp;parameter.orderId=string"/>
+  <setBody>
+    <constant>order amended</constant>
+  </setBody>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: langchain4j-tools:test1
+      parameters:
+        tags: orders
+        name: amendOrder
+        description: Amend an order by its ID
+        parameter.orderId: string
+      steps:
+        - setBody:
+            constant: order amended
 ```
 
 ### Using stop() in Tool Routes
@@ -293,19 +416,82 @@ Tool routes can use the `stop()` EIP to discontinue route processing early. When
 
 Example with two tools where one uses stop():
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:chat")
     .to("langchain4j-tools:test1?tags=orders")
     .log("response is: ${body}");
 
-// Tool that uses stop() to end processing early
 from("langchain4j-tools:test1?tags=orders&description=Amend an order by its ID&parameter.orderId=string")
     .setBody(constant("order amended"))
     .stop();
 
-// Tool that returns JSON — executes independently
 from("langchain4j-tools:test1?tags=orders&description=Get current promotions")
     .setBody(constant("{\"status\":\"ok\",\"promotions\":[\"10% off\"]}"));
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="langchain4j-tools:test1?tags=orders"/>
+  <log message="response is: ${body}"/>
+</route>
+
+<route>
+  <from uri="langchain4j-tools:test1?tags=orders&amp;description=Amend an order by its ID&amp;parameter.orderId=string"/>
+  <setBody>
+    <constant>order amended</constant>
+  </setBody>
+  <stop/>
+</route>
+
+<route>
+  <from uri="langchain4j-tools:test1?tags=orders&amp;description=Get current promotions"/>
+  <setBody>
+    <constant>{"status":"ok","promotions":["10% off"]}</constant>
+  </setBody>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: langchain4j-tools:test1
+            parameters:
+              tags: orders
+        - log:
+            message: "response is: ${body}"
+
+- route:
+    from:
+      uri: langchain4j-tools:test1
+      parameters:
+        tags: orders
+        description: Amend an order by its ID
+        parameter.orderId: string
+      steps:
+        - setBody:
+            constant: order amended
+        - stop: {}
+
+- route:
+    from:
+      uri: langchain4j-tools:test1
+      parameters:
+        tags: orders
+        description: Get current promotions
+      steps:
+        - setBody:
+            constant: '{"status":"ok","promotions":["10% off"]}'
 ```
 
 When the LLM invokes both tools, each produces its own result. The `stop()` in the first tool does not prevent the second tool from executing, nor does it stop the calling route from continuing after the tools producer completes.
@@ -344,9 +530,35 @@ context.getRegistry().bind("chatModel", model);
 
 Use the model in the Camel LangChain4j Chat Producer
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
- from("direct:chat")
-      .to("langchain4j-tools:test?tags=users&chatModel=#chatModel");
+from("direct:chat")
+    .to("langchain4j-tools:test?tags=users&chatModel=#chatModel");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="langchain4j-tools:test?tags=users&amp;chatModel=#chatModel"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: langchain4j-tools:test
+            parameters:
+              tags: users
+              chatModel: "#chatModel"
 ```
 
 > **Note**
@@ -377,9 +589,37 @@ The Tool Search Tool solves this by allowing you to mark certain tools as "searc
 
 By default, all tools are exposed to the LLM (`exposed=true`). To make a tool searchable instead:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("langchain4j-tools:queryBySSN?tags=users&description=Query user database by social security number&parameter.ssn=string&exposed=false")
     .to("sql:SELECT name FROM users WHERE ssn = :#ssn");
+```
+
+```xml
+<route>
+  <from uri="langchain4j-tools:queryBySSN?tags=users&amp;description=Query user database by social security number&amp;parameter.ssn=string&amp;exposed=false"/>
+  <to uri="sql:SELECT name FROM users WHERE ssn = :#ssn"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: langchain4j-tools:queryBySSN
+      parameters:
+        tags: users
+        description: Query user database by social security number
+        parameter.ssn: string
+        exposed: false
+      steps:
+        - to:
+            uri: "sql:SELECT name FROM users WHERE ssn = :#ssn"
 ```
 
 #### How It Works
@@ -395,6 +635,13 @@ from("langchain4j-tools:queryBySSN?tags=users&description=Query user database by
 
 #### Example: Mixed Exposed and Searchable Tools
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // This tool is immediately available to the LLM
 from("langchain4j-tools:queryById?tags=users&description=Query user database by user ID&parameter.userId=integer")
@@ -407,6 +654,67 @@ from("langchain4j-tools:queryBySSN?tags=users&description=Query user database by
 // Another searchable tool with different tags
 from("langchain4j-tools:sendEmail?tags=users,email&description=Send email to a user&parameter.email=string&parameter.message=string&exposed=false")
     .to("smtp://mailserver");
+```
+
+```xml
+<!-- This tool is immediately available to the LLM -->
+<route>
+  <from uri="langchain4j-tools:queryById?tags=users&amp;description=Query user database by user ID&amp;parameter.userId=integer"/>
+  <to uri="sql:SELECT name FROM users WHERE id = :#userId"/>
+</route>
+
+<!-- This tool is searchable but not immediately exposed -->
+<route>
+  <from uri="langchain4j-tools:queryBySSN?tags=users&amp;description=Query user database by social security number&amp;parameter.ssn=string&amp;exposed=false"/>
+  <to uri="sql:SELECT name FROM users WHERE ssn = :#ssn"/>
+</route>
+
+<!-- Another searchable tool with different tags -->
+<route>
+  <from uri="langchain4j-tools:sendEmail?tags=users,email&amp;description=Send email to a user&amp;parameter.email=string&amp;parameter.message=string&amp;exposed=false"/>
+  <to uri="smtp://mailserver"/>
+</route>
+```
+
+```yaml
+# This tool is immediately available to the LLM
+- route:
+    from:
+      uri: langchain4j-tools:queryById
+      parameters:
+        tags: users
+        description: Query user database by user ID
+        parameter.userId: integer
+      steps:
+        - to:
+            uri: "sql:SELECT name FROM users WHERE id = :#userId"
+
+# This tool is searchable but not immediately exposed
+- route:
+    from:
+      uri: langchain4j-tools:queryBySSN
+      parameters:
+        tags: users
+        description: Query user database by social security number
+        parameter.ssn: string
+        exposed: false
+      steps:
+        - to:
+            uri: "sql:SELECT name FROM users WHERE ssn = :#ssn"
+
+# Another searchable tool with different tags
+- route:
+    from:
+      uri: langchain4j-tools:sendEmail
+      parameters:
+        tags: "users,email"
+        description: Send email to a user
+        parameter.email: string
+        parameter.message: string
+        exposed: false
+      steps:
+        - to:
+            uri: smtp://mailserver
 ```
 
 In this example:

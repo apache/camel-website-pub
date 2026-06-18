@@ -7,10 +7,37 @@ Jackson Protobuf is a Data Format which uses the [Jackson library](https://githu
 > **Tip**
 > If you are familiar with Jackson, this Protobuf data format behaves in the same way as its JSON counterpart, and thus can be used with classes annotated for JSON serialization/deserialization.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("kafka:topic").
-  unmarshal().protobuf(ProtobufLibrary.Jackson, JsonNode.class).
-  to("log:info");
+from("kafka:topic")
+    .unmarshal().protobuf(ProtobufLibrary.Jackson, JsonNode.class)
+    .to("log:info");
+```
+
+```xml
+<route>
+  <from uri="kafka:topic"/>
+  <unmarshal><protobuf library="Jackson"/></unmarshal>
+  <to uri="log:info"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:topic
+      steps:
+        - unmarshal:
+            protobuf:
+              library: Jackson
+        - to:
+            uri: log:info
 ```
 
 ## Protobuf Jackson Options

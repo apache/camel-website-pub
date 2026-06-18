@@ -18,6 +18,8 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 ## URI format
 
+_Java-only: URI format syntax_
+
 ```java
 amqp:[queue:|topic:]destinationName[?options]
 ```
@@ -867,6 +869,8 @@ As AMQP component is inherited from JMS component, the usage of the former is al
 
 **Using AMQP component**
 
+_Java-only: Java DSL snippet (incomplete route)_
+
 ```java
 // Consuming from AMQP queue
 from("amqp:queue:incoming").
@@ -883,6 +887,8 @@ from(...).
 
 AMQPComponents may be created using the provided factory methods, for example:
 
+_Java-only: Java programmatic component factory_
+
 ```java
 AMQPComponent amqp = AMQPComponent.amqpComponent("amqp://localhost:5672");
 
@@ -894,6 +900,8 @@ Alternatively, the AMQP Component can be initialized by providing one or more of
 **SSL configuration**
 
 The component can be configured to connect to an AMQP broker using SSL by setting the `useSsl` option and providing keystore and truststore details, for example:
+
+_Java-only: Java programmatic SSL configuration_
 
 ```java
 AMQPComponent component = new AMQPComponent();
@@ -912,6 +920,8 @@ component.setKeyStoreType("PKCS12");
 
 A username and password may be provided for AMQP broker authentication:
 
+_Java-only: Java programmatic component configuration_
+
 ```java
 AMQPComponent component = new AMQPComponent();
 component.setUsername("camel");
@@ -919,6 +929,8 @@ component.setPassword("rider");
 ```
 
 **AMQP Broker host and port configuration**
+
+_Java-only: Java programmatic component configuration_
 
 ```java
 AMQPComponent amqpComponent = new AMQPComponent();
@@ -931,6 +943,8 @@ If `host` or `port` options have not been provided and the component is initiali
 **Enabling AMQP specific options**
 
 If you, for example, need to enable `amqp.traceFrames` you can do that by appending the option to your URI, like the following example:
+
+_Java-only: Java programmatic component factory_
 
 ```java
 AMQPComponent amqp = AMQPComponent.amqpComponent("amqp://localhost:5672?amqp.traceFrames=true");

@@ -302,13 +302,15 @@ Filters permit you to use some Mina Filters, such as `SslFilter`. You can also i
 
 ### Example with sync=false
 
-In this sample, Camel exposes a service that listens for TCP connections on port 6200. We use the **textline** codec. In our route, we create a Mina consumer endpoint that listens to on port 6200:
+In this sample, Camel exposes a service that listens for TCP connections on port 6200. We use the **textline** codec. In our route, we create a Mina consumer endpoint that listens to on port 6200: ._Java-only: Java string concatenation with port variable_
 
 ```java
 from("mina:tcp://localhost:" + port1 + "?textline=true&sync=false").to("mock:result");
 ```
 
 As the sample is part of a unit test, we test it by sending some data to it on port 6200.
+
+_Java-only: Java test API (MockEndpoint and ProducerTemplate)_
 
 ```java
 MockEndpoint mock = getMockEndpoint("mock:result");
@@ -323,6 +325,8 @@ MockEndpoint.assertIsSatisfied(context);
 
 In the next sample, we have a more common use case where we expose a TCP service on port 6201 also use the `textline` codec. However, this time we want to return a response, so we set the `sync` option to `true` on the consumer.
 
+_Java-only: inline Processor class_
+
 ```java
 fromF("mina:tcp://localhost:%d?textline=true&sync=true", port2).process(new Processor() {
     public void process(Exchange exchange) throws Exception {
@@ -333,6 +337,8 @@ fromF("mina:tcp://localhost:%d?textline=true&sync=true", port2).process(new Proc
 ```
 
 Then we test the sample by sending some data and retrieving the response using the `template.requestBody()` method. As we know the response is a `String`, we cast it to `String` and can assert that the response is, in fact, something we have dynamically set in our processor code logic.
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 String response = (String)template.requestBody("mina:tcp://localhost:" + port2 + "?textline=true&sync=true", "World");
@@ -352,6 +358,8 @@ Spring DSL can also be used for [MINA](#). In the sample below, we expose a TCP 
 
 In the route above, we expose a TCP server on port 5555 using the textline codec. We let the Spring bean with ID, `myTCPOrderHandler`, handle the request and return a reply. For instance, the handler bean could be implemented as follows:
 
+_Java-only: Java handler class_
+
 ```java
     public String handleOrder(String payload) {
         ...
@@ -364,6 +372,8 @@ In the route above, we expose a TCP server on port 5555 using the textline codec
 When acting as a server, you sometimes want to close the session when, for example, a client conversion is finished. To instruct Camel to close the session, you should add a header with the key `CamelMinaCloseSessionWhenComplete` set to a boolean `true` value.
 
 For instance, the example below will close the session after it has written the `bye` message back to the client:
+
+_Java-only: inline Processor class_
 
 ```java
         from("mina:tcp://localhost:8080?sync=true&textline=true").process(new Processor() {

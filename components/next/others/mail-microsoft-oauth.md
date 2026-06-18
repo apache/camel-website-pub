@@ -34,6 +34,8 @@ For example,
 -   in a Quarkus application:
     
 
+_Java-only: registering the OAuth2 authenticator bean in Quarkus_
+
 ```java
 @jakarta.enterprise.inject.Produces
 @Named("auth")
@@ -46,6 +48,8 @@ public MicrosoftExchangeOnlineOAuth2MailAuthenticator exchangeAuthenticator() {
 -   in a Spring Boot application:
     
 
+_Java-only: registering the OAuth2 authenticator bean in Spring Boot_
+
 ```java
 @BindToRegistry("auth")
 public MicrosoftExchangeOnlineOAuth2MailAuthenticator exchangeAuthenticator(){
@@ -54,6 +58,8 @@ public MicrosoftExchangeOnlineOAuth2MailAuthenticator exchangeAuthenticator(){
 ```
 
 and then reference it in the Camel endpoint:
+
+_Java-only: referencing the authenticator in the IMAP endpoint URI_
 
 ```java
  from("imaps://outlook.office365.com:993"

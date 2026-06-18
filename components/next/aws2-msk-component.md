@@ -452,13 +452,41 @@ Camel-AWS MSK component provides the following operation on the producer side:
 -   listClusters: this operation will list the available MSK Brokers in AWS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:listClusters")
-    .to("aws2-msk://test?mskClient=#amazonMskClient&operation=listClusters")
+    .to("aws2-msk://test?mskClient=#amazonMskClient&operation=listClusters");
+```
+
+```xml
+<route>
+  <from uri="direct:listClusters"/>
+  <to uri="aws2-msk://test?mskClient=#amazonMskClient&amp;operation=listClusters"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listClusters
+      steps:
+        - to:
+            uri: aws2-msk://test
+            parameters:
+              mskClient: "#amazonMskClient"
+              operation: listClusters
 ```
 
 -   createCluster: this operation will create an MSK Cluster in AWS
     
+
+_Java-only: creating an MSK Cluster with a Processor and MSK2Constants_
 
 ```java
 from("direct:createCluster")
@@ -478,11 +506,45 @@ from("direct:createCluster")
 -   deleteCluster: this operation will delete an MSK Cluster in AWS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:deleteCluster")
-    .setHeader(MSK2Constants.CLUSTER_ARN, constant("test-kafka"));
-    .to("aws2-msk://test?mskClient=#amazonMskClient&operation=deleteCluster")
+    .setHeader(MSK2Constants.CLUSTER_ARN, constant("test-kafka"))
+    .to("aws2-msk://test?mskClient=#amazonMskClient&operation=deleteCluster");
 ```
+
+```xml
+<route>
+    <from uri="direct:deleteCluster"/>
+    <setHeader name="CamelAwsMSKClusterArn">
+        <constant>test-kafka</constant>
+    </setHeader>
+    <to uri="aws2-msk://test?mskClient=#amazonMskClient&amp;operation=deleteCluster"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:deleteCluster
+    steps:
+      - setHeader:
+          name: CamelAwsMSKClusterArn
+          constant: test-kafka
+      - to:
+          uri: aws2-msk://test
+          parameters:
+            mskClient: "#amazonMskClient"
+            operation: deleteCluster
+```
+
+_Java-only: deleting an MSK Cluster with a Processor and MSK2Constants_
 
 ```java
 from("direct:createCluster")
@@ -502,6 +564,8 @@ from("direct:createCluster")
 ### Using a POJO as body
 
 Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS MSK, there are multiple operations you can submit, as an example for List clusters request, you can do something like:
+
+_Java-only: using an AWS SDK POJO request as the message body_
 
 ```java
 from("direct:aws2-msk")

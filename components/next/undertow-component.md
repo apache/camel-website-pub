@@ -208,12 +208,34 @@ Undertow HTTP and WebSocket consumers can validate incoming `Authorization: Bear
 > **Note**
 > If `oauthProfile` is set but no `OAuthTokenValidationFactory` is available, the route fails to start. Add `camel-oauth` for the default provider or include a runtime-specific provider from the platform integration.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("undertow:http://0.0.0.0:8080/secure?oauthProfile=myprofile")
     .to("direct:businessLogic");
+```
 
-from("undertow:ws://0.0.0.0:8080/secure-ws?oauthProfile=myprofile")
-    .to("direct:webSocketLogic");
+```xml
+<route>
+  <from uri="undertow:http://0.0.0.0:8080/secure?oauthProfile=myprofile"/>
+  <to uri="direct:businessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: undertow:http://0.0.0.0:8080/secure
+      parameters:
+        oauthProfile: myprofile
+      steps:
+        - to:
+            uri: direct:businessLogic
 ```
 
 When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. HTTP requests and WebSocket upgrade requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. The raw `Authorization` header is removed before the route is invoked.
@@ -277,24 +299,97 @@ To listen across an entire URI prefix see next section.
 
 By default, Undertow will only match on exact uri’s. But you can instruct Undertow to match prefixes. For example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("undertow:http://0.0.0.0:8123/foo").to("mock:foo");
+```
+
+```xml
+<route>
+  <from uri="undertow:http://0.0.0.0:8123/foo"/>
+  <to uri="mock:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: undertow:http://0.0.0.0:8123/foo
+      steps:
+        - to:
+            uri: mock:foo
 ```
 
 In the route above Undertow will only match if the uri is an exact match, so it will match if you enter `http://0.0.0.0:8123/foo` but not match if you do `http://0.0.0.0:8123/foo/bar`.
 
 So if you want to enable wildcard matching you need to set `matchOnUriPrefix=true` as follows:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("undertow:http://0.0.0.0:8123/foo?matchOnUriPrefix=true").to("mock:foo");
+```
+
+```xml
+<route>
+  <from uri="undertow:http://0.0.0.0:8123/foo?matchOnUriPrefix=true"/>
+  <to uri="mock:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: undertow:http://0.0.0.0:8123/foo
+      parameters:
+        matchOnUriPrefix: true
+      steps:
+        - to:
+            uri: mock:foo
 ```
 
 So now Undertow matches any endpoints with starts with `foo`.
 
 To match **any** endpoint you can remove the prefix so it will match anything from the root:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("undertow:http://0.0.0.0:8123?matchOnUriPrefix=true").to("mock:foo");
+```
+
+```xml
+<route>
+  <from uri="undertow:http://0.0.0.0:8123?matchOnUriPrefix=true"/>
+  <to uri="mock:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: undertow:http://0.0.0.0:8123
+      parameters:
+        matchOnUriPrefix: true
+      steps:
+        - to:
+            uri: mock:foo
 ```
 
 ### Security provider

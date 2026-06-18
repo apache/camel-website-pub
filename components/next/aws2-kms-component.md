@@ -467,40 +467,158 @@ Camel-AWS KMS component provides the following operation on the producer side:
 -   listKeys: this operation will list the available keys in KMS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:listKeys")
-      .to("aws2-kms://test?kmsClient=#amazonKmsClient&operation=listKeys")
+    .to("aws2-kms://test?kmsClient=#amazonKmsClient&operation=listKeys");
+```
+
+```xml
+<route>
+  <from uri="direct:listKeys"/>
+  <to uri="aws2-kms://test?kmsClient=#amazonKmsClient&amp;operation=listKeys"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listKeys
+      steps:
+        - to:
+            uri: aws2-kms://test
+            parameters:
+              kmsClient: "#amazonKmsClient"
+              operation: listKeys
 ```
 
 -   createKey: this operation will create a key in KMS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createKey")
-      .to("aws2-kms://test?kmsClient=#amazonKmsClient&operation=createKey")
+    .to("aws2-kms://test?kmsClient=#amazonKmsClient&operation=createKey");
+```
+
+```xml
+<route>
+  <from uri="direct:createKey"/>
+  <to uri="aws2-kms://test?kmsClient=#amazonKmsClient&amp;operation=createKey"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createKey
+      steps:
+        - to:
+            uri: aws2-kms://test
+            parameters:
+              kmsClient: "#amazonKmsClient"
+              operation: createKey
 ```
 
 -   disableKey: this operation will disable a key in KMS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:disableKey")
-      .setHeader(KMS2Constants.KEY_ID, constant("123")
-      .to("aws2-kms://test?kmsClient=#amazonKmsClient&operation=disableKey")
+    .setHeader(KMS2Constants.KEY_ID, constant("123"))
+    .to("aws2-kms://test?kmsClient=#amazonKmsClient&operation=disableKey");
+```
+
+```xml
+<route>
+    <from uri="direct:disableKey"/>
+    <setHeader name="CamelAwsKMSKeyId">
+        <constant>123</constant>
+    </setHeader>
+    <to uri="aws2-kms://test?kmsClient=#amazonKmsClient&amp;operation=disableKey"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:disableKey
+    steps:
+      - setHeader:
+          name: CamelAwsKMSKeyId
+          constant: "123"
+      - to:
+          uri: aws2-kms://test
+          parameters:
+            kmsClient: "#amazonKmsClient"
+            operation: disableKey
 ```
 
 -   enableKey: this operation will enable a key in KMS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:enableKey")
-      .setHeader(KMS2Constants.KEY_ID, constant("123")
-      .to("aws2-kms://test?kmsClient=#amazonKmsClient&operation=enableKey")
+    .setHeader(KMS2Constants.KEY_ID, constant("123"))
+    .to("aws2-kms://test?kmsClient=#amazonKmsClient&operation=enableKey");
+```
+
+```xml
+<route>
+    <from uri="direct:enableKey"/>
+    <setHeader name="CamelAwsKMSKeyId">
+        <constant>123</constant>
+    </setHeader>
+    <to uri="aws2-kms://test?kmsClient=#amazonKmsClient&amp;operation=enableKey"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:enableKey
+    steps:
+      - setHeader:
+          name: CamelAwsKMSKeyId
+          constant: "123"
+      - to:
+          uri: aws2-kms://test
+          parameters:
+            kmsClient: "#amazonKmsClient"
+            operation: enableKey
 ```
 
 ### Using a POJO as body
 
 Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS KMS there are multiple operations you can submit, as an example for List keys request, you can do something like:
+
+_Java-only: using a POJO request body with the AWS SDK builder_
 
 ```java
 from("direct:createUser")

@@ -214,6 +214,8 @@ Enum values:
 
 When `rest-openapi` is used as a consumer, HTTP requests are served by the selected `RestOpenApiConsumerFactory` delegate, such as the built-in `platform-http` delegate or a custom delegate. To validate incoming `Authorization: Bearer` tokens from Rest DSL contract-first routes, pass the delegate endpoint option `oauthProfile` through the REST configuration endpoint properties.
 
+_Java-only: configuring REST with OAuth profile_
+
 ```java
 restConfiguration()
     .component("platform-http")
@@ -224,9 +226,35 @@ rest().openApi("petstore-v3.json");
 
 For direct `rest-openapi` consumer routes, pass the delegate endpoint option directly on the consumer endpoint URI. Consumer URIs identify the OpenAPI specification and do not include an `#operationId` fragment.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("rest-openapi:petstore-v3.json?consumerComponentName=platform-http&oauthProfile=myprofile")
     .to("direct:businessLogic");
+```
+
+```xml
+<route>
+  <from uri="rest-openapi:petstore-v3.json?consumerComponentName=platform-http&amp;oauthProfile=myprofile"/>
+  <to uri="direct:businessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rest-openapi:petstore-v3.json
+      parameters:
+        consumerComponentName: platform-http
+        oauthProfile: myprofile
+      steps:
+        - to:
+            uri: direct:businessLogic
 ```
 
 The selected delegate component must support the `oauthProfile` endpoint option. The built-in `platform-http` delegate supports this option. An `OAuthTokenValidationFactory` must be available, for example from [camel-oauth](../4.18.x/others/oauth.md) or from the runtime integration. OpenAPI `securitySchemes` and operation security requirements are not converted into `oauthProfile` configuration; select the OAuth profile explicitly with the REST endpoint property or direct endpoint URI option. The `oauthProfile` option is a first-class `rest-openapi` endpoint option that is forwarded to the selected delegate, which is responsible for enforcing it. The route fails at startup when the resolved `RestOpenApiConsumerFactory` does not declare that its consumers enforce `oauthProfile`, so a misconfigured delegate cannot start without the expected protection. Custom factories that enforce the option must override `RestOpenApiConsumerFactory.supportsOAuthProfile()` to return `true`.
@@ -276,6 +304,8 @@ Example pom.xml
 
 Start by defining a `RestOpenApiComponent` bean:
 
+_Java-only: defining a RestOpenApiComponent bean for PetStore_
+
 ```java
 @Bean
 public Component petstore(CamelContext camelContext) {
@@ -292,6 +322,8 @@ public Component petstore(CamelContext camelContext) {
 > In this example, there is no need to explicitly associate the `petstore` component with the `HttpComponent` as Camel will use the first class on the `_CLASSPATH_` that implements `RestProducerFactory`. However, if a different component is required, then calling `petstore.setComponentName("http")` would use the named component from the Camel registry.
 
 Now in our application we can simply use the `ProducerTemplate` to invoke PetStore REST methods:
+
+_Java-only: invoking PetStore REST methods with ProducerTemplate_
 
 ```java
 @Autowired

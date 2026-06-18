@@ -12,6 +12,8 @@ To enable this, add this component to the classpath and Camel should auto-detect
 
 You can also register the microprofile-config component manually with the Apache Camel Properties Component as shown below:
 
+_Java-only: registering MicroProfile Config properties source_
+
 ```java
     PropertiesComponent pc = (PropertiesComponent) camelContext.getPropertiesComponent();
     pc.addPropertiesSource(new CamelMicroProfilePropertiesSource());

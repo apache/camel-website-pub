@@ -189,6 +189,8 @@ Enum values:
 -   `listNamespaces`: this operation lists the namespaces on a kubernetes cluster
     
 
+_Java-only: uses toF() for endpoint URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-namespaces:///?kubernetesClient=#kubernetesClient&operation=listNamespaces").
@@ -199,6 +201,8 @@ This operation returns a list of namespaces from your cluster
 
 -   `listNamespacesByLabels`: this operation lists the namespaces by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor with KubernetesConstants and HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -217,6 +221,8 @@ from("direct:listByLabels").process(new Processor() {
 This operation returns a list of namespaces from your cluster, using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Namespaces Consumer Example
+
+_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
 
 ```java
 fromF("kubernetes-namespaces://%s?oauthToken=%s", host, authToken)

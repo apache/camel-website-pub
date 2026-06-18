@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 311 components (18 deprecated, 59 JVM only)
+There are 312 components (18 deprecated, 59 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -104,6 +104,7 @@ level | Description |
 | [Geocoder](extensions/geocoder.md) | camel-quarkus-geocoder | 1.1.0 | 1.2.0 | Stable | Find geocodes (latitude and longitude) for a given address or the other way round. |
 | [Git](extensions/git.md) | camel-quarkus-git | 1.1.0 | 1.1.0 | Stable | Perform operations on git repositories. |
 | [GitHub](extensions/github.md) | camel-quarkus-github | 1.0.0 | 1.0.0 | Stable | Interact with the GitHub API. |
+| [GitHub2](extensions/github2.md) | camel-quarkus-github2 | 3.37.0 | 3.37.0 | Stable | Interact with the GitHub API. |
 | [Google BigQuery Standard SQL](extensions/google-bigquery.md) | camel-quarkus-google-bigquery | 1.0.0 | 1.6.0 | Stable | Access Google Cloud BigQuery service using SQL queries. |
 | [Google BigQuery](extensions/google-bigquery.md) | camel-quarkus-google-bigquery | 1.0.0 | 1.6.0 | Stable | Google BigQuery data warehouse for analytics. |
 | [Google Calendar Stream](extensions/google-calendar.md) | camel-quarkus-google-calendar | 1.0.0 | 1.0.0 | Stable | Poll for changes in a Google Calendar. |

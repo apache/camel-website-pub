@@ -48,18 +48,74 @@ All event classes extend `OcsfEvent` which provides common attributes like `time
 
 ### Marshalling OCSF Events
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .marshal().ocsf()
     .to("kafka:security-events");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <marshal>
+    <ocsf/>
+  </marshal>
+  <to uri="kafka:security-events"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            ocsf: {}
+        - to:
+            uri: kafka:security-events
+```
+
 ### Unmarshalling OCSF Events
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("kafka:security-events")
     .unmarshal().ocsf()
     .to("direct:process");
+```
+
+```xml
+<route>
+  <from uri="kafka:security-events"/>
+  <unmarshal>
+    <ocsf/>
+  </unmarshal>
+  <to uri="direct:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:security-events
+      steps:
+        - unmarshal:
+            ocsf: {}
+        - to:
+            uri: direct:process
 ```
 
 ### Unmarshalling to a Specific Event Class
@@ -103,6 +159,13 @@ from("kafka:security-events")
 
 AWS Security Hub now outputs findings in OCSF format. You can use this data format to process those findings:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("aws-securityhub:findings")
     .unmarshal().ocsf(DetectionFinding.class)
@@ -111,6 +174,44 @@ from("aws-securityhub:findings")
             .to("direct:high-severity")
         .otherwise()
             .to("direct:normal-severity");
+```
+
+```xml
+<route>
+  <from uri="aws-securityhub:findings"/>
+  <unmarshal>
+    <ocsf unmarshalType="org.apache.camel.dataformat.ocsf.model.DetectionFinding"/>
+  </unmarshal>
+  <choice>
+    <when>
+      <simple>${body.severityId} >= 4</simple>
+      <to uri="direct:high-severity"/>
+    </when>
+    <otherwise>
+      <to uri="direct:normal-severity"/>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: aws-securityhub:findings
+      steps:
+        - unmarshal:
+            ocsf:
+              unmarshalType: org.apache.camel.dataformat.ocsf.model.DetectionFinding
+        - choice:
+            when:
+              - simple: "${body.severityId} >= 4"
+                steps:
+                  - to:
+                      uri: direct:high-severity
+            otherwise:
+              steps:
+                - to:
+                    uri: direct:normal-severity
 ```
 
 ## OCSF Options
@@ -145,6 +246,8 @@ OCSF defines the following event categories:
 
 ## Example: Creating a Detection Finding
 
+_Java-only: creating and marshalling a DetectionFinding POJO_
+
 ```java
 DetectionFinding finding = new DetectionFinding();
 finding.setActivityId(1); // Create
@@ -175,6 +278,8 @@ You can combine the OCSF DataFormat with the LangChain4j Chat component to use a
     
 
 ### Java DSL Example
+
+_Java-only: AI-powered security finding summarization with process and langchain4j_
 
 ```java
 from("kafka:security-events")

@@ -152,6 +152,8 @@ Camel will provide exchange information in the Velocity context (just a `Map`). 
 
 You can set up a custom Velocity Context yourself by setting property `allowTemplateFromHeader=true` and setting the message header `CamelVelocityContext` just like this
 
+_Java-only: programmatic VelocityContext creation and header manipulation_
+
 ```java
 VelocityContext velocityContext = new VelocityContext(variableMap);
 exchange.getIn().setHeader("CamelVelocityContext", velocityContext);
@@ -175,51 +177,222 @@ Camel provides two headers by which you can define a different resource location
 
 For example, you could use something like
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("velocity:com/acme/MyResponse.vm");
+from("activemq:My.Queue")
+    .to("velocity:com/acme/MyResponse.vm");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="velocity:com/acme/MyResponse.vm"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: velocity:com/acme/MyResponse.vm
 ```
 
 To use a Velocity template to formulate a response to a message for InOut message exchanges (where there is a `JMSReplyTo` header).
 
 If you want to use InOnly and consume the message and send it to another destination, you could use the following route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("velocity:com/acme/MyResponse.vm").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("velocity:com/acme/MyResponse.vm")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="velocity:com/acme/MyResponse.vm"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: velocity:com/acme/MyResponse.vm
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 And to use the content cache, e.g., for use in production, where the `.vm` template never changes:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("velocity:com/acme/MyResponse.vm?contentCache=true").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("velocity:com/acme/MyResponse.vm?contentCache=true")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="velocity:com/acme/MyResponse.vm?contentCache=true"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: velocity:com/acme/MyResponse.vm
+            parameters:
+              contentCache: true
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 And a file-based resource:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("velocity:file://myfolder/MyResponse.vm?contentCache=true").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("velocity:file://myfolder/MyResponse.vm?contentCache=true")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="velocity:file://myfolder/MyResponse.vm?contentCache=true"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: velocity:file://myfolder/MyResponse.vm
+            parameters:
+              contentCache: true
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 It’s possible to specify what template the component should use dynamically via a header, so for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  setHeader("CamelVelocityResourceUri").constant("path/to/my/template.vm").
-  to("velocity:dummy?allowTemplateFromHeader=true"");
+from("direct:in")
+    .setHeader("CamelVelocityResourceUri").constant("path/to/my/template.vm")
+    .to("velocity:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelVelocityResourceUri">
+    <constant>path/to/my/template.vm</constant>
+  </setHeader>
+  <to uri="velocity:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelVelocityResourceUri
+            expression:
+              constant:
+                expression: path/to/my/template.vm
+        - to:
+            uri: velocity:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 It’s possible to specify a template directly as a header. The component should use it dynamically via a header, so for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  setHeader("CamelVelocityTemplate").constant("Hi this is a velocity template that can do templating ${body}").
-  to("velocity:dummy?allowTemplateFromHeader=true"");
+from("direct:in")
+    .setHeader("CamelVelocityTemplate").constant("Hi this is a velocity template that can do templating ${body}")
+    .to("velocity:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelVelocityTemplate">
+    <constant>Hi this is a velocity template that can do templating ${body}</constant>
+  </setHeader>
+  <to uri="velocity:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelVelocityTemplate
+            expression:
+              constant:
+                expression: "Hi this is a velocity template that can do templating ${body}"
+        - to:
+            uri: velocity:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 ### The Email Example
@@ -238,6 +411,8 @@ ${body}
 ```
 
 And the java code (from an unit test):
+
+_Java-only: unit test with Exchange API, ProducerTemplate, MockEndpoint assertions, and RouteBuilder class_
 
 ```java
     private Exchange createLetter() {

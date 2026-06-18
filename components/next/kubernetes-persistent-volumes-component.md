@@ -133,6 +133,8 @@ The Kubernetes Persistent Volume component supports 3 message header(s), which i
 -   `listPersistentVolumes`: this operation lists the PVs on a kubernetes cluster
     
 
+_Java-only: uses `toF()` for URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-persistent-volumes:///?kubernetesClient=#kubernetesClient&operation=listPersistentVolumes").
@@ -143,6 +145,8 @@ This operation returns a list of PVs from your cluster
 
 -   `listPersistentVolumesByLabels`: this operation lists the PVs by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor, Java constants, and \`toF()\`_
 
 ```java
 from("direct:listByLabels").process(new Processor() {

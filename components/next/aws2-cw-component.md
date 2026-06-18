@@ -451,9 +451,34 @@ For more information about this you can look at [AWS credentials documentation](
 
 If you need more control over the `CloudWatchClient` instance configuration you can create your own instance and refer to it from the URI:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-.to("aws2-cw://namespace?amazonCwClient=#client");
+    .to("aws2-cw://namespace?amazonCwClient=#client");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="aws2-cw://namespace?amazonCwClient=#client"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: aws2-cw://namespace
+            parameters:
+              amazonCwClient: "#client"
 ```
 
 The `#client` refers to a `CloudWatchClient` in the Registry.
@@ -478,12 +503,37 @@ where `${camel-version`} must be replaced by the actual version of Camel.
 
 ### Producer Example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
   .to("aws2-cw://http://camel.apache.org/aws-cw");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="aws2-cw://http://camel.apache.org/aws-cw"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: aws2-cw://http://camel.apache.org/aws-cw
+```
+
 and sends something like
+
+_Java-only: setting CloudWatch metric headers programmatically_
 
 ```java
 exchange.getIn().setHeader(Cw2Constants.METRIC_NAME, "ExchangesCompleted");

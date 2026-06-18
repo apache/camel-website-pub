@@ -295,12 +295,45 @@ camel.oauth.azure.token-endpoint=https://login.microsoftonline.com/tenant/oauth2
 camel.oauth.azure.scope=https://cognitiveservices.azure.com/.default
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:chat")
     .to("openai:chat-completion?model=gpt-4&oauthProfile=azure");
 ```
 
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;oauthProfile=azure"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              oauthProfile: azure
+```
+
 MCP servers can also use OAuth independently via per-server `oauthProfile`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:chat")
@@ -311,9 +344,33 @@ from("direct:chat")
         + "&mcpServer.tools.oauthProfile=keycloak");
 ```
 
+```xml
+<route>
+    <from uri="direct:chat"/>
+    <to uri="openai:chat-completion?model=gpt-4&amp;oauthProfile=azure&amp;mcpServer.tools.transportType=streamableHttp&amp;mcpServer.tools.url=https://mcp.internal/mcp&amp;mcpServer.tools.oauthProfile=keycloak"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              oauthProfile: azure
+              mcpServer.tools.transportType: streamableHttp
+              mcpServer.tools.url: https://mcp.internal/mcp
+              mcpServer.tools.oauthProfile: keycloak
+```
+
 ### Basic Chat Completion with String Input
 
 -   Java
+    
+-   XML
     
 -   YAML
     
@@ -323,6 +380,17 @@ from("direct:chat")
     .setBody(constant("What is Apache Camel?"))
     .to("openai:chat-completion")
     .log("Response: ${body}");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <setBody>
+    <constant>What is Apache Camel?</constant>
+  </setBody>
+  <to uri="openai:chat-completion"/>
+  <log message="Response: ${body}"/>
+</route>
 ```
 
 ```yaml
@@ -340,7 +408,12 @@ from("direct:chat")
 
 ### File-Backed Prompt with Text File
 
-Usage example:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("file:prompts?noop=true")
@@ -348,9 +421,33 @@ from("file:prompts?noop=true")
     .log("Response: ${body}");
 ```
 
+```xml
+<route>
+  <from uri="file:prompts?noop=true"/>
+  <to uri="openai:chat-completion"/>
+  <log message="Response: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:prompts?noop=true
+      steps:
+        - to:
+            uri: openai:chat-completion
+        - log:
+            message: "Response: ${body}"
+```
+
 ### Image File Input with Vision Model
 
-Usage example:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("file:images?noop=true")
@@ -358,9 +455,36 @@ from("file:images?noop=true")
     .log("Response: ${body}");
 ```
 
+```xml
+<route>
+  <from uri="file:images?noop=true"/>
+  <to uri="openai:chat-completion?model=gpt-4.1-mini&amp;userMessage=Describe what you see in this image"/>
+  <log message="Response: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:images?noop=true
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4.1-mini
+              userMessage: Describe what you see in this image
+        - log:
+            message: "Response: ${body}"
+```
+
 Image input also works with bodies produced by remote file and cloud storage components, such as FTP/SFTP (`WrappedFile`), AWS S3, Azure Blob Storage or MinIO (`byte[]` or `InputStream`). The MIME type is detected from the component’s content-type header or the file name:
 
-Usage example:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("aws2-s3:my-bucket")
@@ -368,9 +492,36 @@ from("aws2-s3:my-bucket")
     .log("Response: ${body}");
 ```
 
+```xml
+<route>
+  <from uri="aws2-s3:my-bucket"/>
+  <to uri="openai:chat-completion?model=gpt-4.1-mini&amp;userMessage=Describe what you see in this image"/>
+  <log message="Response: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: aws2-s3:my-bucket
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4.1-mini
+              userMessage: Describe what you see in this image
+        - log:
+            message: "Response: ${body}"
+```
+
 When no content-type header is available, set the `CamelOpenAIMediaType` header explicitly:
 
-Usage example:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:image")
@@ -378,6 +529,39 @@ from("direct:image")
     .setHeader("CamelOpenAIUserMessage", constant("Describe what you see in this image"))
     .to("openai:chat-completion?model=gpt-4.1-mini")
     .log("Response: ${body}");
+```
+
+```xml
+<route>
+  <from uri="direct:image"/>
+  <setHeader name="CamelOpenAIMediaType">
+    <constant>image/png</constant>
+  </setHeader>
+  <setHeader name="CamelOpenAIUserMessage">
+    <constant>Describe what you see in this image</constant>
+  </setHeader>
+  <to uri="openai:chat-completion?model=gpt-4.1-mini"/>
+  <log message="Response: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:image
+      steps:
+        - setHeader:
+            name: CamelOpenAIMediaType
+            constant: "image/png"
+        - setHeader:
+            name: CamelOpenAIUserMessage
+            constant: "Describe what you see in this image"
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4.1-mini
+        - log:
+            message: "Response: ${body}"
 ```
 
 > **Note**
@@ -423,7 +607,7 @@ Usage example:
 
 ### Structured Output with outputClass
 
-Usage example:
+_Java-only: uses Java class definition for `outputClass` schema_
 
 ```java
 public class Person {
@@ -442,7 +626,12 @@ from("direct:structured")
 
 The `jsonSchema` option instructs the model to return JSON that conforms to the provided schema. The response will be valid JSON but is not automatically validated against the schema:
 
-Usage example:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:json-schema")
@@ -452,15 +641,76 @@ from("direct:json-schema")
     .log("JSON response: ${body}");
 ```
 
+```xml
+<route>
+  <from uri="direct:json-schema"/>
+  <setBody>
+    <constant>Create a product description</constant>
+  </setBody>
+  <setHeader name="CamelOpenAIJsonSchema">
+    <constant>{"type":"object","properties":{"name":{"type":"string"},"price":{"type":"number"}}}</constant>
+  </setHeader>
+  <to uri="openai:chat-completion"/>
+  <log message="JSON response: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:json-schema
+      steps:
+        - setBody:
+            constant: "Create a product description"
+        - setHeader:
+            name: CamelOpenAIJsonSchema
+            constant: '{"type":"object","properties":{"name":{"type":"string"},"price":{"type":"number"}}}'
+        - to:
+            uri: openai:chat-completion
+        - log:
+            message: "JSON response: ${body}"
+```
+
 You can also load the schema from a resource file:
 
-Usage example:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:json-schema-resource")
     .setBody(constant("Create a product description"))
     .to("openai:chat-completion?jsonSchema=resource:classpath:schemas/product.schema.json")
     .log("JSON response: ${body}");
+```
+
+```xml
+<route>
+  <from uri="direct:json-schema-resource"/>
+  <setBody>
+    <constant>Create a product description</constant>
+  </setBody>
+  <to uri="openai:chat-completion?jsonSchema=resource:classpath:schemas/product.schema.json"/>
+  <log message="JSON response: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:json-schema-resource
+      steps:
+        - setBody:
+            constant: "Create a product description"
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              jsonSchema: "resource:classpath:schemas/product.schema.json"
+        - log:
+            message: "JSON response: ${body}"
 ```
 
 > **Note**
@@ -567,7 +817,7 @@ IMPORTANT:
 
 Example of manual conversation history:
 
-Usage example:
+_Java-only: uses OpenAI SDK `ChatCompletionMessageParam` types_
 
 ```java
 List<ChatCompletionMessageParam> history = new ArrayList<>();
@@ -591,6 +841,8 @@ When no SSL parameters are set, the default JVM trust store is used.
 
 The component implements `SSLContextParametersAware` and supports Camel’s standard `SSLContextParameters` for SSL configuration. When set, `SSLContextParameters` takes precedence over the individual `ssl*` properties (same pattern as `camel-kafka`).
 
+_Java-only: programmatic `SSLContextParameters` configuration_
+
 ```java
 KeyStoreParameters trustStoreParams = new KeyStoreParameters();
 trustStoreParams.setResource("/path/to/truststore.jks");
@@ -609,6 +861,8 @@ from("direct:chat")
 ```
 
 To use global SSL context parameters for all OpenAI endpoints:
+
+_Java-only: programmatic component configuration_
 
 ```java
 OpenAIComponent openai = context.getComponent("openai", OpenAIComponent.class);
@@ -903,6 +1157,8 @@ Additional metadata (model, token usage, vector size, count) is exposed via head
 
 You can embed multiple texts in a single request by passing a `List<String>`:
 
+_Java-only: uses `List.of()` for batch input_
+
 ```java
 from("direct:batch-embed")
     .setBody(constant(List.of("First text", "Second text", "Third text")))
@@ -980,6 +1236,8 @@ For specialized vector workloads, you can also use `camel-qdrant`, `camel-weavia
 
 The component can automatically calculate cosine similarity when a reference embedding is provided:
 
+_Java-only: uses `List<Float>` variable for reference embedding_
+
 ```java
 List<Float> referenceEmbedding = /* previously computed embedding */;
 
@@ -991,6 +1249,8 @@ from("direct:compare")
 ```
 
 You can also use `SimilarityUtils` directly for manual calculations:
+
+_Java-only: `SimilarityUtils` API for vector math_
 
 ```java
 import org.apache.camel.component.openai.SimilarityUtils;
@@ -1360,6 +1620,8 @@ from("direct:chat")
 ```
 
 With this route, a multi-turn conversation works as follows:
+
+_Java-only: ProducerTemplate test API with conversation history management_
 
 ```java
 // Turn 1: the model calls the "add" tool and returns the result

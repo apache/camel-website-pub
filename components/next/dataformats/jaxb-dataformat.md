@@ -54,6 +54,8 @@ Enum values:
 
 The following example uses a named DataFormat of `jaxb` which is configured with a Java package name to initialize the [JAXBContext](https://jakarta.ee/specifications/xml-binding/2.3/apidocs/javax/xml/bind/jaxbcontext).
 
+_Java-only: Java programmatic data format instantiation_
+
 ```java
 DataFormat jaxb = new JaxbDataFormat("com.acme.model");
 
@@ -63,6 +65,8 @@ from("activemq:My.Queue").
 ```
 
 You can, if you prefer, use a named reference to a data format which can then be defined in your Registry such as via your Spring XML file. e.g.
+
+_Java-only: Java DSL with named data format reference_
 
 ```java
 from("activemq:My.Queue").
@@ -116,6 +120,8 @@ If `JaxbConstants.JAXB_PART_NAMESPACE` is set as one of the exchange headers, it
 
 While setting `partNamespace` through `JaxbConstants.JAXB_PART_NAMESPACE`, please note that you need to specify its value in the format `{namespaceUri}localPart`, as per the example below.
 
+_Java-only: Java constant reference_
+
 ```java
 .setHeader(JaxbConstants.JAXB_PART_NAMESPACE, constant("{http://www.camel.apache.org/jaxb/example/address/1}address"));
 ```
@@ -137,6 +143,8 @@ While setting `partNamespace` through `JaxbConstants.JAXB_PART_NAMESPACE`, pleas
 This feature has been tested with Woodstox 3.2.9 and Sun JDK 1.6 StAX implementation.
 
 `JaxbDataFormat` now allows you to customize the `XMLStreamWriter` used to marshal the stream to XML. Using this configuration, you can add your own stream writer to completely remove, escape, or replace non-XML characters.
+
+_Java-only: Java programmatic data format configuration_
 
 ```java
 JaxbDataFormat customWriterFormat = new JaxbDataFormat("org.apache.camel.foo.bar");
@@ -193,6 +201,8 @@ The `JaxbDataFormat` supports validation by marshalling and unmarshalling from /
 
 Using the Java DSL, you can configure it in the following way:
 
+_Java-only: Java programmatic data format configuration_
+
 ```java
 JaxbDataFormat jaxbDataFormat = new JaxbDataFormat();
 jaxbDataFormat.setContextPath(Person.class.getPackage().getName());
@@ -214,6 +224,8 @@ You can do the same using the XML DSL:
 The `JaxbDataFormat` supports to specify the `SchemaLocation` when marshalling the XML.
 
 Using the Java DSL, you can configure it in the following way:
+
+_Java-only: Java programmatic data format configuration_
 
 ```java
 JaxbDataFormat jaxbDataFormat = new JaxbDataFormat();

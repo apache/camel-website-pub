@@ -159,9 +159,36 @@ The above route will trigger once and load the `data.json` from file system and 
 
 You can also specify headers and variables using _multivalue_, where each header is prefixed with `header.<key>`. In the sample below we set 2 headers as follows: `foo=abc` and `bar=123`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("once:tick?body=world&header.foo=abc&header.bar=123")
-  .to("bean:myBean");
+    .to("bean:myBean");
+```
+
+```xml
+<route>
+  <from uri="once:tick?body=world&amp;header.foo=abc&amp;header.bar=123"/>
+  <to uri="bean:myBean"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: once:tick
+      parameters:
+        body: world
+        header.foo: abc
+        header.bar: "123"
+      steps:
+        - to:
+            uri: bean:myBean
 ```
 
 You can do the same for variables with `variable.<key>`.
@@ -204,9 +231,35 @@ This makes it possible to use groovy or simple language for setting the message 
 
 For example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("once:tick?body=language:groovy:file:src/test/resources/calc.groovy&variable.amount=123")
         .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="once:tick?body=language:groovy:file:src/test/resources/calc.groovy&amp;variable.amount=123"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: once:tick
+      parameters:
+        body: "language:groovy:file:src/test/resources/calc.groovy"
+        variable.amount: "123"
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 You must use `language:groovy:` as prefix when using languages. And you can combine this with loading from file. The `calc.groovy` file is as follows:

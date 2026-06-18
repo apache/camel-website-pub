@@ -193,6 +193,8 @@ Enum values:
 -   `listReplicationControllers`: this operation lists the RCs on a kubernetes cluster
     
 
+_Java-only: uses toF() for endpoint URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-replication-controllers:///?kubernetesClient=#kubernetesClient&operation=listReplicationControllers").
@@ -203,6 +205,8 @@ This operation returns a list of RCs from your cluster
 
 -   `listReplicationControllersByLabels`: this operation lists the RCs by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor with KubernetesConstants and HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -221,6 +225,8 @@ from("direct:listByLabels").process(new Processor() {
 This operation returns a list of RCs from your cluster using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Replication Controllers Consumer Example
+
+_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
 
 ```java
 fromF("kubernetes-replication-controllers://%s?oauthToken=%s", host, authToken)

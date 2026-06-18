@@ -515,38 +515,178 @@ Azure Key Vault component provides the following operation on the producer side:
 -   createSecret: this operation will create a secret in Azure Key Vault
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createSecret")
-    .setHeader(KeyVaultConstants.SECRET_NAME, "Test")
+    .setHeader("CamelAzureKeyVaultSecretName", constant("Test"))
     .setBody(constant("Test"))
-    .to("azure-key-vault://test123?clientId=RAW({{clientId}})&clientSecret=RAW({{clientSecret}})&tenantId=RAW({{tenantId}})")
+    .to("azure-key-vault://test123?clientId=RAW({{clientId}})&clientSecret=RAW({{clientSecret}})&tenantId=RAW({{tenantId}})");
+```
+
+```xml
+<route>
+  <from uri="direct:createSecret"/>
+  <setHeader name="CamelAzureKeyVaultSecretName">
+    <constant>Test</constant>
+  </setHeader>
+  <setBody>
+    <constant>Test</constant>
+  </setBody>
+  <to uri="azure-key-vault://test123?clientId=RAW({{clientId}})&amp;clientSecret=RAW({{clientSecret}})&amp;tenantId=RAW({{tenantId}})"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createSecret
+      steps:
+        - setHeader:
+            name: CamelAzureKeyVaultSecretName
+            constant: Test
+        - setBody:
+            constant: Test
+        - to:
+            uri: azure-key-vault://test123
+            parameters:
+              clientId: "RAW({{clientId}})"
+              clientSecret: "RAW({{clientSecret}})"
+              tenantId: "RAW({{tenantId}})"
 ```
 
 -   getSecret: this operation will get a secret from Azure Key Vault
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:getSecret")
-    .setHeader(KeyVaultConstants.SECRET_NAME, "Test")
-    .to("azure-key-vault://test123?clientId=RAW({{clientId}})&clientSecret=RAW({{clientSecret}})&tenantId=RAW({{tenantId}})&operation=getSecret")
+    .setHeader("CamelAzureKeyVaultSecretName", constant("Test"))
+    .to("azure-key-vault://test123?clientId=RAW({{clientId}})&clientSecret=RAW({{clientSecret}})&tenantId=RAW({{tenantId}})&operation=getSecret");
+```
+
+```xml
+<route>
+  <from uri="direct:getSecret"/>
+  <setHeader name="CamelAzureKeyVaultSecretName">
+    <constant>Test</constant>
+  </setHeader>
+  <to uri="azure-key-vault://test123?clientId=RAW({{clientId}})&amp;clientSecret=RAW({{clientSecret}})&amp;tenantId=RAW({{tenantId}})&amp;operation=getSecret"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:getSecret
+      steps:
+        - setHeader:
+            name: CamelAzureKeyVaultSecretName
+            constant: Test
+        - to:
+            uri: azure-key-vault://test123
+            parameters:
+              clientId: "RAW({{clientId}})"
+              clientSecret: "RAW({{clientSecret}})"
+              tenantId: "RAW({{tenantId}})"
+              operation: getSecret
 ```
 
 -   deleteSecret: this operation will delete a Secret from Azure Key Vault
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:deleteSecret")
-    .setHeader(KeyVaultConstants.SECRET_NAME, "Test")
-    .to("azure-key-vault://test123?clientId=RAW({{clientId}})&clientSecret=RAW({{clientSecret}})&tenantId=RAW({{tenantId}})&operation=deleteSecret")
+    .setHeader("CamelAzureKeyVaultSecretName", constant("Test"))
+    .to("azure-key-vault://test123?clientId=RAW({{clientId}})&clientSecret=RAW({{clientSecret}})&tenantId=RAW({{tenantId}})&operation=deleteSecret");
+```
+
+```xml
+<route>
+  <from uri="direct:deleteSecret"/>
+  <setHeader name="CamelAzureKeyVaultSecretName">
+    <constant>Test</constant>
+  </setHeader>
+  <to uri="azure-key-vault://test123?clientId=RAW({{clientId}})&amp;clientSecret=RAW({{clientSecret}})&amp;tenantId=RAW({{tenantId}})&amp;operation=deleteSecret"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:deleteSecret
+      steps:
+        - setHeader:
+            name: CamelAzureKeyVaultSecretName
+            constant: Test
+        - to:
+            uri: azure-key-vault://test123
+            parameters:
+              clientId: "RAW({{clientId}})"
+              clientSecret: "RAW({{clientSecret}})"
+              tenantId: "RAW({{tenantId}})"
+              operation: deleteSecret
 ```
 
 -   purgeDeletedSecret: this operation will purge a deleted Secret from Azure Key Vault
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:purgeDeletedSecret")
-    .setHeader(KeyVaultConstants.SECRET_NAME, "Test")
-    .to("azure-key-vault://test123?clientId=RAW({{clientId}})&clientSecret=RAW({{clientSecret}})&tenantId=RAW({{tenantId}})&operation=purgeDeletedSecret")
+    .setHeader("CamelAzureKeyVaultSecretName", constant("Test"))
+    .to("azure-key-vault://test123?clientId=RAW({{clientId}})&clientSecret=RAW({{clientSecret}})&tenantId=RAW({{tenantId}})&operation=purgeDeletedSecret");
+```
+
+```xml
+<route>
+  <from uri="direct:purgeDeletedSecret"/>
+  <setHeader name="CamelAzureKeyVaultSecretName">
+    <constant>Test</constant>
+  </setHeader>
+  <to uri="azure-key-vault://test123?clientId=RAW({{clientId}})&amp;clientSecret=RAW({{clientSecret}})&amp;tenantId=RAW({{tenantId}})&amp;operation=purgeDeletedSecret"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:purgeDeletedSecret
+      steps:
+        - setHeader:
+            name: CamelAzureKeyVaultSecretName
+            constant: Test
+        - to:
+            uri: azure-key-vault://test123
+            parameters:
+              clientId: "RAW({{clientId}})"
+              clientSecret: "RAW({{clientSecret}})"
+              tenantId: "RAW({{tenantId}})"
+              operation: purgeDeletedSecret
 ```
 
 ## Spring Boot Auto-Configuration

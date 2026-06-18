@@ -47,6 +47,8 @@ The MIME Multipart dataformat supports 5 options, which are listed below.
 
 ## Examples
 
+_Java-only: marshalling a message with attachments into MIME-Multipart format_
+
 ```java
 from(...).marshal().mimeMultipart()
 ```
@@ -75,6 +77,8 @@ AAECAwQFBgc=
 ------=\_Part\_0\_14180567.1447658227051--
 
 A message with the header Content-Type set to "text/plain" sent to the route
+
+_Java-only: marshalling with custom MIME-Multipart options_
 
 ```java
 from("...").marshal().mimeMultipart("related", true, true, "(included|x-.*)", true);

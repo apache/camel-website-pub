@@ -203,11 +203,36 @@ The Spring WebService component supports 7 message header(s), which is/are liste
 
 To call a web service at `http://foo.com/bar` simply define a route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:example").to("spring-ws:http://foo.com/bar")
+from("direct:example").to("spring-ws:http://foo.com/bar");
+```
+
+```xml
+<route>
+  <from uri="direct:example"/>
+  <to uri="spring-ws:http://foo.com/bar"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:example
+      steps:
+        - to:
+            uri: spring-ws:http://foo.com/bar
 ```
 
 And sent a message:
+
+_Java-only: ProducerTemplate test API_
 
 ```java
 template.requestBody("direct:example", "<foobar xmlns=\"http://foo.com\"><msg>test message</msg></foobar>");
@@ -219,33 +244,61 @@ Remember if it’s a SOAP service you’re calling, you don’t have to include 
 
 When a remote web service requires a SOAP action or use of the WS-Addressing standard, you define your route as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:example")
-.to("spring-ws:http://foo.com/bar?soapAction=http://foo.com&wsAddressingAction=http://bar.com")
+  .to("spring-ws:http://foo.com/bar?soapAction=http://foo.com&wsAddressingAction=http://bar.com");
+```
+
+```xml
+<route>
+  <from uri="direct:example"/>
+  <to uri="spring-ws:http://foo.com/bar?soapAction=http://foo.com&amp;wsAddressingAction=http://bar.com"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:example
+      steps:
+        - to:
+            uri: spring-ws:http://foo.com/bar
+            parameters:
+              soapAction: "http://foo.com"
+              wsAddressingAction: "http://bar.com"
 ```
 
 Optionally, you can override the endpoint options with header values:
 
+_Java-only: ProducerTemplate setting SOAP action header_
+
 ```java
 template.requestBodyAndHeader("direct:example",
-"<foobar xmlns=\"http://foo.com\"><msg>test message</msg></foobar>",
-SpringWebserviceConstants.SPRING_WS_SOAP_ACTION, "http://baz.com");
+    "<foobar xmlns=\"http://foo.com\"><msg>test message</msg></foobar>",
+    "CamelSpringWebserviceSoapAction", "http://baz.com");
 ```
 
 ### Using SOAP headers
 
 You can provide the SOAP header(s) as a Camel Message header when sending a message to a spring-ws endpoint, for example, given the following SOAP header in a String
 
+_Java-only: constructing SOAP header and setting it on the Exchange_
+
 ```java
 String body = ...
-String soapHeader = "<h:Header xmlns:h=\"http://www.webserviceX.NET/\"><h:MessageID>1234567890</h:MessageID><h:Nested><h:NestedID>1111</h:NestedID></h:Nested></h:Header>";
-```
+String soapHeader = "<h:Header xmlns:h=\"http://www.webserviceX.NET/\">"
+        + "<h:MessageID>1234567890</h:MessageID>"
+        + "<h:Nested><h:NestedID>1111</h:NestedID></h:Nested></h:Header>";
 
-We can set the body and header on the Camel Message as follows:
-
-```java
 exchange.getIn().setBody(body);
-exchange.getIn().setHeader(SpringWebserviceConstants.SPRING_WS_SOAP_HEADER, soapHeader);
+exchange.getIn().setHeader("CamelSpringWebserviceSoapHeader", soapHeader);
 ```
 
 And then send the Exchange to a `spring-ws` endpoint to call the Web Service.
@@ -258,9 +311,11 @@ For example, see this [unit test](https://github.com/apache/camel/blob/main/comp
 
 Spring WS Camel supports propagation of the headers and attachments into Spring-WS `WebServiceMessage` response. The endpoint will use so-called "hook" the `MessageFilter` (default implementation is provided by `BasicMessageFilter`) to propagate the exchange headers and attachments into `WebServiceMessage` response. Now you can use
 
+_Java-only: programmatic header and attachment manipulation_
+
 ```java
-exchange.getOut().getHeaders().put("myCustom","myHeaderValue")
-exchange.getIn().addAttachment("myAttachment", new DataHandler(...))
+exchange.getOut().getHeaders().put("myCustom", "myHeaderValue");
+exchange.getIn().addAttachment("myAttachment", new DataHandler(...));
 ```
 
 > **Note**
@@ -309,21 +364,51 @@ For more information, see [CAMEL-5724](https://issues.apache.org/jira/browse/CAM
 
 If you want to create your own `MessageFilter`, consider overriding the following methods in the default implementation of `MessageFilter` in class `BasicMessageFilter`:
 
-```java
-protected void doProcessSoapHeader(Message inOrOut, SoapMessage soapMessage)
-{your code /*no need to call super*/ }
+_Java-only: custom `MessageFilter` method overrides_
 
-protected void doProcessSoapAttachements(Message inOrOut, SoapMessage response)
-{ your code /*no need to call super*/ }
+```java
+protected void doProcessSoapHeader(Message inOrOut, SoapMessage soapMessage) {
+    // your code, no need to call super
+}
+
+protected void doProcessSoapAttachements(Message inOrOut, SoapMessage response) {
+    // your code, no need to call super
+}
 ```
 
 ### Using a custom MessageSender and MessageFactory
 
 A custom message sender or factory in the registry can be referenced like this:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:example")
-.to("spring-ws:http://foo.com/bar?messageFactory=#messageFactory&messageSender=#messageSender")
+    .to("spring-ws:http://foo.com/bar?messageFactory=#messageFactory&messageSender=#messageSender");
+```
+
+```xml
+<route>
+  <from uri="direct:example"/>
+  <to uri="spring-ws:http://foo.com/bar?messageFactory=#messageFactory&amp;messageSender=#messageSender"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:example
+      steps:
+        - to:
+            uri: spring-ws:http://foo.com/bar
+            parameters:
+              messageFactory: "#messageFactory"
+              messageSender: "#messageSender"
 ```
 
 Spring configuration:
@@ -389,28 +474,28 @@ The following route will receive all web service requests that have a root eleme
 
 ```java
 from("spring-ws:rootqname:{http://example.com/}GetFoo?endpointMapping=#endpointMapping")
-.convertBodyTo(String.class).to(mock:example)
+    .convertBodyTo(String.class).to("mock:example");
 ```
 
 The following route will receive web service requests containing the `http://example.com/GetFoo` SOAP action.
 
 ```java
 from("spring-ws:soapaction:http://example.com/GetFoo?endpointMapping=#endpointMapping")
-.convertBodyTo(String.class).to(mock:example)
+    .convertBodyTo(String.class).to("mock:example");
 ```
 
 The following route will receive all requests sent to `http://example.com/foobar`.
 
 ```java
 from("spring-ws:uri:http://example.com/foobar?endpointMapping=#endpointMapping")
-.convertBodyTo(String.class).to(mock:example)
+    .convertBodyTo(String.class).to("mock:example");
 ```
 
 The route below will receive requests that contain the element `<foobar>abc</foobar>` anywhere inside the message (and the default namespace).
 
 ```java
 from("spring-ws:xpathresult:abc?expression=//foobar&endpointMapping=#endpointMapping")
-.convertBodyTo(String.class).to(mock:example)
+    .convertBodyTo(String.class).to("mock:example");
 ```
 
 ### Alternative configuration, using existing endpoint mappings
@@ -449,6 +534,8 @@ Camel’s pluggable data formats offer support for pojo/xml marshalling using li
 
 When _accessing_ web services, you can marshal the request and unmarshal the response message:
 
+_Java-only: programmatic JAXB data format configuration with marshal/unmarshal_
+
 ```java
 JaxbDataFormat jaxb = new JaxbDataFormat(false);
 jaxb.setContextPath("com.example.model");
@@ -458,9 +545,13 @@ from("direct:example").marshal(jaxb).to("spring-ws:http://foo.com/bar").unmarsha
 
 Similarly, when _providing_ web services, you can unmarshal XML requests to POJO’s and marshal the response message back to XML:
 
+_Java-only: unmarshal incoming SOAP requests and marshal responses with JAXB_
+
 ```java
-from("spring-ws:rootqname:{http://example.com/}GetFoo?endpointMapping=#endpointMapping").unmarshal(jaxb)
-.to("mock:example").marshal(jaxb);
+from("spring-ws:rootqname:{http://example.com/}GetFoo?endpointMapping=#endpointMapping")
+    .unmarshal(jaxb)
+    .to("mock:example")
+    .marshal(jaxb);
 ```
 
 ## Spring Boot Auto-Configuration

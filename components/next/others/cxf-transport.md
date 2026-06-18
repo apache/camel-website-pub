@@ -39,6 +39,8 @@ You can use the following snippet in your applicationcontext if you want to conf
 
 Camel transport provides a setContext method that you could use to set the Camel context into the transport factory. If you want this factory take effect, you need to register the factory into the CXF bus. Here is a full example for you.
 
+_Java-only: programmatic CXF bus and transport factory setup_
+
 ```java
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
@@ -73,7 +75,7 @@ The elements used to configure a Camel transport endpoint are defined in the nam
 
 **Adding the Configuration Namespace**
 
-```java
+```xml
 <beans ...
        xmlns:camel="http://cxf.apache.org/transports/camel
        ...
@@ -89,7 +91,7 @@ You configure a Camel transport server endpoint using the `camel:destination` el
 
 **camel:destination Element**
 
-```java
+```xml
 ...
   <camel:destination name="{http://widgets/widgetvendor.net}widgetSOAPPort.http-destination>
     <camelContext id="context" xmlns="http://activemq.apache.org/camel/schema/spring">

@@ -303,6 +303,13 @@ The following headers are set on the exchange when consuming messages from Iggy:
 
 Here is a minimal route to read messages from an Iggy topic:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("iggy:my_topic?streamName=my_stream&consumerGroupName=my_consumer_group&host=localhost&port=8090")
     .log("Message received from Iggy : ${body}")
@@ -310,12 +317,71 @@ from("iggy:my_topic?streamName=my_stream&consumerGroupName=my_consumer_group&hos
     .log("    and offset ${headers[CamelIggyMessageOffset]}");
 ```
 
+```xml
+<route>
+  <from uri="iggy:my_topic?streamName=my_stream&amp;consumerGroupName=my_consumer_group&amp;host=localhost&amp;port=8090"/>
+  <log message="Message received from Iggy : ${body}"/>
+  <log message="    with id ${headers[CamelIggyMessageId]}"/>
+  <log message="    and offset ${headers[CamelIggyMessageOffset]}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: iggy:my_topic
+      parameters:
+        streamName: my_stream
+        consumerGroupName: my_consumer_group
+        host: localhost
+        port: 8090
+      steps:
+        - log:
+            message: "Message received from Iggy : ${body}"
+        - log:
+            message: "    with id ${headers[CamelIggyMessageId]}"
+        - log:
+            message: "    and offset ${headers[CamelIggyMessageOffset]}"
+```
+
 ### Producing messages to Iggy
 
 Here is a minimal route to produce messages to an Iggy topic:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .setBody(constant("Message from Camel"))
     .to("iggy:my_topic?streamName=my_stream&host=localhost&port=8090");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>Message from Camel</constant>
+  </setBody>
+  <to uri="iggy:my_topic?streamName=my_stream&amp;host=localhost&amp;port=8090"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: "Message from Camel"
+        - to:
+            uri: iggy:my_topic
+            parameters:
+              streamName: my_stream
+              host: localhost
+              port: 8090
 ```

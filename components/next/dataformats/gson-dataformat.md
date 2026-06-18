@@ -4,10 +4,37 @@
 
 Gson is a Data Format that uses the [Gson Library](https://github.com/google/gson)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  marshal().json(JsonLibrary.Gson).
-  to("mqseries:Another.Queue");
+from("activemq:My.Queue")
+    .marshal().json(JsonLibrary.Gson)
+    .to("mqseries:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <marshal><json library="Gson"/></marshal>
+  <to uri="mqseries:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - marshal:
+            json:
+              library: Gson
+        - to:
+            uri: mqseries:Another.Queue
 ```
 
 ## Gson Options

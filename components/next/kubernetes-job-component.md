@@ -142,6 +142,8 @@ The Kubernetes Job component supports 6 message header(s), which is/are listed b
 -   `listJob`: this operation lists the jobs on a kubernetes cluster
     
 
+_Java-only: uses toF() for endpoint URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-job:///?kubernetesClient=#kubernetesClient&operation=listJob").
@@ -152,6 +154,8 @@ This operation returns a list of jobs from your cluster
 
 -   `listJobByLabels`: this operation lists the jobs by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor with KubernetesConstants and HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -173,6 +177,8 @@ This operation returns a list of jobs from your cluster, using a label selector 
     
 
 We have a wonderful example of this operation thanks to [Emmerson Miranda](https://github.com/Emmerson-Miranda) from this [Java test](https://github.com/Emmerson-Miranda/camel/blob/master/camel3-cdi/cdi-k8s-pocs/src/main/java/edu/emmerson/camel/k8s/jobs/camel_k8s_jobs/KubernetesCreateJob.java)
+
+_Java-only: full RouteBuilder class with KubernetesConstants, lambda Processors, and programmatic JobSpec construction_
 
 ```java
 import java.util.ArrayList;

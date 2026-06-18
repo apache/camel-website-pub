@@ -184,6 +184,8 @@ See the following link for information about [LDAP Injection](https://cheatsheet
 
 Following on from the configuration above, the code sample below sends an LDAP request to filter search a group for a member. The Common Name is then extracted from the response.
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 ProducerTemplate template = exchange.getContext().createProducerTemplate();
 
@@ -210,6 +212,8 @@ If no specific filter is required (for example, you need to look up a single ent
 ### Binding using credentials
 
 A Camel end user donated this sample code he used to bind to the ldap server using credentials.
+
+_Java-only: Java programmatic CamelContext and LDAP context setup_
 
 ```java
 Properties props = new Properties();

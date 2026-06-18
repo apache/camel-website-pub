@@ -30,6 +30,8 @@ Include the `camel-opentelemetry` component in your POM, along with any specific
 
 To explicitly configure OpenTelemetry support, instantiate the `OpenTelemetryTracer` and initialize the camel context. You can optionally specify a `Tracer`, or alternatively it can be implicitly discovered using the `Registry`
 
+_Java-only: programmatic OpenTelemetryTracer configuration_
+
 ```java
 OpenTelemetryTracer otelTracer = new OpenTelemetryTracer();
 // By default, it uses the DefaultTracer, but you can override it with a specific OpenTelemetry Tracer implementation.
@@ -125,6 +127,8 @@ To have Spring Boot’s Actuator configure OpenTelemetry, you need to add `org.s
 
 You’ll probably want to configure at least one [SpanExporter](https://opentelemetry.io/docs/languages/java/sdk/#spanexporter) as they allow you to export your traces to various backends (e.g., Zipkin and Jaeger), or log them. For example, to export your traces to Jaeger using OTLP via gRPC, add `io.opentelemetry:opentelemetry-exporter-otlp` as a dependency to your project. To configure it, you can use the `management.otlp.tracing` properties or register a new `SpanExporter` bean yourself:
 
+_Java-only: Spring bean definition for SpanExporter_
+
 ```java
 @Bean
 public SpanExporter OtlpGrpcSpanExporter(@Value("${tracing.url}") String url) {
@@ -135,6 +139,8 @@ public SpanExporter OtlpGrpcSpanExporter(@Value("${tracing.url}") String url) {
 Spring Boot’s Actuator will take care of the wiring for you.
 
 Alternatively if you just want to log your traces in OTLP JSON format, add `io.opentelemetry:opentelemetry-exporter-logging-otlp` as a dependency to your project and also register a new `SpanExporter` bean:
+
+_Java-only: Spring bean definition for logging SpanExporter_
 
 ```java
 @Bean
@@ -156,6 +162,8 @@ In _rare_ circumstances, it may be desirable to apply advanced customizations to
 To do this, you can provide a custom implementation of `SpanCustomizer` and either set it explicitly on the `OpenTelemetryTracer`, or bind it to the Camel registry, where it will be automatically resolved by the tracer upon initialization.
 
 Note that care should be taken when configuring parents & links to avoid breaking the relationship between spans & traces.
+
+_Java-only: SpanCustomizer class definition_
 
 ```java
 public class MySpanCustomizer implements SpanCustomizer {

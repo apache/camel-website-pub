@@ -23,6 +23,8 @@ When this dependency is present, the OpenAPI validator is automatically discover
 
 To enable request validation on incoming HTTP requests, use `clientRequestValidation(true)` in the REST DSL and load the OpenAPI specification with `openApi()`:
 
+_Java-only: enabling client request validation with REST DSL and OpenAPI_
+
 ```java
 rest().clientRequestValidation(true)
     .openApi()
@@ -53,6 +55,8 @@ camel.rest.validation-levels[validation.response.body.missing] = WARN
 ```
 
 Or configure them in Java DSL:
+
+_Java-only: configuring validation levels programmatically_
 
 ```java
 restConfiguration()

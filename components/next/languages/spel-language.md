@@ -85,6 +85,8 @@ SpEL expressions need to be surrounded by `#{` `}` delimiters since expression t
 
 For example, if you construct the following route:
 
+_Java-only: static method import for spel expression_
+
 ```java
 from("direct:example")
     .setBody(spel("Hello #{request.body}! What a beautiful #{request.headers['dayOrNight']}"))
@@ -92,6 +94,8 @@ from("direct:example")
 ```
 
 In the route above, notice `spel` is a static method which we need to import from `org.apache.camel.language.spel.SpelExpression.spel`, as we use `spel` as an Expression passed in as a parameter to the `setBody` method. Though if we use the fluent API, we can do this instead:
+
+_Java-only: fluent API for spel expression_
 
 ```java
 from("direct:example")
@@ -102,6 +106,8 @@ from("direct:example")
 Notice we now use the `spel` method from the `setBody()` method. And this does not require us to statically import the `spel` method.
 
 Then we send a message with the string "World" in the body, and a header `dayOrNight` with value `day`:
+
+_Java-only: ProducerTemplate usage_
 
 ```java
 template.sendBodyAndHeader("direct:example", "World", "dayOrNight", "day");
@@ -120,6 +126,8 @@ You can reference beans defined in the [Registry](../../../manual/registry.md) i
 ## Loading script from external resource
 
 You can externalize the script and have Apache Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`. This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
+
+_Java-only: fluent API for loading SpEL from resource_
 
 ```java
 .setHeader("myHeader").spel("resource:classpath:myspel.txt")

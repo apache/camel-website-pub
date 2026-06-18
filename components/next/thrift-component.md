@@ -192,6 +192,8 @@ The Thrift component supports 1 message header(s), which is/are listed below:
 
 Parameters in the called procedure must be passed as a list of objects inside the message body. The primitives are converted from the objects on the fly. To correctly find the corresponding method, all types must be transmitted regardless of the values. Please see an example below, how to pass different parameters to the method with the Camel body:
 
+_Java-only: passing different parameter types in the Thrift method request body_
+
 ```java
 List requestBody = new ArrayList();
 

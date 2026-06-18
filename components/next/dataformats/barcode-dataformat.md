@@ -104,12 +104,16 @@ First, you have to initialize the barcode data format class. You can use the def
 | encoding | UTF-8 |
 | barcode format (BarcodeFormat) | QR-Code |
 
+_Java-only: Java programmatic data format instantiation_
+
 ```java
 // QR-Code default
 DataFormat code = new BarcodeDataFormat();
 ```
 
 If you want to use zxing hints, you can use the 'addToHintMap' method of your BarcodeDataFormat instance:
+
+_Java-only: Java data format configuration API_
 
 ```java
 code.addToHintMap(DecodeHintType.TRY_HARDER, Boolean.true);
@@ -119,6 +123,8 @@ For possible hints, please consult the xzing documentation.
 
 ### Marshalling
 
+_Java-only: route using Java data format variable_
+
 ```java
 from("direct://code")
   .marshal(code)
@@ -126,6 +132,8 @@ from("direct://code")
 ```
 
 You can call the route from a test class with:
+
+_Java-only: Java test API (ProducerTemplate)_
 
 ```java
 template.sendBody("direct://code", "This is a testmessage!");
@@ -138,6 +146,8 @@ You should find inside the 'barcode\_out' folder this image:
 ### Unmarshalling
 
 The unmarshaller is generic. For unmarshalling, you can use any BarcodeDataFormat instance. If you’ve two instances, one for (generating) QR-Code and one for PDF417, it doesn’t matter which one will be used.
+
+_Java-only: route using Java data format variable_
 
 ```java
 from("file://barcode_in?noop=true")

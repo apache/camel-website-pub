@@ -38,11 +38,41 @@ Enum values:
 
 It’s possible to parse JSON message to convert it to the Thrift format and serialize it back using native util converter. To use this option, set contentTypeFormat value to 'json' or call thrift with second parameter. If the default instance is not specified, always use the native binary Thrift format. The simple JSON format is write-only (marshal) and produces a simple output format suitable for parsing by scripting languages. The sample code shows below:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:marshal")
     .unmarshal()
     .thrift("org.apache.camel.dataformat.thrift.generated.Work", "json")
     .to("mock:reverse");
+```
+
+```xml
+<route>
+  <from uri="direct:marshal"/>
+  <unmarshal>
+    <thrift instanceClass="org.apache.camel.dataformat.thrift.generated.Work" contentTypeFormat="json"/>
+  </unmarshal>
+  <to uri="mock:reverse"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:marshal
+      steps:
+        - unmarshal:
+            thrift:
+              instanceClass: org.apache.camel.dataformat.thrift.generated.Work
+              contentTypeFormat: json
+        - to:
+            uri: mock:reverse
 ```
 
 ## Thrift overview
@@ -87,23 +117,27 @@ This will generate separate Java class for each type defined in .thrift file, i.
 
 You can use create the ThriftDataFormat instance and pass it to Camel DataFormat marshal and unmarshal API like this.
 
-```java
-   ThriftDataFormat format = new ThriftDataFormat(new Work());
+_Java-only: programmatic ThriftDataFormat instance_
 
-   from("direct:in").marshal(format);
-   from("direct:back").unmarshal(format).to("mock:reverse");
+```java
+ThriftDataFormat format = new ThriftDataFormat(new Work());
+
+from("direct:in").marshal(format);
+from("direct:back").unmarshal(format).to("mock:reverse");
 ```
 
 Or use the DSL thrift() passing the unmarshal default instance or default instance class name like this.
 
-```java
-   // You don't need to specify the default instance for the thrift marshaling
-   from("direct:marshal").marshal().thrift();
-   from("direct:unmarshalA").unmarshal()
-       .thrift("org.apache.camel.dataformat.thrift.generated.Work")
-       .to("mock:reverse");
+_Java-only: DSL thrift() with class name and instance parameters_
 
-   from("direct:unmarshalB").unmarshal().thrift(new Work()).to("mock:reverse");
+```java
+// You don't need to specify the default instance for the thrift marshaling
+from("direct:marshal").marshal().thrift();
+from("direct:unmarshalA").unmarshal()
+    .thrift("org.apache.camel.dataformat.thrift.generated.Work")
+    .to("mock:reverse");
+
+from("direct:unmarshalB").unmarshal().thrift(new Work()).to("mock:reverse");
 ```
 
 The following example shows how to use Thrift to unmarshal:

@@ -135,6 +135,8 @@ Assumed we have a java bean with the following annotations
 
 **Car.java**
 
+_Java-only: Java Bean with validation annotations_
+
 ```java
 public class Car {
 
@@ -153,6 +155,8 @@ and an interface definition for our custom validation group
 
 **OptionalChecks.java**
 
+_Java-only: custom validation group interface_
+
 ```java
 public interface OptionalChecks {
 }
@@ -160,23 +164,79 @@ public interface OptionalChecks {
 
 with the following Camel route, only the **@NotNull** constraints on the attributes `manufacturer` and `licensePlate` will be validated (Camel uses the default group `jakarta.validation.groups.Default`).
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-.to("bean-validator://x")
-.to("mock:end")
+    .to("bean-validator://x")
+    .to("mock:end");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="bean-validator://x"/>
+  <to uri="mock:end"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: bean-validator://x
+        - to:
+            uri: mock:end
 ```
 
 If you want to check the constraints from the group `OptionalChecks`, you have to define the route like this
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-.to("bean-validator://x?group=OptionalChecks")
-.to("mock:end")
+    .to("bean-validator://x?group=OptionalChecks")
+    .to("mock:end");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="bean-validator://x?group=OptionalChecks"/>
+  <to uri="mock:end"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: bean-validator://x
+            parameters:
+              group: OptionalChecks
+        - to:
+            uri: mock:end
 ```
 
 If you want to check the constraints from both groups, you have to define a new interface first:
 
 **AllChecks.java**
+
+_Java-only: combined validation group interface using @GroupSequence_
 
 ```java
 @GroupSequence({Default.class, OptionalChecks.class})
@@ -186,10 +246,38 @@ public interface AllChecks {
 
 And then your route definition should look like this:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-.to("bean-validator://x?group=AllChecks")
-.to("mock:end")
+    .to("bean-validator://x?group=AllChecks")
+    .to("mock:end");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="bean-validator://x?group=AllChecks"/>
+  <to uri="mock:end"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: bean-validator://x
+            parameters:
+              group: AllChecks
+        - to:
+            uri: mock:end
 ```
 
 And if you have to provide your own message interpolator, traversable resolver and constraint validator factory, you have to write a route like this:

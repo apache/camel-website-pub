@@ -234,11 +234,43 @@ Metric name defined in URI can be overridden by using header with name `CamelMet
 
 For example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:in")
-    .setHeader(MetricsConstants.HEADER_METRIC_NAME, constant("new.name"))
+    .setHeader("CamelMetricsName").constant("new.name")
     .to("metrics:counter:name.not.used")
     .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMetricsName">
+    <constant>new.name</constant>
+  </setHeader>
+  <to uri="metrics:counter:name.not.used"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMetricsName
+            constant: new.name
+        - to:
+            uri: metrics:counter:name.not.used
+        - to:
+            uri: direct:out
 ```
 
 will update counter with name `new.name` instead of `name.not.used`.
@@ -259,12 +291,47 @@ metrics:counter:metricname\[?options\]
 
 If neither `increment` or `decrement` is defined then the value of the counter will be incremented by one. If `increment` and `decrement` are both defined only increment operation is called.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // update counter simple.counter by 7
 from("direct:in")
     .to("metrics:counter:simple.counter?increment=7")
     .to("direct:out");
 ```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:counter:simple.counter?increment=7"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:counter:simple.counter
+            parameters:
+              increment: 7
+        - to:
+            uri: direct:out
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 // increment counter simple.counter by 1
@@ -273,11 +340,58 @@ from("direct:in")
     .to("direct:out");
 ```
 
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:counter:simple.counter"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:counter:simple.counter
+        - to:
+            uri: direct:out
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // decrement counter simple.counter by 3
 from("direct:in")
     .to("metrics:counter:simple.counter?decrement=3")
     .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:counter:simple.counter?decrement=3"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:counter:simple.counter
+            parameters:
+              decrement: 3
+        - to:
+            uri: direct:out
 ```
 
 #### Headers
@@ -290,20 +404,86 @@ Message headers can be used to override `increment` and `decrement` values speci
 | CamelMetricsCounterIncrement | Override increment value in URI | Long |
 | CamelMetricsCounterDecrement | Override decrement value in URI | Long |
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // update counter simple.counter by 417
 from("direct:in")
-    .setHeader(MetricsConstants.HEADER_COUNTER_INCREMENT, constant(417L))
+    .setHeader("CamelMetricsCounterIncrement").constant(417L)
     .to("metrics:counter:simple.counter?increment=7")
     .to("direct:out");
 ```
 
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMetricsCounterIncrement">
+    <constant resultType="java.lang.Long">417</constant>
+  </setHeader>
+  <to uri="metrics:counter:simple.counter?increment=7"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMetricsCounterIncrement
+            constant: 417
+        - to:
+            uri: metrics:counter:simple.counter
+            parameters:
+              increment: 7
+        - to:
+            uri: direct:out
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // updates counter using simple language to evaluate body.length
 from("direct:in")
-    .setHeader(MetricsConstants.HEADER_COUNTER_INCREMENT, simple("${body.length}"))
+    .setHeader("CamelMetricsCounterIncrement", simple("${body.length}"))
     .to("metrics:counter:body.length")
     .to("mock:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMetricsCounterIncrement">
+    <simple>${body.length}</simple>
+  </setHeader>
+  <to uri="metrics:counter:body.length"/>
+  <to uri="mock:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMetricsCounterIncrement
+            simple: "${body.length}"
+        - to:
+            uri: metrics:counter:body.length
+        - to:
+            uri: mock:out
 ```
 
 ### Metric type histogram
@@ -319,6 +499,13 @@ metrics:histogram:metricname\[?options\]
 
 If `value` is not set, nothing is added to histogram and warning is logged.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // adds value 9923 to simple.histogram
 from("direct:in")
@@ -326,11 +513,58 @@ from("direct:in")
     .to("direct:out");
 ```
 
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:histogram:simple.histogram?value=9923"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:histogram:simple.histogram
+            parameters:
+              value: 9923
+        - to:
+            uri: direct:out
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // nothing is added to simple.histogram; warning is logged
 from("direct:in")
     .to("metrics:histogram:simple.histogram")
     .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:histogram:simple.histogram"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:histogram:simple.histogram
+        - to:
+            uri: direct:out
 ```
 
 #### Headers
@@ -363,6 +597,13 @@ metrics:meter:metricname\[?options\]
 
 If `mark` is not set then `meter.mark()` is called without argument.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // marks simple.meter without value
 from("direct:in")
@@ -370,11 +611,58 @@ from("direct:in")
     .to("direct:out");
 ```
 
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:simple.meter"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:simple.meter
+        - to:
+            uri: direct:out
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // marks simple.meter with value 81
 from("direct:in")
     .to("metrics:meter:simple.meter?mark=81")
     .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:meter:simple.meter?mark=81"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:meter:simple.meter
+            parameters:
+              mark: 81
+        - to:
+            uri: direct:out
 ```
 
 #### Headers
@@ -407,12 +695,45 @@ metrics:timer:metricname\[?options\]
 
 If no `action` or invalid value is provided then warning is logged without any timer update. If action `start` is called on already running timer or `stop` is called on not running timer then nothing is updated and warning is logged.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // measure time taken by route "calculate"
 from("direct:in")
     .to("metrics:timer:simple.timer?action=start")
     .to("direct:calculate")
     .to("metrics:timer:simple.timer?action=stop");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:timer:simple.timer?action=start"/>
+  <to uri="direct:calculate"/>
+  <to uri="metrics:timer:simple.timer?action=stop"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:timer:simple.timer
+            parameters:
+              action: start
+        - to:
+            uri: direct:calculate
+        - to:
+            uri: metrics:timer:simple.timer
+            parameters:
+              action: stop
 ```
 
 `TimerContext` objects are stored as Exchange properties between different Metrics component calls.
@@ -426,12 +747,44 @@ Message header can be used to override action value specified in Metrics compone
 | --- | --- | --- |
 | CamelMetricsTimerAction | Override timer action in URI | `org.apache.camel.component.metrics.MetricsTimerAction` |
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // sets timer action using header
 from("direct:in")
-    .setHeader(MetricsConstants.HEADER_TIMER_ACTION, MetricsTimerAction.start)
+    .setHeader("CamelMetricsTimerAction").constant("start")
     .to("metrics:timer:simple.timer")
     .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMetricsTimerAction">
+    <constant>start</constant>
+  </setHeader>
+  <to uri="metrics:timer:simple.timer"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMetricsTimerAction
+            constant: start
+        - to:
+            uri: metrics:timer:simple.timer
+        - to:
+            uri: direct:out
 ```
 
 ### Metric type gauge
@@ -447,11 +800,39 @@ metrics:gauge:metricname\[?options\]
 
 If `subject` is not defined it’s simply ignored, i.e., the gauge is not registered.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // update gauge "simple.gauge" by a bean "mySubjectBean"
 from("direct:in")
     .to("metrics:gauge:simple.gauge?subject=#mySubjectBean")
     .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="metrics:gauge:simple.gauge?subject=#mySubjectBean"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: metrics:gauge:simple.gauge
+            parameters:
+              subject: "#mySubjectBean"
+        - to:
+            uri: direct:out
 ```
 
 #### Headers
@@ -463,12 +844,46 @@ Message headers can be used to override `subject` values specified in Metrics co
 | --- | --- | --- |
 | CamelMetricsGaugeSubject | Override subject value in URI | Object |
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // update gauge simple.gauge by a String literal "myUpdatedSubject"
 from("direct:in")
-    .setHeader(MetricsConstants.HEADER_GAUGE_SUBJECT, constant("myUpdatedSubject"))
+    .setHeader("CamelMetricsGaugeSubject").constant("myUpdatedSubject")
     .to("metrics:counter:simple.gauge?subject=#mySubjectBean")
     .to("direct:out");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMetricsGaugeSubject">
+    <constant>myUpdatedSubject</constant>
+  </setHeader>
+  <to uri="metrics:counter:simple.gauge?subject=#mySubjectBean"/>
+  <to uri="direct:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMetricsGaugeSubject
+            constant: myUpdatedSubject
+        - to:
+            uri: metrics:counter:simple.gauge
+            parameters:
+              subject: "#mySubjectBean"
+        - to:
+            uri: direct:out
 ```
 
 ### MetricsRoutePolicyFactory

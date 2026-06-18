@@ -558,45 +558,200 @@ Get your account info
 
 ```java
 from("direct:getAccountInfo")
-    .setHeader(DigitalOceanConstants.OPERATION, constant(DigitalOceanOperations.get))
+    .setHeader("CamelDigitalOceanOperation", constant(DigitalOceanOperations.get))
     .to("digitalocean:account?oAuthToken=XXXXXX")
 ```
 
 Create a droplet
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createDroplet")
-    .setHeader(DigitalOceanConstants.OPERATION, constant("create"))
-    .setHeader(DigitalOceanHeaders.NAME, constant("myDroplet"))
-    .setHeader(DigitalOceanHeaders.REGION, constant("fra1"))
-    .setHeader(DigitalOceanHeaders.DROPLET_IMAGE, constant("ubuntu-14-04-x64"))
-    .setHeader(DigitalOceanHeaders.DROPLET_SIZE, constant("512mb"))
+    .setHeader("CamelDigitalOceanOperation", constant("create"))
+    .setHeader("CamelDigitalOceanName", constant("myDroplet"))
+    .setHeader("CamelDigitalOceanRegion", constant("fra1"))
+    .setHeader("CamelDigitalOceanDropletImage", constant("ubuntu-14-04-x64"))
+    .setHeader("CamelDigitalOceanDropletSize", constant("512mb"))
     .to("digitalocean:droplet?oAuthToken=XXXXXX")
+```
+
+```xml
+<route>
+  <from uri="direct:createDroplet"/>
+  <setHeader name="CamelDigitalOceanOperation">
+    <constant>create</constant>
+  </setHeader>
+  <setHeader name="CamelDigitalOceanName">
+    <constant>myDroplet</constant>
+  </setHeader>
+  <setHeader name="CamelDigitalOceanRegion">
+    <constant>fra1</constant>
+  </setHeader>
+  <setHeader name="CamelDigitalOceanDropletImage">
+    <constant>ubuntu-14-04-x64</constant>
+  </setHeader>
+  <setHeader name="CamelDigitalOceanDropletSize">
+    <constant>512mb</constant>
+  </setHeader>
+  <to uri="digitalocean:droplet?oAuthToken=XXXXXX"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createDroplet
+      steps:
+        - setHeader:
+            name: CamelDigitalOceanOperation
+            constant: create
+        - setHeader:
+            name: CamelDigitalOceanName
+            constant: myDroplet
+        - setHeader:
+            name: CamelDigitalOceanRegion
+            constant: fra1
+        - setHeader:
+            name: CamelDigitalOceanDropletImage
+            constant: ubuntu-14-04-x64
+        - setHeader:
+            name: CamelDigitalOceanDropletSize
+            constant: 512mb
+        - to:
+            uri: digitalocean:droplet
+            parameters:
+              oAuthToken: XXXXXX
 ```
 
 List all your droplets
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:getDroplets")
-    .setHeader(DigitalOceanConstants.OPERATION, constant("list"))
+    .setHeader("CamelDigitalOceanOperation", constant("list"))
     .to("digitalocean:droplets?oAuthToken=XXXXXX")
+```
+
+```xml
+<route>
+  <from uri="direct:getDroplets"/>
+  <setHeader name="CamelDigitalOceanOperation">
+    <constant>list</constant>
+  </setHeader>
+  <to uri="digitalocean:droplets?oAuthToken=XXXXXX"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:getDroplets
+      steps:
+        - setHeader:
+            name: CamelDigitalOceanOperation
+            constant: list
+        - to:
+            uri: digitalocean:droplets
+            parameters:
+              oAuthToken: XXXXXX
 ```
 
 Retrieve information for the Droplet (dropletId = 34772987)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:getDroplet")
-    .setHeader(DigitalOceanConstants.OPERATION, constant("get"))
-    .setHeader(DigitalOceanConstants.ID, 34772987)
+    .setHeader("CamelDigitalOceanOperation", constant("get"))
+    .setHeader("CamelDigitalOceanId", constant(34772987))
     .to("digitalocean:droplet?oAuthToken=XXXXXX")
+```
+
+```xml
+<route>
+  <from uri="direct:getDroplet"/>
+  <setHeader name="CamelDigitalOceanOperation">
+    <constant>get</constant>
+  </setHeader>
+  <setHeader name="CamelDigitalOceanId">
+    <constant resultType="java.lang.Integer">34772987</constant>
+  </setHeader>
+  <to uri="digitalocean:droplet?oAuthToken=XXXXXX"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:getDroplet
+      steps:
+        - setHeader:
+            name: CamelDigitalOceanOperation
+            constant: get
+        - setHeader:
+            name: CamelDigitalOceanId
+            constant: 34772987
+        - to:
+            uri: digitalocean:droplet
+            parameters:
+              oAuthToken: XXXXXX
 ```
 
 Shutdown information for the Droplet (dropletId = 34772987)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:shutdown")
-    .setHeader(DigitalOceanConstants.ID, 34772987)
+    .setHeader("CamelDigitalOceanId", constant(34772987))
     .to("digitalocean:droplet?operation=shutdown&oAuthToken=XXXXXX")
+```
+
+```xml
+<route>
+  <from uri="direct:shutdown"/>
+  <setHeader name="CamelDigitalOceanId">
+    <constant resultType="java.lang.Integer">34772987</constant>
+  </setHeader>
+  <to uri="digitalocean:droplet?operation=shutdown&amp;oAuthToken=XXXXXX"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:shutdown
+      steps:
+        - setHeader:
+            name: CamelDigitalOceanId
+            constant: 34772987
+        - to:
+            uri: digitalocean:droplet
+            parameters:
+              operation: shutdown
+              oAuthToken: XXXXXX
 ```
 
 ## Spring Boot Auto-Configuration

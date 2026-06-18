@@ -436,6 +436,8 @@ Camel-AWS Translate component provides the following operation on the producer s
 
 ### Translate Text example
 
+_Java-only: uses Java constants for header names and enum values_
+
 ```java
 from("direct:start")
   .setHeader(TranslateConstants.SOURCE_LANGUAGE, TranslateLanguageEnum.ITALIAN)
@@ -449,6 +451,8 @@ As a result, you’ll get an exchange containing the translated text.
 ### Using a POJO as body
 
 Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS Translate, the only operation available is TranslateText, so you can do something like:
+
+_Java-only: uses AWS SDK POJO request builder as message body_
 
 ```java
 from("direct:start")

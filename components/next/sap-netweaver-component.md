@@ -134,13 +134,15 @@ https://sapes4.sapdevcenter.com/sap/opu/odata/IWFND/RMTSAMPLEFLIGHT
 
 And we want to execute the following command
 
-```java
+```text
 FlightCollection(carrid='AA',connid='0017',fldate=datetime'2016-04-20T00%3A00%3A00')
 ```
 
 To get flight details for the given flight. The command syntax is in [MS ADO.Net Data Service](http://msdn.microsoft.com/en-us/library/cc956153.aspx) format.
 
 We have the following Camel route
+
+_Java-only: route using Java constants and toF() string formatting_
 
 ```java
 from("direct:start")
@@ -152,11 +154,13 @@ from("direct:start")
 
 Where `url`, `username`, `password` and `command` are defined as:
 
+_Java-only: Java field definitions_
+
 ```java
-    private String username = "P1909969254";
-    private String password = "TODO";
-    private String url = "https://sapes4.sapdevcenter.com/sap/opu/odata/IWFND/RMTSAMPLEFLIGHT";
-    private String command = "FlightCollection(carrid='AA',connid='0017',fldate=datetime'2016-04-20T00%3A00%3A00')";
+private String username = "P1909969254";
+private String password = "TODO";
+private String url = "https://sapes4.sapdevcenter.com/sap/opu/odata/IWFND/RMTSAMPLEFLIGHT";
+private String command = "FlightCollection(carrid='AA',connid='0017',fldate=datetime'2016-04-20T00%3A00%3A00')";
 ```
 
 The password is invalid. You would need to create an account at SAP first to run the demo.

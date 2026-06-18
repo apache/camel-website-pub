@@ -190,6 +190,8 @@ Enum values:
 -   `listPods`: this operation lists the pods on a kubernetes cluster
     
 
+_Java-only: uses toF() for endpoint URI formatting_
+
 ```java
 from("direct:list").
     toF("kubernetes-pods:///?kubernetesClient=#kubernetesClient&operation=listPods").
@@ -200,6 +202,8 @@ This operation returns a list of pods from your cluster
 
 -   `listPodsByLabels`: this operation lists the pods by labels on a kubernetes cluster
     
+
+_Java-only: uses inline Processor with KubernetesConstants and HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -218,6 +222,8 @@ from("direct:listByLabels").process(new Processor() {
 This operation returns a list of pods from your cluster using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Pods Consumer Example
+
+_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
 
 ```java
 fromF("kubernetes-pods://%s?oauthToken=%s", host, authToken)

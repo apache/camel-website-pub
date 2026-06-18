@@ -84,6 +84,8 @@ from("activemq:topic:OrdersTopic")
 
 The bean could be implemented as follows:
 
+_Java-only: bean class implementation with Exchange parameter_
+
 ```java
 public class MyBean {
   public boolean isGoldCustomer(Exchange exchange) {
@@ -94,6 +96,8 @@ public class MyBean {
 
 How this method uses `Exchange` in the method signature. You would often not do that, and use non-Camel types. For example, by using `String` then Camel will automatically convert the message body to this type when calling the method:
 
+_Java-only: bean method with automatic type conversion_
+
 ```java
 public boolean isGoldCustomer(String body) {...}
 ```
@@ -101,6 +105,8 @@ public boolean isGoldCustomer(String body) {...}
 ### Using Annotations for bean integration
 
 You can also use the [Bean Integration](../../../manual/bean-integration.md) annotations, such as `@Header`, `@Body`, `@Variable` etc
+
+_Java-only: using bean integration annotations for parameter binding_
 
 ```java
 public boolean isGoldCustomer(@Header(name = "foo") Integer fooHeader) {...}
@@ -114,6 +120,8 @@ The Bean Method Language also supports invoking beans that are not registered in
 
 Camel can instantiate the bean of a given type and invoke the method or invoke the method on an already existing instance.
 
+_Java-only: invoking a bean by class type_
+
 ```java
 from("activemq:topic:OrdersTopic")
   .filter().method(MyBean.class, "isGoldCustomer")
@@ -121,6 +129,8 @@ from("activemq:topic:OrdersTopic")
 ```
 
 The first parameter can also be an existing instance of a Bean such as:
+
+_Java-only: invoking a method on an existing bean instance_
 
 ```java
 private MyBean my = ...;

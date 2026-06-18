@@ -1712,19 +1712,69 @@ The Box component supports three different types of authenticated connections.
 
 The following route uploads new files to the user’s root folder:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file:...")
     .to("box://files/upload/inBody=fileUploadRequest");
 ```
 
+```xml
+<route>
+    <from uri="file:..."/>
+    <to uri="box://files/upload/inBody=fileUploadRequest"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:...
+    steps:
+      - to:
+          uri: box://files/upload/inBody=fileUploadRequest
+```
+
 The following route polls user’s account for updates:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("box://events/listen?startingPosition=-1")
     .to("bean:blah");
 ```
 
+```xml
+<route>
+    <from uri="box://events/listen?startingPosition=-1"/>
+    <to uri="bean:blah"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: box://events/listen
+      parameters:
+        startingPosition: -1
+    steps:
+      - to:
+          uri: bean:blah
+```
+
 The following route uses a producer with dynamic header options. The **fileId** property has the Box file id and the **output** property has the output stream of the file contents, so they are assigned to the **CamelBox.fileId** header and **CamelBox.output** header respectively as follows:
+
+_Java-only: uses header() expression to set dynamic headers_
 
 ```java
 from("direct:foo")

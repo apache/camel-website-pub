@@ -323,6 +323,8 @@ The Ehcache component supports 8 message header(s), which is/are listed below:
 
 ### Ehcache based idempotent repository example:
 
+_Java-only: programmatic CacheManager and idempotent repository configuration_
+
 ```java
 CacheManager manager = CacheManagerBuilder.newCacheManager(new XmlConfiguration("ehcache.xml"));
 EhcacheIdempotentRepository repo = new EhcacheIdempotentRepository(manager, "idempotent-cache");
@@ -333,6 +335,8 @@ from("direct:in")
 ```
 
 ### Ehcache based aggregation repository example:
+
+_Java-only: full test class with aggregation repository configuration_
 
 ```java
 public class EhcacheAggregationRepositoryRoutesTest extends CamelTestSupport {

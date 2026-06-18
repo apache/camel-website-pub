@@ -145,27 +145,109 @@ Camel provides two headers by which you can define a different resource location
 
 For example, you could use something like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-to("mustache:com/acme/MyResponse.mustache");
+from("activemq:My.Queue")
+    .to("mustache:com/acme/MyResponse.mustache");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="mustache:com/acme/MyResponse.mustache"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: mustache:com/acme/MyResponse.mustache
 ```
 
 To use a Mustache template to formulate a response for a message for InOut message exchanges (where there is a `JMSReplyTo` header).
 
 If you want to use InOnly and consume the message and send it to another destination, you could use:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-to("mustache:com/acme/MyResponse.mustache").
-to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("mustache:com/acme/MyResponse.mustache")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="mustache:com/acme/MyResponse.mustache"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: mustache:com/acme/MyResponse.mustache
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 It’s possible to specify what template the component should use dynamically via a header, so for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-setHeader(MustacheConstants.MUSTACHE_RESOURCE_URI).constant("path/to/my/template.mustache").
-to("mustache:dummy?allowTemplateFromHeader=true");
+from("direct:in")
+    .setHeader("MustacheResourceUri").constant("path/to/my/template.mustache")
+    .to("mustache:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="MustacheResourceUri">
+    <constant>path/to/my/template.mustache</constant>
+  </setHeader>
+  <to uri="mustache:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: MustacheResourceUri
+            expression:
+              constant:
+                expression: path/to/my/template.mustache
+        - to:
+            uri: mustache:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 ### The Email Example

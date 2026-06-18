@@ -317,6 +317,8 @@ If more than single instance of the `TransactionStrategy` is found, Camel will l
 
 For consuming only selected entities, you can use the `namedQuery` URI query option. First, you have to define the named query in the JPA Entity class:
 
+_Java-only: JPA entity class definition with @NamedQuery annotation_
+
 ```java
 @Entity
 @NamedQuery(name = "step1", query = "select x from MultiSteps x where x.step = 1")
@@ -327,27 +329,102 @@ public class MultiSteps {
 
 After that, you can define a consumer uri like this one:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jpa://org.apache.camel.examples.MultiSteps?namedQuery=step1")
-.to("bean:myBusinessLogic");
+    .to("bean:myBusinessLogic");
+```
+
+```xml
+<route>
+  <from uri="jpa://org.apache.camel.examples.MultiSteps?namedQuery=step1"/>
+  <to uri="bean:myBusinessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jpa://org.apache.camel.examples.MultiSteps
+      parameters:
+        namedQuery: step1
+      steps:
+        - to:
+            uri: bean:myBusinessLogic
 ```
 
 ### Using a consumer with a query
 
 For consuming only selected entities, you can use the `query` URI query option. You only have to define the query option:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jpa://org.apache.camel.examples.MultiSteps?query=select o from org.apache.camel.examples.MultiSteps o where o.step = 1")
-.to("bean:myBusinessLogic");
+    .to("bean:myBusinessLogic");
+```
+
+```xml
+<route>
+    <from uri="jpa://org.apache.camel.examples.MultiSteps?query=select o from org.apache.camel.examples.MultiSteps o where o.step = 1"/>
+    <to uri="bean:myBusinessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jpa://org.apache.camel.examples.MultiSteps
+      parameters:
+        query: "select o from org.apache.camel.examples.MultiSteps o where o.step = 1"
+    steps:
+      - to:
+          uri: bean:myBusinessLogic
 ```
 
 ### Using a consumer with a native query
 
 For consuming only selected entities, you can use the `nativeQuery` URI query option. You only have to define the native query option:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("jpa://org.apache.camel.examples.MultiSteps?nativeQuery=select * from MultiSteps where step = 1")
-.to("bean:myBusinessLogic");
+    .to("bean:myBusinessLogic");
+```
+
+```xml
+<route>
+    <from uri="jpa://org.apache.camel.examples.MultiSteps?nativeQuery=select * from MultiSteps where step = 1"/>
+    <to uri="bean:myBusinessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jpa://org.apache.camel.examples.MultiSteps
+      parameters:
+        nativeQuery: "select * from MultiSteps where step = 1"
+    steps:
+      - to:
+          uri: bean:myBusinessLogic
 ```
 
 If you use the native query option, you will receive an object array in the message body.
@@ -355,6 +432,8 @@ If you use the native query option, you will receive an object array in the mess
 ### Using a producer with a named query
 
 For retrieving selected entities or execute bulk update/delete, you can use the `namedQuery` URI query option. First, you have to define the named query in the JPA Entity class:
+
+_Java-only: JPA entity class definition with @NamedQuery annotation_
 
 ```java
 @Entity
@@ -366,9 +445,34 @@ public class MultiSteps {
 
 After that, you can define a producer uri like this one:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:namedQuery")
-.to("jpa://org.apache.camel.examples.MultiSteps?namedQuery=step1");
+    .to("jpa://org.apache.camel.examples.MultiSteps?namedQuery=step1");
+```
+
+```xml
+<route>
+  <from uri="direct:namedQuery"/>
+  <to uri="jpa://org.apache.camel.examples.MultiSteps?namedQuery=step1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:namedQuery
+      steps:
+        - to:
+            uri: jpa://org.apache.camel.examples.MultiSteps
+            parameters:
+              namedQuery: step1
 ```
 
 Note that you need to specify `useExecuteUpdate` option to `true` to execute `UPDATE`/`DELETE` statement as a named query.
@@ -377,18 +481,69 @@ Note that you need to specify `useExecuteUpdate` option to `true` to execute `UP
 
 For retrieving selected entities or execute bulk update/delete, you can use the `query` URI query option. You only have to define the query option:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:query")
-.to("jpa://org.apache.camel.examples.MultiSteps?query=select o from org.apache.camel.examples.MultiSteps o where o.step = 1");
+    .to("jpa://org.apache.camel.examples.MultiSteps?query=select o from org.apache.camel.examples.MultiSteps o where o.step = 1");
+```
+
+```xml
+<route>
+    <from uri="direct:query"/>
+    <to uri="jpa://org.apache.camel.examples.MultiSteps?query=select o from org.apache.camel.examples.MultiSteps o where o.step = 1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:query
+    steps:
+      - to:
+          uri: jpa://org.apache.camel.examples.MultiSteps
+          parameters:
+            query: "select o from org.apache.camel.examples.MultiSteps o where o.step = 1"
 ```
 
 ### Using a producer with a native query
 
 For retrieving selected entities or execute bulk update/delete, you can use the `nativeQuery` URI query option. You only have to define the native query option:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:nativeQuery")
-.to("jpa://org.apache.camel.examples.MultiSteps?resultClass=org.apache.camel.examples.MultiSteps&nativeQuery=select * from MultiSteps where step = 1");
+    .to("jpa://org.apache.camel.examples.MultiSteps?resultClass=org.apache.camel.examples.MultiSteps&nativeQuery=select * from MultiSteps where step = 1");
+```
+
+```xml
+<route>
+    <from uri="direct:nativeQuery"/>
+    <to uri="jpa://org.apache.camel.examples.MultiSteps?resultClass=org.apache.camel.examples.MultiSteps&amp;nativeQuery=select * from MultiSteps where step = 1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:nativeQuery
+    steps:
+      - to:
+          uri: jpa://org.apache.camel.examples.MultiSteps
+          parameters:
+            resultClass: org.apache.camel.examples.MultiSteps
+            nativeQuery: "select * from MultiSteps where step = 1"
 ```
 
 If you use the native query option without specifying `resultClass`, you will receive an object array in the message body.

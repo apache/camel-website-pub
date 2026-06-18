@@ -30,6 +30,8 @@ Include the `camel-opentelemetry` component in your POM, along with any specific
 
 To explicitly configure OpenTelemetry support, instantiate the `OpenTelemetryTracer` and initialize the camel context. You can optionally specify a `Tracer`, or alternatively it can be implicitly discovered using the `Registry`
 
+_Java-only: configuring MicrometerObservationTracer with metrics and tracing_
+
 ```java
 ObservationRegistry observationRegistry = ObservationRegistry.create();
 MicrometerObservationTracer micrometerObservationTracer = new MicrometerObservationTracer();

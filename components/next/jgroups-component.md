@@ -139,17 +139,60 @@ The JGroups component supports 4 message header(s), which is/are listed below:
 
 Using `jgroups` component on the consumer side of the route will capture messages received by the `JChannel` associated with the endpoint and forward them to the Camel route. JGroups consumer processes incoming messages [asynchronously](http://camel.apache.org/asynchronous-routing-engine.md).
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Capture messages from cluster named
-// 'clusterName' and send them to Camel route.
 from("jgroups:clusterName").to("seda:queue");
+```
+
+```xml
+<route>
+  <from uri="jgroups:clusterName"/>
+  <to uri="seda:queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jgroups:clusterName
+      steps:
+        - to:
+            uri: seda:queue
 ```
 
 Using `jgroups` component on the producer side of the route will forward body of the Camel exchanges to the `JChannel` instance managed by the endpoint.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Send a message to the cluster named 'clusterName'
 from("direct:start").to("jgroups:clusterName");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="jgroups:clusterName"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: jgroups:clusterName
 ```
 
 ### Predefined filters
@@ -157,6 +200,8 @@ from("direct:start").to("jgroups:clusterName");
 JGroups component comes with predefined filters factory class named `JGroupsFilters.`
 
 If you would like to consume only view changes notifications sent to coordinator of the cluster (and ignore these sent to the "slave" nodes), use the `JGroupsFilters.dropNonCoordinatorViews()` filter. This filter is particularly useful when you want a single Camel node to become the master in the cluster, because messages passing this filter notifies you when a given node has become a coordinator of the cluster. The snippet below demonstrates how to collect only messages received by the master node.
+
+_Java-only: Java static import and filter EIP_
 
 ```java
 import static org.apache.camel.component.jgroups.JGroupsFilters.dropNonCoordinatorViews;
@@ -173,6 +218,8 @@ JGroups component comes with predefined expressions factory class named `JGroups
 If you would like to create delayer that would affect the route only if the Camel context has not been started yet, use the `JGroupsExpressions.delayIfContextNotStarted(long delay)` factory method. The expression created by this factory method will return given delay value only if the Camel context is in the state different from `started`. This expression is particularly useful if you would like to use JGroups component for keeping singleton (master) route within the cluster. [Control Bus](controlbus-component.md) `start` command won’t initialize the singleton route if the Camel Context hasn’t been yet started. So you need to delay a startup of the master route, to be sure that it has been initialized after the Camel Context startup. Because such a scenario can happen only during the initialization of the cluster, we don’t want to delay startup of the slave node becoming the new master - that’s why we need a conditional delay expression.
 
 The snippet below demonstrates how to use conditional delaying with the JGroups component to delay the initial startup of master node in the cluster.
+
+_Java-only: Java static imports with conditional delay expression_
 
 ```java
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -193,6 +240,8 @@ from("timer://master?repeatCount=1").routeId("masterRoute").autoStartup(false).t
 
 To send a message to the JGroups cluster, use producer endpoint, just as demonstrated in the snippet below.
 
+_Java-only: Java test API (ProducerTemplate)_
+
 ```java
 from("direct:start").to("jgroups:myCluster");
 ...
@@ -200,6 +249,8 @@ producerTemplate.sendBody("direct:start", "msg")
 ```
 
 To receive the message from the snippet above (on the same, or the other physical machine), listen to the messages coming from the given cluster, just as demonstrated on the code fragment below.
+
+_Java-only: Java test API (MockEndpoint assertions)_
 
 ```java
 mockEndpoint.setExpectedMessageCount(1);
@@ -213,6 +264,8 @@ mockEndpoint.assertIsSatisfied();
 ### Receive cluster view change notifications
 
 The snippet below demonstrates how to create the consumer endpoint listening to the notifications regarding cluster membership changes. By default, the endpoint consumes only regular messages.
+
+_Java-only: Java test API (MockEndpoint assertions)_
 
 ```java
 mockEndpoint.setExpectedMessageCount(1);

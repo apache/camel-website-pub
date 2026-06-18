@@ -118,9 +118,32 @@ Enum values:
 
 Prefix any camel endpoint with **master:someName:** where _someName_ is a logical name and is used to acquire the master lock. For instance:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("master:cheese:jms:foo")
-  .to("activemq:wine");
+    .to("activemq:wine");
+```
+
+```xml
+<route>
+  <from uri="master:cheese:jms:foo"/>
+  <to uri="activemq:wine"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: master:cheese:jms:foo
+      steps:
+        - to:
+            uri: activemq:wine
 ```
 
 In this example, the master component ensures that the route is only active in one node, at any given time, in the cluster. So if there are 8 nodes in the cluster, then the master component will elect one route to be the leader, and only this route will be active, and hence only this route will consume messages from `jms:foo`. In case this route is stopped or unexpectedly terminated, then the master component will detect this, and re-elect another node to be active, which will then become active and start consuming messages from `jms:foo`.
@@ -131,6 +154,8 @@ In this example, the master component ensures that the route is only active in o
 ## Example
 
 You can protect a clustered Camel application to only consume files from one active node.
+
+_Java-only: string concatenation to build the master endpoint URI_
 
 ```java
 // the file endpoint we want to consume from
@@ -148,6 +173,8 @@ from("master:myGroup:" + url)
 The master component leverages CamelClusterService you can configure using
 
 -   **Java**
+    
+    _Java-only: programmatic ZooKeeperClusterService configuration_
     
     ```java
     ZooKeeperClusterService service = new ZooKeeperClusterService();

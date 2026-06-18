@@ -42,6 +42,8 @@ To enable webhook mode, users need first to add a REST implementation to their a
 
 In Java DSL:
 
+_Java-only: processing ClickUp webhook events with Java types and lambdas_
+
 ```java
 from("webhook:clickup:<workspaceId>?&authorizationToken=<authorizationToken>&events=taskTimeTrackedUpdated")
                 .choice()

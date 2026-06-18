@@ -168,7 +168,7 @@ Add the dependency for LangChain4j Tavily Web Search Engine support :
 
 Initialize the Web Search Engine instance, and bind it to the Camel Registry:
 
-Example:
+_Java-only: binding a Tavily Web Search Engine to the registry_
 
 ```java
 @BindToRegistry("web-search-engine")
@@ -182,9 +182,34 @@ The web search engine will be autowired automatically if its bound name is `web-
 
 Example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
- from("direct:web-search")
-      .to("langchain4j-web-search:test?webSearchEngine=#web-search-engine-test")
+from("direct:web-search")
+    .to("langchain4j-web-search:test?webSearchEngine=#web-search-engine-test");
+```
+
+```xml
+<route>
+  <from uri="direct:web-search"/>
+  <to uri="langchain4j-web-search:test?webSearchEngine=#web-search-engine-test"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:web-search
+      steps:
+        - to:
+            uri: langchain4j-web-search:test
+            parameters:
+              webSearchEngine: "#web-search-engine-test"
 ```
 
 > **Note**
@@ -198,7 +223,7 @@ By default, the `maxResults` property is set to 1. You can adjust this value to 
 
 When `maxResults` is set to 1, you can by default retrieve by default the content as a single string.
 
-Example:
+_Java-only: retrieving a single search result as a string_
 
 ```java
 String response = template.requestBody("langchain4j-web-search:test", "Who won the European Cup in 2024?", String.class);
@@ -206,7 +231,7 @@ String response = template.requestBody("langchain4j-web-search:test", "Who won t
 
 When `maxResults` is greater than 1, you can retrieve a list of strings.
 
-Example:
+_Java-only: retrieving multiple search results as a list of strings_
 
 ```java
 List<String> responses = template.requestBody("langchain4j-web-search:test?maxResults=3", "Who won the European Cup in 2024?", List.class);
@@ -229,7 +254,7 @@ When defining a WebSearchRequest, the Camel LangChain4j web search component wil
 
 A WebSearchRequest should be bound to the registry.
 
-Example of binding the request to the registry.
+_Java-only: binding a WebSearchRequest to the registry_
 
 ```java
 @BindToRegistry("web-search-request")
@@ -243,7 +268,32 @@ The request will be autowired automatically if its bound name is `web-search-req
 
 Example of route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
- from("direct:web-search")
-      .to("langchain4j-web-search:test?webSearchRequest=#searchRequestTest");
+from("direct:web-search")
+    .to("langchain4j-web-search:test?webSearchRequest=#searchRequestTest");
+```
+
+```xml
+<route>
+  <from uri="direct:web-search"/>
+  <to uri="langchain4j-web-search:test?webSearchRequest=#searchRequestTest"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:web-search
+      steps:
+        - to:
+            uri: langchain4j-web-search:test
+            parameters:
+              webSearchRequest: "#searchRequestTest"
 ```

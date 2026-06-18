@@ -194,17 +194,62 @@ Enum values:
 
 Using `jgroups-raft` component with `enableRoleChangeEvents=true` on the consumer side of the route will capture change in JGroups-raft role and forward them to the Camel route. JGroups-raft consumer processes incoming messages [asynchronously](http://camel.apache.org/asynchronous-routing-engine.md).
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Capture raft role changes from cluster named
-// 'clusterName' and send them to Camel route.
 from("jgroups-raft:clusterName?enableRoleChangeEvents=true").to("seda:queue");
+```
+
+```xml
+<route>
+  <from uri="jgroups-raft:clusterName?enableRoleChangeEvents=true"/>
+  <to uri="seda:queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jgroups-raft:clusterName
+      parameters:
+        enableRoleChangeEvents: true
+      steps:
+        - to:
+            uri: seda:queue
 ```
 
 Using `jgroups-raft` component on the producer side of the route will use the body of the camel exchange (which must be a `byte[]`) to perform a setX() operation on the raftHandle associated with the endpoint.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// perform a setX() operation to the cluster named 'clusterName' shared state machine
 from("direct:start").to("jgroups-raft:clusterName");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="jgroups-raft:clusterName"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: jgroups-raft:clusterName
 ```
 
 ## Examples
@@ -213,15 +258,41 @@ from("direct:start").to("jgroups-raft:clusterName");
 
 The snippet below demonstrates how to create the consumer endpoint listening to the change role events. By default, this option is off.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-...
-from("jgroups-raft:clusterName?enableRoleChangeEvents=true").to(mock:mockEndpoint);
-...
+from("jgroups-raft:clusterName?enableRoleChangeEvents=true")
+    .to("mock:mockEndpoint");
+```
+
+```xml
+<route>
+  <from uri="jgroups-raft:clusterName?enableRoleChangeEvents=true"/>
+  <to uri="mock:mockEndpoint"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jgroups-raft:clusterName
+      parameters:
+        enableRoleChangeEvents: true
+      steps:
+        - to:
+            uri: mock:mockEndpoint
 ```
 
 ### Keeping singleton route within the cluster
 
 The snippet below demonstrates how to keep the singleton consumer route in the cluster of Camel Contexts. As soon as the master node dies, one of the slaves will be elected as a new master and started. In this particular example, we want to keep singleton [jetty](jetty-component.md) instance listening for the requests on address\` [http://localhost:8080/orders\`](http://localhost:8080/orders`).
+
+_Java-only: programmatic JGroupsRaftClusterService configuration_
 
 ```java
 JGroupsRaftClusterService service = new JGroupsRaftClusterService();

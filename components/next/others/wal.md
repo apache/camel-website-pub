@@ -10,6 +10,8 @@ A resume strategy that uses a write-ahead strategy to keep a transaction log of 
 
 Because this strategy wraps another one, then the other one should be created first and then passed as an argument to this strategy when creating it.
 
+_Java-only: creating a WriteAheadResumeStrategy wrapping another strategy_
+
 ```java
 SomeOtherResumeStrategy resumeStrategy = new SomeOtherResumeStrategy();
 final String logFile = System.getProperty("wal.log.file");
@@ -18,6 +20,8 @@ WriteAheadResumeStrategy writeAheadResumeStrategy = new WriteAheadResumeStrategy
 ```
 
 Subsequently, this strategy should be registered to the registry instead
+
+_Java-only: registering the strategy and using it in a route_
 
 ```java
 getCamelContext().getRegistry().bind(ResumeStrategy.DEFAULT_NAME, writeAheadResumeStrategy);

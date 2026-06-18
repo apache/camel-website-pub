@@ -34,10 +34,41 @@ The message body will be set as the `contextItem`. And the following variables a
 
 ## Example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("queue:foo")
   .filter().xquery("//foo")
-  .to("queue:bar")
+  .to("queue:bar");
+```
+
+```xml
+<route>
+  <from uri="queue:foo"/>
+  <filter>
+    <xquery>//foo</xquery>
+    <to uri="queue:bar"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: queue:foo
+      steps:
+        - filter:
+            expression:
+              xquery:
+                expression: //foo
+            steps:
+              - to:
+                  uri: queue:bar
 ```
 
 You can also use functions inside your query, in which case you need an explicit type conversion, or you will get an `org.w3c.dom.DOMException: HIERARCHY_REQUEST_ERR`). You need to pass in the expected output type of the function. For example, the concat function returns a `String` which is done as shown:
@@ -79,6 +110,8 @@ from("direct:start")
 
 If you have a standard set of namespaces you wish to work with and wish to share them across many XQuery expressions, you can use the `org.apache.camel.support.builder.Namespaces` when using Java DSL as shown:
 
+_Java-only: programmatic namespace configuration with Namespaces builder_
+
 ```java
 Namespaces ns = new Namespaces("c", "http://acme.com/cheese");
 
@@ -96,6 +129,8 @@ Each namespace is a key=value pair, where the prefix is the key. In the XQuery e
 ```
 
 The namespace builder supports adding multiple namespaces as shown:
+
+_Java-only: adding multiple namespaces with the Namespaces builder_
 
 ```java
 Namespaces ns = new Namespaces("c", "http://acme.com/cheese")
@@ -133,12 +168,41 @@ This namespace uses `foo` as prefix, so the `<xquery>` expression uses `foo:` to
 
 We can do a message translation using transform or setBody in the route, as shown below:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start").
    transform().xquery("/people/person");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <transform>
+    <xquery>/people/person</xquery>
+  </transform>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - transform:
+            expression:
+              xquery:
+                expression: /people/person
+```
+
 Notice that xquery will use DOMResult by default, so if we want to grab the value of the person node, using `text()` we need to tell XQuery to use String as the result type, as shown:
+
+_Java-only: specifying result type with String.class parameter_
 
 ```java
 from("direct:start").
@@ -159,6 +223,8 @@ If you want to use Camel variables like headers, you have to explicitly declare 
 ## Loading script from external resource
 
 You can externalize the script and have Apache Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`. This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
+
+_Java-only: loading XQuery script from classpath with class literal_
 
 ```java
 .setHeader("myHeader").xquery("resource:classpath:myxquery.txt", String.class)

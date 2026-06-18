@@ -140,34 +140,143 @@ Camel provides two headers by which you can define a different resource location
 
 For example, you could use something like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-to("chunk:template");
+from("activemq:My.Queue")
+    .to("chunk:template");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="chunk:template"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: chunk:template
 ```
 
 To use a Chunk template to formulate a response for a message for InOut message exchanges (where there is a `JMSReplyTo` header).
 
 If you want to use InOnly and consume the message and send it to another destination, you could use:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-to("chunk:template").
-to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("chunk:template")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="chunk:template"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: chunk:template
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 It’s possible to specify what template the component should use dynamically via a header, so for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-setHeader(ChunkConstants.CHUNK_RESOURCE_URI).constant("template").
-to("chunk:dummy?allowTemplateFromHeader=true");
+from("direct:in")
+    .setHeader("ChunkResourceUri").constant("template")
+    .to("chunk:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="ChunkResourceUri">
+    <constant>template</constant>
+  </setHeader>
+  <to uri="chunk:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: ChunkResourceUri
+            expression:
+              constant:
+                expression: template
+        - to:
+            uri: chunk:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 An example of Chunk component options use:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-to("chunk:file_example?themeFolder=template&themeSubfolder=subfolder&extension=chunk");
+from("direct:in")
+    .to("chunk:file_example?themeFolder=template&themeSubfolder=subfolder&extension=chunk");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="chunk:file_example?themeFolder=template&amp;themeSubfolder=subfolder&amp;extension=chunk"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: chunk:file_example
+            parameters:
+              themeFolder: template
+              themeSubfolder: subfolder
+              extension: chunk
 ```
 
 In this example, the Chunk component will look for the file `file_example.chunk` in the folder `template/subfolder`.

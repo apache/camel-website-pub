@@ -485,14 +485,67 @@ You can configure additional options on the `ftpClient` and `ftpClientConfig` fr
 
 For example, to set the `setDataTimeout` on the `FTPClient` to 30 seconds you can do:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ftp://foo@myserver?password=secret&ftpClient.dataTimeout=30000").to("bean:foo");
 ```
 
+```xml
+<route>
+  <from uri="ftp://foo@myserver?password=secret&amp;ftpClient.dataTimeout=30000"/>
+  <to uri="bean:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp://foo@myserver
+      parameters:
+        password: secret
+        ftpClient.dataTimeout: 30000
+      steps:
+        - to:
+            uri: bean:foo
+```
+
 You can mix and match and use both prefixes, for example, to configure date format or timezones.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("ftp://foo@myserver?password=secret&ftpClient.dataTimeout=30000&ftpClientConfig.serverLanguageCode=fr").to("bean:foo");
+```
+
+```xml
+<route>
+  <from uri="ftp://foo@myserver?password=secret&amp;ftpClient.dataTimeout=30000&amp;ftpClientConfig.serverLanguageCode=fr"/>
+  <to uri="bean:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp://foo@myserver
+      parameters:
+        password: secret
+        ftpClient.dataTimeout: 30000
+        ftpClientConfig.serverLanguageCode: fr
+      steps:
+        - to:
+            uri: bean:foo
 ```
 
 You can have as many of these options as you like.
@@ -512,8 +565,34 @@ For example:
 
 And then let Camel look up this bean when you use the # notation in the url.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ftp://foo@myserver?password=secret&ftpClientConfig=#myConfig").to("bean:foo");
+```
+
+```xml
+<route>
+  <from uri="ftp://foo@myserver?password=secret&amp;ftpClientConfig=#myConfig"/>
+  <to uri="bean:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp://foo@myserver
+      parameters:
+        password: secret
+        ftpClientConfig: "#myConfig"
+      steps:
+        - to:
+            uri: bean:foo
 ```
 
 ### Concurrency
@@ -557,8 +636,34 @@ Camel will store to a local file with the same name as the remote file, though w
 
 So if you want to download files from a remote FTP server and store it as files, then you need to route to a file endpoint such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ftp://someone@someserver.com?password=secret&localWorkDirectory=/tmp").to("file://inbox");
+```
+
+```xml
+<route>
+  <from uri="ftp://someone@someserver.com?password=secret&amp;localWorkDirectory=/tmp"/>
+  <to uri="file://inbox"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp://someone@someserver.com
+      parameters:
+        password: secret
+        localWorkDirectory: /tmp
+      steps:
+        - to:
+            uri: file://inbox
 ```
 
 > **Tip**
@@ -763,8 +868,33 @@ The file paths are matched with the following rules:
 
 The sample below demonstrates how to use it:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ftp://admin@localhost:2222/public/camel?antInclude=**/*.txt").to("...");
+```
+
+```xml
+<route>
+  <from uri="ftp://admin@localhost:2222/public/camel?antInclude=**/*.txt"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp://admin@localhost:2222/public/camel
+      parameters:
+        antInclude: "**/*.txt"
+      steps:
+        - to:
+            uri: "..."
 ```
 
 ### Using a proxy with SFTP
@@ -790,9 +920,36 @@ You can also assign a username and password to the proxy, if necessary. Please c
 
 If you want to explicitly specify the list of authentication methods that should be used by `sftp` component, use `preferredAuthentications` option. If, for example, you would like Camel to attempt to authenticate with a private/public SSH key and fallback to user/password authentication in the case when no public key is available, use the following route configuration:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("sftp://localhost:9999/root?username=admin&password=admin&preferredAuthentications=publickey,password").
-  to("bean:processFile");
+from("sftp://localhost:9999/root?username=admin&password=admin&preferredAuthentications=publickey,password")
+    .to("bean:processFile");
+```
+
+```xml
+<route>
+  <from uri="sftp://localhost:9999/root?username=admin&amp;password=admin&amp;preferredAuthentications=publickey,password"/>
+  <to uri="bean:processFile"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: sftp://localhost:9999/root
+      parameters:
+        username: admin
+        password: admin
+        preferredAuthentications: publickey,password
+      steps:
+        - to:
+            uri: bean:processFile
 ```
 
 ### Consuming a single file using a fixed name
@@ -801,14 +958,46 @@ When you want to download a single file and knows the file name, you can use `fi
 
 For example, to have a Camel route that picks up a single file, and delete it after use you can do
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ftp://admin@localhost:21/nolist/?password=admin&stepwise=false&useList=false&ignoreFileNotFoundOrPermissionError=true&fileName=report.txt&delete=true")
   .to("activemq:queue:report");
 ```
 
+```xml
+<route>
+  <from uri="ftp://admin@localhost:21/nolist/?password=admin&amp;stepwise=false&amp;useList=false&amp;ignoreFileNotFoundOrPermissionError=true&amp;fileName=report.txt&amp;delete=true"/>
+  <to uri="activemq:queue:report"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp://admin@localhost:21/nolist/
+      parameters:
+        password: admin
+        stepwise: false
+        useList: false
+        ignoreFileNotFoundOrPermissionError: true
+        fileName: report.txt
+        delete: true
+      steps:
+        - to:
+            uri: activemq:queue:report
+```
+
 Notice that we have used all the options we talked above.
 
 You can also use this with `ConsumerTemplate`. For example, to download a single file (if it exists) and grab the file content as a String type:
+
+_Java-only: using ConsumerTemplate to download a single file_
 
 ```java
 String data = template.retrieveBodyNoWait("ftp://admin@localhost:21/nolist/?password=admin&stepwise=false&useList=false&ignoreFileNotFoundOrPermissionError=true&fileName=report.txt&delete=true", String.class);
@@ -826,29 +1015,107 @@ The [FTP](../4.18.x/ftp-component.md) component has many options. So make sure y
 
 In the sample below, we set up Camel to download all the reports from the FTP server once every hour (60 min) as BINARY content and store it as files on the local file system.
 
-And the route using XML DSL:
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("ftp://scott@localhost/public/reports?password=tiger&binary=true&delay=60000")
+    .to("file://target/test-reports");
+```
 
 ```xml
-  <route>
-     <from uri="ftp://scott@localhost/public/reports?password=tiger&amp;binary=true&amp;delay=60000"/>
-     <to uri="file://target/test-reports"/>
-  </route>
+<route>
+  <from uri="ftp://scott@localhost/public/reports?password=tiger&amp;binary=true&amp;delay=60000"/>
+  <to uri="file://target/test-reports"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftp://scott@localhost/public/reports
+      parameters:
+        password: tiger
+        binary: true
+        delay: "60000"
+      steps:
+        - to:
+            uri: file://target/test-reports
 ```
 
 ### Consuming a remote FTPS server (implicit SSL) and client authentication
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("ftps://admin@localhost:2222/public/camel?password=admin&securityProtocol=SSL&implicit=true
-      &ftpClient.keyStore.file=./src/test/resources/server.jks
-      &ftpClient.keyStore.password=password&ftpClient.keyStore.keyPassword=password")
-  .to("bean:foo");
+from("ftps://admin@localhost:2222/public/camel?password=admin&securityProtocol=SSL&implicit=true&ftpClient.keyStore.file=./src/test/resources/server.jks&ftpClient.keyStore.password=password&ftpClient.keyStore.keyPassword=password")
+    .to("bean:foo");
+```
+
+```xml
+<route>
+  <from uri="ftps://admin@localhost:2222/public/camel?password=admin&amp;securityProtocol=SSL&amp;implicit=true&amp;ftpClient.keyStore.file=./src/test/resources/server.jks&amp;ftpClient.keyStore.password=password&amp;ftpClient.keyStore.keyPassword=password"/>
+  <to uri="bean:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftps://admin@localhost:2222/public/camel
+      parameters:
+        password: admin
+        securityProtocol: SSL
+        implicit: true
+        ftpClient.keyStore.file: ./src/test/resources/server.jks
+        ftpClient.keyStore.password: password
+        ftpClient.keyStore.keyPassword: password
+      steps:
+        - to:
+            uri: bean:foo
 ```
 
 ### Consuming a remote FTPS server (explicit TLS) and a custom trust store configuration
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("ftps://admin@localhost:2222/public/camel?password=admin&ftpClient.trustStore.file=./src/test/resources/server.jks&ftpClient.trustStore.password=password")
-  .to("bean:foo");
+    .to("bean:foo");
+```
+
+```xml
+<route>
+  <from uri="ftps://admin@localhost:2222/public/camel?password=admin&amp;ftpClient.trustStore.file=./src/test/resources/server.jks&amp;ftpClient.trustStore.password=password"/>
+  <to uri="bean:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ftps://admin@localhost:2222/public/camel
+      parameters:
+        password: admin
+        ftpClient.trustStore.file: ./src/test/resources/server.jks
+        ftpClient.trustStore.password: password
+      steps:
+        - to:
+            uri: bean:foo
 ```
 
 ### Examples

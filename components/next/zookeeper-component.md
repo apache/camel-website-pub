@@ -225,14 +225,62 @@ Enum values:
 
 The following snippet will read the data from the _znode_ `/somepath/somenode/` provided that it already exists. The data retrieved will be placed into an exchange and passed onto the rest of the route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("zookeeper://localhost:39913/somepath/somenode").to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="zookeeper://localhost:39913/somepath/somenode"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: zookeeper://localhost:39913/somepath/somenode
+      steps:
+        - to:
+            uri: mock:result
+```
+
 If the node does not yet exist, then a flag can be supplied to have the endpoint await its creation:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("zookeeper://localhost:39913/somepath/somenode?awaitCreation=true").to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="zookeeper://localhost:39913/somepath/somenode?awaitCreation=true"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: zookeeper://localhost:39913/somepath/somenode
+      parameters:
+        awaitCreation: true
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ### Reading from a _znode_
@@ -243,15 +291,40 @@ When data is read due to a `WatchedEvent` received from the ZooKeeper ensemble, 
 
 The following snippet will write the payload of the exchange into the znode at `/somepath/somenode/` provided that it already exists:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:write-to-znode")
     .to("zookeeper://localhost:39913/somepath/somenode");
+```
+
+```xml
+<route>
+  <from uri="direct:write-to-znode"/>
+  <to uri="zookeeper://localhost:39913/somepath/somenode"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:write-to-znode
+      steps:
+        - to:
+            uri: zookeeper://localhost:39913/somepath/somenode
 ```
 
 For flexibility, the endpoint allows the target _znode_ to be specified dynamically as a message header. If a header keyed by the string `CamelZooKeeperNode` is present then the value of the header will be used as the path to the _znode_ on the server. For instance using the same route definition above, the following code snippet will write the data not to `/somepath/somenode` but to the path from the header `/somepath/someothernode`.
 
 > **Warning**
 > the `testPayload` must be convertible to `byte[]` as the data stored in ZooKeeper is byte-based.
+
+_Java-only: ProducerTemplate with dynamic znode header_
 
 ```java
 Object testPayload = ...
@@ -260,12 +333,44 @@ template.sendBodyAndHeader("direct:write-to-znode", testPayload, "CamelZooKeeper
 
 To also create the node if it does not exist the `create` option should be used.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:create-and-write-to-znode")
     .to("zookeeper://localhost:39913/somepath/somenode?create=true");
 ```
 
+```xml
+<route>
+  <from uri="direct:create-and-write-to-znode"/>
+  <to uri="zookeeper://localhost:39913/somepath/somenode?create=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:create-and-write-to-znode
+      steps:
+        - to:
+            uri: zookeeper://localhost:39913/somepath/somenode
+            parameters:
+              create: true
+```
+
 It is also possible to **delete** a node using the header `CamelZookeeperOperation` by setting it to `DELETE`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:delete-znode")
@@ -273,16 +378,26 @@ from("direct:delete-znode")
     .to("zookeeper://localhost:39913/somepath/somenode");
 ```
 
-or equivalently:
-
 ```xml
 <route>
-  <from uri="direct:delete-znode" />
+  <from uri="direct:delete-znode"/>
   <setHeader name="CamelZookeeperOperation">
-     <constant>DELETE</constant>
+    <constant>DELETE</constant>
   </setHeader>
-  <to uri="zookeeper://localhost:39913/somepath/somenode" />
+  <to uri="zookeeper://localhost:39913/somepath/somenode"/>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:delete-znode
+    steps:
+      - setHeader:
+          name: CamelZookeeperOperation
+          constant: DELETE
+      - to:
+          uri: zookeeper://localhost:39913/somepath/somenode
 ```
 
 ZooKeeper’s nodes can have different types; they can be 'Ephemeral' or 'Persistent' and 'Sequenced' or 'Unsequenced'. For further information of each type, you can check [here](http://zookeeper.apache.org/doc/trunk/zookeeperProgrammers.html#Ephemeral+Nodes). By default, endpoints will create unsequenced, ephemeral nodes, but the type can be easily manipulated via an URI config parameter or via a special message header. The values expected for the create mode are simply the names from the `CreateMode` enumeration:
@@ -298,15 +413,43 @@ ZooKeeper’s nodes can have different types; they can be 'Ephemeral' or 'Persis
 
 For example, to create a persistent _znode_ via the URI config:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:create-and-write-to-persistent-znode")
     .to("zookeeper://localhost:39913/somepath/somenode?create=true&createMode=PERSISTENT");
+```
+
+```xml
+<route>
+  <from uri="direct:create-and-write-to-persistent-znode"/>
+  <to uri="zookeeper://localhost:39913/somepath/somenode?create=true&amp;createMode=PERSISTENT"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:create-and-write-to-persistent-znode
+      steps:
+        - to:
+            uri: zookeeper://localhost:39913/somepath/somenode
+            parameters:
+              create: true
+              createMode: PERSISTENT
 ```
 
 or using the header `CamelZookeeperCreateMode`.
 
 > **Warning**
 > the `testPayload` must be convertible to `byte[]` as the data stored in ZooKeeper is byte-based.
+
+_Java-only: ProducerTemplate with create mode header_
 
 ```java
 Object testPayload = ...

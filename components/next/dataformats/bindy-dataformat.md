@@ -125,6 +125,8 @@ The separator used to segregate the fields in the CSV record is `,` :
 
 10, J, Pauline, M, XD12345678, Fortis Dynamic 15/15, 2500, USD, 08-01-2009
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord( separator = "," )
 public Class Order {
@@ -138,6 +140,8 @@ Compare to the previous case, the separator here is `;` instead of `,` :
 
 10; J; Pauline; M; XD12345678; Fortis Dynamic 15/15; 2500; USD; 08-01-2009
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord( separator = ";" )
 public Class Order {
@@ -150,6 +154,8 @@ public Class Order {
 Compare to the previous case, the separator here is `|` instead of `;` :
 
 10| J| Pauline| M| XD12345678| Fortis Dynamic 15/15| 2500| USD| 08-01-2009
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord( separator = "\\|" )
@@ -169,6 +175,8 @@ When the field to be parsed of the CSV record contains `,` or `;` which is also 
 
 "10","J","Pauline"," M","XD12345678","Fortis Dynamic 15,15","2500","USD","08-01-2009"
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord( separator = "\",\"" )
 public Class Order {
@@ -180,6 +188,8 @@ Bindy automatically detects if the record is enclosed with either single or doub
 
 "10","J","Pauline"," M","XD12345678","Fortis Dynamic 15,15","2500","USD","08-01-2009"
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord( separator = "," )
 public Class Order {
@@ -188,6 +198,8 @@ public Class Order {
 ```
 
 Notice that if you want to marshal from Object to CSV and use quotes, then you need to specify which quote character to use, using the `quote` attribute on the `@CsvRecord` as shown below:
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord( separator = ",", quote = "\"" )
@@ -204,6 +216,8 @@ order id, client id, first name, last name, isin code, instrument name, quantity
 
 To inform bindy that this first line must be skipped during the parsing process, then we use the attribute :
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",", skipFirstLine = true)
 public Class Order {
@@ -214,6 +228,8 @@ public Class Order {
 **case 6:generateHeaderColumns**
 
 To include at the first line of the CSV generated, the attribute `generateHeaderColumns` must be set to true in the annotation like this :
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord( generateHeaderColumns = true )
@@ -231,6 +247,8 @@ order id, client id, first name, last name, isin code, instrument name, quantity
 
 If the platform where camel-bindy will run is not Windows but Macintosh or Unix, then you can change the crlf property like this. Three values are available: `WINDOWS`, `UNIX` or `MAC`.
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",", crlf="MAC")
 public Class Order {
@@ -239,6 +257,8 @@ public Class Order {
 ```
 
 Additionally, if for some reason you need to add a different line ending character, you can opt to specify it using the crlf parameter. In the following example, we can end the line with a comma followed by the newline character:
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord(separator = ",", crlf=",\n")
@@ -250,6 +270,8 @@ public Class Order {
 **case 8: isOrdered**
 
 Sometimes, the order to follow during the creation of the CSV record from the model is different from the order used during the parsing. Then, in this case, we can use the attribute `isOrdered = true` to indicate this in combination with attribute `position` of the DataField annotation.
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord(isOrdered = true)
@@ -285,6 +307,8 @@ E.g.: If the model class Client is linked to the Order class, then use annotatio
 
 **Property Link**
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",")
 public class Order {
@@ -300,6 +324,8 @@ public class Order {
 And for the class Client :
 
 **Class Link**
+
+_Java-only: Java annotation model class_
 
 ```java
 @Link
@@ -350,6 +376,8 @@ This parameter/attribute represents the position of the field in the CSV record.
 
 **Position**
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",")
 public class Order {
@@ -366,6 +394,8 @@ public class Order {
 As you can see in this example, the position starts at `1` but continues at `5` in the class Order. The numbers from `2` to `4` are defined in the class Client (see here after).
 
 **Position continues in another model class**
+
+_Java-only: Java annotation model class_
 
 ```java
 public class Client {
@@ -386,6 +416,8 @@ public class Client {
 The pattern allows enriching or validates the format of your data
 
 **Pattern**
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord(separator = ",")
@@ -417,6 +449,8 @@ public class Order {
 The precision is helpful when you want to define the decimal part of your number.
 
 **Precision**
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord(separator = ",")
@@ -453,6 +487,8 @@ Here is an example:
 
 **Position is different in output**
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",", isOrdered = true)
 public class Order {
@@ -487,6 +523,8 @@ If a field is mandatory, use the attribute `required` set to true.
 
 **Required**
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",")
 public class Order {
@@ -515,6 +553,8 @@ If a field has leading and/or trailing spaces which should be removed before the
 
 **Trim**
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",")
 public class Order {
@@ -539,6 +579,8 @@ If a field is not defined then uses the value indicated by the `defaultValue` at
 
 **Default value**
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",")
 public class Order {
@@ -562,6 +604,8 @@ public class Order {
 Specifies the column name for the property only if `@CsvRecord` has annotation `generateHeaderColumns = true`.
 
 **Column Name**
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord(separator = ",", generateHeaderColumns = true)
@@ -616,6 +660,8 @@ This example shows how to design the model to parse/format a fixed message:
 
 **Fixed-simple**
 
+_Java-only: Java annotation model class_
+
 ```java
 @FixedLengthRecord(length=54, paddingChar=' ')
 public static class Order {
@@ -662,6 +708,8 @@ This more elaborated example show how to define the alignment for a field and ho
 10A9 PaulineM ISINXD12345678BUYShare2500.45USD01-08-2009
 
 **Fixed-padding-align**
+
+_Java-only: Java annotation model class_
 
 ```java
 @FixedLengthRecord(length=60, paddingChar=' ')
@@ -710,6 +758,8 @@ Sometimes, the default padding defined for record cannot be applied to the field
 
 **Fixed-padding-field**
 
+_Java-only: Java annotation model class_
+
 ```java
 @FixedLengthRecord(length = 65, paddingChar = ' ')
 public static class Order {
@@ -756,6 +806,8 @@ Fixed-length records sometimes have delimited content within the record. The fir
 10A9Pauline^M^ISINXD12345678BUYShare000002500.45USD01-08-2009
 
 **Fixed-delimited**
+
+_Java-only: Java annotation model class_
 
 ```java
 @FixedLengthRecord
@@ -805,6 +857,8 @@ Occasionally, a fixed-length record may contain a field that defines the expecte
 10A9Pauline^M^ISIN10XD12345678BUYShare000002500.45USD01-08-2009
 
 **Fixed-delimited**
+
+_Java-only: Java annotation model class_
 
 ```java
 @FixedLengthRecord
@@ -858,6 +912,8 @@ Bindy will discover fixed-length header and footer records that are configured a
 9000000002
 
 **Fixed-header-and-footer-main-class**
+
+_Java-only: Java annotation model class_
 
 ```java
 @FixedLengthRecord(header = OrderHeader.class, footer = OrderFooter.class)
@@ -923,6 +979,8 @@ It is common to integrate with systems that provide fixed-length records contain
 
 Similarly, it is possible that none of the content beyond some field is of interest. In this case, you can tell Bindy to skip parsing of everything beyond the last mapped field by setting the `ignoreTrailingChars` property on the `@FixedLengthRecord` declaration.
 
+_Java-only: Java annotation model class_
+
 ```java
 @FixedLengthRecord(ignoreTrailingChars = true)
 public static class Order {
@@ -972,6 +1030,8 @@ and how to use the annotation:
 
 **FIX - message**
 
+_Java-only: Java annotation model class_
+
 ```java
 @Message(keyValuePairSeparator = "=", pairSeparator = "\\u0001", type="FIX", version="4.1")
 public class Order {
@@ -1012,6 +1072,8 @@ This parameter represents the key of the field in the message:
 
 **FIX message - Tag**
 
+_Java-only: Java annotation model class_
+
 ```java
 @Message(keyValuePairSeparator = "=", pairSeparator = "\\u0001", type="FIX", version="4.1")
 public class Order {
@@ -1045,6 +1107,8 @@ public class Order {
 If the tags/keys that we will put in the _FIX message_ must be sorted according to a predefined order, then use the attribute `position` of the annotation `@KeyValuePairField`.
 
 **FIX message - Tag - sort**
+
+_Java-only: Java annotation model class_
 
 ```java
 @Message(keyValuePairSeparator = "=", pairSeparator = "\\u0001", type = "FIX", version = "4.1", isOrdered = true)
@@ -1082,6 +1146,8 @@ Definition of the header section:
 
 **FIX message - Section - Header**
 
+_Java-only: Java annotation model class_
+
 ```java
 @Section(number = 1)
 public class Header {
@@ -1097,6 +1163,8 @@ public class Header {
 Definition of the body section:
 
 **FIX message - Section - Body**
+
+_Java-only: Java annotation model class_
 
 ```java
 @Section(number = 2)
@@ -1117,6 +1185,8 @@ public class Order {
 Definition of the footer section:
 
 **FIX message - Section - Footer**
+
+_Java-only: Java annotation model class_
 
 ```java
 @Section(number = 3)
@@ -1170,6 +1240,8 @@ And the classes used to modeling this. The Author class contains a List of Book.
 
 **Generate CSV with repetitive data**
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator=",")
 public class Author {
@@ -1216,6 +1288,8 @@ And the code:
 
 **Reading FIX message containing group of tags/keys**
 
+_Java-only: Java annotation model class_
+
 ```java
 public class Order {
 
@@ -1253,6 +1327,8 @@ public class Security {
 
 The purpose of the annotation `@BindyConverter` is to define a converter to be used on field level. The provided class must implement the Format interface.
 
+_Java-only: Java annotation model class_
+
 ```java
 @FixedLengthRecord(length = 10, paddingChar = ' ')
 public static class DataModel {
@@ -1277,6 +1353,8 @@ public static class CustomConverter implements Format<String> {
 ### 10\. FormatFactories
 
 The purpose of the annotation `@FormatFactories` is to define a set of converters at record-level. The provided classes must implement the `FormatFactoryInterface` interface.
+
+_Java-only: Java annotation model class_
 
 ```java
 @CsvRecord(separator = ",")
@@ -1360,6 +1438,8 @@ When a parse fails and the field is tolerant, Bindy picks a substitute value in 
 
 #### Example
 
+_Java-only: Java annotation model class_
+
 ```java
 @CsvRecord(separator = ",", continueParseOnFailure = true)
 public class Order {
@@ -1427,6 +1507,8 @@ The next step instantiates the DataFormat _bindy_ class associated with this rec
 
 For example, the following uses the class `BindyCsvDataFormat` (which corresponds to the class associated with the CSV record type) which is configured with _com.acme.model.MyModel.class_ to initialize the model objects configured in this package.
 
+_Java-only: Java annotation model class_
+
 ```java
 DataFormat bindy = new BindyCsvDataFormat(com.acme.model.MyModel.class);
 ```
@@ -1434,6 +1516,8 @@ DataFormat bindy = new BindyCsvDataFormat(com.acme.model.MyModel.class);
 ### Setting locale
 
 Bindy supports configuring the locale on the dataformat, such as
+
+_Java-only: Java annotation model class_
 
 ```java
 BindyCsvDataFormat bindy = new BindyCsvDataFormat(com.acme.model.MyModel.class);
@@ -1443,6 +1527,8 @@ bindy.setLocale("us");
 
 Or to use the platform default locale, then use "default" as the locale name.
 
+_Java-only: Java annotation model class_
+
 ```java
 BindyCsvDataFormat bindy = new BindyCsvDataFormat(com.acme.model.MyModel.class);
 
@@ -1451,6 +1537,8 @@ bindy.setLocale("default");
 
 ### Unmarshaling
 
+_Java-only: Java annotation model class_
+
 ```java
 from("file://inbox")
   .unmarshal(bindy)
@@ -1458,6 +1546,8 @@ from("file://inbox")
 ```
 
 Alternatively, you can use a named reference to a data format which can then be defined in your registry, e.g., your Spring XML file:
+
+_Java-only: Java annotation model class_
 
 ```java
 from("file://inbox")
@@ -1471,6 +1561,8 @@ to the route referenced by `handleOrders`.
 The collection returned is a **List of Map** objects. Each Map within the list contains the model objects marshalled out of each line of the CSV. The reason behind this is that _each line can correspond to more than one object_. This can be confusing when you expect one object to be returned per line.
 
 Each object can be retrieved using its class name.
+
+_Java-only: Java annotation model class_
 
 ```java
 List<Map<String, Object>> unmarshaledModels = (List<Map<String, Object>>) exchange.getIn().getBody();
@@ -1489,6 +1581,8 @@ LOG.info("Total CSV records received by the csv bean: {}", modelCount);
 
 Assuming that you want to extract a single Order object from this map for processing in a route, you could use a combination of a Splitter and a Processor as per the following:
 
+_Java-only: inline Processor implementation_
+
 ```java
 from("file://inbox")
     .unmarshal(bindy)
@@ -1506,6 +1600,8 @@ from("file://inbox")
 
 Take care of the fact that Bindy uses CHARSET\_NAME property or the CHARSET\_NAME header as define in the Exchange interface to do a characterset conversion of the inputstream received for unmarshalling. In some producers, (e.g., file-endpoint) you can define a characterset. This producer can already do the character set conversion. Sometimes you need to remove this property or header from the exchange before sending it to the unmarshal. If you don’t remove it, the conversion might be done twice, which might lead to unwanted results.
 
+_Java-only: Java constant reference_
+
 ```java
 from("file://inbox?charset=Cp922")
   .removeProperty(Exchange.CHARSET_NAME)
@@ -1516,6 +1612,8 @@ from("file://inbox?charset=Cp922")
 ### Marshaling
 
 To generate CSV records from a collection of model objects, you create the following route :
+
+_Java-only: Java annotation model class_
 
 ```java
 from("direct:handleOrders")

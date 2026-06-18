@@ -23,6 +23,8 @@ Google Secret Manager component authentication is targeted for use with the GCP 
 
 When you have the **service account key**, you can provide authentication credentials to your application code. Google security credentials can be set through the component endpoint:
 
+_Java-only: setting the endpoint URI with service account key_
+
 ```java
 String endpoint = "google-secret-manager://myCamelFunction?serviceAccountKey=/home/user/Downloads/my-key.json";
 ```
@@ -39,9 +41,35 @@ You can append query options to the URI in the following format, `?options=value
 
 For example, in order to call the function `myCamelFunction` from the project `myProject` and location `us-central1`, use the following snippet:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=createSecret")
-  .to("direct:test");
+    .to("direct:test");
+```
+
+```xml
+<route>
+  <from uri="google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=createSecret"/>
+  <to uri="direct:test"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: google-secret-manager://myProject
+      parameters:
+        serviceAccountKey: /home/user/Downloads/my-key.json
+        operation: createSecret
+      steps:
+        - to:
+            uri: direct:test
 ```
 
 ## Configuring Options
@@ -457,22 +485,97 @@ If you don’t specify an operation by default, the producer will use the `creat
 -   `createSecret`: This operation will create a secret in the Secret Manager service
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .setHeader("GoogleSecretManagerConstants.SECRET_ID, constant("test"))
+    .setHeader("CamelGoogleSecretManagerSecretId", constant("test"))
     .setBody(constant("hello"))
-    .to("google-functions://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=createSecret")
-    .log("body:${body}")
+    .to("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=createSecret")
+    .log("body:${body}");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelGoogleSecretManagerSecretId">
+    <constant>test</constant>
+  </setHeader>
+  <setBody>
+    <constant>hello</constant>
+  </setBody>
+  <to uri="google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=createSecret"/>
+  <log message="body:${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelGoogleSecretManagerSecretId
+            constant: test
+        - setBody:
+            constant: hello
+        - to:
+            uri: google-secret-manager://myProject
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: createSecret
+        - log:
+            message: "body:${body}"
 ```
 
 -   `getSecretVersion`: This operation will retrieve a secret value with the latest version in the Secret Manager service
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .setHeader("GoogleSecretManagerConstants.SECRET_ID, constant("test"))
-    .to("google-functions://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=getSecretVersion")
-    .log("body:${body}")
+    .setHeader("CamelGoogleSecretManagerSecretId", constant("test"))
+    .to("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=getSecretVersion")
+    .log("body:${body}");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelGoogleSecretManagerSecretId">
+    <constant>test</constant>
+  </setHeader>
+  <to uri="google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=getSecretVersion"/>
+  <log message="body:${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelGoogleSecretManagerSecretId
+            constant: test
+        - to:
+            uri: google-secret-manager://myProject
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: getSecretVersion
+        - log:
+            message: "body:${body}"
 ```
 
 This will log the value of the secret "test".
@@ -480,19 +583,83 @@ This will log the value of the secret "test".
 -   `deleteSecret`: This operation will delete a secret
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .setHeader("GoogleSecretManagerConstants.SECRET_ID, constant("test"))
-    .to("google-functions://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=deleteSecret")
+    .setHeader("CamelGoogleSecretManagerSecretId", constant("test"))
+    .to("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=deleteSecret");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelGoogleSecretManagerSecretId">
+    <constant>test</constant>
+  </setHeader>
+  <to uri="google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=deleteSecret"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelGoogleSecretManagerSecretId
+            constant: test
+        - to:
+            uri: google-secret-manager://myProject
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: deleteSecret
 ```
 
 -   `listSecrets`: This operation will return the secrets' list for the project myProject
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .setHeader("GoogleSecretManagerConstants.SECRET_ID, constant("test"))
-    .to("google-functions://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=listSecrets")
+    .setHeader("CamelGoogleSecretManagerSecretId", constant("test"))
+    .to("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=listSecrets");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelGoogleSecretManagerSecretId">
+    <constant>test</constant>
+  </setHeader>
+  <to uri="google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=listSecrets"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelGoogleSecretManagerSecretId
+            constant: test
+        - to:
+            uri: google-secret-manager://myProject
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: listSecrets
 ```
 
 ## Spring Boot Auto-Configuration

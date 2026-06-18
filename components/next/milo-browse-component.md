@@ -194,6 +194,8 @@ Please refer to the documentation of the Camel Milo Client component for further
 
 The main use of this component is to be able to determine the nodes values to be retrieved or to be written by first browsing the node tree of the OPC-UA server, e.g. to avoid hard-coding a significant number of node ids within the configuration of Camel routes. The component is designed to work in conjunction with the Camel Milo Client component as illustrated in the following example:
 
+_Java-only: browsing OPC UA nodes and enriching with client values_
+
 ```java
 from("direct:start")
 

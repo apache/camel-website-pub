@@ -457,6 +457,8 @@ The result of **read** endpoint and data type of **data** option depends on the 
 
 The following route reads top 5 entries from the Manufacturer feed ordered by ascending Name property.
 
+_Java-only: uses setHeader with Java constant_
+
 ```java
 from("direct:...")
     .setHeader("CamelOlingo2.$top", "5");
@@ -464,6 +466,8 @@ from("direct:...")
 ```
 
 The following route reads Manufacturer entry using the key property value in incoming **id** header.
+
+_Java-only: uses setHeader with header() expression_
 
 ```java
 from("direct:...")
@@ -473,16 +477,66 @@ from("direct:...")
 
 The following route creates Manufacturer entry using the `java.util.Map<String, Object>` in the body message.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:...")
     .to("olingo2://create/Manufacturers");
 ```
 
+```xml
+<route>
+    <from uri="direct:..."/>
+    <to uri="olingo2://create/Manufacturers"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:...
+    steps:
+      - to:
+          uri: olingo2://create/Manufacturers
+```
+
 The following route polls Manufacturer [delta feed](http://olingo.apache.org/doc/tutorials/deltaClient.md) every 30 seconds. The bean **blah** updates the bean **paramsBean** to add an updated **!deltatoken** property with the value returned in the **ODataDeltaFeed** result. Since the initial delta token is not known, the consumer endpoint will produce an **ODataFeed** value the first time, and **ODataDeltaFeed** on subsequent polls.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("olingo2://read/Manufacturers?queryParams=#paramsBean&timeUnit=SECONDS&delay=30")
     .to("bean:blah");
+```
+
+```xml
+<route>
+    <from uri="olingo2://read/Manufacturers?queryParams=#paramsBean&amp;timeUnit=SECONDS&amp;delay=30"/>
+    <to uri="bean:blah"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: olingo2://read/Manufacturers
+      parameters:
+        queryParams: "#paramsBean"
+        timeUnit: SECONDS
+        delay: 30
+    steps:
+      - to:
+          uri: bean:blah
 ```
 
 ## Spring Boot Auto-Configuration

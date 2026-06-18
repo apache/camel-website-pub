@@ -8,6 +8,8 @@ For example, you could use DataSonnet to create a Predicate in a [Message Filter
 
 To use a DataSonnet expression, use the following Java code:
 
+_Java-only: creating a DataSonnet expression_
+
 ```java
 datasonnet("someDSExpression");
 ```
@@ -142,7 +144,7 @@ Camel adds the following DataSonnet functions that can be used to access the exc
 
 Camel ships a standard library of helper functions that can be imported in any DataSonnet script:
 
-```java
+```datasonnet
 local c = import 'camel.libsonnet';
 {
   total: c.sumBy(body.items, function(i) i.price * i.qty),
@@ -248,6 +250,8 @@ from("direct:in")
 
 You can externalize the script and have Apache Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`.  
 This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
+
+_Java-only: loading a DataSonnet script from an external resource_
 
 ```java
 .setHeader("myHeader").datasonnet("resource:classpath:mydatasonnet.ds");

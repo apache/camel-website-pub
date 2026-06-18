@@ -182,16 +182,71 @@ Supported actions are:
 
 ### Producer Example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:in")
-  .to("asterisk://myVoIP?hostname=hostname&username=username&password=password&action=EXTENSION_STATE")
+  .to("asterisk://myVoIP?hostname=hostname&username=username&password=password&action=EXTENSION_STATE");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="asterisk://myVoIP?hostname=hostname&amp;username=username&amp;password=password&amp;action=EXTENSION_STATE"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: asterisk://myVoIP
+            parameters:
+              hostname: hostname
+              username: username
+              password: password
+              action: EXTENSION_STATE
 ```
 
 ### Consumer Example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("asterisk:myVoIP?hostname=hostname&username=username&password=password")
   .log("Received a message - ${body}");
+```
+
+```xml
+<route>
+  <from uri="asterisk:myVoIP?hostname=hostname&amp;username=username&amp;password=password"/>
+  <log message="Received a message - ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: asterisk:myVoIP
+      parameters:
+        hostname: hostname
+        username: username
+        password: password
+      steps:
+        - log:
+            message: "Received a message - ${body}"
 ```
 
 ## Spring Boot Auto-Configuration

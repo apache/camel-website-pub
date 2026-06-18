@@ -193,6 +193,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 -   startProcess
     
 
+_Java-only: inline Processor with Zeebe SDK types_
+
 ```java
     from("direct:start")
         .process(exchange -> {
@@ -235,6 +237,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 -   cancelProcess
     
 
+_Java-only: inline Processor with Zeebe SDK types_
+
 ```java
     from("direct:start")
         .process(exchange -> {
@@ -253,6 +257,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 
 -   publishMessage
     
+
+_Java-only: inline Processor with Zeebe SDK types_
 
 ```java
     from("direct:start")
@@ -298,6 +304,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 -   completeJob
     
 
+_Java-only: inline Processor with Zeebe SDK types_
+
 ```java
     from("direct:start")
         .process(exchange -> {
@@ -317,6 +325,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 
 -   failJob
     
+
+_Java-only: inline Processor with Zeebe SDK types_
 
 ```java
     from("direct:start")
@@ -339,6 +349,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 -   updateJobRetries
     
 
+_Java-only: inline Processor with Zeebe SDK types_
+
 ```java
     from("direct:start")
         .process(exchange -> {
@@ -358,6 +370,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 
 -   throwError
     
+
+_Java-only: inline Processor with Zeebe SDK types_
 
 ```java
     from("direct:start")
@@ -379,6 +393,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 
 -   deployResource
     
+
+_Java-only: inline Processor with Zeebe SDK types_
 
 ```java
     from("direct:start")
@@ -409,6 +425,8 @@ The endpoints accept either Java request objects as shown in the examples below 
 | worker | Registers a job worker for a job type and provides messages for available jobs. |
 
 **Example**
+
+_Java-only: inline Processor with Zeebe SDK types_
 
 ```java
     from("zeebe://worker?jobKey=job1&timeout=20")

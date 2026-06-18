@@ -21,19 +21,85 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 Extract all IP addresses from input
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:in")
     .unmarshal().grok("%{IP:ip}")
     .to("log:out");
 ```
 
+```xml
+<route>
+  <from uri="direct:in"/>
+  <unmarshal><grok pattern="%{IP:ip}"/></unmarshal>
+  <to uri="log:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - unmarshal:
+            grok:
+              pattern: "%{IP:ip}"
+        - to:
+            uri: log:out
+```
+
 Parse Apache logs and process only 4xx responses
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("file://apacheLogs")
     .unmarshal().grok("%{COMBINEDAPACHELOG")
     .split(body()).filter(simple("${body[response]} starts with '4'"))
-    .to("log:4xx")
+    .to("log:4xx");
+```
+
+```xml
+<route>
+  <from uri="file://apacheLogs"/>
+  <unmarshal><grok pattern="%{COMBINEDAPACHELOG"/></unmarshal>
+  <split>
+    <simple>${body}</simple>
+    <filter>
+      <simple>${body[response]} starts with '4'</simple>
+      <to uri="log:4xx"/>
+    </filter>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file://apacheLogs
+      steps:
+        - unmarshal:
+            grok:
+              pattern: "%{COMBINEDAPACHELOG"
+        - split:
+            simple: "${body}"
+            steps:
+              - filter:
+                  simple: "${body[response]} starts with '4'"
+                  steps:
+                    - to:
+                        uri: log:4xx
 ```
 
 ### Preregistered patterns

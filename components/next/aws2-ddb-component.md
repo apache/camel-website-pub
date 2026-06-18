@@ -577,6 +577,8 @@ For more information about this you can look at [AWS credentials documentation](
 
 If you need more control over the `AmazonDynamoDB` instance configuration you can create your own instance and refer to it from the URI:
 
+_Java-only: programmatic `DynamoDbClient` configuration and registry binding_
+
 ```java
 public class MyRouteBuilder extends RouteBuilder {
 
@@ -657,6 +659,8 @@ where `${camel-version}` must be replaced by the actual version of Camel.
 -   PutItem: this operation will create an entry into DynamoDB
     
 
+_Java-only: uses AWS SDK `AttributeValue` builders and variable table name_
+
 ```java
 Map<String, AttributeValue> attributeMap = new HashMap<>();
 attributeMap.put("partitionKey", AttributeValue.builder().s("3000").build());
@@ -664,16 +668,18 @@ attributeMap.put("id", AttributeValue.builder().s("1001").build());
 attributeMap.put("barcode", AttributeValue.builder().s("9002811220001").build());
 
 from("direct:start")
-  .setHeader(Ddb2Constants.OPERATION,  constant(Ddb2Operations.PutItem))
-  .setHeader(Ddb2Constants.CONSISTENT_READ, constant("true"))
-  .setHeader(Ddb2Constants.RETURN_VALUES, constant("ALL_OLD"))
-  .setHeader(Ddb2Constants.ITEM, constant(attributeMap))
-  .setHeader(Ddb2Constants.ATTRIBUTE_NAMES, constant(attributeMap.keySet()))
+  .setHeader("CamelAwsDdbOperation",  constant("PutItem"))
+  .setHeader("CamelAwsDdbConsistentRead", constant("true"))
+  .setHeader("CamelAwsDdbReturnValues", constant("ALL_OLD"))
+  .setHeader("CamelAwsDdbItem", constant(attributeMap))
+  .setHeader("CamelAwsDdbAttributeNames", constant(attributeMap.keySet()))
   .to("aws2-ddb://" + tableName + "?amazonDDBClient=#client");
 ```
 
 -   UpdateItem: this operation will update an entry into DynamoDB
     
+
+_Java-only: uses AWS SDK `AttributeValue` and `AttributeValueUpdate` builders_
 
 ```java
 Map<String, AttributeValueUpdate> attributeMap = new HashMap<>();
@@ -686,14 +692,16 @@ keyMap.put("partitionKey", AttributeValue.builder().s("3000").build());
 keyMap.put("sortKey", AttributeValue.builder().s("1001").build());
 
 from("direct:start")
-  .setHeader(Ddb2Constants.OPERATION,  constant(Ddb2Operations.UpdateItem))
-  .setHeader(Ddb2Constants.UPDATE_VALUES,  constant(attributeMap))
-  .setHeader(Ddb2Constants.KEY,  constant(keyMap))
+  .setHeader("CamelAwsDdbOperation",  constant("UpdateItem"))
+  .setHeader("CamelAwsDdbUpdateValues",  constant(attributeMap))
+  .setHeader("CamelAwsDdbKey",  constant(keyMap))
   .to("aws2-ddb://" + tableName + "?amazonDDBClient=#client");
 ```
 
 -   GetItem: this operation will retrieve an entry from DynamoDB
     
+
+_Java-only: uses `Processor` with AWS SDK `AttributeValue` builders_
 
 ```java
 from("direct:get")
@@ -701,9 +709,9 @@ from("direct:get")
       final Map<String, AttributeValue> keyMap = new HashMap<>();
       keyMap.put("table-key", AttributeValue.builder().s("1").build());
 
-      exchange.getIn().setHeader(Ddb2Constants.OPERATION, Ddb2Operations.GetItem);
-      exchange.getIn().setHeader(Ddb2Constants.ATTRIBUTE_NAMES, constant(List.of("table-key", "message")));
-      exchange.getIn().setHeader(Ddb2Constants.KEY, keyMap);
+      exchange.getIn().setHeader("CamelAwsDdbOperation", "GetItem");
+      exchange.getIn().setHeader("CamelAwsDdbAttributeNames", constant(List.of("table-key", "message")));
+      exchange.getIn().setHeader("CamelAwsDdbKey", keyMap);
   })
   .toF("aws2-ddb://%s?amazonDDBClient=#client&consistentRead=true", tableName);
 ```
@@ -711,14 +719,16 @@ from("direct:get")
 -   DeleteItem: this operation will delete an entry from DynamoDB
     
 
+_Java-only: uses `Processor` with AWS SDK `AttributeValue` builders_
+
 ```java
 from("direct:delete")
   .process(exchange -> {
       final Map<String, AttributeValue> keyMap = new HashMap<>();
       keyMap.put("table-key", AttributeValue.builder().s("1").build());
 
-      exchange.getIn().setHeader(Ddb2Constants.OPERATION, Ddb2Operations.DeleteItem);
-      exchange.getIn().setHeader(Ddb2Constants.KEY, keyMap);
+      exchange.getIn().setHeader("CamelAwsDdbOperation", "DeleteItem");
+      exchange.getIn().setHeader("CamelAwsDdbKey", keyMap);
   })
   .toF("aws2-ddb://%s?amazonDDBClient=#client&consistentRead=true", tableName);
 ```
@@ -726,15 +736,17 @@ from("direct:delete")
 -   ExecuteStatement (PartiQL): this operation runs a PartiQL statement against DynamoDB
     
 
+_Java-only: uses `Processor` with AWS SDK `AttributeValue` builders_
+
 ```java
 from("direct:partiql")
   .process(exchange -> {
-      exchange.getIn().setHeader(Ddb2Constants.OPERATION, Ddb2Operations.ExecuteStatement);
-      exchange.getIn().setHeader(Ddb2Constants.STATEMENT,
+      exchange.getIn().setHeader("CamelAwsDdbOperation", "ExecuteStatement");
+      exchange.getIn().setHeader("CamelAwsDdbStatement",
           "SELECT * FROM \"MyTable\" WHERE \"key\" = ?");
-      exchange.getIn().setHeader(Ddb2Constants.STATEMENT_PARAMETERS,
+      exchange.getIn().setHeader("CamelAwsDdbStatementParameters",
           List.of(AttributeValue.builder().s("myKeyValue").build()));
-      exchange.getIn().setHeader(Ddb2Constants.CONSISTENT_READ, true);
+      exchange.getIn().setHeader("CamelAwsDdbConsistentRead", true);
   })
   .toF("aws2-ddb://%s?amazonDDBClient=#client", tableName);
 ```
@@ -742,11 +754,13 @@ from("direct:partiql")
 -   BatchExecuteStatement (PartiQL batch): this operation runs multiple PartiQL statements in a batch
     
 
+_Java-only: uses `Processor` with AWS SDK `BatchStatementRequest` builders_
+
 ```java
 from("direct:batchPartiql")
   .process(exchange -> {
-      exchange.getIn().setHeader(Ddb2Constants.OPERATION, Ddb2Operations.BatchExecuteStatement);
-      exchange.getIn().setHeader(Ddb2Constants.BATCH_STATEMENTS, List.of(
+      exchange.getIn().setHeader("CamelAwsDdbOperation", "BatchExecuteStatement");
+      exchange.getIn().setHeader("CamelAwsDdbBatchStatements", List.of(
           BatchStatementRequest.builder()
               .statement("INSERT INTO \"MyTable\" VALUE {'key': 'k1', 'data': 'v1'}")
               .build(),
@@ -760,6 +774,8 @@ from("direct:batchPartiql")
 -   TransactWriteItems: this operation performs a transactional write across one or more tables
     
 
+_Java-only: uses `Processor` with AWS SDK `TransactWriteItem` builders_
+
 ```java
 Map<String, AttributeValue> item = new HashMap<>();
 item.put("key", AttributeValue.builder().s("txKey").build());
@@ -767,8 +783,8 @@ item.put("data", AttributeValue.builder().s("txValue").build());
 
 from("direct:transactWrite")
   .process(exchange -> {
-      exchange.getIn().setHeader(Ddb2Constants.OPERATION, Ddb2Operations.TransactWriteItems);
-      exchange.getIn().setHeader(Ddb2Constants.TRANSACT_WRITE_ITEMS, List.of(
+      exchange.getIn().setHeader("CamelAwsDdbOperation", "TransactWriteItems");
+      exchange.getIn().setHeader("CamelAwsDdbTransactWriteItems", List.of(
           TransactWriteItem.builder()
               .put(Put.builder().tableName("MyTable").item(item).build())
               .build()));
@@ -779,14 +795,16 @@ from("direct:transactWrite")
 -   TransactGetItems: this operation performs a transactional read across one or more tables
     
 
+_Java-only: uses `Processor` with AWS SDK `TransactGetItem` builders_
+
 ```java
 Map<String, AttributeValue> key = new HashMap<>();
 key.put("key", AttributeValue.builder().s("txKey").build());
 
 from("direct:transactGet")
   .process(exchange -> {
-      exchange.getIn().setHeader(Ddb2Constants.OPERATION, Ddb2Operations.TransactGetItems);
-      exchange.getIn().setHeader(Ddb2Constants.TRANSACT_GET_ITEMS, List.of(
+      exchange.getIn().setHeader("CamelAwsDdbOperation", "TransactGetItems");
+      exchange.getIn().setHeader("CamelAwsDdbTransactGetItems", List.of(
           TransactGetItem.builder()
               .get(Get.builder().tableName("MyTable").key(key).build())
               .build()));
@@ -796,6 +814,8 @@ from("direct:transactGet")
 
 -   BatchWriteItems: this operation puts or deletes multiple items in one or more tables in a single batch
     
+
+_Java-only: uses AWS SDK `WriteRequest` and `PutRequest` builders_
 
 ```java
 Map<String, AttributeValue> item1 = new HashMap<>();
@@ -810,8 +830,8 @@ requestItems.put("MyTable", List.of(
 
 from("direct:batchWrite")
   .process(exchange -> {
-      exchange.getIn().setHeader(Ddb2Constants.OPERATION, Ddb2Operations.BatchWriteItems);
-      exchange.getIn().setHeader(Ddb2Constants.BATCH_WRITE_ITEMS, requestItems);
+      exchange.getIn().setHeader("CamelAwsDdbOperation", "BatchWriteItems");
+      exchange.getIn().setHeader("CamelAwsDdbBatchWriteItems", requestItems);
   })
   .toF("aws2-ddb://%s?amazonDDBClient=#client", tableName);
 ```

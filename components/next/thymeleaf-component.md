@@ -199,6 +199,8 @@ Camel will provide exchange information in the Thymeleaf context (just a `Map`).
 
 You can set up a custom Thymeleaf Context yourself by setting property `allowTemplateFromHeader=true` and setting the message header `CamelThymeleafContext` like this
 
+_Java-only: programmatic Thymeleaf context setup via Exchange API_
+
 ```java
 EngineContext engineContext = new EngineContext(variableMap);
 exchange.getIn().setHeader("CamelThymeleafContext", engineContext);
@@ -222,51 +224,222 @@ Camel provides two headers by which you can define a different resource location
 
 For a simple use case, you could use something like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("thymeleaf:com/acme/MyResponse.html");
+from("activemq:My.Queue")
+    .to("thymeleaf:com/acme/MyResponse.html");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="thymeleaf:com/acme/MyResponse.html"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: thymeleaf:com/acme/MyResponse.html
 ```
 
 To use a Thymeleaf template to formulate a response to a message for InOut message exchanges (where there is a `JMSReplyTo` header).
 
 If you want to use InOnly and consume the message and send it to another destination, you could use the following route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:My.Queue")
-  .to("thymeleaf:com/acme/MyResponse.html")
-  .to("activemq:Another.Queue");
+    .to("thymeleaf:com/acme/MyResponse.html")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="thymeleaf:com/acme/MyResponse.html"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: thymeleaf:com/acme/MyResponse.html
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 And to use the content cache, e.g., for use in production, where the `.html` template never changes:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:My.Queue")
-  .to("thymeleaf:com/acme/MyResponse.html?contentCache=true")
-  .to("activemq:Another.Queue");
+    .to("thymeleaf:com/acme/MyResponse.html?contentCache=true")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="thymeleaf:com/acme/MyResponse.html?contentCache=true"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: thymeleaf:com/acme/MyResponse.html
+            parameters:
+              contentCache: true
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 And a file-based resource:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:My.Queue")
-  .to("thymeleaf:file://myfolder/MyResponse.html?contentCache=true")
-  .to("activemq:Another.Queue");
+    .to("thymeleaf:file://myfolder/MyResponse.html?contentCache=true")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="thymeleaf:file://myfolder/MyResponse.html?contentCache=true"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: thymeleaf:file://myfolder/MyResponse.html
+            parameters:
+              contentCache: true
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 It’s possible to specify what template the component should use dynamically via a header, so for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:in")
-  .setHeader("CamelThymeleafResourceUri").constant("path/to/my/template.html")
-  .to("thymeleaf:dummy?allowTemplateFromHeader=true"");
+    .setHeader("CamelThymeleafResourceUri").constant("path/to/my/template.html")
+    .to("thymeleaf:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelThymeleafResourceUri">
+    <constant>path/to/my/template.html</constant>
+  </setHeader>
+  <to uri="thymeleaf:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelThymeleafResourceUri
+            expression:
+              constant:
+                expression: path/to/my/template.html
+        - to:
+            uri: thymeleaf:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 It’s possible to specify a template directly as a header. The component should use it dynamically via a header, so, for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:in")
-  .setHeader("CamelThymeleafTemplate").constant("Hi this is a thymeleaf template that can do templating ${body}")
-  .to("thymeleaf:dummy?allowTemplateFromHeader=true"");
+    .setHeader("CamelThymeleafTemplate").constant("Hi this is a thymeleaf template that can do templating ${body}")
+    .to("thymeleaf:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelThymeleafTemplate">
+    <constant>Hi this is a thymeleaf template that can do templating ${body}</constant>
+  </setHeader>
+  <to uri="thymeleaf:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelThymeleafTemplate
+            expression:
+              constant:
+                expression: "Hi this is a thymeleaf template that can do templating ${body}"
+        - to:
+            uri: thymeleaf:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 ### The Email Example
@@ -285,6 +458,8 @@ Regards Camel Riders Bookstore
 ```
 
 And the java code (from a unit test):
+
+_Java-only: unit test with Exchange creation and RouteBuilder_
 
 ```java
     private Exchange createLetter() {

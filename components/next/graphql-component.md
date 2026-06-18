@@ -121,25 +121,109 @@ If the `variables` and `variablesHeader` parameters are not set and the IN body 
 
 Simple queries can be defined directly in the URI:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .to("graphql://http://example.com/graphql?query={books{id name}}")
+    .to("graphql://http://example.com/graphql?query={books{id name}}");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="graphql://http://example.com/graphql?query={books{id name}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: graphql://http://example.com/graphql
+            parameters:
+              query: "{books{id name}}"
 ```
 
 The body can also be used for the query:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(constant("{books{id name}}"))
-    .to("graphql://http://example.com/graphql")
+    .to("graphql://http://example.com/graphql");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <constant>{books{id name}}</constant>
+  </setBody>
+  <to uri="graphql://http://example.com/graphql"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            constant: "{books{id name}}"
+        - to:
+            uri: graphql://http://example.com/graphql
 ```
 
 The query can come from a header also:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setHeader("myQuery", constant("{books{id name}}"))
-    .to("graphql://http://example.com/graphql?queryHeader=myQuery")
+    .to("graphql://http://example.com/graphql?queryHeader=myQuery");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="myQuery">
+    <constant>{books{id name}}</constant>
+  </setHeader>
+  <to uri="graphql://http://example.com/graphql?queryHeader=myQuery"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+    steps:
+      - setHeader:
+          name: myQuery
+          constant: "{books{id name}}"
+      - to:
+          uri: graphql://http://example.com/graphql
+          parameters:
+            queryHeader: myQuery
 ```
 
 More complex queries can be stored in a file and referenced in the URI:
@@ -153,16 +237,67 @@ query Books {
   }
 }
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .to("graphql://http://example.com/graphql?queryFile=booksQuery.graphql")
+    .to("graphql://http://example.com/graphql?queryFile=booksQuery.graphql");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="graphql://http://example.com/graphql?queryFile=booksQuery.graphql"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: graphql://http://example.com/graphql
+            parameters:
+              queryFile: booksQuery.graphql
 ```
 
 When the query file defines multiple operations, it’s required to specify which one should be executed:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .to("graphql://http://example.com/graphql?queryFile=multipleQueries.graphql&operationName=Books")
+    .to("graphql://http://example.com/graphql?queryFile=multipleQueries.graphql&operationName=Books");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="graphql://http://example.com/graphql?queryFile=multipleQueries.graphql&amp;operationName=Books"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: graphql://http://example.com/graphql
+            parameters:
+              queryFile: multipleQueries.graphql
+              operationName: Books
 ```
 
 Queries with variables need to reference a JsonObject instance from the registry:
@@ -177,6 +312,8 @@ query BookById($id: Int!) {
   }
 }
 
+_Java-only: registering query variables and referencing them in the endpoint_
+
 ```java
 @BindToRegistry("bookByIdQueryVariables")
 public JsonObject bookByIdQueryVariables() {
@@ -190,6 +327,8 @@ from("direct:start")
 ```
 
 A query that accesses variables via the variablesHeader parameter:
+
+_Java-only: setting variables via a header with a lambda supplier_
 
 ```java
 from("direct:start")
@@ -216,6 +355,8 @@ mutation AddBook($bookInput: BookInput) {
     }
   }
 }
+
+_Java-only: registering mutation variables and referencing them in the endpoint_
 
 ```java
 @BindToRegistry("addBookMutationVariables")

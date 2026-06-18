@@ -414,9 +414,34 @@ For more information about this you can look at [AWS credentials documentation](
 
 If you need more control over the `SesClient` instance configuration you can create your own instance and refer to it from the URI:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-.to("aws2-ses://example@example.com?amazonSESClient=#client");
+    .to("aws2-ses://example@example.com?amazonSESClient=#client");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="aws2-ses://example@example.com?amazonSESClient=#client"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: aws2-ses://example@example.com
+            parameters:
+              amazonSESClient: "#client"
 ```
 
 The `#client` refers to a `SesClient` in the Registry.
@@ -425,12 +450,55 @@ The `#client` refers to a `SesClient` in the Registry.
 
 ### Producer Examples
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setHeader(SesConstants.SUBJECT, constant("This is my subject"))
     .setHeader(SesConstants.TO, constant(Collections.singletonList("to@example.com"))
     .setBody(constant("This is my message text."))
     .to("aws2-ses://from@example.com?accessKey=xxx&secretKey=yyy");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <setHeader name="CamelAwsSesSubject">
+        <constant>This is my subject</constant>
+    </setHeader>
+    <setHeader name="CamelAwsSesTo">
+        <constant>to@example.com</constant>
+    </setHeader>
+    <setBody>
+        <constant>This is my message text.</constant>
+    </setBody>
+    <to uri="aws2-ses://from@example.com?accessKey=xxx&amp;secretKey=yyy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAwsSesSubject
+            constant: "This is my subject"
+        - setHeader:
+            name: CamelAwsSesTo
+            constant: "to@example.com"
+        - setBody:
+            constant: "This is my message text."
+        - to:
+            uri: aws2-ses://from@example.com
+            parameters:
+              accessKey: xxx
+              secretKey: yyy
 ```
 
 ## Dependencies

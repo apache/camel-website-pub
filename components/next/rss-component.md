@@ -212,14 +212,47 @@ Camel initializes the In body on the Exchange with a ROME `SyndFeed`. Depending 
 
 If the URL for the RSS feed uses query parameters, this component will resolve them. For example, if the feed uses `alt=rss`, then the following example will be resolved:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("rss:http://someserver.com/feeds/posts/default?alt=rss&splitEntries=false&delay=1000")
     .to("bean:rss");
 ```
 
+```xml
+<route>
+  <from uri="rss:http://someserver.com/feeds/posts/default?alt=rss&amp;splitEntries=false&amp;delay=1000"/>
+  <to uri="bean:rss"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "rss:http://someserver.com/feeds/posts/default?alt=rss"
+      parameters:
+        splitEntries: false
+        delay: 1000
+      steps:
+        - to:
+            uri: bean:rss
+```
+
 ### Filtering entries
 
 You can filter out entries using XPath, as shown in the data format section above. You can also exploit Camel’s Bean Integration to implement your own conditions. For instance, a filter equivalent to the XPath example above would be:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("rss:file:src/test/data/rss20.xml?splitEntries=true&delay=100")
@@ -227,7 +260,36 @@ from("rss:file:src/test/data/rss20.xml?splitEntries=true&delay=100")
         .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="rss:file:src/test/data/rss20.xml?splitEntries=true&amp;delay=100"/>
+  <filter>
+    <method ref="myFilterBean" method="titleContainsCamel"/>
+    <to uri="mock:result"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rss:file:src/test/data/rss20.xml
+      parameters:
+        splitEntries: true
+        delay: 100
+      steps:
+        - filter:
+            method:
+              ref: myFilterBean
+              method: titleContainsCamel
+            steps:
+              - to:
+                  uri: mock:result
+```
+
 The custom bean for this would be:
+
+_Java-only: bean class definition with annotations and type casts_
 
 ```java
 public static class FilterBean {
@@ -248,6 +310,8 @@ Alternative Approach: Using the HTTP Component with Proxy Instead of directly us
 ### Configuring Proxy for HTTP Component and Processing RSS
 
 Below is an example that sets up an HTTP client with a proxy (including authentication support) and uses it to retrieve and process an RSS feed:
+
+_Java-only: programmatic proxy configuration with HttpClientConfigurer, registry binding, and RouteBuilder class_
 
 ```java
 protected RoutesBuilder createRouteBuilder() throws Exception {

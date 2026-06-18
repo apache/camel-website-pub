@@ -4,10 +4,37 @@
 
 Fastjson is a Data Format that uses the [Fastjson Library](https://github.com/alibaba/fastjson)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  marshal().json(JsonLibrary.Fastjson).
-  to("mqseries:Another.Queue");
+from("activemq:My.Queue")
+    .marshal().json(JsonLibrary.Fastjson)
+    .to("mqseries:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <marshal><json library="Fastjson"/></marshal>
+  <to uri="mqseries:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - marshal:
+            json:
+              library: Fastjson
+        - to:
+            uri: mqseries:Another.Queue
 ```
 
 ## Fastjson Options

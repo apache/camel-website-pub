@@ -2095,6 +2095,8 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClientScope", null, 
 
 Identity providers allow you to configure external authentication systems like LDAP, Active Directory, Google, GitHub, and other SAML/OIDC providers.
 
+_Java-only: Keycloak admin API_
+
 ```java
 // Create OIDC identity provider
 Map<String, Object> idpHeaders = new HashMap<>();
@@ -2135,6 +2137,8 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteIdentityProvider", n
 ### Organization Operations
 
 Organizations (introduced in Keycloak 26) allow you to model multi-tenant scenarios within a realm. Each organization can have members and can be linked to one or more identity providers.
+
+_Java-only: Keycloak admin API_
 
 ```java
 // Create a new organization
@@ -2586,6 +2590,8 @@ Keycloak Authorization Services provide fine-grained authorization with resource
 > **Note**
 > These operations require a client with authorization services enabled in Keycloak.
 
+_Java-only: Keycloak authorization API_
+
 ```java
 // Create authorization resource
 ResourceRepresentation resource = new ResourceRepresentation();
@@ -2854,6 +2860,8 @@ System.out.println("RPT token obtained: " + (rptToken != null));
 
 ##### Fine-Grained Resource Authorization
 
+_Java-only: Keycloak authorization API_
+
 ```java
 // Check if user can access a specific document
 public boolean canAccessDocument(String accessToken, String documentId) {
@@ -2883,6 +2891,8 @@ public Map<String, Boolean> checkMultipleResources(String accessToken, List<Stri
 
 ##### Token Exchange for Delegation
 
+_Java-only: Keycloak token exchange API_
+
 ```java
 // Evaluate permissions on behalf of another user (token exchange)
 Map<String, Object> headers = new HashMap<>();
@@ -2905,6 +2915,8 @@ The operation throws exceptions in the following cases:
     
 -   `AuthorizationDeniedException` - When the user doesn’t have permission to access the requested resources
     
+
+_Java-only: Java exception handling_
 
 ```java
 import org.keycloak.authorization.client.AuthorizationDeniedException;
@@ -5221,6 +5233,8 @@ beans:
 
 The introspection cache significantly reduces the performance impact of API calls to Keycloak:
 
+_Java-only: programmatic security policy configuration_
+
 ```java
 KeycloakSecurityPolicy policy = new KeycloakSecurityPolicy();
 policy.setServerUrl("http://localhost:8080");
@@ -5400,6 +5414,8 @@ beans:
 
 For production systems, monitor cache performance to optimize TTL and size settings:
 
+_Java-only: cache monitoring API_
+
 ```java
 // Periodically check cache performance
 TokenCache.CacheStats stats = introspector.getCacheStats();
@@ -5454,6 +5470,8 @@ if (stats != null) {
 5.  **Different Policies for Different Endpoints**: Use Caffeine cache for high-traffic endpoints and stricter settings for security-critical endpoints
     
 
+_Java-only: programmatic cache configuration_
+
 ```java
 // High-traffic endpoint - use Caffeine with longer TTL
 KeycloakSecurityPolicy highTrafficPolicy = new KeycloakSecurityPolicy();
@@ -5478,6 +5496,8 @@ from("rest:post:/payments")
 #### Token Revocation Workflow
 
 When using token introspection, you can implement a complete token revocation workflow:
+
+_Java-only: token revocation workflow_
 
 ```java
 // 1. Revoke token in Keycloak (via admin API)
@@ -5588,6 +5608,8 @@ The security policy expects access tokens to be provided in one of the following
     
 3.  **Exchange Property**: `CamelKeycloakAccessToken`
     
+
+_Java-only: accessing token from exchange_
 
 ```java
 // Using header
@@ -5920,6 +5942,8 @@ beans:
 
 ### Sending Requests with Tokens
 
+_Java-only: HTTP client authentication_
+
 ```java
 // In your client code, include the access token
 String accessToken = "eyJhbGciOiJSUzI1NiIsInR5cC..."; // From Keycloak
@@ -6022,6 +6046,8 @@ keycloak.client-secret=your-client-secret
 ```
 
 ### Spring Configuration
+
+_Java-only: Spring configuration class_
 
 ```java
 @Configuration
@@ -6389,6 +6415,8 @@ For permissions-based authorization, you have several options to include permiss
     
 3.  In your application code, you can then use scopes as permissions:
     
+
+_Java-only: programmatic security policy configuration_
 
 ```java
 KeycloakSecurityPolicy policy = new KeycloakSecurityPolicy();

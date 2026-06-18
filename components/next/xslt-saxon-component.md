@@ -171,17 +171,66 @@ The XSLT Saxon component supports 3 message header(s), which is/are listed below
 
 The following format is an example of using an XSLT template to formulate a response for a message for InOut message exchanges (where there is a `JMSReplyTo` header)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("xslt-saxon:com/acme/mytransform.xsl");
+from("activemq:My.Queue")
+    .to("xslt-saxon:com/acme/mytransform.xsl");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="xslt-saxon:com/acme/mytransform.xsl"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: xslt-saxon:com/acme/mytransform.xsl
 ```
 
 If you want to use InOnly and consume the message and send it to another destination, you could use the following route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("xslt-saxon:com/acme/mytransform.xsl").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("xslt-saxon:com/acme/mytransform.xsl")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="xslt-saxon:com/acme/mytransform.xsl"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: xslt-saxon:com/acme/mytransform.xsl
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 ### Getting Usable Parameters into the XSLT
@@ -259,6 +308,8 @@ You can explicitly specify `file:` or `classpath:` loading. The two loading type
 
 Since Saxon 9.2, writing extension functions has been supplemented by a new mechanism, referred to as [extension functions](https://www.saxonica.com/html/documentation12/extensibility/extension-functions.md) you can now easily use camel as shown in the below example:
 
+_Java-only: registering Saxon extension functions and using them in a route_
+
 ```java
 SimpleRegistry registry = new SimpleRegistry();
 registry.put("function1", new MyExtensionFunction1());
@@ -299,10 +350,41 @@ To provide a dynamic stylesheet at runtime, you can either:
 
 When using a header for dynamic stylesheet, then you can either refer to the stylesheet as a `file` or `classpath` with the header `CamelXsltResourceUri`, such as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:transform")
     .setHeader("CamelXsltResourceUri", simple("file:styles/${header.region}.xsl"))
     .to("xslt-saxon:template.xsl?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:transform"/>
+  <setHeader name="CamelXsltResourceUri">
+    <simple>file:styles/${header.region}.xsl</simple>
+  </setHeader>
+  <to uri="xslt-saxon:template.xsl?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:transform
+      steps:
+        - setHeader:
+            name: CamelXsltResourceUri
+            simple: "file:styles/${header.region}.xsl"
+        - to:
+            uri: xslt-saxon:template.xsl
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 Here we set the `CamelXsltResourceUri` header to refer to a stylesheet to be loaded from the file system, with a dynamic name that is computed from another header (`region`).
@@ -342,9 +424,34 @@ The exception is stored on the Exchange as a warning with the key `Exchange.XSLT
 
 By default, the input body is assumed as XML. You can set `useJsonBody=true` to consume JSON data from Camel Message body.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:transform")
     .to("xslt-saxon:template.xsl?useJsonBody=true");
+```
+
+```xml
+<route>
+  <from uri="direct:transform"/>
+  <to uri="xslt-saxon:template.xsl?useJsonBody=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:transform
+      steps:
+        - to:
+            uri: xslt-saxon:template.xsl
+            parameters:
+              useJsonBody: true
 ```
 
 If `useJsonBody=true` is set, the JSON body is transformed into XML representation of JSON [defined in XSLT 3.0 specification](https://www.w3.org/TR/xslt-30/#json-to-xml-mapping).

@@ -181,6 +181,8 @@ The Flink component supports 4 message header(s), which is/are listed below:
 
 ### Flink DataSet Callback
 
+_Java-only: Flink DataSetCallback API_
+
 ```java
 @Bean
 public DataSetCallback<Long> dataSetCallback() {
@@ -199,6 +201,8 @@ public DataSetCallback<Long> dataSetCallback() {
 
 ### Flink DataStream Callback
 
+_Java-only: Flink DataStreamCallback API_
+
 ```java
 @Bean
 public VoidDataStreamCallback dataStreamCallback() {
@@ -214,6 +218,8 @@ public VoidDataStreamCallback dataStreamCallback() {
 ```
 
 ### Camel-Flink Producer call
+
+_Java-only: ProducerTemplate API_
 
 ```java
 CamelContext camelContext = new SpringCamelContext(context);
@@ -231,7 +237,9 @@ try {
 
 ### Modern DataStream Batch Processing Example
 
-The recommended approach using the DataStream API in batch mode:
+The recommended approach using the DataStream API in batch mode.
+
+_Java-only: Spring @Bean configuration_
 
 ```java
 @Bean
@@ -265,15 +273,46 @@ public DataStreamCallback wordCountCallback() {
         }
     };
 }
+```
 
-// In your route
+Then use the beans in the route:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
 from("direct:wordCount")
     .to("flink:datastream?dataStream=#myDataStream&dataStreamCallback=#wordCountCallback");
+```
+
+```xml
+<route>
+  <from uri="direct:wordCount"/>
+  <to uri="flink:datastream?dataStream=#myDataStream&amp;dataStreamCallback=#wordCountCallback"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:wordCount
+      steps:
+        - to:
+            uri: flink:datastream
+            parameters:
+              dataStream: "#myDataStream"
+              dataStreamCallback: "#wordCountCallback"
 ```
 
 ### Real-time Streaming Example
 
 For true streaming use cases with unbounded data:
+
+_Java-only: Spring @Bean configuration with Flink streaming API_
 
 ```java
 @Bean
@@ -311,31 +350,81 @@ public DataStreamCallback streamingProcessCallback() {
 
 Configure a DataStream endpoint for batch processing with custom settings:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:batchProcess")
-    .to("flink:datastream?dataStream=#myDataStream"
-        + "&dataStreamCallback=#myCallback"
-        + "&executionMode=BATCH"
-        + "&parallelism=4"
-        + "&jobName=MyBatchJob");
+    .to("flink:datastream?dataStream=#myDataStream&dataStreamCallback=#myCallback&executionMode=BATCH&parallelism=4&jobName=MyBatchJob");
+```
+
+```xml
+<route>
+  <from uri="direct:batchProcess"/>
+  <to uri="flink:datastream?dataStream=#myDataStream&amp;dataStreamCallback=#myCallback&amp;executionMode=BATCH&amp;parallelism=4&amp;jobName=MyBatchJob"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:batchProcess
+      steps:
+        - to:
+            uri: flink:datastream
+            parameters:
+              dataStream: "#myDataStream"
+              dataStreamCallback: "#myCallback"
+              executionMode: BATCH
+              parallelism: 4
+              jobName: MyBatchJob
 ```
 
 #### Streaming with Checkpointing
 
 Configure a streaming job with checkpointing for fault tolerance:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:streamProcess")
-    .to("flink:datastream?dataStream=#myDataStream"
-        + "&dataStreamCallback=#streamCallback"
-        + "&executionMode=STREAMING"
-        + "&checkpointInterval=60000"              // Checkpoint every 60 seconds
-        + "&checkpointingMode=EXACTLY_ONCE"        // Exactly-once semantics
-        + "&checkpointTimeout=120000"              // 2 minute timeout
-        + "&minPauseBetweenCheckpoints=30000"      // 30 second minimum pause
-        + "&parallelism=8"
-        + "&maxParallelism=128"
-        + "&jobName=StreamingPipeline");
+    .to("flink:datastream?dataStream=#myDataStream&dataStreamCallback=#streamCallback&executionMode=STREAMING&checkpointInterval=60000&checkpointingMode=EXACTLY_ONCE&checkpointTimeout=120000&minPauseBetweenCheckpoints=30000&parallelism=8&maxParallelism=128&jobName=StreamingPipeline");
+```
+
+```xml
+<route>
+  <from uri="direct:streamProcess"/>
+  <to uri="flink:datastream?dataStream=#myDataStream&amp;dataStreamCallback=#streamCallback&amp;executionMode=STREAMING&amp;checkpointInterval=60000&amp;checkpointingMode=EXACTLY_ONCE&amp;checkpointTimeout=120000&amp;minPauseBetweenCheckpoints=30000&amp;parallelism=8&amp;maxParallelism=128&amp;jobName=StreamingPipeline"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:streamProcess
+      steps:
+        - to:
+            uri: flink:datastream
+            parameters:
+              dataStream: "#myDataStream"
+              dataStreamCallback: "#streamCallback"
+              executionMode: STREAMING
+              checkpointInterval: 60000
+              checkpointingMode: EXACTLY_ONCE
+              checkpointTimeout: 120000
+              minPauseBetweenCheckpoints: 30000
+              parallelism: 8
+              maxParallelism: 128
+              jobName: StreamingPipeline
 ```
 
 #### Configuration Options Reference

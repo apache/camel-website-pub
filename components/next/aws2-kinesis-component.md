@@ -610,9 +610,36 @@ For more information about this you can look at [AWS credentials documentation](
 
 You then have to reference the KinesisClient in the `amazonKinesisClient` URI option.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("aws2-kinesis://mykinesisstream?amazonKinesisClient=#kinesisClient")
-  .to("log:out?showAll=true");
+    .to("log:out?showAll=true");
+```
+
+```xml
+<route>
+  <from uri="aws2-kinesis://mykinesisstream?amazonKinesisClient=#kinesisClient"/>
+  <to uri="log:out?showAll=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: aws2-kinesis://mykinesisstream
+      parameters:
+        amazonKinesisClient: "#kinesisClient"
+      steps:
+        - to:
+            uri: log:out
+            parameters:
+              showAll: true
 ```
 
 ### Providing AWS Credentials
@@ -625,9 +652,39 @@ The component supports also the KCL (Kinesis Client Library) for consuming from 
 
 To enable this feature you’ll need to set three different parameter in your endpoint and set the region:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("aws2-kinesis://mykinesisstream?asyncClient=true&useDefaultCredentialsProvider=true&useKclConsumers=true&region=myregion")
-  .to("log:out?showAll=true");
+    .to("log:out?showAll=true");
+```
+
+```xml
+<route>
+  <from uri="aws2-kinesis://mykinesisstream?asyncClient=true&amp;useDefaultCredentialsProvider=true&amp;useKclConsumers=true&amp;region=myregion"/>
+  <to uri="log:out?showAll=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: aws2-kinesis://mykinesisstream
+      parameters:
+        asyncClient: true
+        useDefaultCredentialsProvider: true
+        useKclConsumers: true
+        region: myregion
+      steps:
+        - to:
+            uri: log:out
+            parameters:
+              showAll: true
 ```
 
 This feature will make possible to automatically checkpointing the Shard Iterations by combining the usage of KCL, DynamoDB Table and CloudWatch alarms.

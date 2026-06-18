@@ -117,8 +117,31 @@ The body content is defined by the event model deployed to the Flowable Event Re
 
 The following example sends an event to the Flowable event registry for further processing:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start").to("flowable:exampleChannel");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="flowable:exampleChannel"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: flowable:exampleChannel
 ```
 
 ## Dependencies

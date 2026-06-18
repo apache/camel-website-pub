@@ -199,20 +199,94 @@ The component will use the message body as the document to be inserted. If the b
 
 For example, if you wish to consume all inserts, updates and deletes from a CouchDB instance running locally, on port 9999, then you could use the following:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("couchdb:http://localhost:9999").process(someProcessor);
 ```
 
+```xml
+<route>
+    <from uri="couchdb:http://localhost:9999"/>
+    <process ref="someProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: couchdb:http://localhost:9999
+    steps:
+      - process:
+          ref: someProcessor
+```
+
 If you were only interested in deleting, then you could use the following:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("couchdb:http://localhost:9999?updates=false").process(someProcessor);
 ```
 
+```xml
+<route>
+    <from uri="couchdb:http://localhost:9999?updates=false"/>
+    <process ref="someProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: couchdb:http://localhost:9999
+      parameters:
+        updates: false
+    steps:
+      - process:
+          ref: someProcessor
+```
+
 If you want to insert a message as a document, then the body of the exchange is used:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("someProducingEndpoint").process(someProcessor).to("couchdb:http://localhost:9999")
+```
+
+```xml
+<route>
+    <from uri="someProducingEndpoint"/>
+    <process ref="someProcessor"/>
+    <to uri="couchdb:http://localhost:9999"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: someProducingEndpoint
+    steps:
+      - process:
+          ref: someProcessor
+      - to:
+          uri: couchdb:http://localhost:9999
 ```
 
 To start tracking the changes immediately after an update sequence, implement a custom resume strategy. To do so, it is necessary to implement a CouchDbResumeStrategy and use the resumable to set the last (update) offset to start tracking the changes:

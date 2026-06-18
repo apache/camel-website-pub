@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 15 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The Hidden Work: 2,449 Dependency Updates Across 20 Apache Camel Releases</title>
+      <link>https://camel.apache.org/blog/2026/06/camel-dependency-updates/</link>
+      <pubDate>Thu, 18 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/camel-dependency-updates/</guid>
+      <description>Every Apache Camel release ships new features and bug fixes — and those get the headlines. But behind every release there is a quieter effort that rarely gets mentioned: keeping 500+ third-party dependencies current.&#xA;We compared the parent/pom.xml across every Camel 4.x minor release — from 4.0.0 to 4.20.0 — and counted every dependency version that changed. Here is what we found.&#xA;2,449 dependency updates across 20 releases Every minor release updates a significant portion of the dependency tree.</description>
+    </item>
     <item>
       <title>Apache Camel: 19 Years of Continuous Development — 272 Releases, 100,000 Commits, Zero Gaps</title>
       <link>https://camel.apache.org/blog/2026/06/camel-always-on/</link>

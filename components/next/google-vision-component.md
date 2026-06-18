@@ -39,9 +39,34 @@ You can append query options to the URI in the following format, `?options=value
 
 For example, in order to perform label detection on an image, use the following snippet:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("google-vision://labelDetection?serviceAccountKey=/home/user/Downloads/my-key.json");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-vision://labelDetection?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-vision://labelDetection
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
 ```
 
 ## Configuring Options
@@ -208,25 +233,78 @@ The operation is specified as part of the endpoint URI (e.g., `google-vision://l
 
 If you need to have more control over the `ImageAnnotatorClient` instance configuration, you can create your own instance and refer to it in your Camel google-vision component configuration:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("google-vision://labelDetection?client=#myVisionClient");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-vision://labelDetection?client=#myVisionClient"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-vision://labelDetection
+            parameters:
+              client: "#myVisionClient"
+```
+
 ### Google Cloud Vision Producer Operation examples
 
--   `labelDetection`: this operation detects labels in an image
+-   `labelDetection`: this operation detects labels in an image. The message body should contain the image data as a `byte[]`.
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] imageData = Files.readAllBytes(Path.of("/path/to/image.jpg"));
-        exchange.getIn().setBody(imageData);
-    })
     .to("google-vision://labelDetection?serviceAccountKey=/home/user/Downloads/my-key.json&maxResults=10")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-vision://labelDetection?serviceAccountKey=/home/user/Downloads/my-key.json&amp;maxResults=10"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-vision://labelDetection
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              maxResults: 10
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 This operation will return a `List<EntityAnnotation>` with the detected labels.
@@ -234,15 +312,42 @@ This operation will return a `List<EntityAnnotation>` with the detected labels.
 -   `textDetection`: this operation extracts text from an image (OCR)
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] imageData = Files.readAllBytes(Path.of("/path/to/document.png"));
-        exchange.getIn().setBody(imageData);
-    })
     .to("google-vision://textDetection?serviceAccountKey=/home/user/Downloads/my-key.json")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-vision://textDetection?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-vision://textDetection
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 This operation will return a `List<EntityAnnotation>` with the detected text.
@@ -250,15 +355,42 @@ This operation will return a `List<EntityAnnotation>` with the detected text.
 -   `faceDetection`: this operation detects faces in an image
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] imageData = Files.readAllBytes(Path.of("/path/to/photo.jpg"));
-        exchange.getIn().setBody(imageData);
-    })
     .to("google-vision://faceDetection?serviceAccountKey=/home/user/Downloads/my-key.json")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-vision://faceDetection?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-vision://faceDetection
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 This operation will return a `List<FaceAnnotation>` with the detected faces.
@@ -266,15 +398,42 @@ This operation will return a `List<FaceAnnotation>` with the detected faces.
 -   `safeSearchDetection`: this operation detects explicit content
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] imageData = Files.readAllBytes(Path.of("/path/to/image.jpg"));
-        exchange.getIn().setBody(imageData);
-    })
     .to("google-vision://safeSearchDetection?serviceAccountKey=/home/user/Downloads/my-key.json")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-vision://safeSearchDetection?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-vision://safeSearchDetection
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 This operation will return a `SafeSearchAnnotation` with likelihood ratings for adult, spoof, medical, violence and racy content.
@@ -282,15 +441,42 @@ This operation will return a `SafeSearchAnnotation` with likelihood ratings for 
 -   `objectLocalization`: this operation detects and localizes objects
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] imageData = Files.readAllBytes(Path.of("/path/to/image.jpg"));
-        exchange.getIn().setBody(imageData);
-    })
     .to("google-vision://objectLocalization?serviceAccountKey=/home/user/Downloads/my-key.json")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-vision://objectLocalization?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-vision://objectLocalization
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 This operation will return a `List<LocalizedObjectAnnotation>` with detected objects and their bounding polygons.
@@ -298,21 +484,50 @@ This operation will return a `List<LocalizedObjectAnnotation>` with detected obj
 -   `webDetection`: this operation finds web references and visually similar images
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] imageData = Files.readAllBytes(Path.of("/path/to/image.jpg"));
-        exchange.getIn().setBody(imageData);
-    })
     .to("google-vision://webDetection?serviceAccountKey=/home/user/Downloads/my-key.json")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="google-vision://webDetection?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: google-vision://webDetection
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 This operation will return a `WebDetection` with matching pages, images and best guess labels.
 
 -   Using POJO request for full control:
     
+
+_Java-only: Google Cloud Vision SDK AnnotateImageRequest builder_
 
 ```java
 from("direct:start")
@@ -340,16 +555,49 @@ When using `pojoRequest=true`, the body should be an `AnnotateImageRequest` and 
 -   Overriding the operation at runtime via header:
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-    .process(exchange -> {
-        byte[] imageData = Files.readAllBytes(Path.of("/path/to/image.jpg"));
-        exchange.getIn().setBody(imageData);
-        exchange.getIn().setHeader(GoogleCloudVisionConstants.OPERATION, GoogleCloudVisionOperations.logoDetection);
-    })
+    .setHeader(GoogleCloudVisionConstants.OPERATION, constant(GoogleCloudVisionOperations.logoDetection))
     .to("google-vision://labelDetection?serviceAccountKey=/home/user/Downloads/my-key.json")
     .log("body:${body}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelGoogleCloudVisionOperation">
+    <constant>logoDetection</constant>
+  </setHeader>
+  <to uri="google-vision://labelDetection?serviceAccountKey=/home/user/Downloads/my-key.json"/>
+  <log message="body:${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelGoogleCloudVisionOperation
+            constant: logoDetection
+        - to:
+            uri: google-vision://labelDetection
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+        - log:
+            message: "body:${body}"
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

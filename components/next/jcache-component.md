@@ -196,6 +196,8 @@ Similar caching solution is available, for example, in Spring using the @Cacheab
 
 The cache used by the policy can be set directly. This means you have to configure the cache yourself and get a JCache Cache object, but this gives the most flexibility. For example, it can be setup in the config xml of the cache provider (Hazelcast, EhCache, …​) and used here. Or it’s possible to use the standard Caching API as below:
 
+_Java-only: Java programmatic cache configuration with JCachePolicy_
+
 ```java
 MutableConfiguration configuration = new MutableConfiguration<>();
 configuration.setTypes(String.class, Object.class);
@@ -215,6 +217,8 @@ from("direct:get-orders")
 ### Set cacheManager
 
 If the `cache` is not set, the policy will try to look up or create the cache automatically. If the `cacheManager` is set on the policy, it will try to get cache with the set `cacheName` (routeId by default) from the CacheManager. If the cache does not exist, it will create a new one using the `cacheConfiguration` (new MutableConfiguration by default).
+
+_Java-only: Java programmatic CacheManager configuration_
 
 ```java
 //In a Spring environment, for example, the CacheManager may already exist as a bean
@@ -237,6 +241,8 @@ If `cacheManager` (and the `cache`) is not set, the policy will try to find a JC
 -   Use the standard api `Caching.getCachingProvider().getCacheManager()`
     
 
+_Java-only: Java DSL with JCachePolicy_
+
 ```java
 //A Cache "getorders" will be used (or created) from the found CacheManager
 from("direct:get-orders").routeId("getorders")
@@ -248,6 +254,8 @@ from("direct:get-orders").routeId("getorders")
 ### Partially wrapped route
 
 In the examples above, the whole route was executed or skipped. A policy can be used to wrap only a segment of the route instead of all processors.
+
+_Java-only: Java DSL with partial JCachePolicy wrapping_
 
 ```java
 from("direct:get-orders")
@@ -266,6 +274,8 @@ The `.log()` at the beginning and at the end of the route is always called, but 
 By default, the policy uses the received Exchange body as the _key_, so the default expression is like `simple("${body}")`. We can set a different Camel Expression as `keyExpression` which will be evaluated to determine the key. For example, if we try to find an `order` by an `orderId` which is in the message headers, set `header("orderId")` (or `simple("$\{header.orderId\}")` as `keyExpression`.
 
 The expression is evaluated only once at the beginning of the route to determine the _key_. If nothing was found in cache, this _key_ is used to store the _value_ in cache at the end of the route.
+
+_Java-only: Java programmatic JCachePolicy with keyExpression_
 
 ```java
 MutableConfiguration configuration = new MutableConfiguration<>();

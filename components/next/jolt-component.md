@@ -172,25 +172,109 @@ The JOLT component supports 2 message header(s), which is/are listed below:
 
 For example, you could use something like
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("jolt:com/acme/MyResponse.json");
+from("activemq:My.Queue")
+    .to("jolt:com/acme/MyResponse.json");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="jolt:com/acme/MyResponse.json"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: jolt:com/acme/MyResponse.json
 ```
 
 And a file-based resource:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("jolt:file://myfolder/MyResponse.json?contentCache=true").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("jolt:file://myfolder/MyResponse.json?contentCache=true")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="jolt:file://myfolder/MyResponse.json?contentCache=true"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: jolt:file://myfolder/MyResponse.json
+            parameters:
+              contentCache: true
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 You can also specify what specification the component should use dynamically via a header, so, for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  setHeader("CamelJoltResourceUri").constant("path/to/my/spec.json").
-  to("jolt:dummy?allowTemplateFromHeader=true");
+from("direct:in")
+    .setHeader("CamelJoltResourceUri").constant("path/to/my/spec.json")
+    .to("jolt:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelJoltResourceUri">
+    <constant>path/to/my/spec.json</constant>
+  </setHeader>
+  <to uri="jolt:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelJoltResourceUri
+            expression:
+              constant:
+                expression: path/to/my/spec.json
+        - to:
+            uri: jolt:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 ## Spring Boot Auto-Configuration

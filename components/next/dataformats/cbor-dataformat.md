@@ -4,10 +4,36 @@
 
 CBOR is a Data Format that uses the [Jackson library](https://github.com/FasterXML/jackson/) with the [CBOR extension](https://github.com/FasterXML/jackson-dataformats-binary/tree/master/cbor) to unmarshal a CBOR payload into Java objects or to marshal Java objects into a CBOR payload.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:My.Queue")
     .unmarshal().cbor()
     .to("mqseries:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <unmarshal><cbor/></unmarshal>
+  <to uri="mqseries:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - unmarshal:
+            cbor: {}
+        - to:
+            uri: mqseries:Another.Queue
 ```
 
 ## Usage

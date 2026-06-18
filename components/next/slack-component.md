@@ -240,12 +240,39 @@ The SlackComponent with XML must be configured as a Spring bean that contains th
 
 You can now use a token to send a message instead of WebhookUrl
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:test")
     .to("slack:#random?token=RAW(<YOUR_TOKEN>)");
 ```
 
+```xml
+<route>
+  <from uri="direct:test"/>
+  <to uri="slack:#random?token=RAW(&lt;YOUR_TOKEN&gt;)"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:test
+      steps:
+        - to:
+            uri: "slack:#random"
+            parameters:
+              token: "<YOUR_TOKEN>"
+```
+
 You can now use the Slack API model to create blocks. You can read more about it here [https://api.slack.com/block-kit](https://api.slack.com/block-kit)
+
+_Java-only: creating Slack Block Kit messages with the API model_
 
 ```java
     public void testSlackAPIModelMessage() {
@@ -287,9 +314,35 @@ For User tokens, you’ll need the following permissions:
 
 You can also use a consumer for messages in a channel
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("slack://general?token=RAW(<YOUR_TOKEN>)&maxResults=1")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="slack://general?token=RAW(&lt;YOUR_TOKEN&gt;)&amp;maxResults=1"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: slack://general
+      parameters:
+        token: "<YOUR_TOKEN>"
+        maxResults: 1
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 This way you’ll get the last message from `general` channel. The consumer will track the timestamp of the last message consumed, and in the next poll it will consume only newer messages in the channel.

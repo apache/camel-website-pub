@@ -293,6 +293,8 @@ pom.xml
 
 Initialize the OpenAI Chat Model, and add it to the Camel Registry:
 
+_Java-only: programmatic ChatModel initialization and registry binding_
+
 ```java
 ChatModel model = OpenAiChatModel.builder()
     .apiKey(openApiKey)

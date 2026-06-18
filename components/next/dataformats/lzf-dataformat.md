@@ -17,16 +17,68 @@ The LZF Deflate Compression dataformat supports 1 options, which are listed belo
 
 In this example, we marshal a regular text/XML payload to a compressed payload employing LZF compression format and send it an ActiveMQ queue called MY\_QUEUE.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start").marshal().lzf().to("activemq:queue:MY_QUEUE");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <marshal><lzf/></marshal>
+  <to uri="activemq:queue:MY_QUEUE"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            lzf: {}
+        - to:
+            uri: activemq:queue:MY_QUEUE
 ```
 
 ## Unmarshal
 
 In this example we unmarshal a LZF payload from an ActiveMQ queue called MY\_QUEUE to its original format, and forward it for processing to the `UnGZippedMessageProcessor`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("activemq:queue:MY_QUEUE").unmarshal().lzf().process(new UnCompressedMessageProcessor());
+```
+
+```xml
+<route>
+  <from uri="activemq:queue:MY_QUEUE"/>
+  <unmarshal><lzf/></unmarshal>
+  <process ref="unCompressedMessageProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:queue:MY_QUEUE
+      steps:
+        - unmarshal:
+            lzf: {}
+        - process:
+            ref: unCompressedMessageProcessor
 ```
 
 ## Dependencies

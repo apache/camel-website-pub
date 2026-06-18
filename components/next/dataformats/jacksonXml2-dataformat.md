@@ -11,10 +11,38 @@ This extension also mimics [JAXB’s "Code first" approach](https://github.com/F
 
 This data format relies on [Woodstox](https://github.com/FasterXML/Woodstox) (especially for features like pretty printing), a fast and efficient XML processor.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  unmarshal().jacksonXml().
-  to("mqseries:Another.Queue");
+from("activemq:My.Queue")
+    .unmarshal().jacksonXml()
+    .to("mqseries:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <unmarshal>
+    <jacksonXml/>
+  </unmarshal>
+  <to uri="mqseries:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - unmarshal:
+            jacksonXml: {}
+        - to:
+            uri: mqseries:Another.Queue
 ```
 
 ## JacksonXML Options
@@ -84,6 +112,8 @@ Note that the weight field is missing in the resulting XML:
 
 As an example of using this attribute, you can instead of:
 
+_Java-only: Java programmatic data format with class literal_
+
 ```java
 JacksonXMLDataFormat ageViewFormat = new JacksonXMLDataFormat(TestPojoView.class, Views.Age.class);
 
@@ -92,6 +122,8 @@ from("direct:inPojoAgeView")
 ```
 
 Directly specify your [JSON view](https://github.com/FasterXML/jackson-annotations/blob/master/src/main/java/com/fasterxml/jackson/annotation/JsonView.java) inside the Java DSL as:
+
+_Java-only: Java DSL with class literal parameters_
 
 ```java
 from("direct:inPojoAgeView")
@@ -113,6 +145,8 @@ And the same in XML DSL:
 
 If you want to marshal a POJO to XML, and the POJO has some fields with null values. And you want to skip these null values, then you need to set either an annotation on the POJO:
 
+_Java-only: Java annotation_
+
 ```java
 @JsonInclude(Include.NON_NULL)
 public class MyPojo {
@@ -121,6 +155,8 @@ public class MyPojo {
 ```
 
 But this requires you to include that annotation in your POJO source code. You can also configure the Camel JacksonXMLDataFormat to set the `include` option, as shown below:
+
+_Java-only: Java programmatic data format configuration_
 
 ```java
 JacksonXMLDataFormat format = new JacksonXMLDataFormat();
@@ -141,6 +177,8 @@ If you use Jackson to unmarshal XML to POJO, then you can now specify a header i
 
 For JMS end users, there is the `JMSType` header from the JMS spec that indicates that also. To enable support for `JMSType` you would need to turn that on, on the Jackson data format as shown:
 
+_Java-only: Java programmatic data format configuration_
+
 ```java
 JacksonDataFormat format = new JacksonDataFormat();
 format.setAllowJmsType(true);
@@ -157,6 +195,8 @@ Or from XML DSL you configure this as:
 ### Unmarshalling from XML to `List<Map>` or `List<POJO>`
 
 If you are using Jackson to unmarshal XML to a list of map/POJO, you can now specify this by setting `useList="true"` or use the `org.apache.camel.component.jacksonxml.ListJacksonXMLDataFormat`. For example, with Java, you can do as shown below:
+
+_Java-only: Java programmatic data format configuration_
 
 ```java
 JacksonXMLDataFormat format = new ListJacksonXMLDataFormat();
@@ -232,6 +272,8 @@ To enable a feature, use the enableFeatures options instead.
 
 From Java code, you can use the type safe methods from camel-jackson module:
 
+_Java-only: Java programmatic data format configuration_
+
 ```java
 JacksonDataFormat df = new JacksonDataFormat(MyPojo.class);
 df.disableFeature(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -241,6 +283,8 @@ df.disableFeature(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
 ### Converting Maps to POJO using Jackson
 
 Jackson `XmlMapper` can be used to convert maps to POJO objects. Jackson component comes with the data converter that can be used to convert `java.util.Map` instance to non-String, non-primitive and non-Number objects.
+
+_Java-only: Java collection API (ProducerTemplate)_
 
 ```java
 Map<String, Object> invoiceData = new HashMap<String, Object>();
@@ -264,6 +308,8 @@ Using the `prettyPrint` option one can output a well-formatted XML while marshal
 ```
 
 And in Java DSL:
+
+_Java-only: Java DSL shorthand_
 
 ```java
 from("direct:inPretty").marshal().jacksonXml(true);

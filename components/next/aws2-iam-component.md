@@ -646,53 +646,233 @@ Camel-AWS2 IAM component provides the following operation on the producer side:
 -   createUser: this operation will create a user in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createUser")
-    .setHeader(IAM2Constants.USERNAME, constant("camel"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createUser")
+    .setHeader("CamelAwsIAMUsername", constant("camel"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createUser");
+```
+
+```xml
+<route>
+    <from uri="direct:createUser"/>
+    <setHeader name="CamelAwsIAMUsername">
+        <constant>camel</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createUser"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createUser
+    steps:
+      - setHeader:
+          name: CamelAwsIAMUsername
+          constant: camel
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: createUser
 ```
 
 -   deleteUser: this operation will delete a user in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:deleteUser")
-    .setHeader(IAM2Constants.USERNAME, constant("camel"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deleteUser")
+    .setHeader("CamelAwsIAMUsername", constant("camel"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deleteUser");
+```
+
+```xml
+<route>
+    <from uri="direct:deleteUser"/>
+    <setHeader name="CamelAwsIAMUsername">
+        <constant>camel</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deleteUser"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:deleteUser
+    steps:
+      - setHeader:
+          name: CamelAwsIAMUsername
+          constant: camel
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: deleteUser
 ```
 
 -   listUsers: this operation will list the users in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:listUsers")
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listUsers")
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listUsers");
+```
+
+```xml
+<route>
+    <from uri="direct:listUsers"/>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listUsers"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listUsers
+    steps:
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: listUsers
 ```
 
 -   createGroup: this operation will add a group in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:deleteUser")
-    .setHeader(IAM2Constants.GROUP_NAME, constant("camel"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createGroup")
+from("direct:createGroup")
+    .setHeader("CamelAwsIAMGroupName", constant("camel"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createGroup");
+```
+
+```xml
+<route>
+    <from uri="direct:createGroup"/>
+    <setHeader name="CamelAwsIAMGroupName">
+        <constant>camel</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createGroup"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createGroup
+    steps:
+      - setHeader:
+          name: CamelAwsIAMGroupName
+          constant: camel
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: createGroup
 ```
 
 -   deleteGroup: this operation will delete a group in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:deleteUser")
-    .setHeader(IAM2Constants.GROUP_NAME, constant("camel"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deleteGroup")
+from("direct:deleteGroup")
+    .setHeader("CamelAwsIAMGroupName", constant("camel"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deleteGroup");
+```
+
+```xml
+<route>
+    <from uri="direct:deleteGroup"/>
+    <setHeader name="CamelAwsIAMGroupName">
+        <constant>camel</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deleteGroup"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:deleteGroup
+    steps:
+      - setHeader:
+          name: CamelAwsIAMGroupName
+          constant: camel
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: deleteGroup
 ```
 
 -   listGroups: this operation will list the groups in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:listUsers")
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listGroups")
+from("direct:listGroups")
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listGroups");
+```
+
+```xml
+<route>
+    <from uri="direct:listGroups"/>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listGroups"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listGroups
+    steps:
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: listGroups
 ```
 
 #### Role Operations
@@ -700,37 +880,165 @@ from("direct:listUsers")
 -   createRole: this operation will create a role in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createRole")
-    .setHeader(IAM2Constants.ROLE_NAME, constant("myRole"))
-    .setHeader(IAM2Constants.ASSUME_ROLE_POLICY_DOCUMENT, constant("{...}"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createRole")
+    .setHeader("CamelAwsIAMRoleName", constant("myRole"))
+    .setHeader("CamelAwsIAMAssumeRolePolicyDocument", constant("{...}"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createRole");
+```
+
+```xml
+<route>
+    <from uri="direct:createRole"/>
+    <setHeader name="CamelAwsIAMRoleName">
+        <constant>myRole</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMAssumeRolePolicyDocument">
+        <constant>{...}</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createRole"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createRole
+    steps:
+      - setHeader:
+          name: CamelAwsIAMRoleName
+          constant: myRole
+      - setHeader:
+          name: CamelAwsIAMAssumeRolePolicyDocument
+          constant: "{...}"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: createRole
 ```
 
 -   deleteRole: this operation will delete a role in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:deleteRole")
-    .setHeader(IAM2Constants.ROLE_NAME, constant("myRole"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deleteRole")
+    .setHeader("CamelAwsIAMRoleName", constant("myRole"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deleteRole");
+```
+
+```xml
+<route>
+    <from uri="direct:deleteRole"/>
+    <setHeader name="CamelAwsIAMRoleName">
+        <constant>myRole</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deleteRole"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:deleteRole
+    steps:
+      - setHeader:
+          name: CamelAwsIAMRoleName
+          constant: myRole
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: deleteRole
 ```
 
 -   getRole: this operation will get a role in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:getRole")
-    .setHeader(IAM2Constants.ROLE_NAME, constant("myRole"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=getRole")
+    .setHeader("CamelAwsIAMRoleName", constant("myRole"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=getRole");
+```
+
+```xml
+<route>
+    <from uri="direct:getRole"/>
+    <setHeader name="CamelAwsIAMRoleName">
+        <constant>myRole</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=getRole"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:getRole
+    steps:
+      - setHeader:
+          name: CamelAwsIAMRoleName
+          constant: myRole
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: getRole
 ```
 
 -   listRoles: this operation will list the roles in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:listRoles")
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listRoles")
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listRoles");
+```
+
+```xml
+<route>
+    <from uri="direct:listRoles"/>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listRoles"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listRoles
+    steps:
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: listRoles
 ```
 
 #### Policy Operations
@@ -738,37 +1046,165 @@ from("direct:listRoles")
 -   createPolicy: this operation will create a policy in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createPolicy")
-    .setHeader(IAM2Constants.POLICY_NAME, constant("myPolicy"))
-    .setHeader(IAM2Constants.POLICY_DOCUMENT, constant("{...}"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createPolicy")
+    .setHeader("CamelAwsIAMPolicyName", constant("myPolicy"))
+    .setHeader("CamelAwsIAMPolicyDocument", constant("{...}"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createPolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:createPolicy"/>
+    <setHeader name="CamelAwsIAMPolicyName">
+        <constant>myPolicy</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMPolicyDocument">
+        <constant>{...}</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createPolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createPolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMPolicyName
+          constant: myPolicy
+      - setHeader:
+          name: CamelAwsIAMPolicyDocument
+          constant: "{...}"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: createPolicy
 ```
 
 -   deletePolicy: this operation will delete a policy in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:deletePolicy")
-    .setHeader(IAM2Constants.POLICY_ARN, constant("arn:aws:iam::123456789012:policy/myPolicy"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deletePolicy")
+    .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deletePolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:deletePolicy"/>
+    <setHeader name="CamelAwsIAMPolicyArn">
+        <constant>arn:aws:iam::123456789012:policy/myPolicy</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deletePolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:deletePolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMPolicyArn
+          constant: "arn:aws:iam::123456789012:policy/myPolicy"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: deletePolicy
 ```
 
 -   getPolicy: this operation will get a policy in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:getPolicy")
-    .setHeader(IAM2Constants.POLICY_ARN, constant("arn:aws:iam::123456789012:policy/myPolicy"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=getPolicy")
+    .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=getPolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:getPolicy"/>
+    <setHeader name="CamelAwsIAMPolicyArn">
+        <constant>arn:aws:iam::123456789012:policy/myPolicy</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=getPolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:getPolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMPolicyArn
+          constant: "arn:aws:iam::123456789012:policy/myPolicy"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: getPolicy
 ```
 
 -   listPolicies: this operation will list the policies in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:listPolicies")
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listPolicies")
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listPolicies");
+```
+
+```xml
+<route>
+    <from uri="direct:listPolicies"/>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listPolicies"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listPolicies
+    steps:
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: listPolicies
 ```
 
 #### Policy Attachment Operations
@@ -776,61 +1212,289 @@ from("direct:listPolicies")
 -   attachUserPolicy: this operation will attach a policy to a user
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:attachUserPolicy")
-    .setHeader(IAM2Constants.USERNAME, constant("camel"))
-    .setHeader(IAM2Constants.POLICY_ARN, constant("arn:aws:iam::123456789012:policy/myPolicy"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=attachUserPolicy")
+    .setHeader("CamelAwsIAMUsername", constant("camel"))
+    .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=attachUserPolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:attachUserPolicy"/>
+    <setHeader name="CamelAwsIAMUsername">
+        <constant>camel</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMPolicyArn">
+        <constant>arn:aws:iam::123456789012:policy/myPolicy</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=attachUserPolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:attachUserPolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMUsername
+          constant: camel
+      - setHeader:
+          name: CamelAwsIAMPolicyArn
+          constant: "arn:aws:iam::123456789012:policy/myPolicy"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: attachUserPolicy
 ```
 
 -   detachUserPolicy: this operation will detach a policy from a user
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:detachUserPolicy")
-    .setHeader(IAM2Constants.USERNAME, constant("camel"))
-    .setHeader(IAM2Constants.POLICY_ARN, constant("arn:aws:iam::123456789012:policy/myPolicy"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=detachUserPolicy")
+    .setHeader("CamelAwsIAMUsername", constant("camel"))
+    .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=detachUserPolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:detachUserPolicy"/>
+    <setHeader name="CamelAwsIAMUsername">
+        <constant>camel</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMPolicyArn">
+        <constant>arn:aws:iam::123456789012:policy/myPolicy</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=detachUserPolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:detachUserPolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMUsername
+          constant: camel
+      - setHeader:
+          name: CamelAwsIAMPolicyArn
+          constant: "arn:aws:iam::123456789012:policy/myPolicy"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: detachUserPolicy
 ```
 
 -   attachGroupPolicy: this operation will attach a policy to a group
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:attachGroupPolicy")
-    .setHeader(IAM2Constants.GROUP_NAME, constant("myGroup"))
-    .setHeader(IAM2Constants.POLICY_ARN, constant("arn:aws:iam::123456789012:policy/myPolicy"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=attachGroupPolicy")
+    .setHeader("CamelAwsIAMGroupName", constant("myGroup"))
+    .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=attachGroupPolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:attachGroupPolicy"/>
+    <setHeader name="CamelAwsIAMGroupName">
+        <constant>myGroup</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMPolicyArn">
+        <constant>arn:aws:iam::123456789012:policy/myPolicy</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=attachGroupPolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:attachGroupPolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMGroupName
+          constant: myGroup
+      - setHeader:
+          name: CamelAwsIAMPolicyArn
+          constant: "arn:aws:iam::123456789012:policy/myPolicy"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: attachGroupPolicy
 ```
 
 -   detachGroupPolicy: this operation will detach a policy from a group
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:detachGroupPolicy")
-    .setHeader(IAM2Constants.GROUP_NAME, constant("myGroup"))
-    .setHeader(IAM2Constants.POLICY_ARN, constant("arn:aws:iam::123456789012:policy/myPolicy"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=detachGroupPolicy")
+    .setHeader("CamelAwsIAMGroupName", constant("myGroup"))
+    .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=detachGroupPolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:detachGroupPolicy"/>
+    <setHeader name="CamelAwsIAMGroupName">
+        <constant>myGroup</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMPolicyArn">
+        <constant>arn:aws:iam::123456789012:policy/myPolicy</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=detachGroupPolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:detachGroupPolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMGroupName
+          constant: myGroup
+      - setHeader:
+          name: CamelAwsIAMPolicyArn
+          constant: "arn:aws:iam::123456789012:policy/myPolicy"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: detachGroupPolicy
 ```
 
 -   attachRolePolicy: this operation will attach a policy to a role
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:attachRolePolicy")
-    .setHeader(IAM2Constants.ROLE_NAME, constant("myRole"))
-    .setHeader(IAM2Constants.POLICY_ARN, constant("arn:aws:iam::123456789012:policy/myPolicy"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=attachRolePolicy")
+    .setHeader("CamelAwsIAMRoleName", constant("myRole"))
+    .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=attachRolePolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:attachRolePolicy"/>
+    <setHeader name="CamelAwsIAMRoleName">
+        <constant>myRole</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMPolicyArn">
+        <constant>arn:aws:iam::123456789012:policy/myPolicy</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=attachRolePolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:attachRolePolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMRoleName
+          constant: myRole
+      - setHeader:
+          name: CamelAwsIAMPolicyArn
+          constant: "arn:aws:iam::123456789012:policy/myPolicy"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: attachRolePolicy
 ```
 
 -   detachRolePolicy: this operation will detach a policy from a role
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:detachRolePolicy")
-    .setHeader(IAM2Constants.ROLE_NAME, constant("myRole"))
-    .setHeader(IAM2Constants.POLICY_ARN, constant("arn:aws:iam::123456789012:policy/myPolicy"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=detachRolePolicy")
+    .setHeader("CamelAwsIAMRoleName", constant("myRole"))
+    .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=detachRolePolicy");
+```
+
+```xml
+<route>
+    <from uri="direct:detachRolePolicy"/>
+    <setHeader name="CamelAwsIAMRoleName">
+        <constant>myRole</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMPolicyArn">
+        <constant>arn:aws:iam::123456789012:policy/myPolicy</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=detachRolePolicy"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:detachRolePolicy
+    steps:
+      - setHeader:
+          name: CamelAwsIAMRoleName
+          constant: myRole
+      - setHeader:
+          name: CamelAwsIAMPolicyArn
+          constant: "arn:aws:iam::123456789012:policy/myPolicy"
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: detachRolePolicy
 ```
 
 #### Instance Profile Operations
@@ -838,61 +1502,261 @@ from("direct:detachRolePolicy")
 -   createInstanceProfile: this operation will create an instance profile in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:createInstanceProfile")
-    .setHeader(IAM2Constants.INSTANCE_PROFILE_NAME, constant("myInstanceProfile"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createInstanceProfile")
+    .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=createInstanceProfile");
+```
+
+```xml
+<route>
+    <from uri="direct:createInstanceProfile"/>
+    <setHeader name="CamelAwsIAMInstanceProfileName">
+        <constant>myInstanceProfile</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createInstanceProfile"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createInstanceProfile
+    steps:
+      - setHeader:
+          name: CamelAwsIAMInstanceProfileName
+          constant: myInstanceProfile
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: createInstanceProfile
 ```
 
 -   deleteInstanceProfile: this operation will delete an instance profile in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:deleteInstanceProfile")
-    .setHeader(IAM2Constants.INSTANCE_PROFILE_NAME, constant("myInstanceProfile"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deleteInstanceProfile")
+    .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=deleteInstanceProfile");
+```
+
+```xml
+<route>
+    <from uri="direct:deleteInstanceProfile"/>
+    <setHeader name="CamelAwsIAMInstanceProfileName">
+        <constant>myInstanceProfile</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deleteInstanceProfile"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:deleteInstanceProfile
+    steps:
+      - setHeader:
+          name: CamelAwsIAMInstanceProfileName
+          constant: myInstanceProfile
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: deleteInstanceProfile
 ```
 
 -   getInstanceProfile: this operation will get an instance profile in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:getInstanceProfile")
-    .setHeader(IAM2Constants.INSTANCE_PROFILE_NAME, constant("myInstanceProfile"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=getInstanceProfile")
+    .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=getInstanceProfile");
+```
+
+```xml
+<route>
+    <from uri="direct:getInstanceProfile"/>
+    <setHeader name="CamelAwsIAMInstanceProfileName">
+        <constant>myInstanceProfile</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=getInstanceProfile"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:getInstanceProfile
+    steps:
+      - setHeader:
+          name: CamelAwsIAMInstanceProfileName
+          constant: myInstanceProfile
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: getInstanceProfile
 ```
 
 -   listInstanceProfiles: this operation will list the instance profiles in IAM
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:listInstanceProfiles")
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listInstanceProfiles")
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=listInstanceProfiles");
+```
+
+```xml
+<route>
+    <from uri="direct:listInstanceProfiles"/>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listInstanceProfiles"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listInstanceProfiles
+    steps:
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: listInstanceProfiles
 ```
 
 -   addRoleToInstanceProfile: this operation will add a role to an instance profile
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:addRoleToInstanceProfile")
-    .setHeader(IAM2Constants.INSTANCE_PROFILE_NAME, constant("myInstanceProfile"))
-    .setHeader(IAM2Constants.ROLE_NAME, constant("myRole"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=addRoleToInstanceProfile")
+    .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
+    .setHeader("CamelAwsIAMRoleName", constant("myRole"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=addRoleToInstanceProfile");
+```
+
+```xml
+<route>
+    <from uri="direct:addRoleToInstanceProfile"/>
+    <setHeader name="CamelAwsIAMInstanceProfileName">
+        <constant>myInstanceProfile</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMRoleName">
+        <constant>myRole</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=addRoleToInstanceProfile"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:addRoleToInstanceProfile
+    steps:
+      - setHeader:
+          name: CamelAwsIAMInstanceProfileName
+          constant: myInstanceProfile
+      - setHeader:
+          name: CamelAwsIAMRoleName
+          constant: myRole
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: addRoleToInstanceProfile
 ```
 
 -   removeRoleFromInstanceProfile: this operation will remove a role from an instance profile
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:removeRoleFromInstanceProfile")
-    .setHeader(IAM2Constants.INSTANCE_PROFILE_NAME, constant("myInstanceProfile"))
-    .setHeader(IAM2Constants.ROLE_NAME, constant("myRole"))
-    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=removeRoleFromInstanceProfile")
+    .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
+    .setHeader("CamelAwsIAMRoleName", constant("myRole"))
+    .to("aws2-iam://test?iamClient=#amazonIAMClient&operation=removeRoleFromInstanceProfile");
+```
+
+```xml
+<route>
+    <from uri="direct:removeRoleFromInstanceProfile"/>
+    <setHeader name="CamelAwsIAMInstanceProfileName">
+        <constant>myInstanceProfile</constant>
+    </setHeader>
+    <setHeader name="CamelAwsIAMRoleName">
+        <constant>myRole</constant>
+    </setHeader>
+    <to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=removeRoleFromInstanceProfile"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:removeRoleFromInstanceProfile
+    steps:
+      - setHeader:
+          name: CamelAwsIAMInstanceProfileName
+          constant: myInstanceProfile
+      - setHeader:
+          name: CamelAwsIAMRoleName
+          constant: myRole
+      - to:
+          uri: aws2-iam://test
+          parameters:
+            iamClient: "#amazonIAMClient"
+            operation: removeRoleFromInstanceProfile
 ```
 
 ### Using a POJO as body
 
 Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as a body. In AWS IAM, there are multiple operations you can submit, as an example for Create User request, you can do something like:
+
+_Java-only: requires AWS SDK builder_
 
 ```java
 from("direct:createUser")

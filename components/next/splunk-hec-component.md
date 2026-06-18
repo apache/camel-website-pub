@@ -138,12 +138,39 @@ It is meant for high-volume ingestion of machine data.
 
 By default, the index time for an event is when the event makes it to the Splunk server.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
-        .to("splunk-hec://localhost:8080?token=token");
+    .to("splunk-hec://localhost:8080?token=token");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="splunk-hec://localhost:8080?token=token"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: splunk-hec://localhost:8080
+            parameters:
+              token: token
 ```
 
 If you are ingesting a large enough dataset with a big enough lag, then the time the event hits the server and when that event actually happened could be skewed. If you want to override the index time, you can do so.
+
+_Java-only: uses SplunkHECConstants.INDEX\_TIME Java constant_
 
 ```java
 from("kafka:logs")
@@ -151,9 +178,32 @@ from("kafka:logs")
         .to("splunk-hec://localhost:8080?token=token");
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("kafka:logs")
         .toD("splunk-hec://localhost:8080?token=token&time=${headers[kafka.HEADERS].lastKey('TIME')}");
+```
+
+```xml
+<route>
+  <from uri="kafka:logs"/>
+  <toD uri="splunk-hec://localhost:8080?token=token&amp;time=${headers[kafka.HEADERS].lastKey('TIME')}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:logs
+      steps:
+        - toD:
+            uri: "splunk-hec://localhost:8080?token=token&time=${headers[kafka.HEADERS].lastKey('TIME')}"
 ```
 
 ## Spring Boot Auto-Configuration

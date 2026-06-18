@@ -446,9 +446,36 @@ For more information about this you can look at [AWS credentials documentation](
 
 You then have to reference the FirehoseClient in the `amazonKinesisFirehoseClient` URI option.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("aws2-kinesis-firehose://mykinesisdeliverystream?amazonKinesisFirehoseClient=#kinesisClient")
-  .to("log:out?showAll=true");
+    .to("log:out?showAll=true");
+```
+
+```xml
+<route>
+  <from uri="aws2-kinesis-firehose://mykinesisdeliverystream?amazonKinesisFirehoseClient=#kinesisClient"/>
+  <to uri="log:out?showAll=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: aws2-kinesis-firehose://mykinesisdeliverystream
+      parameters:
+        amazonKinesisFirehoseClient: "#kinesisClient"
+      steps:
+        - to:
+            uri: log:out
+            parameters:
+              showAll: true
 ```
 
 ### Providing AWS Credentials
@@ -473,6 +500,8 @@ Camel-AWS s3 component provides the following operation on the producer side:
 ### Send Batch Records Example
 
 You can send an iterable of Kinesis Record (as the following example shows), or you can send directly a PutRecordBatchRequest POJO instance in the body.
+
+_Java-only: uses ProducerTemplate, inline Processor, and AWS SDK builders_
 
 ```java
     @Test

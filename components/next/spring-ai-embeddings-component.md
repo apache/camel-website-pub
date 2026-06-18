@@ -133,10 +133,36 @@ The embedding vectors are returned in the message body, with additional metadata
 
 ### Single Text Example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("spring-ai-embeddings:myEmbedding")
     .log("Embedding vector: ${body}");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="spring-ai-embeddings:myEmbedding"/>
+  <log message="Embedding vector: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: spring-ai-embeddings:myEmbedding
+        - log:
+            message: "Embedding vector: ${body}"
 ```
 
 When processing a single String, the component returns:
@@ -157,11 +183,42 @@ When processing a single String, the component returns:
 
 ### Batch Processing Example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:batch")
     .setBody(constant(List.of("text 1", "text 2", "text 3")))
     .to("spring-ai-embeddings:myEmbedding")
     .log("Number of embeddings: ${body.size()}");
+```
+
+```xml
+<route>
+  <from uri="direct:batch"/>
+  <setBody>
+    <constant>["text 1", "text 2", "text 3"]</constant>
+  </setBody>
+  <to uri="spring-ai-embeddings:myEmbedding"/>
+  <log message="Number of embeddings: ${body.size()}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:batch
+      steps:
+        - setBody:
+            constant: '["text 1", "text 2", "text 3"]'
+        - to:
+            uri: spring-ai-embeddings:myEmbedding
+        - log:
+            message: "Number of embeddings: ${body.size()}"
 ```
 
 When processing a List<String>, the component returns:

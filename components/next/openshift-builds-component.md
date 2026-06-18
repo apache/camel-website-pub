@@ -134,6 +134,8 @@ The OpenShift Builds component supports 4 message header(s), which is/are listed
 -   `listBuilds`: this operation lists the builds on an Openshift cluster
     
 
+_Java-only: uses `toF()` for URI formatting_
+
 ```java
 from("direct:list").
     toF("openshift-builds:///?kubernetesClient=#kubernetesClient&operation=listBuilds").
@@ -144,6 +146,8 @@ This operation returns a List of Builds from your Openshift cluster
 
 -   `listBuildsByLabels`: this operation lists the builds by labels on an Openshift cluster
     
+
+_Java-only: uses inline Processor, Java constants, and \`toF()\`_
 
 ```java
 from("direct:listByLabels").process(new Processor() {

@@ -647,6 +647,8 @@ You can also emit with an explicit state:
 
 For advanced use cases, `A2AProgress` also supports emitting structured artifacts and intermediate messages:
 
+_Java-only: emitting structured artifacts and intermediate messages with A2AProgress_
+
 ```java
 // Emit a structured artifact (e.g., a generated file)
 Artifact artifact = Artifact.builder()
@@ -1344,6 +1346,8 @@ Default handlers:
 
 Override or extend by registering a custom handler bean:
 
+_Java-only: implementing a custom A2ASecuritySchemeHandler_
+
 ```java
 @BindToRegistry("myCustomAuth")
 public class MutualTlsHandler implements A2ASecuritySchemeHandler {
@@ -1565,6 +1569,8 @@ The following settings are configurable programmatically on the `InMemoryTaskSto
 To customize, register a bean implementing `A2ATaskStore` in the Camel registry. The preview SPI is also split into narrower parent contracts (`A2ATaskRepository`, `A2ATaskSubscriptions`, `A2APushConfigStore`, and `A2ATaskCleanup`) so custom stores can keep storage, subscription, push-config, and cleanup responsibilities separate. Registry-provided stores are wrapped by a guard that enforces terminal-state protection, delegates subscriber registration and notification to the custom store, tracks endpoint subscribers for terminal-event cleanup, validates push webhook URLs, and normalizes push config IDs/task IDs on the endpoint path. Custom stores still need to preserve durable storage and any cross-node notification semantics inside their own implementation; the dispatcher revalidates webhook URLs before delivery.
 
 Custom subscribers can be registered on a task-store bean for audit logging, metrics, or custom delivery:
+
+_Java-only: registering a custom A2ATaskStore with a global subscriber_
 
 ```java
 @BindToRegistry

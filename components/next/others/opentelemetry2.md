@@ -220,6 +220,8 @@ Then add the following dependency for the OpenTelemetry Spring Boot starter:
 
 The starter auto-configures most aspects of the OpenTelemetry instrumentation, with two exceptions: No `Tracer` or `ContextPropagators` beans are autoconfigured, they need to be configured manually:
 
+_Java-only: Spring configuration class for OpenTelemetry beans_
+
 ```java
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
@@ -257,6 +259,8 @@ otel:
 
 When you’re working at a very low level, you may need to tweak your metrics and add some in-process custom `span` in order to trace some specific measure of your application. If you need this advanced use case, you can create it during your process by configuring an Opentelemetry Tracer object and share it to your route. For example, in Java DSL:
 
+_Java-only: creating custom spans with the OpenTelemetry Tracer API_
+
 ```java
 private Tracer otelTracer = otelExtension.getOpenTelemetry().getTracer("traceTest");
 ...
@@ -275,6 +279,8 @@ public void process(Exchange exchange) throws Exception {
 
 In complex integrations it is advisable to have third party dependencies or add custom spans at a Processor level in order to get advanced telemetry information. When these spans are added at Processor level, then, you can expect the span to be nested under the specific core Processor. For example:
 
+_Java-only: bean with @WithSpan annotation for custom span nesting_
+
 ```java
     from("direct:start")
             .bean(MyBean.class)
@@ -291,10 +297,32 @@ You should expect your custom span "myLogic" to be nested under the Bean process
 
 If you instead call it with an endpoint producer, the process is converted to an event, and as we cannot capture the scope, then it would nest the custom span under the endpoint instead. For example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("direct:start")
-            .to("bean:myBean")
-...
+from("direct:start")
+    .to("bean:myBean");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="bean:myBean"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: bean:myBean
 ```
 
 The spans produced are slightly different because now they include an additional span for the endpoint ("to" node). And, more important, as highlighted above, the custom span is going to be nested directly under the endpoint span "to" instead of the processor span ("bean").
@@ -304,6 +332,8 @@ For this reason, whenever you need to provide custom telemetry information, it i
 ### Baggage customization
 
 `Baggage` is a way to attach key-value metadata to a request and carry it across service boundaries. In the context of OpenTelemetry, baggage travels along with the context (like trace/span), but it’s meant for custom data you define, not telemetry internals. Camel allows you to programmatically provide any `Baggage` information via Exchange property settings. Whenever the component finds a property defined as `CamelBaggage_xyz` it will consider it as a baggage variable named `xyz`. For example, in Java DSL:
+
+_Java-only: inline Processor accessing OpenTelemetry Baggage API_
 
 ```java
                 from("direct:start")

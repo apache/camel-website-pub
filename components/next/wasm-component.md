@@ -144,6 +144,8 @@ pub unsafe extern "C" fn dealloc(ptr: &mut u8, len: i32) {
 
 It is not possible to share a Java object with the Wasm module directly, and as mentioned before, data exchange leverages Wasm’s memory that can be accessed by both the host and the guest runtimes. At this stage, the data structure that the component exchange with the Wasm function is a subset of the Apache Camel Message, containing headers the body encoded as a base64 string:
 
+_Java-only: data exchange wrapper class for Wasm module communication_
+
 ```java
 public static class Wrapper {
     @JsonProperty
@@ -222,29 +224,34 @@ pub extern fn process(ptr: u32, len: u32) -> u64 {
 
 Supposing we have compiled a Wasm module containing the function above, then it can be called in a Camel Route by its name and module resource location:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
- try (CamelContext cc = new DefaultCamelContext()) {
-    FluentProducerTemplate pt = cc.createFluentProducerTemplate();
+from("direct:in")
+    .to("wasm:process?module=classpath://functions.wasm");
+```
 
-    cc.addRoutes(new RouteBuilder() {
-        @Override
-        public void configure() throws Exception {
-            from("direct:in")
-                    .toF("wasm:process?module=classpath://functions.wasm");
-        }
-    });
-    cc.start();
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="wasm:process?module=classpath://functions.wasm"/>
+</route>
+```
 
-    Exchange out = pt.to("direct:in")
-            .withHeader("foo", "bar")
-            .withBody("hello")
-            .request(Exchange.class);
-
-    assertThat(out.getMessage().getHeaders())
-            .containsEntry("foo", "bar");
-    assertThat(out.getMessage().getBody(String.class))
-            .isEqualTo("HELLO");
-}
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: wasm:process
+            parameters:
+              module: classpath://functions.wasm
 ```
 
 ## Spring Boot Auto-Configuration

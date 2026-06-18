@@ -411,6 +411,13 @@ See below for more details.
 
 Here is a basic route that you can use to listen to Debezium events from MySQL connector.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("debezium-mysql:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&databaseHostname=localhost&databaseUser=debezium&databasePassword=dbz&databaseServerName=my-app-connector&databaseHistoryFileFilename=/usr/history-file-1.dat")
     .log("Event received from Debezium : ${body}")
@@ -420,12 +427,58 @@ from("debezium-mysql:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&dat
     .log("    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'")
     .log("    with the key ${headers.CamelDebeziumKey}")
     .log("    the previous value is ${headers.CamelDebeziumBefore}")
-    .log("    the ddl sql text is ${headers.CamelDebeziumDdlSQL}")
+    .log("    the ddl sql text is ${headers.CamelDebeziumDdlSQL}");
+```
+
+```xml
+<route>
+  <from uri="debezium-mysql:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&amp;databaseHostname=localhost&amp;databaseUser=debezium&amp;databasePassword=dbz&amp;databaseServerName=my-app-connector&amp;databaseHistoryFileFilename=/usr/history-file-1.dat"/>
+  <log message="Event received from Debezium : ${body}"/>
+  <log message="    with this identifier ${headers.CamelDebeziumIdentifier}"/>
+  <log message="    with these source metadata ${headers.CamelDebeziumSourceMetadata}"/>
+  <log message="    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'"/>
+  <log message="    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'"/>
+  <log message="    with the key ${headers.CamelDebeziumKey}"/>
+  <log message="    the previous value is ${headers.CamelDebeziumBefore}"/>
+  <log message="    the ddl sql text is ${headers.CamelDebeziumDdlSQL}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: debezium-mysql:dbz-test-1
+      parameters:
+        offsetStorageFileName: /usr/offset-file-1.dat
+        databaseHostname: localhost
+        databaseUser: debezium
+        databasePassword: dbz
+        databaseServerName: my-app-connector
+        databaseHistoryFileFilename: /usr/history-file-1.dat
+      steps:
+        - log:
+            message: "Event received from Debezium : ${body}"
+        - log:
+            message: "    with this identifier ${headers.CamelDebeziumIdentifier}"
+        - log:
+            message: "    with these source metadata ${headers.CamelDebeziumSourceMetadata}"
+        - log:
+            message: "    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'"
+        - log:
+            message: "    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'"
+        - log:
+            message: "    with the key ${headers.CamelDebeziumKey}"
+        - log:
+            message: "    the previous value is ${headers.CamelDebeziumBefore}"
+        - log:
+            message: "    the ddl sql text is ${headers.CamelDebeziumDdlSQL}"
 ```
 
 By default, the component will emit the events in the body and `CamelDebeziumBefore` header as [`Struct`](https://kafka.apache.org/22/javadoc/org/apache/kafka/connect/data/Struct.md) data type, the reasoning behind this, is to perceive the schema information in case is needed. However, the component as well contains a [Type Converter](../../manual/type-converter.md) that converts from default output type of [`Struct`](https://kafka.apache.org/22/javadoc/org/apache/kafka/connect/data/Struct.md) to `Map` in order to leverage Camel’s rich [Data Format](../../manual/data-format.md) types. Many of them work out of box with `Map` data type. To use it, you can either add `Map.class` type when you access the message (e.g., `exchange.getIn().getBody(Map.class)`), or you can convert the body always to `Map` from the route builder by adding `.convertBodyTo(Map.class)` to your Camel Route DSL after `from` statement.
 
 We mentioned above the schema, which can be used in case you need to perform advance data transformation and the schema is needed for that. If you choose not to convert your body to `Map`, you can obtain the schema information as [`Schema`](https://kafka.apache.org/22/javadoc/org/apache/kafka/connect/data/Schema.md) type from `Struct` like this:
+
+_Java-only: accessing the Struct schema from a processor_
 
 ```java
 from("debezium-mysql:[name]?[options]])

@@ -4,10 +4,36 @@
 
 Jackson 3 is a Data Format that uses the [Jackson 3 Library](https://github.com/FasterXML/jackson)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  marshal().jackson().
-  to("mqseries:Another.Queue");
+from("activemq:My.Queue")
+    .marshal().jackson()
+    .to("mqseries:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <marshal><jackson/></marshal>
+  <to uri="mqseries:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - marshal:
+            jackson: {}
+        - to:
+            uri: mqseries:Another.Queue
 ```
 
 ## Jackson 3 Options
@@ -46,6 +72,8 @@ The JSON Jackson 3 dataformat supports 22 options, which are listed below.
 
 Jackson can also be used via the generic `json()` DSL method by specifying `JsonLibrary.Jackson`:
 
+_Java-only: using the json() DSL method with JsonLibrary.Jackson_
+
 ```java
 from("activemq:My.Queue")
   .marshal().json(JsonLibrary.Jackson)
@@ -53,6 +81,8 @@ from("activemq:My.Queue")
 ```
 
 This is equivalent to using `.jackson()` directly. The `json()` method also supports additional parameters:
+
+_Java-only: json() DSL with pretty print and unmarshal type_
 
 ```java
 // Pretty print
@@ -85,6 +115,8 @@ This gives a set of out-of-the-box converters to/from the Jackson type `JsonNode
 #### Enabling more type converters and support for POJOs
 
 To enable POJO conversion support for `camel-jackson3` then this must be enabled, which is done by setting the following options on the `CamelContext` global options, as shown:
+
+_Java-only: enabling Jackson 3 POJO type converter via CamelContext options_
 
 ```java
 // Enable Jackson 3 JSON type converter for more types.

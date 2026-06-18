@@ -32,6 +32,8 @@ The Flatpack dataformat supports 8 options, which are listed below.
 
 To use the data format, instantiate an instance and invoke the marshal or unmarshal operation in the route builder:
 
+_Java-only: programmatic FlatpackDataFormat configuration and unmarshal_
+
 ```java
   FlatpackDataFormat fp = new FlatpackDataFormat();
   fp.setDefinition(new ClassPathResource("INVENTORY-Delimited.pzmap.xml"));
@@ -40,6 +42,8 @@ To use the data format, instantiate an instance and invoke the marshal or unmars
 ```
 
 The sample above will read files from the `order/in` folder and unmarshal the input using the Flatpack configuration file `INVENTORY-Delimited.pzmap.xml` that configures the structure of the files. The result is a `DataSetList` object we store on the SEDA queue.
+
+_Java-only: programmatic FlatpackDataFormat configuration and marshal_
 
 ```java
 FlatpackDataFormat df = new FlatpackDataFormat();

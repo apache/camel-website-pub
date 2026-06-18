@@ -17,6 +17,8 @@ request.body.familyName
 
 Or use similar syntax as in Java:
 
+_Java-only: OGNL expression using Java method call syntax_
+
 ```java
 getRequest().getBody().getFamilyName()
 ```
@@ -94,6 +96,8 @@ from("seda:foo")
 ## Loading script from external resource
 
 You can externalize the script and have Apache Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`. This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
+
+_Java-only: loading an OGNL script from the classpath_
 
 ```java
 .setHeader("myHeader").ognl("resource:classpath:myognl.txt")

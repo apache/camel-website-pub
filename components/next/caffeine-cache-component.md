@@ -237,22 +237,50 @@ Each time you’ll use an operation on the cache, you’ll have two different he
 
 You can use your cache with the following code:
 
-```java
-@BindToRegistry("cache")
-Cache cache = Caffeine.newBuilder().recordStats().build();
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
-@Override
-protected RouteBuilder createRouteBuilder() throws Exception {
-    return new RouteBuilder() {
-        public void configure() {
-            from("direct://start")
-                .to("caffeine-cache://cache?action=PUT&key=1")
-                .to("caffeine-cache://cache?key=1&action=GET")
-                .log("Test! ${body}")
-                .to("mock:result");
-        }
-    };
-}
+```java
+from("direct://start")
+    .to("caffeine-cache://cache?action=PUT&key=1")
+    .to("caffeine-cache://cache?key=1&action=GET")
+    .log("Test! ${body}")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct://start"/>
+  <to uri="caffeine-cache://cache?action=PUT&amp;key=1"/>
+  <to uri="caffeine-cache://cache?key=1&amp;action=GET"/>
+  <log message="Test! ${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct://start
+      steps:
+        - to:
+            uri: caffeine-cache://cache
+            parameters:
+              action: PUT
+              key: 1
+        - to:
+            uri: caffeine-cache://cache
+            parameters:
+              key: 1
+              action: GET
+        - log:
+            message: "Test! ${body}"
+        - to:
+            uri: mock:result
 ```
 
 In this way, you’ll work always on the same cache in the registry.

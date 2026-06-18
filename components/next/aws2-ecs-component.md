@@ -451,14 +451,42 @@ Camel-AWS ECS component provides the following operation on the producer side:
 -   listClusters: this operation will list the available clusters in ECS
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:listClusters")
-    .to("aws2-ecs://test?ecsClient=#amazonEcsClient&operation=listClusters")
+    .to("aws2-ecs://test?ecsClient=#amazonEcsClient&operation=listClusters");
+```
+
+```xml
+<route>
+  <from uri="direct:listClusters"/>
+  <to uri="aws2-ecs://test?ecsClient=#amazonEcsClient&amp;operation=listClusters"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listClusters
+      steps:
+        - to:
+            uri: aws2-ecs://test
+            parameters:
+              ecsClient: "#amazonEcsClient"
+              operation: listClusters
 ```
 
 ### Using a POJO as body
 
 Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as a body. In AWS ECS there are multiple operations you can submit, as an example for List cluster request, you can do something like:
+
+_Java-only: using a POJO request body with the AWS SDK builder_
 
 ```java
 from("direct:start")

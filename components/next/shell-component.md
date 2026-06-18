@@ -137,19 +137,71 @@ Errors occurring in the route are displayed in red.
 
 ### Chat with an LLM
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("shell:myapp?color=green")
     .to("huggingface:chat?modelId=Qwen/Qwen2.5-3B-Instruct");
 ```
 
+```xml
+<route>
+  <from uri="shell:myapp?color=green"/>
+  <to uri="huggingface:chat?modelId=Qwen/Qwen2.5-3B-Instruct"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: shell:myapp
+      parameters:
+        color: green
+      steps:
+        - to:
+            uri: huggingface:chat
+            parameters:
+              modelId: Qwen/Qwen2.5-3B-Instruct
+```
+
 ### Call a REST API
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("shell:myapp")
     .toD("http://api.example.com/chat?query=${body}");
 ```
 
+```xml
+<route>
+  <from uri="shell:myapp"/>
+  <toD uri="http://api.example.com/chat?query=${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: shell:myapp
+      steps:
+        - toD:
+            uri: "http://api.example.com/chat?query=${body}"
+```
+
 ### Route to JMS (fire-and-forget)
+
+_Java-only: using ExchangePattern.InOnly with shell consumer_
 
 ```java
 from("shell:myapp")

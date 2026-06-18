@@ -182,6 +182,8 @@ If an _out file_ is specified (in the endpoint via `outFile` or the message head
 
 The example below executes `wc` (word count, Linux) to count the words in file `/usr/share/dict/words`. The word count (_output_) is written to the standard output stream of `wc`:
 
+_Java-only: route with inline Processor to handle ExecResult_
+
 ```java
 from("direct:exec")
 .to("exec:wc?args=--words /usr/share/dict/words")
@@ -201,28 +203,106 @@ from("direct:exec")
 
 The example below executes `java` with two arguments: `-server` and `-version`, if `java` is in the system path.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:exec")
-.to("exec:java?args=-server -version")
+    .to("exec:java?args=-server -version");
+```
+
+```xml
+<route>
+  <from uri="direct:exec"/>
+  <to uri="exec:java?args=-server -version"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:exec
+      steps:
+        - to:
+            uri: exec:java
+            parameters:
+              args: "-server -version"
 ```
 
 The example below executes `java` in `c:\temp` with three arguments: `-server`, `-version` and the system property `user.name`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:exec")
-.to("exec:c:/program files/jdk/bin/java?args=-server -version -Duser.name=Camel&workingDir=c:/temp")
+    .to("exec:c:/program files/jdk/bin/java?args=-server -version -Duser.name=Camel&workingDir=c:/temp");
+```
+
+```xml
+<route>
+  <from uri="direct:exec"/>
+  <to uri="exec:c:/program files/jdk/bin/java?args=-server -version -Duser.name=Camel&amp;workingDir=c:/temp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:exec
+      steps:
+        - to:
+            uri: "exec:c:/program files/jdk/bin/java"
+            parameters:
+              args: "-server -version -Duser.name=Camel"
+              workingDir: "c:/temp"
 ```
 
 ### Executing Ant scripts
 
 The following example executes [Apache Ant](http://ant.apache.org/) (Windows only) with the build file `CamelExecBuildFile.xml`, provided that `ant.bat` is in the system path, and that `CamelExecBuildFile.xml` is in the current directory.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:exec")
-.to("exec:ant.bat?args=-f CamelExecBuildFile.xml")
+    .to("exec:ant.bat?args=-f CamelExecBuildFile.xml");
+```
+
+```xml
+<route>
+  <from uri="direct:exec"/>
+  <to uri="exec:ant.bat?args=-f CamelExecBuildFile.xml"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:exec
+      steps:
+        - to:
+            uri: exec:ant.bat
+            parameters:
+              args: "-f CamelExecBuildFile.xml"
 ```
 
 In the next example, the `ant.bat` command redirects its output to `CamelExecOutFile.txt` with `-l`. The file `CamelExecOutFile.txt` is used as the _out file_ with `outFile=CamelExecOutFile.txt`. The example assumes that `ant.bat` is in the system path, and that `CamelExecBuildFile.xml` is in the current directory.
+
+_Java-only: route with inline Processor to handle output file_
 
 ```java
 from("direct:exec")
@@ -240,8 +320,34 @@ from("direct:exec")
 
 Commands such as `echo` and `dir` can be executed only with the command interpreter of the operating system. This example shows how to execute such a command - `echo` - in Windows.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:exec").to("exec:cmd?args=/C echo echoString")
+from("direct:exec")
+    .to("exec:cmd?args=/C echo echoString");
+```
+
+```xml
+<route>
+  <from uri="direct:exec"/>
+  <to uri="exec:cmd?args=/C echo echoString"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:exec
+      steps:
+        - to:
+            uri: exec:cmd
+            parameters:
+              args: "/C echo echoString"
 ```
 
 ## Spring Boot Auto-Configuration

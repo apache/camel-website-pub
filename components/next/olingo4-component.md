@@ -468,6 +468,8 @@ The result of **read** endpoint and data type of **data** option depends on the 
 
 The following route reads top 5 entries from the People entity ordered by ascending FirstName property.
 
+_Java-only: uses setHeader with Java constant_
+
 ```java
 from("direct:...")
     .setHeader("CamelOlingo4.$top", "5");
@@ -475,6 +477,8 @@ from("direct:...")
 ```
 
 The following route reads Airports entity using the key property value in incoming **id** header.
+
+_Java-only: uses setHeader with header() expression_
 
 ```java
 from("direct:...")
@@ -484,16 +488,62 @@ from("direct:...")
 
 The following route creates People entity using the **ClientEntity** in body message.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:...")
     .to("olingo4://create/People");
 ```
 
+```xml
+<route>
+    <from uri="direct:..."/>
+    <to uri="olingo4://create/People"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:...
+    steps:
+      - to:
+          uri: olingo4://create/People
+```
+
 The following route calls an odata action using the **ClientEntity** in the body message. The body message may be null for actions that don’t expect an input.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:...")
     .to("olingo4://action/People");
+```
+
+```xml
+<route>
+    <from uri="direct:..."/>
+    <to uri="olingo4://action/People"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:...
+    steps:
+      - to:
+          uri: olingo4://action/People
 ```
 
 ## Spring Boot Auto-Configuration

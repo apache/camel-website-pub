@@ -194,9 +194,34 @@ Quartz supports [Cron-like expressions](http://www.quartz-scheduler.org/document
 
 For example, the following will fire a message every five minutes starting at 12pm (noon) to 6pm on weekdays:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("quartz://myGroup/myTimerName?cron=0+0/5+12-18+?+*+MON-FRI")
     .to("activemq:Totally.Rocks");
+```
+
+```xml
+<route>
+  <from uri="quartz://myGroup/myTimerName?cron=0+0/5+12-18+?+*+MON-FRI"/>
+  <to uri="activemq:Totally.Rocks"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: quartz://myGroup/myTimerName
+      parameters:
+        cron: "0 0/5 12-18 ? * MON-FRI"
+      steps:
+        - to:
+            uri: activemq:Totally.Rocks
 ```
 
 which is equivalent to using the cron expression
@@ -294,9 +319,35 @@ The [Quartz](#) component provides a Polling Consumer scheduler which allows usi
 
 For example, to use a cron based expression to poll for files every second, then a Camel route can be defined simply as:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("file:inbox?scheduler=quartz&scheduler.cron=0/2+*+*+*+*+?")
-       .to("bean:process");
+from("file:inbox?scheduler=quartz&scheduler.cron=0/2+*+*+*+*+?")
+    .to("bean:process");
+```
+
+```xml
+<route>
+  <from uri="file:inbox?scheduler=quartz&amp;scheduler.cron=0/2+*+*+*+*+?"/>
+  <to uri="bean:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:inbox
+      parameters:
+        scheduler: quartz
+        scheduler.cron: "0/2 * * * * ?"
+      steps:
+        - to:
+            uri: bean:process
 ```
 
 Notice we define the `scheduler=quartz` to instruct Camel to use the [Quartz-based](#) scheduler. Then we use `scheduler.xxx` options to configure the scheduler. The [Quartz](#) scheduler requires the cron option to be set.
@@ -314,16 +365,70 @@ The following options are supported:
 > **Important**
 > Remember that configuring these options from the endpoint URIs must be prefixed with `scheduler.`. For example, to configure the trigger id and group:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("file:inbox?scheduler=quartz&scheduler.cron=0/2+*+*+*+*+?&scheduler.triggerId=myId&scheduler.triggerGroup=myGroup")
-       .to("bean:process");
+from("file:inbox?scheduler=quartz&scheduler.cron=0/2+*+*+*+*+?&scheduler.triggerId=myId&scheduler.triggerGroup=myGroup")
+    .to("bean:process");
+```
+
+```xml
+<route>
+  <from uri="file:inbox?scheduler=quartz&amp;scheduler.cron=0/2+*+*+*+*+?&amp;scheduler.triggerId=myId&amp;scheduler.triggerGroup=myGroup"/>
+  <to uri="bean:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:inbox
+      parameters:
+        scheduler: quartz
+        scheduler.cron: "0/2 * * * * ?"
+        scheduler.triggerId: myId
+        scheduler.triggerGroup: myGroup
+      steps:
+        - to:
+            uri: bean:process
 ```
 
 There is also a CRON scheduler in Spring, so you can use the following as well:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("file:inbox?scheduler=spring&scheduler.cron=0/2+*+*+*+*+?")
-       .to("bean:process");
+from("file:inbox?scheduler=spring&scheduler.cron=0/2+*+*+*+*+?")
+    .to("bean:process");
+```
+
+```xml
+<route>
+  <from uri="file:inbox?scheduler=spring&amp;scheduler.cron=0/2+*+*+*+*+?"/>
+  <to uri="bean:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:inbox
+      parameters:
+        scheduler: spring
+        scheduler.cron: "0/2 * * * * ?"
+      steps:
+        - to:
+            uri: bean:process
 ```
 
 ### Cron Component Support
@@ -336,9 +441,34 @@ Users can then use the cron component instead of the quartz component, as in the
 
 Example route for the cron component
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("cron://name?schedule=0+0/5+12-18+?+*+MON-FRI")
+from("cron://name?schedule=0+0/5+12-18+?+*+MON-FRI")
     .to("activemq:Totally.Rocks");
+```
+
+```xml
+<route>
+  <from uri="cron://name?schedule=0+0/5+12-18+?+*+MON-FRI"/>
+  <to uri="activemq:Totally.Rocks"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: cron://name
+      parameters:
+        schedule: "0 0/5 12-18 ? * MON-FRI"
+      steps:
+        - to:
+            uri: activemq:Totally.Rocks
 ```
 
 ## Spring Boot Auto-Configuration

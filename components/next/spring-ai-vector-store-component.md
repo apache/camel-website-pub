@@ -218,9 +218,35 @@ The component returns matching documents in the message body and sets the follow
 
 This is the **recommended best practice** for adding documents. The vector store component handles embedding generation internally:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:store")
     .to("spring-ai-vector-store:myStore?operation=ADD&vectorStore=#vectorStore");
+```
+
+```xml
+<route>
+  <from uri="direct:store"/>
+  <to uri="spring-ai-vector-store:myStore?operation=ADD&amp;vectorStore=#vectorStore"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:store
+    steps:
+      - to:
+          uri: spring-ai-vector-store:myStore
+          parameters:
+            operation: ADD
+            vectorStore: "#vectorStore"
 ```
 
 When you send plain text to this route, the component automatically: 1. Generates embeddings using the embedding model configured in the vector store 2. Creates a Document object 3. Stores it in the vector store
@@ -231,16 +257,53 @@ This single-step approach is simpler and more efficient than manually chaining t
 
 If you need explicit control over the embedding process or want to manipulate embeddings before storing, you can chain the components:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:embedAndStore")
     .to("spring-ai-embeddings:test?embeddingModel=#embeddingModel")
     .to("spring-ai-vector-store:test?vectorStore=#vectorStore");
 ```
 
+```xml
+<route>
+  <from uri="direct:embedAndStore"/>
+  <to uri="spring-ai-embeddings:test?embeddingModel=#embeddingModel"/>
+  <to uri="spring-ai-vector-store:test?vectorStore=#vectorStore"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:embedAndStore
+    steps:
+      - to:
+          uri: spring-ai-embeddings:test
+          parameters:
+            embeddingModel: "#embeddingModel"
+      - to:
+          uri: spring-ai-vector-store:test
+          parameters:
+            vectorStore: "#vectorStore"
+```
+
 > **Note**
 > This approach is only necessary when you need to access or modify the embeddings between generation and storage. For most use cases, the direct ADD operation (shown above) is preferred.
 
 ### Similarity Search
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:search")
@@ -250,9 +313,40 @@ from("direct:search")
     .log("Document IDs: ${header.CamelSpringAiVectorStoreDocumentIds}");
 ```
 
+```xml
+<route>
+  <from uri="direct:search"/>
+  <setBody><constant>What is AI?</constant></setBody>
+  <to uri="spring-ai-vector-store:myStore?operation=SIMILARITY_SEARCH&amp;topK=5&amp;similarityThreshold=0.7"/>
+  <log message="Found ${header.CamelSpringAiVectorStoreSimilarDocuments.size()} similar documents"/>
+  <log message="Document IDs: ${header.CamelSpringAiVectorStoreDocumentIds}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:search
+    steps:
+      - setBody:
+          constant: "What is AI?"
+      - to:
+          uri: spring-ai-vector-store:myStore
+          parameters:
+            operation: SIMILARITY_SEARCH
+            topK: 5
+            similarityThreshold: 0.7
+      - log:
+          message: "Found ${header.CamelSpringAiVectorStoreSimilarDocuments.size()} similar documents"
+      - log:
+          message: "Document IDs: ${header.CamelSpringAiVectorStoreDocumentIds}"
+```
+
 ### Delete Documents
 
 Delete documents by specifying their IDs:
+
+_Java-only: Java constants and Arrays.asList()_
 
 ```java
 from("direct:delete")
@@ -261,6 +355,8 @@ from("direct:delete")
 ```
 
 You can also chain operations to search for documents and then delete them using the returned IDs:
+
+_Java-only: Java constants and enum values_
 
 ```java
 from("direct:searchAndDelete")
@@ -274,6 +370,8 @@ from("direct:searchAndDelete")
 
 ### Dynamic Operation
 
+_Java-only: Java constants and enum values_
+
 ```java
 from("direct:dynamic")
     .setHeader(SpringAiVectorStoreHeaders.OPERATION, constant(SpringAiVectorStoreOperation.ADD))
@@ -285,6 +383,8 @@ from("direct:dynamic")
 ### Configuring the Vector Store
 
 To use the ADD operation with automatic embedding generation (recommended), configure your vector store with an embedding model:
+
+_Java-only: Java Spring AI SDK configuration_
 
 ```java
 // Create a Qdrant Client

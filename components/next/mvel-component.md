@@ -149,27 +149,116 @@ Camel provides two headers by which you can define a different resource location
 
 For example, you could use something like
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("mvel:com/acme/MyResponse.mvel");
+from("activemq:My.Queue")
+    .to("mvel:com/acme/MyResponse.mvel");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="mvel:com/acme/MyResponse.mvel"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: mvel:com/acme/MyResponse.mvel
 ```
 
 To use a MVEL template to formulate a response to a message for InOut message exchanges (where there is a `JMSReplyTo` header).
 
 To specify what template the component should use dynamically via a header, so for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  setHeader("CamelMvelResourceUri").constant("path/to/my/template.mvel").
-  to("mvel:dummy?allowTemplateFromHeader=true");
+from("direct:in")
+    .setHeader("CamelMvelResourceUri").constant("path/to/my/template.mvel")
+    .to("mvel:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMvelResourceUri">
+    <constant>path/to/my/template.mvel</constant>
+  </setHeader>
+  <to uri="mvel:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMvelResourceUri
+            expression:
+              constant:
+                expression: path/to/my/template.mvel
+        - to:
+            uri: mvel:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 To specify a template directly as a header, the component should use dynamically via a header, so for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  setHeader("CamelMvelTemplate").constant("@{\"The result is \" + request.body * 3}\" }").
-  to("velocity:dummy?allowTemplateFromHeader=true");
+from("direct:in")
+    .setHeader("CamelMvelTemplate").constant("@{\"The result is \" + request.body * 3}\" }")
+    .to("mvel:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelMvelTemplate">
+    <constant>@{"The result is " + request.body * 3}" }</constant>
+  </setHeader>
+  <to uri="mvel:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelMvelTemplate
+            expression:
+              constant:
+                expression: "@{\"The result is \" + request.body * 3}\" }"
+        - to:
+            uri: mvel:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 ## Spring Boot Auto-Configuration

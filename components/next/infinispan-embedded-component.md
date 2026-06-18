@@ -602,6 +602,8 @@ Table 11. Query Operation
 
 -   Put a key/value into a named cache:
     
+    _Java-only: uses InfinispanConstants and InfinispanOperation Java constants_
+    
     ```java
     from("direct:start")
         .setHeader(InfinispanConstants.OPERATION).constant(InfinispanOperation.PUT) (1)
@@ -612,6 +614,8 @@ Table 11. Query Operation
     <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the operation to perform</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the key used to identify the element in the cache</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Use the configured cache manager <code>cacheContainer</code> from the registry to put an element to the cache named <code>myCacheName</code></td></tr></tbody></table>
     
     It is possible to configure the lifetime and/or the idle time before the entry expires and gets evicted from the cache, as example:
+    
+    _Java-only: uses InfinispanConstants Java constants and TimeUnit enum_
     
     ```java
     from("direct:start")
@@ -625,6 +629,8 @@ Table 11. Query Operation
     <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the lifespan of the entry</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the time unit for the lifespan</td></tr></tbody></table>
     
 -   Queries
+    
+    _Java-only: uses InfinispanQueryBuilder anonymous class and Java constants_
     
     ```java
     from("direct:start")
@@ -640,9 +646,35 @@ Table 11. Query Operation
     
 -   Custom Listeners
     
+    -   Java
+        
+    -   XML
+        
+    -   YAML
+        
+    
     ```java
     from("infinispan://?cacheContainer=#cacheManager&customListener=#myCustomListener")
       .to("mock:result");
+    ```
+    
+    ```xml
+    <route>
+      <from uri="infinispan://?cacheContainer=#cacheManager&amp;customListener=#myCustomListener"/>
+      <to uri="mock:result"/>
+    </route>
+    ```
+    
+    ```yaml
+    - route:
+        from:
+          uri: "infinispan://"
+          parameters:
+            cacheContainer: "#cacheManager"
+            customListener: "#myCustomListener"
+        steps:
+          - to:
+              uri: mock:result
     ```
     
     The instance of `myCustomListener` must exist and Camel should be able to look it up from the `Registry`. Users are encouraged to extend the `org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedCustomListener` class and annotate the resulting class with `@Listener` which can be found in the package `org.infinispan.notifications`.

@@ -188,6 +188,8 @@ Enum values:
 
 Camel supports OpenSSH certificate-based authentication for SCP connections, where a user’s public key is signed by a Certificate Authority (CA). This is configured using the `certFile`, `certUri`, or `certBytes` parameters alongside the private key:
 
+_Java-only: configuring certificate-based authentication_
+
 ```java
 to("scp://host/path?username=myuser"
    + "&privateKeyFile=/path/to/user_key"

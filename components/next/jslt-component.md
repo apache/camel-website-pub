@@ -148,40 +148,182 @@ For example, the header named `type` and the exchange property `instance` can be
 
 For example, you could use something like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("jslt:com/acme/MyResponse.json");
+from("activemq:My.Queue")
+    .to("jslt:com/acme/MyResponse.json");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="jslt:com/acme/MyResponse.json"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: jslt:com/acme/MyResponse.json
 ```
 
 And a file-based resource:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("jslt:file://myfolder/MyResponse.json?contentCache=true").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("jslt:file://myfolder/MyResponse.json?contentCache=true")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="jslt:file://myfolder/MyResponse.json?contentCache=true"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: jslt:file://myfolder/MyResponse.json
+            parameters:
+              contentCache: true
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 You can also specify which JSLT expression the component should use dynamically via a header, so, for example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  setHeader("CamelJsltResourceUri").constant("path/to/my/spec.json").
-  to("jslt:dummy?allowTemplateFromHeader=true");
+from("direct:in")
+    .setHeader("CamelJsltResourceUri").constant("path/to/my/spec.json")
+    .to("jslt:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelJsltResourceUri">
+    <constant>path/to/my/spec.json</constant>
+  </setHeader>
+  <to uri="jslt:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelJsltResourceUri
+            expression:
+              constant:
+                expression: path/to/my/spec.json
+        - to:
+            uri: jslt:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 Or send whole jslt expression via header: (suitable for querying)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  setHeader("CamelJsltString").constant(".published").
-  to("jslt:dummy?allowTemplateFromHeader=true");
+from("direct:in")
+    .setHeader("CamelJsltString").constant(".published")
+    .to("jslt:dummy?allowTemplateFromHeader=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <setHeader name="CamelJsltString">
+    <constant>.published</constant>
+  </setHeader>
+  <to uri="jslt:dummy?allowTemplateFromHeader=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelJsltString
+            expression:
+              constant:
+                expression: ".published"
+        - to:
+            uri: jslt:dummy
+            parameters:
+              allowTemplateFromHeader: true
 ```
 
 Passing exchange properties to the jslt expression can be done like this
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:in").
-  to("jslt:com/acme/MyResponse.json?allowContextMapAll=true");
+from("direct:in")
+    .to("jslt:com/acme/MyResponse.json?allowContextMapAll=true");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <to uri="jslt:com/acme/MyResponse.json?allowContextMapAll=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: jslt:com/acme/MyResponse.json
+            parameters:
+              allowContextMapAll: true
 ```
 
 ## Spring Boot Auto-Configuration

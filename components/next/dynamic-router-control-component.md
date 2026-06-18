@@ -136,11 +136,43 @@ Subscribing can be achieved by using query parameters in the control endpoint UR
 
 ### URI examples
 
-Example Java URI `RouteBuilder` Subscription
+Example URI `RouteBuilder` Subscription
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-// Send a subscribe request to the dynamic router that will match every exchange and route messages to the URI: "direct:myDestination"
-from("direct:subscribe").to("dynamic-router-control:subscribe?subscribeChannel=myChannel&subscriptionId=mySubId&destinationUri=direct:myDestination&priority=5&predicate=true&expressionLanguage=simple");
+// Send a subscribe request to the dynamic router that will match every exchange
+// and route messages to the URI: "direct:myDestination"
+from("direct:subscribe")
+    .to("dynamic-router-control:subscribe?subscribeChannel=myChannel&subscriptionId=mySubId&destinationUri=direct:myDestination&priority=5&predicate=true&expressionLanguage=simple");
+```
+
+```xml
+<route>
+  <from uri="direct:subscribe"/>
+  <to uri="dynamic-router-control:subscribe?subscribeChannel=myChannel&amp;subscriptionId=mySubId&amp;destinationUri=direct:myDestination&amp;priority=5&amp;predicate=true&amp;expressionLanguage=simple"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:subscribe
+      steps:
+        - to:
+            uri: dynamic-router-control:subscribe
+            parameters:
+              subscribeChannel: myChannel
+              subscriptionId: mySubId
+              destinationUri: direct:myDestination
+              priority: 5
+              predicate: "true"
+              expressionLanguage: simple
 ```
 
 Example Java URI `ProducerTemplate` Subscription
@@ -196,10 +228,37 @@ Like subscribing, unsubscribing can also be achieved by using query parameters i
 
 ### URI examples
 
-Example Java URI `RouteBuilder` Unsubscribe
+Example URI `RouteBuilder` Unsubscribe
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:subscribe").to("dynamic-router-control:unsubscribe?subscribeChannel=myChannel&subscriptionId=mySubId");
+from("direct:subscribe")
+    .to("dynamic-router-control:unsubscribe?subscribeChannel=myChannel&subscriptionId=mySubId");
+```
+
+```xml
+<route>
+  <from uri="direct:subscribe"/>
+  <to uri="dynamic-router-control:unsubscribe?subscribeChannel=myChannel&amp;subscriptionId=mySubId"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:subscribe
+      steps:
+        - to:
+            uri: dynamic-router-control:unsubscribe
+            parameters:
+              subscribeChannel: myChannel
+              subscriptionId: mySubId
 ```
 
 Example Java URI `ProducerTemplate` Unsubscribe

@@ -534,6 +534,8 @@ Note that if encoders are specified, then the encoder param will be ignored, sim
 
 The lists of codecs need to be added to the Camel’s registry, so they can be resolved when the endpoint is created.
 
+_Java-only: Java programmatic registry configuration_
+
 ```java
 ChannelHandlerFactory lengthDecoder = ChannelHandlerFactories.newLengthFieldBasedFrameDecoder(1048576, 0, 4, 0, 4);
 
@@ -647,6 +649,8 @@ When acting as a server, you sometimes want to close the channel when, for examp
 
 However, you can also instruct Camel on a per-message basis as follows. To instruct Camel to close the channel, you should add a header with the key `CamelNettyCloseChannelWhenComplete` set to a boolean `true` value. For instance, the example below will close the channel after it has written the bye message back to the client:
 
+_Java-only: inline Processor implementation_
+
 ```java
 from("netty:tcp://0.0.0.0:8080").process(new Processor() {
     public void process(Exchange exchange) throws Exception {
@@ -681,6 +685,8 @@ The example below shows how `ServerInitializerFactory` factory may be created
 
 #### Using custom pipeline factory
 
+_Java-only: Java class definition_
+
 ```java
 public class SampleServerInitializerFactory extends ServerInitializerFactory {
     private int maxLineSize = 1024;
@@ -698,6 +704,8 @@ public class SampleServerInitializerFactory extends ServerInitializerFactory {
 ```
 
 The custom channel pipeline factory can then be added to the registry and instantiated/utilized on a Camel route in the following way
+
+_Java-only: Java programmatic registry and route configuration_
 
 ```java
 Registry registry = camelContext.getRegistry();
@@ -817,6 +825,8 @@ So then you need to add the following dependency:
 
 Note that Object serialization is not allowed by default, and so a decoder must be configured.
 
+_Java-only: Java annotation and class definition_
+
 ```java
 @BindToRegistry("decoder")
 public ChannelHandler getDecoder() throws Exception {
@@ -844,6 +854,8 @@ RouteBuilder builder = new RouteBuilder() {
 
 ### A TCP-based Netty consumer endpoint using One-way communication
 
+_Java-only: Java RouteBuilder class_
+
 ```java
 RouteBuilder builder = new RouteBuilder() {
   public void configure() {
@@ -860,6 +872,8 @@ Using the JSSE Configuration Utility
 The Netty component supports SSL/TLS configuration through the [Camel JSSE Configuration Utility](../../manual/camel-configuration-utilities.md). This utility greatly decreases the amount of component-specific code you need to write and is configurable at the endpoint and component levels. The following examples demonstrate how to use the utility with the Netty component.
 
 Programmatic configuration of the component
+
+_Java-only: Java programmatic SSL configuration_
 
 ```java
 KeyStoreParameters ksp = new KeyStoreParameters();
@@ -897,6 +911,8 @@ Spring DSL based configuration of endpoint
 
 Using Basic SSL/TLS configuration on the Jetty Component
 
+_Java-only: Java programmatic SSL route configuration_
+
 ```java
 context.addRoutes(new RouteBuilder() {
   public void configure() {
@@ -920,6 +936,8 @@ context.addRoutes(new RouteBuilder() {
 Getting access to SSLSession and the client certificate
 
 You can get access to the `javax.net.ssl.SSLSession` if you e.g., need to get details about the client certificate. When `ssl=true` then the [Netty](#) component will store the `SSLSession` as a header on the Camel Message as shown below:
+
+_Java-only: Java SSL session API_
 
 ```java
 SSLSession session = exchange.getIn().getHeader(NettyConstants.NETTY_SSL_SESSION, SSLSession.class);

@@ -865,15 +865,15 @@ There is support to pass [Salesforce headers](https://developer.salesforce.com/d
 
 For example, to fetch API limits, you can specify:
 
+_Java-only: uses custom `Processor` implementation to read response headers_
+
 ```java
 // in your Camel route set the header before Salesforce endpoint
-//...
   .setHeader("Sforce-Limit-Info", constant("api-usage"))
   .to("salesforce:getGlobalObjects")
   .to(myProcessor);
 
-// myProcessor will receive `Sforce-Limit-Info` header on the outbound
-// message
+// myProcessor will receive `Sforce-Limit-Info` header on the outbound message
 class MyProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         Message in = exchange.getIn();
@@ -887,6 +887,8 @@ In addition, HTTP response status code and text are available as headers `Exchan
 #### Sending null values to salesforce
 
 By default, SObject fields with null values are not sent to salesforce. In order to send null values to salesforce, use the `fieldsToNull` property, as follows:
+
+_Java-only: programmatic SObject field manipulation_
 
 ```java
 accountSObject.getFieldsToNull().add("Site");
@@ -1018,15 +1020,59 @@ For instance, consider that you need to limit the API usage of Salesforce so tha
 
 Notice how multiplying `1.0` with the integer value held in `body.dailyApiRequests.remaining` makes the expression evaluate as with floating point arithmetic, without it - it would end up making integral division which would result with either `0` (some API limits consumed) or `1` (no API limits consumed).
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:querySalesforce")
     .to("salesforce:limits")
     .choice()
-    .when(spel("#{1.0 * body.dailyApiRequests.remaining / body.dailyApiRequests.max < 0.1}"))
-        .to("salesforce:query?...")
-    .otherwise()
-        .setBody(constant("Used up Salesforce API limits, leaving 10% for critical routes"))
-    .endChoice()
+        .when(spel("#{1.0 * body.dailyApiRequests.remaining / body.dailyApiRequests.max < 0.1}"))
+            .to("salesforce:query?...")
+        .otherwise()
+            .setBody(constant("Used up Salesforce API limits, leaving 10% for critical routes"))
+    .endChoice();
+```
+
+```xml
+<route>
+  <from uri="direct:querySalesforce"/>
+  <to uri="salesforce:limits"/>
+  <choice>
+    <when>
+      <spel>#{1.0 * body.dailyApiRequests.remaining / body.dailyApiRequests.max &lt; 0.1}</spel>
+      <to uri="salesforce:query?..."/>
+    </when>
+    <otherwise>
+      <setBody>
+        <constant>Used up Salesforce API limits, leaving 10% for critical routes</constant>
+      </setBody>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:querySalesforce
+      steps:
+        - to:
+            uri: salesforce:limits
+        - choice:
+            when:
+              - spel: "#{1.0 * body.dailyApiRequests.remaining / body.dailyApiRequests.max < 0.1}"
+                steps:
+                  - to:
+                      uri: "salesforce:query?..."
+            otherwise:
+              steps:
+                - setBody:
+                    constant: "Used up Salesforce API limits, leaving 10% for critical routes"
 ```
 
 ##### Recently Viewed Items
@@ -1048,11 +1094,43 @@ Type: `List<RecentItem>`
 
 To fetch the recent items use `salesforce:recent` operation. This operation returns an `java.util.List` of `org.apache.camel.component.salesforce.api.dto.RecentItem` objects (`List<RecentItem>`) that in turn contain the `Id`, `Name` and `Attributes` (with `type` and `url` properties). You can limit the number of returned items by specifying `limit` parameter set to maximum number of records to return. For example:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:fetchRecentItems")
-    to("salesforce:recent")
-        .split().body()
-            .log("${body.name} at ${body.attributes.url}");
+    .to("salesforce:recent")
+    .split(body())
+        .log("${body.name} at ${body.attributes.url}");
+```
+
+```xml
+<route>
+  <from uri="direct:fetchRecentItems"/>
+  <to uri="salesforce:recent"/>
+  <split>
+    <body/>
+    <log message="${body.name} at ${body.attributes.url}"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:fetchRecentItems
+      steps:
+        - to:
+            uri: salesforce:recent
+        - split:
+            expression:
+              body: {}
+            steps:
+              - log: "${body.name} at ${body.attributes.url}"
 ```
 
 ##### Describe Global
@@ -1336,18 +1414,56 @@ For example, to send one record for approval using values in headers use:
 
 Given a route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:example1")//
-        .setHeader("approval.ContextId", simple("${body['contextId']}"))
-        .setHeader("approval.NextApproverIds", simple("${body['nextApproverIds']}"))
-        .to("salesforce:approval?"//
-            + "approval.actionType=Submit"//
-            + "&approval.comments=this is a test"//
-            + "&approval.processDefinitionNameOrId=Test_Account_Process"//
-            + "&approval.skipEntryCriteria=true");
+from("direct:example1")
+    .setHeader("approval.ContextId", simple("${body['contextId']}"))
+    .setHeader("approval.NextApproverIds", simple("${body['nextApproverIds']}"))
+    .to("salesforce:approval?approval.actionType=Submit&approval.comments=this is a test&approval.processDefinitionNameOrId=Test_Account_Process&approval.skipEntryCriteria=true");
+```
+
+```xml
+<route>
+  <from uri="direct:example1"/>
+  <setHeader name="approval.ContextId">
+    <simple>${body['contextId']}</simple>
+  </setHeader>
+  <setHeader name="approval.NextApproverIds">
+    <simple>${body['nextApproverIds']}</simple>
+  </setHeader>
+  <to uri="salesforce:approval?approval.actionType=Submit&amp;approval.comments=this is a test&amp;approval.processDefinitionNameOrId=Test_Account_Process&amp;approval.skipEntryCriteria=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:example1
+      steps:
+        - setHeader:
+            name: approval.ContextId
+            simple: "${body['contextId']}"
+        - setHeader:
+            name: approval.NextApproverIds
+            simple: "${body['nextApproverIds']}"
+        - to:
+            uri: salesforce:approval
+            parameters:
+              approval.actionType: Submit
+              approval.comments: "this is a test"
+              approval.processDefinitionNameOrId: Test_Account_Process
+              approval.skipEntryCriteria: true
 ```
 
 You could send a record for approval using:
+
+_Java-only: ProducerTemplate test API_
 
 ```java
 final Map<String, String> body = new HashMap<>();
@@ -1391,6 +1507,8 @@ Type: `SObjectCompositeResponse`
 > As with the batch API, the results can vary from API to API so the body of each `SObjectCompositeResult` instance is given as a `java.lang.Object`. In most cases the result will be a `java.util.Map` with string keys and values or other `java.util.Map` as value. Requests are made in JSON format hold some type information (i.e., it is known what values are strings and what values are numbers).
 
 Let’s look at an example:
+
+_Java-only: uses `SObjectComposite` builders and ProducerTemplate_
 
 ```java
 SObjectComposite composite = new SObjectComposite("38.0", true);
@@ -1472,6 +1590,8 @@ The easiest way to use this functionality is to use the DTOs generated by the `c
 
 Let’s look at an example:
 
+_Java-only: uses `SObjectTree` builders and ProducerTemplate_
+
 ```java
 Account account = ...
 Contact president = ...
@@ -1517,6 +1637,8 @@ The Composite API batch operation allows you to accumulate multiple requests in 
 > The results can vary from API to API so the result of each sub-request (`SObjectBatchResult.result`) is given as a `java.lang.Object`. In most cases the result will be a `java.util.Map` with string keys and values or other `java.util.Map` as value. Requests are made in JSON format and hold some type information (i.e., it is known what values are strings and what values are numbers).
 
 Let’s look at an example:
+
+_Java-only: uses `SObjectBatch` builders and ProducerTemplate_
 
 ```java
 final String acountId = ...
@@ -1683,6 +1805,8 @@ When you populate a `***Binary` field with an `InputStream`, the component autom
 
 **Creating a ContentVersion with binary data:**
 
+_Java-only: uses generated DTO classes and ProducerTemplate_
+
 ```java
 // Create ContentVersion with binary field
 ContentVersion cv = new ContentVersion();
@@ -1698,6 +1822,8 @@ template.requestBody("salesforce:createSObject", cv);
 ```
 
 **Updating a Document with binary content:**
+
+_Java-only: uses generated DTO classes and ProducerTemplate_
 
 ```java
 // Update Document with binary field
@@ -1716,6 +1842,8 @@ template.requestBody("salesforce:updateSObject", doc);
 ##### DTO Generation
 
 When using the [Camel Salesforce Maven Plugin](#MavenPlugin), binary fields are automatically generated for blob fields:
+
+_Java-only: generated DTO class_
 
 ```java
 public class ContentVersion extends AbstractSObjectBase {
@@ -1760,6 +1888,8 @@ Using binary fields provides significant performance improvements:
 ##### Backward Compatibility
 
 The existing base64 string approach continues to work:
+
+_Java-only: Salesforce DTO API_
 
 ```java
 // Still supported - base64 approach
@@ -2396,14 +2526,70 @@ salesforce:subscribe:<topic\_name>\[?options\]
 
 To create and subscribe to a topic
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("salesforce:subscribe:CamelTestTopic?notifyForFields=ALL&notifyForOperations=ALL&sObjectName=Merchandise__c&updateTopic=true&sObjectQuery=SELECT Id, Name FROM Merchandise__c")...
+from("salesforce:subscribe:CamelTestTopic?notifyForFields=ALL&notifyForOperations=ALL&sObjectName=Merchandise__c&updateTopic=true&sObjectQuery=SELECT Id, Name FROM Merchandise__c")
+    .to("...");
+```
+
+```xml
+<route>
+  <from uri="salesforce:subscribe:CamelTestTopic?notifyForFields=ALL&amp;notifyForOperations=ALL&amp;sObjectName=Merchandise__c&amp;updateTopic=true&amp;sObjectQuery=SELECT Id, Name FROM Merchandise__c"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: salesforce:subscribe:CamelTestTopic
+      parameters:
+        notifyForFields: ALL
+        notifyForOperations: ALL
+        sObjectName: Merchandise__c
+        updateTopic: true
+        sObjectQuery: "SELECT Id, Name FROM Merchandise__c"
+      steps:
+        - to:
+            uri: "..."
 ```
 
 To subscribe to an existing topic
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("salesforce:subscribe:CamelTestTopic&sObjectName=Merchandise__c")...
+from("salesforce:subscribe:CamelTestTopic?sObjectName=Merchandise__c")
+    .to("...");
+```
+
+```xml
+<route>
+  <from uri="salesforce:subscribe:CamelTestTopic?sObjectName=Merchandise__c"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: salesforce:subscribe:CamelTestTopic
+      parameters:
+        sObjectName: Merchandise__c
+      steps:
+        - to:
+            uri: "..."
 ```
 
     
@@ -2443,8 +2629,32 @@ salesforce:subscribe:event/<event\_name>
 
 For example, to receive platform events use for the event type `Order_Event__e`:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("salesforce:subscribe:event/Order_Event__e")
+    .to("...");
+```
+
+```xml
+<route>
+  <from uri="salesforce:subscribe:event/Order_Event__e"/>
+  <to uri="..."/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: salesforce:subscribe:event/Order_Event__e
+      steps:
+        - to:
+            uri: "..."
 ```
 
     
@@ -2479,10 +2689,61 @@ salesforce:subscribe:data/<Custom\_Object\_Name>\_\_ChangeEvent
 
 Here are a few examples
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("salesforce:subscribe:data/ChangeEvents?replayId=-1").log("being notified of all change events")
-from("salesforce:subscribe:data/AccountChangeEvent?replayId=-1").log("being notified of change events for Account records")
-from("salesforce:subscribe:data/Employee__ChangeEvent?replayId=-1").log("being notified of change events for Employee__c custom object")
+from("salesforce:subscribe:data/ChangeEvents?replayId=-1")
+    .log("being notified of all change events");
+
+from("salesforce:subscribe:data/AccountChangeEvent?replayId=-1")
+    .log("being notified of change events for Account records");
+
+from("salesforce:subscribe:data/Employee__ChangeEvent?replayId=-1")
+    .log("being notified of change events for Employee__c custom object");
+```
+
+```xml
+<route>
+  <from uri="salesforce:subscribe:data/ChangeEvents?replayId=-1"/>
+  <log message="being notified of all change events"/>
+</route>
+<route>
+  <from uri="salesforce:subscribe:data/AccountChangeEvent?replayId=-1"/>
+  <log message="being notified of change events for Account records"/>
+</route>
+<route>
+  <from uri="salesforce:subscribe:data/Employee__ChangeEvent?replayId=-1"/>
+  <log message="being notified of change events for Employee__c custom object"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: salesforce:subscribe:data/ChangeEvents
+      parameters:
+        replayId: -1
+      steps:
+        - log: "being notified of all change events"
+- route:
+    from:
+      uri: salesforce:subscribe:data/AccountChangeEvent
+      parameters:
+        replayId: -1
+      steps:
+        - log: "being notified of change events for Account records"
+- route:
+    from:
+      uri: salesforce:subscribe:data/Employee__ChangeEvent
+      parameters:
+        replayId: -1
+      steps:
+        - log: "being notified of change events for Employee__c custom object"
 ```
 
 More details about how to use the Camel Salesforce component change data capture capabilities could be found in the [ChangeEventsConsumerIntegrationTest](https://github.com/apache/camel/tree/main/components/camel-salesforce/camel-salesforce-component/src/test/java/org/apache/camel/component/salesforce/ChangeEventsConsumerIntegrationTest.java).
@@ -2673,6 +2934,8 @@ The response is:
 
 For efficient document uploads without base64 encoding overhead, use the binary field approach:
 
+_Java-only: Processor implementation with Salesforce DTO and binary fields_
+
 ```java
 public class ContentProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
@@ -2700,6 +2963,8 @@ public class ContentProcessor implements Processor {
 
 Give the output from the processor to the Salesforce component:
 
+_Java-only: inline Processor instantiation_
+
 ```java
 from("file:///home/camel/library")
     .to(new ContentProcessor())     // convert file stream into a ContentVersion SObject
@@ -2710,6 +2975,8 @@ from("file:///home/camel/library")
 #### Using Base64 Encoding (Legacy)
 
 The traditional base64 encoding approach is still supported for backward compatibility:
+
+_Java-only: Processor implementation with base64 encoding_
 
 ```java
 public class ContentProcessor implements Processor {
@@ -2739,6 +3006,8 @@ public class ContentProcessor implements Processor {
 ### Generating SOQL query strings
 
 `org.apache.camel.component.salesforce.api.utils.QueryHelper` contains helper methods to generate SOQL queries. For instance, to fetch all custom fields from _Account_ SObject, you can generate the SOQL SELECT by invoking:
+
+_Java-only: QueryHelper API_
 
 ```java
 String allCustomFieldsQuery = QueryHelper.queryToFetchFilteredFieldsOf(new Account(), SObjectField::isCustom);

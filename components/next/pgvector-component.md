@@ -44,6 +44,8 @@ The following actions are supported via the `CamelPgVectorAction` header:
 
 When using the `SIMILARITY_SEARCH` action, you can filter results using a SQL WHERE clause via the `CamelPgVectorFilter` header. For safe handling of dynamic values, use parameterized queries with `?` placeholders and provide values via the `CamelPgVectorFilterParams` header:
 
+_Java-only: setting parameterized filter headers programmatically_
+
 ```java
 from("direct:search")
     .setHeader(PgVectorHeaders.ACTION).constant(PgVectorAction.SIMILARITY_SEARCH)

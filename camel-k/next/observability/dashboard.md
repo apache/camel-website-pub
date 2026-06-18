@@ -11,7 +11,10 @@ From Camel K version 2.10.0 onward, the applications deployed by the operator wi
 
 On the Camel Monitor side, any application containing the label will be watched and monitored providing a set of useful Camel metrics (for example, health, number of exchanges succeeded, failed, …​).
 
-You will need to include the `camel-observability-services` component into your application in order to get the full power of this monitoring tool. As an example:
+> **Note**
+> From version 2.11.0 onward the `camel-observability-services` component, required to get the full power of this monitoring tool, is included by default.
+
+Take this example:
 
 ```yaml
 apiVersion: camel.apache.org/v1
@@ -19,8 +22,6 @@ kind: Integration
 metadata:
   name: sample-it
 spec:
-  dependencies:
-    - mvn:org.apache.camel.quarkus:camel-quarkus-observability-services
   flows:
     - route:
         id: send-5-messages
@@ -30,11 +31,6 @@ spec:
             - setBody:
                 simple: "Hello!"
             - to: "log:myLogger"
-  traits:
-    # We need a provide any version supporting camel-observability-services (introduced in Camel 4.9.0)
-    camel:
-      runtimeProvider: plain-quarkus
-      runtimeVersion: 3.30.8
 ```
 
 The information will be stored in a Custom Resource provided by the Camel Monitor installation procedure: `CamelMonitor` (or abbreviated to `cmon`). Here a basic example:

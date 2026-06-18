@@ -176,6 +176,8 @@ You can allow Camel to scan the container context, e.g., the Spring `Application
 
 This allows you to just annotate your routes using the Spring `@Component` and have those routes included by Camel
 
+_Java-only: Spring component-scanned RouteBuilder class definition_
+
 ```java
 @Component
 public class MyRoute extends SpringRouteBuilder {
@@ -256,6 +258,8 @@ At test time, it is often desirable to be able to selectively exclude matching r
 
 Say `RouteC` is not applicable to our test scenario and generates a lot of noise during the test. It would be nice to be able to exclude this route from this specific test. The `SpringTestSupport` class has been modified to allow this. It provides two methods (`excludeRoute` and `excludeRoutes`) that may be overridden to exclude a single class or an array of classes.
 
+_Java-only: test class with route exclusion_
+
 ```java
 public class RouteAandRouteBOnlyTest extends SpringTestSupport {
     @Override
@@ -267,6 +271,8 @@ public class RouteAandRouteBOnlyTest extends SpringTestSupport {
 
 To hook into the camelContext initialization by spring to exclude the class `MyExcludedRouteBuilder`, we need to intercept the spring context creation. When overriding createApplicationContext to create the spring context, we call the `getRouteExcludingApplicationContext()` method to provide a special parent spring context that takes care of the exclusion.
 
+_Java-only: overriding Spring application context for route exclusion_
+
 ```java
 @Override
 protected AbstractXmlApplicationContext createApplicationContext() {
@@ -275,6 +281,8 @@ protected AbstractXmlApplicationContext createApplicationContext() {
 ```
 
 `RouteC` will now be excluded from initialization. Similarly, in another test that is testing only `RouteC`, we could exclude RouteB and RouteA by overriding the method `excludeRoutes`.
+
+_Java-only: excluding multiple route classes_
 
 ```java
 @Override

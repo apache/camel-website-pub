@@ -136,17 +136,69 @@ All headers found in the message are passed to the `JobLauncher` as job paramete
 
 Triggering the Spring Batch job execution:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:startBatch").to("spring-batch:myJob");
+from("direct:startBatch")
+    .to("spring-batch:myJob");
+```
+
+```xml
+<route>
+  <from uri="direct:startBatch"/>
+  <to uri="spring-batch:myJob"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:startBatch
+      steps:
+        - to:
+            uri: spring-batch:myJob
 ```
 
 Triggering the Spring Batch job execution with the `JobLauncher` set explicitly.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:startBatch").to("spring-batch:myJob?jobLauncherRef=myJobLauncher");
+from("direct:startBatch")
+    .to("spring-batch:myJob?jobLauncherRef=myJobLauncher");
+```
+
+```xml
+<route>
+  <from uri="direct:startBatch"/>
+  <to uri="spring-batch:myJob?jobLauncherRef=myJobLauncher"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:startBatch
+      steps:
+        - to:
+            uri: spring-batch:myJob
+            parameters:
+              jobLauncherRef: myJobLauncher
 ```
 
 A `JobExecution` instance returned by the `JobLauncher` is forwarded by the `SpringBatchProducer` as the output message. You can use the `JobExecution` instance to perform some operations using the Spring Batch API directly.
+
+_Java-only: accessing JobExecution from MockEndpoint_
 
 ```java
 from("direct:startBatch").to("spring-batch:myJob").to("mock:JobExecutions");

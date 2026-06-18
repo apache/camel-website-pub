@@ -230,35 +230,154 @@ The list producer provides eight operations:
 
 ### Example for **add**:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:add")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.ADD))
-.toF("hazelcast-%sbar", HazelcastConstants.LIST_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("add"))
+    .to("hazelcast-list:bar");
+```
+
+```xml
+<route>
+  <from uri="direct:add"/>
+  <setHeader name="CamelHazelcastOperationType">
+    <constant>add</constant>
+  </setHeader>
+  <to uri="hazelcast-list:bar"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:add
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: add
+        - to:
+            uri: hazelcast-list:bar
 ```
 
 ### Example for **get**:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:get")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-.toF("hazelcast-%sbar", HazelcastConstants.LIST_PREFIX)
-.to("seda:out");
+    .setHeader("CamelHazelcastOperationType", constant("get"))
+    .to("hazelcast-list:bar")
+    .to("seda:out");
+```
+
+```xml
+<route>
+  <from uri="direct:get"/>
+  <setHeader name="CamelHazelcastOperationType">
+    <constant>get</constant>
+  </setHeader>
+  <to uri="hazelcast-list:bar"/>
+  <to uri="seda:out"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: get
+        - to:
+            uri: hazelcast-list:bar
+        - to:
+            uri: seda:out
 ```
 
 ### Example for **setvalue**:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:set")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.SET_VALUE))
-.toF("hazelcast-%sbar", HazelcastConstants.LIST_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("setvalue"))
+    .to("hazelcast-list:bar");
+```
+
+```xml
+<route>
+  <from uri="direct:set"/>
+  <setHeader name="CamelHazelcastOperationType">
+    <constant>setvalue</constant>
+  </setHeader>
+  <to uri="hazelcast-list:bar"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:set
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: setvalue
+        - to:
+            uri: hazelcast-list:bar
 ```
 
 ### Example for **removevalue**:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:removevalue")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.REMOVE_VALUE))
-.toF("hazelcast-%sbar", HazelcastConstants.LIST_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("removevalue"))
+    .to("hazelcast-list:bar");
+```
+
+```xml
+<route>
+  <from uri="direct:removevalue"/>
+  <setHeader name="CamelHazelcastOperationType">
+    <constant>removevalue</constant>
+  </setHeader>
+  <to uri="hazelcast-list:bar"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:removevalue
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: removevalue
+        - to:
+            uri: hazelcast-list:bar
 ```
 
 Note that **CamelHazelcastObjectIndex** header is used for indexing purpose.
@@ -267,18 +386,74 @@ Note that **CamelHazelcastObjectIndex** header is used for indexing purpose.
 
 The list consumer provides two operations: \* add \* remove
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-fromF("hazelcast-%smm", HazelcastConstants.LIST_PREFIX)
+from("hazelcast-list:mm")
     .log("object...")
     .choice()
-        .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
+        .when(header("CamelHazelcastListenerAction").isEqualTo("added"))
             .log("...added")
-                        .to("mock:added")
-        .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.REMOVED))
+            .to("mock:added")
+        .when(header("CamelHazelcastListenerAction").isEqualTo("removed"))
             .log("...removed")
-                        .to("mock:removed")
-                .otherwise()
-                        .log("fail!");
+            .to("mock:removed")
+        .otherwise()
+            .log("fail!");
+```
+
+```xml
+<route>
+  <from uri="hazelcast-list:mm"/>
+  <log message="object..."/>
+  <choice>
+    <when>
+      <simple>${header.CamelHazelcastListenerAction} == 'added'</simple>
+      <log message="...added"/>
+      <to uri="mock:added"/>
+    </when>
+    <when>
+      <simple>${header.CamelHazelcastListenerAction} == 'removed'</simple>
+      <log message="...removed"/>
+      <to uri="mock:removed"/>
+    </when>
+    <otherwise>
+      <log message="fail!"/>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: hazelcast-list:mm
+      steps:
+        - log:
+            message: "object..."
+        - choice:
+            when:
+              - simple: "${header.CamelHazelcastListenerAction} == 'added'"
+                steps:
+                  - log:
+                      message: "...added"
+                  - to:
+                      uri: mock:added
+              - simple: "${header.CamelHazelcastListenerAction} == 'removed'"
+                steps:
+                  - log:
+                      message: "...removed"
+                  - to:
+                      uri: mock:removed
+            otherwise:
+              steps:
+                - log:
+                    message: "fail!"
 ```
 
 ## Spring Boot Auto-Configuration

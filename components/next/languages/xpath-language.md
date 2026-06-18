@@ -91,6 +91,8 @@ If there is no namespace given, then Camel resolves only based on the local part
 
 You can combine headers, properties, body and variables in an XPath expression as shown in the example below:
 
+_Java-only: uses Document.class type conversion in setVariable/setHeader_
+
 ```java
 from("timer:java?period=1000,repeatCount=1")
     .setBody()
@@ -157,16 +159,88 @@ If the message body is stream based, which means the input it receives is submit
 
 You often need to access the data multiple times when you use [XPath](#) as a [Message Filter](#) or Content-Based Router. Then, you should use Stream Caching or convert the message body to a `String` prior, which is safe to be re-read multiple times.
 
-```java
-from("queue:foo").
-  filter().xpath("//foo").
-  to("queue:bar")
-```
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("queue:foo").
-  choice().xpath("//foo").to("queue:bar").
-  otherwise().to("queue:others");
+from("queue:foo")
+  .filter().xpath("//foo")
+  .to("queue:bar");
+```
+
+```xml
+<route>
+  <from uri="queue:foo"/>
+  <filter>
+    <xpath>//foo</xpath>
+    <to uri="queue:bar"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: queue:foo
+      steps:
+        - filter:
+            expression:
+              xpath:
+                expression: //foo
+            steps:
+              - to:
+                  uri: queue:bar
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("queue:foo")
+  .choice().when(xpath("//foo")).to("queue:bar")
+  .otherwise().to("queue:others");
+```
+
+```xml
+<route>
+  <from uri="queue:foo"/>
+  <choice>
+    <when>
+      <xpath>//foo</xpath>
+      <to uri="queue:bar"/>
+    </when>
+    <otherwise>
+      <to uri="queue:others"/>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: queue:foo
+      steps:
+        - choice:
+            when:
+              - expression:
+                  xpath:
+                    expression: //foo
+                steps:
+                  - to:
+                      uri: queue:bar
+            otherwise:
+              steps:
+                - to:
+                    uri: queue:others
 ```
 
 ## Setting a result type
@@ -189,6 +263,8 @@ In XML DSL you use the **resultType** attribute to provide the fully qualified c
 > Classes from `java.lang` can omit the FQN name, so you can use `resultType="String"`
 
 Using `@XPath` annotation:
+
+_Java-only: Java bean integration annotation_
 
 ```java
 @XPath(value = "concat('foo-',//order/name/)", resultType = String.class) String name)
@@ -214,13 +290,18 @@ xpath("/invoice/@orderType = 'premium'", "invoiceDetails")
 
 Here is a simple example using an XPath expression as a predicate in a [Message Filter](../eips/filter-eip.md):
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .filter().xpath("/person[@name='James']")
         .to("mock:result");
 ```
-
-And in XML
 
 ```xml
 <route>
@@ -232,9 +313,25 @@ And in XML
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - filter:
+            expression:
+              xpath:
+                expression: "/person[@name='James']"
+            steps:
+              - to:
+                  uri: mock:result
+```
+
 ## Using namespaces
 
 If you have a standard set of namespaces you wish to work with and wish to share them across many XPath expressions, you can use the `org.apache.camel.support.builder.Namespaces` when using Java DSL as shown:
+
+_Java-only: Namespaces builder API_
 
 ```java
 Namespaces ns = new Namespaces("c", "http://acme.com/cheese");
@@ -253,6 +350,8 @@ Each namespace is a key=value pair, where the prefix is the key. In the XPath ex
 ```
 
 The namespace builder supports adding multiple namespaces as shown:
+
+_Java-only: Namespaces builder API_
 
 ```java
 Namespaces ns = new Namespaces("c", "http://acme.com/cheese")
@@ -295,6 +394,8 @@ You can use [Bean Integration](../../../manual/bean-integration.md) to invoke a 
 > **Note**
 > The default `@XPath` annotation has SOAP and XML namespaces available.
 
+_Java-only: Java bean integration annotation_
+
 ```java
 public class Foo {
 
@@ -313,6 +414,8 @@ It requires that you pass in a `CamelContext` since a lot of the moving parts in
 
 For example, you can do something like this:
 
+_Java-only: XPathBuilder API_
+
 ```java
 boolean matches = XPathBuilder.xpath("/foo/bar/@xyz").matches(context, "<foo><bar xyz='cheese'/></foo>"));
 ```
@@ -321,6 +424,8 @@ This will match the given predicate.
 
 You can also evaluate as shown in the following three examples:
 
+_Java-only: XPathBuilder API_
+
 ```java
 String name = XPathBuilder.xpath("foo/bar").evaluate(context, "<foo><bar>cheese</bar></foo>", String.class);
 Integer number = XPathBuilder.xpath("foo/bar").evaluate(context, "<foo><bar>123</bar></foo>", Integer.class);
@@ -328,6 +433,8 @@ Boolean bool = XPathBuilder.xpath("foo/bar").evaluate(context, "<foo><bar>true</
 ```
 
 Evaluating with a `String` result is a common requirement and make this simpler:
+
+_Java-only: XPathBuilder API_
 
 ```java
 String name = XPathBuilder.xpath("foo/bar").evaluate(context, "<foo><bar>cheese</bar></foo>");
@@ -451,6 +558,8 @@ xmlns:b=\[http://apache.org/camelA, http://apache.org/camelB\]}
 
 You can externalize the script and have Apache Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`. This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
 
+_Java-only: Java DSL expression syntax_
+
 ```java
 .setHeader("myHeader").xpath("resource:classpath:myxpath.txt", String.class)
 ```
@@ -485,6 +594,13 @@ Which you want to transform to a smaller structure:
 
 Then you can use simple as template and XPath to grab the content from the message payload, as shown in the route snippet below:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
         .transform().simple("""
@@ -496,14 +612,72 @@ from("direct:start")
         .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <transform>
+    <simple><![CDATA[<user>
+  <rool>${xpath(/order/@id)}</rool>
+  <country>${xpath(/order/address/co/text())}</country>
+  <fullname>${xpath(/order/first/text())}</fullname>
+</user>]]></simple>
+  </transform>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - transform:
+            simple: |
+              <user>
+                <rool>${xpath(/order/@id)}</rool>
+                <country>${xpath(/order/address/co/text())}</country>
+                <fullname>${xpath(/order/first/text())}</fullname>
+              </user>
+        - to:
+            uri: mock:result
+```
+
 Notice how we use `${xpath(exp}` syntax in the simple template to use xpath that will be evaluated on the message body, to extract the content to be used in the output (see previous for output).
 
 Since the simple language can output anything, you can also use this to output in plain text or JSON, etc.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
         .transform().simple("The order ${xpath(/order/@id)} is being shipped to ${xpath(/order/address/co/text())}")
         .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <transform>
+    <simple>The order ${xpath(/order/@id)} is being shipped to ${xpath(/order/address/co/text())}</simple>
+  </transform>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - transform:
+            simple: "The order ${xpath(/order/@id)} is being shipped to ${xpath(/order/address/co/text())}"
+        - to:
+            uri: mock:result
 ```
 
 ## Dependencies

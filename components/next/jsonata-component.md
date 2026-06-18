@@ -145,30 +145,112 @@ Enum values:
 
 For example, you could use something like:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("jsonata:com/acme/MyResponse.json");
+from("activemq:My.Queue")
+    .to("jsonata:com/acme/MyResponse.json");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="jsonata:com/acme/MyResponse.json"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: jsonata:com/acme/MyResponse.json
 ```
 
 And a file-based resource:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("jsonata:file://myfolder/MyResponse.json?contentCache=true").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("jsonata:file://myfolder/MyResponse.json?contentCache=true")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="jsonata:file://myfolder/MyResponse.json?contentCache=true"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: jsonata:file://myfolder/MyResponse.json
+            parameters:
+              contentCache: true
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 ### Frame bindings
 
 It is possible to configure custom functions that can be called from Jsonata. For example you might want to be able to inject environment variables:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("activemq:My.Queue").
-  to("jsonata:file://myfolder/MyResponse.json?contentCache=true&frameBinding=#customBindings").
-  to("activemq:Another.Queue");
+from("activemq:My.Queue")
+    .to("jsonata:file://myfolder/MyResponse.json?contentCache=true&frameBinding=#customBindings")
+    .to("activemq:Another.Queue");
+```
+
+```xml
+<route>
+  <from uri="activemq:My.Queue"/>
+  <to uri="jsonata:file://myfolder/MyResponse.json?contentCache=true&amp;frameBinding=#customBindings"/>
+  <to uri="activemq:Another.Queue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:My.Queue
+      steps:
+        - to:
+            uri: jsonata:file://myfolder/MyResponse.json
+            parameters:
+              contentCache: true
+              frameBinding: "#customBindings"
+        - to:
+            uri: activemq:Another.Queue
 ```
 
 A custom binding might look like the following:
+
+_Java-only: implementing a custom JsonataFrameBinding_
 
 ```java
 @NoArgsConstructor

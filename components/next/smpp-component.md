@@ -930,6 +930,8 @@ This component supports the general Camel exception handling capabilities
 When an error occurs sending a message with SubmitSm (the default action), the org.apache.camel.component.smpp.SmppException is thrown with a nested exception, org.jsmpp.extra.NegativeResponseException. Call NegativeResponseException.getCommandStatus() to obtain the exact SMPP negative response code, the values are explained in the SMPP specification 3.4, section 5.1.3.  
 When the SMPP consumer receives a `DeliverSm` or `DataSm` short message and the processing of these messages fails, you can also throw a `ProcessRequestException` instead of handle the failure. In this case, this exception is forwarded to the underlying [JSMPP library](http://jsmpp.org) which will return the included error code to the SMSC. This feature is useful to e.g., instruct the SMSC to resend the short message at a later time. This could be done with the following lines of code:
 
+_Java-only: uses doTry/doCatch with Exception.class literal and ProcessRequestException constructor_
+
 ```java
 from("smpp://smppclient@localhost:2775?password=password&enquireLinkTimer=3000&transactionTimer=5000&systemType=consumer")
   .doTry()
@@ -943,42 +945,79 @@ Please refer to the [SMPP specification](http://smsforum.net/SMPP_v3_4_Issue1_2.
 
 ## Examples
 
-A route which sends an SMS using the Java DSL:
+A route which sends an SMS:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
-  .to("smpp://smppclient@localhost:2775?
-      password=password&enquireLinkTimer=3000&transactionTimer=5000&systemType=producer");
+    .to("smpp://smppclient@localhost:2775?password=password&enquireLinkTimer=3000&transactionTimer=5000&systemType=producer");
 ```
-
-A route which sends an SMS using the Spring XML DSL:
 
 ```xml
 <route>
   <from uri="direct:start"/>
-  <to uri="smpp://smppclient@localhost:2775?
-           password=password&amp;enquireLinkTimer=3000&amp;transactionTimer=5000&amp;systemType=producer"/>
+  <to uri="smpp://smppclient@localhost:2775?password=password&amp;enquireLinkTimer=3000&amp;transactionTimer=5000&amp;systemType=producer"/>
 </route>
 ```
 
-A route which receives an SMS using the Java DSL:
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: smpp://smppclient@localhost:2775
+            parameters:
+              password: password
+              enquireLinkTimer: 3000
+              transactionTimer: 5000
+              systemType: producer
+```
+
+A route which receives an SMS:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("smpp://smppclient@localhost:2775?password=password&enquireLinkTimer=3000&transactionTimer=5000&systemType=consumer")
-  .to("bean:foo");
+    .to("bean:foo");
 ```
 
-A route which receives an SMS using the Spring XML DSL:
-
 ```xml
-  <route>
-     <from uri="smpp://smppclient@localhost:2775?
-                password=password&amp;enquireLinkTimer=3000&amp;transactionTimer=5000&amp;systemType=consumer"/>
-     <to uri="bean:foo"/>
-  </route>
+<route>
+  <from uri="smpp://smppclient@localhost:2775?password=password&amp;enquireLinkTimer=3000&amp;transactionTimer=5000&amp;systemType=consumer"/>
+  <to uri="bean:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: smpp://smppclient@localhost:2775
+      parameters:
+        password: password
+        enquireLinkTimer: 3000
+        transactionTimer: 5000
+        systemType: consumer
+      steps:
+        - to:
+            uri: bean:foo
 ```
 
 An example of using transceiver (TRX) binding type:
+
+_Java-only: multi-route definition with string concatenation and route id assignment_
 
 ```java
 from("direct:start")

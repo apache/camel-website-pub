@@ -222,17 +222,47 @@ The component supports three types of chat operations:
 
 #### Simple Chat (Single Message)
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:chat")
     .to("spring-ai-chat:test?chatModel=#chatModel");
+```
 
-// Usage:
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:test?chatModel=#chatModel"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:test
+            parameters:
+              chatModel: "#chatModel"
+```
+
+_Java-only: ProducerTemplate test API_
+
+```java
 String response = template.requestBody("direct:chat", "What is the capital of Italy?", String.class);
 ```
 
 #### Chat with Prompt Templates
 
 Use the `CHAT_SINGLE_MESSAGE_WITH_PROMPT` operation to leverage Spring AI’s template engine:
+
+_Java-only: ProducerTemplate test API with `Map.of()` and Spring AI constants_
 
 ```java
 from("direct:chat")
@@ -258,6 +288,8 @@ String response = template.requestBodyAndHeader(
 
 Maintain conversation context by sending multiple messages:
 
+_Java-only: uses Spring AI `Message` types and ProducerTemplate_
+
 ```java
 import org.springframework.ai.chat.messages.*;
 
@@ -281,6 +313,8 @@ RAG allows you to augment prompts with relevant context from your data sources, 
 #### Automatic RAG with VectorStore
 
 Configure a VectorStore for automatic context retrieval:
+
+_Java-only: programmatic VectorStore and registry configuration_
 
 ```java
 import org.springframework.ai.vectorstore.VectorStore;
@@ -311,6 +345,8 @@ The component will automatically:
 
 Use the `SpringAiRagAggregatorStrategy` with Camel’s Content Enricher EIP:
 
+_Java-only: programmatic aggregation strategy configuration_
+
 ```java
 import org.apache.camel.component.springai.chat.rag.SpringAiRagAggregatorStrategy;
 
@@ -327,6 +363,8 @@ from("direct:retrieve-context")
 #### RAG with Headers
 
 Directly provide augmented data via the `AUGMENTED_DATA` header:
+
+_Java-only: uses Spring AI `Document` type and ProducerTemplate_
 
 ```java
 import org.springframework.ai.document.Document;
@@ -459,6 +497,8 @@ The component provides automatic conversation memory management via Spring AI’
 
 Configure a `ChatMemory` on the endpoint for automatic conversation tracking using traditional message window approach. This strategy keeps a configurable number of recent messages in memory.
 
+_Java-only: programmatic Spring AI `ChatMemory` setup and ProducerTemplate usage_
+
 ```java
 // Create chat memory with message window
 ChatMemory chatMemory = MessageWindowChatMemory.builder()
@@ -483,6 +523,8 @@ template.requestBodyAndHeader("direct:chat", "What's my name?",
 #### Vector-based Semantic Memory (ChatMemoryVectorStore)
 
 For long-term memory with semantic retrieval capabilities, configure a `VectorStore` for chat memory. This strategy uses vector embeddings to enable semantic search over conversation history, making it ideal for retrieving contextually relevant information rather than just recent messages.
+
+_Java-only: programmatic Ollama embedding model and VectorStore setup_
 
 ```java
 OllamaApi ollamaApi = OllamaApi.builder()
@@ -595,6 +637,8 @@ from("direct:multiToolChat")
 The component supports multimodal input for models that support vision, audio, and document capabilities.
 
 The component seamlessly integrates with Camel file components (file, ftp, sftp, smb) through `WrappedFile` support, enabling direct routing from file sources to AI chat. Media can also be sent as byte arrays or as lists of files with appropriate headers.
+
+_Java-only: uses ProducerTemplate, `WrappedFile` aggregation, and Spring AI `UserMessage`/`Media` types_
 
 ```java
 // Direct file-to-AI pipeline (MIME type auto-detected)
@@ -717,6 +761,8 @@ The component supports structured output conversion, allowing you to convert LLM
 
 Three output formats are supported: **BEAN** (Java records/POJOs), **MAP** (key-value structures), and **LIST** (arrays). Each can be configured via converter bean, endpoint parameters, or headers.
 
+_Java-only: uses Java record definition and ProducerTemplate_
+
 ```java
 // Bean output - convert to typed Java objects
 @JsonPropertyOrder({ "actor", "movies" })
@@ -754,6 +800,8 @@ template.requestBodyAndHeader("direct:chat", "List programming languages",
 
 For maximum control, you can provide a pre-configured `ChatClient` instead of a `ChatModel`:
 
+_Java-only: programmatic `ChatClient` builder configuration_
+
 ```java
 ChatClient chatClient = ChatClient.builder(chatModel)
     .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
@@ -774,6 +822,8 @@ In addition to Camel route tools (via `tags`), you can use Spring AI `@Tool`\-an
 #### Camel Spring Boot (Recommended)
 
 When using Camel Spring Boot, Spring AI’s auto-configuration automatically discovers `@Tool`\-annotated methods from Spring beans via `ToolCallbackResolver`. Simply define your tool as a Spring bean and reference it by name using `toolNames`:
+
+_Java-only: Spring `@Component` with `@Tool` annotation_
 
 ```java
 @Component
@@ -798,6 +848,8 @@ from("direct:chat")
 #### Without Spring Boot
 
 Outside Spring Boot (e.g., in plain Camel or tests), there is no `ToolCallbackResolver`. You need to resolve the callbacks manually and bind them in the registry:
+
+_Java-only: programmatic `ToolCallbackProvider` setup_
 
 ```java
 ToolCallbackProvider provider = MethodToolCallbackProvider.builder()
@@ -828,6 +880,8 @@ Tool names are resolved via Spring AI’s `ToolCallbackResolver`. You can combin
 ### Tool Context
 
 Pass contextual data (user ID, session info, tenant ID, etc.) to tools during execution. Tools with a `ToolContext` parameter receive these values automatically:
+
+_Java-only: `@Tool` with `ToolContext` and ProducerTemplate_
 
 ```java
 // Tool that uses context

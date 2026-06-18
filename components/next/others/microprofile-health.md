@@ -21,6 +21,8 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 This component provides a custom `HealthCheckRegistry` implementation that needs to be registered on the `CamelContext`.
 
+_Java-only: registering the MicroProfile Health check registry on the CamelContext_
+
 ```java
 HealthCheckRegistry registry = new CamelMicroProfileHealthCheckRegistry();
 camelContext.setExtension(HealthCheckRegistry.class, registry);
@@ -29,6 +31,8 @@ camelContext.setExtension(HealthCheckRegistry.class, registry);
 By default, Camel health checks are registered as both MicroProfile Health liveness and readiness checks. To have finer control over whether a Camel health check should be considered either a readiness or liveness check, you can extend `AbstractHealthCheck` and override the `isLiveness()` and `isReadiness()` methods.
 
 For example, to have a check registered exclusively as a liveness check:
+
+_Java-only: implementing a custom liveness health check_
 
 ```java
 public class MyHealthCheck extends AbstractHealthCheck {

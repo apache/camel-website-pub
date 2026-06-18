@@ -213,23 +213,91 @@ The topic producer provides only one operation (publish).
 
 ### Example for **publish**:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:add")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUBLISH))
-.toF("hazelcast-%sbar", HazelcastConstants.PUBLISH_OPERATION);
+from(“direct:add”)
+    .setHeader(“CamelHazelcastOperationType”, constant(“publish”))
+    .to(“hazelcast-topic:bar”);
+```
+
+```xml
+<route>
+  <from uri=”direct:add”/>
+  <setHeader name=”CamelHazelcastOperationType”>
+    <constant>publish</constant>
+  </setHeader>
+  <to uri=”hazelcast-topic:bar”/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:add
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            constant: publish
+        - to:
+            uri: hazelcast-topic:bar
 ```
 
 ## Topic consumer – from(“hazelcast-topic:foo”)
 
 The topic consumer provides only one operation (received). This component is supposed to support multiple consumption as it’s expected when it comes to topics, so you are free to have as many consumers as you need on the same hazelcast topic.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-fromF("hazelcast-%sfoo", HazelcastConstants.TOPIC_PREFIX)
-  .choice()
-    .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.RECEIVED))
-      .log("...message received")
-    .otherwise()
-      .log("...this should never have happened")
+from(“hazelcast-topic:foo”)
+    .choice()
+        .when(header(“CamelHazelcastListenerAction”).isEqualTo(“received”))
+            .log(“...message received”)
+        .otherwise()
+            .log(“...this should never have happened”);
+```
+
+```xml
+<route>
+  <from uri=”hazelcast-topic:foo”/>
+  <choice>
+    <when>
+      <simple>${header.CamelHazelcastListenerAction} == 'received'</simple>
+      <log message=”...message received”/>
+    </when>
+    <otherwise>
+      <log message=”...this should never have happened”/>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: hazelcast-topic:foo
+      steps:
+        - choice:
+            when:
+              - simple: “${header.CamelHazelcastListenerAction} == 'received'”
+                steps:
+                  - log:
+                      message: “...message received”
+            otherwise:
+              steps:
+                - log:
+                    message: “...this should never have happened”
 ```
 
 ## Spring Boot Auto-Configuration

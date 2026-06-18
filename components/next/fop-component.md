@@ -192,11 +192,40 @@ The location of a configuration file with the following [structure](http://xmlgr
 
 Below is an example route that renders PDFs from XML data and XSLT template and saves the PDF files in the target folder:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("file:source/data/xml")
     .to("xslt:xslt/template.xsl")
     .to("fop:application/pdf")
     .to("file:target/data");
+```
+
+```xml
+<route>
+  <from uri="file:source/data/xml"/>
+  <to uri="xslt:xslt/template.xsl"/>
+  <to uri="fop:application/pdf"/>
+  <to uri="file:target/data"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:source/data/xml
+      steps:
+        - to:
+            uri: xslt:xslt/template.xsl
+        - to:
+            uri: fop:application/pdf
+        - to:
+            uri: file:target/data
 ```
 
 ## Spring Boot Auto-Configuration

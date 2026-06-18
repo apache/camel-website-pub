@@ -161,41 +161,180 @@ User `superman` to send messages to `joker`:
 
 xmpp://superman@jabber.org/joker@jabber.org?password=secret
 
-Routing example in Java:
+Routing example:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("timer://kickoff?period=10000").
-setBody(constant("I will win!\n Your Superman.")).
-to("xmpp://superman@jabber.org/joker@jabber.org?password=secret");
+from("timer://kickoff?period=10000")
+    .setBody(constant("I will win! Your Superman."))
+    .to("xmpp://superman@jabber.org/joker@jabber.org?password=secret");
+```
+
+```xml
+<route>
+  <from uri="timer://kickoff?period=10000"/>
+  <setBody>
+    <constant>I will win! Your Superman.</constant>
+  </setBody>
+  <to uri="xmpp://superman@jabber.org/joker@jabber.org?password=secret"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:kickoff
+      parameters:
+        period: 10000
+      steps:
+        - setBody:
+            constant: "I will win! Your Superman."
+        - to:
+            uri: xmpp://superman@jabber.org/joker@jabber.org
+            parameters:
+              password: secret
 ```
 
 Consumer configuration, which writes all messages from `joker` into the queue, `evil.talk`.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("xmpp://superman@jabber.org/joker@jabber.org?password=secret").
-to("activemq:evil.talk");
+from("xmpp://superman@jabber.org/joker@jabber.org?password=secret")
+    .to("activemq:evil.talk");
+```
+
+```xml
+<route>
+  <from uri="xmpp://superman@jabber.org/joker@jabber.org?password=secret"/>
+  <to uri="activemq:evil.talk"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: xmpp://superman@jabber.org/joker@jabber.org
+      parameters:
+        password: secret
+      steps:
+        - to:
+            uri: activemq:evil.talk
 ```
 
 Consumer configuration, which listens to room messages:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("xmpp://superman@jabber.org/?password=secret&room=krypton@conference.jabber.org").
-to("activemq:krypton.talk");
+from("xmpp://superman@jabber.org/?password=secret&room=krypton@conference.jabber.org")
+    .to("activemq:krypton.talk");
+```
+
+```xml
+<route>
+  <from uri="xmpp://superman@jabber.org/?password=secret&amp;room=krypton@conference.jabber.org"/>
+  <to uri="activemq:krypton.talk"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: xmpp://superman@jabber.org/
+      parameters:
+        password: secret
+        room: "krypton@conference.jabber.org"
+      steps:
+        - to:
+            uri: activemq:krypton.talk
 ```
 
 Room in short notation (no domain part):
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("xmpp://superman@jabber.org/?password=secret&room=krypton").
-to("activemq:krypton.talk");
+from("xmpp://superman@jabber.org/?password=secret&room=krypton")
+    .to("activemq:krypton.talk");
+```
+
+```xml
+<route>
+  <from uri="xmpp://superman@jabber.org/?password=secret&amp;room=krypton"/>
+  <to uri="activemq:krypton.talk"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: xmpp://superman@jabber.org/
+      parameters:
+        password: secret
+        room: krypton
+      steps:
+        - to:
+            uri: activemq:krypton.talk
 ```
 
 When connecting to the Google Chat service, you’ll need to specify the `serviceName` as well as your credentials:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("direct:start").
-  to("xmpp://talk.google.com:5222/touser@gmail.com?serviceName=gmail.com&user=fromuser&password=secret").
-  to("mock:result");
+from("direct:start")
+    .to("xmpp://talk.google.com:5222/touser@gmail.com?serviceName=gmail.com&user=fromuser&password=secret")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="xmpp://talk.google.com:5222/touser@gmail.com?serviceName=gmail.com&amp;user=fromuser&amp;password=secret"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: xmpp://talk.google.com:5222/touser@gmail.com
+            parameters:
+              serviceName: gmail.com
+              user: fromuser
+              password: secret
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

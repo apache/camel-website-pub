@@ -220,6 +220,8 @@ When a subscription has a [dead-letter policy](https://cloud.google.com/pubsub/d
 
 This allows routes to implement custom retry logic based on the delivery attempt count:
 
+_Java-only: inline Processor with lambda expression accessing delivery attempt header_
+
 ```java
 from("google-pubsub:{{project.name}}:{{subscription.name}}")
     .process(exchange -> {
@@ -249,14 +251,34 @@ The `maxDeliveryAttempts` value is resolved as follows:
 4.  A value of `0` disables enforcement.
     
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-// Explicit configuration
 from("google-pubsub:{{project.name}}:{{subscription.name}}?maxDeliveryAttempts=5")
     .to("direct:process");
+```
 
-// Auto-fetch from subscription dead-letter policy (default behavior when not set)
-from("google-pubsub:{{project.name}}:{{subscription.name}}")
-    .to("direct:process");
+```xml
+<route>
+  <from uri="google-pubsub:{{project.name}}:{{subscription.name}}?maxDeliveryAttempts=5"/>
+  <to uri="direct:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: google-pubsub:{{project.name}}:{{subscription.name}}
+      parameters:
+        maxDeliveryAttempts: 5
+      steps:
+        - to:
+            uri: direct:process
 ```
 
 ### Message Body
@@ -275,6 +297,8 @@ All Google components support [Workload Identity Federation](https://cloud.googl
 
 **With an explicit WIF configuration file:** Set `useWorkloadIdentityFederation=true` and provide the path to the WIF JSON config file via `workloadIdentityConfig`. This is the typical setup for GitHub Actions, AWS, and Azure workloads.
 
+_Java-only: programmatic endpoint configuration for Workload Identity Federation_
+
 ```java
 // GKE with Workload Identity - ADC handles it automatically
 from("google-pubsub:my-project:my-subscription")
@@ -287,6 +311,8 @@ endpoint.setWorkloadIdentityConfig("/path/to/wif-config.json");
 ```
 
 **With Service Account Impersonation:** Set `impersonatedServiceAccount` to a target service account email. The external credentials obtained via WIF will impersonate that service account, inheriting its permissions.
+
+_Java-only: programmatic endpoint configuration with service account impersonation_
 
 ```java
 // WIF with service account impersonation
@@ -335,6 +361,8 @@ The component supports 12 options, which are listed below.
 By default, the PubSub consumer will acknowledge messages once the exchange has been processed, or negative-acknowledge them if the exchange has failed.
 
 If the _ackMode_ option is set to `NONE`, the component will not acknowledge messages, and it is up to the route to do so. In this case, a `GooglePubsubAcknowledge` object is stored in the header `GooglePubsubConstants.GOOGLE_PUBSUB_ACKNOWLEDGE` and can be used to acknowledge messages:
+
+_Java-only: inline Processor with lambda expression for manual acknowledgement_
 
 ```java
 from("google-pubsub:{{project.name}}:{{subscription.name}}?ackMode=NONE")

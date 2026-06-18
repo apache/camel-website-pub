@@ -7,10 +7,37 @@ Jackson Avro is a Data Format which uses the [Jackson library](https://github.co
 > **Tip**
 > If you are familiar with Jackson, this Avro data format behaves in the same way as its JSON counterpart, and thus can be used with classes annotated for JSON serialization/deserialization.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-from("kafka:topic").
-  unmarshal().avro(JsonNode.class).
-  to("log:info");
+from("kafka:topic")
+    .unmarshal().avro(JsonNode.class)
+    .to("log:info");
+```
+
+```xml
+<route>
+  <from uri="kafka:topic"/>
+  <unmarshal><avro library="Jackson"/></unmarshal>
+  <to uri="log:info"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:topic
+      steps:
+        - unmarshal:
+            avro:
+              library: Jackson
+        - to:
+            uri: log:info
 ```
 
 ## Avro Jackson Options

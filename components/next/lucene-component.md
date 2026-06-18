@@ -163,6 +163,8 @@ Lucene usage samples.
 
 ### Example 1: Creating a Lucene index
 
+_Java-only: RouteBuilder class definition_
+
 ```java
 RouteBuilder builder = new RouteBuilder() {
     public void configure() {
@@ -176,6 +178,8 @@ RouteBuilder builder = new RouteBuilder() {
 
 ### Example 2: Loading properties into the JNDI registry in the Camel Context
 
+_Java-only: programmatic CamelContext and registry configuration_
+
 ```java
 CamelContext context = new DefaultCamelContext(createRegistry());
 Registry registry = context.getRegistry();
@@ -185,6 +189,8 @@ registry.bind("whitespaceAnalyzer", new WhitespaceAnalyzer());
 ```
 
 ### Example 2: Performing searches using a Query Producer
+
+_Java-only: RouteBuilder with inline Processor and Java constants_
 
 ```java
 RouteBuilder builder = new RouteBuilder() {
@@ -215,6 +221,8 @@ RouteBuilder builder = new RouteBuilder() {
 ```
 
 ### Example 3: Performing searches using a Query Processor
+
+_Java-only: RouteBuilder with LuceneQueryProcessor and inline Processor_
 
 ```java
 RouteBuilder builder = new RouteBuilder() {

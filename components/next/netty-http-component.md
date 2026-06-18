@@ -507,9 +507,34 @@ Netty HTTP consumers can validate incoming `Authorization: Bearer` tokens by set
 > **Note**
 > If `oauthProfile` is set but no `OAuthTokenValidationFactory` is available, the route fails to start. Add `camel-oauth` for the default provider or include a runtime-specific provider from the platform integration.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("netty-http:http://0.0.0.0:8080/secure?oauthProfile=myprofile")
     .to("direct:businessLogic");
+```
+
+```xml
+<route>
+  <from uri="netty-http:http://0.0.0.0:8080/secure?oauthProfile=myprofile"/>
+  <to uri="direct:businessLogic"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:8080/secure
+      parameters:
+        oauthProfile: myprofile
+      steps:
+        - to:
+            uri: direct:businessLogic
 ```
 
 When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. Requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. The raw `Authorization` header is removed before the route is invoked.
@@ -523,6 +548,8 @@ OAuth validation can perform blocking calls to identity-provider infrastructure 
 
 This component uses the `org.apache.camel.component.netty.http.NettyHttpMessage` as the message implementation on the Exchange. This allows end users to get access to the original Netty request/response instances if needed, as shown below. Mind that the original response may not be accessible at all times.
 
+_Java-only: accessing the underlying Netty HTTP request object_
+
 ```java
 io.netty.handler.codec.http.HttpRequest request = exchange.getIn(NettyHttpMessage.class).getHttpRequest();
 ```
@@ -531,7 +558,7 @@ io.netty.handler.codec.http.HttpRequest request = exchange.getIn(NettyHttpMessag
 
 The Netty HTTP consumer supports HTTP basic authentication by specifying the security realm name to use, as shown below
 
-```java
+```xml
 <route>
    <from uri="netty-http:http://0.0.0.0:{{port}}/foo?securityConfiguration.realm=someRealm"/>
    ...
@@ -590,16 +617,43 @@ To use this constraint, we just need to refer to the bean id as shown below:
 
 In the route below, we use Netty HTTP as an HTTP server, which returns a hardcoded _"Bye World"_ message.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
-    from("netty-http:http://0.0.0.0:8080/foo")
-      .transform().constant("Bye World");
+from("netty-http:http://0.0.0.0:8080/foo")
+  .transform().constant("Bye World");
+```
+
+```xml
+<route>
+  <from uri="netty-http:http://0.0.0.0:8080/foo"/>
+  <transform>
+    <constant>Bye World</constant>
+  </transform>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:8080/foo
+      steps:
+        - transform:
+            constant: "Bye World"
 ```
 
 And we can call this HTTP server using Camel also, with the ProducerTemplate as shown below:
 
+_Java-only: ProducerTemplate test API_
+
 ```java
-    String out = template.requestBody("netty-http:http://0.0.0.0:8080/foo", "Hello World", String.class);
-    System.out.println(out);
+String out = template.requestBody("netty-http:http://0.0.0.0:8080/foo", "Hello World", String.class);
+System.out.println(out);
 ```
 
 And we get _"Bye World"_ as the output.
@@ -608,8 +662,31 @@ And we get _"Bye World"_ as the output.
 
 By default, Netty HTTP will only match on exact uri’s. But you can instruct Netty to match prefixes. For example
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("netty-http:http://0.0.0.0:8123/foo").to("mock:foo");
+```
+
+```xml
+<route>
+  <from uri="netty-http:http://0.0.0.0:8123/foo"/>
+  <to uri="mock:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:8123/foo
+      steps:
+        - to:
+            uri: mock:foo
 ```
 
 In the route above Netty HTTP will only match if the uri is an exact match, so it will match if you enter  
@@ -617,16 +694,66 @@ In the route above Netty HTTP will only match if the uri is an exact match, so i
 
 So if you want to enable wildcard matching, you do as follows:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("netty-http:http://0.0.0.0:8123/foo?matchOnUriPrefix=true").to("mock:foo");
+```
+
+```xml
+<route>
+  <from uri="netty-http:http://0.0.0.0:8123/foo?matchOnUriPrefix=true"/>
+  <to uri="mock:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:8123/foo
+      parameters:
+        matchOnUriPrefix: true
+      steps:
+        - to:
+            uri: mock:foo
 ```
 
 So now Netty matches any endpoints with starts with `foo`.
 
 To match **any** endpoint, you can do:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("netty-http:http://0.0.0.0:8123?matchOnUriPrefix=true").to("mock:foo");
+```
+
+```xml
+<route>
+  <from uri="netty-http:http://0.0.0.0:8123?matchOnUriPrefix=true"/>
+  <to uri="mock:foo"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:8123
+      parameters:
+        matchOnUriPrefix: true
+      steps:
+        - to:
+            uri: mock:foo
 ```
 
 ### Using multiple routes with same port
@@ -639,14 +766,57 @@ Here is an example with two routes that share the same port.
 
 **Two routes sharing the same port**
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("netty-http:http://0.0.0.0:{{port}}/foo")
-  .to("mock:foo")
-  .transform().constant("Bye World");
+    .to("mock:foo")
+    .transform().constant("Bye World");
 
 from("netty-http:http://0.0.0.0:{{port}}/bar")
-  .to("mock:bar")
-  .transform().constant("Bye Camel");
+    .to("mock:bar")
+    .transform().constant("Bye Camel");
+```
+
+```xml
+<route>
+  <from uri="netty-http:http://0.0.0.0:{{port}}/foo"/>
+  <to uri="mock:foo"/>
+  <transform>
+    <constant>Bye World</constant>
+  </transform>
+</route>
+<route>
+  <from uri="netty-http:http://0.0.0.0:{{port}}/bar"/>
+  <to uri="mock:bar"/>
+  <transform>
+    <constant>Bye Camel</constant>
+  </transform>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:{{port}}/foo
+      steps:
+        - to:
+            uri: mock:foo
+        - transform:
+            constant: "Bye World"
+- route:
+    from:
+      uri: netty-http:http://0.0.0.0:{{port}}/bar
+      steps:
+        - to:
+            uri: mock:bar
+        - transform:
+            constant: "Bye Camel"
 ```
 
 And here is an example of a mis-configured second route that does not have identical `org.apache.camel.component.netty.NettyServerBootstrapConfiguration` option as the first route. This will cause Camel to fail on startup.
@@ -700,6 +870,8 @@ And in the routes you refer to this option as shown below
 Netty HTTP component can act as a reverse proxy, in that case `Exchange.HTTP_SCHEME`, `Exchange.HTTP_HOST` and `Exchange.HTTP_PORT` headers are populated from the absolute URL received on the request line of the HTTP request.
 
 Here’s an example of an HTTP proxy that simply transforms the response from the origin server to uppercase.
+
+_Java-only: reverse proxy with dynamic `toD` and Netty response processing_
 
 ```java
 from("netty-http:proxy://0.0.0.0:8080")

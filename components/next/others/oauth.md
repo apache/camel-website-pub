@@ -238,6 +238,8 @@ The `OAuthHelper` utility from `camel-support` can be used for both outgoing cli
 
 #### Validate an Incoming Bearer Token
 
+_Java-only: programmatic token validation using OAuthHelper API_
+
 ```java
 import org.apache.camel.spi.OAuthTokenValidationResult;
 import org.apache.camel.support.OAuthHelper;
@@ -264,11 +266,15 @@ String email = result.getClaim("email", String.class);
 
 For the default unnamed profile, use:
 
+_Java-only: default profile token validation_
+
 ```java
 OAuthTokenValidationResult result = OAuthHelper.validateOAuthToken(camelContext, bearerToken);
 ```
 
 For advanced validation use cases, resolve `OAuthTokenValidationFactory` directly and pass an explicit `OAuthTokenValidationConfig`.
+
+_Java-only: advanced validation with explicit config and factory_
 
 ```java
 import org.apache.camel.spi.OAuthTokenValidationConfig;
@@ -288,6 +294,8 @@ OAuthTokenValidationResult result = factory.validateToken(config, bearerToken);
 
 #### Resolve an Outgoing Client Credentials Token
 
+_Java-only: resolving an OAuth token using OAuthHelper_
+
 ```java
 import org.apache.camel.support.OAuthHelper;
 
@@ -295,6 +303,8 @@ String token = OAuthHelper.resolveOAuthToken(camelContext, "keycloak");
 ```
 
 For advanced use cases, the `OAuthClientAuthenticationFactory` can be used directly with an explicit `OAuthClientConfig`:
+
+_Java-only: advanced token resolution with explicit OAuthClientConfig_
 
 ```java
 import org.apache.camel.spi.OAuthClientAuthenticationFactory;

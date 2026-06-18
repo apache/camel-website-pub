@@ -266,11 +266,20 @@ There are many options that can be submitted to the `createBucket` and `listObje
 
 If you would like to configure all the [parameters](https://support.huaweicloud.com/intl/en-us/api-obs/obs_04_0021.md) when creating a bucket, you can pass a [CreateBucketRequest](https://obssdk-intl.obs.ap-southeast-1.myhuaweicloud.com/apidoc/en/java/com/obs/services/model/CreateBucketRequest.md) object or a Json string into the exchange body. If the exchange body is empty, a new bucket will be created using the bucketName and bucketLocation (if provided) passed through the endpoint uri.
 
+_Java-only: requires SDK CreateBucketRequest constructor_
+
 ```java
 from("direct:triggerRoute")
  .setBody(new CreateBucketRequest("Bucket name", "Bucket location"))
  .to("hwcloud-obs:createBucket?region=cn-north-4&accessKey=********&secretKey=********")
 ```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:triggerRoute")
@@ -278,7 +287,34 @@ from("direct:triggerRoute")
  .to("hwcloud-obs:createBucket?region=cn-north-4&accessKey=********&secretKey=********")
 ```
 
+```xml
+<route>
+  <from uri="direct:triggerRoute"/>
+  <setBody>
+    <constant>{"bucketName":"Bucket name","location":"Bucket location"}</constant>
+  </setBody>
+  <to uri="hwcloud-obs:createBucket?region=cn-north-4&amp;accessKey=********&amp;secretKey=********"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:triggerRoute
+      steps:
+        - setBody:
+            constant: '{"bucketName":"Bucket name","location":"Bucket location"}'
+        - to:
+            uri: hwcloud-obs:createBucket
+            parameters:
+              region: cn-north-4
+              accessKey: "********"
+              secretKey: "********"
+```
+
 If you would like to configure all the [parameters](https://support.huaweicloud.com/intl/en-us/api-obs/obs_04_0022.md) when listing objects, you can pass a [ListObjectsRequest](https://obssdk-intl.obs.ap-southeast-1.myhuaweicloud.com/apidoc/en/java/com/obs/services/model/ListObjectsRequest.md) object or a Json string into the exchange body. If the exchange body is empty, objects will be listed based on the bucketName passed through the endpoint uri.
+
+_Java-only: requires SDK ListObjectsRequest constructor_
 
 ```java
 from("direct:triggerRoute")
@@ -286,10 +322,42 @@ from("direct:triggerRoute")
  .to("hwcloud-obs:listObjects?region=cn-north-4&accessKey=********&secretKey=********")
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:triggerRoute")
- .setBody("{\"bucketName\":\"Bucket name\",\"maxKeys\":1000"}")
+ .setBody("{\"bucketName\":\"Bucket name\",\"maxKeys\":1000}")
  .to("hwcloud-obs:listObjects?region=cn-north-4&accessKey=********&secretKey=********")
+```
+
+```xml
+<route>
+  <from uri="direct:triggerRoute"/>
+  <setBody>
+    <constant>{"bucketName":"Bucket name","maxKeys":1000}</constant>
+  </setBody>
+  <to uri="hwcloud-obs:listObjects?region=cn-north-4&amp;accessKey=********&amp;secretKey=********"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:triggerRoute
+      steps:
+        - setBody:
+            constant: '{"bucketName":"Bucket name","maxKeys":1000}'
+        - to:
+            uri: hwcloud-obs:listObjects
+            parameters:
+              region: cn-north-4
+              accessKey: "********"
+              secretKey: "********"
 ```
 
 ### Using ServiceKey Configuration Bean
@@ -305,12 +373,56 @@ Check the following code snippets:
 </bean>
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:triggerRoute")
- .setProperty(OBSPropeties.OPERATION, constant("createBucket"))
- .setProperty(OBSPropeties.BUCKET_NAME ,constant("your_bucket_name"))
- .setProperty(OBSPropeties.BUCKET_LOCATION, constant("your_bucket_location"))
+ .setProperty("CamelHwCloudObsOperation", constant("createBucket"))
+ .setProperty("CamelHwCloudObsBucketName", constant("your_bucket_name"))
+ .setProperty("CamelHwCloudObsBucketLocation", constant("your_bucket_location"))
  .to("hwcloud-obs:createBucket?region=cn-north-4&serviceKeys=#myServiceKeyConfig")
+```
+
+```xml
+<route>
+  <from uri="direct:triggerRoute"/>
+  <setProperty name="CamelHwCloudObsOperation">
+    <constant>createBucket</constant>
+  </setProperty>
+  <setProperty name="CamelHwCloudObsBucketName">
+    <constant>your_bucket_name</constant>
+  </setProperty>
+  <setProperty name="CamelHwCloudObsBucketLocation">
+    <constant>your_bucket_location</constant>
+  </setProperty>
+  <to uri="hwcloud-obs:createBucket?region=cn-north-4&amp;serviceKeys=#myServiceKeyConfig"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:triggerRoute
+      steps:
+        - setProperty:
+            name: CamelHwCloudObsOperation
+            constant: createBucket
+        - setProperty:
+            name: CamelHwCloudObsBucketName
+            constant: your_bucket_name
+        - setProperty:
+            name: CamelHwCloudObsBucketLocation
+            constant: your_bucket_location
+        - to:
+            uri: hwcloud-obs:createBucket
+            parameters:
+              region: cn-north-4
+              serviceKeys: "#myServiceKeyConfig"
 ```
 
 ## Spring Boot Auto-Configuration

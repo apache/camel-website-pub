@@ -33,19 +33,83 @@ The RSS component ships with an RSS dataformat that can be used to convert betwe
 
 A route using the RSS dataformat will look like this:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("rss:file:src/test/data/rss20.xml?splitEntries=false&delay=1000")
-  .marshal().rss()
-  .to("mock:marshal");
+    .marshal().rss()
+    .to("mock:marshal");
 ```
 
-The purpose of this feature is to make it possible to use Camel’s built-in expressions for manipulating RSS messages. As shown below, an XPath expression can be used to filter the RSS message. In the following example, on ly entries with Camel in the title will get through the filter.
+```xml
+<route>
+  <from uri="rss:file:src/test/data/rss20.xml?splitEntries=false&amp;delay=1000"/>
+  <marshal><rss/></marshal>
+  <to uri="mock:marshal"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rss:file:src/test/data/rss20.xml
+      parameters:
+        splitEntries: false
+        delay: 1000
+      steps:
+        - marshal:
+            rss: {}
+        - to:
+            uri: mock:marshal
+```
+
+The purpose of this feature is to make it possible to use Camel’s built-in expressions for manipulating RSS messages. As shown below, an XPath expression can be used to filter the RSS message. In the following example, only entries with Camel in the title will get through the filter.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("rss:file:src/test/data/rss20.xml?splitEntries=true&delay=100")
-  .marshal().rss()
-  .filter().xpath("//item/title[contains(.,'Camel')]")
-    .to("mock:result");
+    .marshal().rss()
+    .filter().xpath("//item/title[contains(.,'Camel')]")
+        .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="rss:file:src/test/data/rss20.xml?splitEntries=true&amp;delay=100"/>
+  <marshal><rss/></marshal>
+  <filter>
+    <xpath>//item/title[contains(.,'Camel')]</xpath>
+    <to uri="mock:result"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rss:file:src/test/data/rss20.xml
+      parameters:
+        splitEntries: true
+        delay: 100
+      steps:
+        - marshal:
+            rss: {}
+        - filter:
+            xpath: "//item/title[contains(.,'Camel')]"
+            steps:
+              - to:
+                  uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

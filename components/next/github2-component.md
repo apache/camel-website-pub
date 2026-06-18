@@ -281,6 +281,8 @@ The GitHub2 component requires to be configured with an authentication token on 
 
 For example, to set it on the component:
 
+_Java-only: programmatic component configuration_
+
 ```java
 GitHub2Component ghc = context.getComponent("github2", GitHub2Component.class);
 ghc.setOauthToken("mytoken");
@@ -290,9 +292,36 @@ ghc.setOauthToken("mytoken");
 
 To use with GitHub Enterprise, set the `apiUrl` parameter to your GitHub Enterprise API endpoint:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("github2:commit/main?repoOwner=myorg&repoName=myrepo&apiUrl=https://github.mycompany.com/api/v3")
     .to("log:commits");
+```
+
+```xml
+<route>
+  <from uri="github2:commit/main?repoOwner=myorg&amp;repoName=myrepo&amp;apiUrl=https://github.mycompany.com/api/v3"/>
+  <to uri="log:commits"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: github2:commit/main
+      parameters:
+        repoOwner: myorg
+        repoName: myrepo
+        apiUrl: "https://github.mycompany.com/api/v3"
+      steps:
+        - to:
+            uri: log:commits
 ```
 
 ### Consumer Endpoints
@@ -320,19 +349,87 @@ from("github2:commit/main?repoOwner=myorg&repoName=myrepo&apiUrl=https://github.
 
 ### Example: Consuming commits
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("github2:commit/main?repoOwner=apache&repoName=camel&oauthToken=mytoken")
     .log("New commit: ${header.CamelGitHubCommitSha} by ${header.CamelGitHubCommitAuthor}")
     .to("direct:processCommit");
 ```
 
+```xml
+<route>
+  <from uri="github2:commit/main?repoOwner=apache&amp;repoName=camel&amp;oauthToken=mytoken"/>
+  <log message="New commit: ${header.CamelGitHubCommitSha} by ${header.CamelGitHubCommitAuthor}"/>
+  <to uri="direct:processCommit"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: github2:commit/main
+      parameters:
+        repoOwner: apache
+        repoName: camel
+        oauthToken: mytoken
+    steps:
+      - log:
+          message: "New commit: ${header.CamelGitHubCommitSha} by ${header.CamelGitHubCommitAuthor}"
+      - to:
+          uri: direct:processCommit
+```
+
 ### Example: Creating an issue
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:createIssue")
     .setHeader("CamelGitHubIssueTitle", constant("Bug Report"))
     .setBody(constant("This is the issue description"))
     .to("github2:createIssue?repoOwner=apache&repoName=camel&oauthToken=mytoken");
+```
+
+```xml
+<route>
+  <from uri="direct:createIssue"/>
+  <setHeader name="CamelGitHubIssueTitle">
+    <constant>Bug Report</constant>
+  </setHeader>
+  <setBody>
+    <constant>This is the issue description</constant>
+  </setBody>
+  <to uri="github2:createIssue?repoOwner=apache&amp;repoName=camel&amp;oauthToken=mytoken"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createIssue
+    steps:
+      - setHeader:
+          name: CamelGitHubIssueTitle
+          constant: Bug Report
+      - setBody:
+          constant: This is the issue description
+      - to:
+          uri: github2:createIssue
+          parameters:
+            repoOwner: apache
+            repoName: camel
+            oauthToken: mytoken
 ```
 
 ## Spring Boot Auto-Configuration
