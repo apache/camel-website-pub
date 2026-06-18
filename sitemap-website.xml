@@ -14,9 +14,6 @@
     <loc>https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/</loc>
     <lastmod>2026-06-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
-    <lastmod>2026-06-18T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2026/06/camel-dependency-updates/</loc>
     <lastmod>2026-06-18T00:00:00+00:00</lastmod>
   </url><url>
@@ -60,6 +57,9 @@
     <lastmod>2026-05-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/</loc>
+    <lastmod>2026-05-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
     <lastmod>2026-05-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.36.0/</loc>
