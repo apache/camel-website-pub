@@ -6,8 +6,15 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 28 May 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kaoto v2.11 release</title>
+      <link>https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/</link>
+      <pubDate>Thu, 18 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/</guid>
+      <description>What&amp;rsquo;s New? Kaoto 2.11 delivers major improvements across three key areas: automated testing through Citrus framework support, enhanced DataMapper capabilities for handling complex schemas, and flexible runtime management options. Built on Apache Camel 4.20.0, this release strengthens Kaoto&amp;rsquo;s position as a powerful visual integration design tool.&#xA;Citrus Testing Capabilities The Citrus framework is now fully integrated into Kaoto 2.11, enabling you to create automated tests within the same visual environment where you design your integrations.</description>
+    </item>
     <item>
       <title>Camel Quarkus 3.36.0 Released</title>
       <link>https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/</link>

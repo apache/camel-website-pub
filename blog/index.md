@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[207]{title,link,pubDate,description}:
+posts[208]{title,link,pubDate,description}:
+  Kaoto v2.11 release|https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/index.md|Thu, 18 Jun 2026 00:00:00 +0000|What&rsquo;s New? Kaoto 2.11 delivers major improvements across three key areas: automated testing through Citrus framework support, enhanced DataMapper capabilities for handling complex schemas, and 
   The Hidden Work: 2,449 Dependency Updates Across 20 Apache Camel Releases|https://camel.apache.org/blog/2026/06/camel-dependency-updates/index.md|Thu, 18 Jun 2026 00:00:00 +0000|Every Apache Camel release ships new features and bug fixes — and those get the headlines. But behind every release there is a quieter effort that rarely gets mentioned: keeping 500+ third-party depen
   Apache Camel: 19 Years of Continuous Development — 272 Releases, 100,000 Commits, Zero Gaps|https://camel.apache.org/blog/2026/06/camel-always-on/index.md|Mon, 15 Jun 2026 00:00:00 +0000|Apache Camel has shipped 272 production releases over 19 years without a single month of inactivity. The project averages a new release every 15 days, maintains up to 10 release lines in parallel, and
   Apache Camel's Bug Fix Track Record: 7,070 Bugs Fixed, Median 1-Day Resolution, 99.8% Fix Rate|https://camel.apache.org/blog/2026/06/camel-bug-fix-track-record/index.md|Sun, 14 Jun 2026 00:00:00 +0000|Apache Camel has fixed 7,070 out of 7,081 reported bugs — a 99.8% resolution rate — with a median fix time of 1 day. That track record spans 19 years, 350+ connectors, and 272 production releases. Thi
