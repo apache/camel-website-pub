@@ -272,33 +272,3 @@ from("activemq:SomeQueue").to("dataset:foo");
 The above would look in the Registry to find the `foo` `DataSet` instance which is used to create the messages.
 
 Then you create a `DataSet` implementation, such as using the `SimpleDataSet` as described below, configuring things like how big the data set is and what the messages look like etc.
-
-## Spring Boot Auto-Configuration
-
-When using dataset with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-dataset-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 11 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.dataset-test.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.dataset-test.enabled** | Whether to enable auto configuration of the dataset-test component. This is enabled by default. |  | Boolean |
-| **camel.component.dataset-test.exchange-formatter** | To use a custom ExchangeFormatter to format the Exchange into a String suitable for logging. The option is a org.apache.camel.spi.ExchangeFormatter type. |  | ExchangeFormatter |
-| **camel.component.dataset-test.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.dataset-test.log** | To turn on logging when the mock receives an incoming message. This will log only one time at INFO level for the incoming message. For more detailed logging, then set the logger to DEBUG level for the org.apache.camel.component.mock.MockEndpoint class. | false | Boolean |
-| **camel.component.dataset.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.dataset.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
-| **camel.component.dataset.enabled** | Whether to enable auto configuration of the dataset component. This is enabled by default. |  | Boolean |
-| **camel.component.dataset.exchange-formatter** | To use a custom ExchangeFormatter to format the Exchange into a String suitable for logging. The option is a org.apache.camel.spi.ExchangeFormatter type. |  | ExchangeFormatter |
-| **camel.component.dataset.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.dataset.log** | To turn on logging when the mock receives an incoming message. This will log only one time at INFO level for the incoming message. For more detailed logging, then set the logger to DEBUG level for the org.apache.camel.component.mock.MockEndpoint class. | false | Boolean |

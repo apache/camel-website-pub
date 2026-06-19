@@ -302,30 +302,3 @@ It’s important to note that Milvus SDK doesn’t support upsert for autoID fie
 That’s the reason why, in the example, we are setting the userID as keyName with a keyValue of 3. This is particularly important when you design your Milvus database.
 
 The transformer only supports insert/upsert objects, so the only operation you can set via header are INSERT and UPSERT, otherwise the transformer will fail with an error log.
-
-## Spring Boot Auto-Configuration
-
-When using milvus with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-milvus-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 8 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.milvus.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.milvus.configuration** | The configuration;. The option is a org.apache.camel.component.milvus.MilvusConfiguration type. |  | MilvusConfiguration |
-| **camel.component.milvus.enabled** | Whether to enable auto configuration of the milvus component. This is enabled by default. |  | Boolean |
-| **camel.component.milvus.host** | The host to connect to. | localhost | String |
-| **camel.component.milvus.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.milvus.port** | The port to connect to. | 19530 | Integer |
-| **camel.component.milvus.timeout** | Sets a default timeout for all requests. |  | Long |
-| **camel.component.milvus.token** | Sets the API key to use for authentication. |  | String |

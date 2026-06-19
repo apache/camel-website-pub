@@ -89,24 +89,3 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
     <!-- use the same version as your Camel core version -->
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using ical with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-ical-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 2 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.ical.enabled** | Whether to enable auto configuration of the ical data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.ical.validating** | Whether to validate. | false | Boolean |

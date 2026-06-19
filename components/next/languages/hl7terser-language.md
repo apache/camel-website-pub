@@ -133,29 +133,3 @@ import ca.uhn.hl7v2.ErrorCode;
 exchange.setProperty("CamelMllpAcknowledgement",
   ack(AcknowledgmentCode.AR, "Server didn't accept this message", ErrorCode.UNKNOWN_KEY_IDENTIFIER).evaluate(exchange, Object.class)
 ```
-
-## Spring Boot Auto-Configuration
-
-When using hl7terser with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-hl7-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 7 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.hl7.enabled** | Whether to enable auto configuration of the hl7 data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.hl7.parser** | To use a custom HL7 parser. The option is a ca.uhn.hl7v2.parser.Parser type. |  | String |
-| **camel.dataformat.hl7.target-format** | The target format for marshal output and unmarshal result type. By default, marshal encodes to HL7 ER7, and unmarshal returns a HAPI Message object. If this is set to XML, marshal encodes to HL7 XML, and unmarshal returns an XML DOM Document. |  | String |
-| **camel.dataformat.hl7.validate** | Whether to validate the HL7 message Is by default true. | true | Boolean |
-| **camel.language.hl7terser.enabled** | Whether to enable auto configuration of the hl7terser language. This is enabled by default. |  | Boolean |
-| **camel.language.hl7terser.source** | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |  | String |
-| **camel.language.hl7terser.trim** | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. | true | Boolean |

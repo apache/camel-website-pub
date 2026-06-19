@@ -148,28 +148,3 @@ However, there may be some features in Camel where this may not work (yet).
 
 > **Important**
 > This feature is only intended to include smaller groovy sources as small functions, DTOs that makes it easier to use together with Camel for low-code integrations. It is not intended to support Groovy as a general purpose programming language for Camel. For this kind then you can use groovy and Java together and follow best practices for this, such as using the joint-compilation via Maven / Gradle plugins during build.
-
-## Spring Boot Auto-Configuration
-
-When using groovy with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-groovy-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 6 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.groovy-json.enabled** | Whether to enable auto configuration of the groovyJson data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.groovy-json.pretty-print** | To pretty printing output nicely formatted. Is by default true. | true | Boolean |
-| **camel.dataformat.groovy-xml.attribute-mapping** | To turn on or off attribute mapping. When enabled then keys that start with \_ or character will be mapped to an XML attribute, and vise versa. This rule is what Jackson and other XML or JSon libraries uses. | true | Boolean |
-| **camel.dataformat.groovy-xml.enabled** | Whether to enable auto configuration of the groovyXml data format. This is enabled by default. |  | Boolean |
-| **camel.language.groovy.enabled** | Whether to enable auto configuration of the groovy language. This is enabled by default. |  | Boolean |
-| **camel.language.groovy.trim** | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. | true | Boolean |

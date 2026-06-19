@@ -63,25 +63,3 @@ If you use Maven you can add the following to your `pom.xml`, substituting the v
   <!-- use the same version as your Camel core version -->
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using asn1 with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-asn1-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 3 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.asn1.enabled** | Whether to enable auto configuration of the asn1 data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.asn1.unmarshal-type** | Class to use when unmarshalling. |  | String |
-| **camel.dataformat.asn1.using-iterator** | If the asn1 file has more than one entry, the setting this option to true, allows working with the splitter EIP, to split the data using an iterator in a streaming mode. | false | Boolean |

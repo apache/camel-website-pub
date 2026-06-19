@@ -150,27 +150,3 @@ Where `MyFooDto` is a POJO that MapStruct is able to convert to/from.
 
 > **Warning**
 > If you define multiple mapping methods for the same from / to types, then the implementation chosen by Camel to do its type conversion is potentially non-deterministic.
-
-## Spring Boot Auto-Configuration
-
-When using mapstruct with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-mapstruct-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 5 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.mapstruct.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.mapstruct.enabled** | Whether to enable auto configuration of the mapstruct component. This is enabled by default. |  | Boolean |
-| **camel.component.mapstruct.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.mapstruct.map-struct-converter** | To use a custom MapStructConverter such as adapting to a special runtime. The option is a org.apache.camel.component.mapstruct.MapStructMapperFinder type. |  | MapStructMapperFinder |
-| **camel.component.mapstruct.mapper-package-name** | Package name(s) where Camel should discover Mapstruct mapping classes. Multiple package names can be separated by comma. |  | String |

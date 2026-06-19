@@ -167,18 +167,3 @@ The camel context id which you want to inject into the camel conduit
 ## Example Using Camel as a load balancer for CXF
 
 This example shows how to use the camel load balancing feature in CXF. You need to load the configuration file in CXF and publish the endpoints on the address "camel://direct:EndpointA" and "camel://direct:EndpointB"
-
-## Spring Boot Auto-Configuration
-
-When using cxf-transport with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-cxf-transport-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component has no Spring Boot auto configuration options.

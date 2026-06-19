@@ -84,28 +84,3 @@ If you use maven, you could just add the following to your pom.xml, substituting
   <version>x.x.x</version>
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using groovyXml with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-groovy-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 6 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.groovy-json.enabled** | Whether to enable auto configuration of the groovyJson data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.groovy-json.pretty-print** | To pretty printing output nicely formatted. Is by default true. | true | Boolean |
-| **camel.dataformat.groovy-xml.attribute-mapping** | To turn on or off attribute mapping. When enabled then keys that start with \_ or character will be mapped to an XML attribute, and vise versa. This rule is what Jackson and other XML or JSon libraries uses. | true | Boolean |
-| **camel.dataformat.groovy-xml.enabled** | Whether to enable auto configuration of the groovyXml data format. This is enabled by default. |  | Boolean |
-| **camel.language.groovy.enabled** | Whether to enable auto configuration of the groovy language. This is enabled by default. |  | Boolean |
-| **camel.language.groovy.trim** | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. | true | Boolean |

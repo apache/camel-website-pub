@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 375 in 301 JAR artifacts (12 deprecated)
+Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -104,6 +104,7 @@ Number of Non-Core Components: 375 in 301 JAR artifacts (12 deprecated)
 | [AWS Translate](aws2-translate-component.md) | camel-aws2-translate | Stable | 3.1 | Translate texts using AWS Translate and AWS SDK version 2.x. |
 | [Azure](azure-summary.md) |  |  |  |  |
 | [Azure CosmosDB](azure-cosmosdb-component.md) | camel-azure-cosmosdb | Stable | 3.10 | To read and write records to the CosmosDB database on Azure cloud platform. |
+| [Azure Event Grid](azure-eventgrid-component.md) | camel-azure-eventgrid | Stable | 4.17 | Send events to Azure Event Grid topics. |
 | [Azure Event Hubs](azure-eventhubs-component.md) | camel-azure-eventhubs | Stable | 3.5 | Send and receive events to/from Azure Event Hubs using AMQP protocol. |
 | [Azure Files](azure-files-component.md) | camel-azure-files | Preview | 3.22 | Send and receive files to Azure storage file share |
 | [Azure Functions](azure-functions-component.md) | camel-azure-functions | Preview | 4.19 | Invoke and manage Azure Functions. |

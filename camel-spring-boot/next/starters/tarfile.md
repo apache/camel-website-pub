@@ -1,0 +1,32 @@
+# Tar File
+
+Archive files into tarballs or extract files from tarballs.
+
+## What’s inside
+
+-   [Tar File data format](../../../components/next/dataformats/tarFile-dataformat.md)
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-tarfile-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 5 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.dataformat.tar-file.allow-empty-directory | If the tar file has more than one entry, setting this option to true, allows to get the iterator even if the directory is empty | false | Boolean |
+| camel.dataformat.tar-file.enabled | Whether to enable auto configuration of the tarFile data format. This is enabled by default. |  | Boolean |
+| camel.dataformat.tar-file.max-decompressed-size | Set the maximum decompressed size of a tar file (in bytes). The default value if not specified corresponds to 1 gigabyte. An IOException will be thrown if the decompressed size exceeds this amount. Set to -1 to disable setting a maximum decompressed size. | 1073741824 | Long |
+| camel.dataformat.tar-file.preserve-path-elements | If the file name contains path elements, setting this option to true, allows the path to be maintained in the tar file. | false | Boolean |
+| camel.dataformat.tar-file.using-iterator | If the tar file has more than one entry, the setting this option to true, allows working with the splitter EIP, to split the data using an iterator in a streaming mode. | false | Boolean |

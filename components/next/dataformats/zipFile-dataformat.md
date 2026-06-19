@@ -220,27 +220,3 @@ If you use Maven you can add the following to your `pom.xml`, substituting the v
   <!-- use the same version as your Camel core version -->
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using zipFile with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-zipfile-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 5 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.zip-file.allow-empty-directory** | If the zip file has more than one entry, setting this option to true, allows to get the iterator even if the directory is empty. | false | Boolean |
-| **camel.dataformat.zip-file.enabled** | Whether to enable auto configuration of the zipFile data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.zip-file.max-decompressed-size** | Set the maximum decompressed size of a zip file (in bytes). The default value if not specified corresponds to 1 gigabyte. An IOException will be thrown if the decompressed size exceeds this amount. Set to -1 to disable setting a maximum decompressed size. | 1073741824 | Long |
-| **camel.dataformat.zip-file.preserve-path-elements** | If the file name contains path elements, setting this option to true, allows the path to be maintained in the zip file. | false | Boolean |
-| **camel.dataformat.zip-file.using-iterator** | If the zip file has more than one entry, the setting this option to true, allows working with the splitter EIP, to split the data using an iterator in a streaming mode. | false | Boolean |

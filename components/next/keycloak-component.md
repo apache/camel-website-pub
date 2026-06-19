@@ -3343,11 +3343,8 @@ headers.put("CamelKeycloakContinueOnError", false);
     
 
 ```java
-public class BulkUserProvisioningRoute extends RouteBuilder {
-    @Override
-    public void configure() throws Exception {
-        // Provision users from CSV file
-        from("file:data/incoming?noop=true")
+// Provision users from CSV file
+from("file:data/incoming?noop=true")
             .routeId("bulk-user-provisioning")
             .log("Processing user provisioning file: ${header.CamelFileName}")
 
@@ -3429,7 +3426,6 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
             .setHeader("CamelKeycloakContinueOnError", constant(true))
             .to("keycloak:admin?operation=bulkDeleteUsers")
             .log("Deleted ${body[success]} inactive users");
-    }
 
     private boolean isInactive(UserRepresentation user) {
         // Custom logic to determine if user is inactive
@@ -3565,13 +3561,8 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
     
 
 ```java
-public class KeycloakManagementRoutes extends RouteBuilder {
-
-    @Override
-    public void configure() throws Exception {
-
-        // Configure Keycloak component
-        KeycloakComponent keycloak = getContext().getComponent("keycloak", KeycloakComponent.class);
+// Configure Keycloak component
+KeycloakComponent keycloak = getContext().getComponent("keycloak", KeycloakComponent.class);
         KeycloakConfiguration config = new KeycloakConfiguration();
         config.setServerUrl("http://localhost:8080");
         config.setRealm("master");
@@ -3656,8 +3647,6 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             .to("keycloak:admin?operation=deleteUser")
             .setHeader("Content-Type", constant("application/json"))
             .transform().constant("{\"status\": \"success\", \"message\": \"User deleted\"}");
-    }
-}
 ```
 
 ```yaml
@@ -4557,22 +4546,17 @@ The message body contains:
     
 
 ```java
-public class KeycloakEventMonitoringRoutes extends RouteBuilder {
+// Configure Keycloak component
+KeycloakComponent keycloak = getContext().getComponent("keycloak", KeycloakComponent.class);
+KeycloakConfiguration config = new KeycloakConfiguration();
+config.setServerUrl("http://localhost:8080");
+config.setRealm("master");
+config.setUsername("admin");
+config.setPassword("admin");
+keycloak.setConfiguration(config);
 
-    @Override
-    public void configure() throws Exception {
-
-        // Configure Keycloak component
-        KeycloakComponent keycloak = getContext().getComponent("keycloak", KeycloakComponent.class);
-        KeycloakConfiguration config = new KeycloakConfiguration();
-        config.setServerUrl("http://localhost:8080");
-        config.setRealm("master");
-        config.setUsername("admin");
-        config.setPassword("admin");
-        keycloak.setConfiguration(config);
-
-        // Consume admin events and send to audit system
-        from("keycloak:adminEvents"
+// Consume admin events and send to audit system
+from("keycloak:adminEvents"
              + "?realm=production-realm"
              + "&eventType=admin-events"
              + "&operationTypes=CREATE,UPDATE,DELETE"
@@ -4615,12 +4599,10 @@ public class KeycloakEventMonitoringRoutes extends RouteBuilder {
             .to("bean:analyticsService?method=processUserActivity")
             .to("log:analytics");
 
-        // Process security alerts
-        from("direct:security-check")
-            .to("bean:securityService?method=checkFailedLogin")
-            .to("log:security");
-    }
-}
+// Process security alerts
+from("direct:security-check")
+    .to("bean:securityService?method=checkFailedLogin")
+    .to("log:security");
 ```
 
 ```yaml
@@ -5115,12 +5097,8 @@ beans:
     
 
 ```java
-public class HybridSecurityRoutes extends RouteBuilder {
-    @Override
-    public void configure() throws Exception {
-
-        // Introspection for admin operations
-        KeycloakSecurityPolicy adminIntrospection = new KeycloakSecurityPolicy(
+// Introspection for admin operations
+KeycloakSecurityPolicy adminIntrospection = new KeycloakSecurityPolicy(
             "{{keycloak.server-url}}", "{{keycloak.realm}}",
             "{{keycloak.client-id}}", "{{keycloak.client-secret}}");
         adminIntrospection.setRequiredRoles("admin");
@@ -5149,11 +5127,9 @@ public class HybridSecurityRoutes extends RouteBuilder {
             .policy(readPolicy)
             .to("bean:userService?method=listUsers");
 
-        from("rest:get:/profile")
-            .policy(readPolicy)
-            .to("bean:userService?method=getProfile");
-    }
-}
+from("rest:get:/profile")
+    .policy(readPolicy)
+    .to("bean:userService?method=getProfile");
 ```
 
 ```yaml
@@ -6092,13 +6068,8 @@ public class SecurityConfiguration {
     
 
 ```java
-public class KeycloakSecurityRoutes extends RouteBuilder {
-
-    @Override
-    public void configure() throws Exception {
-
-        // Admin policy - requires admin role
-        KeycloakSecurityPolicy adminPolicy = new KeycloakSecurityPolicy(
+// Admin policy - requires admin role
+KeycloakSecurityPolicy adminPolicy = new KeycloakSecurityPolicy(
             "{{keycloak.server-url}}", "{{keycloak.realm}}",
             "{{keycloak.client-id}}", "{{keycloak.client-secret}}");
         adminPolicy.setRequiredRoles("admin");
@@ -6121,11 +6092,9 @@ public class KeycloakSecurityRoutes extends RouteBuilder {
             .policy(adminPolicy)
             .to("bean:userService?method=getAllUsers");
 
-        from("rest:get:/profile")
-            .policy(userPolicy)
-            .to("bean:userService?method=getCurrentUser");
-    }
-}
+from("rest:get:/profile")
+    .policy(userPolicy)
+    .to("bean:userService?method=getCurrentUser");
 ```
 
 ```yaml

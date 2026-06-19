@@ -387,27 +387,3 @@ If you use Maven you could just add the following to your `pom.xml`, substitutin
   <version>x.x.x</version>
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using datasonnet with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-datasonnet-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 5 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.language.datasonnet.body-media-type** | The String representation of the message’s body MediaType. |  | String |
-| **camel.language.datasonnet.enabled** | Whether to enable auto configuration of the datasonnet language. This is enabled by default. |  | Boolean |
-| **camel.language.datasonnet.output-media-type** | The String representation of the MediaType to output. |  | String |
-| **camel.language.datasonnet.source** | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |  | String |
-| **camel.language.datasonnet.trim** | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. | true | Boolean |

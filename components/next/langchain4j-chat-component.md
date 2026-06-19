@@ -147,31 +147,6 @@ The LangChain4j Chat component supports 2 message header(s), which is/are listed
 | **CamelLangChain4jChatPromptTemplate** (producer) Constant: [`PROMPT_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#PROMPT_TEMPLATE) | The prompt Template. |  | String |
 | **CamelLangChain4jChatAugmentedData** (producer) Constant: [`AUGMENTED_DATA`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#AUGMENTED_DATA) | Augmented Data for RAG. |  | String |
 
-## Spring Boot Auto-Configuration
-
-When using langchain4j-chat with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-langchain4j-chat-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 6 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.langchain4j-chat.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.langchain4j-chat.chat-model** | Chat Model of type dev.langchain4j.model.chat.ChatModel. The option is a dev.langchain4j.model.chat.ChatModel type. |  | ChatModel |
-| **camel.component.langchain4j-chat.chat-operation** | Operation in case of Endpoint of type CHAT. The value is one of the values of org.apache.camel.component.langchain4j.chat.LangChain4jChatOperations. | chat-single-message | LangChain4jChatOperations |
-| **camel.component.langchain4j-chat.configuration** | The configuration. The option is a org.apache.camel.component.langchain4j.chat.LangChain4jChatConfiguration type. |  | LangChain4jChatConfiguration |
-| **camel.component.langchain4j-chat.enabled** | Whether to enable auto configuration of the langchain4j-chat component. This is enabled by default. |  | Boolean |
-| **camel.component.langchain4j-chat.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-
 ## Usage
 
 ### Using a specific Chat Model

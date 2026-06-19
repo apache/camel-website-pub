@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781853622796,
+  "generated": 1781873509650,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -16612,13 +16612,13 @@
               "module": "ROOT",
               "path": "jgroups-raft-cluster-service.adoc",
               "url": "/camel-spring-boot/next/jgroups-raft-cluster-service.html",
-              "title": "JGroups Raft Cluster Service"
+              "title": "Jgroups Raft Cluster Service"
             },
             {
               "module": "ROOT",
               "path": "jolokia.adoc",
               "url": "/camel-spring-boot/next/jolokia.html",
-              "title": "Jolokia Starter"
+              "title": "Jolokia"
             },
             {
               "module": "ROOT",
@@ -16649,6 +16649,2460 @@
               "path": "starter-configuration.adoc",
               "url": "/camel-spring-boot/next/starter-configuration.html",
               "title": "Starter Configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/activemq.adoc",
+              "url": "/camel-spring-boot/next/starters/activemq.html",
+              "title": "ActiveMQ 5.x"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/activemq6.adoc",
+              "url": "/camel-spring-boot/next/starters/activemq6.html",
+              "title": "ActiveMQ 6.x"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/amqp.adoc",
+              "url": "/camel-spring-boot/next/starters/amqp.html",
+              "title": "AMQP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/arangodb.adoc",
+              "url": "/camel-spring-boot/next/starters/arangodb.html",
+              "title": "ArangoDb"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/as2.adoc",
+              "url": "/camel-spring-boot/next/starters/as2.html",
+              "title": "AS2"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/asn1.adoc",
+              "url": "/camel-spring-boot/next/starters/asn1.html",
+              "title": "ASN.1 File"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/asterisk.adoc",
+              "url": "/camel-spring-boot/next/starters/asterisk.html",
+              "title": "Asterisk"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/atmosphere-websocket.adoc",
+              "url": "/camel-spring-boot/next/starters/atmosphere-websocket.html",
+              "title": "Atmosphere Websocket"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/atom.adoc",
+              "url": "/camel-spring-boot/next/starters/atom.html",
+              "title": "Atom"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/avro-rpc.adoc",
+              "url": "/camel-spring-boot/next/starters/avro-rpc.html",
+              "title": "Avro RPC"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/avro.adoc",
+              "url": "/camel-spring-boot/next/starters/avro.html",
+              "title": "Avro"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws-bedrock.adoc",
+              "url": "/camel-spring-boot/next/starters/aws-bedrock.html",
+              "title": "AWS Bedrock"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws-cloudtrail.adoc",
+              "url": "/camel-spring-boot/next/starters/aws-cloudtrail.html",
+              "title": "AWS Cloudtrail"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws-config.adoc",
+              "url": "/camel-spring-boot/next/starters/aws-config.html",
+              "title": "AWS Config Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws-parameter-store.adoc",
+              "url": "/camel-spring-boot/next/starters/aws-parameter-store.html",
+              "title": "AWS Parameter Store"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws-secrets-manager.adoc",
+              "url": "/camel-spring-boot/next/starters/aws-secrets-manager.html",
+              "title": "AWS Secrets Manager"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws-security-hub.adoc",
+              "url": "/camel-spring-boot/next/starters/aws-security-hub.html",
+              "title": "AWS Security Hub"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-athena.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-athena.html",
+              "title": "AWS Athena"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-comprehend.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-comprehend.html",
+              "title": "AWS Comprehend"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-cw.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-cw.html",
+              "title": "AWS CloudWatch"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-ddb.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-ddb.html",
+              "title": "AWS DynamoDB"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-ec2.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-ec2.html",
+              "title": "AWS Elastic Compute Cloud (EC2)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-ecs.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-ecs.html",
+              "title": "AWS Elastic Container Service (ECS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-eks.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-eks.html",
+              "title": "AWS Elastic Kubernetes Service (EKS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-eventbridge.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-eventbridge.html",
+              "title": "AWS Eventbridge"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-iam.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-iam.html",
+              "title": "AWS Identity and Access Management (IAM)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-kinesis.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-kinesis.html",
+              "title": "AWS Kinesis"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-kms.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-kms.html",
+              "title": "AWS Key Management Service (KMS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-lambda.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-lambda.html",
+              "title": "AWS Lambda"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-mq.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-mq.html",
+              "title": "AWS MQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-msk.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-msk.html",
+              "title": "AWS Managed Streaming for Apache Kafka (MSK)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-polly.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-polly.html",
+              "title": "AWS Polly"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-redshift.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-redshift.html",
+              "title": "AWS RedshiftData"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-rekognition.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-rekognition.html",
+              "title": "AWS Rekognition"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-s3-vectors.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-s3-vectors.html",
+              "title": "AWS S3 Vectors"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-s3.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-s3.html",
+              "title": "AWS S3 Storage Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-ses.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-ses.html",
+              "title": "AWS Simple Email Service (SES)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-sns.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-sns.html",
+              "title": "AWS Simple Notification System (SNS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-sqs.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-sqs.html",
+              "title": "AWS Simple Queue Service (SQS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-step-functions.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-step-functions.html",
+              "title": "AWS StepFunctions"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-sts.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-sts.html",
+              "title": "AWS Security Token Service (STS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-textract.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-textract.html",
+              "title": "AWS Textract"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-timestream.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-timestream.html",
+              "title": "AWS Timestream"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-transcribe.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-transcribe.html",
+              "title": "AWS Transcribe"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/aws2-translate.adoc",
+              "url": "/camel-spring-boot/next/starters/aws2-translate.html",
+              "title": "AWS Translate"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-cosmosdb.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-cosmosdb.html",
+              "title": "Azure CosmosDB"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-eventgrid.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-eventgrid.html",
+              "title": "Azure Event Grid"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-eventhubs.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-eventhubs.html",
+              "title": "Azure Event Hubs"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-files.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-files.html",
+              "title": "Azure Files"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-functions.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-functions.html",
+              "title": "Azure Functions"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-key-vault.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-key-vault.html",
+              "title": "Azure Key Vault"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-servicebus.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-servicebus.html",
+              "title": "Azure ServiceBus"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-storage-blob.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-storage-blob.html",
+              "title": "Azure Storage Blob Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-storage-datalake.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-storage-datalake.html",
+              "title": "Azure Storage Data Lake Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/azure-storage-queue.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-storage-queue.html",
+              "title": "Azure Storage Queue Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/barcode.adoc",
+              "url": "/camel-spring-boot/next/starters/barcode.html",
+              "title": "Barcode"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/base64.adoc",
+              "url": "/camel-spring-boot/next/starters/base64.html",
+              "title": "Base64"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/bean-validator.adoc",
+              "url": "/camel-spring-boot/next/starters/bean-validator.html",
+              "title": "Bean Validator"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/bean.adoc",
+              "url": "/camel-spring-boot/next/starters/bean.html",
+              "title": "Bean"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/beanio.adoc",
+              "url": "/camel-spring-boot/next/starters/beanio.html",
+              "title": "BeanIO"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/bindy.adoc",
+              "url": "/camel-spring-boot/next/starters/bindy.html",
+              "title": "Bindy CSV"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/bonita.adoc",
+              "url": "/camel-spring-boot/next/starters/bonita.html",
+              "title": "Bonita"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/box.adoc",
+              "url": "/camel-spring-boot/next/starters/box.html",
+              "title": "Box"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/braintree.adoc",
+              "url": "/camel-spring-boot/next/starters/braintree.html",
+              "title": "Braintree"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/browse.adoc",
+              "url": "/camel-spring-boot/next/starters/browse.html",
+              "title": "Browse"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/caffeine.adoc",
+              "url": "/camel-spring-boot/next/starters/caffeine.html",
+              "title": "Caffeine Cache"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cassandraql.adoc",
+              "url": "/camel-spring-boot/next/starters/cassandraql.html",
+              "title": "Cassandra CQL"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cbor.adoc",
+              "url": "/camel-spring-boot/next/starters/cbor.html",
+              "title": "CBOR"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/chatscript.adoc",
+              "url": "/camel-spring-boot/next/starters/chatscript.html",
+              "title": "ChatScript"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/chunk.adoc",
+              "url": "/camel-spring-boot/next/starters/chunk.html",
+              "title": "Chunk"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/clickup.adoc",
+              "url": "/camel-spring-boot/next/starters/clickup.html",
+              "title": "ClickUp"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cloudevents.adoc",
+              "url": "/camel-spring-boot/next/starters/cloudevents.html",
+              "title": "Cloudevents"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cm-sms.adoc",
+              "url": "/camel-spring-boot/next/starters/cm-sms.html",
+              "title": "CM SMS Gateway"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/coap.adoc",
+              "url": "/camel-spring-boot/next/starters/coap.html",
+              "title": "CoAP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cometd.adoc",
+              "url": "/camel-spring-boot/next/starters/cometd.html",
+              "title": "CometD"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/console.adoc",
+              "url": "/camel-spring-boot/next/starters/console.html",
+              "title": "Console"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/consul-cluster-service.adoc",
+              "url": "/camel-spring-boot/next/starters/consul-cluster-service.html",
+              "title": "Consul Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/consul.adoc",
+              "url": "/camel-spring-boot/next/starters/consul.html",
+              "title": "Consul"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/controlbus.adoc",
+              "url": "/camel-spring-boot/next/starters/controlbus.html",
+              "title": "Control Bus"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/core.adoc",
+              "url": "/camel-spring-boot/next/starters/core.html",
+              "title": "Core"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/couchbase.adoc",
+              "url": "/camel-spring-boot/next/starters/couchbase.html",
+              "title": "Couchbase"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/couchdb.adoc",
+              "url": "/camel-spring-boot/next/starters/couchdb.html",
+              "title": "CouchDB"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cron.adoc",
+              "url": "/camel-spring-boot/next/starters/cron.html",
+              "title": "Cron"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/crypto-pgp.adoc",
+              "url": "/camel-spring-boot/next/starters/crypto-pgp.html",
+              "title": "PGP (Pretty Good Privacy Cryptographic)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/crypto.adoc",
+              "url": "/camel-spring-boot/next/starters/crypto.html",
+              "title": "Crypto (JCE)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/csimple-joor.adoc",
+              "url": "/camel-spring-boot/next/starters/csimple-joor.html",
+              "title": "Csimple Joor"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/csv.adoc",
+              "url": "/camel-spring-boot/next/starters/csv.html",
+              "title": "CSV"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cxf-rest.adoc",
+              "url": "/camel-spring-boot/next/starters/cxf-rest.html",
+              "title": "CXF-RS"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cxf-soap.adoc",
+              "url": "/camel-spring-boot/next/starters/cxf-soap.html",
+              "title": "CXF"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cxf-transport.adoc",
+              "url": "/camel-spring-boot/next/starters/cxf-transport.html",
+              "title": "Cxf Transport"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/cyberark-vault.adoc",
+              "url": "/camel-spring-boot/next/starters/cyberark-vault.html",
+              "title": "CyberArk Vault"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/dapr.adoc",
+              "url": "/camel-spring-boot/next/starters/dapr.html",
+              "title": "Dapr"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/dataformat.adoc",
+              "url": "/camel-spring-boot/next/starters/dataformat.html",
+              "title": "Data Format"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/dataset.adoc",
+              "url": "/camel-spring-boot/next/starters/dataset.html",
+              "title": "DataSet Test"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/datasonnet.adoc",
+              "url": "/camel-spring-boot/next/starters/datasonnet.html",
+              "title": "DataSonnet"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/debezium-db2.adoc",
+              "url": "/camel-spring-boot/next/starters/debezium-db2.html",
+              "title": "Debezium DB2 Connector"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/debezium-mongodb.adoc",
+              "url": "/camel-spring-boot/next/starters/debezium-mongodb.html",
+              "title": "Debezium MongoDB Connector"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/debezium-mysql.adoc",
+              "url": "/camel-spring-boot/next/starters/debezium-mysql.html",
+              "title": "Debezium MySQL Connector"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/debezium-oracle.adoc",
+              "url": "/camel-spring-boot/next/starters/debezium-oracle.html",
+              "title": "Debezium Oracle Connector"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/debezium-postgres.adoc",
+              "url": "/camel-spring-boot/next/starters/debezium-postgres.html",
+              "title": "Debezium PostgresSQL Connector"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/debezium-sqlserver.adoc",
+              "url": "/camel-spring-boot/next/starters/debezium-sqlserver.html",
+              "title": "Debezium SQL Server Connector"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/debug.adoc",
+              "url": "/camel-spring-boot/next/starters/debug.html",
+              "title": "Debug"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/dfdl.adoc",
+              "url": "/camel-spring-boot/next/starters/dfdl.html",
+              "title": "DFDL"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/dhis2.adoc",
+              "url": "/camel-spring-boot/next/starters/dhis2.html",
+              "title": "DHIS2"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/diagram.adoc",
+              "url": "/camel-spring-boot/next/starters/diagram.html",
+              "title": "Diagram"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/digitalocean.adoc",
+              "url": "/camel-spring-boot/next/starters/digitalocean.html",
+              "title": "DigitalOcean"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/direct.adoc",
+              "url": "/camel-spring-boot/next/starters/direct.html",
+              "title": "Direct"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/disruptor.adoc",
+              "url": "/camel-spring-boot/next/starters/disruptor.html",
+              "title": "Disruptor"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/djl.adoc",
+              "url": "/camel-spring-boot/next/starters/djl.html",
+              "title": "Deep Java Library"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/dns.adoc",
+              "url": "/camel-spring-boot/next/starters/dns.html",
+              "title": "DNS"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/docker.adoc",
+              "url": "/camel-spring-boot/next/starters/docker.html",
+              "title": "Docker"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/docling.adoc",
+              "url": "/camel-spring-boot/next/starters/docling.html",
+              "title": "Docling"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/drill.adoc",
+              "url": "/camel-spring-boot/next/starters/drill.html",
+              "title": "Drill"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/dropbox.adoc",
+              "url": "/camel-spring-boot/next/starters/dropbox.html",
+              "title": "Dropbox"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/dynamic-router.adoc",
+              "url": "/camel-spring-boot/next/starters/dynamic-router.html",
+              "title": "Dynamic Router"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ehcache.adoc",
+              "url": "/camel-spring-boot/next/starters/ehcache.html",
+              "title": "Ehcache"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/elasticsearch-rest-client.adoc",
+              "url": "/camel-spring-boot/next/starters/elasticsearch-rest-client.html",
+              "title": "Elasticsearch Low level Rest Client"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/elasticsearch.adoc",
+              "url": "/camel-spring-boot/next/starters/elasticsearch.html",
+              "title": "Elasticsearch"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/exec.adoc",
+              "url": "/camel-spring-boot/next/starters/exec.html",
+              "title": "Exec"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/fastjson.adoc",
+              "url": "/camel-spring-boot/next/starters/fastjson.html",
+              "title": "JSON Fastjson"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/fhir.adoc",
+              "url": "/camel-spring-boot/next/starters/fhir.html",
+              "title": "FHIR"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/file-cluster-service.adoc",
+              "url": "/camel-spring-boot/next/starters/file-cluster-service.html",
+              "title": "File Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/file-watch.adoc",
+              "url": "/camel-spring-boot/next/starters/file-watch.html",
+              "title": "File Watch"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/file.adoc",
+              "url": "/camel-spring-boot/next/starters/file.html",
+              "title": "File"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/flatpack.adoc",
+              "url": "/camel-spring-boot/next/starters/flatpack.html",
+              "title": "Flatpack"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/flink.adoc",
+              "url": "/camel-spring-boot/next/starters/flink.html",
+              "title": "Flink"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/flowable.adoc",
+              "url": "/camel-spring-boot/next/starters/flowable.html",
+              "title": "Flowable"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/fop.adoc",
+              "url": "/camel-spring-boot/next/starters/fop.html",
+              "title": "FOP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/fory.adoc",
+              "url": "/camel-spring-boot/next/starters/fory.html",
+              "title": "Fory"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/freemarker.adoc",
+              "url": "/camel-spring-boot/next/starters/freemarker.html",
+              "title": "Freemarker"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ftp.adoc",
+              "url": "/camel-spring-boot/next/starters/ftp.html",
+              "title": "FTP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/geocoder.adoc",
+              "url": "/camel-spring-boot/next/starters/geocoder.html",
+              "title": "Geocoder"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/git.adoc",
+              "url": "/camel-spring-boot/next/starters/git.html",
+              "title": "Git"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/github2.adoc",
+              "url": "/camel-spring-boot/next/starters/github2.html",
+              "title": "GitHub2"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-bigquery.adoc",
+              "url": "/camel-spring-boot/next/starters/google-bigquery.html",
+              "title": "Google BigQuery"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-calendar.adoc",
+              "url": "/camel-spring-boot/next/starters/google-calendar.html",
+              "title": "Google Calendar"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-drive.adoc",
+              "url": "/camel-spring-boot/next/starters/google-drive.html",
+              "title": "Google Drive"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-firestore.adoc",
+              "url": "/camel-spring-boot/next/starters/google-firestore.html",
+              "title": "Google Firestore"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-functions.adoc",
+              "url": "/camel-spring-boot/next/starters/google-functions.html",
+              "title": "Google Cloud Functions"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-mail.adoc",
+              "url": "/camel-spring-boot/next/starters/google-mail.html",
+              "title": "Google Mail"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-pubsub.adoc",
+              "url": "/camel-spring-boot/next/starters/google-pubsub.html",
+              "title": "Google Pubsub"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-secret-manager.adoc",
+              "url": "/camel-spring-boot/next/starters/google-secret-manager.html",
+              "title": "Google Secret Manager"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-sheets.adoc",
+              "url": "/camel-spring-boot/next/starters/google-sheets.html",
+              "title": "Google Sheets"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-speech-to-text.adoc",
+              "url": "/camel-spring-boot/next/starters/google-speech-to-text.html",
+              "title": "Google Cloud Speech To Text"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-storage.adoc",
+              "url": "/camel-spring-boot/next/starters/google-storage.html",
+              "title": "Google Storage"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-text-to-speech.adoc",
+              "url": "/camel-spring-boot/next/starters/google-text-to-speech.html",
+              "title": "Google Cloud Text To Speech"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-vertexai.adoc",
+              "url": "/camel-spring-boot/next/starters/google-vertexai.html",
+              "title": "Google Vertex AI"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/google-vision.adoc",
+              "url": "/camel-spring-boot/next/starters/google-vision.html",
+              "title": "Google Cloud Vision"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/graphql.adoc",
+              "url": "/camel-spring-boot/next/starters/graphql.html",
+              "title": "GraphQL"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/grok.adoc",
+              "url": "/camel-spring-boot/next/starters/grok.html",
+              "title": "Grok"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/groovy.adoc",
+              "url": "/camel-spring-boot/next/starters/groovy.html",
+              "title": "Groovy"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/grpc.adoc",
+              "url": "/camel-spring-boot/next/starters/grpc.html",
+              "title": "gRPC"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/gson.adoc",
+              "url": "/camel-spring-boot/next/starters/gson.html",
+              "title": "JSON Gson"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/hashicorp-vault.adoc",
+              "url": "/camel-spring-boot/next/starters/hashicorp-vault.html",
+              "title": "Hashicorp Vault"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/hazelcast.adoc",
+              "url": "/camel-spring-boot/next/starters/hazelcast.html",
+              "title": "Hazelcast Atomic Number"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/hl7.adoc",
+              "url": "/camel-spring-boot/next/starters/hl7.html",
+              "title": "HL7"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/http.adoc",
+              "url": "/camel-spring-boot/next/starters/http.html",
+              "title": "HTTP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/huaweicloud-dms.adoc",
+              "url": "/camel-spring-boot/next/starters/huaweicloud-dms.html",
+              "title": "Huawei Distributed Message Service (DMS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/huaweicloud-frs.adoc",
+              "url": "/camel-spring-boot/next/starters/huaweicloud-frs.html",
+              "title": "Huawei Cloud Face Recognition Service (FRS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/huaweicloud-functiongraph.adoc",
+              "url": "/camel-spring-boot/next/starters/huaweicloud-functiongraph.html",
+              "title": "Huawei FunctionGraph"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/huaweicloud-iam.adoc",
+              "url": "/camel-spring-boot/next/starters/huaweicloud-iam.html",
+              "title": "Huawei Identity and Access Management (IAM)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/huaweicloud-imagerecognition.adoc",
+              "url": "/camel-spring-boot/next/starters/huaweicloud-imagerecognition.html",
+              "title": "Huawei Cloud Image Recognition"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/huaweicloud-obs.adoc",
+              "url": "/camel-spring-boot/next/starters/huaweicloud-obs.html",
+              "title": "Huawei Object Storage Service (OBS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/huaweicloud-smn.adoc",
+              "url": "/camel-spring-boot/next/starters/huaweicloud-smn.html",
+              "title": "Huawei Simple Message Notification (SMN)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/huggingface.adoc",
+              "url": "/camel-spring-boot/next/starters/huggingface.html",
+              "title": "Hugging Face"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ibm-cos.adoc",
+              "url": "/camel-spring-boot/next/starters/ibm-cos.html",
+              "title": "IBM Cloud Object Storage"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ibm-secrets-manager.adoc",
+              "url": "/camel-spring-boot/next/starters/ibm-secrets-manager.html",
+              "title": "IBM Secrets Manager"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ibm-watson-discovery.adoc",
+              "url": "/camel-spring-boot/next/starters/ibm-watson-discovery.html",
+              "title": "IBM Watson Discovery"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ibm-watson-language.adoc",
+              "url": "/camel-spring-boot/next/starters/ibm-watson-language.html",
+              "title": "IBM Watson Language"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ibm-watson-speech-to-text.adoc",
+              "url": "/camel-spring-boot/next/starters/ibm-watson-speech-to-text.html",
+              "title": "IBM Watson Speech to Text"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ibm-watson-text-to-speech.adoc",
+              "url": "/camel-spring-boot/next/starters/ibm-watson-text-to-speech.html",
+              "title": "IBM Watson Text to Speech"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ibm-watsonx-ai.adoc",
+              "url": "/camel-spring-boot/next/starters/ibm-watsonx-ai.html",
+              "title": "IBM watsonx.ai"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ical.adoc",
+              "url": "/camel-spring-boot/next/starters/ical.html",
+              "title": "iCal"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/iec60870.adoc",
+              "url": "/camel-spring-boot/next/starters/iec60870.html",
+              "title": "IEC 60870 Client"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/iggy.adoc",
+              "url": "/camel-spring-boot/next/starters/iggy.html",
+              "title": "Iggy"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ignite.adoc",
+              "url": "/camel-spring-boot/next/starters/ignite.html",
+              "title": "Ignite Cache"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/infinispan-cluster-service.adoc",
+              "url": "/camel-spring-boot/next/starters/infinispan-cluster-service.html",
+              "title": "Infinispan Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/infinispan-embedded.adoc",
+              "url": "/camel-spring-boot/next/starters/infinispan-embedded.html",
+              "title": "Infinispan Embedded"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/infinispan.adoc",
+              "url": "/camel-spring-boot/next/starters/infinispan.html",
+              "title": "Infinispan"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/influxdb.adoc",
+              "url": "/camel-spring-boot/next/starters/influxdb.html",
+              "title": "InfluxDB"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/influxdb2.adoc",
+              "url": "/camel-spring-boot/next/starters/influxdb2.html",
+              "title": "InfluxDB2"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/irc.adoc",
+              "url": "/camel-spring-boot/next/starters/irc.html",
+              "title": "IRC"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ironmq.adoc",
+              "url": "/camel-spring-boot/next/starters/ironmq.html",
+              "title": "IronMQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/iso8583.adoc",
+              "url": "/camel-spring-boot/next/starters/iso8583.html",
+              "title": "ISO-8583"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jackson-avro.adoc",
+              "url": "/camel-spring-boot/next/starters/jackson-avro.html",
+              "title": "Avro Jackson"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jackson-protobuf.adoc",
+              "url": "/camel-spring-boot/next/starters/jackson-protobuf.html",
+              "title": "Protobuf Jackson"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jackson.adoc",
+              "url": "/camel-spring-boot/next/starters/jackson.html",
+              "title": "JSON Jackson"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jackson3-avro.adoc",
+              "url": "/camel-spring-boot/next/starters/jackson3-avro.html",
+              "title": "Avro Jackson"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jackson3-protobuf.adoc",
+              "url": "/camel-spring-boot/next/starters/jackson3-protobuf.html",
+              "title": "Protobuf Jackson"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jackson3.adoc",
+              "url": "/camel-spring-boot/next/starters/jackson3.html",
+              "title": "JSON Jackson"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jackson3xml.adoc",
+              "url": "/camel-spring-boot/next/starters/jackson3xml.html",
+              "title": "Jackson XML"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jacksonxml.adoc",
+              "url": "/camel-spring-boot/next/starters/jacksonxml.html",
+              "title": "Jackson XML"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jandex.adoc",
+              "url": "/camel-spring-boot/next/starters/jandex.html",
+              "title": "Jandex"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jasypt.adoc",
+              "url": "/camel-spring-boot/next/starters/jasypt.html",
+              "title": "Jasypt"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/javascript.adoc",
+              "url": "/camel-spring-boot/next/starters/javascript.html",
+              "title": "JavaScript"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jaxb.adoc",
+              "url": "/camel-spring-boot/next/starters/jaxb.html",
+              "title": "JAXB"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jcache.adoc",
+              "url": "/camel-spring-boot/next/starters/jcache.html",
+              "title": "JCache"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jcr.adoc",
+              "url": "/camel-spring-boot/next/starters/jcr.html",
+              "title": "JCR"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jdbc.adoc",
+              "url": "/camel-spring-boot/next/starters/jdbc.html",
+              "title": "JDBC"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jetty.adoc",
+              "url": "/camel-spring-boot/next/starters/jetty.html",
+              "title": "Jetty"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jfr.adoc",
+              "url": "/camel-spring-boot/next/starters/jfr.html",
+              "title": "Jfr"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jgroups-raft-cluster-service.adoc",
+              "url": "/camel-spring-boot/next/starters/jgroups-raft-cluster-service.html",
+              "title": "Jgroups Raft Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jgroups-raft.adoc",
+              "url": "/camel-spring-boot/next/starters/jgroups-raft.html",
+              "title": "JGroups raft"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jgroups.adoc",
+              "url": "/camel-spring-boot/next/starters/jgroups.html",
+              "title": "JGroups"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jira.adoc",
+              "url": "/camel-spring-boot/next/starters/jira.html",
+              "title": "Jira"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jms.adoc",
+              "url": "/camel-spring-boot/next/starters/jms.html",
+              "title": "JMS"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jmx.adoc",
+              "url": "/camel-spring-boot/next/starters/jmx.html",
+              "title": "JMX"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jolokia.adoc",
+              "url": "/camel-spring-boot/next/starters/jolokia.html",
+              "title": "Jolokia"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jolt.adoc",
+              "url": "/camel-spring-boot/next/starters/jolt.html",
+              "title": "JOLT"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jooq.adoc",
+              "url": "/camel-spring-boot/next/starters/jooq.html",
+              "title": "JOOQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/joor.adoc",
+              "url": "/camel-spring-boot/next/starters/joor.html",
+              "title": "Java"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jpa.adoc",
+              "url": "/camel-spring-boot/next/starters/jpa.html",
+              "title": "JPA"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jq.adoc",
+              "url": "/camel-spring-boot/next/starters/jq.html",
+              "title": "JQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jsch.adoc",
+              "url": "/camel-spring-boot/next/starters/jsch.html",
+              "title": "SCP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jslt.adoc",
+              "url": "/camel-spring-boot/next/starters/jslt.html",
+              "title": "JSLT"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/json-patch.adoc",
+              "url": "/camel-spring-boot/next/starters/json-patch.html",
+              "title": "JsonPatch"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/json-validator.adoc",
+              "url": "/camel-spring-boot/next/starters/json-validator.html",
+              "title": "JSON Schema Validator"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jsonapi.adoc",
+              "url": "/camel-spring-boot/next/starters/jsonapi.html",
+              "title": "JSonApi"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jsonata.adoc",
+              "url": "/camel-spring-boot/next/starters/jsonata.html",
+              "title": "JSONata"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jsonb.adoc",
+              "url": "/camel-spring-boot/next/starters/jsonb.html",
+              "title": "JSON JSON-B"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jsonpath.adoc",
+              "url": "/camel-spring-boot/next/starters/jsonpath.html",
+              "title": "JSONPath"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jsoup.adoc",
+              "url": "/camel-spring-boot/next/starters/jsoup.html",
+              "title": "Jsoup"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jt400.adoc",
+              "url": "/camel-spring-boot/next/starters/jt400.html",
+              "title": "JT400"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jte.adoc",
+              "url": "/camel-spring-boot/next/starters/jte.html",
+              "title": "JTE"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/kafka.adoc",
+              "url": "/camel-spring-boot/next/starters/kafka.html",
+              "title": "Kafka"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/kamelet.adoc",
+              "url": "/camel-spring-boot/next/starters/kamelet.html",
+              "title": "Kamelet"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/keycloak.adoc",
+              "url": "/camel-spring-boot/next/starters/keycloak.html",
+              "title": "Keycloak"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/knative.adoc",
+              "url": "/camel-spring-boot/next/starters/knative.html",
+              "title": "Knative"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/kserve.adoc",
+              "url": "/camel-spring-boot/next/starters/kserve.html",
+              "title": "KServe"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/kubernetes-cluster-service.adoc",
+              "url": "/camel-spring-boot/next/starters/kubernetes-cluster-service.html",
+              "title": "Kubernetes Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/kubernetes.adoc",
+              "url": "/camel-spring-boot/next/starters/kubernetes.html",
+              "title": "Kubernetes ConfigMap"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/kudu.adoc",
+              "url": "/camel-spring-boot/next/starters/kudu.html",
+              "title": "Kudu"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/langchain4j-agent.adoc",
+              "url": "/camel-spring-boot/next/starters/langchain4j-agent.html",
+              "title": "LangChain4j Agent"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/langchain4j-chat.adoc",
+              "url": "/camel-spring-boot/next/starters/langchain4j-chat.html",
+              "title": "LangChain4j Chat"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/langchain4j-embeddings.adoc",
+              "url": "/camel-spring-boot/next/starters/langchain4j-embeddings.html",
+              "title": "LangChain4j Embeddings"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/langchain4j-embeddingstore.adoc",
+              "url": "/camel-spring-boot/next/starters/langchain4j-embeddingstore.html",
+              "title": "LangChain4j Embedding Store"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/langchain4j-tokenizer.adoc",
+              "url": "/camel-spring-boot/next/starters/langchain4j-tokenizer.html",
+              "title": "Langchain4j Tokenizer"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/langchain4j-tools.adoc",
+              "url": "/camel-spring-boot/next/starters/langchain4j-tools.html",
+              "title": "LangChain4j Tools"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/langchain4j-web-search.adoc",
+              "url": "/camel-spring-boot/next/starters/langchain4j-web-search.html",
+              "title": "LangChain4j Web Search"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/language.adoc",
+              "url": "/camel-spring-boot/next/starters/language.html",
+              "title": "Language"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ldap.adoc",
+              "url": "/camel-spring-boot/next/starters/ldap.html",
+              "title": "LDAP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ldif.adoc",
+              "url": "/camel-spring-boot/next/starters/ldif.html",
+              "title": "LDIF"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/leveldb.adoc",
+              "url": "/camel-spring-boot/next/starters/leveldb.html",
+              "title": "Leveldb"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/log.adoc",
+              "url": "/camel-spring-boot/next/starters/log.html",
+              "title": "Log Data"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/lra.adoc",
+              "url": "/camel-spring-boot/next/starters/lra.html",
+              "title": "Lra"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/lucene.adoc",
+              "url": "/camel-spring-boot/next/starters/lucene.html",
+              "title": "Lucene"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/lumberjack.adoc",
+              "url": "/camel-spring-boot/next/starters/lumberjack.html",
+              "title": "Lumberjack"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/lzf.adoc",
+              "url": "/camel-spring-boot/next/starters/lzf.html",
+              "title": "LZF Deflate Compression"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mail-microsoft-oauth.adoc",
+              "url": "/camel-spring-boot/next/starters/mail-microsoft-oauth.html",
+              "title": "Mail Microsoft Oauth"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mail.adoc",
+              "url": "/camel-spring-boot/next/starters/mail.html",
+              "title": "IMAP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/management.adoc",
+              "url": "/camel-spring-boot/next/starters/management.html",
+              "title": "Management"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mapstruct.adoc",
+              "url": "/camel-spring-boot/next/starters/mapstruct.html",
+              "title": "MapStruct"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/master.adoc",
+              "url": "/camel-spring-boot/next/starters/master.html",
+              "title": "Master"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mdc.adoc",
+              "url": "/camel-spring-boot/next/starters/mdc.html",
+              "title": "Mdc"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/metrics.adoc",
+              "url": "/camel-spring-boot/next/starters/metrics.html",
+              "title": "Metrics"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/micrometer-observability.adoc",
+              "url": "/camel-spring-boot/next/starters/micrometer-observability.html",
+              "title": "Micrometer Observability"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/micrometer.adoc",
+              "url": "/camel-spring-boot/next/starters/micrometer.html",
+              "title": "Micrometer"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/milo.adoc",
+              "url": "/camel-spring-boot/next/starters/milo.html",
+              "title": "OPC UA Browser"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/milvus.adoc",
+              "url": "/camel-spring-boot/next/starters/milvus.html",
+              "title": "Milvus"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mina-sftp.adoc",
+              "url": "/camel-spring-boot/next/starters/mina-sftp.html",
+              "title": "MINA SFTP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mina.adoc",
+              "url": "/camel-spring-boot/next/starters/mina.html",
+              "title": "Mina"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/minio.adoc",
+              "url": "/camel-spring-boot/next/starters/minio.html",
+              "title": "Minio"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mllp.adoc",
+              "url": "/camel-spring-boot/next/starters/mllp.html",
+              "title": "MLLP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mock.adoc",
+              "url": "/camel-spring-boot/next/starters/mock.html",
+              "title": "Mock"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mongodb-gridfs.adoc",
+              "url": "/camel-spring-boot/next/starters/mongodb-gridfs.html",
+              "title": "MongoDB GridFS"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mongodb.adoc",
+              "url": "/camel-spring-boot/next/starters/mongodb.html",
+              "title": "MongoDB"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mustache.adoc",
+              "url": "/camel-spring-boot/next/starters/mustache.html",
+              "title": "Mustache"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mvel.adoc",
+              "url": "/camel-spring-boot/next/starters/mvel.html",
+              "title": "MVEL"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/mybatis.adoc",
+              "url": "/camel-spring-boot/next/starters/mybatis.html",
+              "title": "MyBatis"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/nats.adoc",
+              "url": "/camel-spring-boot/next/starters/nats.html",
+              "title": "Nats"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/neo4j.adoc",
+              "url": "/camel-spring-boot/next/starters/neo4j.html",
+              "title": "Neo4j"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/netty-http.adoc",
+              "url": "/camel-spring-boot/next/starters/netty-http.html",
+              "title": "Netty HTTP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/netty.adoc",
+              "url": "/camel-spring-boot/next/starters/netty.html",
+              "title": "Netty"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/oaipmh.adoc",
+              "url": "/camel-spring-boot/next/starters/oaipmh.html",
+              "title": "OAI-PMH"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/observability-services.adoc",
+              "url": "/camel-spring-boot/next/starters/observability-services.html",
+              "title": "Observability Services"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/observation.adoc",
+              "url": "/camel-spring-boot/next/starters/observation.html",
+              "title": "Observation"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ocsf.adoc",
+              "url": "/camel-spring-boot/next/starters/ocsf.html",
+              "title": "OCSF"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ognl.adoc",
+              "url": "/camel-spring-boot/next/starters/ognl.html",
+              "title": "OGNL"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/olingo2.adoc",
+              "url": "/camel-spring-boot/next/starters/olingo2.html",
+              "title": "Olingo2"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/olingo4.adoc",
+              "url": "/camel-spring-boot/next/starters/olingo4.html",
+              "title": "Olingo4"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/once.adoc",
+              "url": "/camel-spring-boot/next/starters/once.html",
+              "title": "Once"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/openai.adoc",
+              "url": "/camel-spring-boot/next/starters/openai.html",
+              "title": "OpenAI"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/openapi-java.adoc",
+              "url": "/camel-spring-boot/next/starters/openapi-java.html",
+              "title": "Openapi Java"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/openapi-validator.adoc",
+              "url": "/camel-spring-boot/next/starters/openapi-validator.html",
+              "title": "Openapi Validator"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/opensearch.adoc",
+              "url": "/camel-spring-boot/next/starters/opensearch.html",
+              "title": "OpenSearch"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/openstack.adoc",
+              "url": "/camel-spring-boot/next/starters/openstack.html",
+              "title": "OpenStack Cinder"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/opentelemetry-metrics.adoc",
+              "url": "/camel-spring-boot/next/starters/opentelemetry-metrics.html",
+              "title": "OpenTelemetry Metrics"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/opentelemetry.adoc",
+              "url": "/camel-spring-boot/next/starters/opentelemetry.html",
+              "title": "Opentelemetry"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/opentelemetry2.adoc",
+              "url": "/camel-spring-boot/next/starters/opentelemetry2.html",
+              "title": "Opentelemetry2"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/optaplanner.adoc",
+              "url": "/camel-spring-boot/next/starters/optaplanner.html",
+              "title": "OptaPlanner"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/paho-mqtt5.adoc",
+              "url": "/camel-spring-boot/next/starters/paho-mqtt5.html",
+              "title": "Paho MQTT 5"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/paho.adoc",
+              "url": "/camel-spring-boot/next/starters/paho.html",
+              "title": "Paho"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/parquet-avro.adoc",
+              "url": "/camel-spring-boot/next/starters/parquet-avro.html",
+              "title": "Parquet File"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/pdf.adoc",
+              "url": "/camel-spring-boot/next/starters/pdf.html",
+              "title": "PDF"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/pg-replication-slot.adoc",
+              "url": "/camel-spring-boot/next/starters/pg-replication-slot.html",
+              "title": "PostgresSQL Replication Slot"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/pgevent.adoc",
+              "url": "/camel-spring-boot/next/starters/pgevent.html",
+              "title": "PostgresSQL Event"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/pinecone.adoc",
+              "url": "/camel-spring-boot/next/starters/pinecone.html",
+              "title": "Pinecone"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/platform-http.adoc",
+              "url": "/camel-spring-boot/next/starters/platform-http.html",
+              "title": "Platform HTTP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/plc4x.adoc",
+              "url": "/camel-spring-boot/next/starters/plc4x.html",
+              "title": "PLC4X"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/pqc.adoc",
+              "url": "/camel-spring-boot/next/starters/pqc.html",
+              "title": "PQC (Post-Quantum Cryptography)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/printer.adoc",
+              "url": "/camel-spring-boot/next/starters/printer.html",
+              "title": "Printer"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/protobuf.adoc",
+              "url": "/camel-spring-boot/next/starters/protobuf.html",
+              "title": "Protobuf"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/pubnub.adoc",
+              "url": "/camel-spring-boot/next/starters/pubnub.html",
+              "title": "PubNub"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/pulsar.adoc",
+              "url": "/camel-spring-boot/next/starters/pulsar.html",
+              "title": "Pulsar"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/python.adoc",
+              "url": "/camel-spring-boot/next/starters/python.html",
+              "title": "Python"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/qdrant.adoc",
+              "url": "/camel-spring-boot/next/starters/qdrant.html",
+              "title": "Qdrant"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/quartz.adoc",
+              "url": "/camel-spring-boot/next/starters/quartz.html",
+              "title": "Quartz"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/quickfix.adoc",
+              "url": "/camel-spring-boot/next/starters/quickfix.html",
+              "title": "QuickFix"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/reactive-streams.adoc",
+              "url": "/camel-spring-boot/next/starters/reactive-streams.html",
+              "title": "Reactive Streams"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/reactor.adoc",
+              "url": "/camel-spring-boot/next/starters/reactor.html",
+              "title": "Reactor"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ref.adoc",
+              "url": "/camel-spring-boot/next/starters/ref.html",
+              "title": "Ref"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/resilience4j-micrometer.adoc",
+              "url": "/camel-spring-boot/next/starters/resilience4j-micrometer.html",
+              "title": "Resilience4j Micrometer"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/resilience4j.adoc",
+              "url": "/camel-spring-boot/next/starters/resilience4j.html",
+              "title": "Resilience4j"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/rest-openapi.adoc",
+              "url": "/camel-spring-boot/next/starters/rest-openapi.html",
+              "title": "REST OpenApi"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/rest.adoc",
+              "url": "/camel-spring-boot/next/starters/rest.html",
+              "title": "REST"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/robotframework.adoc",
+              "url": "/camel-spring-boot/next/starters/robotframework.html",
+              "title": "Robot Framework"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/rocketmq.adoc",
+              "url": "/camel-spring-boot/next/starters/rocketmq.html",
+              "title": "RocketMQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/rss.adoc",
+              "url": "/camel-spring-boot/next/starters/rss.html",
+              "title": "RSS"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/rxjava.adoc",
+              "url": "/camel-spring-boot/next/starters/rxjava.html",
+              "title": "Rxjava"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/saga.adoc",
+              "url": "/camel-spring-boot/next/starters/saga.html",
+              "title": "Saga"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/salesforce.adoc",
+              "url": "/camel-spring-boot/next/starters/salesforce.html",
+              "title": "Salesforce"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/sap-netweaver.adoc",
+              "url": "/camel-spring-boot/next/starters/sap-netweaver.html",
+              "title": "SAP NetWeaver"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/saxon.adoc",
+              "url": "/camel-spring-boot/next/starters/saxon.html",
+              "title": "XQuery"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/scheduler.adoc",
+              "url": "/camel-spring-boot/next/starters/scheduler.html",
+              "title": "Scheduler"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/schematron.adoc",
+              "url": "/camel-spring-boot/next/starters/schematron.html",
+              "title": "Schematron"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/seda.adoc",
+              "url": "/camel-spring-boot/next/starters/seda.html",
+              "title": "SEDA"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/servicenow.adoc",
+              "url": "/camel-spring-boot/next/starters/servicenow.html",
+              "title": "ServiceNow"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/servlet.adoc",
+              "url": "/camel-spring-boot/next/starters/servlet.html",
+              "title": "Servlet"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/shiro.adoc",
+              "url": "/camel-spring-boot/next/starters/shiro.html",
+              "title": "Shiro"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/sjms.adoc",
+              "url": "/camel-spring-boot/next/starters/sjms.html",
+              "title": "Simple JMS"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/sjms2.adoc",
+              "url": "/camel-spring-boot/next/starters/sjms2.html",
+              "title": "Simple JMS2"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/slack.adoc",
+              "url": "/camel-spring-boot/next/starters/slack.html",
+              "title": "Slack"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/smb.adoc",
+              "url": "/camel-spring-boot/next/starters/smb.html",
+              "title": "SMB"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/smooks.adoc",
+              "url": "/camel-spring-boot/next/starters/smooks.html",
+              "title": "Smooks"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/smpp.adoc",
+              "url": "/camel-spring-boot/next/starters/smpp.html",
+              "title": "SMPP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/snakeyaml.adoc",
+              "url": "/camel-spring-boot/next/starters/snakeyaml.html",
+              "title": "YAML SnakeYAML"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/snmp.adoc",
+              "url": "/camel-spring-boot/next/starters/snmp.html",
+              "title": "SNMP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/soap.adoc",
+              "url": "/camel-spring-boot/next/starters/soap.html",
+              "title": "SOAP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/solr.adoc",
+              "url": "/camel-spring-boot/next/starters/solr.html",
+              "title": "Solr"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/splunk-hec.adoc",
+              "url": "/camel-spring-boot/next/starters/splunk-hec.html",
+              "title": "Splunk HEC"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/splunk.adoc",
+              "url": "/camel-spring-boot/next/starters/splunk.html",
+              "title": "Splunk"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-ai-chat.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-ai-chat.html",
+              "title": "Spring AI Chat"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-ai-embeddings.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-ai-embeddings.html",
+              "title": "Spring AI Embeddings"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-ai-image.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-ai-image.html",
+              "title": "Spring AI Image"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-ai-tools.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-ai-tools.html",
+              "title": "Spring AI Tools"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-ai-vector-store.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-ai-vector-store.html",
+              "title": "Spring AI Vector Store"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-batch.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-batch.html",
+              "title": "Spring Batch"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-cloud-config.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-cloud-config.html",
+              "title": "Spring Cloud Config"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-jdbc.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-jdbc.html",
+              "title": "Spring JDBC"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-ldap.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-ldap.html",
+              "title": "Spring LDAP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-rabbitmq.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-rabbitmq.html",
+              "title": "Spring RabbitMQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-redis.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-redis.html",
+              "title": "Spring Redis"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-security.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-security.html",
+              "title": "Spring Security"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring-ws.adoc",
+              "url": "/camel-spring-boot/next/starters/spring-ws.html",
+              "title": "Spring WebService"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spring.adoc",
+              "url": "/camel-spring-boot/next/starters/spring.html",
+              "title": "SpEL"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/springdoc.adoc",
+              "url": "/camel-spring-boot/next/starters/springdoc.html",
+              "title": "Springdoc"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/sql.adoc",
+              "url": "/camel-spring-boot/next/starters/sql.html",
+              "title": "SQL"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ssh.adoc",
+              "url": "/camel-spring-boot/next/starters/ssh.html",
+              "title": "SSH"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/stax.adoc",
+              "url": "/camel-spring-boot/next/starters/stax.html",
+              "title": "StAX"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/stitch.adoc",
+              "url": "/camel-spring-boot/next/starters/stitch.html",
+              "title": "Stitch"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/stream.adoc",
+              "url": "/camel-spring-boot/next/starters/stream.html",
+              "title": "Stream"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/stringtemplate.adoc",
+              "url": "/camel-spring-boot/next/starters/stringtemplate.html",
+              "title": "String Template"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/stripe.adoc",
+              "url": "/camel-spring-boot/next/starters/stripe.html",
+              "title": "Stripe"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/stub.adoc",
+              "url": "/camel-spring-boot/next/starters/stub.html",
+              "title": "Stub"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/swift.adoc",
+              "url": "/camel-spring-boot/next/starters/swift.html",
+              "title": "SWIFT MT"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/syslog.adoc",
+              "url": "/camel-spring-boot/next/starters/syslog.html",
+              "title": "Syslog"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/tahu.adoc",
+              "url": "/camel-spring-boot/next/starters/tahu.html",
+              "title": "Tahu Edge Node / Device"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/tarfile.adoc",
+              "url": "/camel-spring-boot/next/starters/tarfile.html",
+              "title": "Tar File"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/telegram.adoc",
+              "url": "/camel-spring-boot/next/starters/telegram.html",
+              "title": "Telegram"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/telemetry-dev.adoc",
+              "url": "/camel-spring-boot/next/starters/telemetry-dev.html",
+              "title": "Telemetry Dev"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/tensorflow-serving.adoc",
+              "url": "/camel-spring-boot/next/starters/tensorflow-serving.html",
+              "title": "TensorFlow Serving"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/thrift.adoc",
+              "url": "/camel-spring-boot/next/starters/thrift.html",
+              "title": "Thrift"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/thymeleaf.adoc",
+              "url": "/camel-spring-boot/next/starters/thymeleaf.html",
+              "title": "Thymeleaf"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/tika.adoc",
+              "url": "/camel-spring-boot/next/starters/tika.html",
+              "title": "Tika"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/timer.adoc",
+              "url": "/camel-spring-boot/next/starters/timer.html",
+              "title": "Timer"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/twilio.adoc",
+              "url": "/camel-spring-boot/next/starters/twilio.html",
+              "title": "Twilio"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/twitter.adoc",
+              "url": "/camel-spring-boot/next/starters/twitter.html",
+              "title": "Twitter Direct Message"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/undertow-spring-security.adoc",
+              "url": "/camel-spring-boot/next/starters/undertow-spring-security.html",
+              "title": "Undertow Spring Security"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/undertow.adoc",
+              "url": "/camel-spring-boot/next/starters/undertow.html",
+              "title": "Undertow"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/univocity-parsers.adoc",
+              "url": "/camel-spring-boot/next/starters/univocity-parsers.html",
+              "title": "uniVocity CSV"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/validator.adoc",
+              "url": "/camel-spring-boot/next/starters/validator.html",
+              "title": "Validator"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/velocity.adoc",
+              "url": "/camel-spring-boot/next/starters/velocity.html",
+              "title": "Velocity"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/vertx-http.adoc",
+              "url": "/camel-spring-boot/next/starters/vertx-http.html",
+              "title": "Vert.x HTTP Client"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/vertx-websocket.adoc",
+              "url": "/camel-spring-boot/next/starters/vertx-websocket.html",
+              "title": "Vert.x WebSocket"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/vertx.adoc",
+              "url": "/camel-spring-boot/next/starters/vertx.html",
+              "title": "Vert.x"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/wasm.adoc",
+              "url": "/camel-spring-boot/next/starters/wasm.html",
+              "title": "Wasm"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/weather.adoc",
+              "url": "/camel-spring-boot/next/starters/weather.html",
+              "title": "Weather"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/weaviate.adoc",
+              "url": "/camel-spring-boot/next/starters/weaviate.html",
+              "title": "weaviate"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/web3j.adoc",
+              "url": "/camel-spring-boot/next/starters/web3j.html",
+              "title": "Web3j Ethereum Blockchain"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/webhook.adoc",
+              "url": "/camel-spring-boot/next/starters/webhook.html",
+              "title": "Webhook"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/whatsapp.adoc",
+              "url": "/camel-spring-boot/next/starters/whatsapp.html",
+              "title": "WhatsApp"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/wordpress.adoc",
+              "url": "/camel-spring-boot/next/starters/wordpress.html",
+              "title": "WordPress"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/workday.adoc",
+              "url": "/camel-spring-boot/next/starters/workday.html",
+              "title": "Workday"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xchange.adoc",
+              "url": "/camel-spring-boot/next/starters/xchange.html",
+              "title": "XChange"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xj.adoc",
+              "url": "/camel-spring-boot/next/starters/xj.html",
+              "title": "XJ"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xml-jaxb.adoc",
+              "url": "/camel-spring-boot/next/starters/xml-jaxb.html",
+              "title": "Xml Jaxb"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xml-jaxp.adoc",
+              "url": "/camel-spring-boot/next/starters/xml-jaxp.html",
+              "title": "Xml Jaxp"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xmlsecurity.adoc",
+              "url": "/camel-spring-boot/next/starters/xmlsecurity.html",
+              "title": "XML Security"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xmpp.adoc",
+              "url": "/camel-spring-boot/next/starters/xmpp.html",
+              "title": "XMPP"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xpath.adoc",
+              "url": "/camel-spring-boot/next/starters/xpath.html",
+              "title": "XPath"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xslt-saxon.adoc",
+              "url": "/camel-spring-boot/next/starters/xslt-saxon.html",
+              "title": "XSLT Saxon"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/xslt.adoc",
+              "url": "/camel-spring-boot/next/starters/xslt.html",
+              "title": "XSLT"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/zeebe.adoc",
+              "url": "/camel-spring-boot/next/starters/zeebe.html",
+              "title": "Zeebe"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/zendesk.adoc",
+              "url": "/camel-spring-boot/next/starters/zendesk.html",
+              "title": "Zendesk"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/zip-deflater.adoc",
+              "url": "/camel-spring-boot/next/starters/zip-deflater.html",
+              "title": "GZip Deflater"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/zipfile.adoc",
+              "url": "/camel-spring-boot/next/starters/zipfile.html",
+              "title": "Zip File"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/zookeeper-cluster-service.adoc",
+              "url": "/camel-spring-boot/next/starters/zookeeper-cluster-service.html",
+              "title": "Zookeeper Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/zookeeper-master.adoc",
+              "url": "/camel-spring-boot/next/starters/zookeeper-master.html",
+              "title": "ZooKeeper Master"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/zookeeper.adoc",
+              "url": "/camel-spring-boot/next/starters/zookeeper.html",
+              "title": "ZooKeeper"
             },
             {
               "module": "ROOT",
@@ -18693,6 +21147,12 @@
               "path": "azure-cosmosdb-component.adoc",
               "url": "/components/next/azure-cosmosdb-component.html",
               "title": "Azure CosmosDB"
+            },
+            {
+              "module": "ROOT",
+              "path": "azure-eventgrid-component.adoc",
+              "url": "/components/next/azure-eventgrid-component.html",
+              "title": "Azure Event Grid"
             },
             {
               "module": "ROOT",

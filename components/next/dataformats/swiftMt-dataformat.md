@@ -187,29 +187,3 @@ If you use Maven, you can add the following to your `pom.xml`:
   <version>x.x.x</version>  <!-- use the same version as your Camel core version -->
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using swiftMt with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-swift-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 7 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.swift-mt.enabled** | Whether to enable auto configuration of the swiftMt data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.swift-mt.write-in-json** | The flag indicating that messages must be marshalled in a JSON format. | false | Boolean |
-| **camel.dataformat.swift-mx.enabled** | Whether to enable auto configuration of the swiftMx data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.swift-mx.read-config** | Refers to a specific configuration to use when unmarshalling an input stream to lookup from the registry. The option is a com.prowidesoftware.swift.model.mx.MxReadConfiguration type. |  | String |
-| **camel.dataformat.swift-mx.read-message-id** | The type of MX message to produce when unmarshalling an input stream. If not set, it will be automatically detected from the namespace used. The option is a com.prowidesoftware.swift.model.MxId type. |  | String |
-| **camel.dataformat.swift-mx.write-config** | Refers to a specific configuration to use when marshalling a message to lookup from the registry. The option is a com.prowidesoftware.swift.model.mx.MxWriteConfiguration type. |  | String |
-| **camel.dataformat.swift-mx.write-in-json** | The flag indicating that messages must be marshalled in a JSON format. | false | Boolean |

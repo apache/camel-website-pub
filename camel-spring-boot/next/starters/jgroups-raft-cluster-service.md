@@ -1,0 +1,39 @@
+# Jgroups Raft Cluster Service
+
+Spring Boot auto-configuration for the Camel JGroups Raft Cluster Service.
+
+This starter provides leader election for Camel routes using [JGroups Raft](http://www.jgroups.org/raft) consensus protocol. It integrates with Camel’s `CamelClusterService` SPI so you can use the clustered route controller to ensure only one instance of a route runs across a cluster.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-jgroups-raft-cluster-service-starter</artifactId>
+</dependency>
+```
+
+## Usage
+
+To use this cluster service, enable the clustered route controller and configure routes with `routePolicy=ClusteredRoutePolicy`:
+
+```properties
+# enable the cluster service
+camel.cluster.jgroups-raft.enabled = true
+
+# enable the clustered route controller
+camel.clustered.controller.enabled = true
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 5 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.cluster.jgroups-raft.enabled | Sets if the jgroups raft cluster service should be enabled or not, default is true. | true | Boolean |
+| camel.cluster.jgroups-raft.id | Cluster Service ID |  | String |
+| camel.cluster.jgroups-raft.jgroups-raft-cluster-name | JGroups Cluster name |  | String |
+| camel.cluster.jgroups-raft.jgroups-raft-config | JGrups-raft configuration File name |  | String |
+| camel.cluster.jgroups-raft.raft-id | JGroups-raft ID |  | String |

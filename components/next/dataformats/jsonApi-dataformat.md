@@ -24,25 +24,3 @@ If you use Maven, you could add the following to your `pom.xml`, substituting th
   <!-- use the same version as your Camel core version -->
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using jsonApi with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-jsonapi-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 3 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.json-api.data-format-types** | The classes to take into account for the marshalling. Multiple classes can be separated by comma. |  | String |
-| **camel.dataformat.json-api.enabled** | Whether to enable auto configuration of the jsonApi data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.json-api.main-format-type** | The class to take into account while unmarshalling. |  | String |

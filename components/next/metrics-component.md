@@ -173,57 +173,6 @@ Enum values:
 
 Camel Metrics component uses by default a `MetricRegistry` instance with a `Slf4jReporter` that has a 60-second reporting interval. This default registry can be replaced with a custom one by providing a `MetricRegistry` bean. If multiple `MetricRegistry` beans exist in the application, the one with name `metricRegistry` is used.
 
-For example:
-
--   Java (Spring)
-    
--   Java (CDI)
-    
-
-```java
-@Configuration
-public static class MyConfig extends SingleRouteCamelConfiguration {
-
-    @Bean
-    @Override
-    public RouteBuilder route() {
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                // define Camel routes here
-            }
-        };
-    }
-
-    @Bean(name = MetricsComponent.METRIC_REGISTRY_NAME)
-    public MetricRegistry getMetricRegistry() {
-        MetricRegistry registry = ...;
-        return registry;
-    }
-}
-```
-
-```java
-class MyBean extends RouteBuilder {
-
-    @Override
-    public void configure() {
-      from("...")
-          // Register the 'my-meter' meter in the MetricRegistry below
-          .to("metrics:meter:my-meter");
-    }
-
-    @Produces
-    // If multiple MetricRegistry beans
-    // @Named(MetricsComponent.METRIC_REGISTRY_NAME)
-    MetricRegistry registry() {
-        MetricRegistry registry = new MetricRegistry();
-        // ...
-        return registry;
-    }
-}
-```
-
 ## Usage
 
 Each metric has type and name. Supported types are [counter](#MetricsComponent-counter), [histogram](#MetricsComponent-histogram), [meter](#MetricsComponent-meter), [timer](#MetricsComponent-timer) and [gauge](#MetricsComponent-gauge). Metric name is simple string. If a metric type is not provided, then type meter is used by default.
@@ -1051,26 +1000,3 @@ And the JMX API the MBean is registered in the `type=services` tree with `name=M
 ### InstrumentedThreadPoolFactory
 
 This factory allows you to gather performance information about Camel Thread Pools by injecting a `InstrumentedThreadPoolFactory` which collects information from the inside of Camel. See more details at Advanced configuration of CamelContext using Spring
-
-## Spring Boot Auto-Configuration
-
-When using metrics with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-metrics-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 4 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.metrics.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.metrics.enabled** | Whether to enable auto configuration of the metrics component. This is enabled by default. |  | Boolean |
-| **camel.component.metrics.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.metrics.metric-registry** | To use a custom configured MetricRegistry. The option is a com.codahale.metrics.MetricRegistry type. |  | MetricRegistry |

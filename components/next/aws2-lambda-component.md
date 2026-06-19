@@ -708,24 +708,20 @@ and by sending
 _Java-only: Java test API (ProducerTemplate with file upload)_
 
 ```java
-        template.send("direct:createFunction", ExchangePattern.InOut, new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader(Lambda2Constants.RUNTIME, "nodejs6.10");
-                exchange.getIn().setHeader(Lambda2Constants.HANDLER, "GetHelloWithName.handler");
-                exchange.getIn().setHeader(Lambda2Constants.DESCRIPTION, "Hello with node.js on Lambda");
-                exchange.getIn().setHeader(Lambda2Constants.ROLE,
-                        "arn:aws:iam::643534317684:role/lambda-execution-role");
+template.send("direct:createFunction", ExchangePattern.InOut, exchange -> {
+    exchange.getIn().setHeader("CamelAwsLambdaRuntime", "nodejs6.10");
+    exchange.getIn().setHeader("CamelAwsLambdaHandler", "GetHelloWithName.handler");
+    exchange.getIn().setHeader("CamelAwsLambdaDescription", "Hello with node.js on Lambda");
+    exchange.getIn().setHeader("CamelAwsLambdaRole",
+            "arn:aws:iam::643534317684:role/lambda-execution-role");
 
-                ClassLoader classLoader = getClass().getClassLoader();
-                File file = new File(
-                        classLoader
-                                .getResource("org/apache/camel/component/aws2/lambda/function/node/GetHelloWithName.zip")
-                                .getFile());
-                FileInputStream inputStream = new FileInputStream(file);
-                exchange.getIn().setBody(inputStream);
-            }
-        });
+    ClassLoader classLoader = getClass().getClassLoader();
+    File file = new File(
+            classLoader
+                    .getResource("org/apache/camel/component/aws2/lambda/function/node/GetHelloWithName.zip")
+                    .getFile());
+    exchange.getIn().setBody(new FileInputStream(file));
+});
 ```
 
 ### Function URL Operations
@@ -1312,13 +1308,13 @@ _Java-only: requires List values for CORS headers_
 from("direct:createFunctionUrlWithCors")
     .process(exchange -> {
         exchange.getIn().setHeader("CamelAwsLambdaFunctionUrlAuthType", "NONE");
-        exchange.getIn().setHeader(Lambda2Constants.FUNCTION_URL_CORS_ALLOW_ORIGINS,
-            Arrays.asList("https://example.com"));
-        exchange.getIn().setHeader(Lambda2Constants.FUNCTION_URL_CORS_ALLOW_METHODS,
-            Arrays.asList("GET", "POST"));
-        exchange.getIn().setHeader(Lambda2Constants.FUNCTION_URL_CORS_ALLOW_HEADERS,
-            Arrays.asList("Content-Type", "Authorization"));
-        exchange.getIn().setHeader(Lambda2Constants.FUNCTION_URL_CORS_MAX_AGE, 3600);
+        exchange.getIn().setHeader("CamelAwsLambdaFunctionUrlCorsAllowOrigins",
+            List.of("https://example.com"));
+        exchange.getIn().setHeader("CamelAwsLambdaFunctionUrlCorsAllowMethods",
+            List.of("GET", "POST"));
+        exchange.getIn().setHeader("CamelAwsLambdaFunctionUrlCorsAllowHeaders",
+            List.of("Content-Type", "Authorization"));
+        exchange.getIn().setHeader("CamelAwsLambdaFunctionUrlCorsMaxAge", 3600);
     })
     .to("aws2-lambda://myFunction?operation=createFunctionUrlConfig")
     .to("mock:result");
@@ -1353,45 +1349,3 @@ Maven users will need to add the following dependency to their pom.xml.
 ```
 
 where `${camel-version}` must be replaced by the actual version of Camel.
-
-## Spring Boot Auto-Configuration
-
-When using aws2-lambda with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-aws2-lambda-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 23 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.aws2-lambda.access-key** | Amazon AWS Access Key. |  | String |
-| **camel.component.aws2-lambda.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.aws2-lambda.aws-lambda-client** | To use an existing configured AwsLambdaClient client. The option is a software.amazon.awssdk.services.lambda.LambdaClient type. |  | LambdaClient |
-| **camel.component.aws2-lambda.configuration** | Component configuration. The option is a org.apache.camel.component.aws2.lambda.Lambda2Configuration type. |  | Lambda2Configuration |
-| **camel.component.aws2-lambda.enabled** | Whether to enable auto configuration of the aws2-lambda component. This is enabled by default. |  | Boolean |
-| **camel.component.aws2-lambda.health-check-consumer-enabled** | Used for enabling or disabling all consumer based health checks from this component. | true | Boolean |
-| **camel.component.aws2-lambda.health-check-producer-enabled** | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
-| **camel.component.aws2-lambda.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.aws2-lambda.operation** | The operation to perform. It can be listFunctions, getFunction, createFunction, deleteFunction or invokeFunction. | invokefunction | Lambda2Operations |
-| **camel.component.aws2-lambda.override-endpoint** | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | Boolean |
-| **camel.component.aws2-lambda.pojo-request** | If we want to use a POJO request as body or not. | false | Boolean |
-| **camel.component.aws2-lambda.profile-credentials-name** | If using a profile credentials provider, this parameter will set the profile name. |  | String |
-| **camel.component.aws2-lambda.proxy-host** | To define a proxy host when instantiating the Lambda client. |  | String |
-| **camel.component.aws2-lambda.proxy-port** | To define a proxy port when instantiating the Lambda client. |  | Integer |
-| **camel.component.aws2-lambda.proxy-protocol** | To define a proxy protocol when instantiating the Lambda client. | https | Protocol |
-| **camel.component.aws2-lambda.region** | The region in which the Lambda client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example, ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id(). |  | String |
-| **camel.component.aws2-lambda.secret-key** | Amazon AWS Secret Key. |  | String |
-| **camel.component.aws2-lambda.session-token** | Amazon AWS Session Token used when the user needs to assume an IAM role. |  | String |
-| **camel.component.aws2-lambda.trust-all-certificates** | If we want to trust all certificates in case of overriding the endpoint. | false | Boolean |
-| **camel.component.aws2-lambda.uri-endpoint-override** | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
-| **camel.component.aws2-lambda.use-default-credentials-provider** | Set whether the Lambda client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | false | Boolean |
-| **camel.component.aws2-lambda.use-profile-credentials-provider** | Set whether the Lambda client should expect to load credentials through a profile credentials provider. | false | Boolean |
-| **camel.component.aws2-lambda.use-session-credentials** | Set whether the Lambda client should expect to use Session Credentials. This is useful in a situation in which the user needs to assume an IAM role for doing operations in Lambda. | false | Boolean |

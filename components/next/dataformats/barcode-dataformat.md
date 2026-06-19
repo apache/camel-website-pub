@@ -168,27 +168,3 @@ If you’ll paste the code 39 barcode that is rotated some degrees into the 'bar
 | Name | Type | Description |
 | --- | --- | --- |
 | ORIENTATION | Integer | rotate value in degrees . |
-
-## Spring Boot Auto-Configuration
-
-When using barcode with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-barcode-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 5 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.barcode.barcode-format** | Barcode format such as QR-Code. | QR\_CODE | String |
-| **camel.dataformat.barcode.enabled** | Whether to enable auto configuration of the barcode data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.barcode.height** | Height of the barcode. | 100 | Integer |
-| **camel.dataformat.barcode.image-type** | Image type of the barcode such as png. | PNG | String |
-| **camel.dataformat.barcode.width** | Width of the barcode. | 100 | Integer |

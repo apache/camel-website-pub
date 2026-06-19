@@ -119,7 +119,7 @@ Enum values:
  |  | AS2ApiName |
 | **methodName** (common) | **Required** What sub operation to use for the selected operation. |  | String |
 
-### Query Parameters (48 parameters)
+### Query Parameters (49 parameters)
 
    
 | Name | Description | Default | Type |
@@ -308,6 +308,7 @@ Enum values:
 | **mdnPassword** (security) | The password that is used by the server for basic authentication when it sends an async MDN. |  | String |
 | **mdnUserName** (security) | The user-name that is used by the server for basic authentication when it sends an async MDN. If options for basic authentication and bearer authentication are both set then basic authentication takes precedence. |  | String |
 | **password** (security) | The password that is used by the client for basic authentication. |  | String |
+| **signatureVerificationRequired** (security) | Whether to reject an inbound signed AS2 message that cannot be verified because no validateSigningCertificateChain is configured (server only). When false (default), such a message is delivered after logging a warning, preserving the previous behaviour. When true, the message is rejected instead of being delivered without verifying its signature. Has no effect when validateSigningCertificateChain is set (signatures are always validated then) or for unsigned messages. | false | boolean |
 | **signedReceiptMicAlgorithms** (security) | The list of algorithms, in order of preference, requested to generate a message integrity check (MIC) returned in message disposition notification (MDN). Multiple algorithms can be separated by comma. |  | String |
 | **signingAlgorithm** (security) | 
 
@@ -491,7 +492,7 @@ The as2/send API method has the parameters listed in the table below:
 | **subject** | Message subject | String |
 | **userName** | The user-name that is used for basic authentication | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (48 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters (49 parameters)](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 
@@ -528,7 +529,7 @@ The as2/receive API method has the parameters listed in the table below:
 | **requestUriPattern** | 
  | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (48 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters (49 parameters)](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 
@@ -565,35 +566,9 @@ The as2/listen API method has the parameters listed in the table below:
 | **requestUriPattern** | 
  | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (48 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters (49 parameters)](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
-
-## Spring Boot Auto-Configuration
-
-When using as2 with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-as2-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 7 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.as2.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.as2.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
-| **camel.component.as2.configuration** | Component configuration. The option is a org.apache.camel.component.as2.AS2Configuration type. |  | AS2Configuration |
-| **camel.component.as2.enabled** | Whether to enable auto configuration of the as2 component. This is enabled by default. |  | Boolean |
-| **camel.component.as2.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.as2.ssl-context-parameters** | To configure security using SSLContextParameters. The option is a org.apache.camel.support.jsse.SSLContextParameters type. |  | SSLContextParameters |
-| **camel.component.as2.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |

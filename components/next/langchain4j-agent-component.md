@@ -218,59 +218,21 @@ The langchain4j-agent component accepts a pre-built `Agent` or `ChatModel` bean 
 _Java-only: programmatic `ChatModel` bean registration with \`OAuthHelper\`_
 
 ```java
-import org.apache.camel.support.OAuthHelper;
+String token = OAuthHelper.resolveOAuthToken(getContext(), "azure");
 
-public class MyRouteBuilder extends RouteBuilder {
-    @Override
-    public void configure() throws Exception {
-        String token = OAuthHelper.resolveOAuthToken(getContext(), "azure");
+ChatModel chatModel = OpenAiChatModel.builder()
+        .apiKey(token)
+        .modelName("gpt-4")
+        .build();
 
-        ChatModel chatModel = OpenAiChatModel.builder()
-                .apiKey(token)
-                .modelName("gpt-4")
-                .build();
+getContext().getRegistry().bind("myChatModel", chatModel);
 
-        getContext().getRegistry().bind("myChatModel", chatModel);
-
-        from("direct:agent")
-            .to("langchain4j-agent:myAgent");
-    }
-}
+from("direct:agent")
+    .to("langchain4j-agent:myAgent");
 ```
 
 > **Note**
 > In Quarkus or Spring Boot, configure the ChatModel via the framework’s own properties and dependency injection instead of programmatic bean registration.
-
-## Spring Boot Auto-Configuration
-
-When using langchain4j-agent with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-langchain4j-agent-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 12 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.langchain4j-agent.agent** | The agent to use for the component. The option is a org.apache.camel.component.langchain4j.agent.api.Agent type. |  | Agent |
-| **camel.component.langchain4j-agent.agent-configuration** | AgentConfiguration used by Camel to create the agent internally. When set, Camel creates an AgentWithMemory if a ChatMemoryProvider is configured, otherwise an AgentWithoutMemory. If an agentFactory is also configured, the factory takes precedence. The option is a org.apache.camel.component.langchain4j.agent.api.AgentConfiguration type. |  | AgentConfiguration |
-| **camel.component.langchain4j-agent.agent-factory** | The agent factory to use for creating agents if no Agent is provided. The option is a org.apache.camel.component.langchain4j.agent.api.AgentFactory type. |  | AgentFactory |
-| **camel.component.langchain4j-agent.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.langchain4j-agent.configuration** | The configuration. The option is a org.apache.camel.component.langchain4j.agent.LangChain4jAgentConfiguration type. |  | LangChain4jAgentConfiguration |
-| **camel.component.langchain4j-agent.enabled** | Whether to enable auto configuration of the langchain4j-agent component. This is enabled by default. |  | Boolean |
-| **camel.component.langchain4j-agent.json-schema** | JSON schema for structured output validation. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. Mutually exclusive with outputClass. |  | String |
-| **camel.component.langchain4j-agent.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.langchain4j-agent.mcp-clients** | Pre-built MCP (Model Context Protocol) client instances for external tool integration. Reference beans from the registry, e.g., #myMcpClient1,#myMcpClient2. |  | List |
-| **camel.component.langchain4j-agent.mcp-server** | MCP server definitions in the form of mcpServer..=. Supported properties: transportType (stdio, http, streamableHttp, or sse, default: stdio), command (comma-separated, for stdio), url (for http/sse), environment.= (for stdio), timeout (in seconds, default: 60), logRequests, logResponses, oauthProfile (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
-| **camel.component.langchain4j-agent.output-class** | Java class to use for structured output. Camel derives the JSON schema from the class and instructs the model to produce matching JSON; the response body is left as a raw JSON string. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. The class must be a POJO with public fields or getters; simple types, enums, and collections are not supported. Mutually exclusive with jsonSchema. |  | Class |
-| **camel.component.langchain4j-agent.tags** | Tags for discovering and calling Camel route tools. |  | String |
 
 ## Usage
 
@@ -1772,46 +1734,31 @@ WordCountGuardrail custom = WordCountGuardrail.builder()
 _Java-only: `RouteBuilder` class with `AgentConfiguration`, guardrails, memory, and `doTry`/\`doCatch\`_
 
 ```java
-import org.apache.camel.component.langchain4j.agent.api.*;
-import org.apache.camel.component.langchain4j.agent.api.guardrails.*;
-import dev.langchain4j.model.openai.OpenAiChatModel;
-import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+ChatModel chatModel = OpenAiChatModel.builder()
+    .apiKey("{{openai.api.key}}")
+    .modelName("gpt-4o")
+    .build();
 
-public class SecureAgentRoute extends RouteBuilder {
+ChatMemoryProvider memoryProvider = memoryId ->
+    MessageWindowChatMemory.withMaxMessages(20);
 
-    @Override
-    public void configure() throws Exception {
-        // Create chat model
-        ChatModel chatModel = OpenAiChatModel.builder()
-            .apiKey("{{openai.api.key}}")
-            .modelName("gpt-4o")
-            .build();
+AgentConfiguration configuration = new AgentConfiguration()
+    .withChatModel(chatModel)
+    .withChatMemoryProvider(memoryProvider)
+    .withInputGuardrailClasses(Guardrails.defaultInputGuardrails())
+    .withOutputGuardrailClasses(Guardrails.defaultOutputGuardrails());
 
-        // Create memory provider
-        ChatMemoryProvider memoryProvider = memoryId ->
-            MessageWindowChatMemory.withMaxMessages(20);
+Agent secureAgent = new AgentWithMemory(configuration);
+getContext().getRegistry().bind("secureAgent", secureAgent);
 
-        // Create secure agent configuration
-        AgentConfiguration configuration = new AgentConfiguration()
-            .withChatModel(chatModel)
-            .withChatMemoryProvider(memoryProvider)
-            .withInputGuardrailClasses(Guardrails.defaultInputGuardrails())
-            .withOutputGuardrailClasses(Guardrails.defaultOutputGuardrails());
-
-        Agent secureAgent = new AgentWithMemory(configuration);
-        getContext().getRegistry().bind("secureAgent", secureAgent);
-
-        // Secure chat route with error handling
-        from("direct:chat")
-            .setHeader("CamelLangChain4jAgentMemoryId", simple("${header.userId}"))
-            .doTry()
-                .to("langchain4j-agent:chat?agent=#secureAgent")
-            .doCatch(dev.langchain4j.service.guardrail.GuardrailException.class)
-                .log("Guardrail blocked request: ${exception.message}")
-                .setBody(constant("Your message was blocked due to security policies."))
-            .end();
-    }
-}
+from("direct:chat")
+    .setHeader("CamelLangChain4jAgentMemoryId", simple("${header.userId}"))
+    .doTry()
+        .to("langchain4j-agent:chat?agent=#secureAgent")
+    .doCatch(dev.langchain4j.service.guardrail.GuardrailException.class)
+        .log("Guardrail blocked request: ${exception.message}")
+        .setBody(constant("Your message was blocked due to security policies."))
+    .end();
 ```
 
 #### Spring Boot Configuration Example

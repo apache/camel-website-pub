@@ -164,27 +164,3 @@ from("lumberjack:0.0.0.0")
         - to:
             uri: stream:out
 ```
-
-## Spring Boot Auto-Configuration
-
-When using lumberjack with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-lumberjack-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 5 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.lumberjack.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.lumberjack.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
-| **camel.component.lumberjack.enabled** | Whether to enable auto configuration of the lumberjack component. This is enabled by default. |  | Boolean |
-| **camel.component.lumberjack.ssl-context-parameters** | Sets the default SSL configuration to use for all the endpoints. You can also configure it directly at the endpoint level. The option is a org.apache.camel.support.jsse.SSLContextParameters type. |  | SSLContextParameters |
-| **camel.component.lumberjack.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |

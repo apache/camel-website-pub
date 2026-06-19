@@ -197,18 +197,3 @@ _Java-only: Java test API (ProducerTemplate)_
 ```
 
 When you use the username and password headers, then the ShiroSecurityPolicy in the Camel route will automatically transform those into a single header with key `CamelShiroSecurityToken` with the token. Then token is either a `ShiroSecurityToken` instance, or a base64 representation as a String (the latter is when you have set base64=true).
-
-## Spring Boot Auto-Configuration
-
-When using shiro with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-shiro-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component has no Spring Boot auto configuration options.

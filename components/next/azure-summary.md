@@ -10,6 +10,10 @@ See the following for usage of each component:
 
 To read and write records to the CosmosDB database on Azure cloud platform.
 
+[Azure Event Grid](azure-eventgrid-component.md)
+
+Send events to Azure Event Grid topics.
+
 [Azure Event Hubs](azure-eventhubs-component.md)
 
 Send and receive events to/from Azure Event Hubs using AMQP protocol.

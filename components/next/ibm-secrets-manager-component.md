@@ -739,25 +739,3 @@ where `camel.vault.ibm.refreshEnabled` will enable the automatic context reload 
 where `camel.vault.ibm.eventStreamBootstrapServers` is the comma-separated list of Bootstrap Servers for IBM Event Stream, `camel.vault.ibm.eventStreamTopic`, `camel.vault.ibm.eventStreamUsername`, `camel.vault.ibm.eventStreamPassword`, `camel.vault.ibm.eventStreamGroupId` and `camel.vault.ibm.eventStreamConsumerPollTimeout` are the IBM Event Stream parameters for connecting and consuming events related to Secrets.
 
 Note that `camel.vault.ibm.secrets` is not mandatory: if not specified the task responsible for checking updates events will take into accounts or the properties with an `ibm:` prefix.
-
-## Spring Boot Auto-Configuration
-
-When using ibm-secrets-manager with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-ibm-secrets-manager-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 3 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.ibm-secrets-manager.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.ibm-secrets-manager.enabled** | Whether to enable auto configuration of the ibm-secrets-manager component. This is enabled by default. |  | Boolean |
-| **camel.component.ibm-secrets-manager.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |

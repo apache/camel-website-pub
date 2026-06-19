@@ -298,37 +298,3 @@ Exchange result = template.request("direct:query", exchange -> {
     exchange.getMessage().setHeader(AQL_QUERY_BIND_PARAMETERS, bindVars);
 });
 ```
-
-## Spring Boot Auto-Configuration
-
-When using arangodb with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-arangodb-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 15 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.arangodb.arango-d-b** | To use an existing ArangDB client. The option is a com.arangodb.ArangoDB type. |  | ArangoDB |
-| **camel.component.arangodb.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.arangodb.configuration** | Component configuration. The option is a org.apache.camel.component.arangodb.ArangoDbConfiguration type. |  | ArangoDbConfiguration |
-| **camel.component.arangodb.document-collection** | Collection name, when using ArangoDb as a Document Database. Set the documentCollection name when using the CRUD operation on the document database collections (SAVE\_DOCUMENT , FIND\_DOCUMENT\_BY\_KEY, UPDATE\_DOCUMENT, DELETE\_DOCUMENT). |  | String |
-| **camel.component.arangodb.edge-collection** | Collection name of vertices, when using ArangoDb as a Graph Database. Set the edgeCollection name to perform CRUD operation on edges using these operations : SAVE\_VERTEX, FIND\_VERTEX\_BY\_KEY, UPDATE\_VERTEX, DELETE\_VERTEX. The graph attribute is mandatory. |  | String |
-| **camel.component.arangodb.enabled** | Whether to enable auto configuration of the arangodb component. This is enabled by default. |  | Boolean |
-| **camel.component.arangodb.graph** | Graph name, when using ArangoDb as a Graph Database. Combine this attribute with one of the two attributes vertexCollection and edgeCollection. |  | String |
-| **camel.component.arangodb.host** | ArangoDB host. If host and port are default, this field is Optional. |  | String |
-| **camel.component.arangodb.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.arangodb.operation** | Operations to perform on ArangoDb. For the operation AQL\_QUERY, no need to specify a collection or graph. |  | ArangoDbOperation |
-| **camel.component.arangodb.password** | ArangoDB password. If user and password are default, this field is Optional. |  | String |
-| **camel.component.arangodb.port** | ArangoDB exposed port. If host and port are default, this field is Optional. |  | Integer |
-| **camel.component.arangodb.user** | ArangoDB user. If user and password are default, this field is Optional. |  | String |
-| **camel.component.arangodb.vertex-collection** | Collection name of vertices, when using ArangoDb as a Graph Database. Set the vertexCollection name to perform CRUD operation on vertices using these operations : SAVE\_EDGE, FIND\_EDGE\_BY\_KEY, UPDATE\_EDGE, DELETE\_EDGE. The graph attribute is mandatory. |  | String |
-| **camel.component.arangodb.vertx** | To use an existing Vertx in the ArangoDB client. The option is a io.vertx.core.Vertx type. |  | Vertx |

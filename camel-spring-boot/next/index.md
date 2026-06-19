@@ -49,7 +49,7 @@ Next, add the [Camel Spring Boot starter](spring-boot.md) to start up the [Camel
     </dependencies>
 ```
 
-Also add any [component starters](list.md) your Spring Boot application requires. For example this adds the [auto-configuration starter](../../components/4.18.x/jms-component.html#_spring_boot_auto_configuration) for the [JMS component](../../components/4.18.x/jms-component.md).
+Also add any [component starters](list.md) your Spring Boot application requires. For example this adds the [auto-configuration starter](starters/jms.md) for the [JMS component](../../components/4.18.x/jms-component.md).
 
 ```xml
     <dependencies>

@@ -94,29 +94,6 @@ java -javaagent:path/to/opentelemetry-javaagent.jar \
      -jar myapp.jar
 ```
 
-## Spring Boot Auto-Configuration
-
-When using opentelemetry with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-opentelemetry-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 4 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.opentelemetry.enabled** | **Deprecated** Global option to enable/disable OpenTelemetry integration, default is true. | true | Boolean |
-| **camel.opentelemetry.encoding** | **Deprecated** Activate or deactivate dash encoding in headers (required by JMS) for messaging. |  | Boolean |
-| **camel.opentelemetry.exclude-patterns** | **Deprecated** Sets exclude pattern(s) that will disable tracing for Camel messages that matches the pattern. Multiple patterns can be separated by comma. |  | String |
-| **camel.opentelemetry.trace-processors** | **Deprecated** Setting this to true will create new OpenTelemetry Spans for each Camel Processors. Use the excludePattern property to filter out Processors. |  | Boolean |
-
 ### Spring Boot’s Actuator
 
 To have Spring Boot’s Actuator configure OpenTelemetry, you need to add `org.springframework.boot:spring-boot-starter-actuator` and `io.micrometer:micrometer-tracing-bridge-otel` to your project. OpenTelemetry’s `Tracer` will then be [configured](https://docs.spring.io/spring-boot/reference/actuator/tracing.md) through `spring-boot-starter-actuator` unless a `Tracer` is already defined.

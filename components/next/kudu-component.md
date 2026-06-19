@@ -150,26 +150,3 @@ The input body format has to be a `java.util.Map<String, Object>`. This map will
 #### Scan
 
 The output body format will be a `java.util.List<java.util.Map<String, Object>>`. Each element of the list will be a different row of the table. Each row is a `Map<String, Object>` whose elements will be each pair of column name and column value for that row.
-
-## Spring Boot Auto-Configuration
-
-When using kudu with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-kudu-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 4 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.kudu.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.kudu.enabled** | Whether to enable auto configuration of the kudu component. This is enabled by default. |  | Boolean |
-| **camel.component.kudu.kudu-client** | To use an existing Kudu client instance, instead of creating a client per endpoint. This allows you to customize various aspects to the client configuration. The option is a org.apache.kudu.client.KuduClient type. |  | KuduClient |
-| **camel.component.kudu.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |

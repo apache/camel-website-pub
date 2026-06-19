@@ -181,26 +181,3 @@ If you use maven, you could add the following to your `pom.xml`, substituting th
   <!-- use the same version as your Camel core version -->
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using iso8583 with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-iso8583-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 4 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.iso8583.allow-auto-wired-message-format** | Whether to auto-discover com.solab.iso8583.MessageFactory from the registry. | true | Boolean |
-| **camel.dataformat.iso8583.config-file** | The j8583 configuration file to load from classpath. | j8583-config.xml | String |
-| **camel.dataformat.iso8583.enabled** | Whether to enable auto configuration of the iso8583 data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.iso8583.iso-type** | The default ISO-Type to use. |  | String |

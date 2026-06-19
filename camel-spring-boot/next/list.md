@@ -12,22 +12,380 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 
 There are 394 spring boot starter json files.
 
-Of these 392 are used in components, dataformats, etc.
+Of these 0 are used in components, dataformats, etc.
 
 > **Note**
 > Cluster service starters (consul, file, infinispan, jgroups-raft, kubernetes, zookeeper) are documented in the [Cluster Services](#_cluster_services) section below.
 
 ### Unused spring-boot-starter names
 
+activemq
+
+activemq6
+
+amqp
+
+arangodb
+
+as2
+
+asn1
+
+asterisk
+
+atmosphere-websocket
+
+atom
+
+avro-rpc
+
+avro
+
+aws-bedrock
+
+aws-cloudtrail
+
+aws-config
+
+aws-parameter-store
+
+aws-secrets-manager
+
+aws-security-hub
+
+aws2-athena
+
+aws2-comprehend
+
+aws2-cw
+
+aws2-ddb
+
+aws2-ec2
+
+aws2-ecs
+
+aws2-eks
+
+aws2-eventbridge
+
+aws2-iam
+
+aws2-kinesis
+
+aws2-kms
+
+aws2-lambda
+
+aws2-mq
+
+aws2-msk
+
+aws2-polly
+
+aws2-redshift
+
+aws2-rekognition
+
+aws2-s3-vectors
+
+aws2-s3
+
+aws2-ses
+
+aws2-sns
+
+aws2-sqs
+
+aws2-step-functions
+
+aws2-sts
+
+aws2-textract
+
+aws2-timestream
+
+aws2-transcribe
+
+aws2-translate
+
+azure-cosmosdb
+
 azure-eventgrid
+
+azure-eventhubs
+
+azure-files
+
+azure-functions
+
+azure-key-vault
+
+azure-servicebus
+
+azure-storage-blob
+
+azure-storage-datalake
+
+azure-storage-queue
+
+barcode
+
+base64
+
+bean-validator
+
+bean
+
+beanio
+
+bindy
+
+bonita
+
+box
+
+braintree
+
+browse
+
+caffeine
+
+cassandraql
+
+cbor
+
+chatscript
+
+chunk
+
+clickup
+
+cm-sms
+
+coap
+
+cometd
 
 consul-cluster-service
 
+consul
+
+controlbus
+
+core
+
+couchbase
+
+couchdb
+
+cron
+
+crypto-pgp
+
+crypto
+
+csimple-joor
+
+csv
+
+cxf-rest
+
+cxf-soap
+
+cxf-transport
+
+cyberark-vault
+
+dapr
+
+dataformat
+
+dataset
+
+datasonnet
+
+debezium-db2
+
+debezium-mongodb
+
+debezium-mysql
+
+debezium-oracle
+
+debezium-postgres
+
+debezium-sqlserver
+
+debug
+
+dfdl
+
+dhis2
+
+digitalocean
+
+direct
+
+disruptor
+
+djl
+
+dns
+
+docker
+
+docling
+
+drill
+
+dropbox
+
+dynamic-router
+
+ehcache
+
+elasticsearch-rest-client
+
+elasticsearch
+
+exec
+
+fastjson
+
+fhir
+
 file-cluster-service
+
+file-watch
+
+file
+
+flatpack
+
+flink
+
+flowable
+
+fop
+
+fory
+
+freemarker
+
+ftp
+
+geocoder
+
+git
+
+github2
+
+google-bigquery
+
+google-calendar
+
+google-drive
+
+google-firestore
+
+google-functions
+
+google-mail
+
+google-pubsub
+
+google-secret-manager
+
+google-sheets
+
+google-speech-to-text
+
+google-storage
+
+google-text-to-speech
+
+google-vertexai
+
+google-vision
+
+graphql
+
+grok
+
+groovy
+
+grpc
+
+gson
+
+hashicorp-vault
+
+hazelcast
+
+hl7
+
+http
+
+huaweicloud-dms
+
+huaweicloud-frs
+
+huaweicloud-functiongraph
+
+huaweicloud-iam
+
+huaweicloud-imagerecognition
+
+huaweicloud-obs
+
+huaweicloud-smn
 
 huggingface
 
+ibm-cos
+
+ibm-secrets-manager
+
+ibm-watson-discovery
+
+ibm-watson-language
+
+ibm-watson-speech-to-text
+
+ibm-watson-text-to-speech
+
+ibm-watsonx-ai
+
+ical
+
+iec60870
+
+iggy
+
+ignite
+
 infinispan-cluster-service
+
+infinispan-embedded
+
+infinispan
+
+influxdb
+
+influxdb2
+
+irc
+
+ironmq
+
+iso8583
+
+jackson-avro
+
+jackson-protobuf
+
+jackson
 
 jackson3-avro
 
@@ -35,11 +393,419 @@ jackson3-protobuf
 
 jackson3
 
+jackson3xml
+
+jacksonxml
+
+jasypt
+
+javascript
+
+jaxb
+
+jcache
+
+jcr
+
+jdbc
+
+jetty
+
+jfr
+
 jgroups-raft-cluster-service
+
+jgroups-raft
+
+jgroups
+
+jira
+
+jms
+
+jmx
+
+jolt
+
+jooq
+
+joor
+
+jpa
+
+jq
+
+jsch
+
+jslt
+
+json-patch
+
+json-validator
+
+jsonapi
+
+jsonata
+
+jsonb
+
+jsonpath
+
+jt400
+
+jte
+
+kafka
+
+kamelet
+
+keycloak
+
+knative
+
+kserve
 
 kubernetes-cluster-service
 
+kubernetes
+
+kudu
+
+langchain4j-agent
+
+langchain4j-chat
+
+langchain4j-embeddings
+
+langchain4j-embeddingstore
+
+langchain4j-tools
+
+langchain4j-web-search
+
+language
+
+ldap
+
+ldif
+
+leveldb
+
+log
+
+lra
+
+lucene
+
+lumberjack
+
+lzf
+
+mail
+
+mapstruct
+
+master
+
+mdc
+
+metrics
+
+micrometer-observability
+
+micrometer
+
+milo
+
+milvus
+
+mina-sftp
+
+mina
+
+minio
+
+mllp
+
+mock
+
+mongodb-gridfs
+
+mongodb
+
+mustache
+
+mvel
+
+mybatis
+
+nats
+
+neo4j
+
+netty-http
+
+netty
+
+oaipmh
+
+observation
+
+ocsf
+
+ognl
+
+olingo2
+
+olingo4
+
+once
+
+openai
+
+openapi-java
+
+opensearch
+
+openstack
+
+opentelemetry-metrics
+
+opentelemetry
+
+opentelemetry2
+
+optaplanner
+
+paho-mqtt5
+
+paho
+
+parquet-avro
+
+pdf
+
+pg-replication-slot
+
+pgevent
+
+pinecone
+
+platform-http
+
+plc4x
+
+pqc
+
+printer
+
+protobuf
+
+pubnub
+
+pulsar
+
+python
+
+qdrant
+
+quartz
+
+quickfix
+
+reactive-streams
+
+reactor
+
+ref
+
+resilience4j
+
+rest-openapi
+
+rest
+
+robotframework
+
+rocketmq
+
+rss
+
+rxjava
+
+saga
+
+salesforce
+
+sap-netweaver
+
+saxon
+
+scheduler
+
+schematron
+
+seda
+
+servicenow
+
+servlet
+
+shiro
+
+sjms
+
+sjms2
+
+slack
+
+smb
+
+smooks
+
+smpp
+
+snakeyaml
+
+snmp
+
+soap
+
+solr
+
+splunk-hec
+
+splunk
+
+spring-ai-chat
+
+spring-ai-embeddings
+
+spring-ai-image
+
+spring-ai-tools
+
+spring-ai-vector-store
+
+spring-batch
+
+spring-jdbc
+
+spring-ldap
+
+spring-rabbitmq
+
+spring-redis
+
+spring-security
+
+spring-ws
+
+spring
+
+springdoc
+
+sql
+
+ssh
+
+stax
+
+stitch
+
+stream
+
+stringtemplate
+
+stripe
+
+stub
+
+swift
+
+syslog
+
+tahu
+
+tarfile
+
+telegram
+
+telemetry-dev
+
+tensorflow-serving
+
+thrift
+
+thymeleaf
+
+tika
+
+timer
+
+twilio
+
+twitter
+
+undertow-spring-security
+
+undertow
+
+univocity-parsers
+
+validator
+
+velocity
+
+vertx-http
+
+vertx-websocket
+
+vertx
+
+wasm
+
+weather
+
+weaviate
+
+web3j
+
+webhook
+
+whatsapp
+
+wordpress
+
+workday
+
+xchange
+
+xj
+
+xmlsecurity
+
+xmpp
+
+xpath
+
+xslt-saxon
+
+xslt
+
+zeebe
+
+zendesk
+
+zip-deflater
+
+zipfile
+
 zookeeper-cluster-service
+
+zookeeper-master
+
+zookeeper
 
 ## Camel Spring Boot
 
@@ -47,7 +813,13 @@ Apache Camel Spring Boot supports the following Camel artifacts as Spring Boot S
 
 ## Camel Components
 
-Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
+Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
+
+    
+| Component | Artifact | Support Level | Since | Description |
+| --- | --- | --- | --- | --- |
+
+### Non-Spring-Boot Components
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -101,6 +873,7 @@ Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 | [AWS Transcribe](../../components/next/aws2-transcribe-component.md) | camel-aws2-transcribe-starter | Stable | 4.15 | Automatically convert speech to text using AWS Transcribe service |
 | [AWS Translate](../../components/next/aws2-translate-component.md) | camel-aws2-translate-starter | Stable | 3.1 | Translate texts using AWS Translate and AWS SDK version 2.x. |
 | [Azure CosmosDB](../../components/next/azure-cosmosdb-component.md) | camel-azure-cosmosdb-starter | Stable | 3.10 | To read and write records to the CosmosDB database on Azure cloud platform. |
+| [Azure Event Grid](../../components/next/azure-eventgrid-component.md) | camel-azure-eventgrid-starter | Stable | 4.17 | Send events to Azure Event Grid topics. |
 | [Azure Event Hubs](../../components/next/azure-eventhubs-component.md) | camel-azure-eventhubs-starter | Stable | 3.5 | Send and receive events to/from Azure Event Hubs using AMQP protocol. |
 | [Azure Files](../../components/next/azure-files-component.md) | camel-azure-files-starter | Preview | 3.22 | Send and receive files to Azure storage file share |
 | [Azure Functions](../../components/next/azure-functions-component.md) | camel-azure-functions-starter | Preview | 4.19 | Invoke and manage Azure Functions. |
@@ -218,6 +991,7 @@ Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 | [Huawei Identity and Access Management (IAM)](../../components/next/hwcloud-iam-component.md) | camel-huaweicloud-iam-starter | Stable | 3.11 | To securely manage users on Huawei Cloud |
 | [Huawei Object Storage Service (OBS)](../../components/next/hwcloud-obs-component.md) | camel-huaweicloud-obs-starter | Stable | 3.12 | To provide stable, secure, efficient, and easy-to-use cloud storage service on Huawei Cloud |
 | [Huawei Simple Message Notification (SMN)](../../components/next/hwcloud-smn-component.md) | camel-huaweicloud-smn-starter | Stable | 3.8 | To broadcast messages and connect cloud services through notifications on Huawei Cloud |
+| [Hugging Face](../../components/next/huggingface-component.md) | camel-huggingface-starter | Preview | 4.19 | Integration with Hugging Face’s Model Hub by using the Deep Java Library (DJL) Python bridge |
 | [IBM Cloud Object Storage](../../components/next/ibm-cos-component.md) | camel-ibm-cos-starter | Stable | 4.16 | Store and retrieve objects from IBM Cloud Object Storage. |
 | [IBM Secrets Manager](../../components/next/ibm-secrets-manager-component.md) | camel-ibm-secrets-manager-starter | Stable | 4.11 | Manage secrets in IBM Secrets Manager Service |
 | [IBM Watson Discovery](../../components/next/ibm-watson-discovery-component.md) | camel-ibm-watson-discovery-starter | Stable | 4.16 | Perform document understanding and search using IBM Watson Discovery |
@@ -340,6 +1114,7 @@ Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 | [Paho](../../components/next/paho-component.md) | camel-paho-starter | Stable-deprecated | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |
 | [Paho MQTT 5](../../components/next/paho-mqtt5-component.md) | camel-paho-mqtt5-starter | Stable | 3.8 | Communicate with MQTT message brokers using Eclipse Paho MQTT v5 Client. |
 | [PDF](../../components/next/pdf-component.md) | camel-pdf-starter | Stable | 2.16 | Create, modify or extract content from PDF documents. |
+| [PGVector](../../components/next/pgvector-component.md) | camel-pgvector-starter | Preview | 4.19 | Perform operations on the PostgreSQL pgvector Vector Database. |
 | [Pinecone](../../components/next/pinecone-component.md) | camel-pinecone-starter | Stable | 4.6 | Perform operations on the Pinecone Vector Database. |
 | [Platform HTTP](../../components/next/platform-http-component.md) | camel-platform-http-starter | Stable | 3.0 | Expose HTTP endpoints using the HTTP server available in the current platform. |
 | [PLC4X](../../components/next/plc4x-component.md) | camel-plc4x-starter | Stable | 3.20 | Read and write to PLC devices |
@@ -347,6 +1122,7 @@ Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 | [PostgresSQL Replication Slot](../../components/next/pg-replication-slot-component.md) | camel-pg-replication-slot-starter | Stable | 3.0 | Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots. |
 | [PQC Algorithms](../../components/next/pqc-component.md) | camel-pqc-starter | Stable | 4.12 | Post Quantum Cryptography Signature and Verification component. |
 | [Printer](../../components/next/lpr-component.md) | camel-printer-starter | Stable | 2.1 | Send print jobs to printers. |
+| [Properties](../../components/next/properties-component.md) | camel-base-starter | Stable | 2.3 | The properties component is used for property placeholders in your Camel application, such as endpoint URIs. |
 | [PubNub](../../components/next/pubnub-component.md) | camel-pubnub-starter | Stable | 2.19 | Send and receive messages to/from PubNub data stream network for connected devices. |
 | [Pulsar](../../components/next/pulsar-component.md) | camel-pulsar-starter | Stable | 2.24 | Send and receive messages from/to Apache Pulsar messaging system. |
 | [Qdrant](../../components/next/qdrant-component.md) | camel-qdrant-starter | Stable | 4.5 | Perform operations on the Qdrant Vector Database. |
@@ -370,6 +1146,7 @@ Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 | [ServiceNow](../../components/next/servicenow-component.md) | camel-servicenow-starter | Stable | 2.18 | Interact with ServiceNow via its REST API. |
 | [Servlet](../../components/next/servlet-component.md) | camel-servlet-starter | Stable | 2.0 | Serve HTTP requests by a Servlet. |
 | [SFTP](../../components/next/sftp-component.md) | camel-ftp-starter | Stable | 1.1 | Upload and download files to/from SFTP servers. |
+| [Shell](../../components/next/shell-component.md) | camel-shell-starter | Preview | 4.21 | Camel Shell component |
 | [Simple JMS](../../components/next/sjms-component.md) | camel-sjms-starter | Stable | 2.11 | Send and receive messages to/from a JMS Queue or Topic using plain JMS 1.x API. |
 | [Simple JMS2](../../components/next/sjms2-component.md) | camel-sjms2-starter | Stable | 2.19 | Send and receive messages to/from a JMS Queue or Topic using plain JMS 2.x API. |
 | [Slack](../../components/next/slack-component.md) | camel-slack-starter | Stable | 2.16 | Send and receive messages to/from Slack. |
@@ -440,19 +1217,15 @@ Number of Camel components: 387 in 321 JAR artifacts (12 deprecated)
 | [ZooKeeper](../../components/next/zookeeper-component.md) | camel-zookeeper-starter | Stable | 2.9 | Manage ZooKeeper clusters. |
 | [ZooKeeper Master](../../components/next/zookeeper-master-component.md) | camel-zookeeper-master-starter | Stable | 2.19 | Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies. |
 
-### Non-Spring-Boot Components
-
-    
-| Component | Artifact | Support Level | Since | Description |
-| --- | --- | --- | --- | --- |
-| [Hugging Face](../../components/next/huggingface-component.md) | camel-huggingface-starter | Preview | 4.19 | Integration with Hugging Face’s Model Hub by using the Deep Java Library (DJL) Python bridge |
-| [PGVector](../../components/next/pgvector-component.md) | camel-pgvector-starter | Preview | 4.19 | Perform operations on the PostgreSQL pgvector Vector Database. |
-| [Properties](../../components/next/properties-component.md) | camel-base-starter | Stable | 2.3 | The properties component is used for property placeholders in your Camel application, such as endpoint URIs. |
-| [Shell](../../components/next/shell-component.md) | camel-shell-starter | Preview | 4.21 | Camel Shell component |
-
 ## Camel Data Formats
 
-Number of Camel data formats: 56 in 50 JAR artifacts (0 deprecated)
+Number of Camel data formats: 0 in 0 JAR artifacts (0 deprecated)
+
+    
+| Data Format | Artifact | Support Level | Since | Description |
+| --- | --- | --- | --- | --- |
+
+### Non-Spring-Boot Data Formats
 
     
 | Data Format | Artifact | Support Level | Since | Description |
@@ -514,27 +1287,27 @@ Number of Camel data formats: 56 in 50 JAR artifacts (0 deprecated)
 | [Zip Deflater](../../components/next/dataformats/zipDeflater-dataformat.md) | camel-zip-deflater-starter | Stable | 2.12 | Compress and decompress streams using java.util.zip.Deflater and java.util.zip.Inflater. |
 | [Zip File](../../components/next/dataformats/zipFile-dataformat.md) | camel-zipfile-starter | Stable | 2.11 | Compression and decompress streams using java.util.zip.ZipStream. |
 
-### Non-Spring-Boot Data Formats
-
-    
-| Data Format | Artifact | Support Level | Since | Description |
-| --- | --- | --- | --- | --- |
-
 ## Camel Languages
 
-Number of Camel languages: 26 in 17 JAR artifacts (3 deprecated)
+Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
+
+    
+| Language | Artifact | Support Level | Since | Description |
+| --- | --- | --- | --- | --- |
+
+### Non-Spring-Boot Languages
 
     
 | Language | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
 | [Bean Method](../../components/next/languages/bean-language.md) | camel-bean-starter | Stable | 1.3 | Calls a Java bean method. |
-| [Constant](../../components/next/languages/constant-language.md) | camel-core-starter | Stable | 1.5 | A fixed value set only once during the route startup. |
-| [CSimple](../../components/next/languages/csimple-language.md) | camel-core-starter | Stable-deprecated | 3.7 | Evaluate a compiled simple expression. |
+| [Constant](../../components/next/languages/constant-language.md) | camel-core-languages-starter | Stable | 1.5 | A fixed value set only once during the route startup. |
+| [CSimple](../../components/next/languages/csimple-language.md) | camel-core-languages-starter | Stable-deprecated | 3.7 | Evaluate a compiled simple expression. |
 | [DataSonnet](../../components/next/languages/datasonnet-language.md) | camel-datasonnet-starter | Stable | 3.7 | To use DataSonnet scripts for message transformations. |
-| [ExchangeProperty](../../components/next/languages/exchangeProperty-language.md) | camel-core-starter | Stable | 2.0 | Gets a property from the Exchange. |
-| [File](../../components/next/languages/file-language.md) | camel-core-starter | Stable | 1.1 | File related capabilities for the Simple language |
+| [ExchangeProperty](../../components/next/languages/exchangeProperty-language.md) | camel-core-languages-starter | Stable | 2.0 | Gets a property from the Exchange. |
+| [File](../../components/next/languages/file-language.md) | camel-core-languages-starter | Stable | 1.1 | File related capabilities for the Simple language |
 | [Groovy](../../components/next/languages/groovy-language.md) | camel-groovy-starter | Stable | 1.3 | Evaluates a Groovy script. |
-| [Header](../../components/next/languages/header-language.md) | camel-core-starter | Stable | 1.5 | Gets a header from the Exchange. |
+| [Header](../../components/next/languages/header-language.md) | camel-core-languages-starter | Stable | 1.5 | Gets a header from the Exchange. |
 | [HL7 Terser](../../components/next/languages/hl7terser-language.md) | camel-hl7-starter | Stable | 2.11 | Get the value of a HL7 message field specified by terse location specification syntax. |
 | [Java](../../components/next/languages/java-language.md) | camel-joor-starter | Stable | 4.3 | Evaluates a Java (Java compiled once at runtime) expression. |
 | [JavaScript](../../components/next/languages/js-language.md) | camel-javascript-starter | Stable | 3.20 | Evaluates a JavaScript expression. |
@@ -544,54 +1317,23 @@ Number of Camel languages: 26 in 17 JAR artifacts (3 deprecated)
 | [MVEL](../../components/next/languages/mvel-language.md) | camel-mvel-starter | Stable | 2.0 | Evaluates a MVEL template. |
 | [OGNL](../../components/next/languages/ognl-language.md) | camel-ognl-starter | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL). |
 | [Python](../../components/next/languages/python-language.md) | camel-python-starter | Experimental | 3.19 | Evaluates a Python expression. |
-| [Ref](../../components/next/languages/ref-language.md) | camel-core-starter | Stable | 2.8 | Uses an existing expression from the registry. |
-| [Simple](../../components/next/languages/simple-language.md) | camel-core-starter | Stable | 1.1 | Evaluates a Camel simple expression. |
+| [Ref](../../components/next/languages/ref-language.md) | camel-core-languages-starter | Stable | 2.8 | Uses an existing expression from the registry. |
+| [Simple](../../components/next/languages/simple-language.md) | camel-core-languages-starter | Stable | 1.1 | Evaluates a Camel simple expression. |
 | [SpEL](../../components/next/languages/spel-language.md) | camel-spring-starter | Stable | 2.7 | Evaluates a Spring expression (SpEL). |
-| [Tokenize](../../components/next/languages/tokenize-language.md) | camel-core-starter | Stable | 2.0 | Tokenize text payloads using delimiter patterns. |
-| [Variable](../../components/next/languages/variable-language.md) | camel-core-starter | Stable | 4.4 | Gets a variable |
+| [Tokenize](../../components/next/languages/tokenize-language.md) | camel-core-languages-starter | Stable | 2.0 | Tokenize text payloads using delimiter patterns. |
+| [Variable](../../components/next/languages/variable-language.md) | camel-core-languages-starter | Stable | 4.4 | Gets a variable |
 | [Wasm](../../components/next/languages/wasm-language.md) | camel-wasm-starter | Experimental | 4.5 | Call a wasm (web assembly) function. |
 | [XML Tokenize](../../components/next/languages/xtokenize-language.md) | camel-stax-starter | Stable | 2.14 | Tokenize XML payloads. |
 | [XPath](../../components/next/languages/xpath-language.md) | camel-xpath-starter | Stable | 1.1 | Evaluates an XPath expression against an XML payload. |
 | [XQuery](../../components/next/languages/xquery-language.md) | camel-saxon-starter | Stable | 1.0 | Evaluates an XQuery expressions against an XML payload. |
 
-### Non-Spring-Boot Languages
-
-    
-| Language | Artifact | Support Level | Since | Description |
-| --- | --- | --- | --- | --- |
-
 ## Miscellaneous Extensions
 
-Number of miscellaneous extensions: 25 in 25 JAR artifacts (4 deprecated)
+Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 
     
 | Extensions | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
-| [CLI Debug](../../components/next/others/cli-debug.md) | camel-cli-debug-starter | Stable | 4.17 | Remote CLI debugger |
-| [Cloudevents](../../components/next/others/cloudevents.md) | camel-cloudevents-starter | Stable | 3.15 | Camel support for the CloudEvents specification |
-| [CSimple jOOR](../../components/next/others/csimple-joor.md) | camel-csimple-joor-starter | Stable-deprecated | 3.7 | jOOR compiler for csimple language |
-| [CXF Transport](../../components/next/others/cxf-transport.md) | camel-cxf-transport-starter | Stable | 2.8 | Camel Transport for Apache CXF |
-| [Debug](../../components/next/others/debug.md) | camel-debug-starter | Stable | 3.15 | Enables Camel Route Debugging |
-| [Jasypt](../../components/next/others/jasypt.md) | camel-jasypt-starter | Stable | 2.5 | Security using Jasypt |
-| [JFR](../../components/next/others/jfr.md) | camel-jfr-starter | Stable | 3.8 | Diagnose Camel applications with Java Flight Recorder |
-| [LangChain4j Tokenizer](../../components/next/others/langchain4j-tokenizer.md) | camel-langchain4j-tokenizer-starter | Preview | 4.8 | LangChain4j Tokenizer |
-| [LevelDB](../../components/next/others/leveldb.md) | camel-leveldb-starter | Stable-deprecated | 2.10 | Using LevelDB as persistent EIP store |
-| [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
-| [MDC Logging](../../components/next/others/mdc.md) | camel-mdc-starter | Preview | 4.15 | Logging MDC (Mapped Diagnostic Context) Service |
-| [Micrometer Observability](../../components/next/others/observation.md) | camel-observation-starter | Stable-deprecated | 3.21 | Observability using Micrometer Observation |
-| [Micrometer Observability 2](../../components/next/others/micrometer-observability.md) | camel-micrometer-observability-starter | Preview | 4.15 | Micrometer Observability implementation of Camel Telemetry |
-| [Openapi Java](../../components/next/others/openapi-java.md) | camel-openapi-java-starter | Stable | 3.1 | Rest DSL support for using OpenApi doc |
-| [OpenTelemetry](../../components/next/others/opentelemetry.md) | camel-opentelemetry-starter | Stable-deprecated | 3.5 | Distributed tracing using OpenTelemetry |
-| [Opentelemetry2](../../components/next/others/opentelemetry2.md) | camel-opentelemetry2-starter | Stable | 4.11 | Implementation of Camel Opentelemetry based on the Camel Telemetry spec |
-| [Reactor](../../components/next/others/reactor.md) | camel-reactor-starter | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
-| [Resilience4j](../../components/next/others/resilience4j.md) | camel-resilience4j-starter | Stable | 3.0 | Circuit Breaker EIP using Resilience4j |
-| [Resilience4j Micrometer](../../components/next/others/resilience4j-micrometer.md) | camel-resilience4j-micrometer-starter | Stable | 4.15 | Micrometer statistics for Resilience4j |
-| [RxJava](../../components/next/others/rxjava.md) | camel-rxjava-starter | Stable | 2.22 | RxJava based back-end for Camel’s reactive streams component |
-| [Shiro](../../components/next/others/shiro.md) | camel-shiro-starter | Stable | 2.5 | Security using Shiro |
-| [Spring Security](../../components/next/others/spring-security.md) | camel-spring-security-starter | Stable | 2.3 | Security using Spring Security |
-| [Springdoc](../../components/next/others/springdoc.md) | camel-springdoc-starter |  | 3.14 | Springdoc Swagger UI for openapi-java in spring boot |
-| [Telemetry Dev](../../components/next/others/telemetry-dev.md) | camel-telemetry-dev-starter | Preview | 4.11 | Basic implementation of Camel Telemetry useful for development purposes |
-| [Undertow Spring Security](../../components/next/others/undertow-spring-security.md) | camel-undertow-spring-security-starter | Stable | 3.3 | Spring Security Provider for camel-undertow |
 
 ### Non-Spring-Boot Miscellaneous Extensions
 
@@ -602,37 +1344,61 @@ Number of miscellaneous extensions: 25 in 25 JAR artifacts (4 deprecated)
 | [Azure Schema Registry](../../components/next/others/azure-schema-registry.md) | camel-azure-schema-registry-starter | Stable | 4.2 | Azure Schema Registry Component for utilities to deal with authentication |
 | [Camel YAML DSL Validator Maven Plugin](../../components/next/others/camel-yaml-dsl-validator-maven-plugin.md) | undefined-starter |  |  |  |
 | [CLI Connector](../../components/next/others/cli-connector.md) | camel-cli-connector-starter | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
+| [CLI Debug](../../components/next/others/cli-debug.md) | camel-cli-debug-starter | Stable | 4.17 | Remote CLI debugger |
+| [Cloudevents](../../components/next/others/cloudevents.md) | camel-cloudevents-starter | Stable | 3.15 | Camel support for the CloudEvents specification |
+| [CSimple jOOR](../../components/next/others/csimple-joor.md) | camel-csimple-joor-starter | Stable-deprecated | 3.7 | jOOR compiler for csimple language |
+| [CXF Transport](../../components/next/others/cxf-transport.md) | camel-cxf-transport-starter | Stable | 2.8 | Camel Transport for Apache CXF |
+| [Debug](../../components/next/others/debug.md) | camel-debug-starter | Stable | 3.15 | Enables Camel Route Debugging |
 | [Diagram](../../components/next/others/diagram.md) | camel-diagram-starter | Preview | 4.21 | Camel Route Diagram rendering |
 | [DSL](../../components/next/others/dsl.md) | undefined-starter |  |  |  |
 | [DSL Modeline](../../components/next/others/dsl-modeline.md) | camel-dsl-modeline-starter | Stable | 3.16 | Camel DSL modeline |
 | [Headersmap](../../components/next/others/headersmap.md) | camel-headersmap-starter | Stable-deprecated | 2.20 | Fast case-insensitive headers map implementation |
 | [Jandex](../../components/next/others/jandex.md) | camel-jandex-starter | Stable | 4.12 | Custom class and resource loader using jandex.idx |
+| [Jasypt](../../components/next/others/jasypt.md) | camel-jasypt-starter | Stable | 2.5 | Security using Jasypt |
 | [Java DSL (runtime compiled)](../../components/next/others/java-joor-dsl.md) | camel-java-joor-dsl-starter | Stable | 3.9 | Camel Java DSL with jOOR |
 | [Jaxb XML Dsl](../../components/next/others/java-xml-jaxb-dsl.md) | camel-xml-jaxb-dsl-starter | Stable | 3.9 | Camel DSL with XML using camel-jaxb |
+| [JFR](../../components/next/others/jfr.md) | camel-jfr-starter | Stable | 3.8 | Diagnose Camel applications with Java Flight Recorder |
 | [Jsoup](../../components/next/others/jsoup.md) | camel-jsoup-starter | Preview | 4.21 | Cleanup HTML content |
 | [JTA](../../components/next/others/jta.md) | camel-jta-starter | Stable | 3.4 | Using Camel With JTA Transaction Manager |
 | [Kamelet Main](../../components/next/others/kamelet-main.md) | camel-kamelet-main-starter | Preview | 3.11 | Main to run Kamelet standalone |
 | [Kamelet Main Support](../../components/next/others/kamelet-main-support.md) | camel-kamelet-main-support-starter | Preview | 4.19 | Support Module for Kamelet Main |
+| [LangChain4j Tokenizer](../../components/next/others/langchain4j-tokenizer.md) | camel-langchain4j-tokenizer-starter | Preview | 4.8 | LangChain4j Tokenizer |
+| [LevelDB](../../components/next/others/leveldb.md) | camel-leveldb-starter | Stable-deprecated | 2.10 | Using LevelDB as persistent EIP store |
+| [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](../../components/next/others/mail-microsoft-oauth.md) | camel-mail-microsoft-oauth-starter | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](../../components/next/others/main.md) | camel-main-starter | Stable | 3.0 | Camel Main |
+| [MDC Logging](../../components/next/others/mdc.md) | camel-mdc-starter | Preview | 4.15 | Logging MDC (Mapped Diagnostic Context) Service |
+| [Micrometer Observability](../../components/next/others/observation.md) | camel-observation-starter | Stable-deprecated | 3.21 | Observability using Micrometer Observation |
+| [Micrometer Observability 2](../../components/next/others/micrometer-observability.md) | camel-micrometer-observability-starter | Preview | 4.15 | Micrometer Observability implementation of Camel Telemetry |
 | [Micrometer Prometheus](../../components/next/others/micrometer-prometheus.md) | camel-micrometer-prometheus-starter | Stable | 4.3 | Camel Micrometer Prometheus for Camel Main |
 | [Microprofile Config](../../components/next/others/microprofile-config.md) | camel-microprofile-config-starter | Stable | 3.0 | Bridging Eclipse MicroProfile Config with Camel properties |
 | [Microprofile Fault Tolerance](../../components/next/others/microprofile-fault-tolerance.md) | camel-microprofile-fault-tolerance-starter | Stable | 3.3 | Circuit Breaker EIP using MicroProfile Fault Tolerance |
 | [Microprofile Health](../../components/next/others/microprofile-health.md) | camel-microprofile-health-starter | Stable | 3.0 | Expose Camel health checks via MicroProfile Health |
 | [Oauth](../../components/next/others/oauth.md) | camel-oauth-starter | Preview | 4.12 | Camel OAuth (Preview) |
 | [Observability Services](../../components/next/others/observability-services.md) | camel-observability-services-starter | Preview | 4.9 | Camel Observability Services |
+| [Openapi Java](../../components/next/others/openapi-java.md) | camel-openapi-java-starter | Stable | 3.1 | Rest DSL support for using OpenApi doc |
 | [Openapi Validator](../../components/next/others/openapi-validator.md) | camel-openapi-validator-starter | Stable | 4.7 | OpenAPI validator for Camel Rest DSL |
+| [OpenTelemetry](../../components/next/others/opentelemetry.md) | camel-opentelemetry-starter | Stable-deprecated | 3.5 | Distributed tracing using OpenTelemetry |
+| [Opentelemetry2](../../components/next/others/opentelemetry2.md) | camel-opentelemetry2-starter | Stable | 4.11 | Implementation of Camel Opentelemetry based on the Camel Telemetry spec |
 | [Platform HTTP Jolokia](../../components/next/others/platform-http-jolokia.md) | camel-platform-http-jolokia-starter | Stable | 4.5 | Jolokia plugin for standalone Camel HTTP Platform |
 | [Platform Http Main](../../components/next/others/platform-http-main.md) | camel-platform-http-main-starter | Stable | 4.0 | Platform HTTP for standalone Camel Main applications |
 | [Platform Http Vertx](../../components/next/others/platform-http-vertx.md) | camel-platform-http-vertx-starter | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [Reactive Executor Tomcat](../../components/next/others/reactive-executor-tomcat.md) | camel-reactive-executor-tomcat-starter | Experimental | 3.17 | Reactive Executor for camel-core using Apache Tomcat |
 | [Reactive Executor Vert.x](../../components/next/others/reactive-executor-vertx.md) | camel-reactive-executor-vertx-starter | Experimental | 3.0 | Reactive Executor for camel-core using Vert.x |
+| [Reactor](../../components/next/others/reactor.md) | camel-reactor-starter | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](../../components/next/others/redis.md) | camel-redis-starter | Stable | 3.5 | Aggregation repository using Redis as datastore |
+| [Resilience4j](../../components/next/others/resilience4j.md) | camel-resilience4j-starter | Stable | 3.0 | Circuit Breaker EIP using Resilience4j |
+| [Resilience4j Micrometer](../../components/next/others/resilience4j-micrometer.md) | camel-resilience4j-micrometer-starter | Stable | 4.15 | Micrometer statistics for Resilience4j |
 | [Resourceresolver Github](../../components/next/others/resourceresolver-github.md) | camel-resourceresolver-github-starter | Stable | 3.11 | Resource resolver to load files from GitHub |
+| [RxJava](../../components/next/others/rxjava.md) | camel-rxjava-starter | Stable | 2.22 | RxJava based back-end for Camel’s reactive streams component |
+| [Shiro](../../components/next/others/shiro.md) | camel-shiro-starter | Stable | 2.5 | Security using Shiro |
 | [Spring Cloud Config](../../components/next/others/spring-cloud-config.md) | camel-spring-cloud-config-starter | Stable | 4.12 | Camel Spring Cloud Config support |
 | [Spring Main](../../components/next/others/spring-main.md) | camel-spring-main-starter | Stable | 3.2 | Camel Spring Main support |
+| [Spring Security](../../components/next/others/spring-security.md) | camel-spring-security-starter | Stable | 2.3 | Security using Spring Security |
 | [Spring XML](../../components/next/others/spring-xml.md) | camel-spring-xml-starter | Stable | 3.9 | Camel Spring with XML DSL |
+| [Springdoc](../../components/next/others/springdoc.md) | openapi-java-starter |  | 3.14 | Springdoc Swagger UI for openapi-java in spring boot |
 | [Telemetry](../../components/next/others/telemetry.md) | camel-telemetry-starter | Preview | 4.11 | Distributed telemetry common interfaces |
+| [Telemetry Dev](../../components/next/others/telemetry-dev.md) | camel-telemetry-dev-starter | Preview | 4.11 | Basic implementation of Camel Telemetry useful for development purposes |
 | [Test JUnit5](../../components/next/others/test-junit5.md) | camel-test-junit5-starter | Stable | 3.0 | Camel unit testing with JUnit 5 |
 | [Test JUnit6](../../components/next/others/test-junit6.md) | camel-test-junit6-starter | Stable | 4.17 | Camel unit testing with JUnit 6 |
 | [Test Main JUnit5](../../components/next/others/test-main-junit5.md) | camel-test-main-junit5-starter | Stable | 3.16 | Camel unit testing with Main and JUnit 5 |
@@ -641,6 +1407,7 @@ Number of miscellaneous extensions: 25 in 25 JAR artifacts (4 deprecated)
 | [Test Spring JUnit6](../../components/next/others/test-spring-junit6.md) | camel-test-spring-junit6-starter | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
 | [ThreadPoolFactory Vert.x](../../components/next/others/threadpoolfactory-vertx.md) | camel-threadpoolfactory-vertx-starter | Experimental | 3.5 | ThreadPoolFactory for camel-core using Vert.x |
 | [Tracing](../../components/next/others/tracing.md) | camel-tracing-starter | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
+| [Undertow Spring Security](../../components/next/others/undertow-spring-security.md) | camel-undertow-spring-security-starter | Stable | 3.3 | Spring Security Provider for camel-undertow |
 | [Write Ahead Log Strategy for Resume API](../../components/next/others/wal.md) | camel-wal-starter | Stable | 3.20 | Write Ahead Log Strategy for Resume API |
 | [XML Io Dsl](../../components/next/others/java-xml-io-dsl.md) | camel-xml-io-dsl-starter | Stable | 3.9 | Camel DSL with XML |
 | [YAML DSL](../../components/next/others/yaml-dsl.md) | camel-yaml-dsl-starter | Stable | 3.9 | Camel YAML DSL |

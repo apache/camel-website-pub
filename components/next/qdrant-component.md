@@ -257,33 +257,3 @@ from("direct:in")
         .constant(ConditionFactory.matchKeyword("foo", "hello"))
     .to("qdrant:myCollection");
 ```
-
-## Spring Boot Auto-Configuration
-
-When using qdrant with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-qdrant-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 11 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.qdrant.api-key** | Sets the API key to use for authentication. |  | String |
-| **camel.component.qdrant.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.qdrant.configuration** | The configuration;. The option is a org.apache.camel.component.qdrant.QdrantConfiguration type. |  | QdrantConfiguration |
-| **camel.component.qdrant.enabled** | Whether to enable auto configuration of the qdrant component. This is enabled by default. |  | Boolean |
-| **camel.component.qdrant.filter** | Filter for similarity search. The option is a io.qdrant.client.grpc.Common.Filter type. |  | Common$Filter |
-| **camel.component.qdrant.host** | The host to connect to. | localhost | String |
-| **camel.component.qdrant.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.qdrant.max-results** | Max results for similarity search. | 3 | Integer |
-| **camel.component.qdrant.port** | The port to connect to. | 6334 | Integer |
-| **camel.component.qdrant.timeout** | Sets a default timeout for all requests. |  | Duration |
-| **camel.component.qdrant.tls** | Whether the client uses Transport Layer Security (TLS) to secure communications. | false | Boolean |

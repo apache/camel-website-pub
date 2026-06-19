@@ -179,23 +179,3 @@ from("direct:syslogMessages")
         - to:
             uri: mina:udp://remotehost:10514
 ```
-
-## Spring Boot Auto-Configuration
-
-When using syslog with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-syslog-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 1 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.syslog.enabled** | Whether to enable auto configuration of the syslog data format. This is enabled by default. |  | Boolean |

@@ -33,27 +33,3 @@ If you use maven, you could add the following to your `pom.xml`, substituting th
   <!-- use the same version as your Camel core version -->
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using fory with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-fory-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 5 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.fory.allow-auto-wired-fory** | Whether to auto-discover Fory from the registry. | true | Boolean |
-| **camel.dataformat.fory.enabled** | Whether to enable auto configuration of the fory data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.fory.require-class-registration** | Whether to require register classes. | true | Boolean |
-| **camel.dataformat.fory.thread-safe** | Whether to use the threadsafe Fory. | true | Boolean |
-| **camel.dataformat.fory.unmarshal-type** | Class of the java type to use when unmarshalling. |  | String |

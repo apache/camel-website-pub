@@ -74,26 +74,3 @@ If you want to add the Johnzon implementation, and you are using maven, add foll
   <version>x.x.x</version>
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using jsonb with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-jsonb-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 4 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.jsonb.enabled** | Whether to enable auto configuration of the jsonb data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.jsonb.object-mapper** | Lookup and use the existing Jsonb instance with the given id. |  | String |
-| **camel.dataformat.jsonb.pretty-print** | To enable pretty printing output nicely formatted. Is by default false. | false | Boolean |
-| **camel.dataformat.jsonb.unmarshal-type** | Class name of the java type to use when unmarshalling. |  | String |

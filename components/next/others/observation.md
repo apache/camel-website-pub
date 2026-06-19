@@ -64,27 +64,6 @@ If you are using Spring Boot, then you can add the `camel-observation-starter` d
 
 The `MicrometerObservationTracer` will be implicitly obtained from the camel context’s `Registry`, unless a `MicrometerObservationTracer` bean has been defined by the application.
 
-## Spring Boot Auto-Configuration
-
-When using observation with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-observation-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 2 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.observation.encoding** | **Deprecated** Activate or deactivate dash encoding in headers (required by JMS) for messaging. |  | Boolean |
-| **camel.observation.exclude-patterns** | **Deprecated** Sets exclude pattern(s) that will disable observability for Camel messages that matches the pattern. Multiple patterns can be separated by comma. |  | String |
-
 ## MDC Logging
 
 You can add \[Micrometer Observability Mapped Diagnostic Context tracing information\]([https://docs.micrometer.io/tracing/reference/index.html](https://docs.micrometer.io/tracing/reference/index.md)) (ie, `traceId` and `spanId`) adding some instrumentation bridge to your application. You may add the `io.micrometer:micrometer-tracing-bridge-otel` dependency and you will be able to get those MDC information automatically.

@@ -1,0 +1,30 @@
+# JSON Fastjson
+
+Marshal POJOs to JSON and back using Fastjson
+
+## What’s inside
+
+-   [JSON Fastjson data format](../../../components/next/dataformats/fastjson-dataformat.md)
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-fastjson-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 3 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.dataformat.fastjson.content-type-header | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON | true | Boolean |
+| camel.dataformat.fastjson.enabled | Whether to enable auto configuration of the fastjson data format. This is enabled by default. |  | Boolean |
+| camel.dataformat.fastjson.unmarshal-type | Class name of the java type to use when unmarshalling |  | String |

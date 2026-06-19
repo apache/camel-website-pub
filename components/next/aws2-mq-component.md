@@ -508,29 +508,21 @@ from("direct:listBrokers")
 -   createBroker: this operation will create an MQ Broker in AWS
     
 
-_Java-only: uses inline Processor, Java constants, and AWS SDK builders_
+_Java-only: uses AWS SDK enum types and `User` builder_
 
 ```java
 from("direct:createBroker")
-    .process(new Processor() {
-       @Override
-       public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader(MQ2Constants.BROKER_NAME, "test");
-                exchange.getIn().setHeader(MQ2Constants.BROKER_DEPLOYMENT_MODE, DeploymentMode.SINGLE_INSTANCE);
-                exchange.getIn().setHeader(MQ2Constants.BROKER_INSTANCE_TYPE, "mq.t2.micro");
-                exchange.getIn().setHeader(MQ2Constants.BROKER_ENGINE, EngineType.ACTIVEMQ.name());
-                exchange.getIn().setHeader(MQ2Constants.BROKER_ENGINE_VERSION, "5.15.6");
-                exchange.getIn().setHeader(MQ2Constants.BROKER_PUBLICLY_ACCESSIBLE, false);
-                List<User> users = new ArrayList<>();
-                User.Builder user = User.builder();
-                user.username("camel");
-                user.password("camelpwd");
-                users.add(user.build());
-                exchange.getIn().setHeader(MQ2Constants.BROKER_USERS, users);
-
-       }
+    .process(exchange -> {
+        exchange.getIn().setHeader("CamelAwsMQBrokerName", "test");
+        exchange.getIn().setHeader("CamelAwsMQBrokerDeploymentMode", DeploymentMode.SINGLE_INSTANCE);
+        exchange.getIn().setHeader("CamelAwsMQBrokerInstanceType", "mq.t2.micro");
+        exchange.getIn().setHeader("CamelAwsMQBrokerEngine", EngineType.ACTIVEMQ.name());
+        exchange.getIn().setHeader("CamelAwsMQBrokerEngineVersion", "5.15.6");
+        exchange.getIn().setHeader("CamelAwsMQBrokerPubliclyAccessible", false);
+        exchange.getIn().setHeader("CamelAwsMQBrokerUsers",
+            List.of(User.builder().username("camel").password("camelpwd").build()));
     })
-    .to("aws2-mq://test?amazonMqClient=#amazonMqClient&operation=createBroker")
+    .to("aws2-mq://test?amazonMqClient=#amazonMqClient&operation=createBroker");
 ```
 
 -   deleteBroker: this operation will delete an MQ Broker in AWS
@@ -545,7 +537,7 @@ from("direct:createBroker")
 
 ```java
 from("direct:deleteBroker")
-    .setHeader(MQ2Constants.BROKER_ID, constant("123"))
+    .setHeader("CamelAwsMQBrokerID", constant("123"))
     .to("aws2-mq://test?amazonMqClient=#amazonMqClient&operation=deleteBroker");
 ```
 
@@ -586,7 +578,7 @@ from("direct:deleteBroker")
 
 ```java
 from("direct:rebootBroker")
-    .setHeader(MQ2Constants.BROKER_ID, constant("123"))
+    .setHeader("CamelAwsMQBrokerID", constant("123"))
     .to("aws2-mq://test?amazonMqClient=#amazonMqClient&operation=rebootBroker");
 ```
 
@@ -644,45 +636,3 @@ Maven users will need to add the following dependency to their pom.xml.
 ```
 
 where `${camel-version}` must be replaced by the actual version of Camel.
-
-## Spring Boot Auto-Configuration
-
-When using aws2-mq with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-aws2-mq-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 23 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.aws2-mq.access-key** | Amazon AWS Access Key. |  | String |
-| **camel.component.aws2-mq.amazon-mq-client** | To use a existing configured AmazonMQClient client. The option is a software.amazon.awssdk.services.mq.MqClient type. |  | MqClient |
-| **camel.component.aws2-mq.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.aws2-mq.configuration** | Component configuration. The option is a org.apache.camel.component.aws2.mq.MQ2Configuration type. |  | MQ2Configuration |
-| **camel.component.aws2-mq.enabled** | Whether to enable auto configuration of the aws2-mq component. This is enabled by default. |  | Boolean |
-| **camel.component.aws2-mq.health-check-consumer-enabled** | Used for enabling or disabling all consumer based health checks from this component. | true | Boolean |
-| **camel.component.aws2-mq.health-check-producer-enabled** | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
-| **camel.component.aws2-mq.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.aws2-mq.operation** | The operation to perform. It can be listBrokers, createBroker, deleteBroker. |  | MQ2Operations |
-| **camel.component.aws2-mq.override-endpoint** | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | Boolean |
-| **camel.component.aws2-mq.pojo-request** | If we want to use a POJO request as body or not. | false | Boolean |
-| **camel.component.aws2-mq.profile-credentials-name** | If using a profile credentials provider, this parameter will set the profile name. |  | String |
-| **camel.component.aws2-mq.proxy-host** | To define a proxy host when instantiating the MQ client. |  | String |
-| **camel.component.aws2-mq.proxy-port** | To define a proxy port when instantiating the MQ client. |  | Integer |
-| **camel.component.aws2-mq.proxy-protocol** | To define a proxy protocol when instantiating the MQ client. | https | Protocol |
-| **camel.component.aws2-mq.region** | The region in which MQ client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example, ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id(). |  | String |
-| **camel.component.aws2-mq.secret-key** | Amazon AWS Secret Key. |  | String |
-| **camel.component.aws2-mq.session-token** | Amazon AWS Session Token used when the user needs to assume an IAM role. |  | String |
-| **camel.component.aws2-mq.trust-all-certificates** | If we want to trust all certificates in case of overriding the endpoint. | false | Boolean |
-| **camel.component.aws2-mq.uri-endpoint-override** | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
-| **camel.component.aws2-mq.use-default-credentials-provider** | Set whether the MQ client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | false | Boolean |
-| **camel.component.aws2-mq.use-profile-credentials-provider** | Set whether the MQ client should expect to load credentials through a profile credentials provider. | false | Boolean |
-| **camel.component.aws2-mq.use-session-credentials** | Set whether the MQ client should expect to use Session Credentials. This is useful in a situation in which the user needs to assume an IAM role for doing operations in MQ. | false | Boolean |

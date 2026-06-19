@@ -340,12 +340,9 @@ _Java-only: inline Processor accessing OpenTelemetry Baggage API_
                         .setProperty("CamelBaggage_myValue", constant("1234"))
                         .routeId("start")
                         .log("A message")
-                        .process(new Processor() {
-                            @Override
-                            public void process(Exchange exchange) throws Exception {
-                                // Baggage is available via the OpenTelemetry API
-                                String val = Baggage.current().getEntryValue("myValue");
-                            }
+                        .process(exchange -> {
+                            // Baggage is available via the OpenTelemetry API
+                            String val = Baggage.current().getEntryValue("myValue");
                         })
                         .to("log:info");
 ```

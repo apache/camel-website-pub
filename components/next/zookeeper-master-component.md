@@ -234,31 +234,3 @@ from("file:target/inbox?delete=true").noAutoStartup()
     .log(name + " - Done file:     ${file:name}")
     .to("file:target/outbox");
 ```
-
-## Spring Boot Auto-Configuration
-
-When using zookeeper-master with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-zookeeper-master-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 9 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.zookeeper-master.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.zookeeper-master.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
-| **camel.component.zookeeper-master.container-id-factory** | To use a custom ContainerIdFactory for creating container ids. The option is a org.apache.camel.component.zookeepermaster.ContainerIdFactory type. |  | ContainerIdFactory |
-| **camel.component.zookeeper-master.curator** | To use a custom configured CuratorFramework as connection to zookeeper ensemble. The option is a org.apache.curator.framework.CuratorFramework type. |  | CuratorFramework |
-| **camel.component.zookeeper-master.enabled** | Whether to enable auto configuration of the zookeeper-master component. This is enabled by default. |  | Boolean |
-| **camel.component.zookeeper-master.maximum-connection-timeout** | Timeout in millis to use when connecting to the zookeeper ensemble. | 10000 | Integer |
-| **camel.component.zookeeper-master.zk-root** | The root path to use in zookeeper where information is stored which nodes are master/slave etc. Will by default use: /camel/zookeepermaster/clusters/master. | /camel/zookeepermaster/clusters/master | String |
-| **camel.component.zookeeper-master.zoo-keeper-password** | The password to use when connecting to the zookeeper ensemble. |  | String |
-| **camel.component.zookeeper-master.zoo-keeper-url** | The url for the zookeeper ensemble. | localhost:2181 | String |

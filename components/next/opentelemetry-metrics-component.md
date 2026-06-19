@@ -843,33 +843,3 @@ java -javaagent:path/to/opentelemetry-javaagent.jar \
 When you use `camel-opentelemetry-metrics-starter` with Spring Boot, then Spring Boot autoconfiguration will automatically enable metrics capture if a `io.opentelemetry.api.metrics.Meter` is available.
 
 See the following table for options to specify what metrics to capture, or to turn it off.
-
-## Spring Boot Auto-Configuration
-
-When using opentelemetry-metrics with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-opentelemetry-metrics-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 11 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.opentelemetry-metrics.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.opentelemetry-metrics.enabled** | Whether to enable auto configuration of the opentelemetry-metrics component. This is enabled by default. |  | Boolean |
-| **camel.component.opentelemetry-metrics.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.opentelemetry-metrics.meter** | To use a custom configured Meter. The option is a io.opentelemetry.api.metrics.Meter type. |  | Meter |
-| **camel.opentelemetry.metrics.base-endpoint-uri-exchange-event-notifier** | Whether to use static or dynamic values for Endpoint Name tags in captured metrics. By default, static values are used. When using dynamic tags, then a dynamic to (toD) can compute many different endpoint URIs that, can lead to many tags as the URI is dynamic, so use this with care if setting this option to false. | true | Boolean |
-| **camel.opentelemetry.metrics.enable-exchange-event-notifier** | Set whether to enable the MicrometerExchangeEventNotifier for capturing metrics on exchange processing times. | true | Boolean |
-| **camel.opentelemetry.metrics.enable-message-history** | Set whether to enable the MicrometerMessageHistoryFactory for capturing metrics on individual route node processing times. Depending on the number of configured route nodes, there is the potential to create a large volume of metrics. Therefore, this option is disabled by default. | false | Boolean |
-| **camel.opentelemetry.metrics.enable-route-event-notifier** | Set whether to enable the MicrometerRouteEventNotifier for capturing metrics on the total number of routes and total number of routes running. | true | Boolean |
-| **camel.opentelemetry.metrics.enable-route-policy** | Set whether to enable the MicrometerRoutePolicyFactory for capturing metrics on route processing times. | true | Boolean |
-| **camel.opentelemetry.metrics.route-policy-exclude-pattern** | Pattern to exclude routes (by id) to capture. Multiple route ids can be separated by comma. |  | String |
-| **camel.opentelemetry.metrics.route-policy-level** | Sets the level of information to capture. Possible values are all,route,context. all = both context and routes. route = routes only. context = camel context only. | all | String |

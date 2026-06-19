@@ -33,18 +33,3 @@ If you use Maven you could add the following to your `pom.xml`, substituting the
   <version>x.x.x</version>
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using csimple-joor with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-csimple-joor-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component has no Spring Boot auto configuration options.

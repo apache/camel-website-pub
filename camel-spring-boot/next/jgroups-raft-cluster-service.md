@@ -1,35 +1,3 @@
-# JGroups Raft Cluster Service
+# Jgroups Raft Cluster Service
 
-The JGroups Raft Cluster Service starter provides a cluster service implementation using [JGroups](http://www.jgroups.org/) with the Raft consensus protocol for clustering in Camel Spring Boot applications.
-
-## Maven Dependency
-
-```xml
-<dependency>
-    <groupId>org.apache.camel.springboot</groupId>
-    <artifactId>camel-jgroups-raft-cluster-service-starter</artifactId>
-</dependency>
-```
-
-## Configuration Options
-
-The following configuration options are available under the `camel.cluster.jgroups.raft` prefix:
-
-  
-| Option | Default | Description |
-| --- | --- | --- |
-| enabled | true | Sets if the jgroups raft cluster service should be enabled or not. |
-| id |  | Cluster Service ID. |
-| raft-id |  | The JGroups Raft ID for this node. |
-| raft-config |  | The JGroups Raft configuration file. |
-| order |  | Service lookup order/priority. |
-| attributes |  | Custom service attributes. |
-
-## Usage Example
-
-Configure in `application.properties`:
-
-```properties
-camel.cluster.jgroups.raft.enabled=true
-camel.cluster.jgroups.raft.raft-id=node1
-```
+This page has moved to [Jgroups Raft Cluster Service](starters/jgroups-raft-cluster-service.md).

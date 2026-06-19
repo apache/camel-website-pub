@@ -497,32 +497,3 @@ Maven users will need to add the following dependency to their `pom.xml`.
 ```
 
 where `x.x.x` is the version number of Camel.
-
-## Spring Boot Auto-Configuration
-
-When using ibm-watson-discovery with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-ibm-watson-discovery-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 10 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.ibm-watson-discovery.api-key** | The IBM Cloud API key for authentication. |  | String |
-| **camel.component.ibm-watson-discovery.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.ibm-watson-discovery.collection-id** | The collection ID for operations that require it. |  | String |
-| **camel.component.ibm-watson-discovery.configuration** | The component configuration. The option is a org.apache.camel.component.ibm.watson.discovery.WatsonDiscoveryConfiguration type. |  | WatsonDiscoveryConfiguration |
-| **camel.component.ibm-watson-discovery.enabled** | Whether to enable auto configuration of the ibm-watson-discovery component. This is enabled by default. |  | Boolean |
-| **camel.component.ibm-watson-discovery.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.ibm-watson-discovery.operation** | The operation to perform. |  | WatsonDiscoveryOperations |
-| **camel.component.ibm-watson-discovery.project-id** | The Watson Discovery project ID. |  | String |
-| **camel.component.ibm-watson-discovery.service-url** | The service endpoint URL. If not specified, the default URL will be used. |  | String |
-| **camel.component.ibm-watson-discovery.version** | The API version date (format: YYYY-MM-DD). | 2023-03-31 | String |

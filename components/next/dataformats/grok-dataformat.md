@@ -144,27 +144,3 @@ The Grok dataformat supports 4 options, which are listed below.
 | **flattened** (common) | `false` | `Boolean` | Turns on flattened mode. In flattened mode the exception is thrown when there are multiple pattern matches with same key. |
 | **allowMultipleMatchesPerLine** (common) | `true` | `Boolean` | If false, every line of input is matched for pattern only once. Otherwise the line can be scanned multiple times when non-terminal pattern is used. |
 | **namedOnly** (common) | `false` | `Boolean` | Whether to capture named expressions only or not (i.e. %\\{IP:ip} but not ${IP}). |
-
-## Spring Boot Auto-Configuration
-
-When using grok with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-grok-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 5 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.grok.allow-multiple-matches-per-line** | If false, every line of input is matched for pattern only once. Otherwise the line can be scanned multiple times when non-terminal pattern is used. | true | Boolean |
-| **camel.dataformat.grok.enabled** | Whether to enable auto configuration of the grok data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.grok.flattened** | Turns on flattened mode. In flattened mode the exception is thrown when there are multiple pattern matches with same key. | false | Boolean |
-| **camel.dataformat.grok.named-only** | Whether to capture named expressions only or not (i.e. %\\{IP:ip} but not ${IP}). | false | Boolean |
-| **camel.dataformat.grok.pattern** | The grok pattern to match lines of input. |  | String |

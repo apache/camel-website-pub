@@ -190,35 +190,6 @@ Enum values:
 | **CamelLangchain4jEmbeddingStoreMinScore** (producer) Constant: [`MIN_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#MIN_SCORE) | Minimum similarity score for search results. |  | Double |
 | **CamelLangchain4jEmbeddingStoreFilter** (producer) Constant: [`FILTER`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#FILTER) | Search filter for metadata-based constraints. |  | Filter |
 
-## Spring Boot Auto-Configuration
-
-When using langchain4j-embeddingstore with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-langchain4j-embeddingstore-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 10 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.langchain4j-embeddingstore.action** | The operation to perform: ADD, REMOVE, or SEARCH. |  | LangChain4jEmbeddingStoreAction |
-| **camel.component.langchain4j-embeddingstore.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.langchain4j-embeddingstore.configuration** | The configuration;. The option is a org.apache.camel.component.langchain4j.embeddingstore.LangChain4jEmbeddingStoreConfiguration type. |  | LangChain4jEmbeddingStoreConfiguration |
-| **camel.component.langchain4j-embeddingstore.embedding-store** | Direct embedding store instance for vector operations. The option is a dev.langchain4j.store.embedding.EmbeddingStore<dev.langchain4j.data.segment.TextSegment> type. |  | EmbeddingStore |
-| **camel.component.langchain4j-embeddingstore.embedding-store-factory** | The embedding store factory to use for creating embedding stores if no embeddingstore is provided. The option is a org.apache.camel.component.langchain4j.embeddingstore.EmbeddingStoreFactory type. |  | EmbeddingStoreFactory |
-| **camel.component.langchain4j-embeddingstore.enabled** | Whether to enable auto configuration of the langchain4j-embeddingstore component. This is enabled by default. |  | Boolean |
-| **camel.component.langchain4j-embeddingstore.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.langchain4j-embeddingstore.max-results** | Maximum number of results to return for SEARCH operation. | 5 | Integer |
-| **camel.component.langchain4j-embeddingstore.min-score** | Minimum similarity score threshold for SEARCH operation (0.0 to 1.0). |  | Double |
-| **camel.component.langchain4j-embeddingstore.return-text-content** | When true, SEARCH returns List with text content instead of List. | false | Boolean |
-
 ## Usage
 
 ### Configuring an Embedding Store

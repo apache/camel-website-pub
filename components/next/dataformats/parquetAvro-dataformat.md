@@ -80,26 +80,3 @@ If you use Maven you can add the following to your `pom.xml`, substituting the v
   <!-- use the same version as your Camel core version -->
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using parquetAvro with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-parquet-avro-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 4 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.parquet-avro.compression-codec-name** | Compression codec to use when marshalling. | GZIP | String |
-| **camel.dataformat.parquet-avro.enabled** | Whether to enable auto configuration of the parquetAvro data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.parquet-avro.lazy-load** | Whether the unmarshalling should produce an iterator of records or read all the records at once. | false | Boolean |
-| **camel.dataformat.parquet-avro.unmarshal-type** | Class to use when (un)marshalling. If omitted, parquet files are converted into Avro’s GenericRecords for unmarshalling and input objects are assumed as GenericRecords for marshalling. |  | String |

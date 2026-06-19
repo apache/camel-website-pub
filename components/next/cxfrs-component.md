@@ -469,22 +469,14 @@ Here is an example:
 _Java-only: Java test API (ProducerTemplate with inline Processor)_
 
 ```java
-Exchange exchange = template.send("direct://proxy", new Processor() {
-    public void process(Exchange exchange) throws Exception {
-        exchange.setPattern(ExchangePattern.InOut);
-        Message inMessage = exchange.getIn();
-        // set the operation name
-        inMessage.setHeader(CxfConstants.OPERATION_NAME, "getCustomer");
-        // using the proxy client API
-        inMessage.setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, Boolean.FALSE);
-        // set a customer header
-        inMessage.setHeader("key", "value");
-        // set up the accepted content type
-        inMessage.setHeader(CxfConstants.ACCEPT_CONTENT_TYPE, "application/json");
-        // set the parameters, if you just have one parameter,
-        // camel will put this object into an Object[] itself
-        inMessage.setBody("123");
-    }
+Exchange exchange = template.send("direct://proxy", ex -> {
+    ex.setPattern(ExchangePattern.InOut);
+    Message inMessage = ex.getIn();
+    inMessage.setHeader("CamelCxfOperationName", "getCustomer");
+    inMessage.setHeader("CamelCxfRsUsingHttpAPI", Boolean.FALSE);
+    inMessage.setHeader("key", "value");
+    inMessage.setHeader("Accept", "application/json");
+    inMessage.setBody("123");
 });
 
 // get the response message
@@ -497,28 +489,20 @@ assertEquals(200, exchange.getMessage().getHeader(Exchange.HTTP_RESPONSE_CODE), 
 assertEquals("value", exchange.getMessage().getHeader("key"), "Get a wrong header value");
 ```
 
-The [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md) also provides [an HTTP centric client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-CXFWebClientAPI). You can also invoke this API from `camel-cxfrs` producer. You need to specify the [HTTP\_PATH](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_PATH) and the [HTTP\_METHOD](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_METHOD) and let the producer use the http centric client API by using the URI option **httpClientAPI** or by setting the message header [CxfConstants.CAMEL\_CXF\_RS\_USING\_HTTP\_API](https://www.javadoc.io/doc/org.apache.camel/camel-cxf-transport/current/org/apache/camel/component/cxf/common/message/CxfConstants.html#CAMEL_CXF_RS_USING_HTTP_API). You can turn the response object to the type class specified with the message header [CxfConstants.CAMEL\_CXF\_RS\_RESPONSE\_CLASS](https://www.javadoc.io/doc/org.apache.camel/camel-cxf-transport/current/org/apache/camel/component/cxf/common/message/CxfConstants.html#CAMEL_CXF_RS_RESPONSE_CLASS).
+The [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md) also provides [an HTTP centric client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-CXFWebClientAPI). You can also invoke this API from `camel-cxfrs` producer. You need to specify the [HTTP\_PATH](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_PATH) and the [HTTP\_METHOD](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_METHOD) and let the producer use the http centric client API by using the URI option **httpClientAPI** or by setting the message header `CamelCxfRsUsingHttpAPI`. You can turn the response object to the type class specified with the message header `CamelCxfRsResponseClass`.
 
 _Java-only: Java test API (ProducerTemplate with inline Processor)_
 
 ```java
-Exchange exchange = template.send("direct://http", new Processor() {
-    public void process(Exchange exchange) throws Exception {
-        exchange.setPattern(ExchangePattern.InOut)
-        Message inMessage = exchange.getIn();
-        // using the http central client API
-        inMessage.setHeader(CxfConstants.CAMEL_CXF_RS_USING_HTTP_API, Boolean.TRUE);
-        // set the Http method
-        inMessage.setHeader(Exchange.HTTP_METHOD, "GET");
-        // set the relative path
-        inMessage.setHeader(Exchange.HTTP_PATH, "/customerservice/customers/123");
-        // Specify the response class, cxfrs will use InputStream as the response object type
-        inMessage.setHeader(CxfConstants.CAMEL_CXF_RS_RESPONSE_CLASS, Customer.class);
-        // set a customer header
-        inMessage.setHeader("key", "value");
-        // since we use the Get method, so we don't need to set the message body
-        inMessage.setBody(null);
-    }
+Exchange exchange = template.send("direct://http", ex -> {
+    ex.setPattern(ExchangePattern.InOut);
+    Message inMessage = ex.getIn();
+    inMessage.setHeader("CamelCxfRsUsingHttpAPI", Boolean.TRUE);
+    inMessage.setHeader(Exchange.HTTP_METHOD, "GET");
+    inMessage.setHeader(Exchange.HTTP_PATH, "/customerservice/customers/123");
+    inMessage.setHeader("CamelCxfRsResponseClass", Customer.class);
+    inMessage.setHeader("key", "value");
+    inMessage.setBody(null);
 });
 ```
 
@@ -530,7 +514,7 @@ _Java-only: Java test API (ProducerTemplate)_
 Exchange exchange = template.send("cxfrs://http://localhost:9003/testQuery?httpClientAPI=true&q1=12&q2=13"
 ```
 
-To support the Dynamical routing, you can override the URI’s query parameters by using the [CxfConstants.CAMEL\_CXF\_RS\_QUERY\_MAP](https://www.javadoc.io/doc/org.apache.camel/camel-cxf-transport/current/org/apache/camel/component/cxf/common/message/CxfConstants.html#CAMEL_CXF_RS_QUERY_MAP) header to set the parameter map for it.
+To support the Dynamical routing, you can override the URI’s query parameters by using the `CamelCxfRsQueryMap` header to set the parameter map for it.
 
 _Java-only: Java collection API_
 
@@ -538,31 +522,5 @@ _Java-only: Java collection API_
 Map<String, String> queryMap = new LinkedHashMap<>();
 queryMap.put("q1", "new");
 queryMap.put("q2", "world");
-inMessage.setHeader(CxfConstants.CAMEL_CXF_RS_QUERY_MAP, queryMap);
+inMessage.setHeader("CamelCxfRsQueryMap", queryMap);
 ```
-
-## Spring Boot Auto-Configuration
-
-When using cxfrs with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-cxf-rest-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 7 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.cxfrs.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.cxfrs.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
-| **camel.component.cxfrs.enabled** | Whether to enable auto configuration of the cxfrs component. This is enabled by default. |  | Boolean |
-| **camel.component.cxfrs.header-filter-strategy** | To use a custom org.apache.camel.spi.HeaderFilterStrategy to filter header to and from Camel message. The option is a org.apache.camel.spi.HeaderFilterStrategy type. |  | HeaderFilterStrategy |
-| **camel.component.cxfrs.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.cxfrs.synchronous** | Sets whether synchronous processing should be strictly used. | false | Boolean |
-| **camel.component.cxfrs.use-global-ssl-context-parameters** | Enable usage of global SSL context parameters. | false | Boolean |

@@ -811,39 +811,3 @@ context.addRoutes(new RouteBuilder() {
 
 > **Note**
 > With the release of Infinispan 11, it is required to set the encoding configuration on any cache created. This is critical for consuming events too. For more information, have a look at [Data Encoding and MediaTypes](https://infinispan.org/docs/stable/titles/developing/developing.html#data_encoding) in the official Infinispan documentation.
-
-## Spring Boot Auto-Configuration
-
-When using infinispan-embedded with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-infinispan-embedded-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 17 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.infinispan-embedded.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.infinispan-embedded.bridge-error-handler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
-| **camel.component.infinispan-embedded.cache-container** | Specifies the cache Container to connect. The option is a org.infinispan.manager.EmbeddedCacheManager type. |  | EmbeddedCacheManager |
-| **camel.component.infinispan-embedded.cache-container-configuration** | The CacheContainer configuration. Used if the cacheContainer is not defined. The option is a org.infinispan.configuration.cache.Configuration type. |  | Configuration |
-| **camel.component.infinispan-embedded.clustered-listener** | If true, the listener will be installed for the entire cluster. | false | Boolean |
-| **camel.component.infinispan-embedded.configuration** | Component configuration. The option is a org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedConfiguration type. |  | InfinispanEmbeddedConfiguration |
-| **camel.component.infinispan-embedded.configuration-uri** | An implementation specific URI for the CacheManager. |  | String |
-| **camel.component.infinispan-embedded.custom-listener** | Returns the custom listener in use, if provided. The option is a org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedCustomListener type. |  | InfinispanEmbeddedCustomListener |
-| **camel.component.infinispan-embedded.enabled** | Whether to enable auto configuration of the infinispan-embedded component. This is enabled by default. |  | Boolean |
-| **camel.component.infinispan-embedded.event-types** | Specifies the set of event types to register by the consumer.Multiple event can be separated by comma. The possible event types are: CACHE\_ENTRY\_ACTIVATED, CACHE\_ENTRY\_PASSIVATED, CACHE\_ENTRY\_VISITED, CACHE\_ENTRY\_LOADED, CACHE\_ENTRY\_EVICTED, CACHE\_ENTRY\_CREATED, CACHE\_ENTRY\_REMOVED, CACHE\_ENTRY\_MODIFIED, TRANSACTION\_COMPLETED, TRANSACTION\_REGISTERED, CACHE\_ENTRY\_INVALIDATED, CACHE\_ENTRY\_EXPIRED, DATA\_REHASHED, TOPOLOGY\_CHANGED, PARTITION\_STATUS\_CHANGED, PERSISTENCE\_AVAILABILITY\_CHANGED. |  | String |
-| **camel.component.infinispan-embedded.flags** | A comma separated list of org.infinispan.context.Flag to be applied by default on each cache invocation. |  | String |
-| **camel.component.infinispan-embedded.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.infinispan-embedded.operation** | The operation to perform. | put | InfinispanOperation |
-| **camel.component.infinispan-embedded.query-builder** | Specifies the query builder. The option is a org.apache.camel.component.infinispan.InfinispanQueryBuilder type. |  | InfinispanQueryBuilder |
-| **camel.component.infinispan-embedded.remapping-function** | Set a specific remappingFunction to use in a compute operation. The option is a java.util.function.BiFunction type. |  | BiFunction |
-| **camel.component.infinispan-embedded.result-header** | Store the operation result in a header instead of the message body. By default, resultHeader == null and the query result is stored in the message body, any existing content in the message body is discarded. If resultHeader is set, the value is used as the name of the header to store the query result and the original message body is preserved. This value can be overridden by an in message header named: CamelInfinispanOperationResultHeader. |  | String |
-| **camel.component.infinispan-embedded.sync** | If true, the consumer will receive notifications synchronously. | true | Boolean |

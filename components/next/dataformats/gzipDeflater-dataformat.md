@@ -66,25 +66,3 @@ If you use Maven you could add the following to your `pom.xml`, substituting the
   <version>x.x.x</version>
 </dependency>
 ```
-
-## Spring Boot Auto-Configuration
-
-When using gzipDeflater with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-zip-deflater-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 3 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.dataformat.gzip-deflater.enabled** | Whether to enable auto configuration of the gzipDeflater data format. This is enabled by default. |  | Boolean |
-| **camel.dataformat.zip-deflater.compression-level** | To specify a specific compression between 0-9. -1 is default compression, 0 is no compression, and 9 is the best compression. | \-1 | Integer |
-| **camel.dataformat.zip-deflater.enabled** | Whether to enable auto configuration of the zipDeflater data format. This is enabled by default. |  | Boolean |

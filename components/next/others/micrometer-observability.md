@@ -27,29 +27,6 @@ The configuration properties for the component are:
 | `includePatterns` |  | A comma-separated list of patterns (e.g., `log*,direct*,setBody*`) to explicitly include in a trace. Spans matching these patterns will be enabled. If nothing is specified, all processors are included by default. |
 | `traceHeadersInclusion` | false | Add the generated telemetry `CAMEL_TRACE_ID` and `CAMEL_SPAN_ID` Exchange headers. |
 
-## Spring Boot Auto-Configuration
-
-When using micrometer-observability with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-micrometer-observability-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 4 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.micrometer.observability.disable-core-processors** | Disable any inner core processors (any core DSL processor provided in the route, for example `bean`, `log`, …​). | false | Boolean |
-| **camel.micrometer.observability.exclude-patterns** | Sets exclude pattern(s) that will disable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. |  | String |
-| **camel.micrometer.observability.include-patterns** | Sets include pattern(s) that will explicitly enable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. All processors included by default if nothing is specified. |  | String |
-| **camel.micrometer.observability.trace-processors** | Setting this to true will create new telemetry spans for each Camel custom Processors. Use the excludePattern property to filter out Processors. |  | Boolean |
-
 ### Spring Boot context propagation
 
 The starter is in charge to autoconfigure the component. Additionally you will need to specify the concrete Propagation implementation by adding the dependency you wish to use (for example, `io.micrometer:micrometer-tracing-bridge-otel`, `io.micrometer:micrometer-tracing-bridge-brave` or any other technology you wish to use). If none is provided, a "no-op" implementation will be defined as default.
@@ -206,12 +183,9 @@ _Java-only: setting baggage properties and retrieving them via Micrometer API_
                         .setProperty("CamelBaggage_myValue", constant("1234"))
                         .routeId("start")
                         .log("A message")
-                        .process(new Processor() {
-                            @Override
-                            public void process(Exchange exchange) throws Exception {
-                                // Baggage is available via the Micrometer Observability API
-                                String val = tracer.getBaggage("myValue").get();
-                            }
+                        .process(exchange -> {
+                            // Baggage is available via the Micrometer Observability API
+                            String val = tracer.getBaggage("myValue").get();
                         })
                         .to("log:info");
 ```

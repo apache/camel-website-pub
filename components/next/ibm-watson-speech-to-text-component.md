@@ -723,36 +723,3 @@ Maven users will need to add the following dependency to their `pom.xml`.
 ```
 
 where `x.x.x` is the version number of Camel.
-
-## Spring Boot Auto-Configuration
-
-When using ibm-watson-speech-to-text with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:
-
-```xml
-<dependency>
-  <groupId>org.apache.camel.springboot</groupId>
-  <artifactId>camel-ibm-watson-speech-to-text-starter</artifactId>
-  <version>x.x.x</version>
-  <!-- use the same version as your Camel core version -->
-</dependency>
-```
-
-The component supports 14 options, which are listed below.
-
-   
-| Name | Description | Default | Type |
-| --- | --- | --- | --- |
-| **camel.component.ibm-watson-speech-to-text.api-key** | The IBM Cloud API key for authentication. |  | String |
-| **camel.component.ibm-watson-speech-to-text.autowired-enabled** | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
-| **camel.component.ibm-watson-speech-to-text.configuration** | Component configuration. The option is a org.apache.camel.component.ibm.watson.stt.WatsonSpeechToTextConfiguration type. |  | WatsonSpeechToTextConfiguration |
-| **camel.component.ibm-watson-speech-to-text.content-type** | The audio format (MIME type). Default is audio/wav. Supported formats: audio/wav, audio/mp3, audio/flac, audio/ogg, audio/webm. | audio/wav | String |
-| **camel.component.ibm-watson-speech-to-text.enabled** | Whether to enable auto configuration of the ibm-watson-speech-to-text component. This is enabled by default. |  | Boolean |
-| **camel.component.ibm-watson-speech-to-text.health-check-consumer-enabled** | Used for enabling or disabling all consumer based health checks from this component. | true | Boolean |
-| **camel.component.ibm-watson-speech-to-text.health-check-producer-enabled** | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
-| **camel.component.ibm-watson-speech-to-text.lazy-start-producer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
-| **camel.component.ibm-watson-speech-to-text.model** | The language model to use for recognition. Default is en-US\_BroadbandModel. Examples: en-US\_NarrowbandModel, en-GB\_BroadbandModel, es-ES\_BroadbandModel, fr-FR\_BroadbandModel. | en-US\_BroadbandModel | String |
-| **camel.component.ibm-watson-speech-to-text.operation** | The operation to perform. |  | WatsonSpeechToTextOperations |
-| **camel.component.ibm-watson-speech-to-text.service-url** | The service endpoint URL. If not specified, the default URL will be used. |  | String |
-| **camel.component.ibm-watson-speech-to-text.speaker-labels** | Whether to identify different speakers in the audio. Default is false. | false | Boolean |
-| **camel.component.ibm-watson-speech-to-text.timestamps** | Whether to include timestamps for each word in the transcription. Default is false. | false | Boolean |
-| **camel.component.ibm-watson-speech-to-text.word-confidence** | Whether to include confidence scores for each word. Default is false. | false | Boolean |
