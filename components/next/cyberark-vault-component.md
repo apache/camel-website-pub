@@ -393,7 +393,7 @@ Using message header for dynamic secret retrieval:
 
 ```java
 from("direct:start")
-    .setHeader(CyberArkVaultConstants.SECRET_ID, simple("${header.secretName}"))
+    .setHeader("CamelCyberArkVaultSecretId", simple("${header.secretName}"))
     .to("cyberark-vault:secret?operation=getSecret&url=https://conjur.example.com&account=myaccount&username=admin&password=secretpass")
     .log("Retrieved secret: ${body}");
 ```
@@ -440,7 +440,7 @@ Retrieve a specific version of a secret:
 
 ```java
 from("direct:start")
-    .setHeader(CyberArkVaultConstants.SECRET_VERSION, constant("3"))
+    .setHeader("CamelCyberArkVaultSecretVersion", constant("3"))
     .to("cyberark-vault:secret?secretId=db/password&url=https://conjur.example.com&account=myaccount&username=admin&apiKey=3ahx8dy3...")
     .log("Retrieved secret version 3: ${body}");
 ```
@@ -538,8 +538,8 @@ Using message header:
 
 ```java
 from("direct:start")
-    .setHeader(CyberArkVaultConstants.SECRET_VALUE, constant("myNewPassword"))
-    .setHeader(CyberArkVaultConstants.SECRET_ID, constant("db/password"))
+    .setHeader("CamelCyberArkVaultSecretValue", constant("myNewPassword"))
+    .setHeader("CamelCyberArkVaultSecretId", constant("db/password"))
     .to("cyberark-vault:secret?operation=createSecret&url=https://conjur.example.com&account=myaccount&username=admin&apiKey=3ahx8dy3...")
     .log("Secret created/updated");
 ```
@@ -593,7 +593,7 @@ Dynamic secret creation:
 ```java
 from("direct:start")
     .setBody(simple("${header.newSecretValue}"))
-    .setHeader(CyberArkVaultConstants.SECRET_ID, simple("${header.secretPath}"))
+    .setHeader("CamelCyberArkVaultSecretId", simple("${header.secretPath}"))
     .to("cyberark-vault:secret?operation=createSecret&url=https://conjur.example.com&account=myaccount&username=admin&apiKey=3ahx8dy3...")
     .log("Secret ${header.secretPath} created/updated");
 ```

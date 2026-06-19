@@ -14,63 +14,103 @@
               kubernetesClient: "#kubernetesClient"
               operation: listEvents
         - to:
-            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation returns a list of events from your cluster. The type of the events is <code>io.fabric8.kubernetes.api.model.events.v1.Event</code>.</p> </div> <div class="paragraph"> <p>To indicate from which namespace, the events are expected, it is possible to set the message header <code>CamelKubernetesNamespaceName</code>. By default, the events of all namespaces are returned.</p> </div> <div class="ulist"> <ul> <li> <p><code>listEventsByLabels</code>: this operation lists the events selected by labels</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a Processor to set label headers on the exchange</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listByLabels").process(new Processor() {
-
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map&lt;String, String&gt; labels = new HashMap&lt;&gt;();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENTS_LABELS, labels);
-            }
-        });
-    to("kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=listEventsByLabels").
-    to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>This operation returns a list of events from your cluster that occurred in any namespaces, using a label selector (in the example above only expect events which have the label "key1" set to "value1" and the label "key2" set to "value2"). The type of the events is <code>io.fabric8.kubernetes.api.model.events.v1.Event</code>.</p> </div> <div class="paragraph"> <p>This operation expects the message header <code>CamelKubernetesEventsLabels</code> to be set to a <code>Map&lt;String, String&gt;</code> where the key-value pairs represent the expected label names and values.</p> </div> <div class="ulist"> <ul> <li> <p><code>getEvent</code>: this operation gives a specific event</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a Processor to set namespace and event name headers</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:get").process(new Processor() {
-
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, "test");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENT_NAME, "event1");
-            }
-        });
-    to("kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=getEvent").
-    to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>This operation returns the event matching the criteria from your cluster. The type of the event is <code>io.fabric8.kubernetes.api.model.events.v1.Event</code>.</p> </div> <div class="paragraph"> <p>This operation expects two message headers which are <code>CamelKubernetesNamespaceName</code> and <code>CamelKubernetesEventName</code>, the first one needs to be set to the name of the target namespace and second one needs to be set to the target name of event.</p> </div> <div class="paragraph"> <p>If no matching event could be found, <code>null</code> is returned.</p> </div> <div class="ulist"> <ul> <li> <p><code>createEvent</code>: this operation creates a new event</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a Processor to set event headers for creation</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:get").process(new Processor() {
-
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, "default");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENT_NAME, "test1");
-                Map&lt;String, String&gt; labels = new HashMap&lt;&gt;();
-                labels.put("this", "rocks");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENTS_LABELS, labels);
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENT_ACTION_PRODUCER, "Some Action");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENT_TYPE, "Normal");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENT_REASON, "Some Reason");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENT_REPORTING_CONTROLLER, "Some-Reporting-Controller");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENT_REPORTING_INSTANCE, "Some-Reporting-Instance");
-            }
-        });
-    to("kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=createEvent").
-    to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>This operation publishes a new event in your cluster. An event can be created in two ways either from message headers or directly from an <code>io.fabric8.kubernetes.api.model.events.v1.EventBuilder</code>.</p> </div> <div class="paragraph"> <p>Whatever the way used to create the event:</p> </div> <div class="ulist"> <ul> <li> <p>The operation expects two message headers which are <code>CamelKubernetesNamespaceName</code> and <code>CamelKubernetesEventName</code>, to set respectively the name of namespace and the name of the produced event.</p> </li> <li> <p>The operation supports the message header <code>CamelKubernetesEventsLabels</code> to set the labels to the produced event.</p> </li> </ul> </div> <div class="paragraph"> <p>The message headers that can be used to create an event are <code>CamelKubernetesEventTime</code>, <code>CamelKubernetesEventAction</code>, <code>CamelKubernetesEventType</code>, <code>CamelKubernetesEventReason</code>, <code>CamelKubernetesEventNote</code>,<code>CamelKubernetesEventRegarding</code>, <code>CamelKubernetesEventRelated</code>, <code>CamelKubernetesEventReportingController</code> and <code>CamelKubernetesEventReportingInstance</code>.</p> </div> <div class="paragraph"> <p>In case the supported message headers are not enough for a specific use case, it is still possible to set the message body with an object of type <code>io.fabric8.kubernetes.api.model.events.v1.EventBuilder</code> representing a prefilled builder to use when creating the event. Please note that the labels, name of event and name of namespace are always set from the message headers, even when the builder is provided.</p> </div> <div class="ulist"> <ul> <li> <p><code>updateEvent</code>: this operation updates an existing event</p> </li> </ul> </div> <div class="paragraph"> <p>The behavior is exactly the same as <code>createEvent</code>, only the name of the operation is different.</p> </div> <div class="ulist"> <ul> <li> <p><code>deleteEvent</code>: this operation deletes an existing event.</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a Processor to set namespace and event name headers</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:get").process(new Processor() {
-
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, "default");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_EVENT_NAME, "test1");
-            }
-        });
-    to("kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=deleteEvent").
-    to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>This operation removes an existing event from your cluster. It returns a <code>boolean</code> to indicate whether the operation was successful or not.</p> </div> <div class="paragraph"> <p>This operation expects two message headers which are <code>CamelKubernetesNamespaceName</code> and <code>CamelKubernetesEventName</code>, the first one needs to be set to the name of the target namespace and second one needs to be set to the target name of event.</p> </div> </div> <div class="sect2"> <h3 id="_kubernetes_events_consumer_example"><a class="anchor" href="#_kubernetes_events_consumer_example"></a>Kubernetes Events Consumer Example</h3> <div class="listingblock"> <div class="title"><em>Java-only: using fromF with parameters and a custom Processor to handle Event objects</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">fromF("kubernetes-events://%s?oauthToken=%s", host, authToken)
-    .process(new KubernetesProcessor()).to("mock:result");
-
-    public class KubernetesProcessor implements Processor {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            Message in = exchange.getIn();
-            Event e = exchange.getIn().getBody(Event.class);
-            log.info("Got event with event name: " + e.getMetadata().getName() + " and action " + in.getHeader(KubernetesConstants.KUBERNETES_EVENT_ACTION));
-        }
-    }</code></pre> </div> </div> <div class="paragraph"> <p>This consumer returns a message per event received in the whole cluster. It also set the action (<code>io.fabric8.kubernetes.client.Watcher.Action</code>) in the message header <code>CamelKubernetesEventAction</code> and the timestamp (<code>long</code>) in the message header <code>CamelKubernetesEventTimestamp</code>.</p> </div> <div class="paragraph"> <p>You can narrow the scope of the consumer using the following query parameter combinations:</p> </div> <div class="ulist"> <ul> <li> <p><code>labelKey</code> + <code>labelValue</code> - Watch Events with the specified label in any namespace.</p> </li> <li> <p><code>namespace</code> - Watch all Events in the specified namespace.</p> </li> <li> <p><code>namespace</code> + <code>resourceName</code> - Watch the Event with the specified name in the given namespace.</p> </li> <li> <p><code>namespace</code> + <code>labelKey</code> + <code>labelValue</code> - Watch Events with the specified label in the given namespace.</p> </li> </ul> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using kubernetes-events with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation returns a list of events from your cluster. The type of the events is <code>io.fabric8.kubernetes.api.model.events.v1.Event</code>.</p> </div> <div class="paragraph"> <p>To indicate from which namespace, the events are expected, it is possible to set the message header <code>CamelKubernetesNamespaceName</code>. By default, the events of all namespaces are returned.</p> </div> <div class="ulist"> <ul> <li> <p><code>listEventsByLabels</code>: this operation lists the events selected by labels</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a Processor to set label headers on the exchange</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listByLabels")
+    .process(exchange -&gt; {
+        Map&lt;String, String&gt; labels = new HashMap&lt;&gt;();
+        labels.put("key1", "value1");
+        labels.put("key2", "value2");
+        exchange.getIn().setHeader("CamelKubernetesEventsLabels", labels);
+    })
+    .to("kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=listEventsByLabels")
+    .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>This operation returns a list of events from your cluster that occurred in any namespaces, using a label selector (in the example above only expect events which have the label "key1" set to "value1" and the label "key2" set to "value2"). The type of the events is <code>io.fabric8.kubernetes.api.model.events.v1.Event</code>.</p> </div> <div class="paragraph"> <p>This operation expects the message header <code>CamelKubernetesEventsLabels</code> to be set to a <code>Map&lt;String, String&gt;</code> where the key-value pairs represent the expected label names and values.</p> </div> <div class="ulist"> <ul> <li> <p><code>getEvent</code>: this operation gives a specific event</p> </li> </ul> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:get")
+    .setHeader("CamelKubernetesNamespaceName", constant("test"))
+    .setHeader("CamelKubernetesEventName", constant("event1"))
+    .to("kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=getEvent")
+    .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:get"/&gt;
+  &lt;setHeader name="CamelKubernetesNamespaceName"&gt;
+    &lt;constant&gt;test&lt;/constant&gt;
+  &lt;/setHeader&gt;
+  &lt;setHeader name="CamelKubernetesEventName"&gt;
+    &lt;constant&gt;event1&lt;/constant&gt;
+  &lt;/setHeader&gt;
+  &lt;to uri="kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;amp;operation=getEvent"/&gt;
+  &lt;to uri="mock:result"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: CamelKubernetesNamespaceName
+            constant: test
+        - setHeader:
+            name: CamelKubernetesEventName
+            constant: event1
+        - to:
+            uri: kubernetes-events:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: getEvent
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation returns the event matching the criteria from your cluster. The type of the event is <code>io.fabric8.kubernetes.api.model.events.v1.Event</code>.</p> </div> <div class="paragraph"> <p>This operation expects two message headers which are <code>CamelKubernetesNamespaceName</code> and <code>CamelKubernetesEventName</code>, the first one needs to be set to the name of the target namespace and second one needs to be set to the target name of event.</p> </div> <div class="paragraph"> <p>If no matching event could be found, <code>null</code> is returned.</p> </div> <div class="ulist"> <ul> <li> <p><code>createEvent</code>: this operation creates a new event</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a Processor to set event headers for creation (requires building a Map for labels)</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:create")
+    .process(exchange -&gt; {
+        exchange.getIn().setHeader("CamelKubernetesNamespaceName", "default");
+        exchange.getIn().setHeader("CamelKubernetesEventName", "test1");
+        Map&lt;String, String&gt; labels = new HashMap&lt;&gt;();
+        labels.put("this", "rocks");
+        exchange.getIn().setHeader("CamelKubernetesEventsLabels", labels);
+        exchange.getIn().setHeader("CamelKubernetesEventAction", "Some Action");
+        exchange.getIn().setHeader("CamelKubernetesEventType", "Normal");
+        exchange.getIn().setHeader("CamelKubernetesEventReason", "Some Reason");
+        exchange.getIn().setHeader("CamelKubernetesEventReportingController", "Some-Reporting-Controller");
+        exchange.getIn().setHeader("CamelKubernetesEventReportingInstance", "Some-Reporting-Instance");
+    })
+    .to("kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=createEvent")
+    .to("mock:result");</code></pre> </div> </div> <div class="paragraph"> <p>This operation publishes a new event in your cluster. An event can be created in two ways either from message headers or directly from an <code>io.fabric8.kubernetes.api.model.events.v1.EventBuilder</code>.</p> </div> <div class="paragraph"> <p>Whatever the way used to create the event:</p> </div> <div class="ulist"> <ul> <li> <p>The operation expects two message headers which are <code>CamelKubernetesNamespaceName</code> and <code>CamelKubernetesEventName</code>, to set respectively the name of namespace and the name of the produced event.</p> </li> <li> <p>The operation supports the message header <code>CamelKubernetesEventsLabels</code> to set the labels to the produced event.</p> </li> </ul> </div> <div class="paragraph"> <p>The message headers that can be used to create an event are <code>CamelKubernetesEventTime</code>, <code>CamelKubernetesEventAction</code>, <code>CamelKubernetesEventType</code>, <code>CamelKubernetesEventReason</code>, <code>CamelKubernetesEventNote</code>,<code>CamelKubernetesEventRegarding</code>, <code>CamelKubernetesEventRelated</code>, <code>CamelKubernetesEventReportingController</code> and <code>CamelKubernetesEventReportingInstance</code>.</p> </div> <div class="paragraph"> <p>In case the supported message headers are not enough for a specific use case, it is still possible to set the message body with an object of type <code>io.fabric8.kubernetes.api.model.events.v1.EventBuilder</code> representing a prefilled builder to use when creating the event. Please note that the labels, name of event and name of namespace are always set from the message headers, even when the builder is provided.</p> </div> <div class="ulist"> <ul> <li> <p><code>updateEvent</code>: this operation updates an existing event</p> </li> </ul> </div> <div class="paragraph"> <p>The behavior is exactly the same as <code>createEvent</code>, only the name of the operation is different.</p> </div> <div class="ulist"> <ul> <li> <p><code>deleteEvent</code>: this operation deletes an existing event.</p> </li> </ul> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:delete")
+    .setHeader("CamelKubernetesNamespaceName", constant("default"))
+    .setHeader("CamelKubernetesEventName", constant("test1"))
+    .to("kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;operation=deleteEvent")
+    .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:delete"/&gt;
+  &lt;setHeader name="CamelKubernetesNamespaceName"&gt;
+    &lt;constant&gt;default&lt;/constant&gt;
+  &lt;/setHeader&gt;
+  &lt;setHeader name="CamelKubernetesEventName"&gt;
+    &lt;constant&gt;test1&lt;/constant&gt;
+  &lt;/setHeader&gt;
+  &lt;to uri="kubernetes-events:///?kubernetesClient=#kubernetesClient&amp;amp;operation=deleteEvent"/&gt;
+  &lt;to uri="mock:result"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:delete
+      steps:
+        - setHeader:
+            name: CamelKubernetesNamespaceName
+            constant: default
+        - setHeader:
+            name: CamelKubernetesEventName
+            constant: test1
+        - to:
+            uri: kubernetes-events:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: deleteEvent
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation removes an existing event from your cluster. It returns a <code>boolean</code> to indicate whether the operation was successful or not.</p> </div> <div class="paragraph"> <p>This operation expects two message headers which are <code>CamelKubernetesNamespaceName</code> and <code>CamelKubernetesEventName</code>, the first one needs to be set to the name of the target namespace and second one needs to be set to the target name of event.</p> </div> </div> <div class="sect2"> <h3 id="_kubernetes_events_consumer_example"><a class="anchor" href="#_kubernetes_events_consumer_example"></a>Kubernetes Events Consumer Example</h3> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// The body is an io.fabric8.kubernetes.api.model.events.v1.Event object
+from("kubernetes-events://{{host}}?oauthToken={{authToken}}")
+    .to("log:result");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!-- The body is an io.fabric8.kubernetes.api.model.events.v1.Event object --&gt;
+&lt;route&gt;
+  &lt;from uri="kubernetes-events://{{host}}?oauthToken={{authToken}}"/&gt;
+  &lt;to uri="log:result"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># The body is an io.fabric8.kubernetes.api.model.events.v1.Event object
+- route:
+    from:
+      uri: kubernetes-events://{{host}}
+      parameters:
+        oauthToken: "{{authToken}}"
+      steps:
+        - to:
+            uri: log:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This consumer returns a message per event received in the whole cluster. It also set the action (<code>io.fabric8.kubernetes.client.Watcher.Action</code>) in the message header <code>CamelKubernetesEventAction</code> and the timestamp (<code>long</code>) in the message header <code>CamelKubernetesEventTimestamp</code>.</p> </div> <div class="paragraph"> <p>You can narrow the scope of the consumer using the following query parameter combinations:</p> </div> <div class="ulist"> <ul> <li> <p><code>labelKey</code> + <code>labelValue</code> - Watch Events with the specified label in any namespace.</p> </li> <li> <p><code>namespace</code> - Watch all Events in the specified namespace.</p> </li> <li> <p><code>namespace</code> + <code>resourceName</code> - Watch the Event with the specified name in the given namespace.</p> </li> <li> <p><code>namespace</code> + <code>labelKey</code> + <code>labelValue</code> - Watch Events with the specified label in the given namespace.</p> </li> </ul> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using kubernetes-events with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-kubernetes-starter&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

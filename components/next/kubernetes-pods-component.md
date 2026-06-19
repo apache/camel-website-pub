@@ -190,12 +190,39 @@ Enum values:
 -   `listPods`: this operation lists the pods on a kubernetes cluster
     
 
-_Java-only: uses toF() for endpoint URI formatting_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:list").
-    toF("kubernetes-pods:///?kubernetesClient=#kubernetesClient&operation=listPods").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-pods:///?kubernetesClient=#kubernetesClient&operation=listPods")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-pods:///?kubernetesClient=#kubernetesClient&amp;operation=listPods"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+    steps:
+      - to:
+          uri: kubernetes-pods:///
+          parameters:
+            kubernetesClient: "#kubernetesClient"
+            operation: listPods
+      - to:
+          uri: mock:result
 ```
 
 This operation returns a list of pods from your cluster
@@ -203,39 +230,55 @@ This operation returns a list of pods from your cluster
 -   `listPodsByLabels`: this operation lists the pods by labels on a kubernetes cluster
     
 
-_Java-only: uses inline Processor with KubernetesConstants and HashMap_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_PODS_LABELS, labels);
-            }
-        });
-    toF("kubernetes-pods:///?kubernetesClient=#kubernetesClient&operation=listPodsByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Map<String, String> labels = new HashMap<>();
+            labels.put("key1", "value1");
+            labels.put("key2", "value2");
+            exchange.getIn().setHeader("CamelKubernetesPodLabels", labels);
+        }
+    })
+    .to("kubernetes-pods:///?kubernetesClient=#kubernetesClient&operation=listPodsByLabels")
+    .to("mock:result");
 ```
 
 This operation returns a list of pods from your cluster using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Pods Consumer Example
 
-_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-fromF("kubernetes-pods://%s?oauthToken=%s", host, authToken)
-    .process(new KubernetesProcessor()).to("mock:result");
-    public class KubernetesProcessor implements Processor {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            Message in = exchange.getIn();
-            Pod pod = exchange.getIn().getBody(Pod.class);
-            log.info("Got event with pod name: " + pod.getMetadata().getName() + " and action " + in.getHeader(KubernetesConstants.KUBERNETES_EVENT_ACTION));
-        }
-    }
+from("kubernetes-pods://{{kubernetes-host}}?oauthToken={{kubernetes-token}}")
+    .to("log:result");
+```
+
+```xml
+<route>
+  <from uri="kubernetes-pods://{{kubernetes-host}}?oauthToken={{kubernetes-token}}"/>
+  <to uri="log:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kubernetes-pods://{{kubernetes-host}}
+      parameters:
+        oauthToken: "{{kubernetes-token}}"
+    steps:
+      - to:
+          uri: log:result
 ```
 
 This consumer returns a message per event received for all Pods from all namespaces in the cluster.

@@ -135,32 +135,10 @@ pub extern fn transform(ptr: u32, len: u32) -> u64 {
 
 Supposing we have compiled a Wasm module containing the function above, then it can be called in a Camel Route by its name and module resource location:
 
-_Java-only: programmatic CamelContext and FluentProducerTemplate usage_
-
 ```java
- try (CamelContext cc = new DefaultCamelContext()) {
-    FluentProducerTemplate pt = cc.createFluentProducerTemplate();
-
-    cc.addRoutes(new RouteBuilder() {
-        @Override
-        public void configure() throws Exception {
-            from("direct:in")
-                    .tramsform()
-                      .wasm("transform", "classpath://functions.wasm");
-        }
-    });
-    cc.start();
-
-    Exchange out = pt.to("direct:in")
-            .withHeader("foo", "bar")
-            .withBody("hello")
-            .request(Exchange.class);
-
-    assertThat(out.getMessage().getHeaders())
-            .containsEntry("foo", "bar");
-    assertThat(out.getMessage().getBody(String.class))
-            .isEqualTo("HELLO");
-}
+from("direct:in")
+    .transform()
+        .wasm("transform", "classpath://functions.wasm");
 ```
 
 ## Dependencies

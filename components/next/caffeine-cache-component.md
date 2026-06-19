@@ -228,9 +228,9 @@ The Caffeine Cache component supports 7 message header(s), which is/are listed b
 
 Each time you’ll use an operation on the cache, you’ll have two different headers to check for status:
 
--   `CaffeineConstants.ACTION_HAS_RESULT`
+-   `CamelCaffeineActionHasResult`
     
--   `CaffeineConstants.ACTION_SUCCEEDED`
+-   `CamelCaffeineActionSucceeded`
     
 
 ## Examples

@@ -86,7 +86,7 @@ camel.vault.cyberark.apiKey=3ahx8dy3...</code></pre> </div> </div> </div> <div c
               password: secretpass
         - log:
             message: "Retrieved secret: ${body}"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Using message header for dynamic secret retrieval:</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
-    .setHeader(CyberArkVaultConstants.SECRET_ID, simple("${header.secretName}"))
+    .setHeader("CamelCyberArkVaultSecretId", simple("${header.secretName}"))
     .to("cyberark-vault:secret?operation=getSecret&amp;url=https://conjur.example.com&amp;account=myaccount&amp;username=admin&amp;password=secretpass")
     .log("Retrieved secret: ${body}");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start"/&gt;
@@ -112,7 +112,7 @@ camel.vault.cyberark.apiKey=3ahx8dy3...</code></pre> </div> </div> </div> <div c
               password: secretpass
         - log:
             message: "Retrieved secret: ${body}"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Retrieve a specific version of a secret:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
-    .setHeader(CyberArkVaultConstants.SECRET_VERSION, constant("3"))
+    .setHeader("CamelCyberArkVaultSecretVersion", constant("3"))
     .to("cyberark-vault:secret?secretId=db/password&amp;url=https://conjur.example.com&amp;account=myaccount&amp;username=admin&amp;apiKey=3ahx8dy3...")
     .log("Retrieved secret version 3: ${body}");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start"/&gt;
@@ -164,8 +164,8 @@ camel.vault.cyberark.apiKey=3ahx8dy3...</code></pre> </div> </div> </div> <div c
               apiKey: "3ahx8dy3..."
         - log:
             message: "Secret created/updated"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Using message header:</p> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
-    .setHeader(CyberArkVaultConstants.SECRET_VALUE, constant("myNewPassword"))
-    .setHeader(CyberArkVaultConstants.SECRET_ID, constant("db/password"))
+    .setHeader("CamelCyberArkVaultSecretValue", constant("myNewPassword"))
+    .setHeader("CamelCyberArkVaultSecretId", constant("db/password"))
     .to("cyberark-vault:secret?operation=createSecret&amp;url=https://conjur.example.com&amp;account=myaccount&amp;username=admin&amp;apiKey=3ahx8dy3...")
     .log("Secret created/updated");</code></pre> </div> </div> </div> <div id="_tabs_8_xml--panel" class="tabpanel" aria-labelledby="_tabs_8_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start"/&gt;
@@ -198,7 +198,7 @@ camel.vault.cyberark.apiKey=3ahx8dy3...</code></pre> </div> </div> </div> <div c
         - log:
             message: "Secret created/updated"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Dynamic secret creation:</p> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .setBody(simple("${header.newSecretValue}"))
-    .setHeader(CyberArkVaultConstants.SECRET_ID, simple("${header.secretPath}"))
+    .setHeader("CamelCyberArkVaultSecretId", simple("${header.secretPath}"))
     .to("cyberark-vault:secret?operation=createSecret&amp;url=https://conjur.example.com&amp;account=myaccount&amp;username=admin&amp;apiKey=3ahx8dy3...")
     .log("Secret ${header.secretPath} created/updated");</code></pre> </div> </div> </div> <div id="_tabs_9_xml--panel" class="tabpanel" aria-labelledby="_tabs_9_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start"/&gt;

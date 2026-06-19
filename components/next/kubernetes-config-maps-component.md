@@ -240,7 +240,7 @@ This operation returns a List of ConfigMaps from your cluster
 
 ```java
 from("direct:listByLabels")
-    .setHeader(KubernetesConstants.KUBERNETES_CONFIGMAPS_LABELS, constant("key1=value1,key2=value2"))
+    .setHeader("CamelKubernetesConfigMapsLabels", constant("key1=value1,key2=value2"))
     .to("kubernetes-config-maps:///?kubernetesClient=#kubernetesClient&operation=listConfigMapsByLabels")
     .to("mock:result");
 ```
@@ -279,20 +279,34 @@ This operation returns a List of ConfigMaps from your cluster, using a label sel
 
 ### Kubernetes ConfigMaps Consumer Example
 
-_Java-only: consuming ConfigMap events with a custom processor_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-fromF("kubernetes-config-maps://%s?oauthToken=%s", host, authToken)
-    .process(new KubernetesProcessor()).to("mock:result");
+from("kubernetes-config-maps://{{kubernetes-host}}?oauthToken={{kubernetes-token}}")
+    .to("log:result");
+```
 
-    public class KubernetesProcessor implements Processor {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            Message in = exchange.getIn();
-            ConfigMap cm = exchange.getIn().getBody(ConfigMap.class);
-            log.info("Got event with configmap name: " + cm.getMetadata().getName() + " and action " + in.getHeader(KubernetesConstants.KUBERNETES_EVENT_ACTION));
-        }
-    }
+```xml
+<route>
+  <from uri="kubernetes-config-maps://{{kubernetes-host}}?oauthToken={{kubernetes-token}}"/>
+  <to uri="log:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kubernetes-config-maps://{{kubernetes-host}}
+      parameters:
+        oauthToken: "{{kubernetes-token}}"
+      steps:
+        - to:
+            uri: log:result
 ```
 
 This consumer returns a message per event received for all ConfigMaps from all namespaces in the cluster.

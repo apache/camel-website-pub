@@ -43,7 +43,7 @@ producerTemplate.sendBody("paho:topic", payload);</code></pre> </div> </div> </d
       steps:
         - to:
             uri: mock:test</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>And here we override the default topic and set to a dynamic topic</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:test")
-    .setHeader(PahoConstants.CAMEL_PAHO_OVERRIDE_TOPIC, simple("${header.customerId}"))
+    .setHeader("CamelPahoOverrideTopic", simple("${header.customerId}"))
     .to("paho:some/target/queue");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:test"/&gt;
     &lt;setHeader name="CamelPahoOverrideTopic"&gt;

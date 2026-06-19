@@ -51,31 +51,7 @@ props.setProperty(Context.SECURITY_CREDENTIALS, "secret");
 DefaultRegistry reg = new DefaultRegistry();
 reg.bind("myldap", new InitialLdapContext(props, null));
 
-CamelContext context = new DefaultCamelContext(reg);
-context.addRoutes(
-    new RouteBuilder() {
-        @Override
-        public void configure() throws Exception {
-            from("direct:start").to("ldap:myldap?base=ou=test");
-        }
-    }
-);
-context.start();
-
-ProducerTemplate template = context.createProducerTemplate();
-
-Endpoint endpoint = context.getEndpoint("direct:start");
-Exchange exchange = endpoint.createExchange();
-exchange.getIn().setBody("(uid=test)");
-Exchange out = template.send(endpoint, exchange);
-
-Collection&lt;SearchResult&gt; data = out.getMessage().getBody(Collection.class);
-assert data != null;
-assert !data.isEmpty();
-
-System.out.println(out.getMessage().getBody());
-
-context.stop();</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_configuring_ssl"><a class="anchor" href="#_configuring_ssl"></a>Configuring SSL</h2> <div class="sectionbody"> <div class="paragraph"> <p>All that is required is to create a custom socket factory and reference it in the <code>InitialDirContext</code> bean. See the sample below.</p> </div> <div class="paragraph"> <p><strong>SSL Configuration</strong></p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java_quarkus" class="tab"> <p>Java (Quarkus)</p> </li> <li id="_tabs_2_xml_spring" class="tab"> <p>XML (Spring)</p> </li> </ul> </div> <div id="_tabs_2_java_quarkus--panel" class="tabpanel" aria-labelledby="_tabs_2_java_quarkus"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class LdapServerProducer {
+from("direct:start").to("ldap:myldap?base=ou=test");</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_configuring_ssl"><a class="anchor" href="#_configuring_ssl"></a>Configuring SSL</h2> <div class="sectionbody"> <div class="paragraph"> <p>All that is required is to create a custom socket factory and reference it in the <code>InitialDirContext</code> bean. See the sample below.</p> </div> <div class="paragraph"> <p><strong>SSL Configuration</strong></p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java_quarkus" class="tab"> <p>Java (Quarkus)</p> </li> <li id="_tabs_2_xml_spring" class="tab"> <p>XML (Spring)</p> </li> </ul> </div> <div id="_tabs_2_java_quarkus--panel" class="tabpanel" aria-labelledby="_tabs_2_java_quarkus"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class LdapServerProducer {
 
     @Produces
     @Dependent

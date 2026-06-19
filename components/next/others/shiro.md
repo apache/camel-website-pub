@@ -91,62 +91,42 @@ _Java-only: Java class instantiation and configuration_
 
 The ShiroSecurityPolicy, tests and permits incoming message exchanges containing an encrypted SecurityToken in the Message Header to proceed further following proper authentication. The SecurityToken object contains a Username/Password details that are used to determine where the user is a valid user.
 
-_Java-only: Java RouteBuilder with security policy_
+_Java-only: route with Shiro security policy_
 
 ```java
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        final ShiroSecurityPolicy securityPolicy =
-            new ShiroSecurityPolicy("classpath:shiro.ini", passPhrase);
+final ShiroSecurityPolicy securityPolicy =
+    new ShiroSecurityPolicy("classpath:shiro.ini", passPhrase);
 
-        return new RouteBuilder() {
-            public void configure() {
-                onException(UnknownAccountException.class).
-                    to("mock:authenticationException");
-                onException(IncorrectCredentialsException.class).
-                    to("mock:authenticationException");
-                onException(LockedAccountException.class).
-                    to("mock:authenticationException");
-                onException(AuthenticationException.class).
-                    to("mock:authenticationException");
+onException(UnknownAccountException.class).to("mock:authenticationException");
+onException(IncorrectCredentialsException.class).to("mock:authenticationException");
+onException(LockedAccountException.class).to("mock:authenticationException");
+onException(AuthenticationException.class).to("mock:authenticationException");
 
-                from("direct:secureEndpoint").
-                    to("log:incoming payload").
-                    policy(securityPolicy).
-                    to("mock:success");
-            }
-        };
-    }
+from("direct:secureEndpoint")
+    .to("log:incoming payload")
+    .policy(securityPolicy)
+    .to("mock:success");
 ```
 
 #### Applying Shiro Authorization on a Camel Route
 
 Authorization can be applied on a camel route by associating a Permissions List with the ShiroSecurityPolicy. The Permissions List specifies the permissions necessary for the user to proceed with the execution of the route segment. If the user does not have the proper permission set, the request is not authorized to continue any further.
 
-_Java-only: Java RouteBuilder with security policy_
+_Java-only: route with Shiro security policy and permissions_
 
 ```java
-    protected RouteBuilder createRouteBuilder() throws Exception {
-        final ShiroSecurityPolicy securityPolicy =
-            new ShiroSecurityPolicy("./src/test/resources/securityconfig.ini", passPhrase);
+final ShiroSecurityPolicy securityPolicy =
+    new ShiroSecurityPolicy("./src/test/resources/securityconfig.ini", passPhrase);
 
-        return new RouteBuilder() {
-            public void configure() {
-                onException(UnknownAccountException.class).
-                    to("mock:authenticationException");
-                onException(IncorrectCredentialsException.class).
-                    to("mock:authenticationException");
-                onException(LockedAccountException.class).
-                    to("mock:authenticationException");
-                onException(AuthenticationException.class).
-                    to("mock:authenticationException");
+onException(UnknownAccountException.class).to("mock:authenticationException");
+onException(IncorrectCredentialsException.class).to("mock:authenticationException");
+onException(LockedAccountException.class).to("mock:authenticationException");
+onException(AuthenticationException.class).to("mock:authenticationException");
 
-                from("direct:secureEndpoint").
-                    to("log:incoming payload").
-                    policy(securityPolicy).
-                    to("mock:success");
-            }
-        };
-    }
+from("direct:secureEndpoint")
+    .to("log:incoming payload")
+    .policy(securityPolicy)
+    .to("mock:success");
 ```
 
 ### Creating a ShiroSecurityToken and injecting it into a Message Exchange
@@ -195,14 +175,14 @@ _Java-only: Java test method (ProducerTemplate)_
 
 ### Using ShiroSecurityToken
 
-You can send a message to a Camel route with a header of key `ShiroSecurityConstants.SHIRO_SECURITY_TOKEN` of the type `org.apache.camel.component.shiro.security.ShiroSecurityToken` that contains the username and password. For example:
+You can send a message to a Camel route with a header of key `CamelShiroSecurityToken` of the type `org.apache.camel.component.shiro.security.ShiroSecurityToken` that contains the username and password. For example:
 
 _Java-only: Java test API (ProducerTemplate)_
 
 ```java
         ShiroSecurityToken shiroSecurityToken = new ShiroSecurityToken("ringo", "starr");
 
-        template.sendBodyAndHeader("direct:secureEndpoint", "Beatle Mania", ShiroSecurityConstants.SHIRO_SECURITY_TOKEN, shiroSecurityToken);
+        template.sendBodyAndHeader("direct:secureEndpoint", "Beatle Mania", "CamelShiroSecurityToken", shiroSecurityToken);
 ```
 
 You can also provide the username and password in two different headers as shown below:
@@ -211,12 +191,12 @@ _Java-only: Java test API (ProducerTemplate)_
 
 ```java
         Map<String, Object> headers = new HashMap<String, Object>();
-        headers.put(ShiroSecurityConstants.SHIRO_SECURITY_USERNAME, "ringo");
-        headers.put(ShiroSecurityConstants.SHIRO_SECURITY_PASSWORD, "starr");
+        headers.put("CamelShiroSecurityUsername", "ringo");
+        headers.put("CamelShiroSecurityPassword", "starr");
         template.sendBodyAndHeaders("direct:secureEndpoint", "Beatle Mania", headers);
 ```
 
-When you use the username and password headers, then the ShiroSecurityPolicy in the Camel route will automatically transform those into a single header with key ShiroSecurityConstants.SHIRO\_SECURITY\_TOKEN with the token. Then token is either a `ShiroSecurityToken` instance, or a base64 representation as a String (the latter is when you have set base64=true).
+When you use the username and password headers, then the ShiroSecurityPolicy in the Camel route will automatically transform those into a single header with key `CamelShiroSecurityToken` with the token. Then token is either a `ShiroSecurityToken` instance, or a base64 representation as a String (the latter is when you have set base64=true).
 
 ## Spring Boot Auto-Configuration
 

@@ -44,17 +44,11 @@
                   simple: "${body[response]} starts with '4'"
                   steps:
                     - to:
-                        uri: log:4xx</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_preregistered_patterns"><a class="anchor" href="#_preregistered_patterns"></a>Preregistered patterns</h3> <div class="paragraph"> <p>This component comes with preregistered patterns, which are based on Logstash patterns. All <a href="https://github.com/thekrakken/java-grok/tree/master/src/main/resources/patterns/patterns">Java Grok Default Patterns</a> are preregistered and as such could be used without manual registration.</p> </div> </div> <div class="sect2"> <h3 id="_custom_patterns"><a class="anchor" href="#_custom_patterns"></a>Custom patterns</h3> <div class="paragraph"> <p>Camel Grok DataFormat supports plugable patterns, which are auto loaded from Camel Registry. You can register patterns with Java DSL and Spring DSL:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: registering a custom Grok pattern in a `RouteBuilder`</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyRouteBuilder extends RouteBuilder {
+                        uri: log:4xx</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_preregistered_patterns"><a class="anchor" href="#_preregistered_patterns"></a>Preregistered patterns</h3> <div class="paragraph"> <p>This component comes with preregistered patterns, which are based on Logstash patterns. All <a href="https://github.com/thekrakken/java-grok/tree/master/src/main/resources/patterns/patterns">Java Grok Default Patterns</a> are preregistered and as such could be used without manual registration.</p> </div> </div> <div class="sect2"> <h3 id="_custom_patterns"><a class="anchor" href="#_custom_patterns"></a>Custom patterns</h3> <div class="paragraph"> <p>Camel Grok DataFormat supports plugable patterns, which are auto loaded from Camel Registry. You can register patterns with Java DSL and Spring DSL:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: registering a custom Grok pattern</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">bindToRegistry("myCustomPatternBean", new GrokPattern("FOOBAR", "foo|bar"));
 
-    @Override
-    public void configure() throws Exception {
-        bindToRegistry("myCustomPatternBean", new GrokPattern("FOOBAR", "foo|bar"));
-
-        from("direct:in")
-            .unmarshal().grok("%{FOOBAR:fooBar}")
-            .to("log:out");
-    }
-}</code></pre> </div> </div> <div class="paragraph"> <p>In Spring XML, you register the custom pattern as a bean:</p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring XML bean registration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;beans&gt;
+from("direct:in")
+    .unmarshal().grok("%{FOOBAR:fooBar}")
+    .to("log:out");</code></pre> </div> </div> <div class="paragraph"> <p>In Spring XML, you register the custom pattern as a bean:</p> </div> <div class="listingblock"> <div class="title"><em>XML-only: Spring XML bean registration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;beans&gt;
     &lt;bean id="myCustomPatternBean" class="org.apache.camel.component.grok.GrokPattern"&gt;
         &lt;constructor-arg value="FOOBAR"/&gt;
         &lt;constructor-arg value="foo|bar"/&gt;

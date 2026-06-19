@@ -109,25 +109,73 @@ Here we show some examples of producer using camel-kubernetes.
 
 ### Create a pod
 
-_Java-only: uses toF() with runtime variables for host and auth token_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:createPod")
-    .toF("kubernetes-pods://%s?oauthToken=%s&operation=createPod", host, authToken);
+    .to("kubernetes-pods://{{kubernetes-host}}?oauthToken={{kubernetes-token}}&operation=createPod");
 ```
 
-By using the `KubernetesConstants.KUBERNETES_POD_SPEC` header, you can specify your PodSpec and pass it to this operation.
+```xml
+<route>
+  <from uri="direct:createPod"/>
+  <to uri="kubernetes-pods://{{kubernetes-host}}?oauthToken={{kubernetes-token}}&amp;operation=createPod"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createPod
+    steps:
+      - to:
+          uri: kubernetes-pods://{{kubernetes-host}}
+          parameters:
+            oauthToken: "{{kubernetes-token}}"
+            operation: createPod
+```
+
+By using the `CamelKubernetesPodSpec` header, you can specify your PodSpec and pass it to this operation.
 
 ### Delete a pod
 
-_Java-only: uses toF() with runtime variables for host and auth token_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:createPod")
-    .toF("kubernetes-pods://%s?oauthToken=%s&operation=deletePod", host, authToken);
+from("direct:deletePod")
+    .to("kubernetes-pods://{{kubernetes-host}}?oauthToken={{kubernetes-token}}&operation=deletePod");
 ```
 
-By using the `KubernetesConstants.KUBERNETES_POD_NAME` header, you can specify your Pod name and pass it to this operation.
+```xml
+<route>
+  <from uri="direct:deletePod"/>
+  <to uri="kubernetes-pods://{{kubernetes-host}}?oauthToken={{kubernetes-token}}&amp;operation=deletePod"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:deletePod
+    steps:
+      - to:
+          uri: kubernetes-pods://{{kubernetes-host}}
+          parameters:
+            oauthToken: "{{kubernetes-token}}"
+            operation: deletePod
+```
+
+By using the `CamelKubernetesPodName` header, you can specify your Pod name and pass it to this operation.
 
 ## Using Kubernetes ConfigMaps and Secrets
 

@@ -558,7 +558,7 @@ Get your account info
 
 ```java
 from("direct:getAccountInfo")
-    .setHeader("CamelDigitalOceanOperation", constant(DigitalOceanOperations.get))
+    .setHeader("CamelDigitalOceanOperation", constant("get"))
     .to("digitalocean:account?oAuthToken=XXXXXX")
 ```
 

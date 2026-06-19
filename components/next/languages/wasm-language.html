@@ -48,29 +48,9 @@ pub extern fn transform(ptr: u32, len: u32) -&gt; u64 {
     };
 
     return ((out_ptr as u64) &lt;&lt; 32) | out_len as u64;
-}</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2> <div class="sectionbody"> <div class="paragraph"> <p>Supposing we have compiled a Wasm module containing the function above, then it can be called in a Camel Route by its name and module resource location:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic CamelContext and FluentProducerTemplate usage</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java"> try (CamelContext cc = new DefaultCamelContext()) {
-    FluentProducerTemplate pt = cc.createFluentProducerTemplate();
-
-    cc.addRoutes(new RouteBuilder() {
-        @Override
-        public void configure() throws Exception {
-            from("direct:in")
-                    .tramsform()
-                      .wasm("transform", "classpath://functions.wasm");
-        }
-    });
-    cc.start();
-
-    Exchange out = pt.to("direct:in")
-            .withHeader("foo", "bar")
-            .withBody("hello")
-            .request(Exchange.class);
-
-    assertThat(out.getMessage().getHeaders())
-            .containsEntry("foo", "bar");
-    assertThat(out.getMessage().getBody(String.class))
-            .isEqualTo("HELLO");
-}</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>If you use Maven you could add the following to your <code>pom.xml</code>, substituting the version number for the latest and greatest release.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+}</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2> <div class="sectionbody"> <div class="paragraph"> <p>Supposing we have compiled a Wasm module containing the function above, then it can be called in a Camel Route by its name and module resource location:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
+    .transform()
+        .wasm("transform", "classpath://functions.wasm");</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>If you use Maven you could add the following to your <code>pom.xml</code>, substituting the version number for the latest and greatest release.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
   &lt;artifactId&gt;camel-wasm&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

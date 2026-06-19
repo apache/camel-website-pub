@@ -182,21 +182,41 @@ If an _out file_ is specified (in the endpoint via `outFile` or the message head
 
 The example below executes `wc` (word count, Linux) to count the words in file `/usr/share/dict/words`. The word count (_output_) is written to the standard output stream of `wc`:
 
-_Java-only: route with inline Processor to handle ExecResult_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
+// The body is an ExecResult instance, which can be auto-converted to String (stdout output)
 from("direct:exec")
-.to("exec:wc?args=--words /usr/share/dict/words")
-.process(new Processor() {
-     public void process(Exchange exchange) throws Exception {
-       // By default, the body is ExecResult instance
-       assertIsInstanceOf(ExecResult.class, exchange.getIn().getBody());
-       // Use the Camel Exec String type converter to convert the ExecResult to String
-       // In this case, the stdout is considered as output
-       String wordCountOutput = exchange.getIn().getBody(String.class);
-       // do something with the word count
-     }
-});
+    .to("exec:wc?args=--words /usr/share/dict/words")
+    .to("log:result");
+```
+
+```xml
+<!-- The body is an ExecResult instance, which can be auto-converted to String (stdout output) -->
+<route>
+  <from uri="direct:exec"/>
+  <to uri="exec:wc?args=--words /usr/share/dict/words"/>
+  <to uri="log:result"/>
+</route>
+```
+
+```yaml
+# The body is an ExecResult instance, which can be auto-converted to String (stdout output)
+- route:
+    from:
+      uri: direct:exec
+      steps:
+        - to:
+            uri: exec:wc
+            parameters:
+              args: "--words /usr/share/dict/words"
+        - to:
+            uri: log:result
 ```
 
 ### Executing `java`
@@ -302,18 +322,42 @@ from("direct:exec")
 
 In the next example, the `ant.bat` command redirects its output to `CamelExecOutFile.txt` with `-l`. The file `CamelExecOutFile.txt` is used as the _out file_ with `outFile=CamelExecOutFile.txt`. The example assumes that `ant.bat` is in the system path, and that `CamelExecBuildFile.xml` is in the current directory.
 
-_Java-only: route with inline Processor to handle output file_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
+// When outFile is specified, the body is the content of that file (as InputStream)
 from("direct:exec")
-.to("exec:ant.bat?args=-f CamelExecBuildFile.xml -l CamelExecOutFile.txt&outFile=CamelExecOutFile.txt")
-.process(new Processor() {
-     public void process(Exchange exchange) throws Exception {
-        InputStream outFile = exchange.getIn().getBody(InputStream.class);
-        assertIsInstanceOf(InputStream.class, outFile);
-        // do something with the out file here
-     }
-  });
+    .to("exec:ant.bat?args=-f CamelExecBuildFile.xml -l CamelExecOutFile.txt&outFile=CamelExecOutFile.txt")
+    .to("log:result");
+```
+
+```xml
+<!-- When outFile is specified, the body is the content of that file (as InputStream) -->
+<route>
+  <from uri="direct:exec"/>
+  <to uri="exec:ant.bat?args=-f CamelExecBuildFile.xml -l CamelExecOutFile.txt&amp;outFile=CamelExecOutFile.txt"/>
+  <to uri="log:result"/>
+</route>
+```
+
+```yaml
+# When outFile is specified, the body is the content of that file (as InputStream)
+- route:
+    from:
+      uri: direct:exec
+      steps:
+        - to:
+            uri: exec:ant.bat
+            parameters:
+              args: "-f CamelExecBuildFile.xml -l CamelExecOutFile.txt"
+              outFile: CamelExecOutFile.txt
+        - to:
+            uri: log:result
 ```
 
 ### Executing `echo` (Windows)

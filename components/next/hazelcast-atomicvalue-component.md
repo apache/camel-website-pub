@@ -218,8 +218,8 @@ The operations for this producer are:
 
 ```java
 from("direct:set")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.SET_VALUE))
-    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("setValue"))
+    .to("hazelcast-atomicvalue:foo");
 ```
 
 ```xml
@@ -257,8 +257,8 @@ Provide the value to set inside the message body (here the value is 10): `templa
 
 ```java
 from("direct:get")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("get"))
+    .to("hazelcast-atomicvalue:foo");
 ```
 
 ```xml
@@ -296,8 +296,8 @@ You can get the number with `long body = template.requestBody("direct:get", null
 
 ```java
 from("direct:increment")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.INCREMENT))
-    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("increment"))
+    .to("hazelcast-atomicvalue:foo");
 ```
 
 ```xml
@@ -335,8 +335,8 @@ The actual value (after increment) will be provided inside the message body.
 
 ```java
 from("direct:decrement")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DECREMENT))
-    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("decrement"))
+    .to("hazelcast-atomicvalue:foo");
 ```
 
 ```xml
@@ -374,8 +374,8 @@ The actual value (after decrement) will be provided inside the message body.
 
 ```java
 from("direct:destroy")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DESTROY))
-    .toF("hazelcast-%sfoo", HazelcastConstants.ATOMICNUMBER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("destroy"))
+    .to("hazelcast-atomicvalue:foo");
 ```
 
 ```xml

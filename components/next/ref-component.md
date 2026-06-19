@@ -151,17 +151,32 @@ context.getRegistry().bind("endpoint2", context.getEndpoint("log:end"));
 
 Use the `ref` URI scheme to refer to endpoint’s bond to the Camel registry:
 
-_Java-only: RouteBuilder class definition_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-public class MyRefRoutes extends RouteBuilder {
-    @Override
-    public void configure() {
-        // direct:start -> log:end
-        from("ref:endpoint1")
-            .to("ref:endpoint2");
-    }
-}
+from("ref:endpoint1")
+    .to("ref:endpoint2");
+```
+
+```xml
+<route>
+  <from uri="ref:endpoint1"/>
+  <to uri="ref:endpoint2"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ref:endpoint1
+    steps:
+      - to:
+          uri: ref:endpoint2
 ```
 
 ## Spring Boot Auto-Configuration

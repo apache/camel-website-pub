@@ -355,7 +355,7 @@ And here we override the default topic and set to a dynamic topic
 
 ```java
 from("direct:test")
-    .setHeader(PahoConstants.CAMEL_PAHO_OVERRIDE_TOPIC, simple("${header.customerId}"))
+    .setHeader("CamelPahoOverrideTopic", simple("${header.customerId}"))
     .to("paho:some/target/queue");
 ```
 

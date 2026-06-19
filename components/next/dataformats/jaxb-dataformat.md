@@ -114,18 +114,16 @@ It is possible to use this data format with more than one context path. You can 
 
 JAXB 2 supports marshalling and unmarshalling XML tree fragments. By default, JAXB looks for the `@XmlRootElement` annotation on a given class to operate on the whole XML tree. This is useful, but not always. Sometimes the generated code does not have the `@XmlRootElement` annotation, and sometimes you need to unmarshall only part of the tree.
 
-In that case, you can use partial unmarshalling. To enable this behavior, you need set property `partClass` on the `JaxbDataFormat`. Camel will pass this class to the JAXB unmarshaller. If `JaxbConstants.JAXB_PART_CLASS` is set as one of the exchange headers, its value is used to override the `partClass` property on the `JaxbDataFormat`.
+In that case, you can use partial unmarshalling. To enable this behavior, you need set property `partClass` on the `JaxbDataFormat`. Camel will pass this class to the JAXB unmarshaller. If `CamelJaxbPartClass` is set as one of the exchange headers, its value is used to override the `partClass` property on the `JaxbDataFormat`.
 
 For marshalling you have to add the `partNamespace` attribute with the `QName` of the destination namespace.
 
-If `JaxbConstants.JAXB_PART_NAMESPACE` is set as one of the exchange headers, its value is used to override the `partNamespace` property on the `JaxbDataFormat`.
+If `CamelJaxbPartNamespace` is set as one of the exchange headers, its value is used to override the `partNamespace` property on the `JaxbDataFormat`.
 
-While setting `partNamespace` through `JaxbConstants.JAXB_PART_NAMESPACE`, please note that you need to specify its value in the format `{namespaceUri}localPart`, as per the example below.
-
-_Java-only: Java constant reference_
+While setting `partNamespace` through the `CamelJaxbPartNamespace` header, please note that you need to specify its value in the format `{namespaceUri}localPart`, as per the example below.
 
 ```java
-.setHeader(JaxbConstants.JAXB_PART_NAMESPACE, constant("{http://www.camel.apache.org/jaxb/example/address/1}address"));
+.setHeader("CamelJaxbPartNamespace", constant("{http://www.camel.apache.org/jaxb/example/address/1}address"));
 ```
 
 ### Fragment

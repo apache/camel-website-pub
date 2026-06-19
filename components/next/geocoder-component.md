@@ -233,7 +233,7 @@ If you provide a header with the `CamelGeoCoderAddress` then that overrides the 
 _Java-only: overriding the address via a message header_
 
 ```java
-template.sendBodyAndHeader("direct:start", "Hello", GeoCoderConstants.ADDRESS, "Copenhagen, Denmark");
+template.sendBodyAndHeader("direct:start", "Hello", "CamelGeoCoderAddress", "Copenhagen, Denmark");
 ```
 
 To get the address for a latitude and longitude we can do:

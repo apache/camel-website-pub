@@ -934,7 +934,7 @@ from("direct:start")
             uri: mock:result
 ```
 
-`createDownLink` and `createUploadLink` have a default expiry of 3600s which can be overridden by setting the header `MinioConstants.PRESIGNED_URL_EXPIRATION_TIME` (value in seconds)
+`createDownLink` and `createUploadLink` have a default expiry of 3600s which can be overridden by setting the header `CamelMinioPresignedURLExpirationTime` (value in seconds)
 
 ### Bucket Auto-creation
 

@@ -191,7 +191,7 @@ This operation returns a list of secrets from your cluster
 
 ```java
 from("direct:listByLabels")
-    .setHeader(KubernetesConstants.KUBERNETES_SECRETS_LABELS, constant("key1=value1,key2=value2"))
+    .setHeader("CamelKubernetesSecretsLabels", constant("key1=value1,key2=value2"))
     .to("kubernetes-secrets:///?kubernetesClient=#kubernetesClient&operation=listSecretsByLabels")
     .to("mock:result");
 ```

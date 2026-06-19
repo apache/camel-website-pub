@@ -272,7 +272,7 @@ You can call the samples with:
 _Java-only: calling producer operations using ProducerTemplate_
 
 ```java
-template.sendBodyAndHeader("direct:[put|get|update|delete|query|evict]", "my-foo", HazelcastConstants.OBJECT_ID, "4711");
+template.sendBodyAndHeader("direct:[put|get|update|delete|query|evict]", "my-foo", "CamelHazelcastObjectId", "4711");
 ```
 
 ### Example for **put**:
@@ -286,8 +286,8 @@ template.sendBodyAndHeader("direct:[put|get|update|delete|query|evict]", "my-foo
 
 ```java
 from("direct:put")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
-.toF("hazelcast-%sfoo", HazelcastConstants.MAP_PREFIX);
+.setHeader("CamelHazelcastOperationType", constant("put"))
+.to("hazelcast-map:foo");
 ```
 
 ```xml
@@ -323,10 +323,10 @@ Sample for **put** with eviction:
 
 ```java
 from("direct:put")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
-.setHeader(HazelcastConstants.TTL_VALUE, constant(Long.valueOf(1)))
-.setHeader(HazelcastConstants.TTL_UNIT, constant(TimeUnit.MINUTES))
-.toF("hazelcast-%sfoo", HazelcastConstants.MAP_PREFIX);
+.setHeader("CamelHazelcastOperationType", constant("put"))
+.setHeader("CamelHazelcastObjectTtlValue", constant(Long.valueOf(1)))
+.setHeader("CamelHazelcastObjectTtlUnit", constant(TimeUnit.MINUTES))
+.to("hazelcast-map:foo");
 ```
 
 ```xml
@@ -374,8 +374,8 @@ from("direct:put")
 
 ```java
 from("direct:get")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-.toF("hazelcast-%sfoo", HazelcastConstants.MAP_PREFIX)
+.setHeader("CamelHazelcastOperationType", constant("get"))
+.to("hazelcast-map:foo")
 .to("seda:out");
 ```
 
@@ -415,8 +415,8 @@ from("direct:get")
 
 ```java
 from("direct:update")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.UPDATE))
-.toF("hazelcast-%sfoo", HazelcastConstants.MAP_PREFIX);
+.setHeader("CamelHazelcastOperationType", constant("update"))
+.to("hazelcast-map:foo");
 ```
 
 ```xml
@@ -452,8 +452,8 @@ from("direct:update")
 
 ```java
 from("direct:delete")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DELETE))
-.toF("hazelcast-%sfoo", HazelcastConstants.MAP_PREFIX);
+.setHeader("CamelHazelcastOperationType", constant("delete"))
+.to("hazelcast-map:foo");
 ```
 
 ```xml
@@ -489,8 +489,8 @@ from("direct:delete")
 
 ```java
 from("direct:query")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.QUERY))
-.toF("hazelcast-%sfoo", HazelcastConstants.MAP_PREFIX)
+.setHeader("CamelHazelcastOperationType", constant("query"))
+.to("hazelcast-map:foo")
 .to("seda:out");
 ```
 
@@ -525,7 +525,7 @@ _Java-only: sending a query predicate using ProducerTemplate_
 
 ```java
 String q1 = "bar > 1000";
-template.sendBodyAndHeader("direct:query", null, HazelcastConstants.QUERY, q1);
+template.sendBodyAndHeader("direct:query", null, "CamelHazelcastQuery", q1);
 ```
 
 ## Map cache consumer - from("hazelcast-map:foo")

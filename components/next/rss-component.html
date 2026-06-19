@@ -75,15 +75,10 @@
         }
     });
 
-    return new RouteBuilder() {
-        @Override
-        public void configure() throws Exception {
-            from("timer://mytimer?fixedRate=false&amp;period=60&amp;synchronous=true")
-                .to("http://feeds.aps.org/rss/recent/prstper.xml?httpClientConfigurer=myHttpClientConfigurer")
-                .unmarshal(new RssDataFormat()) // Convert raw response to structured RSS
-                .to("mock:result");
-        }
-    };
+    from("timer://mytimer?fixedRate=false&amp;period=60&amp;synchronous=true")
+        .to("http://feeds.aps.org/rss/recent/prstper.xml?httpClientConfigurer=myHttpClientConfigurer")
+        .unmarshal(new RssDataFormat())
+        .to("mock:result");
 }</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using rss with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-rss-starter&lt;/artifactId&gt;

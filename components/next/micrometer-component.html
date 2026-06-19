@@ -217,7 +217,7 @@ String json = service.dumpStatisticsAsJson();</code></pre> </div> </div> <div cl
       &lt;groupId&gt;io.micrometer&lt;/groupId&gt;
       &lt;artifactId&gt;micrometer-registry-jmx&lt;/artifactId&gt;
       &lt;version&gt;${micrometer-version}&lt;/version&gt;
-    &lt;/dependency&gt;</code></pre> </div> </div> <div class="paragraph"> <p>and add a <code>JmxMeterRegistry</code> instance:</p> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_cdi" class="tab"> <p>CDI</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Bean(name = MicrometerConstants.METRICS_REGISTRY_NAME)
+    &lt;/dependency&gt;</code></pre> </div> </div> <div class="paragraph"> <p>and add a <code>JmxMeterRegistry</code> instance:</p> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_cdi" class="tab"> <p>CDI</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Bean(name = "metricsRegistry")
     public MeterRegistry getMeterRegistry() {
         CompositeMeterRegistry meterRegistry = new CompositeMeterRegistry();
         meterRegistry.add(...);
@@ -227,7 +227,7 @@ String json = service.dumpStatisticsAsJson();</code></pre> </div> </div> <div cl
            HierarchicalNameMapper.DEFAULT));
         return meterRegistry;
     }</code></pre> </div> </div> </div> <div id="_tabs_12_cdi--panel" class="tabpanel" aria-labelledby="_tabs_12_cdi"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Produces
-    @Named(MicrometerConstants.METRICS_REGISTRY_NAME))
+    @Named("metricsRegistry"))
     public MeterRegistry getMeterRegistry() {
         CompositeMeterRegistry meterRegistry = new CompositeMeterRegistry();
         meterRegistry.add(...);

@@ -196,14 +196,10 @@ final KeyStoreParameters tsParameters = new KeyStoreParameters();
 tsParameters.setPassword("password");
 tsParameters.setResource("sender.truststore");
 
-context.addRoutes(new RouteBuilder() {
-    public void configure() {
-        from("direct:start")
-           .marshal().xmlSecurity("//cust:cheesesites/italy", namespaces, true, "recipient",
-                                testCypherAlgorithm, XMLCipher.RSA_v1dot5, tsParameters)
-           .to("mock:encrypted");
-    }
-}
+from("direct:start")
+    .marshal().xmlSecurity("//cust:cheesesites/italy", namespaces, true, "recipient",
+                            testCypherAlgorithm, XMLCipher.RSA_v1dot5, tsParameters)
+    .to("mock:encrypted");
 ```
 
 Spring XML

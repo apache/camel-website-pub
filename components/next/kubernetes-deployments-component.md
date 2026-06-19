@@ -194,12 +194,39 @@ Enum values:
 -   `listDeployments`: this operation lists the deployments on a kubernetes cluster
     
 
-_Java-only: uses toF() for endpoint URI formatting_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:list").
-    toF("kubernetes-deployments:///?kubernetesClient=#kubernetesClient&operation=listDeployments").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-deployments:///?kubernetesClient=#kubernetesClient&operation=listDeployments")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-deployments:///?kubernetesClient=#kubernetesClient&amp;operation=listDeployments"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+    steps:
+      - to:
+          uri: kubernetes-deployments:///
+          parameters:
+            kubernetesClient: "#kubernetesClient"
+            operation: listDeployments
+      - to:
+          uri: mock:result
 ```
 
 This operation returns a List of Deployment from your cluster
@@ -207,40 +234,55 @@ This operation returns a List of Deployment from your cluster
 -   `listDeploymentsByLabels`: this operation lists the deployments by labels on a kubernetes cluster
     
 
-_Java-only: uses inline Processor with KubernetesConstants and HashMap_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_DEPLOYMENTS_LABELS, labels);
-            }
-        });
-    toF("kubernetes-deployments:///?kubernetesClient=#kubernetesClient&operation=listDeploymentsByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Map<String, String> labels = new HashMap<>();
+            labels.put("key1", "value1");
+            labels.put("key2", "value2");
+            exchange.getIn().setHeader("CamelKubernetesDeploymentsLabels", labels);
+        }
+    })
+    .to("kubernetes-deployments:///?kubernetesClient=#kubernetesClient&operation=listDeploymentsByLabels")
+    .to("mock:result");
 ```
 
 This operation returns a List of Deployments from your cluster, using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Deployments Consumer Example
 
-_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-fromF("kubernetes-deployments://%s?oauthToken=%s", host, authToken)
-    .process(new KubernetesProcessor()).to("mock:result");
+from("kubernetes-deployments://{{kubernetes-host}}?oauthToken={{kubernetes-token}}")
+    .to("log:result");
+```
 
-    public class KubernetesProcessor implements Processor {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            Message in = exchange.getIn();
-            Deployment dp = exchange.getIn().getBody(Deployment.class);
-            log.info("Got event with deployment name: " + dp.getMetadata().getName() + " and action " + in.getHeader(KubernetesConstants.KUBERNETES_EVENT_ACTION));
-        }
-    }
+```xml
+<route>
+  <from uri="kubernetes-deployments://{{kubernetes-host}}?oauthToken={{kubernetes-token}}"/>
+  <to uri="log:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kubernetes-deployments://{{kubernetes-host}}
+      parameters:
+        oauthToken: "{{kubernetes-token}}"
+    steps:
+      - to:
+          uri: log:result
 ```
 
 This consumer returns a message per event received for all Deployments from all namespaces in the cluster.

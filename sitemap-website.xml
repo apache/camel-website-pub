@@ -2,13 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-06-18T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/categories/AI/</loc>
+    <lastmod>2026-06-19T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Community/</loc>
-    <lastmod>2026-06-18T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2026-06-19T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-06-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/06/camel-ai-trained/</loc>
+    <lastmod>2026-06-19T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Community/</loc>
     <lastmod>2026-06-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/</loc>
@@ -49,9 +55,6 @@
   </url><url>
     <loc>https://camel.apache.org/categories/Howtos/</loc>
     <lastmod>2026-06-04T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/AI/</loc>
-    <lastmod>2026-05-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/05/wanaku-0.1.1/</loc>
     <lastmod>2026-05-31T00:00:00+00:00</lastmod>

@@ -436,16 +436,9 @@ _Java-only: unit test with Exchange API, ProducerTemplate, MockEndpoint assertio
         mock.assertIsSatisfied();
     }
 
-    @Override
-    protected RouteBuilder createRouteBuilder() {
-        return new RouteBuilder() {
-            public void configure() {
-                from("direct:a")
-                    .to("velocity:org/apache/camel/component/velocity/letter.vm")
-                    .to("mock:result");
-            }
-        };
-    }
+    from("direct:a")
+        .to("velocity:org/apache/camel/component/velocity/letter.vm")
+        .to("mock:result");
 ```
 
 ## Spring Boot Auto-Configuration

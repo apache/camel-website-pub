@@ -62,7 +62,7 @@ import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.ErrorCode;
 
 // In process block
-exchange.setProperty(MllpConstants.MLLP_ACKNOWLEDGEMENT,
+exchange.setProperty("CamelMllpAcknowledgement",
   ack(AcknowledgmentCode.AR, "Server didn't accept this message", ErrorCode.UNKNOWN_KEY_IDENTIFIER).evaluate(exchange, Object.class)</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using hl7terser with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-hl7-starter&lt;/artifactId&gt;

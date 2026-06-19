@@ -586,7 +586,7 @@ Message header can be used to override value specified in Metrics component URI.
 ```java
 // adds value 992 to simple.histogram
 from("direct:in")
-    .setHeader(MetricsConstants.HEADER_HISTOGRAM_VALUE, constant(992L))
+    .setHeader("CamelMetricsHistogramValue", constant(992L))
     .to("metrics:histogram:simple.histogram?value=700")
     .to("direct:out");
 ```
@@ -718,7 +718,7 @@ Message header can be used to override `mark` value specified in Metrics compone
 ```java
 // updates meter simple.meter with value 345
 from("direct:in")
-    .setHeader(MetricsConstants.HEADER_METER_MARK, constant(345L))
+    .setHeader("CamelMetricsMeterMark", constant(345L))
     .to("metrics:meter:simple.meter?mark=123")
     .to("direct:out");
 ```

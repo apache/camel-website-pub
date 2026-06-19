@@ -37,7 +37,7 @@ As mentioned, Camel provides a pair of crypto endpoints to create and verify sig
 crypto:sign:name\[?options\]
 crypto:verify:name\[?options\]
 
--   `crypto:sign` creates the signature and stores it in the Header keyed by the constant `org.apache.camel.component.crypto.DigitalSignatureConstants.SIGNATURE`, i.e., `"CamelDigitalSignature"`.
+-   `crypto:sign` creates the signature and stores it in the header `CamelDigitalSignature`.
     
 -   `crypto:verify` will read in the contents of this header and do the verification calculation.
     
@@ -353,14 +353,14 @@ In case you need to update the size of the buffer…​
 
 When using a Recipient list or similar EIP, the recipient of an exchange can vary dynamically. Using the same key across all recipients may be neither feasible nor desirable. It would be useful to be able to specify signature keys dynamically on a per-exchange basis. The exchange could then be dynamically enriched with the key of its target recipient prior to signing. To facilitate this, the signature mechanisms allow for keys to be supplied dynamically via the message headers below
 
--   `DigitalSignatureConstants.SIGNATURE_PRIVATE_KEY`, `"CamelSignaturePrivateKey"`
+-   `CamelSignaturePrivateKey`
     
--   `DigitalSignatureConstants.SIGNATURE_PUBLIC_KEY_OR_CERT`, `"CamelSignaturePublicKeyOrCert"`
+-   `CamelSignaturePublicKeyOrCert`
     
 
 Even better would be to dynamically supply a keystore alias. Again, the alias can be supplied in a message header
 
--   `DigitalSignatureConstants.KEYSTORE_ALIAS`, `"CamelSignatureKeyStoreAlias"`
+-   `CamelSignatureKeyStoreAlias`
     
 
 The header would be set as follows:
@@ -460,12 +460,12 @@ kpGen.initialize(MLDSAParameterSpec.ml_dsa_65);
 KeyPair kp = kpGen.generateKeyPair();
 
 from("direct:sign")
-    .setHeader(DigitalSignatureConstants.SIGNATURE_PRIVATE_KEY, constant(kp.getPrivate()))
+    .setHeader("CamelSignaturePrivateKey", constant(kp.getPrivate()))
     .to("crypto:sign:pqc?algorithm=ML-DSA&provider=BC")
     .to("direct:verify");
 
 from("direct:verify")
-    .setHeader(DigitalSignatureConstants.SIGNATURE_PUBLIC_KEY_OR_CERT, constant(kp.getPublic()))
+    .setHeader("CamelSignaturePublicKeyOrCert", constant(kp.getPublic()))
     .to("crypto:verify:pqc?algorithm=ML-DSA&provider=BC")
     .to("mock:result");
 ```

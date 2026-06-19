@@ -194,12 +194,39 @@ Enum values:
 -   `listDeploymentConfigs`: this operation lists the deployments on an Openshift cluster
     
 
-_Java-only: uses toF() for endpoint URI formatting_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:list").
-    toF("openshift-deploymentconfigs:///?kubernetesClient=#kubernetesClient&operation=listDeploymentConfigs").
-    to("mock:result");
+from("direct:list")
+    .to("openshift-deploymentconfigs:///?kubernetesClient=#kubernetesClient&operation=listDeploymentConfigs")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="openshift-deploymentconfigs:///?kubernetesClient=#kubernetesClient&amp;operation=listDeploymentConfigs"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+      steps:
+        - to:
+            uri: openshift-deploymentconfigs:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listDeploymentConfigs
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of deployment configs from your cluster
@@ -207,40 +234,55 @@ This operation returns a list of deployment configs from your cluster
 -   `listDeploymentConfigsByLabels`: this operation lists the deployment configs by labels on an Openshift cluster
     
 
-_Java-only: uses inline Processor with KubernetesConstants and HashMap_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_DEPLOYMENTS_LABELS, labels);
-            }
-        });
-    toF("openshift-deploymentconfigs:///?kubernetesClient=#kubernetesClient&operation=listDeploymentConfigsByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Map<String, String> labels = new HashMap<>();
+            labels.put("key1", "value1");
+            labels.put("key2", "value2");
+            exchange.getIn().setHeader("CamelKubernetesDeploymentsLabels", labels);
+        }
+    })
+    .to("openshift-deploymentconfigs:///?kubernetesClient=#kubernetesClient&operation=listDeploymentConfigsByLabels")
+    .to("mock:result");
 ```
 
 This operation returns a list of deployment configs from your cluster using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Openshift Deployment Configs Consumer Example
 
-_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-fromF("openshift-deploymentconfigs://%s?oauthToken=%s", host, authToken)
-    .process(new OpenshiftProcessor()).to("mock:result");
+from("openshift-deploymentconfigs://{{kubernetes-host}}?oauthToken={{kubernetes-token}}")
+    .to("log:result");
+```
 
-    public class OpenshiftProcessor implements Processor {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            Message in = exchange.getIn();
-            DeploymentConfig dp = exchange.getIn().getBody(DeploymentConfig.class);
-            log.info("Got event with deployment config name: " + dp.getMetadata().getName() + " and action " + in.getHeader(KubernetesConstants.KUBERNETES_EVENT_ACTION));
-        }
-    }
+```xml
+<route>
+  <from uri="openshift-deploymentconfigs://{{kubernetes-host}}?oauthToken={{kubernetes-token}}"/>
+  <to uri="log:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: openshift-deploymentconfigs://{{kubernetes-host}}
+      parameters:
+        oauthToken: "{{kubernetes-token}}"
+      steps:
+        - to:
+            uri: log:result
 ```
 
 This consumer returns a message per event received for all DeploymentConfigs from all namespaces in the cluster.

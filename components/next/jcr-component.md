@@ -154,7 +154,7 @@ The snippet below creates a node named `node` under the `/home/test` node in the
     
 
 ```java
-from("direct:a").setHeader(JcrConstants.JCR_NODE_NAME, constant("node"))
+from("direct:a").setHeader("CamelJcrNodeName", constant("node"))
     .setHeader("my.contents.property", body())
     .to("jcr://user:pass@repository/home/test");
 ```
@@ -162,7 +162,7 @@ from("direct:a").setHeader(JcrConstants.JCR_NODE_NAME, constant("node"))
 ```xml
 <route>
     <from uri="direct:a"/>
-    <setHeader name="JcrConstants.JCR_NODE_NAME">
+    <setHeader name="CamelJcrNodeName">
         <constant>node</constant>
     </setHeader>
     <setHeader name="my.contents.property">
@@ -178,7 +178,7 @@ from("direct:a").setHeader(JcrConstants.JCR_NODE_NAME, constant("node"))
       uri: direct:a
       steps:
         - setHeader:
-            name: JcrConstants.JCR_NODE_NAME
+            name: CamelJcrNodeName
             expression:
               constant:
                 expression: node

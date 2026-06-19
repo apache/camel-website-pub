@@ -241,8 +241,8 @@ The multimap producer provides eight operations:
 
 ```java
 from("direct:put")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
-    .to(String.format("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX));
+    .setHeader("CamelHazelcastOperationType", constant("put"))
+    .to("hazelcast-multimap:bar");
 ```
 
 ```xml
@@ -279,8 +279,8 @@ from("direct:put")
 
 ```java
 from("direct:removevalue")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.REMOVE_VALUE))
-    .toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("removeValue"))
+    .to("hazelcast-multimap:bar");
 ```
 
 ```xml
@@ -319,8 +319,8 @@ To remove a value you have to provide the value you want to remove inside the me
 
 ```java
 from("direct:get")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-    .toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX)
+    .setHeader("CamelHazelcastOperationType", constant("get"))
+    .to("hazelcast-multimap:bar")
     .to("seda:out");
 ```
 
@@ -361,8 +361,8 @@ from("direct:get")
 
 ```java
 from("direct:delete")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DELETE))
-    .toF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("delete"))
+    .to("hazelcast-multimap:bar");
 ```
 
 ```xml
@@ -393,7 +393,7 @@ You can call them in your test class with:
 _Java-only: uses ProducerTemplate API and Java constants_
 
 ```java
-template.sendBodyAndHeader("direct:[put|get|removevalue|delete]", "my-foo", HazelcastConstants.OBJECT_ID, "4711");
+template.sendBodyAndHeader("direct:[put|get|removevalue|delete]", "my-foo", "CamelHazelcastObjectId", "4711");
 ```
 
 ## multimap cache consumer - from("hazelcast-multimap:foo")

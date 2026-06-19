@@ -1704,7 +1704,7 @@ In the route above we have an endpoint configured `requestTimeout` of 30 seconds
 If you want to use a per message timeout value, you can set the header `CamelJmsRequestTimeout` with a timeout value as a long type.
 
 > **Tip**
-> In Java code, you can use the constant `JmsConstants.JMS_REQUEST_TIMEOUT` for the header name.
+> The header name is `CamelJmsRequestTimeout`.
 
 For example, we can use a bean to compute the timeout value per individual message, such as calling the `"whatIsTheTimeout"` method on the service bean as shown below:
 

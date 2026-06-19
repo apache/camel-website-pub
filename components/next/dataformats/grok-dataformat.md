@@ -110,20 +110,14 @@ This component comes with preregistered patterns, which are based on Logstash pa
 
 Camel Grok DataFormat supports plugable patterns, which are auto loaded from Camel Registry. You can register patterns with Java DSL and Spring DSL:
 
-_Java-only: registering a custom Grok pattern in a \`RouteBuilder\`_
+_Java-only: registering a custom Grok pattern_
 
 ```java
-public class MyRouteBuilder extends RouteBuilder {
+bindToRegistry("myCustomPatternBean", new GrokPattern("FOOBAR", "foo|bar"));
 
-    @Override
-    public void configure() throws Exception {
-        bindToRegistry("myCustomPatternBean", new GrokPattern("FOOBAR", "foo|bar"));
-
-        from("direct:in")
-            .unmarshal().grok("%{FOOBAR:fooBar}")
-            .to("log:out");
-    }
-}
+from("direct:in")
+    .unmarshal().grok("%{FOOBAR:fooBar}")
+    .to("log:out");
 ```
 
 In Spring XML, you register the custom pattern as a bean:

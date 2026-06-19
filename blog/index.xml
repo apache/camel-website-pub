@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 19 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Why AI Already Knows Apache Camel</title>
+      <link>https://camel.apache.org/blog/2026/06/camel-ai-trained/</link>
+      <pubDate>Fri, 19 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/camel-ai-trained/</guid>
+      <description>Ask an AI coding assistant to write an Apache Camel route and you will likely get working code on the first try. Ask it to configure a Kafka consumer, wire up an error handler, or transform a message with the Simple language, and the result is usually correct — often surprisingly so.&#xA;This is not because AI models were specifically trained on Camel. It is because Camel&amp;rsquo;s 19-year track record has produced exactly the kind of public, high-quality, consistent data that large language models learn best from.</description>
+    </item>
     <item>
       <title>Kaoto v2.11 release</title>
       <link>https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/</link>

@@ -237,9 +237,9 @@ _Java-only: Java lambda Processor with Stitch SDK API_
 ```java
 from("direct:sendStitch")
      .process(exchange -> {
-         exchange.getMessage().setHeader(StitchConstants.SCHEMA, StitchSchema.builder().addKeyword("field_1", "string").build());
-         exchange.getMessage().setHeader(StitchConstants.KEY_NAMES, "field_1");
-         exchange.getMessage().setHeader(StitchConstants.TABLE_NAME, "table_1");
+         exchange.getMessage().setHeader("CamelStitchSchema", StitchSchema.builder().addKeyword("field_1", "string").build());
+         exchange.getMessage().setHeader("CamelStitchKeyNames", "field_1");
+         exchange.getMessage().setHeader("CamelStitchTableName", "table_1");
 
          final StitchMessage stitchMessage = StitchMessage.builder()
                .withData("field_1", "stitchMessage2-1")
@@ -282,9 +282,9 @@ _Java-only: Java lambda Processor with Iterable construction_
 ```java
 from("direct:sendStitch")
      .process(exchange -> {
-         exchange.getMessage().setHeader(StitchConstants.SCHEMA, StitchSchema.builder().addKeyword("field_1", "string").build());
-         exchange.getMessage().setHeader(StitchConstants.KEY_NAMES, "field_1");
-         exchange.getMessage().setHeader(StitchConstants.TABLE_NAME, "table_1");
+         exchange.getMessage().setHeader("CamelStitchSchema", StitchSchema.builder().addKeyword("field_1", "string").build());
+         exchange.getMessage().setHeader("CamelStitchKeyNames", "field_1");
+         exchange.getMessage().setHeader("CamelStitchTableName", "table_1");
 
         final StitchMessage stitchMessage1 = StitchMessage.builder()
                 .withData("field_1", "stitchMessage1")

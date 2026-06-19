@@ -27,26 +27,17 @@ Camel also populates **all** `request.parameter` and Camel also populates **all*
 
 In addition to the implementation of the `PlatformHttp` SPI based on Vert.x, this module provides a Vert.x based HTTP server compatible with the `VertxPlatformHttpEngine`:
 
-_Java-only: programmatic CamelContext and VertxPlatformHttpServer setup_
+_Java-only: programmatic VertxPlatformHttpServer setup_
 
 ```java
-final int port = AvailablePortFinder.getNextAvailable();
-final CamelContext context = new DefaultCamelContext();
-
 VertxPlatformHttpServerConfiguration conf = new VertxPlatformHttpServerConfiguration();
 conf.setBindPort(port);
 
 context.addService(new VertxPlatformHttpServer(conf));
-context.addRoutes(new RouteBuilder() {
-    @Override
-    public void configure() throws Exception {
-        from("platform-http:/test")
-            .routeId("get")
-            .setBody().constant("Hello from Camel's PlatformHttp service");
-    }
-});
 
-context.start();
+from("platform-http:/test")
+    .routeId("get")
+    .setBody().constant("Hello from Camel's PlatformHttp service");
 ```
 
 ## Implementing a reverse proxy
@@ -153,14 +144,8 @@ authenticationConfig.setEnabled(true);
 conf.setAuthenticationConfig(authenticationConfig);
 
 context.addService(new VertxPlatformHttpServer(conf));
-context.addRoutes(new RouteBuilder() {
-    @Override
-    public void configure() throws Exception {
-        from("platform-http:/test")
-            .routeId("get")
-            .setBody().constant("Hello from Camel's PlatformHttp service");
-    }
-});
 
-context.start();
+from("platform-http:/test")
+    .routeId("get")
+    .setBody().constant("Hello from Camel's PlatformHttp service");
 ```

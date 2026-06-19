@@ -10,14 +10,16 @@ producer.process(exchange);</code></pre> </div> </div> <div class="paragraph"> <
     &lt;endpoint id="normalOrder" uri="activemq:order.slow"/&gt;
     &lt;endpoint id="bigspenderOrder" uri="activemq:order.high"/&gt;
 &lt;/camelContext&gt;</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_example"><a class="anchor" href="#_example"></a>Example</h2> <div class="sectionbody"> <div class="paragraph"> <p>Bind endpoints to the Camel registry:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic registry binding</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">context.getRegistry().bind("endpoint1", context.getEndpoint("direct:start"));
-context.getRegistry().bind("endpoint2", context.getEndpoint("log:end"));</code></pre> </div> </div> <div class="paragraph"> <p>Use the <code>ref</code> URI scheme to refer to endpoint&#8217;s bond to the Camel registry:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: RouteBuilder class definition</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class MyRefRoutes extends RouteBuilder {
-    @Override
-    public void configure() {
-        // direct:start -&gt; log:end
-        from("ref:endpoint1")
-            .to("ref:endpoint2");
-    }
-}</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using ref with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+context.getRegistry().bind("endpoint2", context.getEndpoint("log:end"));</code></pre> </div> </div> <div class="paragraph"> <p>Use the <code>ref</code> URI scheme to refer to endpoint&#8217;s bond to the Camel registry:</p> </div> <div id="_tabs_1" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("ref:endpoint1")
+    .to("ref:endpoint2");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="ref:endpoint1"/&gt;
+  &lt;to uri="ref:endpoint2"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: ref:endpoint1
+    steps:
+      - to:
+          uri: ref:endpoint2</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using ref with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-ref-starter&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

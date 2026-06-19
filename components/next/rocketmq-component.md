@@ -278,18 +278,61 @@ from("rocketmq:FROM_TOPIC?namesrvAddr=localhost:9876&consumerGroup=consumer")
               producerGroup: producer
 ```
 
-Setting specific headers can change routing behaviour. For example, if header `RocketMQConstants.OVERRIDE_TOPIC_NAME` was set, the message will be sent to `ACTUAL_TARGET` instead of `ORIGIN_TARGET`.
+Setting specific headers can change routing behaviour. For example, if header `CamelRockerMQOverrideTopicName` was set, the message will be sent to `ACTUAL_TARGET` instead of `ORIGIN_TARGET`.
 
-_Java-only: uses inline Processor lambda and RocketMQConstants Java constants_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("rocketmq:FROM?consumerGroup=consumer")
-        .process(exchange -> {
-            exchange.getMessage().setHeader(RocketMQConstants.OVERRIDE_TOPIC_NAME, "ACTUAL_TARGET");
-            exchange.getMessage().setHeader(RocketMQConstants.OVERRIDE_TAG, "OVERRIDE_TAG");
-            exchange.getMessage().setHeader(RocketMQConstants.OVERRIDE_MESSAGE_KEY, "OVERRIDE_MESSAGE_KEY");
-        }
-)
-.to("rocketmq:ORIGIN_TARGET?producerGroup=producer")
-.to("log:RocketRoute?showAll=true")
+    .setHeader("CamelRockerMQOverrideTopicName", constant("ACTUAL_TARGET"))
+    .setHeader("CamelRockerMQOverrideTag", constant("OVERRIDE_TAG"))
+    .setHeader("CamelRockerMQOverrideMessageKey", constant("OVERRIDE_MESSAGE_KEY"))
+    .to("rocketmq:ORIGIN_TARGET?producerGroup=producer")
+    .to("log:RocketRoute?showAll=true");
+```
+
+```xml
+<route>
+  <from uri="rocketmq:FROM?consumerGroup=consumer"/>
+  <setHeader name="CamelRockerMQOverrideTopicName">
+    <constant>ACTUAL_TARGET</constant>
+  </setHeader>
+  <setHeader name="CamelRockerMQOverrideTag">
+    <constant>OVERRIDE_TAG</constant>
+  </setHeader>
+  <setHeader name="CamelRockerMQOverrideMessageKey">
+    <constant>OVERRIDE_MESSAGE_KEY</constant>
+  </setHeader>
+  <to uri="rocketmq:ORIGIN_TARGET?producerGroup=producer"/>
+  <to uri="log:RocketRoute?showAll=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: rocketmq:FROM
+      parameters:
+        consumerGroup: consumer
+    steps:
+      - setHeader:
+          name: CamelRockerMQOverrideTopicName
+          constant: ACTUAL_TARGET
+      - setHeader:
+          name: CamelRockerMQOverrideTag
+          constant: OVERRIDE_TAG
+      - setHeader:
+          name: CamelRockerMQOverrideMessageKey
+          constant: OVERRIDE_MESSAGE_KEY
+      - to:
+          uri: rocketmq:ORIGIN_TARGET
+          parameters:
+            producerGroup: producer
+      - to:
+          uri: log:RocketRoute?showAll=true
 ```

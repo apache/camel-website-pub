@@ -11,23 +11,23 @@
       uri: direct:setVariableCamelBody
       steps:
         - to:
-            uri: robotframework:src/test/resources/org/apache/camel/component/robotframework/set_variable_camel_body.robot</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>To use a robot test case to execute and collect the results and pass them to generate a custom report if such need happens</p> </div> <div class="paragraph"> <p>It&#8217;s possible to specify what template the component should use dynamically via a header, so for example:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java constants for header names</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
-    .setHeader(RobotFrameworkCamelConstants.CAMEL_ROBOT_RESOURCE_URI).constant("path/to/my/template.robot")
-    .to("robotframework:dummy?allowTemplateFromHeader=true");</code></pre> </div> </div> <div class="paragraph"> <p>Robotframework component helps you pass values into robot test cases with the similar approach how you would be able to pass values using Camel Simple Language. Components support passing values in three different ways. Exchange body, headers, and properties.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java constants for header names</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
+            uri: robotframework:src/test/resources/org/apache/camel/component/robotframework/set_variable_camel_body.robot</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>To use a robot test case to execute and collect the results and pass them to generate a custom report if such need happens</p> </div> <div class="paragraph"> <p>It&#8217;s possible to specify what template the component should use dynamically via a header, so for example:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: dynamic template via header</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
+    .setHeader("CamelRobotResourceUri").constant("path/to/my/template.robot")
+    .to("robotframework:dummy?allowTemplateFromHeader=true");</code></pre> </div> </div> <div class="paragraph"> <p>Robotframework component helps you pass values into robot test cases with the similar approach how you would be able to pass values using Camel Simple Language. Components support passing values in three different ways. Exchange body, headers, and properties.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: dynamic template via header</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
     .setBody(constant("Hello Robot"))
-    .setHeader(RobotFrameworkCamelConstants.CAMEL_ROBOT_RESOURCE_URI).constant("path/to/my/template.robot")
+    .setHeader("CamelRobotResourceUri").constant("path/to/my/template.robot")
     .to("robotframework:dummy?allowTemplateFromHeader=true");</code></pre> </div> </div> <div class="paragraph"> <p>And the <code>template.robot</code> file:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">    *** Test Cases ***
     Set Variable Camel Body Test Case
     ${myvar} =    Set Variable    ${body}
-    Should Be True    ${myvar} == ${body}</code></pre> </div> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java constants for header names</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
+    Should Be True    ${myvar} == ${body}</code></pre> </div> </div> <div class="listingblock"> <div class="title"><em>Java-only: dynamic template via header</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
     .setHeader("testHeader", constant("testHeaderValue"))
-    .setHeader(RobotFrameworkCamelConstants.CAMEL_ROBOT_RESOURCE_URI).constant("path/to/my/template.robot")
+    .setHeader("CamelRobotResourceUri").constant("path/to/my/template.robot")
     .to("robotframework:dummy?allowTemplateFromHeader=true");</code></pre> </div> </div> <div class="paragraph"> <p>And the <code>template.robot</code> file:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">    *** Test Cases ***
     Set Variable Camel Header Test Case
     ${myvar} =    Set Variable    ${headers.testHeader}
-    Should Be True    ${myvar} == ${headers.testHeader}</code></pre> </div> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java constants for header names</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
+    Should Be True    ${myvar} == ${headers.testHeader}</code></pre> </div> </div> <div class="listingblock"> <div class="title"><em>Java-only: dynamic template via header</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:in")
     .setProperty"testProperty", constant("testPropertyValue"))
-    .setHeader(RobotFrameworkCamelConstants.CAMEL_ROBOT_RESOURCE_URI).constant("path/to/my/template.robot")
+    .setHeader("CamelRobotResourceUri").constant("path/to/my/template.robot")
     .to("robotframework:dummy?allowTemplateFromHeader=true");</code></pre> </div> </div> <div class="paragraph"> <p>And the <code>template.robot</code> file:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">    *** Test Cases ***
     Set Variable Camel Header Test Case
     ${myvar} =    Set Variable    ${properties.testProperty}

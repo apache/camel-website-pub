@@ -28,14 +28,10 @@ final KeyStoreParameters tsParameters = new KeyStoreParameters();
 tsParameters.setPassword("password");
 tsParameters.setResource("sender.truststore");
 
-context.addRoutes(new RouteBuilder() {
-    public void configure() {
-        from("direct:start")
-           .marshal().xmlSecurity("//cust:cheesesites/italy", namespaces, true, "recipient",
-                                testCypherAlgorithm, XMLCipher.RSA_v1dot5, tsParameters)
-           .to("mock:encrypted");
-    }
-}</code></pre> </div> </div> <div id="XMLSecurityDataFormat-SpringXML" class="paragraph"> <p>Spring XML</p> </div> <div class="paragraph"> <p>A namespace prefix defined as part of the <code>camelContext</code> definition can be re-used in context within the data format <code>secureTag</code> attribute of the <code>xmlSecurity</code> element.</p> </div> <div id="_tabs_1" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+from("direct:start")
+    .marshal().xmlSecurity("//cust:cheesesites/italy", namespaces, true, "recipient",
+                            testCypherAlgorithm, XMLCipher.RSA_v1dot5, tsParameters)
+    .to("mock:encrypted");</code></pre> </div> </div> <div id="XMLSecurityDataFormat-SpringXML" class="paragraph"> <p>Spring XML</p> </div> <div class="paragraph"> <p>A namespace prefix defined as part of the <code>camelContext</code> definition can be re-used in context within the data format <code>secureTag</code> attribute of the <code>xmlSecurity</code> element.</p> </div> <div id="_tabs_1" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_1_java" class="tab"> <p>Java</p> </li> <li id="_tabs_1_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_1_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_1_java--panel" class="tabpanel" aria-labelledby="_tabs_1_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .marshal().xmlSecurity("//cheese:cheesesites/italy", true)
     .to("...");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;camelContext id="springXmlSecurityDataFormatTestCamelContext"
               xmlns="http://camel.apache.org/schema/spring"

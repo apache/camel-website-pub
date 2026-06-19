@@ -303,7 +303,7 @@ The SSH Component can authenticate against the remote SSH server using one of tw
     
 2.  If `certResource` is not set, it will look to see if a `keyPairProvider` has been set, and if so, it will use that for certificate-based authentication.
     
-3.  If neither `certResource` nor `keyPairProvider` are set, it will use the `username` and `password` options for authentication. Even though the `username` and `password` are provided in the endpoint configuration and headers set with `SshConstants.USERNAME_HEADER` (`CamelSshUsername`) and `SshConstants.PASSWORD_HEADER` (`CamelSshPassword`), the endpoint configuration is surpassed and credentials set in the headers are used.
+3.  If neither `certResource` nor `keyPairProvider` are set, it will use the `username` and `password` options for authentication. Even though the `username` and `password` are provided in the endpoint configuration and headers set with `CamelSshUsername` and `CamelSshPassword`, the endpoint configuration is surpassed and credentials set in the headers are used.
     
 
 The following route fragment shows an SSH polling consumer using a certificate from the classpath.

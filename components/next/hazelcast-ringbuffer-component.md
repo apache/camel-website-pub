@@ -206,8 +206,8 @@ The ringbuffer producer provides 5 operations:
 
 ```java
 from("direct:put")
-.setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.ADD))
-.to(String.format("hazelcast-%sbar", HazelcastConstants.RINGBUFFER_PREFIX));
+.setHeader("CamelHazelcastOperationType", constant("add"))
+.to("hazelcast-ringbuffer:bar");
 ```
 
 ```xml

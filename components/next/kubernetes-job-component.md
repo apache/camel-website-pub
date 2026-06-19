@@ -155,7 +155,7 @@ This operation returns a list of jobs from your cluster
 -   `listJobByLabels`: this operation lists the jobs by labels on a kubernetes cluster
     
 
-_Java-only: uses inline Processor with KubernetesConstants and HashMap_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
 from("direct:listByLabels").process(new Processor() {
@@ -164,7 +164,7 @@ from("direct:listByLabels").process(new Processor() {
                 Map<String, String> labels = new HashMap<>();
                 labels.put("key1", "value1");
                 labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_JOB_LABELS, labels);
+                exchange.getIn().setHeader("CamelKubernetesJobLabels", labels);
             }
         });
     toF("kubernetes-job:///?kubernetesClient=#kubernetesClient&operation=listJobByLabels").
@@ -178,7 +178,7 @@ This operation returns a list of jobs from your cluster, using a label selector 
 
 We have a wonderful example of this operation thanks to [Emmerson Miranda](https://github.com/Emmerson-Miranda) from this [Java test](https://github.com/Emmerson-Miranda/camel/blob/master/camel3-cdi/cdi-k8s-pocs/src/main/java/edu/emmerson/camel/k8s/jobs/camel_k8s_jobs/KubernetesCreateJob.java)
 
-_Java-only: full RouteBuilder class with KubernetesConstants, lambda Processors, and programmatic JobSpec construction_
+_Java-only: full RouteBuilder class with lambda Processors and programmatic JobSpec construction_
 
 ```java
 import java.util.ArrayList;
@@ -192,8 +192,6 @@ import javax.inject.Inject;
 import org.apache.camel.Endpoint;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.kubernetes.KubernetesConstants;
-import org.apache.camel.component.kubernetes.KubernetesOperations;
 
 import io.fabric8.kubernetes.api.model.Container;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -216,18 +214,18 @@ public class KubernetesCreateJob extends RouteBuilder {
         from(inputEndpoint)
         	.routeId("kubernetes-jobcreate-client")
         	.process(exchange -> {
-        		exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_JOB_NAME, "camel-job"); //DNS-1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_NAMESPACE_NAME, "default");
+        		exchange.getIn().setHeader("CamelKubernetesJobName", "camel-job"); //DNS-1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')
+                exchange.getIn().setHeader("CamelKubernetesNamespaceName", "default");
 
                 Map<String, String> joblabels = new HashMap<String, String>();
                 joblabels.put("jobLabelKey1", "value1");
                 joblabels.put("jobLabelKey2", "value2");
                 joblabels.put("app", "jobFromCamelApp");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_JOB_LABELS, joblabels);
+                exchange.getIn().setHeader("CamelKubernetesJobLabels", joblabels);
 
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_JOB_SPEC, generateJobSpec());
+                exchange.getIn().setHeader("CamelKubernetesJobSpec", generateJobSpec());
         	})
-        	.toF("kubernetes-job:///{{kubernetes-master-url}}?oauthToken={{kubernetes-oauth-token:}}&operation=" + KubernetesOperations.CREATE_JOB_OPERATION)
+        	.to("kubernetes-job:///{{kubernetes-master-url}}?oauthToken={{kubernetes-oauth-token:}}&operation=createJob")
         	.log("Job created:")
         	.process(exchange -> {
         		System.out.println(exchange.getIn().getBody());

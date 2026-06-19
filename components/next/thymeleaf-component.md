@@ -483,16 +483,9 @@ _Java-only: unit test with Exchange creation and RouteBuilder_
         mock.assertIsSatisfied();
     }
 
-    @Override
-    protected RouteBuilder createRouteBuilder() {
-        return new RouteBuilder() {
-            public void configure() {
-                from("direct:a")
-                    .to("thymeleaf:org/apache/camel/component/thymeleaf/letter.txt")
-                    .to("mock:result");
-            }
-        };
-    }
+    from("direct:a")
+        .to("thymeleaf:org/apache/camel/component/thymeleaf/letter.txt")
+        .to("mock:result");
 ```
 
 ## Spring Boot Auto-Configuration

@@ -141,12 +141,39 @@ The Kubernetes Resources Quota component supports 5 message header(s), which is/
 -   `listResourcesQuota`: this operation lists the resource quotas on a kubernetes cluster
     
 
-_Java-only: uses `toF()` for URI formatting_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:list").
-    toF("kubernetes-resources-quota:///?kubernetesClient=#kubernetesClient&operation=listResourcesQuota").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-resources-quota:///?kubernetesClient=#kubernetesClient&operation=listResourcesQuota")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-resources-quota:///?kubernetesClient=#kubernetesClient&amp;operation=listResourcesQuota"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+      steps:
+        - to:
+            uri: kubernetes-resources-quota:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listResourcesQuota
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of resource quotas from your cluster
@@ -154,20 +181,21 @@ This operation returns a list of resource quotas from your cluster
 -   `listResourcesQuotaByLabels`: this operation lists the resource quotas by labels on a kubernetes cluster
     
 
-_Java-only: uses inline Processor, Java constants, and \`toF()\`_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_RESOURCES_QUOTA_LABELS, labels);
-            }
-        });
-    toF("kubernetes-resources-quota:///?kubernetesClient=#kubernetesClient&operation=listResourcesQuotaByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Map<String, String> labels = new HashMap<>();
+            labels.put("key1", "value1");
+            labels.put("key2", "value2");
+            exchange.getIn().setHeader("CamelKubernetesResourcesQuotaLabels", labels);
+        }
+    })
+    .to("kubernetes-resources-quota:///?kubernetesClient=#kubernetesClient&operation=listResourcesQuotaByLabels")
+    .to("mock:result");
 ```
 
 This operation returns a list of resource quotas from your cluster using a label selector (with key1 and key2, with value value1 and value2)

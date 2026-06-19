@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[208]{title,link,pubDate,description}:
+posts[209]{title,link,pubDate,description}:
+  Why AI Already Knows Apache Camel|https://camel.apache.org/blog/2026/06/camel-ai-trained/index.md|Fri, 19 Jun 2026 00:00:00 +0000|Ask an AI coding assistant to write an Apache Camel route and you will likely get working code on the first try. Ask it to configure a Kafka consumer, wire up an error handler, or transform a message 
   Kaoto v2.11 release|https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/index.md|Thu, 18 Jun 2026 00:00:00 +0000|What&rsquo;s New? Kaoto 2.11 delivers major improvements across three key areas: automated testing through Citrus framework support, enhanced DataMapper capabilities for handling complex schemas, and 
   The Hidden Work: 2,449 Dependency Updates Across 20 Apache Camel Releases|https://camel.apache.org/blog/2026/06/camel-dependency-updates/index.md|Thu, 18 Jun 2026 00:00:00 +0000|Every Apache Camel release ships new features and bug fixes — and those get the headlines. But behind every release there is a quieter effort that rarely gets mentioned: keeping 500+ third-party depen
   Apache Camel: 19 Years of Continuous Development — 272 Releases, 100,000 Commits, Zero Gaps|https://camel.apache.org/blog/2026/06/camel-always-on/index.md|Mon, 15 Jun 2026 00:00:00 +0000|Apache Camel has shipped 272 production releases over 19 years without a single month of inactivity. The project averages a new release every 15 days, maintains up to 10 release lines in parallel, and

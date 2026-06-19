@@ -292,7 +292,7 @@ See the Mina how to write your own codec. To use your custom codec with `camel-m
 
 ### Get the IoSession for message
 
-You can get the IoSession from the message header with this key `MinaConstants.MINA_IOSESSION`, and also get the local host address with the key `MinaConstants.MINA_LOCAL_ADDRESS` and remote host address with the key `MinaConstants.MINA_REMOTE_ADDRESS`.
+You can get the IoSession from the message header with this key `CamelMinaIoSession`, and also get the local host address with the key `CamelMinaLocalAddress` and remote host address with the key `CamelMinaRemoteAddress`.
 
 ### Configuring Mina filters
 
@@ -325,15 +325,37 @@ MockEndpoint.assertIsSatisfied(context);
 
 In the next sample, we have a more common use case where we expose a TCP service on port 6201 also use the `textline` codec. However, this time we want to return a response, so we set the `sync` option to `true` on the consumer.
 
-_Java-only: inline Processor class_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-fromF("mina:tcp://localhost:%d?textline=true&sync=true", port2).process(new Processor() {
-    public void process(Exchange exchange) throws Exception {
-        String body = exchange.getIn().getBody(String.class);
-        exchange.getOut().setBody("Bye " + body);
-    }
-});
+from("mina:tcp://localhost:{{port}}?textline=true&sync=true")
+    .setBody(simple("Bye ${body}"));
+```
+
+```xml
+<route>
+  <from uri="mina:tcp://localhost:{{port}}?textline=true&amp;sync=true"/>
+  <setBody>
+    <simple>Bye ${body}</simple>
+  </setBody>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina:tcp://localhost:{{port}}
+      parameters:
+        textline: true
+        sync: true
+      steps:
+        - setBody:
+            simple: "Bye ${body}"
 ```
 
 Then we test the sample by sending some data and retrieving the response using the `template.requestBody()` method. As we know the response is a `String`, we cast it to `String` and can assert that the response is, in fact, something we have dynamically set in our processor code logic.
@@ -396,16 +418,44 @@ When acting as a server, you sometimes want to close the session when, for examp
 
 For instance, the example below will close the session after it has written the `bye` message back to the client:
 
-_Java-only: inline Processor class_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-        from("mina:tcp://localhost:8080?sync=true&textline=true").process(new Processor() {
-            public void process(Exchange exchange) throws Exception {
-                String body = exchange.getIn().getBody(String.class);
-                exchange.getOut().setBody("Bye " + body);
-                exchange.getOut().setHeader(MinaConstants.MINA_CLOSE_SESSION_WHEN_COMPLETE, true);
-            }
-        });
+from("mina:tcp://localhost:8080?sync=true&textline=true")
+    .setBody(simple("Bye ${body}"))
+    .setHeader("CamelMinaCloseSessionWhenComplete", constant(true));
+```
+
+```xml
+<route>
+  <from uri="mina:tcp://localhost:8080?sync=true&amp;textline=true"/>
+  <setBody>
+    <simple>Bye ${body}</simple>
+  </setBody>
+  <setHeader name="CamelMinaCloseSessionWhenComplete">
+    <constant>true</constant>
+  </setHeader>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: mina:tcp://localhost:8080
+      parameters:
+        sync: true
+        textline: true
+      steps:
+        - setBody:
+            simple: "Bye ${body}"
+        - setHeader:
+            name: CamelMinaCloseSessionWhenComplete
+            constant: true
 ```
 
 ## Spring Boot Auto-Configuration

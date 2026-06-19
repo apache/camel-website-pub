@@ -221,8 +221,8 @@ _Java-only: requires OpenTelemetry Attributes API_
 
 ```java
 from("direct:in")
-    .setHeader(OpenTelemetryConstants.HEADER_METRIC_NAME, constant("new.name"))
-    .setHeader(OpenTelemetryConstants.HEADER_METRIC_ATTRIBUTES, constant(Attributes.of(AttributeKey.stringKey("dynamic-key"), "dynamic-value")))
+    .setHeader("CamelMetricsName", constant("new.name"))
+    .setHeader("CamelMetricsAttributes", constant(Attributes.of(AttributeKey.stringKey("dynamic-key"), "dynamic-value")))
     .to("opentelemetry-metrics:counter:name.not.used?attributes.key=value")
     .to("direct:out");
 ```
@@ -680,7 +680,7 @@ _Java-only: requires OpenTelemetryTimerAction enum_
 ```java
 // sets timer action using header
 from("direct:in")
-    .setHeader(OpenTelemetryConstants.HEADER_TIMER_ACTION, OpenTelemetryTimerAction.start)
+    .setHeader("CamelMetricsTimerAction", constant("start"))
     .to("opentelemetry-metrics:timer:simple.timer")
     .to("direct:out");
 ```

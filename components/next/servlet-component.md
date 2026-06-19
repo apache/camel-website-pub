@@ -234,20 +234,34 @@ _XML-only: web.xml servlet configuration_
 
 ### Example route
 
-_Java-only: inline Processor with Exchange API and string concatenation_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("servlet:hello").process(new Processor() {
-    public void process(Exchange exchange) throws Exception {
-        // Access HTTP headers sent by the client
-        Message message = exchange.getMessage();
-        String contentType = message.getHeader(Exchange.CONTENT_TYPE, String.class);
-        String httpUri = message.getHeader(Exchange.HTTP_URI, String.class);
+from("servlet:hello")
+    .setBody(simple("<b>Got Content-Type: ${header.Content-Type}, URI: ${header.CamelHttpUri}</b>"));
+```
 
-        // Set the response body
-        message.setBody("<b>Got Content-Type: " + contentType = ", URI: " + httpUri + "</b>");
-    }
-});
+```xml
+<route>
+  <from uri="servlet:hello"/>
+  <setBody>
+    <simple>&lt;b&gt;Got Content-Type: ${header.Content-Type}, URI: ${header.CamelHttpUri}&lt;/b&gt;</simple>
+  </setBody>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: servlet:hello
+      steps:
+        - setBody:
+            simple: "<b>Got Content-Type: ${header.Content-Type}, URI: ${header.CamelHttpUri}</b>"
 ```
 
 ### Camel Servlet HTTP endpoint path

@@ -1388,24 +1388,21 @@ As example you could use the secret key to dynamically instruct the CryptoDataFo
 _Java-only: extracting secret key from encapsulation for downstream CryptoDataFormat usage_
 
 ```java
-        CryptoDataFormat cryptoFormat = new CryptoDataFormat("AES", null);
-        return new RouteBuilder() {
-            @Override
-            public void configure() {
-                from("direct:encapsulate").to("pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
-                        .to("mock:encapsulate")
-                        .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
-                        .to("pqc:keyenc?operation=extractSecretKeyFromEncapsulation&symmetricKeyAlgorithm=AES")
-                        .setHeader(CryptoDataFormat.KEY, body())
-                        .setBody(constant("Hello"))
-                        .marshal(cryptoFormat)
-                        .log("Encrypted ${body}")
-                        .to("mock:encrypted")
-                        .unmarshal(cryptoFormat)
-                        .log("Unencrypted ${body}")
-                        .to("mock:unencrypted");
-                ;
-            }
+CryptoDataFormat cryptoFormat = new CryptoDataFormat("AES", null);
+
+from("direct:encapsulate")
+    .to("pqc:keyenc?operation=generateSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
+    .to("mock:encapsulate")
+    .to("pqc:keyenc?operation=extractSecretKeyEncapsulation&symmetricKeyAlgorithm=AES")
+    .to("pqc:keyenc?operation=extractSecretKeyFromEncapsulation&symmetricKeyAlgorithm=AES")
+    .setHeader(CryptoDataFormat.KEY, body())
+    .setBody(constant("Hello"))
+    .marshal(cryptoFormat)
+    .log("Encrypted ${body}")
+    .to("mock:encrypted")
+    .unmarshal(cryptoFormat)
+    .log("Unencrypted ${body}")
+    .to("mock:unencrypted");
 ```
 
 This could be used to generate a secret key, protect it through Encapsulation and KEM approach and re-use it once extracted.
@@ -3823,34 +3820,11 @@ void testPQCDataFormatRoundTrip() throws Exception {
     pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
     pqcFormat.setSymmetricKeyAlgorithm("AES");
 
-    // Create route
-    context.addRoutes(new RouteBuilder() {
-        @Override
-        public void configure() {
-            from("direct:start")
-                .marshal(pqcFormat)
-                .to("mock:encrypted")
-                .unmarshal(pqcFormat)
-                .to("mock:decrypted");
-        }
-    });
-
-    // Test
-    String original = "Sensitive data";
-    template.sendBody("direct:start", original);
-
-    MockEndpoint encrypted = getMockEndpoint("mock:encrypted");
-    MockEndpoint decrypted = getMockEndpoint("mock:decrypted");
-
-    encrypted.assertIsSatisfied();
-    decrypted.assertIsSatisfied();
-
-    byte[] encryptedBody = encrypted.getExchanges().get(0).getMessage().getBody(byte[].class);
-    assertNotEquals(original, new String(encryptedBody));
-
-    String decryptedBody = decrypted.getExchanges().get(0).getMessage().getBody(String.class);
-    assertEquals(original, decryptedBody);
-}
+    from("direct:start")
+        .marshal(pqcFormat)
+        .to("mock:encrypted")
+        .unmarshal(pqcFormat)
+        .to("mock:decrypted");
 ```
 
 ### Troubleshooting

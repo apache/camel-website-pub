@@ -133,12 +133,39 @@ The Kubernetes Persistent Volume component supports 3 message header(s), which i
 -   `listPersistentVolumes`: this operation lists the PVs on a kubernetes cluster
     
 
-_Java-only: uses `toF()` for URI formatting_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:list").
-    toF("kubernetes-persistent-volumes:///?kubernetesClient=#kubernetesClient&operation=listPersistentVolumes").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-persistent-volumes:///?kubernetesClient=#kubernetesClient&operation=listPersistentVolumes")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-persistent-volumes:///?kubernetesClient=#kubernetesClient&amp;operation=listPersistentVolumes"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+      steps:
+        - to:
+            uri: kubernetes-persistent-volumes:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listPersistentVolumes
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of PVs from your cluster
@@ -146,20 +173,21 @@ This operation returns a list of PVs from your cluster
 -   `listPersistentVolumesByLabels`: this operation lists the PVs by labels on a kubernetes cluster
     
 
-_Java-only: uses inline Processor, Java constants, and \`toF()\`_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_PERSISTENT_VOLUMES_LABELS, labels);
-            }
-        });
-    toF("kubernetes-persistent-volumes:///?kubernetesClient=#kubernetesClient&operation=listPersistentVolumesByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Map<String, String> labels = new HashMap<>();
+            labels.put("key1", "value1");
+            labels.put("key2", "value2");
+            exchange.getIn().setHeader("CamelKubernetesPersistentVolumesLabels", labels);
+        }
+    })
+    .to("kubernetes-persistent-volumes:///?kubernetesClient=#kubernetesClient&operation=listPersistentVolumesByLabels")
+    .to("mock:result");
 ```
 
 This operation returns a list of PVs from your cluster using a label selector (with key1 and key2, with value value1 and value2)

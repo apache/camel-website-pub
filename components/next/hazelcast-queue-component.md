@@ -263,7 +263,7 @@ The queue producer provides 12 operations:
 
 ```java
 from("direct:add")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.ADD))
+    .setHeader("CamelHazelcastOperationType", constant("add"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -300,7 +300,7 @@ from("direct:add")
 
 ```java
 from("direct:put")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
+    .setHeader("CamelHazelcastOperationType", constant("put"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -337,7 +337,7 @@ from("direct:put")
 
 ```java
 from("direct:poll")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.POLL))
+    .setHeader("CamelHazelcastOperationType", constant("poll"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -374,7 +374,7 @@ from("direct:poll")
 
 ```java
 from("direct:peek")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PEEK))
+    .setHeader("CamelHazelcastOperationType", constant("peek"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -411,7 +411,7 @@ from("direct:peek")
 
 ```java
 from("direct:offer")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.OFFER))
+    .setHeader("CamelHazelcastOperationType", constant("offer"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -448,7 +448,7 @@ from("direct:offer")
 
 ```java
 from("direct:removevalue")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.REMOVE_VALUE))
+    .setHeader("CamelHazelcastOperationType", constant("removeValue"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -485,7 +485,7 @@ from("direct:removevalue")
 
 ```java
 from("direct:remaining-capacity")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.REMAINING_CAPACITY))
+    .setHeader("CamelHazelcastOperationType", constant("remainingCapacity"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -522,7 +522,7 @@ from("direct:remaining-capacity")
 
 ```java
 from("direct:removeAll")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.REMOVE_ALL))
+    .setHeader("CamelHazelcastOperationType", constant("removeAll"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -559,7 +559,7 @@ from("direct:removeAll")
 
 ```java
 from("direct:removeIf")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.REMOVE_IF))
+    .setHeader("CamelHazelcastOperationType", constant("removeIf"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -596,7 +596,7 @@ from("direct:removeIf")
 
 ```java
 from("direct:drainTo")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DRAIN_TO))
+    .setHeader("CamelHazelcastOperationType", constant("drainTo"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -633,7 +633,7 @@ from("direct:drainTo")
 
 ```java
 from("direct:take")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.TAKE))
+    .setHeader("CamelHazelcastOperationType", constant("take"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -670,7 +670,7 @@ from("direct:take")
 
 ```java
 from("direct:retainAll")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.RETAIN_ALL))
+    .setHeader("CamelHazelcastOperationType", constant("retainAll"))
     .to("hazelcast-queue:bar");
 ```
 
@@ -756,10 +756,10 @@ Sample for **Listen** mode
 from("hazelcast-queue:mm")
     .log("object...")
     .choice()
-        .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
+        .when(header("CamelHazelcastListenerAction").isEqualTo("added"))
             .log("...added")
             .to("mock:added")
-        .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.REMOVED))
+        .when(header("CamelHazelcastListenerAction").isEqualTo("removed"))
             .log("...removed")
             .to("mock:removed")
         .otherwise()

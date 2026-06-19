@@ -1090,15 +1090,15 @@ The component supports the following operations:
 ```java
 // Create a new realm
 template.sendBodyAndHeader("keycloak:admin?operation=createRealm", null,
-    KeycloakConstants.REALM_NAME, "my-new-realm");
+    "CamelKeycloakRealmName", "my-new-realm");
 
 // Get realm information
 template.sendBodyAndHeader("keycloak:admin?operation=getRealm", null,
-    KeycloakConstants.REALM_NAME, "my-realm");
+    "CamelKeycloakRealmName", "my-realm");
 
 // Delete a realm
 template.sendBodyAndHeader("keycloak:admin?operation=deleteRealm", null,
-    KeycloakConstants.REALM_NAME, "my-old-realm");
+    "CamelKeycloakRealmName", "my-old-realm");
 ```
 
 ### User Operations
@@ -1109,18 +1109,18 @@ template.sendBodyAndHeader("keycloak:admin?operation=deleteRealm", null,
 ```java
 // Create a new user
 Map<String, Object> headers = new HashMap<>();
-headers.put(KeycloakConstants.REALM_NAME, "my-realm");
-headers.put(KeycloakConstants.USERNAME, "john.doe");
-headers.put(KeycloakConstants.USER_EMAIL, "john.doe@example.com");
-headers.put(KeycloakConstants.USER_FIRST_NAME, "John");
-headers.put(KeycloakConstants.USER_LAST_NAME, "Doe");
+headers.put("CamelKeycloakRealmName", "my-realm");
+headers.put("CamelKeycloakUsername", "john.doe");
+headers.put("CamelKeycloakUserEmail", "john.doe@example.com");
+headers.put("CamelKeycloakUserFirstName", "John");
+headers.put("CamelKeycloakUserLastName", "Doe");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=createUser", null, headers);
 
 // Set user password
 Map<String, Object> passwordHeaders = new HashMap<>();
-passwordHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-passwordHeaders.put(KeycloakConstants.USERNAME, "john.doe");
+passwordHeaders.put("CamelKeycloakRealmName", "my-realm");
+passwordHeaders.put("CamelKeycloakUsername", "john.doe");
 passwordHeaders.put("CamelKeycloakUserPassword", "secure-password");
 passwordHeaders.put("CamelKeycloakUserPasswordTemporary", false);
 
@@ -1128,12 +1128,12 @@ template.sendBodyAndHeaders("keycloak:admin?operation=setUserPassword", null, pa
 
 // List all users in realm
 template.sendBodyAndHeader("keycloak:admin?operation=listUsers", null,
-    KeycloakConstants.REALM_NAME, "my-realm");
+    "CamelKeycloakRealmName", "my-realm");
 
 // Delete a user
 Map<String, Object> deleteHeaders = new HashMap<>();
-deleteHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-deleteHeaders.put(KeycloakConstants.USERNAME, "john.doe");
+deleteHeaders.put("CamelKeycloakRealmName", "my-realm");
+deleteHeaders.put("CamelKeycloakUsername", "john.doe");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=deleteUser", null, deleteHeaders);
 ```
@@ -1148,31 +1148,31 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteUser", null, deleteH
 ```java
 // Create a new role
 Map<String, Object> roleHeaders = new HashMap<>();
-roleHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-roleHeaders.put(KeycloakConstants.ROLE_NAME, "manager");
-roleHeaders.put(KeycloakConstants.ROLE_DESCRIPTION, "Manager role with elevated privileges");
+roleHeaders.put("CamelKeycloakRealmName", "my-realm");
+roleHeaders.put("CamelKeycloakRoleName", "manager");
+roleHeaders.put("CamelKeycloakRoleDescription", "Manager role with elevated privileges");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=createRole", null, roleHeaders);
 
 // Get role information
 Map<String, Object> getRoleHeaders = new HashMap<>();
-getRoleHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-getRoleHeaders.put(KeycloakConstants.ROLE_NAME, "manager");
+getRoleHeaders.put("CamelKeycloakRealmName", "my-realm");
+getRoleHeaders.put("CamelKeycloakRoleName", "manager");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=getRole", null, getRoleHeaders);
 
 // Assign role to user
 Map<String, Object> assignHeaders = new HashMap<>();
-assignHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-assignHeaders.put(KeycloakConstants.USERNAME, "john.doe");
-assignHeaders.put(KeycloakConstants.ROLE_NAME, "manager");
+assignHeaders.put("CamelKeycloakRealmName", "my-realm");
+assignHeaders.put("CamelKeycloakUsername", "john.doe");
+assignHeaders.put("CamelKeycloakRoleName", "manager");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=assignRoleToUser", null, assignHeaders);
 
 // Delete a role
 Map<String, Object> deleteRoleHeaders = new HashMap<>();
-deleteRoleHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-deleteRoleHeaders.put(KeycloakConstants.ROLE_NAME, "old-role");
+deleteRoleHeaders.put("CamelKeycloakRealmName", "my-realm");
+deleteRoleHeaders.put("CamelKeycloakRoleName", "old-role");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=deleteRole", null, deleteRoleHeaders);
 ```
@@ -1279,7 +1279,7 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteRole", null, deleteR
 ```java
 // Create a new client
 Map<String, Object> clientHeaders = new HashMap<>();
-clientHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+clientHeaders.put("CamelKeycloakRealmName", "my-realm");
 clientHeaders.put("CamelKeycloakClientId", "my-service-client");
 clientHeaders.put("CamelKeycloakClientSecretRequired", true);
 clientHeaders.put("CamelKeycloakClientDirectAccessGrantsEnabled", true);
@@ -1288,14 +1288,14 @@ template.sendBodyAndHeaders("keycloak:admin?operation=createClient", null, clien
 
 // Get client information
 Map<String, Object> getClientHeaders = new HashMap<>();
-getClientHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+getClientHeaders.put("CamelKeycloakRealmName", "my-realm");
 getClientHeaders.put("CamelKeycloakClientId", "my-service-client");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=getClient", null, getClientHeaders);
 
 // Get client secret
 Map<String, Object> secretHeaders = new HashMap<>();
-secretHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+secretHeaders.put("CamelKeycloakRealmName", "my-realm");
 secretHeaders.put("CamelKeycloakClientId", "my-service-client");
 
 String clientSecret = template.requestBodyAndHeaders("keycloak:admin?operation=getClientSecret",
@@ -1303,7 +1303,7 @@ String clientSecret = template.requestBodyAndHeaders("keycloak:admin?operation=g
 
 // Delete a client
 Map<String, Object> deleteClientHeaders = new HashMap<>();
-deleteClientHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+deleteClientHeaders.put("CamelKeycloakRealmName", "my-realm");
 deleteClientHeaders.put("CamelKeycloakClientId", "old-client");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=deleteClient", null, deleteClientHeaders);
@@ -1407,34 +1407,34 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteClient", null, delet
 ```java
 // Create a new group
 Map<String, Object> groupHeaders = new HashMap<>();
-groupHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-groupHeaders.put(KeycloakConstants.GROUP_NAME, "developers");
+groupHeaders.put("CamelKeycloakRealmName", "my-realm");
+groupHeaders.put("CamelKeycloakGroupName", "developers");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=createGroup", null, groupHeaders);
 
 // List all groups
 template.sendBodyAndHeader("keycloak:admin?operation=listGroups", null,
-    KeycloakConstants.REALM_NAME, "my-realm");
+    "CamelKeycloakRealmName", "my-realm");
 
 // Add user to group
 Map<String, Object> addToGroupHeaders = new HashMap<>();
-addToGroupHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-addToGroupHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-addToGroupHeaders.put(KeycloakConstants.GROUP_ID, "group-id-456");
+addToGroupHeaders.put("CamelKeycloakRealmName", "my-realm");
+addToGroupHeaders.put("CamelKeycloakUserId", "user-id-123");
+addToGroupHeaders.put("CamelKeycloakGroupId", "group-id-456");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=addUserToGroup", null, addToGroupHeaders);
 
 // List user's groups
 Map<String, Object> userGroupsHeaders = new HashMap<>();
-userGroupsHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-userGroupsHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
+userGroupsHeaders.put("CamelKeycloakRealmName", "my-realm");
+userGroupsHeaders.put("CamelKeycloakUserId", "user-id-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=listUserGroups", null, userGroupsHeaders);
 
 // Delete a group
 Map<String, Object> deleteGroupHeaders = new HashMap<>();
-deleteGroupHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-deleteGroupHeaders.put(KeycloakConstants.GROUP_ID, "group-id-456");
+deleteGroupHeaders.put("CamelKeycloakRealmName", "my-realm");
+deleteGroupHeaders.put("CamelKeycloakGroupId", "group-id-456");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=deleteGroup", null, deleteGroupHeaders);
 ```
@@ -1531,19 +1531,19 @@ template.sendBodyAndHeaders("keycloak:admin?operation=deleteGroup", null, delete
 ```java
 // Reset user password
 Map<String, Object> passwordHeaders = new HashMap<>();
-passwordHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-passwordHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-passwordHeaders.put(KeycloakConstants.USER_PASSWORD, "newSecurePassword123!");
-passwordHeaders.put(KeycloakConstants.PASSWORD_TEMPORARY, false); // User won't need to change password
+passwordHeaders.put("CamelKeycloakRealmName", "my-realm");
+passwordHeaders.put("CamelKeycloakUserId", "user-id-123");
+passwordHeaders.put("CamelKeycloakUserPassword", "newSecurePassword123!");
+passwordHeaders.put("CamelKeycloakPasswordTemporary", false); // User won't need to change password
 
 template.sendBodyAndHeaders("keycloak:admin?operation=resetUserPassword", null, passwordHeaders);
 
 // Reset with temporary password (user must change on first login)
 Map<String, Object> tempPasswordHeaders = new HashMap<>();
-tempPasswordHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-tempPasswordHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-tempPasswordHeaders.put(KeycloakConstants.USER_PASSWORD, "tempPassword123");
-tempPasswordHeaders.put(KeycloakConstants.PASSWORD_TEMPORARY, true);
+tempPasswordHeaders.put("CamelKeycloakRealmName", "my-realm");
+tempPasswordHeaders.put("CamelKeycloakUserId", "user-id-123");
+tempPasswordHeaders.put("CamelKeycloakUserPassword", "tempPassword123");
+tempPasswordHeaders.put("CamelKeycloakPasswordTemporary", true);
 
 template.sendBodyAndHeaders("keycloak:admin?operation=resetUserPassword", null, tempPasswordHeaders);
 ```
@@ -1618,24 +1618,24 @@ template.sendBodyAndHeaders("keycloak:admin?operation=resetUserPassword", null, 
 ```java
 // Search users by query
 Map<String, Object> searchHeaders = new HashMap<>();
-searchHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-searchHeaders.put(KeycloakConstants.SEARCH_QUERY, "john");
+searchHeaders.put("CamelKeycloakRealmName", "my-realm");
+searchHeaders.put("CamelKeycloakSearchQuery", "john");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=searchUsers", null, searchHeaders);
 
 // Search with pagination
 Map<String, Object> paginatedSearchHeaders = new HashMap<>();
-paginatedSearchHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-paginatedSearchHeaders.put(KeycloakConstants.SEARCH_QUERY, "doe");
-paginatedSearchHeaders.put(KeycloakConstants.FIRST_RESULT, 0);
-paginatedSearchHeaders.put(KeycloakConstants.MAX_RESULTS, 10);
+paginatedSearchHeaders.put("CamelKeycloakRealmName", "my-realm");
+paginatedSearchHeaders.put("CamelKeycloakSearchQuery", "doe");
+paginatedSearchHeaders.put("CamelKeycloakFirstResult", 0);
+paginatedSearchHeaders.put("CamelKeycloakMaxResults", 10);
 
 template.sendBodyAndHeaders("keycloak:admin?operation=searchUsers", null, paginatedSearchHeaders);
 
 // Get user roles
 Map<String, Object> rolesHeaders = new HashMap<>();
-rolesHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-rolesHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
+rolesHeaders.put("CamelKeycloakRealmName", "my-realm");
+rolesHeaders.put("CamelKeycloakUserId", "user-id-123");
 
 List<RoleRepresentation> roles = template.requestBodyAndHeaders(
     "keycloak:admin?operation=getUserRoles", null, rolesHeaders, List.class);
@@ -1723,35 +1723,35 @@ List<RoleRepresentation> roles = template.requestBodyAndHeaders(
 ```java
 // Create client role
 Map<String, Object> clientRoleHeaders = new HashMap<>();
-clientRoleHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-clientRoleHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
-clientRoleHeaders.put(KeycloakConstants.ROLE_NAME, "service-admin");
-clientRoleHeaders.put(KeycloakConstants.ROLE_DESCRIPTION, "Service administrator role");
+clientRoleHeaders.put("CamelKeycloakRealmName", "my-realm");
+clientRoleHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
+clientRoleHeaders.put("CamelKeycloakRoleName", "service-admin");
+clientRoleHeaders.put("CamelKeycloakRoleDescription", "Service administrator role");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=createClientRole", null, clientRoleHeaders);
 
 // List client roles
 Map<String, Object> listClientRolesHeaders = new HashMap<>();
-listClientRolesHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-listClientRolesHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
+listClientRolesHeaders.put("CamelKeycloakRealmName", "my-realm");
+listClientRolesHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=listClientRoles", null, listClientRolesHeaders);
 
 // Assign client role to user
 Map<String, Object> assignClientRoleHeaders = new HashMap<>();
-assignClientRoleHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-assignClientRoleHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-assignClientRoleHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
-assignClientRoleHeaders.put(KeycloakConstants.ROLE_NAME, "service-admin");
+assignClientRoleHeaders.put("CamelKeycloakRealmName", "my-realm");
+assignClientRoleHeaders.put("CamelKeycloakUserId", "user-id-123");
+assignClientRoleHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
+assignClientRoleHeaders.put("CamelKeycloakRoleName", "service-admin");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=assignClientRoleToUser", null, assignClientRoleHeaders);
 
 // Remove client role from user
 Map<String, Object> removeClientRoleHeaders = new HashMap<>();
-removeClientRoleHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-removeClientRoleHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-removeClientRoleHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
-removeClientRoleHeaders.put(KeycloakConstants.ROLE_NAME, "service-admin");
+removeClientRoleHeaders.put("CamelKeycloakRealmName", "my-realm");
+removeClientRoleHeaders.put("CamelKeycloakUserId", "user-id-123");
+removeClientRoleHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
+removeClientRoleHeaders.put("CamelKeycloakRoleName", "service-admin");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=removeClientRoleFromUser", null, removeClientRoleHeaders);
 ```
@@ -1848,22 +1848,22 @@ template.sendBodyAndHeaders("keycloak:admin?operation=removeClientRoleFromUser",
 ```java
 // List user sessions
 Map<String, Object> sessionsHeaders = new HashMap<>();
-sessionsHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-sessionsHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
+sessionsHeaders.put("CamelKeycloakRealmName", "my-realm");
+sessionsHeaders.put("CamelKeycloakUserId", "user-id-123");
 
 List<UserSessionRepresentation> sessions = template.requestBodyAndHeaders(
     "keycloak:admin?operation=listUserSessions", null, sessionsHeaders, List.class);
 
 // Logout user (invalidate all sessions)
 Map<String, Object> logoutHeaders = new HashMap<>();
-logoutHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-logoutHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
+logoutHeaders.put("CamelKeycloakRealmName", "my-realm");
+logoutHeaders.put("CamelKeycloakUserId", "user-id-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=logoutUser", null, logoutHeaders);
 
 // Logout all users in realm
 template.sendBodyAndHeader("keycloak:admin?operation=logoutAllUsers", null,
-    KeycloakConstants.REALM_NAME, "my-realm");
+    "CamelKeycloakRealmName", "my-realm");
 ```
 
 ```yaml
@@ -1933,22 +1933,22 @@ Token management operations allow you to revoke specific tokens or introspect th
 ```java
 // Revoke an access token
 Map<String, Object> revokeHeaders = new HashMap<>();
-revokeHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-revokeHeaders.put(KeycloakConstants.TOKEN, accessToken);
+revokeHeaders.put("CamelKeycloakRealmName", "my-realm");
+revokeHeaders.put("CamelKeycloakToken", accessToken);
 
 template.sendBodyAndHeaders("keycloak:admin?operation=revokeAccessToken", null, revokeHeaders);
 
 // Introspect a token
 Map<String, Object> introspectHeaders = new HashMap<>();
-introspectHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-introspectHeaders.put(KeycloakConstants.TOKEN, tokenToVerify);
+introspectHeaders.put("CamelKeycloakRealmName", "my-realm");
+introspectHeaders.put("CamelKeycloakToken", tokenToVerify);
 
 Map<String, Object> claims = template.requestBodyAndHeaders("keycloak:admin?operation=introspectToken",
     null, introspectHeaders, Map.class);
 
 // Push not-before policy (invalidates all tokens issued before now)
 template.sendBodyAndHeader("keycloak:admin?operation=pushNotBefore", null,
-    KeycloakConstants.REALM_NAME, "my-realm");
+    "CamelKeycloakRealmName", "my-realm");
 ```
 
 ```yaml
@@ -2010,26 +2010,26 @@ template.sendBodyAndHeader("keycloak:admin?operation=pushNotBefore", null,
 ```java
 // Create client scope
 Map<String, Object> scopeHeaders = new HashMap<>();
-scopeHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-scopeHeaders.put(KeycloakConstants.CLIENT_SCOPE_NAME, "custom-scope");
+scopeHeaders.put("CamelKeycloakRealmName", "my-realm");
+scopeHeaders.put("CamelKeycloakClientScopeName", "custom-scope");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=createClientScope", null, scopeHeaders);
 
 // List client scopes
 template.sendBodyAndHeader("keycloak:admin?operation=listClientScopes", null,
-    KeycloakConstants.REALM_NAME, "my-realm");
+    "CamelKeycloakRealmName", "my-realm");
 
 // Get client scope
 Map<String, Object> getScopeHeaders = new HashMap<>();
-getScopeHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-getScopeHeaders.put(KeycloakConstants.CLIENT_SCOPE_ID, "scope-id-123");
+getScopeHeaders.put("CamelKeycloakRealmName", "my-realm");
+getScopeHeaders.put("CamelKeycloakClientScopeId", "scope-id-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=getClientScope", null, getScopeHeaders);
 
 // Delete client scope
 Map<String, Object> deleteScopeHeaders = new HashMap<>();
-deleteScopeHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-deleteScopeHeaders.put(KeycloakConstants.CLIENT_SCOPE_ID, "scope-id-123");
+deleteScopeHeaders.put("CamelKeycloakRealmName", "my-realm");
+deleteScopeHeaders.put("CamelKeycloakClientScopeId", "scope-id-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=deleteClientScope", null, deleteScopeHeaders);
 ```
@@ -2100,7 +2100,7 @@ _Java-only: Keycloak admin API_
 ```java
 // Create OIDC identity provider
 Map<String, Object> idpHeaders = new HashMap<>();
-idpHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
+idpHeaders.put("CamelKeycloakRealmName", "my-realm");
 
 IdentityProviderRepresentation idp = new IdentityProviderRepresentation();
 idp.setAlias("google-idp");
@@ -2119,12 +2119,12 @@ template.sendBodyAndHeaders("keycloak:admin?operation=createIdentityProvider&poj
 
 // List all identity providers
 template.sendBodyAndHeader("keycloak:admin?operation=listIdentityProviders", null,
-    KeycloakConstants.REALM_NAME, "my-realm");
+    "CamelKeycloakRealmName", "my-realm");
 
 // Get specific identity provider
 Map<String, Object> getIdpHeaders = new HashMap<>();
-getIdpHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-getIdpHeaders.put(KeycloakConstants.IDP_ALIAS, "google-idp");
+getIdpHeaders.put("CamelKeycloakRealmName", "my-realm");
+getIdpHeaders.put("CamelKeycloakIdpAlias", "google-idp");
 
 IdentityProviderRepresentation provider = template.requestBodyAndHeaders(
     "keycloak:admin?operation=getIdentityProvider", null, getIdpHeaders,
@@ -2143,11 +2143,11 @@ _Java-only: Keycloak admin API_
 ```java
 // Create a new organization
 Map<String, Object> orgHeaders = new HashMap<>();
-orgHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-orgHeaders.put(KeycloakConstants.ORGANIZATION_NAME, "acme-corp");
-orgHeaders.put(KeycloakConstants.ORGANIZATION_ALIAS, "acme");
-orgHeaders.put(KeycloakConstants.ORGANIZATION_DESCRIPTION, "Acme Corporation");
-orgHeaders.put(KeycloakConstants.ORGANIZATION_DOMAIN, "acme.com");
+orgHeaders.put("CamelKeycloakRealmName", "my-realm");
+orgHeaders.put("CamelKeycloakOrganizationName", "acme-corp");
+orgHeaders.put("CamelKeycloakOrganizationAlias", "acme");
+orgHeaders.put("CamelKeycloakOrganizationDescription", "Acme Corporation");
+orgHeaders.put("CamelKeycloakOrganizationDomain", "acme.com");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=createOrganization", null, orgHeaders);
 
@@ -2161,23 +2161,23 @@ domain.setName("acme.com");
 org.addDomain(domain);
 
 template.sendBodyAndHeader("keycloak:admin?operation=createOrganization&pojoRequest=true",
-    org, KeycloakConstants.REALM_NAME, "my-realm");
+    org, "CamelKeycloakRealmName", "my-realm");
 
 // List all organizations in a realm
 template.sendBodyAndHeader("keycloak:admin?operation=listOrganizations", null,
-    KeycloakConstants.REALM_NAME, "my-realm");
+    "CamelKeycloakRealmName", "my-realm");
 
 // Search organizations by name/alias/domain
 Map<String, Object> searchHeaders = new HashMap<>();
-searchHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-searchHeaders.put(KeycloakConstants.ORGANIZATION_SEARCH, "acme");
+searchHeaders.put("CamelKeycloakRealmName", "my-realm");
+searchHeaders.put("CamelKeycloakOrganizationSearch", "acme");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=searchOrganizations", null, searchHeaders);
 
 // Get a specific organization by ID
 Map<String, Object> getOrgHeaders = new HashMap<>();
-getOrgHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-getOrgHeaders.put(KeycloakConstants.ORGANIZATION_ID, "<organization-id>");
+getOrgHeaders.put("CamelKeycloakRealmName", "my-realm");
+getOrgHeaders.put("CamelKeycloakOrganizationId", "<organization-id>");
 
 OrganizationRepresentation organization = template.requestBodyAndHeaders(
     "keycloak:admin?operation=getOrganization", null, getOrgHeaders,
@@ -2185,9 +2185,9 @@ OrganizationRepresentation organization = template.requestBodyAndHeaders(
 
 // Add an existing user as a member of an organization
 Map<String, Object> addMemberHeaders = new HashMap<>();
-addMemberHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-addMemberHeaders.put(KeycloakConstants.ORGANIZATION_ID, "<organization-id>");
-addMemberHeaders.put(KeycloakConstants.USER_ID, "<user-id>");
+addMemberHeaders.put("CamelKeycloakRealmName", "my-realm");
+addMemberHeaders.put("CamelKeycloakOrganizationId", "<organization-id>");
+addMemberHeaders.put("CamelKeycloakUserId", "<user-id>");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=addOrganizationMember", null, addMemberHeaders);
 
@@ -2199,9 +2199,9 @@ template.sendBodyAndHeaders("keycloak:admin?operation=removeOrganizationMember",
 
 // Link an identity provider to an organization
 Map<String, Object> linkIdpHeaders = new HashMap<>();
-linkIdpHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-linkIdpHeaders.put(KeycloakConstants.ORGANIZATION_ID, "<organization-id>");
-linkIdpHeaders.put(KeycloakConstants.IDP_ALIAS, "acme-saml");
+linkIdpHeaders.put("CamelKeycloakRealmName", "my-realm");
+linkIdpHeaders.put("CamelKeycloakOrganizationId", "<organization-id>");
+linkIdpHeaders.put("CamelKeycloakIdpAlias", "acme-saml");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=linkOrganizationIdentityProvider",
     null, linkIdpHeaders);
@@ -2230,26 +2230,26 @@ User attributes allow you to store custom key-value pairs on user accounts for a
 ```java
 // Set user attribute
 Map<String, Object> attrHeaders = new HashMap<>();
-attrHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-attrHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-attrHeaders.put(KeycloakConstants.ATTRIBUTE_NAME, "department");
-attrHeaders.put(KeycloakConstants.ATTRIBUTE_VALUE, "Engineering");
+attrHeaders.put("CamelKeycloakRealmName", "my-realm");
+attrHeaders.put("CamelKeycloakUserId", "user-id-123");
+attrHeaders.put("CamelKeycloakAttributeName", "department");
+attrHeaders.put("CamelKeycloakAttributeValue", "Engineering");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=setUserAttribute", null, attrHeaders);
 
 // Get all user attributes
 Map<String, Object> getUserAttrHeaders = new HashMap<>();
-getUserAttrHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-getUserAttrHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
+getUserAttrHeaders.put("CamelKeycloakRealmName", "my-realm");
+getUserAttrHeaders.put("CamelKeycloakUserId", "user-id-123");
 
 Map<String, List<String>> attributes = template.requestBodyAndHeaders(
     "keycloak:admin?operation=getUserAttributes", null, getUserAttrHeaders, Map.class);
 
 // Delete user attribute
 Map<String, Object> delAttrHeaders = new HashMap<>();
-delAttrHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-delAttrHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-delAttrHeaders.put(KeycloakConstants.ATTRIBUTE_NAME, "department");
+delAttrHeaders.put("CamelKeycloakRealmName", "my-realm");
+delAttrHeaders.put("CamelKeycloakUserId", "user-id-123");
+delAttrHeaders.put("CamelKeycloakAttributeName", "department");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=deleteUserAttribute", null, delAttrHeaders);
 ```
@@ -2343,49 +2343,49 @@ Manage user credentials and trigger user actions such as email verification and 
 ```java
 // Get user credentials
 Map<String, Object> credHeaders = new HashMap<>();
-credHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-credHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
+credHeaders.put("CamelKeycloakRealmName", "my-realm");
+credHeaders.put("CamelKeycloakUserId", "user-id-123");
 
 List<CredentialRepresentation> credentials = template.requestBodyAndHeaders(
     "keycloak:admin?operation=getUserCredentials", null, credHeaders, List.class);
 
 // Delete specific credential
 Map<String, Object> delCredHeaders = new HashMap<>();
-delCredHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-delCredHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-delCredHeaders.put(KeycloakConstants.CREDENTIAL_ID, "credential-id-456");
+delCredHeaders.put("CamelKeycloakRealmName", "my-realm");
+delCredHeaders.put("CamelKeycloakUserId", "user-id-123");
+delCredHeaders.put("CamelKeycloakCredentialId", "credential-id-456");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=deleteUserCredential", null, delCredHeaders);
 
 // Send verification email
 Map<String, Object> verifyHeaders = new HashMap<>();
-verifyHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-verifyHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
+verifyHeaders.put("CamelKeycloakRealmName", "my-realm");
+verifyHeaders.put("CamelKeycloakUserId", "user-id-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=sendVerifyEmail", null, verifyHeaders);
 
 // Send password reset email
 Map<String, Object> resetHeaders = new HashMap<>();
-resetHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-resetHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
+resetHeaders.put("CamelKeycloakRealmName", "my-realm");
+resetHeaders.put("CamelKeycloakUserId", "user-id-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=sendPasswordResetEmail", null, resetHeaders);
 
 // Add required action
 Map<String, Object> actionHeaders = new HashMap<>();
-actionHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-actionHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-actionHeaders.put(KeycloakConstants.REQUIRED_ACTION, "VERIFY_EMAIL");
+actionHeaders.put("CamelKeycloakRealmName", "my-realm");
+actionHeaders.put("CamelKeycloakUserId", "user-id-123");
+actionHeaders.put("CamelKeycloakRequiredAction", "VERIFY_EMAIL");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=addRequiredAction", null, actionHeaders);
 
 // Execute multiple actions via email
 Map<String, Object> execHeaders = new HashMap<>();
-execHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-execHeaders.put(KeycloakConstants.USER_ID, "user-id-123");
-execHeaders.put(KeycloakConstants.ACTIONS, Arrays.asList("UPDATE_PASSWORD", "VERIFY_EMAIL"));
-execHeaders.put(KeycloakConstants.REDIRECT_URI, "https://myapp.com/auth/callback");
-execHeaders.put(KeycloakConstants.LIFESPAN, 3600); // 1 hour
+execHeaders.put("CamelKeycloakRealmName", "my-realm");
+execHeaders.put("CamelKeycloakUserId", "user-id-123");
+execHeaders.put("CamelKeycloakActions", Arrays.asList("UPDATE_PASSWORD", "VERIFY_EMAIL"));
+execHeaders.put("CamelKeycloakRedirectUri", "https://myapp.com/auth/callback");
+execHeaders.put("CamelKeycloakLifespan", 3600); // 1 hour
 
 template.sendBodyAndHeaders("keycloak:admin?operation=executeActionsEmail", null, execHeaders);
 ```
@@ -2518,8 +2518,8 @@ Retrieve and rotate client secrets for confidential clients.
 ```java
 // Get client secret
 Map<String, Object> getSecretHeaders = new HashMap<>();
-getSecretHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-getSecretHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
+getSecretHeaders.put("CamelKeycloakRealmName", "my-realm");
+getSecretHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
 
 CredentialRepresentation secret = template.requestBodyAndHeaders(
     "keycloak:admin?operation=getClientSecret", null, getSecretHeaders,
@@ -2529,8 +2529,8 @@ System.out.println("Client secret: " + secret.getValue());
 
 // Regenerate client secret (rotates the secret)
 Map<String, Object> regenHeaders = new HashMap<>();
-regenHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-regenHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
+regenHeaders.put("CamelKeycloakRealmName", "my-realm");
+regenHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
 
 CredentialRepresentation newSecret = template.requestBodyAndHeaders(
     "keycloak:admin?operation=regenerateClientSecret", null, regenHeaders,
@@ -2601,8 +2601,8 @@ resource.setUris(Collections.singleton("/documents/*"));
 resource.addScope("read", "write", "delete");
 
 Map<String, Object> resourceHeaders = new HashMap<>();
-resourceHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-resourceHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
+resourceHeaders.put("CamelKeycloakRealmName", "my-realm");
+resourceHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
 
 Response response = template.requestBodyAndHeaders(
     "keycloak:admin?operation=createResource&pojoRequest=true",
@@ -2622,8 +2622,8 @@ policyConfig.put("roles", "[{\"id\":\"admin-role-id\",\"required\":true}]");
 policy.setConfig(policyConfig);
 
 Map<String, Object> policyHeaders = new HashMap<>();
-policyHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-policyHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
+policyHeaders.put("CamelKeycloakRealmName", "my-realm");
+policyHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=createResourcePolicy&pojoRequest=true",
     policy, policyHeaders);
@@ -2635,8 +2635,8 @@ permission.addResource("documents");
 permission.addPolicy("admin-policy");
 
 Map<String, Object> permHeaders = new HashMap<>();
-permHeaders.put(KeycloakConstants.REALM_NAME, "my-realm");
-permHeaders.put(KeycloakConstants.CLIENT_UUID, "client-uuid-123");
+permHeaders.put("CamelKeycloakRealmName", "my-realm");
+permHeaders.put("CamelKeycloakClientUuid", "client-uuid-123");
 
 template.sendBodyAndHeaders("keycloak:admin?operation=createResourcePermission&pojoRequest=true",
     permission, permHeaders);
@@ -2715,8 +2715,8 @@ The operation supports two modes:
 ```java
 // Evaluate all permissions for a user
 Map<String, Object> headers = new HashMap<>();
-headers.put(KeycloakConstants.ACCESS_TOKEN, userAccessToken);
-headers.put(KeycloakConstants.PERMISSIONS_ONLY, true);
+headers.put("CamelKeycloakAccessToken", userAccessToken);
+headers.put("CamelKeycloakPermissionsOnly", true);
 
 Map<String, Object> result = template.requestBodyAndHeaders(
     "keycloak:authz?serverUrl=http://localhost:8080&realm=myrealm"
@@ -2731,10 +2731,10 @@ System.out.println("Granted permissions: " + permissions.size());
 
 // Check specific resource permissions
 Map<String, Object> resourceHeaders = new HashMap<>();
-resourceHeaders.put(KeycloakConstants.ACCESS_TOKEN, userAccessToken);
-resourceHeaders.put(KeycloakConstants.PERMISSION_RESOURCE_NAMES, "document1,document2");
-resourceHeaders.put(KeycloakConstants.PERMISSION_SCOPES, "read,write");
-resourceHeaders.put(KeycloakConstants.PERMISSIONS_ONLY, true);
+resourceHeaders.put("CamelKeycloakAccessToken", userAccessToken);
+resourceHeaders.put("CamelKeycloakPermissionResourceNames", "document1,document2");
+resourceHeaders.put("CamelKeycloakPermissionScopes", "read,write");
+resourceHeaders.put("CamelKeycloakPermissionsOnly", true);
 
 Map<String, Object> resourceResult = template.requestBodyAndHeaders(
     "keycloak:authz?serverUrl=http://localhost:8080&realm=myrealm"
@@ -2743,7 +2743,7 @@ Map<String, Object> resourceResult = template.requestBodyAndHeaders(
 
 // Get RPT token with permissions (default mode)
 Map<String, Object> rptHeaders = new HashMap<>();
-rptHeaders.put(KeycloakConstants.PERMISSION_RESOURCE_NAMES, "protected-resource");
+rptHeaders.put("CamelKeycloakPermissionResourceNames", "protected-resource");
 
 Map<String, Object> rptResult = template.requestBodyAndHeaders(
     "keycloak:authz?serverUrl=http://localhost:8080&realm=myrealm"
@@ -2866,10 +2866,10 @@ _Java-only: Keycloak authorization API_
 // Check if user can access a specific document
 public boolean canAccessDocument(String accessToken, String documentId) {
     Map<String, Object> headers = new HashMap<>();
-    headers.put(KeycloakConstants.ACCESS_TOKEN, accessToken);
-    headers.put(KeycloakConstants.PERMISSION_RESOURCE_NAMES, documentId);
-    headers.put(KeycloakConstants.PERMISSION_SCOPES, "view");
-    headers.put(KeycloakConstants.PERMISSIONS_ONLY, true);
+    headers.put("CamelKeycloakAccessToken", accessToken);
+    headers.put("CamelKeycloakPermissionResourceNames", documentId);
+    headers.put("CamelKeycloakPermissionScopes", "view");
+    headers.put("CamelKeycloakPermissionsOnly", true);
 
     Map<String, Object> result = template.requestBodyAndHeaders(
         "keycloak:authz?operation=evaluatePermission", null, headers, Map.class);
@@ -2896,9 +2896,9 @@ _Java-only: Keycloak token exchange API_
 ```java
 // Evaluate permissions on behalf of another user (token exchange)
 Map<String, Object> headers = new HashMap<>();
-headers.put(KeycloakConstants.SUBJECT_TOKEN, userToken);  // The user's token
-headers.put(KeycloakConstants.PERMISSION_RESOURCE_NAMES, "admin-resource");
-headers.put(KeycloakConstants.PERMISSIONS_ONLY, true);
+headers.put("CamelKeycloakSubjectToken", userToken);  // The user's token
+headers.put("CamelKeycloakPermissionResourceNames", "admin-resource");
+headers.put("CamelKeycloakPermissionsOnly", true);
 
 // Service evaluates if the user (from subject token) can access the resource
 Map<String, Object> result = template.requestBodyAndHeaders(
@@ -3003,8 +3003,8 @@ for (int i = 1; i <= 100; i++) {
 }
 
 Map<String, Object> headers = new HashMap<>();
-headers.put(KeycloakConstants.REALM_NAME, "my-realm");
-headers.put(KeycloakConstants.CONTINUE_ON_ERROR, true); // Continue even if some users fail
+headers.put("CamelKeycloakRealmName", "my-realm");
+headers.put("CamelKeycloakContinueOnError", true); // Continue even if some users fail
 
 Map<String, Object> result = template.requestBodyAndHeaders(
     "keycloak:admin?operation=bulkCreateUsers", users, headers, Map.class);
@@ -3055,17 +3055,17 @@ Delete multiple users by user IDs or usernames in a single operation.
 List<String> userIds = List.of("user-id-1", "user-id-2", "user-id-3");
 
 Map<String, Object> headers = new HashMap<>();
-headers.put(KeycloakConstants.REALM_NAME, "my-realm");
-headers.put(KeycloakConstants.USER_IDS, userIds);
-headers.put(KeycloakConstants.CONTINUE_ON_ERROR, true);
+headers.put("CamelKeycloakRealmName", "my-realm");
+headers.put("CamelKeycloakUserId"S, userIds);
+headers.put("CamelKeycloakContinueOnError", true);
 
 Map<String, Object> result = template.requestBodyAndHeaders(
     "keycloak:admin?operation=bulkDeleteUsers", null, headers, Map.class);
 
 // Or delete by usernames
 List<String> usernames = List.of("user1", "user2", "user3");
-headers.put(KeycloakConstants.USERNAMES, usernames);
-headers.remove(KeycloakConstants.USER_IDS);
+headers.put("CamelKeycloakUsername"S, usernames);
+headers.remove("CamelKeycloakUserId"S);
 
 result = template.requestBodyAndHeaders(
     "keycloak:admin?operation=bulkDeleteUsers", null, headers, Map.class);
@@ -3112,10 +3112,10 @@ Assign multiple roles to a single user in one operation.
 List<String> roleNames = List.of("admin", "manager", "developer");
 
 Map<String, Object> headers = new HashMap<>();
-headers.put(KeycloakConstants.REALM_NAME, "my-realm");
-headers.put(KeycloakConstants.USER_ID, "user-id-123");
-headers.put(KeycloakConstants.ROLE_NAMES, roleNames);
-headers.put(KeycloakConstants.CONTINUE_ON_ERROR, true);
+headers.put("CamelKeycloakRealmName", "my-realm");
+headers.put("CamelKeycloakUserId", "user-id-123");
+headers.put("CamelKeycloakRoleName"S, roleNames);
+headers.put("CamelKeycloakContinueOnError", true);
 
 Map<String, Object> result = template.requestBodyAndHeaders(
     "keycloak:admin?operation=bulkAssignRolesToUser", null, headers, Map.class);
@@ -3173,10 +3173,10 @@ Assign a single role to multiple users in one operation.
 List<String> userIds = List.of("user-id-1", "user-id-2", "user-id-3");
 
 Map<String, Object> headers = new HashMap<>();
-headers.put(KeycloakConstants.REALM_NAME, "my-realm");
-headers.put(KeycloakConstants.ROLE_NAME, "developer");
-headers.put(KeycloakConstants.USER_IDS, userIds);
-headers.put(KeycloakConstants.CONTINUE_ON_ERROR, true);
+headers.put("CamelKeycloakRealmName", "my-realm");
+headers.put("CamelKeycloakRoleName", "developer");
+headers.put("CamelKeycloakUserId"S, userIds);
+headers.put("CamelKeycloakContinueOnError", true);
 
 Map<String, Object> result = template.requestBodyAndHeaders(
     "keycloak:admin?operation=bulkAssignRoleToUsers", null, headers, Map.class);
@@ -3185,8 +3185,8 @@ System.out.println("Assigned role to " + result.get("success") + " users");
 
 // Or use usernames instead of IDs
 List<String> usernames = List.of("user1", "user2", "user3");
-headers.put(KeycloakConstants.USERNAMES, usernames);
-headers.remove(KeycloakConstants.USER_IDS);
+headers.put("CamelKeycloakUsername"S, usernames);
+headers.remove("CamelKeycloakUserId"S);
 
 result = template.requestBodyAndHeaders(
     "keycloak:admin?operation=bulkAssignRoleToUsers", null, headers, Map.class);
@@ -3236,7 +3236,7 @@ List<UserRepresentation> users = new ArrayList<>();
 // Fetch users and update them
 List<UserRepresentation> existingUsers = template.requestBodyAndHeader(
     "keycloak:admin?operation=listUsers", null,
-    KeycloakConstants.REALM_NAME, "my-realm", List.class);
+    "CamelKeycloakRealmName", "my-realm", List.class);
 
 for (UserRepresentation user : existingUsers) {
     // Update user properties
@@ -3246,9 +3246,9 @@ for (UserRepresentation user : existingUsers) {
 }
 
 Map<String, Object> headers = new HashMap<>();
-headers.put(KeycloakConstants.REALM_NAME, "my-realm");
-headers.put(KeycloakConstants.USERS, users);
-headers.put(KeycloakConstants.CONTINUE_ON_ERROR, true);
+headers.put("CamelKeycloakRealmName", "my-realm");
+headers.put("CamelKeycloakUsers", users);
+headers.put("CamelKeycloakContinueOnError", true);
 
 Map<String, Object> result = template.requestBodyAndHeaders(
     "keycloak:admin?operation=bulkUpdateUsers", null, headers, Map.class);
@@ -3317,10 +3317,10 @@ Bulk operations support the `CamelKeycloakContinueOnError` header to control err
 
 ```java
 // Continue processing even if some operations fail
-headers.put(KeycloakConstants.CONTINUE_ON_ERROR, true);
+headers.put("CamelKeycloakContinueOnError", true);
 
 // Stop on first error (default behavior)
-headers.put(KeycloakConstants.CONTINUE_ON_ERROR, false);
+headers.put("CamelKeycloakContinueOnError", false);
 ```
 
 ```yaml
@@ -3373,8 +3373,8 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
             })
 
             // Bulk create users
-            .setHeader(KeycloakConstants.REALM_NAME, constant("my-realm"))
-            .setHeader(KeycloakConstants.CONTINUE_ON_ERROR, constant(true))
+            .setHeader("CamelKeycloakRealmName", constant("my-realm"))
+            .setHeader("CamelKeycloakContinueOnError", constant(true))
             .to("keycloak:admin?operation=bulkCreateUsers")
 
             // Log results
@@ -3397,10 +3397,10 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
             .routeId("bulk-assign-roles")
             .log("Bulk assigning roles to users")
             .unmarshal().json()
-            .setHeader(KeycloakConstants.REALM_NAME, simple("${body[realm]}"))
-            .setHeader(KeycloakConstants.USER_ID, simple("${body[userId]}"))
+            .setHeader("CamelKeycloakRealmName", simple("${body[realm]}"))
+            .setHeader("CamelKeycloakUserId", simple("${body[userId]}"))
             .setBody(simple("${body[roles]}"))
-            .setHeader(KeycloakConstants.CONTINUE_ON_ERROR, constant(true))
+            .setHeader("CamelKeycloakContinueOnError", constant(true))
             .to("keycloak:admin?operation=bulkAssignRolesToUser")
             .marshal().json()
             .setHeader("Content-Type", constant("application/json"));
@@ -3409,7 +3409,7 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
         from("timer:cleanup?period=86400000") // Daily
             .routeId("cleanup-inactive-users")
             .log("Starting inactive user cleanup")
-            .setHeader(KeycloakConstants.REALM_NAME, constant("my-realm"))
+            .setHeader("CamelKeycloakRealmName", constant("my-realm"))
             .to("keycloak:admin?operation=listUsers")
             .process(exchange -> {
                 List<UserRepresentation> allUsers = exchange.getIn().getBody(List.class);
@@ -3426,7 +3426,7 @@ public class BulkUserProvisioningRoute extends RouteBuilder {
                 exchange.getIn().setBody(inactiveUserIds);
             })
             .filter(simple("${body.size} > 0"))
-            .setHeader(KeycloakConstants.CONTINUE_ON_ERROR, constant(true))
+            .setHeader("CamelKeycloakContinueOnError", constant(true))
             .to("keycloak:admin?operation=bulkDeleteUsers")
             .log("Deleted ${body[success]} inactive users");
     }
@@ -3585,18 +3585,18 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             .log("Setting up user environment...")
 
             // Step 1: Create realm
-            .setHeader(KeycloakConstants.REALM_NAME, constant("my-company"))
+            .setHeader("CamelKeycloakRealmName", constant("my-company"))
             .to("keycloak:admin?operation=createRealm")
             .log("Created realm: my-company")
 
             // Step 2: Create roles
-            .setHeader(KeycloakConstants.ROLE_NAME, constant("admin"))
-            .setHeader(KeycloakConstants.ROLE_DESCRIPTION, constant("Administrator role"))
+            .setHeader("CamelKeycloakRoleName", constant("admin"))
+            .setHeader("CamelKeycloakRoleDescription", constant("Administrator role"))
             .to("keycloak:admin?operation=createRole")
             .log("Created admin role")
 
-            .setHeader(KeycloakConstants.ROLE_NAME, constant("user"))
-            .setHeader(KeycloakConstants.ROLE_DESCRIPTION, constant("Standard user role"))
+            .setHeader("CamelKeycloakRoleName", constant("user"))
+            .setHeader("CamelKeycloakRoleDescription", constant("Standard user role"))
             .to("keycloak:admin?operation=createRole")
             .log("Created user role")
 
@@ -3608,10 +3608,10 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             .log("Created client: my-app")
 
             // Step 4: Create users
-            .setHeader(KeycloakConstants.USERNAME, constant("admin.user"))
-            .setHeader(KeycloakConstants.USER_EMAIL, constant("admin@company.com"))
-            .setHeader(KeycloakConstants.USER_FIRST_NAME, constant("Admin"))
-            .setHeader(KeycloakConstants.USER_LAST_NAME, constant("User"))
+            .setHeader("CamelKeycloakUsername", constant("admin.user"))
+            .setHeader("CamelKeycloakUserEmail", constant("admin@company.com"))
+            .setHeader("CamelKeycloakUserFirstName", constant("Admin"))
+            .setHeader("CamelKeycloakUserLastName", constant("User"))
             .to("keycloak:admin?operation=createUser")
             .log("Created admin user")
 
@@ -3622,7 +3622,7 @@ public class KeycloakManagementRoutes extends RouteBuilder {
             .log("Set admin user password")
 
             // Step 6: Assign role
-            .setHeader(KeycloakConstants.ROLE_NAME, constant("admin"))
+            .setHeader("CamelKeycloakRoleName", constant("admin"))
             .to("keycloak:admin?operation=assignRoleToUser")
             .log("Assigned admin role to user")
 
@@ -3632,11 +3632,11 @@ public class KeycloakManagementRoutes extends RouteBuilder {
         from("rest:post:/users")
             .routeId("create-user-api")
             .log("Creating user: ${body}")
-            .setHeader(KeycloakConstants.REALM_NAME, constant("my-company"))
-            .setHeader(KeycloakConstants.USERNAME, jsonpath("$.username"))
-            .setHeader(KeycloakConstants.USER_EMAIL, jsonpath("$.email"))
-            .setHeader(KeycloakConstants.USER_FIRST_NAME, jsonpath("$.firstName"))
-            .setHeader(KeycloakConstants.USER_LAST_NAME, jsonpath("$.lastName"))
+            .setHeader("CamelKeycloakRealmName", constant("my-company"))
+            .setHeader("CamelKeycloakUsername", jsonpath("$.username"))
+            .setHeader("CamelKeycloakUserEmail", jsonpath("$.email"))
+            .setHeader("CamelKeycloakUserFirstName", jsonpath("$.firstName"))
+            .setHeader("CamelKeycloakUserLastName", jsonpath("$.lastName"))
             .to("keycloak:admin?operation=createUser")
             .setHeader("Content-Type", constant("application/json"))
             .transform().constant("{\"status\": \"success\", \"message\": \"User created\"}");
@@ -3644,15 +3644,15 @@ public class KeycloakManagementRoutes extends RouteBuilder {
         from("rest:get:/users")
             .routeId("list-users-api")
             .log("Listing users")
-            .setHeader(KeycloakConstants.REALM_NAME, constant("my-company"))
+            .setHeader("CamelKeycloakRealmName", constant("my-company"))
             .to("keycloak:admin?operation=listUsers")
             .setHeader("Content-Type", constant("application/json"));
 
         from("rest:delete:/users/{username}")
             .routeId("delete-user-api")
             .log("Deleting user: ${header.username}")
-            .setHeader(KeycloakConstants.REALM_NAME, constant("my-company"))
-            .setHeader(KeycloakConstants.USERNAME, header("username"))
+            .setHeader("CamelKeycloakRealmName", constant("my-company"))
+            .setHeader("CamelKeycloakUsername", header("username"))
             .to("keycloak:admin?operation=deleteUser")
             .setHeader("Content-Type", constant("application/json"))
             .transform().constant("{\"status\": \"success\", \"message\": \"User deleted\"}");
@@ -5502,7 +5502,7 @@ _Java-only: token revocation workflow_
 ```java
 // 1. Revoke token in Keycloak (via admin API)
 template.sendBodyAndHeader("keycloak:admin?operation=revokeSession", null,
-    KeycloakConstants.SESSION_ID, sessionId);
+    "CamelKeycloakSessionId", sessionId);
 
 // 2. Subsequent requests with the revoked token will be rejected
 // The introspection endpoint will return "active": false
@@ -5614,7 +5614,7 @@ _Java-only: accessing token from exchange_
 ```java
 // Using header
 template.sendBodyAndHeader("direct:protected", "message",
-    KeycloakSecurityConstants.ACCESS_TOKEN_HEADER, accessToken);
+    "CamelKeycloakAccessToken", accessToken);
 
 // Using Authorization header
 template.sendBodyAndHeader("direct:protected", "message",
@@ -5951,7 +5951,7 @@ String accessToken = "eyJhbGciOiJSUzI1NiIsInR5cC..."; // From Keycloak
 // Option 1: Using custom header
 template.sendBodyAndHeader("direct:protected-endpoint",
     requestBody,
-    KeycloakSecurityConstants.ACCESS_TOKEN_HEADER,
+    "CamelKeycloakAccessToken",
     accessToken);
 
 // Option 2: Using Authorization header (standard)
@@ -5963,7 +5963,7 @@ template.sendBodyAndHeader("direct:protected-endpoint",
 // Option 3: Using exchange property
 Exchange exchange = ExchangeBuilder.anExchange(camelContext)
     .withBody(requestBody)
-    .withProperty(KeycloakSecurityConstants.ACCESS_TOKEN_PROPERTY, accessToken)
+    .withProperty("CamelKeycloakAccessToken", accessToken)
     .build();
 template.send("direct:protected-endpoint", exchange);
 ```

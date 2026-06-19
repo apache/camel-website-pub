@@ -134,12 +134,39 @@ The OpenShift Build Config component supports 4 message header(s), which is/are 
 -   `listBuilds`: this operation lists the build configs on an Openshift cluster
     
 
-_Java-only: uses `toF()` for URI formatting_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:list").
-    toF("openshift-build-configs:///?kubernetesClient=#kubernetesClient&operation=listBuildConfigs").
-    to("mock:result");
+from("direct:list")
+    .to("openshift-build-configs:///?kubernetesClient=#kubernetesClient&operation=listBuildConfigs")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="openshift-build-configs:///?kubernetesClient=#kubernetesClient&amp;operation=listBuildConfigs"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+      steps:
+        - to:
+            uri: openshift-build-configs:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listBuildConfigs
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of builds from your Openshift cluster
@@ -147,20 +174,21 @@ This operation returns a list of builds from your Openshift cluster
 -   `listBuildsByLabels`: this operation lists the build configs by labels on an Openshift cluster
     
 
-_Java-only: uses inline Processor, Java constants, and \`toF()\`_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_BUILD_CONFIGS_LABELS, labels);
-            }
-        });
-    toF("openshift-build-configs:///?kubernetesClient=#kubernetesClient&operation=listBuildConfigsByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Map<String, String> labels = new HashMap<>();
+            labels.put("key1", "value1");
+            labels.put("key2", "value2");
+            exchange.getIn().setHeader("CamelKubernetesBuildConfigsLabels", labels);
+        }
+    })
+    .to("openshift-build-configs:///?kubernetesClient=#kubernetesClient&operation=listBuildConfigsByLabels")
+    .to("mock:result");
 ```
 
 This operation returns a list of build configs from your cluster using a label selector (with key1 and key2, with value value1 and value2)

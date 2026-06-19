@@ -232,8 +232,8 @@ The replicatedmap producer provides 6 operations:
 
 ```java
 from("direct:put")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.PUT))
-    .to(String.format("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX));
+    .setHeader("CamelHazelcastOperationType", constant("put"))
+    .to("hazelcast-replicatedmap:bar");
 ```
 
 ```xml
@@ -270,8 +270,8 @@ from("direct:put")
 
 ```java
 from("direct:get")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-    .toF("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX)
+    .setHeader("CamelHazelcastOperationType", constant("get"))
+    .to("hazelcast-replicatedmap:bar")
     .to("seda:out");
 ```
 
@@ -312,8 +312,8 @@ from("direct:get")
 
 ```java
 from("direct:delete")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DELETE))
-    .toF("hazelcast-%sbar", HazelcastConstants.REPLICATEDMAP_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("delete"))
+    .to("hazelcast-replicatedmap:bar");
 ```
 
 ```xml
@@ -344,7 +344,7 @@ You can call them in your test class with:
 _Java-only: uses ProducerTemplate API and Java constants_
 
 ```java
-template.sendBodyAndHeader("direct:[put|get|delete|clear]", "my-foo", HazelcastConstants.OBJECT_ID, "4711");
+template.sendBodyAndHeader("direct:[put|get|delete|clear]", "my-foo", "CamelHazelcastObjectId", "4711");
 ```
 
 ## replicatedmap cache consumer
@@ -354,16 +354,16 @@ For the multimap cache, this component provides the same listeners / variables a
 _Java-only: uses Java constants, string formatting, and choice/when/otherwise_
 
 ```java
-fromF("hazelcast-%sbar", HazelcastConstants.MULTIMAP_PREFIX)
+from("hazelcast-multimap:bar")
 .log("object...")
 .choice()
-    .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ADDED))
+    .when(header("CamelHazelcastListenerAction").isEqualTo("added"))
         .log("...added")
                 .to("mock:added")
-        //.when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.ENVICTED))
+        //.when(header("CamelHazelcastListenerAction").isEqualTo("envicted"))
         //        .log("...envicted")
         //        .to("mock:envicted")
-        .when(header(HazelcastConstants.LISTENER_ACTION).isEqualTo(HazelcastConstants.REMOVED))
+        .when(header("CamelHazelcastListenerAction").isEqualTo("removed"))
                 .log("...removed")
                 .to("mock:removed")
         .otherwise()

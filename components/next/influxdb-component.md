@@ -6,7 +6,7 @@
 
 This component allows you to interact with [InfluxDB](https://influxdata.com/time-series-platform/influxdb/) v1, a time series database.
 
-The native body type for this component is `Point` (the native influxdb class). However, it can also accept `Map<String, Object>` as message body, and it will get converted to `Point.class`, please note that the map must contain an element with `InfluxDbConstants.MEASUREMENT_NAME` as key.
+The native body type for this component is `Point` (the native influxdb class). However, it can also accept `Map<String, Object>` as message body, and it will get converted to `Point.class`, please note that the map must contain an element with `camelInfluxDB.MeasurementName` as key.
 
 Additionally, you may register your own Converters to your data type to `Point`, or use the (un)marshalling tools provided by Camel.
 

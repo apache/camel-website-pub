@@ -141,12 +141,39 @@ The Kubernetes Service Account component supports 5 message header(s), which is/
 -   `listServiceAccounts`: this operation lists the SAs on a kubernetes cluster
     
 
-_Java-only: uses `toF()` for URI formatting_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:list").
-    toF("kubernetes-service-accounts:///?kubernetesClient=#kubernetesClient&operation=listServiceAccounts").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-service-accounts:///?kubernetesClient=#kubernetesClient&operation=listServiceAccounts")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-service-accounts:///?kubernetesClient=#kubernetesClient&amp;operation=listServiceAccounts"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+      steps:
+        - to:
+            uri: kubernetes-service-accounts:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listServiceAccounts
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of services from your cluster
@@ -154,20 +181,21 @@ This operation returns a list of services from your cluster
 -   `listServiceAccountsByLabels`: this operation lists the SAs by labels on a kubernetes cluster
     
 
-_Java-only: uses inline Processor, Java constants, and \`toF()\`_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_SERVICE_ACCOUNTS_LABELS, labels);
-            }
-        });
-    toF("kubernetes-service-accounts:///?kubernetesClient=#kubernetesClient&operation=listServiceAccountsByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Map<String, String> labels = new HashMap<>();
+            labels.put("key1", "value1");
+            labels.put("key2", "value2");
+            exchange.getIn().setHeader("CamelKubernetesServiceAccountsLabels", labels);
+        }
+    })
+    .to("kubernetes-service-accounts:///?kubernetesClient=#kubernetesClient&operation=listServiceAccountsByLabels")
+    .to("mock:result");
 ```
 
 This operation returns a list of services from your cluster using a label selector (with key1 and key2, with value value1 and value2)

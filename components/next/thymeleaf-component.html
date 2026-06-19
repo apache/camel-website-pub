@@ -122,16 +122,9 @@ Regards Camel Riders Bookstore
         mock.assertIsSatisfied();
     }
 
-    @Override
-    protected RouteBuilder createRouteBuilder() {
-        return new RouteBuilder() {
-            public void configure() {
-                from("direct:a")
-                    .to("thymeleaf:org/apache/camel/component/thymeleaf/letter.txt")
-                    .to("mock:result");
-            }
-        };
-    }</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using thymeleaf with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    from("direct:a")
+        .to("thymeleaf:org/apache/camel/component/thymeleaf/letter.txt")
+        .to("mock:result");</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using thymeleaf with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-thymeleaf-starter&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

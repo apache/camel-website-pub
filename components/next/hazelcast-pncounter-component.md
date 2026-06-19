@@ -202,8 +202,8 @@ The operations for this producer are:
 
 ```java
 from("direct:increment")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.INCREMENT))
-    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("increment"))
+    .to("hazelcast-pncounter:foo");
 ```
 
 ```xml
@@ -241,8 +241,8 @@ The actual value (after increment) will be provided inside the message body.
 
 ```java
 from("direct:decrement")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DECREMENT))
-    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("decrement"))
+    .to("hazelcast-pncounter:foo");
 ```
 
 ```xml
@@ -280,8 +280,8 @@ The actual value (after decrement) will be provided inside the message body.
 
 ```java
 from("direct:get")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET))
-    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("get"))
+    .to("hazelcast-pncounter:foo");
 ```
 
 ```xml
@@ -319,8 +319,8 @@ You can get the counter value with `long body = template.requestBody("direct:get
 
 ```java
 from("direct:getAndAdd")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.GET_AND_ADD))
-    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("getAndAdd"))
+    .to("hazelcast-pncounter:foo");
 ```
 
 ```xml
@@ -360,8 +360,8 @@ The previous value (before the add) will be returned in the message body.
 
 ```java
 from("direct:destroy")
-    .setHeader(HazelcastConstants.OPERATION, constant(HazelcastOperation.DESTROY))
-    .toF("hazelcast-%sfoo", HazelcastConstants.PNCOUNTER_PREFIX);
+    .setHeader("CamelHazelcastOperationType", constant("destroy"))
+    .to("hazelcast-pncounter:foo");
 ```
 
 ```xml

@@ -189,12 +189,39 @@ Enum values:
 -   `listNodes`: this operation lists the nodes on a kubernetes cluster
     
 
-_Java-only: uses toF() for endpoint URI formatting_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from("direct:list").
-    toF("kubernetes-nodes:///?kubernetesClient=#kubernetesClient&operation=listNodes").
-    to("mock:result");
+from("direct:list")
+    .to("kubernetes-nodes:///?kubernetesClient=#kubernetesClient&operation=listNodes")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:list"/>
+  <to uri="kubernetes-nodes:///?kubernetesClient=#kubernetesClient&amp;operation=listNodes"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:list
+    steps:
+      - to:
+          uri: kubernetes-nodes:///
+          parameters:
+            kubernetesClient: "#kubernetesClient"
+            operation: listNodes
+      - to:
+          uri: mock:result
 ```
 
 This operation returns a List of Nodes from your cluster
@@ -202,40 +229,55 @@ This operation returns a List of Nodes from your cluster
 -   `listNodesByLabels`: this operation lists the nodes by labels on a kubernetes cluster
     
 
-_Java-only: uses inline Processor with KubernetesConstants and HashMap_
+_Java-only: uses inline Processor with HashMap_
 
 ```java
-from("direct:listByLabels").process(new Processor() {
-            @Override
-            public void process(Exchange exchange) throws Exception {
-                Map<String, String> labels = new HashMap<>();
-                labels.put("key1", "value1");
-                labels.put("key2", "value2");
-                exchange.getIn().setHeader(KubernetesConstants.KUBERNETES_NODES_LABELS, labels);
-            }
-        });
-    toF("kubernetes-deployments:///?kubernetesClient=#kubernetesClient&operation=listNodesByLabels").
-    to("mock:result");
+from("direct:listByLabels")
+    .process(new Processor() {
+        @Override
+        public void process(Exchange exchange) throws Exception {
+            Map<String, String> labels = new HashMap<>();
+            labels.put("key1", "value1");
+            labels.put("key2", "value2");
+            exchange.getIn().setHeader("CamelKubernetesNodeLabels", labels);
+        }
+    })
+    .to("kubernetes-nodes:///?kubernetesClient=#kubernetesClient&operation=listNodesByLabels")
+    .to("mock:result");
 ```
 
 This operation returns a list of nodes from your cluster, using a label selector (with key1 and key2, with value value1 and value2)
 
 ### Kubernetes Nodes Consumer Example
 
-_Java-only: uses fromF(), inline Processor class, KubernetesConstants, and string concatenation_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-fromF("kubernetes-nodes://%s?oauthToken=%s", host, authToken)
-    .process(new KubernetesProcessor()).to("mock:result");
+from("kubernetes-nodes://{{kubernetes-host}}?oauthToken={{kubernetes-token}}")
+    .to("log:result");
+```
 
-    public class KubernetesProcessor implements Processor {
-        @Override
-        public void process(Exchange exchange) throws Exception {
-            Message in = exchange.getIn();
-            Node node = exchange.getIn().getBody(Node.class);
-            log.info("Got event with node name: " + node.getMetadata().getName() + " and action " + in.getHeader(KubernetesConstants.KUBERNETES_EVENT_ACTION));
-        }
-    }
+```xml
+<route>
+  <from uri="kubernetes-nodes://{{kubernetes-host}}?oauthToken={{kubernetes-token}}"/>
+  <to uri="log:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kubernetes-nodes://{{kubernetes-host}}
+      parameters:
+        oauthToken: "{{kubernetes-token}}"
+    steps:
+      - to:
+          uri: log:result
 ```
 
 This consumer returns a message per event received for all Nodes in the cluster.

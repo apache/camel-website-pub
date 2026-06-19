@@ -79,16 +79,28 @@ registry.bind("decoders", decoders);</code></pre> </div> </div> <div class="para
         sync: false
       steps:
         - to:
-            uri: mock:multiple-codec</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_closing_channel_when_complete"><a class="anchor" href="#_closing_channel_when_complete"></a>Closing Channel When Complete</h3> <div class="paragraph"> <p>When acting as a server, you sometimes want to close the channel when, for example, a client conversion is finished. You can do this by simply setting the endpoint option <code>disconnect=true</code>.</p> </div> <div class="paragraph"> <p>However, you can also instruct Camel on a per-message basis as follows. To instruct Camel to close the channel, you should add a header with the key <code>CamelNettyCloseChannelWhenComplete</code> set to a boolean <code>true</code> value. For instance, the example below will close the channel after it has written the bye message back to the client:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: inline Processor implementation</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:8080").process(new Processor() {
-    public void process(Exchange exchange) throws Exception {
-        String body = exchange.getIn().getBody(String.class);
-        exchange.getOut().setBody("Bye " + body);
-        // some condition that determines if we should close
-        if (close) {
-            exchange.getOut().setHeader(NettyConstants.NETTY_CLOSE_CHANNEL_WHEN_COMPLETE, true);
-        }
-    }
-});</code></pre> </div> </div> <div id="Netty-Addingcustomchannelpipelinefactoriestogaincompletecontroloveracreatedpipeline" class="paragraph"> <p>Adding custom channel pipeline factories to gain complete control over a created pipeline</p> </div> </div> <div class="sect2"> <h3 id="_custom_pipeline"><a class="anchor" href="#_custom_pipeline"></a>Custom pipeline</h3> <div class="paragraph"> <p>Custom channel pipelines provide complete control to the user over the handler/interceptor chain by inserting custom handler(s), encoder(s) &amp; decoder(s) without having to specify them in the Netty Endpoint URL in a straightforward way.</p> </div> <div class="paragraph"> <p>To add a custom pipeline, a custom channel pipeline factory must be created and registered with the context via the context registry (or the camel-spring <code>ApplicationContextRegistry</code>, etc).</p> </div> <div class="paragraph"> <p>A custom pipeline factory must be constructed as follows</p> </div> <div class="ulist"> <ul> <li> <p>A Producer-linked channel pipeline factory must extend the abstract class <code>ClientInitializerFactory</code>.</p> </li> <li> <p>A Consumer-linked channel pipeline factory must extend the abstract class <code>ServerInitializerFactory</code>.</p> </li> <li> <p>The classes should override the <code>initChannel()</code> method to insert custom handler(s), encoder(s) and decoder(s). Not overriding the <code>initChannel()</code> method creates a pipeline with no handlers, encoders or decoders wired to the pipeline.</p> </li> </ul> </div> <div class="paragraph"> <p>The example below shows how <code>ServerInitializerFactory</code> factory may be created</p> </div> <div class="sect3"> <h4 id="_using_custom_pipeline_factory"><a class="anchor" href="#_using_custom_pipeline_factory"></a>Using custom pipeline factory</h4> <div class="listingblock"> <div class="title"><em>Java-only: Java class definition</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class SampleServerInitializerFactory extends ServerInitializerFactory {
+            uri: mock:multiple-codec</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_closing_channel_when_complete"><a class="anchor" href="#_closing_channel_when_complete"></a>Closing Channel When Complete</h3> <div class="paragraph"> <p>When acting as a server, you sometimes want to close the channel when, for example, a client conversion is finished. You can do this by simply setting the endpoint option <code>disconnect=true</code>.</p> </div> <div class="paragraph"> <p>However, you can also instruct Camel on a per-message basis as follows. To instruct Camel to close the channel, you should add a header with the key <code>CamelNettyCloseChannelWhenComplete</code> set to a boolean <code>true</code> value. For instance, the example below will close the channel after it has written the bye message back to the client:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:8080")
+    .setBody(simple("Bye ${body}"))
+    // set the CamelNettyCloseChannelWhenComplete header to true to close the channel
+    .setHeader("CamelNettyCloseChannelWhenComplete", constant(true));</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="netty:tcp://0.0.0.0:8080"/&gt;
+  &lt;setBody&gt;
+    &lt;simple&gt;Bye ${body}&lt;/simple&gt;
+  &lt;/setBody&gt;
+  &lt;!-- set the CamelNettyCloseChannelWhenComplete header to true to close the channel --&gt;
+  &lt;setHeader name="CamelNettyCloseChannelWhenComplete"&gt;
+    &lt;constant&gt;true&lt;/constant&gt;
+  &lt;/setHeader&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># set the CamelNettyCloseChannelWhenComplete header to true to close the channel
+- route:
+    from:
+      uri: netty:tcp://0.0.0.0:8080
+      steps:
+        - setBody:
+            simple: "Bye ${body}"
+        - setHeader:
+            name: CamelNettyCloseChannelWhenComplete
+            constant: true</code></pre> </div> </div> </div> </div> </div> <div id="Netty-Addingcustomchannelpipelinefactoriestogaincompletecontroloveracreatedpipeline" class="paragraph"> <p>Adding custom channel pipeline factories to gain complete control over a created pipeline</p> </div> </div> <div class="sect2"> <h3 id="_custom_pipeline"><a class="anchor" href="#_custom_pipeline"></a>Custom pipeline</h3> <div class="paragraph"> <p>Custom channel pipelines provide complete control to the user over the handler/interceptor chain by inserting custom handler(s), encoder(s) &amp; decoder(s) without having to specify them in the Netty Endpoint URL in a straightforward way.</p> </div> <div class="paragraph"> <p>To add a custom pipeline, a custom channel pipeline factory must be created and registered with the context via the context registry (or the camel-spring <code>ApplicationContextRegistry</code>, etc).</p> </div> <div class="paragraph"> <p>A custom pipeline factory must be constructed as follows</p> </div> <div class="ulist"> <ul> <li> <p>A Producer-linked channel pipeline factory must extend the abstract class <code>ClientInitializerFactory</code>.</p> </li> <li> <p>A Consumer-linked channel pipeline factory must extend the abstract class <code>ServerInitializerFactory</code>.</p> </li> <li> <p>The classes should override the <code>initChannel()</code> method to insert custom handler(s), encoder(s) and decoder(s). Not overriding the <code>initChannel()</code> method creates a pipeline with no handlers, encoders or decoders wired to the pipeline.</p> </li> </ul> </div> <div class="paragraph"> <p>The example below shows how <code>ServerInitializerFactory</code> factory may be created</p> </div> <div class="sect3"> <h4 id="_using_custom_pipeline_factory"><a class="anchor" href="#_using_custom_pipeline_factory"></a>Using custom pipeline factory</h4> <div class="listingblock"> <div class="title"><em>Java-only: Java class definition</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class SampleServerInitializerFactory extends ServerInitializerFactory {
     private int maxLineSize = 1024;
 
     protected void initChannel(Channel ch) throws Exception {
@@ -103,22 +115,8 @@ registry.bind("decoders", decoders);</code></pre> </div> </div> <div class="para
 }</code></pre> </div> </div> <div class="paragraph"> <p>The custom channel pipeline factory can then be added to the registry and instantiated/utilized on a Camel route in the following way</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java programmatic registry and route configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Registry registry = camelContext.getRegistry();
 ServerInitializerFactory factory = new TestServerInitializerFactory();
 registry.bind("spf", factory);
-context.addRoutes(new RouteBuilder() {
-  public void configure() {
-      String netty_ssl_endpoint =
-         "netty:tcp://0.0.0.0:5150?serverInitializerFactory=#spf"
-      String return_string =
-         "When You Go Home, Tell Them Of Us And Say,"
-         + "For Your Tomorrow, We Gave Our Today.";
-
-      from(netty_ssl_endpoint)
-       .process(new Processor() {
-          public void process(Exchange exchange) throws Exception {
-            exchange.getOut().setBody(return_string);
-          }
-       }
-  }
-});</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_reusing_netty_boss_and_worker_thread_pools"><a class="anchor" href="#_reusing_netty_boss_and_worker_thread_pools"></a>Reusing Netty boss and worker thread pools</h3> <div class="paragraph"> <p>Netty has two kinds of thread pools: boss and worker. By default, each Netty consumer and producer has their private thread pools. If you want to reuse these thread pools among multiple consumers or producers, then the thread pools must be created and enlisted in the Registry.</p> </div> <div class="paragraph"> <p>For example, using Spring XML we can create a shared worker thread pool using the <code>NettyWorkerPoolBuilder</code> with two worker threads as shown below:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!-- use the worker pool builder to help create the shared thread pool --&gt;
+from("netty:tcp://0.0.0.0:5150?serverInitializerFactory=#spf")
+    .setBody(constant("When You Go Home, Tell Them Of Us And Say, For Your Tomorrow, We Gave Our Today."));</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_reusing_netty_boss_and_worker_thread_pools"><a class="anchor" href="#_reusing_netty_boss_and_worker_thread_pools"></a>Reusing Netty boss and worker thread pools</h3> <div class="paragraph"> <p>Netty has two kinds of thread pools: boss and worker. By default, each Netty consumer and producer has their private thread pools. If you want to reuse these thread pools among multiple consumers or producers, then the thread pools must be created and enlisted in the Registry.</p> </div> <div class="paragraph"> <p>For example, using Spring XML we can create a shared worker thread pool using the <code>NettyWorkerPoolBuilder</code> with two worker threads as shown below:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;!-- use the worker pool builder to help create the shared thread pool --&gt;
 &lt;bean id="poolBuilder" class="org.apache.camel.component.netty.NettyWorkerPoolBuilder"&gt;
   &lt;property name="workerCount" value="2"/&gt;
 &lt;/bean&gt;
@@ -126,11 +124,11 @@ context.addRoutes(new RouteBuilder() {
 &lt;!-- the shared worker thread pool --&gt;
 &lt;bean id="sharedPool" class="org.jboss.netty.channel.socket.nio.WorkerPool"
       factory-bean="poolBuilder" factory-method="build" destroy-method="shutdown"&gt;
-&lt;/bean&gt;</code></pre> </div> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> <div class="paragraph"> <p>For boss thread pool there is a <code>org.apache.camel.component.netty.NettyServerBossPoolBuilder</code> builder for Netty consumers, and a <code>org.apache.camel.component.netty.NettyClientBossPoolBuilder</code> for the Netty producers.</p> </div> </td> </tr> </table></div> </div> <div class="paragraph"> <p>Then in the Camel routes we can refer to this worker pools by configuring the <code>workerPool</code> option in the URI as shown below:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5021?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false")
-    .to("log:result");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+&lt;/bean&gt;</code></pre> </div> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> <div class="paragraph"> <p>For boss thread pool there is a <code>org.apache.camel.component.netty.NettyServerBossPoolBuilder</code> builder for Netty consumers, and a <code>org.apache.camel.component.netty.NettyClientBossPoolBuilder</code> for the Netty producers.</p> </div> </td> </tr> </table></div> </div> <div class="paragraph"> <p>Then in the Camel routes we can refer to this worker pools by configuring the <code>workerPool</code> option in the URI as shown below:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5021?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false")
+    .to("log:result");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="netty:tcp://0.0.0.0:5021?textline=true&amp;amp;sync=true&amp;amp;workerPool=#sharedPool&amp;amp;usingExecutorService=false"/&gt;
   &lt;to uri="log:result"/&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: netty:tcp://0.0.0.0:5021
       parameters:
@@ -140,11 +138,11 @@ context.addRoutes(new RouteBuilder() {
         usingExecutorService: false
       steps:
         - to:
-            uri: log:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>And if we have another route, we can refer to the shared worker pool:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5022?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false")
-    .to("log:result");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+            uri: log:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>And if we have another route, we can refer to the shared worker pool:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5022?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false")
+    .to("log:result");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="netty:tcp://0.0.0.0:5022?textline=true&amp;amp;sync=true&amp;amp;workerPool=#sharedPool&amp;amp;usingExecutorService=false"/&gt;
   &lt;to uri="log:result"/&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: netty:tcp://0.0.0.0:5022
       parameters:
@@ -159,11 +157,11 @@ context.addRoutes(new RouteBuilder() {
         &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;
         &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;
     &lt;/extension&gt;
-&lt;/extensions&gt;</code></pre> </div> </div> <div class="paragraph"> <p>So then you need to add the following dependency:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_linuxunix" class="tab"> <p>Linux/Unix</p> </li> <li id="_tabs_4_macosbsd" class="tab"> <p>MacOS/BSD</p> </li> </ul> </div> <div id="_tabs_4_linuxunix--panel" class="tabpanel" aria-labelledby="_tabs_4_linuxunix"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+&lt;/extensions&gt;</code></pre> </div> </div> <div class="paragraph"> <p>So then you need to add the following dependency:</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_linuxunix" class="tab"> <p>Linux/Unix</p> </li> <li id="_tabs_5_macosbsd" class="tab"> <p>MacOS/BSD</p> </li> </ul> </div> <div id="_tabs_5_linuxunix--panel" class="tabpanel" aria-labelledby="_tabs_5_linuxunix"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;io.netty&lt;/groupId&gt;
     &lt;artifactId&gt;netty-transport-native-epoll&lt;/artifactId&gt;
     &lt;classifier&gt;${os.detected.classifier}&lt;/classifier&gt;
-&lt;/dependency&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_macosbsd--panel" class="tabpanel" aria-labelledby="_tabs_4_macosbsd"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+&lt;/dependency&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_macosbsd--panel" class="tabpanel" aria-labelledby="_tabs_5_macosbsd"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;io.netty&lt;/groupId&gt;
     &lt;artifactId&gt;netty-transport-native-kqueue&lt;/artifactId&gt;
     &lt;classifier&gt;${os.detected.classifier}&lt;/classifier&gt;
@@ -177,23 +175,17 @@ public ChannelHandler getDecoder() throws Exception {
     };
 }
 
-RouteBuilder builder = new RouteBuilder() {
-  public void configure() {
-    from("netty:udp://0.0.0.0:5155?sync=true&amp;decoders=#decoder")
-      .process(new Processor() {
-         public void process(Exchange exchange) throws Exception {
-           Poetry poetry = (Poetry) exchange.getIn().getBody();
-           // Process poetry in some way
-           exchange.getOut().setBody("Message received);
-         }
-       }
-    }
-};</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_a_tcp_based_netty_consumer_endpoint_using_one_way_communication"><a class="anchor" href="#_a_tcp_based_netty_consumer_endpoint_using_one_way_communication"></a>A TCP-based Netty consumer endpoint using One-way communication</h3> <div class="listingblock"> <div class="title"><em>Java-only: Java RouteBuilder class</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">RouteBuilder builder = new RouteBuilder() {
-  public void configure() {
-       from("netty:tcp://0.0.0.0:5150")
-           .to("mock:result");
-  }
-};</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_an_ssltcp_based_netty_consumer_endpoint_using_request_reply_communication"><a class="anchor" href="#_an_ssltcp_based_netty_consumer_endpoint_using_request_reply_communication"></a>An SSL/TCP-based Netty consumer endpoint using Request-Reply communication</h3> <div id="Netty-UsingtheJSSEConfigurationUtility" class="paragraph"> <p>Using the JSSE Configuration Utility</p> </div> <div class="paragraph"> <p>The Netty component supports SSL/TLS configuration through the <a href="../../manual/camel-configuration-utilities.html" class="xref page">Camel JSSE Configuration Utility</a>. This utility greatly decreases the amount of component-specific code you need to write and is configurable at the endpoint and component levels. The following examples demonstrate how to use the utility with the Netty component.</p> </div> <div id="Netty-Programmaticconfigurationofthecomponent" class="paragraph"> <p>Programmatic configuration of the component</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java programmatic SSL configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">KeyStoreParameters ksp = new KeyStoreParameters();
+from("netty:udp://0.0.0.0:5155?sync=true&amp;decoders=#decoder")
+    .to("bean:poetryProcessor");</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_a_tcp_based_netty_consumer_endpoint_using_one_way_communication"><a class="anchor" href="#_a_tcp_based_netty_consumer_endpoint_using_one_way_communication"></a>A TCP-based Netty consumer endpoint using One-way communication</h3> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5150")
+    .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="netty:tcp://0.0.0.0:5150"/&gt;
+  &lt;to uri="mock:result"/&gt;
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: netty:tcp://0.0.0.0:5150
+    steps:
+      - to:
+          uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_an_ssltcp_based_netty_consumer_endpoint_using_request_reply_communication"><a class="anchor" href="#_an_ssltcp_based_netty_consumer_endpoint_using_request_reply_communication"></a>An SSL/TCP-based Netty consumer endpoint using Request-Reply communication</h3> <div id="Netty-UsingtheJSSEConfigurationUtility" class="paragraph"> <p>Using the JSSE Configuration Utility</p> </div> <div class="paragraph"> <p>The Netty component supports SSL/TLS configuration through the <a href="../../manual/camel-configuration-utilities.html" class="xref page">Camel JSSE Configuration Utility</a>. This utility greatly decreases the amount of component-specific code you need to write and is configurable at the endpoint and component levels. The following examples demonstrate how to use the utility with the Netty component.</p> </div> <div id="Netty-Programmaticconfigurationofthecomponent" class="paragraph"> <p>Programmatic configuration of the component</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java programmatic SSL configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">KeyStoreParameters ksp = new KeyStoreParameters();
 ksp.setResource("/users/home/server/keystore.jks");
 ksp.setPassword("keystorePassword");
 
@@ -217,23 +209,8 @@ nettyComponent.getConfiguration().setSslContextParameters(scp);</code></pre> </d
   &lt;/camel:sslContextParameters&gt;...
 ...
   &lt;to uri="netty:tcp://0.0.0.0:5150?sync=true&amp;ssl=true&amp;sslContextParameters=#sslContextParameters"/&gt;
-...</code></pre> </div> </div> <div id="Netty-UsingBasicSSLTLSconfigurationontheJettyComponent" class="paragraph"> <p>Using Basic SSL/TLS configuration on the Jetty Component</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java programmatic SSL route configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">context.addRoutes(new RouteBuilder() {
-  public void configure() {
-      String netty_ssl_endpoint =
-         "netty:tcp://0.0.0.0:5150?sync=true&amp;ssl=true&amp;passphrase=changeit"
-         + "&amp;keyStoreResource=file:src/test/resources/keystore.jks&amp;trustStoreResource=file:src/test/resources/keystore.jks";
-      String return_string =
-         "When You Go Home, Tell Them Of Us And Say,"
-         + "For Your Tomorrow, We Gave Our Today.";
-
-      from(netty_ssl_endpoint)
-       .process(new Processor() {
-          public void process(Exchange exchange) throws Exception {
-            exchange.getOut().setBody(return_string);
-          }
-       }
-  }
-});</code></pre> </div> </div> <div id="Netty-GettingaccesstoSSLSessionandtheclientcertificate" class="paragraph"> <p>Getting access to SSLSession and the client certificate</p> </div> <div class="paragraph"> <p>You can get access to the <code>javax.net.ssl.SSLSession</code> if you e.g., need to get details about the client certificate. When <code>ssl=true</code> then the <a href="#">Netty</a> component will store the <code>SSLSession</code> as a header on the Camel Message as shown below:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java SSL session API</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SSLSession session = exchange.getIn().getHeader(NettyConstants.NETTY_SSL_SESSION, SSLSession.class);
+...</code></pre> </div> </div> <div id="Netty-UsingBasicSSLTLSconfigurationontheJettyComponent" class="paragraph"> <p>Using Basic SSL/TLS configuration on the Jetty Component</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: SSL route configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5150?sync=true&amp;ssl=true&amp;passphrase=changeit&amp;keyStoreResource=file:src/test/resources/keystore.jks&amp;trustStoreResource=file:src/test/resources/keystore.jks")
+    .setBody(constant("When You Go Home, Tell Them Of Us And Say, For Your Tomorrow, We Gave Our Today."));</code></pre> </div> </div> <div id="Netty-GettingaccesstoSSLSessionandtheclientcertificate" class="paragraph"> <p>Getting access to SSLSession and the client certificate</p> </div> <div class="paragraph"> <p>You can get access to the <code>javax.net.ssl.SSLSession</code> if you e.g., need to get details about the client certificate. When <code>ssl=true</code> then the <a href="#">Netty</a> component will store the <code>SSLSession</code> as a header on the Camel Message as shown below:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java SSL session API</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SSLSession session = exchange.getIn().getHeader("CamelNettySSLSession", SSLSession.class);
 // get the first certificate which is client certificate
 javax.security.cert.X509Certificate cert = session.getPeerCertificateChain()[0];
 Principal principal = cert.getSubjectDN();</code></pre> </div> </div> <div class="paragraph"> <p>Remember to set <code>needClientAuth=true</code> to authenticate the client, otherwise <code>SSLSession</code> cannot access information about the client certificate, and you may get an exception <code>javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated</code>. You may also get this exception if the client certificate is expired or not valid, etc.</p> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> <div class="paragraph"> <p>The option <code>sslClientCertHeaders</code> can be set to <code>true</code> which then enriches the Camel Message with headers having details about the client certificate. For example, the subject name is readily available in the header <code>CamelNettySSLClientCertSubjectName</code>.</p> </div> </td> </tr> </table></div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using netty with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;

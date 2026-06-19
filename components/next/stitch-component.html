@@ -35,9 +35,9 @@
      })
 .to("stitch:table_1?token=RAW({{token}})");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_input_body_type_org_apache_camel_component_stitch_client_models_stitchmessage"><a class="anchor" href="#_input_body_type_org_apache_camel_component_stitch_client_models_stitchmessage"></a>Input body type <code>org.apache.camel.component.stitch.client.models.StitchMessage</code>:</h4> <div class="listingblock"> <div class="title"><em>Java-only: Java lambda Processor with Stitch SDK API</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:sendStitch")
      .process(exchange -&gt; {
-         exchange.getMessage().setHeader(StitchConstants.SCHEMA, StitchSchema.builder().addKeyword("field_1", "string").build());
-         exchange.getMessage().setHeader(StitchConstants.KEY_NAMES, "field_1");
-         exchange.getMessage().setHeader(StitchConstants.TABLE_NAME, "table_1");
+         exchange.getMessage().setHeader("CamelStitchSchema", StitchSchema.builder().addKeyword("field_1", "string").build());
+         exchange.getMessage().setHeader("CamelStitchKeyNames", "field_1");
+         exchange.getMessage().setHeader("CamelStitchTableName", "table_1");
 
          final StitchMessage stitchMessage = StitchMessage.builder()
                .withData("field_1", "stitchMessage2-1")
@@ -64,9 +64,9 @@
      })
 .to("stitch:table_1?token=RAW({{token}})");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_input_body_type_iterable"><a class="anchor" href="#_input_body_type_iterable"></a>Input body type <code>Iterable</code>:</h4> <div class="listingblock"> <div class="title"><em>Java-only: Java lambda Processor with Iterable construction</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:sendStitch")
      .process(exchange -&gt; {
-         exchange.getMessage().setHeader(StitchConstants.SCHEMA, StitchSchema.builder().addKeyword("field_1", "string").build());
-         exchange.getMessage().setHeader(StitchConstants.KEY_NAMES, "field_1");
-         exchange.getMessage().setHeader(StitchConstants.TABLE_NAME, "table_1");
+         exchange.getMessage().setHeader("CamelStitchSchema", StitchSchema.builder().addKeyword("field_1", "string").build());
+         exchange.getMessage().setHeader("CamelStitchKeyNames", "field_1");
+         exchange.getMessage().setHeader("CamelStitchTableName", "table_1");
 
         final StitchMessage stitchMessage1 = StitchMessage.builder()
                 .withData("field_1", "stitchMessage1")
