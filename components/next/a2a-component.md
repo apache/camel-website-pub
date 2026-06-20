@@ -27,7 +27,7 @@ Current Preview limitations:
     
 -   The REST binding uses A2A custom-method paths containing colons, such as `/message:send`. These paths collide on Vert.x/platform-http. Use `protocolBinding=JSONRPC` with platform-http, or use `httpServerComponent=undertow` or `httpServerComponent=jetty` for REST custom-method routes.
     
--   Real-time SSE streaming is verified with Undertow and Jetty. Vert.x/platform-http buffers `InputStream` responses and does not deliver events as they are emitted.
+-   Real-time SSE streaming is verified with Vert.x/platform-http, Undertow, and Jetty.
     
 -   The default task store is in-memory and single-JVM. Register a custom `A2ATaskStore` for durable or cross-node task state.
     
@@ -43,7 +43,7 @@ Maven users will need to add the following dependency to their `pom.xml`:
 </dependency>
 ```
 
-Consumer routes also need an HTTP server component at runtime. For example, add `camel-platform-http-vertx` for JSON-RPC agents, or `camel-undertow` / `camel-jetty` for REST custom-method routes and real-time SSE streaming. See [Dependencies](#_dependencies) and [HTTP Server Component Discovery](#_http_server_component_discovery).
+Consumer routes also need an HTTP server component at runtime. For example, add `camel-platform-http-vertx` for JSON-RPC agents (including SSE streaming), or `camel-undertow` / `camel-jetty` for REST custom-method routes. See [Dependencies](#_dependencies) and [HTTP Server Component Discovery](#_http_server_component_discovery).
 
 ## URI Format
 
@@ -438,7 +438,7 @@ The A2A REST protocol uses Google’s Custom Method convention with colons in pa
 
 This means operation serving is not reliable with REST binding on Vert.x/platform-http. For example, `POST /message:stream` can be handled by the `SendMessage` route instead of the streaming route.
 
-**Workaround:** Use `protocolBinding=JSONRPC` for agents running on Vert.x (the default `platform-http`). Alternatively, use `httpServerComponent=jetty` or `httpServerComponent=undertow`; their routers treat colons as literal characters. For real-time SSE streaming, use Jetty or Undertow because Vert.x/platform-http buffers `InputStream` responses.
+**Workaround:** Use `protocolBinding=JSONRPC` for agents running on Vert.x (the default `platform-http`). Alternatively, use `httpServerComponent=jetty` or `httpServerComponent=undertow`; their routers treat colons as literal characters.
 
 ### Authentication
 
@@ -724,17 +724,10 @@ The consumer supports two SSE streaming patterns:
 -   **`SubscribeToTask`** — Clients subscribe via `POST /tasks/{id}:subscribe` to receive real-time SSE updates for an existing non-terminal task. The component uses an Event-to-Stream Bridge (`QueueStreamEmitter` + `SseQueueInputStream`) with heartbeat comments to keep the connection alive. The stream sends the current `Task` first and ends when the task later reaches a terminal state. Subscribing to an already-terminal task returns `UnsupportedOperationError`.
     
 
-> **Important**
+> **Note**
 > **HTTP Server Component for Streaming**
 >
-> For real-time SSE streaming, use `httpServerComponent=undertow` or `httpServerComponent=jetty`. The default Vert.x `platform-http` buffers `InputStream` responses due to an `AsyncInputStream` greedy-fill loop, causing all events to arrive at once.
->
-> ```yaml
-> parameters:
->   httpServerComponent: undertow
-> ```
->
-> This requires `camel-undertow` (or `camel-jetty`) on the classpath.
+> Real-time SSE streaming works with all tested HTTP server components: Vert.x/platform-http, Undertow, and Jetty.
 
 SSE streaming parameters:
 
@@ -1559,12 +1552,10 @@ The preview component does not auto-create arbitrary HTTP server components and 
 
 Tested behavior in this Preview release:
 
--   `camel-platform-http` / Vert.x - suitable for JSON-RPC agents and serving the public agent card. REST custom-method paths containing colons can collide, and SSE `InputStream` responses are buffered.
+-   `camel-platform-http` / Vert.x - suitable for JSON-RPC agents (including SSE streaming) and serving the public agent card. REST custom-method paths containing colons can collide.
     
 -   `camel-undertow` and `camel-jetty` - suitable for REST custom-method paths and real-time SSE streaming.
     
-
-For SSE streaming, specify `httpServerComponent=undertow` or `httpServerComponent=jetty` and add the matching component dependency.
 
 ## Data Format
 
