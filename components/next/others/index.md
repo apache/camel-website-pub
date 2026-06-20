@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 71 in 70 JAR artifacts (6 deprecated)
+Number of Miscellaneous Components: 76 in 70 JAR artifacts (6 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -31,6 +31,9 @@ Number of Miscellaneous Components: 71 in 70 JAR artifacts (6 deprecated)
 | [JTA](jta.md) | camel-jta | Stable | 3.4 | Using Camel With JTA Transaction Manager |
 | [Kamelet Main](kamelet-main.md) | camel-kamelet-main | Preview | 3.11 | Main to run Kamelet standalone |
 | [Kamelet Main Support](kamelet-main-support.md) | camel-kamelet-main-support | Preview | 4.19 | Support Module for Kamelet Main |
+| [Keycloak Consumer Operations](keycloak-consumer.md) |  |  |  |  |
+| [Keycloak Producer Operations](keycloak-producer.md) |  |  |  |  |
+| [Keycloak Security Policies](keycloak-security.md) |  |  |  |  |
 | [LangChain4j Tokenizer](langchain4j-tokenizer.md) | camel-langchain4j-tokenizer | Preview | 4.8 | LangChain4j Tokenizer |
 | [LevelDB](leveldb.md) | camel-leveldb | Stable-deprecated | 2.10 | Using LevelDB as persistent EIP store |
 | [LRA](lra.md) | camel-lra | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
@@ -52,6 +55,8 @@ Number of Miscellaneous Components: 71 in 70 JAR artifacts (6 deprecated)
 | [Platform HTTP Jolokia](platform-http-jolokia.md) | camel-platform-http-jolokia | Stable | 4.5 | Jolokia plugin for standalone Camel HTTP Platform |
 | [Platform Http Main](platform-http-main.md) | camel-platform-http-main | Stable | 4.0 | Platform HTTP for standalone Camel Main applications |
 | [Platform Http Vertx](platform-http-vertx.md) | camel-platform-http-vertx | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
+| [PQC Hybrid Cryptography](pqc-hybrid.md) |  |  |  |  |
+| [PQC Key Lifecycle Management](pqc-key-lifecycle.md) |  |  |  |  |
 | [Reactive Executor Tomcat](reactive-executor-tomcat.md) | camel-reactive-executor-tomcat | Experimental | 3.17 | Reactive Executor for camel-core using Apache Tomcat |
 | [Reactive Executor Vert.x](reactive-executor-vertx.md) | camel-reactive-executor-vertx | Experimental | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](reactor.md) | camel-reactor | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |

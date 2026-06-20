@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781933843775,
+  "generated": 1781947897480,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -20556,6 +20556,24 @@
             },
             {
               "module": "others",
+              "path": "keycloak-consumer.adoc",
+              "url": "/components/next/others/keycloak-consumer.html",
+              "title": "Keycloak Consumer Operations"
+            },
+            {
+              "module": "others",
+              "path": "keycloak-producer.adoc",
+              "url": "/components/next/others/keycloak-producer.html",
+              "title": "Keycloak Producer Operations"
+            },
+            {
+              "module": "others",
+              "path": "keycloak-security.adoc",
+              "url": "/components/next/others/keycloak-security.html",
+              "title": "Keycloak Security Policies"
+            },
+            {
+              "module": "others",
               "path": "langchain4j-tokenizer.adoc",
               "url": "/components/next/others/langchain4j-tokenizer.html",
               "title": "LangChain4j Tokenizer"
@@ -20679,6 +20697,18 @@
               "path": "platform-http-vertx.adoc",
               "url": "/components/next/others/platform-http-vertx.html",
               "title": "Platform Http Vertx"
+            },
+            {
+              "module": "others",
+              "path": "pqc-hybrid.adoc",
+              "url": "/components/next/others/pqc-hybrid.html",
+              "title": "PQC Hybrid Cryptography"
+            },
+            {
+              "module": "others",
+              "path": "pqc-key-lifecycle.adoc",
+              "url": "/components/next/others/pqc-key-lifecycle.html",
+              "title": "PQC Key Lifecycle Management"
             },
             {
               "module": "others",

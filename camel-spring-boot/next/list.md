@@ -1362,6 +1362,9 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [JTA](../../components/next/others/jta.md) | camel-jta-starter | Stable | 3.4 | Using Camel With JTA Transaction Manager |
 | [Kamelet Main](../../components/next/others/kamelet-main.md) | camel-kamelet-main-starter | Preview | 3.11 | Main to run Kamelet standalone |
 | [Kamelet Main Support](../../components/next/others/kamelet-main-support.md) | camel-kamelet-main-support-starter | Preview | 4.19 | Support Module for Kamelet Main |
+| [Keycloak Consumer Operations](../../components/next/others/keycloak-consumer.md) | undefined-starter |  |  |  |
+| [Keycloak Producer Operations](../../components/next/others/keycloak-producer.md) | undefined-starter |  |  |  |
+| [Keycloak Security Policies](../../components/next/others/keycloak-security.md) | undefined-starter |  |  |  |
 | [LangChain4j Tokenizer](../../components/next/others/langchain4j-tokenizer.md) | camel-langchain4j-tokenizer-starter | Preview | 4.8 | LangChain4j Tokenizer |
 | [LevelDB](../../components/next/others/leveldb.md) | camel-leveldb-starter | Stable-deprecated | 2.10 | Using LevelDB as persistent EIP store |
 | [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
@@ -1383,6 +1386,8 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Platform HTTP Jolokia](../../components/next/others/platform-http-jolokia.md) | camel-platform-http-jolokia-starter | Stable | 4.5 | Jolokia plugin for standalone Camel HTTP Platform |
 | [Platform Http Main](../../components/next/others/platform-http-main.md) | camel-platform-http-main-starter | Stable | 4.0 | Platform HTTP for standalone Camel Main applications |
 | [Platform Http Vertx](../../components/next/others/platform-http-vertx.md) | camel-platform-http-vertx-starter | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
+| [PQC Hybrid Cryptography](../../components/next/others/pqc-hybrid.md) | undefined-starter |  |  |  |
+| [PQC Key Lifecycle Management](../../components/next/others/pqc-key-lifecycle.md) | undefined-starter |  |  |  |
 | [Reactive Executor Tomcat](../../components/next/others/reactive-executor-tomcat.md) | camel-reactive-executor-tomcat-starter | Experimental | 3.17 | Reactive Executor for camel-core using Apache Tomcat |
 | [Reactive Executor Vert.x](../../components/next/others/reactive-executor-vertx.md) | camel-reactive-executor-vertx-starter | Experimental | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](../../components/next/others/reactor.md) | camel-reactor-starter | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |

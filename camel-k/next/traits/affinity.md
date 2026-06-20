@@ -56,3 +56,6 @@ $ kamel run -t affinity.pod-anti-affinity-labels="camel.apache.org/integration" 
 ```
 
 More information can be found in the official Kubernetes documentation about [Assigning Pods to Nodes](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).
+
+> **Note**
+> Operators can restrict which label keys CR authors are permitted to use in `affinity.nodeAffinityLabels` by setting the `AFFINITY_NODE_LABELS_ALLOWED_KEYS` environment variable on the operator deployment to a comma-separated list of allowed keys (e.g. `kubernetes.io/hostname,topology.kubernetes.io/zone`). Expressions whose key is not in the list are dropped and an info message is logged. When the variable is unset or empty, all keys are accepted (default behavior). See build environment variables documentation for details.

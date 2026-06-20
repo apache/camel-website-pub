@@ -18,6 +18,7 @@ Here a quick resume of the parameters you can configure as environment variables
 | PUBLISH\_STRATEGY | Strategy used to publish built artifacts/images. | `jib` |
 | BUILD\_IMAGE\_PLATFORMS | Comma-separated list of target platforms for the build (e.g. `linux/amd64,linux/arm64`). | auto-detected |
 | MAX\_RUNNING\_BUILDS | Maximum number of builds that can run concurrently. | `3` if build strategy is `routine`, `10` if `pod` |
+| AFFINITY\_NODE\_LABELS\_ALLOWED\_KEYS | Comma-separated list of label keys that CR authors are permitted to use in `affinity.nodeAffinityLabels`. When unset or empty all keys are accepted. Expressions whose key is not in the list are dropped and an info message is logged. Example: `kubernetes.io/hostname,topology.kubernetes.io/zone`. |  |
 | BUILDER\_TASKS\_ENABLED | Controls whether CR authors are permitted to inject custom pipeline tasks via the `builder.tasks` trait. Set to `false` to disable custom task injection for all integrations managed by this operator. When unset or set to any value other than `false`, custom tasks are allowed (default behavior). | `true` |
 | BUILDER\_NODE\_SELECTOR\_ALLOWED\_LABELS | Comma-separated list of node-selector label keys that CR authors are permitted to set via the `builder.nodeSelector` trait. When unset or empty all keys are accepted. Unlisted keys are dropped and an info message is logged. Example: `kubernetes.io/hostname,topology.kubernetes.io/zone`. |  |
 
