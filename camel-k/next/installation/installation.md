@@ -9,7 +9,7 @@ The first step is to install and run the Camel K operator. You can do it via any
 [Kustomize](https://kustomize.io) provides a declarative approach to the configuration customization of a Camel-K installation. Kustomize works either with a standalone executable or as a built-in to `kubectl`. The [/install](https://github.com/apache/camel-k/tree/main/install) directory provides a series of base and overlays configuration that you can use. You can create your own overlays or customize the one available in the repository to accommodate your need.
 
 $ kubectl create ns camel-k
-$ kubectl apply -k github.com/apache/camel-k/install/overlays/kubernetes/descoped?ref=v2.10.0 --server-side
+$ kubectl apply -k github.com/apache/camel-k/install/overlays/all-namespaces?ref=v2.10.0 --server-side
 
 You can specify as `ref` parameter the version you’re willing to install (ie, `v2.10.0`). The command above will install a descoped (global) operator in the camel-k namespace. This is the suggested configuration in order to manage Integrations in all namespaces.
 
@@ -36,6 +36,26 @@ You can edit the `Subscription` custom resource, setting the channel you want to
 
 > **Note**
 > Some Kubernetes clusters such as Openshift may let you to perform the same operation from a GUI as well. Refer to the cluster instruction to learn how to perform such action from user interface.
+
+## Installation topology
+
+When you decide to install the operator, you can decide to install the following topology:
+
+-   Global operator: a single global operator watching all namespaces.
+    
+-   Own namespace operator: a namespaces operator watching its own namespace only.
+    
+-   Single namespace operator: an operator installed in a namespace and watching another namespace.
+    
+-   Multi namespace operator: an operator installed in a namespace and watching multiple namespaces.
+    
+
+The namespace(s) to watch is configured via `WATCH_NAMESPACE` variable in the operator `Deployment` resource. You can provide an empty value (watch all namespaces), a single value (watch either the own namespace or any other namespace) or a comma separated value (watching as many namespaces as provided).
+
+It’s important to notice that when running the single or multiple namespace operator, you will need to provide the RBACs which are expected by the operator to run properly. For such a configuration you can take as a reference the `Kustomize` examples available in `/install/overlays/single-namespace/` and `/install/overlays/multi-namespace/`. The last topology is probably the most secure as it will avoid the operator to access to any resource outside those namespaces for which you’ve provided the proper security rules.
+
+> **Note**
+> OLM only allows own and global installation mode.
 
 ## Setup the operator configuration
 

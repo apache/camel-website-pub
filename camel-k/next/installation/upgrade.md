@@ -9,7 +9,7 @@ Camel K is delivering new features with each new release, so, you’ll be probab
 
 If you want to upgrade via [Kustomize](https://kustomize.io) you’ll need to execute the same installation procedure you did for the previous version and add the `--force-conflicts` flag which will take care to overwrite any conflicting configuration (ie, rewriting the CRDs). Here an example for a descoped (global) installation procedure:
 
-$ kubectl apply -k github.com/apache/camel-k/install/overlays/kubernetes/descoped?ref=v2.10.0  --server-side --force-conflicts
+$ kubectl apply -k github.com/apache/camel-k/install/overlays/all-namespaces?ref=v2.10.0  --server-side --force-conflicts
 
 ## Upgrade via Operator Hub
 
@@ -43,7 +43,7 @@ Once the operator is up to date, you may want to refresh the `Integration` resou
 Since Camel K version 2, we’re able to run any Camel K runtime version from the same operator. However, if you upgrade and you rebuild an Integration, this one will be rebuilt using the default runtime version of the new operator. In order to stick to a runtime fixed version you need to use the `Camel` trait and the `runtime-version` property, which pin the exact runtime version to use, regardless the default one used by the operator:
 
 kamel run /tmp/Test.java -t camel.runtime-version=1.17.0
-kubectl apply -k github.com/apache/camel-k/install/overlays/kubernetes/descoped?ref=v2.4.0 --server-side --force-conflicts //ie, version 2.4.0
+kubectl apply -k github.com/apache/camel-k/install/overlays/all-namespaces?ref=v2.4.0 --server-side --force-conflicts //ie, version 2.4.0
 kamel rebuild test
 kamel logs test
 \[1\] 2023-04-13 13:38:43,648 INFO  \[org.apa.cam.k.Runtime\] (main) Apache Camel K Runtime 1.17.0

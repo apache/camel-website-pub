@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1781947897480,
+  "generated": 1782029214671,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -20412,15 +20412,69 @@
             },
             {
               "module": "others",
+              "path": "a2a-consumer.adoc",
+              "url": "/components/next/others/a2a-consumer.html",
+              "title": "A2A - Consumer Guide"
+            },
+            {
+              "module": "others",
+              "path": "a2a-producer.adoc",
+              "url": "/components/next/others/a2a-producer.html",
+              "title": "A2A - Producer Guide"
+            },
+            {
+              "module": "others",
               "path": "attachments.adoc",
               "url": "/components/next/others/attachments.html",
               "title": "Attachments"
             },
             {
               "module": "others",
+              "path": "aws-bedrock-examples.adoc",
+              "url": "/components/next/others/aws-bedrock-examples.html",
+              "title": "AWS Bedrock - Examples"
+            },
+            {
+              "module": "others",
+              "path": "aws-bedrock-models.adoc",
+              "url": "/components/next/others/aws-bedrock-models.html",
+              "title": "AWS Bedrock - Supported Models"
+            },
+            {
+              "module": "others",
+              "path": "aws2-s3-consumer-examples.adoc",
+              "url": "/components/next/others/aws2-s3-consumer-examples.html",
+              "title": "AWS S3 - Consumer Examples"
+            },
+            {
+              "module": "others",
+              "path": "aws2-s3-producer-operations.adoc",
+              "url": "/components/next/others/aws2-s3-producer-operations.html",
+              "title": "AWS S3 - Producer Operations"
+            },
+            {
+              "module": "others",
+              "path": "aws2-s3-streaming.adoc",
+              "url": "/components/next/others/aws2-s3-streaming.html",
+              "title": "AWS S3 - Streaming Upload"
+            },
+            {
+              "module": "others",
               "path": "azure-schema-registry.adoc",
               "url": "/components/next/others/azure-schema-registry.html",
               "title": "Azure Schema Registry"
+            },
+            {
+              "module": "others",
+              "path": "azure-storage-blob-consumer.adoc",
+              "url": "/components/next/others/azure-storage-blob-consumer.html",
+              "title": "Azure Storage Blob - Consumer Examples"
+            },
+            {
+              "module": "others",
+              "path": "azure-storage-blob-operations.adoc",
+              "url": "/components/next/others/azure-storage-blob-operations.html",
+              "title": "Azure Storage Blob - Producer Operations"
             },
             {
               "module": "others",
@@ -20472,6 +20526,24 @@
             },
             {
               "module": "others",
+              "path": "docling-async-processing.adoc",
+              "url": "/components/next/others/docling-async-processing.html",
+              "title": "Docling - Asynchronous Processing"
+            },
+            {
+              "module": "others",
+              "path": "docling-batch-processing.adoc",
+              "url": "/components/next/others/docling-batch-processing.html",
+              "title": "Docling - Batch Processing"
+            },
+            {
+              "module": "others",
+              "path": "docling-serve.adoc",
+              "url": "/components/next/others/docling-serve.html",
+              "title": "Docling - Using Docling-Serve API"
+            },
+            {
+              "module": "others",
               "path": "dsl-modeline.adoc",
               "url": "/components/next/others/dsl-modeline.html",
               "title": "DSL Modeline"
@@ -20487,6 +20559,12 @@
               "path": "headersmap.adoc",
               "url": "/components/next/others/headersmap.html",
               "title": "Headersmap"
+            },
+            {
+              "module": "others",
+              "path": "ibm-watsonx-ai-examples.adoc",
+              "url": "/components/next/others/ibm-watsonx-ai-examples.html",
+              "title": "IBM watsonx.ai - Examples"
             },
             {
               "module": "others",
@@ -20574,6 +20652,24 @@
             },
             {
               "module": "others",
+              "path": "langchain4j-agent-guardrails.adoc",
+              "url": "/components/next/others/langchain4j-agent-guardrails.html",
+              "title": "LangChain4j Agent - Input and Output Guardrails"
+            },
+            {
+              "module": "others",
+              "path": "langchain4j-agent-mcp.adoc",
+              "url": "/components/next/others/langchain4j-agent-mcp.html",
+              "title": "LangChain4j Agent - MCP Tools Integration"
+            },
+            {
+              "module": "others",
+              "path": "langchain4j-agent-multimodal.adoc",
+              "url": "/components/next/others/langchain4j-agent-multimodal.html",
+              "title": "LangChain4j Agent - Multimodal Content Support"
+            },
+            {
+              "module": "others",
               "path": "langchain4j-tokenizer.adoc",
               "url": "/components/next/others/langchain4j-tokenizer.html",
               "title": "LangChain4j Tokenizer"
@@ -20640,6 +20736,24 @@
             },
             {
               "module": "others",
+              "path": "mina-sftp-authentication.adoc",
+              "url": "/components/next/others/mina-sftp-authentication.html",
+              "title": "MINA SFTP Authentication"
+            },
+            {
+              "module": "others",
+              "path": "mina-sftp-migration.adoc",
+              "url": "/components/next/others/mina-sftp-migration.html",
+              "title": "MINA SFTP Migration from JSch"
+            },
+            {
+              "module": "others",
+              "path": "mina-sftp-security.adoc",
+              "url": "/components/next/others/mina-sftp-security.html",
+              "title": "MINA SFTP SSH Security"
+            },
+            {
+              "module": "others",
               "path": "oauth.adoc",
               "url": "/components/next/others/oauth.html",
               "title": "Oauth"
@@ -20655,6 +20769,24 @@
               "path": "observation.adoc",
               "url": "/components/next/others/observation.html",
               "title": "Micrometer Observability"
+            },
+            {
+              "module": "others",
+              "path": "openai-mcp.adoc",
+              "url": "/components/next/others/openai-mcp.html",
+              "title": "OpenAI - MCP Tool Calling"
+            },
+            {
+              "module": "others",
+              "path": "openai-operations.adoc",
+              "url": "/components/next/others/openai-operations.html",
+              "title": "OpenAI - Embeddings and Audio Operations"
+            },
+            {
+              "module": "others",
+              "path": "openai-providers.adoc",
+              "url": "/components/next/others/openai-providers.html",
+              "title": "OpenAI - Compatible Providers"
             },
             {
               "module": "others",
@@ -20757,6 +20889,30 @@
               "path": "rxjava.adoc",
               "url": "/components/next/others/rxjava.html",
               "title": "RxJava"
+            },
+            {
+              "module": "others",
+              "path": "salesforce-bulk-api.adoc",
+              "url": "/components/next/others/salesforce-bulk-api.html",
+              "title": "Salesforce - Bulk API"
+            },
+            {
+              "module": "others",
+              "path": "salesforce-reports.adoc",
+              "url": "/components/next/others/salesforce-reports.html",
+              "title": "Salesforce - Reports API"
+            },
+            {
+              "module": "others",
+              "path": "salesforce-rest-api.adoc",
+              "url": "/components/next/others/salesforce-rest-api.html",
+              "title": "Salesforce - REST API"
+            },
+            {
+              "module": "others",
+              "path": "salesforce-streaming.adoc",
+              "url": "/components/next/others/salesforce-streaming.html",
+              "title": "Salesforce - Streaming and Pub/Sub"
             },
             {
               "module": "others",
@@ -32680,6 +32836,12 @@
             },
             {
               "module": "ROOT",
+              "path": "property-placeholder-functions.adoc",
+              "url": "/manual/property-placeholder-functions.html",
+              "title": "Property Placeholder Functions"
+            },
+            {
+              "module": "ROOT",
               "path": "registry.adoc",
               "url": "/manual/registry.html",
               "title": "Registry"
@@ -32749,6 +32911,12 @@
               "path": "route-reload.adoc",
               "url": "/manual/route-reload.html",
               "title": "Route Reload"
+            },
+            {
+              "module": "ROOT",
+              "path": "route-template-bean-binding.adoc",
+              "url": "/manual/route-template-bean-binding.html",
+              "title": "Route Template Bean Binding"
             },
             {
               "module": "ROOT",

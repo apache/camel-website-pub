@@ -3479,9 +3479,17 @@ Deprecated: will be removed in future versions.
 
  |
 | `tasks`  
-\[\]string | A list of tasks to be executed (available only when using `pod` strategy) with format `<name>;<container-image>;<container-command>`. |
+\[\]string | A list of tasks to be executed (available only when using `pod` strategy) with format `<name>;<container-image>;<container-command>`.
+
+Deprecated: may be removed in future versions.
+
+ |
 | `tasksFilter`  
-string | A list of tasks sorted by the order of execution in a csv format, ie, `<taskName1>,<taskName2>,…​`. Mind that you must include also the operator tasks (`builder`, `quarkus-native`, `package`, `jib`, `s2i`) if you need to execute them. Useful only with `pod` strategy. |
+string | A list of tasks sorted by the order of execution in a csv format, ie, `<taskName1>,<taskName2>,…​`. Mind that you must include also the operator tasks (`builder`, `quarkus-native`, `package`, `jib`, `s2i`) if you need to execute them. Useful only with `pod` strategy. Disabled by default, you need to enable via BUILDER\_TASKS\_ENABLED=true environment variable on operator Deployment.
+
+Deprecated: may be removed in future versions.
+
+ |
 | `tasksRequestCPU`  
 \[\]string | A list of request cpu configuration for the specific task with format `<task-name>:<request-cpu-conf>`. |
 | `tasksRequestMemory`  

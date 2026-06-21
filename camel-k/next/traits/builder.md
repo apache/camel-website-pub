@@ -55,8 +55,16 @@ Deprecated: use TasksRequestCPU instead with task name `builder`.
 Deprecated: will be removed in future versions.
 
  |
-| `builder.tasks` | `[]string` | A list of tasks to be executed (available only when using `pod` strategy) with format `<name>;<container-image>;<container-command>`. |
-| `builder.tasksFilter` | `string` | A list of tasks sorted by the order of execution in a csv format, ie, `<taskName1>,<taskName2>,…​`. Mind that you must include also the operator tasks (`builder`, `quarkus-native`, `package`, `jib`, `s2i`) if you need to execute them. Useful only with `pod` strategy. |
+| `builder.tasks` | `[]string` | A list of tasks to be executed (available only when using `pod` strategy) with format `<name>;<container-image>;<container-command>`.
+
+Deprecated: may be removed in future versions.
+
+ |
+| `builder.tasksFilter` | `string` | A list of tasks sorted by the order of execution in a csv format, ie, `<taskName1>,<taskName2>,…​`. Mind that you must include also the operator tasks (`builder`, `quarkus-native`, `package`, `jib`, `s2i`) if you need to execute them. Useful only with `pod` strategy. Disabled by default, you need to enable via BUILDER\_TASKS\_ENABLED=true environment variable on operator Deployment.
+
+Deprecated: may be removed in future versions.
+
+ |
 | `builder.tasksRequestCPU` | `[]string` | A list of request cpu configuration for the specific task with format `<task-name>:<request-cpu-conf>`. |
 | `builder.tasksRequestMemory` | `[]string` | A list of request memory configuration for the specific task with format `<task-name>:<request-memory-conf>`. |
 | `builder.tasksLimitCPU` | `[]string` | A list of limit cpu configuration for the specific task with format `<task-name>:<limit-cpu-conf>`. |
@@ -96,4 +104,4 @@ $ kamel run --trait builder.node-selector.'size'=large integration.yaml
 The `builder.tasks` trait option lets CR authors inject arbitrary containers into the build pipeline (only when using the `pod` build strategy). Each task entry has the format `<name>;<image>;<command>[;<userID>]`.
 
 > **Note**
-> Operators can disable custom task injection entirely by setting `BUILDER_TASKS_ENABLED=false` on the operator deployment. When disabled, any `builder.tasks` values provided by CR authors are silently ignored and an info message is logged. The default is `true` (tasks are allowed). See build environment variables documentation for details.
+> Operators can enable custom task injection by setting `BUILDER_TASKS_ENABLED=true` on the operator deployment. When disabled, any `builder.tasks` values provided by CR authors are silently ignored and an info message is logged. The default is `false` (custom tasks are not allowed). See build environment variables documentation for details.

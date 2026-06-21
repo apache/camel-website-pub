@@ -1340,8 +1340,17 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
     
 | Extensions | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
+| [A2A - Consumer Guide](../../components/next/others/a2a-consumer.md) | undefined-starter |  |  |  |
+| [A2A - Producer Guide](../../components/next/others/a2a-producer.md) | undefined-starter |  |  |  |
 | [Attachments](../../components/next/others/attachments.md) | camel-attachments-starter | Stable | 3.0 | Support for attachments on Camel messages |
+| [AWS Bedrock - Examples](../../components/next/others/aws-bedrock-examples.md) | undefined-starter |  |  |  |
+| [AWS Bedrock - Supported Models](../../components/next/others/aws-bedrock-models.md) | undefined-starter |  |  |  |
+| [AWS S3 - Consumer Examples](../../components/next/others/aws2-s3-consumer-examples.md) | undefined-starter |  |  |  |
+| [AWS S3 - Producer Operations](../../components/next/others/aws2-s3-producer-operations.md) | undefined-starter |  |  |  |
+| [AWS S3 - Streaming Upload](../../components/next/others/aws2-s3-streaming.md) | undefined-starter |  |  |  |
 | [Azure Schema Registry](../../components/next/others/azure-schema-registry.md) | camel-azure-schema-registry-starter | Stable | 4.2 | Azure Schema Registry Component for utilities to deal with authentication |
+| [Azure Storage Blob - Consumer Examples](../../components/next/others/azure-storage-blob-consumer.md) | undefined-starter |  |  |  |
+| [Azure Storage Blob - Producer Operations](../../components/next/others/azure-storage-blob-operations.md) | undefined-starter |  |  |  |
 | [Camel YAML DSL Validator Maven Plugin](../../components/next/others/camel-yaml-dsl-validator-maven-plugin.md) | undefined-starter |  |  |  |
 | [CLI Connector](../../components/next/others/cli-connector.md) | camel-cli-connector-starter | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
 | [CLI Debug](../../components/next/others/cli-debug.md) | camel-cli-debug-starter | Stable | 4.17 | Remote CLI debugger |
@@ -1350,9 +1359,13 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [CXF Transport](../../components/next/others/cxf-transport.md) | camel-cxf-transport-starter | Stable | 2.8 | Camel Transport for Apache CXF |
 | [Debug](../../components/next/others/debug.md) | camel-debug-starter | Stable | 3.15 | Enables Camel Route Debugging |
 | [Diagram](../../components/next/others/diagram.md) | camel-diagram-starter | Preview | 4.21 | Camel Route Diagram rendering |
+| [Docling - Asynchronous Processing](../../components/next/others/docling-async-processing.md) | undefined-starter |  |  |  |
+| [Docling - Batch Processing](../../components/next/others/docling-batch-processing.md) | undefined-starter |  |  |  |
+| [Docling - Using Docling-Serve API](../../components/next/others/docling-serve.md) | undefined-starter |  |  |  |
 | [DSL](../../components/next/others/dsl.md) | undefined-starter |  |  |  |
 | [DSL Modeline](../../components/next/others/dsl-modeline.md) | camel-dsl-modeline-starter | Stable | 3.16 | Camel DSL modeline |
 | [Headersmap](../../components/next/others/headersmap.md) | camel-headersmap-starter | Stable-deprecated | 2.20 | Fast case-insensitive headers map implementation |
+| [IBM watsonx.ai - Examples](../../components/next/others/ibm-watsonx-ai-examples.md) | undefined-starter |  |  |  |
 | [Jandex](../../components/next/others/jandex.md) | camel-jandex-starter | Stable | 4.12 | Custom class and resource loader using jandex.idx |
 | [Jasypt](../../components/next/others/jasypt.md) | camel-jasypt-starter | Stable | 2.5 | Security using Jasypt |
 | [Java DSL (runtime compiled)](../../components/next/others/java-joor-dsl.md) | camel-java-joor-dsl-starter | Stable | 3.9 | Camel Java DSL with jOOR |
@@ -1365,6 +1378,9 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Keycloak Consumer Operations](../../components/next/others/keycloak-consumer.md) | undefined-starter |  |  |  |
 | [Keycloak Producer Operations](../../components/next/others/keycloak-producer.md) | undefined-starter |  |  |  |
 | [Keycloak Security Policies](../../components/next/others/keycloak-security.md) | undefined-starter |  |  |  |
+| [LangChain4j Agent - Input and Output Guardrails](../../components/next/others/langchain4j-agent-guardrails.md) | undefined-starter |  |  |  |
+| [LangChain4j Agent - MCP Tools Integration](../../components/next/others/langchain4j-agent-mcp.md) | undefined-starter |  |  |  |
+| [LangChain4j Agent - Multimodal Content Support](../../components/next/others/langchain4j-agent-multimodal.md) | undefined-starter |  |  |  |
 | [LangChain4j Tokenizer](../../components/next/others/langchain4j-tokenizer.md) | camel-langchain4j-tokenizer-starter | Preview | 4.8 | LangChain4j Tokenizer |
 | [LevelDB](../../components/next/others/leveldb.md) | camel-leveldb-starter | Stable-deprecated | 2.10 | Using LevelDB as persistent EIP store |
 | [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
@@ -1377,8 +1393,14 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Microprofile Config](../../components/next/others/microprofile-config.md) | camel-microprofile-config-starter | Stable | 3.0 | Bridging Eclipse MicroProfile Config with Camel properties |
 | [Microprofile Fault Tolerance](../../components/next/others/microprofile-fault-tolerance.md) | camel-microprofile-fault-tolerance-starter | Stable | 3.3 | Circuit Breaker EIP using MicroProfile Fault Tolerance |
 | [Microprofile Health](../../components/next/others/microprofile-health.md) | camel-microprofile-health-starter | Stable | 3.0 | Expose Camel health checks via MicroProfile Health |
+| [MINA SFTP Authentication](../../components/next/others/mina-sftp-authentication.md) | undefined-starter |  |  |  |
+| [MINA SFTP Migration from JSch](../../components/next/others/mina-sftp-migration.md) | undefined-starter |  |  |  |
+| [MINA SFTP SSH Security](../../components/next/others/mina-sftp-security.md) | undefined-starter |  |  |  |
 | [Oauth](../../components/next/others/oauth.md) | camel-oauth-starter | Preview | 4.12 | Camel OAuth (Preview) |
 | [Observability Services](../../components/next/others/observability-services.md) | camel-observability-services-starter | Preview | 4.9 | Camel Observability Services |
+| [OpenAI - Compatible Providers](../../components/next/others/openai-providers.md) | undefined-starter |  |  |  |
+| [OpenAI - Embeddings and Audio Operations](../../components/next/others/openai-operations.md) | undefined-starter |  |  |  |
+| [OpenAI - MCP Tool Calling](../../components/next/others/openai-mcp.md) | undefined-starter |  |  |  |
 | [Openapi Java](../../components/next/others/openapi-java.md) | camel-openapi-java-starter | Stable | 3.1 | Rest DSL support for using OpenApi doc |
 | [Openapi Validator](../../components/next/others/openapi-validator.md) | camel-openapi-validator-starter | Stable | 4.7 | OpenAPI validator for Camel Rest DSL |
 | [OpenTelemetry](../../components/next/others/opentelemetry.md) | camel-opentelemetry-starter | Stable-deprecated | 3.5 | Distributed tracing using OpenTelemetry |
@@ -1396,6 +1418,10 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Resilience4j Micrometer](../../components/next/others/resilience4j-micrometer.md) | camel-resilience4j-micrometer-starter | Stable | 4.15 | Micrometer statistics for Resilience4j |
 | [Resourceresolver Github](../../components/next/others/resourceresolver-github.md) | camel-resourceresolver-github-starter | Stable | 3.11 | Resource resolver to load files from GitHub |
 | [RxJava](../../components/next/others/rxjava.md) | camel-rxjava-starter | Stable | 2.22 | RxJava based back-end for Camel’s reactive streams component |
+| [Salesforce - Bulk API](../../components/next/others/salesforce-bulk-api.md) | undefined-starter |  |  |  |
+| [Salesforce - Reports API](../../components/next/others/salesforce-reports.md) | undefined-starter |  |  |  |
+| [Salesforce - REST API](../../components/next/others/salesforce-rest-api.md) | undefined-starter |  |  |  |
+| [Salesforce - Streaming and Pub/Sub](../../components/next/others/salesforce-streaming.md) | undefined-starter |  |  |  |
 | [Shiro](../../components/next/others/shiro.md) | camel-shiro-starter | Stable | 2.5 | Security using Shiro |
 | [Spring Cloud Config](../../components/next/others/spring-cloud-config.md) | camel-spring-cloud-config-starter | Stable | 4.12 | Camel Spring Cloud Config support |
 | [Spring Main](../../components/next/others/spring-main.md) | camel-spring-main-starter | Stable | 3.2 | Camel Spring Main support |

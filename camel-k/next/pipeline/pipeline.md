@@ -1,6 +1,11 @@
 # Build Pipeline
 
-Since version 2.0, we’ve introduced the concept of `Pipeline` in order to provide a degree of flexibility for those user that want to customize the entire building process. We can think of a pipeline as a series of tasks that can be executed to generate a Camel application project, build it accordingly and publish into a container registry.
+Camel K operator provides an opinionated pipeline used to generate the project from the source code (user submitted DSL or Git based project), build, "containerize" and push to a container registry. This is generally robust enough to perform the building operations required to build and execute an application on the cloud.
+
+If you need more control on the build pipeline or you need any customization, you are invited to use an [External CICD pipeline](external.md) instead.
+
+> **Warning**
+> the following documentation related to "custom tasks" is deprecated and will be removed in future releases.
 
 Camel K operator creates a default pipeline containing an opinionated `build`, `package` and `publish` operations. Beside them you can include any additional task in order to enrich the building process:
 
@@ -19,6 +24,9 @@ The **custom tasks** can be provided at any point of the pipeline (read task sor
 The final user can include any optional task, which, by default is run after a build operation is performed. We think this is the best moment when any custom operation can be performed as it is the immediate step after the Maven project is generated. And ideally, the context of any custom operation is the project.
 
 Custom tasks are only available using builder `pod` strategy in order to let the user provide each task with the tools required to run the specific customization.
+
+> **Note**
+> from version 2.11.0 onward, you will need to explicitly enable the feature setting `BUILDER_TASKS_ENABLED` environmnent variable as `true` on the operator Deployment.
 
 Let’s see an example:
 

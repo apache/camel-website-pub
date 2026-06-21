@@ -57,8 +57,6 @@ timer-source-to-log-sink.yaml
 apiVersion: camel.apache.org/v1
 kind: Pipe
 metadata:
-  annotations:
-    camel.apache.org/operator.id: camel-k
   name: timer-source-to-log-sink
   namespace: camel-k
 spec:
