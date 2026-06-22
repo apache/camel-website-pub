@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SBOMs Are Becoming a Requirement — Apache Camel Already Ships and Supports Them</title>
+      <link>https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/</link>
+      <pubDate>Mon, 22 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/</guid>
+      <description>If your security or compliance team has started asking &amp;ldquo;does it ship with an SBOM?&amp;rdquo;, you are not alone. The EU Cyber Resilience Act (CRA) will require SBOM delivery for software sold in the EU, US Executive Order 14028 and NIST guidance make SBOMs a federal procurement expectation, and enterprise evaluation checklists increasingly treat SBOM availability as a gate.&#xA;Apache Camel has shipped SBOMs with every release since 4.0.3 — long before these regulations finalized.</description>
+    </item>
     <item>
       <title>Why AI Already Knows Apache Camel</title>
       <link>https://camel.apache.org/blog/2026/06/camel-ai-trained/</link>

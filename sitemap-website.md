@@ -1,7 +1,9 @@
-urls[764]{loc,lastmod}:
+urls[766]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-06-22T00:00:00+00:00
+  https://camel.apache.org/,2026-06-22T00:00:00+00:00
+  https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/,2026-06-22T00:00:00+00:00
+  https://camel.apache.org/categories/Security/,2026-06-22T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-06-19T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-06-19T00:00:00+00:00
-  https://camel.apache.org/,2026-06-19T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-ai-trained/,2026-06-19T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-06-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/,2026-06-18T00:00:00+00:00
