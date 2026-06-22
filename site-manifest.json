@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1782029214671,
+  "generated": 1782152924190,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32929,6 +32929,12 @@
               "path": "routes.adoc",
               "url": "/manual/routes.html",
               "title": "Routes"
+            },
+            {
+              "module": "ROOT",
+              "path": "sbom.adoc",
+              "url": "/manual/sbom.html",
+              "title": "Generating SBOMs"
             },
             {
               "module": "ROOT",

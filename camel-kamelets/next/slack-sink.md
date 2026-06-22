@@ -17,7 +17,6 @@ The following table summarizes the configuration options available for the `slac
 | **webhookUrl** | Webhook URL | **Required** The webhook URL used by the Slack channel to handle incoming messages. | string |  |  |
 | **iconEmoji** | Icon Emoji | Use a Slack emoji as an avatar. | string |  |  |
 | **iconUrl** | Icon URL | The avatar to use when sending a message to a channel or user. | string |  |  |
-| **username** | Username | The username for the bot when it sends messages to a channel or user. | string |  |  |
 
 ## Dependencies
 
