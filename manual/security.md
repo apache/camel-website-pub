@@ -4,6 +4,8 @@ Camel offers several forms and levels of security capabilities that can be used 
 
 > **Note**
 > This page describes the security **features** Camel offers to route authors and operators. For the project’s **security model** - who is trusted, where the trust boundaries sit, what counts as a framework vulnerability, and what is operator responsibility - see [Security Model](security-model.md).
+>
+> Camel also includes a [Security Policy Enforcement](security-policy.md) mechanism that detects insecure configuration (plain-text secrets, disabled SSL verification, unsafe deserialization, dev features in production) at startup time.
 
 The broad categories offered are:
 

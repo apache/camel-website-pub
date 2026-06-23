@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OPC UA Browser component supports 25 options, which are listed below.
+The OPC UA Browser component supports 27 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -107,6 +107,8 @@ The OPC UA Browser component supports 25 options, which are listed below.
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
+| **password** (security) | The password for authentication. Use this instead of embedding credentials in the endpoint URI when the password contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
+| **username** (security) | The username for authentication. Use this instead of embedding credentials in the endpoint URI when the username contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
 
 ## Endpoint Options
 
@@ -123,7 +125,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **endpointUri** (producer) | **Required** The OPC UA server endpoint. |  | String |
 
-### Query Parameters (30 parameters)
+### Query Parameters (32 parameters)
 
    
 | Name | Description | Default | Type |
@@ -174,6 +176,8 @@ Enum values:
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
+| **password** (security) | The password for authentication. Use this instead of embedding credentials in the endpoint URI when the password contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
+| **username** (security) | The username for authentication. Use this instead of embedding credentials in the endpoint URI when the username contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
 
 ## Message Headers
 

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1782161940645,
+  "generated": 1782209667097,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32947,6 +32947,12 @@
               "path": "security-model.adoc",
               "url": "/manual/security-model.html",
               "title": "Security Model"
+            },
+            {
+              "module": "ROOT",
+              "path": "security-policy.adoc",
+              "url": "/manual/security-policy.html",
+              "title": "Security Policy Enforcement"
             },
             {
               "module": "ROOT",

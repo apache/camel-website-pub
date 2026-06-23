@@ -34,6 +34,14 @@ milo-client:opc.tcp://\[user:password@\]host:port?node=RAW(nsu=urn:foo:bar;s=ite
 
 If no user credentials are provided the client will switch to anonymous mode.
 
+As an alternative to URI-embedded credentials (`user:password`), you can provide credentials explicitly using the endpoint parameters `username` and `password`. This is recommended when credentials contain special characters (for example `?`, `/`, `@`, `&`, `%`(%25)) that can make URI-embedded credentials difficult to handle.
+
+For example:
+
+milo-client:opc.tcp://host:port/path/to/service?node=RAW(nsu=urn:foo:bar;s=item-1)&username=RAW(my?user@name)&password=RAW(p@ss/w&rd)
+
+When both styles are provided, the explicit `username`/`password` parameters take precedence over credentials embedded in the URI.
+
 All configuration options in the group client are applicable to the shared client instance. Endpoints will share client instances for each endpoint URI. So the first time a request for that endpoint URI is made, the options of the client group are applied. All further instances will be ignored.
 
 If you need alternate options for the same endpoint URI it is possible though to set the clientId option which will by added internally to the endpoint URI in order to select a different shared connection instance. In other words, shared connections located by the combination of endpoint URI and client id.
@@ -85,7 +93,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OPC UA Client component supports 26 options, which are listed below.
+The OPC UA Client component supports 28 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -116,6 +124,8 @@ The OPC UA Client component supports 26 options, which are listed below.
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
+| **password** (security) | The password for authentication. Use this instead of embedding credentials in the endpoint URI when the password contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
+| **username** (security) | The username for authentication. Use this instead of embedding credentials in the endpoint URI when the username contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
 
 ## Endpoint Options
 
@@ -132,7 +142,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **endpointUri** (common) | **Required** The OPC UA server endpoint. |  | String |
 
-### Query Parameters (34 parameters)
+### Query Parameters (36 parameters)
 
    
 | Name | Description | Default | Type |
@@ -215,6 +225,8 @@ Enum values:
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
+| **password** (security) | The password for authentication. Use this instead of embedding credentials in the endpoint URI when the password contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
+| **username** (security) | The username for authentication. Use this instead of embedding credentials in the endpoint URI when the username contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
 
 ## Message Headers
 

@@ -16,6 +16,7 @@ The following table summarizes the configuration options available for the `time
 | **timestampFormat** | Timestamp Format | Format string for the timestamp that is compatible with java.text.SimpleDateFormat. | string | yyyyMMdd |  |
 | **timestampHeaderName** | Timestamp Header Name | The name of the header containing a timestamp. | string | kafka.TIMESTAMP |  |
 | **topicFormat** | Topic Format | Format string which can contain '$\[topic\]' and '$\[timestamp\]' as placeholders for the topic and timestamp, respectively. | string | topic-$\[timestamp\] |  |
+| **topicHeaderName** | Topic Header Name | The name of the header containing the topic name. When not set, the default Kafka topic header (CamelKafkaTopic) is used. | string |  |  |
 
 ## Dependencies
 

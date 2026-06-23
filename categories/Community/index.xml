@@ -9,13 +9,6 @@
     <lastBuildDate>Thu, 18 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Community/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Kaoto v2.11 release</title>
-      <link>https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/</link>
-      <pubDate>Thu, 18 Jun 2026 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/</guid>
-      <description>What&amp;rsquo;s New? Kaoto 2.11 delivers major improvements across three key areas: automated testing through Citrus framework support, enhanced DataMapper capabilities for handling complex schemas, and flexible runtime management options. Built on Apache Camel 4.20.0, this release strengthens Kaoto&amp;rsquo;s position as a powerful visual integration design tool.&#xA;Citrus Testing Capabilities The Citrus framework is now fully integrated into Kaoto 2.11, enabling you to create automated tests within the same visual environment where you design your integrations.</description>
-    </item>
-    <item>
       <title>The Hidden Work: 2,449 Dependency Updates Across 20 Apache Camel Releases</title>
       <link>https://camel.apache.org/blog/2026/06/camel-dependency-updates/</link>
       <pubDate>Thu, 18 Jun 2026 00:00:00 +0000</pubDate>
@@ -49,13 +42,6 @@
       <pubDate>Tue, 09 Jun 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</guid>
       <description>When the first commit landed on March 19, 2007, Apache Camel was a routing library with a handful of components and a single contributor. Nineteen years later, the git repository has crossed 100,000 commits from 1,500+ contributors representing 450+ companies across more than 20 countries. The project ships 311 integration components, has published 300+ releases, and runs in production at organizations where downtime means grounded flights, blocked payments, or missed diagnoses.</description>
-    </item>
-    <item>
-      <title>Wanaku 0.1.1: Bringing Apache Camel Integration Capabilities to AI Agents via MCP</title>
-      <link>https://camel.apache.org/blog/2026/05/wanaku-0.1.1/</link>
-      <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
-      <guid>https://camel.apache.org/blog/2026/05/wanaku-0.1.1/</guid>
-      <description>We&amp;rsquo;re excited to announce Wanaku 0.1.1, a significant milestone that showcases how Apache Camel&amp;rsquo;s powerful integration capabilities can be seamlessly exposed to AI agents through the Model Context Protocol (MCP). This release introduces Service Catalogs and Service Templates — features that leverage Apache Camel as the integration runtime to bridge the gap between AI and enterprise systems.&#xA;What is Wanaku? Wanaku is an open-source MCP router and capability management platform that acts as a smart intermediary between AI agents and integration capabilities.</description>
     </item>
   </channel>
 </rss>
