@@ -53,22 +53,22 @@ The Jackson XML 2 dataformat supports 17 options, which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **xmlMapper** (advanced) |  | `String` | Lookup and use the existing XmlMapper with the given id. |
-| **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
+| **prettyPrint** (common) | `false` | `Boolean` | Whether to enable pretty printing output nicely formatted. Is by default false. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
-| **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson is allowed to attempt to use the CamelJacksonUnmarshalType header during the unmarshalling. This should only be enabled when desired to be used. |
+| **allowUnmarshallType** (common) | `false` | `Boolean` | Whether to allow Jackson to use the CamelJacksonUnmarshalType header during unmarshalling. Should only be enabled when desired. |
 | **jsonView** (common) |  | `String` | When marshalling a POJO to JSON you might want to exclude certain fields from the JSON output. With Jackson you can use JSON views to accomplish this. This option is to refer to the class which has JsonView annotations. |
-| **include** (common) |  | `String` | If you want to marshal a pojo to JSON, and the pojo has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |
-| **allowJmsType** (advanced) | `false` | `Boolean` | Used for JMS users to allow the JMSType header from the JMS spec to specify a FQN classname to use to unmarshal to. |
-| **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows to use different collection types than java.util.Collection based as default. |
-| **useList** (common) | `false` | `Boolean` | To unmarshal to a List of Map or a List of Pojo. |
+| **include** (common) |  | `String` | If you want to marshal a POJO to JSON, and the POJO has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |
+| **allowJmsType** (advanced) | `false` | `Boolean` | Whether to allow the JMSType header from the JMS spec to specify a FQN classname to use to unmarshal to. |
+| **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows using different collection types than java.util.Collection based as default. |
+| **useList** (common) | `false` | `Boolean` | Whether to unmarshal to a List of Map or a List of Pojo. |
 | **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
-| **enableJaxbAnnotationModule** (advanced) | `false` | `Boolean` | Whether to enable the JAXB annotations module when using jackson. When enabled then JAXB annotations can be used by Jackson. |
+| **enableJaxbAnnotationModule** (advanced) | `false` | `Boolean` | Whether to enable the JAXB annotations module when using Jackson. When enabled then JAXB annotations can be used by Jackson. |
 | **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules com.fasterxml.jackson.databind.Module specified as a String with FQN class names. Multiple classes can be separated by comma. |
 | **moduleRefs** (advanced) |  | `String` | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |
-| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |
-| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |
+| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from SerializationFeature, DeserializationFeature, or MapperFeature. Multiple features can be separated by comma. |
+| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from SerializationFeature, DeserializationFeature, or MapperFeature. Multiple features can be separated by comma. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
-| **maxStringLength** (advanced) |  | `Integer` | Sets the maximum string length (in chars or bytes, depending on input context). The default is 20,000,000. This limit is not exact, the limit is applied when we increase internal buffer sizes and an exception will happen at sizes greater than this limit. Some text values that are a little bigger than the limit may be treated as valid but no text values with sizes less than or equal to this limit will be treated as invalid. |
+| **maxStringLength** (advanced) |  | `Integer` | Maximum allowed string length when deserializing (in chars or bytes, depending on input context). The default is 20,000,000. |
 
 ## Usage
 

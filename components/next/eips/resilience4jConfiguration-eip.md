@@ -9,12 +9,12 @@ The Resilience4j Configuration eip supports 0 options, which are listed below.
 | --- | --- | --- | --- |
 | **circuitBreaker** | Refers to an existing io.github.resilience4j.circuitbreaker.CircuitBreaker instance to lookup and use from the registry. When using this, then any other circuit breaker options are not in use. |  | String |
 | **config** | Refers to an existing io.github.resilience4j.circuitbreaker.CircuitBreakerConfig instance to lookup and use from the registry. |  | String |
-| **failureRateThreshold** | Configures the failure rate threshold in percentage. If the failure rate is equal or greater than the threshold the CircuitBreaker transitions to open and starts short-circuiting calls. The threshold must be greater than 0 and not greater than 100. Default value is 50 percentage. | 50 | Float |
-| **permittedNumberOfCallsInHalfOpenState** | Configures the number of permitted calls when the CircuitBreaker is half open. The size must be greater than 0. Default size is 10. | 10 | Integer |
-| **throwExceptionWhenHalfOpenOrOpenState** | Whether to throw io.github.resilience4j.circuitbreaker.CallNotPermittedException when the call is rejected due circuit breaker is half open (and was not attempted but rejected immediately) or open (always rejected). This option is only in use when there is NOT a fallback configured on the circuit breaker. When there is a fallback then the fallback is always executed and CallNotPermittedException is not thrown. | false | Boolean |
-| **slidingWindowSize** | Configures the size of the sliding window which is used to record the outcome of calls when the CircuitBreaker is closed. slidingWindowSize configures the size of the sliding window. Sliding window can either be count-based or time-based. If slidingWindowType is COUNT\_BASED, the last slidingWindowSize calls are recorded and aggregated. If slidingWindowType is TIME\_BASED, the calls of the last slidingWindowSize seconds are recorded and aggregated. The slidingWindowSize must be greater than 0. The minimumNumberOfCalls must be greater than 0. If the slidingWindowType is COUNT\_BASED, the minimumNumberOfCalls cannot be greater than slidingWindowSize . If the slidingWindowType is TIME\_BASED, you can pick whatever you want. Default slidingWindowSize is 100. | 100 | Integer |
+| **failureRateThreshold** | Configures the failure rate threshold in percentage. If the failure rate is equal or greater than the threshold the CircuitBreaker transitions to open and starts short-circuiting calls. | 50 | Float |
+| **permittedNumberOfCallsInHalfOpenState** | Configures the number of permitted calls when the CircuitBreaker is half open. | 10 | Integer |
+| **throwExceptionWhenHalfOpenOrOpenState** | Whether to throw io.github.resilience4j.circuitbreaker.CallNotPermittedException when the call is rejected because the circuit breaker is half open or open. | false | Boolean |
+| **slidingWindowSize** | Configures the size of the sliding window which is used to record the outcome of calls when the CircuitBreaker is closed. Sliding window can either be count-based or time-based. | 100 | Integer |
 | **slidingWindowType** | 
-Configures the type of the sliding window which is used to record the outcome of calls when the CircuitBreaker is closed. Sliding window can either be count-based or time-based. If slidingWindowType is COUNT\_BASED, the last slidingWindowSize calls are recorded and aggregated. If slidingWindowType is TIME\_BASED, the calls of the last slidingWindowSize seconds are recorded and aggregated. Default slidingWindowType is COUNT\_BASED.
+Configures the type of the sliding window which is used to record the outcome of calls when the CircuitBreaker is closed. Sliding window can either be count-based or time-based.
 
 Enum values:
 
@@ -28,22 +28,22 @@ Enum values:
 
 
  | COUNT\_BASED | String |
-| **minimumNumberOfCalls** | Configures the minimum number of calls which are required (per sliding window period) before the CircuitBreaker can calculate the error rate. For example, if minimumNumberOfCalls is 10, then at least 10 calls must be recorded, before the failure rate can be calculated. If only 9 calls have been recorded the CircuitBreaker will not transition to open even if all 9 calls have failed. Default minimumNumberOfCalls is 100. | 100 | Integer |
-| **writableStackTraceEnabled** | Enables writable stack traces. When set to false, Exception.getStackTrace returns a zero length array. This may be used to reduce log spam when the circuit breaker is open as the cause of the exceptions is already known (the circuit breaker is short-circuiting calls). | true | Boolean |
-| **waitDurationInOpenState** | Configures the wait duration (in seconds) which specifies how long the CircuitBreaker should stay open, before it switches to half open. Default value is 60 seconds. | 60 | Integer |
+| **minimumNumberOfCalls** | Configures the minimum number of calls which are required (per sliding window period) before the CircuitBreaker can calculate the error rate. | 100 | Integer |
+| **writableStackTraceEnabled** | Enables writable stack traces. When set to false, Exception.getStackTrace returns a zero length array. This may be used to reduce log spam when the circuit breaker is open. | true | Boolean |
+| **waitDurationInOpenState** | Configures the wait duration (in seconds) which specifies how long the CircuitBreaker should stay open, before it switches to half open. | 60 | Integer |
 | **automaticTransitionFromOpenToHalfOpenEnabled** | Enables automatic transition from OPEN to HALF\_OPEN state once the waitDurationInOpenState has passed. | false | Boolean |
-| **slowCallRateThreshold** | Configures a threshold in percentage. The CircuitBreaker considers a call as slow when the call duration is greater than slowCallDurationThreshold Duration. When the percentage of slow calls is equal or greater the threshold, the CircuitBreaker transitions to open and starts short-circuiting calls. The threshold must be greater than 0 and not greater than 100. Default value is 100 percentage which means that all recorded calls must be slower than slowCallDurationThreshold. | 100 | Float |
-| **slowCallDurationThreshold** | Configures the duration threshold (seconds) above which calls are considered as slow and increase the slow calls percentage. Default value is 60 seconds. | 60 | Integer |
-| **bulkheadEnabled** | Whether bulkhead is enabled or not on the circuit breaker. Default is false. | false | Boolean |
+| **slowCallRateThreshold** | Configures a threshold in percentage. The CircuitBreaker considers a call as slow when the call duration is greater than slowCallDurationThreshold. When the percentage of slow calls is equal or greater the threshold, the CircuitBreaker transitions to open and starts short-circuiting calls. | 100 | Float |
+| **slowCallDurationThreshold** | Configures the duration threshold (seconds) above which calls are considered as slow and increase the slow calls percentage. | 60 | Integer |
+| **bulkheadEnabled** | Whether bulkhead is enabled or not on the circuit breaker. | false | Boolean |
 | **bulkheadMaxConcurrentCalls** | Configures the max amount of concurrent calls the bulkhead will support. | 25 | Integer |
-| **bulkheadMaxWaitDuration** | Configures a maximum amount of time which the calling thread will wait to enter the bulkhead. If bulkhead has space available, entry is guaranteed and immediate. If bulkhead is full, calling threads will contest for space, if it becomes available. maxWaitDuration can be set to 0. Note: for threads running on an event-loop or equivalent (rx computation pool, etc), setting maxWaitDuration to 0 is highly recommended. Blocking an event-loop thread will most likely have a negative effect on application throughput. | 0 | Integer |
-| **timeoutEnabled** | Whether timeout is enabled or not on the circuit breaker. Default is false. | false | Boolean |
-| **timeoutExecutorService** | References to a custom thread pool to use when timeout is enabled (uses ForkJoinPool#commonPool() by default). |  | ExecutorService |
+| **bulkheadMaxWaitDuration** | Configures a maximum amount of time which the calling thread will wait to enter the bulkhead. | 0 | Integer |
+| **timeoutEnabled** | Whether timeout is enabled or not on the circuit breaker. | false | Boolean |
+| **timeoutExecutorService** | References to a custom thread pool to use when timeout is enabled (uses ForkJoinPool.commonPool() by default). |  | ExecutorService |
 | **timeoutDuration** | Configures the thread execution timeout. Default value is 1 second. | 1000 | Integer |
 | **timeoutCancelRunningFuture** | Configures whether cancel is called on the running future. Defaults to true. | true | Boolean |
 | **micrometerEnabled** | Whether to enable collecting statistics using Micrometer. This requires adding camel-resilience4j-micrometer JAR to the classpath. | false | Boolean |
 | **recordException** | Configure a list of exceptions that are recorded as a failure and thus increase the failure rate. Any exception matching or inheriting from one of the list counts as a failure, unless explicitly ignored via ignoreExceptions. |  | List |
-| **ignoreException** | Configure a list of exceptions that are ignored and neither count as a failure nor success. Any exception matching or inheriting from one of the list will not count as a failure nor success, even if the exceptions is part of recordExceptions. |  | List |
+| **ignoreException** | Configure a list of exceptions that are ignored and neither count as a failure nor success. Any exception matching or inheriting from one of the list will not count as a failure nor success, even if the exception is part of recordExceptions. |  | List |
 
 ## Exchange properties
 

@@ -17,11 +17,11 @@ The Filter eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **expression** | **Required** Expression to determine if the message should be filtered or not. If the expression returns an empty value or false then the message is filtered (dropped), otherwise the message is continued being routed. |  | ExpressionDefinition |
-| **statusPropertyName** | Name of exchange property to use for storing the status of the filtering. Setting this allows to know if the filter predicate evaluated as true or false. |  | String |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **expression** | **Required** The predicate expression to evaluate. Messages where the predicate returns false are filtered out and not routed further. |  | ExpressionDefinition |
+| **statusPropertyName** | Name of an exchange property to store whether the filter predicate matched or not. The value is stored as a boolean. |  | String |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

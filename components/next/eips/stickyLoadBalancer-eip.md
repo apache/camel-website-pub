@@ -11,7 +11,7 @@ The Sticky Load Balancer eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **correlationExpression** | **Required** The correlation expression to use to calculate the correlation key. |  | ExpressionSubElementDefinition |
+| **correlationExpression** | The correlation expression to use to calculate the correlation key. |  | ExpressionSubElementDefinition |
 
 ## Exchange properties
 

@@ -13,9 +13,9 @@ The JAXB dataformat supports 20 options, which are listed below.
 | --- | --- | --- | --- |
 | **contextPath** (common) |  | `String` | **Required** Package name where your JAXB classes are located. |
 | **contextPathIsClassName** (common) | `false` | `Boolean` | This can be set to true to mark that the contextPath is referring to a classname and not a package name. |
-| **schema** (common) |  | `String` | To validate against an existing schema. Your can use the prefix classpath:, file: or http: to specify how the resource should be resolved. You can separate multiple schema files by using the ',' character. |
+| **schema** (common) |  | `String` | To validate against an existing schema. You can use the prefix classpath:, file: or http: to specify how the resource should be resolved. You can separate multiple schema files by using the comma character. |
 | **schemaSeverityLevel** (common) | `0` | `Enum` | 
-Sets the schema severity level to use when validating against a schema. This level determines the minimum severity error that triggers JAXB to stop continue parsing. The default value of 0 (warning) means that any error (warning, error or fatal error) will trigger JAXB to stop. There are the following three levels: 0=warning, 1=error, 2=fatal error.
+Sets the schema severity level to use when validating against a schema. The default value of 0 (warning) means that any error will trigger JAXB to stop. There are the following three levels: 0=warning, 1=error, 2=fatal error.
 
 Enum values:
 
@@ -32,21 +32,21 @@ Enum values:
 
  |
 | **prettyPrint** (common) | `true` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
-| **objectFactory** (advanced) | `true` | `Boolean` | Whether to allow using ObjectFactory classes to create the POJO classes during marshalling. This only applies to POJO classes that has not been annotated with JAXB and providing jaxb.index descriptor files. |
+| **objectFactory** (advanced) | `true` | `Boolean` | Whether to allow using ObjectFactory classes to create the POJO classes during marshalling. |
 | **ignoreJAXBElement** (advanced) | `true` | `Boolean` | Whether to ignore JAXBElement elements - only needed to be set to false in very special use-cases. |
-| **mustBeJAXBElement** (advanced) | `false` | `Boolean` | Whether marhsalling must be java objects with JAXB annotations. And if not then it fails. This option can be set to false to relax that, such as when the data is already in XML format. |
-| **filterNonXmlChars** (advanced) | `false` | `Boolean` | To ignore non xml characheters and replace them with an empty space. |
+| **mustBeJAXBElement** (advanced) | `false` | `Boolean` | Whether marshalling must be java objects with JAXB annotations. And if not then it fails. This option can be set to false to relax that, such as when the data is already in XML format. |
+| **filterNonXmlChars** (advanced) | `false` | `Boolean` | To ignore non xml characters and replace them with an empty space. |
 | **encoding** (common) |  | `String` | To overrule and use a specific encoding. |
-| **fragment** (advanced) | `false` | `Boolean` | To turn on marshalling XML fragment trees. By default JAXB looks for XmlRootElement annotation on given class to operate on whole XML tree. This is useful but not always - sometimes generated code does not have XmlRootElement annotation, sometimes you need unmarshall only part of tree. In that case you can use partial unmarshalling. To enable this behaviours you need set property partClass. Camel will pass this class to JAXB’s unmarshaler. |
-| **partClass** (advanced) |  | `String` | Name of class used for fragment parsing. See more details at the fragment option. |
-| **partNamespace** (advanced) |  | `String` | XML namespace to use for fragment parsing. See more details at the fragment option. |
+| **fragment** (advanced) | `false` | `Boolean` | To turn on marshalling XML fragment trees. This is useful when generated code does not have XmlRootElement annotation and you need to unmarshall only part of the tree. |
+| **partClass** (advanced) |  | `String` | Name of class used for fragment parsing. |
+| **partNamespace** (advanced) |  | `String` | XML namespace to use for fragment parsing. |
 | **namespacePrefix** (advanced) |  | `Object` | When marshalling using JAXB or SOAP then the JAXB implementation will automatically assign namespace prefixes, such as ns2, ns3, ns4 etc. To control this mapping, Camel allows you to refer to a map which contains the desired mapping. |
 | **xmlStreamWriterWrapper** (advanced) |  | `String` | To use a custom xml stream writer. |
 | **schemaLocation** (common) |  | `String` | To define the location of the schema. |
 | **noNamespaceSchemaLocation** (advanced) |  | `String` | To define the location of the namespaceless schema. |
 | **jaxbProviderProperties** (advanced) |  | `String` | Refers to a custom java.util.Map to lookup in the registry containing custom JAXB provider properties to be used with the JAXB marshaller. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
-| **accessExternalSchemaProtocols** (security) |  | `String` | Only in use if schema validation has been enabled. Restrict access to the protocols specified for external reference set by the schemaLocation attribute, Import and Include element. Examples of protocols are file, http, jar:file. empty, false or none to deny all access to external references; a specific protocol, such as file, to give permission to only the protocol; the keyword all to grant permission to all protocols. |
+| **accessExternalSchemaProtocols** (security) |  | `String` | Only in use if schema validation has been enabled. Restrict access to the protocols specified for external reference set by the schemaLocation attribute, Import and Include element. |
 
 ## Usage
 

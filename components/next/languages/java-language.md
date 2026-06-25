@@ -15,8 +15,8 @@ The Java language supports 4 options, which are listed below.
 | --- | --- | --- | --- |
 | **preCompile** (advanced) | `true` | `Boolean` | Whether the expression should be pre compiled once during initialization phase. If this is turned off, then the expression is reloaded and compiled on each evaluation. |
 | **singleQuotes** (advanced) | `true` | `Boolean` | Whether single quotes can be used as replacement for double quotes. This is convenient when you need to work with strings inside strings. |
-| **resultType** (common) |  | `String` | Sets the class of the result type (type from output). |
-| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. |
+| **resultType** (common) |  | `String` | The class of the result type (type from output). |
+| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 
 ## Usage
 

@@ -15,9 +15,9 @@ The Bean Method language supports 7 options, which are listed below.
 | --- | --- | --- | --- |
 | **ref** (common) |  | `String` | Reference to an existing bean (bean id) to lookup in the registry. |
 | **method** (common) |  | `String` | Name of method to call. |
-| **beanType** (common) |  | `String` | Class name (fully qualified) of the bean to use Will lookup in registry and if there is a single instance of the same type, then the existing bean is used, otherwise a new bean is created (requires a default no-arg constructor). |
+| **beanType** (common) |  | `String` | Class name (fully qualified) of the bean to use. Will lookup in registry and if there is a single instance of the same type, then the existing bean is used, otherwise a new bean is created (requires a default no-arg constructor). |
 | **scope** (advanced) | `Singleton` | `Enum` | 
-Scope of bean. When using singleton scope (default) the bean is created or looked up only once and reused for the lifetime of the endpoint. The bean should be thread-safe in case concurrent threads is calling the bean at the same time. When using request scope the bean is created or looked up once per request (exchange). This can be used if you want to store state on a bean while processing a request and you want to call the same bean instance multiple times while processing the request. The bean does not have to be thread-safe as the instance is only called from the same request. When using prototype scope, then the bean will be looked up or created per call. However in case of lookup then this is delegated to the bean registry such as Spring or CDI (if in use), which depends on their configuration can act as either singleton or prototype scope. So when using prototype scope then this depends on the bean registry implementation.
+Scope of bean. When using singleton scope (default) the bean is created or looked up only once and reused for the lifetime of the endpoint.
 
 Enum values:
 
@@ -34,8 +34,8 @@ Enum values:
 
  |
 | **validate** (advanced) | `true` | `Boolean` | Whether to validate the bean has the configured method. |
-| **resultType** (common) |  | `String` | Sets the class of the result type (type from output). |
-| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. |
+| **resultType** (common) |  | `String` | The class of the result type (type from output). |
+| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 
 ## Examples
 

@@ -1,6 +1,6 @@
 # LZF Deflate Compression
 
-Compress and decompress streams using LZF deflate algorithm.
+Compress and decompress streams using LZF deflate algorithm
 
 ## What’s inside
 
@@ -26,4 +26,4 @@ The starter supports 2 options, which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | camel.dataformat.lzf.enabled | Whether to enable auto configuration of the lzf data format. This is enabled by default. |  | Boolean |
-| camel.dataformat.lzf.using-parallel-compression | Enable encoding (compress) using multiple processing cores. | false | Boolean |
+| camel.dataformat.lzf.using-parallel-compression | Whether to enable encoding (compress) using multiple processing cores. | false | Boolean |

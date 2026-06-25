@@ -13,11 +13,11 @@ The Sample eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **samplePeriod** | Sets the sample period during which only a single Exchange will pass through. | 1000 | String |
-| **messageFrequency** | Sets the sample message count which only a single Exchange will pass through after this many received. |  | Long |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **samplePeriod** | The period between samples, using a time-based approach. Default is 1 second. | 1000 | String |
+| **messageFrequency** | The frequency of samples as a message count, using a message-frequency approach. For example, a value of 5 means every 5th message is sampled. |  | Long |
 
 ## Exchange properties
 

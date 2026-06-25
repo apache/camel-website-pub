@@ -40,19 +40,19 @@ The uniVocity CSV dataformat supports 17 options, which are listed below.
 | **quoteAllFields** (common) | `false` | `Boolean` | Whether or not all values must be quoted when writing them. |
 | **quote** (advanced) | `"` | `String` | The quote symbol. |
 | **quoteEscape** (advanced) | `"` | `String` | The quote escape symbol. |
-| **nullValue** (advanced) |  | `String` | The string representation of a null value. The default value is null. |
-| **skipEmptyLines** (common) | `true` | `Boolean` | Whether or not the empty lines must be ignored. The default value is true. |
-| **ignoreTrailingWhitespaces** (common) | `true` | `Boolean` | Whether or not the trailing white spaces must be ignored. The default value is true. |
-| **ignoreLeadingWhitespaces** (common) | `true` | `Boolean` | Whether or not the leading white spaces must be ignored. The default value is true. |
-| **headersDisabled** (common) | `false` | `Boolean` | Whether or not the headers are disabled. When defined, this option explicitly sets the headers as null which indicates that there is no header. The default value is false. |
-| **headerExtractionEnabled** (common) | `false` | `Boolean` | Whether or not the header must be read in the first line of the test document. The default value is false. |
+| **nullValue** (advanced) |  | `String` | The string representation of a null value. |
+| **skipEmptyLines** (common) | `true` | `Boolean` | Whether or not the empty lines must be ignored. |
+| **ignoreTrailingWhitespaces** (common) | `true` | `Boolean` | Whether or not the trailing white spaces must be ignored. |
+| **ignoreLeadingWhitespaces** (common) | `true` | `Boolean` | Whether or not the leading white spaces must be ignored. |
+| **headersDisabled** (common) | `false` | `Boolean` | Whether or not the headers are disabled. When defined, this option explicitly sets the headers as null which indicates that there is no header. |
+| **headerExtractionEnabled** (common) | `false` | `Boolean` | Whether or not the header must be read in the first line of the test document. |
 | **numberOfRecordsToRead** (advanced) |  | `Integer` | The maximum number of record to read. |
 | **emptyValue** (advanced) |  | `String` | The String representation of an empty value. |
 | **lineSeparator** (advanced) |  | `String` | The line separator of the files. The default value is to use the JVM platform line separator. |
 | **normalizedLineSeparator** (advanced) |  | `String` | The normalized line separator of the files. The default value is a new line character. |
-| **comment** (advanced) | `#` | `String` | The comment symbol. The default value is #. |
-| **lazyLoad** (common) | `false` | `Boolean` | Whether the unmarshalling should produce an iterator that reads the lines on the fly or if all the lines must be read at once. The default value is false. |
-| **asMap** (common) | `false` | `Boolean` | Whether the unmarshalling should produce maps for the lines values instead of lists. It requires to have header (either defined or collected). The default value is false. |
+| **comment** (advanced) | `#` | `String` | The comment symbol. |
+| **lazyLoad** (common) | `false` | `Boolean` | Whether the unmarshalling should produce an iterator that reads the lines on the fly or if all the lines must be read at once. |
+| **asMap** (common) | `false` | `Boolean` | Whether the unmarshalling should produce maps for the lines values instead of lists. It requires to have header (either defined or collected). |
 
 ## Marshalling usages
 

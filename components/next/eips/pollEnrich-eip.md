@@ -32,19 +32,19 @@ The Poll Enrich eip supports 1 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **expression** | **Required** Expression that computes the endpoint uri to use as the resource endpoint to enrich from. |  | ExpressionDefinition |
-| **variableReceive** | To use a variable to store the received message body (only body, not headers). This makes it handy to use variables for user data and to easily control what data to use for sending and receiving. Important: When using receive variable then the received body is stored only in this variable and not on the current message. |  | String |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **expression** | **Required** The expression to compute the endpoint URI to poll-enrich from. |  | ExpressionDefinition |
+| **variableReceive** | To use a variable to store the received message body (only body, not headers). This makes it handy to use variables for user data and to easily control what data to use for sending and receiving. |  | String |
 | **aggregationStrategy** | Sets the AggregationStrategy to be used to merge the reply from the external service, into a single outgoing message. By default Camel will use the reply from the external service as outgoing message. |  | AggregationStrategy |
-| **aggregationStrategyMethodName** | This option can be used to explicit declare the method name to use, when using POJOs as the AggregationStrategy. |  | String |
+| **aggregationStrategyMethodName** | This option can be used to explicitly declare the method name to use, when using POJOs as the AggregationStrategy. |  | String |
 | **aggregationStrategyMethodAllowNull** | If this option is false then the aggregate method is not used if there was no data to enrich. If this option is true then null values is used as the oldExchange (when no data to enrich), when using POJOs as the AggregationStrategy. |  | String |
-| **aggregateOnException** | If this option is false then the aggregate method is not used if there was an exception thrown while trying to retrieve the data to enrich from the resource. Setting this option to true allows end users to control what to do if there was an exception in the aggregate method. For example to suppress the exception or set a custom message body etc. | false | Boolean |
-| **timeout** | Timeout in millis when polling from the external service. The timeout has influence about the poll enrich behavior. It basically operations in three different modes: negative value - Waits until a message is available and then returns it. Warning that this method could block indefinitely if no messages are available. 0 - Attempts to receive a message exchange immediately without waiting and returning null if a message exchange is not available yet. positive value - Attempts to receive a message exchange, waiting up to the given timeout to expire if a message is not yet available. Returns null if timed out The default value is -1 and therefore the method could block indefinitely, and therefore its recommended to use a timeout value. | \-1 | String |
-| **cacheSize** | Sets the maximum size used by the org.apache.camel.spi.ConsumerCache which is used to cache and reuse consumers when uris are reused. Beware that when using dynamic endpoints then it affects how well the cache can be utilized. If each dynamic endpoint is unique then its best to turn off caching by setting this to -1, which allows Camel to not cache both the consumers and endpoints; they are regarded as prototype scoped and will be stopped and discarded after use. This reduces memory usage as otherwise consumers/endpoints are stored in memory in the caches. However, if there are a high degree of dynamic endpoints that have been used before, then it can benefit to use the cache to reuse both consumers and endpoints and therefore the cache size can be set accordingly or rely on the default size (1000). If there is a mix of unique and used before dynamic endpoints, then setting a reasonable cache size can help reduce memory usage to avoid storing too many non-frequent used consumers. |  | Integer |
-| **ignoreInvalidEndpoint** | Ignore the invalidate endpoint exception when try to create a consumer with that endpoint. | false | Boolean |
-| **allowOptimisedComponents** | Whether to allow components to optimise if they are org.apache.camel.spi.PollDynamicAware. | true | Boolean |
+| **aggregateOnException** | If this option is false then the aggregate method is not used if there was an exception thrown while trying to retrieve the data to enrich from the resource. Setting this option to true allows end users to control what to do if there was an exception in the aggregate method. | false | Boolean |
+| **timeout** | Timeout in millis when polling from the external service. A negative value waits until a message is available (could block indefinitely). Zero attempts to receive immediately without waiting. A positive value waits up to the given timeout. | \-1 | String |
+| **cacheSize** | Sets the maximum size used by the ConsumerCache which is used to cache and reuse consumers when uris are reused. Use 0 for default cache size, or -1 to turn cache off. |  | Integer |
+| **ignoreInvalidEndpoint** | Whether to ignore an invalid endpoint URI when trying to create a consumer with that endpoint. | false | Boolean |
+| **allowOptimisedComponents** | Whether to allow components to optimise if they are PollDynamicAware. | true | Boolean |
 | **autoStartComponents** | Whether to auto startup components when poll enricher is starting up. | true | Boolean |
 
 ## Exchange properties

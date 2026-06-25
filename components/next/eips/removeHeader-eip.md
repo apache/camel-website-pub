@@ -9,9 +9,9 @@ The Remove Header eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **name** | **Required** Name of header to remove. |  | String |
 
 ## Exchange properties

@@ -30,11 +30,11 @@ The Transform Data Type eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **fromType** | From type used in data type transformation. |  | String |
-| **toType** | **Required** To type used as a target data type in the transformation. |  | String |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **fromType** | The source data type URN in the format 'scheme:name' (e.g. 'java:com.example.MyClass'). If not specified, the current message body type is used. |  | String |
+| **toType** | **Required** The target data type URN in the format 'scheme:name' (e.g. 'json:JsonOrder') that the message body should be transformed into. |  | String |
 
 ## Exchange properties
 

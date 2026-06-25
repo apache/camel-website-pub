@@ -18,14 +18,14 @@ The Circuit Breaker eip supports 7 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **configuration** | Refers to a circuit breaker configuration (such as resillience4j, or microprofile-fault-tolerance) to use for configuring the circuit breaker EIP. |  | String |
-| **inheritErrorHandler** | To turn on or off Camel error handling during circuit breaker. If this is enabled then Camel error handler will first trigger if there is an error in the circuit breaker, which allows to let Camel handle redeliveries. If all attempts is failed, then after the circuit breaker is finished, then Camel error handler can handle the error as well such as the dead letter channel. By default, Camel error handler is turned off. | false | Boolean |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **configuration** | Refers to a circuit breaker configuration to use for configuring the circuit breaker EIP. |  | String |
+| **inheritErrorHandler** | Whether to inherit Camel error handling during circuit breaker. By default, Camel error handler is turned off. | false | Boolean |
 | **resilience4jConfiguration** | Configures the circuit breaker to use Resilience4j with the given configuration. |  | Resilience4jConfigurationDefinition |
 | **faultToleranceConfiguration** | Configures the circuit breaker to use MicroProfile Fault Tolerance with the given configuration. |  | FaultToleranceConfigurationDefinition |
-| **onFallback** | The fallback route path to execute that does not go over the network. This should be a static or cached result that can immediately be returned upon failure. If the fallback requires network connection then use onFallbackViaNetwork() . |  | OnFallbackDefinition |
+| **onFallback** | The fallback route path to execute when the circuit breaker triggers. |  | OnFallbackDefinition |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

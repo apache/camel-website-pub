@@ -104,7 +104,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **connectionBean** (common) | **Required** Sets the connection bean reference used to lookup a client for connecting to a database if no hosts parameter is present. |  | String |
 
-### Query Parameters (56 parameters)
+### Query Parameters (58 parameters)
 
    
 | Name | Description | Default | Type |
@@ -179,6 +179,8 @@ Enum values:
 
 
  |  | MongoDbOutputType |
+| **changeStreamToken** (consumer) | A change stream token as a serialized BSON document JSON string. |  | String |
+| **changeStreamTokenRepository** (consumer) | The repository to store change stream tokens. |  | StateRepository |
 | **consumerType** (consumer) | 
 
 Consumer type.
@@ -1268,6 +1270,46 @@ from("mongodb:myDb?consumerType=changeStreams&database=flights&collection=ticket
 
 > **Tip**
 > You can externalize the streamFilter value into a property placeholder which allows the endpoint URI parameters to be _cleaner_ and easier to read.
+
+#### Change Streams Resume
+
+The Change Streams consumer supports resume in two complementary ways:
+
+-   Endpoint options (`changeStreamTokenRepository`, `changeStreamToken`) to restore and persist the resume token.
+    
+-   The [Resume Strategies](eips/resume-strategies.md) EIP (`resumable()`) for route-level resume handling.
+    
+
+When a route id is configured, the token key is computed as `<routeId>/<collection>`. If no route id is configured, Camel falls back to the endpoint URI.
+
+The resume token is a BSON document. It is persisted as a serialized JSON string and parsed back to a `BsonDocument` when restored.
+
+The following example configures endpoint-level token persistence:
+
+```java
+from("mongodb:myDb?consumerType=changeStreams"
+   + "&database=flights"
+   + "&collection=tickets"
+   + "&changeStreamTokenRepository=#changeStreamTokenRepo")
+  .id("resumeChangeStreamConsumer")
+  .to("mock:test");
+```
+
+The following example configures route-level resume strategy support:
+
+```java
+MongoDbResumeStrategyConfigurationBuilder configurationBuilder =
+    MongoDbResumeStrategyConfigurationBuilder.newBuilder()
+        .withStateRepository(memoryStateRepository)
+        .withResumeCache(new CaffeineCache<>(100));
+
+from("mongodb:myDb?consumerType=changeStreams&database=flights&collection=tickets")
+  .id("resumeChangeStreamConsumer")
+  .resumable().configuration(configurationBuilder)
+  .to("mock:test");
+```
+
+You can use only endpoint options, only route-level resumable configuration, or both depending on your deployment requirements.
 
 ### Type conversions
 

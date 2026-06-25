@@ -16,7 +16,7 @@ The Thrift dataformat supports 3 options, which are listed below.
 | --- | --- | --- | --- |
 | **instanceClass** (common) |  | `String` | Name of class to use when unmarshalling. |
 | **contentTypeFormat** (common) | `binary` | `Enum` | 
-Defines a content type format in which thrift message will be serialized/deserialized from(to) the Java been. The format can either be native or json for either native binary thrift, json or simple json fields representation. The default value is binary.
+The content type format in which thrift message will be serialized/deserialized. The format can be native binary, json, or simple json.
 
 Enum values:
 

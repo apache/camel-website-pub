@@ -13,11 +13,11 @@ The Sort eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **expression** | **Required** Optional expression to sort by something else than the message body. |  | ExpressionDefinition |
-| **comparator** | Sets the comparator to use for sorting. |  | Comparator |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **expression** | **Required** The expression to use for sorting. The message body is split into a list, sorted using this expression as the comparator key, and then reassembled. |  | ExpressionDefinition |
+| **comparator** | Sets a reference to lookup for the comparator to use for sorting. |  | Comparator |
 
 ## Exchange properties
 

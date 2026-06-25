@@ -11,7 +11,7 @@ The Variable language supports 1 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. |
+| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 
 ## Example usage
 

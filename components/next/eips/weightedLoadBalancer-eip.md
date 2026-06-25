@@ -9,9 +9,9 @@ The Weighted Load Balancer eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **distributionRatio** | **Required** The distribution ratio is a delimited String consisting on integer weights separated by delimiters for example 2,3,5. The distributionRatio must match the number of endpoints and/or processors specified in the load balancer list. |  | String |
-| **distributionRatioDelimiter** | Delimiter used to specify the distribution ratio. The default value is , (comma). | , | String |
-| **roundRobin** | To enable round robin mode. By default the weighted distribution mode is used. The default value is false. | false | Boolean |
+| **distributionRatio** | The distribution ratio is a delimited String consisting of integer weights separated by delimiters for example 2,3,5. The distributionRatio must match the number of endpoints and/or processors specified in the load balancer list. |  | String |
+| **distributionRatioDelimiter** | Delimiter used to specify the distribution ratio. The default value is comma. | , | String |
+| **roundRobin** | Whether to enable round robin mode. By default the weighted distribution mode is used. | false | Boolean |
 
 ## Exchange properties
 

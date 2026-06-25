@@ -20,6 +20,8 @@ Support for resume varies according to the component. Initially, the support is 
     
 -   [camel-kafka](../../4.18.x/kafka-component.md)
     
+-   [camel-mongodb](../../4.18.x/mongodb-component.md)
+    
 -   [camel-rss](../../4.18.x/rss-component.md)
     
 

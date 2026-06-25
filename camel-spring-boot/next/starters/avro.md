@@ -1,6 +1,6 @@
 # Avro
 
-Serialize and deserialize messages using Apache Avro binary data format.
+Serialize and deserialize messages using Apache Avro binary data format
 
 ## What’s inside
 
@@ -26,4 +26,4 @@ The starter supports 2 options, which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | camel.dataformat.avro.enabled | Whether to enable auto configuration of the avro data format. This is enabled by default. |  | Boolean |
-| camel.dataformat.avro.instance-class-name | Class name to use for marshal and unmarshalling |  | String |
+| camel.dataformat.avro.instance-class-name | Class name to use for marshal and unmarshalling. |  | String |

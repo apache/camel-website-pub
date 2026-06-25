@@ -13,12 +13,12 @@ The Throttle eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **expression** | **Required** Expression to configure the maximum number of messages to throttle per request. |  | ExpressionDefinition |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **expression** | **Required** The expression to set the maximum request count (for TotalRequests mode) or the maximum number of concurrent requests (for ConcurrentRequests mode). |  | ExpressionDefinition |
 | **mode** | 
-Sets the throttling mode to one of the available modes enumerated in ThrottlingMode.
+Sets the throttling mode. TotalRequests limits the total number of requests within a time period. ConcurrentRequests uses a leaky-bucket algorithm to limit the number of concurrent requests being processed at the same time.
 
 Enum values:
 
@@ -32,11 +32,11 @@ Enum values:
 
 
  | TotalRequests | ThrottlingMode |
-| **correlationExpression** | The expression used to calculate the correlation key to use for throttle grouping. The Exchange which has the same correlation key is throttled together. |  | ExpressionSubElementDefinition |
+| **correlationExpression** | The correlation expression to use for throttle grouping. Exchanges with the same correlation key are throttled together. |  | ExpressionSubElementDefinition |
 | **executorService** | To use a custom thread pool (ScheduledExecutorService) by the throttler. |  | ExecutorService |
 | **asyncDelayed** | Enables asynchronous delay which means the thread will not block while delaying. | false | Boolean |
-| **callerRunsWhenRejected** | Whether or not the caller should run the task when it was rejected by the thread pool. Is by default true. | true | Boolean |
-| **rejectExecution** | Whether or not throttler throws the ThrottlerRejectedExecutionException when the exchange exceeds the request limit Is by default false. | false | Boolean |
+| **callerRunsWhenRejected** | Whether or not the caller should run the task when it was rejected by the thread pool. | true | Boolean |
+| **rejectExecution** | Whether or not throttler throws the ThrottlerRejectedExecutionException when the exchange exceeds the request limit. | false | Boolean |
 | **timePeriodMillis** | Sets the time period during which the maximum request count is valid for. | 1000 | String |
 
 ## Exchange properties

@@ -26,11 +26,11 @@ The Resequence eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **expression** | **Required** Expression to use for re-ordering the messages, such as a header with a sequence number. |  | ExpressionDefinition |
-| **resequencerConfig** | **Required** To configure the resequencer in using either batch or stream configuration. Will by default use batch configuration. |  | ResequencerConfig |
+| **resequencerConfig** | Resequencer configuration using either batch or stream mode. Defaults to batch mode. |  | ResequencerConfig |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

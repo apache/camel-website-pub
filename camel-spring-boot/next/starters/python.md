@@ -1,6 +1,6 @@
 # Python
 
-Evaluates a Python expression.
+Evaluates a Python expression
 
 ## What’s inside
 
@@ -26,4 +26,4 @@ The starter supports 2 options, which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | camel.language.python.enabled | Whether to enable auto configuration of the python language. This is enabled by default. |  | Boolean |
-| camel.language.python.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. | true | Boolean |
+| camel.language.python.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |

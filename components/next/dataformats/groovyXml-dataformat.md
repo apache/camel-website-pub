@@ -13,7 +13,7 @@ The Groovy XML dataformat supports 1 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **attributeMapping** (common) | `true` | `Boolean` | To turn on or off attribute mapping. When enabled then keys that start with \_ or character will be mapped to an XML attribute, and vise versa. This rule is what Jackson and other XML or JSon libraries uses. |
+| **attributeMapping** (common) | `true` | `Boolean` | Whether to enable attribute mapping. When enabled, keys that start with \_ or character will be mapped to an XML attribute, and vice versa. |
 
 ## Supported Java types
 

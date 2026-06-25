@@ -11,7 +11,7 @@ The SWIFT MT dataformat supports 1 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **writeInJson** (common) | `false` | `Boolean` | The flag indicating that messages must be marshalled in a JSON format. |
+| **writeInJson** (common) | `false` | `Boolean` | Whether to marshal messages in JSON format. |
 
 In Spring DSL, you configure the data format using this tag:
 

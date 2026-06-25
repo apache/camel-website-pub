@@ -15,11 +15,11 @@ The Validate eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **expression** | **Required** Expression to use for validation as a predicate. The expression should return either true or false. If returning false the message is invalid and an exception is thrown. |  | ExpressionDefinition |
-| **predicateExceptionFactory** | The bean id of custom PredicateExceptionFactory to use for creating the exception when the validation fails. By default, Camel will throw PredicateValidationException. By using a custom factory you can control which exception to throw instead. |  | PredicateExceptionFactory |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **expression** | **Required** The predicate expression to validate against the current message. If the predicate returns false, a PredicateValidationException is thrown. |  | ExpressionDefinition |
+| **predicateExceptionFactory** | Reference to a custom PredicateExceptionFactory for creating the exception when validation fails. |  | PredicateExceptionFactory |
 
 ## Exchange properties
 

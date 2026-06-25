@@ -14,7 +14,7 @@ The XML Tokenize language supports 5 options, which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **mode** (common) | `i` | `Enum` | 
-The extraction mode. The available extraction modes are: i - injecting the contextual namespace bindings into the extracted token (default) w - wrapping the extracted token in its ancestor context u - unwrapping the extracted token to its child content t - extracting the text content of the specified element.
+The extraction mode. The available extraction modes are: i - injecting the contextual namespace bindings into the extracted token (default), w - wrapping the extracted token in its ancestor context, u - unwrapping the extracted token to its child content, t - extracting the text content of the specified element.
 
 Enum values:
 
@@ -34,8 +34,8 @@ Enum values:
  |
 | **group** (common) |  | `Integer` | To group N parts together. |
 | **source** (common) |  | `String` | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |
-| **resultType** (common) |  | `String` | Sets the class of the result type (type from output). |
-| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. |
+| **resultType** (common) |  | `String` | The class of the result type (type from output). |
+| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 
 ## Example
 

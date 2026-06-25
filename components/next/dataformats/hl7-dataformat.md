@@ -173,9 +173,9 @@ The HL7 dataformat supports 3 options, which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **parser** (advanced) |  | `Object` | To use a custom HL7 parser. |
-| **validate** (common) | `true` | `Boolean` | Whether to validate the HL7 message Is by default true. |
+| **validate** (common) | `true` | `Boolean` | Whether to validate the HL7 message. |
 | **targetFormat** (common) |  | `Enum` | 
-The target format for marshal output and unmarshal result type. By default, marshal encodes to HL7 ER7, and unmarshal returns a HAPI Message object. If this is set to XML, marshal encodes to HL7 XML, and unmarshal returns an XML DOM Document.
+The target format for marshal output and unmarshal result type. By default, marshal encodes to HL7 ER7 and unmarshal returns a HAPI Message object. If set to XML, marshal encodes to HL7 XML and unmarshal returns an XML DOM Document.
 
 Enum values:
 

@@ -11,11 +11,11 @@ The Fault Tolerance Configuration eip supports 0 options, which are listed below
 | **delay** | Control how long the circuit breaker stays open. The default is 5 seconds. | 5000 | String |
 | **successThreshold** | Controls the number of trial calls which are allowed when the circuit breaker is half-open. | 1 | Integer |
 | **requestVolumeThreshold** | Controls the size of the rolling window used when the circuit breaker is closed. | 20 | Integer |
-| **failureRatio** | Configures the failure rate threshold in percentage. If the failure rate is equal or greater than the threshold the CircuitBreaker transitions to open and starts short-circuiting calls. The threshold must be greater than 0 and not greater than 100. Default value is 50 percentage. | 50 | Integer |
-| **timeoutEnabled** | Whether timeout is enabled or not on the circuit breaker. Default is false. | false | Boolean |
+| **failureRatio** | Configures the failure rate threshold in percentage. If the failure rate is equal or greater than the threshold the CircuitBreaker transitions to open and starts short-circuiting calls. | 50 | Integer |
+| **timeoutEnabled** | Whether timeout is enabled or not on the circuit breaker. | false | Boolean |
 | **timeoutDuration** | Configures the thread execution timeout. Default value is 1 second. | 1000 | String |
-| **timeoutPoolSize** | Configures the pool size of the thread pool when timeout is enabled. Default value is 10. | 10 | Integer |
-| **bulkheadEnabled** | Whether bulkhead is enabled or not on the circuit breaker. Default is false. | false | Boolean |
+| **timeoutPoolSize** | Configures the pool size of the thread pool when timeout is enabled. | 10 | Integer |
+| **bulkheadEnabled** | Whether bulkhead is enabled or not on the circuit breaker. | false | Boolean |
 | **bulkheadMaxConcurrentCalls** | Configures the max amount of concurrent calls the bulkhead will support. | 10 | Integer |
 | **bulkheadWaitingTaskQueue** | Configures the task queue size for holding waiting tasks to be processed by the bulkhead. | 10 | Integer |
 | **threadOffloadExecutorService** | References a custom thread pool to use when offloading a guarded action to another thread. |  | ExecutorService |

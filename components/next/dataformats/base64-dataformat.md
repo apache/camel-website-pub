@@ -12,8 +12,8 @@ The Base64 dataformat supports 3 options, which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **lineLength** (common) | `76` | `Integer` | To specific a maximum line length for the encoded data. By default 76 is used. |
-| **lineSeparator** (advanced) |  | `String` | The line separators to use. Uses new line characters (CRLF) by default. |
-| **urlSafe** (advanced) | `false` | `Boolean` | Instead of emitting '' and '/' we emit '-' and '\_' respectively. urlSafe is only applied to encode operations. Decoding seamlessly handles both modes. Is by default false. |
+| **lineSeparator** (advanced) |  | `String` | The line separators to use. By default \\r\\n is used. |
+| **urlSafe** (advanced) | `false` | `Boolean` | Instead of emitting and / we emit - and \_ respectively. urlSafe is only applied to encode operations. Decoding seamlessly handles both modes. |
 
 In Spring DSL, you configure the data format using this tag:
 

@@ -9,11 +9,11 @@ The Remove Headers eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **pattern** | **Required** Name or pattern of headers to remove. The pattern is matched in the following order: 1 = exact match 2 = wildcard (pattern ends with a and the name starts with the pattern) 3 = regular expression (all of above is case in-sensitive). |  | String |
-| **excludePattern** | Name or patter of headers to not remove. The pattern is matched in the following order: 1 = exact match 2 = wildcard (pattern ends with a and the name starts with the pattern) 3 = regular expression (all of above is case in-sensitive). |  | String |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **pattern** | **Required** Name or pattern of headers to remove. The pattern supports exact match, wildcard (pattern ends with ), and regular expression (all case-insensitive). |  | String |
+| **excludePattern** | Name or pattern of headers to not remove. You can use comma to separate multiple patterns. |  | String |
 
 ## Exchange properties
 

@@ -50,16 +50,16 @@ The Avro Jackson 3 dataformat supports 18 options, which are listed below.
 | **objectMapper** (advanced) |  | `String` | Lookup and use the existing ObjectMapper with the given id when using Jackson. |
 | **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson ObjectMapper from the registry. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
-| **jsonView** (common) |  | `String` | When marshalling a POJO to JSON you might want to exclude certain fields from the JSON output. With Jackson you can use JSON views to accomplish this. This option is to refer to the class which has JsonView annotations. |
+| **jsonView** (advanced) |  | `String` | When marshalling a POJO to JSON you might want to exclude certain fields from the JSON output. With Jackson you can use JSON views to accomplish this. This option is to refer to the class which has JsonView annotations. |
 | **include** (common) |  | `String` | If you want to marshal a pojo to JSON, and the pojo has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |
 | **allowJmsType** (advanced) | `false` | `Boolean` | Used for JMS users to allow the JMSType header from the JMS spec to specify a FQN classname to use to unmarshal to. |
-| **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows to use different collection types than java.util.Collection based as default. |
+| **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. |
 | **useList** (common) | `false` | `Boolean` | To unmarshal to a List of Map or a List of Pojo. |
 | **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules tools.jackson.databind.JacksonModule specified as a String with FQN class names. Multiple classes can be separated by comma. |
 | **moduleRefs** (advanced) |  | `String` | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |
 | **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson tools.jackson.databind.ObjectMapper. The features should be a name that matches a enum from tools.jackson.databind.SerializationFeature, tools.jackson.databind.DeserializationFeature, or tools.jackson.databind.MapperFeature Multiple features can be separated by comma. |
 | **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson tools.jackson.databind.ObjectMapper. The features should be a name that matches a enum from tools.jackson.databind.SerializationFeature, tools.jackson.databind.DeserializationFeature, or tools.jackson.databind.MapperFeature Multiple features can be separated by comma. |
-| **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson is allowed to attempt to use the CamelJacksonUnmarshalType header during the unmarshalling. This should only be enabled when desired to be used. |
+| **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson is allowed to attempt to use the CamelJacksonUnmarshalType header during the unmarshalling. |
 | **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
 | **autoDiscoverObjectMapper** (advanced) | `false` | `Boolean` | If set to true then Jackson will lookup for an objectMapper into the registry. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |

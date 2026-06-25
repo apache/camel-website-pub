@@ -9,14 +9,14 @@ The Loop eip supports 2 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **expression** | **Required** Expression to define how many times we should loop. Notice the expression is only evaluated once, and should return a number as how many times to loop. A value of zero or negative means no looping. The loop is like a for-loop fashion, if you want a while loop, then the dynamic router may be a better choice. |  | ExpressionDefinition |
-| **copy** | If the copy attribute is true, a copy of the input Exchange is used for each iteration. That means each iteration will start from a copy of the same message. By default loop will loop the same exchange all over, so each iteration may have different message content. | false | Boolean |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **expression** | **Required** The expression that determines the number of times to loop. The result is converted to an integer. |  | ExpressionDefinition |
+| **copy** | If enabled, a copy of the input Exchange is used for each iteration. That means each iteration will start from a copy of the same message. | false | Boolean |
 | **doWhile** | Enables the while loop that loops until the predicate evaluates to false or null. | false | Boolean |
-| **breakOnShutdown** | If the breakOnShutdown attribute is true, then the loop will not iterate until it reaches the end when Camel is shut down. | false | Boolean |
-| **onPrepare** | Uses the Processor when preparing the org.apache.camel.Exchange for each loop iteration. This can be used to deep-clone messages, or any custom logic needed before the looping executes. |  | Processor |
+| **breakOnShutdown** | If enabled, the loop will not iterate until it reaches the end when Camel is shut down. | false | Boolean |
+| **onPrepare** | Uses a processor when preparing the exchange for each loop iteration. This can be used to deep-clone messages, or any custom logic needed before the looping executes. |  | Processor |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

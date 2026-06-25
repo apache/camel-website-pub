@@ -13,7 +13,7 @@ The XPath language supports 11 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **documentType** (advanced) |  | `String` | Name of class for document type The default value is org.w3c.dom.Document. |
+| **documentType** (advanced) |  | `String` | Name of class for document type. The default value is org.w3c.dom.Document. |
 | **resultQName** (common) | `NODESET` | `Enum` | 
 Sets the output type supported by XPath.
 
@@ -39,11 +39,11 @@ Enum values:
 | **factoryRef** (advanced) |  | `String` | References to a custom XPathFactory to lookup in the registry. |
 | **objectModel** (advanced) |  | `String` | The XPath object model to use. |
 | **logNamespaces** (advanced) | `false` | `Boolean` | Whether to log namespaces which can assist during troubleshooting. |
-| **threadSafety** (advanced) | `false` | `Boolean` | Whether to enable thread-safety for the returned result of the xpath expression. This applies to when using NODESET as the result type, and the returned set has multiple elements. In this situation there can be thread-safety issues if you process the NODESET concurrently such as from a Camel Splitter EIP in parallel processing mode. This option prevents concurrency issues by doing defensive copies of the nodes. It is recommended to turn this option on if you are using camel-saxon or Saxon in your application. Saxon has thread-safety issues which can be prevented by turning this option on. |
-| **preCompile** (advanced) | `true` | `Boolean` | Whether to enable pre-compiling the xpath expression during initialization phase. pre-compile is enabled by default. This can be used to turn off, for example in cases the compilation phase is desired at the starting phase, such as if the application is ahead of time compiled (for example with camel-quarkus) which would then load the xpath factory of the built operating system, and not a JVM runtime. |
+| **threadSafety** (advanced) | `false` | `Boolean` | Whether to enable thread-safety for the returned result of the xpath expression. This applies to when using NODESET as the result type, and the returned set has multiple elements. |
+| **preCompile** (advanced) | `true` | `Boolean` | Whether to enable pre-compiling the xpath expression during initialization phase. pre-compile is enabled by default. |
 | **source** (common) |  | `String` | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |
-| **resultType** (common) |  | `String` | Sets the class of the result type (type from output). |
-| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. |
+| **resultType** (common) |  | `String` | The class of the result type (type from output). |
+| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 
 ## Namespaces
 

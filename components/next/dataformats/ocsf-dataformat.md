@@ -224,10 +224,10 @@ The OCSF dataformat supports 7 options, which are listed below.
 | **objectMapper** (advanced) |  | `String` | Lookup and use the existing ObjectMapper with the given id when using Jackson. |
 | **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson ObjectMapper from the registry. |
 | **unmarshalType** (common) |  | `String` | Class name of the OCSF event type to use when unmarshalling. Defaults to OcsfEvent. |
-| **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows to use different collection types than java.util.Collection based as default. |
-| **useList** (common) | `false` | `Boolean` | To unmarshal to a List of OCSF events. |
-| **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then the unmarshal type can be specified via the CamelOcsfUnmarshalType header. This should only be enabled when desired to be used. |
-| **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
+| **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows using different collection types than java.util.Collection based as default. |
+| **useList** (common) | `false` | `Boolean` | Whether to unmarshal to a List of OCSF events. |
+| **allowUnmarshallType** (common) | `false` | `Boolean` | Whether to allow the unmarshal type to be specified via the CamelOcsfUnmarshalType header. |
+| **prettyPrint** (common) | `false` | `Boolean` | Whether to enable pretty printing output nicely formatted. |
 
 ## OCSF Event Categories
 

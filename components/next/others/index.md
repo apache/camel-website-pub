@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 102 in 70 JAR artifacts (6 deprecated)
+Number of Miscellaneous Components: 102 in 70 JAR artifacts (8 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -80,7 +80,7 @@ Number of Miscellaneous Components: 102 in 70 JAR artifacts (6 deprecated)
 | [PQC Hybrid Cryptography](pqc-hybrid.md) |  |  |  |  |
 | [PQC Key Lifecycle Management](pqc-key-lifecycle.md) |  |  |  |  |
 | [Reactive Executor Tomcat](reactive-executor-tomcat.md) | camel-reactive-executor-tomcat | Experimental | 3.17 | Reactive Executor for camel-core using Apache Tomcat |
-| [Reactive Executor Vert.x](reactive-executor-vertx.md) | camel-reactive-executor-vertx | Experimental | 3.0 | Reactive Executor for camel-core using Vert.x |
+| [Reactive Executor Vert.x](reactive-executor-vertx.md) | camel-reactive-executor-vertx | Experimental-deprecated | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](reactor.md) | camel-reactor | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](redis.md) | camel-redis | Stable | 3.5 | Aggregation repository using Redis as datastore |
 | [Resilience4j](resilience4j.md) | camel-resilience4j | Stable | 3.0 | Circuit Breaker EIP using Resilience4j |
@@ -105,7 +105,7 @@ Number of Miscellaneous Components: 102 in 70 JAR artifacts (6 deprecated)
 | [Test Main JUnit6](test-main-junit6.md) | camel-test-main-junit6 | Stable | 4.17 | Camel unit testing with Main and JUnit 6 |
 | [Test Spring JUnit5](test-spring-junit5.md) | camel-test-spring-junit5 | Stable | 3.0 | Camel unit testing with Spring and JUnit 5 |
 | [Test Spring JUnit6](test-spring-junit6.md) | camel-test-spring-junit6 | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
-| [ThreadPoolFactory Vert.x](threadpoolfactory-vertx.md) | camel-threadpoolfactory-vertx | Experimental | 3.5 | ThreadPoolFactory for camel-core using Vert.x |
+| [ThreadPoolFactory Vert.x](threadpoolfactory-vertx.md) | camel-threadpoolfactory-vertx | Experimental-deprecated | 3.5 | ThreadPoolFactory for camel-core using Vert.x |
 | [Tracing](tracing.md) | camel-tracing | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
 | [Undertow Spring Security](undertow-spring-security.md) | camel-undertow-spring-security | Stable | 3.3 | Spring Security Provider for camel-undertow |
 | [Write Ahead Log Strategy for Resume API](wal.md) | camel-wal | Stable | 3.20 | Write Ahead Log Strategy for Resume API |

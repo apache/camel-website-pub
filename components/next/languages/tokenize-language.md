@@ -13,18 +13,18 @@ The Tokenize language supports 12 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **token** (common) |  | `String` | **Required** The (start) token to use as tokenizer, for example you can use the new line token. You can use simple language as the token to support dynamic tokens. |
+| **token** (common) |  | `String` | The (start) token to use as tokenizer, for example you can use the new line token. You can use simple language as the token to support dynamic tokens. |
 | **endToken** (common) |  | `String` | The end token to use as tokenizer if using start/end token pairs. You can use simple language as the token to support dynamic tokens. |
-| **inheritNamespaceTagName** (advanced) |  | `String` | To inherit namespaces from a root/parent tag name when using XML You can use simple language as the tag name to support dynamic names. |
-| **regex** (advanced) | `false` | `Boolean` | If the token is a regular expression pattern. The default value is false. |
+| **inheritNamespaceTagName** (advanced) |  | `String` | To inherit namespaces from a root/parent tag name when using XML. You can use simple language as the tag name to support dynamic names. |
+| **regex** (advanced) | `false` | `Boolean` | If the token is a regular expression pattern. |
 | **xml** (common) | `false` | `Boolean` | Whether the input is XML messages. This option must be set to true if working with XML payloads. |
-| **includeTokens** (common) | `false` | `Boolean` | Whether to include the tokens in the parts when using pairs. When including tokens then the endToken property must also be configured (to use pair mode). The default value is false. |
+| **includeTokens** (common) | `false` | `Boolean` | Whether to include the tokens in the parts when using pairs. When including tokens then the endToken property must also be configured (to use pair mode). |
 | **group** (advanced) |  | `String` | To group N parts together, for example to split big files into chunks of 1000 lines. You can use simple language as the group to support dynamic group sizes. |
 | **groupDelimiter** (advanced) |  | `String` | Sets the delimiter to use when grouping. If this has not been set then token will be used as the delimiter. |
 | **skipFirst** (advanced) | `false` | `Boolean` | To skip the very first element. |
 | **source** (common) |  | `String` | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |
-| **resultType** (common) |  | `String` | Sets the class of the result type (type from output). |
-| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. |
+| **resultType** (common) |  | `String` | The class of the result type (type from output). |
+| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 
 ## Example
 

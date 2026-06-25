@@ -46,20 +46,20 @@ Enum values:
  |
 | **commentMarkerDisabled** (advanced) | `false` | `Boolean` | Disables the comment marker of the reference format. |
 | **commentMarker** (advanced) |  | `String` | Sets the comment marker of the reference format. |
-| **delimiter** (common) |  | `String` | Sets the delimiter to use. The default value is , (comma). |
-| **escapeDisabled** (advanced) | `false` | `Boolean` | Use for disabling using escape character. |
+| **delimiter** (common) |  | `String` | The delimiter to use. The default value is , (comma). |
+| **escapeDisabled** (advanced) | `false` | `Boolean` | Whether to disable the escape character. |
 | **escape** (advanced) |  | `String` | Sets the escape character to use. |
-| **headerDisabled** (common) | `false` | `Boolean` | Use for disabling headers. |
+| **headerDisabled** (common) | `false` | `Boolean` | Whether to disable headers. |
 | **header** (common) |  | `String` | To configure the CSV headers. Multiple headers can be separated by comma. |
 | **allowMissingColumnNames** (common) | `false` | `Boolean` | Whether to allow missing column names. |
 | **ignoreEmptyLines** (common) | `false` | `Boolean` | Whether to ignore empty lines. |
 | **ignoreSurroundingSpaces** (common) | `false` | `Boolean` | Whether to ignore surrounding spaces. |
-| **nullStringDisabled** (advanced) | `false` | `Boolean` | Used to disable null strings. |
+| **nullStringDisabled** (advanced) | `false` | `Boolean` | Whether to disable null string handling. |
 | **nullString** (advanced) |  | `String` | Sets the null string. |
-| **quoteDisabled** (common) | `false` | `Boolean` | Used to disable quotes. |
-| **quote** (common) |  | `String` | Sets the quote to use which by default is double-quote character. |
-| **recordSeparatorDisabled** (common) |  | `String` | Used for disabling record separator. |
-| **recordSeparator** (common) |  | `String` | Sets the record separator (aka new line) which by default is new line characters (CRLF). |
+| **quoteDisabled** (common) | `false` | `Boolean` | Whether to disable quoting. |
+| **quote** (common) |  | `String` | The quote character to use. The default is double-quote character. |
+| **recordSeparatorDisabled** (advanced) | `false` | `Boolean` | Whether to disable the record separator. |
+| **recordSeparator** (common) |  | `String` | The record separator (aka new line) which by default is new line characters (CRLF). |
 | **skipHeaderRecord** (common) | `false` | `Boolean` | Whether to skip the header record in the output. |
 | **quoteMode** (common) |  | `Enum` | 
 
@@ -83,12 +83,12 @@ Enum values:
 
 
  |
-| **ignoreHeaderCase** (common) | `false` | `Boolean` | Sets whether or not to ignore case when accessing header names. |
-| **trim** (common) | `false` | `Boolean` | Sets whether or not to trim leading and trailing blanks. |
-| **trailingDelimiter** (common) | `false` | `Boolean` | Sets whether or not to add a trailing delimiter. |
-| **marshallerFactoryRef** (advanced) |  | `String` | Sets the implementation of the CsvMarshallerFactory interface which is able to customize marshalling/unmarshalling behavior by extending CsvMarshaller or creating it from scratch. |
+| **ignoreHeaderCase** (common) | `false` | `Boolean` | Whether to ignore case when accessing header names. |
+| **trim** (common) | `false` | `Boolean` | Whether to trim leading and trailing blanks. |
+| **trailingDelimiter** (common) | `false` | `Boolean` | Whether to add a trailing delimiter. |
+| **marshallerFactoryRef** (advanced) |  | `String` | Sets the implementation of the CsvMarshallerFactory interface which is able to customize marshalling/unmarshalling behavior. |
 | **lazyLoad** (advanced) | `false` | `Boolean` | Whether the unmarshalling should produce an iterator that reads the lines on the fly or if all the lines must be read at one. |
-| **useMaps** (common) | `false` | `Boolean` | Whether the unmarshalling should produce maps (HashMap)for the lines values instead of lists. It requires to have header (either defined or collected). |
+| **useMaps** (common) | `false` | `Boolean` | Whether the unmarshalling should produce maps (HashMap) for the lines values instead of lists. It requires to have header (either defined or collected). |
 | **useOrderedMaps** (common) | `false` | `Boolean` | Whether the unmarshalling should produce ordered maps (LinkedHashMap) for the lines values instead of lists. It requires to have header (either defined or collected). |
 | **recordConverterRef** (advanced) |  | `String` | Refers to a custom CsvRecordConverter to lookup from the registry to use. |
 | **captureHeaderRecord** (advanced) | `false` | `Boolean` | Whether the unmarshalling should capture the header record and store it in the message header. |

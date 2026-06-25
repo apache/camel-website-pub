@@ -11,12 +11,12 @@ The Choice eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **when** | Sets the when nodes. |  | List |
-| **otherwise** | Sets the otherwise node. |  | OtherwiseDefinition |
-| **precondition** | Indicates whether this Choice EIP is in precondition mode or not. If so its branches (when/otherwise) are evaluated during startup to keep at runtime only the branch that matched. | false | Boolean |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **when** | The when clauses (predicates) to evaluate. The first when clause that matches determines which route branch to follow. |  | List |
+| **otherwise** | The otherwise clause to execute when none of the when predicates matched. |  | OtherwiseDefinition |
+| **precondition** | If enabled then the choice is evaluated at route initialization time (precondition). Only when predicates with property placeholders or simple expressions using only property placeholders are supported. | false | Boolean |
 
 ## Exchange properties
 

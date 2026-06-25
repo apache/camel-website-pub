@@ -1230,62 +1230,62 @@ Number of Camel data formats: 0 in 0 JAR artifacts (0 deprecated)
     
 | Data Format | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
-| [ASN.1 File](../../components/next/dataformats/asn1-dataformat.md) | camel-asn1-starter | Stable | 2.20 | Encode and decode data structures using Abstract Syntax Notation One (ASN.1). |
-| [Avro](../../components/next/dataformats/avro-dataformat.md) | camel-avro-starter | Stable | 2.14 | Serialize and deserialize messages using Apache Avro binary data format. |
+| [ASN.1 File](../../components/next/dataformats/asn1-dataformat.md) | camel-asn1-starter | Stable | 2.20 | Encode and decode data structures using Abstract Syntax Notation One (ASN.1) |
+| [Avro](../../components/next/dataformats/avro-dataformat.md) | camel-avro-starter | Stable | 2.14 | Serialize and deserialize messages using Apache Avro binary data format |
 | [Avro Jackson 2](../../components/next/dataformats/avroJackson2-dataformat.md) | camel-jackson-avro-starter | Stable | 3.10 | Marshal POJOs to Avro and back using Jackson. |
 | [Avro Jackson 3](../../components/next/dataformats/avroJackson3-dataformat.md) | camel-jackson3-avro-starter | Preview | 4.19 | Marshal POJOs to Avro and back using Jackson. |
-| [Barcode](../../components/next/dataformats/barcode-dataformat.md) | camel-barcode-starter | Stable | 2.14 | Transform strings to various 1D/2D barcode bitmap formats and back. |
-| [Base64](../../components/next/dataformats/base64-dataformat.md) | camel-base64-starter | Stable | 2.11 | Encode and decode data using Base64. |
-| [BeanIO](../../components/next/dataformats/beanio-dataformat.md) | camel-beanio-starter | Stable | 2.10 | Marshal and unmarshal Java beans to and from flat files (such as CSV, delimited, or fixed length formats). |
+| [Barcode](../../components/next/dataformats/barcode-dataformat.md) | camel-barcode-starter | Stable | 2.14 | Transform strings to various 1D/2D barcode bitmap formats and back |
+| [Base64](../../components/next/dataformats/base64-dataformat.md) | camel-base64-starter | Stable | 2.11 | Encode and decode data using Base64 |
+| [BeanIO](../../components/next/dataformats/beanio-dataformat.md) | camel-beanio-starter | Stable | 2.10 | Marshal and unmarshal Java beans to and from flat files (such as CSV, delimited, or fixed length formats) |
 | [Bindy](../../components/next/dataformats/bindy-dataformat.md) | camel-bindy-starter | Stable | 2.0 | Marshal and unmarshal between POJOs and key-value pair (KVP) format using Camel Bindy |
-| [CBOR](../../components/next/dataformats/cbor-dataformat.md) | camel-cbor-starter | Stable | 3.0 | Unmarshal a CBOR payload to POJO and back. |
-| [Crypto (Java Cryptographic Extension)](../../components/next/dataformats/crypto-dataformat.md) | camel-crypto-starter | Stable | 2.3 | Encrypt and decrypt messages using Java Cryptography Extension (JCE). |
-| [CSV](../../components/next/dataformats/csv-dataformat.md) | camel-csv-starter | Stable | 1.3 | Handle CSV (Comma Separated Values) payloads. |
-| [DFDL](../../components/next/dataformats/dfdl-dataformat.md) | camel-dfdl-starter | Stable | 4.11 | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
-| [FHIR JSon](../../components/next/dataformats/fhirJson-dataformat.md) | camel-fhir-starter | Stable | 2.21 | Marshall and unmarshall FHIR objects to/from JSON. |
-| [FHIR XML](../../components/next/dataformats/fhirXml-dataformat.md) | camel-fhir-starter | Stable | 2.21 | Marshall and unmarshall FHIR objects to/from XML. |
-| [Flatpack](../../components/next/dataformats/flatpack-dataformat.md) | camel-flatpack-starter | Stable | 2.1 | Marshal and unmarshal Java lists and maps to/from flat files (such as CSV, delimited, or fixed length formats) using Flatpack library. |
+| [CBOR](../../components/next/dataformats/cbor-dataformat.md) | camel-cbor-starter | Stable | 3.0 | Unmarshal a CBOR payload to POJO and back |
+| [Crypto (Java Cryptographic Extension)](../../components/next/dataformats/crypto-dataformat.md) | camel-crypto-starter | Stable | 2.3 | Encrypt and decrypt messages using Java Cryptography Extension (JCE) |
+| [CSV](../../components/next/dataformats/csv-dataformat.md) | camel-csv-starter | Stable | 1.3 | Handle CSV (Comma Separated Values) payloads |
+| [DFDL](../../components/next/dataformats/dfdl-dataformat.md) | camel-dfdl-starter | Stable | 4.11 | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL) |
+| [FHIR JSon](../../components/next/dataformats/fhirJson-dataformat.md) | camel-fhir-starter | Stable | 2.21 | Marshall and unmarshall FHIR objects to/from JSON |
+| [FHIR XML](../../components/next/dataformats/fhirXml-dataformat.md) | camel-fhir-starter | Stable | 2.21 | Marshall and unmarshall FHIR objects to/from XML |
+| [Flatpack](../../components/next/dataformats/flatpack-dataformat.md) | camel-flatpack-starter | Stable | 2.1 | Marshal and unmarshal Java lists and maps to/from flat files (such as CSV, delimited, or fixed length formats) using Flatpack library |
 | [Fory](../../components/next/dataformats/fory-dataformat.md) | camel-fory-starter | Stable | 4.9 | Serialize and deserialize messages using Apache Fory |
-| [Grok](../../components/next/dataformats/grok-dataformat.md) | camel-grok-starter | Stable | 3.0 | Unmarshal unstructured data to objects using Logstash based Grok patterns. |
-| [Groovy JSon](../../components/next/dataformats/groovyJson-dataformat.md) | camel-groovy-starter | Preview | 4.19 | Transform between JSon and java.util.Map or java.util.List objects. |
-| [Groovy XML](../../components/next/dataformats/groovyXml-dataformat.md) | camel-groovy-starter | Stable | 4.15 | Transform between XML and Groovy Node (Map structure) objects. |
-| [GZip Deflater](../../components/next/dataformats/gzipDeflater-dataformat.md) | camel-zip-deflater-starter | Stable | 2.0 | Compress and decompress messages using java.util.zip.GZIPStream. |
-| [HL7](../../components/next/dataformats/hl7-dataformat.md) | camel-hl7-starter | Stable | 2.0 | Marshal and unmarshal HL7 (Health Care) model objects using the HL7 MLLP codec. |
-| [iCal](../../components/next/dataformats/ical-dataformat.md) | camel-ical-starter | Stable | 2.12 | Marshal and unmarshal iCal (.ics) documents to/from model objects. |
-| [ISO-8583](../../components/next/dataformats/iso8583-dataformat.md) | camel-iso8583-starter | Stable | 4.14 | Create, edit and read ISO-8583 messages. |
-| [Jackson XML 2](../../components/next/dataformats/jacksonXml2-dataformat.md) | camel-jacksonxml-starter | Stable | 2.16 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson. |
-| [Jackson XML 3](../../components/next/dataformats/jacksonXml3-dataformat.md) | camel-jackson3xml-starter | Preview | 4.19 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson. |
-| [JAXB](../../components/next/dataformats/jaxb-dataformat.md) | camel-jaxb-starter | Stable | 1.0 | Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard. |
+| [Grok](../../components/next/dataformats/grok-dataformat.md) | camel-grok-starter | Stable | 3.0 | Unmarshal unstructured data to objects using Logstash based Grok patterns |
+| [Groovy JSon](../../components/next/dataformats/groovyJson-dataformat.md) | camel-groovy-starter | Preview | 4.19 | Transform between JSon and java.util.Map or java.util.List objects |
+| [Groovy XML](../../components/next/dataformats/groovyXml-dataformat.md) | camel-groovy-starter | Stable | 4.15 | Transform between XML and Groovy Node (Map structure) objects |
+| [GZip Deflater](../../components/next/dataformats/gzipDeflater-dataformat.md) | camel-zip-deflater-starter | Stable | 2.0 | Compress and decompress messages using java.util.zip.GZIP\*Stream |
+| [HL7](../../components/next/dataformats/hl7-dataformat.md) | camel-hl7-starter | Stable | 2.0 | Marshal and unmarshal HL7 (Health Care) model objects using the HL7 MLLP codec |
+| [iCal](../../components/next/dataformats/ical-dataformat.md) | camel-ical-starter | Stable | 2.12 | Marshal and unmarshal iCal (\*.ics) documents to/from model objects |
+| [ISO-8583](../../components/next/dataformats/iso8583-dataformat.md) | camel-iso8583-starter | Stable | 4.14 | Create, edit and read ISO-8583 messages |
+| [Jackson XML 2](../../components/next/dataformats/jacksonXml2-dataformat.md) | camel-jacksonxml-starter | Stable | 2.16 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
+| [Jackson XML 3](../../components/next/dataformats/jacksonXml3-dataformat.md) | camel-jackson3xml-starter | Preview | 4.19 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
+| [JAXB](../../components/next/dataformats/jaxb-dataformat.md) | camel-jaxb-starter | Stable | 1.0 | Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard |
 | [JSON Fastjson](../../components/next/dataformats/fastjson-dataformat.md) | camel-fastjson-starter | Stable | 2.20 | Marshal POJOs to JSON and back using Fastjson |
 | [JSON Gson](../../components/next/dataformats/gson-dataformat.md) | camel-gson-starter | Stable | 2.10 | Marshal POJOs to JSON and back using Gson |
 | [JSON Jackson 2](../../components/next/dataformats/jackson2-dataformat.md) | camel-jackson-starter | Stable | 2.0 | Marshal POJOs to JSON and back using Jackson. |
 | [JSON Jackson 3](../../components/next/dataformats/jackson3-dataformat.md) | camel-jackson3-starter | Preview | 4.19 | Marshal POJOs to JSON and back using Jackson. |
 | [JSON JSON-B](../../components/next/dataformats/jsonb-dataformat.md) | camel-jsonb-starter | Stable | 3.7 | Marshal POJOs to JSON and back using JSON-B. |
-| [JSonApi](../../components/next/dataformats/jsonApi-dataformat.md) | camel-jsonapi-starter | Stable | 3.0 | Marshal and unmarshal JSON:API resources using JSONAPI-Converter library. |
-| [LZF Deflate Compression](../../components/next/dataformats/lzf-dataformat.md) | camel-lzf-starter | Stable | 2.17 | Compress and decompress streams using LZF deflate algorithm. |
-| [MIME Multipart](../../components/next/dataformats/mimeMultipart-dataformat.md) | camel-mail-starter | Stable | 2.17 | Marshal Camel messages with attachments into MIME-Multipart messages and back. |
-| [OCSF](../../components/next/dataformats/ocsf-dataformat.md) | camel-ocsf-starter | Stable | 4.18 | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON. |
-| [Parquet File](../../components/next/dataformats/parquetAvro-dataformat.md) | camel-parquet-avro-starter | Stable | 4.0 | Parquet Avro serialization and de-serialization. |
-| [PGP (Pretty Good Privacy Cryptographic)](../../components/next/dataformats/pgp-dataformat.md) | camel-crypto-pgp-starter | Stable | 2.9 | Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP. |
-| [PQC (Post-Quantum Cryptography)](../../components/next/dataformats/pqc-dataformat.md) | camel-pqc-starter | Stable | 4.16 | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM). |
-| [Protobuf](../../components/next/dataformats/protobuf-dataformat.md) | camel-protobuf-starter | Stable | 2.2 | Serialize and deserialize Java objects using Google’s Protocol buffers. |
+| [JSonApi](../../components/next/dataformats/jsonApi-dataformat.md) | camel-jsonapi-starter | Stable | 3.0 | Marshal and unmarshal JSON:API resources using JSONAPI-Converter library |
+| [LZF Deflate Compression](../../components/next/dataformats/lzf-dataformat.md) | camel-lzf-starter | Stable | 2.17 | Compress and decompress streams using LZF deflate algorithm |
+| [MIME Multipart](../../components/next/dataformats/mimeMultipart-dataformat.md) | camel-mail-starter | Stable | 2.17 | Marshal Camel messages with attachments into MIME-Multipart messages and back |
+| [OCSF](../../components/next/dataformats/ocsf-dataformat.md) | camel-ocsf-starter | Stable | 4.18 | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON |
+| [Parquet File](../../components/next/dataformats/parquetAvro-dataformat.md) | camel-parquet-avro-starter | Stable | 4.0 | Parquet Avro serialization and de-serialization |
+| [PGP (Pretty Good Privacy Cryptographic)](../../components/next/dataformats/pgp-dataformat.md) | camel-crypto-pgp-starter | Stable | 2.9 | Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP |
+| [PQC (Post-Quantum Cryptography)](../../components/next/dataformats/pqc-dataformat.md) | camel-pqc-starter | Stable | 4.16 | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM) |
+| [Protobuf](../../components/next/dataformats/protobuf-dataformat.md) | camel-protobuf-starter | Stable | 2.2 | Serialize and deserialize Java objects using Google’s Protocol buffers |
 | [Protobuf Jackson 2](../../components/next/dataformats/protobufJackson2-dataformat.md) | camel-jackson-protobuf-starter | Stable | 3.10 | Marshal POJOs to Protobuf and back using Jackson. |
 | [Protobuf Jackson 3](../../components/next/dataformats/protobufJackson3-dataformat.md) | camel-jackson3-protobuf-starter | Preview | 4.19 | Marshal POJOs to Protobuf and back using Jackson. |
-| [RSS](../../components/next/dataformats/rss-dataformat.md) | camel-rss-starter | Stable | 2.1 | Transform from ROME SyndFeed Java Objects to XML and vice-versa. |
-| [Smooks](../../components/next/dataformats/smooks-dataformat.md) | camel-smooks-starter | Stable | 4.9 | Transform and bind XML as well as non-XML data, including EDI, CSV, JSON, and YAML using Smooks. |
-| [SOAP](../../components/next/dataformats/soap-dataformat.md) | camel-soap-starter | Stable | 2.3 | Marshal Java objects to SOAP messages and back. |
-| [SWIFT MT](../../components/next/dataformats/swiftMt-dataformat.md) | camel-swift-starter | Stable | 3.20 | Encode and decode SWIFT MT messages. |
-| [SWIFT MX](../../components/next/dataformats/swiftMx-dataformat.md) | camel-swift-starter | Stable | 3.20 | Encode and decode SWIFT MX messages. |
-| [Syslog](../../components/next/dataformats/syslog-dataformat.md) | camel-syslog-starter | Stable | 2.6 | Marshall SyslogMessages to RFC3164 and RFC5424 messages and back. |
-| [Tar File](../../components/next/dataformats/tarFile-dataformat.md) | camel-tarfile-starter | Stable | 2.16 | Archive files into tarballs or extract files from tarballs. |
-| [Thrift](../../components/next/dataformats/thrift-dataformat.md) | camel-thrift-starter | Stable | 2.20 | Serialize and deserialize messages using Apache Thrift binary data format. |
-| [uniVocity CSV](../../components/next/dataformats/univocityCsv-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to CSV (Comma Separated Values) using UniVocity Parsers. |
-| [uniVocity Fixed Length](../../components/next/dataformats/univocityFixed-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to fixed length records using UniVocity Parsers. |
-| [uniVocity TSV](../../components/next/dataformats/univocityTsv-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to TSV (Tab-Separated Values) records using UniVocity Parsers. |
-| [XML Security](../../components/next/dataformats/xmlSecurity-dataformat.md) | camel-xmlsecurity-starter | Stable | 2.0 | Encrypt and decrypt XML payloads using Apache Santuario. |
+| [RSS](../../components/next/dataformats/rss-dataformat.md) | camel-rss-starter | Stable | 2.1 | Transform from ROME SyndFeed Java Objects to XML and vice-versa |
+| [Smooks](../../components/next/dataformats/smooks-dataformat.md) | camel-smooks-starter | Stable | 4.9 | Transform and bind XML as well as non-XML data, including EDI, CSV, JSON, and YAML using Smooks |
+| [SOAP](../../components/next/dataformats/soap-dataformat.md) | camel-soap-starter | Stable | 2.3 | Marshal Java objects to SOAP messages and back |
+| [SWIFT MT](../../components/next/dataformats/swiftMt-dataformat.md) | camel-swift-starter | Stable | 3.20 | Encode and decode SWIFT MT messages |
+| [SWIFT MX](../../components/next/dataformats/swiftMx-dataformat.md) | camel-swift-starter | Stable | 3.20 | Encode and decode SWIFT MX messages |
+| [Syslog](../../components/next/dataformats/syslog-dataformat.md) | camel-syslog-starter | Stable | 2.6 | Marshall SyslogMessages to RFC3164 and RFC5424 messages and back |
+| [Tar File](../../components/next/dataformats/tarFile-dataformat.md) | camel-tarfile-starter | Stable | 2.16 | Archive files into tarballs or extract files from tarballs |
+| [Thrift](../../components/next/dataformats/thrift-dataformat.md) | camel-thrift-starter | Stable | 2.20 | Serialize and deserialize messages using Apache Thrift binary data format |
+| [uniVocity CSV](../../components/next/dataformats/univocityCsv-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to CSV (Comma Separated Values) using UniVocity Parsers |
+| [uniVocity Fixed Length](../../components/next/dataformats/univocityFixed-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to fixed length records using UniVocity Parsers |
+| [uniVocity TSV](../../components/next/dataformats/univocityTsv-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to TSV (Tab-Separated Values) records using UniVocity Parsers |
+| [XML Security](../../components/next/dataformats/xmlSecurity-dataformat.md) | camel-xmlsecurity-starter | Stable | 2.0 | Encrypt and decrypt XML payloads using Apache Santuario |
 | [YAML SnakeYAML](../../components/next/dataformats/snakeYaml-dataformat.md) | camel-snakeyaml-starter | Stable | 2.17 | Marshal and unmarshal Java objects to and from YAML using SnakeYAML |
-| [Zip Deflater](../../components/next/dataformats/zipDeflater-dataformat.md) | camel-zip-deflater-starter | Stable | 2.12 | Compress and decompress streams using java.util.zip.Deflater and java.util.zip.Inflater. |
-| [Zip File](../../components/next/dataformats/zipFile-dataformat.md) | camel-zipfile-starter | Stable | 2.11 | Compression and decompress streams using java.util.zip.ZipStream. |
+| [Zip Deflater](../../components/next/dataformats/zipDeflater-dataformat.md) | camel-zip-deflater-starter | Stable | 2.12 | Compress and decompress streams using java.util.zip.Deflater and java.util.zip.Inflater |
+| [Zip File](../../components/next/dataformats/zipFile-dataformat.md) | camel-zipfile-starter | Stable | 2.11 | Compression and decompress streams using java.util.zip.Zip\*Stream |
 
 ## Camel Languages
 
@@ -1300,32 +1300,36 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
     
 | Language | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
-| [Bean Method](../../components/next/languages/bean-language.md) | camel-bean-starter | Stable | 1.3 | Calls a Java bean method. |
-| [Constant](../../components/next/languages/constant-language.md) | camel-core-languages-starter | Stable | 1.5 | A fixed value set only once during the route startup. |
-| [CSimple](../../components/next/languages/csimple-language.md) | camel-core-languages-starter | Stable-deprecated | 3.7 | Evaluate a compiled simple expression. |
-| [DataSonnet](../../components/next/languages/datasonnet-language.md) | camel-datasonnet-starter | Stable | 3.7 | To use DataSonnet scripts for message transformations. |
-| [ExchangeProperty](../../components/next/languages/exchangeProperty-language.md) | camel-core-languages-starter | Stable | 2.0 | Gets a property from the Exchange. |
+| [Bean Method](../../components/next/languages/bean-language.md) | camel-bean-starter | Stable | 1.3 | Calls a Java bean method |
+| [Constant](../../components/next/languages/constant-language.md) | camel-core-languages-starter | Stable | 1.5 | A fixed value set only once during the route startup |
+| [CSimple](../../components/next/languages/csimple-language.md) | camel-core-languages-starter | Stable-deprecated | 3.7 | Evaluate a compiled simple expression |
+| [DataSonnet](../../components/next/languages/datasonnet-language.md) | camel-datasonnet-starter | Stable | 3.7 | To use DataSonnet scripts for message transformations |
+| [ExchangeProperty](../../components/next/languages/exchangeProperty-language.md) | camel-core-languages-starter | Stable | 2.0 | Gets a property from the Exchange |
 | [File](../../components/next/languages/file-language.md) | camel-core-languages-starter | Stable | 1.1 | File related capabilities for the Simple language |
-| [Groovy](../../components/next/languages/groovy-language.md) | camel-groovy-starter | Stable | 1.3 | Evaluates a Groovy script. |
-| [Header](../../components/next/languages/header-language.md) | camel-core-languages-starter | Stable | 1.5 | Gets a header from the Exchange. |
-| [HL7 Terser](../../components/next/languages/hl7terser-language.md) | camel-hl7-starter | Stable | 2.11 | Get the value of a HL7 message field specified by terse location specification syntax. |
-| [Java](../../components/next/languages/java-language.md) | camel-joor-starter | Stable | 4.3 | Evaluates a Java (Java compiled once at runtime) expression. |
-| [JavaScript](../../components/next/languages/js-language.md) | camel-javascript-starter | Stable | 3.20 | Evaluates a JavaScript expression. |
-| [jOOR](../../components/next/languages/joor-language.md) | camel-joor-starter | Stable-deprecated | 3.7 | Evaluates a jOOR (Java compiled once at runtime) expression. |
-| [JQ](../../components/next/languages/jq-language.md) | camel-jq-starter | Stable | 3.18 | Evaluates a JQ expression against a JSON message body. |
-| [JSONPath](../../components/next/languages/jsonpath-language.md) | camel-jsonpath-starter | Stable | 2.13 | Evaluates a JSONPath expression against a JSON message body. |
-| [MVEL](../../components/next/languages/mvel-language.md) | camel-mvel-starter | Stable | 2.0 | Evaluates a MVEL template. |
-| [OGNL](../../components/next/languages/ognl-language.md) | camel-ognl-starter | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL). |
-| [Python](../../components/next/languages/python-language.md) | camel-python-starter | Experimental | 3.19 | Evaluates a Python expression. |
-| [Ref](../../components/next/languages/ref-language.md) | camel-core-languages-starter | Stable | 2.8 | Uses an existing expression from the registry. |
-| [Simple](../../components/next/languages/simple-language.md) | camel-core-languages-starter | Stable | 1.1 | Evaluates a Camel simple expression. |
-| [SpEL](../../components/next/languages/spel-language.md) | camel-spring-starter | Stable | 2.7 | Evaluates a Spring expression (SpEL). |
-| [Tokenize](../../components/next/languages/tokenize-language.md) | camel-core-languages-starter | Stable | 2.0 | Tokenize text payloads using delimiter patterns. |
+| [Groovy](../../components/next/languages/groovy-language.md) | camel-groovy-starter | Stable | 1.3 | Evaluates a Groovy script |
+| [Header](../../components/next/languages/header-language.md) | camel-core-languages-starter | Stable | 1.5 | Gets a header from the Exchange |
+| [HL7 Terser](../../components/next/languages/hl7terser-language.md) | camel-hl7-starter | Stable | 2.11 | Get the value of a HL7 message field specified by terse location specification syntax |
+| [Java](../../components/next/languages/java-language.md) | camel-joor-starter | Stable | 4.3 | Evaluates a Java (Java compiled once at runtime) expression |
+| [JavaScript](../../components/next/languages/js-language.md) | camel-javascript-starter | Stable | 3.20 | Evaluates a JavaScript expression |
+| [jOOR](../../components/next/languages/joor-language.md) | camel-joor-starter | Stable-deprecated | 3.7 | Evaluates a jOOR (Java compiled once at runtime) expression |
+| [JQ](../../components/next/languages/jq-language.md) | camel-jq-starter | Stable | 3.18 | Evaluates a JQ expression against a JSON message body |
+| [JSONPath](../../components/next/languages/jsonpath-language.md) | camel-jsonpath-starter | Stable | 2.13 | Evaluates a JSONPath expression against a JSON message body |
+| [MVEL](../../components/next/languages/mvel-language.md) | camel-mvel-starter | Stable | 2.0 | Evaluates a MVEL template |
+| [OGNL](../../components/next/languages/ognl-language.md) | camel-ognl-starter | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL) |
+| [Python](../../components/next/languages/python-language.md) | camel-python-starter | Experimental | 3.19 | Evaluates a Python expression |
+| [Ref](../../components/next/languages/ref-language.md) | camel-core-languages-starter | Stable | 2.8 | Uses an existing expression from the registry |
+| [Simple](../../components/next/languages/simple-language.md) | camel-core-languages-starter | Stable | 1.1 | Evaluates a Camel simple expression |
+| [Simple - Advanced Features](../../components/next/languages/simple-advanced.md) | undefined-starter |  |  |  |
+| [Simple - Built-in Functions](../../components/next/languages/simple-functions.md) | undefined-starter |  |  |  |
+| [Simple - Built-in Operators](../../components/next/languages/simple-operators.md) | undefined-starter |  |  |  |
+| [Simple - OGNL Expressions](../../components/next/languages/simple-ognl.md) | undefined-starter |  |  |  |
+| [SpEL](../../components/next/languages/spel-language.md) | camel-spring-starter | Stable | 2.7 | Evaluates a Spring expression (SpEL) |
+| [Tokenize](../../components/next/languages/tokenize-language.md) | camel-core-languages-starter | Stable | 2.0 | Tokenize text payloads using delimiter patterns |
 | [Variable](../../components/next/languages/variable-language.md) | camel-core-languages-starter | Stable | 4.4 | Gets a variable |
-| [Wasm](../../components/next/languages/wasm-language.md) | camel-wasm-starter | Experimental | 4.5 | Call a wasm (web assembly) function. |
-| [XML Tokenize](../../components/next/languages/xtokenize-language.md) | camel-stax-starter | Stable | 2.14 | Tokenize XML payloads. |
-| [XPath](../../components/next/languages/xpath-language.md) | camel-xpath-starter | Stable | 1.1 | Evaluates an XPath expression against an XML payload. |
-| [XQuery](../../components/next/languages/xquery-language.md) | camel-saxon-starter | Stable | 1.0 | Evaluates an XQuery expressions against an XML payload. |
+| [Wasm](../../components/next/languages/wasm-language.md) | camel-wasm-starter | Experimental | 4.5 | Call a wasm (web assembly) function |
+| [XML Tokenize](../../components/next/languages/xtokenize-language.md) | camel-stax-starter | Stable | 2.14 | Tokenize XML payloads |
+| [XPath](../../components/next/languages/xpath-language.md) | camel-xpath-starter | Stable | 1.1 | Evaluates an XPath expression against an XML payload |
+| [XQuery](../../components/next/languages/xquery-language.md) | camel-saxon-starter | Stable | 1.0 | Evaluates an XQuery expressions against an XML payload |
 
 ## Miscellaneous Extensions
 
@@ -1411,7 +1415,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [PQC Hybrid Cryptography](../../components/next/others/pqc-hybrid.md) | undefined-starter |  |  |  |
 | [PQC Key Lifecycle Management](../../components/next/others/pqc-key-lifecycle.md) | undefined-starter |  |  |  |
 | [Reactive Executor Tomcat](../../components/next/others/reactive-executor-tomcat.md) | camel-reactive-executor-tomcat-starter | Experimental | 3.17 | Reactive Executor for camel-core using Apache Tomcat |
-| [Reactive Executor Vert.x](../../components/next/others/reactive-executor-vertx.md) | camel-reactive-executor-vertx-starter | Experimental | 3.0 | Reactive Executor for camel-core using Vert.x |
+| [Reactive Executor Vert.x](../../components/next/others/reactive-executor-vertx.md) | camel-reactive-executor-vertx-starter | Experimental-deprecated | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](../../components/next/others/reactor.md) | camel-reactor-starter | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](../../components/next/others/redis.md) | camel-redis-starter | Stable | 3.5 | Aggregation repository using Redis as datastore |
 | [Resilience4j](../../components/next/others/resilience4j.md) | camel-resilience4j-starter | Stable | 3.0 | Circuit Breaker EIP using Resilience4j |
@@ -1436,7 +1440,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Test Main JUnit6](../../components/next/others/test-main-junit6.md) | camel-test-main-junit6-starter | Stable | 4.17 | Camel unit testing with Main and JUnit 6 |
 | [Test Spring JUnit5](../../components/next/others/test-spring-junit5.md) | camel-test-spring-junit5-starter | Stable | 3.0 | Camel unit testing with Spring and JUnit 5 |
 | [Test Spring JUnit6](../../components/next/others/test-spring-junit6.md) | camel-test-spring-junit6-starter | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
-| [ThreadPoolFactory Vert.x](../../components/next/others/threadpoolfactory-vertx.md) | camel-threadpoolfactory-vertx-starter | Experimental | 3.5 | ThreadPoolFactory for camel-core using Vert.x |
+| [ThreadPoolFactory Vert.x](../../components/next/others/threadpoolfactory-vertx.md) | camel-threadpoolfactory-vertx-starter | Experimental-deprecated | 3.5 | ThreadPoolFactory for camel-core using Vert.x |
 | [Tracing](../../components/next/others/tracing.md) | camel-tracing-starter | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
 | [Undertow Spring Security](../../components/next/others/undertow-spring-security.md) | camel-undertow-spring-security-starter | Stable | 3.3 | Spring Security Provider for camel-undertow |
 | [Write Ahead Log Strategy for Resume API](../../components/next/others/wal.md) | camel-wal-starter | Stable | 3.20 | Write Ahead Log Strategy for Resume API |

@@ -20,12 +20,12 @@ The Logger eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **message** | **Required** Sets the log message (uses simple language). |  | String |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **message** | The log message to output. Supports simple language expressions. |  | String |
 | **loggingLevel** | 
-Sets the logging level. The default value is INFO.
+Sets the logging level to use for the log message. Available levels: TRACE, DEBUG, INFO, WARN, ERROR, OFF.
 
 Enum values:
 
@@ -47,10 +47,10 @@ Enum values:
 
 
  | INFO | LoggingLevel |
-| **logName** | Sets the name of the logger. The name is default the routeId or the source:line if source location is enabled. You can also specify the name using tokens: ${class} - the logger class name (org.apache.camel.processor.LogProcessor) ${contextId} - the camel context id ${routeId} - the route id ${groupId} - the route group id ${nodeId} - the node id ${nodePrefixId} - the node prefix id ${source} - the source:line (source location must be enabled) $\\{source.name} - the source filename (source location must be enabled) $\\{source.line} - the source line number (source location must be enabled) For example to use the route and node id you can specify the name as: ${routeId}/${nodeId}. |  | String |
-| **marker** | To use slf4j marker. |  | String |
-| **logger** | To refer to a custom logger instance to lookup from the registry. |  | Logger |
-| **logLanguage** | To configure the language to use. By default, the simple language is used. However, Camel also supports other languages such as groovy. |  | String |
+| **logName** | The logger name to use. By default the route id is used. |  | String |
+| **marker** | An optional SLF4J marker to use with the log statement. |  | String |
+| **logger** | Reference to a custom SLF4J logger instance to use. |  | Logger |
+| **logLanguage** | The language to use for evaluating the log message, such as simple, groovy, or ognl. |  | String |
 
 ## Exchange properties
 

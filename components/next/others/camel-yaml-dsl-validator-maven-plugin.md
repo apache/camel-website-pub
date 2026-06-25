@@ -22,7 +22,7 @@ You can also enable the plugin to run automatically as part of the build to catc
 ```xml
 <plugin>
   <groupId>org.apache.camel</groupId>
-  <artifactId>camel-yaml-dsl-validate-maven-plugin</artifactId>
+  <artifactId>camel-yaml-dsl-validator-maven-plugin</artifactId>
   <executions>
     <execution>
       <phase>process-classes</phase>
@@ -41,7 +41,7 @@ The maven plugin can also be configured to validate the test source code, which 
 ```xml
 <plugin>
   <groupId>org.apache.camel</groupId>
-  <artifactId>camel-yaml-dsl-validate-maven-plugin</artifactId>
+  <artifactId>camel-yaml-dsl-validator-maven-plugin</artifactId>
   <executions>
     <execution>
       <configuration>
@@ -84,7 +84,7 @@ Validation error detected in 1 files
 
 The maven plugin **validate** goal supports the following options which can be configured from the command line (use `-D` syntax), or defined in the `pom.xml` file in the `<configuration>` tag.
 
-<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Parameter</td><td class="tableblock halign-left valign-top">Default Value</td><td class="tableblock halign-left valign-top">Description</td></tr><tr><td class="tableblock halign-left valign-top">skip</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Skip the validation execution.</td></tr><tr><td class="tableblock halign-left valign-top">failOnError</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Whether to fail if invalid Camel endpoints was found. By default the plugin logs the errors at WARN level.</td></tr><tr><td class="tableblock halign-left valign-top">includeTest</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Whether to include test source code.</td></tr><tr><td class="tableblock halign-left valign-top">includes</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">To filter the names of YAML files to only include files matching any of the given list of patterns (wildcard and regular expression). Multiple values can be separated by comma.</td></tr><tr><td class="tableblock halign-left valign-top">excludes</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">To filter the names of YAML files to exclude files matching any of the given list of patterns (wildcard and regular expression). Multiple values can be separated by comma.</td></tr><tr><td class="tableblock halign-left valign-top">onlyCamelYamlExt</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Whether to only accept files with xxx.camel.yaml as file name. By default, all .yaml files are accepted.</td></tr></tbody></table>
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Parameter</td><td class="tableblock halign-left valign-top">Default Value</td><td class="tableblock halign-left valign-top">Description</td></tr><tr><td class="tableblock halign-left valign-top">skip</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Skip the validation execution.</td></tr><tr><td class="tableblock halign-left valign-top">failOnError</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Whether to fail if invalid Camel endpoints was found. By default the plugin logs the errors at WARN level.</td></tr><tr><td class="tableblock halign-left valign-top">includeTest</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Whether to include test source code.</td></tr><tr><td class="tableblock halign-left valign-top">includes</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">To filter the names of YAML files to only include files matching any of the given list of patterns (wildcard and regular expression). Multiple values can be separated by comma.</td></tr><tr><td class="tableblock halign-left valign-top">excludes</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">To filter the names of YAML files to exclude files matching any of the given list of patterns (wildcard and regular expression). Multiple values can be separated by comma.</td></tr><tr><td class="tableblock halign-left valign-top">onlyCamelYamlExt</td><td class="tableblock halign-left valign-top">false</td><td class="tableblock halign-left valign-top">Whether to only accept files with xxx.camel.yaml as file name. By default, all .yaml files are accepted.</td></tr><tr><td class="tableblock halign-left valign-top">directories</td><td class="tableblock halign-left valign-top"></td><td class="tableblock halign-left valign-top">Additional directories to scan for YAML files. By default, only the project’s resource directories are scanned.</td></tr></tbody></table>
 
 For example to excludes a specific file:
 
@@ -93,6 +93,33 @@ mvn camel-yaml-dsl-validator:validate -Dcamel.excludes=cheese.yaml
 ```
 
 Notice that you must prefix the `-D` command argument with `camel.`, eg `camel.excludes` as the option name.
+
+### Validating with additional directories
+
+If your YAML route files are stored in a location outside the standard Maven resource directories, you can specify additional directories to scan:
+
+```xml
+<plugin>
+  <groupId>org.apache.camel</groupId>
+  <artifactId>camel-yaml-dsl-validator-maven-plugin</artifactId>
+  <executions>
+    <execution>
+      <configuration>
+        <directories>
+          <directory>src/main/routes</directory>
+          <directory>src/main/camel</directory>
+        </directories>
+      </configuration>
+      <phase>process-classes</phase>
+      <goals>
+        <goal>validate</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+```
+
+Both relative and absolute paths are supported. Relative paths are resolved against the project base directory.
 
 ### Validating include test
 

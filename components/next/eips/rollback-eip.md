@@ -9,12 +9,12 @@ The Rollback eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **message** | Message to use in rollback exception. |  | String |
-| **markRollbackOnly** | Mark the transaction for rollback only (cannot be overruled to commit). | false | Boolean |
-| **markRollbackOnlyLast** | Mark only last sub transaction for rollback only. When using sub transactions (if the transaction manager support this). | false | Boolean |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **message** | The message to set on the exception when rolling back. |  | String |
+| **markRollbackOnly** | If enabled then only the current transaction is marked for rollback. No exception is thrown and the route continues to execute. | false | Boolean |
+| **markRollbackOnlyLast** | If enabled then only the last sub-transaction (from the last transacted EIP) is marked for rollback. This allows partial rollbacks in nested transaction scenarios. | false | Boolean |
 
 ## Exchange properties
 

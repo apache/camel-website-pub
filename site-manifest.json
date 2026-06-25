@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1782209667097,
+  "generated": 1782368368762,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8634,6 +8634,12 @@
               "path": "reference/extensions/aws-bedrock.adoc",
               "url": "/camel-quarkus/next/reference/extensions/aws-bedrock.html",
               "title": "AWS Bedrock"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws-cloudtrail.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/aws-cloudtrail.html",
+              "title": "AWS Cloudtrail"
             },
             {
               "module": "ROOT",
@@ -20364,9 +20370,33 @@
             },
             {
               "module": "languages",
+              "path": "simple-advanced.adoc",
+              "url": "/components/next/languages/simple-advanced.html",
+              "title": "Simple - Advanced Features"
+            },
+            {
+              "module": "languages",
+              "path": "simple-functions.adoc",
+              "url": "/components/next/languages/simple-functions.html",
+              "title": "Simple - Built-in Functions"
+            },
+            {
+              "module": "languages",
               "path": "simple-language.adoc",
               "url": "/components/next/languages/simple-language.html",
               "title": "Simple"
+            },
+            {
+              "module": "languages",
+              "path": "simple-ognl.adoc",
+              "url": "/components/next/languages/simple-ognl.html",
+              "title": "Simple - OGNL Expressions"
+            },
+            {
+              "module": "languages",
+              "path": "simple-operators.adoc",
+              "url": "/components/next/languages/simple-operators.html",
+              "title": "Simple - Built-in Operators"
             },
             {
               "module": "languages",
@@ -31822,9 +31852,27 @@
             },
             {
               "module": "ROOT",
+              "path": "exception-advanced.adoc",
+              "url": "/manual/exception-advanced.html",
+              "title": "Exception Clause - Advanced Usage"
+            },
+            {
+              "module": "ROOT",
               "path": "exception-clause.adoc",
               "url": "/manual/exception-clause.html",
               "title": "Exception Clause"
+            },
+            {
+              "module": "ROOT",
+              "path": "exception-handling-patterns.adoc",
+              "url": "/manual/exception-handling-patterns.html",
+              "title": "Exception Clause - Handling Patterns"
+            },
+            {
+              "module": "ROOT",
+              "path": "exception-redelivery.adoc",
+              "url": "/manual/exception-redelivery.html",
+              "title": "Exception Clause - Redelivery"
             },
             {
               "module": "ROOT",
@@ -32860,9 +32908,21 @@
             },
             {
               "module": "ROOT",
+              "path": "rest-dsl-binding.adoc",
+              "url": "/manual/rest-dsl-binding.html",
+              "title": "Rest DSL - Binding and Configuration"
+            },
+            {
+              "module": "ROOT",
               "path": "rest-dsl-openapi.adoc",
               "url": "/manual/rest-dsl-openapi.html",
               "title": "REST DSL with contract-first OpenAPI"
+            },
+            {
+              "module": "ROOT",
+              "path": "rest-dsl-validation.adoc",
+              "url": "/manual/rest-dsl-validation.html",
+              "title": "Rest DSL - Error Handling and Validation"
             },
             {
               "module": "ROOT",

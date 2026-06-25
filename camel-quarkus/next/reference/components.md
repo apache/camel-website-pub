@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 312 components (18 deprecated, 59 JVM only)
+There are 313 components (18 deprecated, 59 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -18,6 +18,7 @@ level | Description |
 | [AWS Bedrock Agent Runtime](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Invoke Model of AWS Bedrock Agent Runtime service. |
 | [AWS Bedrock Agent](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Operate on AWS Bedrock through its Agent. |
 | [AWS Bedrock](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Invoke Model of AWS Bedrock service. |
+| [AWS Cloudtrail](extensions/aws-cloudtrail.md) | camel-quarkus-aws-cloudtrail | 3.37.0 | 3.37.0 | Stable | Consume events from Amazon Cloudtrail using AWS SDK version 2.x. |
 | [AWS Secrets Manager](extensions/aws-secrets-manager.md) | camel-quarkus-aws-secrets-manager | 2.0.0 | 3.19.0 | Stable | Manage secrets using AWS Secrets Manager. |
 | [AWS Athena](extensions/aws2-athena.md) | camel-quarkus-aws2-athena | 1.0.0 | 1.0.0 | Stable | Access AWS Athena. |
 | [AWS CloudWatch](extensions/aws2-cw.md) | camel-quarkus-aws2-cw | 1.0.0 | 1.0.0 | Stable | Sending metrics to AWS CloudWatch. |

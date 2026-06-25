@@ -11,7 +11,7 @@ The LZF Deflate Compression dataformat supports 1 options, which are listed belo
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **usingParallelCompression** (common) | `false` | `Boolean` | Enable encoding (compress) using multiple processing cores. |
+| **usingParallelCompression** (common) | `false` | `Boolean` | Whether to enable encoding (compress) using multiple processing cores. |
 
 ## Marshal
 

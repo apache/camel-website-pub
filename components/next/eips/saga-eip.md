@@ -22,12 +22,12 @@ The Saga eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **sagaService** | Refers to the id to lookup in the registry for the specific CamelSagaService to use. |  | CamelSagaService |
 | **propagation** | 
-Set the Saga propagation mode (REQUIRED, REQUIRES\_NEW, MANDATORY, SUPPORTS, NOT\_SUPPORTED, NEVER).
+Set the Saga propagation mode. REQUIRED joins an existing saga or starts a new one. REQUIRES\_NEW always starts a new saga, suspending any existing one. MANDATORY requires an existing saga and fails if none is active. SUPPORTS joins an existing saga if present but does not start a new one. NOT\_SUPPORTED executes outside any saga, suspending an existing one. NEVER fails if a saga is already active.
 
 Enum values:
 
@@ -51,7 +51,7 @@ Enum values:
  | REQUIRED | SagaPropagation |
 | **completionMode** | 
 
-Determine how the saga should be considered complete. When set to AUTO, the saga is completed when the exchange that initiates the saga is processed successfully, or compensated when it completes exceptionally. When set to MANUAL, the user must complete or compensate the saga using the saga:complete or saga:compensate endpoints.
+Determine how the saga should be considered complete. When set to AUTO, the saga is completed when the exchange is processed successfully, or compensated when it completes exceptionally. When set to MANUAL, the user must complete or compensate the saga using the saga:complete or saga:compensate endpoints.
 
 Enum values:
 
@@ -66,9 +66,9 @@ Enum values:
 
  | AUTO | SagaCompletionMode |
 | **timeout** | Set the maximum amount of time for the Saga. After the timeout is expired, the saga will be compensated automatically (unless a different decision has been taken in the meantime). |  | String |
-| **compensation** | The compensation endpoint URI that must be called to compensate all changes done in the route. The route corresponding to the compensation URI must perform compensation and complete without error. If errors occur during compensation, the saga service may call again the compensation URI to retry. |  | String |
-| **completion** | The completion endpoint URI that will be called when the Saga is completed successfully. The route corresponding to the completion URI must perform completion tasks and terminate without error. If errors occur during completion, the saga service may call again the completion URI to retry. |  | String |
-| **option** | Allows to save properties of the current exchange in order to re-use them in a compensation/completion callback route. Options are usually helpful e.g. to store and retrieve identifiers of objects that should be deleted in compensating actions. Option values will be transformed into input headers of the compensation/completion exchange. |  | List |
+| **compensation** | The compensation endpoint URI that must be called to compensate all changes done in the route. The route corresponding to the compensation URI must perform compensation and complete without error. |  | String |
+| **completion** | The completion endpoint URI that will be called when the Saga is completed successfully. The route corresponding to the completion URI must perform completion tasks and terminate without error. |  | String |
+| **option** | Allows to save properties of the current exchange in order to re-use them in a compensation/completion callback route. Option values will be transformed into input headers of the compensation/completion exchange. |  | List |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

@@ -41,7 +41,7 @@ Enum values:
 
 
  |
-| **unmarshalType** (common) |  | `String` | Class to use when (un)marshalling. If omitted, parquet files are converted into Avro’s GenericRecords for unmarshalling and input objects are assumed as GenericRecords for marshalling. |
+| **unmarshalType** (common) |  | `String` | Class to use when (un)marshalling. If omitted, parquet files are converted into Avro GenericRecords for unmarshalling and input objects are assumed as GenericRecords for marshalling. |
 | **lazyLoad** (common) | `false` | `Boolean` | Whether the unmarshalling should produce an iterator of records or read all the records at once. |
 
 ## Unmarshal

@@ -25,7 +25,7 @@ The starter supports 12 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| camel.dataformat.snake-yaml.allow-any-type | Allow any class to be un-marshaled | false | Boolean |
+| camel.dataformat.snake-yaml.allow-any-type | Allow any class to be un-marshaled. | false | Boolean |
 | camel.dataformat.snake-yaml.allow-recursive-keys | Set whether recursive keys are allowed. | false | Boolean |
 | camel.dataformat.snake-yaml.constructor | BaseConstructor to construct incoming documents. |  | String |
 | camel.dataformat.snake-yaml.dumper-options | DumperOptions to configure outgoing objects. |  | String |
@@ -33,7 +33,7 @@ The starter supports 12 options, which are listed below.
 | camel.dataformat.snake-yaml.max-aliases-for-collections | Set the maximum amount of aliases allowed for collections. | 50 | Integer |
 | camel.dataformat.snake-yaml.pretty-flow | Force the emitter to produce a pretty YAML document when using the flow style. | false | Boolean |
 | camel.dataformat.snake-yaml.representer | Representer to emit outgoing objects. |  | String |
-| camel.dataformat.snake-yaml.resolver | Resolver to detect implicit type |  | String |
+| camel.dataformat.snake-yaml.resolver | Resolver to detect implicit type. |  | String |
 | camel.dataformat.snake-yaml.type-filter | Set the types SnakeYAML is allowed to un-marshall. Multiple types can be separated by comma. |  | String |
-| camel.dataformat.snake-yaml.unmarshal-type | Class name of the java type to use when unmarshalling |  | String |
-| camel.dataformat.snake-yaml.use-application-context-class-loader | Use ApplicationContextClassLoader as custom ClassLoader | true | Boolean |
+| camel.dataformat.snake-yaml.unmarshal-type | Class name of the java type to use when unmarshalling. |  | String |
+| camel.dataformat.snake-yaml.use-application-context-class-loader | Use ApplicationContextClassLoader as custom ClassLoader. | true | Boolean |

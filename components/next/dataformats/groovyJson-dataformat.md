@@ -15,7 +15,7 @@ The Groovy JSon dataformat supports 1 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **prettyPrint** (common) | `true` | `Boolean` | To pretty printing output nicely formatted. Is by default true. |
+| **prettyPrint** (common) | `true` | `Boolean` | Whether to pretty print output nicely formatted. |
 
 ## Supported Java types
 

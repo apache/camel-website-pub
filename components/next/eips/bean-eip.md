@@ -17,14 +17,14 @@ The Bean eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **ref** | Sets a reference to an existing bean to use, which is looked up from the registry. |  | String |
-| **method** | Sets the method name on the bean to use. |  | String |
-| **beanType** | Sets the class name (fully qualified) of the bean to use. |  | String |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **ref** | A reference to an existing bean to use, which is looked up from the registry. |  | String |
+| **method** | The method name on the bean to invoke. |  | String |
+| **beanType** | The class name (fully qualified) of the bean to use. |  | String |
 | **scope** | 
-Scope of bean. When using singleton scope (default) the bean is created or looked up only once and reused for the lifetime of the endpoint. The bean should be thread-safe in case concurrent threads is calling the bean at the same time. When using request scope the bean is created or looked up once per request (exchange). This can be used if you want to store state on a bean while processing a request and you want to call the same bean instance multiple times while processing the request. The bean does not have to be thread-safe as the instance is only called from the same request. When using prototype scope, then the bean will be looked up or created per call. However in case of lookup then this is delegated to the bean registry such as Spring or CDI (if in use), which depends on their configuration can act as either singleton or prototype scope. So when using prototype scope then this depends on the bean registry implementation.
+Scope of bean. When using singleton scope (default) the bean is created or looked up only once and reused for the lifetime of the endpoint.
 
 Enum values:
 

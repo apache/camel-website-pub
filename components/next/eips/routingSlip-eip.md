@@ -15,13 +15,13 @@ The Routing Slip eip supports 2 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **expression** | **Required** Expression to define the routing slip, which defines which endpoints to route the message in a pipeline style. Notice the expression is evaluated once, if you want a more dynamic style, then the dynamic router eip is a better choice. |  | ExpressionDefinition |
-| **uriDelimiter** | Sets the uri delimiter to use. | , | String |
-| **ignoreInvalidEndpoints** | Ignore the invalidate endpoint exception when try to create a producer with that endpoint. | false | Boolean |
-| **cacheSize** | Sets the maximum size used by the org.apache.camel.spi.ProducerCache which is used to cache and reuse producers when using this routing slip, when uris are reused. Beware that when using dynamic endpoints then it affects how well the cache can be utilized. If each dynamic endpoint is unique then its best to turn off caching by setting this to -1, which allows Camel to not cache both the producers and endpoints; they are regarded as prototype scoped and will be stopped and discarded after use. This reduces memory usage as otherwise producers/endpoints are stored in memory in the caches. However if there are a high degree of dynamic endpoints that have been used before, then it can benefit to use the cache to reuse both producers and endpoints and therefore the cache size can be set accordingly or rely on the default size (1000). If there is a mix of unique and used before dynamic endpoints, then setting a reasonable cache size can help reduce memory usage to avoid storing too many non frequent used producers. |  | Integer |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **expression** | **Required** The expression to compute the routing slip of endpoint URIs. The result is a delimited list of endpoint URIs that defines the series of processing steps. |  | ExpressionDefinition |
+| **uriDelimiter** | The delimiter used to separate endpoint URIs in the routing slip expression. Default is comma. | , | String |
+| **ignoreInvalidEndpoints** | If enabled then invalid endpoint URIs are ignored and logged instead of throwing an exception. | false | Boolean |
+| **cacheSize** | Configures the cache size for ProducerCache which caches producers for reuse. The default cache size is 1000. Set to -1 to turn off caching. |  | Integer |
 > **Tip**
 > See the `cacheSize` option for more details on _how much cache_ to use depending on how many or few unique endpoints are used.
 

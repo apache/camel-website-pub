@@ -13,10 +13,10 @@ The Tar File dataformat supports 4 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **usingIterator** (common) | `false` | `Boolean` | If the tar file has more than one entry, the setting this option to true, allows working with the splitter EIP, to split the data using an iterator in a streaming mode. |
-| **allowEmptyDirectory** (common) | `false` | `Boolean` | If the tar file has more than one entry, setting this option to true, allows to get the iterator even if the directory is empty. |
-| **preservePathElements** (common) | `false` | `Boolean` | If the file name contains path elements, setting this option to true, allows the path to be maintained in the tar file. |
-| **maxDecompressedSize** (advanced) | `1073741824` | `Integer` | Set the maximum decompressed size of a tar file (in bytes). The default value if not specified corresponds to 1 gigabyte. An IOException will be thrown if the decompressed size exceeds this amount. Set to -1 to disable setting a maximum decompressed size. |
+| **usingIterator** (common) | `false` | `Boolean` | Whether to use an iterator to split tar entries when the tar file has more than one entry, for use with the splitter EIP in streaming mode. |
+| **allowEmptyDirectory** (common) | `false` | `Boolean` | Whether to allow getting the iterator even if the directory is empty, when the tar file has more than one entry. |
+| **preservePathElements** (common) | `false` | `Boolean` | Whether to preserve path elements when the file name contains path elements in the tar file. |
+| **maxDecompressedSize** (advanced) | `1073741824` | `Integer` | The maximum decompressed size of a tar file (in bytes). An IOException is thrown if the decompressed size exceeds this amount. Set to -1 to disable. |
 
 ## Marshal
 

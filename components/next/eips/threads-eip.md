@@ -15,15 +15,15 @@ The Threads eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **disabled** | Disables this EIP from the route. | false | Boolean |
-| **executorService** | To use a custom thread pool. |  | ExecutorService |
-| **poolSize** | Sets the core pool size. |  | Integer |
-| **maxPoolSize** | Sets the maximum pool size. |  | Integer |
-| **keepAliveTime** | Sets the keep alive time for idle threads. |  | Long |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **executorService** | To refer to a custom thread pool or use a thread pool profile (as overlay). |  | ExecutorService |
+| **poolSize** | Sets the core pool size (number of threads to keep in the pool, even if idle). |  | Integer |
+| **maxPoolSize** | Sets the maximum pool size (the upper bound of threads in the pool). |  | Integer |
+| **keepAliveTime** | Sets the keep alive time for idle threads before they are terminated. Only applies to threads above the core pool size. |  | Long |
 | **timeUnit** | 
-Sets the keep alive time unit. By default SECONDS is used.
+Sets the time unit for the keep alive time. By default SECONDS is used.
 
 Enum values:
 
@@ -48,8 +48,8 @@ Enum values:
 
  |  | TimeUnit |
 | **maxQueueSize** | Sets the maximum number of tasks in the work queue. Use -1 or Integer.MAX\_VALUE for an unbounded queue. |  | Integer |
-| **allowCoreThreadTimeOut** | Whether idle core threads are allowed to timeout and therefore can shrink the pool size below the core pool size Is by default false. | false | Boolean |
-| **threadName** | Sets the thread name to use. | Threads | String |
+| **allowCoreThreadTimeOut** | Whether idle core threads are allowed to timeout and therefore can shrink the pool size below the core pool size. | false | Boolean |
+| **threadName** | Sets the thread name pattern to use for naming threads created by this thread pool. | Threads | String |
 | **rejectedPolicy** | 
 
 Sets the handler for tasks which cannot be executed by the thread pool.
@@ -68,7 +68,7 @@ Enum values:
 
 
  |  | ThreadPoolRejectedPolicy |
-| **callerRunsWhenRejected** | Whether or not to use as caller runs as fallback when a task is rejected being added to the thread pool (when its full). This is only used as fallback if no rejectedPolicy has been configured, or the thread pool has no configured rejection handler. Is by default true. | true | Boolean |
+| **callerRunsWhenRejected** | Whether to use the caller thread as fallback when a task is rejected being added to the thread pool (when its full). This is only used as fallback if no rejectedPolicy has been configured, or the thread pool has no configured rejection handler. | true | Boolean |
 
 ## Exchange properties
 

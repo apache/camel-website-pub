@@ -1,6 +1,6 @@
 # Barcode
 
-Transform strings to various 1D/2D barcode bitmap formats and back.
+Transform strings to various 1D/2D barcode bitmap formats and back
 
 ## What’s inside
 
@@ -25,8 +25,8 @@ The starter supports 5 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| camel.dataformat.barcode.barcode-format | Barcode format such as QR-Code | QR\_CODE | String |
+| camel.dataformat.barcode.barcode-format | Barcode format such as QR-Code. | QR\_CODE | String |
 | camel.dataformat.barcode.enabled | Whether to enable auto configuration of the barcode data format. This is enabled by default. |  | Boolean |
-| camel.dataformat.barcode.height | Height of the barcode | 100 | Integer |
-| camel.dataformat.barcode.image-type | Image type of the barcode such as png | PNG | String |
-| camel.dataformat.barcode.width | Width of the barcode | 100 | Integer |
+| camel.dataformat.barcode.height | Height of the barcode. | 100 | Integer |
+| camel.dataformat.barcode.image-type | Image type of the barcode such as png. | PNG | String |
+| camel.dataformat.barcode.width | Width of the barcode. | 100 | Integer |

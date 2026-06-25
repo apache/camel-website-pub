@@ -1,5 +1,8 @@
 # Reactive Executor Vert.x
 
+> **Warning**
+> **Deprecated:** This reactive-executor-vertx is deprecated and may be removed in a future release.
+
 **Since Camel 3.0**
 
 The camel-reactive-executor-vertx is a VertX based implementation of the `ReactiveExecutor` SPI.

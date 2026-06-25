@@ -17,7 +17,7 @@ The SOAP dataformat supports 7 options, which are listed below.
 | --- | --- | --- | --- |
 | **contextPath** (common) |  | `String` | **Required** Package name where your JAXB classes are located. |
 | **encoding** (common) |  | `String` | To overrule and use a specific encoding. |
-| **elementNameStrategy** (advanced) |  | `Object` | Refers to an element strategy to lookup from the registry. An element name strategy is used for two purposes. The first is to find a xml element name for a given object and soap action when marshaling the object into a SOAP message. The second is to find an Exception class for a given soap fault name. The following three element strategy class name is provided out of the box. QNameStrategy - Uses a fixed qName that is configured on instantiation. Exception lookup is not supported TypeNameStrategy - Uses the name and namespace from the XMLType annotation of the given type. If no namespace is set then package-info is used. Exception lookup is not supported ServiceInterfaceStrategy - Uses information from a webservice interface to determine the type name and to find the exception class for a SOAP fault All three classes is located in the package name org.apache.camel.dataformat.soap.name If you have generated the web service stub code with cxf-codegen or a similar tool then you probably will want to use the ServiceInterfaceStrategy. In the case you have no annotated service interface you should use QNameStrategy or TypeNameStrategy. |
+| **elementNameStrategy** (advanced) |  | `Object` | Refers to an element strategy to lookup from the registry. |
 | **version** (common) | `1.1` | `Enum` | 
 SOAP version should either be 1.1 or 1.2. Is by default 1.1.
 
@@ -33,9 +33,9 @@ Enum values:
 
 
  |
-| **namespacePrefix** (advanced) |  | `Object` | When marshalling using JAXB or SOAP then the JAXB implementation will automatic assign namespace prefixes, such as ns2, ns3, ns4 etc. To control this mapping, Camel allows you to refer to a map which contains the desired mapping. |
-| **schema** (common) |  | `String` | To validate against an existing schema. Your can use the prefix classpath:, file: or http: to specify how the resource should be resolved. You can separate multiple schema files by using the ',' character. |
-| **ignoreUnmarshalledHeaders** (advanced) | `false` | `Boolean` | Whether to ignore headers that was not unmarshalled. By default, headers which could not be unmarshalled is recorded in the org.apache.camel.dataformat.soap.UNMARSHALLED\_HEADER\_LIST header which allows to inspect any problematic header. |
+| **namespacePrefix** (advanced) |  | `Object` | When marshalling using JAXB or SOAP then the JAXB implementation will automatic assign namespace prefixes. To control this mapping, Camel allows you to refer to a map which contains the desired mapping. |
+| **schema** (common) |  | `String` | To validate against an existing schema. You can use the prefix classpath:, file: or http: to specify how the resource should be resolved. You can separate multiple schema files by using the ',' character. |
+| **ignoreUnmarshalledHeaders** (advanced) | `false` | `Boolean` | Whether to ignore headers that were not unmarshalled. |
 
 ## ElementNameStrategy
 

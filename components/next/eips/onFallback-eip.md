@@ -11,9 +11,9 @@ The On Fallback eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **fallbackViaNetwork** | Whether the fallback goes over the network. If the fallback will go over the network it is another possible point of failure. It is important to execute the fallback command on a separate thread-pool, otherwise if the main command were to become latent and fill the thread-pool this would prevent the fallback from running if the two commands share the same pool. | false | Boolean |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **fallbackViaNetwork** | Whether the fallback goes over the network. If so, the fallback is executed on a separate thread-pool to avoid exhausting the main thread-pool. | false | Boolean |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

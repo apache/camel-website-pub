@@ -146,10 +146,10 @@ The CSimple language supports 4 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **trimResult** (common) | `false` | `Boolean` | Whether to trim the returned values when this language are in use. For example the output result may contain unwanted line breaks at the beginning and end such as when using Java DSL with multi-line blocks. Is default false to be backwards compatible with existing behavior. |
+| **trimResult** (common) | `false` | `Boolean` | Whether to trim the returned values when this language is in use. |
 | **pretty** (common) | `false` | `Boolean` | To pretty format the output (only JSon or XML supported). |
-| **resultType** (common) |  | `String` | Sets the class of the result type (type from output). |
-| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. For example when using DSLs where the source will span across multiple lines and there may be additional line breaks at both the beginning and end. |
+| **resultType** (common) |  | `String` | The class of the result type (type from output). |
+| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 
 ## Limitations
 

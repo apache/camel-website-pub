@@ -19,8 +19,8 @@ The BeanIO dataformat supports 8 options, which are listed below.
 | **ignoreUnexpectedRecords** (common) | `false` | `Boolean` | Whether to ignore unexpected records. |
 | **ignoreInvalidRecords** (common) | `false` | `Boolean` | Whether to ignore invalid records. |
 | **encoding** (advanced) |  | `String` | The charset to use. Is by default the JVM platform default charset. |
-| **beanReaderErrorHandlerType** (advanced) |  | `String` | To use a custom org.apache.camel.dataformat.beanio.BeanIOErrorHandler as error handler while parsing. Configure the fully qualified class name of the error handler. Notice the options ignoreUnidentifiedRecords, ignoreUnexpectedRecords, and ignoreInvalidRecords may not be in use when you use a custom error handler. |
-| **unmarshalSingleObject** (advanced) | `false` | `Boolean` | This options controls whether to unmarshal as a list of objects or as a single object only. The former is the default mode, and the latter is only intended in special use-cases where beanio maps the Camel message to a single POJO bean. |
+| **beanReaderErrorHandlerType** (advanced) |  | `String` | To use a custom org.apache.camel.dataformat.beanio.BeanIOErrorHandler as error handler while parsing. Configure the fully qualified class name of the error handler. |
+| **unmarshalSingleObject** (advanced) | `false` | `Boolean` | This option controls whether to unmarshal as a list of objects or as a single object only. |
 
 ## Usage
 

@@ -1,0 +1,149 @@
+# Simple - OGNL Expressions
+
+[Back to Simple Language](simple-language.md)
+
+## OGNL Expression Support
+
+The [Simple](simple-language.md) and [Bean](simple-language.md) languages support a _OGNL like_ notation for invoking methods (using reflection) in a fluent builder like style.
+
+[OGNL](https://en.wikipedia.org/wiki/OGNL) (Object-Graph Navigation Language) is a powerful expression language used in Java. In Camel you can use OGNL dot notation to invoke methods. If you for instance have a body that contains a POJO that has a `getFamilyName` method then you can construct the Simple syntax as follows:
+
+```java
+simple("${body.familyName}")
+```
+
+Or use similar syntax as in Java:
+
+```java
+simple("${body.getFamilyName()}")
+```
+
+Camel’s OGNL support is for invoking methods only. You cannot access fields. Camel support accessing the length field of Java arrays.
+
+> **Important**
+> When using **OGNL** then `camel-bean` JAR is required to be on the classpath.
+
+### Built-in Functions supporting OGNL
+
+The following functions support _OGNL syntax_:
+
+  
+| Variable | Response Type | Description |
+| --- | --- | --- |
+| `attachment.key._OGNL_` | `Object` | Refer to the attachment with the given key on the `Exchange`. This requires having camel-attachments JAR on classpath. |
+| `bodyAs(type)` | `<T>` | The message body converted to the given type |
+| `body` | `Object` | The message body |
+| `camelContext` | `CamelContext` | The `CamelContext` |
+| `convertTo(exp,type)` | `<T>` | Converts the expression to the specified type |
+| `exception` | `Throwable` | If the exchange failed due to an exception |
+| `exchangeProperty.key` | `Object` | The value from the exchange property with the given key |
+| `exchange` | `Exchange` | The current `Exchange` |
+| `header.key` | `Object` | The value from the message header with the given key |
+| `mandatoryBodyAs(type)` | `<T>` | The message body converted to the given type |
+| `messageAs(type)` | `<T>` | The `org.apache.camel.Message` as a specialized instance |
+| `variable.key` | `Object` | The value from the variable with the given key |
+
+### Basic OGNL examples
+
+Suppose the Message body contains a POJO which has a `getAddress()` method. Then you can use Camel OGNL notation to access the address object:
+
+```java
+simple("${body.address}")
+simple("${body.address.street}")
+simple("${body.address.zip}")
+```
+
+Camel understands the shorthand names for getters, but you can invoke any method or use the real name such as:
+
+```java
+simple("${body.address}")
+simple("${body.getAddress.getStreet}")
+simple("${body.getAddress().getStreet()}")
+simple("${body.address.getZip}")
+simple("${body.doSomething}")
+```
+
+You can also use the null safe operator (`?.`) to avoid `NullPointerException` if, for example, the body does NOT have an address:
+
+```java
+simple("${body?.address?.street}")
+```
+
+### Advanced OGNL examples
+
+It is also possible to index in `Map` or `List` types, so you can do:
+
+```java
+simple("${body[foo].name}")
+```
+
+To assume the body is `Map` based and look up the value with `foo` as key, and invoke the `getName` method on that value.
+
+If the key has space, then you **must** enclose the key with quotes, for example, 'foo bar':
+
+```java
+simple("${body['foo bar'].name}")
+```
+
+You can access the `Map` or `List` objects directly using their key name (with or without dots) :
+
+```java
+simple("${body[foo]}")
+simple("${body[this.is.foo]}")
+```
+
+Suppose there was no value with the key `foo` then you can use the null safe operator to avoid the NPE as shown:
+
+```java
+simple("${body[foo]?.name}")
+```
+
+You can also access `List` types, for example, to get lines from the address you can do:
+
+```java
+simple("${body.address.lines[0]}")
+simple("${body.address.lines[1]}")
+simple("${body.address.lines[2]}")
+```
+
+There is a special `last` keyword which can be used to get the last value from a list.
+
+```java
+simple("${body.address.lines[last]}")
+```
+
+And to get the 2nd last you can subtract a number, so we can use `last-1` to indicate this:
+
+```java
+simple("${body.address.lines[last-1]}")
+```
+
+And the third last is, of course:
+
+```java
+simple("${body.address.lines[last-2]}")
+```
+
+And you can call the size method on the list with
+
+```java
+simple("${body.address.lines.size}")
+```
+
+Camel supports the length field for Java arrays as well, e.g.:
+
+```java
+String[] lines = new String[]{"foo", "bar", "cat"};
+exchange.getMessage().setBody(lines);
+
+simple("There are ${body.length} lines")
+```
+
+> **Tip**
+> You can also use the **length** function from **Camel 4.18**: `simple("There are ${length()} lines")`
+
+And yes, you can combine this with the Simple operators such as checking if a zip code is larger than 1000:
+
+```java
+simple("${body.address.zip} > 1000")
+```

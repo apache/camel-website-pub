@@ -11,7 +11,7 @@ The SWIFT MX dataformat supports 4 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **writeInJson** (common) | `false` | `Boolean` | The flag indicating that messages must be marshalled in a JSON format. |
+| **writeInJson** (common) | `false` | `Boolean` | Whether to marshal messages in JSON format. |
 | **readMessageId** (advanced) |  | `Object` | The type of MX message to produce when unmarshalling an input stream. If not set, it will be automatically detected from the namespace used. |
 | **readConfig** (advanced) |  | `Object` | Refers to a specific configuration to use when unmarshalling an input stream to lookup from the registry. |
 | **writeConfig** (advanced) |  | `Object` | Refers to a specific configuration to use when marshalling a message to lookup from the registry. |

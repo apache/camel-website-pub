@@ -1,5 +1,8 @@
 # ThreadPoolFactory Vert.x
 
+> **Warning**
+> **Deprecated:** This threadpoolfactory-vertx is deprecated and may be removed in a future release.
+
 **Since Camel 3.5**
 
 The Camel ThreadPoolFactory Vert.x component is a VertX based implementation of the `ThreadPoolFactory` SPI.

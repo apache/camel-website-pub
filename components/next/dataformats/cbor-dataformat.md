@@ -48,13 +48,13 @@ The CBOR dataformat supports 10 options, which are listed below.
 | **objectMapper** (advanced) |  | `String` | Lookup and use the existing CBOR ObjectMapper with the given id when using Jackson. |
 | **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson CBOR ObjectMapper from the registry. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
-| **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows to use different collection types than java.util.Collection based as default. |
+| **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. |
 | **useList** (common) | `false` | `Boolean` | To unmarshal to a List of Map or a List of Pojo. |
-| **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson CBOR is allowed to attempt to use the CamelCBORUnmarshalType header during the unmarshalling. This should only be enabled when desired to be used. |
+| **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson CBOR is allowed to attempt to use the CamelCBORUnmarshalType header during the unmarshalling. |
 | **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
 | **allowJmsType** (advanced) | `false` | `Boolean` | Used for JMS users to allow the JMSType header from the JMS spec to specify a FQN classname to use to unmarshal to. |
-| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |
-| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |
+| **enableFeatures** (advanced) |  | `String` | Set of features to enable on the Jackson ObjectMapper. Multiple features can be separated by comma. |
+| **disableFeatures** (advanced) |  | `String` | Set of features to disable on the Jackson ObjectMapper. Multiple features can be separated by comma. |
 
 #### Using CBOR in Spring DSL
 

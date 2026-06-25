@@ -19,7 +19,7 @@ The XML Security dataformat supports 13 options, which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **xmlCipherAlgorithm** (common) | `AES-256-GCM` | `Enum` | 
-The cipher algorithm to be used for encryption/decryption of the XML message content. The available choices are: XMLCipher.TRIPLEDES XMLCipher.AES\_128 XMLCipher.AES\_128\_GCM XMLCipher.AES\_192 XMLCipher.AES\_192\_GCM XMLCipher.AES\_256 XMLCipher.AES\_256\_GCM XMLCipher.SEED\_128 XMLCipher.CAMELLIA\_128 XMLCipher.CAMELLIA\_192 XMLCipher.CAMELLIA\_256 The default value is XMLCipher.AES\_256\_GCM.
+The cipher algorithm to be used for encryption/decryption of the XML message content.
 
 Enum values:
 
@@ -51,13 +51,13 @@ Enum values:
 
 
  |
-| **passPhrase** (common) |  | `String` | A String used as passPhrase to encrypt/decrypt content. The passPhrase has to be provided. The passPhrase needs to be put together in conjunction with the appropriate encryption algorithm. For example using TRIPLEDES the passPhase can be a Only another 24 Byte key. |
-| **passPhraseByte** (advanced) |  | `String` | A byte used as passPhrase to encrypt/decrypt content. The passPhrase has to be provided. The passPhrase needs to be put together in conjunction with the appropriate encryption algorithm. For example using TRIPLEDES the passPhase can be a Only another 24 Byte key. |
+| **passPhrase** (common) |  | `String` | A String used as passPhrase to encrypt/decrypt content. |
+| **passPhraseByte** (advanced) |  | `String` | A byte used as passPhrase to encrypt/decrypt content. |
 | **secureTag** (common) |  | `String` | The XPath reference to the XML Element selected for encryption/decryption. If no tag is specified, the entire payload is encrypted/decrypted. |
-| **secureTagContents** (common) | `false` | `Boolean` | A boolean value to specify whether the XML Element is to be encrypted or the contents of the XML Element. false = Element Level. true = Element Content Level. |
+| **secureTagContents** (common) | `false` | `Boolean` | A boolean value to specify whether the XML Element is to be encrypted or the contents of the XML Element. false = Element Level, true = Element Content Level. |
 | **keyCipherAlgorithm** (common) | `RSA_OAEP` | `Enum` | 
 
-The cipher algorithm to be used for encryption/decryption of the asymmetric key. The available choices are: XMLCipher.RSA\_v1dot5 XMLCipher.RSA\_OAEP XMLCipher.RSA\_OAEP\_11 The default value is XMLCipher.RSA\_OAEP.
+The cipher algorithm to be used for encryption/decryption of the asymmetric key.
 
 Enum values:
 
@@ -78,7 +78,7 @@ Enum values:
 | **keyPassword** (common) |  | `String` | The password to be used for retrieving the private key from the KeyStore. This key is used for asymmetric decryption. |
 | **digestAlgorithm** (common) | `SHA1` | `Enum` | 
 
-The digest algorithm to use with the RSA OAEP algorithm. The available choices are: XMLCipher.SHA1 XMLCipher.SHA256 XMLCipher.SHA512 The default value is XMLCipher.SHA1.
+The digest algorithm to use with the RSA OAEP algorithm.
 
 Enum values:
 
@@ -96,7 +96,7 @@ Enum values:
  |
 | **mgfAlgorithm** (common) | `MGF1_SHA1` | `Enum` | 
 
-The MGF Algorithm to use with the RSA OAEP algorithm. The available choices are: EncryptionConstants.MGF1\_SHA1 EncryptionConstants.MGF1\_SHA256 EncryptionConstants.MGF1\_SHA512 The default value is EncryptionConstants.MGF1\_SHA1.
+The MGF Algorithm to use with the RSA OAEP algorithm.
 
 Enum values:
 
@@ -113,7 +113,7 @@ Enum values:
 
  |
 | **addKeyValueForEncryptedKey** (common) | `true` | `Boolean` | Whether to add the public key used to encrypt the session key as a KeyValue in the EncryptedKey structure or not. |
-| **namespace** (common) |  | `Object` | Refers to a Map XML Namespaces of prefix - uri mappings. |
+| **namespace** (common) |  | `Object` | Refers to a Map of XML Namespaces of prefix to uri mappings. |
 
 ### Key Cipher Algorithm
 

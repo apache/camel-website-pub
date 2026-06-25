@@ -33,7 +33,7 @@ The iCal dataformat supports 1 options, which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **validating** (common) | `false` | `Boolean` | Whether to validate. |
+| **validating** (common) | `false` | `Boolean` | Whether to validate the iCal document. |
 
 ## Basic Usage
 

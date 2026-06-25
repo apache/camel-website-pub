@@ -15,7 +15,7 @@ The Zip Deflater dataformat supports 1 options, which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **compressionLevel** (common) | `-1` | `Enum` | 
-To specify a specific compression between 0-9. -1 is default compression, 0 is no compression, and 9 is the best compression.
+Compression level to use (0-9). -1 is default compression, 0 is no compression, and 9 is the best compression.
 
 Enum values:
 

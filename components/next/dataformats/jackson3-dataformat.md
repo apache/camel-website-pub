@@ -50,21 +50,21 @@ The JSON Jackson 3 dataformat supports 22 options, which are listed below.
 | **combineUnicodeSurrogates** (common) | `false` | `Boolean` | Force generator that outputs JSON content to combine surrogate pairs (if any) into 4-byte characters. This should be preferred when using 4-byte characters such as Japanese. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
 | **jsonView** (advanced) |  | `String` | When marshalling a POJO to JSON you might want to exclude certain fields from the JSON output. With Jackson you can use JSON views to accomplish this. This option is to refer to the class which has JsonView annotations. |
-| **include** (advanced) |  | `String` | If you want to marshal a pojo to JSON, and the pojo has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |
+| **include** (advanced) |  | `String` | If you want to marshal a POJO to JSON, and the POJO has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |
 | **allowJmsType** (advanced) | `false` | `Boolean` | Used for JMS users to allow the JMSType header from the JMS spec to specify a FQN classname to use to unmarshal to. |
 | **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows using different collection types than java.util.Collection based as default. |
 | **useList** (common) | `false` | `Boolean` | To unmarshal to a List of Map or a List of Pojo. |
 | **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules com.fasterxml.jackson.databind.Module specified as a String with FQN class names. Multiple classes can be separated by comma. |
 | **moduleRefs** (advanced) |  | `String` | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |
-| **enableFeatures** (advanced) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |
-| **disableFeatures** (advanced) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from com.fasterxml.jackson.databind.SerializationFeature, com.fasterxml.jackson.databind.DeserializationFeature, or com.fasterxml.jackson.databind.MapperFeature Multiple features can be separated by comma. |
+| **enableFeatures** (advanced) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. Multiple features can be separated by comma. |
+| **disableFeatures** (advanced) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. Multiple features can be separated by comma. |
 | **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson is allowed to attempt to use the CamelJacksonUnmarshalType header during the unmarshalling. This should only be enabled when desired to be used. |
-| **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. This option will have no effect on the others Json DataFormat, like gson and fastjson. |
+| **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
 | **schemaResolver** (advanced) |  | `Object` | Optional schema resolver used to lookup schemas for the data in transit. |
 | **autoDiscoverSchemaResolver** (advanced) | `true` | `Boolean` | When not disabled, the SchemaResolver will be looked up into the registry. |
 | **namingStrategy** (common) |  | `String` | If set then Jackson will use the the defined Property Naming Strategy.Possible values are: LOWER\_CAMEL\_CASE, LOWER\_DOT\_CASE, LOWER\_CASE, KEBAB\_CASE, SNAKE\_CASE and UPPER\_CAMEL\_CASE. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
-| **maxStringLength** (advanced) |  | `Integer` | Jackson. Sets the maximum string length (in chars or bytes, depending on input context). The default is 20,000,000. This limit is not exact, the limit is applied when we increase internal buffer sizes and an exception will happen at sizes greater than this limit. Some text values that are a little bigger than the limit may be treated as valid but no text values with sizes less than or equal to this limit will be treated as invalid. |
+| **maxStringLength** (advanced) |  | `Integer` | Sets the maximum string length (in chars or bytes, depending on input context). The default is 20,000,000. |
 
 ## Usage
 

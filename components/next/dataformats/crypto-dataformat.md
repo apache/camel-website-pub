@@ -15,7 +15,7 @@ The Crypto (Java Cryptographic Extension) dataformat supports 9 options, which a
 | **key** (common) |  | `Object` | Refers to the secret key to lookup from the register to use. |
 | **cryptoProvider** (advanced) |  | `String` | The name of the JCE Security Provider that should be used. |
 | **initVector** (advanced) |  | `String` | Refers to a byte array containing the Initialization Vector that will be used to initialize the Cipher. |
-| **algorithmParameterSpec** (advanced) |  | `Object` | A JCE AlgorithmParameterSpec used to initialize the Cipher. Will lookup the type using the given name as a java.security.spec.AlgorithmParameterSpec type. |
+| **algorithmParameterSpec** (advanced) |  | `Object` | A JCE AlgorithmParameterSpec used to initialize the Cipher. |
 | **bufferSize** (common) | `4096` | `Integer` | The size of the buffer used in the signature process. |
 | **macAlgorithm** (common) | `HmacSHA1` | `String` | The JCE algorithm name indicating the Message Authentication algorithm. |
 | **shouldAppendHMAC** (common) | `true` | `Boolean` | Flag indicating that a Message Authentication Code should be calculated and appended to the encrypted data. |

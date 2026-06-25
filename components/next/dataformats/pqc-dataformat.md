@@ -14,7 +14,7 @@ The PQC (Post-Quantum Cryptography) dataformat supports 7 options, which are lis
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **keyEncapsulationAlgorithm** (common) | `MLKEM` | `Enum` | 
-The Post-Quantum KEM algorithm to use for key encapsulation. Supported values: MLKEM, BIKE, HQC, CMCE, SABER, FRODO, NTRU, NTRULPRime, SNTRUPrime, KYBER.
+The Post-Quantum KEM algorithm to use for key encapsulation.
 
 Enum values:
 
@@ -46,7 +46,7 @@ Enum values:
  |
 | **symmetricKeyAlgorithm** (common) | `AES` | `Enum` | 
 
-The symmetric encryption algorithm to use with the shared secret. Supported values: AES, ARIA, RC2, RC5, CAMELLIA, CAST5, CAST6, CHACHA7539, etc.
+The symmetric encryption algorithm to use with the shared secret.
 
 Enum values:
 
@@ -93,10 +93,10 @@ Enum values:
 
  |
 | **symmetricKeyLength** (common) | `128` | `Integer` | The length (in bits) of the symmetric key. |
-| **keyPair** (common) |  | `Object` | Refers to the KeyPair to lookup from the register to use for KEM operations. |
+| **keyPair** (common) |  | `Object` | Refers to the KeyPair to lookup from the registry to use for KEM operations. |
 | **bufferSize** (advanced) | `4096` | `Integer` | The size of the buffer used for streaming encryption/decryption. |
 | **provider** (advanced) |  | `String` | The JCE security provider to use. |
-| **keyGenerator** (advanced) |  | `Object` | Refers to a custom KeyGenerator to lookup from the register for KEM operations. |
+| **keyGenerator** (advanced) |  | `Object` | Refers to a custom KeyGenerator to lookup from the registry for KEM operations. |
 
 ## Overview
 

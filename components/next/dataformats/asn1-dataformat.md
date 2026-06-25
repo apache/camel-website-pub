@@ -12,7 +12,7 @@ The ASN.1 File dataformat supports 2 options, which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **unmarshalType** (common) |  | `String` | Class to use when unmarshalling. |
-| **usingIterator** (common) | `false` | `Boolean` | If the asn1 file has more than one entry, the setting this option to true, allows working with the splitter EIP, to split the data using an iterator in a streaming mode. |
+| **usingIterator** (common) | `false` | `Boolean` | If the asn1 file has more than one entry, the setting this option to true allows working with the splitter EIP to split each entry individually. |
 
 ## Unmarshal
 

@@ -14,10 +14,10 @@ The From eip supports 0 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **note** | Sets the note of this node. |  | String |
-| **description** | Sets the description of this node. |  | String |
-| **uri** | **Required** Sets the URI of the endpoint to use. |  | String |
-| **variableReceive** | To use a variable to store a copy of the received message body (only body, not headers). This is handy for easy access to the received message body via variables. |  | String |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **uri** | **Required** The endpoint URI to consume from. |  | String |
+| **variableReceive** | To use a variable to store the received message body (only body, not headers). This makes it handy to use variables for user data and to easily control what data to use for sending and receiving. |  | String |
 
 ## Exchange properties
 
