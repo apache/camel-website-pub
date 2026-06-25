@@ -40,7 +40,9 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [Architecture](architecture.md)
     
--   [Enterprise Integration Patterns](../components/4.18.x/eips/enterprise-integration-patterns.md)
+-   [EIP Patterns](../components/4.18.x/eips/enterprise-integration-patterns.md)
+    
+-   [AI Patterns](../components/next/eips/ai-patterns.md)
     
 -   [Component DSL](component-dsl.md)
     

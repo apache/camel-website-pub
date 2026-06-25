@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1782368368762,
+  "generated": 1782374794575,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -19605,6 +19605,12 @@
               "path": "aggregate-eip.adoc",
               "url": "/components/next/eips/aggregate-eip.html",
               "title": "Aggregate"
+            },
+            {
+              "module": "eips",
+              "path": "ai-patterns.adoc",
+              "url": "/components/next/eips/ai-patterns.html",
+              "title": "AI Patterns"
             },
             {
               "module": "eips",
