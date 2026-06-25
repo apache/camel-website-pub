@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Servlet component supports 11 options, which are listed below.
+The Servlet component supports 12 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -89,6 +89,7 @@ The Servlet component supports 11 options, which are listed below.
 | **httpBinding** (advanced) | To use a custom HttpBinding to control the mapping between Camel message and HttpClient. |  | HttpBinding |
 | **httpConfiguration** (advanced) | To use the shared HttpConfiguration as base configuration. |  | HttpConfiguration |
 | **headerFilterStrategy** (filter) | To use a custom org.apache.camel.spi.HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied when deserializing Java objects from requests or responses with Content-Type application/x-java-serialized-object (only used when allowJavaSerializedObject or transferException is enabled). When not set, the JVM-wide jdk.serialFilter is used if present; otherwise a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. packages is applied. |  | String |
 
 ## Endpoint Options
 

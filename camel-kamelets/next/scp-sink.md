@@ -16,8 +16,8 @@ The following table summarizes the configuration options available for the `scp-
 | **serverName** | Hostname | **Required** The hostname of the FTP server. | string |  |  |
 | **serverPort** | Port | **Required** The port of the FTP server. | string |  |  |
 | **password** | Password | Password for accessing FTP Server. | string |  |  |
-| **privateKeyFile** | Private Key File | Set the private key file so that the SFTP endpoint can do private key verification. | string |  |  |
-| **privateKeyPassphrase** | Private Key Passphrase | Set the private key file passphrase so that the SFTP endpoint can do private key verification. | string |  |  |
+| **privateKeyFile** | Private Key File | Set the private key file so that the SCP endpoint can do private key verification. | string |  |  |
+| **privateKeyPassphrase** | Private Key Passphrase | Set the private key file passphrase so that the SCP endpoint can do private key verification. | string |  |  |
 | **strictHostKeyChecking** | Strict Host Checking | Sets whether to use strict host key checking. | string | no |  |
 | **useUserKnownHostsFile** | Use User Known Hosts File | If knownHostFile has not been explicit configured then use the host file from System.getProperty(user.home)/.ssh/known\_hosts. | boolean | true |  |
 | **username** | Username | Username for accessing FTP Server. | string |  |  |

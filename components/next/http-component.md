@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The HTTP component supports 50 options, which are listed below.
+The HTTP component supports 51 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -148,6 +148,7 @@ Enum values:
 | **proxyAuthUsername** (proxy) | Proxy server username. |  | String |
 | **proxyHost** (proxy) | Proxy server host. |  | String |
 | **proxyPort** (proxy) | Proxy server port. |  | Integer |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied when deserializing Java objects from requests or responses with Content-Type application/x-java-serialized-object (only used when allowJavaSerializedObject or transferException is enabled). When not set, the JVM-wide jdk.serialFilter is used if present; otherwise a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. packages is applied. |  | String |
 | **hostnameVerificationPolicy** (security) | 
 
 Controls how hostname verification is performed during the TLS handshake. CLIENT (default) delegates entirely to the configured x509HostnameVerifier, preserving the behaviour of httpclient 5.5 and earlier a NoopHostnameVerifier will disable verification. BUILTIN uses the JDK SSLParameters hostname check only, ignoring the configured verifier. BOTH runs the JDK built-in check first and then the configured verifier; a NoopHostnameVerifier cannot bypass the built-in check under BUILTIN or BOTH. Prefer BOTH when no custom verifier semantics are needed for stronger out-of-the-box security.

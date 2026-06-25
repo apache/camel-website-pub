@@ -13,7 +13,7 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **databaseName** | Database Name | **Required** The name of the AWS RedShift Database. | string |  |  |
+| **databaseName** | Database Name | **Required** The name of the AWS Redshift Database. | string |  |  |
 | **password** | Password | **Required** The password to access a secured AWS Redshift Database. | string |  |  |
 | **query** | Query | **Required** The query to execute against the AWS Redshift Database. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
 | **serverName** | Server Name | **Required** The server name for the data source. | string |  | localhost |

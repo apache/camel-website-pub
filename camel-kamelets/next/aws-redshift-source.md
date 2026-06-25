@@ -4,7 +4,7 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Query data from an AWS RedShift Database.
+Query data from an AWS Redshift Database.
 
 ## Configuration Options
 
@@ -13,13 +13,13 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **databaseName** | Database Name | **Required** The name of the AWS RedShift Database. | string |  |  |
-| **password** | Password | **Required** The password to access a secured AWS RedShift Database. | string |  |  |
-| **query** | Query | **Required** The query to execute against the AWS RedShift Database. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
+| **databaseName** | Database Name | **Required** The name of the AWS Redshift Database. | string |  |  |
+| **password** | Password | **Required** The password to access a secured AWS Redshift Database. | string |  |  |
+| **query** | Query | **Required** The query to execute against the AWS Redshift Database. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
 | **serverName** | Server Name | **Required** The server name for the data source. | string |  | localhost |
-| **username** | Username | **Required** The username to access a secured AWS RedShift Database. | string |  |  |
+| **username** | Username | **Required** The username to access a secured AWS Redshift Database. | string |  |  |
 | **consumedQuery** | Consumed Query | A query to run on a tuple consumed. | string |  | DELETE FROM accounts where user\_id = :#user\_id |
-| **delay** | Delay | The number of milliseconds before the next poll from the AWS RedShift database. | integer | 500 |  |
+| **delay** | Delay | The number of milliseconds before the next poll from the AWS Redshift database. | integer | 500 |  |
 | **serverPort** | Server Port | The server port for the data source. | string | 5439 |  |
 
 ## Dependencies

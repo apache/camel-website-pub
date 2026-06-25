@@ -72,7 +72,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Jetty component supports 38 options, which are listed below.
+The Jetty component supports 39 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -106,6 +106,7 @@ The Jetty component supports 38 options, which are listed below.
 | **headerFilterStrategy** (filter) | To use a custom org.apache.camel.spi.HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **proxyHost** (proxy) | To use a http proxy to configure the hostname. |  | String |
 | **proxyPort** (proxy) | To use a http proxy to configure the port number. |  | Integer |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied when deserializing Java objects from requests or responses with Content-Type application/x-java-serialized-object (only used when allowJavaSerializedObject or transferException is enabled). When not set, the JVM-wide jdk.serialFilter is used if present; otherwise a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. packages is applied. |  | String |
 | **keystore** (security) | Specifies the location of the Java keystore file, which contains the Jetty server’s own X.509 certificate in a key entry. |  | String |
 | **socketConnectorProperties** (security) | A map which contains general HTTP connector properties. Uses the same principle as sslSocketConnectorProperties. |  | Map |
 | **socketConnectors** (security) | A map which contains per port number specific HTTP connectors. Uses the same principle as sslSocketConnectors. |  | Map |
