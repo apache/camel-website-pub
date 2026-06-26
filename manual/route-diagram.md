@@ -35,6 +35,25 @@ camel cmd route-diagram MyRoute.java foo.yaml
 
 And if you run Camel CLI with `--console` then the developer console also comes with this functionality, by opening the link: [http://localhost:8080/q/dev/route-diagram](http://localhost:8080/q/dev/route-diagram)
 
+To see a topology diagram (how routes connect to each other) in the browser, use:
+
+http://localhost:8080/q/dev/route-diagram?mode=topology
+
+The topology view supports the following query parameters:
+
+-   `mode=topology` — switch from route diagram (default) to topology diagram
+    
+-   `format=html` — interactive SVG web component (default)
+    
+-   `format=png` — static PNG image
+    
+-   `format=text` — ASCII art, `format=unicode` — Unicode box-drawing characters
+    
+-   `external=true|false` — include/exclude external systems such as Kafka, HTTP, etc. (default: `true`)
+    
+-   `metric=true|false` — show live exchange counters (default: `true`)
+    
+
 ## Generating Route Diagrams with Camel Main
 
 This is done by adding `camel-diagram` as test scoped dependency, and then adding a special unit test that is responsible for generating the route diagrams and saving them to a specified folder.
@@ -128,7 +147,7 @@ camel cmd route-topology
 
 See [camel cmd route-topology](jbang-commands/camel-jbang-cmd-route-topology.md) for more details.
 
-The developer console is also available at: `[http://localhost:8080/q/dev/route-topology](http://localhost:8080/q/dev/route-topology)`
+The developer console is also available at: `[http://localhost:8080/q/dev/route-topology](http://localhost:8080/q/dev/route-topology)` (JSON/text data), or as a visual HTML diagram at: `[http://localhost:8080/q/dev/route-diagram?mode=topology](http://localhost:8080/q/dev/route-diagram?mode=topology)`
 
 ### Generating Topology Diagrams during `mvn test`
 

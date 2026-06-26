@@ -1,6 +1,8 @@
-urls[766]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-06-22T00:00:00+00:00
-  https://camel.apache.org/,2026-06-22T00:00:00+00:00
+urls[767]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-06-26T00:00:00+00:00
+  https://camel.apache.org/categories/Features/,2026-06-26T00:00:00+00:00
+  https://camel.apache.org/,2026-06-26T00:00:00+00:00
+  https://camel.apache.org/blog/2026/06/camel-route-topology/,2026-06-26T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/,2026-06-22T00:00:00+00:00
   https://camel.apache.org/categories/Security/,2026-06-22T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-06-19T00:00:00+00:00
@@ -11,7 +13,6 @@ urls[766]{loc,lastmod}:
   https://camel.apache.org/blog/2026/06/camel-dependency-updates/,2026-06-18T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-06-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-always-on/,2026-06-15T00:00:00+00:00
-  https://camel.apache.org/categories/Features/,2026-06-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-bug-fix-track-record/,2026-06-14T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-dna-19-years/,2026-06-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/,2026-06-11T00:00:00+00:00

@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>See How Your Routes Connect: Route Topology Diagrams in Apache Camel</title>
+      <link>https://camel.apache.org/blog/2026/06/camel-route-topology/</link>
+      <pubDate>Fri, 26 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/06/camel-route-topology/</guid>
+      <description>When you have a handful of Camel routes, understanding the message flow is straightforward. But as your application grows to tens or hundreds of routes connected through direct, seda, Kafka topics, and external services, it becomes harder to see the big picture. Which route feeds into which? Where does a message end up after three hops? Which external systems are involved?&#xA;Apache Camel 4.21 introduces route topology diagrams to answer exactly these questions.</description>
+    </item>
     <item>
       <title>SBOMs Are Becoming a Requirement — Apache Camel Already Ships and Supports Them</title>
       <link>https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/</link>

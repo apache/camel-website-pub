@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS Bedrock Agent component supports 27 options, which are listed below.
+The AWS Bedrock Agent component supports 26 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -73,25 +73,7 @@ The AWS Bedrock Agent component supports 27 options, which are listed below.
 | **configuration** (common) | Component configuration. |  | BedrockAgentConfiguration |
 | **dataSourceId** (common) | Define the Data source Id we are going to use. |  | String |
 | **knowledgeBaseId** (common) | Define the Knowledge Base Id we are going to use. |  | String |
-| **modelId** (common) | 
-**Required** Define the model Id we are going to use.
-
-Enum values:
-
--   anthropic.claude-instant-v1
-    
--   anthropic.claude-v2
-    
--   anthropic.claude-v2:1
-    
-
-
-
-
-
- |  | String |
 | **operation** (common) | 
-
 **Required** The operation to perform.
 
 Enum values:
@@ -204,32 +186,14 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **label** (common) | **Required** Logical name. |  | String |
 
-### Query Parameters (41 parameters)
+### Query Parameters (40 parameters)
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **dataSourceId** (common) | Define the Data source Id we are going to use. |  | String |
 | **knowledgeBaseId** (common) | Define the Knowledge Base Id we are going to use. |  | String |
-| **modelId** (common) | 
-**Required** Define the model Id we are going to use.
-
-Enum values:
-
--   anthropic.claude-instant-v1
-    
--   anthropic.claude-v2
-    
--   anthropic.claude-v2:1
-    
-
-
-
-
-
- |  | String |
 | **operation** (common) | 
-
 **Required** The operation to perform.
 
 Enum values:

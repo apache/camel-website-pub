@@ -362,7 +362,7 @@ Enum values:
 
 ## Message Headers
 
-The Docling component supports 31 message header(s), which is/are listed below:
+The Docling component supports 32 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -389,6 +389,7 @@ The Docling component supports 31 message header(s), which is/are listed below:
 | **CamelDoclingBatchProcessingTime** (producer) Constant: [`BATCH_PROCESSING_TIME`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#BATCH_PROCESSING_TIME) | Total processing time for the batch in milliseconds. |  | Long |
 | **CamelDoclingBatchSplitResults** (producer) Constant: [`BATCH_SPLIT_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#BATCH_SPLIT_RESULTS) | Split batch results into individual exchanges instead of single BatchProcessingResults. |  | Boolean |
 | **CamelDoclingMetadataPageCount** (producer) Constant: [`METADATA_PAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#METADATA_PAGE_COUNT) | Number of pages in the document. |  | Integer |
+| **CamelDoclingMetadataTitle** (producer) Constant: [`METADATA_TITLE`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#METADATA_TITLE) | Document title. |  | String |
 | **CamelDoclingMetadataLanguage** (producer) Constant: [`METADATA_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#METADATA_LANGUAGE) | Document language code. |  | String |
 | **CamelDoclingMetadataDocumentType** (producer) Constant: [`METADATA_DOCUMENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#METADATA_DOCUMENT_TYPE) | Document type/format. |  | String |
 | **CamelDoclingMetadataFormat** (producer) Constant: [`METADATA_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#METADATA_FORMAT) | Document format (MIME type). |  | String |
@@ -575,6 +576,14 @@ from("file:///data/documents?include=.*\\.pdf")
           uri: file:///data/output
 ```
 
+### OCR and page headers/footers
+
+Docling recognizes page headers and footers (page numbers, copyright lines, running titles, footnotes, and similar content) during OCR, but it classifies them as page _furniture_: they are assigned to docling’s `FURNITURE` content layer rather than the document `BODY`. Docling’s Markdown, text and HTML exports include only the `BODY` layer by default, so header and footer text is omitted from the converted output even though the OCR engine read it correctly.
+
+When using `useDoclingServe=true`, the component cannot currently change this, because the docling-serve API does not expose an option to choose which content layers are included in the export — even though docling’s Python library can include the `FURNITURE` layer. This is tracked upstream in [docling-serve#271](https://github.com/docling-project/docling-serve/issues/271). The docling CLI (`useDoclingServe=false`) has the same limitation.
+
+If you need header or footer content in the output, restructure the source document so the text is part of the body, or track the upstream issue for a future option to include the furniture layer.
+
 ### Using headers to control processing
 
 -   Java
@@ -694,12 +703,12 @@ from("file:///data/documents?include=.*\\.pdf")
 
         // Access metadata fields
         String title = metadata.getTitle();
-        String author = metadata.getAuthor();
+        String documentType = metadata.getDocumentType();
         Integer pageCount = metadata.getPageCount();
-        Instant creationDate = metadata.getCreationDate();
+        String format = metadata.getFormat();
 
-        log.info("Document: {} by {}, Pages: {}, Created: {}",
-            title, author, pageCount, creationDate);
+        log.info("Document: {} ({}), Pages: {}, Format: {}",
+            title, documentType, pageCount, format);
 
         // Metadata is also available in headers
         String titleFromHeader = exchange.getIn().getHeader("CamelDoclingMetadataTitle", String.class);
@@ -716,7 +725,7 @@ from("file:///data/documents?include=.*\\.pdf")
       - to:
           uri: docling:EXTRACT_METADATA
       - log:
-          message: "Document: ${header.CamelDoclingMetadataTitle} by ${header.CamelDoclingMetadataAuthor}"
+          message: "Document: ${header.CamelDoclingMetadataTitle} (${header.CamelDoclingMetadataDocumentType})"
       - log:
           message: "Pages: ${header.CamelDoclingMetadataPageCount}"
       - process:
