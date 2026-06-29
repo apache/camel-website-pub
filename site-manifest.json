@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1782571569391,
+  "generated": 1782694346177,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32329,6 +32329,12 @@
               "path": "jbang-commands/camel-jbang-get-count.adoc",
               "url": "/manual/jbang-commands/camel-jbang-get-count.html",
               "title": "camel get count"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-get-datasource.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-datasource.html",
+              "title": "camel get datasource"
             },
             {
               "module": "ROOT",

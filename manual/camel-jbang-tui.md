@@ -53,7 +53,7 @@ The example starts running in the background. The TUI auto-selects it as soon as
 If an example requires infrastructure (like Kafka or a database), the TUI automatically starts the required Docker containers before launching the example. A notification in the footer shows the progress.
 
 > **Tip**
-> Press **F1** on any screen for context-sensitive help. Keyboard shortcuts are always shown in the footer bar.
+> Press **F1** or **?** on any screen for context-sensitive help. Keyboard shortcuts are always shown in the footer bar.
 
 ## Tabs Overview
 
@@ -310,7 +310,7 @@ The Doctor checks your development environment and reports issues:
 | --- | --- |
 | **1** - **0** | Jump to tab by number |
 | **Tab** / **Shift+Tab** | Next / previous tab |
-| **F1** | Context-sensitive help (toggle) |
+| **F1** / **?** | Context-sensitive help (toggle) |
 | **F2** | Actions menu |
 | **F3** | Switch between integrations (when multiple running) |
 | **Shift+F5** | Take screenshot |

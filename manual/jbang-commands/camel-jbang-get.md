@@ -19,6 +19,7 @@ camel get [options]
 | [consumer](camel-jbang-get-consumer.md) | Get status of Camel consumers |
 | [context](camel-jbang-get-context.md) | Get status of Camel integrations |
 | [count](camel-jbang-get-count.md) | Get total and failed exchanges |
+| [datasource](camel-jbang-get-datasource.md) | Get status of DataSource connection pools |
 | [endpoint](camel-jbang-get-endpoint.md) | Get usage of Camel endpoints |
 | [error](camel-jbang-get-error.md) | Get captured routing errors of Camel integrations |
 | [event](camel-jbang-get-event.md) | Get latest events of Camel integrations |
