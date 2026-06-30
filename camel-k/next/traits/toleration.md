@@ -54,3 +54,7 @@ The following configuration options are available:
     ```console
     $ kamel run -t toleration.taints="disktype=ssd:PreferNoSchedule" ...
     ```
+    
+
+> **Note**
+> Operators can restrict which taint keys CR authors are permitted to use in `toleration.taints` by setting the `TOLERATION_TAINTS_ALLOWED_KEYS` environment variable on the operator deployment to a comma-separated list of allowed keys (e.g. `node-role.kubernetes.io/master,disktype`). Taints whose key is not in the list are dropped and an info message is logged. When the variable is unset or empty, all keys are accepted (default behavior). See build environment variables documentation for details.

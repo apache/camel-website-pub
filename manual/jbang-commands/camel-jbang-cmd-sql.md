@@ -1,0 +1,20 @@
+# camel cmd sql
+
+Execute SQL query on a DataSource
+
+## Usage
+
+```bash
+camel cmd sql [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--datasource` | Name of the DataSource bean (auto-detected if only one exists) |  | String |
+| `--max-rows` | Maximum number of rows to return | 100 | int |
+| `--query,--sql` | The SQL query to execute, or file:<path> to load from a file |  | String |
+| `--query-timeout` | Query timeout in seconds | 30 | int |
+| `-h,--help` | Display the help and sub-commands |  | boolean |
