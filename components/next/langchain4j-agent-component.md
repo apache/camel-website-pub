@@ -142,7 +142,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The LangChain4j Agent component supports 6 message header(s), which is/are listed below:
+The LangChain4j Agent component supports 10 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -153,6 +153,30 @@ The LangChain4j Agent component supports 6 message header(s), which is/are liste
 | **CamelLangChain4jAgentMediaType** (producer) Constant: [`MEDIA_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#MEDIA_TYPE) | The media type (MIME type) of the file content. Overrides auto-detection from file extension. |  | String |
 | **CamelLangChain4jAgentExcludeTags** (producer) Constant: [`EXCLUDE_TAGS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#EXCLUDE_TAGS) | Comma-separated list of Camel tool tags to exclude from this agent invocation. |  | String |
 | **CamelLangChain4jAgentExcludeMcpServers** (producer) Constant: [`EXCLUDE_MCP_SERVERS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#EXCLUDE_MCP_SERVERS) | Comma-separated list of MCP server names (keys) to exclude from this agent invocation. |  | String |
+| **CamelLangChain4jAgentFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#FINISH_REASON) | 
+The Finish Reason.
+
+Enum values:
+
+-   STOP
+    
+-   LENGTH
+    
+-   TOOL\_EXECUTION
+    
+-   CONTENT\_FILTER
+    
+-   OTHER
+    
+
+
+
+
+
+ |  | FinishReason |
+| **CamelLangChain4jAgentInputTokenCount** (producer) Constant: [`INPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#INPUT_TOKEN_COUNT) | The Input Token Count. |  | int |
+| **CamelLangChain4jAgentOutputTokenCount** (producer) Constant: [`OUTPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#OUTPUT_TOKEN_COUNT) | The Output Token Count. |  | int |
+| **CamelLangChain4jAgentTotalTokenCount** (producer) Constant: [`TOTAL_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#TOTAL_TOKEN_COUNT) | The Total Token Count. |  | int |
 
 ## OAuth Authentication
 

@@ -2,7 +2,9 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[211]{title,link,pubDate,description}:
+posts[213]{title,link,pubDate,description}:
+  RELEASE 4.21.0|https://camel.apache.org/blog/2026/07/RELEASE-4.21.0/index.md|Wed, 01 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.21.0 release with 406 new features and improvements. The artifacts are published and ready for you to download from the Central 
+  Who Maintains Apache Camel: 19 Years, One Team, 100,000 Commits|https://camel.apache.org/blog/2026/07/camel-who-maintains/index.md|Wed, 01 Jul 2026 00:00:00 +0000|Apache Camel has crossed 100,000 commits from 1,500+ contributors representing 450+ companies. Those numbers paint a picture of a broad, thriving open source community — and that picture is real. But 
   See How Your Routes Connect: Route Topology Diagrams in Apache Camel|https://camel.apache.org/blog/2026/06/camel-route-topology/index.md|Fri, 26 Jun 2026 00:00:00 +0000|When you have a handful of Camel routes, understanding the message flow is straightforward. But as your application grows to tens or hundreds of routes connected through direct, seda, Kafka topics, an
   SBOMs Are Becoming a Requirement — Apache Camel Already Ships and Supports Them|https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/index.md|Mon, 22 Jun 2026 00:00:00 +0000|If your security or compliance team has started asking &ldquo;does it ship with an SBOM?&rdquo;, you are not alone. The EU Cyber Resilience Act (CRA) will require SBOM delivery for software sold in th
   Why AI Already Knows Apache Camel|https://camel.apache.org/blog/2026/06/camel-ai-trained/index.md|Fri, 19 Jun 2026 00:00:00 +0000|Ask an AI coding assistant to write an Apache Camel route and you will likely get working code on the first try. Ask it to configure a Kafka consumer, wire up an error handler, or transform a message 

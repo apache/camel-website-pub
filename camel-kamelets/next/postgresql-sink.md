@@ -30,7 +30,7 @@ At runtime, the `postgresql-sink` Kamelet relies upon the presence of the follow
     
 -   camel:sql
     
--   mvn:org.postgresql:postgresql:42.7.11
+-   mvn:org.postgresql:postgresql:42.7.12
     
 -   mvn:org.apache.commons:commons-dbcp2:2.14.0
     

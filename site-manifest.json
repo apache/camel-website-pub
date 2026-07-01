@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1782820152566,
+  "generated": 1782934961204,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32056,6 +32056,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-heap-histogram.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-heap-histogram.html",
+              "title": "camel cmd heap-histogram"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-cmd-load.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-load.html",
               "title": "camel cmd load"
@@ -32467,6 +32473,12 @@
               "path": "jbang-commands/camel-jbang-get-source.adoc",
               "url": "/manual/jbang-commands/camel-jbang-get-source.html",
               "title": "camel get source"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-get-sql-trace.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-sql-trace.html",
+              "title": "camel get sql-trace"
             },
             {
               "module": "ROOT",

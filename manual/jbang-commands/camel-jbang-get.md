@@ -40,6 +40,7 @@ camel get [options]
 | [route-controller](camel-jbang-get-route-controller.md) | List status of route controller |
 | [service](camel-jbang-get-service.md) | Get services of Camel integrations |
 | [source](camel-jbang-get-source.md) | Display Camel route source code |
+| [sql-trace](camel-jbang-get-sql-trace.md) | Get SQL query trace data |
 | [startup-recorder](camel-jbang-get-startup-recorder.md) | Display startup recording |
 | [transformer](camel-jbang-get-transformer.md) | Get list of data type transformers |
 | [variable](camel-jbang-get-variable.md) | List variables of Camel integrations |

@@ -301,6 +301,14 @@ The Doctor checks your development environment and reports issues:
 -   Disk space in temp directory
     
 
+## Theme
+
+The TUI ships with two color themes, **dark** (the default) and **light**, defined as CSS stylesheets. Press **F4** on any screen to toggle between them at runtime.
+
+The brand orange accent is identical in both themes; status colors (success, warning, error) and borders adapt for readability on dark and light terminals.
+
+Your choice is remembered: it is saved as `camel.tui.theme` (`dark` or `light`) in `.camel-jbang-user.properties` and restored the next time you open the TUI.
+
 ## Keyboard Shortcuts
 
 ### Global (All Tabs)
@@ -313,6 +321,7 @@ The Doctor checks your development environment and reports issues:
 | **F1** / **?** | Context-sensitive help (toggle) |
 | **F2** | Actions menu |
 | **F3** | Switch between integrations (when multiple running) |
+| **F4** | Toggle light / dark theme |
 | **Shift+F5** | Take screenshot |
 | **Ctrl+R** | Start/stop tape recording |
 | **Ctrl+C** / **Q** | Quit |

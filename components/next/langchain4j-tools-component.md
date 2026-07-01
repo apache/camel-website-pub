@@ -133,6 +133,38 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **chatModel** (advanced) | **Autowired** Chat Model of type dev.langchain4j.model.chat.ChatModel. |  | ChatModel |
 
+## Message Headers
+
+The LangChain4j Tools component supports 4 message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelLangChain4jToolsFinishReason** (common) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#FINISH_REASON) | 
+The Finish Reason.
+
+Enum values:
+
+-   STOP
+    
+-   LENGTH
+    
+-   TOOL\_EXECUTION
+    
+-   CONTENT\_FILTER
+    
+-   OTHER
+    
+
+
+
+
+
+ |  | FinishReason |
+| **CamelLangChain4jToolsInputTokenCount** (common) Constant: [`INPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#INPUT_TOKEN_COUNT) | The Input Token Count. |  | int |
+| **CamelLangChain4jToolsOutputTokenCount** (common) Constant: [`OUTPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#OUTPUT_TOKEN_COUNT) | The Output Token Count. |  | int |
+| **CamelLangChain4jToolsTotalTokenCount** (common) Constant: [`TOTAL_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#TOTAL_TOKEN_COUNT) | The Total Token Count. |  | int |
+
 ## Usage
 
 This component helps to use function-calling features from LLMs so that models can decide what functions (routes, in case of Camel) can be called (i.e.; routed).

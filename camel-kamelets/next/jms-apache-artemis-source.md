@@ -25,7 +25,7 @@ At runtime, the `jms-apache-artemis-source` Kamelet relies upon the presence of 
     
 -   camel:kamelet
     
--   mvn:org.apache.activemq:artemis-jakarta-client-all:2.54.0
+-   mvn:org.apache.activemq:artemis-jakarta-client-all:2.55.0
     
 
 ## Camel JBang usage

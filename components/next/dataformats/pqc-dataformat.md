@@ -8,7 +8,7 @@ The PQC data format supports encrypting and decrypting payload using Post Quantu
 
 ## PGC DataFormat Options
 
-The PQC (Post-Quantum Cryptography) dataformat supports 7 options, which are listed below.
+The PQC (Post-Quantum Cryptography) dataformat supports 6 options, which are listed below.
 
    
 | Name | Default | Java Type | Description |
@@ -46,7 +46,7 @@ Enum values:
  |
 | **symmetricKeyAlgorithm** (common) | `AES` | `Enum` | 
 
-The symmetric encryption algorithm to use with the shared secret.
+The symmetric encryption algorithm to use with the shared secret. Only algorithms that support authenticated encryption (AEAD) are allowed: AES, ARIA, CAMELLIA, CAST6, DSTU7624, GOST3412\_2015, SEED and SM4 are encrypted with GCM, and CHACHA7539 with ChaCha20-Poly1305.
 
 Enum values:
 
@@ -54,37 +54,19 @@ Enum values:
     
 -   ARIA
     
--   RC2
-    
--   RC5
-    
 -   CAMELLIA
-    
--   CAST5
     
 -   CAST6
     
--   CHACHA7539
-    
 -   DSTU7624
     
--   GOST28147
-    
 -   GOST3412\_2015
-    
--   GRAIN128
-    
--   HC128
-    
--   HC256
-    
--   SALSA20
     
 -   SEED
     
 -   SM4
     
--   DESEDE
+-   CHACHA7539
     
 
 
@@ -94,7 +76,6 @@ Enum values:
  |
 | **symmetricKeyLength** (common) | `128` | `Integer` | The length (in bits) of the symmetric key. |
 | **keyPair** (common) |  | `Object` | Refers to the KeyPair to lookup from the registry to use for KEM operations. |
-| **bufferSize** (advanced) | `4096` | `Integer` | The size of the buffer used for streaming encryption/decryption. |
 | **provider** (advanced) |  | `String` | The JCE security provider to use. |
 | **keyGenerator** (advanced) |  | `Object` | Refers to a custom KeyGenerator to lookup from the registry for KEM operations. |
 
@@ -115,7 +96,7 @@ This approach provides **defense-in-depth**: even if the symmetric algorithm is 
 
 -   **Simplified API** - Single marshal/unmarshal operation instead of multiple KEM steps
     
--   **Streaming Support** - Efficient encryption/decryption of large payloads
+-   **Authenticated Encryption** - AEAD (GCM or ChaCha20-Poly1305) protects both confidentiality and integrity
     
 -   **Header-based Configuration** - Dynamic algorithm and key selection per message
     
@@ -126,17 +107,16 @@ This approach provides **defense-in-depth**: even if the symmetric algorithm is 
 
 ## Wire Format
 
-Since Camel 4.19, the PQC DataFormat uses wire format v2 which includes magic bytes, version, and algorithm identifiers (see [Wire Format v2 and Algorithm Identification](../others/pqc-hybrid.html#_wire_format_v2_and_algorithm_identification)). The v1 format `[4 bytes: encapsulation length][N bytes: encapsulation][M bytes: encrypted data]` is still accepted on input for backward compatibility.
-
-The v2 encrypted message format is:
+The encrypted message produced by the PQC DataFormat is:
 
 ```text
-[2 bytes: magic "PQ"] [1 byte: version] [1 byte: format type]
-[2 bytes: KEM algorithm ID] [2 bytes: symmetric algorithm ID]
-[4 bytes: encapsulation length] [N bytes: encapsulation] [M bytes: encrypted data]
+[4 bytes: encapsulation length] [N bytes: encapsulation] [12 bytes: AEAD nonce] [M bytes: ciphertext + auth tag]
 ```
 
-This format allows the receiver to identify the algorithms used, extract the encapsulation, decapsulate the shared secret using their private key, and decrypt the data.
+The KEM encapsulation allows the receiver to decapsulate the shared secret using their private key. The payload is then encrypted with an authenticated cipher (AEAD): 128-bit block ciphers use GCM and the ChaCha20 stream cipher uses ChaCha20-Poly1305, so both confidentiality and integrity are protected. Decryption fails if the ciphertext or its authentication tag has been modified.
+
+> **Note**
+> The authenticated wire format was introduced in Camel 4.22. Data encrypted by earlier versions used unauthenticated ECB and did not include a nonce, and cannot be decrypted by Camel 4.22 or later. See the Camel 4.x upgrade guide for details.
 
 ## Basic Usage
 
@@ -196,10 +176,9 @@ from("file:encrypted")
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
 | keyEncapsulationAlgorithm | String | MLKEM | PQC KEM algorithm (MLKEM, BIKE, HQC, CMCE, SABER, FRODO, NTRU, NTRULPRime, SNTRUPrime, KYBER) |
-| symmetricKeyAlgorithm | String | AES | Symmetric encryption algorithm (AES, ARIA, RC2, RC5, CAMELLIA, CAST5, CAST6, CHACHA7539, DSTU7624, GOST28147, GRAIN128, SEED, SM4, DESEDE) |
+| symmetricKeyAlgorithm | String | AES | Symmetric encryption algorithm. Only AEAD-capable algorithms are supported: AES, ARIA, CAMELLIA, CAST6, DSTU7624, GOST3412-2015, SEED, SM4 (GCM) and CHACHA7539 (ChaCha20-Poly1305) |
 | symmetricKeyLength | int | 128 | Length of the symmetric key in bits (128, 192, or 256 for AES) |
 | keyPair | KeyPair | null | KeyPair to use for encryption/decryption. Can also be provided via header. |
-| bufferSize | int | 4096 | Buffer size for streaming encryption/decryption |
 | provider | String | null | JCE security provider (defaults to Bouncy Castle PQC provider) |
 | keyGenerator | KeyGenerator | null | Custom KeyGenerator for KEM operations |
 
@@ -290,30 +269,28 @@ from("direct:encrypt")
 
 ### Symmetric Encryption Algorithms
 
+Only algorithms that support authenticated encryption (AEAD) are supported. All except CHACHA7539 are encrypted with GCM; CHACHA7539 is encrypted with ChaCha20-Poly1305 and requires a 256-bit key.
+
 -   AES - Advanced Encryption Standard (recommended)
     
 -   ARIA - Korean standard
     
--   RC2, RC5 - Rivest ciphers
-    
 -   CAMELLIA - Japanese standard
     
--   CAST5, CAST6 - CAST ciphers
+-   CAST6 - CAST-256
     
--   CHACHA7539 - ChaCha stream cipher
+-   DSTU7624 - Ukrainian standard (Kalyna)
     
--   DSTU7624 - Ukrainian standard
-    
--   GOST28147 - Russian standard
-    
--   GRAIN128 - Stream cipher
+-   GOST3412-2015 - Russian standard (Kuznyechik)
     
 -   SEED - Korean standard
     
 -   SM4 - Chinese standard
     
--   DESEDE - Triple DES
+-   CHACHA7539 - ChaCha20 (ChaCha20-Poly1305)
     
+
+The legacy ciphers RC2, RC5, CAST5, GOST28147 and DESEDE, and the unauthenticated stream ciphers GRAIN128, HC128, HC256 and SALSA20, cannot provide AEAD and are no longer supported.
 
 ## Advanced Examples
 
@@ -491,7 +468,7 @@ The DataFormat approach is significantly simpler and handles all KEM operations 
 
 -   **Recommended**: AES-256 or AES-128
     
--   **Avoid**: RC2, GOST28147 (legacy algorithms)
+-   **Not supported**: legacy ciphers without AEAD (RC2, RC5, CAST5, GOST28147, DESEDE) and unauthenticated stream ciphers (GRAIN128, HC128, HC256, SALSA20) are rejected at startup
     
 
 **4\. Wire Format Security**
@@ -500,23 +477,12 @@ The DataFormat approach is significantly simpler and handles all KEM operations 
     
 -   The encrypted data is protected by the symmetric key
     
--   Use authenticated encryption modes (GCM) when available
+-   The symmetric layer always uses authenticated encryption (GCM or ChaCha20-Poly1305), protecting integrity as well as confidentiality
     
 
 ## Performance Considerations
 
-**1\. Buffer Size**
-
-Adjust bufferSize based on message size:
-
-_Java-only: configuring PQCDataFormat buffer size_
-
-```java
-PQCDataFormat pqcFormat = new PQCDataFormat();
-pqcFormat.setBufferSize(8192);  // Larger buffer for big files
-```
-
-**2\. Caching KeyGenerator**
+**1\. Caching KeyGenerator**
 
 Configure a KeyGenerator once to avoid repeated initialization:
 
@@ -532,11 +498,11 @@ PQCDataFormat pqcFormat = new PQCDataFormat();
 pqcFormat.setKeyGenerator(kemKeyGenerator);
 ```
 
-**3\. Streaming**
+**2\. Large Payloads**
 
-The DataFormat supports streaming for large payloads, avoiding memory issues:
+To guarantee integrity, the authenticated (AEAD) cipher verifies the authentication tag before releasing any plaintext, so the payload is processed as a whole rather than incrementally. Enable stream caching to let Camel spill large bodies to disk on the route:
 
-_Java-only: streaming large files with PQCDataFormat_
+_Java-only: stream caching large files with PQCDataFormat_
 
 ```java
 from("file:large-files?noop=true")
@@ -602,13 +568,11 @@ void testPQCDataFormatRoundTrip() throws Exception {
 
 **Issue**: OutOfMemoryError with large files
 
--   **Solution**: Increase buffer size or enable stream caching:
+-   **Solution**: Authenticated (AEAD) encryption processes the payload as a whole; enable stream caching so Camel spills large bodies to disk:
     
-    _Java-only: increasing buffer size or enabling stream caching_
+    _Java-only: enabling stream caching for large files_
     
     ```java
-    pqcFormat.setBufferSize(16384);
-    // or
     from("file:large-files?noop=true").streamCache(true).marshal(pqcFormat)...
     ```
     

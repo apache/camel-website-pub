@@ -139,13 +139,37 @@ Enum values:
 
 ## Message Headers
 
-The LangChain4j Chat component supports 2 message header(s), which is/are listed below:
+The LangChain4j Chat component supports 6 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelLangChain4jChatPromptTemplate** (producer) Constant: [`PROMPT_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#PROMPT_TEMPLATE) | The prompt Template. |  | String |
 | **CamelLangChain4jChatAugmentedData** (producer) Constant: [`AUGMENTED_DATA`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#AUGMENTED_DATA) | Augmented Data for RAG. |  | String |
+| **CamelLangChain4jChatFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#FINISH_REASON) | 
+The Finish Reason.
+
+Enum values:
+
+-   STOP
+    
+-   LENGTH
+    
+-   TOOL\_EXECUTION
+    
+-   CONTENT\_FILTER
+    
+-   OTHER
+    
+
+
+
+
+
+ |  | FinishReason |
+| **CamelLangChain4jChatInputTokenCount** (producer) Constant: [`INPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#INPUT_TOKEN_COUNT) | The Input Token Count. |  | int |
+| **CamelLangChain4jChatOutputTokenCount** (producer) Constant: [`OUTPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#OUTPUT_TOKEN_COUNT) | The Output Token Count. |  | int |
+| **CamelLangChain4jChatTotalTokenCount** (producer) Constant: [`TOTAL_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#TOTAL_TOKEN_COUNT) | The Total Token Count. |  | int |
 
 ## Usage
 

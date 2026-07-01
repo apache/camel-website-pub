@@ -23,6 +23,7 @@ On this page you'll find archived releases of:
 Releases by release date
 | Version | Release date | Description |
 | --- | --- | --- |
+| [4.21.0](../releases/release-4.21.0/) | 2026-07-01 | New release 4.21.0 |
 | [4.20.0](../releases/release-4.20.0/) | 2026-04-25 | New release 4.20.0 |
 | [4.14.7](../releases/release-4.14.7/) | 2026-04-24 | New LTS release 4.14.7 |
 | [4.18.2](../releases/release-4.18.2/) | 2026-04-22 | New LTS release 4.18.2 |
