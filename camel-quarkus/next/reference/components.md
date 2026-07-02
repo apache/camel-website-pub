@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 313 components (18 deprecated, 59 JVM only)
+There are 310 components (20 deprecated, 57 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -104,7 +104,6 @@ level | Description |
 | [FTPS](extensions/ftp.md) | camel-quarkus-ftp | 1.0.0 | 1.0.0 | Stable | Upload and download files to/from FTP servers supporting the FTPS protocol. |
 | [Geocoder](extensions/geocoder.md) | camel-quarkus-geocoder | 1.1.0 | 1.2.0 | Stable | Find geocodes (latitude and longitude) for a given address or the other way round. |
 | [Git](extensions/git.md) | camel-quarkus-git | 1.1.0 | 1.1.0 | Stable | Perform operations on git repositories. |
-| [GitHub](extensions/github.md) | camel-quarkus-github | 1.0.0 | 1.0.0 | Stable | Interact with the GitHub API. |
 | [GitHub2](extensions/github2.md) | camel-quarkus-github2 | 3.37.0 | 3.37.0 | Stable | Interact with the GitHub API. |
 | [Google BigQuery Standard SQL](extensions/google-bigquery.md) | camel-quarkus-google-bigquery | 1.0.0 | 1.6.0 | Stable | Access Google Cloud BigQuery service using SQL queries. |
 | [Google BigQuery](extensions/google-bigquery.md) | camel-quarkus-google-bigquery | 1.0.0 | 1.6.0 | Stable | Google BigQuery data warehouse for analytics. |
@@ -121,7 +120,6 @@ level | Description |
 | [Google Storage](extensions/google-storage.md) | camel-quarkus-google-storage | 2.0.0 | 2.0.0 | Stable | Store and retrieve objects from Google Cloud Storage Service using the google-cloud-storage library. |
 | [GraphQL](extensions/graphql.md) | camel-quarkus-graphql | 1.0.0 | 1.0.0 | Stable | Send GraphQL queries and mutations to external systems. |
 | [gRPC](extensions/grpc.md) | camel-quarkus-grpc | 1.0.0 | 1.0.0 | Stable | Expose gRPC endpoints and access external gRPC endpoints. |
-| [Guava EventBus](extensions/guava-eventbus.md) | camel-quarkus-guava-eventbus | 1.1.0 | n/a | Preview | Send and receive messages to/from Guava EventBus. |
 | [Hashicorp Vault](extensions/hashicorp-vault.md) | camel-quarkus-hashicorp-vault | 2.11.0 | 3.15.0 | Stable | Manage secrets in Hashicorp Vault Service |
 | [Hazelcast Atomic Number](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
 | [Hazelcast Instance](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Consume join/leave events of a cache instance in a Hazelcast cluster. |
@@ -227,7 +225,7 @@ level | Description |
 | [OAI-PMH](extensions/oaipmh.md) | camel-quarkus-oaipmh | 1.7.0 | 1.7.0 | Stable | Harvest metadata using OAI-PMH protocol |
 | [Olingo4](extensions/olingo4.md) | camel-quarkus-olingo4 | 1.0.0 | 1.0.0 | Stable | Communicate with OData 4.0 services using Apache Olingo OData API. |
 | [Once](extensions/once.md) | camel-quarkus-once | 3.31.0 | 3.31.0 | Stable | Trigger a single message only once at startup (useful for development and testing purposes). |
-| [OpenAI](extensions/openai.md) | camel-quarkus-openai | 3.32.0 | 3.32.0 | Stable | OpenAI endpoint for chat completion and embeddings. |
+| [OpenAI](extensions/openai.md) | camel-quarkus-openai | 3.32.0 | 3.32.0 | Stable | OpenAI endpoint for chat completion, embeddings, and audio transcription. |
 | [OpenSearch](extensions/opensearch.md) | camel-quarkus-opensearch | 3.8.0 | n/a | Preview | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](extensions/kubernetes.md) | camel-quarkus-kubernetes | 1.0.0 | 1.0.0 | Stable | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](extensions/kubernetes.md) | camel-quarkus-kubernetes | 1.0.0 | 1.0.0 | Stable | Perform operations on OpenShift Builds. |
@@ -287,7 +285,6 @@ level | Description |
 | [SSH](extensions/ssh.md) | camel-quarkus-ssh | 1.1.0 | 1.2.0 | Stable | Execute commands on remote hosts using SSH. |
 | [StAX](extensions/stax.md) | camel-quarkus-stax | 1.1.0 | 1.7.0 | Stable | Process XML payloads by a SAX ContentHandler. |
 | [Stitch](extensions/stitch.md) | camel-quarkus-stitch | 1.8.0 | n/a | Preview | Stitch is a cloud ETL service that integrates various data sources into a central data warehouse through various integrations. |
-| [Stomp](extensions/stomp.md) | camel-quarkus-stomp | 1.1.0 | n/a | Preview | Send and receive messages to/from STOMP (Simple Text Oriented Messaging Protocol) compliant message brokers. |
 | [Stream](extensions/stream.md) | camel-quarkus-stream | 1.0.0 | 1.0.0 | Stable | Read from system-in and write to system-out and system-err streams. |
 | [String Template](extensions/stringtemplate.md) | camel-quarkus-stringtemplate | 1.1.0 | 1.2.0 | Stable | Transform messages using StringTemplate engine. |
 | [Stub](extensions/stub.md) | camel-quarkus-stub | 1.1.0 | n/a | Preview | Stub out any physical endpoints while in development or testing. |

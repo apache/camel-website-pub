@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Compress and decompress streams using LZF deflate algorithm.
+Compress and decompress streams using LZF deflate algorithm
 
 ## What’s inside
 

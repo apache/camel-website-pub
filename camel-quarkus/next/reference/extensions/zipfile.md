@@ -2,7 +2,7 @@
 
 JVM since0.2.0 Native since0.2.0
 
-Compression and decompress streams using java.util.zip.ZipStream.
+Compression and decompress streams using java.util.zip.Zip\*Stream
 
 ## What’s inside
 

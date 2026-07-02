@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.5.0
 
-Serialize and deserialize Java objects using Google’s Protocol buffers.
+Serialize and deserialize Java objects using Google’s Protocol buffers
 
 ## What’s inside
 

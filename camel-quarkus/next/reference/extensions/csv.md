@@ -2,7 +2,7 @@
 
 JVM since0.2.0 Native since0.2.0
 
-Handle CSV (Comma Separated Values) payloads.
+Handle CSV (Comma Separated Values) payloads
 
 ## What’s inside
 

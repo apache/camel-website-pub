@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Serialize and deserialize messages using Apache Avro binary data format.
+Serialize and deserialize messages using Apache Avro binary data format
 
 ## What’s inside
 

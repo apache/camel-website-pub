@@ -1,6 +1,6 @@
 # ThreadPoolFactory Vert.x
 
-JVM since1.0.0 Native since1.0.0
+JVM since1.0.0 Native since1.0.0 ⚠️Deprecated
 
 ThreadPoolFactory for camel-core using Vert.x
 

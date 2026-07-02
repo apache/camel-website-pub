@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Marshal and unmarshal iCal (.ics) documents to/from model objects.
+Marshal and unmarshal iCal (\*.ics) documents to/from model objects
 
 ## What’s inside
 

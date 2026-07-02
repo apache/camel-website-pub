@@ -423,7 +423,11 @@ maven wrapper - upgrade to 3.9.14+
 
 camel-kubernetes - Upgrade to 7.6 client
 
-### Improvement (221)
+### Improvement (222)
+
+[CAMEL-23873](https://issues.apache.org/jira/browse/CAMEL-23873)
+
+camel-jbang - Introduce shared ToolRegistry for AI tools
 
 [CAMEL-23833](https://issues.apache.org/jira/browse/CAMEL-23833)
 

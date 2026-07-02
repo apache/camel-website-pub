@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1782936678253,
+  "generated": 1782988563662,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8649,12 +8649,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/aws-xray.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/aws-xray.html",
-              "title": "AWS XRay"
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/aws2-athena.adoc",
               "url": "/camel-quarkus/next/reference/extensions/aws2-athena.html",
               "title": "AWS 2 Athena",
@@ -9357,15 +9351,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/github.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/github.html",
-              "title": "GitHub",
-              "attributes": {
-                "page-aliases": "extensions/github.adoc"
-              }
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/github2.adoc",
               "url": "/camel-quarkus/next/reference/extensions/github2.html",
               "title": "GitHub2"
@@ -9486,12 +9471,6 @@
               "attributes": {
                 "page-aliases": "extensions/gson.adoc"
               }
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/guava-eventbus.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/guava-eventbus.html",
-              "title": "Guava EventBus"
             },
             {
               "module": "ROOT",
@@ -9822,6 +9801,12 @@
               "attributes": {
                 "page-aliases": "extensions/jsonpath.adoc"
               }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jsoup.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/jsoup.html",
+              "title": "Jsoup"
             },
             {
               "module": "ROOT",
@@ -10671,12 +10656,6 @@
               "path": "reference/extensions/stitch.adoc",
               "url": "/camel-quarkus/next/reference/extensions/stitch.html",
               "title": "Stitch"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/stomp.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/stomp.html",
-              "title": "Stomp"
             },
             {
               "module": "ROOT",

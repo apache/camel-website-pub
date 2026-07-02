@@ -1,6 +1,6 @@
 # Paho
 
-JVM since0.2.0 Native since0.2.0
+JVM since0.2.0 Native since0.2.0 ⚠️Deprecated
 
 Communicate with MQTT message brokers using Eclipse Paho MQTT Client.
 

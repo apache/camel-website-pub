@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Encode and decode data using Base64.
+Encode and decode data using Base64
 
 ## What’s inside
 

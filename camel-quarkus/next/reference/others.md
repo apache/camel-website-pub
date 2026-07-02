@@ -1,6 +1,6 @@
 # Camel misc. components supported on Quarkus
 
-There are 34 misc. components (3 deprecated, 7 JVM only)
+There are 34 misc. components (5 deprecated, 6 JVM only)
 
      
 | Misc. component | Artifact | JVM  
@@ -9,7 +9,6 @@ since | Support
 level | Description |
 | --- | --- | --- | --- | --- | --- |
 | [Attachments](extensions/attachments.md) | camel-quarkus-attachments | 0.3.0 | 0.3.0 | Stable | Support for attachments on Camel messages |
-| [AWS XRay](extensions/aws-xray.md) | camel-quarkus-aws-xray | 1.2.0 | n/a | Preview | Enable Distributed tracing using AWS XRay |
 | [CLI Connector](extensions/cli-connector.md) | camel-quarkus-cli-connector | 3.2.0 | n/a | Preview | Runtime adapter connecting with Camel CLI |
 | [CLI Debug](extensions/cli-debug.md) | camel-quarkus-cli-debug | 3.31.0 | n/a | Preview | Remote CLI debugger |
 | [Cloudevents](extensions/cloudevents.md) | camel-quarkus-cloudevents | 2.14.0 | 2.14.0 | Stable | Camel support for the CloudEvents specification |
@@ -20,6 +19,7 @@ level | Description |
 | [Jasypt](extensions/jasypt.md) | camel-quarkus-jasypt | 1.2.0 | 3.7.0 | Stable | Security using Jasypt |
 | [Java DSL (runtime compiled)](extensions/java-joor-dsl.md) | camel-quarkus-java-joor-dsl | 1.8.0 | 2.16.0 | Stable | Camel Java DSL with jOOR |
 | [JFR](extensions/jfr.md) | camel-quarkus-jfr | 1.7.0 | 2.6.0 | Stable | Diagnose Camel applications with Java Flight Recorder |
+| [Jsoup](extensions/jsoup.md) | camel-quarkus-jsoup | 3.36.0 | 3.36.0 | Stable | Cleanup HTML content |
 | [JTA](extensions/jta.md) | camel-quarkus-jta | 1.0.0 | 1.0.0 | Stable | Using Camel With JTA Transaction Manager |
 | [LangChain4j Tokenizer](extensions/langchain4j-tokenizer.md) | camel-quarkus-langchain4j-tokenizer | 3.15.0 | 3.24.0 | Stable | LangChain4j Tokenizer |
 | [LevelDB](extensions/leveldb.md) | camel-quarkus-leveldb | 1.2.0 | 1.2.0 | Stable | Using LevelDB as persistent EIP store |

@@ -1,6 +1,6 @@
 # IRC
 
-JVM since1.1.0 Nativeunsupported
+JVM since1.1.0 Nativeunsupported ⚠️Deprecated
 
 Send and receive messages to/from and IRC chat.
 

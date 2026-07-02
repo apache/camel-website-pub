@@ -2,7 +2,7 @@
 
 JVM since0.3.0 Native since0.3.0
 
-Archive files into tarballs or extract files from tarballs.
+Archive files into tarballs or extract files from tarballs
 
 ## What’s inside
 

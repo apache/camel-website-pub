@@ -112,9 +112,19 @@ Sets whether to disable tracing for endpoint URIs or Processor ids that match th
 
 
  | `string` |  |
+| `[quarkus.camel.opentelemetry2.include-patterns](#quarkus-camel-opentelemetry2-include-patterns)`
+
+Sets include pattern(s) that will explicitly enable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. All processors included by default if nothing is specified.
+
+ | `string` |  |
 | `[quarkus.camel.opentelemetry2.trace-processors](#quarkus-camel-opentelemetry2-trace-processors)`
 
-Sets whether to create new OpenTelemetry spans for each Camel Processor. Use the excludePatterns property to filter out Processors.
+Sets whether to create new telemetry spans for each Camel custom Processor. Use the excludePatterns property to filter out Processors.
+
+ | `boolean` | `false` |
+| `[quarkus.camel.opentelemetry2.disable-core-processors](#quarkus-camel-opentelemetry2-disable-core-processors)`
+
+Disable any inner core processors (any core DSL processor provided in the route, for example `bean`, `log`, …​).
 
  | `boolean` | `false` |
 | `[quarkus.camel.opentelemetry2.trace-headers-inclusion](#quarkus-camel-opentelemetry2-trace-headers-inclusion)`

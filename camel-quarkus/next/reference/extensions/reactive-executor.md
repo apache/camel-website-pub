@@ -1,6 +1,6 @@
 # Reactive Executor
 
-JVM since0.3.0 Native since0.3.0
+JVM since0.3.0 Native since0.3.0 ⚠️Deprecated
 
 Reactive Executor for camel-core using Vert.x
 

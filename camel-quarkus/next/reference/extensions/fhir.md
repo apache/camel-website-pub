@@ -2,7 +2,7 @@
 
 JVM since0.3.0 Native since0.3.0
 
-Exchange information in the healthcare domain using the FHIR (Fast Healthcare Interoperability Resources) standard. Marshall and unmarshall FHIR objects to/from JSON. Marshall and unmarshall FHIR objects to/from XML.
+Exchange information in the healthcare domain using the FHIR (Fast Healthcare Interoperability Resources) standard. Marshall and unmarshall FHIR objects to/from JSON Marshall and unmarshall FHIR objects to/from XML
 
 ## What’s inside
 

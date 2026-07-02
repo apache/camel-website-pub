@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson.
+Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson
 
 ## What’s inside
 

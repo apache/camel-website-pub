@@ -2,7 +2,8 @@
 
 Release feed for Apache Camel and related projects.
 
-releases[102]{title,link,pubDate,description}:
+releases[103]{title,link,pubDate,description}:
+  Apache Camel 4.21 What's New|https://camel.apache.org/blog/2026/07/camel421-whatsnew/index.md|Thu, 02 Jul 2026 00:00:00 +0000|Apache Camel 4.21 has just been released. This release introduces a large set of new features and noticeable improvements that we will cover in this blog post. Camel Core Error Registry The Error Regi
   RELEASE 4.21.0|https://camel.apache.org/blog/2026/07/RELEASE-4.21.0/index.md|Wed, 01 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.21.0 release with 406 new features and improvements. The artifacts are published and ready for you to download from the Central 
   Kaoto v2.11 release|https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/index.md|Thu, 18 Jun 2026 00:00:00 +0000|What&rsquo;s New? Kaoto 2.11 delivers major improvements across three key areas: automated testing through Citrus framework support, enhanced DataMapper capabilities for handling complex schemas, and 
   Wanaku 0.1.1: Bringing Apache Camel Integration Capabilities to AI Agents via MCP|https://camel.apache.org/blog/2026/05/wanaku-0.1.1/index.md|Sun, 31 May 2026 00:00:00 +0000|We&rsquo;re excited to announce Wanaku 0.1.1, a significant milestone that showcases how Apache Camel&rsquo;s powerful integration capabilities can be seamlessly exposed to AI agents through the Model

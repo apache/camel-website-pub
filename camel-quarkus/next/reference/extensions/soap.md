@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Marshal Java objects to SOAP messages and back.
+Marshal Java objects to SOAP messages and back
 
 ## What’s inside
 

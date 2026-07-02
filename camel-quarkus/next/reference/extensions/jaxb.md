@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard.
+Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard
 
 ## What’s inside
 

@@ -1,6 +1,6 @@
 # Headersmap
 
-JVM since1.2.0 Native since1.2.0
+JVM since1.2.0 Native since1.2.0 ⚠️Deprecated
 
 Fast case-insensitive headers map implementation
 
