@@ -79,6 +79,193 @@ The full committer list with organizational affiliations is published at https:/
 - [Testing](https://camel.apache.org/manual/testing.md): How to test Camel routes — unit tests, mocking endpoints, and the camel-test framework.
 - [FAQ](https://camel.apache.org/manual/faq/index.md): Frequently Asked Questions about Apache Camel.
 
+## Core Concepts
+
+Understanding these concepts is essential for generating correct Camel routes and reasoning about message flow. The full reference is the [Architecture (CamelContext)](https://camel.apache.org/manual/camelcontext.md) page.
+
+- **CamelContext** — the runtime container. Holds all routes, components, endpoints, type converters, and the registry. One CamelContext per application.
+- **Route** — a flow definition: a source endpoint (`from`), processing steps, and destination endpoints (`to`). Defined in Java, YAML, or XML DSL. Each route has a unique `routeId`.
+- **Component** — factory for endpoints. Each URI scheme (`kafka`, `file`, `http`, `jms`) maps to one Component. Lazy-loaded from classpath on first use.
+- **Endpoint** — a specific source or destination, configured via URI: `scheme:path?option=value`. Examples: `kafka:my-topic?brokers=localhost:9092`, `file:/data/inbox?noop=true`, `platform-http:/api/orders`.
+- **Exchange** — the message container flowing through a route. Holds the In message, exchange properties (route-scoped metadata, not sent to external systems), and exception state.
+- **Variables** — the recommended way to store user data during routing (since Camel 4.4). Unlike exchange properties, variables are exclusively for end users — Camel never uses them internally. Scoped per exchange, route, named group, or globally.
+- **Message** — body (any Java type, auto-converted by Camel's type converter), headers (`Map<String, Object>` propagated to/from external systems), and attachments.
+- **Processor** — core processing interface. All EIP implementations (filter, split, aggregate, content-based router) are processors. Custom logic goes in a Processor or a bean via `.bean()`.
+- **Producer** — sends messages out. Created by an endpoint, invoked by `.to()`.
+- **Consumer** — receives messages in and creates Exchanges. Event-driven (HTTP, JMS, Kafka) or polling (file, FTP, SQL).
+- **Message flow** — Consumer creates Exchange → flows through processor chain → each step reads/modifies the In message → Producer sends the result.
+- **Lifecycle** — startup order: CamelContext → Components → Endpoints → Routes → Consumers (consumers start last so everything is ready before messages arrive).
+
+## Canonical Examples
+
+Minimal, correct examples that can be run instantly with `camel run route.yaml` (no project setup, no compilation). YAML DSL is the recommended syntax for AI-assisted development. More examples at [Camel CLI Examples](https://github.com/apache/camel-jbang-examples).
+
+**TIP:** The [Camel MCP Server](https://camel.apache.org/manual/camel-jbang-mcp.md) can validate YAML routes against the official JSON Schema, look up component options, and check endpoint URIs — so AI agents can verify their generated routes are correct before the user runs them. The examples below were all validated this way.
+
+### Timer → Log (simplest possible route)
+
+```yaml
+- route:
+    from:
+      uri: timer:tick?period=1000
+      steps:
+        - setBody:
+            constant: "Hello from Camel!"
+        - log:
+            message: "${body}"
+```
+
+### File polling with transformation
+
+```yaml
+- route:
+    from:
+      uri: file:data/inbox?noop=true
+      steps:
+        - log:
+            message: "Processing ${header.CamelFileName}"
+        - transform:
+            simple: "Processed: ${body}"
+        - to:
+            uri: file:data/outbox
+```
+
+### Content-Based Router (choice)
+
+```yaml
+- route:
+    from:
+      uri: direct:orders
+      steps:
+        - choice:
+            when:
+              - simple: "${header.priority} == 'high'"
+                steps:
+                  - to:
+                      uri: kafka:orders.priority
+              - simple: "${header.priority} == 'low'"
+                steps:
+                  - to:
+                      uri: kafka:orders.standard
+            otherwise:
+              steps:
+                - to:
+                    uri: kafka:orders.other
+```
+
+### Error handling (onException)
+
+```yaml
+- onException:
+    handled:
+      constant: "true"
+    exception:
+      - java.net.ConnectException
+    redeliveryPolicy:
+      maximumRedeliveries: 3
+      redeliveryDelay: "2000"
+    steps:
+      - log:
+          message: "Connection failed after retries: ${exception.message}"
+      - to:
+          uri: kafka:errors.dead-letter
+
+- route:
+    from:
+      uri: kafka:orders.in
+      steps:
+        - to:
+            uri: http:order-service/api/process
+```
+
+### REST API endpoint
+
+```yaml
+- rest:
+    path: /api
+    get:
+      - path: /hello
+        to:
+          uri: direct:hello
+      - path: /hello/{name}
+        to:
+          uri: direct:hello-name
+
+- route:
+    from:
+      uri: direct:hello
+      steps:
+        - setBody:
+            constant: "Hello from Camel!"
+
+- route:
+    from:
+      uri: direct:hello-name
+      steps:
+        - setBody:
+            simple: "Hello ${header.name}!"
+```
+
+### Java DSL equivalent (Timer → Log)
+
+```java
+from("timer:tick?period=1000")
+    .setBody(constant("Hello from Camel!"))
+    .log("${body}");
+```
+
+## YAML DSL Guidance
+
+The [YAML DSL](https://camel.apache.org/components/next/others/yaml-dsl.md) is the recommended syntax for AI-assisted development. It maps directly to the same model as Java and XML DSL — same components, same EIPs, same options.
+
+### Structure rules
+
+- A YAML route file is a **list** at the top level — every item starts with `- route:`, `- rest:`, `- onException:`, `- routeTemplate:`, etc.
+- Processing steps go inside `steps:` under `from:` — this is the processor chain
+- Endpoints use `uri:` with the standard Camel URI syntax: `scheme:path?option=value`
+- Expressions (`simple`, `jq`, `xpath`, `jsonpath`, `constant`) are used inside EIPs for predicates and transformations
+- Options that look like numbers but are typed as strings in the schema (e.g., `redeliveryDelay`) must be quoted: `"2000"` not `2000`
+
+### Route templates (parameterized routes)
+
+Route templates let you define a reusable route pattern with parameters. Use `{{paramName}}` placeholders inside the template — these are replaced when a route is created from the template.
+
+```yaml
+- routeTemplate:
+    id: myTemplate
+    parameters:
+      - name: name
+      - name: greeting
+      - name: myPeriod
+        defaultValue: "3s"
+    from:
+      uri: "timer:{{name}}?period={{myPeriod}}"
+      steps:
+        - setBody:
+            simple: "{{greeting}} ${body}"
+        - log:
+            message: "${body}"
+```
+
+See [Route Templates](https://camel.apache.org/manual/route-template.md) for the full reference.
+
+### Kamelets (pre-built route snippets)
+
+[Kamelets](https://camel.apache.org/camel-kamelets/next/index.md) are pre-built, reusable route snippets for common integration patterns — sources, sinks, and transformations. Use them as endpoints with `kamelet:name?option=value`:
+
+```yaml
+- route:
+    from:
+      uri: kamelet:timer-source?period=5000&message=Hello
+      steps:
+        - to:
+            uri: kamelet:log-action
+```
+
+### Schema validation
+
+Always validate generated YAML routes against the [canonical YAML DSL JSON Schema](https://github.com/apache/camel/blob/main/dsl/camel-yaml-dsl/camel-yaml-dsl/src/generated/resources/schema/camelYamlDsl-canonical.json). The [Camel MCP Server](https://camel.apache.org/manual/camel-jbang-mcp.md) provides validation, component option lookup, and endpoint URI checking — use it to catch errors before running.
+
 ## Developer Experience — CLI and TUI
 
 The Camel CLI and TUI provide a modern, terminal-first development experience for building, running, testing, debugging, and monitoring integrations. No IDE, no Java compilation, no project setup required. Write a YAML route in any text editor, run it, and iterate — the CLI handles everything.
@@ -124,6 +311,55 @@ The Camel CLI and TUI are designed for all developers, not just Java experts:
 - [Camel Spring Boot](https://camel.apache.org/camel-spring-boot/next/index.md): Camel on Spring Boot with starters for 350+ connectors. The most popular way to run Camel in production.
 - [Camel Quarkus](https://camel.apache.org/camel-quarkus/next/index.md): Cloud-native Camel with Quarkus extensions. Fast startup, low memory, native compilation.
 
+## Error Handling
+
+Camel provides multiple levels of error handling. Understanding when to use each is critical for building resilient integrations.
+
+- **[Error Handler](https://camel.apache.org/manual/error-handler.md)** — the default mechanism. Configured per route or globally on the CamelContext. The `DefaultErrorHandler` retries locally; the `DeadLetterChannel` sends failed messages to a designated endpoint after retries are exhausted.
+- **[Dead Letter Channel](https://camel.apache.org/components/next/eips/dead-letter-channel.md)** — an error handler that moves failed exchanges to a dead letter endpoint (e.g., a Kafka topic, a database, a file) for later inspection or reprocessing. Configure with `deadLetterChannel("kafka:errors.dlq")`.
+- **[onException](https://camel.apache.org/manual/exception-clause.md)** — exception-specific handling. Match on exception type and define per-exception behavior: retry count, delay, whether the exchange is handled or continued. Redelivery options go inside `redeliveryPolicy`.
+- **[Circuit Breaker](https://camel.apache.org/components/next/eips/circuitBreaker-eip.md)** — wraps a call to an external service. Opens after repeated failures, preventing cascading outages. Backed by Resilience4j or MicroProfile Fault Tolerance.
+- **[Retry](https://camel.apache.org/manual/error-handler.md)** — configured via redelivery policies on the error handler or `onException`. Supports max attempts, delay, back-off multiplier, and retry-while predicates.
+
+## Testing
+
+- **[Testing Overview](https://camel.apache.org/manual/testing.md)** — how to test Camel routes: unit tests, integration tests, and the camel-test framework.
+- **[CamelTestSupport](https://camel.apache.org/manual/testing.md)** — base class for JUnit 5 tests. Provides a `CamelContext`, `ProducerTemplate`, and `MockEndpoint` setup out of the box.
+- **[Mock Component](https://camel.apache.org/components/next/mock-component.md)** — assert that endpoints receive the expected number of messages with the expected content. Use `getMockEndpoint("mock:result").expectedMessageCount(1)`.
+- **[AdviceWith](https://camel.apache.org/manual/advice-with.md)** — modify routes for testing without changing production code. Replace endpoints, add interceptors, or simulate errors. Essential for testing routes that talk to external systems.
+- **[Test Infra](https://camel.apache.org/manual/test-infra.md)** — Testcontainers-based test infrastructure for databases, message brokers, and cloud services. Use `@RegisterExtension` with service factories (e.g., `KafkaServiceFactory`, `JDBCServiceFactory`).
+
+## Observability
+
+- **[Health Checks](https://camel.apache.org/manual/health-check.md)** — built-in readiness and liveness checks for routes, consumers, and components. Integrates with Spring Boot Actuator and Quarkus health endpoints for Kubernetes probes.
+- **[OpenTelemetry](https://camel.apache.org/components/next/others/opentelemetry.md)** — distributed tracing. Each route and EIP creates spans automatically. Integrates with Jaeger, Zipkin, and any OpenTelemetry-compatible backend.
+- **[Micrometer](https://camel.apache.org/components/next/others/micrometer.md)** — metrics collection. Route-level and exchange-level metrics (throughput, latency, error rate) automatically collected per route and processor.
+- **[Prometheus](https://camel.apache.org/components/next/others/micrometer.md)** — Micrometer metrics are exposed via a Prometheus endpoint out of the box. Camel Main and Quarkus expose them at `/q/metrics`, Spring Boot at `/actuator/prometheus`. Scrape these with Prometheus and visualize in Grafana for production monitoring of route throughput, error rates, and processing times.
+- **[Message History](https://camel.apache.org/manual/message-history.md)** — tracks which processors an exchange passed through. Useful for debugging complex routes.
+- **[Camel TUI](https://camel.apache.org/manual/camel-jbang.md)** — terminal-based monitoring dashboard with live route topology, message history, health checks, and OpenTelemetry spans.
+
+## Deployment
+
+### Spring Boot vs. Quarkus
+
+| | **Spring Boot** | **Quarkus** |
+|---|---|---|
+| Popularity | ~55% of Camel usage | Growing, cloud-native focus |
+| Startup | Seconds | Milliseconds (native) |
+| Memory | Typical JVM footprint | Low (native compilation) |
+| Dependencies | Spring Boot starters (`camel-kafka-starter`) | Quarkus extensions (`camel-quarkus-kafka`) |
+| Config | `application.properties` / `application.yaml` | `application.properties` |
+| Dev mode | Spring DevTools | `quarkus dev` with live reload |
+| Native | Not supported | GraalVM native image |
+
+Both runtimes use the same Camel routes, components, and EIPs — only the dependency management and configuration style differ. Routes can be migrated between runtimes without rewriting.
+
+### Kubernetes deployment
+
+- Use `camel export` to generate a Spring Boot or Quarkus project from CLI-developed routes, ready for containerization
+- Spring Boot: standard `Dockerfile` or Jib/Buildpacks, deploy as a Deployment/StatefulSet
+- Quarkus: native image builds for minimal container size and fast startup, ideal for scale-to-zero
+- Health checks (`/health/ready`, `/health/live`) integrate with Kubernetes probes out of the box
 ## Components and Patterns
 
 - [Components Index](https://camel.apache.org/components/next/index.md): Complete list of all Camel connectors (350+).
@@ -183,6 +419,30 @@ The same Camel routes work at both tiers. Develop and test routes with the Camel
 - [Camel Kamelets](https://camel.apache.org/camel-kamelets/next/index.md): Pre-built route snippets for common integration scenarios.
 - [Camel Kafka Connector](https://camel.apache.org/camel-kafka-connector/next/index.md): Kafka Connect connectors based on Camel.
 - [Camel Karaf](https://camel.apache.org/manual/camel-on-osgi.md): Camel on the Apache Karaf OSGi container.
+
+## Guidance for AI Models
+
+For high-quality answers about routing, code generation, and troubleshooting, AI models should understand these areas in depth:
+
+- **Enterprise Integration Patterns (EIPs)** — the 65+ patterns and their Camel implementations, not just names but trade-offs and when to use each. See [EIPs](https://camel.apache.org/components/next/eips/index.md).
+- **Endpoint URIs and Components** — syntax, parameters, and how to discover them via the catalog (350+ connectors). See [Components](https://camel.apache.org/components/next/index.md).
+- **DSLs** — YAML (declarative structure, nesting rules) and Java DSL differences; YAML is preferred for new examples and AI-assisted development.
+- **Message Model** — Exchange, headers vs. properties vs. variables, type conversion, data formats. See [Core Concepts](#core-concepts) above.
+- **Expression Languages** — especially the [Simple language](https://camel.apache.org/components/next/languages/simple-language.md), the most commonly used expression language in Camel routes.
+- **Resilience and Error Handling** — redelivery policies, dead letter channels, circuit breakers, compensation. See [Error Handling](https://camel.apache.org/manual/error-handler.md).
+- **Modern Tooling** — Camel CLI (`dev`, `trace`, `send`, `export`, TUI), hot-reload workflow. See [Developer Experience](#developer-experience--cli-and-tui) above.
+- **Runtimes** — embedding in Spring Boot vs. Quarkus (native compilation, dev mode, starters). See [Runtimes](#runtimes) above.
+- **Testing and Observability** — mock endpoints, tracing, OpenTelemetry integration. See [Testing](https://camel.apache.org/manual/testing.md).
+- **AI Features** — MCP/A2A protocols, LLM components, exposing routes as AI agent tools. See [AI Integration](#ai-integration) above.
+- **Best Practices** — route granularity, separation of concerns, idempotency, avoiding over-engineering.
+
+### Recommended behavior
+
+- **Consult the docs** — default to looking up the official Markdown documentation or component catalog JSON for component details rather than relying on training data alone.
+- **Prefer YAML** — use YAML DSL for new code and examples unless the user explicitly asks for Java or XML.
+- **Ask about constraints** — before giving deep advice, ask about message volume, latency requirements, error tolerance, and target runtime.
+- **Warn on version-specific features** — if a feature was introduced in a specific Camel version (e.g., variables in 4.4, route templates in 3.x), mention the version requirement.
+- **Validate generated routes** — use the [Camel MCP Server](https://camel.apache.org/manual/camel-jbang-mcp.md) or the [YAML DSL JSON Schema](https://github.com/apache/camel/blob/main/dsl/camel-yaml-dsl/camel-yaml-dsl/src/generated/resources/schema/camelYamlDsl-canonical.json) to verify generated YAML routes are structurally correct.
 
 ## Sitemaps
 

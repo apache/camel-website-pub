@@ -6,6 +6,10 @@ Apache Camel is a widely used project. As such, several companies have built pro
 
 [Cyberlogic Consulting](http://www.cyberlogic.ch) is a Swiss based consultancy. We pride ourselves in providing Swiss quality services including enterprise consulting, coding, systems integration, training and support for Apache Camel and the related Apache Open Source Software. We specialize in helping our clients to realize new projects and support the delivery of the project from end to end.
 
+## [Digital Change](https://digitalchange.eu)
+
+[Digital Change](https://digitalchange.eu) is an Austrian consultancy and ISV specializing in system integration with Apache Camel and modern middleware.
+
 ## [Fluxygen](https://fluxygen.com)
 
 [Fluxygen](https://fluxygen.com) is a company based in the Netherlands. It offers a low-code integration platform based on Apache Camel, Apache ActiveMQ and [Assimbly](https://assimbly.org). The aim is to make integration as easy as possible, and enable businesses to automate processes. We also provide cloud services, support and training.

@@ -105,6 +105,56 @@ During routing, exchanges flow from one processor to another; as such, you can t
 
 A route starts with a consumer (i.e., `from` in the DSL) that populates the initial [exchange](exchange.md). At each processor step, the output (out) message from the previous step is the input (in) message of the next. In many cases, processors don’t set an out message, so in this case the in message is reused. The [exchange pattern](exchange-pattern.md) of the exchange determines, at the end of a route, whether a reply needs to be sent back to the caller of the route. If the exchange pattern (MEP) is `InOnly`, no reply will be sent back. If it’s `InOut`, Camel will take the out message from the last step and return it.
 
+### Exchange
+
+The [Exchange](exchange.md) is the message container that flows through a route. Every time a consumer receives a message, it wraps it in an Exchange and sends it through the route’s processor chain.
+
+An Exchange holds:
+
+-   **In Message** — the current message being processed. Most processors read and modify the In message directly.
+    
+-   **Exchange Properties** — a `Map<String, Object>` of metadata scoped to the exchange. Properties are _not_ propagated to external systems — they are only visible within the route. Use properties to pass state between processors in the same route.
+    
+-   **Exception** — set when processing fails. Used by [error handlers](error-handler.md) and [exception clauses](exception-clause.md) to determine how to handle the failure.
+    
+
+The [Exchange Pattern](exchange-pattern.md) (MEP) determines whether the exchange is one-way (`InOnly`) or request-reply (`InOut`). For `InOut`, Camel returns the final message as the reply to the caller.
+
+### Variables
+
+[Variables](variables.md) are the recommended way to store user data during routing instead of exchange properties.
+
+Exchange properties are also used internally by Camel and some EIPs and components, which can lead to naming conflicts or unexpected behavior. Variables are exclusively for end users — Camel will never set or read your variables internally.
+
+Variables can be scoped at different levels:
+
+-   **Exchange** (default) — private to the current exchange, same as exchange properties but without the risk of collisions with Camel internals
+    
+-   **Route** — shared across all exchanges in a specific route
+    
+-   **Group** — shared across a named group of routes
+    
+-   **Global** — shared across the entire `CamelContext`
+    
+
+Variables also integrate with commonly used EIPs (`to`, `enrich`, `poll`, `unmarshal`, etc.) via `variableSend` and `variableReceive` options, making it easy to gather data from external systems without modifying the current message.
+
+See [Variables](variables.md) for the full reference.
+
+### Message
+
+A [Message](exchange.md) has three parts:
+
+-   **Body** — the payload. Can be any Java type. Camel’s [type converter](type-converter.md) system automatically converts between types when needed (for example, `String` to `InputStream`, JSON to POJO, `byte[]` to `String`).
+    
+-   **Headers** — a `Map<String, Object>` of metadata. Headers are propagated to and from external systems by producers and consumers. For example, the File component sets `CamelFileName`, and the HTTP component maps HTTP headers. Camel-internal headers use the `Camel` prefix.
+    
+-   **Attachments** — binary attachments (used mainly with mail and SOAP components).
+    
+
+> **Note**
+> Headers and exchange properties are different. Headers travel with the message and can be sent to external systems. Exchange properties are route-scoped and never leave the exchange.
+
 ### Component
 
 [Components](../components/4.18.x/index.md) are the main extension point in Camel.
@@ -156,8 +206,27 @@ In contrast to the event-driven consumer, the polling consumer actively goes and
 > **Note**
 > In the Camel components, its only either the event driven or scheduled polling consumers that are in use. The polling consumer (non-scheduled) is only used to poll on-demand, such as when using the [Poll Enrich](../components/4.18.x/eips/pollEnrich-eip.md) EIP, or from Java by creating a `PollingConsumer` instance via the `createPollingConsumer()` method from `Endpoint`.
 
+## Startup Order
+
+When the `CamelContext` starts, it initializes services in a specific order:
+
+1.  **CamelContext** — initializes the registry, type converters, and internal services
+    
+2.  **Components** — component instances are created (or lazy-loaded on first use)
+    
+3.  **Endpoints** — endpoints referenced by routes are resolved and created
+    
+4.  **Routes** — route definitions are built into the processor chain
+    
+5.  **Consumers** — consumers start last, so all routes, endpoints, and processors are fully ready before any messages flow in
+    
+
+This order ensures that when the first message arrives, everything it needs is already initialized. Consumers starting last is important — it prevents messages from arriving before the route is ready to process them.
+
+Routes can be started and stopped individually at runtime using the `CamelContext` or via JMX.
+
+See [Lifecycle](lifecycle.md) for the full lifecycle details including suspend/resume and graceful shutdown.
+
 ## See Also
 
 See the following for high-level [architecture](architecture.md) of Apache Camel.
-
-See [Lifecycle](lifecycle.md) to understand the overall lifecycle of the `CamelContext`.

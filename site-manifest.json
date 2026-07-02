@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1782988563662,
+  "generated": 1783010433944,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32041,6 +32041,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-jfr-old-objects.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-jfr-old-objects.html",
+              "title": "camel cmd jfr-old-objects"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-cmd-load.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-load.html",
               "title": "camel cmd load"
@@ -32050,6 +32056,12 @@
               "path": "jbang-commands/camel-jbang-cmd-logger.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-logger.html",
               "title": "camel cmd logger"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-memory-leak.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-memory-leak.html",
+              "title": "camel cmd memory-leak"
             },
             {
               "module": "ROOT",

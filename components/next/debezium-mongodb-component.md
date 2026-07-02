@@ -74,7 +74,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Debezium MongoDB Connector component supports 88 options, which are listed below.
+The Debezium MongoDB Connector component supports 89 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -162,6 +162,7 @@ The Debezium MongoDB Connector component supports 88 options, which are listed b
 | **snapshotModeConfigurationBasedStartStream** (mongodb) | When 'snapshot.mode' is set as configuration\_based, this setting permits to specify whenever the stream should start or not after snapshot. | false | boolean |
 | **snapshotModeCustomName** (mongodb) | When 'snapshot.mode' is set as custom, this setting must be set to specify a the name of the custom implementation provided in the 'name()' method. The implementations must implement the 'Snapshotter' interface and is called on each app boot to determine whether to do a snapshot. |  | String |
 | **sourceinfoStructMaker** (mongodb) | The name of the SourceInfoStructMaker class that returns SourceInfo schema and struct. | io.debezium.connector.mongodb.MongoDbSourceInfoStructMaker | String |
+| **statisticsMetricsEnabled** (mongodb) | Enable to collect various kind of statistics, like latencies in record processing, and derived data like quantiles. By default collecting statistics is enabled. | true | boolean |
 | **streamingDelayMs** (mongodb) | A delay period after the snapshot is completed and the streaming begins, given in milliseconds. Defaults to 0 ms. | 0ms | long |
 | **tombstonesOnDelete** (mongodb) | Whether delete operations should be represented by a delete event and a subsequent tombstone event (true) or only by a delete event (false). Emitting the tombstone event (the default behavior) allows Kafka to completely delete all events pertaining to the given key once the source record got deleted. | false | boolean |
 | **topicNamingStrategy** (mongodb) | The name of the TopicNamingStrategy class that should be used to determine the topic name for data change, schema change, transaction, heartbeat event etc. | io.debezium.schema.SchemaTopicNamingStrategy | String |
@@ -183,7 +184,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **name** (consumer) | **Required** Unique name for the connector. Attempting to register again with the same name will fail. |  | String |
 
-### Query Parameters (88 parameters)
+### Query Parameters (89 parameters)
 
    
 | Name | Description | Default | Type |
@@ -285,6 +286,7 @@ Enum values:
 | **snapshotModeConfigurationBasedStartStream** (mongodb) | When 'snapshot.mode' is set as configuration\_based, this setting permits to specify whenever the stream should start or not after snapshot. | false | boolean |
 | **snapshotModeCustomName** (mongodb) | When 'snapshot.mode' is set as custom, this setting must be set to specify a the name of the custom implementation provided in the 'name()' method. The implementations must implement the 'Snapshotter' interface and is called on each app boot to determine whether to do a snapshot. |  | String |
 | **sourceinfoStructMaker** (mongodb) | The name of the SourceInfoStructMaker class that returns SourceInfo schema and struct. | io.debezium.connector.mongodb.MongoDbSourceInfoStructMaker | String |
+| **statisticsMetricsEnabled** (mongodb) | Enable to collect various kind of statistics, like latencies in record processing, and derived data like quantiles. By default collecting statistics is enabled. | true | boolean |
 | **streamingDelayMs** (mongodb) | A delay period after the snapshot is completed and the streaming begins, given in milliseconds. Defaults to 0 ms. | 0ms | long |
 | **tombstonesOnDelete** (mongodb) | Whether delete operations should be represented by a delete event and a subsequent tombstone event (true) or only by a delete event (false). Emitting the tombstone event (the default behavior) allows Kafka to completely delete all events pertaining to the given key once the source record got deleted. | false | boolean |
 | **topicNamingStrategy** (mongodb) | The name of the TopicNamingStrategy class that should be used to determine the topic name for data change, schema change, transaction, heartbeat event etc. | io.debezium.schema.SchemaTopicNamingStrategy | String |

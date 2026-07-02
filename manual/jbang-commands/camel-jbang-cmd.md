@@ -20,6 +20,7 @@ camel cmd [options]
 | [heap-histogram](camel-jbang-cmd-heap-histogram.md) | Display class-level heap memory usage in a running Camel integration |
 | [load](camel-jbang-cmd-load.md) | Loads new source files into an existing Camel |
 | [logger](camel-jbang-cmd-logger.md) | List or change logging levels |
+| [memory-leak](camel-jbang-cmd-memory-leak.md) | Diagnose memory leaks in a running Camel integration |
 | [receive](camel-jbang-cmd-receive.md) | Receive and dump messages from remote endpoints |
 | [reload](camel-jbang-cmd-reload.md) | Trigger reloading Camel |
 | [reset-stats](camel-jbang-cmd-reset-stats.md) | Reset performance statistics |
