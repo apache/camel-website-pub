@@ -75,9 +75,9 @@ Replace the `COMPONENT` with the artifact outlined in the [component documentati
 
 | Download | Signature and checksum |
 | --- | --- |
-| [apache-camel-4.18.2-src.zip](https://www.apache.org/dyn/closer.lua/camel/apache-camel/4.18.2/apache-camel-4.18.2-src.zip) (Sources) | [PGP Signature](https://downloads.apache.org/camel/apache-camel/4.18.2/apache-camel-4.18.2-src.zip.asc), [SHA512 Checksum](https://downloads.apache.org/camel/apache-camel/4.18.2/apache-camel-4.18.2-src.zip.sha512) |
-| [apache-camel-4.18.2-sbom.xml](https://www.apache.org/dyn/closer.lua/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.xml) (SBOM, CycloneDX XML) | [PGP Signature](https://downloads.apache.org/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.xml.asc), [SHA512 Checksum](https://downloads.apache.org/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.xml.sha512) |
-| [apache-camel-4.18.2-sbom.json](https://www.apache.org/dyn/closer.lua/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.json) (SBOM, CycloneDX JSON) | [PGP Signature](https://downloads.apache.org/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.json.asc), [SHA512 Checksum](https://downloads.apache.org/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.json.sha512) |
+| [apache-camel-4.18.2-src.zip](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-src.zip) (Sources) | [PGP Signature](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-src.zip.asc), [SHA512 Checksum](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-src.zip.sha512) |
+| [apache-camel-4.18.2-sbom.xml](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.xml) (SBOM, CycloneDX XML) | [PGP Signature](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.xml.asc), [SHA512 Checksum](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.xml.sha512) |
+| [apache-camel-4.18.2-sbom.json](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.json) (SBOM, CycloneDX JSON) | [PGP Signature](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.json.asc), [SHA512 Checksum](https://archive.apache.org/dist/camel/apache-camel/4.18.2/apache-camel-4.18.2-sbom.json.sha512) |
 
 ## Git tag checkout
 

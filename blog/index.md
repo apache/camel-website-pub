@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[214]{title,link,pubDate,description}:
+posts[215]{title,link,pubDate,description}:
+  RELEASE 4.18.3|https://camel.apache.org/blog/2026/07/RELEASE-4.18.3/index.md|Fri, 03 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.3 LTS release with 84 new features and improvements. The artifacts are published and ready for you to download from the Centr
   Apache Camel 4.21 What's New|https://camel.apache.org/blog/2026/07/camel421-whatsnew/index.md|Thu, 02 Jul 2026 00:00:00 +0000|Apache Camel 4.21 has just been released. This release introduces a large set of new features and noticeable improvements that we will cover in this blog post. Camel Core Error Registry The Error Regi
   RELEASE 4.21.0|https://camel.apache.org/blog/2026/07/RELEASE-4.21.0/index.md|Wed, 01 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.21.0 release with 406 new features and improvements. The artifacts are published and ready for you to download from the Central 
   Who Maintains Apache Camel: 19 Years, One Team, 100,000 Commits|https://camel.apache.org/blog/2026/07/camel-who-maintains/index.md|Wed, 01 Jul 2026 00:00:00 +0000|Apache Camel has crossed 100,000 commits from 1,500+ contributors representing 450+ companies. Those numbers paint a picture of a broad, thriving open source community — and that picture is real. But 
