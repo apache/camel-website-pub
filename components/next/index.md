@@ -22,7 +22,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 | [DataSet Test](dataset-test-component.md) | camel-dataset | Stable | 1.3 | Extends the mock component by pulling messages from another endpoint on startup to set the expected message bodies. |
 | [Direct](direct-component.md) | camel-direct | Stable | 1.0 | Call another endpoint from the same Camel Context synchronously. |
 | [Dynamic Router](dynamic-router-component.md) | camel-dynamic-router | Stable | 3.15 | The Dynamic Router component routes exchanges to recipients, and the recipients (and their rules) may change at runtime. |
-| [Event](event-component.md) | camel-event | Preview | 4.19 | Subscribe to Camel internal events such as route started/stopped and exchange completed/failed. |
+| [Event](event-component.md) | camel-event | Stable | 4.19 | Subscribe to Camel internal events such as route started/stopped and exchange completed/failed. |
 | [Exec](exec-component.md) | camel-exec | Stable | 2.3 | Execute commands on the underlying operating system. |
 | [File](file-component.md) | camel-file | Stable | 1.0 | Read and write files. |
 | [Kamelet](kamelet-component.md) | camel-kamelet | Stable | 3.8 | To call Kamelets |
@@ -107,7 +107,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Azure Event Grid](azure-eventgrid-component.md) | camel-azure-eventgrid | Stable | 4.17 | Send events to Azure Event Grid topics. |
 | [Azure Event Hubs](azure-eventhubs-component.md) | camel-azure-eventhubs | Stable | 3.5 | Send and receive events to/from Azure Event Hubs using AMQP protocol. |
 | [Azure Files](azure-files-component.md) | camel-azure-files | Preview | 3.22 | Send and receive files to Azure storage file share |
-| [Azure Functions](azure-functions-component.md) | camel-azure-functions | Preview | 4.19 | Invoke and manage Azure Functions. |
+| [Azure Functions](azure-functions-component.md) | camel-azure-functions | Stable | 4.19 | Invoke and manage Azure Functions. |
 | [Azure Key Vault](azure-key-vault-component.md) | camel-azure-key-vault | Stable | 3.17 | Manage secrets and keys in Azure Key Vault Service |
 | [Azure ServiceBus](azure-servicebus-component.md) | camel-azure-servicebus | Stable | 3.12 | Send and receive messages to/from Azure Service Bus. |
 | [Azure Storage Blob Service](azure-storage-blob-component.md) | camel-azure-storage-blob | Stable | 3.3 | Store and retrieve blobs from Azure Storage Blob Service. |
@@ -176,11 +176,11 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Google Calendar](google-calendar-component.md) | camel-google-calendar | Stable | 2.15 | Perform various operations on a Google Calendar. |
 | [Google Calendar Stream](google-calendar-stream-component.md) | camel-google-calendar | Stable | 2.23 | Poll for changes in a Google Calendar. |
 | [Google Cloud Functions](google-functions-component.md) | camel-google-functions | Stable | 3.9 | Manage and invoke Google Cloud Functions |
-| [Google Cloud Speech To Text](google-speech-to-text-component.md) | camel-google-speech-to-text | Preview | 4.19 | Transcribe audio to text using Google Cloud Speech-to-Text API |
-| [Google Cloud Text To Speech](google-text-to-speech-component.md) | camel-google-text-to-speech | Preview | 4.19 | Synthesize speech from text using the Google Cloud Text-to-Speech API |
-| [Google Cloud Vision](google-vision-component.md) | camel-google-vision | Preview | 4.19 | Detect labels, text, faces, logos and more on images through Google Cloud Vision API |
+| [Google Cloud Speech To Text](google-speech-to-text-component.md) | camel-google-speech-to-text | Stable | 4.19 | Transcribe audio to text using Google Cloud Speech-to-Text API |
+| [Google Cloud Text To Speech](google-text-to-speech-component.md) | camel-google-text-to-speech | Stable | 4.19 | Synthesize speech from text using the Google Cloud Text-to-Speech API |
+| [Google Cloud Vision](google-vision-component.md) | camel-google-vision | Stable | 4.19 | Detect labels, text, faces, logos and more on images through Google Cloud Vision API |
 | [Google Drive](google-drive-component.md) | camel-google-drive | Stable | 2.14 | Manage files in Google Drive. |
-| [Google Firestore](google-firestore-component.md) | camel-google-firestore | Preview | 4.19 | Store and retrieve data from Google Cloud Firestore NoSQL database. |
+| [Google Firestore](google-firestore-component.md) | camel-google-firestore | Stable | 4.19 | Store and retrieve data from Google Cloud Firestore NoSQL database. |
 | [Google Mail](google-mail-component.md) | camel-google-mail | Stable | 2.15 | Manage messages in Google Mail. |
 | [Google Mail Stream](google-mail-stream-component.md) | camel-google-mail | Stable | 2.22 | Poll for incoming messages in Google Mail. |
 | [Google Pubsub](google-pubsub-component.md) | camel-google-pubsub | Stable | 2.19 | Send and receive messages to/from Google Cloud Platform PubSub Service. |
@@ -198,7 +198,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Hazelcast List](hazelcast-list-component.md) | camel-hazelcast | Stable | 2.7 | Perform operations on Hazelcast distributed list. |
 | [Hazelcast Map](hazelcast-map-component.md) | camel-hazelcast | Stable | 2.7 | Perform operations on Hazelcast distributed map. |
 | [Hazelcast Multimap](hazelcast-multimap-component.md) | camel-hazelcast | Stable | 2.7 | Perform operations on Hazelcast distributed multimap. |
-| [Hazelcast PN Counter](hazelcast-pncounter-component.md) | camel-hazelcast | Preview | 4.19 | Increment, decrement, get, etc. operations on a Hazelcast PN Counter (CRDT counter). |
+| [Hazelcast PN Counter](hazelcast-pncounter-component.md) | camel-hazelcast | Stable | 4.19 | Increment, decrement, get, etc. operations on a Hazelcast PN Counter (CRDT counter). |
 | [Hazelcast Queue](hazelcast-queue-component.md) | camel-hazelcast | Stable | 2.7 | Perform operations on Hazelcast distributed queue. |
 | [Hazelcast Replicated Map](hazelcast-replicatedmap-component.md) | camel-hazelcast | Stable | 2.16 | Perform operations on Hazelcast replicated map. |
 | [Hazelcast Ringbuffer](hazelcast-ringbuffer-component.md) | camel-hazelcast | Stable | 2.16 | Perform operations on Hazelcast distributed ringbuffer. |
@@ -214,7 +214,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Huawei Identity and Access Management (IAM)](hwcloud-iam-component.md) | camel-huaweicloud-iam | Stable | 3.11 | To securely manage users on Huawei Cloud |
 | [Huawei Object Storage Service (OBS)](hwcloud-obs-component.md) | camel-huaweicloud-obs | Stable | 3.12 | To provide stable, secure, efficient, and easy-to-use cloud storage service on Huawei Cloud |
 | [Huawei Simple Message Notification (SMN)](hwcloud-smn-component.md) | camel-huaweicloud-smn | Stable | 3.8 | To broadcast messages and connect cloud services through notifications on Huawei Cloud |
-| [Hugging Face](huggingface-component.md) | camel-huggingface | Preview | 4.19 | Integration with Hugging Face’s Model Hub by using the Deep Java Library (DJL) Python bridge |
+| [Hugging Face](huggingface-component.md) | camel-huggingface | Stable | 4.19 | Integration with Hugging Face’s Model Hub by using the Deep Java Library (DJL) Python bridge |
 | [IBM](ibm-summary.md) |  |  |  |  |
 | [IBM Cloud Object Storage](ibm-cos-component.md) | camel-ibm-cos | Stable | 4.16 | Store and retrieve objects from IBM Cloud Object Storage. |
 | [IBM Secrets Manager](ibm-secrets-manager-component.md) | camel-ibm-secrets-manager | Stable | 4.11 | Manage secrets in IBM Secrets Manager Service |
@@ -223,7 +223,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [IBM Watson Speech to Text](ibm-watson-speech-to-text-component.md) | camel-ibm-watson-speech-to-text | Stable | 4.17 | Convert speech audio to text using IBM Watson Speech to Text |
 | [IBM Watson Text to Speech](ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
 | [IBM watsonx.ai](ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
-| [IBM watsonx.data](ibm-watsonx-data-component.md) | camel-ibm-watsonx-data | Preview | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
+| [IBM watsonx.data](ibm-watsonx-data-component.md) | camel-ibm-watsonx-data | Stable | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
 | [IEC 60870 Client](iec60870-client-component.md) | camel-iec60870 | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
 | [IEC 60870 Server](iec60870-server-component.md) | camel-iec60870 | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
 | [Iggy](iggy-component.md) | camel-iggy | Preview | 4.17 | Send and receive message to Apache Iggy streaming platform. |
@@ -336,7 +336,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Paho](paho-component.md) | camel-paho | Stable-deprecated | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |
 | [Paho MQTT 5](paho-mqtt5-component.md) | camel-paho-mqtt5 | Stable | 3.8 | Communicate with MQTT message brokers using Eclipse Paho MQTT v5 Client. |
 | [PDF](pdf-component.md) | camel-pdf | Stable | 2.16 | Create, modify or extract content from PDF documents. |
-| [PGVector](pgvector-component.md) | camel-pgvector | Preview | 4.19 | Perform operations on the PostgreSQL pgvector Vector Database. |
+| [PGVector](pgvector-component.md) | camel-pgvector | Stable | 4.19 | Perform operations on the PostgreSQL pgvector Vector Database. |
 | [Pinecone](pinecone-component.md) | camel-pinecone | Stable | 4.6 | Perform operations on the Pinecone Vector Database. |
 | [Platform HTTP](platform-http-component.md) | camel-platform-http | Stable | 3.0 | Expose HTTP endpoints using the HTTP server available in the current platform. |
 | [PLC4X](plc4x-component.md) | camel-plc4x | Stable | 3.20 | Read and write to PLC devices |
@@ -377,7 +377,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Spring](spring-summary.md) | camel-spring |  |  |  |
 | [Spring AI Chat](spring-ai-chat-component.md) | camel-spring-ai-chat | Stable | 4.17 | Perform chat operations using Spring AI. |
 | [Spring AI Embeddings](spring-ai-embeddings-component.md) | camel-spring-ai-embeddings | Stable | 4.17 | Spring AI Embeddings |
-| [Spring AI Image](spring-ai-image-component.md) | camel-spring-ai-image | Preview | 4.19 | Spring AI Image Generation |
+| [Spring AI Image](spring-ai-image-component.md) | camel-spring-ai-image | Stable | 4.19 | Spring AI Image Generation |
 | [Spring AI Tools](spring-ai-tools-component.md) | camel-spring-ai-tools | Stable | 4.17 | Spring AI Tools and Function Calling Features |
 | [Spring AI Vector Store](spring-ai-vector-store-component.md) | camel-spring-ai-vector-store | Stable | 4.17 | Spring AI Vector Store |
 | [Spring Batch](spring-batch-component.md) | camel-spring-batch | Stable | 2.10 | Send messages to Spring Batch for further processing. |

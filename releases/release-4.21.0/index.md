@@ -1647,7 +1647,11 @@ camel-core: replace Thread.sleep in tests
 
 camel-cxf: replace Thread.sleep in tests
 
-### Test (20)
+### Test (21)
+
+[CAMEL-23880](https://issues.apache.org/jira/browse/CAMEL-23880)
+
+camel-pulsar - Fix flaky integration tests caused by topic name collisions and resource leaks
 
 [CAMEL-23758](https://issues.apache.org/jira/browse/CAMEL-23758)
 

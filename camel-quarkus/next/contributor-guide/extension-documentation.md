@@ -31,6 +31,18 @@ The `update-extension-doc-page` mojo merges the [FreeMarker template](https://ra
 -   `limitations`: Camel Quarkus specific limitations (optional); the content of `src/main/doc/limitations.adoc` in the runtime module of the given extension.
     
 
+## Extension description sync
+
+The `cq:update-quarkus-metadata` goal automatically syncs each extension’s runtime `pom.xml` `<description>` with the Camel catalog. Extensions that need a custom description (e.g. multi-model extensions or extensions where the catalog description is not suitable) can opt out by setting:
+
+```xml
+<properties>
+    <cq.descriptionSync>false</cq.descriptionSync>
+</properties>
+```
+
+The property defaults to `true`.
+
 ## Overriding generated component links
 
 Sometimes the generated component link xref within each extension doc page needs to be overridden. Usually due to the Camel component `.adoc` file not conforming to the usual naming conventions or if a component is moved, renamed etc.

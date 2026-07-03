@@ -14,7 +14,7 @@ Number of Data Formats: 56 in 50 JAR artifacts (0 deprecated)
 | [ASN.1 File](asn1-dataformat.md) | camel-asn1 | Stable | 2.20 | Encode and decode data structures using Abstract Syntax Notation One (ASN.1) |
 | [Avro](avro-dataformat.md) | camel-avro | Stable | 2.14 | Serialize and deserialize messages using Apache Avro binary data format |
 | [Avro Jackson 2](avroJackson2-dataformat.md) | camel-jackson-avro | Stable | 3.10 | Marshal POJOs to Avro and back using Jackson. |
-| [Avro Jackson 3](avroJackson3-dataformat.md) | camel-jackson3-avro | Preview | 4.19 | Marshal POJOs to Avro and back using Jackson. |
+| [Avro Jackson 3](avroJackson3-dataformat.md) | camel-jackson3-avro | Stable | 4.19 | Marshal POJOs to Avro and back using Jackson. |
 | [Barcode](barcode-dataformat.md) | camel-barcode | Stable | 2.14 | Transform strings to various 1D/2D barcode bitmap formats and back |
 | [Base64](base64-dataformat.md) | camel-base64 | Stable | 2.11 | Encode and decode data using Base64 |
 | [BeanIO](beanio-dataformat.md) | camel-beanio | Stable | 2.10 | Marshal and unmarshal Java beans to and from flat files (such as CSV, delimited, or fixed length formats) |
@@ -28,19 +28,19 @@ Number of Data Formats: 56 in 50 JAR artifacts (0 deprecated)
 | [Flatpack](flatpack-dataformat.md) | camel-flatpack | Stable | 2.1 | Marshal and unmarshal Java lists and maps to/from flat files (such as CSV, delimited, or fixed length formats) using Flatpack library |
 | [Fory](fory-dataformat.md) | camel-fory | Stable | 4.9 | Serialize and deserialize messages using Apache Fory |
 | [Grok](grok-dataformat.md) | camel-grok | Stable | 3.0 | Unmarshal unstructured data to objects using Logstash based Grok patterns |
-| [Groovy JSon](groovyJson-dataformat.md) | camel-groovy | Preview | 4.19 | Transform between JSon and java.util.Map or java.util.List objects |
+| [Groovy JSon](groovyJson-dataformat.md) | camel-groovy | Stable | 4.19 | Transform between JSon and java.util.Map or java.util.List objects |
 | [Groovy XML](groovyXml-dataformat.md) | camel-groovy | Stable | 4.15 | Transform between XML and Groovy Node (Map structure) objects |
 | [GZip Deflater](gzipDeflater-dataformat.md) | camel-zip-deflater | Stable | 2.0 | Compress and decompress messages using java.util.zip.GZIP\*Stream |
 | [HL7](hl7-dataformat.md) | camel-hl7 | Stable | 2.0 | Marshal and unmarshal HL7 (Health Care) model objects using the HL7 MLLP codec |
 | [iCal](ical-dataformat.md) | camel-ical | Stable | 2.12 | Marshal and unmarshal iCal (\*.ics) documents to/from model objects |
 | [ISO-8583](iso8583-dataformat.md) | camel-iso8583 | Stable | 4.14 | Create, edit and read ISO-8583 messages |
 | [Jackson XML 2](jacksonXml2-dataformat.md) | camel-jacksonxml | Stable | 2.16 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
-| [Jackson XML 3](jacksonXml3-dataformat.md) | camel-jackson3xml | Preview | 4.19 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
+| [Jackson XML 3](jacksonXml3-dataformat.md) | camel-jackson3xml | Stable | 4.19 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
 | [JAXB](jaxb-dataformat.md) | camel-jaxb | Stable | 1.0 | Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard |
 | [JSON Fastjson](fastjson-dataformat.md) | camel-fastjson | Stable | 2.20 | Marshal POJOs to JSON and back using Fastjson |
 | [JSON Gson](gson-dataformat.md) | camel-gson | Stable | 2.10 | Marshal POJOs to JSON and back using Gson |
 | [JSON Jackson 2](jackson2-dataformat.md) | camel-jackson | Stable | 2.0 | Marshal POJOs to JSON and back using Jackson. |
-| [JSON Jackson 3](jackson3-dataformat.md) | camel-jackson3 | Preview | 4.19 | Marshal POJOs to JSON and back using Jackson. |
+| [JSON Jackson 3](jackson3-dataformat.md) | camel-jackson3 | Stable | 4.19 | Marshal POJOs to JSON and back using Jackson. |
 | [JSON JSON-B](jsonb-dataformat.md) | camel-jsonb | Stable | 3.7 | Marshal POJOs to JSON and back using JSON-B. |
 | [JSonApi](jsonApi-dataformat.md) | camel-jsonapi | Stable | 3.0 | Marshal and unmarshal JSON:API resources using JSONAPI-Converter library |
 | [LZF Deflate Compression](lzf-dataformat.md) | camel-lzf | Stable | 2.17 | Compress and decompress streams using LZF deflate algorithm |
@@ -51,7 +51,7 @@ Number of Data Formats: 56 in 50 JAR artifacts (0 deprecated)
 | [PQC (Post-Quantum Cryptography)](pqc-dataformat.md) | camel-pqc | Stable | 4.16 | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM) |
 | [Protobuf](protobuf-dataformat.md) | camel-protobuf | Stable | 2.2 | Serialize and deserialize Java objects using Google’s Protocol buffers |
 | [Protobuf Jackson 2](protobufJackson2-dataformat.md) | camel-jackson-protobuf | Stable | 3.10 | Marshal POJOs to Protobuf and back using Jackson. |
-| [Protobuf Jackson 3](protobufJackson3-dataformat.md) | camel-jackson3-protobuf | Preview | 4.19 | Marshal POJOs to Protobuf and back using Jackson. |
+| [Protobuf Jackson 3](protobufJackson3-dataformat.md) | camel-jackson3-protobuf | Stable | 4.19 | Marshal POJOs to Protobuf and back using Jackson. |
 | [RSS](rss-dataformat.md) | camel-rss | Stable | 2.1 | Transform from ROME SyndFeed Java Objects to XML and vice-versa |
 | [Smooks](smooks-dataformat.md) | camel-smooks | Stable | 4.9 | Transform and bind XML as well as non-XML data, including EDI, CSV, JSON, and YAML using Smooks |
 | [SOAP](soap-dataformat.md) | camel-soap | Stable | 2.3 | Marshal Java objects to SOAP messages and back |

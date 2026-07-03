@@ -876,7 +876,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Azure Event Grid](../../components/next/azure-eventgrid-component.md) | camel-azure-eventgrid-starter | Stable | 4.17 | Send events to Azure Event Grid topics. |
 | [Azure Event Hubs](../../components/next/azure-eventhubs-component.md) | camel-azure-eventhubs-starter | Stable | 3.5 | Send and receive events to/from Azure Event Hubs using AMQP protocol. |
 | [Azure Files](../../components/next/azure-files-component.md) | camel-azure-files-starter | Preview | 3.22 | Send and receive files to Azure storage file share |
-| [Azure Functions](../../components/next/azure-functions-component.md) | camel-azure-functions-starter | Preview | 4.19 | Invoke and manage Azure Functions. |
+| [Azure Functions](../../components/next/azure-functions-component.md) | camel-azure-functions-starter | Stable | 4.19 | Invoke and manage Azure Functions. |
 | [Azure Key Vault](../../components/next/azure-key-vault-component.md) | camel-azure-key-vault-starter | Stable | 3.17 | Manage secrets and keys in Azure Key Vault Service |
 | [Azure ServiceBus](../../components/next/azure-servicebus-component.md) | camel-azure-servicebus-starter | Stable | 3.12 | Send and receive messages to/from Azure Service Bus. |
 | [Azure Storage Blob Service](../../components/next/azure-storage-blob-component.md) | camel-azure-storage-blob-starter | Stable | 3.3 | Store and retrieve blobs from Azure Storage Blob Service. |
@@ -935,7 +935,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Ehcache](../../components/next/ehcache-component.md) | camel-ehcache-starter | Stable | 2.18 | Perform caching operations using Ehcache. |
 | [Elasticsearch](../../components/next/elasticsearch-component.md) | camel-elasticsearch-starter | Stable | 3.19 | Send requests to ElasticSearch via Java Client API. |
 | [Elasticsearch Low level Rest Client](../../components/next/elasticsearch-rest-client-component.md) | camel-elasticsearch-rest-client-starter | Stable | 4.3 | Perform queries and other operations on Elasticsearch or OpenSearch (uses low-level client). |
-| [Event](../../components/next/event-component.md) | camel-event-starter | Preview | 4.19 | Subscribe to Camel internal events such as route started/stopped and exchange completed/failed. |
+| [Event](../../components/next/event-component.md) | camel-event-starter | Stable | 4.19 | Subscribe to Camel internal events such as route started/stopped and exchange completed/failed. |
 | [Exec](../../components/next/exec-component.md) | camel-exec-starter | Stable | 2.3 | Execute commands on the underlying operating system. |
 | [FHIR](../../components/next/fhir-component.md) | camel-fhir-starter | Stable | 2.23 | Exchange information in the healthcare domain using the FHIR (Fast Healthcare Interoperability Resources) standard. |
 | [File](../../components/next/file-component.md) | camel-file-starter | Stable | 1.0 | Read and write files. |
@@ -955,11 +955,11 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Google Calendar](../../components/next/google-calendar-component.md) | camel-google-calendar-starter | Stable | 2.15 | Perform various operations on a Google Calendar. |
 | [Google Calendar Stream](../../components/next/google-calendar-stream-component.md) | camel-google-calendar-starter | Stable | 2.23 | Poll for changes in a Google Calendar. |
 | [Google Cloud Functions](../../components/next/google-functions-component.md) | camel-google-functions-starter | Stable | 3.9 | Manage and invoke Google Cloud Functions |
-| [Google Cloud Speech To Text](../../components/next/google-speech-to-text-component.md) | camel-google-speech-to-text-starter | Preview | 4.19 | Transcribe audio to text using Google Cloud Speech-to-Text API |
-| [Google Cloud Text To Speech](../../components/next/google-text-to-speech-component.md) | camel-google-text-to-speech-starter | Preview | 4.19 | Synthesize speech from text using the Google Cloud Text-to-Speech API |
-| [Google Cloud Vision](../../components/next/google-vision-component.md) | camel-google-vision-starter | Preview | 4.19 | Detect labels, text, faces, logos and more on images through Google Cloud Vision API |
+| [Google Cloud Speech To Text](../../components/next/google-speech-to-text-component.md) | camel-google-speech-to-text-starter | Stable | 4.19 | Transcribe audio to text using Google Cloud Speech-to-Text API |
+| [Google Cloud Text To Speech](../../components/next/google-text-to-speech-component.md) | camel-google-text-to-speech-starter | Stable | 4.19 | Synthesize speech from text using the Google Cloud Text-to-Speech API |
+| [Google Cloud Vision](../../components/next/google-vision-component.md) | camel-google-vision-starter | Stable | 4.19 | Detect labels, text, faces, logos and more on images through Google Cloud Vision API |
 | [Google Drive](../../components/next/google-drive-component.md) | camel-google-drive-starter | Stable | 2.14 | Manage files in Google Drive. |
-| [Google Firestore](../../components/next/google-firestore-component.md) | camel-google-firestore-starter | Preview | 4.19 | Store and retrieve data from Google Cloud Firestore NoSQL database. |
+| [Google Firestore](../../components/next/google-firestore-component.md) | camel-google-firestore-starter | Stable | 4.19 | Store and retrieve data from Google Cloud Firestore NoSQL database. |
 | [Google Mail](../../components/next/google-mail-component.md) | camel-google-mail-starter | Stable | 2.15 | Manage messages in Google Mail. |
 | [Google Mail Stream](../../components/next/google-mail-stream-component.md) | camel-google-mail-starter | Stable | 2.22 | Poll for incoming messages in Google Mail. |
 | [Google Pubsub](../../components/next/google-pubsub-component.md) | camel-google-pubsub-starter | Stable | 2.19 | Send and receive messages to/from Google Cloud Platform PubSub Service. |
@@ -976,7 +976,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Hazelcast List](../../components/next/hazelcast-list-component.md) | camel-hazelcast-starter | Stable | 2.7 | Perform operations on Hazelcast distributed list. |
 | [Hazelcast Map](../../components/next/hazelcast-map-component.md) | camel-hazelcast-starter | Stable | 2.7 | Perform operations on Hazelcast distributed map. |
 | [Hazelcast Multimap](../../components/next/hazelcast-multimap-component.md) | camel-hazelcast-starter | Stable | 2.7 | Perform operations on Hazelcast distributed multimap. |
-| [Hazelcast PN Counter](../../components/next/hazelcast-pncounter-component.md) | camel-hazelcast-starter | Preview | 4.19 | Increment, decrement, get, etc. operations on a Hazelcast PN Counter (CRDT counter). |
+| [Hazelcast PN Counter](../../components/next/hazelcast-pncounter-component.md) | camel-hazelcast-starter | Stable | 4.19 | Increment, decrement, get, etc. operations on a Hazelcast PN Counter (CRDT counter). |
 | [Hazelcast Queue](../../components/next/hazelcast-queue-component.md) | camel-hazelcast-starter | Stable | 2.7 | Perform operations on Hazelcast distributed queue. |
 | [Hazelcast Replicated Map](../../components/next/hazelcast-replicatedmap-component.md) | camel-hazelcast-starter | Stable | 2.16 | Perform operations on Hazelcast replicated map. |
 | [Hazelcast Ringbuffer](../../components/next/hazelcast-ringbuffer-component.md) | camel-hazelcast-starter | Stable | 2.16 | Perform operations on Hazelcast distributed ringbuffer. |
@@ -991,7 +991,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Huawei Identity and Access Management (IAM)](../../components/next/hwcloud-iam-component.md) | camel-huaweicloud-iam-starter | Stable | 3.11 | To securely manage users on Huawei Cloud |
 | [Huawei Object Storage Service (OBS)](../../components/next/hwcloud-obs-component.md) | camel-huaweicloud-obs-starter | Stable | 3.12 | To provide stable, secure, efficient, and easy-to-use cloud storage service on Huawei Cloud |
 | [Huawei Simple Message Notification (SMN)](../../components/next/hwcloud-smn-component.md) | camel-huaweicloud-smn-starter | Stable | 3.8 | To broadcast messages and connect cloud services through notifications on Huawei Cloud |
-| [Hugging Face](../../components/next/huggingface-component.md) | camel-huggingface-starter | Preview | 4.19 | Integration with Hugging Face’s Model Hub by using the Deep Java Library (DJL) Python bridge |
+| [Hugging Face](../../components/next/huggingface-component.md) | camel-huggingface-starter | Stable | 4.19 | Integration with Hugging Face’s Model Hub by using the Deep Java Library (DJL) Python bridge |
 | [IBM Cloud Object Storage](../../components/next/ibm-cos-component.md) | camel-ibm-cos-starter | Stable | 4.16 | Store and retrieve objects from IBM Cloud Object Storage. |
 | [IBM Secrets Manager](../../components/next/ibm-secrets-manager-component.md) | camel-ibm-secrets-manager-starter | Stable | 4.11 | Manage secrets in IBM Secrets Manager Service |
 | [IBM Watson Discovery](../../components/next/ibm-watson-discovery-component.md) | camel-ibm-watson-discovery-starter | Stable | 4.16 | Perform document understanding and search using IBM Watson Discovery |
@@ -999,7 +999,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [IBM Watson Speech to Text](../../components/next/ibm-watson-speech-to-text-component.md) | camel-ibm-watson-speech-to-text-starter | Stable | 4.17 | Convert speech audio to text using IBM Watson Speech to Text |
 | [IBM Watson Text to Speech](../../components/next/ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech-starter | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
 | [IBM watsonx.ai](../../components/next/ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai-starter | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
-| [IBM watsonx.data](../../components/next/ibm-watsonx-data-component.md) | camel-ibm-watsonx-data-starter | Preview | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
+| [IBM watsonx.data](../../components/next/ibm-watsonx-data-component.md) | camel-ibm-watsonx-data-starter | Stable | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
 | [IEC 60870 Client](../../components/next/iec60870-client-component.md) | camel-iec60870-starter | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
 | [IEC 60870 Server](../../components/next/iec60870-server-component.md) | camel-iec60870-starter | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
 | [Iggy](../../components/next/iggy-component.md) | camel-iggy-starter | Preview | 4.17 | Send and receive message to Apache Iggy streaming platform. |
@@ -1114,7 +1114,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Paho](../../components/next/paho-component.md) | camel-paho-starter | Stable-deprecated | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |
 | [Paho MQTT 5](../../components/next/paho-mqtt5-component.md) | camel-paho-mqtt5-starter | Stable | 3.8 | Communicate with MQTT message brokers using Eclipse Paho MQTT v5 Client. |
 | [PDF](../../components/next/pdf-component.md) | camel-pdf-starter | Stable | 2.16 | Create, modify or extract content from PDF documents. |
-| [PGVector](../../components/next/pgvector-component.md) | camel-pgvector-starter | Preview | 4.19 | Perform operations on the PostgreSQL pgvector Vector Database. |
+| [PGVector](../../components/next/pgvector-component.md) | camel-pgvector-starter | Stable | 4.19 | Perform operations on the PostgreSQL pgvector Vector Database. |
 | [Pinecone](../../components/next/pinecone-component.md) | camel-pinecone-starter | Stable | 4.6 | Perform operations on the Pinecone Vector Database. |
 | [Platform HTTP](../../components/next/platform-http-component.md) | camel-platform-http-starter | Stable | 3.0 | Expose HTTP endpoints using the HTTP server available in the current platform. |
 | [PLC4X](../../components/next/plc4x-component.md) | camel-plc4x-starter | Stable | 3.20 | Read and write to PLC devices |
@@ -1159,7 +1159,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Splunk HEC](../../components/next/splunk-hec-component.md) | camel-splunk-hec-starter | Stable | 3.3 | The splunk component allows publishing events in Splunk using the HTTP Event Collector. |
 | [Spring AI Chat](../../components/next/spring-ai-chat-component.md) | camel-spring-ai-chat-starter | Stable | 4.17 | Perform chat operations using Spring AI. |
 | [Spring AI Embeddings](../../components/next/spring-ai-embeddings-component.md) | camel-spring-ai-embeddings-starter | Stable | 4.17 | Spring AI Embeddings |
-| [Spring AI Image](../../components/next/spring-ai-image-component.md) | camel-spring-ai-image-starter | Preview | 4.19 | Spring AI Image Generation |
+| [Spring AI Image](../../components/next/spring-ai-image-component.md) | camel-spring-ai-image-starter | Stable | 4.19 | Spring AI Image Generation |
 | [Spring AI Tools](../../components/next/spring-ai-tools-component.md) | camel-spring-ai-tools-starter | Stable | 4.17 | Spring AI Tools and Function Calling Features |
 | [Spring AI Vector Store](../../components/next/spring-ai-vector-store-component.md) | camel-spring-ai-vector-store-starter | Stable | 4.17 | Spring AI Vector Store |
 | [Spring Batch](../../components/next/spring-batch-component.md) | camel-spring-batch-starter | Stable | 2.10 | Send messages to Spring Batch for further processing. |
@@ -1233,7 +1233,7 @@ Number of Camel data formats: 0 in 0 JAR artifacts (0 deprecated)
 | [ASN.1 File](../../components/next/dataformats/asn1-dataformat.md) | camel-asn1-starter | Stable | 2.20 | Encode and decode data structures using Abstract Syntax Notation One (ASN.1) |
 | [Avro](../../components/next/dataformats/avro-dataformat.md) | camel-avro-starter | Stable | 2.14 | Serialize and deserialize messages using Apache Avro binary data format |
 | [Avro Jackson 2](../../components/next/dataformats/avroJackson2-dataformat.md) | camel-jackson-avro-starter | Stable | 3.10 | Marshal POJOs to Avro and back using Jackson. |
-| [Avro Jackson 3](../../components/next/dataformats/avroJackson3-dataformat.md) | camel-jackson3-avro-starter | Preview | 4.19 | Marshal POJOs to Avro and back using Jackson. |
+| [Avro Jackson 3](../../components/next/dataformats/avroJackson3-dataformat.md) | camel-jackson3-avro-starter | Stable | 4.19 | Marshal POJOs to Avro and back using Jackson. |
 | [Barcode](../../components/next/dataformats/barcode-dataformat.md) | camel-barcode-starter | Stable | 2.14 | Transform strings to various 1D/2D barcode bitmap formats and back |
 | [Base64](../../components/next/dataformats/base64-dataformat.md) | camel-base64-starter | Stable | 2.11 | Encode and decode data using Base64 |
 | [BeanIO](../../components/next/dataformats/beanio-dataformat.md) | camel-beanio-starter | Stable | 2.10 | Marshal and unmarshal Java beans to and from flat files (such as CSV, delimited, or fixed length formats) |
@@ -1247,19 +1247,19 @@ Number of Camel data formats: 0 in 0 JAR artifacts (0 deprecated)
 | [Flatpack](../../components/next/dataformats/flatpack-dataformat.md) | camel-flatpack-starter | Stable | 2.1 | Marshal and unmarshal Java lists and maps to/from flat files (such as CSV, delimited, or fixed length formats) using Flatpack library |
 | [Fory](../../components/next/dataformats/fory-dataformat.md) | camel-fory-starter | Stable | 4.9 | Serialize and deserialize messages using Apache Fory |
 | [Grok](../../components/next/dataformats/grok-dataformat.md) | camel-grok-starter | Stable | 3.0 | Unmarshal unstructured data to objects using Logstash based Grok patterns |
-| [Groovy JSon](../../components/next/dataformats/groovyJson-dataformat.md) | camel-groovy-starter | Preview | 4.19 | Transform between JSon and java.util.Map or java.util.List objects |
+| [Groovy JSon](../../components/next/dataformats/groovyJson-dataformat.md) | camel-groovy-starter | Stable | 4.19 | Transform between JSon and java.util.Map or java.util.List objects |
 | [Groovy XML](../../components/next/dataformats/groovyXml-dataformat.md) | camel-groovy-starter | Stable | 4.15 | Transform between XML and Groovy Node (Map structure) objects |
 | [GZip Deflater](../../components/next/dataformats/gzipDeflater-dataformat.md) | camel-zip-deflater-starter | Stable | 2.0 | Compress and decompress messages using java.util.zip.GZIP\*Stream |
 | [HL7](../../components/next/dataformats/hl7-dataformat.md) | camel-hl7-starter | Stable | 2.0 | Marshal and unmarshal HL7 (Health Care) model objects using the HL7 MLLP codec |
 | [iCal](../../components/next/dataformats/ical-dataformat.md) | camel-ical-starter | Stable | 2.12 | Marshal and unmarshal iCal (\*.ics) documents to/from model objects |
 | [ISO-8583](../../components/next/dataformats/iso8583-dataformat.md) | camel-iso8583-starter | Stable | 4.14 | Create, edit and read ISO-8583 messages |
 | [Jackson XML 2](../../components/next/dataformats/jacksonXml2-dataformat.md) | camel-jacksonxml-starter | Stable | 2.16 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
-| [Jackson XML 3](../../components/next/dataformats/jacksonXml3-dataformat.md) | camel-jackson3xml-starter | Preview | 4.19 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
+| [Jackson XML 3](../../components/next/dataformats/jacksonXml3-dataformat.md) | camel-jackson3xml-starter | Stable | 4.19 | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
 | [JAXB](../../components/next/dataformats/jaxb-dataformat.md) | camel-jaxb-starter | Stable | 1.0 | Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard |
 | [JSON Fastjson](../../components/next/dataformats/fastjson-dataformat.md) | camel-fastjson-starter | Stable | 2.20 | Marshal POJOs to JSON and back using Fastjson |
 | [JSON Gson](../../components/next/dataformats/gson-dataformat.md) | camel-gson-starter | Stable | 2.10 | Marshal POJOs to JSON and back using Gson |
 | [JSON Jackson 2](../../components/next/dataformats/jackson2-dataformat.md) | camel-jackson-starter | Stable | 2.0 | Marshal POJOs to JSON and back using Jackson. |
-| [JSON Jackson 3](../../components/next/dataformats/jackson3-dataformat.md) | camel-jackson3-starter | Preview | 4.19 | Marshal POJOs to JSON and back using Jackson. |
+| [JSON Jackson 3](../../components/next/dataformats/jackson3-dataformat.md) | camel-jackson3-starter | Stable | 4.19 | Marshal POJOs to JSON and back using Jackson. |
 | [JSON JSON-B](../../components/next/dataformats/jsonb-dataformat.md) | camel-jsonb-starter | Stable | 3.7 | Marshal POJOs to JSON and back using JSON-B. |
 | [JSonApi](../../components/next/dataformats/jsonApi-dataformat.md) | camel-jsonapi-starter | Stable | 3.0 | Marshal and unmarshal JSON:API resources using JSONAPI-Converter library |
 | [LZF Deflate Compression](../../components/next/dataformats/lzf-dataformat.md) | camel-lzf-starter | Stable | 2.17 | Compress and decompress streams using LZF deflate algorithm |
@@ -1270,7 +1270,7 @@ Number of Camel data formats: 0 in 0 JAR artifacts (0 deprecated)
 | [PQC (Post-Quantum Cryptography)](../../components/next/dataformats/pqc-dataformat.md) | camel-pqc-starter | Stable | 4.16 | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM) |
 | [Protobuf](../../components/next/dataformats/protobuf-dataformat.md) | camel-protobuf-starter | Stable | 2.2 | Serialize and deserialize Java objects using Google’s Protocol buffers |
 | [Protobuf Jackson 2](../../components/next/dataformats/protobufJackson2-dataformat.md) | camel-jackson-protobuf-starter | Stable | 3.10 | Marshal POJOs to Protobuf and back using Jackson. |
-| [Protobuf Jackson 3](../../components/next/dataformats/protobufJackson3-dataformat.md) | camel-jackson3-protobuf-starter | Preview | 4.19 | Marshal POJOs to Protobuf and back using Jackson. |
+| [Protobuf Jackson 3](../../components/next/dataformats/protobufJackson3-dataformat.md) | camel-jackson3-protobuf-starter | Stable | 4.19 | Marshal POJOs to Protobuf and back using Jackson. |
 | [RSS](../../components/next/dataformats/rss-dataformat.md) | camel-rss-starter | Stable | 2.1 | Transform from ROME SyndFeed Java Objects to XML and vice-versa |
 | [Smooks](../../components/next/dataformats/smooks-dataformat.md) | camel-smooks-starter | Stable | 4.9 | Transform and bind XML as well as non-XML data, including EDI, CSV, JSON, and YAML using Smooks |
 | [SOAP](../../components/next/dataformats/soap-dataformat.md) | camel-soap-starter | Stable | 2.3 | Marshal Java objects to SOAP messages and back |
