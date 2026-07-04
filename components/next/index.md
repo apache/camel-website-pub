@@ -27,7 +27,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 | [File](file-component.md) | camel-file | Stable | 1.0 | Read and write files. |
 | [Kamelet](kamelet-component.md) | camel-kamelet | Stable | 3.8 | To call Kamelets |
 | [Language](language-component.md) | camel-language | Stable | 2.5 | Execute scripts in any of the languages supported by Camel. |
-| [Log Data](log-component.md) | camel-log | Stable | 1.1 | Prints data form the routed message (such as body and headers) to the logger. |
+| [Log Data](log-component.md) | camel-log | Stable | 1.1 | Prints data from the routed message (such as body and headers) to the logger. |
 | [Mock](mock-component.md) | camel-mock | Stable | 1.0 | Test routes and mediation rules using mocks. |
 | [Once](once-component.md) | camel-once | Stable | 4.17 | Trigger a single message only once at startup (useful for development and testing purposes). |
 | [Ref](ref-component.md) | camel-ref | Stable | 1.2 | Route messages to an endpoint looked up dynamically by name in the Camel Registry. |
@@ -56,7 +56,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [ActiveMQ 5.x](activemq-component.md) | camel-activemq | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](activemq6-component.md) | camel-activemq6 | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI](ai-summary.md) |  |  |  |  |
-| [AMQP](amqp-component.md) | camel-amqp | Stable | 1.2 | Messaging with AMQP protocol using Apache QPid Client. |
+| [AMQP](amqp-component.md) | camel-amqp | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](arangodb-component.md) | camel-arangodb | Stable | 3.5 | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](as2-component.md) | camel-as2 | Stable | 2.22 | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
 | [Asterisk](asterisk-component.md) | camel-asterisk | Stable | 2.18 | Interact with Asterisk PBX Server (VoIP). |
@@ -68,7 +68,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [AWS Bedrock](aws-bedrock-component.md) | camel-aws-bedrock | Stable | 4.5 | Invoke Model of AWS Bedrock service. |
 | [AWS Bedrock Agent](aws-bedrock-agent-component.md) | camel-aws-bedrock | Stable | 4.5 | Operate on AWS Bedrock through its Agent. |
 | [AWS Bedrock Agent Runtime](aws-bedrock-agent-runtime-component.md) | camel-aws-bedrock | Stable | 4.5 | Invoke Model of AWS Bedrock Agent Runtime service. |
-| [AWS Cloudtrail](aws-cloudtrail-component.md) | camel-aws-cloudtrail | Stable | 3.19 | Consume events from Amazon Cloudtrail using AWS SDK version 2.x. |
+| [AWS CloudTrail](aws-cloudtrail-component.md) | camel-aws-cloudtrail | Stable | 3.19 | Consume events from Amazon CloudTrail using AWS SDK version 2.x. |
 | [AWS CloudWatch](aws2-cw-component.md) | camel-aws2-cw | Stable | 3.1 | Sending metrics to AWS CloudWatch. |
 | [AWS Comprehend](aws2-comprehend-component.md) | camel-aws2-comprehend | Stable | 4.18 | Perform natural language processing using AWS Comprehend and AWS SDK version 2.x. |
 | [AWS Config Service](aws-config-component.md) | camel-aws-config | Stable | 4.3 | Manage AWS Config service. |
@@ -141,7 +141,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Debezium MongoDB Connector](debezium-mongodb-component.md) | camel-debezium-mongodb | Stable | 3.0 | Capture changes from a MongoDB database. |
 | [Debezium MySQL Connector](debezium-mysql-component.md) | camel-debezium-mysql | Stable | 3.0 | Capture changes from a MySQL database. |
 | [Debezium Oracle Connector](debezium-oracle-component.md) | camel-debezium-oracle | Stable | 3.17 | Capture changes from an Oracle database. |
-| [Debezium PostgresSQL Connector](debezium-postgres-component.md) | camel-debezium-postgres | Stable | 3.0 | Capture changes from a PostgresSQL database. |
+| [Debezium PostgreSQL Connector](debezium-postgres-component.md) | camel-debezium-postgres | Stable | 3.0 | Capture changes from a PostgreSQL database. |
 | [Debezium SQL Server Connector](debezium-sqlserver-component.md) | camel-debezium-sqlserver | Stable | 3.0 | Capture changes from an SQL Server database. |
 | [Deep Java Library](djl-component.md) | camel-djl | Stable | 3.3 | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
 | [DFDL](dfdl-component.md) | camel-dfdl | Stable | 4.11 | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
@@ -156,7 +156,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Dropbox](dropbox-component.md) | camel-dropbox | Stable | 2.14 | Upload, download and manage files, folders, groups, collaborations, etc on Dropbox. |
 | [Dynamic Router Control](dynamic-router-control-component.md) | camel-dynamic-router | Stable | 4.4 | The Dynamic Router control endpoint for operations that allow routing participants to subscribe or unsubscribe to participate in dynamic message routing. |
 | [Ehcache](ehcache-component.md) | camel-ehcache | Stable | 2.18 | Perform caching operations using Ehcache. |
-| [Elasticsearch](elasticsearch-component.md) | camel-elasticsearch | Stable | 3.19 | Send requests to ElasticSearch via Java Client API. |
+| [Elasticsearch](elasticsearch-component.md) | camel-elasticsearch | Stable | 3.19 | Send requests to Elasticsearch via Java Client API. |
 | [Elasticsearch Low level Rest Client](elasticsearch-rest-client-component.md) | camel-elasticsearch-rest-client | Stable | 4.3 | Perform queries and other operations on Elasticsearch or OpenSearch (uses low-level client). |
 | [FHIR](fhir-component.md) | camel-fhir | Stable | 2.23 | Exchange information in the healthcare domain using the FHIR (Fast Healthcare Interoperability Resources) standard. |
 | [File Watch](file-watch-component.md) | camel-file-watch | Stable | 3.0 | Get notified about file events in a directory using java.nio.file.WatchService. |
@@ -191,7 +191,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Google Vertex AI](google-vertexai-component.md) | camel-google-vertexai | Stable | 4.17 | Interact with Google Cloud Vertex AI generative models. |
 | [GraphQL](graphql-component.md) | camel-graphql | Stable | 3.0 | Send GraphQL queries and mutations to external systems. |
 | [gRPC](grpc-component.md) | camel-grpc | Stable | 2.19 | Expose gRPC endpoints and access external gRPC endpoints. |
-| [Hashicorp Vault](hashicorp-vault-component.md) | camel-hashicorp-vault | Stable | 3.18 | Manage secrets in Hashicorp Vault Service |
+| [HashiCorp Vault](hashicorp-vault-component.md) | camel-hashicorp-vault | Stable | 3.18 | Manage secrets in HashiCorp Vault Service |
 | [Hazelcast](hazelcast-summary.md) | camel-hazelcast |  | 2.7 |  |
 | [Hazelcast Atomic Number](hazelcast-atomicvalue-component.md) | camel-hazelcast | Stable-deprecated | 2.7 | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
 | [Hazelcast Instance](hazelcast-instance-component.md) | camel-hazelcast | Stable | 2.7 | Consume join/leave events of a cache instance in a Hazelcast cluster. |
@@ -239,7 +239,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Infinispan Embedded](infinispan-embedded-component.md) | camel-infinispan-embedded | Stable | 2.13 | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [InfluxDB](influxdb-component.md) | camel-influxdb | Stable | 2.18 | Interact with InfluxDB v1, a time series database. |
 | [InfluxDB2](influxdb2-component.md) | camel-influxdb2 | Stable | 3.20 | Interact with InfluxDB v2, a time series database. |
-| [IRC](irc-component.md) | camel-irc | Stable-deprecated | 1.1 | Send and receive messages to/from and IRC chat. |
+| [IRC](irc-component.md) | camel-irc | Stable-deprecated | 1.1 | Send and receive messages to/from an IRC chat. |
 | [IronMQ](ironmq-component.md) | camel-ironmq | Stable-deprecated | 2.17 | Send and receive messages to/from IronMQ an elastic and durable hosted message queue as a service. |
 | [JCache](jcache-component.md) | camel-jcache | Stable | 2.17 | Perform caching operations against JSR107/JCache. |
 | [JCR](jcr-component.md) | camel-jcr | Stable | 1.3 | Read and write nodes to/from a JCR compliant content repository. |
@@ -285,7 +285,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Kudu](kudu-component.md) | camel-kudu | Stable | 3.0 | Interact with Apache Kudu, a free and open source column-oriented data store of the Apache Hadoop ecosystem. |
 | [LangChain4j Agent](langchain4j-agent-component.md) | camel-langchain4j-agent | Preview | 4.14 | LangChain4j Agent component |
 | [LangChain4j Chat](langchain4j-chat-component.md) | camel-langchain4j-chat | Stable | 4.5 | LangChain4j Chat component |
-| [LangChain4j Embedding Store](langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore | Stable | 4.14 | Perform operations on the Langchain4jEmbeddingStores. |
+| [LangChain4j Embedding Store](langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore | Stable | 4.14 | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](langchain4j-embeddings-component.md) | camel-langchain4j-embeddings | Stable | 4.5 | LangChain4j Embeddings |
 | [LangChain4j Tools](langchain4j-tools-component.md) | camel-langchain4j-tools | Preview | 4.8 | LangChain4j Tools and Function Calling Features |
 | [LangChain4j Web Search](langchain4j-web-search-component.md) | camel-langchain4j-web-search | Stable | 4.8 | LangChain4j Web Search Engine |
@@ -294,7 +294,7 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Lucene](lucene-component.md) | camel-lucene | Stable | 2.2 | Perform inserts or queries against Apache Lucene databases. |
 | [Lumberjack](lumberjack-component.md) | camel-lumberjack | Stable | 2.18 | Receive logs messages using the Lumberjack protocol. |
 | [Mail](mail-component.md) | camel-mail | Stable | 1.0 | Send and receive emails using imap, pop3 and smtp protocols. |
-| [MapStruct](mapstruct-component.md) | camel-mapstruct | Stable | 3.19 | Type Conversion using Mapstruct |
+| [MapStruct](mapstruct-component.md) | camel-mapstruct | Stable | 3.19 | Type Conversion using MapStruct |
 | [Master](master-component.md) | camel-master | Stable | 2.20 | Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies. |
 | [Metrics](metrics-component.md) | camel-metrics | Stable | 2.14 | Collect various metrics directly from Camel routes using the DropWizard metrics library. |
 | [Micrometer](micrometer-component.md) | camel-micrometer | Stable | 2.22 | Collect various metrics directly from Camel routes using the Micrometer library. |
@@ -340,8 +340,8 @@ Number of Non-Core Components: 376 in 302 JAR artifacts (12 deprecated)
 | [Pinecone](pinecone-component.md) | camel-pinecone | Stable | 4.6 | Perform operations on the Pinecone Vector Database. |
 | [Platform HTTP](platform-http-component.md) | camel-platform-http | Stable | 3.0 | Expose HTTP endpoints using the HTTP server available in the current platform. |
 | [PLC4X](plc4x-component.md) | camel-plc4x | Stable | 3.20 | Read and write to PLC devices |
-| [PostgresSQL Event](pgevent-component.md) | camel-pgevent | Stable | 2.15 | Send and receive PostgreSQL events via LISTEN and NOTIFY commands. |
-| [PostgresSQL Replication Slot](pg-replication-slot-component.md) | camel-pg-replication-slot | Stable | 3.0 | Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots. |
+| [PostgreSQL Event](pgevent-component.md) | camel-pgevent | Stable | 2.15 | Send and receive PostgreSQL events via LISTEN and NOTIFY commands. |
+| [PostgreSQL Replication Slot](pg-replication-slot-component.md) | camel-pg-replication-slot | Stable | 3.0 | Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots. |
 | [PQC Algorithms](pqc-component.md) | camel-pqc | Stable | 4.12 | Post Quantum Cryptography Signature and Verification component. |
 | [Printer](lpr-component.md) | camel-printer | Stable | 2.1 | Send print jobs to printers. |
 | [Properties](properties-component.md) | camel-base | Stable | 2.3 | The properties component is used for property placeholders in your Camel application, such as endpoint URIs. |

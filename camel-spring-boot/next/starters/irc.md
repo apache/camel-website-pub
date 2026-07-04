@@ -1,6 +1,6 @@
 # IRC
 
-Send and receive messages to/from and IRC chat.
+Send and receive messages to/from an IRC chat.
 
 ## What’s inside
 

@@ -1,10 +1,10 @@
-# AWS Cloudtrail
+# AWS CloudTrail
 
-Consume events from Amazon Cloudtrail using AWS SDK version 2.x.
+Consume events from Amazon CloudTrail using AWS SDK version 2.x.
 
 ## What’s inside
 
--   [AWS Cloudtrail component](../../../components/next/aws-cloudtrail-component.md), URI syntax: `aws-cloudtrail:label`
+-   [AWS CloudTrail component](../../../components/next/aws-cloudtrail-component.md), URI syntax: `aws-cloudtrail:label`
     
 
 Please refer to the above links for usage and configuration details.

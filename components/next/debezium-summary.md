@@ -22,9 +22,9 @@ Capture changes from a MySQL database.
 
 Capture changes from an Oracle database.
 
-[Debezium PostgresSQL Connector](debezium-postgres-component.md)
+[Debezium PostgreSQL Connector](debezium-postgres-component.md)
 
-Capture changes from a PostgresSQL database.
+Capture changes from a PostgreSQL database.
 
 [Debezium SQL Server Connector](debezium-sqlserver-component.md)
 

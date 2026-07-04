@@ -1,6 +1,6 @@
 # Elasticsearch
 
-Send requests to ElasticSearch via Java Client API.
+Send requests to Elasticsearch via Java Client API.
 
 ## What’s inside
 

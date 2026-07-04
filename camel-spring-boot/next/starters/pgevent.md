@@ -1,10 +1,10 @@
-# PostgresSQL Event
+# PostgreSQL Event
 
 Send and receive PostgreSQL events via LISTEN and NOTIFY commands.
 
 ## What’s inside
 
--   [PostgresSQL Event component](../../../components/next/pgevent-component.md), URI syntax: `pgevent:host:port/database/channel`
+-   [PostgreSQL Event component](../../../components/next/pgevent-component.md), URI syntax: `pgevent:host:port/database/channel`
     
 
 Please refer to the above links for usage and configuration details.

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1783074732304,
+  "generated": 1783196167840,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8556,6 +8556,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/a2a.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/a2a.html",
+              "title": "A2A"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/activemq.adoc",
               "url": "/camel-quarkus/next/reference/extensions/activemq.html",
               "title": "ActiveMQ",
@@ -16711,7 +16717,7 @@
               "module": "ROOT",
               "path": "starters/aws-cloudtrail.adoc",
               "url": "/camel-spring-boot/next/starters/aws-cloudtrail.html",
-              "title": "AWS Cloudtrail"
+              "title": "AWS CloudTrail"
             },
             {
               "module": "ROOT",
@@ -17233,7 +17239,7 @@
               "module": "ROOT",
               "path": "starters/debezium-postgres.adoc",
               "url": "/camel-spring-boot/next/starters/debezium-postgres.html",
-              "title": "Debezium PostgresSQL Connector"
+              "title": "Debezium PostgreSQL Connector"
             },
             {
               "module": "ROOT",
@@ -17557,7 +17563,7 @@
               "module": "ROOT",
               "path": "starters/hashicorp-vault.adoc",
               "url": "/camel-spring-boot/next/starters/hashicorp-vault.html",
-              "title": "Hashicorp Vault"
+              "title": "HashiCorp Vault"
             },
             {
               "module": "ROOT",
@@ -18403,13 +18409,13 @@
               "module": "ROOT",
               "path": "starters/pg-replication-slot.adoc",
               "url": "/camel-spring-boot/next/starters/pg-replication-slot.html",
-              "title": "PostgresSQL Replication Slot"
+              "title": "PostgreSQL Replication Slot"
             },
             {
               "module": "ROOT",
               "path": "starters/pgevent.adoc",
               "url": "/camel-spring-boot/next/starters/pgevent.html",
-              "title": "PostgresSQL Event"
+              "title": "PostgreSQL Event"
             },
             {
               "module": "ROOT",
@@ -21131,7 +21137,7 @@
               "module": "ROOT",
               "path": "aws-cloudtrail-component.adoc",
               "url": "/components/next/aws-cloudtrail-component.html",
-              "title": "AWS Cloudtrail"
+              "title": "AWS CloudTrail"
             },
             {
               "module": "ROOT",
@@ -21617,7 +21623,7 @@
               "module": "ROOT",
               "path": "debezium-postgres-component.adoc",
               "url": "/components/next/debezium-postgres-component.html",
-              "title": "Debezium PostgresSQL Connector"
+              "title": "Debezium PostgreSQL Connector"
             },
             {
               "module": "ROOT",
@@ -21953,7 +21959,7 @@
               "module": "ROOT",
               "path": "hashicorp-vault-component.adoc",
               "url": "/components/next/hashicorp-vault-component.html",
-              "title": "Hashicorp Vault"
+              "title": "HashiCorp Vault"
             },
             {
               "module": "ROOT",
@@ -22865,13 +22871,13 @@
               "module": "ROOT",
               "path": "pg-replication-slot-component.adoc",
               "url": "/components/next/pg-replication-slot-component.html",
-              "title": "PostgresSQL Replication Slot"
+              "title": "PostgreSQL Replication Slot"
             },
             {
               "module": "ROOT",
               "path": "pgevent-component.adoc",
               "url": "/components/next/pgevent-component.html",
-              "title": "PostgresSQL Event"
+              "title": "PostgreSQL Event"
             },
             {
               "module": "ROOT",

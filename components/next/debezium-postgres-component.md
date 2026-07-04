@@ -1,10 +1,10 @@
-# Debezium PostgresSQL Connector
+# Debezium PostgreSQL Connector
 
 **Since Camel 3.0**
 
 **Only consumer is supported**
 
-The Debezium PostgresSQL component is wrapper around [Debezium](https://debezium.io/) using [Debezium Engine](https://debezium.io/documentation/reference/1.9/development/engine.md), which enables Change Data Capture from PostgresSQL database using Debezium without the need for Kafka or Kafka Connect.
+The Debezium PostgreSQL component is wrapper around [Debezium](https://debezium.io/) using [Debezium Engine](https://debezium.io/documentation/reference/1.9/development/engine.md), which enables Change Data Capture from PostgreSQL database using Debezium without the need for Kafka or Kafka Connect.
 
 > **Note**
 > **Note on handling failures:** per [Debezium Embedded Engine](https://debezium.io/documentation/reference/1.9/development/engine.html#_handling_failures) documentation, the engines are actively recording source offsets and periodically flush these offsets to a persistent storage. Therefore, when the application is restarted or crashed, the engine will resume from the last recorded offset. This means that, at normal operation, your downstream routes will receive each event exactly once. However, in case of an application crash (not having a graceful shutdown), the application will resume from the last recorded offset, which may result in receiving duplicate events immediately after the restart. Therefore, your downstream routes should be tolerant enough of such a case and deduplicate events if needed.
@@ -71,7 +71,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Debezium PostgresSQL Connector component supports 132 options, which are listed below.
+The Debezium PostgreSQL Connector component supports 132 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -211,7 +211,7 @@ The Debezium PostgresSQL Connector component supports 132 options, which are lis
 
 ## Endpoint Options
 
-The Debezium PostgresSQL Connector endpoint is configured using URI syntax:
+The Debezium PostgreSQL Connector endpoint is configured using URI syntax:
 
 debezium-postgres:name
 
@@ -378,7 +378,7 @@ Enum values:
 
 ## Message Headers
 
-The Debezium PostgresSQL Connector component supports 7 message header(s), which is/are listed below:
+The Debezium PostgreSQL Connector component supports 7 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -410,7 +410,7 @@ See below for more details.
 
 ### Consuming events
 
-Here is a basic route that you can use to listen to Debezium events from PostgresSQL connector.
+Here is a basic route that you can use to listen to Debezium events from PostgreSQL connector.
 
 -   Java
     

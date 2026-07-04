@@ -33,7 +33,7 @@ Since Apache Camel provides more than 300 components out of the box, it’s easy
 
 Suppose that you want to provide a Kamelet that allows users to search data on Twitter, providing a stream of information about a given keyword. Creating such a Kamelet is a fairly easy task: we can use options of the "camel-twitter" component without adding much processing logic.
 
-So the procedure of writing a simple Kamelet starts with scaffolding a new Kamelet resource, which can be done with the Camel JBang CLI (`camel`):
+So the procedure of writing a simple Kamelet starts with scaffolding a new Kamelet resource, which can be done with the Camel CLI (`camel`):
 
 ```none
 camel init twitter-search-source.kamelet.yaml
@@ -461,7 +461,7 @@ You may choose the language that you prefer to write the first integration, even
 > **Tip**
 > For a great developer experience, we suggest to use [Visual Studio Code](https://code.visualstudio.com/) with the [Camel Extension Pack](https://marketplace.visualstudio.com/items?itemName=redhat.apache-camel-extension-pack)
 
-We start from scratch by creating an integration file with Camel JBang CLI:
+We start from scratch by creating an integration file with Camel CLI:
 
 ```none
 camel init Earthquake.java
@@ -499,7 +499,7 @@ In order to run the integration above, if you have a Kubernetes cluster with Cam
 camel run Earthquake.java
 ```
 
-The `camel run` command relies on Camel JBang to locally run the integration. The integration will start and begin printing out earthquake data every 10 seconds.
+The `camel run` command relies on Camel CLI to locally run the integration. The integration will start and begin printing out earthquake data every 10 seconds.
 
 I show an excerpt of what is printed by the integration:
 
@@ -1362,140 +1362,110 @@ This will create a new integration that forwards the Apache Camel logo to your p
 
 The most obvious way to test a Kamelet is via an e2e tests that verifies if the Kamelet respects its specification.
 
-[Citrus](https://github.com/citrusframework/citrus) is the framework of choice for such e2e tests. You can find more information and documentation starting from the [Citrus GitHub repository](https://github.com/citrusframework/citrus). Here we’ll provide examples for the Kamelets above.
+[Citrus](https://github.com/citrusframework/citrus) is the framework of choice for such e2e tests. Integration tests live under `tests/camel-kamelets-itest/src/test/resources/<feature>/`: each one is a Citrus `*.citrus.it.yaml` test that drives the Kamelet with [Camel CLI](../../manual/camel-jbang.md) — it runs a Camel `Pipe` that wires the Kamelet under test and then asserts the resulting behaviour.
 
-### Testing a source
+The building blocks of a test are:
 
-YAKS allows writing a declarative [Gherkin](https://cucumber.io/docs/gherkin/reference/) file to specify the behavior of the Kamelet.
+-   a `Pipe` YAML that binds the Kamelet under test (a source is bound to a verifiable sink; a sink is fed by a source);
+    
+-   a `*.citrus.it.yaml` test that runs the `Pipe` and verifies it;
+    
+-   a `*IT.java` class that registers the resource folder with a Citrus test factory.
+    
 
-Let’s try to test the earthquake Kamelet above, a Gherkin file for it should look like:
+### A worked example
 
-earthquake-source.feature
+The simplest sink to assert against is `log-sink`, whose output can be matched with a `logMessage`. The `log` suite tests it by feeding it with `timer-source`.
 
-```gherkin
-Feature: Kamelet earthquake-source works
+First, the `Pipe` that wires the Kamelets together:
 
-  Background:
-    Given Disable auto removal of Kamelet resources
-    Given Disable auto removal of Kubernetes resources
-    Given Camel K resource polling configuration
-      | maxAttempts          | 60   |
-      | delayBetweenAttempts | 3000 |
-
-  Scenario: Bind Kamelet to service
-    Given create Kubernetes service test-service with target port 8080
-    And bind Kamelet earthquake-source to uri http://test-service.${CITRUS_NAMESPACE}.svc.cluster.local/test
-    When create Pipe earthquake-source-uri
-    Then Pipe earthquake-source-uri should be available
-    And Camel K integration earthquake-source-uri should be running
-
-  Scenario: Verify binding
-    Given HTTP server "test-service"
-    And HTTP server timeout is 120000 ms
-    Then expect HTTP request header: Content-Type="application/json;charset=UTF-8"
-    And receive POST /test
-    And delete Pipe earthquake-source-uri
-```
-
-As you see this is a declarative test that is materialized into something that actually checks that the service generates some data. Checks can be also more detailed than this one, but checking that it generates some JSON data is enough for a "smoke test" that verifies that the Kamelet can be actually used.
-
-The test requires that you’re connected to a Kubernetes cluster and have also YAKS installed (refer to the [YAKS documentation](https://citrusframework.org/yaks/reference/html/index.md) for more information). We’re also going to use the CLI:
-
-```none
-# We assume the Kamelet is already installed in the namespace
-yaks run earthquake-source.feature
-```
-
-When testing a source, the backbone of the Gherkin file that you’ll write is similar to the one above. Depending on the source under test, you may need to stimulate the production of some data using additional Gherkin steps before verifying that the data has been produced (in our case, it’s better not to try to stimulate an earthquake :D).
-
-### Testing a sink
-
-A test for a sink is similar to the one for the source, except that we’re going to generate data to feed it.
-
-To send data to the Kamelet we may think to bind it to another Kamelet of type `webhook-source`, that allows us to send data to it via HTTP. Let’s create a parameterized binding like the following one:
-
-webhook-to-telegram.yaml
+log/log-sink-pipe.yaml
 
 ```yaml
 apiVersion: camel.apache.org/v1
 kind: Pipe
 metadata:
-  name: webhook-to-telegram
+  name: log-sink-pipe
 spec:
   source:
     ref:
       kind: Kamelet
       apiVersion: camel.apache.org/v1
-      name: webhook-source
+      name: timer-source
     properties:
-      subpath: message
+      period: 10000
+      message: "{{message}}"
   sink:
     ref:
       kind: Kamelet
       apiVersion: camel.apache.org/v1
-      name: telegram-sink
+      name: log-sink
     properties:
-      authorizationToken: "${telegram.authorization.token}"
-      chatId: "${telegram.chat.id}"
+      loggerName: "test-log-sink"
+      showHeaders: false
 ```
 
-This will expose an HTTP endpoint that we can use to forward a message to Telegram. It requires that two parameters are set in the YAKS configuration before creation. Those can be set in a simple property file:
+Then the Citrus test that runs the `Pipe` and verifies the message reaches the sink:
 
-telegram-credentials.properties
+log/log-sink-pipe.citrus.it.yaml
 
-```properties
-telegram.authorization.token=your-own-token
-telegram.chat.id=your-own-chat
+```yaml
+name: log-sink-pipe-test
+variables:
+  - name: "message"
+    value: "Hello from the log-sink test!"
+actions:
+  # Run the Pipe as a Camel CLI integration
+  - camel:
+      jbang:
+        run:
+          waitForRunningState: false
+          integration:
+            file: "log/log-sink-pipe.yaml"
+            systemProperties:
+              properties:
+                - name: "message"
+                  value: "${message}"
+
+  # Verify the message reaches the sink
+  - camel:
+      jbang:
+        verify:
+          integration: "log-sink-pipe"
+          logMessage: "${message}"
 ```
 
-Then we’re ready to define the feature we want to test, i.e. the ability to send a message via the Telegram API.
+Finally, register the resource folder in a `*IT.java` factory method so JUnit runs it:
 
-An example of "smoke test" can be the following one:
+CommonIT.java
 
-telegram-sink.feature
-
-```gherkin
-Feature: Kamelet telegram-sink works
-
-  Background:
-    Given Disable auto removal of Kamelet resources
-    Given Disable auto removal of Kubernetes resources
-    Given Camel K resource polling configuration
-      | maxAttempts          | 60   |
-      | delayBetweenAttempts | 3000 |
-
-
-  Scenario: Bind webhook to Kamelet sink
-    Given load variables telegram-credentials.properties
-    And load Pipe webhook-to-telegram.yaml
-    Then Pipe webhook-to-telegram should be available
-    And Camel K integration webhook-to-telegram should be running
-
-
-  Scenario: Send a message to the Telegram Chat
-    Given URL: http://webhook-to-telegram.${CITRUS_NAMESPACE}.svc.cluster.local
-    And HTTP request timeout is 60000 milliseconds
-    And wait for GET on path / to return 404
-    Given HTTP request headers
-     | Content-Type          | text/plain |
-    And HTTP request body
-    """
-    Hello from YAKS!
-    """
-    When send POST /message
-    Then receive HTTP 200 OK
-    And delete Pipe webhook-to-telegram
+```java
+@CitrusTestFactory
+public Stream<DynamicTest> log() {
+    return CitrusTestFactorySupport.factory(TestLoader.YAML).packageScan("log");
+}
 ```
 
-This test will only check that the Telegram API accept the message created by the test.
+### Testing a source
 
-This can be run with the following command:
+To test a **source**, put the Kamelet under test on the `source` side of the `Pipe` and bind it to a verifiable sink: `log-sink` when a log assertion is enough, or the Citrus HTTP server for a stricter check on the emitted payload — the `timer` and `earthquake` suites bind their source to an HTTP endpoint and assert the received request. When the source consumes from an external system (a broker, a cloud service, …​), start it with [Testcontainers](https://java.testcontainers.org/) through the matching Citrus module, as the `aws`, `kafka` and `mongodb` suites do.
+
+### Testing a sink
+
+To test a **sink**, feed it from a source that generates data — usually `timer-source` — and assert the effect the sink produced: a `logMessage`, an HTTP request received by the Citrus HTTP server, a row written into a Testcontainers database, and so on. The `log`, `http` and `slack` suites are good starting points.
+
+### Running the tests
+
+Run the whole integration suite from the repository root:
 
 ```none
-# We assume that both the webhook-source and the telegram-sink kamelet are already present in the namespace
-yaks run telegram-sink.feature --resource webhook-to-telegram.yaml --resource telegram-credentials.properties
+mvn verify -pl :camel-kamelets-itest -Denable.integration.tests
 ```
 
-If everything goes well, you should receive a message during the test execution.
+or a single factory while iterating on one Kamelet:
 
-For a more specific test that checks also the content sent to Telegram, you should add additional Gherkin steps to get and verify the actual message via other Telegram APIs. We’re not going in so much details for this example, but the Gherkin file highlighted above is a good approximation of the backbone you’ll find in tests for Kamelets of type "sink".
+```none
+mvn verify -pl :camel-kamelets-itest -Denable.integration.tests -Dit.test=CommonIT#log
+```
+
+A Kamelet whose behaviour test passes should carry the `camel.apache.org/kamelet.verified: "true"` label.

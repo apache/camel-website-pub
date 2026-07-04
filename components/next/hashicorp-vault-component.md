@@ -1,10 +1,10 @@
-# Hashicorp Vault
+# HashiCorp Vault
 
 **Since Camel 3.18**
 
 **Only producer is supported**
 
-The hashicorp-vault component that integrates [Hashicorp Vault](https://www.vaultproject.io/).
+The hashicorp-vault component that integrates [HashiCorp Vault](https://www.vaultproject.io/).
 
 ## URI Format
 
@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Hashicorp Vault component supports 2 options, which are listed below.
+The HashiCorp Vault component supports 2 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -74,7 +74,7 @@ The Hashicorp Vault component supports 2 options, which are listed below.
 
 ## Endpoint Options
 
-The Hashicorp Vault endpoint is configured using URI syntax:
+The HashiCorp Vault endpoint is configured using URI syntax:
 
 hashicorp-vault:secretsEngine
 
@@ -123,7 +123,7 @@ Enum values:
 
 ## Message Headers
 
-The Hashicorp Vault component supports 3 message header(s), which is/are listed below:
+The HashiCorp Vault component supports 3 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -132,7 +132,7 @@ The Hashicorp Vault component supports 3 message header(s), which is/are listed 
 | **CamelHashicorpVaultSecretPath** (producer) Constant: [`SECRET_PATH`](https://javadoc.io/doc/org.apache.camel/camel-hashicorp-vault/latest/org/apache/camel/component/hashicorp/vault/HashicorpVaultConstants.html#SECRET_PATH) | Set the desired secret path as header. |  | String |
 | **CamelHashicorpVaultSecretVersion** (producer) Constant: [`SECRET_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-hashicorp-vault/latest/org/apache/camel/component/hashicorp/vault/HashicorpVaultConstants.html#SECRET_VERSION) | Set the desired secret version as header. |  | String |
 
-## Authentication and Hashicorp vault on-premise vs Hashicorp Cloud
+## Authentication and HashiCorp Vault on-premise vs HashiCorp Cloud
 
 The component supports operations at the producer level. Specifically, it provides the following functionalities:
 
@@ -158,9 +158,9 @@ When using a HashiCorp Vault Cloud instance, in addition to the standard paramet
 
 ## Examples
 
-### Using Hashicorp Vault Property Function
+### Using HashiCorp Vault Property Function
 
-To use this function, you’ll need to provide credentials for Hashicorp vault as environment variables:
+To use this function, you’ll need to provide credentials for HashiCorp Vault as environment variables:
 
 ```bash
 export CAMEL_VAULT_HASHICORP_TOKEN=token
@@ -178,7 +178,7 @@ camel.vault.hashicorp.port = port
 camel.vault.hashicorp.scheme = scheme
 ```
 
-In case the running Hashicorp Vault instance you’re pointing is running on Hashicorp Cloud, the configuration will require two additional parameters:
+In case the running HashiCorp Vault instance you’re pointing is running on HashiCorp Cloud, the configuration will require two additional parameters:
 
 ```bash
 export CAMEL_VAULT_HASHICORP_TOKEN=token
@@ -200,13 +200,13 @@ camel.vault.hashicorp.cloud = true
 camel.vault.hashicorp.namespace = namespace
 ```
 
-This will make the Properties function works even in the Hashicorp Cloud deployment option.
+This will make the Properties function works even in the HashiCorp Cloud deployment option.
 
 > **Note**
 > if you’re running the application on a Kubernetes based cloud platform, you can initialize the environment variables from a Secret or Configmap to enhance security. You can also enhance security by [setting a Secret property placeholder](../../manual/using-propertyplaceholder.html#_resolving_property_placeholders_on_cloud) which will be initialized at application runtime only.
 
 > **Note**
-> `camel.vault.hashicorp` configuration only applies to the Hashicorp Vault properties function (E.g when resolving properties). When using the `operation` option to create, get, list secrets etc., you should provide the `host`, `port`, `scheme` (if required) & `token` options.
+> `camel.vault.hashicorp` configuration only applies to the HashiCorp Vault properties function (E.g when resolving properties). When using the `operation` option to create, get, list secrets etc., you should provide the `host`, `port`, `scheme` (if required) & `token` options.
 
 At this point, you’ll be able to reference a property in the following way:
 
@@ -240,9 +240,9 @@ from("direct:start")
             uri: "{{hashicorp:secret:route}}"
 ```
 
-Where route will be the name of the secret stored in the Hashicorp Vault instance, in the 'secret' engine.
+Where route will be the name of the secret stored in the HashiCorp Vault instance, in the 'secret' engine.
 
-You could specify a default value in case the secret is not present on Hashicorp Vault instance:
+You could specify a default value in case the secret is not present on HashiCorp Vault instance:
 
 -   Java
     
@@ -323,7 +323,7 @@ from("direct:start")
 
 Or re-use the property as part of an endpoint.
 
-You could specify a default value in case the particular field of secret is not present on Hashicorp Vault instance, in the 'secret' engine:
+You could specify a default value in case the particular field of secret is not present on HashiCorp Vault instance, in the 'secret' engine:
 
 -   Java
     
@@ -459,7 +459,7 @@ The only requirement is adding the camel-hashicorp-vault jar to your Camel appli
 
 ### Automatic Camel context reloading on Secret Refresh
 
-Being able to reload Camel context on a Secret Refresh could be done by specifying the usual credentials (the same used for Hashicorp Vault Property Function).
+Being able to reload Camel context on a Secret Refresh could be done by specifying the usual credentials (the same used for HashiCorp Vault Property Function).
 
 With Environment variables:
 
@@ -496,9 +496,9 @@ Note that `camel.vault.hashicorp.secrets` is not mandatory: if not specified the
 
 #### How the Refresh Mechanism Works
 
-Unlike cloud-based secret managers (AWS, GCP, Azure) that provide event-driven notifications, Hashicorp Vault does not have a native event notification system for secret changes. Therefore, this implementation uses a **polling-based approach**:
+Unlike cloud-based secret managers (AWS, GCP, Azure) that provide event-driven notifications, HashiCorp Vault does not have a native event notification system for secret changes. Therefore, this implementation uses a **polling-based approach**:
 
-1.  **Metadata Polling**: The refresh task periodically queries the Hashicorp Vault metadata endpoint (`/v1/<engine>/metadata/<secret>`) for each tracked secret.
+1.  **Metadata Polling**: The refresh task periodically queries the HashiCorp Vault metadata endpoint (`/v1/<engine>/metadata/<secret>`) for each tracked secret.
     
 2.  **Version Tracking**: It compares the `current_version` field to detect changes.
     
@@ -509,11 +509,11 @@ Unlike cloud-based secret managers (AWS, GCP, Azure) that provide event-driven n
 
 For example, if a secret named `database` is updated in Vault: - The metadata endpoint returns `"current_version": 5` - On the next check, if `current_version` changes to `6`, a reload is triggered - The refresh period (default 60 seconds) determines how quickly changes are detected
 
-This polling approach works with all Hashicorp Vault deployments (on-premise, cloud, enterprise, and open-source) without requiring additional infrastructure.
+This polling approach works with all HashiCorp Vault deployments (on-premise, cloud, enterprise, and open-source) without requiring additional infrastructure.
 
-### Using Hashicorp Vault Property Function in Spring Boot for Early resolving properties
+### Using HashiCorp Vault Property Function in Spring Boot for Early resolving properties
 
-Hashicorp Vault Spring Boot component starter offers the ability to early resolve properties, so the end user could resolve properties directly in the application.properties before both Spring Boot runtime and Camel context will start.
+HashiCorp Vault Spring Boot component starter offers the ability to early resolve properties, so the end user could resolve properties directly in the application.properties before both Spring Boot runtime and Camel context will start.
 
 This could be accomplished in the following way. You should specified this property in your application.properties file:
 

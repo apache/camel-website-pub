@@ -1,10 +1,10 @@
-# Hashicorp Vault
+# HashiCorp Vault
 
-Manage secrets in Hashicorp Vault Service
+Manage secrets in HashiCorp Vault Service
 
 ## What’s inside
 
--   [Hashicorp Vault component](../../../components/next/hashicorp-vault-component.md), URI syntax: `hashicorp-vault:secretsEngine`
+-   [HashiCorp Vault component](../../../components/next/hashicorp-vault-component.md), URI syntax: `hashicorp-vault:secretsEngine`
     
 
 Please refer to the above links for usage and configuration details.

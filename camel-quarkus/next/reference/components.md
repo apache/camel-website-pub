@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 310 components (20 deprecated, 57 JVM only)
+There are 311 components (20 deprecated, 57 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -8,6 +8,7 @@ since | Native
 since | Support  
 level | Description |
 | --- | --- | --- | --- | --- | --- |
+| [A2A](extensions/a2a.md) | camel-quarkus-a2a | 3.37.0 | 3.37.0 | Stable | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](extensions/activemq.md) | camel-quarkus-activemq | 1.0.0 | 1.0.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](extensions/activemq6.md) | camel-quarkus-activemq6 | 3.30.0 | 3.30.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AMQP](extensions/amqp.md) | camel-quarkus-amqp | 1.0.0 | 1.0.0 | Stable | Messaging with AMQP protocol using Apache QPid Client. |

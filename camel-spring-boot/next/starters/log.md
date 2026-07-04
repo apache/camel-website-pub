@@ -1,6 +1,6 @@
 # Log Data
 
-Prints data form the routed message (such as body and headers) to the logger.
+Prints data from the routed message (such as body and headers) to the logger.
 
 ## What’s inside
 

@@ -1,6 +1,6 @@
 # AMQP
 
-Messaging with AMQP protocol using Apache QPid Client.
+Messaging with AMQP protocol using Apache Qpid Client.
 
 ## What’s inside
 

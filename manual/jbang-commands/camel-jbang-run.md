@@ -32,6 +32,7 @@ camel run [options]
 | `--java-version,--java` | Java version (21, 25) | 21 | String |
 | `--jfr` | Enables Java Flight Recorder saving recording to disk on exit | false | boolean |
 | `--jfr-profile` | Java Flight Recorder profile to use (such as default or profile) |  | String |
+| `--jvm-args` | Additional JVM arguments (e.g. -Xmx256m -Xms128m) |  | String |
 | `--jvm-debug` | To enable JVM remote debugging on port 4004 by default. The supported values are true to enable the remote debugging, false to disable the remote debugging or a number to use a custom port |  | int |
 | `--kamelets-version` | Apache Camel Kamelets version (auto-detected from classpath if not set) |  | String |
 | `--lazy-bean` | Whether to use lazy bean initialization (can help with complex classloading issues) | false | boolean |
@@ -102,4 +103,16 @@ Run with additional dependencies:
 
 ```bash
 camel run hello.java --dep=camel-jackson
+```
+
+Run with custom JVM memory settings (init and max heap):
+
+```bash
+camel run hello.java --jvm-args="-Xms128m -Xmx256m"
+```
+
+Run with max heap only:
+
+```bash
+camel run hello.java --jvm-args="-Xmx512m"
 ```

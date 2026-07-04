@@ -6,8 +6,15 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 03 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Release 4.14.8</title>
+      <link>https://camel.apache.org/releases/release-4.14.8/</link>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.14.8/</guid>
+      <description>This release is the new Camel 4.14.8 LTS release.</description>
+    </item>
     <item>
       <title>Release 4.18.3</title>
       <link>https://camel.apache.org/releases/release-4.18.3/</link>

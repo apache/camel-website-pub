@@ -79,3 +79,10 @@ As a consequence:
 -   The message is now processed in memory rather than streamed: the authenticated cipher must verify the authentication tag before releasing any plaintext, so the whole payload is held in memory during marshal and unmarshal. For very large payloads, enable stream caching on the route.
     
 -   The `bufferSize` option has been removed. It only configured the previous streaming implementation and no longer has any effect with authenticated encryption.
+    
+
+### camel-mail - MimeMultipartDataFormat inbound header filtering
+
+When unmarshalling a MIME message with `headersInline=true`, the `mime-multipart` data format now applies a `HeaderFilterStrategy` to the headers copied from the MIME content onto the Camel message. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) present in the external MIME headers are no longer copied onto the message, consistent with the inbound header filtering already performed by the camel-mail consumer.
+
+Ordinary application headers are unaffected. If a route relied on `Camel*` headers being propagated from the MIME content, set them explicitly after unmarshalling.

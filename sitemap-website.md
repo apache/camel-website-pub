@@ -1,10 +1,12 @@
-urls[773]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-07-03T00:00:00+00:00
-  https://camel.apache.org/,2026-07-03T00:00:00+00:00
+urls[775]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-07-04T00:00:00+00:00
+  https://camel.apache.org/,2026-07-04T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.14.8/,2026-07-04T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/,2026-07-04T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-07-04T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.3/,2026-07-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/RELEASE-4.18.3/,2026-07-03T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-07-03T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-07-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel421-whatsnew/,2026-07-02T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-07-01T00:00:00+00:00
   https://camel.apache.org/releases/release-4.21.0/,2026-07-01T00:00:00+00:00

@@ -36,7 +36,7 @@ LangChain4j Chat component
 
 [LangChain4j Embedding Store](langchain4j-embeddingstore-component.md)
 
-Perform operations on the Langchain4jEmbeddingStores.
+Perform operations on the LangChain4jEmbeddingStores.
 
 [LangChain4j Embeddings](langchain4j-embeddings-component.md)
 

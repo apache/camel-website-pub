@@ -1,10 +1,10 @@
-# Debezium PostgresSQL Connector
+# Debezium PostgreSQL Connector
 
-Capture changes from a PostgresSQL database.
+Capture changes from a PostgreSQL database.
 
 ## What’s inside
 
--   [Debezium PostgresSQL Connector component](../../../components/next/debezium-postgres-component.md), URI syntax: `debezium-postgres:name`
+-   [Debezium PostgreSQL Connector component](../../../components/next/debezium-postgres-component.md), URI syntax: `debezium-postgres:name`
     
 
 Please refer to the above links for usage and configuration details.

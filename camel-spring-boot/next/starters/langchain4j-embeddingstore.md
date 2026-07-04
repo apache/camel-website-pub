@@ -1,6 +1,6 @@
 # LangChain4j Embedding Store
 
-Perform operations on the Langchain4jEmbeddingStores.
+Perform operations on the LangChain4jEmbeddingStores.
 
 ## What’s inside
 

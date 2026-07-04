@@ -1,14 +1,14 @@
-# AWS Cloudtrail
+# AWS CloudTrail
 
 **Since Camel 3.19**
 
 **Only consumer is supported**
 
-The AWS Cloudtrail component supports receiving events from Amazon Cloudtrail service.
+The AWS CloudTrail component supports receiving events from Amazon CloudTrail service.
 
 Prerequisites
 
-You must have a valid Amazon Web Services developer account, and be signed up to use Amazon Cloudtrail. More information is available at [AWS Cloudtrail](https://aws.amazon.com/cloudtrail/)
+You must have a valid Amazon Web Services developer account, and be signed up to use Amazon CloudTrail. More information is available at [AWS CloudTrail](https://aws.amazon.com/cloudtrail/)
 
 ## URI Format
 
@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS Cloudtrail component supports 22 options, which are listed below.
+The AWS CloudTrail component supports 22 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -206,7 +206,7 @@ Enum values:
 
 ## Endpoint Options
 
-The AWS Cloudtrail endpoint is configured using URI syntax:
+The AWS CloudTrail endpoint is configured using URI syntax:
 
 aws-cloudtrail:label
 
@@ -435,7 +435,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Cloudtrail component supports 4 message header(s), which is/are listed below:
+The AWS CloudTrail component supports 4 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -472,12 +472,12 @@ Only one of static, default and profile credentials could be used at the same ti
 
 For more information about this you can look at [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
 
-### Cloudtrail Events consumed
+### CloudTrail Events consumed
 
-The Cloudtrail consumer will use an API method called LookupEvents.
+The CloudTrail consumer will use an API method called LookupEvents.
 
-This method will only take into account management events like create/update/delete of resources and Cloudtrail insight events where enabled.
+This method will only take into account management events like create/update/delete of resources and CloudTrail insight events where enabled.
 
-This means you won’t consume the events registered in the Cloudtrail logs stored on S3, in case of creation of a new Trail.
+This means you won’t consume the events registered in the CloudTrail logs stored on S3, in case of creation of a new Trail.
 
 This is important to notice, and it must be taken into account when using this component.

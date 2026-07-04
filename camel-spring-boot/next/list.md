@@ -827,7 +827,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [A2A](../../components/next/a2a-component.md) | camel-a2a-starter | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](../../components/next/activemq-component.md) | camel-activemq-starter | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](../../components/next/activemq6-component.md) | camel-activemq6-starter | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
-| [AMQP](../../components/next/amqp-component.md) | camel-amqp-starter | Stable | 1.2 | Messaging with AMQP protocol using Apache QPid Client. |
+| [AMQP](../../components/next/amqp-component.md) | camel-amqp-starter | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](../../components/next/arangodb-component.md) | camel-arangodb-starter | Stable | 3.5 | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](../../components/next/as2-component.md) | camel-as2-starter | Stable | 2.22 | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
 | [Asterisk](../../components/next/asterisk-component.md) | camel-asterisk-starter | Stable | 2.18 | Interact with Asterisk PBX Server (VoIP). |
@@ -838,7 +838,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [AWS Bedrock](../../components/next/aws-bedrock-component.md) | camel-aws-bedrock-starter | Stable | 4.5 | Invoke Model of AWS Bedrock service. |
 | [AWS Bedrock Agent](../../components/next/aws-bedrock-agent-component.md) | camel-aws-bedrock-starter | Stable | 4.5 | Operate on AWS Bedrock through its Agent. |
 | [AWS Bedrock Agent Runtime](../../components/next/aws-bedrock-agent-runtime-component.md) | camel-aws-bedrock-starter | Stable | 4.5 | Invoke Model of AWS Bedrock Agent Runtime service. |
-| [AWS Cloudtrail](../../components/next/aws-cloudtrail-component.md) | camel-aws-cloudtrail-starter | Stable | 3.19 | Consume events from Amazon Cloudtrail using AWS SDK version 2.x. |
+| [AWS CloudTrail](../../components/next/aws-cloudtrail-component.md) | camel-aws-cloudtrail-starter | Stable | 3.19 | Consume events from Amazon CloudTrail using AWS SDK version 2.x. |
 | [AWS CloudWatch](../../components/next/aws2-cw-component.md) | camel-aws2-cw-starter | Stable | 3.1 | Sending metrics to AWS CloudWatch. |
 | [AWS Comprehend](../../components/next/aws2-comprehend-component.md) | camel-aws2-comprehend-starter | Stable | 4.18 | Perform natural language processing using AWS Comprehend and AWS SDK version 2.x. |
 | [AWS Config Service](../../components/next/aws-config-component.md) | camel-aws-config-starter | Stable | 4.3 | Manage AWS Config service. |
@@ -916,7 +916,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Debezium MongoDB Connector](../../components/next/debezium-mongodb-component.md) | camel-debezium-mongodb-starter | Stable | 3.0 | Capture changes from a MongoDB database. |
 | [Debezium MySQL Connector](../../components/next/debezium-mysql-component.md) | camel-debezium-mysql-starter | Stable | 3.0 | Capture changes from a MySQL database. |
 | [Debezium Oracle Connector](../../components/next/debezium-oracle-component.md) | camel-debezium-oracle-starter | Stable | 3.17 | Capture changes from an Oracle database. |
-| [Debezium PostgresSQL Connector](../../components/next/debezium-postgres-component.md) | camel-debezium-postgres-starter | Stable | 3.0 | Capture changes from a PostgresSQL database. |
+| [Debezium PostgreSQL Connector](../../components/next/debezium-postgres-component.md) | camel-debezium-postgres-starter | Stable | 3.0 | Capture changes from a PostgreSQL database. |
 | [Debezium SQL Server Connector](../../components/next/debezium-sqlserver-component.md) | camel-debezium-sqlserver-starter | Stable | 3.0 | Capture changes from an SQL Server database. |
 | [Deep Java Library](../../components/next/djl-component.md) | camel-djl-starter | Stable | 3.3 | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
 | [DFDL](../../components/next/dfdl-component.md) | camel-dfdl-starter | Stable | 4.11 | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
@@ -933,7 +933,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Dynamic Router](../../components/next/dynamic-router-component.md) | camel-dynamic-router-starter | Stable | 3.15 | The Dynamic Router component routes exchanges to recipients, and the recipients (and their rules) may change at runtime. |
 | [Dynamic Router Control](../../components/next/dynamic-router-control-component.md) | camel-dynamic-router-starter | Stable | 4.4 | The Dynamic Router control endpoint for operations that allow routing participants to subscribe or unsubscribe to participate in dynamic message routing. |
 | [Ehcache](../../components/next/ehcache-component.md) | camel-ehcache-starter | Stable | 2.18 | Perform caching operations using Ehcache. |
-| [Elasticsearch](../../components/next/elasticsearch-component.md) | camel-elasticsearch-starter | Stable | 3.19 | Send requests to ElasticSearch via Java Client API. |
+| [Elasticsearch](../../components/next/elasticsearch-component.md) | camel-elasticsearch-starter | Stable | 3.19 | Send requests to Elasticsearch via Java Client API. |
 | [Elasticsearch Low level Rest Client](../../components/next/elasticsearch-rest-client-component.md) | camel-elasticsearch-rest-client-starter | Stable | 4.3 | Perform queries and other operations on Elasticsearch or OpenSearch (uses low-level client). |
 | [Event](../../components/next/event-component.md) | camel-event-starter | Stable | 4.19 | Subscribe to Camel internal events such as route started/stopped and exchange completed/failed. |
 | [Exec](../../components/next/exec-component.md) | camel-exec-starter | Stable | 2.3 | Execute commands on the underlying operating system. |
@@ -970,7 +970,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Google Vertex AI](../../components/next/google-vertexai-component.md) | camel-google-vertexai-starter | Stable | 4.17 | Interact with Google Cloud Vertex AI generative models. |
 | [GraphQL](../../components/next/graphql-component.md) | camel-graphql-starter | Stable | 3.0 | Send GraphQL queries and mutations to external systems. |
 | [gRPC](../../components/next/grpc-component.md) | camel-grpc-starter | Stable | 2.19 | Expose gRPC endpoints and access external gRPC endpoints. |
-| [Hashicorp Vault](../../components/next/hashicorp-vault-component.md) | camel-hashicorp-vault-starter | Stable | 3.18 | Manage secrets in Hashicorp Vault Service |
+| [HashiCorp Vault](../../components/next/hashicorp-vault-component.md) | camel-hashicorp-vault-starter | Stable | 3.18 | Manage secrets in HashiCorp Vault Service |
 | [Hazelcast Atomic Number](../../components/next/hazelcast-atomicvalue-component.md) | camel-hazelcast-starter | Stable-deprecated | 2.7 | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
 | [Hazelcast Instance](../../components/next/hazelcast-instance-component.md) | camel-hazelcast-starter | Stable | 2.7 | Consume join/leave events of a cache instance in a Hazelcast cluster. |
 | [Hazelcast List](../../components/next/hazelcast-list-component.md) | camel-hazelcast-starter | Stable | 2.7 | Perform operations on Hazelcast distributed list. |
@@ -1014,7 +1014,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Infinispan Embedded](../../components/next/infinispan-embedded-component.md) | camel-infinispan-embedded-starter | Stable | 2.13 | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [InfluxDB](../../components/next/influxdb-component.md) | camel-influxdb-starter | Stable | 2.18 | Interact with InfluxDB v1, a time series database. |
 | [InfluxDB2](../../components/next/influxdb2-component.md) | camel-influxdb2-starter | Stable | 3.20 | Interact with InfluxDB v2, a time series database. |
-| [IRC](../../components/next/irc-component.md) | camel-irc-starter | Stable-deprecated | 1.1 | Send and receive messages to/from and IRC chat. |
+| [IRC](../../components/next/irc-component.md) | camel-irc-starter | Stable-deprecated | 1.1 | Send and receive messages to/from an IRC chat. |
 | [IronMQ](../../components/next/ironmq-component.md) | camel-ironmq-starter | Stable-deprecated | 2.17 | Send and receive messages to/from IronMQ an elastic and durable hosted message queue as a service. |
 | [JCache](../../components/next/jcache-component.md) | camel-jcache-starter | Stable | 2.17 | Perform caching operations against JSR107/JCache. |
 | [JCR](../../components/next/jcr-component.md) | camel-jcr-starter | Stable | 1.3 | Read and write nodes to/from a JCR compliant content repository. |
@@ -1060,18 +1060,18 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Kudu](../../components/next/kudu-component.md) | camel-kudu-starter | Stable | 3.0 | Interact with Apache Kudu, a free and open source column-oriented data store of the Apache Hadoop ecosystem. |
 | [LangChain4j Agent](../../components/next/langchain4j-agent-component.md) | camel-langchain4j-agent-starter | Preview | 4.14 | LangChain4j Agent component |
 | [LangChain4j Chat](../../components/next/langchain4j-chat-component.md) | camel-langchain4j-chat-starter | Stable | 4.5 | LangChain4j Chat component |
-| [LangChain4j Embedding Store](../../components/next/langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore-starter | Stable | 4.14 | Perform operations on the Langchain4jEmbeddingStores. |
+| [LangChain4j Embedding Store](../../components/next/langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore-starter | Stable | 4.14 | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](../../components/next/langchain4j-embeddings-component.md) | camel-langchain4j-embeddings-starter | Stable | 4.5 | LangChain4j Embeddings |
 | [LangChain4j Tools](../../components/next/langchain4j-tools-component.md) | camel-langchain4j-tools-starter | Preview | 4.8 | LangChain4j Tools and Function Calling Features |
 | [LangChain4j Web Search](../../components/next/langchain4j-web-search-component.md) | camel-langchain4j-web-search-starter | Stable | 4.8 | LangChain4j Web Search Engine |
 | [Language](../../components/next/language-component.md) | camel-language-starter | Stable | 2.5 | Execute scripts in any of the languages supported by Camel. |
 | [LDAP](../../components/next/ldap-component.md) | camel-ldap-starter | Stable | 1.5 | Perform searches on LDAP servers. |
 | [LDIF](../../components/next/ldif-component.md) | camel-ldif-starter | Stable | 2.20 | Perform updates on an LDAP server from an LDIF body content. |
-| [Log Data](../../components/next/log-component.md) | camel-log-starter | Stable | 1.1 | Prints data form the routed message (such as body and headers) to the logger. |
+| [Log Data](../../components/next/log-component.md) | camel-log-starter | Stable | 1.1 | Prints data from the routed message (such as body and headers) to the logger. |
 | [Lucene](../../components/next/lucene-component.md) | camel-lucene-starter | Stable | 2.2 | Perform inserts or queries against Apache Lucene databases. |
 | [Lumberjack](../../components/next/lumberjack-component.md) | camel-lumberjack-starter | Stable | 2.18 | Receive logs messages using the Lumberjack protocol. |
 | [Mail](../../components/next/mail-component.md) | camel-mail-starter | Stable | 1.0 | Send and receive emails using imap, pop3 and smtp protocols. |
-| [MapStruct](../../components/next/mapstruct-component.md) | camel-mapstruct-starter | Stable | 3.19 | Type Conversion using Mapstruct |
+| [MapStruct](../../components/next/mapstruct-component.md) | camel-mapstruct-starter | Stable | 3.19 | Type Conversion using MapStruct |
 | [Master](../../components/next/master-component.md) | camel-master-starter | Stable | 2.20 | Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies. |
 | [Metrics](../../components/next/metrics-component.md) | camel-metrics-starter | Stable | 2.14 | Collect various metrics directly from Camel routes using the DropWizard metrics library. |
 | [Micrometer](../../components/next/micrometer-component.md) | camel-micrometer-starter | Stable | 2.22 | Collect various metrics directly from Camel routes using the Micrometer library. |
@@ -1118,8 +1118,8 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Pinecone](../../components/next/pinecone-component.md) | camel-pinecone-starter | Stable | 4.6 | Perform operations on the Pinecone Vector Database. |
 | [Platform HTTP](../../components/next/platform-http-component.md) | camel-platform-http-starter | Stable | 3.0 | Expose HTTP endpoints using the HTTP server available in the current platform. |
 | [PLC4X](../../components/next/plc4x-component.md) | camel-plc4x-starter | Stable | 3.20 | Read and write to PLC devices |
-| [PostgresSQL Event](../../components/next/pgevent-component.md) | camel-pgevent-starter | Stable | 2.15 | Send and receive PostgreSQL events via LISTEN and NOTIFY commands. |
-| [PostgresSQL Replication Slot](../../components/next/pg-replication-slot-component.md) | camel-pg-replication-slot-starter | Stable | 3.0 | Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots. |
+| [PostgreSQL Event](../../components/next/pgevent-component.md) | camel-pgevent-starter | Stable | 2.15 | Send and receive PostgreSQL events via LISTEN and NOTIFY commands. |
+| [PostgreSQL Replication Slot](../../components/next/pg-replication-slot-component.md) | camel-pg-replication-slot-starter | Stable | 3.0 | Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots. |
 | [PQC Algorithms](../../components/next/pqc-component.md) | camel-pqc-starter | Stable | 4.12 | Post Quantum Cryptography Signature and Verification component. |
 | [Printer](../../components/next/lpr-component.md) | camel-printer-starter | Stable | 2.1 | Send print jobs to printers. |
 | [Properties](../../components/next/properties-component.md) | camel-base-starter | Stable | 2.3 | The properties component is used for property placeholders in your Camel application, such as endpoint URIs. |

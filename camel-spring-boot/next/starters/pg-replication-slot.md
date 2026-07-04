@@ -1,10 +1,10 @@
-# PostgresSQL Replication Slot
+# PostgreSQL Replication Slot
 
 Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots.
 
 ## What’s inside
 
--   [PostgresSQL Replication Slot component](../../../components/next/pg-replication-slot-component.md), URI syntax: `pg-replication-slot:host:port/database/slot:outputPlugin`
+-   [PostgreSQL Replication Slot component](../../../components/next/pg-replication-slot-component.md), URI syntax: `pg-replication-slot:host:port/database/slot:outputPlugin`
     
 
 Please refer to the above links for usage and configuration details.

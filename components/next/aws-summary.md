@@ -22,9 +22,9 @@ Operate on AWS Bedrock through its Agent.
 
 Invoke Model of AWS Bedrock Agent Runtime service.
 
-[AWS Cloudtrail](aws-cloudtrail-component.md)
+[AWS CloudTrail](aws-cloudtrail-component.md)
 
-Consume events from Amazon Cloudtrail using AWS SDK version 2.x.
+Consume events from Amazon CloudTrail using AWS SDK version 2.x.
 
 [AWS CloudWatch](aws2-cw-component.md)
 

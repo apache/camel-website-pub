@@ -3,21 +3,27 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-07-03T00:00:00+00:00</lastmod>
+    <lastmod>2026-07-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
-    <lastmod>2026-07-03T00:00:00+00:00</lastmod>
+    <lastmod>2026-07-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.14.8/</loc>
+    <lastmod>2026-07-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/</loc>
+    <lastmod>2026-07-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
+    <lastmod>2026-07-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-07-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.18.3/</loc>
     <lastmod>2026-07-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/RELEASE-4.18.3/</loc>
-    <lastmod>2026-07-03T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
-    <lastmod>2026-07-03T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-07-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/camel421-whatsnew/</loc>

@@ -1,4 +1,4 @@
-# PostgresSQL Replication Slot
+# PostgreSQL Replication Slot
 
 **Since Camel 3.0**
 
@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The PostgresSQL Replication Slot component supports 4 options, which are listed below.
+The PostgreSQL Replication Slot component supports 4 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -82,7 +82,7 @@ The PostgresSQL Replication Slot component supports 4 options, which are listed 
 
 ## Endpoint Options
 
-The PostgresSQL Replication Slot endpoint is configured using URI syntax:
+The PostgreSQL Replication Slot endpoint is configured using URI syntax:
 
 pg-replication-slot:host:port/database/slot:outputPlugin
 

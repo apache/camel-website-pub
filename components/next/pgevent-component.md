@@ -1,4 +1,4 @@
-# PostgresSQL Event
+# PostgreSQL Event
 
 **Since Camel 2.15**
 
@@ -71,7 +71,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The PostgresSQL Event component supports 3 options, which are listed below.
+The PostgreSQL Event component supports 3 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -82,7 +82,7 @@ The PostgresSQL Event component supports 3 options, which are listed below.
 
 ## Endpoint Options
 
-The PostgresSQL Event endpoint is configured using URI syntax:
+The PostgreSQL Event endpoint is configured using URI syntax:
 
 pgevent:host:port/database/channel
 
@@ -131,7 +131,7 @@ Enum values:
 
 ## Message Headers
 
-The PostgresSQL Event component supports 1 message header(s), which is/are listed below:
+The PostgreSQL Event component supports 1 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The ElasticSearch component allows you to interface with an [ElasticSearch](https://www.elastic.co/products/elasticsearch) 8.x API using the Java API Client library.
+The Elasticsearch component allows you to interface with an [Elasticsearch](https://www.elastic.co/products/elasticsearch) 8.x API using the Java API Client library.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -217,7 +217,7 @@ Enum values:
 
 ## Message Operations
 
-The following ElasticSearch operations are currently supported. Set an endpoint URI option or exchange header with a key of "operation" and a value set to one of the following. Some operations also require other parameters or the message body to be set.
+The following Elasticsearch operations are currently supported. Set an endpoint URI option or exchange header with a key of "operation" and a value set to one of the following. Some operations also require other parameters or the message body to be set.
 
   
 | operation | message body | description |
