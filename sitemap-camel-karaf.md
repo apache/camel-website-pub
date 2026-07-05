@@ -1,4 +1,4 @@
 urls[3]{loc,lastmod}:
-  https://camel.apache.org/camel-karaf/4.9.x/components.md,2026-07-04T21:43:46.770Z
-  https://camel.apache.org/camel-karaf/4.9.x/index.md,2026-07-04T21:43:46.770Z
-  https://camel.apache.org/camel-karaf/4.9.x/security-model.md,2026-07-04T21:43:46.770Z
+  https://camel.apache.org/camel-karaf/4.9.x/components.md,2026-07-05T09:33:26.805Z
+  https://camel.apache.org/camel-karaf/4.9.x/index.md,2026-07-05T09:33:26.805Z
+  https://camel.apache.org/camel-karaf/4.9.x/security-model.md,2026-07-05T09:33:26.805Z

@@ -6,8 +6,204 @@
     <description>Recent content in Security on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 18 May 2026 09:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2026 10:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-40047</title>
+      <link>https://camel.apache.org/security/CVE-2026-40047.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-40047.html</guid>
+      <description>Camel-Docling: Insufficient validation of custom CLI arguments enables argument injection and path traversal in DoclingProducer</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-40859</title>
+      <link>https://camel.apache.org/security/CVE-2026-40859.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-40859.html</guid>
+      <description>Camel-Vertx-Http and Camel-Netty-Http: Unsafe Java deserialization of HTTP response bodies via a raw ObjectInputStream when transferException is enabled</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-43865</title>
+      <link>https://camel.apache.org/security/CVE-2026-43865.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-43865.html</guid>
+      <description>Camel-Hazelcast: Unsafe Java deserialization in default-configured managed Hazelcast instances enables remote code execution</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46453</title>
+      <link>https://camel.apache.org/security/CVE-2026-46453.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46453.html</guid>
+      <description>Camel-Elasticsearch-Rest-Client: Exchange header constants without the Camel prefix bypass inbound HTTP header filtering, allowing untrusted clients to override the Elasticsearch query and operation</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46454</title>
+      <link>https://camel.apache.org/security/CVE-2026-46454.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46454.html</guid>
+      <description>Camel-Cometd: Inbound Bayeux message headers are mapped into the Exchange without a HeaderFilterStrategy, allowing unauthenticated clients to inject Camel control headers</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46455</title>
+      <link>https://camel.apache.org/security/CVE-2026-46455.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46455.html</guid>
+      <description>Camel-Keycloak: The access-token validity window is not verified because the IS_ACTIVE check is missing from the TokenVerifier, allowing expired tokens to be accepted</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46456</title>
+      <link>https://camel.apache.org/security/CVE-2026-46456.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46456.html</guid>
+      <description>Camel-AWS2-SQS: Inbound message attributes are mapped into the Exchange without an inbound HeaderFilterStrategy, allowing a message sender to inject Camel control headers</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46457</title>
+      <link>https://camel.apache.org/security/CVE-2026-46457.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46457.html</guid>
+      <description>Camel-NATS: Inbound NATS message headers are mapped into the Exchange without a configured HeaderFilterStrategy, allowing a client that can publish to the subject to inject Camel control headers</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46584</title>
+      <link>https://camel.apache.org/security/CVE-2026-46584.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46584.html</guid>
+      <description>Camel-Mail: The mail producer applied attacker-supplied mail.smtp.* / mail.smtps.* message headers as JavaMail session properties, allowing an attacker to weaken the SMTP transport security and, on releases before 4.19.0, redirect the connection and steal the configured SMTP credentials</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46585</title>
+      <link>https://camel.apache.org/security/CVE-2026-46585.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46585.html</guid>
+      <description>Camel-Lucene: The query control headers used non-Camel-prefixed names (QUERY, RETURN_LUCENE_DOCS) that bypass the HTTP header filter, allowing an HTTP client to inject the full-text search query</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46590</title>
+      <link>https://camel.apache.org/security/CVE-2026-46590.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46590.html</guid>
+      <description>Camel-PQC: The HashiCorp Vault and AWS Secrets Manager key-lifecycle managers deserialize persisted key metadata with java.io.ObjectInputStream and no ObjectInputFilter (incomplete remediation of CVE-2026-40048)</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46591</title>
+      <link>https://camel.apache.org/security/CVE-2026-46591.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46591.html</guid>
+      <description>Camel-Neo4j: JSON property names from the CamelNeo4jMatchProperties header are interpolated into the Cypher WHERE clause without validation, allowing Cypher injection (incomplete remediation of CVE-2025-66169)</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46592</title>
+      <link>https://camel.apache.org/security/CVE-2026-46592.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46592.html</guid>
+      <description>Camel-CXF: The SOAP operation-selection headers used non-Camel-prefixed names (operationName, operationNamespace) that bypass the HTTP header filter, allowing an HTTP client to redirect the invoked SOAP operation</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46726</title>
+      <link>https://camel.apache.org/security/CVE-2026-46726.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46726.html</guid>
+      <description>Camel-Vertx-Websocket: The inbound consumer maps externally-supplied WebSocket query and path parameters into the Exchange without a HeaderFilterStrategy, allowing injection of Camel control headers - enabling server-side request forgery and disclosure of secrets when bridged to an HTTP producer</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-48203</title>
+      <link>https://camel.apache.org/security/CVE-2026-48203.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-48203.html</guid>
+      <description>Camel-Solr: The SolrParam. and SolrField. Exchange header prefixes used non-Camel-prefixed names that bypass the HTTP header filter, allowing an HTTP client to inject Solr query parameters (server-side request forgery) and document fields</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-48204</title>
+      <link>https://camel.apache.org/security/CVE-2026-48204.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-48204.html</guid>
+      <description>Camel-MongoDB-GridFS: The gridfs.* control headers used non-Camel-prefixed names that bypass the HTTP header filter, allowing an HTTP client to switch the GridFS operation - including destructive file deletion - in the default configuration</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-48205</title>
+      <link>https://camel.apache.org/security/CVE-2026-48205.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-48205.html</guid>
+      <description>Camel-DNS: The dns.* and term Exchange header constants used non-Camel-prefixed names that bypass the HTTP header filter, allowing an HTTP client to redirect DNS queries to an attacker-controlled server (server-side request forgery) and enumerate internal hostnames</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-48206</title>
+      <link>https://camel.apache.org/security/CVE-2026-48206.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-48206.html</guid>
+      <description>Camel-JIRA: A set of non-Camel-prefixed Exchange header constants (IssueKey, ProjectKey, IssueTransitionId, &amp;hellip;) bypass the HTTP header filter, allowing an HTTP client to drive arbitrary JIRA issue operations using the endpoint&amp;rsquo;s configured credentials</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-49086</title>
+      <link>https://camel.apache.org/security/CVE-2026-49086.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-49086.html</guid>
+      <description>Camel-Dapr: The Dapr Pub/Sub consumer copied the inbound CloudEvent&amp;rsquo;s pub/sub-name and topic into producer-direction routing headers, allowing an actor who can publish to the subscribed topic to redirect the re-published message to an arbitrary Dapr Pub/Sub component and topic</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-49097</title>
+      <link>https://camel.apache.org/security/CVE-2026-49097.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-49097.html</guid>
+      <description>Camel-IRC: The irc.sendTo (and other irc.*) Exchange header constants used non-Camel-prefixed names that bypass the HTTP header filter, allowing an HTTP client to redirect outgoing IRC messages to arbitrary channels or users</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-49098</title>
+      <link>https://camel.apache.org/security/CVE-2026-49098.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-49098.html</guid>
+      <description>Camel-Kafka: The kafka.OVERRIDE_TOPIC (and other kafka.*) Exchange header constants used non-Camel-prefixed names that bypass the upstream HTTP header filter, allowing an HTTP client to redirect Kafka messages to an arbitrary topic</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-49099</title>
+      <link>https://camel.apache.org/security/CVE-2026-49099.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-49099.html</guid>
+      <description>Camel-Salesforce: Non-Camel-prefixed Exchange header constants (sObjectQuery, sObjectSearch, apexUrl, &amp;hellip;) bypass the HTTP header filter, allowing an HTTP client to inject SOQL/SOSL queries, override the target SObject, and redirect Apex REST calls using the connected Salesforce user&amp;rsquo;s permissions</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-49365</title>
+      <link>https://camel.apache.org/security/CVE-2026-49365.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-49365.html</guid>
+      <description>Camel-Netty-HTTP: The muteException consumer option defaulted to false, so a processing error returned the full Java stack trace in the HTTP response body, disclosing sensitive internal information to unauthenticated clients</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-53913</title>
+      <link>https://camel.apache.org/security/CVE-2026-53913.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-53913.html</guid>
+      <description>Camel-Keycloak: KeycloakSecurityPolicy verifies the bearer access token only inside its role and permission checks, so in the default configuration (no required roles or permissions) the token is never verified and any non-null bearer value is accepted - a fail-open authentication bypass</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-55993</title>
+      <link>https://camel.apache.org/security/CVE-2026-55993.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-55993.html</guid>
+      <description>Camel-Atmosphere-Websocket: The inbound consumer maps externally-supplied WebSocket query parameters into the Exchange without a HeaderFilterStrategy, allowing injection of Camel control headers - enabling server-side request forgery and disclosure of secrets when bridged to an HTTP producer</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-55994</title>
+      <link>https://camel.apache.org/security/CVE-2026-55994.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-55994.html</guid>
+      <description>Camel-Iggy: The inbound consumer maps externally-supplied Iggy message user-headers into the Exchange without a HeaderFilterStrategy, allowing injection of Camel control headers - enabling server-side request forgery and disclosure of secrets when bridged to an HTTP producer</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-56139</title>
+      <link>https://camel.apache.org/security/CVE-2026-56139.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-56139.html</guid>
+      <description>Camel-Undertow: The muteException consumer option defaulted to false, so a processing error returned the full Java stack trace in the HTTP response body, disclosing sensitive internal information to unauthenticated clients - and the option was not honoured at all for Rest DSL consumers</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-56140</title>
+      <link>https://camel.apache.org/security/CVE-2026-56140.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-56140.html</guid>
+      <description>Camel-AWS2-SNS: An inbound Camel-namespace filter was added to Sns2HeaderFilterStrategy to align it with sibling components; because camel-aws2-sns is producer-only (no consumer) there is no reachable inbound header-injection path, so this is a defense-in-depth hardening change related to the camel-aws2-sqs issue CVE-2026-46456</description>
+    </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-45760</title>
       <link>https://camel.apache.org/security/CVE-2026-45760.html</link>
@@ -28,6 +224,13 @@
       <pubDate>Wed, 06 May 2026 09:00:00 +0200</pubDate>
       <guid>https://camel.apache.org/security/CVE-2026-33453.html</guid>
       <description>Apache Camel: Improperly Controlled Modification of Dynamically-Determined Object Attributes vulnerability in Camel-Coap component.</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-42527</title>
+      <link>https://camel.apache.org/security/CVE-2026-42527.html</link>
+      <pubDate>Wed, 29 Apr 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-42527.html</guid>
+      <description>Permissive default ObjectInputFilter pattern admits java.net.** and enables DNS-based information disclosure</description>
     </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-27172</title>

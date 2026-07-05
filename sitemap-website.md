@@ -1,10 +1,39 @@
-urls[775]{loc,lastmod}:
+urls[804]{loc,lastmod}:
   https://camel.apache.org/blog/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/releases/release-4.14.8/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/releases/,2026-07-04T00:00:00+00:00
+  https://camel.apache.org/security/CVE-2026-40047.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-40859.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-43865.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46453.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46454.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46455.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46456.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46457.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46584.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46585.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46590.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46591.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46592.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46726.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-48203.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-48204.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-48205.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-48206.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-49086.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-49097.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-49098.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-49099.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-49365.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-53913.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-55993.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-55994.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-56139.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-56140.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/,2026-07-03T10:00:00+02:00
   https://camel.apache.org/releases/release-4.18.3/,2026-07-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/RELEASE-4.18.3/,2026-07-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel421-whatsnew/,2026-07-02T00:00:00+00:00
@@ -39,7 +68,6 @@ urls[775]{loc,lastmod}:
   https://camel.apache.org/releases/karaf-4.18.2/,2026-05-24T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-45760.md,2026-05-18T09:00:00+02:00
   https://camel.apache.org/security/CVE-2026-47323.md,2026-05-18T09:00:00+02:00
-  https://camel.apache.org/security/,2026-05-18T09:00:00+02:00
   https://camel.apache.org/releases/k-2.10.1/,2026-05-18T00:00:00+00:00
   https://camel.apache.org/releases/k-2.8.1/,2026-05-18T00:00:00+00:00
   https://camel.apache.org/releases/k-2.9.2/,2026-05-18T00:00:00+00:00
@@ -52,6 +80,7 @@ urls[775]{loc,lastmod}:
   https://camel.apache.org/releases/kamelets-4.20.0/,2026-05-04T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.20.0/,2026-05-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-quarkus-release-3.35.0/,2026-04-30T00:00:00+00:00
+  https://camel.apache.org/security/CVE-2026-42527.md,2026-04-29T10:00:00+02:00
   https://camel.apache.org/blog/2026/04/camel420-whatsnew/,2026-04-27T00:00:00+00:00
   https://camel.apache.org/releases/q-3.35.0/,2026-04-27T00:00:00+00:00
   https://camel.apache.org/releases/release-4.20.0/,2026-04-25T00:00:00+00:00
