@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 04 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jul 2026 10:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-43866</title>
+      <link>https://camel.apache.org/security/CVE-2026-43866.html</link>
+      <pubDate>Sun, 05 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-43866.html</guid>
+      <description>Camel JMS deserialization filter bypass: a forged DefaultExchangeHolder carried in a JMS ObjectMessage passes the CVE-2026-40860 class check and is unmarshalled into the Exchange, letting an attacker who can publish an ObjectMessage inject the message body, headers, exchange properties, variables and exception</description>
+    </item>
     <item>
       <title>Release 4.14.8</title>
       <link>https://camel.apache.org/releases/release-4.14.8/</link>
