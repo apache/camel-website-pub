@@ -93,6 +93,20 @@
       <description>Camel-Lucene: The query control headers used non-Camel-prefixed names (QUERY, RETURN_LUCENE_DOCS) that bypass the HTTP header filter, allowing an HTTP client to inject the full-text search query</description>
     </item>
     <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46587</title>
+      <link>https://camel.apache.org/security/CVE-2026-46587.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46587.html</guid>
+      <description>Camel-Couchbase: Non-Camel-prefixed Exchange headers bypass HeaderFilterStrategy allowing operation override from untrusted input</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-46588</title>
+      <link>https://camel.apache.org/security/CVE-2026-46588.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-46588.html</guid>
+      <description>Camel-CouchDB: Non-Camel-prefixed Exchange headers bypass HeaderFilterStrategy allowing operation override from untrusted input</description>
+    </item>
+    <item>
       <title>Apache Camel Security Advisory - CVE-2026-46590</title>
       <link>https://camel.apache.org/security/CVE-2026-46590.html</link>
       <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
@@ -147,6 +161,13 @@
       <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
       <guid>https://camel.apache.org/security/CVE-2026-48206.html</guid>
       <description>Camel-JIRA: A set of non-Camel-prefixed Exchange header constants (IssueKey, ProjectKey, IssueTransitionId, &amp;hellip;) bypass the HTTP header filter, allowing an HTTP client to drive arbitrary JIRA issue operations using the endpoint&amp;rsquo;s configured credentials</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-49042</title>
+      <link>https://camel.apache.org/security/CVE-2026-49042.html</link>
+      <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-49042.html</guid>
+      <description>Camel-Langchain4j-Tools: Tool argument headers are not filtered against declared parameters, allowing an LLM to inject arbitrary Exchange headers via tool call arguments</description>
     </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-49086</title>

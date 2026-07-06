@@ -59,6 +59,12 @@
     <loc>https://camel.apache.org/security/CVE-2026-46585.html</loc>
     <lastmod>2026-07-03T10:00:00+02:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-46587.html</loc>
+    <lastmod>2026-07-03T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-46588.html</loc>
+    <lastmod>2026-07-03T10:00:00+02:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-46590.html</loc>
     <lastmod>2026-07-03T10:00:00+02:00</lastmod>
   </url><url>
@@ -81,6 +87,9 @@
     <lastmod>2026-07-03T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-48206.html</loc>
+    <lastmod>2026-07-03T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-49042.html</loc>
     <lastmod>2026-07-03T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-49086.html</loc>

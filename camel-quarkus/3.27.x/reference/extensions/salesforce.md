@@ -36,7 +36,7 @@ To generate Salesforce DTOs for your project, use the `salesforce-maven-plugin`.
 <plugin>
     <groupId>org.apache.camel.maven</groupId>
     <artifactId>camel-salesforce-maven-plugin</artifactId>
-    <version>4.14.7</version>
+    <version>4.14.8</version>
     <executions>
         <execution>
             <goals>

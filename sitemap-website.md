@@ -1,4 +1,4 @@
-urls[806]{loc,lastmod}:
+urls[809]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-43866.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-43867.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/,2026-07-05T10:00:00+02:00
@@ -18,6 +18,8 @@ urls[806]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-46457.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-46584.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-46585.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46587.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-46588.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-46590.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-46591.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-46592.md,2026-07-03T10:00:00+02:00
@@ -26,6 +28,7 @@ urls[806]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-48204.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-48205.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-48206.md,2026-07-03T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-49042.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-49086.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-49097.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-49098.md,2026-07-03T10:00:00+02:00
