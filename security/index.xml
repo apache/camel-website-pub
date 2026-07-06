@@ -16,6 +16,13 @@
       <description>Camel JMS deserialization filter bypass: a forged DefaultExchangeHolder carried in a JMS ObjectMessage passes the CVE-2026-40860 class check and is unmarshalled into the Exchange, letting an attacker who can publish an ObjectMessage inject the message body, headers, exchange properties, variables and exception</description>
     </item>
     <item>
+      <title>Apache Camel Security Advisory - CVE-2026-43867</title>
+      <link>https://camel.apache.org/security/CVE-2026-43867.html</link>
+      <pubDate>Sun, 05 Jul 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-43867.html</guid>
+      <description>Camel-PQC: The AWS Secrets Manager key-lifecycle manager deserializes persisted key metadata with java.io.ObjectInputStream and no ObjectInputFilter (same defect as CVE-2026-46590, reported independently)</description>
+    </item>
+    <item>
       <title>Apache Camel Security Advisory - CVE-2026-40047</title>
       <link>https://camel.apache.org/security/CVE-2026-40047.html</link>
       <pubDate>Fri, 03 Jul 2026 10:00:00 +0200</pubDate>

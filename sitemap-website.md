@@ -1,5 +1,6 @@
-urls[805]{loc,lastmod}:
+urls[806]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-43866.md,2026-07-05T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-43867.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/,2026-07-05T10:00:00+02:00
   https://camel.apache.org/blog/,2026-07-04T00:00:00+00:00
