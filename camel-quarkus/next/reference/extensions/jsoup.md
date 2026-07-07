@@ -1,6 +1,6 @@
 # Jsoup
 
-JVM since3.36.0 Native since3.36.0
+JVM since3.38.0 Native since3.38.0
 
 Parse HTML using jsoup
 

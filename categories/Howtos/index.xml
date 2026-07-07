@@ -6,8 +6,15 @@
     <description>Recent content in Howtos on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Howtos/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How Apache Camel elevates Citrus Integration Testing to next levels</title>
+      <link>https://camel.apache.org/blog/2026/07/camel-elevates-citrus/</link>
+      <pubDate>Mon, 06 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/camel-elevates-citrus/</guid>
+      <description>Citrus is a powerful integration testing framework that orchestrates end-to-end test scenarios with clean, readable Java code. As a framework Citrus provides several ready-to-use components to connect to messaging systems, cloud services, and protocols such as Http, Kafka, Jms and many more — but when you combine Citrus with the power of Apache Camel, something remarkable happens.&#xA;Citrus gains the ability to speak every protocol Camel supports, transform test data with Camel&amp;rsquo;s rich data formats, and even reach into running Camel routes to trigger or verify business logic directly.</description>
+    </item>
     <item>
       <title>Camel Monitor Operator</title>
       <link>https://camel.apache.org/blog/2026/06/camel-monitor-operator/</link>

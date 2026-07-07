@@ -9,7 +9,7 @@ A typical integration test scenario verifies the collaboration of services and t
 
 ## Citrus Test Framework
 
-As an example of writing integration tests for Camel applications you can use the [Citrus](https://citfrusframework.org) test framework.
+As an example of writing integration tests for Camel applications you can use the [Citrus](https://citrusframework.org) test framework.
 
 Citrus is an Open Source Java testing framework with focus on integration testing and messaging.
 

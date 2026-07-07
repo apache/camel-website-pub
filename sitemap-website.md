@@ -1,9 +1,12 @@
-urls[809]{loc,lastmod}:
+urls[810]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-07-06T00:00:00+00:00
+  https://camel.apache.org/,2026-07-06T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/camel-elevates-citrus/,2026-07-06T00:00:00+00:00
+  https://camel.apache.org/categories/Howtos/,2026-07-06T00:00:00+00:00
+  https://camel.apache.org/categories/Tooling/,2026-07-06T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-43866.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-43867.md,2026-07-05T10:00:00+02:00
-  https://camel.apache.org/,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/,2026-07-05T10:00:00+02:00
-  https://camel.apache.org/blog/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/releases/release-4.14.8/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-07-04T00:00:00+00:00
@@ -54,7 +57,6 @@ urls[809]{loc,lastmod}:
   https://camel.apache.org/blog/2026/06/camel-ai-trained/,2026-06-19T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/,2026-06-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-dependency-updates/,2026-06-18T00:00:00+00:00
-  https://camel.apache.org/categories/Tooling/,2026-06-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-always-on/,2026-06-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-bug-fix-track-record/,2026-06-14T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-dna-19-years/,2026-06-12T00:00:00+00:00
@@ -63,7 +65,6 @@ urls[809]{loc,lastmod}:
   https://camel.apache.org/blog/2026/06/camel-by-the-numbers/,2026-06-09T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-monitor-operator/,2026-06-04T00:00:00+00:00
-  https://camel.apache.org/categories/Howtos/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/05/wanaku-0.1.1/,2026-05-31T00:00:00+00:00
   https://camel.apache.org/blog/2026/05/camel-quarkus-release-3.36.0/,2026-05-28T00:00:00+00:00
   https://camel.apache.org/releases/q-3.36.0/,2026-05-26T00:00:00+00:00

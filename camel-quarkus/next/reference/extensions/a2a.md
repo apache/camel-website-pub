@@ -1,6 +1,6 @@
 # A2A
 
-JVM since3.37.0 Native since3.37.0
+JVM since3.38.0 Native since3.38.0
 
 A2A endpoint for agent-to-agent communication.
 

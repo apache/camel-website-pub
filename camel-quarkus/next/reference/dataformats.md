@@ -39,7 +39,7 @@ level | Description |
 | [JSON JSON-B](extensions/jsonb.md) | camel-quarkus-jsonb | 1.5.0 | 1.5.0 | Stable | Marshal POJOs to JSON and back using JSON-B. |
 | [LZF Deflate Compression](extensions/lzf.md) | camel-quarkus-lzf | 1.0.0 | 1.0.0 | Stable | Compress and decompress streams using LZF deflate algorithm |
 | [MIME Multipart](extensions/mail.md) | camel-quarkus-mail | 0.2.0 | 0.2.0 | Stable | Marshal Camel messages with attachments into MIME-Multipart messages and back |
-| [OCSF](extensions/ocsf.md) | camel-quarkus-ocsf | 3.37.0 | 3.37.0 | Stable | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON |
+| [OCSF](extensions/ocsf.md) | camel-quarkus-ocsf | 3.38.0 | 3.38.0 | Stable | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON |
 | [PGP (Pretty Good Privacy Cryptographic)](extensions/crypto-pgp.md) | camel-quarkus-crypto-pgp | 3.13.0 | 3.13.0 | Stable | Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP |
 | [PQC (Post-Quantum Cryptography)](extensions/pqc.md) | camel-quarkus-pqc | 3.24.0 | 3.35.0 | Stable | Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM) |
 | [Protobuf](extensions/protobuf.md) | camel-quarkus-protobuf | 1.0.0 | 1.5.0 | Stable | Serialize and deserialize Java objects using Google’s Protocol buffers |

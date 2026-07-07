@@ -7,6 +7,12 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.21 to 4.22
 
+### camel-jbang
+
+The Camel JBang CLI now automatic resolves quarkus version to use, instead of hardcoded `3.33.1.1` ([https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b](https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b)).
+
+The Camel TUI (`camel tui`) accepts `--theme=dark` or `--theme=light` to choose the color palette at startup. When omitted, the persisted `camel.tui.theme` value from `.camel-jbang-user.properties` is used.
+
 ### camel-langchain4j-agent
 
 The `Agent.chat()` method return type has changed from `String` to `Result<String>` (from `dev.langchain4j.service.Result`). This allows the agent producer to expose token usage (input, output, total token count) and finish reason as exchange headers, consistent with the chat, tools, and embeddings components.
@@ -86,3 +92,23 @@ As a consequence:
 When unmarshalling a MIME message with `headersInline=true`, the `mime-multipart` data format now applies a `HeaderFilterStrategy` to the headers copied from the MIME content onto the Camel message. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) present in the external MIME headers are no longer copied onto the message, consistent with the inbound header filtering already performed by the camel-mail consumer.
 
 Ordinary application headers are unaffected. If a route relied on `Camel*` headers being propagated from the MIME content, set them explicitly after unmarshalling.
+
+### camel-kafka - metadataMaxAgeMs option moved from producer to common
+
+The `metadataMaxAgeMs` (`metadata.max.age.ms`) option was incorrectly labeled as producer-only, but is applied to both consumer and producer Kafka clients. The label has been corrected to `common`.
+
+If you use the Endpoint DSL, the `metadataMaxAgeMs` method has moved from the producer (advanced) builder to the common builder.
+
+### camel-kafka - Producer no longer silently drops scalar Jackson nodes
+
+With `useIterator=true`, the Kafka producer splits an `Iterable` body into one record per element. A Jackson `JsonNode` implements `Iterable`, so a scalar value node (e.g. an `IntNode` produced by `transform().jq(".my-value")`) was seen as an empty iterable and produced no record, silently discarding the message with no exception or log.
+
+Scalar value nodes are now sent as a single record. Only container nodes (`ArrayNode`, `ObjectNode`) are still split, which is unchanged. Any `convertBodyTo(…​)` previously used as a workaround is no longer required.
+
+### camel-jbang catalog tables fill the terminal width
+
+The `camel catalog` commands (`camel catalog component`, `camel catalog dataformat`, `camel catalog language`, `camel catalog transformer`, `camel catalog kamelet`, …​) now size the `DESCRIPTION` column to the detected terminal width instead of the previous fixed 80-character cap, so wide terminals show more of the description before it is truncated with an ellipsis. The `NAME` column width is also standardized across these commands (it previously differed per command, for example 60 for `transformer` and 30 elsewhere).
+
+Terminal width is now detected on Windows (`cmd` / PowerShell) via `mode con`, in addition to the existing `COLUMNS` / `stty size` detection. When no terminal can be detected (for example when the output is piped or redirected), the width falls back to 120 columns. For full, untruncated output suitable for scripting, use the `--json` option.
+
+The `camel infra list` table now sizes its `DESCRIPTION` column to the terminal width, and truncates the `IMPLEMENTATION` and `SERVICE_DATA` columns with an ellipsis instead of letting the raw service data overflow the terminal. The complete, structured service data remains available via `--json`.

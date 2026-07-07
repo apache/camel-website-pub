@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[216]{title,link,pubDate,description}:
+posts[217]{title,link,pubDate,description}:
+  How Apache Camel elevates Citrus Integration Testing to next levels|https://camel.apache.org/blog/2026/07/camel-elevates-citrus/index.md|Mon, 06 Jul 2026 00:00:00 +0000|Citrus is a powerful integration testing framework that orchestrates end-to-end test scenarios with clean, readable Java code. As a framework Citrus provides several ready-to-use components to connect
   RELEASE 4.14.8|https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/index.md|Sat, 04 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.8 patch release with 43 bug fixes and improvements. The artifacts are published and ready for you to download from the Centra
   RELEASE 4.18.3|https://camel.apache.org/blog/2026/07/RELEASE-4.18.3/index.md|Fri, 03 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.3 LTS release with 84 new features and improvements. The artifacts are published and ready for you to download from the Centr
   Apache Camel 4.21 What's New|https://camel.apache.org/blog/2026/07/camel421-whatsnew/index.md|Thu, 02 Jul 2026 00:00:00 +0000|Apache Camel 4.21 has just been released. This release introduces a large set of new features and noticeable improvements that we will cover in this blog post. Camel Core Error Registry The Error Regi

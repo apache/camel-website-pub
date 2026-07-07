@@ -303,7 +303,9 @@ The Doctor checks your development environment and reports issues:
 
 ## Theme
 
-The TUI ships with two color themes, **dark** (the default) and **light**, defined as CSS stylesheets. Press **F4** on any screen to toggle between them at runtime.
+The TUI ships with two color themes, **dark** (the default) and **light**, defined as CSS stylesheets. Open the **F2** actions menu and choose **Light Theme** or **Dark Theme** to switch at runtime.
+
+Pass `--theme=dark` or `--theme=light` on the command line to pick the palette for the current session. The CLI value overrides the persisted preference from `.camel-jbang-user.properties`; runtime toggles and the config file still apply on later launches when `--theme` is omitted.
 
 The brand orange accent is identical in both themes; status colors (success, warning, error) and borders adapt for readability on dark and light terminals.
 
@@ -321,7 +323,6 @@ Your choice is remembered: it is saved as `camel.tui.theme` (`dark` or `light`) 
 | **F1** / **?** | Context-sensitive help (toggle) |
 | **F2** | Actions menu |
 | **F3** | Switch between integrations (when multiple running) |
-| **F4** | Toggle light / dark theme |
 | **Shift+F5** | Take screenshot |
 | **Ctrl+R** | Start/stop tape recording |
 | **Ctrl+C** / **Q** | Quit |
@@ -458,4 +459,5 @@ vhs demo.tape               # .tape -> .gif
 | `--mcp` | Enable the embedded MCP server for AI agent access to the TUI. | `false` |
 | `--mcp-port` | Port for the embedded MCP server. | `8123` |
 | `--refresh` | Screen refresh interval in milliseconds. | `100` |
+| `--theme` | Color theme for this session: `dark` or `light`. Overrides the persisted `camel.tui.theme` preference when set. |  |
 | `--record` | Replay a `.tape` file and record the session to an Asciinema `.cast` file. |  |

@@ -1,6 +1,6 @@
 # GitHub2
 
-JVM since3.37.0 Native since3.37.0
+JVM since3.38.0 Native since3.38.0
 
 Interact with the GitHub API.
 

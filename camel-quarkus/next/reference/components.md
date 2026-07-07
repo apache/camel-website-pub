@@ -8,7 +8,7 @@ since | Native
 since | Support  
 level | Description |
 | --- | --- | --- | --- | --- | --- |
-| [A2A](extensions/a2a.md) | camel-quarkus-a2a | 3.37.0 | 3.37.0 | Stable | A2A endpoint for agent-to-agent communication. |
+| [A2A](extensions/a2a.md) | camel-quarkus-a2a | 3.38.0 | 3.38.0 | Stable | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](extensions/activemq.md) | camel-quarkus-activemq | 1.0.0 | 1.0.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](extensions/activemq6.md) | camel-quarkus-activemq6 | 3.30.0 | 3.30.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AMQP](extensions/amqp.md) | camel-quarkus-amqp | 1.0.0 | 1.0.0 | Stable | Messaging with AMQP protocol using Apache QPid Client. |
@@ -19,7 +19,7 @@ level | Description |
 | [AWS Bedrock Agent Runtime](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Invoke Model of AWS Bedrock Agent Runtime service. |
 | [AWS Bedrock Agent](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Operate on AWS Bedrock through its Agent. |
 | [AWS Bedrock](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Invoke Model of AWS Bedrock service. |
-| [AWS Cloudtrail](extensions/aws-cloudtrail.md) | camel-quarkus-aws-cloudtrail | 3.37.0 | 3.37.0 | Stable | Consume events from Amazon Cloudtrail using AWS SDK version 2.x. |
+| [AWS Cloudtrail](extensions/aws-cloudtrail.md) | camel-quarkus-aws-cloudtrail | 3.38.0 | 3.38.0 | Stable | Consume events from Amazon Cloudtrail using AWS SDK version 2.x. |
 | [AWS Secrets Manager](extensions/aws-secrets-manager.md) | camel-quarkus-aws-secrets-manager | 2.0.0 | 3.19.0 | Stable | Manage secrets using AWS Secrets Manager. |
 | [AWS Athena](extensions/aws2-athena.md) | camel-quarkus-aws2-athena | 1.0.0 | 1.0.0 | Stable | Access AWS Athena. |
 | [AWS CloudWatch](extensions/aws2-cw.md) | camel-quarkus-aws2-cw | 1.0.0 | 1.0.0 | Stable | Sending metrics to AWS CloudWatch. |
@@ -105,7 +105,7 @@ level | Description |
 | [FTPS](extensions/ftp.md) | camel-quarkus-ftp | 1.0.0 | 1.0.0 | Stable | Upload and download files to/from FTP servers supporting the FTPS protocol. |
 | [Geocoder](extensions/geocoder.md) | camel-quarkus-geocoder | 1.1.0 | 1.2.0 | Stable | Find geocodes (latitude and longitude) for a given address or the other way round. |
 | [Git](extensions/git.md) | camel-quarkus-git | 1.1.0 | 1.1.0 | Stable | Perform operations on git repositories. |
-| [GitHub2](extensions/github2.md) | camel-quarkus-github2 | 3.37.0 | 3.37.0 | Stable | Interact with the GitHub API. |
+| [GitHub2](extensions/github2.md) | camel-quarkus-github2 | 3.38.0 | 3.38.0 | Stable | Interact with the GitHub API. |
 | [Google BigQuery Standard SQL](extensions/google-bigquery.md) | camel-quarkus-google-bigquery | 1.0.0 | 1.6.0 | Stable | Access Google Cloud BigQuery service using SQL queries. |
 | [Google BigQuery](extensions/google-bigquery.md) | camel-quarkus-google-bigquery | 1.0.0 | 1.6.0 | Stable | Google BigQuery data warehouse for analytics. |
 | [Google Calendar Stream](extensions/google-calendar.md) | camel-quarkus-google-calendar | 1.0.0 | 1.0.0 | Stable | Poll for changes in a Google Calendar. |

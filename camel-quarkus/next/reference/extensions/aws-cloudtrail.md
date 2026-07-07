@@ -1,6 +1,6 @@
 # AWS Cloudtrail
 
-JVM since3.37.0 Native since3.37.0
+JVM since3.38.0 Native since3.38.0
 
 Consume events from Amazon Cloudtrail using AWS SDK version 2.x.
 
