@@ -107,13 +107,40 @@ With the following _path_ and _query_ parameters:
 | **moveFailed** (consumer) | Sets the move failure expression based on Simple language. For example, to move files into a .error subdirectory use: .error. Note: When moving the files to the fail location Camel will handle the error and will not pick up the file again. |  | String |
 | **noop** (consumer) | If true, the file is not moved or deleted in any way. This option is good for readonly data, or for ETL type requirements. If noop=true, Camel will set idempotent=true as well, to avoid consuming the same files over and over again. | false | boolean |
 | **preMove** (consumer) | Expression (such as File Language) used to dynamically set the filename when moving it before processing. For example to move in-progress files into the order directory set this value to order. |  | String |
-| **preSort** (consumer) | When pre-sort is enabled then the consumer will sort the file and directory names during polling, that was retrieved from the file system. You may want to do this in case you need to operate on the files in a sorted order. The pre-sort is executed before the consumer starts to filter, and accept files to process by Camel. This option is default=false meaning disabled. | false | boolean |
+| **preSort** (consumer) | 
+When pre-sort is enabled then the consumer will sort the file and directory names during polling, that was retrieved from the file system. You may want to do this in case you need to operate on the files in a sorted order. The pre-sort is executed before the consumer starts to filter, and accept files to process by Camel. This option is default=false meaning disabled. The following values are supported: name (sort by file name), modified (sort by last-modified timestamp), size (sort by file size). To sort in descending (reverse) order, prefix the value with a minus sign (e.g., -modified to sort newest first). The value true is an alias for name (backward compatible).
+
+Enum values:
+
+-   true
+    
+-   false
+    
+-   name
+    
+-   \-name
+    
+-   modified
+    
+-   \-modified
+    
+-   size
+    
+-   \-size
+    
+
+
+
+
+
+ |  | String |
 | **recursive** (consumer) | If a directory, will look for files in all the sub-directories as well. | false | boolean |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **directoryMustExist** (consumer (advanced)) | Similar to the startingDirectoryMustExist option, but this applies during polling (after starting the consumer). | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
+
 Sets the exchange pattern when the consumer creates an exchange.
 
 Enum values:

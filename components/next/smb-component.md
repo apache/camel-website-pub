@@ -109,7 +109,33 @@ With the following _path_ and _query_ parameters:
 | **moveFailed** (consumer) | Sets the move failure expression based on Simple language. For example, to move files into a .error subdirectory use: .error. Note: When moving the files to the fail location Camel will handle the error and will not pick up the file again. |  | String |
 | **noop** (consumer) | If true, the file is not moved or deleted in any way. This option is good for readonly data, or for ETL type requirements. If noop=true, Camel will set idempotent=true as well, to avoid consuming the same files over and over again. | false | boolean |
 | **preMove** (consumer) | Expression (such as File Language) used to dynamically set the filename when moving it before processing. For example to move in-progress files into the order directory set this value to order. |  | String |
-| **preSort** (consumer) | When pre-sort is enabled then the consumer will sort the file and directory names during polling, that was retrieved from the file system. You may want to do this in case you need to operate on the files in a sorted order. The pre-sort is executed before the consumer starts to filter, and accept files to process by Camel. This option is default=false meaning disabled. | false | boolean |
+| **preSort** (consumer) | 
+When pre-sort is enabled then the consumer will sort the file and directory names during polling, that was retrieved from the file system. You may want to do this in case you need to operate on the files in a sorted order. The pre-sort is executed before the consumer starts to filter, and accept files to process by Camel. This option is default=false meaning disabled. The following values are supported: name (sort by file name), modified (sort by last-modified timestamp), size (sort by file size). To sort in descending (reverse) order, prefix the value with a minus sign (e.g., -modified to sort newest first). The value true is an alias for name (backward compatible).
+
+Enum values:
+
+-   true
+    
+-   false
+    
+-   name
+    
+-   \-name
+    
+-   modified
+    
+-   \-modified
+    
+-   size
+    
+-   \-size
+    
+
+
+
+
+
+ |  | String |
 | **recursive** (consumer) | If a directory, will look for files in all the sub-directories as well. | false | boolean |
 | **searchPattern** (consumer) | The search pattern used to list the files (server side on SMB). This parameter can contain the name of a file (or multiple files, if wildcards are used) within this directory. When it is null all files are included. Two wild card characters are supported in the search pattern. The (question mark) character matches a single character. If a search pattern contains one or more characters, then exactly that number of characters is matched by the wildcards. For example, the criterion x matches abx but not abcx or ax, because the two file names do not have enough characters preceding the literal. When a file name criterion has characters trailing a literal, then the match is made with specified number of characters or less. For example, the criterion x matches xab, xa, and x, but not xabc. If only characters are present in the file name selection criterion, then the match is made as if the criterion contained characters trailing a literal. The (asterisk) character matches an entire file name. A null or empty specification criterion also selects all file names. For example, .abc or .abc match any file with an extension of abc. ., , or empty string match all files in a directory. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
@@ -118,6 +144,7 @@ With the following _path_ and _query_ parameters:
 | **download** (consumer (advanced)) | Whether the SMB consumer should download the file. If this option is set to false, then the message body will be null, but the consumer will still trigger a Camel Exchange that has details about the file such as file name, file size, etc. It’s just that the file will not be downloaded. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
+
 Sets the exchange pattern when the consumer creates an exchange.
 
 Enum values:

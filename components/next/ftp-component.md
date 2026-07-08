@@ -176,7 +176,34 @@ Enum values:
 | **moveFailed** (consumer) | Sets the move failure expression based on Simple language. For example, to move files into a .error subdirectory use: .error. Note: When moving the files to the fail location Camel will handle the error and will not pick up the file again. |  | String |
 | **noop** (consumer) | If true, the file is not moved or deleted in any way. This option is good for readonly data, or for ETL type requirements. If noop=true, Camel will set idempotent=true as well, to avoid consuming the same files over and over again. | false | boolean |
 | **preMove** (consumer) | Expression (such as File Language) used to dynamically set the filename when moving it before processing. For example to move in-progress files into the order directory set this value to order. |  | String |
-| **preSort** (consumer) | When pre-sort is enabled then the consumer will sort the file and directory names during polling, that was retrieved from the file system. You may want to do this in case you need to operate on the files in a sorted order. The pre-sort is executed before the consumer starts to filter, and accept files to process by Camel. This option is default=false meaning disabled. | false | boolean |
+| **preSort** (consumer) | 
+
+When pre-sort is enabled then the consumer will sort the file and directory names during polling, that was retrieved from the file system. You may want to do this in case you need to operate on the files in a sorted order. The pre-sort is executed before the consumer starts to filter, and accept files to process by Camel. This option is default=false meaning disabled. The following values are supported: name (sort by file name), modified (sort by last-modified timestamp), size (sort by file size). To sort in descending (reverse) order, prefix the value with a minus sign (e.g., -modified to sort newest first). The value true is an alias for name (backward compatible).
+
+Enum values:
+
+-   true
+    
+-   false
+    
+-   name
+    
+-   \-name
+    
+-   modified
+    
+-   \-modified
+    
+-   size
+    
+-   \-size
+    
+
+
+
+
+
+ |  | String |
 | **recursive** (consumer) | If a directory, will look for files in all the sub-directories as well. | false | boolean |
 | **resumeDownload** (consumer) | Configures whether resume download is enabled. This must be supported by the FTP server (almost all FTP servers support it). In addition, the options localWorkDirectory must be configured so downloaded files are stored in a local directory, and the option binary must be enabled, which is required to support resuming of downloads. | false | boolean |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
