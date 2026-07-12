@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Nativeunsupported
 
-Marshal and unmarshal JSON:API resources using JSONAPI-Converter library.
+Marshal and unmarshal JSON:API resources using JSONAPI-Converter library
 
 ## What’s inside
 

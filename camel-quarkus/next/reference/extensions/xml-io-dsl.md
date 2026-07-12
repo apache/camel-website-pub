@@ -2,7 +2,7 @@
 
 JVM since1.8.0 Native since1.8.0
 
-An XML stack for parsing XML route definitions
+Camel XML DSL with camel-xml-io
 
 ## What’s inside
 

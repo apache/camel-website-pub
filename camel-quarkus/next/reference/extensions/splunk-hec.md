@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since3.8.0
 
-The splunk component allows to publish events in Splunk using the HTTP Event Collector.
+The splunk component allows publishing events in Splunk using the HTTP Event Collector.
 
 ## What’s inside
 

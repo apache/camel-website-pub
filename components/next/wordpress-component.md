@@ -65,7 +65,6 @@ The WordPress component supports 14 options, which are listed below.
 | **criteria** (common) | The criteria to use with complex searches. This is a multi-value option with prefix: criteria. |  | Map |
 | **force** (common) | Whether to bypass trash and force deletion. | false | boolean |
 | **id** (common) | The entity ID. Should be passed when the operation performed requires a specific entity, e.g. deleting a post. |  | Integer |
-| **password** (common) | Password from authorized user. |  | String |
 | **searchCriteria** (common) | Search criteria. |  | SearchCriteria |
 | **url** (common) | **Required** The Wordpress API URL from your site, e.g. [http://myblog.com/wp-json/](http://myblog.com/wp-json/). |  | String |
 | **user** (common) | Authorized user to perform writing operations. |  | String |
@@ -74,6 +73,7 @@ The WordPress component supports 14 options, which are listed below.
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
+| **password** (security) | Password from authorized user. |  | String |
 
 ## Endpoint Options
 
@@ -127,7 +127,6 @@ Enum values:
 | **criteria** (common) | The criteria to use with complex searches. This is a multi-value option with prefix: criteria. |  | Map |
 | **force** (common) | Whether to bypass trash and force deletion. | false | boolean |
 | **id** (common) | The entity ID. Should be passed when the operation performed requires a specific entity, e.g. deleting a post. |  | Integer |
-| **password** (common) | Password from authorized user. |  | String |
 | **searchCriteria** (common) | Search criteria. |  | SearchCriteria |
 | **url** (common) | **Required** The Wordpress API URL from your site, e.g. [http://myblog.com/wp-json/](http://myblog.com/wp-json/). |  | String |
 | **user** (common) | Authorized user to perform writing operations. |  | String |
@@ -149,6 +148,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **password** (security) | Password from authorized user. |  | String |
 
 Most of the parameters needed when performing a read operation mirrors from the official [API](https://developer.wordpress.org/rest-api/reference/). When performing searches operations, the `criteria.` suffix is needed. Take the following `Consumer` as example:
 

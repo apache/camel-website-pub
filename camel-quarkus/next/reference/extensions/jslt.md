@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.4.0
 
-Query or transform JSON payloads using an JSLT.
+Query or transform JSON payloads using JSLT.
 
 ## What’s inside
 

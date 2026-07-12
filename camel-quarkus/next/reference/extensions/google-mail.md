@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Manage messages in Google Mail. Poll for incoming messages in Google Mail.
+Manage messages in Google Mail.
 
 ## What’s inside
 

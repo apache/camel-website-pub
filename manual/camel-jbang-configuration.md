@@ -71,12 +71,15 @@ camel run *
 
 Camel CLI uses two configuration files:
 
--   Global: `~/.camel-jbang-user.properties`
+-   Global: `~/.camel-cli.properties`
     
--   Local: `./camel-jbang-user.properties` (takes precedence)
+-   Local: `./camel-cli.properties` (takes precedence)
     
 
 Commands target global by default. Use `--global=false` for local configuration.
+
+> **Note**
+> These files were previously named `.camel-jbang-user.properties` (global) and `camel-jbang-user.properties` (local). On first run the CLI automatically renames a pre-existing global `~/.camel-jbang-user.properties` to `~/.camel-cli.properties` and a pre-existing local `./camel-jbang-user.properties` to `./camel-cli.properties`. An existing new file is never overwritten.
 
 > **Important**
 > A set version via `camel config set` cannot be combined with `--camel-version` on the command line.

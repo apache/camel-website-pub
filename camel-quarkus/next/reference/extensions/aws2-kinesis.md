@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.7.0
 
-Consume and produce records from AWS Kinesis Streams using AWS SDK version 2.x.
+Consume and produce records from and to AWS Kinesis Streams. Produce data to AWS Kinesis Firehose streams.
 
 ## What’s inside
 

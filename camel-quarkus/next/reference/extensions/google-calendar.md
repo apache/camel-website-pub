@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Perform various operations on a Google Calendar. Poll for changes in a Google Calendar.
+Perform various operations on a Google Calendar.
 
 ## What’s inside
 

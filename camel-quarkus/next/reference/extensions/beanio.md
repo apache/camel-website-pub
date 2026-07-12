@@ -2,7 +2,7 @@
 
 JVM since3.8.0 Native since3.16.0
 
-Marshal and unmarshal Java beans to and from flat files (such as CSV, delimited, or fixed length formats).
+Marshal and unmarshal Java beans to and from flat files (such as CSV, delimited, or fixed length formats)
 
 ## What’s inside
 

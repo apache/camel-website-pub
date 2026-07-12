@@ -1,6 +1,6 @@
 # Camel misc. components supported on Quarkus
 
-There are 34 misc. components (5 deprecated, 6 JVM only)
+There are 35 misc. components (5 deprecated, 7 JVM only)
 
      
 | Misc. component | Artifact | JVM  
@@ -14,6 +14,7 @@ level | Description |
 | [Cloudevents](extensions/cloudevents.md) | camel-quarkus-cloudevents | 2.14.0 | 2.14.0 | Stable | Camel support for the CloudEvents specification |
 | [Console](extensions/console.md) | camel-quarkus-console | 2.16.0 | n/a | Preview | Camel Developer Console |
 | [Debug](extensions/debug.md) | camel-quarkus-debug | 2.10.0 | 3.2.0 | Stable | Enables Camel Route Debugging |
+| [Diagram](extensions/diagram.md) | camel-quarkus-diagram | 3.38.0 | n/a | Preview | Camel Route Diagram rendering |
 | [DSL Modeline](extensions/dsl-modeline.md) | camel-quarkus-dsl-modeline | 2.14.0 | n/a | Preview | Camel DSL modeline |
 | [Headersmap](extensions/headersmap.md) | camel-quarkus-headersmap | 1.2.0 | 1.2.0 | Stable | Fast case-insensitive headers map implementation |
 | [Jasypt](extensions/jasypt.md) | camel-quarkus-jasypt | 1.2.0 | 3.7.0 | Stable | Security using Jasypt |

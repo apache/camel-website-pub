@@ -2,7 +2,7 @@
 
 JVM since1.7.0 Native since1.7.0
 
-The azure-eventhubs component that integrates Azure Event Hubs using AMQP protocol. Azure EventHubs is a highly scalable publish-subscribe service that can ingest millions of events per second and stream them to multiple consumers.
+Send and receive events to/from Azure Event Hubs using AMQP protocol.
 
 ## What’s inside
 

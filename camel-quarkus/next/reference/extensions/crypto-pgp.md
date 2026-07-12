@@ -2,7 +2,7 @@
 
 JVM since3.13.0 Native since3.13.0
 
-Encrypt and decrypt messages using Bouncy Castle OpenPGP API.
+Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP
 
 ## What’s inside
 

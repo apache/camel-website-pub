@@ -2,7 +2,7 @@
 
 JVM since1.8.0 Nativeunsupported
 
-Huawei Cloud component to integrate with SimpleNotification services
+To broadcast messages and connect cloud services through notifications on Huawei Cloud
 
 ## What’s inside
 

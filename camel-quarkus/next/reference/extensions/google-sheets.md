@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Manage spreadsheets in Google Sheets. Poll for changes in Google Sheets.
+Manage spreadsheets in Google Sheets.
 
 ## What’s inside
 

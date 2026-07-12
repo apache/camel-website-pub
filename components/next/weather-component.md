@@ -101,7 +101,6 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **appid** (common) | **Required** APPID ID used to authenticate the user connected to the API Server. |  | String |
 | **headerName** (common) | To store the weather result in this header instead of the message body. This is useable if you want to keep current message body as-is. |  | String |
 | **language** (common) | 
 Language of the response.
@@ -309,6 +308,7 @@ Enum values:
 
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
+| **appid** (security) | **Required** APPID ID used to authenticate the user connected to the API Server. |  | String |
 | **geolocationAccessKey** (security) | **Required** The geolocation service now needs an accessKey to be used. |  | String |
 | **geolocationRequestHostIP** (security) | **Required** The geolocation service now needs to specify the IP associated to the accessKey you’re using. |  | String |
 

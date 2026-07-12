@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Nativeunsupported
 
-Send and receive messages to/from COAP capable devices.
+Send and receive messages to/from CoAP (Constrained Application Protocol) capable devices.
 
 ## What’s inside
 

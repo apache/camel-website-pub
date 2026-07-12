@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Store and retrieve data from AWS DynamoDB service or receive messages from AWS DynamoDB Stream using AWS SDK version 2.x.
+Store and retrieve data from AWS DynamoDB. Receive messages from AWS DynamoDB Stream.
 
 ## What’s inside
 

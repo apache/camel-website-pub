@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.6.0
 
-Store and retrieve blobs from Azure Storage Blob Service using SDK v12.
+Store and retrieve blobs from Azure Storage Blob Service.
 
 ## What’s inside
 

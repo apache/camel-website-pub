@@ -1,9 +1,11 @@
-urls[810]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-07-06T00:00:00+00:00
-  https://camel.apache.org/,2026-07-06T00:00:00+00:00
+urls[811]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-07-10T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-07-10T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/hawtio-ai/,2026-07-10T00:00:00+00:00
+  https://camel.apache.org/,2026-07-10T00:00:00+00:00
+  https://camel.apache.org/categories/Tooling/,2026-07-10T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-elevates-citrus/,2026-07-06T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-07-06T00:00:00+00:00
-  https://camel.apache.org/categories/Tooling/,2026-07-06T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-43866.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-43867.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/,2026-07-05T10:00:00+02:00
@@ -53,7 +55,6 @@ urls[810]{loc,lastmod}:
   https://camel.apache.org/blog/2026/06/camel-route-topology/,2026-06-26T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/,2026-06-22T00:00:00+00:00
   https://camel.apache.org/categories/Security/,2026-06-22T00:00:00+00:00
-  https://camel.apache.org/categories/AI/,2026-06-19T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-ai-trained/,2026-06-19T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/kaoto-release-2.11.0/,2026-06-18T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-dependency-updates/,2026-06-18T00:00:00+00:00

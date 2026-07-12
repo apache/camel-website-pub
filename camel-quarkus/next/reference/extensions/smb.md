@@ -2,7 +2,7 @@
 
 JVM since3.7.0 Native since3.7.0
 
-SMB component which consumes natively from file shares using the Server Message Block (SMB, also known as Common Internet File System - CIFS) protocol
+Read and write files to Server Message Block (SMB) file shares.
 
 ## What’s inside
 

@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Nativeunsupported
 
-Transform strings to various 1D/2D barcode bitmap formats and back.
+Transform strings to various 1D/2D barcode bitmap formats and back
 
 ## What’s inside
 

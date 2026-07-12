@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Nativeunsupported
 
-Encode and decode data structures using Abstract Syntax Notation One (ASN.1).
+Encode and decode data structures using Abstract Syntax Notation One (ASN.1)
 
 ## What’s inside
 

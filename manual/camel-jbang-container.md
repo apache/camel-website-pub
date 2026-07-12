@@ -7,10 +7,9 @@ The Camel JBang container provides a convenient way to run Camel integrations wi
 The simplest command you can check is the `camel version` which can be run on the container:
 
 ```bash
-$ docker run apache/camel-jbang:4.18.2 version
+$ docker run apache/camel-jbang:4.22.0 version
 
-JBang version: 0.137.0
-Camel JBang version: 4.18.2
+Camel CLI version: 4.22.0
 ```
 
 ## Running a route
@@ -18,7 +17,7 @@ Camel JBang version: 4.18.2
 You can mount a Camel route file from your host machine into the container and run the resulting Camel DSL directly. For example, given a route definition in `test.yaml` (ie, `camel init test.yaml`):
 
 ```bash
-$ docker run -w /home/ubuntu -v $PWD/test.yaml:/tmp/test.yaml apache/camel-jbang:4.18.2 run /tmp/test.yaml --runtime quarkus
+$ docker run -w /home/ubuntu -v $PWD/test.yaml:/tmp/test.yaml apache/camel-jbang:4.22.0 run /tmp/test.yaml --runtime quarkus
 
 ...
 2026-06-15 12:21:13,597 INFO  [org.apache.camel.quarkus.core.CamelBootstrapRecorder] (main) Apache Camel Quarkus 3.31.0 is starting

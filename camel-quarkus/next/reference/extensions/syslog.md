@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.7.0
 
-Marshall SyslogMessages to RFC3164 and RFC5424 messages and back.
+Marshall SyslogMessages to RFC3164 and RFC5424 messages and back
 
 ## What’s inside
 

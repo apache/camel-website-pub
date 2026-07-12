@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.1.0
 
-Camel HTTP client support with Vert.x
+Send requests to external HTTP servers using Vert.x
 
 ## What’s inside
 

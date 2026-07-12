@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Nativeunsupported
 
-Pass camel exchanges to acceptence test written in Robot DSL.
+Pass camel exchanges to acceptance test written in Robot DSL.
 
 ## What’s inside
 

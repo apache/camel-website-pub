@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Circuit Breaker EIP using Microprofile Fault Tolerance
+Circuit Breaker EIP using MicroProfile Fault Tolerance
 
 ## What’s inside
 

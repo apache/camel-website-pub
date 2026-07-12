@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since3.2.0
 
-JMX management strategy and associated managed resources.
+Camel Management
 
 ## Maven coordinates
 

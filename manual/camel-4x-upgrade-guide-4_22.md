@@ -11,7 +11,22 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 The Camel JBang CLI now automatic resolves quarkus version to use, instead of hardcoded `3.33.1.1` ([https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b](https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b)).
 
-The Camel TUI (`camel tui`) accepts `--theme=dark` or `--theme=light` to choose the color palette at startup. When omitted, the persisted `camel.tui.theme` value from `.camel-jbang-user.properties` is used.
+The `camel cmd route-diagram` and `camel cmd route-topology` now accept one or more Camel route source files (instead of only the name/pid of a running integration), so diagrams and inter-route topology can be generated at design/source time without starting the application first, for example:
+
+```bash
+camel cmd route-diagram routes/*.yaml
+camel cmd route-topology routes/*.yaml
+```
+
+`route-diagram` previously only accepted a single source file; both commands now accept a set of files. `route-topology` previously required a running integration and printed "No running Camel integration found" when none matched; it now falls back to loading the given files the same way `route-diagram` already did.
+
+As part of this, `camel.main.dumpRoutes=json` (used internally by these commands, and available to users dumping route structure to a folder) now additionally writes a `route-topology.json` file alongside the per-route structure files when topology dumping is enabled (the default). This file is now always written, with empty `nodes`/`edges` arrays if there are no routes to connect, so its presence reliably signals that the dump has completed (previously it was silently skipped when there were no routes).
+
+The Camel TUI (`camel tui`) accepts `--theme=dark` or `--theme=light` to choose the color palette at startup. When omitted, the persisted `camel.tui.theme` value from `.camel-cli.properties` is used.
+
+The Camel TUI now has a **Settings…​** entry in the **F2** actions menu for choosing the theme, the starting tab, and the default run-from-folder. These are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.defaultFolder`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` stays local (project override), while every other key defaults to the global `~/.camel-cli.properties`.
+
+The Camel CLI user configuration file has been renamed from `camel-jbang-user.properties` to `camel-cli.properties` (global `~/.camel-cli.properties`, local `./camel-cli.properties`). The dot convention is unchanged: the global file is a hidden dotfile, the local file is visible. On first run the CLI automatically renames a pre-existing global `~/.camel-jbang-user.properties` to `~/.camel-cli.properties` and a pre-existing local `./camel-jbang-user.properties` to `./camel-cli.properties`; an existing new file is never overwritten.
 
 ### camel-langchain4j-agent
 
@@ -32,6 +47,23 @@ Result<String> chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
 The `Throughput` attribute on the `ManagedPerformanceCounter` JMX MBean now reports an EWMA (exponentially weighted moving average) value with a 1-minute decay window, instead of the previous raw instantaneous rate. This produces a smoother, more stable reading that converges to the true average throughput rather than oscillating between zero and spike values.
 
 If you have tooling that consumes the JMX throughput value and expects the old instantaneous behavior, be aware that the reported value will now ramp up and decay gradually.
+
+### camel-azure-servicebus - Camel-managed message lock renewal
+
+When consuming from Azure Service Bus in `PEEK_LOCK` mode with `maxAutoLockRenewDuration > 0`, Camel now actively renews message locks using a dedicated `ServiceBusReceiverAsyncClient` and Camel’s internal `PeriodTaskScheduler`. This addresses a limitation where the Azure SDK’s built-in lock renewal is tied to the `processMessage` callback duration, which returns immediately for asynchronous Camel routes — causing long-running exchanges to silently lose their message locks.
+
+The new behavior activates automatically when all of the following are true:
+
+-   No custom `processorClient` is provided
+    
+-   Receive mode is `PEEK_LOCK`
+    
+-   `maxAutoLockRenewDuration > 0`
+    
+-   Session mode is disabled
+    
+
+No configuration changes are required. The existing `maxAutoLockRenewDuration` option controls how long Camel will continue renewing a message’s lock.
 
 ### camel-debezium
 
@@ -131,3 +163,90 @@ The `camel catalog` commands (`camel catalog component`, `camel catalog dataform
 Terminal width is now detected on Windows (`cmd` / PowerShell) via `mode con`, in addition to the existing `COLUMNS` / `stty size` detection. When no terminal can be detected (for example when the output is piped or redirected), the width falls back to 120 columns. For full, untruncated output suitable for scripting, use the `--json` option.
 
 The `camel infra list` table now sizes its `DESCRIPTION` column to the terminal width, and truncates the `IMPLEMENTATION` and `SERVICE_DATA` columns with an ellipsis instead of letting the raw service data overflow the terminal. The complete, structured service data remains available via `--json`.
+
+### camel-azure-storage-blob / camel-azure-storage-datalake - download contained within fileDir
+
+When `fileDir` is configured, the Azure Storage Blob and DataLake consumers now ensure the downloaded local file stays within the configured directory, so a remote object name containing `../` sequences can no longer resolve to a path outside it. This is consistent with the containment already performed by the file-based consumers (see the `localWorkDirectory` note in the 4.21 upgrade guide).
+
+Ordinary object names are unaffected. A name that resolves outside `fileDir` is now rejected with an `IllegalArgumentException`.
+
+### camel-weaviate - potential breaking change
+
+The Weaviate Java client has been upgraded from v5 (`io.weaviate:client`) to v6 (`io.weaviate:client6`). This is a major upgrade with several breaking changes.
+
+#### Scheme default value
+
+The `scheme` endpoint option now defaults to `http`. Previously it had no default. Routes that relied on the old behavior (passing no scheme) should explicitly set `scheme=http` or `scheme=https` as appropriate.
+
+#### Collection name case sensitivity
+
+Weaviate v6 requires collection names to start with an uppercase letter (PascalCase). Existing routes using lowercase collection names (e.g., `weaviate:myCollection`) must be updated to use PascalCase (e.g., `weaviate:MyCollection`).
+
+#### New gRPC configuration options
+
+The v6 client requires a gRPC connection in addition to the HTTP connection. Two new endpoint options have been added: `grpcHost` (defaults to the HTTP host) and `grpcPort` (defaults to `50051`). When connecting to a Weaviate server that exposes gRPC on a non-default host or port, these options must be set explicitly.
+
+#### Response body types changed
+
+The exchange body returned by the producer no longer uses `io.weaviate.client.base.Result<T>` wrappers. Code that casts the response body must be updated:
+
+  
+| Action | Old body type | New body type |
+| --- | --- | --- |
+| `CREATE_COLLECTION` | `Result<Boolean>` | `Boolean` |
+| `CREATE` | `Result<WeaviateObject>` | `WeaviateObject<Map<String, Object>>` |
+| `UPDATE_BY_ID` | `Result<Boolean>` | `Boolean` |
+| `DELETE_BY_ID` | `Result<Boolean>` | `Boolean` |
+| `DELETE_COLLECTION` | `Result<Boolean>` | `Boolean` |
+| `QUERY` | `Result<GraphQLResponse>` | `QueryResponse<Map<String, Object>>` |
+| `QUERY_BY_ID` | `Result<List<WeaviateObject>>` | `Optional<WeaviateObject<Map<String, Object>>>` |
+
+The `WeaviateObject` class has also moved from `io.weaviate.client.v1.data.model` to `io.weaviate.client6.v1.api.collections` and uses accessor methods (`uuid()`, `properties()`) instead of getter methods (`getId()`, `getProperties()`).
+
+#### Client type changed
+
+The autowired client type has changed from `io.weaviate.client.WeaviateClient` to `io.weaviate.client6.v1.api.WeaviateClient`. Routes that inject a custom `WeaviateClient` instance must update the import and construction to use the v6 API (e.g., `WeaviateClient.connectToCustom(…​)` instead of `new WeaviateClient(config)`).
+
+#### Readiness check removed
+
+The v5 client performed a readiness check (`misc().readyChecker()`) during client creation and threw an exception if the Weaviate server was not ready. The v6 client no longer performs this check at startup. Errors will now surface on the first operation instead of during endpoint initialization.
+
+#### Proxy configuration removed
+
+The v6 client no longer supports HTTP proxy configuration. The `proxyHost`, `proxyPort`, and `proxyScheme` endpoint options have been removed.
+
+#### New operations
+
+Four new operations have been added to the Weaviate component, leveraging v6 client capabilities:
+
+-   `BATCH_CREATE` — Insert multiple objects in a single call. The exchange body must be a `List<WeaviateObject<Map<String, Object>>>`. Returns an `InsertManyResponse`.
+    
+-   `HYBRID_QUERY` — Keyword + vector hybrid search. The exchange body is the query text (`String`). Supports `CamelWeaviateQueryTopK` (default 10), `CamelWeaviateHybridAlpha` (0.0 = pure BM25, 1.0 = pure vector), `CamelWeaviateQueryVector` (optional pre-computed vector to override server-side vectorizer), and `CamelWeaviateFields` headers. Returns a `QueryResponse<Map<String, Object>>`.
+    
+-   `BM25_QUERY` — Keyword-only (BM25) search. The exchange body is the query text (`String`). Supports `CamelWeaviateQueryTopK` and `CamelWeaviateFields` headers. Returns a `QueryResponse<Map<String, Object>>`.
+    
+-   `AGGREGATE` — Returns aggregate statistics for a collection. No body required. Returns an `AggregateResponse` with `totalCount()` and per-property aggregations.
+    
+
+### camel-spring-boot - Duration configuration properties
+
+The following configuration properties are now bound as `java.time.Duration` instead of raw milliseconds (`long`/`int`):
+
+-   `camel.routecontroller.initial-delay`
+    
+-   `camel.routecontroller.back-off-delay`
+    
+-   `camel.routecontroller.back-off-max-delay`
+    
+-   `camel.routecontroller.back-off-max-elapsed-time`
+    
+-   `camel.startupcondition.interval`
+    
+-   `camel.startupcondition.timeout`
+    
+
+Plain numeric values in `application.properties`/`application.yaml` are still interpreted as milliseconds, so existing configurations keep working unchanged. In addition, readable duration values such as `5s` or `2m` are now supported.
+
+This is a source-incompatible change for code that reads these values programmatically: the getters and setters of `SupervisingRouteControllerConfiguration` and `CamelStartupConditionConfigurationProperties` now use `java.time.Duration` instead of `long`/`int`.
+
+The clustered route controller property `camel.clustered.controller.initial-delay` is unchanged: it keeps its `String` type because it supports Camel time patterns (for example `10 seconds`) that `Duration` binding does not.

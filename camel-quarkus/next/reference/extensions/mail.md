@@ -2,7 +2,7 @@
 
 JVM since0.2.0 Native since0.2.0
 
-Send and receive emails using imap, pop3 and smtp protocols. Marshal Camel messages with attachments into MIME-Multipart messages and back
+Send and receive emails using imap, pop3 and smtp protocols.
 
 ## What’s inside
 

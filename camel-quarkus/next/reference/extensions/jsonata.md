@@ -2,7 +2,7 @@
 
 JVM since1.6.0 Native since1.6.0
 
-JSON to JSON transformation using JSONATA.
+Transforms JSON payload using JSONata transformation.
 
 ## What’s inside
 

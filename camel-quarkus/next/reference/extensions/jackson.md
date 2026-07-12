@@ -2,7 +2,7 @@
 
 JVM since0.3.0 Native since0.3.0
 
-Marshal POJOs to JSON and back using Jackson
+Marshal POJOs to JSON and back using Jackson.
 
 ## What’s inside
 

@@ -359,7 +359,7 @@ camel cmd logger --logging-level=DEBUG foo
 ```
 
 > **Tip**
-> Use `--all` to change levels for all running integrations.
+> Omit the integration name to change levels for all running integrations.
 
 ### Per-category logging
 

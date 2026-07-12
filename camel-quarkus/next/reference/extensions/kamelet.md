@@ -2,7 +2,7 @@
 
 JVM since1.7.0 Native since1.7.0
 
-Materialize route templates
+To call Kamelets
 
 ## What’s inside
 

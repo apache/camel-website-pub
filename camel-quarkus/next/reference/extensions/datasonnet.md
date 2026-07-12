@@ -2,7 +2,7 @@
 
 JVM since2.10.0 Native since2.10.0
 
-To use DataSonnet scripts for message transformations.
+To use DataSonnet scripts for message transformations
 
 ## What’s inside
 

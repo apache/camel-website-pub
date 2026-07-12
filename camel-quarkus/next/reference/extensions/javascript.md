@@ -2,7 +2,7 @@
 
 JVM since3.14.0 Nativeunsupported
 
-Evaluates a JavaScript expression.
+Evaluates a JavaScript expression
 
 ## What’s inside
 

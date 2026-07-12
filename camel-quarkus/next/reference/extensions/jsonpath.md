@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Evaluate a JSONPath expression against a JSON message body
+Evaluates a JSONPath expression against a JSON message body
 
 ## What’s inside
 

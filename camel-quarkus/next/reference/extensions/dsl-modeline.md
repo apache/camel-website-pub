@@ -2,7 +2,7 @@
 
 JVM since2.14.0 Nativeunsupported
 
-Support for Camel K style modeline
+Camel DSL modeline
 
 ## What’s inside
 

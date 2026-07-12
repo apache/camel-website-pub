@@ -59,19 +59,18 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The weaviate component supports 9 options, which are listed below.
+The weaviate component supports 8 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **apiKey** (producer) | API Key to authenticate to weaviate with. |  | String |
 | **configuration** (producer) | The configuration;. |  | WeaviateVectorDbConfiguration |
+| **grpcHost** (producer) | gRPC host for Weaviate server connection. |  | String |
+| **grpcPort** (producer) | gRPC port for Weaviate server connection. | 50051 | Integer |
 | **host** (producer) | Weaviate server host to connect to. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **proxyHost** (producer) | Proxy host to connect to weaviate through. |  | String |
-| **proxyPort** (producer) | Proxy port to connect to weaviate through. |  | Integer |
-| **proxyScheme** (producer) | Proxy scheme to connect to weaviate through. |  | String |
-| **scheme** (producer) | Scheme used to connect to weaviate. |  | String |
+| **scheme** (producer) | Scheme used to connect to weaviate. | http | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 
 ## Endpoint Options
@@ -89,22 +88,21 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **collection** (producer) | **Required** The collection Name. |  | String |
 
-### Query Parameters (7 parameters)
+### Query Parameters (6 parameters)
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **apiKey** (producer) | API Key to authenticate to weaviate with. |  | String |
+| **grpcHost** (producer) | gRPC host for Weaviate server connection. |  | String |
+| **grpcPort** (producer) | gRPC port for Weaviate server connection. | 50051 | Integer |
 | **host** (producer) | Weaviate server host to connect to. |  | String |
-| **proxyHost** (producer) | Proxy host to connect to weaviate through. |  | String |
-| **proxyPort** (producer) | Proxy port to connect to weaviate through. |  | Integer |
-| **proxyScheme** (producer) | Proxy scheme to connect to weaviate through. |  | String |
-| **scheme** (producer) | Scheme used to connect to weaviate. |  | String |
+| **scheme** (producer) | Scheme used to connect to weaviate. | http | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
 ## Message Headers
 
-The weaviate component supports 11 message header(s), which is/are listed below:
+The weaviate component supports 13 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -114,6 +112,12 @@ The action to be performed.
 
 Enum values:
 
+-   AGGREGATE
+    
+-   BATCH\_CREATE
+    
+-   BM25\_QUERY
+    
 -   CREATE\_COLLECTION
     
 -   CREATE
@@ -121,6 +125,8 @@ Enum values:
 -   DELETE\_BY\_ID
     
 -   DELETE\_COLLECTION
+    
+-   HYBRID\_QUERY
     
 -   QUERY
     
@@ -144,3 +150,5 @@ Enum values:
 | **CamelWeaviateUpdateWithMerge** (producer) Constant: [`UPDATE_WITH_MERGE`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#UPDATE_WITH_MERGE) | Merges properties into the object. | true | Boolean |
 | **CamelWeaviateKeyName** (producer) Constant: [`KEY_NAME`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#KEY_NAME) | Key Name for Create/Update/Query operation. |  | String |
 | **CamelWeaviateKeyValue** (producer) Constant: [`KEY_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#KEY_VALUE) | Key Value for Create/Update/Query operation. |  | String |
+| **CamelWeaviateHybridAlpha** (producer) Constant: [`HYBRID_ALPHA`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#HYBRID_ALPHA) | Alpha value for hybrid search (0.0 = pure BM25, 1.0 = pure vector). |  | Float |
+| **CamelWeaviateQueryVector** (producer) Constant: [`QUERY_VECTOR`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#QUERY_VECTOR) | Optional query vector for hybrid search (overrides server-side vectorizer). |  | List |

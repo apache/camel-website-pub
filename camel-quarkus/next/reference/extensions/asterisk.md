@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Nativeunsupported
 
-Interact with Asterisk PBX Server.
+Interact with Asterisk PBX Server (VoIP).
 
 ## What’s inside
 

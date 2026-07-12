@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Expose OpenAPI resources defined in Camel REST DSL
+Rest DSL support for using OpenApi doc
 
 ## What’s inside
 

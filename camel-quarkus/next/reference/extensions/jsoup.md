@@ -2,7 +2,7 @@
 
 JVM since3.38.0 Native since3.38.0
 
-Parse HTML using jsoup
+Cleanup HTML content
 
 ## What’s inside
 

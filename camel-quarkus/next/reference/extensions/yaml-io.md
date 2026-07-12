@@ -2,7 +2,7 @@
 
 JVM since3.2.0 Native since3.2.0
 
-Dump routes in YAML format
+Camel YAML IO
 
 ## Maven coordinates
 

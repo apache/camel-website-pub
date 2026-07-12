@@ -91,7 +91,11 @@ git checkout camel-4.21.0
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (70)
+### Bug (71)
+
+[CAMEL-23937](https://issues.apache.org/jira/browse/CAMEL-23937)
+
+camel-azure-servicebus consumer defeats SDK auto lock-renewal for async routes, causing silent message-lock expiry mid-processing
 
 [CAMEL-23835](https://issues.apache.org/jira/browse/CAMEL-23835)
 

@@ -2,7 +2,7 @@
 
 JVM since3.38.0 Native since3.38.0
 
-Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON.
+Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON
 
 ## What’s inside
 

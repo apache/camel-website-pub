@@ -2,7 +2,7 @@
 
 JVM since2.7.0 Nativeunsupported ⚠️Deprecated
 
-JsonPatch component which transform JSON using JSON patch (RFC 6902).
+Transforms JSON using JSON patch (RFC 6902).
 
 ## What’s inside
 

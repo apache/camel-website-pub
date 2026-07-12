@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.7.0
 
-The azure-storage-queue component is used for storing and retrieving the messages to/from Azure Storage Queue using Azure SDK v12.
+Stores and retrieves messages to/from Azure Storage Queue.
 
 ## What’s inside
 

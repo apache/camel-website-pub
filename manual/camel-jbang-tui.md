@@ -262,6 +262,7 @@ Press **F2** to open the actions menu with quick access to common operations:
 | Run Doctor | Check your environment: Java version, JBang, Maven, Docker, port conflicts, disk space. |
 | Reset Stats | Reset all statistics and metrics for the selected integration. |
 | Stop All | Stop running integrations and/or infrastructure services. |
+| Settings…​ | Change the theme, the starting tab, and the default run-from-folder. |
 | Take Screenshot | Export the current screen as SVG, text, or ANSI art. |
 | Start/Stop Tape Recording | Record your session as a `.tape` file for demos. |
 
@@ -305,11 +306,26 @@ The Doctor checks your development environment and reports issues:
 
 The TUI ships with two color themes, **dark** (the default) and **light**, defined as CSS stylesheets. Open the **F2** actions menu and choose **Light Theme** or **Dark Theme** to switch at runtime.
 
-Pass `--theme=dark` or `--theme=light` on the command line to pick the palette for the current session. The CLI value overrides the persisted preference from `.camel-jbang-user.properties`; runtime toggles and the config file still apply on later launches when `--theme` is omitted.
+Pass `--theme=dark` or `--theme=light` on the command line to pick the palette for the current session. The CLI value overrides the persisted preference from `.camel-cli.properties`; runtime toggles and the config file still apply on later launches when `--theme` is omitted.
 
 The brand orange accent is identical in both themes; status colors (success, warning, error) and borders adapt for readability on dark and light terminals.
 
-Your choice is remembered: it is saved as `camel.tui.theme` (`dark` or `light`) in `.camel-jbang-user.properties` and restored the next time you open the TUI.
+Your choice is remembered: it is saved as `camel.tui.theme` (`dark` or `light`) in `.camel-cli.properties` and restored the next time you open the TUI.
+
+## Settings
+
+Open the **F2** actions menu and choose **Settings…​** to change TUI preferences in one place:
+
+-   **Theme** — cycle between **dark** and **light** (applied immediately on save).
+    
+-   **Starting Tab** — the tab shown when the TUI launches; any tab (primary or under **More**) can be chosen. Defaults to **Overview**.
+    
+-   **Default Folder** — the folder pre-filled in **Run from Folder**. The most recently used folder still takes precedence; this default is used only when there is no remembered folder.
+    
+
+Use **↑**/**↓** to move between rows, **Space** (or **←**/**→**) to cycle the theme and starting tab, type to edit the default folder, **Enter** to save, and **Esc** to cancel.
+
+Settings are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.defaultFolder`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` is treated as a project-level override and stays local, while every other key defaults to the global `~/.camel-cli.properties`. This means a project can deliberately pin a starting tab in its local config without redirecting your personal theme into the project file. See [Configuration](camel-jbang-configuration.md) for details on the global and local files.
 
 ## Keyboard Shortcuts
 
@@ -383,6 +399,23 @@ camel tui --mcp
 This starts an MCP server on `localhost:8123` (configurable with `--mcp-port`). The server is bound to `127.0.0.1` only — it never listens on external interfaces.
 
 When MCP is active, the TUI footer shows the connection status. Use **F2** → _MCP Info_ to see server details and _MCP Log_ to view the tool call history.
+
+### AI panel slash commands
+
+When the AI panel is open, input that starts with `/` runs a local panel command instead of sending a question to the configured AI provider. `/provider` and `/model` are unavailable while a response or command is already in progress; the panel shows a message asking you to wait.
+
+ 
+| Command | Description |
+| --- | --- |
+| `/help` (`/h`) | Show the available slash commands. |
+| `/provider` (`/p`) | Open the provider switcher. |
+| `/model [model-name]` (`/m`) | Show the current model, or switch the session model. |
+| `/clear` (`/c`) | Clear the AI conversation, usage counters, and model context without changing the provider or model. |
+| `/close` | Close the AI panel. |
+| `/quit` (`/exit`, `/q`, `/x`) | Exit the TUI. |
+| `/run <camel run args>` (`/r`) | Run `camel run` with the provided arguments. |
+| `/infra <camel infra args>` (`/i`) | Run `camel infra` with the provided arguments. |
+| `/send <endpoint> <message text | @file>` (`/s`) | Send a message through `camel cmd send`. A body that is exactly one `@file` token is sent as `file:<path>`; inline `@file` text is sent literally. |
 
 ### Connecting an AI Agent
 

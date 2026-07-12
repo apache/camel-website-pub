@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[217]{title,link,pubDate,description}:
+posts[218]{title,link,pubDate,description}:
+  Hawtio AI: Utilizing AI in the Operational Phase of Camel Integrations|https://camel.apache.org/blog/2026/07/hawtio-ai/index.md|Fri, 10 Jul 2026 00:00:00 +0000|Apache Camel and AI AI is a hot topic in the Apache Camel community. When thinking about how to leverage AI in the Apache Camel ecosystem, there are broadly two directions: Incorporating AI services i
   How Apache Camel elevates Citrus Integration Testing to next levels|https://camel.apache.org/blog/2026/07/camel-elevates-citrus/index.md|Mon, 06 Jul 2026 00:00:00 +0000|Citrus is a powerful integration testing framework that orchestrates end-to-end test scenarios with clean, readable Java code. As a framework Citrus provides several ready-to-use components to connect
   RELEASE 4.14.8|https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/index.md|Sat, 04 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.8 patch release with 43 bug fixes and improvements. The artifacts are published and ready for you to download from the Centra
   RELEASE 4.18.3|https://camel.apache.org/blog/2026/07/RELEASE-4.18.3/index.md|Fri, 03 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.3 LTS release with 84 new features and improvements. The artifacts are published and ready for you to download from the Centr

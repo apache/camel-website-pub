@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Enclose Camel routes in transactions using Java Transaction API (JTA) and Narayana transaction manager
+Using Camel With JTA Transaction Manager
 
 ## What’s inside
 

@@ -2,7 +2,7 @@
 
 JVM since1.8.0 Native since3.24.0
 
-Camel Azure Datalake Gen2 Component
+Sends and receives files to/from Azure Data Lake Storage.
 
 ## What’s inside
 

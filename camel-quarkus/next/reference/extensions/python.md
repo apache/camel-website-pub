@@ -2,7 +2,7 @@
 
 JVM since3.24.0 Nativeunsupported
 
-Evaluates a Python expression.
+Evaluates a Python expression
 
 ## What’s inside
 

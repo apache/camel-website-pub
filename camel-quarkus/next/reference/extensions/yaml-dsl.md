@@ -2,7 +2,7 @@
 
 JVM since1.8.0 Native since1.8.0
 
-An YAML stack for parsing YAML route definitions
+Camel YAML DSL
 
 ## What’s inside
 

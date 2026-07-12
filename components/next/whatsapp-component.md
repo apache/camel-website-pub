@@ -109,10 +109,10 @@ With the following _path_ and _query_ parameters:
 | **baseUri** (advanced) | Can be used to set an alternative base URI, e.g. when you want to test the component against a mock WhatsApp API. |  | String |
 | **httpClient** (advanced) | HttpClient implementation. |  | HttpClient |
 | **webhookPath** (advanced) | Webhook path. | webhook | String |
-| **webhookVerifyToken** (advanced) | Webhook verify token. |  | String |
 | **whatsappService** (advanced) | WhatsApp service implementation. |  | WhatsAppService |
 | **authorizationToken** (security) | **Required** The authorization access token taken from whatsapp-business dashboard. |  | String |
 | **webhookSecret** (security) | The app secret used to verify the X-Hub-Signature-256 signature of inbound webhook event payloads (from the Meta/WhatsApp app dashboard). When set, event callbacks with a missing or invalid signature are rejected with HTTP 403; when not set, no signature verification is performed. |  | String |
+| **webhookVerifyToken** (security) | Webhook verify token. |  | String |
 
 ## Message Headers
 

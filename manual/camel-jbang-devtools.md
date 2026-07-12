@@ -31,7 +31,7 @@ For example, given a route that consumes from an MQTT broker:
 Send a message to the running integration named `mqtt` (the payload is loaded from a file):
 
 ```bash
-$ camel cmd send mqtt --body=file:payload.json mqtt
+$ camel cmd send --body=file:payload.json mqtt
 ```
 
 The last argument (`mqtt`) is the integration name — you can also use its PID. With a single route, the command automatically picks the `from` endpoint and reuses its configuration. For multiple routes, filter by route id or component with `--endpoint`:
@@ -208,7 +208,7 @@ HELLO
 WORLD
 ```
 
-Enable logging with `--logging=true` (writes to `.camel-jbang/camel-pipe.log`).
+Enable logging with `--logging=true` (writes to `~/.camel/camel-script.log`).
 
 ### Using stream:in with line vs. raw mode
 
@@ -374,7 +374,7 @@ logging.level.com.zaxxer.hikari = DEBUG
 
 **Available since Camel 4.18**
 
-The validate plugin checks whether Camel source files (YAML, XML) are valid.
+The validate plugin checks whether Camel YAML source files are valid.
 
 ```bash
 $ camel plugin add validate

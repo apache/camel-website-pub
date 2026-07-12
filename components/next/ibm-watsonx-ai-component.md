@@ -193,9 +193,9 @@ Enum values:
 | **logRequests** (advanced) | Whether to log HTTP requests to the watsonx.ai API. | false | Boolean |
 | **logResponses** (advanced) | Whether to log HTTP responses from the watsonx.ai API. | false | Boolean |
 | **timeout** (advanced) | Request timeout in milliseconds. |  | Long |
-| **verifySsl** (advanced) | Whether to verify SSL certificates. | true | Boolean |
 | **apiKey** (security) | **Required** IBM Cloud API key for authentication. |  | String |
 | **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used as apiKey. Requires camel-oauth on the classpath. |  | String |
+| **verifySsl** (security) | Whether to verify SSL certificates. | true | Boolean |
 
 ## Endpoint Options
 
@@ -323,9 +323,9 @@ Enum values:
 | **logRequests** (advanced) | Whether to log HTTP requests to the watsonx.ai API. | false | Boolean |
 | **logResponses** (advanced) | Whether to log HTTP responses from the watsonx.ai API. | false | Boolean |
 | **timeout** (advanced) | Request timeout in milliseconds. |  | Long |
-| **verifySsl** (advanced) | Whether to verify SSL certificates. | true | Boolean |
 | **apiKey** (security) | **Required** IBM Cloud API key for authentication. |  | String |
 | **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used as apiKey. Requires camel-oauth on the classpath. |  | String |
+| **verifySsl** (security) | Whether to verify SSL certificates. | true | Boolean |
 
 ## Message Headers
 

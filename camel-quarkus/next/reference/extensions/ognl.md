@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since3.2.0 ⚠️Deprecated
 
-Evaluate an OGNL expression using Apache Commons OGNL
+Evaluates an OGNL expression (Apache Commons OGNL)
 
 ## What’s inside
 

@@ -2,7 +2,7 @@
 
 JVM since3.31.0 Native since3.31.0
 
-Camel Once component
+Trigger a single message only once at startup (useful for development and testing purposes).
 
 ## What’s inside
 

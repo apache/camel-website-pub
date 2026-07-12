@@ -128,7 +128,6 @@ The Hugging Face component supports 23 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **authToken** (producer) | HF API token for private models. |  | String |
 | **autoSelect** (producer) | If true, auto-select the best label (highest score) for zero-shot classification. | true | boolean |
 | **configuration** (producer) | The configuration. |  | HuggingFaceConfiguration |
 | **device** (producer) | Device for inference (cpu, gpu, auto). |  | String |
@@ -150,6 +149,7 @@ The Hugging Face component supports 23 options, which are listed below.
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
+| **authToken** (security) | HF API token for private models. |  | String |
 | **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used as authToken. Requires camel-oauth on the classpath. |  | String |
 
 ## Endpoint Options
@@ -202,7 +202,6 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **authToken** (producer) | HF API token for private models. |  | String |
 | **autoSelect** (producer) | If true, auto-select the best label (highest score) for zero-shot classification. | true | boolean |
 | **device** (producer) | Device for inference (cpu, gpu, auto). |  | String |
 | **maxTokens** (producer) | Max tokens for generation tasks. |  | int |
@@ -220,6 +219,7 @@ Enum values:
 | **topK** (producer) | Top-k parameter for classification tasks. | 5 | int |
 | **userRole** (producer) | Role for user messages in chat history (e.g., 'user' or 'human'). | user | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **authToken** (security) | HF API token for private models. |  | String |
 | **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used as authToken. Requires camel-oauth on the classpath. |  | String |
 
 ## Message Headers

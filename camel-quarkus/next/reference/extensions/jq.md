@@ -2,7 +2,7 @@
 
 JVM since2.11.0 Native since2.11.0
 
-Evaluates a JQ expression against a JSON message body.
+Evaluates a JQ expression against a JSON message body
 
 ## What’s inside
 

@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.1.0
 
-Perform operations on ArangoDb documents, collections and graphs.
+Perform operations on ArangoDb when used as a Document Database, or as a Graph Database
 
 ## What’s inside
 

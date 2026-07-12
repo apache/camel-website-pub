@@ -2,7 +2,7 @@
 
 JVM since1.8.0 Native since2.16.0
 
-Support for parsing Java route definitions at runtime
+Camel Java DSL with jOOR
 
 ## What’s inside
 

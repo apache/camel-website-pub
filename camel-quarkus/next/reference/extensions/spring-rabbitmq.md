@@ -2,7 +2,7 @@
 
 JVM since1.7.0 Native since1.7.0
 
-Send and receive messages from RabbitMQ using Spring RabbitMQ client.
+Send and receive messages from RabbitMQ using the Spring RabbitMQ client.
 
 ## What’s inside
 

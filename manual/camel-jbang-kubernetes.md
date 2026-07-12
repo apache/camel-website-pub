@@ -43,8 +43,8 @@ The export command provides several options to customize the project:
 | `--config` | Add a runtime configuration from a ConfigMap or a Secret (syntax: \[configmap,secret\]:name\[/key\], where name represents the configmap/secret name and key optionally represents the configmap/secret key to be filtered). |
 | `--resource` | Add a runtime resource from a Configmap or a Secret (syntax: \[configmap,secret\]:name\[/key\]\[@path\], where name represents the configmap/secret name, key optionally represents the configmap/secret key to be filtered and path represents the destination path). |
 | `--open-api` | Add an OpenAPI spec (syntax: \[configmap,file\]:name). |
-| `--env` | Set an environment variable in the integration container, for instance "-e MY\_VAR=my-value". |
-| `--volume` | Mount a volume into the integration container, for instance "-v pvcname:/container/path". |
+| `--env` | Set an environment variable in the integration container, for instance "--env MY\_VAR=my-value". |
+| `--volume` | Mount a volume into the integration container, for instance "--volume pvcname:/container/path". |
 | `--connect` | A Service that the integration should bind to, specified as \[\[apigroup/\]version:\]kind:\[namespace/\]name. |
 | `--source` | Add the source file to your integration, this is added to the list of files listed as arguments of the command. |
 | `--annotation` | Add an annotation to the integration. Use name values pairs like "--annotation my.company=hello". |
@@ -131,7 +131,7 @@ camel kubernetes export Sample.java --trait=cronjob.enabled=true --trait=cronjob
 
 ### Labels and annotations
 
-By default, resources have the label `camel.apache.org/integration` set to the project name. Add custom labels and annotations:
+By default, resources have the label `app.kubernetes.io/name` set to the project name. Add custom labels and annotations:
 
 ```bash
 camel kubernetes export Sample.java --annotation project.team=camel-experts --label env=staging
@@ -435,11 +435,7 @@ Remove a deployment and all its resources:
 
 ```bash
 camel kubernetes delete --name=route
-camel kubernetes delete --name=route --cluster-type=openshift
 ```
-
-> **Note**
-> If you used `--cluster-type` during export/run, you must specify it for delete as well.
 
 ## Minikube deployment tips
 

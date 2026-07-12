@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Access AWS Athena service using AWS SDK version 2.x.
+Access AWS Athena.
 
 ## What’s inside
 

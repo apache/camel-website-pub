@@ -2,7 +2,7 @@
 
 JVM since1.4.0 Native since1.7.0
 
-Manage AWS Eventbridge cluster instances using AWS SDK version 2.x.
+Manage AWS EventBridge cluster instances and consume events via SQS-backed polling.
 
 ## What’s inside
 

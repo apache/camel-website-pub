@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.1.0
 
-Manage and invoke AWS Lambda functions using AWS SDK version 2.x.
+Manage and invoke AWS Lambda functions.
 
 ## What’s inside
 

@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.7.0
 
-Unmarshal a CBOR payload to POJO and back.
+Unmarshal a CBOR payload to POJO and back
 
 ## What’s inside
 

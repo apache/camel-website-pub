@@ -2,7 +2,7 @@
 
 JVM since2.0.0 Native since3.19.0
 
-Manage AWS Secrets Manager services using AWS SDK version 2.x.
+Manage secrets using AWS Secrets Manager.
 
 ## What’s inside
 

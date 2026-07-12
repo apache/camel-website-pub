@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1783491639785,
+  "generated": 1783840122330,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8526,6 +8526,12 @@
             },
             {
               "module": "ROOT",
+              "path": "migration-guide/3.38.0.adoc",
+              "url": "/camel-quarkus/next/migration-guide/3.38.0.html",
+              "title": "Camel Quarkus 3.38.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
               "path": "migration-guide/camel-spring-boot-to-camel-quarkus.adoc",
               "url": "/camel-quarkus/next/migration-guide/camel-spring-boot-to-camel-quarkus.html",
               "title": "Camel Spring Boot to Camel Quarkus Migration Guide"
@@ -9180,6 +9186,12 @@
               "path": "reference/extensions/dfdl.adoc",
               "url": "/camel-quarkus/next/reference/extensions/dfdl.html",
               "title": "DFDL"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/diagram.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/diagram.html",
+              "title": "Diagram"
             },
             {
               "module": "ROOT",

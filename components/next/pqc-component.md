@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The PQC Algorithms component supports 26 options, which are listed below.
+The PQC Algorithms component supports 30 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -244,6 +244,10 @@ Enum values:
 | **keyLifecycleManager** (advanced) | **Autowired** The KeyLifecycleManager to use for key lifecycle operations such as generation, rotation, import/export, expiration, and revocation. |  | KeyLifecycleManager |
 | **keyPair** (advanced) | **Autowired** The KeyPair to be used. |  | KeyPair |
 | **keyPairAlias** (advanced) | A KeyPair alias to use in combination with KeyStore parameter. |  | String |
+| **keyRotationCheckInterval** (advanced) | Interval between key rotation checks when the scheduler is enabled. | 3600000 | long |
+| **keyRotationMaxAge** (advanced) | When the scheduler is enabled, rotate keys older than this age. If not set, age is not used as a rotation signal. |  | long |
+| **keyRotationMaxUsage** (advanced) | When the scheduler is enabled, rotate keys whose recorded usage count reaches this value. 0 disables usage-based rotation. | 0 | long |
+| **keyRotationSchedulerEnabled** (advanced) | Whether to start an automated background key rotation scheduler for this component. Requires keyLifecycleManager to be set. The scheduler periodically rotates keys that exceed the configured age and/or usage policy. | false | boolean |
 | **keyStore** (advanced) | **Autowired** A KeyStore where we could get Cryptographic material. |  | KeyStore |
 | **keyStorePassword** (advanced) | The KeyStore password to use in combination with KeyStore Parameter. |  | String |
 | **signatureAlgorithm** (advanced) | 
@@ -731,6 +735,18 @@ See [PQC Hybrid Cryptography](others/pqc-hybrid.md) for configuration details an
     
 
 See [PQC Key Lifecycle Management](others/pqc-key-lifecycle.md) for full details.
+
+## Metrics
+
+When [Micrometer](https://micrometer.io) is on the classpath and a `MeterRegistry` bean is available in the Camel registry, the PQC producer records metrics automatically. Micrometer is an **optional** dependency: without it (or without a `MeterRegistry`) no metrics are emitted and there is no runtime overhead.
+
+  
+| Meter | Type | Description |
+| --- | --- | --- |
+| `camel.pqc.operations` | Counter | Number of PQC operations performed, tagged by `operation` (sign, verify, generateSecretKeyEncapsulation, extractSecretKeyFromEncapsulation, …​), `algorithm`, and `outcome` (`success` / `failure`). |
+| `camel.pqc.stateful.key.remaining` | Gauge | Remaining signatures for a stateful signature key (XMSS, XMSSMT, LMS, HSS), tagged by `algorithm`. Registered only for producers configured with a stateful signature algorithm. |
+
+To enable the metrics, add `camel-micrometer` (or Micrometer directly) to your application and bind a `MeterRegistry` in the registry - for example a `SimpleMeterRegistry`, or the registry provided by Spring Boot or Quarkus.
 
 ## Sub-Pages
 

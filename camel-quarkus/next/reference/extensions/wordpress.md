@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Nativeunsupported
 
-Manage posts and users using Wordpress API.
+Manage posts and users using the WordPress API.
 
 ## What’s inside
 

@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Unmarshal unstructured data to objects using Logstash based Grok patterns.
+Unmarshal unstructured data to objects using Logstash based Grok patterns
 
 ## What’s inside
 
