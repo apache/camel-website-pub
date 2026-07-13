@@ -13,6 +13,7 @@ camel get [options]
  
 | Subcommand | Description |
 | --- | --- |
+| [activity](camel-jbang-get-activity.md) | Get recent completed exchange activity |
 | [bean](camel-jbang-get-bean.md) | List beans in a running Camel integration |
 | [blocked](camel-jbang-get-blocked.md) | Get blocked messages of Camel integrations |
 | [circuit-breaker](camel-jbang-get-circuit-breaker.md) | Get status of Circuit Breaker EIPs |

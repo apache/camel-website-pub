@@ -99,8 +99,8 @@ The endpoints are exposed in the management port (default `9876`) in order to av
 
 If you need to customize each of the different components provided within this service, then, you can specify in the `application.properties` each of the configuration as it would be done normally when you provide the individual component.
 
-> **Warning**
-> The customization of the configuration for this component is not available for Spring Boot runtime due to a [known limitation](https://github.com/spring-projects/spring-boot/issues/24688). You can use this component in Spring Boot runtime with the default settings only. If you need to provide any customization, you’ll need to configure each component separately.
+> **Note**
+> The customization of the configuration is available for the Spring Boot runtime since version 4.22.0: the starter contributes its defaults as the lowest precedence property source, so any user-provided configuration overrides them following the standard Spring Boot precedence rules. In earlier versions the starter packaged its defaults in `classpath:/config/application.properties`, which took precedence over the application’s own `application.properties` due to a [known limitation](https://github.com/spring-projects/spring-boot/issues/24688), so the defaults could only be overridden via higher precedence sources such as environment variables or system properties.
 
 ## Default logging metrics on shutdown
 

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1783840122330,
+  "generated": 1783961509749,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -32320,6 +32320,12 @@
               "path": "jbang-commands/camel-jbang-export.adoc",
               "url": "/manual/jbang-commands/camel-jbang-export.html",
               "title": "camel export"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-get-activity.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-activity.html",
+              "title": "camel get activity"
             },
             {
               "module": "ROOT",

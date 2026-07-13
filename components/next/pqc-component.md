@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The PQC Algorithms component supports 30 options, which are listed below.
+The PQC Algorithms component supports 31 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -250,6 +250,7 @@ Enum values:
 | **keyRotationSchedulerEnabled** (advanced) | Whether to start an automated background key rotation scheduler for this component. Requires keyLifecycleManager to be set. The scheduler periodically rotates keys that exceed the configured age and/or usage policy. | false | boolean |
 | **keyStore** (advanced) | **Autowired** A KeyStore where we could get Cryptographic material. |  | KeyStore |
 | **keyStorePassword** (advanced) | The KeyStore password to use in combination with KeyStore Parameter. |  | String |
+| **parameterSpec** (advanced) | The NIST parameter set (security level) to use for the configured signature or key encapsulation algorithm, using the BouncyCastle parameter-set names: for example ML-DSA-44, ML-DSA-65 or ML-DSA-87 for MLDSA, and ML-KEM-512, ML-KEM-768 or ML-KEM-1024 for MLKEM. Names are case-insensitive and the underscore form (ml\_dsa\_87) is accepted as an alias. When set, the key material is generated with this parameter set instead of the algorithm default. Not supported for the stateful signature algorithms (XMSS, XMSSMT, LMS, HSS), for MAYO and SNOVA, nor for the hybrid operations: for those, register a KeyPair bean in the registry instead. |  | String |
 | **signatureAlgorithm** (advanced) | 
 
 In case there is no signer, we specify an algorithm to build the KeyPair or the Signer.
@@ -357,7 +358,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **label** (producer) | **Required** Logical name. |  | String |
 
-### Query Parameters (22 parameters)
+### Query Parameters (23 parameters)
 
    
 | Name | Description | Default | Type |
@@ -525,6 +526,7 @@ Enum values:
 | **keyPairAlias** (advanced) | A KeyPair alias to use in combination with KeyStore parameter. |  | String |
 | **keyStore** (advanced) | **Autowired** A KeyStore where we could get Cryptographic material. |  | KeyStore |
 | **keyStorePassword** (advanced) | The KeyStore password to use in combination with KeyStore Parameter. |  | String |
+| **parameterSpec** (advanced) | The NIST parameter set (security level) to use for the configured signature or key encapsulation algorithm, using the BouncyCastle parameter-set names: for example ML-DSA-44, ML-DSA-65 or ML-DSA-87 for MLDSA, and ML-KEM-512, ML-KEM-768 or ML-KEM-1024 for MLKEM. Names are case-insensitive and the underscore form (ml\_dsa\_87) is accepted as an alias. When set, the key material is generated with this parameter set instead of the algorithm default. Not supported for the stateful signature algorithms (XMSS, XMSSMT, LMS, HSS), for MAYO and SNOVA, nor for the hybrid operations: for those, register a KeyPair bean in the registry instead. |  | String |
 | **signatureAlgorithm** (advanced) | 
 
 In case there is no signer, we specify an algorithm to build the KeyPair or the Signer.
@@ -680,6 +682,47 @@ Experimental and non-standardized
 -   SPHINCS+
     
 
+## Parameter Sets (NIST Security Levels)
+
+By default each algorithm uses a fixed parameter set - for example ML-DSA-65 for `MLDSA` and ML-KEM-512 for `MLKEM`. Use the `parameterSpec` option to select a different NIST parameter set (security level); the key material is then generated with that parameter set instead of the algorithm default.
+
+_Java DSL: selecting ML-DSA-87 (NIST level 5)_
+
+```java
+from("direct:sign")
+    .to("pqc:sign?operation=sign&signatureAlgorithm=MLDSA&parameterSpec=ML-DSA-87")
+    .to("pqc:verify?operation=verify&signatureAlgorithm=MLDSA&parameterSpec=ML-DSA-87");
+```
+
+Endpoints configured with the same algorithm and `parameterSpec` share the same generated key, so a sign/verify endpoint pair works out of the box - exactly as with the default key material.
+
+Values are the BouncyCastle parameter-set names, resolved case-insensitively. The underscore form used by the BouncyCastle constants (`ml_dsa_87`) is accepted as an alias of the canonical name (`ML-DSA-87`).
+
+ 
+| Algorithm | Parameter sets |
+| --- | --- |
+| `MLDSA` | `ML-DSA-44`, `ML-DSA-65` (default), `ML-DSA-87` |
+| `MLKEM` | `ML-KEM-512` (default), `ML-KEM-768`, `ML-KEM-1024` |
+| `SLHDSA` | `SLH-DSA-SHA2-128S`, `SLH-DSA-SHAKE-256F`, …​ (see `SLHDSAParameterSpec`) |
+| `FALCON` | `FALCON-512`, `FALCON-1024` |
+| `DILITHIUM` | `DILITHIUM2`, `DILITHIUM3`, `DILITHIUM5` |
+| `SPHINCSPLUS` | `sha2-128s`, …​ (see `SPHINCSPlusParameterSpec`) |
+| `PICNIC` | `picnicl1fs`, …​ (see `PicnicParameterSpec`) |
+| `KYBER` | `kyber512`, `kyber768`, `kyber1024` |
+| `NTRU` | `ntruhps2048509`, …​ (see `NTRUParameterSpec`) |
+| `NTRULPRime` | `ntrulpr653`, …​ (see `NTRULPRimeParameterSpec`) |
+| `SNTRUPrime` | `sntrup761`, …​ (see `SNTRUPrimeParameterSpec`) |
+| `BIKE` | `bike128`, `bike192`, `bike256` |
+| `HQC` | `hqc128`, `hqc192`, `hqc256` |
+| `CMCE` | `mceliece348864`, …​ (see `CMCEParameterSpec`) |
+| `FRODO` | `frodokem640aes`, …​ (see `FrodoParameterSpec`) |
+| `SABER` | `lightsaberkem128r3`, …​ (see `SABERParameterSpec`) |
+
+The `parameterSpec` option is also honoured by the `generateKeyPair` lifecycle operation, which then generates the key at the configured security level.
+
+> **Note**
+> `parameterSpec` is not supported for the stateful hash-based signature algorithms (XMSS, XMSSMT, LMS, HSS), for MAYO and SNOVA, nor for the hybrid operations: those either have no name-addressable BouncyCastle parameter set, or pair a fixed classical key set with a matching PQC key set. For those, register a `KeyPair` bean in the registry instead.
+
 ## Supported Operations
 
 The component supports the following operations:
@@ -769,6 +812,9 @@ This will be true for standardized algorithms and for experimental ones.
 
 > **Tip**
 > To combine a classical signature (ECDSA, Ed25519, RSA) with a PQC signature for defense-in-depth during the post-quantum transition, use the hybrid signature operations described in [Hybrid Cryptography](others/pqc-hybrid.md).
+
+> **Note**
+> The sign and verify operations stream the message body. A `byte[]` or `InputStream` body is fed to the signature in chunks without being materialised as a String, so large payloads (files, large messages) can be signed and verified without loading them fully into memory. When the body is a re-readable `StreamCache` (for example with stream caching enabled) it is reset after reading so downstream processors still see the payload.
 
 ## Examples
 

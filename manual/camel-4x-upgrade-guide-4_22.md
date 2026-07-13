@@ -144,6 +144,12 @@ When unmarshalling a MIME message with `headersInline=true`, the `mime-multipart
 
 Ordinary application headers are unaffected. If a route relied on `Camel*` headers being propagated from the MIME content, set them explicitly after unmarshalling.
 
+### camel-platform-http-main
+
+When `authenticationEnabled=true` but neither a basic-auth properties file (`basicPropertiesFile`) nor a JWT keystore (`jwtKeystoreType`) is configured, Camel now behaves differently under the `prod` profile (`camel.main.profile=prod`).
+
+Under the `prod` profile, startup now fails instead of starting the embedded HTTP server without authentication. Under the `dev` profile and with no profile configured, the existing warning-only behavior is retained for backward compatibility.
+
 ### camel-kafka - metadataMaxAgeMs option moved from producer to common
 
 The `metadataMaxAgeMs` (`metadata.max.age.ms`) option was incorrectly labeled as producer-only, but is applied to both consumer and producer Kafka clients. The label has been corrected to `common`.
@@ -250,3 +256,9 @@ Plain numeric values in `application.properties`/`application.yaml` are still in
 This is a source-incompatible change for code that reads these values programmatically: the getters and setters of `SupervisingRouteControllerConfiguration` and `CamelStartupConditionConfigurationProperties` now use `java.time.Duration` instead of `long`/`int`.
 
 The clustered route controller property `camel.clustered.controller.initial-delay` is unchanged: it keeps its `String` type because it supports Camel time patterns (for example `10 seconds`) that `Duration` binding does not.
+
+### camel-sql - PostgreSQL aggregation repositories fixed
+
+`PostgresAggregationRepository` and `ClusteredPostgresAggregationRepository` were broken since Camel 3.4: every insert failed with a parameter-index error because the `version` column was bound but not included in the generated `INSERT …​ ON CONFLICT DO NOTHING` statement. Both repositories now include the `version` column in the insert, and the clustered variant also writes the `instance_id` column to the completed table when `recoveryByInstance` is enabled (previously instance-scoped recovery could never match any row).
+
+The aggregation tables used with these repositories must have the `version BIGINT` column, as already required by `JdbcAggregationRepository` for reading and updating aggregates. When `recoveryByInstance` is enabled, the completed table must have the `instance_id VARCHAR(255)` column as documented.

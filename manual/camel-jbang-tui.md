@@ -64,20 +64,32 @@ The TUI organizes information into tabs. Press number keys **1** through **0** t
 | --- | --- | --- |
 | 1 | Overview | All running integrations and infrastructure services. Start here. |
 | 2 | Log | Real-time application logs with search and filtering. |
-| 3 | Diagram | Visual route topology with drill-down into individual routes. |
-| 4 | Routes | Route list with message counts, throughput, and processing times. |
-| 5 | Endpoints | All registered endpoints with usage statistics. |
-| 6 | HTTP | HTTP endpoints with details. |
-| 7 | Health | Health check status. |
+| 3 | Activity | Live exchange activity with elapsed times, endpoint sends, and failure tracking. |
+| 4 | Diagram | Visual route topology with drill-down into individual routes. |
+| 5 | Routes | Route list with message counts, throughput, and processing times. |
+| 6 | Endpoints | All registered endpoints with usage statistics. |
+| 7 | HTTP | HTTP endpoints with details. |
 | 8 | Inspect | Message history and tracing — step through exchanges processor by processor. |
 | 9 | Errors | Failures with stack traces and exchange context. |
-| 0 | More | Additional tabs: Beans, Browse, Circuit Breaker, Classpath, Configuration, Consumers, Inflight, Memory, Metrics, Process, Spans, Startup, Threads. |
+| 0 | More | Additional tabs: Beans, Browse, Circuit Breaker, Classpath, Configuration, Consumers, CVE Audit, Health, Inflight, Memory, Metrics, Spans, Process, Startup, and more. |
 
-Tab badges show live counts — the Errors tab shows a red badge when errors exist, Health shows a badge when checks are DOWN, and Routes shows the route count.
+Tab badges show live counts — the Errors tab shows a red badge when errors exist and Routes shows the route count.
+
+## Activity
+
+The Activity tab (Tab 3) shows a live feed of exchange activity — every exchange that flows through the system is captured with its route, status (OK or Failed), elapsed time, endpoint sends, and how long ago it completed.
+
+Activity data is captured when the integration runs in development mode (the `dev` profile), which is the default when running with `camel run`. Activity tracking can also be explicitly enabled via `camel.trace.activityEnabled=true` in `application.properties`. On a production profile without dev mode or explicit enablement, the tab is empty.
+
+The top panel shows aggregated statistics: total / OK / failed exchange counts, total sends, p50 / p95 / max elapsed times, and the time window of the visible entries.
+
+Select an exchange to see its details below: exchange ID, route, elapsed time, the remote endpoints called during the exchange with individual timings, and exception details if the exchange failed.
+
+Use **s** to cycle sort order, **S** to reverse, and **F5** to clear the activity list.
 
 ## Route Topology Diagram
 
-The Diagram tab (Tab 3) renders the route topology as interactive ASCII art. It shows how routes connect to each other through shared endpoints (direct, seda, kafka, etc.).
+The Diagram tab (Tab 4) renders the route topology as interactive ASCII art. It shows how routes connect to each other through shared endpoints (direct, seda, kafka, etc.).
 
 ![Diagram topology view](_images/jbang/camel-tui-topology-diagram.svg)
 
@@ -128,7 +140,7 @@ Press **e** to cycle through three modes for external endpoints:
 
 ## Message Insight
 
-The Inspect tab (Tab 8) lets you step through an exchange processor by processor — like scrubbing through a video timeline of your message’s journey. This is the key to understanding what Camel does with your data at every step.
+The Inspect tab lets you step through an exchange processor by processor — like scrubbing through a video timeline of your message’s journey. This is the key to understanding what Camel does with your data at every step.
 
 ### History of Last Exchange
 
@@ -201,11 +213,11 @@ Use **s** to cycle sort order (time, route, elapsed, exchange) and **S** to reve
 
 ## Troubleshooting Errors
 
-The Errors tab (Tab 9) collects failures with full stack traces and exchange context. When errors occur, a red badge appears on the tab.
+The Errors tab collects failures with full stack traces and exchange context. When errors occur, a red badge appears on the tab.
 
 ![Errors tab with failure details](_images/jbang/camel-tui-topology-errors.svg)
 
-For deeper troubleshooting, switch to the Inspect tab (Tab 8) and use the diagram replay (press **d**) to visualize exactly where the failure occurred:
+For deeper troubleshooting, switch to the Inspect tab and use the diagram replay (press **d**) to visualize exactly where the failure occurred:
 
 -   Failed steps are highlighted in red on the diagram
     
@@ -320,12 +332,14 @@ Open the **F2** actions menu and choose **Settings…​** to change TUI prefere
     
 -   **Starting Tab** — the tab shown when the TUI launches; any tab (primary or under **More**) can be chosen. Defaults to **Overview**.
     
+-   **Select Tab** — the tab to switch to when selecting an integration from the Overview tab. Defaults to **Log**.
+    
 -   **Default Folder** — the folder pre-filled in **Run from Folder**. The most recently used folder still takes precedence; this default is used only when there is no remembered folder.
     
 
-Use **↑**/**↓** to move between rows, **Space** (or **←**/**→**) to cycle the theme and starting tab, type to edit the default folder, **Enter** to save, and **Esc** to cancel.
+Use **↑**/**↓** to move between rows, **Space** (or **←**/**→**) to cycle the theme and tab settings, type to edit the default folder, **Enter** to save, and **Esc** to cancel.
 
-Settings are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.defaultFolder`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` is treated as a project-level override and stays local, while every other key defaults to the global `~/.camel-cli.properties`. This means a project can deliberately pin a starting tab in its local config without redirecting your personal theme into the project file. See [Configuration](camel-jbang-configuration.md) for details on the global and local files.
+Settings are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.selectTab`, `camel.tui.defaultFolder`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` is treated as a project-level override and stays local, while every other key defaults to the global `~/.camel-cli.properties`. This means a project can deliberately pin a starting tab in its local config without redirecting your personal theme into the project file. See [Configuration](camel-jbang-configuration.md) for details on the global and local files.
 
 ## Keyboard Shortcuts
 
