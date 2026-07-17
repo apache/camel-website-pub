@@ -16,5 +16,6 @@ camel infra run [options]
 | `--background` | Run in the background | false | boolean |
 | `--json` | Output in JSON Format |  | boolean |
 | `--log` | Log container output to console |  | boolean |
+| `--no-ui` | Do not start companion UI containers | false | boolean |
 | `--port` | Override the default port for the service |  | Integer |
 | `-h,--help` | Display the help and sub-commands |  | boolean |

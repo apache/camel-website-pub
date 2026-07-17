@@ -26,7 +26,45 @@ The Camel TUI (`camel tui`) accepts `--theme=dark` or `--theme=light` to choose 
 
 The Camel TUI now has a **Settings…​** entry in the **F2** actions menu for choosing the theme, the starting tab, and the default run-from-folder. These are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.defaultFolder`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` stays local (project override), while every other key defaults to the global `~/.camel-cli.properties`.
 
+The Camel TUI (`camel tui`) theme is now backed by CSS stylesheets and ships a switchable light/dark palette. Press **F4** to toggle at runtime; the selection is persisted as `camel.tui.theme` in `.camel-cli.properties`.
+
 The Camel CLI user configuration file has been renamed from `camel-jbang-user.properties` to `camel-cli.properties` (global `~/.camel-cli.properties`, local `./camel-cli.properties`). The dot convention is unchanged: the global file is a hidden dotfile, the local file is visible. On first run the CLI automatically renames a pre-existing global `~/.camel-jbang-user.properties` to `~/.camel-cli.properties` and a pre-existing local `./camel-jbang-user.properties` to `./camel-cli.properties`; an existing new file is never overwritten.
+
+#### Camel CLI launcher Java runtime discovery
+
+The self-contained Camel CLI launcher scripts (`bin/camel.sh` and `bin/camel.bat` in the `camel-launcher` distribution) now share a single Java runtime discovery contract. Candidates are evaluated in this fixed order, and the first one that exists, is executable, and reports a Java major version of at least 17 is used:
+
+1.  `JAVACMD` (explicit override, unchanged).
+    
+2.  `$JAVA_HOME/bin/java` (`%JAVA_HOME%\bin\java.exe` on Windows). This is also how the SDKMAN `java` candidate is honored, since SDKMAN exports `JAVA_HOME`.
+    
+3.  The first `java` (`java.exe`) found on `PATH`.
+    
+4.  `CAMEL_FALLBACK_JAVA`, a new variable set by package-manager installs when the JDK location is deterministic.
+    
+
+Candidates older than Java 17, missing, non-executable, or with unparseable version output are skipped. If none qualify, the launcher now exits nonzero with a diagnostic listing the checked sources instead of attempting to run an unsuitable Java.
+
+The obsolete macOS `JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/…​` default was removed from `camel.sh`; set `JAVA_HOME` or `JAVACMD`, or ensure a Java 17+ `java` is on `PATH`. The Gentoo `java-config` auto-detection and the IBM AIX `$JAVA_HOME/jre/sh/java` probe were also removed; set `JAVA_HOME` or `JAVACMD` explicitly on those platforms. `JAVA_OPTS` handling is unchanged: when unset, the default `-Xmx512m` heap is applied.
+
+#### Native `camel.exe` in the launcher distribution
+
+The `camel-launcher` Windows distribution now ships a native x64 `bin/camel.exe` alongside `bin/camel.bat`. `camel.exe` is a thin bootstrap: it forwards all arguments to the adjacent `camel.bat` (preserving spaces and Unicode) and returns its exit code. It exists so package managers that require a genuine executable users may continue to invoke `bin\camel.bat`; both behave identically.
+
+#### OpenTelemetry agent export target changes
+
+The `--open-telemetry-agent-export` option has been extended with new values and a deprecation:
+
+-   `observability` (new) — exports traces to VictoriaTraces and logs to VictoriaLogs when the observability infra stack is running (`camel infra run observability`).
+    
+-   `otlp` (new) — generic external OTLP export for traces. Replaces `jaeger` as the recommended value for sending traces to any external OTLP-compatible collector.
+    
+-   `jaeger` (deprecated) — still works as an alias for `otlp`. Use `otlp` instead.
+    
+-   `tui` (unchanged) — embedded receiver in the TUI (default).
+    
+
+The `camel.opentelemetry2.exportTarget` property in `OpenTelemetryTracer` now accepts any non-empty value to signal external export mode (previously only `"jaeger"` was recognized).
 
 ### camel-langchain4j-agent
 
@@ -138,11 +176,27 @@ The `preSort` option on the File, FTP, FTPS, SFTP, Azure Files, and SMB consumer
 
 The pre-sort is applied on the raw file listing before any filtering or eager limiting, which makes it possible to combine `preSort=modified` with `eagerMaxMessagesPerPoll=true` and `maxMessagesPerPoll=10` to efficiently consume the 10 oldest files without creating Exchange objects for every file on the server.
 
+### camel-file - forceWrites option deprecated
+
+The `forceWrites` producer option on the File endpoint has been deprecated. This option has had no effect since Camel 2.20, when the file-writing implementation was refactored to use `java.nio.file.Files.move()` and `Files.copy()` instead of `FileChannel`\-based streaming. The `forceWrites` flag was intended to call `FileChannel.force(true)` (fsync) after writing, but no write path has invoked it for several major versions.
+
+The default value has been changed from `true` to `false` to reflect the actual behavior. The option will be removed in a future release.
+
 ### camel-mail - MimeMultipartDataFormat inbound header filtering
 
 When unmarshalling a MIME message with `headersInline=true`, the `mime-multipart` data format now applies a `HeaderFilterStrategy` to the headers copied from the MIME content onto the Camel message. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) present in the external MIME headers are no longer copied onto the message, consistent with the inbound header filtering already performed by the camel-mail consumer.
 
 Ordinary application headers are unaffected. If a route relied on `Camel*` headers being propagated from the MIME content, set them explicitly after unmarshalling.
+
+### camel-knative - structured-mode CloudEvent header filtering
+
+When consuming a CloudEvent in structured content mode (`application/cloudevents+json`), the Knative component now applies a `HeaderFilterStrategy` to the event fields (extensions) mapped from the payload onto the Camel message. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) present as structured-event fields are no longer mapped onto the message, consistent with the inbound header filtering already performed on the binary content-mode / HTTP header path.
+
+Ordinary CloudEvent extension attributes are unaffected. If a route relied on `Camel*`\-named fields being propagated from the structured payload, set them explicitly after consuming the event.
+
+### camel-pinecone
+
+The `tls` endpoint option now correctly documents its default as `false` (previously the catalog listed the default as `true`, but the runtime value was always `false`). No behavioral change — the runtime default was already `false`.
 
 ### camel-platform-http-main
 
@@ -156,11 +210,41 @@ The `metadataMaxAgeMs` (`metadata.max.age.ms`) option was incorrectly labeled as
 
 If you use the Endpoint DSL, the `metadataMaxAgeMs` method has moved from the producer (advanced) builder to the common builder.
 
+### camel-kafka - saslAuthType behavior changes
+
+When `saslAuthType` is set, the generated JAAS configuration and additional SASL properties are now applied using `putIfAbsent` semantics, so explicitly configured `saslJaasConfig`, callback handler classes, or token endpoint URLs take precedence over the auto-generated values.
+
+For OAuth (`saslAuthType=OAUTH`), the JAAS string now contains only login-module parameters (`clientId`, `clientSecret`, `scope`). The `oauth.token.endpoint.uri` and callback handler class are set as separate Kafka client properties instead of being embedded in the JAAS string, matching the Kafka client’s expected configuration format.
+
+For Kerberos (`saslAuthType=KERBEROS`), if the principal is not configured, the configurer now assumes an external JAAS configuration (e.g. via `java.security.auth.login.config`) and skips JAAS string generation instead of throwing an exception. This supports deployment scenarios where Kerberos is configured externally.
+
 ### camel-kafka - Producer no longer silently drops scalar Jackson nodes
 
 With `useIterator=true`, the Kafka producer splits an `Iterable` body into one record per element. A Jackson `JsonNode` implements `Iterable`, so a scalar value node (e.g. an `IntNode` produced by `transform().jq(".my-value")`) was seen as an empty iterable and produced no record, silently discarding the message with no exception or log.
 
 Scalar value nodes are now sent as a single record. Only container nodes (`ArrayNode`, `ObjectNode`) are still split, which is unchanged. Any `convertBodyTo(…​)` previously used as a workaround is no longer required.
+
+### camel-kafka - sslEndpointAlgorithm=none now disables hostname verification
+
+Setting `sslEndpointAlgorithm` to `none` or `false` now correctly disables SSL hostname verification by setting `ssl.endpoint.identification.algorithm` to an empty string. Previously the property was simply omitted, which caused Kafka clients to fall back to their default (`https`), leaving hostname verification silently enabled.
+
+### camel-kafka - Auto-generated groupId shared across consumer threads
+
+When no `groupId` is configured, the auto-generated UUID is now shared across all consumer threads (`consumersCount`). Previously each thread received its own random UUID, causing each thread to independently consume all partitions, which resulted in every message being processed `consumersCount` times.
+
+### camel-kafka - Batch producer respects endpoint key for plain list elements
+
+The batch producer (when the body is a `List`) now respects the endpoint-configured `key` option for elements that do not have a `CamelKafkaKey` header. Previously, elements without the header would get a null record key even when `key=fixedKey` was configured on the endpoint. Additionally, plain list elements (not `Exchange` or `Message`) are now properly converted to the configured serializer type.
+
+### camel-kafka - queueBufferingMaxMessages option deprecated
+
+The `queueBufferingMaxMessages` producer option has been deprecated. This option has had no effect since the old Scala Kafka producer was removed in Camel 2.17 (CAMEL-9467). Use `bufferMemorySize` or `maxBlockMs` instead.
+
+### camel-kafka - Manual commit no longer auto-commits offsets
+
+When using `allowManualCommit=true` together with a `DefaultKafkaManualCommitFactory` or `DefaultKafkaManualAsyncCommitFactory`, the framework previously auto-committed offsets for every processed record — even when the route did not call `KafkaManualCommit.commit()`. This defeated the purpose of manual commit mode and could cause message loss.
+
+The framework no longer auto-commits offsets after processing each partition when manual commit is enabled. Offsets are only committed when the route explicitly calls `KafkaManualCommit.commit()` on the exchange header. The configured factory still controls whether that explicit commit executes synchronously or asynchronously.
 
 ### camel-jbang catalog tables fill the terminal width
 
@@ -257,8 +341,53 @@ This is a source-incompatible change for code that reads these values programmat
 
 The clustered route controller property `camel.clustered.controller.initial-delay` is unchanged: it keeps its `String` type because it supports Camel time patterns (for example `10 seconds`) that `Duration` binding does not.
 
+### camel-spring-rabbitmq - replyTimeout default aligned
+
+The `replyTimeout` option on the component level has been fixed to default to 30 seconds, aligning it with the endpoint-level default that was documented since Camel 3.20.7 / 3.21. Previously, the component-level default was still 5 seconds, which would override the endpoint’s declared 30-second default. If you were relying on the effective 5-second timeout, you can restore it by explicitly setting `replyTimeout=5000` on the component or endpoint.
+
+### camel-core - Multicast UseOriginalAggregationStrategy fix
+
+The Multicast EIP now correctly honors `UseOriginalAggregationStrategy`, consistent with the Splitter and Recipient List EIPs. Previously, Multicast did not bind the original exchange on the strategy, so the strategy was silently ineffective — especially in error scenarios where the aggregated result could overwrite the original exchange body instead of preserving it.
+
 ### camel-sql - PostgreSQL aggregation repositories fixed
 
 `PostgresAggregationRepository` and `ClusteredPostgresAggregationRepository` were broken since Camel 3.4: every insert failed with a parameter-index error because the `version` column was bound but not included in the generated `INSERT …​ ON CONFLICT DO NOTHING` statement. Both repositories now include the `version` column in the insert, and the clustered variant also writes the `instance_id` column to the completed table when `recoveryByInstance` is enabled (previously instance-scoped recovery could never match any row).
 
 The aggregation tables used with these repositories must have the `version BIGINT` column, as already required by `JdbcAggregationRepository` for reading and updating aggregates. When `recoveryByInstance` is enabled, the completed table must have the `instance_id VARCHAR(255)` column as documented.
+
+### camel-pqc - String payloads are signed and verified as UTF-8
+
+The `sign`, `verify`, `hybridSign` and `hybridVerify` operations previously encoded a `String` message body using the JVM default charset (`String.getBytes()`). The default charset is platform dependent, so signing on one JVM and verifying on another with a different default could disagree on the bytes of a non-ASCII payload and make verification fail.
+
+`String` bodies are now always encoded as UTF-8. On Java 18 and newer the default charset is already UTF-8 (JEP 400), so this is a no-op there; on Java 17 with a non-UTF-8 default, the signature of a non-ASCII `String` payload changes. Binary bodies (`byte[]`, `InputStream`) are unaffected, as they are signed byte-for-byte. === camel-sql - Schema-qualified aggregation repository names
+
+The table-name validation in `JdbcAggregationRepository` now accepts schema-qualified names such as `myschema.aggregation`. Previously the validation regex only allowed simple identifiers (`[a-zA-Z_][a-zA-Z0-9_]*`), rejecting any name containing a dot. Names starting with a digit, containing spaces, or with multiple dots (e.g. `catalog.schema.table`) are still rejected.
+
+### camel-sql - New exceptions from aggregation and template parsing
+
+The `remove()` method in `JdbcAggregationRepository` and `ClusteredJdbcAggregationRepository` now throws `OptimisticLockingException` when it detects a stale version during the delete. Previously a stale remove was silently treated as successful. If your error handling or aggregation strategy catches specific exception types around `remove()`, you may need to account for `OptimisticLockingException`.
+
+The `TemplateParser` now catches `TokenMgrError` (a JavaCC lexer error) and wraps it in `ParseRuntimeException`. Previously a malformed stored-procedure template with characters outside the token alphabet would propagate as a raw `java.lang.Error`.
+
+### camel-aws-cloudtrail - consumer event delivery fixed
+
+The CloudTrail consumer previously kept its lookup cursor in a `static` field (shared across all cloudtrail consumers in the JVM), issued a single non-paginated `LookupEvents` call with a default `maxResults` of `1`, and advanced the cursor by the newest event time plus one second. As a result it could silently drop events. The consumer now keeps the cursor per-endpoint, paginates through every page of the window, and de-duplicates events by id at the window boundary.
+
+Two behavior changes follow:
+
+-   The default `maxResults` is now `50` (the AWS maximum). With pagination this is a page-size hint, not a per-poll cap; set it lower to reduce page sizes.
+    
+-   On startup the consumer tails events from the moment it starts, rather than first replaying the single most-recent historical event.
+    
+
+### camel-xslt-saxon - secure processing now applied unconditionally
+
+The `secureProcessing` option (default `true`) is now applied to the Saxon `TransformerFactory` unconditionally. Previously it was only set when `saxonExtensionFunctions` was configured, meaning the default configuration silently ran without `FEATURE_SECURE_PROCESSING`.
+
+Additionally, the Saxon factory now sets `ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_STYLESHEET` to empty strings (matching the behavior of the plain `xslt` component), restricting stylesheet-driven external fetches.
+
+Users of Saxon Professional or Enterprise editions who rely on Java extension functions called from XSLT stylesheets must now explicitly set `secureProcessing=false` on the endpoint.
+
+### camel-xslt / camel-xslt-saxon - transformerFactoryConfigurationStrategy now honored
+
+The `transformerFactoryConfigurationStrategy` option is now applied on all factory creation paths. Previously on `xslt-saxon` it was never invoked, and on plain `xslt` it was only invoked when `transformerFactoryClass` was explicitly set.

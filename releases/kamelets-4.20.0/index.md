@@ -10,9 +10,9 @@ This version supports Java 17 and 21.
 
 | Download | Signature and checksum |
 | --- | --- |
-| [camel-kamelets-sources-4.20.0.tar.gz](https://www.apache.org/dyn/closer.lua/camel/camel-kamelets/4.20.0/camel-kamelets-sources-4.20.0.tar.gz) (Sources) | [PGP Signature](https://downloads.apache.org/camel/camel-kamelets/4.20.0/camel-kamelets-sources-4.20.0.tar.gz.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-kamelets/4.20.0/camel-kamelets-sources-4.20.0.tar.gz.sha512) |
-| [camel-kamelets-4.20.0-sbom.xml](https://www.apache.org/dyn/closer.lua/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.xml) (SBOM, CycloneDX XML) | [PGP Signature](https://downloads.apache.org/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.xml.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.xml.sha512) |
-| [camel-kamelets-4.20.0-sbom.json](https://www.apache.org/dyn/closer.lua/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.json) (SBOM, CycloneDX JSON) | [PGP Signature](https://downloads.apache.org/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.json.asc), [SHA512 Checksum](https://downloads.apache.org/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.json.sha512) |
+| [camel-kamelets-sources-4.20.0.tar.gz](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-sources-4.20.0.tar.gz) (Sources) | [PGP Signature](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-sources-4.20.0.tar.gz.asc), [SHA512 Checksum](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-sources-4.20.0.tar.gz.sha512) |
+| [camel-kamelets-4.20.0-sbom.xml](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.xml) (SBOM, CycloneDX XML) | [PGP Signature](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.xml.asc), [SHA512 Checksum](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.xml.sha512) |
+| [camel-kamelets-4.20.0-sbom.json](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.json) (SBOM, CycloneDX JSON) | [PGP Signature](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.json.asc), [SHA512 Checksum](https://archive.apache.org/dist/camel/camel-kamelets/4.20.0/camel-kamelets-4.20.0-sbom.json.sha512) |
 
 ## Git tag checkout
 

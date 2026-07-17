@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kamelets 4.18.3</title>
+      <link>https://camel.apache.org/releases/kamelets-4.18.3/</link>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.18.3/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Hawtio AI: Utilizing AI in the Operational Phase of Camel Integrations</title>
       <link>https://camel.apache.org/blog/2026/07/hawtio-ai/</link>
@@ -308,6 +315,13 @@
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/07/camel-who-maintains/</guid>
       <description>Apache Camel has crossed 100,000 commits from 1,500+ contributors representing 450+ companies. Those numbers paint a picture of a broad, thriving open source community — and that picture is real. But there&amp;rsquo;s a more specific story inside the git history that&amp;rsquo;s worth telling: who actually maintains this project, day after day, year after year?&#xA;The answer is remarkably consistent. A core engineering team has maintained Apache Camel since 2009 — and they&amp;rsquo;re still here.</description>
+    </item>
+    <item>
+      <title>Kamelets 4.21.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.21.0/</link>
+      <pubDate>Tue, 30 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.21.0/</guid>
+      <description></description>
     </item>
     <item>
       <title>See How Your Routes Connect: Route Topology Diagrams in Apache Camel</title>

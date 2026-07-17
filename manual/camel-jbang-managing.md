@@ -255,10 +255,20 @@ Enable the web-based developer console with `--console`:
 camel run hello.java --console
 ```
 
-The console is accessible at [http://localhost:8080/q/dev](http://localhost:8080/q/dev) and provides insights into routes, performance, and EIP-level metrics. It also supports JSON output for tooling:
+The console is accessible at [http://localhost:8080/q/dev](http://localhost:8080/q/dev) and provides insights into routes, performance, and EIP-level metrics. The endpoints support both HTTP GET and POST.
+
+GET with query parameters:
 
 ```bash
 curl -s -H "Accept: application/json" http://0.0.0.0:8080/q/dev/top/ | jq
+```
+
+POST with a JSON body (avoids URL length limits for large payloads):
+
+```bash
+curl -s -X POST -H "Accept: application/json" -H "Content-Type: application/json" \
+  -d '{"language":"simple","template":"${body}","body":"hello"}' \
+  http://0.0.0.0:8080/q/dev/eval-language | jq
 ```
 
 ## Message history

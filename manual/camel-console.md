@@ -70,6 +70,26 @@ For example to run a Camel route from `foo.yaml` and additional configurations f
 $ camel run foo.yaml myapp.properties --console
 ```
 
+### HTTP Access
+
+The dev console endpoints accept both HTTP GET and POST requests.
+
+With GET, parameters are passed as query parameters:
+
+```bash
+$ curl "http://localhost:8080/q/dev/eval-language?language=simple&template=\$\{body\}&body=hello"
+```
+
+With POST, parameters can be sent as a JSON request body, which avoids URL length limits and is more natural for complex or large payloads:
+
+```bash
+$ curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" \
+  -d '{"language":"simple","template":"${body}","body":"hello"}' \
+  http://localhost:8080/q/dev/eval-language
+```
+
+To receive JSON output, set the `Accept` header to `application/json`. Otherwise, the console returns plain text.
+
 ## Writing Custom Dev Consoles
 
 To write a custom console, you need to add `camel-console` as dependency, as it comes with the base class `AbstractDevConsole` which we extend for our console.

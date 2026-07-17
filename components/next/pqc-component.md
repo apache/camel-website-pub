@@ -814,7 +814,7 @@ This will be true for standardized algorithms and for experimental ones.
 > To combine a classical signature (ECDSA, Ed25519, RSA) with a PQC signature for defense-in-depth during the post-quantum transition, use the hybrid signature operations described in [Hybrid Cryptography](others/pqc-hybrid.md).
 
 > **Note**
-> The sign and verify operations stream the message body. A `byte[]` or `InputStream` body is fed to the signature in chunks without being materialised as a String, so large payloads (files, large messages) can be signed and verified without loading them fully into memory. When the body is a re-readable `StreamCache` (for example with stream caching enabled) it is reset after reading so downstream processors still see the payload.
+> The sign and verify operations stream the message body. A `byte[]` or `InputStream` body is fed to the signature in chunks without being materialised as a String, so large payloads (files, large messages) can be signed and verified without loading them fully into memory. When the body is a re-readable `StreamCache` (for example with stream caching enabled) it is reset after reading so downstream processors still see the payload. Any other body type falls back to its String representation, which is always encoded as **UTF-8** so that signing and verifying agree regardless of the JVM default charset.
 
 ## Examples
 

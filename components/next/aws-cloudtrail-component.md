@@ -75,7 +75,7 @@ The AWS CloudTrail component supports 22 options, which are listed below.
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **configuration** (consumer) | Component configuration. |  | CloudtrailConfiguration |
 | **eventSource** (consumer) | Specify an event source to select events. |  | String |
-| **maxResults** (consumer) | Maximum number of records that will be fetched in each poll. | 1 | int |
+| **maxResults** (consumer) | Maximum number of records that will be fetched in each lookup page. Each poll drains all pages, so this controls the page size rather than the total per poll. AWS allows up to 50. | 50 | int |
 | **overrideEndpoint** (consumer) | Set the need for overriding the endpoint. This option needs to be used in combination with uriEndpointOverride option. | false | boolean |
 | **region** (consumer) | 
 The region in which Cloudtrail client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id().
@@ -225,7 +225,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **eventSource** (consumer) | Specify an event source to select events. |  | String |
-| **maxResults** (consumer) | Maximum number of records that will be fetched in each poll. | 1 | int |
+| **maxResults** (consumer) | Maximum number of records that will be fetched in each lookup page. Each poll drains all pages, so this controls the page size rather than the total per poll. AWS allows up to 50. | 50 | int |
 | **overrideEndpoint** (consumer) | Set the need for overriding the endpoint. This option needs to be used in combination with uriEndpointOverride option. | false | boolean |
 | **region** (consumer) | 
 The region in which Cloudtrail client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id().

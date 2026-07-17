@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1783961509749,
+  "generated": 1784285311000,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -21087,6 +21087,12 @@
             },
             {
               "module": "ROOT",
+              "path": "ai-tool-component.adoc",
+              "url": "/components/next/ai-tool-component.html",
+              "title": "AI Tool"
+            },
+            {
+              "module": "ROOT",
               "path": "amqp-component.adoc",
               "url": "/components/next/amqp-component.html",
               "title": "AMQP"
@@ -32050,6 +32056,12 @@
               "path": "jbang-commands/camel-jbang-cmd-gc.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-gc.html",
               "title": "camel cmd gc"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-heap-dump.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-heap-dump.html",
+              "title": "camel cmd heap-dump"
             },
             {
               "module": "ROOT",

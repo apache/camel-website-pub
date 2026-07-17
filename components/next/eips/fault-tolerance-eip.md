@@ -10,7 +10,7 @@ The Fault Tolerance EIP supports two options which are listed below:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **faultToleranceConfiguration** | Configure the Fault Tolerance EIP. When the configuration is complete, use `end()` to return to the Fault Tolerance EIP. |  | `FaultToleranceConfigurationDefinition` |
-| **faultToleranceConfigurationRef** | Refers to a Fault Tolerance configuration to use for configuring the Fault Tolerance EIP. |  | String |
+| **configuration** | Refers to a Fault Tolerance configuration (by name) to use for configuring the Fault Tolerance EIP. |  | String |
 
 See [Fault Tolerance Configuration](faultToleranceConfiguration-eip.md) for all the configuration options on the Fault Tolerance [Circuit Breaker](circuitBreaker-eip.md).
 
@@ -57,21 +57,21 @@ from("direct:start")
       steps:
         - circuitBreaker:
             steps:
+              - to:
+                  uri: http://fooservice.com/faulty
               - onFallback:
                   steps:
                     - transform:
                         expression:
                           constant:
                             expression: Fallback message
-              - to:
-                  uri: http://fooservice.com/faulty
         - to:
             uri: mock:result
 ```
 
 In case the calling the downstream HTTP service is failing, and an exception is thrown, then the circuit breaker will react and execute the fallback route instead.
 
-If there was no fallback, then the circuit breaker will throw an exception.
+If there is no fallback and the protected processor fails, the circuit breaker will throw an exception. However, when the circuit breaker is open and rejects a call, the message continues routing unchanged (no exception is thrown).
 
 > **Tip**
 > For more information about fallback, see [onFallback](onFallback-eip.md).
@@ -218,6 +218,10 @@ Maven users will need to add the following dependency to their pom.xml to use th
     <version>x.x.x</version><!-- use the same version as your Camel core version -->
 </dependency>
 ```
+
+### Developer Console
+
+The Fault Tolerance dev console (`fault-tolerance`) displays the circuit breaker state (CLOSED, OPEN, HALF\_OPEN) for each breaker in the context. Unlike the Resilience4j dev console, it does not show live metrics (success/failure counts, failure rate) because the underlying SmallRye Fault Tolerance API does not expose per-breaker metric counters.
 
 ### Using Fault Tolerance with Spring Boot
 

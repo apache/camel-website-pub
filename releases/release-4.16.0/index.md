@@ -337,7 +337,7 @@ Camel-Nats: Support ConsumerConfiguration for NatsConsumer with Jetstream
 
 camel-jira component newIssue does not work across multiple projects
 
-### New Feature (23)
+### New Feature (24)
 
 [CAMEL-22622](https://issues.apache.org/jira/browse/CAMEL-22622)
 
@@ -402,6 +402,10 @@ Camel-Flink: Deprecate DataSet API in favor of DataStream API
 [CAMEL-22547](https://issues.apache.org/jira/browse/CAMEL-22547)
 
 Camel-Docling: Support Async operation in docling-server
+
+[CAMEL-22512](https://issues.apache.org/jira/browse/CAMEL-22512)
+
+Camel-PQC: Add Key Lifecycle Management
 
 [CAMEL-22509](https://issues.apache.org/jira/browse/CAMEL-22509)
 

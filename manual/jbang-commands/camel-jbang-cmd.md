@@ -17,6 +17,7 @@ camel cmd [options]
 | [disable-processor](camel-jbang-cmd-disable-processor.md) | Disable Camel processor |
 | [enable-processor](camel-jbang-cmd-enable-processor.md) | Enable Camel processor |
 | [gc](camel-jbang-cmd-gc.md) | Trigger Java Memory Garbage Collector |
+| [heap-dump](camel-jbang-cmd-heap-dump.md) | Write a heap dump (.hprof) file for deep memory analysis |
 | [heap-histogram](camel-jbang-cmd-heap-histogram.md) | Display class-level heap memory usage in a running Camel integration |
 | [load](camel-jbang-cmd-load.md) | Loads new source files into an existing Camel |
 | [logger](camel-jbang-cmd-logger.md) | List or change logging levels |

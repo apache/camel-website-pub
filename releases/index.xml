@@ -6,8 +6,15 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 04 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kamelets 4.18.3</title>
+      <link>https://camel.apache.org/releases/kamelets-4.18.3/</link>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.18.3/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Release 4.14.8</title>
       <link>https://camel.apache.org/releases/release-4.14.8/</link>
@@ -28,6 +35,13 @@
       <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/releases/release-4.21.0/</guid>
       <description>This release is the new Camel 4.21.0 release.</description>
+    </item>
+    <item>
+      <title>Kamelets 4.21.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.21.0/</link>
+      <pubDate>Tue, 30 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.21.0/</guid>
+      <description></description>
     </item>
     <item>
       <title>Camel Quarkus release 3.36.0</title>

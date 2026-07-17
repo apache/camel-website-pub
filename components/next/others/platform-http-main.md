@@ -30,7 +30,7 @@ These features are as follows:
     
 -   `/observe/metrics` - To provide OTEL metrics in prometheus format
     
--   `/q/dev` - Developer console that provides a lot of statistics and information
+-   `/q/dev` - Developer console that provides a lot of statistics and information (supports both GET and POST; POST accepts a JSON body)
     
 -   `/q/upload` - Uploading source files, to allow hot reloading.
     

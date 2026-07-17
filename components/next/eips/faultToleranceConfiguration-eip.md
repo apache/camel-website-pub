@@ -14,7 +14,7 @@ The Fault Tolerance Configuration eip supports 0 options, which are listed below
 | **failureRatio** | Configures the failure rate threshold in percentage. If the failure rate is equal or greater than the threshold the CircuitBreaker transitions to open and starts short-circuiting calls. | 50 | Integer |
 | **timeoutEnabled** | Whether timeout is enabled or not on the circuit breaker. | false | Boolean |
 | **timeoutDuration** | Configures the thread execution timeout. Default value is 1 second. | 1000 | String |
-| **timeoutPoolSize** | Configures the pool size of the thread pool when timeout is enabled. | 10 | Integer |
+| **timeoutPoolSize** | **Deprecated** Deprecated: no longer in use since the switch to TypedGuard API (CAMEL-21857). | 10 | Integer |
 | **bulkheadEnabled** | Whether bulkhead is enabled or not on the circuit breaker. | false | Boolean |
 | **bulkheadMaxConcurrentCalls** | Configures the max amount of concurrent calls the bulkhead will support. | 10 | Integer |
 | **bulkheadWaitingTaskQueue** | Configures the task queue size for holding waiting tasks to be processed by the bulkhead. | 10 | Integer |
