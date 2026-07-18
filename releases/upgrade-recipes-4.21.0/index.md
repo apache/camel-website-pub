@@ -6,7 +6,7 @@
 
 For detailed instructions on using Apache Camel Upgrade Recipes, please see the [Apache Camel Upgrade Recipes Tool Manual](../../manual/camel-upgrade-recipes-tool.md).
 
-This release introduces new recipes for migration to Camel 4.18 (LTS). For more information, please see the [README.adoc](https://github.com/apache/camel-upgrade-recipes/blob/main/README.adoc).
+This release introduces new recipes for migration to Camel 4.21. For more information, please see the [README.adoc](https://github.com/apache/camel-upgrade-recipes/blob/main/README.adoc).
 
 ## Full Release Notes
 
