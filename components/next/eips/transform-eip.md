@@ -25,7 +25,7 @@ This page is documenting the first approach by using Transform EIP.
 
 ## Options
 
-The Transform eip supports 0 options, which are listed below.
+The Transform eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

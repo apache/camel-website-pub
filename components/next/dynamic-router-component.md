@@ -92,7 +92,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Dynamic Router component supports 2 options, which are listed below.
+The Dynamic Router component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -108,14 +108,14 @@ dynamic-router:channel
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **channel** (producer) | Channel for the Dynamic Router. For example, if the Dynamic Router URI is dynamic-router://test, then the channel is test. Channels are a way of keeping routing participants, their rules, and exchanges logically separate from the participants, rules, and exchanges on other channels. This can be seen as analogous to VLANs in networking. |  | String |
 
-### Query Parameters (20 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

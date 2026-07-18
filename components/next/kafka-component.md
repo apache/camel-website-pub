@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Kafka component supports 129 options, which are listed below.
+The Kafka component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -360,14 +360,14 @@ kafka:topic
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **topic** (common) | **Required** Name of the topic to use. On the consumer you can use comma to separate multiple topics. A producer can only send a message to a single topic. |  | String |
 
-### Query Parameters (120 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -659,7 +659,7 @@ Enum values:
 
 ## Message Headers
 
-The Kafka component supports 13 message header(s), which is/are listed below:
+The Kafka component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

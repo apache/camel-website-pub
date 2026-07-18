@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The MyBatis Bean component supports 6 options, which are listed below.
+The MyBatis Bean component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,7 +88,7 @@ mybatis-bean:beanName:methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -96,7 +96,7 @@ With the following _path_ and _query_ parameters:
 | **beanName** (producer) | **Required** Name of the bean with the MyBatis annotations. This can either by a type alias or a FQN class name. |  | String |
 | **methodName** (producer) | **Required** Name of the method on the bean that has the SQL query to be executed. |  | String |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -124,7 +124,7 @@ Enum values:
 
 ## Message Headers
 
-The MyBatis Bean component supports 1 message header(s), which is/are listed below:
+The MyBatis Bean component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

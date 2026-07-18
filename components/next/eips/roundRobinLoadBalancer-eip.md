@@ -6,7 +6,11 @@ The exchanges are selected in a round-robin fashion. This is a well known and cl
 
 ## Options
 
-The Round Robin Load Balancer eip has no options.
+The Round Robin Load Balancer eip supports the following options which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
 
 ## Exchange properties
 

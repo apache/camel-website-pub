@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Language component supports 4 options, which are listed below.
+The Language component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -83,7 +83,7 @@ language:languageName:resourceUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -153,7 +153,7 @@ Enum values:
  |  | String |
 | **resourceUri** (producer) | Path to the resource, or a reference to lookup a bean in the Registry to use as the resource. |  | String |
 
-### Query Parameters (9 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -170,7 +170,7 @@ Enum values:
 
 ## Message Headers
 
-The Language component supports 1 message header(s), which is/are listed below:
+The Language component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Thymeleaf component supports 4 options, which are listed below.
+The Thymeleaf component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,14 +88,14 @@ thymeleaf:resourceUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **resourceUri** (producer) | **Required** Path to the resource. You can prefix with: classpath, file, http, ref, or bean. classpath, file and http loads the resource using these protocols (classpath is default). ref will lookup the resource in the registry. bean will call a method on a bean to be used as the resource. For bean you can specify the method name after dot, eg bean:myBean.myMethod. |  | String |
 
-### Query Parameters (12 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -160,7 +160,7 @@ Enum values:
 
 ## Message Headers
 
-The Thymeleaf component supports 4 message header(s), which is/are listed below:
+The Thymeleaf component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

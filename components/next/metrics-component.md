@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Metrics component supports 3 options, which are listed below.
+The Metrics component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -85,7 +85,7 @@ metrics:metricsType:metricsName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -113,7 +113,7 @@ Enum values:
  |  | MetricsType |
 | **metricsName** (producer) | **Required** Name of metrics. |  | String |
 
-### Query Parameters (7 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -142,7 +142,7 @@ Enum values:
 
 ## Message Headers
 
-The Metrics component supports 7 message header(s), which is/are listed below:
+The Metrics component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

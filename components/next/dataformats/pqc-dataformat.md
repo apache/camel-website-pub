@@ -8,7 +8,7 @@ The PQC data format supports encrypting and decrypting payload using Post Quantu
 
 ## PGC DataFormat Options
 
-The PQC (Post-Quantum Cryptography) dataformat supports 6 options, which are listed below.
+The PQC (Post-Quantum Cryptography) dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

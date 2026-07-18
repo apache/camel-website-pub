@@ -21,7 +21,7 @@ By default, the Resequencer does not support duplicate messages and will only ke
 
 ## Options
 
-The Resequence eip supports 0 options, which are listed below.
+The Resequence eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

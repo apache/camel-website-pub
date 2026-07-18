@@ -17,7 +17,7 @@ Sagas don’t use locks on data. Instead, they define the concept of "Compensati
 
 ## Options
 
-The Saga eip supports 0 options, which are listed below.
+The Saga eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -659,7 +659,7 @@ Since the `direct:creditReservation` endpoint can be now called also from outsid
 Sagas are long-running actions, but this does not mean that they should not have a bounded timeframe to execute. **Setting timeouts on Sagas is always a good practice** as it guarantees that a Saga does not remain stuck forever in the case of machine failure.
 
 > **Note**
-> The Saga EIP implementation may have a default timeout set on all Sagas that don’t specify it explicitly
+> There is no default timeout on Sagas. If no timeout is specified, a Saga may remain open indefinitely in the case of failure. Always set an explicit timeout, especially when using `MANUAL` completion mode.
 
 When the timeout expires, the Saga EIP will decide to **cancel the Saga** (and compensate all participants), unless a different decision has been taken before.
 

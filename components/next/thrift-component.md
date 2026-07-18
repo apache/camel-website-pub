@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Thrift component supports 4 options, which are listed below.
+The Thrift component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -86,7 +86,7 @@ thrift:host:port/service
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -95,7 +95,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | **Required** The Thrift server port. |  | int |
 | **service** (common) | **Required** Fully qualified service name from the thrift descriptor file (package dot service definition name). |  | String |
 
-### Query Parameters (13 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -181,7 +181,7 @@ Enum values:
 
 ## Message Headers
 
-The Thrift component supports 1 message header(s), which is/are listed below:
+The Thrift component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

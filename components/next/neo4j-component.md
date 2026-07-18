@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Neo4j component supports 19 options, which are listed below.
+The Neo4j component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -115,14 +115,14 @@ neo4j:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (producer) | **Required** The database name. |  | String |
 
-### Query Parameters (17 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -161,7 +161,7 @@ Enum values:
 
 ## Message Headers
 
-The Neo4j component supports 12 message header(s), which is/are listed below:
+The Neo4j component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

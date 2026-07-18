@@ -78,7 +78,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure Storage Data Lake Service component supports 38 options, which are listed below.
+The Azure Storage Data Lake Service component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -165,7 +165,7 @@ azure-storage-datalake:accountName/fileSystemName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -173,7 +173,7 @@ With the following _path_ and _query_ parameters:
 | **accountName** (common) | name of the azure account. |  | String |
 | **fileSystemName** (common) | name of filesystem to be used. |  | String |
 
-### Query Parameters (53 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -332,7 +332,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Storage Data Lake Service component supports 63 message header(s), which is/are listed below:
+The Azure Storage Data Lake Service component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

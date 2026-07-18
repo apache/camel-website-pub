@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Vert.x HTTP Client component supports 20 options, which are listed below.
+The Vert.x HTTP Client component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -135,14 +135,14 @@ vertx-http:httpUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **httpUri** (producer) | **Required** The HTTP URI to connect to. |  | URI |
 
-### Query Parameters (28 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -284,7 +284,7 @@ Enum values:
 
 ## Message Headers
 
-The Vert.x HTTP Client component supports 8 message header(s), which is/are listed below:
+The Vert.x HTTP Client component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

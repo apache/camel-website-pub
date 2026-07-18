@@ -9,7 +9,7 @@ The ParquetAvro Data Format is a Camel Framework’s data format implementation 
 
 ## Parquet Data Format Options
 
-The Parquet File dataformat supports 3 options, which are listed below.
+The Parquet File dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

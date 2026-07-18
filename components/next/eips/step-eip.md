@@ -26,7 +26,7 @@ This means you can monitor your Camel applications and gather statistics at 4-ti
 
 ## Options
 
-The Step eip supports 1 options, which are listed below.
+The Step eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -38,7 +38,7 @@ The Step eip supports 1 options, which are listed below.
 
 ## Exchange properties
 
-The Step eip supports 1 exchange properties, which are listed below.
+The Step eip supports the following exchange properties which are listed below.
 
 The exchange properties are set on the `Exchange` by the EIP, unless otherwise specified in the description. This means those properties are available after this EIP has completed processing the `Exchange`.
 

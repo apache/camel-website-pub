@@ -9,7 +9,7 @@ Camel allows [Spring Expression Language (SpEL)](https://docs.spring.io/spring/d
 
 ## SpEL Options
 
-The SpEL language supports 2 options, which are listed below.
+The SpEL language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -10,7 +10,7 @@ In Camel, this is implemented as the Threads EIP.
 
 ## Options
 
-The Threads eip supports 0 options, which are listed below.
+The Threads eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

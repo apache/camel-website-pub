@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The CXF-RS component supports 6 options, which are listed below.
+The CXF-RS component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -97,7 +97,7 @@ cxfrs:beanId:address
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -105,7 +105,7 @@ With the following _path_ and _query_ parameters:
 | **beanId** (common) | To lookup an existing configured CxfRsEndpoint. Must used bean: as prefix. |  | String |
 | **address** (common) | The service publish address. |  | String |
 
-### Query Parameters (31 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -175,7 +175,7 @@ Enum values:
 
 ## Message Headers
 
-The CXF-RS component supports 16 message header(s), which is/are listed below:
+The CXF-RS component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

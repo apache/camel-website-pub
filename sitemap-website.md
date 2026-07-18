@@ -1,7 +1,8 @@
-urls[813]{loc,lastmod}:
+urls[814]{loc,lastmod}:
   https://camel.apache.org/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.18.3/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/releases/,2026-07-17T00:00:00+00:00
+  https://camel.apache.org/releases/upgrade-recipes-4.21.0/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-07-10T00:00:00+00:00
   https://camel.apache.org/blog/,2026-07-10T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/hawtio-ai/,2026-07-10T00:00:00+00:00

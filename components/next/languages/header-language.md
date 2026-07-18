@@ -6,7 +6,7 @@ The Header Expression Language allows you to extract values of named headers.
 
 ## Header Options
 
-The Header language supports 1 options, which are listed below.
+The Header language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

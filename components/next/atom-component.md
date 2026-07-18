@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Atom component supports 2 options, which are listed below.
+The Atom component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -89,14 +89,14 @@ atom:feedUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **feedUri** (consumer) | **Required** The URI to the feed to poll. |  | String |
 
-### Query Parameters (26 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -207,7 +207,7 @@ Enum values:
 
 ## Message Headers
 
-The Atom component supports 1 message header(s), which is/are listed below:
+The Atom component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

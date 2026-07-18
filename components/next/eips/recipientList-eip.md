@@ -10,7 +10,7 @@ Define a channel for each recipient. Then use a Recipient List to inspect an inc
 
 ## Options
 
-The Recipient List eip supports 2 options, which are listed below.
+The Recipient List eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -39,7 +39,7 @@ The Recipient List eip supports 2 options, which are listed below.
 
 ## Exchange properties
 
-The Recipient List eip supports 2 exchange properties, which are listed below.
+The Recipient List eip supports the following exchange properties which are listed below.
 
 The exchange properties are set on the `Exchange` by the EIP, unless otherwise specified in the description. This means those properties are available after this EIP has completed processing the `Exchange`.
 

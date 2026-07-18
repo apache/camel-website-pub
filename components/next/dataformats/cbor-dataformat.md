@@ -40,7 +40,7 @@ from("activemq:My.Queue")
 
 ### CBOR Options
 
-The CBOR dataformat supports 10 options, which are listed below.
+The CBOR dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

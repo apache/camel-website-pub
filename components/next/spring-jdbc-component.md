@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Spring JDBC component supports 4 options, which are listed below.
+The Spring JDBC component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -85,14 +85,14 @@ spring-jdbc:dataSourceName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **dataSourceName** (producer) | **Required** Name of DataSource to lookup in the Registry. If the name is dataSource or default, then Camel will attempt to lookup a default DataSource from the registry, meaning if there is a only one instance of DataSource found, then this DataSource will be used. |  | String |
 
-### Query Parameters (14 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -130,7 +130,7 @@ Enum values:
 
 ## Message Headers
 
-The Spring JDBC component supports 8 message header(s), which is/are listed below:
+The Spring JDBC component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

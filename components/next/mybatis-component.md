@@ -75,7 +75,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The MyBatis component supports 7 options, which are listed below.
+The MyBatis component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -96,14 +96,14 @@ mybatis:statement
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **statement** (common) | **Required** The statement name in the MyBatis XML mapping file which maps to the query, insert, update or delete operation you wish to evaluate. |  | String |
 
-### Query Parameters (30 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -247,7 +247,7 @@ Enum values:
 
 ## Message Headers
 
-The MyBatis component supports 2 message header(s), which is/are listed below:
+The MyBatis component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -63,7 +63,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Zendesk component supports 10 options, which are listed below.
+The Zendesk component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -87,7 +87,7 @@ zendesk:methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -868,7 +868,7 @@ Enum values:
 
  |  | ZendeskApiMethod |
 
-### Query Parameters (26 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -6706,7 +6706,7 @@ The zendesk/verifyUserIdentity API method has the parameters listed in the table
 
  | Long |
 
-In addition to the parameters above, the zendesk API can also use any of the [Query Parameters (26 parameters)](#_query_parameters).
+In addition to the parameters above, the zendesk API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelZendesk.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelZendesk.myParameterNameHere` header.
 

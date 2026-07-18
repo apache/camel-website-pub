@@ -57,7 +57,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Kamelet component supports 10 options, which are listed below.
+The Kamelet component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -81,7 +81,7 @@ kamelet:templateId/routeId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -89,7 +89,7 @@ With the following _path_ and _query_ parameters:
 | **templateId** (common) | **Required** The Route Template ID. |  | String |
 | **routeId** (advanced) | The Route ID. Default value notice: The ID will be auto-generated if not provided. |  | String |
 
-### Query Parameters (9 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OpenStack Neutron component supports 2 options, which are listed below.
+The OpenStack Neutron component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -89,14 +89,14 @@ openstack-neutron:host
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **host** (producer) | **Required** OpenStack host url. |  | String |
 
-### Query Parameters (9 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -146,7 +146,7 @@ Enum values:
 
 ## Message Headers
 
-The OpenStack Neutron component supports 22 message header(s), which is/are listed below:
+The OpenStack Neutron component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

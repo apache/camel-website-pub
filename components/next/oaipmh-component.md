@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OAI-PMH component supports 5 options, which are listed below.
+The OAI-PMH component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -87,14 +87,14 @@ oaipmh:baseUrl
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **baseUrl** (common) | **Required** Base URL of the repository to which the request is made through the OAI-PMH protocol. |  | String |
 
-### Query Parameters (30 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -194,7 +194,7 @@ Enum values:
 
 ## Message Headers
 
-The OAI-PMH component supports 2 message header(s), which is/are listed below:
+The OAI-PMH component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

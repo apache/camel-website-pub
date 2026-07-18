@@ -4,7 +4,7 @@ The Remove Variable EIP allows you to remove a single variable.
 
 ## Options
 
-The Remove Variable eip supports 0 options, which are listed below.
+The Remove Variable eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

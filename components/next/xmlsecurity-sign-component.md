@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The XML Security Sign component supports 29 options, which are listed below.
+The XML Security Sign component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -111,14 +111,14 @@ xmlsecurity-sign:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (producer) | **Required** The name part in the URI can be chosen by the user to distinguish between different signer endpoints within the camel context. |  | String |
 
-### Query Parameters (27 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -153,7 +153,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The XML Security Sign component supports 15 message header(s), which is/are listed below:
+The XML Security Sign component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

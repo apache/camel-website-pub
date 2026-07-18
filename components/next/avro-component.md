@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Avro RPC component supports 10 options, which are listed below.
+The Avro RPC component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,7 +88,7 @@ avro:transport:host:port/messageName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (4 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -112,7 +112,7 @@ Enum values:
 | **host** (common) | **Required** Hostname to use. |  | String |
 | **messageName** (common) | The name of the message to send. |  | String |
 
-### Query Parameters (10 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -144,7 +144,7 @@ Enum values:
 
 ## Message Headers
 
-The Avro RPC component supports 1 message header(s), which is/are listed below:
+The Avro RPC component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

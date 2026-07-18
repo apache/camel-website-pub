@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The JGroups component supports 6 options, which are listed below.
+The JGroups component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -90,14 +90,14 @@ jgroups:clusterName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **clusterName** (common) | **Required** The name of the JGroups cluster the component should connect to. |  | String |
 
-### Query Parameters (6 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -125,7 +125,7 @@ Enum values:
 
 ## Message Headers
 
-The JGroups component supports 4 message header(s), which is/are listed below:
+The JGroups component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

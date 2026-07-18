@@ -62,7 +62,7 @@ The Smooks configuration in `csv-smooks-unmarshal-config.xml` is as follows:
 
 ## Smooks Data Format Options
 
-The Smooks dataformat supports 1 options, which are listed below.
+The Smooks dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

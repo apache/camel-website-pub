@@ -8,7 +8,7 @@ This is particular useable in XML DSLs.
 
 ## Ref Language options
 
-The Ref language supports 2 options, which are listed below.
+The Ref language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

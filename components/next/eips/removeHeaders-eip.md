@@ -4,7 +4,7 @@ The Remove Headers EIP allows you to remove one or more headers from the [Messag
 
 ## Options
 
-The Remove Headers eip supports 0 options, which are listed below.
+The Remove Headers eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

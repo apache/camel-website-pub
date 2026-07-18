@@ -6,7 +6,7 @@ The PGP Data Format integrates the Java Cryptographic Extension into Camel, allo
 
 ## PGPDataFormat Options
 
-The PGP (Pretty Good Privacy Cryptographic) dataformat supports 14 options, which are listed below.
+The PGP (Pretty Good Privacy Cryptographic) dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

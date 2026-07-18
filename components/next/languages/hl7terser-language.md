@@ -6,7 +6,7 @@
 
 ## HL7 Terser Language options
 
-The HL7 Terser language supports 3 options, which are listed below.
+The HL7 Terser language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

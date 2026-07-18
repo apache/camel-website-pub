@@ -71,7 +71,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The PostgreSQL Event component supports 3 options, which are listed below.
+The PostgreSQL Event component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,7 +88,7 @@ pgevent:host:port/database/channel
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (4 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -98,7 +98,7 @@ With the following _path_ and _query_ parameters:
 | **database** (common) | **Required** The database name. The database name can take any characters because it is sent as a quoted identifier. It is part of the endpoint URI, so diacritical marks and non-Latin letters have to be URL encoded. |  | String |
 | **channel** (common) | **Required** The channel name. |  | String |
 
-### Query Parameters (11 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -131,7 +131,7 @@ Enum values:
 
 ## Message Headers
 
-The PostgreSQL Event component supports 1 message header(s), which is/are listed below:
+The PostgreSQL Event component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -22,7 +22,7 @@ You can easily generate classes from a schema, using maven, ant etc. More detail
 
 ## Avro Dataformat Options
 
-The Avro dataformat supports 1 options, which are listed below.
+The Avro dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

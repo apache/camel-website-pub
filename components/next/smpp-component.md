@@ -130,7 +130,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The SMPP component supports 43 options, which are listed below.
+The SMPP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -481,7 +481,7 @@ smpp:host:port
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -489,7 +489,7 @@ With the following _path_ and _query_ parameters:
 | **host** (common) | Hostname for the SMSC server to use. | localhost | String |
 | **port** (common) | Port number for the SMSC server to use. | 2775 | Integer |
 
-### Query Parameters (43 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -849,7 +849,7 @@ Enum values:
 
 ## Message Headers
 
-The SMPP component supports 42 message header(s), which is/are listed below:
+The SMPP component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

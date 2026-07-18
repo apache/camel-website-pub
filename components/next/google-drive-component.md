@@ -74,7 +74,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google Drive component supports 15 options, which are listed below.
+The Google Drive component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -103,7 +103,7 @@ google-drive:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -178,7 +178,7 @@ Enum values:
 
  |  | String |
 
-### Query Parameters (30 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -390,7 +390,7 @@ The google-drive/watch API method has the parameters listed in the table below:
 | **supportsTeamDrives** | Deprecated: Use supportsAllDrives instead | Boolean |
 | **teamDriveId** | Deprecated: Use driveId instead | String |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
@@ -425,7 +425,7 @@ The google-drive/stop API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **contentChannel** | The com.google.api.services.drive.model.Channel | Channel |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
@@ -530,7 +530,7 @@ The google-drive/update API method has the parameters listed in the table below:
 | **content** | The com.google.api.services.drive.model.Comment | Comment |
 | **fileId** | The ID of the file | String |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
@@ -664,7 +664,7 @@ The google-drive/update API method has the parameters listed in the table below:
 | **driveId** | The ID of the shared drive | String |
 | **useDomainAdminAccess** | Issue the request as a domain administrator; if set to true, then the requester will be granted access if they are an administrator of the domain to which the shared drive belongs | Boolean |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
@@ -951,7 +951,7 @@ The google-drive/watch API method has the parameters listed in the table below:
 | **supportsAllDrives** | Whether the requesting application supports both My Drives and shared drives | Boolean |
 | **supportsTeamDrives** | Deprecated: Use supportsAllDrives instead | Boolean |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
@@ -1079,7 +1079,7 @@ The google-drive/update API method has the parameters listed in the table below:
 | **transferOwnership** | Whether to transfer ownership to the specified user and downgrade the current owner to a writer | Boolean |
 | **useDomainAdminAccess** | Issue the request as a domain administrator | Boolean |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
@@ -1188,7 +1188,7 @@ The google-drive/update API method has the parameters listed in the table below:
 | **fileId** | The ID of the file | String |
 | **replyId** | The ID of the reply | String |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
@@ -1275,7 +1275,7 @@ The google-drive/update API method has the parameters listed in the table below:
 | **fileId** | The ID of the file | String |
 | **revisionId** | The ID of the revision | String |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
@@ -1377,7 +1377,7 @@ The google-drive/update API method has the parameters listed in the table below:
 | **teamDriveId** | The ID of the Team Drive | String |
 | **useDomainAdminAccess** | Issue the request as a domain administrator; if set to true, then the requester will be granted access if they are an administrator of the domain to which the Team Drive belongs | Boolean |
 
-In addition to the parameters above, the google-drive API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-drive API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 

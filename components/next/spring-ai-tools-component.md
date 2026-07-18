@@ -72,7 +72,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Spring AI Tools component supports 4 options, which are listed below.
+The Spring AI Tools component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -90,14 +90,14 @@ spring-ai-tools:toolId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **toolId** (common) | **Required** The tool id. |  | String |
 
-### Query Parameters (10 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

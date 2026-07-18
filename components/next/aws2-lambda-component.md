@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS Lambda component supports 22 options, which are listed below.
+The AWS Lambda component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -285,14 +285,14 @@ aws2-lambda:function
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **function** (producer) | **Required** Name of the Lambda function. |  | String |
 
-### Query Parameters (18 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -500,7 +500,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Lambda component supports 56 message header(s), which is/are listed below:
+The AWS Lambda component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

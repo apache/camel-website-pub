@@ -135,7 +135,7 @@ _XML-only: Spring XML bean registration_
 
 ## Grok Data format Options
 
-The Grok dataformat supports 4 options, which are listed below.
+The Grok dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

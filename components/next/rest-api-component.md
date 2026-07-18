@@ -53,7 +53,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The REST API component supports 3 options, which are listed below.
+The REST API component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -70,14 +70,14 @@ rest-api:path
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **path** (consumer) | **Required** The base path. |  | String |
 
-### Query Parameters (5 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

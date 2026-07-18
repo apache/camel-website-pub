@@ -109,7 +109,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The A2A component supports 3 options, which are listed below.
+The A2A component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -126,14 +126,14 @@ a2a:agentCardSource
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **agentCardSource** (common) | **Required** The agent card source (classpath:, file:, http://, https://, or plain name). |  | String |
 
-### Query Parameters (35 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -253,7 +253,7 @@ Enum values:
 
 ## Message Headers
 
-The A2A component supports 19 message header(s), which is/are listed below:
+The A2A component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

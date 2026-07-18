@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Spring LDAP component supports 2 options, which are listed below.
+The Spring LDAP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -86,14 +86,14 @@ spring-ldap:templateName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **templateName** (producer) | **Required** Name of the Spring LDAP Template bean. |  | String |
 
-### Query Parameters (3 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

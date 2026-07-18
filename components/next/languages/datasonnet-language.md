@@ -16,7 +16,7 @@ datasonnet("someDSExpression");
 
 ## DataSonnet Options
 
-The DataSonnet language supports 5 options, which are listed below.
+The DataSonnet language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

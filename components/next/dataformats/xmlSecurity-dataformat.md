@@ -13,7 +13,7 @@ The XMLSecurity Data Format also has improved support for namespaces when proces
 
 ## XMLSecurity Options
 
-The XML Security dataformat supports 13 options, which are listed below.
+The XML Security dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

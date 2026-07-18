@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The IRC component supports 4 options, which are listed below.
+The IRC component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -85,7 +85,7 @@ irc:hostname:port
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -93,7 +93,7 @@ With the following _path_ and _query_ parameters:
 | **hostname** (common) | **Required** Hostname for the IRC chat server. |  | String |
 | **port** (common) | Port number for the IRC chat server. If no port is configured then a default port of either 6667, 6668 or 6669 is used. |  | int |
 
-### Query Parameters (27 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -142,7 +142,7 @@ Enum values:
 
 ## Message Headers
 
-The IRC component supports 10 message header(s), which is/are listed below:
+The IRC component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

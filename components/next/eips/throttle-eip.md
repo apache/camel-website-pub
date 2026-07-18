@@ -8,7 +8,7 @@ Use a Throttler that controls the rate of how many or fast messages are flowing 
 
 ## Options
 
-The Throttle eip supports 0 options, which are listed below.
+The Throttle eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

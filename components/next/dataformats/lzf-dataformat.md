@@ -6,7 +6,7 @@ The LZF [Data Format](../../../manual/data-format.md) is a message compression a
 
 ## Options
 
-The LZF Deflate Compression dataformat supports 1 options, which are listed below.
+The LZF Deflate Compression dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

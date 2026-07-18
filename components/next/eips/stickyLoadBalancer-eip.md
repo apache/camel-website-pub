@@ -6,7 +6,7 @@ A stick mode means that a correlation key (calculated as [Expression](../../../m
 
 ## Options
 
-The Sticky Load Balancer eip supports 0 options, which are listed below.
+The Sticky Load Balancer eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

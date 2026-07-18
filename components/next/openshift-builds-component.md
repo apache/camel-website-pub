@@ -53,7 +53,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OpenShift Builds component supports 3 options, which are listed below.
+The OpenShift Builds component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -70,14 +70,14 @@ openshift-builds:masterUrl
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **masterUrl** (producer) | **Required** URL to a remote Kubernetes API server. This should only be used when your Camel application is connecting from outside Kubernetes. If you run your Camel application inside Kubernetes, then you can use local or client as the URL to tell Camel to run in local mode. If you connect remotely to Kubernetes, then you may also need some of the many other configuration options for secured connection with certificates, etc. |  | String |
 
-### Query Parameters (21 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -106,7 +106,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The OpenShift Builds component supports 4 message header(s), which is/are listed below:
+The OpenShift Builds component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

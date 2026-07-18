@@ -6,7 +6,7 @@ The [Dynamic Router](http://www.enterpriseintegrationpatterns.com/DynamicRouter.
 
 ## Options
 
-The Dynamic Router eip supports 0 options, which are listed below.
+The Dynamic Router eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

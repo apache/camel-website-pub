@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AI Tool component supports 6 options, which are listed below.
+The AI Tool component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -90,14 +90,14 @@ ai-tool:toolName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **toolName** (consumer) | **Required** The tool name. This is the name the LLM sees and uses to invoke the tool. |  | String |
 
-### Query Parameters (6 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

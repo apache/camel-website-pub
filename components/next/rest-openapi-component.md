@@ -95,7 +95,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The REST OpenApi component supports 20 options, which are listed below.
+The REST OpenApi component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -145,7 +145,7 @@ rest-openapi:specificationUri#operationId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -153,7 +153,7 @@ With the following _path_ and _query_ parameters:
 | **specificationUri** (common) | Path to the OpenApi specification file. The scheme, host base path are taken from this specification, but these can be overridden with properties on the component or endpoint level. If not given the component tries to load openapi.json resource from the classpath. Note that the host defined on the component and endpoint of this Component should contain the scheme, hostname and optionally the port in the URI syntax (i.e. [http://api.example.com:8080](http://api.example.com:8080)). Overrides component configuration. The OpenApi specification can be loaded from different sources by prefixing with file: classpath: http: https:. Support for https is limited to using the JDK installed UrlHandler, and as such it can be cumbersome to setup TLS/SSL certificates for https (such as setting a number of javax.net.ssl JVM system properties). How to do that consult the JDK documentation for UrlHandler. Default value notice: By default loads openapi.json file. | openapi.json | String |
 | **operationId** (producer) | ID of the operation from the OpenApi specification. This is required when using producer. |  | String |
 
-### Query Parameters (18 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

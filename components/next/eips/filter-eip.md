@@ -12,7 +12,7 @@ The message filter implemented in Camel is similar to `if (predicate) { block }`
 
 ## EIP options
 
-The Filter eip supports 0 options, which are listed below.
+The Filter eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

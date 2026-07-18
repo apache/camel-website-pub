@@ -31,7 +31,7 @@ The three data formats share common options and have dedicated ones, this sectio
 
 ## Options
 
-The uniVocity TSV dataformat supports 14 options, which are listed below.
+The uniVocity TSV dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -25,7 +25,7 @@ This page is documenting the last approach by using Transform Data Type EIP.
 
 ## Options
 
-The Transform Data Type eip supports 0 options, which are listed below.
+The Transform Data Type eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

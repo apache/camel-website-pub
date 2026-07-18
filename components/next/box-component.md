@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Box component supports 19 options, which are listed below.
+The Box component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -114,7 +114,7 @@ box:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -152,7 +152,7 @@ Enum values:
  |  | BoxApiName |
 | **methodName** (common) | **Required** What sub operation to use for the selected operation. |  | String |
 
-### Query Parameters (19 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -357,7 +357,7 @@ The box/updateCollaborationInfo API method has the parameters listed in the tabl
 | **collaborationId** | The id of collaboration | String |
 | **info** | Collaboration information to update | Info |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -470,7 +470,7 @@ The box/replyToComment API method has the parameters listed in the table below:
 | **commentId** | The id of comment to reply to | String |
 | **message** | The message for the reply | String |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -508,7 +508,7 @@ The box/getEnterpriseEvents API method has the parameters listed in the table be
 | **position** | The starting position of the event stream. May be null in which case all events within bounds returned. | String |
 | **types** | An optional list of event types to filter by | EventType\[\] |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -543,7 +543,7 @@ The box/listen API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **startingPosition** | The starting position of the event stream | Long |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -914,7 +914,7 @@ The box/uploadNewFileVersion API method has the parameters listed in the table b
 | **listener** | A listener for monitoring the upload’s progress | ProgressListener |
 | **modified** | The content modified date that will be given to the uploaded file | Date |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -1115,7 +1115,7 @@ The box/updateFolderInfo API method has the parameters listed in the table below
 | **folderId** | The id of folder to update | String |
 | **info** | The updated information | Info |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -1293,7 +1293,7 @@ The box/updateGroupMembershipInfo API method has the parameters listed in the ta
 | **groupMembershipId** | The id of group membership to update | String |
 | **info** | The updated information | Info |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -1329,7 +1329,7 @@ The box/searchFolder API method has the parameters listed in the table below:
 | **folderId** | The id of folder searched | String |
 | **query** | The search query | String |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -1489,7 +1489,7 @@ The box/updateTaskInfo API method has the parameters listed in the table below:
 | **info** | The updated information | Info |
 | **taskId** | The id of task | String |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 
@@ -1683,7 +1683,7 @@ The box/updateUserInfo API method has the parameters listed in the table below:
 | **info** | The updated information | Info |
 | **userId** | The id of user to update | String |
 
-In addition to the parameters above, the box API can also use any of the [Query Parameters (19 parameters)](#_query_parameters).
+In addition to the parameters above, the box API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBox.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBox.myParameterNameHere` header.
 

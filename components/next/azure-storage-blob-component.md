@@ -80,7 +80,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure Storage Blob Service component supports 51 options, which are listed below.
+The Azure Storage Blob Service component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -264,7 +264,7 @@ azure-storage-blob:accountName/containerName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -272,7 +272,7 @@ With the following _path_ and _query_ parameters:
 | **accountName** (common) | Azure account name to be used for authentication with azure blob services. |  | String |
 | **containerName** (common) | The blob container name. |  | String |
 
-### Query Parameters (66 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -528,7 +528,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Storage Blob Service component supports 79 message header(s), which is/are listed below:
+The Azure Storage Blob Service component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Stitch component supports 10 options, which are listed below.
+The Stitch component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -108,14 +108,14 @@ stitch:tableName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **tableName** (producer) | The name of the destination table the data is being pushed to. Table names must be unique in each destination schema, or loading issues will occur. Note: The number of characters in the table name should be within the destination’s allowed limits or data will rejected. |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -145,7 +145,7 @@ Enum values:
 
 ## Message Headers
 
-The Stitch component supports 6 message header(s), which is/are listed below:
+The Stitch component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

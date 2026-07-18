@@ -87,7 +87,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The LangChain4j Embedding Store component supports 9 options, which are listed below.
+The LangChain4j Embedding Store component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -126,14 +126,14 @@ langchain4j-embeddingstore:embeddingStoreId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **embeddingStoreId** (producer) | **Required** The id of the embedding store. |  | String |
 
-### Query Parameters (7 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -164,7 +164,7 @@ Enum values:
 
 ## Message Headers
 
-The LangChain4j Embedding Store component supports 4 message header(s), which is/are listed below:
+The LangChain4j Embedding Store component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

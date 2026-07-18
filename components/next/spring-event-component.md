@@ -60,7 +60,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Spring Event component supports 3 options, which are listed below.
+The Spring Event component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -77,14 +77,14 @@ spring-event:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (common) | Name of endpoint. |  | String |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

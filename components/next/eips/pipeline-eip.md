@@ -8,7 +8,7 @@ With Camel, you can separate your processing across multiple independent [Endpoi
 
 ## Options
 
-The Pipeline eip supports 0 options, which are listed below.
+The Pipeline eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

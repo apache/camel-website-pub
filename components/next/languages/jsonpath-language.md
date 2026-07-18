@@ -6,7 +6,7 @@ Camel supports [JSONPath](https://github.com/json-path/JsonPath/) to allow using
 
 ## JSONPath Options
 
-The JSONPath language supports 9 options, which are listed below.
+The JSONPath language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

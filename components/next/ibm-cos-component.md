@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The IBM Cloud Object Storage component supports 29 options, which are listed below.
+The IBM Cloud Object Storage component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -142,14 +142,14 @@ ibm-cos:bucketName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **bucketName** (common) | **Required** Bucket name. |  | String |
 
-### Query Parameters (45 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -297,7 +297,7 @@ Enum values:
 
 ## Message Headers
 
-The IBM Cloud Object Storage component supports 21 message header(s), which is/are listed below:
+The IBM Cloud Object Storage component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

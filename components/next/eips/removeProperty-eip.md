@@ -4,7 +4,7 @@ The Remove Property EIP allows you to remove a single property from the `Exchang
 
 ## Options
 
-The Remove Property eip supports 0 options, which are listed below.
+The Remove Property eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

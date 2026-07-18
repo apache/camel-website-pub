@@ -2,7 +2,7 @@
 
 This page documents all the specific options for the [Fault Tolerance](fault-tolerance-eip.md) EIP.
 
-The Fault Tolerance Configuration eip supports 0 options, which are listed below.
+The Fault Tolerance Configuration eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

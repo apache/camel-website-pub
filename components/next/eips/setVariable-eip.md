@@ -4,7 +4,7 @@ The SetVariable EIP is used for setting an [Exchange](../../../manual/exchange.m
 
 ## Options
 
-The Set Variable eip supports 0 options, which are listed below.
+The Set Variable eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

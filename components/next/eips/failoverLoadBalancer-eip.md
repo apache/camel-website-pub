@@ -4,7 +4,7 @@ This EIP allows using fail-over (in case of failures, the exchange will be tried
 
 ## Options
 
-The Failover Load Balancer eip supports 0 options, which are listed below.
+The Failover Load Balancer eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

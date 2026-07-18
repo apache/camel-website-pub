@@ -74,7 +74,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google Sheets Stream component supports 20 options, which are listed below.
+The Google Sheets Stream component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -141,14 +141,14 @@ google-sheets-stream:spreadsheetId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **spreadsheetId** (consumer) | **Required** Specifies the spreadsheet identifier that is used to identify the target to obtain. |  | String |
 
-### Query Parameters (33 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -285,7 +285,7 @@ Enum values:
 
 ## Message Headers
 
-The Google Sheets Stream component supports 6 message header(s), which is/are listed below:
+The Google Sheets Stream component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

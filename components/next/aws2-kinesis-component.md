@@ -69,7 +69,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS Kinesis component supports 36 options, which are listed below.
+The AWS Kinesis component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -268,14 +268,14 @@ aws2-kinesis:streamName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **streamName** (common) | **Required** Name of the stream. |  | String |
 
-### Query Parameters (50 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -545,7 +545,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Kinesis component supports 8 message header(s), which is/are listed below:
+The AWS Kinesis component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -556,6 +556,7 @@ The AWS Kinesis component supports 8 message header(s), which is/are listed belo
 | **CamelMessageTimestamp** (common) Constant: [`MESSAGE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#MESSAGE_TIMESTAMP) | The timestamp of the message. |  | long |
 | **CamelKinesisDbResumeAction** (consumer) Constant: [`RESUME_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#RESUME_ACTION) | The resume action to execute when resuming. |  | String |
 | **CamelAwsKinesisShardId** (common) Constant: [`SHARD_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#SHARD_ID) | The shard ID of the shard where the data record was placed. |  | String |
+| **CamelAwsKinesisPartitionKeys** (producer) Constant: [`PARTITION_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#PARTITION_KEYS) | A list of partition keys for batch operations. When set, each record in the batch is assigned the partition key at the corresponding index, allowing records to be routed to different shards. If not set, the single CamelAwsKinesisPartitionKey header is used for all records. |  | List |
 | **CamelAwsKinesisFailedRecordCount** (producer) Constant: [`FAILED_RECORD_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#FAILED_RECORD_COUNT) | The number of records that failed in a batch put operation. |  | Integer |
 | **CamelAwsKinesisRecordCount** (producer) Constant: [`RECORD_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#RECORD_COUNT) | The total number of records in a batch put operation. |  | Integer |
 
@@ -572,6 +573,12 @@ This component implements the Batch Consumer.
 This allows you, for instance, to know how many messages exist in this batch and for instance, let the Aggregator aggregate this number of messages.
 
 The consumer is able to consume either from a single specific shard or all available shards (multiple shards consumption) of Amazon Kinesis, therefore, if you leave the 'shardId' property in the DSL configuration empty, then it’ll consume all available shards otherwise only the specified shard corresponding to the shardId will be consumed.
+
+### Custom Resume Action
+
+The consumer supports a custom `KinesisResumeAction` for controlling where each shard starts reading (e.g., resuming from a persisted sequence number). Register a subclass in the Camel registry under the key `CamelKinesisDbResumeAction`.
+
+The consumer creates a separate instance per shard via reflection to avoid concurrent mutation when multiple shards are processed in parallel. Because of this, custom subclasses **must** provide a public no-arg constructor. Per-shard state (`builder`, `shardId`, `streamName`) is injected via setters after construction.
 
 ### Batch Producer
 

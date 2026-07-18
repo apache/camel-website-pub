@@ -71,7 +71,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Geocoder component supports 3 options, which are listed below.
+The Geocoder component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,7 +88,7 @@ geocoder:address:latlng
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -96,7 +96,7 @@ With the following _path_ and _query_ parameters:
 | **address** (producer) | The geo address which should be prefixed with address:. |  | String |
 | **latlng** (producer) | The geo latitude and longitude which should be prefixed with latlng:. |  | String |
 
-### Query Parameters (15 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -133,7 +133,7 @@ Enum values:
 
 ## Message Headers
 
-The Geocoder component supports 11 message header(s), which is/are listed below:
+The Geocoder component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

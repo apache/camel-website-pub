@@ -66,6 +66,31 @@ The `--open-telemetry-agent-export` option has been extended with new values and
 
 The `camel.opentelemetry2.exportTarget` property in `OpenTelemetryTracer` now accepts any non-empty value to signal external export mode (previously only `"jaeger"` was recognized).
 
+#### Website installers for the Camel CLI
+
+Two canonical installer scripts are now available for installing the [Camel CLI Launcher](camel-jbang-launcher.md) without a package manager:
+
+```bash
+curl -fsSL https://camel.apache.org/install.sh | sh
+```
+
+```powershell
+irm https://camel.apache.org/install.ps1 | iex
+```
+
+With no arguments, both installers resolve and install the latest published release. An exact version can be requested instead with `--version X.Y.Z` (`install.sh`) or `-Version X.Y.Z` (`install.ps1`); the requested version is validated and matched against the fetched manifest before anything is downloaded.
+
+Both installers download the release archive from Maven Central, verify it against a SHA-256 recorded in a signed-path manifest before extracting it, and reject archives containing absolute paths, `../` traversal, escaping symlinks/reparse points, or more than one top-level directory. The staged launcher is then run once to confirm a Java 17+ runtime can be discovered (see "Camel CLI launcher Java runtime discovery" above); if that check fails, the previously active installation, if any, is left untouched and the installer exits nonzero.
+
+Installation is always per-user and never requires elevation or `sudo`:
+
+-   POSIX (`install.sh`) installs under `${XDG_DATA_HOME:-$HOME/.local/share}/camel-cli/versions/<version>` and activates it via a symlink at `$HOME/.local/bin/camel`. The installer never writes to shell profile files (`.bashrc`, `.profile`, etc.); if `$HOME/.local/bin` is not already on `PATH`, it prints guidance instead.
+    
+-   Windows (`install.ps1`) installs under `%LOCALAPPDATA%\Apache Camel\cli\versions\<version>` and activates it via a `camel.cmd` shim at `%LOCALAPPDATA%\Apache Camel\bin\camel.cmd` that delegates to the staged `camel-x64.exe` or `camel-arm64.exe` (auto-detected). The bin directory is added once, case-insensitively, to the current user’s `PATH`; the machine `PATH` is never modified.
+    
+
+Previously installed version directories are left in place after an upgrade or downgrade and must be removed manually. Reinstalling the same version replaces that version directory.
+
 ### camel-langchain4j-agent
 
 The `Agent.chat()` method return type has changed from `String` to `Result<String>` (from `dev.langchain4j.service.Result`). This allows the agent producer to expose token usage (input, output, total token count) and finish reason as exchange headers, consistent with the chat, tools, and embeddings components.
@@ -79,6 +104,15 @@ String chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
 // After
 Result<String> chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
 ```
+
+### camel-openai
+
+The `conversationMemory` feature on the `chat-completion` operation has two behavior fixes:
+
+-   User messages are now stored in the `CamelOpenAIConversationHistory` exchange property (configurable via `conversationHistoryProperty`) alongside assistant responses. Previously only assistant turns were appended, so code that reads the history property directly will see roughly twice as many entries (alternating user and assistant messages) compared to Camel 4.21 and earlier.
+    
+-   When `systemMessage` is set together with `conversationMemory=true`, the conversation history is now correctly cleared via `exchange.removeProperty()`. Previously `removeHeader()` was used on a property that is stored as an exchange property, so the documented reset had no effect and stale history was kept.
+    
 
 ### camel-management - Throughput MBean attribute uses EWMA smoothing
 
@@ -194,6 +228,12 @@ When consuming a CloudEvent in structured content mode (`application/cloudevents
 
 Ordinary CloudEvent extension attributes are unaffected. If a route relied on `Camel*`\-named fields being propagated from the structured payload, set them explicitly after consuming the event.
 
+### camel-ironmq - message envelope header filtering
+
+When consuming a message with `preserveHeaders=true`, the IronMQ consumer now applies a `HeaderFilterStrategy` to the header entries embedded in the JSON message envelope before mapping them onto the Camel message. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) present in the envelope are no longer mapped onto the message, consistent with the inbound header filtering performed by other consumers.
+
+Ordinary application headers are unaffected. If a route relied on `Camel*` headers being propagated from the message envelope, set them explicitly after consuming the message.
+
 ### camel-pinecone
 
 The `tls` endpoint option now correctly documents its default as `false` (previously the catalog listed the default as `true`, but the runtime value was always `false`). No behavioral change — the runtime default was already `false`.
@@ -253,6 +293,16 @@ The `camel catalog` commands (`camel catalog component`, `camel catalog dataform
 Terminal width is now detected on Windows (`cmd` / PowerShell) via `mode con`, in addition to the existing `COLUMNS` / `stty size` detection. When no terminal can be detected (for example when the output is piped or redirected), the width falls back to 120 columns. For full, untruncated output suitable for scripting, use the `--json` option.
 
 The `camel infra list` table now sizes its `DESCRIPTION` column to the terminal width, and truncates the `IMPLEMENTATION` and `SERVICE_DATA` columns with an ellipsis instead of letting the raw service data overflow the terminal. The complete, structured service data remains available via `--json`.
+
+### camel-aws2-kinesis - Fixed-shardId consumer no longer calls DescribeStream on every poll
+
+The Kinesis consumer with a configured `shardId` previously called the `DescribeStream` API on every poll cycle to locate the shard, risking AWS rate limits (10 TPS per account) and failing for streams with more than 100 shards (no pagination). The consumer now uses the same cached shard list from the `ShardMonitor` background thread that the multi-shard path already uses. The `ShardMonitor` uses the `ListShards` API (paginated, 100 TPS limit) and now paginates through all pages, supporting streams with any number of shards.
+
+This is a transparent performance improvement with no configuration changes required.
+
+### camel-aws2-kinesis - Per-record partition keys in batch producer
+
+The batch producer (body is an `Iterable`) previously applied a single `CamelAwsKinesisPartitionKey` header to all records, routing them all to the same shard. A new `CamelAwsKinesisPartitionKeys` header (`List<String>`) is now supported: when set, each record in the batch is assigned the partition key at the corresponding index. If the list has fewer entries than records, the remaining records fall back to the single `CamelAwsKinesisPartitionKey` header. The existing single-key behavior is unchanged when the new header is not set.
 
 ### camel-azure-storage-blob / camel-azure-storage-datalake - download contained within fileDir
 
@@ -380,6 +430,14 @@ Two behavior changes follow:
 -   On startup the consumer tails events from the moment it starts, rather than first replaying the single most-recent historical event.
     
 
+### camel-aws2-kinesis - Custom KinesisResumeAction requires a public no-arg constructor
+
+Custom `KinesisResumeAction` subclasses registered in the Camel registry under the `CamelKinesisDbResumeAction` key must now provide a public no-arg constructor. The consumer creates a separate instance per shard via reflection to avoid concurrent mutation when multiple shards are processed in parallel. Per-shard state (`builder`, `shardId`, `streamName`) is injected via setters after construction. Any initialization that was previously done in a parameterized constructor should be moved to setters or to the `evalEntry` method.
+
+### camel-aws2-sqs - per-message delay skipped for delay queues and FIFO queues
+
+The SQS producer no longer sets per-message `DelaySeconds` when `delayQueue=true` (delay is queue-level) or when the queue is FIFO (AWS rejects per-message delay with `InvalidParameterValue`). Previously the `CamelAwsSqsDelayHeader` header was applied unconditionally, which could cause AWS errors on FIFO queues and was redundant on delay queues. If your route relied on per-message delay overrides on a delay queue, the override will now be silently ignored.
+
 ### camel-xslt-saxon - secure processing now applied unconditionally
 
 The `secureProcessing` option (default `true`) is now applied to the Saxon `TransformerFactory` unconditionally. Previously it was only set when `saxonExtensionFunctions` was configured, meaning the default configuration silently ran without `FEATURE_SECURE_PROCESSING`.
@@ -387,6 +445,14 @@ The `secureProcessing` option (default `true`) is now applied to the Saxon `Tran
 Additionally, the Saxon factory now sets `ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_STYLESHEET` to empty strings (matching the behavior of the plain `xslt` component), restricting stylesheet-driven external fetches.
 
 Users of Saxon Professional or Enterprise editions who rely on Java extension functions called from XSLT stylesheets must now explicitly set `secureProcessing=false` on the endpoint.
+
+### camel-core - InMemorySagaCoordinator now propagates finalization outcome
+
+The `InMemorySagaCoordinator` used for the Saga EIP (when no external LRA coordinator is configured) previously returned an already-completed future from `compensate()` and `complete()`, meaning the exchange finished before any compensation or completion endpoints had been invoked. Finalization failures were only logged as warnings and never propagated to the caller.
+
+The coordinator now returns the actual finalization future, so the exchange waits for the compensation or completion callbacks to finish (including retries). If all retry attempts fail, the failure is propagated as an exception on the exchange, consistent with the `camel-lra` coordinator behavior.
+
+This is a behavior change: routes that previously completed immediately regardless of compensation/completion outcome will now wait for finalization and may see exceptions that were previously swallowed. If your route relies on fire-and-forget saga finalization, consider using `MANUAL` completion mode instead.
 
 ### camel-xslt / camel-xslt-saxon - transformerFactoryConfigurationStrategy now honored
 

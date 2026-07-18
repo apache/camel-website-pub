@@ -6,7 +6,7 @@ The [Content-Based Router](http://www.enterpriseintegrationpatterns.com/ContentB
 
 ## Choice options
 
-The Choice eip supports 0 options, which are listed below.
+The Choice eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

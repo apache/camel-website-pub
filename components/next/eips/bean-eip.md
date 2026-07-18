@@ -12,7 +12,7 @@ Where **beanID** can be any string used to look up the bean in the [Registry](..
 
 ## EIP options
 
-The Bean eip supports 0 options, which are listed below.
+The Bean eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

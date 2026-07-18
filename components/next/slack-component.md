@@ -74,7 +74,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Slack component supports 7 options, which are listed below.
+The Slack component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -95,14 +95,14 @@ slack:channel
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **channel** (common) | **Required** The channel name (syntax #name) or slack user (syntax userName) to send a message directly to an user. |  | String |
 
-### Query Parameters (29 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

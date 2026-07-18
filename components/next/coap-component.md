@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The CoAP component supports 6 options, which are listed below.
+The CoAP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -84,14 +84,14 @@ coap:uri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **uri** (common) | The URI for the CoAP endpoint. |  | URI |
 
-### Query Parameters (19 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -185,7 +185,7 @@ Enum values:
 
 ## Message Headers
 
-The CoAP component supports 5 message header(s), which is/are listed below:
+The CoAP component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

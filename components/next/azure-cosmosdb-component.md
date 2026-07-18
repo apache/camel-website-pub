@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure CosmosDB component supports 31 options, which are listed below.
+The Azure CosmosDB component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -201,7 +201,7 @@ azure-cosmosdb:databaseName/containerName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -209,7 +209,7 @@ With the following _path_ and _query_ parameters:
 | **databaseName** (common) | The name of the Cosmos database that component should connect to. In case you are producing data and have createDatabaseIfNotExists=true, the component will automatically auto create a Cosmos database. |  | String |
 | **containerName** (common) | The name of the Cosmos container that component should connect to. In case you are producing data and have createContainerIfNotExists=true, the component will automatically auto create a Cosmos container. |  | String |
 
-### Query Parameters (31 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

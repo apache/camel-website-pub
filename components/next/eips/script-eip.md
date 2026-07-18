@@ -11,7 +11,7 @@ This is useful when you need to invoke some logic not in Java code such as JavaS
 
 ## Options
 
-The Script eip supports 0 options, which are listed below.
+The Script eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

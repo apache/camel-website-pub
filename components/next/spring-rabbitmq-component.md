@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Spring RabbitMQ component supports 31 options, which are listed below.
+The Spring RabbitMQ component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -148,14 +148,14 @@ spring-rabbitmq:exchangeName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **exchangeName** (common) | **Required** The exchange name determines the exchange to which the produced messages will be sent to. In the case of consumers, the exchange name determines the exchange the queue will be bound to. Note: to use default exchange then do not use empty name, but use default instead. |  | String |
 
-### Query Parameters (41 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -305,7 +305,7 @@ Enum values:
 
 ## Message Headers
 
-The Spring RabbitMQ component supports 20 message header(s), which is/are listed below:
+The Spring RabbitMQ component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

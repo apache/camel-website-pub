@@ -100,7 +100,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google BigQuery component supports 5 options, which are listed below.
+The Google BigQuery component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -119,7 +119,7 @@ google-bigquery:projectId:datasetId:tableId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -128,7 +128,7 @@ With the following _path_ and _query_ parameters:
 | **datasetId** (common) | **Required** BigQuery Dataset Id. |  | String |
 | **tableId** (common) | BigQuery table id. |  | String |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -140,7 +140,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The Google BigQuery component supports 4 message header(s), which is/are listed below:
+The Google BigQuery component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -6,7 +6,7 @@ JAXB is a Data Format which uses the JAXB XML marshalling standard to unmarshal 
 
 ## Options
 
-The JAXB dataformat supports 20 options, which are listed below.
+The JAXB dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

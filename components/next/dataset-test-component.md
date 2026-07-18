@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The DataSet Test component supports 4 options, which are listed below.
+The DataSet Test component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -83,14 +83,14 @@ dataset-test:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (producer) | **Required** Name of endpoint to lookup in the registry to use for polling messages used for testing. |  | String |
 
-### Query Parameters (17 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

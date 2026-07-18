@@ -6,7 +6,7 @@ The Crypto Data Format integrates the Java Cryptographic Extension into Camel, a
 
 ## CryptoDataFormat Options
 
-The Crypto (Java Cryptographic Extension) dataformat supports 9 options, which are listed below.
+The Crypto (Java Cryptographic Extension) dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

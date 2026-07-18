@@ -8,7 +8,7 @@ Use a special filter to mark the message to be stopped.
 
 ## Options
 
-The Stop eip supports 0 options, which are listed below.
+The Stop eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

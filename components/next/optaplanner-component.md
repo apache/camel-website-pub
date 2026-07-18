@@ -71,7 +71,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OptaPlanner component supports 3 options, which are listed below.
+The OptaPlanner component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,14 +88,14 @@ optaplanner:problemName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **problemName** (common) | **Required** Problem name. |  | String |
 
-### Query Parameters (10 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -127,7 +127,7 @@ Enum values:
 
 ## Message Headers
 
-The OptaPlanner component supports 5 message header(s), which is/are listed below:
+The OptaPlanner component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

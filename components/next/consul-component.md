@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Consul component supports 26 options, which are listed below.
+The Consul component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -144,14 +144,14 @@ consul:apiEndpoint
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **apiEndpoint** (common) | **Required** The API endpoint. |  | String |
 
-### Query Parameters (25 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -236,7 +236,7 @@ Enum values:
 
 ## Message Headers
 
-The Consul component supports 31 message header(s), which is/are listed below:
+The Consul component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

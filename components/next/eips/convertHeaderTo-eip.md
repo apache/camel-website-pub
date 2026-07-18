@@ -2,7 +2,7 @@
 
 The ConvertHeaderTo EIP allows you to transform message header to a different type.
 
-The Convert Header To eip supports 0 options, which are listed below.
+The Convert Header To eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

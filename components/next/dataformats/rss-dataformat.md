@@ -20,7 +20,11 @@ The purpose of this feature is to make it possible to use Camel’s lovely built
 
 ## Options
 
-The RSS dataformat has no options.
+The RSS dataformat supports the following options which are listed below.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
 
 ## Example
 

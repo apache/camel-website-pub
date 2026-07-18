@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Validator component supports 3 options, which are listed below.
+The Validator component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -81,14 +81,14 @@ validator:resourceUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **resourceUri** (producer) | **Required** URL to a local resource on the classpath, or a reference to lookup a bean in the Registry, or a full URL to a remote resource or resource on the file system which contains the XSD to validate against. |  | String |
 
-### Query Parameters (10 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

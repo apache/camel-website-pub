@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Solr component supports 13 options, which are listed below.
+The Solr component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -95,7 +95,7 @@ solr:host:port/basePath
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -104,7 +104,7 @@ With the following _path_ and _query_ parameters:
 | **port** (producer) | The solr instance port number. | 8983 | int |
 | **basePath** (producer) | The solr instance base path (usually /solr). | /solr | String |
 
-### Query Parameters (17 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -147,7 +147,7 @@ Enum values:
 
 ## Message Headers
 
-The Solr component supports 9 message header(s), which is/are listed below:
+The Solr component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

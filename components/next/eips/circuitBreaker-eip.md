@@ -13,7 +13,7 @@ The states are as follows:
 -   **Half-Open**: After a short period in the open state, an operation is attempted to see whether it can complete successfully, and depending on the outcome, it will transfer to either open or closed state.
     
 
-The Circuit Breaker eip supports 7 options, which are listed below.
+The Circuit Breaker eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -30,7 +30,7 @@ The Circuit Breaker eip supports 7 options, which are listed below.
 
 ## Exchange properties
 
-The Circuit Breaker eip supports 7 exchange properties, which are listed below.
+The Circuit Breaker eip supports the following exchange properties which are listed below.
 
 The exchange properties are set on the `Exchange` by the EIP, unless otherwise specified in the description. This means those properties are available after this EIP has completed processing the `Exchange`.
 

@@ -8,7 +8,7 @@ XML Tokenize is capable of not only recognizing XML namespaces and hierarchical 
 
 ## XML Tokenizer Options
 
-The XML Tokenize language supports 5 options, which are listed below.
+The XML Tokenize language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

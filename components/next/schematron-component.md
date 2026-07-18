@@ -57,7 +57,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Schematron component supports 2 options, which are listed below.
+The Schematron component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -73,14 +73,14 @@ schematron:path
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **path** (producer) | **Required** The path to the schematron rules file. Can either be in class path or location in the file system. |  | String |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

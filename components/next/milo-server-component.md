@@ -75,7 +75,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OPC UA Server component supports 20 options, which are listed below.
+The OPC UA Server component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -131,14 +131,14 @@ milo-server:itemId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **itemId** (common) | **Required** ID of the item. |  | String |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

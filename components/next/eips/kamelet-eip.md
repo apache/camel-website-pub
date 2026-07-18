@@ -115,7 +115,7 @@ When calling a Kamelet, you may refer to the name (template id) of the Kamelet i
 
 ## Options
 
-The Kamelet eip supports 0 options, which are listed below.
+The Kamelet eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

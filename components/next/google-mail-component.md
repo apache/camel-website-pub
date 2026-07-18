@@ -74,7 +74,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google Mail component supports 13 options, which are listed below.
+The Google Mail component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -101,7 +101,7 @@ google-mail:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -176,7 +176,7 @@ Enum values:
 
  |  | String |
 
-### Query Parameters (29 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -327,7 +327,7 @@ The google-mail/get API method has the parameters listed in the table below:
 | **messageId** | The ID of the message containing the attachment | String |
 | **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
 
-In addition to the parameters above, the google-mail API can also use any of the [Query Parameters (29 parameters)](#_query_parameters).
+In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleMail.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleMail.myParameterNameHere` header.
 
@@ -458,7 +458,7 @@ The google-mail/update API method has the parameters listed in the table below:
 | **mediaContent** | The media HTTP content | AbstractInputStreamContent |
 | **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
 
-In addition to the parameters above, the google-mail API can also use any of the [Query Parameters (29 parameters)](#_query_parameters).
+In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleMail.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleMail.myParameterNameHere` header.
 
@@ -498,7 +498,7 @@ The google-mail/list API method has the parameters listed in the table below:
 | **startHistoryId** | Required | BigInteger |
 | **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
 
-In addition to the parameters above, the google-mail API can also use any of the [Query Parameters (29 parameters)](#_query_parameters).
+In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleMail.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleMail.myParameterNameHere` header.
 
@@ -615,7 +615,7 @@ The google-mail/update API method has the parameters listed in the table below:
 | **id** | The ID of the label to update | String |
 | **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
 
-In addition to the parameters above, the google-mail API can also use any of the [Query Parameters (29 parameters)](#_query_parameters).
+In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleMail.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleMail.myParameterNameHere` header.
 
@@ -847,7 +847,7 @@ The google-mail/untrash API method has the parameters listed in the table below:
 | **id** | The ID of the message to remove from Trash | String |
 | **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
 
-In addition to the parameters above, the google-mail API can also use any of the [Query Parameters (29 parameters)](#_query_parameters).
+In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleMail.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleMail.myParameterNameHere` header.
 
@@ -970,7 +970,7 @@ The google-mail/untrash API method has the parameters listed in the table below:
 | **id** | The ID of the thread to remove from Trash | String |
 | **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
 
-In addition to the parameters above, the google-mail API can also use any of the [Query Parameters (29 parameters)](#_query_parameters).
+In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleMail.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleMail.myParameterNameHere` header.
 
@@ -1036,7 +1036,7 @@ The google-mail/watch API method has the parameters listed in the table below:
 | **content** | The com.google.api.services.gmail.model.WatchRequest | WatchRequest |
 | **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
 
-In addition to the parameters above, the google-mail API can also use any of the [Query Parameters (29 parameters)](#_query_parameters).
+In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleMail.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleMail.myParameterNameHere` header.
 

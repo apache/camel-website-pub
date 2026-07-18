@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS Bedrock Agent Runtime component supports 28 options, which are listed below.
+The AWS Bedrock Agent Runtime component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -78,11 +78,115 @@ The AWS Bedrock Agent Runtime component supports 28 options, which are listed be
 
 Enum values:
 
--   anthropic.claude-instant-v1
+-   amazon.titan-text-express-v1
     
--   anthropic.claude-v2
+-   amazon.titan-text-lite-v1
     
--   anthropic.claude-v2:1
+-   amazon.titan-image-generator-v1
+    
+-   amazon.titan-embed-text-v1
+    
+-   amazon.titan-embed-image-v1
+    
+-   amazon.titan-text-premier-v1:0
+    
+-   amazon.titan-embed-text-v2:0
+    
+-   amazon.titan-image-generator-v2:0
+    
+-   amazon.nova-canvas-v1:0
+    
+-   amazon.nova-lite-v1:0
+    
+-   amazon.nova-micro-v1:0
+    
+-   amazon.nova-premier-v1:0
+    
+-   amazon.nova-pro-v1:0
+    
+-   amazon.nova-reel-v1:0
+    
+-   amazon.nova-reel-v1:1
+    
+-   amazon.nova-sonic-v1:0
+    
+-   amazon.rerank-v1:0
+    
+-   ai21.jamba-1-5-large-v1:0
+    
+-   ai21.jamba-1-5-mini-v1:0
+    
+-   anthropic.claude-3-sonnet-20240229-v1:0
+    
+-   anthropic.claude-3-5-sonnet-20240620-v1:0
+    
+-   anthropic.claude-3-5-sonnet-20241022-v2:0
+    
+-   anthropic.claude-3-haiku-20240307-v1:0
+    
+-   anthropic.claude-3-5-haiku-20241022-v1:0
+    
+-   anthropic.claude-3-opus-20240229-v1:0
+    
+-   anthropic.claude-3-7-sonnet-20250219-v1:0
+    
+-   anthropic.claude-opus-4-20250514-v1:0
+    
+-   anthropic.claude-sonnet-4-20250514-v1:0
+    
+-   cohere.command-r-plus-v1:0
+    
+-   cohere.command-r-v1:0
+    
+-   cohere.embed-english-v3
+    
+-   cohere.embed-multilingual-v3
+    
+-   cohere.rerank-v3-5:0
+    
+-   meta.llama3-8b-instruct-v1:0
+    
+-   meta.llama3-70b-instruct-v1:0
+    
+-   meta.llama3-1-8b-instruct-v1:0
+    
+-   meta.llama3-1-70b-instruct-v1:0
+    
+-   meta.llama3-1-405b-instruct-v1:0
+    
+-   meta.llama3-2-1b-instruct-v1:0
+    
+-   meta.llama3-2-3b-instruct-v1:0
+    
+-   meta.llama3-2-11b-instruct-v1:0
+    
+-   meta.llama3-2-90b-instruct-v1:0
+    
+-   meta.llama3-3-70b-instruct-v1:0
+    
+-   meta.llama4-maverick-17b-instruct-v1:0
+    
+-   meta.llama4-scout-17b-instruct-v1:0
+    
+-   mistral.mistral-7b-instruct-v0:2
+    
+-   mistral.mixtral-8x7b-instruct-v0:1
+    
+-   mistral.mistral-large-2402-v1:0
+    
+-   mistral.mistral-large-2407-v1:0
+    
+-   mistral.mistral-small-2402-v1:0
+    
+-   mistral.pixtral-large-2502-v1:0
+    
+-   stability.sd3-5-large-v1:0
+    
+-   stability.stable-image-control-sketch-v1:0
+    
+-   stability.stable-image-control-structure-v1:0
+    
+-   stability.stable-image-core-v1:1
     
 
 
@@ -198,14 +302,14 @@ aws-bedrock-agent-runtime:label
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **label** (producer) | **Required** Logical name. |  | String |
 
-### Query Parameters (24 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -216,11 +320,115 @@ With the following _path_ and _query_ parameters:
 
 Enum values:
 
--   anthropic.claude-instant-v1
+-   amazon.titan-text-express-v1
     
--   anthropic.claude-v2
+-   amazon.titan-text-lite-v1
     
--   anthropic.claude-v2:1
+-   amazon.titan-image-generator-v1
+    
+-   amazon.titan-embed-text-v1
+    
+-   amazon.titan-embed-image-v1
+    
+-   amazon.titan-text-premier-v1:0
+    
+-   amazon.titan-embed-text-v2:0
+    
+-   amazon.titan-image-generator-v2:0
+    
+-   amazon.nova-canvas-v1:0
+    
+-   amazon.nova-lite-v1:0
+    
+-   amazon.nova-micro-v1:0
+    
+-   amazon.nova-premier-v1:0
+    
+-   amazon.nova-pro-v1:0
+    
+-   amazon.nova-reel-v1:0
+    
+-   amazon.nova-reel-v1:1
+    
+-   amazon.nova-sonic-v1:0
+    
+-   amazon.rerank-v1:0
+    
+-   ai21.jamba-1-5-large-v1:0
+    
+-   ai21.jamba-1-5-mini-v1:0
+    
+-   anthropic.claude-3-sonnet-20240229-v1:0
+    
+-   anthropic.claude-3-5-sonnet-20240620-v1:0
+    
+-   anthropic.claude-3-5-sonnet-20241022-v2:0
+    
+-   anthropic.claude-3-haiku-20240307-v1:0
+    
+-   anthropic.claude-3-5-haiku-20241022-v1:0
+    
+-   anthropic.claude-3-opus-20240229-v1:0
+    
+-   anthropic.claude-3-7-sonnet-20250219-v1:0
+    
+-   anthropic.claude-opus-4-20250514-v1:0
+    
+-   anthropic.claude-sonnet-4-20250514-v1:0
+    
+-   cohere.command-r-plus-v1:0
+    
+-   cohere.command-r-v1:0
+    
+-   cohere.embed-english-v3
+    
+-   cohere.embed-multilingual-v3
+    
+-   cohere.rerank-v3-5:0
+    
+-   meta.llama3-8b-instruct-v1:0
+    
+-   meta.llama3-70b-instruct-v1:0
+    
+-   meta.llama3-1-8b-instruct-v1:0
+    
+-   meta.llama3-1-70b-instruct-v1:0
+    
+-   meta.llama3-1-405b-instruct-v1:0
+    
+-   meta.llama3-2-1b-instruct-v1:0
+    
+-   meta.llama3-2-3b-instruct-v1:0
+    
+-   meta.llama3-2-11b-instruct-v1:0
+    
+-   meta.llama3-2-90b-instruct-v1:0
+    
+-   meta.llama3-3-70b-instruct-v1:0
+    
+-   meta.llama4-maverick-17b-instruct-v1:0
+    
+-   meta.llama4-scout-17b-instruct-v1:0
+    
+-   mistral.mistral-7b-instruct-v0:2
+    
+-   mistral.mixtral-8x7b-instruct-v0:1
+    
+-   mistral.mistral-large-2402-v1:0
+    
+-   mistral.mistral-large-2407-v1:0
+    
+-   mistral.mistral-small-2402-v1:0
+    
+-   mistral.pixtral-large-2502-v1:0
+    
+-   stability.sd3-5-large-v1:0
+    
+-   stability.stable-image-control-sketch-v1:0
+    
+-   stability.stable-image-control-structure-v1:0
+    
+-   stability.stable-image-core-v1:1
     
 
 
@@ -328,7 +536,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Bedrock Agent Runtime component supports 15 message header(s), which is/are listed below:
+The AWS Bedrock Agent Runtime component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -6,7 +6,7 @@ The ExchangeProperty Expression Language allows you to extract values of named e
 
 ## Exchange Property Options
 
-The ExchangeProperty language supports 1 options, which are listed below.
+The ExchangeProperty language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -4,7 +4,7 @@ The Remove Properties EIP allows you to remove one or more `Exchange` properties
 
 ## Options
 
-The Remove Properties eip supports 0 options, which are listed below.
+The Remove Properties eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

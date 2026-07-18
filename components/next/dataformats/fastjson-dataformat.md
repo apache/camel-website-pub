@@ -39,11 +39,12 @@ from("activemq:My.Queue")
 
 ## Fastjson Options
 
-The JSON Fastjson dataformat supports 2 options, which are listed below.
+The JSON Fastjson dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
+| **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 

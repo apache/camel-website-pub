@@ -4,7 +4,7 @@ The SetVariables EIP is used for setting multiple [Exchange](../../../manual/exc
 
 ## Options
 
-The Set Variables eip supports 0 options, which are listed below.
+The Set Variables eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

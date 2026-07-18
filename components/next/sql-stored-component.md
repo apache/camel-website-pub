@@ -89,7 +89,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The SQL Stored Procedure component supports 4 options, which are listed below.
+The SQL Stored Procedure component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -107,14 +107,14 @@ sql-stored:template
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **template** (producer) | **Required** Sets the stored procedure template to perform. You can externalize the template by using file: or classpath: as prefix and specify the location of the file. |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -130,7 +130,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The SQL Stored Procedure component supports 3 message header(s), which is/are listed below:
+The SQL Stored Procedure component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

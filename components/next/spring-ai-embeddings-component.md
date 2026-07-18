@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Spring AI Embeddings component supports 4 options, which are listed below.
+The Spring AI Embeddings component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -91,14 +91,14 @@ spring-ai-embeddings:embeddingId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **embeddingId** (producer) | **Required** The id. |  | String |
 
-### Query Parameters (2 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -108,7 +108,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The Spring AI Embeddings component supports 6 message header(s), which is/are listed below:
+The Spring AI Embeddings component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

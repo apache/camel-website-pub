@@ -31,7 +31,7 @@ The three data formats share common options and have dedicated ones, this sectio
 
 ## Options
 
-The uniVocity Fixed Length dataformat supports 16 options, which are listed below.
+The uniVocity Fixed Length dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

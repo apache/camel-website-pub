@@ -71,7 +71,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Debezium Oracle Connector component supports 160 options, which are listed below.
+The Debezium Oracle Connector component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -245,14 +245,14 @@ debezium-oracle:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (consumer) | **Required** Unique name for the connector. Attempting to register again with the same name will fail. |  | String |
 
-### Query Parameters (160 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -434,7 +434,7 @@ Enum values:
 
 ## Message Headers
 
-The Debezium Oracle Connector component supports 7 message header(s), which is/are listed below:
+The Debezium Oracle Connector component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

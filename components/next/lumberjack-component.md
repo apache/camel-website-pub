@@ -69,7 +69,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Lumberjack component supports 4 options, which are listed below.
+The Lumberjack component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -87,7 +87,7 @@ lumberjack:host:port
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -95,7 +95,7 @@ With the following _path_ and _query_ parameters:
 | **host** (consumer) | **Required** Network interface on which to listen for Lumberjack. |  | String |
 | **port** (consumer) | Network port on which to listen for Lumberjack. | 5044 | int |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

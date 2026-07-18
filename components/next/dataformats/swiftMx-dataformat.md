@@ -6,7 +6,7 @@ The SWIFT MX data format is used to encode and decode SWIFT MX messages. The dat
 
 ## Options
 
-The SWIFT MX dataformat supports 4 options, which are listed below.
+The SWIFT MX dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -4,7 +4,7 @@ Weighted mode for [Load Balancer](loadBalance-eip.md) EIP. With this policy in c
 
 ## Options
 
-The Weighted Load Balancer eip supports 0 options, which are listed below.
+The Weighted Load Balancer eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

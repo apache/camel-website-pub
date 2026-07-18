@@ -10,7 +10,7 @@ See [JAXB](jaxb-dataformat.md) for details how you can control namespace prefix 
 
 ## SOAP Options
 
-The SOAP dataformat supports 7 options, which are listed below.
+The SOAP dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

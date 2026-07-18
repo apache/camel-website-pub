@@ -66,7 +66,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Pulsar component supports 50 options, which are listed below.
+The Pulsar component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -278,7 +278,7 @@ pulsar:persistence://tenant/namespace/topic
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (4 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -302,7 +302,7 @@ Enum values:
 | **namespace** (common) | **Required** The namespace. |  | String |
 | **topic** (common) | **Required** The topic. |  | String |
 
-### Query Parameters (47 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -520,7 +520,7 @@ Enum values:
 
 ## Message Headers
 
-The Pulsar component supports 16 message header(s), which is/are listed below:
+The Pulsar component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Nats component supports 44 options, which are listed below.
+The Nats component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -144,14 +144,14 @@ nats:topic
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **topic** (common) | **Required** The name of topic we want to use. |  | String |
 
-### Query Parameters (43 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -233,7 +233,7 @@ Enum values:
 
 ## Message Headers
 
-The Nats component supports 9 message header(s), which is/are listed below:
+The Nats component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

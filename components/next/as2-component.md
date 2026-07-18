@@ -75,7 +75,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AS2 component supports 6 options, which are listed below.
+The AS2 component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -95,7 +95,7 @@ as2:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -119,7 +119,7 @@ Enum values:
  |  | AS2ApiName |
 | **methodName** (common) | **Required** What sub operation to use for the selected operation. |  | String |
 
-### Query Parameters (49 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -492,7 +492,7 @@ The as2/send API method has the parameters listed in the table below:
 | **subject** | Message subject | String |
 | **userName** | The user-name that is used for basic authentication | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (49 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 
@@ -529,7 +529,7 @@ The as2/receive API method has the parameters listed in the table below:
 | **requestUriPattern** | 
  | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (49 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 
@@ -566,7 +566,7 @@ The as2/listen API method has the parameters listed in the table below:
 | **requestUriPattern** | 
  | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (49 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 

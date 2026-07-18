@@ -47,7 +47,7 @@ from("activemq:My.Queue")
 
 ## JacksonXML Options
 
-The Jackson XML 2 dataformat supports 17 options, which are listed below.
+The Jackson XML 2 dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

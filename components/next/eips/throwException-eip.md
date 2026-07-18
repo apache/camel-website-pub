@@ -8,7 +8,7 @@ Use a special processor to throw an exception.
 
 ## Options
 
-The Stop eip supports 0 options, which are listed below.
+The Stop eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

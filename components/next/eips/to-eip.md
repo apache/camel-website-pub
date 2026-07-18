@@ -14,7 +14,7 @@ The To and [ToD](toD-eip.md) EIPs are the most common patterns to use in Camel [
 
 ## Options
 
-The To eip supports 1 options, which are listed below.
+The To eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -43,7 +43,7 @@ Enum values:
 
 ## Exchange properties
 
-The To eip supports 1 exchange properties, which are listed below.
+The To eip supports the following exchange properties which are listed below.
 
 The exchange properties are set on the `Exchange` by the EIP, unless otherwise specified in the description. This means those properties are available after this EIP has completed processing the `Exchange`.
 

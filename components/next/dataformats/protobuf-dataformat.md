@@ -15,7 +15,7 @@ Camel provides a Data Format to serialize between Java and the Protocol Buffer p
 
 ## Protobuf Options
 
-The Protobuf dataformat supports 3 options, which are listed below.
+The Protobuf dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

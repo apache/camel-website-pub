@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Vert.x component supports 9 options, which are listed below.
+The Vert.x component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -93,14 +93,14 @@ vertx:address
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **address** (common) | **Required** Sets the event bus address used to communicate. |  | String |
 
-### Query Parameters (5 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

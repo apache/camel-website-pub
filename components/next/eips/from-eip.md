@@ -9,7 +9,7 @@ The `from` EIP is the input.
 
 ## Options
 
-The From eip supports 0 options, which are listed below.
+The From eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

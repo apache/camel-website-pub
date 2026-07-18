@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Webhook component supports 8 options, which are listed below.
+The Webhook component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -99,14 +99,14 @@ webhook:endpointUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **endpointUri** (consumer) | **Required** The delegate uri. Must belong to a component that supports webhooks. |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

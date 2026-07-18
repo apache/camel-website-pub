@@ -80,7 +80,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Olingo2 component supports 18 options, which are listed below.
+The Olingo2 component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -112,7 +112,7 @@ olingo2:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -132,7 +132,7 @@ Enum values:
  |  | Olingo2ApiName |
 | **methodName** (common) | **Required** What sub operation to use for the selected operation. |  | String |
 
-### Query Parameters (34 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -414,13 +414,13 @@ The olingo2/uread API method has the parameters listed in the table below:
 | **resourcePath** | OData Resource path | String |
 | **responseHandler** | Callback handler | Olingo2ResponseHandler |
 
-In addition to the parameters above, the olingo2 API can also use any of the [Query Parameters (34 parameters)](#_query_parameters).
+In addition to the parameters above, the olingo2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelOlingo2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelOlingo2.myParameterNameHere` header.
 
 ## Message Headers
 
-The Olingo2 component supports 1 message header(s), which is/are listed below:
+The Olingo2 component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

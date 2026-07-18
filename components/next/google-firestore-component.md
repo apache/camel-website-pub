@@ -135,7 +135,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google Firestore component supports 13 options, which are listed below.
+The Google Firestore component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -188,14 +188,14 @@ google-firestore:collectionName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **collectionName** (common) | **Required** The collection name to use. |  | String |
 
-### Query Parameters (27 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -319,7 +319,7 @@ Enum values:
 
 ## Message Headers
 
-The Google Firestore component supports 16 message header(s), which is/are listed below:
+The Google Firestore component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

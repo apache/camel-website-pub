@@ -26,7 +26,7 @@ The Poll EIP is a simplified [Poll Enrich](pollEnrich-eip.md) which only support
 
 ## Options
 
-The Poll eip supports 0 options, which are listed below.
+The Poll eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

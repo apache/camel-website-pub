@@ -82,7 +82,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS Comprehend component supports 24 options, which are listed below.
+The AWS Comprehend component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -258,14 +258,14 @@ aws2-comprehend:label
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **label** (producer) | **Required** Logical name. |  | String |
 
-### Query Parameters (20 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -431,7 +431,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Comprehend component supports 7 message header(s), which is/are listed below:
+The AWS Comprehend component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

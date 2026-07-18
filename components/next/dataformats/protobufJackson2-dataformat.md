@@ -42,7 +42,7 @@ from("kafka:topic")
 
 ## Protobuf Jackson Options
 
-The Protobuf Jackson 2 dataformat supports 18 options, which are listed below.
+The Protobuf Jackson 2 dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

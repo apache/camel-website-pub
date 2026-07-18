@@ -24,7 +24,7 @@ getRequest().getBody().getFamilyName()
 
 ## MVEL Options
 
-The MVEL language supports 2 options, which are listed below.
+The MVEL language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Shell component supports 4 options, which are listed below.
+The Shell component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -94,14 +94,14 @@ shell:prompt
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **prompt** (consumer) | **Required** Shell prompt. |  | String |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

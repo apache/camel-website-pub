@@ -81,7 +81,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OpenAI component supports 8 options, which are listed below.
+The OpenAI component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -103,7 +103,7 @@ openai:operation
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -128,7 +128,7 @@ Enum values:
 
  |  | OpenAIOperations |
 
-### Query Parameters (47 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -218,7 +218,7 @@ Enum values:
 
 ## Message Headers
 
-The OpenAI component supports 40 message header(s), which is/are listed below:
+The OpenAI component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

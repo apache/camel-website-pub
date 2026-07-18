@@ -81,7 +81,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google Sheets component supports 14 options, which are listed below.
+The Google Sheets component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -109,7 +109,7 @@ google-sheets:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -154,7 +154,7 @@ Enum values:
 
  |  | String |
 
-### Query Parameters (30 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -462,7 +462,7 @@ The google-sheets/update API method has the parameters listed in the table below
 | **valueInputOption** | How the input data should be interpreted | String |
 | **values** | The com.google.api.services.sheets.v4.model.ValueRange | ValueRange |
 
-In addition to the parameters above, the google-sheets API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-sheets API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleSheets.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleSheets.myParameterNameHere` header.
 
@@ -589,7 +589,7 @@ The google-sheets/values API method has the parameters listed in the table below
 | Parameter | Description | Type |
 | --- | --- | --- |
 
-In addition to the parameters above, the google-sheets API can also use any of the [Query Parameters (30 parameters)](#_query_parameters).
+In addition to the parameters above, the google-sheets API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleSheets.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleSheets.myParameterNameHere` header.
 

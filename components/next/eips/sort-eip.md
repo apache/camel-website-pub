@@ -8,7 +8,7 @@ Use a special filter, a [Message Translator](message-translator.md), between oth
 
 ## Options
 
-The Sort eip supports 0 options, which are listed below.
+The Sort eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

@@ -141,7 +141,7 @@ See the `camel-example-csimple-joor` example at [Camel Examples](https://github.
 
 ## CSimple Language options
 
-The CSimple language supports 4 options, which are listed below.
+The CSimple language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

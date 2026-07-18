@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Quartz component supports 12 options, which are listed below.
+The Quartz component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -99,7 +99,7 @@ quartz:groupName/triggerName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -107,7 +107,7 @@ With the following _path_ and _query_ parameters:
 | **groupName** (consumer) | The quartz group name to use. The combination of group name and trigger name should be unique. | Camel | String |
 | **triggerName** (consumer) | **Required** The quartz trigger name to use. The combination of group name and trigger name should be unique. |  | String |
 
-### Query Parameters (17 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

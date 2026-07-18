@@ -59,7 +59,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Bonita component supports 2 options, which are listed below.
+The Bonita component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -75,7 +75,7 @@ bonita:operation
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -94,7 +94,7 @@ Enum values:
 
  |  | BonitaOperation |
 
-### Query Parameters (6 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

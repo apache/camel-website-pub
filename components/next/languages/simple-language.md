@@ -89,7 +89,7 @@ from("direct:a")
 
 The Simple Language can be configured globally. However, its seldom needed.
 
-The Simple language supports 5 options, which are listed below.
+The Simple language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure Functions component supports 21 options, which are listed below.
+The Azure Functions component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -170,7 +170,7 @@ azure-functions:functionApp/functionName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -178,7 +178,7 @@ With the following _path_ and _query_ parameters:
 | **functionApp** (producer) | **Required** The Azure Function App name. |  | String |
 | **functionName** (producer) | The function name within the app (required for invokeFunction operation). |  | String |
 
-### Query Parameters (19 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -264,7 +264,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Functions component supports 18 message header(s), which is/are listed below:
+The Azure Functions component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

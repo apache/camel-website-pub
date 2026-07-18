@@ -6,7 +6,7 @@ The Variable Expression Language allows you to extract values of named variables
 
 ## Variable Options
 
-The Variable language supports 1 options, which are listed below.
+The Variable language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

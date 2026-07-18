@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The CometD component supports 10 options, which are listed below.
+The CometD component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -100,7 +100,7 @@ cometd:host:port/channelName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -109,7 +109,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | **Required** Host port number. |  | int |
 | **channelName** (common) | **Required** The channelName represents a topic that can be subscribed to by the Camel endpoints. |  | String |
 
-### Query Parameters (17 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -165,7 +165,7 @@ Enum values:
 
 ## Message Headers
 
-The CometD component supports 2 message header(s), which is/are listed below:
+The CometD component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

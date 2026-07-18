@@ -61,7 +61,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Tahu Host Application component supports 12 options, which are listed below.
+The Tahu Host Application component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -87,14 +87,14 @@ tahu-host:hostId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **hostId** (consumer) | **Required** ID for the host application. |  | String |
 
-### Query Parameters (11 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -127,7 +127,7 @@ Enum values:
 
 ## Message Headers
 
-The Tahu Host Application component supports 5 message header(s), which is/are listed below:
+The Tahu Host Application component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

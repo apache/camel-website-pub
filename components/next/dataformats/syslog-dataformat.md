@@ -40,7 +40,11 @@ To expose a Syslog listener service, we reuse the existing [Mina Component](../m
 
 ## Options
 
-The Syslog dataformat has no options.
+The Syslog dataformat supports the following options which are listed below.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
 
 ## RFC5424 Syslog protocol
 

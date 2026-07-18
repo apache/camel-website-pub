@@ -8,7 +8,7 @@ ISO-8583 is a message format used for credit card transactions, banking and othe
 
 ## ISO-8583 Options
 
-The ISO-8583 dataformat supports 3 options, which are listed below.
+The ISO-8583 dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

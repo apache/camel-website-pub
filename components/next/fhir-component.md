@@ -98,7 +98,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The FHIR component supports 27 options, which are listed below.
+The FHIR component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -214,7 +214,7 @@ fhir:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -258,7 +258,7 @@ Enum values:
  |  | FhirApiName |
 | **methodName** (common) | **Required** What sub operation to use for the selected operation. |  | String |
 
-### Query Parameters (44 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -505,7 +505,7 @@ The fhir/ofType API method has the parameters listed in the table below:
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 | **type** | The model type | Class |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -546,7 +546,7 @@ The fhir/resource API method has the parameters listed in the table below:
 | **resourceAsString** | The resource to create | String |
 | **url** | The search URL to use. The format of this URL should be of the form ResourceTypeParameters, for example: Patientname=Smith&identifier=13.2.4.11.4%7C847366, may be null | String |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -618,7 +618,7 @@ The fhir/resourceConditionalByUrl API method has the parameters listed in the ta
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 | **url** | The search URL to use. The format of this URL should be of the form ResourceTypeParameters, for example: Patientname=Smith&identifier=13.2.4.11.4%7C847366 | String |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -697,7 +697,7 @@ The fhir/onType API method has the parameters listed in the table below:
 | **resourceType** | The resource type to search for | Class |
 | **returnType** | Request that the method return a Bundle resource (such as ca.uhn.fhir.model.dstu2.resource.Bundle). Use this method if you are accessing a DSTU2 server. | Class |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -766,7 +766,7 @@ The fhir/previous API method has the parameters listed in the table below:
 | **bundle** | The IBaseBundle | IBaseBundle |
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -870,7 +870,7 @@ The fhir/getFromType API method has the parameters listed in the table below:
 | **metaType** | The IBaseMetaType class | Class |
 | **resourceType** | The resource type e.g Patient | String |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -992,7 +992,7 @@ The fhir/processMessage API method has the parameters listed in the table below:
 | **respondToUri** | An optional query parameter indicating that responses from the receiving server should be sent to this URI, may be NULL | String |
 | **responseClass** | The response class | Class |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -1051,7 +1051,7 @@ The fhir/patchByUrl API method has the parameters listed in the table below:
 | **preferReturn** | Add a Prefer header to the request, which requests that the server include or suppress the resource body as a part of the result. If a resource is returned by the server it will be parsed an accessible to the client via MethodOutcome#getResource() | PreferReturnEnum |
 | **url** | The search URL to use. The format of this URL should be of the form ResourceTypeParameters, for example: Patientname=Smith&identifier=13.2.4.11.4%7C847366 | String |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -1135,7 +1135,7 @@ The fhir/resourceByUrl API method has the parameters listed in the table below:
 | **throwError** | Throw error if the version matches | Boolean |
 | **url** | Referencing the resource by absolute url | String |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -1189,7 +1189,7 @@ The fhir/searchByUrl API method has the parameters listed in the table below:
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 | **url** | The URL to search for. Note that this URL may be complete (e.g. [http://example.com/base/Patientname=foo](http://example.com/base/Patientname=foo)) in which case the client’s base URL will be ignored. Or it can be relative (e.g. Patientname=foo) in which case the client’s base URL will be used. | String |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -1244,7 +1244,7 @@ The fhir/withResources API method has the parameters listed in the table below:
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 | **resources** | Resources to use in the transaction | List |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -1311,7 +1311,7 @@ The fhir/resourceBySearchUrl API method has the parameters listed in the table b
 | **resourceAsString** | The resource body to update | String |
 | **url** | Specifies that the update should be performed as a conditional create against a given search URL | String |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
@@ -1350,7 +1350,7 @@ The fhir/resource API method has the parameters listed in the table below:
 | **resource** | The IBaseResource to validate | IBaseResource |
 | **resourceAsString** | Raw resource to validate | String |
 
-In addition to the parameters above, the fhir API can also use any of the [Query Parameters (44 parameters)](#_query_parameters).
+In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 

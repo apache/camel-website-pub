@@ -14,7 +14,7 @@ groovy("someGroovyExpression")
 
 ## Groovy Options
 
-The Groovy language supports 2 options, which are listed below.
+The Groovy language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

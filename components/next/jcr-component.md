@@ -72,7 +72,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The JCR component supports 3 options, which are listed below.
+The JCR component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -89,7 +89,7 @@ jcr:host/base
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -97,7 +97,7 @@ With the following _path_ and _query_ parameters:
 | **host** (common) | **Required** Name of the javax.jcr.Repository to lookup from the Camel registry to be used. |  | String |
 | **base** (common) | Get the base node when accessing the repository. |  | String |
 
-### Query Parameters (14 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -133,7 +133,7 @@ Enum values:
 
 ## Message Headers
 
-The JCR component supports 3 message header(s), which is/are listed below:
+The JCR component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

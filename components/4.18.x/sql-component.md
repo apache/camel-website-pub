@@ -765,7 +765,7 @@ There’s a special database that may cause problems with optimistic locking use
 This statement is (with default aggregation table definition):
 
 ```sql
-INSERT INTO aggregation (id, exchange) values (?, ?) ON CONFLICT DO NOTHING
+INSERT INTO aggregation (exchange, id, version) VALUES (?, ?, ?) ON CONFLICT DO NOTHING
 ```
 
 Details can be found [in PostgreSQL documentation](https://www.postgresql.org/docs/9.5/sql-insert.md).

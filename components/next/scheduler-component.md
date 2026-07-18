@@ -63,7 +63,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Scheduler component supports 6 options, which are listed below.
+The Scheduler component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -83,14 +83,14 @@ scheduler:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (consumer) | **Required** The name of the scheduler. |  | String |
 
-### Query Parameters (22 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -182,7 +182,7 @@ Enum values:
 
 ## Message Headers
 
-The Scheduler component supports 1 message header(s), which is/are listed below:
+The Scheduler component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

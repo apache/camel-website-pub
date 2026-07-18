@@ -13,7 +13,7 @@ Every library requires adding the special camel component (see "Dependency…​
 
 ## YAML Options
 
-The YAML SnakeYAML dataformat supports 12 options, which are listed below.
+The YAML SnakeYAML dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

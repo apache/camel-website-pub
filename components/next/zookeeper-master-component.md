@@ -95,7 +95,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The ZooKeeper Master component supports 8 options, which are listed below.
+The ZooKeeper Master component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -117,7 +117,7 @@ zookeeper-master:groupName:consumerEndpointUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -125,7 +125,7 @@ With the following _path_ and _query_ parameters:
 | **groupName** (consumer) | **Required** The name of the cluster group to use. |  | String |
 | **consumerEndpointUri** (consumer) | **Required** The consumer endpoint to use in master/slave mode. |  | String |
 
-### Query Parameters (3 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

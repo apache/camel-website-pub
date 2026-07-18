@@ -4,7 +4,7 @@ The Loop EIP allows for processing a message a number of times, possibly in a di
 
 ## Options
 
-The Loop eip supports 2 options, which are listed below.
+The Loop eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -21,7 +21,7 @@ The Loop eip supports 2 options, which are listed below.
 
 ## Exchange properties
 
-The Loop eip supports 2 exchange properties, which are listed below.
+The Loop eip supports the following exchange properties which are listed below.
 
 The exchange properties are set on the `Exchange` by the EIP, unless otherwise specified in the description. This means those properties are available after this EIP has completed processing the `Exchange`.
 

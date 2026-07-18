@@ -72,7 +72,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The JPA component supports 10 options, which are listed below.
+The JPA component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -96,14 +96,14 @@ jpa:entityType
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **entityType** (common) | **Required** Entity class name. |  | Class |
 
-### Query Parameters (48 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -248,7 +248,7 @@ Enum values:
 
 ## Message Headers
 
-The JPA component supports 4 message header(s), which is/are listed below:
+The JPA component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

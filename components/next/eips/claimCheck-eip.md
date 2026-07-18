@@ -9,7 +9,7 @@ It can also be useful in situations where you cannot trust the information with 
 > **Note**
 > The Camel implementation of this EIP pattern stores the message content temporarily in an internal memory store.
 
-The Claim Check eip supports 0 options, which are listed below.
+The Claim Check eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

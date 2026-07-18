@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The RocketMQ component supports 20 options, which are listed below.
+The RocketMQ component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -107,14 +107,14 @@ rocketmq:topicName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **topicName** (common) | **Required** Topic name of this endpoint. |  | String |
 
-### Query Parameters (21 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -187,7 +187,7 @@ Enum values:
 
 ## Message Headers
 
-The RocketMQ component supports 20 message header(s), which is/are listed below:
+The RocketMQ component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -80,7 +80,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Undertow component supports 11 options, which are listed below.
+The Undertow component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -105,14 +105,14 @@ undertow:httpURI
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **httpURI** (common) | **Required** The url of the HTTP endpoint to use. |  | URI |
 
-### Query Parameters (30 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -164,7 +164,7 @@ Enum values:
 
 ## Message Headers
 
-The Undertow component supports 15 message header(s), which is/are listed below:
+The Undertow component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

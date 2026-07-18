@@ -59,7 +59,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Stub component supports 12 options, which are listed below.
+The Stub component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -85,14 +85,14 @@ stub:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (common) | **Required** Name of queue. |  | String |
 
-### Query Parameters (20 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

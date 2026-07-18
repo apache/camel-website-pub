@@ -6,7 +6,7 @@ If you need to call an external service over the network, then you should use **
 
 ## Options
 
-The On Fallback eip supports 0 options, which are listed below.
+The On Fallback eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

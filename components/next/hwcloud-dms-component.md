@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Huawei Distributed Message Service (DMS) component supports 2 options, which are listed below.
+The Huawei Distributed Message Service (DMS) component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -84,14 +84,14 @@ hwcloud-dms:operation
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | **Required** Operation to be performed. |  | String |
 
-### Query Parameters (29 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

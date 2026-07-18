@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The SSH component supports 31 options, which are listed below.
+The SSH component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -113,7 +113,7 @@ ssh:host:port
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -121,7 +121,7 @@ With the following _path_ and _query_ parameters:
 | **host** (common) | **Required** Sets the hostname of the remote SSH server. |  | String |
 | **port** (common) | Sets the port number for the remote SSH server. | 22 | int |
 
-### Query Parameters (45 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -236,7 +236,7 @@ Enum values:
 
 ## Message Headers
 
-The SSH component supports 4 message header(s), which is/are listed below:
+The SSH component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

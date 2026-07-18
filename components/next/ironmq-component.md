@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The IronMQ component supports 5 options, which are listed below.
+The IronMQ component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -96,14 +96,14 @@ ironmq:queueName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **queueName** (common) | **Required** The name of the IronMQ queue. |  | String |
 
-### Query Parameters (31 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -204,7 +204,7 @@ Enum values:
 
 ## Message Headers
 
-The IronMQ component supports 4 message header(s), which is/are listed below:
+The IronMQ component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

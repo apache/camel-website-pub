@@ -53,7 +53,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The XQuery component supports 6 options, which are listed below.
+The XQuery component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -73,14 +73,14 @@ xquery:resourceUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **resourceUri** (common) | **Required** The name of the template to load from classpath or file system. |  | String |
 
-### Query Parameters (32 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

@@ -93,7 +93,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The IEC 60870 Client component supports 4 options, which are listed below.
+The IEC 60870 Client component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -111,14 +111,14 @@ iec60870-client:uriPath
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **uriPath** (common) | **Required** The object information address. |  | ObjectAddress |
 
-### Query Parameters (20 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -207,7 +207,7 @@ Enum values:
 
 ## Message Headers
 
-The IEC 60870 Client component supports 15 message header(s), which is/are listed below:
+The IEC 60870 Client component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

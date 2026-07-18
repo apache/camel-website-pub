@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The GraphQL component supports 5 options, which are listed below.
+The GraphQL component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -83,14 +83,14 @@ graphql:httpUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **httpUri** (producer) | **Required** The GraphQL server URI. |  | URI |
 
-### Query Parameters (15 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

@@ -78,7 +78,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Knative component supports 22 options, which are listed below.
+The Knative component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -130,7 +130,7 @@ knative:type/typeId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -154,7 +154,7 @@ Enum values:
  |  | Type |
 | **typeId** (common) | The identifier of the Knative resource. |  | String |
 
-### Query Parameters (16 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

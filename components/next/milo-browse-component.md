@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OPC UA Browser component supports 27 options, which are listed below.
+The OPC UA Browser component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -118,14 +118,14 @@ milo-browse:endpointUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **endpointUri** (producer) | **Required** The OPC UA server endpoint. |  | String |
 
-### Query Parameters (32 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -181,7 +181,7 @@ Enum values:
 
 ## Message Headers
 
-The OPC UA Browser component supports 1 message header(s), which is/are listed below:
+The OPC UA Browser component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

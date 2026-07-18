@@ -2,7 +2,7 @@
 
 Configuring for [Resequence EIP](resequence-eip.md) in batching mode.
 
-The BatchConfig eip supports 0 options, which are listed below.
+The BatchConfig eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

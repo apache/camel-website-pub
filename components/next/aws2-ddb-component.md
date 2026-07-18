@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS DynamoDB component supports 28 options, which are listed below.
+The AWS DynamoDB component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -257,14 +257,14 @@ aws2-ddb:tableName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **tableName** (producer) | **Required** The name of the table currently worked with. |  | String |
 
-### Query Parameters (24 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -446,7 +446,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS DynamoDB component supports 50 message header(s), which is/are listed below:
+The AWS DynamoDB component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

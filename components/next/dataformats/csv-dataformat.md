@@ -6,7 +6,7 @@ The CSV Data Format uses [Apache Commons CSV](http://commons.apache.org/proper/c
 
 ## Options
 
-The CSV dataformat supports 28 options, which are listed below.
+The CSV dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

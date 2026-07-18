@@ -66,7 +66,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure ServiceBus component supports 29 options, which are listed below.
+The Azure ServiceBus component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -172,7 +172,7 @@ Enum values:
 | **serviceBusTransactionContext** (producer) | Represents transaction in service. This object just contains transaction id. |  | ServiceBusTransactionContext |
 | **sessionId** (producer) | Session ID for session-enabled queues or topics. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
-| **connectionString** (security) | Sets the connection string for a Service Bus namespace or a specific Service Bus resource. |  | String |
+| **connectionString** (security) | Sets the connection string for a Service Bus namespace or a specific Service Bus resource. Connection strings commonly contain characters with a special meaning in URIs (the SharedAccessKey is a Base64 value that may contain plus, slash or equals characters): when configuring the connection string directly in an endpoint URI, wrap the value with RAW() so it is not URI-decoded. |  | String |
 | **credentialType** (security) | 
 
 Determines the credential strategy to adopt.
@@ -202,14 +202,14 @@ azure-servicebus:topicOrQueueName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **topicOrQueueName** (common) | Selected topic name or the queue name, that is depending on serviceBusType config. For example if serviceBusType=queue, then this will be the queue name and if serviceBusType=topic, this will be the topic name. |  | String |
 
-### Query Parameters (29 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -330,7 +330,7 @@ Enum values:
 | **serviceBusTransactionContext** (producer) | Represents transaction in service. This object just contains transaction id. |  | ServiceBusTransactionContext |
 | **sessionId** (producer) | Session ID for session-enabled queues or topics. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **connectionString** (security) | Sets the connection string for a Service Bus namespace or a specific Service Bus resource. |  | String |
+| **connectionString** (security) | Sets the connection string for a Service Bus namespace or a specific Service Bus resource. Connection strings commonly contain characters with a special meaning in URIs (the SharedAccessKey is a Base64 value that may contain plus, slash or equals characters): when configuring the connection string directly in an endpoint URI, wrap the value with RAW() so it is not URI-decoded. |  | String |
 | **credentialType** (security) | 
 
 Determines the credential strategy to adopt.
@@ -354,7 +354,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure ServiceBus component supports 25 message header(s), which is/are listed below:
+The Azure ServiceBus component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -413,6 +413,16 @@ There are three different Credential Types: `AZURE_IDENTITY`, `TOKEN_CREDENTIAL`
 
 -   Provide `connectionString` string it is the simplest option to get started.
     
+
+> **Important**
+> The `SharedAccessKey` part of a connection string is a Base64-encoded value that often contains characters with a special meaning in URIs (such as `+`, `/` or `=`). When the `connectionString` is configured directly in an endpoint URI (including the Endpoint DSL), wrap the value with `RAW()` so it is not URI-decoded, otherwise authentication fails with `status-code: 401 …​ InvalidSignature: The token has an invalid signature`:
+>
+> ```java
+> from("azure-servicebus:myQueue?connectionString=RAW(Endpoint=sb://myhost.servicebus.windows.net/;SharedAccessKeyName=test;SharedAccessKey=aBc+dEf/123=)")
+>     .to("mock:result");
+> ```
+>
+> See [Configuring parameter values using raw values](../../manual/endpoint.html#_configuring_parameter_values_using_raw_values_such_as_passwords) for more details.
 
 **TOKEN\_CREDENTIAL**:
 

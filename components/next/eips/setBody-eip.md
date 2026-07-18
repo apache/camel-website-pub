@@ -19,7 +19,7 @@ This page is documenting the first approach by using Set Body EIP.
 
 ## Options
 
-The Set Body eip supports 0 options, which are listed below.
+The Set Body eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

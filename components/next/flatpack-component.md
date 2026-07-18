@@ -62,7 +62,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Flatpack component supports 3 options, which are listed below.
+The Flatpack component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -79,7 +79,7 @@ flatpack:type:resourceUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -101,7 +101,7 @@ Enum values:
  | delim | FlatpackType |
 | **resourceUri** (common) | **Required** URL for loading the flatpack mapping file from classpath or file system. |  | String |
 
-### Query Parameters (26 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -197,7 +197,7 @@ Enum values:
 
 ## Message Headers
 
-The Flatpack component supports 1 message header(s), which is/are listed below:
+The Flatpack component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

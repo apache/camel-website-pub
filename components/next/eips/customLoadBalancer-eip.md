@@ -2,7 +2,7 @@
 
 This EIP allows you to use your own [Load Balancer](loadBalance-eip.md) implementation.
 
-The Custom Load Balancer eip supports 0 options, which are listed below.
+The Custom Load Balancer eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

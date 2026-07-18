@@ -9,7 +9,7 @@ The Zip Deflater Data Format is a message compression and decompression format. 
 
 ## Options
 
-The Zip Deflater dataformat supports 1 options, which are listed below.
+The Zip Deflater dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

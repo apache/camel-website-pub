@@ -20,7 +20,7 @@ If you use maven, you could just add the following to your pom.xml, substituting
 
 ## Barcode Options
 
-The Barcode dataformat supports 4 options, which are listed below.
+The Barcode dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

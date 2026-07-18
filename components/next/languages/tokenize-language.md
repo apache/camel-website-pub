@@ -8,7 +8,7 @@ The tokenizer language is intended to tokenize text documents using a specified 
 
 ## Tokenize Options
 
-The Tokenize language supports 12 options, which are listed below.
+The Tokenize language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

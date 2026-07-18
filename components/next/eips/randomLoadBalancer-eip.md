@@ -4,7 +4,11 @@ Random mode for the [Load Balancer](loadBalance-eip.md) EIP.
 
 The destination endpoints are selected randomly. This is a well-known and classic policy, which spreads the load randomly.
 
-The Random Load Balancer eip has no options.
+The Random Load Balancer eip supports the following options which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
 
 ## Exchange properties
 

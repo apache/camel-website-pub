@@ -8,7 +8,7 @@ Camel adapts to the method being called via [Bean Binding](../../../manual/bean-
 
 ## Bean Method options
 
-The Bean Method language supports 7 options, which are listed below.
+The Bean Method language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

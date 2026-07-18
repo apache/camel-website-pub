@@ -78,7 +78,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Olingo4 component supports 16 options, which are listed below.
+The Olingo4 component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -108,7 +108,7 @@ olingo4:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -128,7 +128,7 @@ Enum values:
  |  | Olingo4ApiName |
 | **methodName** (common) | **Required** What sub operation to use for the selected operation. |  | String |
 
-### Query Parameters (32 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -427,13 +427,13 @@ The olingo4/uread API method has the parameters listed in the table below:
 | **resourcePath** | OData Resource path | String |
 | **responseHandler** | Callback handler | Olingo4ResponseHandler |
 
-In addition to the parameters above, the olingo4 API can also use any of the [Query Parameters (32 parameters)](#_query_parameters).
+In addition to the parameters above, the olingo4 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelOlingo4.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelOlingo4.myParameterNameHere` header.
 
 ## Message Headers
 
-The Olingo4 component supports 1 message header(s), which is/are listed below:
+The Olingo4 component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

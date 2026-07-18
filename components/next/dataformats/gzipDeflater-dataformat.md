@@ -9,7 +9,11 @@ The GZip Deflater Data Format is a message compression and decompression format.
 
 ## Options
 
-The GZip Deflater dataformat has no options.
+The GZip Deflater dataformat supports the following options which are listed below.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
 
 ## Marshal
 

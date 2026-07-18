@@ -15,7 +15,7 @@ The unmarshal option of the mimeMultipart data format will convert a MIME-Multip
 
 ## Options
 
-The MIME Multipart dataformat supports 5 options, which are listed below.
+The MIME Multipart dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

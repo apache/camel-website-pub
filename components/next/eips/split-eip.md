@@ -10,7 +10,7 @@ The [Splitter](http://www.enterpriseintegrationpatterns.com/patterns/messaging/S
 
 ## Options
 
-The Split eip supports 5 options, which are listed below.
+The Split eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -42,7 +42,7 @@ The Split eip supports 5 options, which are listed below.
 
 ## Exchange properties
 
-The Split eip supports 5 exchange properties, which are listed below.
+The Split eip supports the following exchange properties which are listed below.
 
 The exchange properties are set on the `Exchange` by the EIP, unless otherwise specified in the description. This means those properties are available after this EIP has completed processing the `Exchange`.
 

@@ -10,7 +10,7 @@ When a message is **not** valid then a `PredicateValidationException` is thrown.
 
 ## Options
 
-The Validate eip supports 0 options, which are listed below.
+The Validate eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

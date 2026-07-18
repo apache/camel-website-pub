@@ -8,7 +8,7 @@ The Multicast EIP has many features and is also used as a baseline for the [Reci
 
 ## Options
 
-The Multicast eip supports 3 options, which are listed below.
+The Multicast eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -32,7 +32,7 @@ The Multicast eip supports 3 options, which are listed below.
 
 ## Exchange properties
 
-The Multicast eip supports 3 exchange properties, which are listed below.
+The Multicast eip supports the following exchange properties which are listed below.
 
 The exchange properties are set on the `Exchange` by the EIP, unless otherwise specified in the description. This means those properties are available after this EIP has completed processing the `Exchange`.
 

@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Event component supports 2 options, which are listed below.
+The Event component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -86,14 +86,14 @@ event:events
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **events** (consumer) | **Required** Comma-separated list of event types to subscribe to. Event types correspond to CamelEvent.Type enum values (case-insensitive), for example: RouteStarted, RouteStopped, ExchangeCompleted, ExchangeFailed. Wildcard patterns are supported using a suffix, for example: Route matches all route events, Exchange matches all exchange events, and matches all events. |  | String |
 
-### Query Parameters (12 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -144,7 +144,7 @@ Enum values:
 
 ## Message Headers
 
-The Event component supports 10 message header(s), which is/are listed below:
+The Event component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -72,7 +72,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The LDAP component supports 2 options, which are listed below.
+The LDAP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,14 +88,14 @@ ldap:dirContextName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **dirContextName** (producer) | **Required** Name of either a javax.naming.directory.DirContext, or java.util.Hashtable, or Map bean to lookup in the registry. If the bean is either a Hashtable or Map then a new javax.naming.directory.DirContext instance is created for each use. If the bean is a javax.naming.directory.DirContext then the bean is used as given. The latter may not be possible in all situations where the javax.naming.directory.DirContext must not be shared, and in those situations it can be better to use java.util.Hashtable or Map instead. |  | String |
 
-### Query Parameters (5 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

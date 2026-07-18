@@ -87,7 +87,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Mina component supports 28 options, which are listed below.
+The Mina component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -172,7 +172,7 @@ mina:protocol:host:port
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -181,7 +181,7 @@ With the following _path_ and _query_ parameters:
 | **host** (common) | **Required** Hostname to use. Use localhost or 0.0.0.0 for local server as consumer. For producer use the hostname or ip address of the remote server. |  | String |
 | **port** (common) | **Required** Port number. |  | int |
 
-### Query Parameters (27 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -274,7 +274,7 @@ Enum values:
 
 ## Message Headers
 
-The Mina component supports 4 message header(s), which is/are listed below:
+The Mina component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

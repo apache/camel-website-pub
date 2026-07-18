@@ -59,7 +59,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The weaviate component supports 8 options, which are listed below.
+The weaviate component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -81,14 +81,14 @@ weaviate:collection
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **collection** (producer) | **Required** The collection Name. |  | String |
 
-### Query Parameters (6 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -102,7 +102,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The weaviate component supports 13 message header(s), which is/are listed below:
+The weaviate component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

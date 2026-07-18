@@ -86,7 +86,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Iggy component supports 31 options, which are listed below.
+The Iggy component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -177,14 +177,14 @@ iggy:topicName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **topicName** (common) | **Required** Name of the topic. |  | String |
 
-### Query Parameters (31 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

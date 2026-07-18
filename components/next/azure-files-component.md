@@ -90,7 +90,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure Files component supports 5 options, which are listed below.
+The Azure Files component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -109,7 +109,7 @@ azure-files:account/share
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (4 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -119,7 +119,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | Port of the FTP server. |  | int |
 | **directoryName** (common) | The starting directory. |  | String |
 
-### Query Parameters (102 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -447,7 +447,7 @@ Enum values:
 
 ## Message Headers
 
-The Azure Files component supports 15 message header(s), which is/are listed below:
+The Azure Files component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The FTPS component supports 6 options, which are listed below.
+The FTPS component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -84,7 +84,7 @@ ftps:host:port/directoryName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -93,7 +93,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | Port of the FTP server. |  | int |
 | **directoryName** (common) | The starting directory. |  | String |
 
-### Query Parameters (122 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -462,7 +462,7 @@ Enum values:
 
 ## Message Headers
 
-The FTPS component supports 17 message header(s), which is/are listed below:
+The FTPS component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

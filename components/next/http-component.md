@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The HTTP component supports 51 options, which are listed below.
+The HTTP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -183,14 +183,14 @@ http://httpUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **httpUri** (common) | **Required** The url of the HTTP endpoint to call. |  | URI |
 
-### Query Parameters (67 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -357,7 +357,7 @@ Enum values:
 
 ## Message Headers
 
-The HTTP component supports 14 message header(s), which is/are listed below:
+The HTTP component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

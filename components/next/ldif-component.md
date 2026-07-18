@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The LDIF component supports 2 options, which are listed below.
+The LDIF component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -93,14 +93,14 @@ ldif:ldapConnectionName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **ldapConnectionName** (producer) | **Required** The name of the LdapConnection bean to pull from the registry. Note that this must be of scope prototype to avoid it being shared among threads or using a connection that has timed out. |  | String |
 
-### Query Parameters (1 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

@@ -39,7 +39,7 @@ from("activemq:My.Queue")
 
 ## Gson Options
 
-The JSON Gson dataformat supports 4 options, which are listed below.
+The JSON Gson dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -93,7 +93,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OPC UA Client component supports 28 options, which are listed below.
+The OPC UA Client component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -135,14 +135,14 @@ milo-client:endpointUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **endpointUri** (common) | **Required** The OPC UA server endpoint. |  | String |
 
-### Query Parameters (36 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -230,7 +230,7 @@ Enum values:
 
 ## Message Headers
 
-The OPC UA Client component supports 2 message header(s), which is/are listed below:
+The OPC UA Client component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -42,7 +42,7 @@ from("kafka:topic")
 
 ## Avro Jackson Options
 
-The Avro Jackson 3 dataformat supports 18 options, which are listed below.
+The Avro Jackson 3 dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

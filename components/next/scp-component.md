@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The SCP component supports 5 options, which are listed below.
+The SCP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -89,7 +89,7 @@ scp:host:port/directoryName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -98,7 +98,7 @@ With the following _path_ and _query_ parameters:
 | **port** (producer) | Port of the FTP server. |  | int |
 | **directoryName** (producer) | The starting directory. |  | String |
 
-### Query Parameters (29 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

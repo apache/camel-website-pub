@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS S3 Storage Service component supports 64 options, which are listed below.
+The AWS S3 Storage Service component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -351,14 +351,14 @@ aws2-s3://bucketNameOrArn
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **bucketNameOrArn** (common) | **Required** Bucket name or ARN. |  | String |
 
-### Query Parameters (81 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -478,7 +478,7 @@ Enum values:
 | **fileName** (consumer) | To get the object from the bucket with the given file name. |  | String |
 | **includeBody** (consumer) | If it is true, the S3Object exchange will be consumed and put into the body and closed. If false, the S3Object stream will be put raw into the body and the headers will be set with the S3 object metadata. This option is strongly related to the autocloseBody option. In case of setting includeBody to true because the S3Object stream will be consumed then it will also be closed, while in case of includeBody false then it will be up to the caller to close the S3Object stream. However, setting autocloseBody to true when includeBody is false it will schedule to close the S3Object stream automatically on exchange completion. | true | boolean |
 | **includeFolders** (consumer) | If it is true, the folders/directories will be consumed. If it is false, they will be ignored, and Exchanges will not be created for those. | true | boolean |
-| **maxConnections** (consumer) | Set the maxConnections parameter in the S3 client configuration. | 60 | int |
+| **maxConnections** (consumer) | **Deprecated** Set the maxConnections parameter in the S3 client configuration. This option is deprecated and has no effect. Use the httpClientBuilder option on the S3 client configuration to customize the HTTP client connection pool. | 60 | int |
 | **maxMessagesPerPoll** (consumer) | Gets the maximum number of messages as a limit to poll at each polling. Gets the maximum number of messages as a limit to poll at each polling. The default value is 10. Use 0 or a negative number to set it as unlimited. | 10 | int |
 | **moveAfterRead** (consumer) | Move objects from S3 bucket to a different bucket after they have been retrieved. To accomplish the operation, the destinationBucket option must be set. The copy bucket operation is only performed if the Exchange is committed. If a rollback occurs, the object is not moved. | false | boolean |
 | **removePrefixOnMove** (consumer) | Remove the contents of the prefix configuration string from the new S3Object key before copying. For example, if prefix is set to 'demo/notify' and the destinationBucketPrefix is set to 'demo/archive', an S3Object with a key of 'demo/notify/example.txt' will be copied to 'demo/archive/example.txt', rather than the default behavior where the new key is 'demo/archive/demo/notify/example.txt'. Only applicable when moveAfterRead is true. | false | boolean |
@@ -716,7 +716,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS S3 Storage Service component supports 50 message header(s), which is/are listed below:
+The AWS S3 Storage Service component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

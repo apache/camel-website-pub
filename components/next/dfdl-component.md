@@ -63,7 +63,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The DFDL component supports 2 options, which are listed below.
+The DFDL component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -79,14 +79,14 @@ dfdl:schemaUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **schemaUri** (producer) | **Required** The path to the DFDL schema file. |  | String |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

@@ -59,7 +59,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The MapStruct component supports 4 options, which are listed below.
+The MapStruct component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -77,14 +77,14 @@ mapstruct:className
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **className** (producer) | **Required** The fully qualified class name of the POJO that mapstruct should convert to (target). |  | String |
 
-### Query Parameters (2 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

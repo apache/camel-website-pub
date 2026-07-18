@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The DHIS2 component supports 9 options, which are listed below.
+The DHIS2 component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -91,7 +91,7 @@ dhis2:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -119,7 +119,7 @@ Enum values:
  |  | Dhis2ApiName |
 | **methodName** (common) | **Required** Subject of the API operation (e.g., resource). |  | String |
 
-### Query Parameters (26 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -280,7 +280,7 @@ The dhis2/resource API method has the parameters listed in the table below:
 
  | Object |
 
-In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters (26 parameters)](#_query_parameters).
+In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelDhis2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelDhis2.myParameterNameHere` header.
 
@@ -365,7 +365,7 @@ The dhis2/resource API method has the parameters listed in the table below:
 
  | RootJunctionEnum |
 
-In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters (26 parameters)](#_query_parameters).
+In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelDhis2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelDhis2.myParameterNameHere` header.
 
@@ -408,7 +408,7 @@ The dhis2/resource API method has the parameters listed in the table below:
 
  | Object |
 
-In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters (26 parameters)](#_query_parameters).
+In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelDhis2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelDhis2.myParameterNameHere` header.
 
@@ -451,7 +451,7 @@ The dhis2/resource API method has the parameters listed in the table below:
 
  | Object |
 
-In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters (26 parameters)](#_query_parameters).
+In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelDhis2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelDhis2.myParameterNameHere` header.
 
@@ -500,7 +500,7 @@ The dhis2/analytics API method has the parameters listed in the table below:
 
  | Boolean |
 
-In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters (26 parameters)](#_query_parameters).
+In addition to the parameters above, the dhis2 API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelDhis2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelDhis2.myParameterNameHere` header.
 

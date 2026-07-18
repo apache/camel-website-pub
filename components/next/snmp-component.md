@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The SNMP component supports 5 options, which are listed below.
+The SNMP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -95,7 +95,7 @@ snmp:host:port
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -103,7 +103,7 @@ With the following _path_ and _query_ parameters:
 | **host** (common) | **Required** Hostname of the SNMP enabled device. |  | String |
 | **port** (common) | **Required** Port number of the SNMP enabled device. |  | Integer |
 
-### Query Parameters (36 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

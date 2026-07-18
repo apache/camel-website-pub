@@ -2,7 +2,7 @@
 
 The ConvertBodyTo EIP allows you to transform the message body to a different type.
 
-The Convert Body To eip supports 0 options, which are listed below.
+The Convert Body To eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

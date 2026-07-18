@@ -58,7 +58,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Twitter Direct Message component supports 13 options, which are listed below.
+The Twitter Direct Message component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -85,14 +85,14 @@ twitter-directmessage:user
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **user** (common) | **Required** The user name to send a direct message. This will be ignored for consumer. |  | String |
 
-### Query Parameters (42 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -234,7 +234,7 @@ Enum values:
 
 ## Message Headers
 
-The Twitter Direct Message component supports 2 message header(s), which is/are listed below:
+The Twitter Direct Message component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

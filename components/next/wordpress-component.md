@@ -55,7 +55,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The WordPress component supports 14 options, which are listed below.
+The WordPress component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -83,7 +83,7 @@ wordpress:operation
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -118,7 +118,7 @@ Enum values:
 
  |  | String |
 
-### Query Parameters (12 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

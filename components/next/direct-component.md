@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Direct component supports 5 options, which are listed below.
+The Direct component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -83,14 +83,14 @@ direct:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (common) | **Required** Name of direct endpoint. |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

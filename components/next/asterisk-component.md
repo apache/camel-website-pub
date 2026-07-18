@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Asterisk component supports 3 options, which are listed below.
+The Asterisk component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -87,14 +87,14 @@ asterisk:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (common) | **Required** Name of component. |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -141,7 +141,7 @@ Enum values:
 
 ## Message Headers
 
-The Asterisk component supports 4 message header(s), which is/are listed below:
+The Asterisk component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

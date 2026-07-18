@@ -6,7 +6,7 @@ The FHIR-JSON Data Format leverages [HAPI-FHIR’s](https://github.com/jamesagne
 
 ## FHIR JSON Format Options
 
-The FHIR JSon dataformat supports 18 options, which are listed below.
+The FHIR JSon dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

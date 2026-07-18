@@ -69,7 +69,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The ServiceNow component supports 48 options, which are listed below.
+The ServiceNow component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -241,14 +241,14 @@ servicenow:instanceName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **instanceName** (producer) | **Required** The ServiceNow instance name. |  | String |
 
-### Query Parameters (44 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -410,7 +410,7 @@ Enum values:
 
 ## Message Headers
 
-The ServiceNow component supports 63 message header(s), which is/are listed below:
+The ServiceNow component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

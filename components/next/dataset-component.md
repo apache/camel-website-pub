@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Dataset component supports 5 options, which are listed below.
+The Dataset component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -84,14 +84,14 @@ dataset:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (common) | **Required** Name of DataSet to lookup in the registry. |  | DataSet |
 
-### Query Parameters (22 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -152,7 +152,7 @@ Enum values:
 
 ## Message Headers
 
-The Dataset component supports 1 message header(s), which is/are listed below:
+The Dataset component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

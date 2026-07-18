@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The ZooKeeper component supports 11 options, which are listed below.
+The ZooKeeper component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -120,7 +120,7 @@ zookeeper:serverUrls/path
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -128,7 +128,7 @@ With the following _path_ and _query_ parameters:
 | **serverUrls** (common) | **Required** The zookeeper server hosts (multiple servers can be separated by comma). |  | String |
 | **path** (common) | **Required** The node in the ZooKeeper server (aka znode). |  | String |
 
-### Query Parameters (11 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -180,7 +180,7 @@ Enum values:
 
 ## Message Headers
 
-The ZooKeeper component supports 7 message header(s), which is/are listed below:
+The ZooKeeper component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

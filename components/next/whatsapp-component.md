@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The WhatsApp component supports 8 options, which are listed below.
+The WhatsApp component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -92,14 +92,14 @@ whatsapp:phoneNumberId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **phoneNumberId** (producer) | **Required** The phone number ID taken from whatsapp-business dashboard. |  | String |
 
-### Query Parameters (9 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -116,7 +116,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The WhatsApp component supports 2 message header(s), which is/are listed below:
+The WhatsApp component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

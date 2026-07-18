@@ -4,7 +4,7 @@ The Delay EIP is used for delaying messages during routing.
 
 ## Options
 
-The Delay eip supports 0 options, which are listed below.
+The Delay eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

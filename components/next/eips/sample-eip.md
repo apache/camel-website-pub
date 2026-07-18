@@ -8,7 +8,7 @@ The Sample EIP selects a single message in a given time period or every nth mess
 
 ## Options
 
-The Sample eip supports 0 options, which are listed below.
+The Sample eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

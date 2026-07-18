@@ -8,7 +8,7 @@ For example, you can use Python in a [Predicate](../../../manual/predicate.md) w
 
 ## Python Options
 
-The Python language supports 2 options, which are listed below.
+The Python language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

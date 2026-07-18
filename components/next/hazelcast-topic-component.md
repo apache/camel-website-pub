@@ -55,7 +55,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Hazelcast Topic component supports 5 options, which are listed below.
+The Hazelcast Topic component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -74,14 +74,14 @@ hazelcast-topic:cacheName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **cacheName** (common) | **Required** The name of the cache. |  | String |
 
-### Query Parameters (9 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -195,7 +195,7 @@ Enum values:
 
 ## Message Headers
 
-The Hazelcast Topic component supports 6 message header(s), which is/are listed below:
+The Hazelcast Topic component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

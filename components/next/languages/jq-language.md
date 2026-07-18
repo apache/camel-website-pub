@@ -6,7 +6,7 @@ Camel supports [JQ](https://jqlang.github.io/jq/) to allow using [Expression](..
 
 ## JQ Options
 
-The JQ language supports 3 options, which are listed below.
+The JQ language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

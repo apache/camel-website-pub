@@ -39,7 +39,7 @@ from("activemq:My.Queue")
 
 ## JSON-B Options
 
-The JSON JSON-B dataformat supports 3 options, which are listed below.
+The JSON JSON-B dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

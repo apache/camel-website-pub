@@ -2,7 +2,7 @@
 
 This page documents all the specific options for the [Resilience4j](resilience4j-eip.md) EIP.
 
-The Resilience4j Configuration eip supports 0 options, which are listed below.
+The Resilience4j Configuration eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

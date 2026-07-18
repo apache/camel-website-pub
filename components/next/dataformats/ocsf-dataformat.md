@@ -216,7 +216,7 @@ from("aws-securityhub:findings")
 
 ## OCSF Options
 
-The OCSF dataformat supports 7 options, which are listed below.
+The OCSF dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

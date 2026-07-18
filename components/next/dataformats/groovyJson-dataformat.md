@@ -10,7 +10,7 @@ This data format is limited in functionality but intended to be easier to use. T
 
 ## Groovy XML Options
 
-The Groovy JSon dataformat supports 1 options, which are listed below.
+The Groovy JSon dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google Calendar component supports 16 options, which are listed below.
+The Google Calendar component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -98,7 +98,7 @@ google-calendar:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -171,7 +171,7 @@ Enum values:
 
  |  | String |
 
-### Query Parameters (32 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -432,7 +432,7 @@ The google-calendar/watch API method has the parameters listed in the table belo
 | **showDeleted** | Whether to include deleted ACLs in the result | Boolean |
 | **syncToken** | Token obtained from the nextSyncToken field returned on the last page of results from the previous list request | String |
 
-In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters (32 parameters)](#_query_parameters).
+In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleCalendar.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleCalendar.myParameterNameHere` header.
 
@@ -544,7 +544,7 @@ The google-calendar/update API method has the parameters listed in the table bel
 | **calendarId** | Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to access the primary calendar of the currently logged in user, use the primary keyword. | String |
 | **content** | The com.google.api.services.calendar.model.Calendar | Calendar |
 
-In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters (32 parameters)](#_query_parameters).
+In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleCalendar.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleCalendar.myParameterNameHere` header.
 
@@ -579,7 +579,7 @@ The google-calendar/stop API method has the parameters listed in the table below
 | --- | --- | --- |
 | **contentChannel** | The com.google.api.services.calendar.model.Channel | Channel |
 
-In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters (32 parameters)](#_query_parameters).
+In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleCalendar.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleCalendar.myParameterNameHere` header.
 
@@ -850,7 +850,7 @@ The google-calendar/watch API method has the parameters listed in the table belo
 | **timeZone** | Time zone used in the response | String |
 | **updatedMin** | Lower bound for an event’s last modification time (as a RFC3339 timestamp) to filter by | DateTime |
 
-In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters (32 parameters)](#_query_parameters).
+In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleCalendar.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleCalendar.myParameterNameHere` header.
 
@@ -885,7 +885,7 @@ The google-calendar/query API method has the parameters listed in the table belo
 | --- | --- | --- |
 | **content** | The com.google.api.services.calendar.model.FreeBusyRequest | FreeBusyRequest |
 
-In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters (32 parameters)](#_query_parameters).
+In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleCalendar.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleCalendar.myParameterNameHere` header.
 
@@ -1026,7 +1026,7 @@ The google-calendar/watch API method has the parameters listed in the table belo
 | **showHidden** | Whether to show hidden entries | Boolean |
 | **syncToken** | Token obtained from the nextSyncToken field returned on the last page of results from the previous list request | String |
 
-In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters (32 parameters)](#_query_parameters).
+In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleCalendar.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleCalendar.myParameterNameHere` header.
 
@@ -1096,7 +1096,7 @@ The google-calendar/watch API method has the parameters listed in the table belo
 | **pageToken** | Token specifying which result page to return | String |
 | **syncToken** | Token obtained from the nextSyncToken field returned on the last page of results from the previous list request | String |
 
-In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters (32 parameters)](#_query_parameters).
+In addition to the parameters above, the google-calendar API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleCalendar.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleCalendar.myParameterNameHere` header.
 

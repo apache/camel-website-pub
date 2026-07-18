@@ -9,7 +9,7 @@ Camel provides a Data Format to serialize between Java and the [Apache Thrift](h
 
 ## Thrift Options
 
-The Thrift dataformat supports 3 options, which are listed below.
+The Thrift dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

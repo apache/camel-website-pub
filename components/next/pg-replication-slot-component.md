@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The PostgreSQL Replication Slot component supports 4 options, which are listed below.
+The PostgreSQL Replication Slot component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,7 +88,7 @@ pg-replication-slot:host:port/database/slot:outputPlugin
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (5 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -99,7 +99,7 @@ With the following _path_ and _query_ parameters:
 | **database** (common) | **Required** Postgres database name. |  | String |
 | **outputPlugin** (common) | **Required** Output plugin name. |  | String |
 
-### Query Parameters (24 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

@@ -38,7 +38,7 @@ As you configure bindy using class names, instead of package names, you can put 
 
 ## Options
 
-The Bindy dataformat supports 6 options, which are listed below.
+The Bindy dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -25,7 +25,7 @@ getRequest().getBody().getFamilyName()
 
 ## OGNL Options
 
-The OGNL language supports 2 options, which are listed below.
+The OGNL language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

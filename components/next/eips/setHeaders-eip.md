@@ -4,7 +4,7 @@ The SetHeaders EIP is used for setting multiple [message](message.md) headers at
 
 ## Options
 
-The Set Headers eip supports 0 options, which are listed below.
+The Set Headers eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

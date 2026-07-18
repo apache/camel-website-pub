@@ -167,7 +167,7 @@ String patientId = msg.getQRD().getWhoSubjectFilter(0).getIDNumber().getValue();
 
 The `camel-hl7` JAR ships with a HL7 data format that can be used to marshal or unmarshal HL7 model objects.
 
-The HL7 dataformat supports 3 options, which are listed below.
+The HL7 dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

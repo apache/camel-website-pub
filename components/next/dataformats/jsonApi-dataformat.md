@@ -2,7 +2,7 @@
 
 **Since Camel 3.0**
 
-The JSonApi dataformat supports 2 options, which are listed below.
+The JSonApi dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

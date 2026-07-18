@@ -82,7 +82,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Simple JMS2 component supports 15 options, which are listed below.
+The Simple JMS2 component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -111,7 +111,7 @@ sjms2:destinationType:destinationName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -133,7 +133,7 @@ Enum values:
  | queue | String |
 | **destinationName** (common) | **Required** DestinationName is a JMS queue or topic name. By default, the destinationName is interpreted as a queue name. |  | String |
 
-### Query Parameters (50 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -304,7 +304,7 @@ Enum values:
 
 ## Message Headers
 
-The Simple JMS2 component supports 4 message header(s), which is/are listed below:
+The Simple JMS2 component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

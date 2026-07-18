@@ -86,7 +86,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Spring WebService component supports 4 options, which are listed below.
+The Spring WebService component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -104,7 +104,7 @@ spring-ws:type:lookupKey:webServiceEndpointUri
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -139,7 +139,7 @@ Enum values:
 | **lookupKey** (consumer) | Endpoint mapping key if endpoint mapping is used. |  | String |
 | **webServiceEndpointUri** (producer) | The default Web Service endpoint uri to use for the producer. |  | String |
 
-### Query Parameters (23 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -184,7 +184,7 @@ Enum values:
 
 ## Message Headers
 
-The Spring WebService component supports 7 message header(s), which is/are listed below:
+The Spring WebService component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

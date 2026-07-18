@@ -6,7 +6,7 @@ The Zip File Data Format is a message compression and decompression format. Mess
 
 ## ZipFile Options
 
-The Zip File dataformat supports 4 options, which are listed below.
+The Zip File dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

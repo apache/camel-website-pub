@@ -6,7 +6,7 @@ The FHIR-XML Data Format leverages [HAPI-FHIR’s](https://github.com/jamesagnew
 
 ## FHIR XML Format Options
 
-The FHIR XML dataformat supports 18 options, which are listed below.
+The FHIR XML dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

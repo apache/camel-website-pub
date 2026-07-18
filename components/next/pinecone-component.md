@@ -59,7 +59,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Pinecone component supports 14 options, which are listed below.
+The Pinecone component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -136,14 +136,14 @@ pinecone:collection
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **collection** (producer) | **Required** The collection Name. (Only used by some actions). |  | String |
 
-### Query Parameters (12 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -212,7 +212,7 @@ Enum values:
 
 ## Message Headers
 
-The Pinecone component supports 17 message header(s), which is/are listed below:
+The Pinecone component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

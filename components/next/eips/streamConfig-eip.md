@@ -2,7 +2,7 @@
 
 Configuring for [Resequence EIP](resequence-eip.md) in stream mode.
 
-The StreamConfig eip supports 0 options, which are listed below.
+The StreamConfig eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

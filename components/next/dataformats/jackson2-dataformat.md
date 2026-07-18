@@ -39,7 +39,7 @@ from("activemq:My.Queue")
 
 ## Jackson Options
 
-The JSON Jackson 2 dataformat supports 22 options, which are listed below.
+The JSON Jackson 2 dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

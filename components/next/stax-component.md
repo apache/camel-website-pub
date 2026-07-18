@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The StAX component supports 2 options, which are listed below.
+The StAX component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -93,14 +93,14 @@ stax:contentHandlerClass
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **contentHandlerClass** (producer) | **Required** The FQN class name for the ContentHandler implementation to use. |  | String |
 
-### Query Parameters (1 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

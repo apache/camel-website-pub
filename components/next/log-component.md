@@ -82,7 +82,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Log Data component supports 4 options, which are listed below.
+The Log Data component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -100,14 +100,14 @@ log:loggerName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **loggerName** (producer) | **Required** Name of the logging category to use. |  | String |
 
-### Query Parameters (33 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

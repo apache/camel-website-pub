@@ -8,7 +8,7 @@ The jOOR library integrates with the Java compiler and performs runtime compilat
 
 ## Java Options
 
-The Java language supports 4 options, which are listed below.
+The Java language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

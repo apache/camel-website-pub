@@ -115,7 +115,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google BigQuery Standard SQL component supports 4 options, which are listed below.
+The Google BigQuery Standard SQL component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -133,7 +133,7 @@ google-bigquery-sql:projectId:queryString
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -141,7 +141,7 @@ With the following _path_ and _query_ parameters:
 | **projectId** (common) | **Required** Google Cloud Project Id. |  | String |
 | **queryString** (common) | **Required** BigQuery standard SQL query. |  | String |
 
-### Query Parameters (6 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -169,7 +169,7 @@ Enum values:
 
 ## Message Headers
 
-The Google BigQuery Standard SQL component supports 4 message header(s), which is/are listed below:
+The Google BigQuery Standard SQL component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

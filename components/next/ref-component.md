@@ -59,7 +59,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Ref component supports 3 options, which are listed below.
+The Ref component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -76,14 +76,14 @@ ref:name
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **name** (common) | **Required** Name of endpoint to lookup in the registry. |  | String |
 
-### Query Parameters (4 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

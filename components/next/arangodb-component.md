@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The ArangoDb component supports 14 options, which are listed below.
+The ArangoDb component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -132,14 +132,14 @@ arangodb:database
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **database** (producer) | **Required** database name. |  | String |
 
-### Query Parameters (12 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -195,7 +195,7 @@ Enum values:
 
 ## Message Headers
 
-The ArangoDb component supports 8 message header(s), which is/are listed below:
+The ArangoDb component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

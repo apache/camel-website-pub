@@ -6,7 +6,7 @@ The Base64 data format is used for base64 encoding and decoding.
 
 ## Options
 
-The Base64 dataformat supports 3 options, which are listed below.
+The Base64 dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

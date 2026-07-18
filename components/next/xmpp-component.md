@@ -71,7 +71,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The XMPP component supports 3 options, which are listed below.
+The XMPP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -88,7 +88,7 @@ xmpp:host:port/participant
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -97,7 +97,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | **Required** Port number for the chat server. |  | int |
 | **participant** (common) | JID (Jabber ID) of person to receive messages. room parameter has precedence over participant. |  | String |
 
-### Query Parameters (19 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -138,7 +138,7 @@ Enum values:
 
 ## Message Headers
 
-The XMPP component supports 1 message header(s), which is/are listed below:
+The XMPP component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

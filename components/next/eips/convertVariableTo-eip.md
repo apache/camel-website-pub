@@ -2,7 +2,7 @@
 
 The ConvertVariableTo EIP allows you to convert a variable to a different type.
 
-The Convert Variable To eip supports 0 options, which are listed below.
+The Convert Variable To eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

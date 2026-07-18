@@ -31,7 +31,7 @@ The three data formats share common options and have dedicated ones, this sectio
 
 ## Options
 
-The uniVocity CSV dataformat supports 17 options, which are listed below.
+The uniVocity CSV dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

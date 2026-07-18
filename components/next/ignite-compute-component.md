@@ -57,7 +57,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Ignite Compute component supports 5 options, which are listed below.
+The Ignite Compute component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -76,14 +76,14 @@ ignite-compute:endpointId
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **endpointId** (producer) | **Required** The endpoint ID (not used). |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -123,7 +123,7 @@ Enum values:
 
 ## Message Headers
 
-The Ignite Compute component supports 5 message header(s), which is/are listed below:
+The Ignite Compute component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

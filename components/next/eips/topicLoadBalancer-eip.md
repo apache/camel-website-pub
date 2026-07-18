@@ -4,7 +4,11 @@ Topic mode for the [Load Balancer](loadBalance-eip.md) EIP. With this policy, th
 
 ## Options
 
-The Topic Load Balancer eip has no options.
+The Topic Load Balancer eip supports the following options which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
 
 ## Exchange properties
 

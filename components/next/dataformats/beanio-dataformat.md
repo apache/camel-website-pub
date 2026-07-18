@@ -8,7 +8,7 @@ BeanIO is configured using a mapping XML file where you define the mapping from 
 
 ## Options
 
-The BeanIO dataformat supports 8 options, which are listed below.
+The BeanIO dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

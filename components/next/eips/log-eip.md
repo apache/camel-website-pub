@@ -15,7 +15,7 @@ Camel provides many ways to log the fact that you are processing a message. Here
 
 ## Options
 
-The Logger eip supports 0 options, which are listed below.
+The Logger eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Braintree component supports 3 options, which are listed below.
+The Braintree component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -82,7 +82,7 @@ braintree:apiName/methodName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (2 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -211,7 +211,7 @@ Enum values:
 
  |  | String |
 
-### Query Parameters (13 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -375,7 +375,7 @@ The braintree/update API method has the parameters listed in the table below:
 | **id** | The id of the Address | String |
 | **request** | The request object containing the AddressRequest parameters | AddressRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -414,7 +414,7 @@ The braintree/generate API method has the parameters listed in the table below:
 | **request** | 
  | ClientTokenRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -487,7 +487,7 @@ The braintree/search API method has the parameters listed in the table below:
 | **query** | 
  | CreditCardVerificationSearchRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -600,7 +600,7 @@ The braintree/update API method has the parameters listed in the table below:
 | **id** | The id of the Customer | String |
 | **request** | The request | CustomerRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -734,7 +734,7 @@ The braintree/search API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **query** | The query for what disputes to find | DisputeSearchRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -771,7 +771,7 @@ The braintree/create API method has the parameters listed in the table below:
 | **request** | 
  | DocumentUploadRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -860,7 +860,7 @@ The braintree/find API method has the parameters listed in the table below:
 | **id** | 
  | String |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -951,7 +951,7 @@ The braintree/revokeAccessToken API method has the parameters listed in the tabl
 | **accessToken** | 
  | String |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1091,7 +1091,7 @@ The braintree/update API method has the parameters listed in the table below:
 
  | String |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1151,7 +1151,7 @@ The braintree/find API method has the parameters listed in the table below:
 | **paymentMethodNonce** | 
  | String |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1243,7 +1243,7 @@ The braintree/update API method has the parameters listed in the table below:
 
  | PlanRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1278,7 +1278,7 @@ The braintree/transactionLevelFees API method has the parameters listed in the t
 | --- | --- | --- |
 | **request** | The request | TransactionLevelFeeReportRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1320,7 +1320,7 @@ The braintree/generate API method has the parameters listed in the table below:
 
  | Calendar |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1466,7 +1466,7 @@ The braintree/update API method has the parameters listed in the table below:
 | **id** | The id of the Subscription | String |
 | **request** | The request | SubscriptionRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1747,7 +1747,7 @@ The braintree/voidTransaction API method has the parameters listed in the table 
 | **id** | Of the transaction to void | String |
 | **voidRequest** | The request. Request can be null. Request is used to support idempotency. | TransactionVoidRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1805,7 +1805,7 @@ The braintree/sale API method has the parameters listed in the table below:
 
  | TransactionRequest |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
@@ -1881,7 +1881,7 @@ The braintree/verify API method has the parameters listed in the table below:
 | **challenge** | 
  | String |
 
-In addition to the parameters above, the braintree API can also use any of the [Query Parameters (13 parameters)](#_query_parameters).
+In addition to the parameters above, the braintree API can also use any of the [Query Parameters](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 

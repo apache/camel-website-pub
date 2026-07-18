@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The AWS Bedrock Agent component supports 26 options, which are listed below.
+The AWS Bedrock Agent component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -179,14 +179,14 @@ aws-bedrock-agent:label
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **label** (common) | **Required** Logical name. |  | String |
 
-### Query Parameters (40 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -371,7 +371,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Bedrock Agent component supports 15 message header(s), which is/are listed below:
+The AWS Bedrock Agent component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -8,7 +8,7 @@ For example, you could use XQuery to create a predicate in a [Message Filter](..
 
 ## XQuery Language options
 
-The XQuery language supports 4 options, which are listed below.
+The XQuery language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

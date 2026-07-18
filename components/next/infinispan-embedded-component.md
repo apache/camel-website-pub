@@ -81,7 +81,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Infinispan Embedded component supports 20 options, which are listed below.
+The Infinispan Embedded component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -167,14 +167,14 @@ infinispan-embedded:cacheName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **cacheName** (common) | **Required** The name of the cache to use. Use current to use the existing cache name from the currently configured cached manager. Or use default for the default cache manager name. |  | String |
 
-### Query Parameters (20 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -269,7 +269,7 @@ Enum values:
 
 ## Message Headers
 
-The Infinispan Embedded component supports 22 message header(s), which is/are listed below:
+The Infinispan Embedded component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

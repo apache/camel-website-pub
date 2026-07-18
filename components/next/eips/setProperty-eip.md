@@ -7,7 +7,7 @@ The SetProperty EIP is used for setting an [Exchange](../../../manual/exchange.m
 
 ## Options
 
-The Set Property eip supports 0 options, which are listed below.
+The Set Property eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

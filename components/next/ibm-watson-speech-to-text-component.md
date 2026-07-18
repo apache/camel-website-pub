@@ -65,7 +65,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The IBM Watson Speech to Text component supports 13 options, which are listed below.
+The IBM Watson Speech to Text component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -112,14 +112,14 @@ ibm-watson-speech-to-text:label
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **label** (producer) | **Required** Logical name. |  | String |
 
-### Query Parameters (9 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -156,7 +156,7 @@ Enum values:
 
 ## Message Headers
 
-The IBM Watson Speech to Text component supports 10 message header(s), which is/are listed below:
+The IBM Watson Speech to Text component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

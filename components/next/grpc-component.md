@@ -68,7 +68,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The gRPC component supports 3 options, which are listed below.
+The gRPC component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -85,7 +85,7 @@ grpc:host:port/service
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (3 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -94,7 +94,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | **Required** The gRPC local or remote server port. |  | int |
 | **service** (common) | **Required** Fully qualified service name from the protocol buffer descriptor file (package dot service definition name). |  | String |
 
-### Query Parameters (42 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -245,7 +245,7 @@ Enum values:
 
 ## Message Headers
 
-The gRPC component supports 3 message header(s), which is/are listed below:
+The gRPC component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

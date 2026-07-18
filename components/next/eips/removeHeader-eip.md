@@ -4,7 +4,7 @@ The Remove Header EIP allows you to remove a single header from the [Message](me
 
 ## Options
 
-The Remove Header eip supports 0 options, which are listed below.
+The Remove Header eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |

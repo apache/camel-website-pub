@@ -8,7 +8,7 @@ For example, you could use XPath to create a predicate in a [Message Filter](../
 
 ## XPath Language options
 
-The XPath language supports 11 options, which are listed below.
+The XPath language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

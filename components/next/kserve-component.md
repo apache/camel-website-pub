@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The KServe component supports 9 options, which are listed below.
+The KServe component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -96,7 +96,7 @@ kserve:api
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -125,7 +125,7 @@ Enum values:
 
  |  | String |
 
-### Query Parameters (5 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -138,7 +138,7 @@ Enum values:
 
 ## Message Headers
 
-The KServe component supports 2 message header(s), which is/are listed below:
+The KServe component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -98,7 +98,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Minio component supports 49 options, which are listed below.
+The Minio component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -191,14 +191,14 @@ minio:bucketName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **bucketName** (common) | **Required** Bucket name. |  | String |
 
-### Query Parameters (63 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -362,7 +362,7 @@ Enum values:
 
 ## Message Headers
 
-The Minio component supports 23 message header(s), which is/are listed below:
+The Minio component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

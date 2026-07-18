@@ -53,7 +53,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Twitter Search component supports 13 options, which are listed below.
+The Twitter Search component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -80,14 +80,14 @@ twitter-search:keywords
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **keywords** (common) | **Required** The search query, use the keywords AND, OR, - and () to narrow the search results. |  | String |
 
-### Query Parameters (42 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -229,7 +229,7 @@ Enum values:
 
 ## Message Headers
 
-The Twitter Search component supports 7 message header(s), which is/are listed below:
+The Twitter Search component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

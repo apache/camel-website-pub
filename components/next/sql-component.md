@@ -132,7 +132,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The SQL component supports 11 options, which are listed below.
+The SQL component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -157,14 +157,14 @@ sql:query
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **query** (common) | **Required** Sets the SQL query to perform. You can externalize the query by using file: or classpath: as prefix and specify the location of the file. |  | String |
 
-### Query Parameters (48 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -299,7 +299,7 @@ Enum values:
 
 ## Message Headers
 
-The SQL component supports 9 message header(s), which is/are listed below:
+The SQL component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

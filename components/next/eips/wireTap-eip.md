@@ -6,7 +6,7 @@
 
 ## Options
 
-The Wire Tap eip supports 1 options, which are listed below.
+The Wire Tap eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -28,7 +28,7 @@ The Wire Tap eip supports 1 options, which are listed below.
 
 ## Exchange properties
 
-The Wire Tap eip supports 1 exchange properties, which are listed below.
+The Wire Tap eip supports the following exchange properties which are listed below.
 
 The exchange properties are set on the `Exchange` by the EIP, unless otherwise specified in the description. This means those properties are available after this EIP has completed processing the `Exchange`.
 

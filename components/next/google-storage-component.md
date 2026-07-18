@@ -121,7 +121,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Google Storage component supports 21 options, which are listed below.
+The Google Storage component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -180,14 +180,14 @@ google-storage:bucketName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **bucketName** (common) | **Required** Bucket name or ARN. |  | String |
 
-### Query Parameters (35 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -317,7 +317,7 @@ Enum values:
 
 ## Message Headers
 
-The Google Storage component supports 28 message header(s), which is/are listed below:
+The Google Storage component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

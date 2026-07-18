@@ -64,7 +64,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Platform HTTP component supports 7 options, which are listed below.
+The Platform HTTP component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -85,14 +85,14 @@ platform-http:path
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **path** (consumer) | **Required** The path under which this endpoint serves the HTTP requests, for proxy use 'proxy'. |  | String |
 
-### Query Parameters (25 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

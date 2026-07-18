@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Bean Validator component supports 8 options, which are listed below.
+The Bean Validator component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -92,14 +92,14 @@ bean-validator:label
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **label** (producer) | **Required** Where label is an arbitrary text value describing the endpoint. |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

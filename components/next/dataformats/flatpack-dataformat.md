@@ -14,7 +14,7 @@ The [Flatpack](../flatpack-component.md) component ships with the Flatpack data 
 
 ## Options
 
-The Flatpack dataformat supports 8 options, which are listed below.
+The Flatpack dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

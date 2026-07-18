@@ -6,7 +6,7 @@ The [ASN.1 Data Format](https://www.itu.int/en/ITU-T/asn1/Pages/introduction.asp
 
 ## ASN.1 Data Format Options
 
-The ASN.1 File dataformat supports 2 options, which are listed below.
+The ASN.1 File dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Servlet component supports 12 options, which are listed below.
+The Servlet component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -99,14 +99,14 @@ servlet:contextPath
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **contextPath** (consumer) | **Required** The context-path to use. |  | String |
 
-### Query Parameters (24 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

@@ -61,7 +61,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The PLC4X component supports 3 options, which are listed below.
+The PLC4X component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -78,14 +78,14 @@ plc4x:driver
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **driver** (common) | **Required** PLC4X connection string for the connection to the target. |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |

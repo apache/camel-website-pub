@@ -66,7 +66,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Twitter Timeline component supports 13 options, which are listed below.
+The Twitter Timeline component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -93,7 +93,7 @@ twitter-timeline:timelineType
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
@@ -122,7 +122,7 @@ Enum values:
 
  |  | TimelineType |
 
-### Query Parameters (44 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -266,7 +266,7 @@ Enum values:
 
 ## Message Headers
 
-The Twitter Timeline component supports 1 message header(s), which is/are listed below:
+The Twitter Timeline component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

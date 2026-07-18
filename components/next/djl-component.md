@@ -98,7 +98,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Deep Java Library component supports 2 options, which are listed below.
+The Deep Java Library component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -114,14 +114,14 @@ djl:application
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **application** (producer) | **Required** Application name. |  | String |
 
-### Query Parameters (5 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -134,7 +134,7 @@ With the following _path_ and _query_ parameters:
 
 ## Message Headers
 
-The Deep Java Library component supports 2 message header(s), which is/are listed below:
+The Deep Java Library component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

@@ -73,7 +73,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Exec component supports 7 options, which are listed below.
+The Exec component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -94,14 +94,14 @@ exec:executable
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **executable** (producer) | **Required** Sets the executable to be executed. The executable must not be empty or null. |  | String |
 
-### Query Parameters (11 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -142,7 +142,7 @@ Enum values:
 
 ## Message Headers
 
-The Exec component supports 10 message header(s), which is/are listed below:
+The Exec component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

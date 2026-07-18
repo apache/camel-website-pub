@@ -6,7 +6,7 @@ The SWIFT MT data format is used to encode and decode SWIFT MT messages. The dat
 
 ## Options
 
-The SWIFT MT dataformat supports 1 options, which are listed below.
+The SWIFT MT dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

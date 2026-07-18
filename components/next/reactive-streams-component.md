@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Reactive Streams component supports 9 options, which are listed below.
+The Reactive Streams component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -115,14 +115,14 @@ reactive-streams:stream
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **stream** (common) | Name of the stream channel used by the endpoint to exchange messages. |  | String |
 
-### Query Parameters (10 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -171,7 +171,7 @@ Enum values:
 
 ## Message Headers
 
-The Reactive Streams component supports 2 message header(s), which is/are listed below:
+The Reactive Streams component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

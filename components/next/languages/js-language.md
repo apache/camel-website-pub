@@ -8,7 +8,7 @@ For example, you can use JavaScript in a [Predicate](../../../manual/predicate.m
 
 ## JavaScript Options
 
-The JavaScript language supports 2 options, which are listed below.
+The JavaScript language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

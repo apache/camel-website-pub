@@ -8,7 +8,7 @@ There is also an aggregation strategy that can aggregate multiple messages into 
 
 ## TarFile Options
 
-The Tar File dataformat supports 4 options, which are listed below.
+The Tar File dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

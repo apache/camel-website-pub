@@ -12,7 +12,7 @@ Fory is a Data Format that uses the [Fory Library](https://fory.apache.org/)
 
 ## Fory Options
 
-The Fory dataformat supports 4 options, which are listed below.
+The Fory dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

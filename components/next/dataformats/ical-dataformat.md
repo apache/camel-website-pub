@@ -28,7 +28,7 @@ END:VCALENDAR
 
 ## Options
 
-The iCal dataformat supports 1 options, which are listed below.
+The iCal dataformat supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

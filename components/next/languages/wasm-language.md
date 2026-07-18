@@ -6,7 +6,7 @@ Camel supports Wasm to allow using [Expression](../../../manual/expression.md) o
 
 ## Wasm Options
 
-The Wasm language supports 3 options, which are listed below.
+The Wasm language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

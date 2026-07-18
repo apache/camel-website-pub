@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The IBM Watson Language component supports 14 options, which are listed below.
+The IBM Watson Language component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -109,14 +109,14 @@ ibm-watson-language:label
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **label** (producer) | **Required** Logical name. |  | String |
 
-### Query Parameters (10 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -148,7 +148,7 @@ Enum values:
 
 ## Message Headers
 
-The IBM Watson Language component supports 12 message header(s), which is/are listed below:
+The IBM Watson Language component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

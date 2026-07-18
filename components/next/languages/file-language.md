@@ -9,7 +9,7 @@ The File Expression Language is an extension to the [Simple](simple-language.md)
 
 ## File Language options
 
-The File language supports 5 options, which are listed below.
+The File language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |

@@ -67,7 +67,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Timer component supports 3 options, which are listed below.
+The Timer component supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -84,14 +84,14 @@ timer:timerName
 
 With the following _path_ and _query_ parameters:
 
-### Path Parameters (1 parameters)
+### Path Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **timerName** (consumer) | **Required** The name of the timer. |  | String |
 
-### Query Parameters (14 parameters)
+### Query Parameters
 
    
 | Name | Description | Default | Type |
@@ -150,7 +150,7 @@ Enum values:
 
 ## Message Headers
 
-The Timer component supports 2 message header(s), which is/are listed below:
+The Timer component supports the following message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |

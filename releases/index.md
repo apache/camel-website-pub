@@ -530,6 +530,7 @@ Releases by release date
 Releases by release date
 | Version | Release date | Description |
 | --- | --- | --- |
+| [4.21.0](../releases/upgrade-recipes-4.21.0/) | 2026-07-17 |  |
 | [4.20.0](../releases/upgrade-recipes-4.20.0/) | 2026-05-04 |  |
 | [4.18.0](../releases/upgrade-recipes-4.18.0/) | 2026-02-20 |  |
 | [4.17.0](../releases/upgrade-recipes-4.17.0/) | 2026-01-16 |  |

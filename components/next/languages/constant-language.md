@@ -9,7 +9,7 @@ The Constant Expression Language is really just a way to use a constant value or
 
 ## Constant Options
 
-The Constant language supports 2 options, which are listed below.
+The Constant language supports the following options which are listed below.
 
    
 | Name | Default | Java Type | Description |
