@@ -364,7 +364,7 @@ TRUE forces tolerance for this field — a parse error is replaced with the fiel
 | paddingChar | char |  |  | The char to pad with if the record is set to a fixed length |
 | pattern | String |  |  | Pattern that the Java formatter (SimpleDateFormat by example) will use to transform the data (optional). If using pattern, then setting locale on bindy data format is recommended. Either set to a known locale such as "us" or use "default" to use platform default locale. |
 | position | int |  | 0 | Position of the field in the output message generated (should start from 1). Must be used when the position of the field in the CSV generated (output message) must be different compare to input position (pos). See the pos parameter. |
-| precision | int |  | 0 | precision of the {@link java.math.BigDecimal} number to be created |
+| precision | int |  | \-1 | precision of the {@link java.math.BigDecimal} number to be created. Use -1 (default) to preserve the original scale from the input. |
 | required | boolean |  | false | Indicates if the field is mandatory |
 | rounding | String |  | CEILING | Round mode to be used to round/scale a BigDecimal Values : UP, DOWN, CEILING, FLOOR, HALF\_UP, HALF\_DOWN,HALF\_EVEN, UNNECESSARY e.g : Number = 123456.789, Precision = 2, Rounding = CEILING Result : 123456.79 |
 | timezone | String |  |  | Timezone to be used. |
@@ -1062,7 +1062,7 @@ TRUE forces tolerance — a parse error is replaced with the type-appropriate de
 | name | String |  |  | name of the field (optional) |
 | pattern | String |  |  | pattern that the formater will use to transform the data (optional) |
 | position | int |  | 0 | Position of the field in the message generated - must be used when the position of the key/tag in the FIX message must be different |
-| precision | int |  | 0 | precision of the BigDecimal number to be created |
+| precision | int |  | \-1 | precision of the BigDecimal number to be created. Use -1 (default) to preserve the original scale from the input. |
 | required | boolean |  | false | Indicates if the field is mandatory |
 | timezone | String |  |  | Timezone to be used. |
 

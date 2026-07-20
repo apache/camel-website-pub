@@ -13,7 +13,7 @@
       <link>https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/</link>
       <pubDate>Mon, 20 Jul 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/</guid>
-      <description>The Apache Camel project pointed a frontier AI model at 19 years of integration code and said: find what we missed.&#xA;It found 165 bugs for the upcoming 4.22 LTS release. Not cosmetic issues — concurrency races, silent data loss scenarios, security gaps, and edge cases buried deep in 350+ connectors. We are fixing them. As of today, 148 are already resolved, with a median fix time of 1 day — the same pace this project has maintained for 17 of the last 19 years.</description>
+      <description>The Apache Camel project pointed a frontier AI model at 19 years of integration code and said: find what we missed.&#xA;It found 165 bugs for the upcoming 4.22 LTS release. Not cosmetic issues — concurrency races, silent data loss scenarios, security gaps, and edge cases buried deep in 350+ connectors. We fixed all of them — every single one — with a median fix time of 1 day, the same pace this project has maintained for 17 of the last 19 years.</description>
     </item>
     <item>
       <title>Kamelets 4.18.3</title>
