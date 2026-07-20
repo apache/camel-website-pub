@@ -230,12 +230,25 @@ Complete the following steps to create a new Camel release:
     
     $ ./mvnw release:perform -Prelease
     
-6.  Close the Apache staging repository:
+6.  Stage the WinGet payload in the Apache development distribution repository:
+    
+    -   `release:perform` builds the non-attached WinGet ZIP in its release checkout. Prepare the candidate with the same candidate number used in the vote:
+        
+        cd ${CAMEL\_ROOT\_DIR}/etc/scripts
+        ./stage-winget-distro.sh <Camel version> <candidate number> \\
+          ${CAMEL\_ROOT\_DIR}/target/checkout/dsl/camel-jbang/camel-launcher/target/camel-launcher-<Camel version>-winget-bin.zip
+        
+    -   Review the printed `svn status`, commit the working copy only after checking the ZIP, `.asc`, and `.sha512`, and include the resulting `dist/dev` candidate URL together with the Nexus staging repository URL in the vote email. The WinGet ZIP is not present in the Nexus staging repository.
+        
+    -   The script prints the candidate’s SHA-512 digest. **Include it in the vote email**: promotion requires it, because the candidate number on its own cannot distinguish the approved candidate from a superseded one (each RC directory carries its own self-consistent `.sha512` and `.asc`).
+        
+    
+7.  Close the Apache staging repository:
     
     -   Login to [https://repository.apache.org](https://repository.apache.org) using your Apache LDAP credentials. Click on "Staging Repositories". Then select "org.apache.camel-xxx" in the list of repositories, where xxx represents your username and ip. Click "Close" on the toolbar above. This will close the repository from future deployments and make it available for others to view. If you are staging multiple releases together, skip this step until you have staged everything. Enter the name and version of the artifact being released in the "Description" field and then click "Close". This will make it easier to identify it later.
         
     
-7.  Verify staged artifacts:
+8.  Verify staged artifacts:
     
     -   If you click on your repository, a tree view will appear below. You can then browse the contents to ensure the artifacts are as you expect them. Pay particular attention to the existence of \*.asc (signature) files. If you don’t like the content of the repository, right-click your repository and choose "Drop". You can then roll back your release and repeat the process. Note the repository URL, you will need this in your vote email.
         
@@ -331,7 +344,19 @@ Complete the following steps to create a new Camel-spring-boot release:
 3.  Copy distribution to Apache website:
     
     cd ${CAMEL\_ROOT\_DIR}/etc/scripts
-    ./release-distro.sh <Camel version>
+    ./release-distro.sh <Camel version> <temp-directory> <WinGet candidate number> <WinGet SHA-512>
+    
+    -   The script exports the voted WinGet ZIP, signature, and SHA-512 checksum from `dist/dev`, verifies them, and adds the exact files to the local `dist/release` working copy. It does not rebuild the ZIP. Review and commit the combined working copy using the commands printed by the script.
+        
+    -   `<WinGet SHA-512>` is the digest from the vote email. Promotion aborts if the exported candidate does not match it, which is what stops a superseded RC from being promoted by mistake.
+        
+    -   After the release is available from `[https://archive.apache.org/dist/camel/apache-camel/<Camel](https://archive.apache.org/dist/camel/apache-camel/<Camel) version>/`, run the JReleaser package preparation. WinGet preparation fails until the archived ZIP is available and byte-identical to the approved local ZIP.
+        
+    -   Remove the promoted candidate after the release copy is committed:
+        
+        svn rm https://dist.apache.org/repos/dist/dev/camel/apache-camel/<Camel version>-rc<WinGet candidate number> \\
+          -m "Remove promoted Apache Camel <Camel version> WinGet candidate"
+        
     
 4.  Copy SBOMs to Apache website:
     

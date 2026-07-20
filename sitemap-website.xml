@@ -14,6 +14,12 @@
     <loc>https://camel.apache.org/</loc>
     <lastmod>2026-07-20T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</loc>
+    <lastmod>2026-07-20T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Tooling/</loc>
+    <lastmod>2026-07-20T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.18.3/</loc>
     <lastmod>2026-07-17T00:00:00+00:00</lastmod>
   </url><url>
@@ -24,9 +30,6 @@
     <lastmod>2026-07-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/hawtio-ai/</loc>
-    <lastmod>2026-07-10T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Tooling/</loc>
     <lastmod>2026-07-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/camel-elevates-citrus/</loc>
@@ -2399,6 +2402,8 @@
     <loc>https://camel.apache.org/docs/</loc>
   </url><url>
     <loc>https://camel.apache.org/download/</loc>
+  </url><url>
+    <loc>https://camel.apache.org/download/camel-cli-launcher/</loc>
   </url><url>
     <loc>https://camel.apache.org/community/mailing-list/</loc>
   </url><url>

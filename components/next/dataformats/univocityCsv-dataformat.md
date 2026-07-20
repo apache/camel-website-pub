@@ -196,6 +196,9 @@ All the rows can either:
 -   be read on the fly using an iterator (`lazyLoad` option with `true`).
     
 
+> **Note**
+> When using `lazyLoad=true`, the returned iterator holds a reference to the underlying input stream. The iterator implements `Closeable`, so you should ensure it is closed when no longer needed (for example, by fully consuming it or by explicitly calling `close()` in a processor). If the iterator is not closed, the input stream will not be released until garbage collection.
+
 ### Usage example: unmarshalling a CSV format into maps with automatic headers
 
 -   Java

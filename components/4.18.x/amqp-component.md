@@ -202,7 +202,7 @@ Enum values:
  |  | DefaultTaskExecutorType |
 | **eagerLoadingOfProperties** (consumer (advanced)) | Enables eager loading of JMS properties and payload as soon as a message is loaded which generally is inefficient as the JMS properties may not be required but sometimes can catch early any issues with the underlying JMS provider and the use of JMS properties. See also the option eagerPoisonBody. | false | boolean |
 | **eagerPoisonBody** (consumer (advanced)) | If eagerLoadingOfProperties is enabled and the JMS message payload (JMS body or JMS properties) is poison (cannot be read/mapped), then set this text as the message body instead so the message can be processed (the cause of the poison are already stored as exception on the Exchange). This can be turned off by setting eagerPoisonBody=false. See also the option eagerLoadingOfProperties. | Poison JMS message due to ${exception.message} | String |
-| **exposeListenerSession** (consumer (advanced)) | Specifies whether the listener session should be exposed when consuming messages. | false | boolean |
+| **exposeListenerSession** (consumer (advanced)) | Specifies whether the listener session should be exposed when consuming messages. | true | boolean |
 | **replyToConsumerType** (consumer (advanced)) | 
 
 The consumer type of the reply consumer (when doing request/reply), which can be one of: Simple, Default, or Custom. The consumer type determines which Spring JMS listener to use. Default will use org.springframework.jms.listener.DefaultMessageListenerContainer, Simple will use org.springframework.jms.listener.SimpleMessageListenerContainer. When Custom is specified, the MessageListenerContainerFactory defined by the messageListenerContainerFactory option will determine what org.springframework.jms.listener.AbstractMessageListenerContainer to use.
@@ -599,7 +599,7 @@ Enum values:
 
 
  |  | ExchangePattern |
-| **exposeListenerSession** (consumer (advanced)) | Specifies whether the listener session should be exposed when consuming messages. | false | boolean |
+| **exposeListenerSession** (consumer (advanced)) | Specifies whether the listener session should be exposed when consuming messages. | true | boolean |
 | **replyToConsumerType** (consumer (advanced)) | 
 
 The consumer type of the reply consumer (when doing request/reply), which can be one of: Simple, Default, or Custom. The consumer type determines which Spring JMS listener to use. Default will use org.springframework.jms.listener.DefaultMessageListenerContainer, Simple will use org.springframework.jms.listener.SimpleMessageListenerContainer. When Custom is specified, the MessageListenerContainerFactory defined by the messageListenerContainerFactory option will determine what org.springframework.jms.listener.AbstractMessageListenerContainer to use.

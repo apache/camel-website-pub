@@ -1,13 +1,14 @@
-urls[815]{loc,lastmod}:
+urls[817]{loc,lastmod}:
   https://camel.apache.org/categories/AI/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/blog/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/,2026-07-20T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/,2026-07-20T00:00:00+00:00
+  https://camel.apache.org/categories/Tooling/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.18.3/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/releases/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.21.0/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/hawtio-ai/,2026-07-10T00:00:00+00:00
-  https://camel.apache.org/categories/Tooling/,2026-07-10T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-elevates-citrus/,2026-07-06T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-07-06T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-43866.md,2026-07-05T10:00:00+02:00
@@ -802,6 +803,7 @@ urls[815]{loc,lastmod}:
   https://camel.apache.org/community/contributing/,
   https://camel.apache.org/docs/,
   https://camel.apache.org/download/,
+  https://camel.apache.org/download/camel-cli-launcher/,
   https://camel.apache.org/community/mailing-list/,
   https://camel.apache.org/misc/,
   https://camel.apache.org/sitemap/,

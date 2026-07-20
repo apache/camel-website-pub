@@ -2,8 +2,9 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[219]{title,link,pubDate,description}:
+posts[220]{title,link,pubDate,description}:
   Apache Camel Is Not Afraid of AI|https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/index.md|Mon, 20 Jul 2026 00:00:00 +0000|The Apache Camel project pointed a frontier AI model at 19 years of integration code and said: find what we missed. It found 165 bugs for the upcoming 4.22 LTS release. Not cosmetic issues — concurren
+  Installing the Apache Camel CLI Launcher|https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/index.md|Mon, 20 Jul 2026 00:00:00 +0000|Getting started with the Camel CLI used to mean installing a JDK, then jbang, then finally running jbang camel@apache/camel init for the first time. That friction is gone. install.sh and install.ps1 g
   Hawtio AI: Utilizing AI in the Operational Phase of Camel Integrations|https://camel.apache.org/blog/2026/07/hawtio-ai/index.md|Fri, 10 Jul 2026 00:00:00 +0000|Apache Camel and AI AI is a hot topic in the Apache Camel community. When thinking about how to leverage AI in the Apache Camel ecosystem, there are broadly two directions: Incorporating AI services i
   How Apache Camel elevates Citrus Integration Testing to next levels|https://camel.apache.org/blog/2026/07/camel-elevates-citrus/index.md|Mon, 06 Jul 2026 00:00:00 +0000|Citrus is a powerful integration testing framework that orchestrates end-to-end test scenarios with clean, readable Java code. As a framework Citrus provides several ready-to-use components to connect
   RELEASE 4.14.8|https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/index.md|Sat, 04 Jul 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.8 patch release with 43 bug fixes and improvements. The artifacts are published and ready for you to download from the Centra

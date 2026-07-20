@@ -16,6 +16,13 @@
       <description>The Apache Camel project pointed a frontier AI model at 19 years of integration code and said: find what we missed.&#xA;It found 165 bugs for the upcoming 4.22 LTS release. Not cosmetic issues — concurrency races, silent data loss scenarios, security gaps, and edge cases buried deep in 350+ connectors. We fixed all of them — every single one — with a median fix time of 1 day, the same pace this project has maintained for 17 of the last 19 years.</description>
     </item>
     <item>
+      <title>Installing the Apache Camel CLI Launcher</title>
+      <link>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</link>
+      <pubDate>Mon, 20 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</guid>
+      <description>Getting started with the Camel CLI used to mean installing a JDK, then jbang, then finally running jbang camel@apache/camel init for the first time. That friction is gone. install.sh and install.ps1 get the Camel CLI Launcher running on your machine with a single command, no package manager and no separate jbang install required.&#xA;One-line install On macOS and Linux:&#xA;curl -fsSL https://camel.apache.org/install.sh | sh On Windows, in PowerShell:&#xA;irm https://camel.apache.org/install.ps1 | iex Both installers resolve and install the latest published release by default, or a specific version if you request one with --version (install.</description>
+    </item>
+    <item>
       <title>Kamelets 4.18.3</title>
       <link>https://camel.apache.org/releases/kamelets-4.18.3/</link>
       <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
@@ -5474,6 +5481,13 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/contributing/</guid>
       <description>Thank you for expressing your interest in contributing to Apache Camel, a versatile open-source integration framework. Apache Camel consists of various subprojects, each with its own specific contribution guidelines. To ensure a smooth and effective contribution process, it is important to familiarize yourself with the guidelines specific to the subproject you intend to contribute to. Check the pages for each of the subprojects for details about how to contribute:&#xA;Camel Core Camel K Camel Kafka Connector Camel Karaf Camel Quarkus Camel Spring Boot If in doubt about where to start, check the contributing guide from Camel Core, which provides the overall guidelines for the project and contains comprehensive documentation that may apply for the subprojects.</description>
+    </item>
+    <item>
+      <title>Install the Camel CLI Launcher</title>
+      <link>https://camel.apache.org/download/camel-cli-launcher/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/download/camel-cli-launcher/</guid>
+      <description>The Camel CLI Launcher can be installed on a single machine without a package manager. The installer scripts published on this site download the launcher from Maven Central and verify it against a SHA-256 checksum published here before running it. Installation is always per-user and never requires sudo or elevation.&#xA;Requirements A Java 17 or newer runtime discoverable on your system. curl (macOS and Linux) or PowerShell 5.1+ (Windows). Quick install With no arguments the installer resolves and installs the latest published release.</description>
     </item>
     <item>
       <title>Mailing Lists</title>

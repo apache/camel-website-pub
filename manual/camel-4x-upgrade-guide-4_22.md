@@ -49,13 +49,13 @@ Candidates older than Java 17, missing, non-executable, or with unparseable vers
 
 The obsolete macOS `JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/…​` default was removed from `camel.sh`; set `JAVA_HOME` or `JAVACMD`, or ensure a Java 17+ `java` is on `PATH`. The Gentoo `java-config` auto-detection and the IBM AIX `$JAVA_HOME/jre/sh/java` probe were also removed; set `JAVA_HOME` or `JAVACMD` explicitly on those platforms. `JAVA_OPTS` handling is unchanged: when unset, the default `-Xmx512m` heap is applied.
 
-#### Native `camel.exe` in the launcher distribution
+#### Native `camel.exe` in the WinGet package
 
-The `camel-launcher` distribution now ships two native Windows executables: `bin/camel-x64.exe` (x86\_64) and `bin/camel-arm64.exe` (aarch64), alongside `bin/camel.bat`. Both are thin bootstraps: they forward all arguments to the adjacent `camel.bat` (preserving spaces and Unicode) and return its exit code. They exist so package managers that require a genuine executable (such as WinGet) work correctly. Users may continue to invoke `bin\camel.bat`; all three behave identically.
+The WinGet package now ships two native Windows executables: `bin/camel-x64.exe` (x86\_64) and `bin/camel-arm64.exe` (aarch64), alongside `bin/camel.bat`. Both are thin bootstraps: they forward all arguments to the adjacent `camel.bat` (preserving spaces and Unicode) and return its exit code. WinGet selects the executable matching the host architecture and exposes it as `camel.exe`.
 
-The native executables are now cross-compiled from any host OS using [clang/llvm-mingw](https://github.com/mstorsjo/llvm-mingw), replacing the previous MSVC-only build that required a Windows host. The build is activated by `-Dcamel.exe.build=true` or `-Prelease` and requires `llvm-mingw` on `PATH`.
+The public `camel-launcher-<version>-bin.zip` and `.tar.gz` archives do not contain these WinGet-specific executables. Windows users of those archives should continue to invoke `bin\camel.bat`.
 
-If you have tooling that referenced `bin/camel.exe`, update it to use `bin/camel-x64.exe` (for x86\_64 Windows) or `bin/camel-arm64.exe` (for ARM64 Windows).
+The native executables are now cross-compiled from any host OS using [clang/llvm-mingw](https://github.com/mstorsjo/llvm-mingw), replacing the previous MSVC-only build that required a Windows host. The build is activated by `-Dcamel.exe.build=true` and requires `llvm-mingw` on `PATH`. Release builds get this from `maven-release-plugin`, which passes it alongside `-Prelease`.
 
 #### OpenTelemetry agent export target changes
 
@@ -92,7 +92,7 @@ Installation is always per-user and never requires elevation or `sudo`:
 
 -   POSIX (`install.sh`) installs under `${XDG_DATA_HOME:-$HOME/.local/share}/camel-cli/versions/<version>` and activates it via a symlink at `$HOME/.local/bin/camel`. The installer never writes to shell profile files (`.bashrc`, `.profile`, etc.); if `$HOME/.local/bin` is not already on `PATH`, it prints guidance instead.
     
--   Windows (`install.ps1`) installs under `%LOCALAPPDATA%\Apache Camel\cli\versions\<version>` and activates it via a `camel.cmd` shim at `%LOCALAPPDATA%\Apache Camel\bin\camel.cmd` that delegates to the staged `camel-x64.exe` or `camel-arm64.exe` (auto-detected). The bin directory is added once, case-insensitively, to the current user’s `PATH`; the machine `PATH` is never modified.
+-   Windows (`install.ps1`) installs under `%LOCALAPPDATA%\Apache Camel\cli\versions\<version>` and activates it via a `camel.cmd` shim at `%LOCALAPPDATA%\Apache Camel\bin\camel.cmd` that delegates to the staged `camel.bat`. The bin directory is added once, case-insensitively, to the current user’s `PATH`; the machine `PATH` is never modified.
     
 
 Previously installed version directories are left in place after an upgrade or downgrade and must be removed manually. Reinstalling the same version replaces that version directory.
@@ -146,6 +146,33 @@ The new behavior activates automatically when all of the following are true:
     
 
 No configuration changes are required. The existing `maxAutoLockRenewDuration` option controls how long Camel will continue renewing a message’s lock.
+
+### camel-azure - component-specific CredentialType enums removed
+
+The component-specific `CredentialType` enums, deprecated since Camel 4.19.0, have been removed in favor of the shared `org.apache.camel.component.azure.common.CredentialType` enum from `camel-azure-common`:
+
+-   `org.apache.camel.component.azure.cosmosdb.CredentialType`
+    
+-   `org.apache.camel.component.azure.eventgrid.CredentialType`
+    
+-   `org.apache.camel.component.azure.eventhubs.CredentialType`
+    
+-   `org.apache.camel.component.file.azure.CredentialType` (camel-azure-files)
+    
+-   `org.apache.camel.component.azure.functions.CredentialType`
+    
+-   `org.apache.camel.component.azure.key.vault.CredentialType`
+    
+-   `org.apache.camel.component.azure.servicebus.CredentialType`
+    
+-   `org.apache.camel.component.azure.storage.blob.CredentialType`
+    
+-   `org.apache.camel.component.azure.storage.datalake.CredentialType`
+    
+-   `org.apache.camel.component.azure.storage.queue.CredentialType`
+    
+
+Endpoint URIs are unaffected: the credential type option values keep the same names. Java code that imports one of the removed enums — including typed Endpoint DSL calls such as `credentialType(CredentialType)` — must switch the import to `org.apache.camel.component.azure.common.CredentialType`.
 
 ### camel-debezium
 
