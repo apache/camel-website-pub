@@ -414,6 +414,16 @@ There are three different Credential Types: `AZURE_IDENTITY`, `TOKEN_CREDENTIAL`
 -   Provide `connectionString` string it is the simplest option to get started.
     
 
+> **Important**
+> The `SharedAccessKey` part of a connection string is a Base64-encoded value that often contains characters with a special meaning in URIs (such as `+`, `/` or `=`). When the `connectionString` is configured directly in an endpoint URI (including the Endpoint DSL), wrap the value with `RAW()` so it is not URI-decoded, otherwise authentication fails with `status-code: 401 …​ InvalidSignature: The token has an invalid signature`:
+>
+> ```java
+> from("azure-servicebus:myQueue?connectionString=RAW(Endpoint=sb://myhost.servicebus.windows.net/;SharedAccessKeyName=test;SharedAccessKey=aBc+dEf/123=)")
+>     .to("mock:result");
+> ```
+>
+> See [Configuring parameter values using raw values](../../manual/endpoint.html#_configuring_parameter_values_using_raw_values_such_as_passwords) for more details.
+
 **TOKEN\_CREDENTIAL**:
 
 -   Provide an implementation of `com.azure.core.credential.TokenCredential` into the Camel’s Registry, e.g., using the `com.azure.identity.DefaultAzureCredentialBuilder().build();` API. See the documentation [here about Azure-AD authentication](https://docs.microsoft.com/en-us/azure/active-directory/authentication/overview-authentication).

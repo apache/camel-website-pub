@@ -9,6 +9,8 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ### camel-jbang
 
+The Camel JBang CLI (Camel CLI) and TUI have been promoted from _Preview_ to _Stable_ support level. The MCP Server has also been promoted to _Stable_.
+
 The Camel JBang CLI now automatic resolves quarkus version to use, instead of hardcoded `3.33.1.1` ([https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b](https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b)).
 
 The `camel cmd route-diagram` and `camel cmd route-topology` now accept one or more Camel route source files (instead of only the name/pid of a running integration), so diagrams and inter-route topology can be generated at design/source time without starting the application first, for example:
@@ -49,7 +51,11 @@ The obsolete macOS `JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/…​
 
 #### Native `camel.exe` in the launcher distribution
 
-The `camel-launcher` Windows distribution now ships a native x64 `bin/camel.exe` alongside `bin/camel.bat`. `camel.exe` is a thin bootstrap: it forwards all arguments to the adjacent `camel.bat` (preserving spaces and Unicode) and returns its exit code. It exists so package managers that require a genuine executable users may continue to invoke `bin\camel.bat`; both behave identically.
+The `camel-launcher` distribution now ships two native Windows executables: `bin/camel-x64.exe` (x86\_64) and `bin/camel-arm64.exe` (aarch64), alongside `bin/camel.bat`. Both are thin bootstraps: they forward all arguments to the adjacent `camel.bat` (preserving spaces and Unicode) and return its exit code. They exist so package managers that require a genuine executable (such as WinGet) work correctly. Users may continue to invoke `bin\camel.bat`; all three behave identically.
+
+The native executables are now cross-compiled from any host OS using [clang/llvm-mingw](https://github.com/mstorsjo/llvm-mingw), replacing the previous MSVC-only build that required a Windows host. The build is activated by `-Dcamel.exe.build=true` or `-Prelease` and requires `llvm-mingw` on `PATH`.
+
+If you have tooling that referenced `bin/camel.exe`, update it to use `bin/camel-x64.exe` (for x86\_64 Windows) or `bin/camel-arm64.exe` (for ARM64 Windows).
 
 #### OpenTelemetry agent export target changes
 
@@ -105,7 +111,11 @@ String chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
 Result<String> chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
 ```
 
-### camel-openai
+### camel-langchain4j-chat
+
+The helper classes `OpenAiChatLanguageModelBuilder` and `HugginFaceChatLanguageModelBuilder` have been removed. They were not wired into the component; the `chatModel` is autowired instead.
+
+If you used these helpers directly, configure your `ChatModel` with LangChain4j’s own builders or Spring Boot starters and inject it into the component. === camel-openai
 
 The `conversationMemory` feature on the `chat-completion` operation has two behavior fixes:
 
@@ -395,6 +405,12 @@ The clustered route controller property `camel.clustered.controller.initial-dela
 
 The `replyTimeout` option on the component level has been fixed to default to 30 seconds, aligning it with the endpoint-level default that was documented since Camel 3.20.7 / 3.21. Previously, the component-level default was still 5 seconds, which would override the endpoint’s declared 30-second default. If you were relying on the effective 5-second timeout, you can restore it by explicitly setting `replyTimeout=5000` on the component or endpoint.
 
+### camel-spring-rabbitmq - queue durable default changed to true
+
+The queue `durable` default has been changed from `false` to `true` when using `autoDeclare`. This aligns queues with the exchange default (which was already `durable=true`) and with RabbitMQ 4.3+ which no longer permits non-durable, non-exclusive queues by default (the `transient_nonexcl_queues` deprecated feature is now denied by default).
+
+If you were relying on non-durable queues, you can restore the previous behavior by explicitly setting `arg.queue.durable=false&arg.queue.exclusive=true` on the endpoint URI. Note that RabbitMQ 4.3+ requires non-durable queues to also be exclusive.
+
 ### camel-core - Multicast UseOriginalAggregationStrategy fix
 
 The Multicast EIP now correctly honors `UseOriginalAggregationStrategy`, consistent with the Splitter and Recipient List EIPs. Previously, Multicast did not bind the original exchange on the strategy, so the strategy was silently ineffective — especially in error scenarios where the aggregated result could overwrite the original exchange body instead of preserving it.
@@ -453,6 +469,20 @@ The `InMemorySagaCoordinator` used for the Saga EIP (when no external LRA coordi
 The coordinator now returns the actual finalization future, so the exchange waits for the compensation or completion callbacks to finish (including retries). If all retry attempts fail, the failure is propagated as an exception on the exchange, consistent with the `camel-lra` coordinator behavior.
 
 This is a behavior change: routes that previously completed immediately regardless of compensation/completion outcome will now wait for finalization and may see exceptions that were previously swallowed. If your route relies on fire-and-forget saga finalization, consider using `MANUAL` completion mode instead.
+
+### camel-azure-eventhubs - producer now filters Camel-internal headers
+
+The `azure-eventhubs` producer now applies a `DefaultHeaderFilterStrategy` to the headers copied onto `EventData` application properties. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) are no longer forwarded to Azure Event Hubs, consistent with the inbound header filtering performed by other components.
+
+Ordinary application headers are unaffected.
+
+### camel-azure-storage-datalake - openInputStream no longer uses Blob Query API
+
+The `getFile` operation on the Data Lake consumer/producer now uses the standard `client.openInputStream().getInputStream()` instead of `client.openQueryInputStream("SELECT * from BlobStorage")`. The previous implementation relied on the Blob Query API, which had known issues requiring a `SkipLastByteInputStream` workaround. The `SkipLastByteInputStream` class in `camel-util` has been deprecated and will be removed in a future version.
+
+### camel-azure-storage-blob - page-blob range calculation corrected
+
+The page-blob `getRange` calculation has been corrected from `end - start` to `end - start + 1`, since Azure page blob ranges are inclusive on both ends. If you had a workaround adjusting the range values to compensate for this off-by-one, it should be removed.
 
 ### camel-xslt / camel-xslt-saxon - transformerFactoryConfigurationStrategy now honored
 

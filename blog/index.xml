@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Is Not Afraid of AI</title>
+      <link>https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/</link>
+      <pubDate>Mon, 20 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/</guid>
+      <description>The Apache Camel project pointed a frontier AI model at 19 years of integration code and said: find what we missed.&#xA;It found 165 bugs for the upcoming 4.22 LTS release. Not cosmetic issues — concurrency races, silent data loss scenarios, security gaps, and edge cases buried deep in 350+ connectors. We are fixing them. As of today, 148 are already resolved, with a median fix time of 1 day — the same pace this project has maintained for 17 of the last 19 years.</description>
+    </item>
     <item>
       <title>Hawtio AI: Utilizing AI in the Operational Phase of Camel Integrations</title>
       <link>https://camel.apache.org/blog/2026/07/hawtio-ai/</link>

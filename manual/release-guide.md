@@ -18,6 +18,8 @@ To prepare or perform a release, you **must be** at least an Apache Camel commit
     
 -   Make sure you are using the expected supported Java version.
     
+-   The `-Prelease` Maven profile cross-compiles the native `camel-x64.exe` and `camel-arm64.exe` Windows bootstraps using the `x86_64-w64-mingw32-clang` and `aarch64-w64-mingw32-clang` compilers from [llvm-mingw 20260616](https://github.com/mstorsjo/llvm-mingw/releases/tag/20260616). For a local release, install that toolchain and add its `bin/` directory to `PATH`; a missing toolchain causes a loud build failure (never a silent skip). The CI snapshot-deploy pipeline (`Jenkinsfile.deploy`) reuses an agent-provided toolchain when it is already on `PATH` and otherwise downloads the pinned, SHA256-verified copy automatically, so no manual provisioning of the Jenkins agents is required.
+    
 
 ## GPG setup
 

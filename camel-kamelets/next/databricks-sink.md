@@ -30,7 +30,7 @@ At runtime, the `databricks-sink` Kamelet relies upon the presence of the follow
     
 -   camel:sql
     
--   mvn:com.databricks:databricks-jdbc:3.4.1
+-   mvn:com.databricks:databricks-jdbc:3.4.2
     
 -   mvn:org.apache.commons:commons-dbcp2:2.14.0
     

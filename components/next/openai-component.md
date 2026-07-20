@@ -134,6 +134,7 @@ Enum values:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **additionalBodyProperty** (producer) | Additional JSON properties to include in the request body (e.g. additionalBodyProperty.traceId=123). This is a multi-value option with prefix: additionalBodyProperty. |  | Map |
+| **additionalHeader** (producer) | Additional HTTP request headers to send with every API call (e.g. additionalHeader.OpenAI-Organization=my-org or additionalHeader.api-key=secret). Values may contain secrets. This is a multi-value option with prefix: additionalHeader. |  | Map |
 | **additionalResponseHeader** (producer) | Map additional fields from the response message to Camel headers. The key is the field name in the API response, the value is the Camel header name (e.g. additionalResponseHeader.reasoning\_content=CamelMyReasoningHeader). This is a multi-value option with prefix: additionalResponseHeader. |  | Map |
 | **apiKey** (producer) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. |  | String |
 | **audioLanguage** (producer) | The language of the input audio in ISO-639-1 format (e.g., 'en'). Improves accuracy and latency. |  | String |
@@ -186,6 +187,7 @@ Enum values:
 
  | base64 | String |
 | **jsonSchema** (producer) | JSON schema for structured output validation. |  | String |
+| **maxRetries** (producer) | Maximum number of times the OpenAI SDK client retries failed requests. The SDK retry is rate-limit aware (honors Retry-After on 429). | 2 | int |
 | **maxTokens** (producer) | Maximum number of tokens to generate. |  | Integer |
 | **maxToolIterations** (producer) | Maximum number of tool call loop iterations to prevent infinite loops. | 50 | int |
 | **mcpProtocolVersions** (producer) | Comma-separated list of MCP protocol versions to advertise when connecting to MCP servers using Streamable HTTP transport. When not set, the SDK default is used. Example: 2024-11-05,2025-03-26,2025-06-18. |  | String |
@@ -194,6 +196,7 @@ Enum values:
 | **mcpTimeout** (producer) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
 | **model** (producer) | The model to use for chat completion. |  | String |
 | **outputClass** (producer) | Fully qualified class name for structured output using response format. |  | String |
+| **requestTimeout** (producer) | HTTP request timeout in milliseconds for the OpenAI SDK client. When 0 or negative, the SDK default (10 minutes) is used. | 0 | long |
 | **storeFullResponse** (producer) | Store the full response in the exchange property 'CamelOpenAIResponse' in non-streaming mode. | false | boolean |
 | **streaming** (producer) | Enable streaming responses. | false | boolean |
 | **stripThinking** (producer) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
@@ -231,7 +234,7 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAITopP** (producer) Constant: [`TOP_P`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOP_P) | An alternative to temperature for controlling randomness. Uses nucleus sampling where the model considers tokens with top\_p probability mass. |  | Double |
 | **CamelOpenAIMaxTokens** (producer) Constant: [`MAX_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MAX_TOKENS) | The maximum number of tokens to generate in the completion. |  | Integer |
 | **CamelOpenAIStreaming** (producer) Constant: [`STREAMING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STREAMING) | Whether to stream the response back incrementally. |  | Boolean |
-| **CamelOpenAIOutputClass** (producer) Constant: [`OUTPUT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#OUTPUT_CLASS) | The Java class to use for structured output parsing. |  | Class |
+| **CamelOpenAIOutputClass** (producer) Constant: [`OUTPUT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#OUTPUT_CLASS) | The Java class name (FQCN) to use for structured output parsing. |  | String |
 | **CamelOpenAIJsonSchema** (producer) Constant: [`JSON_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA) | The JSON schema to use for structured output validation. |  | String |
 | **CamelOpenAIStripThinking** (producer) Constant: [`STRIP_THINKING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STRIP_THINKING) | Whether to strip …​ blocks from the response body. |  | Boolean |
 | **CamelOpenAIMediaType** (producer) Constant: [`MEDIA_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MEDIA_TYPE) | The MIME type of the message body when sending a file or binary content (File, WrappedFile, byte or InputStream) to the model. Takes precedence over component content-type headers and automatic MIME type detection. |  | String |

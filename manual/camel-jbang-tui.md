@@ -6,9 +6,6 @@ Camel TUI is a terminal dashboard for developing, prototyping, and understanding
 
 ![TUI Overview showing multiple routes](_images/jbang/camel-tui-topology-overview.svg)
 
-> **Note**
-> This module is in **Preview** status. The TUI is designed for development and prototyping, not production monitoring.
-
 ## Getting Started
 
 You can start using the TUI in two ways: with your own route, or by running one of the built-in examples.

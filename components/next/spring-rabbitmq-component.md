@@ -416,7 +416,7 @@ Then Spring RabbitMQ will automatically declare the necessary elements and set u
 
 The elements can be configured using the multivalued `args` option.
 
-For example, to specify the queue as durable and exclusive, you can configure the endpoint uri with `arg.queue.durable=true&arg.queue.exclusive=true`.
+For example, to specify the queue as exclusive, you can configure the endpoint uri with `arg.queue.exclusive=true`.
 
 **Exchanges**
 
@@ -434,7 +434,7 @@ You can also configure any additional `x-` arguments. See details in the RabbitM
 | Option | Type | Description | Default |
 | --- | --- | --- | --- |
 | autoDelete | boolean | True if the server should delete the queue when it is no longer in use (queue that has had at least one consumer is deleted when last consumer unsubscribes). | false |
-| durable | boolean | A durable queue will survive a server restart. | false |
+| durable | boolean | A durable queue will survive a server restart. | true |
 | exclusive | boolean | Whether the queue is exclusive | false |
 | x-dead-letter-exchange | String | The name of the dead letter exchange. If none configured, then the component configured value is used. |  |
 | x-dead-letter-routing-key | String | The routing key for the dead letter exchange. If none configured, then the component configured value is used. |  |

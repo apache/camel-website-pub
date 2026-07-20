@@ -76,7 +76,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Azure Event Hubs component supports 24 options, which are listed below.
+The Azure Event Hubs component supports 25 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -114,6 +114,7 @@ Enum values:
 | **partitionKey** (producer) | Sets a hashing key to be provided for the batch of events, which instructs the Event Hubs service to map this key to a specific partition. The selection of a partition is stable for a given partition hashing key. Should any other batches of events be sent using the same exact partition hashing key, the Event Hubs service will route them all to the same partition. This should be specified only when there is a need to group events by partition, but there is flexibility into which partition they are routed. If ensuring that a batch of events is sent only to a specific partition, it is recommended that the identifier of the position be specified directly when sending the batch. |  | String |
 | **producerAsyncClient** (producer) | **Autowired** Sets the EventHubProducerAsyncClient.An asynchronous producer responsible for transmitting EventData to a specific Event Hub, grouped together in batches. Depending on the com.azure.messaging.eventhubs.models.CreateBatchOptions options specified when creating an com.azure.messaging.eventhubs.EventDataBatch, the events may be automatically routed to an available partition or specific to a partition. Use by this component to produce the data in camel producer. |  | EventHubProducerAsyncClient |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **headerFilterStrategy** (filter) | To use a custom org.apache.camel.spi.HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **connectionString** (security) | Instead of supplying namespace, sharedAccessKey, sharedAccessName, etc. you can supply the connection string for your eventHub. The connection string for EventHubs already includes all the necessary information to connect to your EventHub. To learn how to generate the connection string, take a look at this documentation: [https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string](https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-get-connection-string). |  | String |
 | **credentialType** (security) | 
 
