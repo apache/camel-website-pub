@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 377 in 303 JAR artifacts (12 deprecated)
+Number of Non-Core Components: 378 in 304 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -124,6 +124,7 @@ Number of Non-Core Components: 377 in 303 JAR artifacts (12 deprecated)
 | [Cassandra CQL](cql-component.md) | camel-cassandraql | Stable | 2.15 | Integrate with Cassandra 2.0 using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
 | [ChatScript](chatscript-component.md) | camel-chatscript | Stable | 3.0 | Chat with a ChatScript Server. |
 | [Chunk](chunk-component.md) | camel-chunk | Stable | 2.15 | Transform messages using Chunk templating engine. |
+| [ClickHouse](clickhouse-component.md) | camel-clickhouse | Preview | 4.22 | Interact with ClickHouse, the high-performance columnar OLAP database, for high-throughput ingestion and OLAP queries. |
 | [ClickUp](clickup-component.md) | camel-clickup | Preview | 4.9 | Receives events from ClickUp |
 | [CM SMS Gateway](cm-sms-component.md) | camel-cm-sms | Stable | 2.18 | Send SMS messages via CM SMS Gateway. |
 | [CoAP](coap-component.md) | camel-coap | Stable | 2.16 | Send and receive messages to/from CoAP (Constrained Application Protocol) capable devices. |
@@ -320,7 +321,7 @@ Number of Non-Core Components: 377 in 303 JAR artifacts (12 deprecated)
 | [OPC UA Browser](milo-browse-component.md) | camel-milo | Stable | 3.15 | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
 | [OPC UA Client](milo-client-component.md) | camel-milo | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](milo-server-component.md) | camel-milo | Stable | 2.19 | Make telemetry data available as an OPC UA server. |
-| [OpenAI](openai-component.md) | camel-openai | Stable | 4.17 | OpenAI endpoint for chat completion, embeddings, and audio transcription. |
+| [OpenAI](openai-component.md) | camel-openai | Stable | 4.17 | OpenAI endpoint for chat completion, embeddings, audio transcription, audio translation, and text-to-speech. |
 | [OpenSearch](opensearch-component.md) | camel-opensearch | Stable | 4.0 | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](openshift-build-configs-component.md) | camel-kubernetes | Stable | 2.17 | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](openshift-builds-component.md) | camel-kubernetes | Stable | 2.17 | Perform operations on OpenShift Builds. |

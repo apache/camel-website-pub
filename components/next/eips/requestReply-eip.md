@@ -71,6 +71,14 @@ from("jms:someQueue?exchangePattern=InOut")
             uri: bean:processMessage
 ```
 
+## How It Works
+
+The `InOut` exchange pattern is a contract between the route and the component endpoint. It tells the producer component that the caller expects a reply message.
+
+The exchange pattern does **not** affect how EIPs and processors work within the route. Processors such as `setBody`, `transform`, `process`, and `bean` always operate on the current message regardless of the exchange pattern. The pattern only matters when the exchange reaches a producer endpoint that acts on it.
+
+Whether a component acts on the pattern depends on the component. Components that support both modes, such as [JMS](../jms-component.md), [SEDA](../seda-component.md), and [AMQP](../amqp-component.md), use `InOut` to switch to request/reply messaging. For example, with JMS the component sets up a temporary reply queue (via `JMSReplyTo`) and waits for a response. Synchronous components such as [Direct](../direct-component.md) always process in the same thread and call stack, so the pattern has no practical effect on the dispatch behavior.
+
 ## Using setExchangePattern EIP
 
 You can specify the [Exchange Pattern](../../../manual/exchange-pattern.md) using `setExchangePattern` in the DSL.

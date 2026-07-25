@@ -404,7 +404,7 @@ Enum values:
 
 ## Message Headers
 
-The AWS Security Hub component supports 21 message header(s), which is/are listed below:
+The AWS Security Hub component supports 22 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -430,6 +430,7 @@ The AWS Security Hub component supports 21 message header(s), which is/are liste
 | **CamelAwsSecurityHubProcessedFindings** (batchUpdateFindings) Constant: [`PROCESSED_FINDINGS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#PROCESSED_FINDINGS) | The list of findings that were updated successfully. |  | List |
 | **CamelAwsSecurityHubFindingId** (getFindingHistory) Constant: [`FINDING_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FINDING_ID) | The finding ID to get history for. |  | String |
 | **CamelAwsSecurityHubProductArn** (getFindingHistory) Constant: [`PRODUCT_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#PRODUCT_ARN) | The product ARN for the finding. |  | String |
+| **CamelAwsSecurityHubFindingAggregatorArn** (getFindingAggregator) Constant: [`FINDING_AGGREGATOR_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FINDING_AGGREGATOR_ARN) | The ARN of the finding aggregator to retrieve. |  | String |
 
 ## Usage
 

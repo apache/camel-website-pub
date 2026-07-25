@@ -91,7 +91,11 @@ git checkout camel-4.20.0
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (4)
+### Bug (5)
+
+[CAMEL-24244](https://issues.apache.org/jira/browse/CAMEL-24244)
+
+camel-base-engine: DefaultStreamCachingStrategy.updateSpool calls lock() instead of unlock() in finally, blocking other threads forever
 
 [CAMEL-23355](https://issues.apache.org/jira/browse/CAMEL-23355)
 

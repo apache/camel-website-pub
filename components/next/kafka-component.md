@@ -1311,6 +1311,22 @@ To avoid blocking for too long, waiting for the whole set of records to fill the
 
 Notice the `pollTimeoutMs` should not be set to a high value, as it’s used directly by Kafka while receiving new messages from the broker. Camel is not active during this processing, and if the option has been configured with a high value, then Camel cannot trigger batch timeout or interval completion ahead of time. Therefore, it’s recommended to keep this value as default.
 
+#### Batch Headers
+
+The exchange carrying the batch also exposes the record metadata headers that every record in the batch agrees on: `CamelKafkaTopic` and `CamelKafkaPartition`. This makes it possible to read them before splitting the batch, for example to store the topic in a variable and reuse it after the split:
+
+_Java-only: reading the topic from the batch before splitting_
+
+```java
+from("kafka:topic?groupId=myGroup&batching=true&maxPollRecords=10")
+    .setVariable("topic", header(KafkaConstants.TOPIC))
+    .split(body())
+        .log("Record from ${variable.topic}")
+    .end();
+```
+
+A header is only set on the batch when **every** record in the batch carries the same value for it. If the batch spans multiple topics or partitions, the corresponding header is not set, since no single value would be correct for the batch as a whole. Per-record headers that naturally differ, such as `CamelKafkaOffset`, are never set on the batch — read those from the individual exchanges in the body.
+
 #### Automatic Commits
 
 By default, Camel uses automatic commits when using batch processing. In this case, Camel automatically commits the records after they have been successfully processed by the application.

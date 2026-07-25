@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, and audio transcription using the official openai-java SDK.
+The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, audio transcription, audio translation, and text-to-speech using the official openai-java SDK.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -32,6 +32,10 @@ Supported operations:
 -   `tool-execution` - Execute MCP tool calls from a stored chat completion response (used in manual tool loops)
     
 -   `audio-transcription` - Transcribe audio files to text using speech-to-text models (e.g., Whisper, GPT-4o Transcribe)
+    
+-   `audio-translation` - Transcribe and translate audio files into English text (e.g., Whisper)
+    
+-   `audio-speech` - Synthesize spoken audio from text using text-to-speech models (e.g., gpt-4o-mini-tts, tts-1)
     
 
 ## Configuring Options
@@ -109,7 +113,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform: 'chat-completion', 'embeddings', 'tool-execution', or 'audio-transcription'.
+**Required** The operation to perform: 'chat-completion', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', or 'audio-speech'.
 
 Enum values:
 
@@ -120,6 +124,10 @@ Enum values:
 -   tool-execution
     
 -   audio-transcription
+    
+-   audio-translation
+    
+-   audio-speech
     
 
 
@@ -187,6 +195,9 @@ Enum values:
 
  | base64 | String |
 | **jsonSchema** (producer) | JSON schema for structured output validation. |  | String |
+| **maxAgenticTokens** (producer) | Maximum cumulative prompt plus completion tokens allowed across the MCP agentic loop. When 0 or negative, no token budget is enforced. Enforcement runs after each API call that requests further tool execution, so actual spend may exceed the configured budget by up to one call (typically the largest, as the prompt grows each iteration). A final text response is returned even when cumulative usage exceeds the budget. | 0 | long |
+| **maxHistoryMessages** (producer) | When conversationMemory is enabled, retain at most this many messages in the exchange conversation history. System and developer messages are prepended separately and are not stored in history. Assistant tool-call blocks are kept intact and may retain slightly more than this limit to preserve tool result pairing. When 0, no message limit is applied. | 0 | int |
+| **maxHistoryTokens** (producer) | When conversationMemory is enabled, trim conversation history using a token estimate (character count / 4, including image payload size for multi-modal user messages). Oldest segments are dropped first until the estimated tokens are within this limit. Assistant tool-call blocks are removed as a unit with their tool results. The most recent segment is always retained, even when it alone exceeds this limit. When 0, no token limit is applied. | 0 | int |
 | **maxRetries** (producer) | Maximum number of times the OpenAI SDK client retries failed requests. The SDK retry is rate-limit aware (honors Retry-After on 429). | 2 | int |
 | **maxTokens** (producer) | Maximum number of tokens to generate. |  | Integer |
 | **maxToolIterations** (producer) | Maximum number of tool call loop iterations to prevent infinite loops. | 50 | int |
@@ -197,6 +208,34 @@ Enum values:
 | **model** (producer) | The model to use for chat completion. |  | String |
 | **outputClass** (producer) | Fully qualified class name for structured output using response format. |  | String |
 | **requestTimeout** (producer) | HTTP request timeout in milliseconds for the OpenAI SDK client. When 0 or negative, the SDK default (10 minutes) is used. | 0 | long |
+| **speechInstructions** (producer) | Optional instructions to control the voice of the generated audio. Does not work with tts-1 or tts-1-hd. |  | String |
+| **speechModel** (producer) | The model to use for text-to-speech (e.g., gpt-4o-mini-tts, tts-1, tts-1-hd). |  | String |
+| **speechResponseFormat** (producer) | 
+
+The audio format for text-to-speech output.
+
+Enum values:
+
+-   mp3
+    
+-   opus
+    
+-   aac
+    
+-   flac
+    
+-   wav
+    
+-   pcm
+    
+
+
+
+
+
+ | mp3 | String |
+| **speechSpeed** (producer) | The speed of the generated audio, from 0.25 to 4.0 where 1.0 is normal speed. |  | Double |
+| **speechVoice** (producer) | The voice to use for text-to-speech (e.g., alloy, echo, fable, onyx, nova, shimmer). See the OpenAI documentation for the full list of supported voices. | alloy | String |
 | **storeFullResponse** (producer) | Store the full response in the exchange property 'CamelOpenAIResponse' in non-streaming mode. | false | boolean |
 | **streaming** (producer) | Enable streaming responses. | false | boolean |
 | **stripThinking** (producer) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
@@ -243,12 +282,15 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIResponseModel** (producer) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_MODEL) | The model used for the completion response. |  | String |
 | **CamelOpenAIResponseId** (producer) Constant: [`RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ID) | The unique identifier for the completion response. |  | String |
 | **CamelOpenAIFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#FINISH_REASON) | The reason the completion finished (e.g., stop, length, content\_filter). |  | String |
-| **CamelOpenAIPromptTokens** (producer) Constant: [`PROMPT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PROMPT_TOKENS) | The number of tokens used in the prompt. |  | Integer |
-| **CamelOpenAICompletionTokens** (producer) Constant: [`COMPLETION_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#COMPLETION_TOKENS) | The number of tokens used in the completion. |  | Integer |
-| **CamelOpenAITotalTokens** (producer) Constant: [`TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOTAL_TOKENS) | The total number of tokens used (prompt completion). |  | Integer |
+| **CamelOpenAIPromptTokens** (producer) Constant: [`PROMPT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PROMPT_TOKENS) | The number of tokens used in the prompt for the latest API call. |  | Long |
+| **CamelOpenAICompletionTokens** (producer) Constant: [`COMPLETION_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#COMPLETION_TOKENS) | The number of tokens used in the completion for the latest API call. |  | Long |
+| **CamelOpenAITotalTokens** (producer) Constant: [`TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOTAL_TOKENS) | The total number of tokens used (prompt completion) for the latest API call. |  | Long |
 | **CamelOpenAIToolIterations** (producer) Constant: [`TOOL_ITERATIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOOL_ITERATIONS) | Number of tool call iterations performed in the agentic loop. |  | Integer |
 | **CamelOpenAIMcpToolCalls** (producer) Constant: [`MCP_TOOL_CALLS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MCP_TOOL_CALLS) | List of tool names called during the agentic loop. |  | List |
 | **CamelOpenAIMcpReturnDirect** (producer) Constant: [`MCP_RETURN_DIRECT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MCP_RETURN_DIRECT) | Whether the response came directly from a tool with returnDirect=true, rather than from the LLM. |  | Boolean |
+| **CamelOpenAIAgenticPromptTokens** (producer) Constant: [`AGENTIC_PROMPT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_PROMPT_TOKENS) | Cumulative prompt tokens consumed across all agentic loop iterations. |  | Long |
+| **CamelOpenAIAgenticCompletionTokens** (producer) Constant: [`AGENTIC_COMPLETION_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_COMPLETION_TOKENS) | Cumulative completion tokens consumed across all agentic loop iterations. |  | Long |
+| **CamelOpenAIAgenticTotalTokens** (producer) Constant: [`AGENTIC_TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_TOTAL_TOKENS) | Cumulative total tokens consumed across all agentic loop iterations. |  | Long |
 | **CamelOpenAIResponse** (producer) Constant: [`RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE) | The complete OpenAI response object. |  | ChatCompletion |
 | **CamelOpenAIEmbeddingModel** (producer) Constant: [`EMBEDDING_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_MODEL) | The model to use for embeddings. |  | String |
 | **CamelOpenAIEmbeddingDimensions** (producer) Constant: [`EMBEDDING_DIMENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_DIMENSIONS) | Number of output dimensions. |  | Integer |
@@ -266,6 +308,11 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIAudioTimestampGranularities** (producer) Constant: [`AUDIO_TIMESTAMP_GRANULARITIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TIMESTAMP_GRANULARITIES) | Comma-separated timestamp granularities: word, segment, or word,segment (verbose\_json only). |  | String |
 | **CamelOpenAIAudioDuration** (producer) Constant: [`AUDIO_DURATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DURATION) | Duration of the audio in seconds (verbose\_json only). |  | Double |
 | **CamelOpenAIAudioDetectedLanguage** (producer) Constant: [`AUDIO_DETECTED_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DETECTED_LANGUAGE) | Language detected in the audio (verbose\_json only). |  | String |
+| **CamelOpenAISpeechModel** (producer) Constant: [`SPEECH_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_MODEL) | The model to use for text-to-speech (e.g., gpt-4o-mini-tts, tts-1, tts-1-hd). |  | String |
+| **CamelOpenAISpeechVoice** (producer) Constant: [`SPEECH_VOICE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_VOICE) | The voice to use for the generated audio (e.g., alloy, echo, fable, onyx, nova, shimmer). |  | String |
+| **CamelOpenAISpeechResponseFormat** (producer) Constant: [`SPEECH_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_RESPONSE_FORMAT) | The audio format for text-to-speech output (mp3, opus, aac, flac, wav, pcm). |  | String |
+| **CamelOpenAISpeechSpeed** (producer) Constant: [`SPEECH_SPEED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_SPEED) | The speed of the generated audio (0.25 to 4.0, where 1.0 is normal speed). |  | Double |
+| **CamelOpenAISpeechInstructions** (producer) Constant: [`SPEECH_INSTRUCTIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_INSTRUCTIONS) | Optional instructions to control the voice of the generated audio (does not work with tts-1 or tts-1-hd). |  | String |
 
 ## Usage
 
@@ -853,6 +900,8 @@ The JSON schema must be a valid JSON object. Invalid schema strings will result 
 
 When `conversationMemory=true`, the component maintains conversation history in the `CamelOpenAIConversationHistory` exchange property (configurable via `conversationHistoryProperty` option). This history is scoped to a single Exchange and allows multi-turn conversations within a route.
 
+Use `maxHistoryMessages` and `maxHistoryTokens` to bound how much history is retained in that property. Oldest conversation segments are dropped first; assistant tool-call blocks are always removed together with their tool results. The most recent segment is always kept, even when it alone exceeds `maxHistoryMessages` or `maxHistoryTokens`. Token limits use a character-count / 4 estimate (including image payload size for multi-modal user messages).
+
 IMPORTANT:
 
 -   Conversation history is automatically updated with each assistant response for **non-streaming** responses only
@@ -1181,9 +1230,11 @@ The component may throw the following exceptions:
 
 -   `IllegalArgumentException`:
     
-    -   When an invalid operation is specified (supported: `chat-completion`, `embeddings`, `tool-execution`, `audio-transcription`)
+    -   When an invalid operation is specified (supported: `chat-completion`, `embeddings`, `tool-execution`, `audio-transcription`, `audio-translation`, `audio-speech`)
         
     -   When message body or user message is missing
+        
+    -   When the audio model is missing (audio-transcription, audio-translation) or the speech model is missing (audio-speech)
         
     -   When image file is provided without userMessage (chat-completion)
         

@@ -1,8 +1,11 @@
-urls[817]{loc,lastmod}:
+urls[818]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-07-24T00:00:00+00:00
+  https://camel.apache.org/categories/Community/,2026-07-24T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/,2026-07-24T00:00:00+00:00
+  https://camel.apache.org/,2026-07-24T00:00:00+00:00
+  https://camel.apache.org/categories/Usecases/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/,2026-07-20T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-07-20T00:00:00+00:00
-  https://camel.apache.org/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.18.3/,2026-07-17T00:00:00+00:00
@@ -51,7 +54,6 @@ urls[817]{loc,lastmod}:
   https://camel.apache.org/releases/release-4.18.3/,2026-07-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/RELEASE-4.18.3/,2026-07-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel421-whatsnew/,2026-07-02T00:00:00+00:00
-  https://camel.apache.org/categories/Community/,2026-07-01T00:00:00+00:00
   https://camel.apache.org/releases/release-4.21.0/,2026-07-01T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/RELEASE-4.21.0/,2026-07-01T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-who-maintains/,2026-07-01T00:00:00+00:00
@@ -67,7 +69,6 @@ urls[817]{loc,lastmod}:
   https://camel.apache.org/blog/2026/06/camel-bug-fix-track-record/,2026-06-14T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-dna-19-years/,2026-06-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/,2026-06-11T00:00:00+00:00
-  https://camel.apache.org/categories/Usecases/,2026-06-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-by-the-numbers/,2026-06-09T00:00:00+00:00
   https://camel.apache.org/categories/Camel-K/,2026-06-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-monitor-operator/,2026-06-04T00:00:00+00:00

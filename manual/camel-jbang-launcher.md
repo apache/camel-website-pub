@@ -52,4 +52,4 @@ The `--camel-version` option is not supported — it requires JBang to dynamical
 
 ## More Information
 
-See the general [Camel CLI](camel-jbang.md) documentation.
+See [Installing the Camel CLI Launcher](camel-jbang-launcher-install.md) for the website installer scripts, `camel self-update`, and \`camel doctor’s multi-install detection, and the general [Camel CLI](camel-jbang.md) documentation.

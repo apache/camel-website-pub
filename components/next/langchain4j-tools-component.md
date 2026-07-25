@@ -130,6 +130,7 @@ Enum values:
 
 
  |  | ExchangePattern |
+| **maxToolCallingRoundTrips** (producer) | Maximum number of tool-calling round trips (iterations) allowed before stopping. This prevents infinite loops when the LLM keeps requesting tool calls indefinitely. Each round trip consists of one LLM call and the execution of all tools requested in that call. Set to 0 for unlimited (not recommended). | 10 | int |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **chatModel** (advanced) | **Autowired** Chat Model of type dev.langchain4j.model.chat.ChatModel. |  | ChatModel |
 

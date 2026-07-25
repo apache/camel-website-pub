@@ -2,16 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2026-07-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Community/</loc>
+    <lastmod>2026-07-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/</loc>
+    <lastmod>2026-07-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-07-24T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Usecases/</loc>
+    <lastmod>2026-07-24T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/categories/AI/</loc>
     <lastmod>2026-07-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/</loc>
-    <lastmod>2026-07-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-07-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/</loc>
     <lastmod>2026-07-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</loc>
@@ -158,9 +167,6 @@
     <loc>https://camel.apache.org/blog/2026/07/camel421-whatsnew/</loc>
     <lastmod>2026-07-02T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Community/</loc>
-    <lastmod>2026-07-01T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/releases/release-4.21.0/</loc>
     <lastmod>2026-07-01T00:00:00+00:00</lastmod>
   </url><url>
@@ -204,9 +210,6 @@
     <lastmod>2026-06-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/06/community-showcase-banking-etl-rewrite/</loc>
-    <lastmod>2026-06-11T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Usecases/</loc>
     <lastmod>2026-06-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/06/camel-by-the-numbers/</loc>

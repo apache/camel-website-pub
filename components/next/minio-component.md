@@ -181,7 +181,7 @@ Enum values:
 | **accessKey** (security) | Amazon AWS Secret Access Key or Minio Access Key. If not set camel will connect to service for anonymous access. |  | String |
 | **secretKey** (security) | Amazon AWS Access Key Id or Minio Secret Key. If not set camel will connect to service for anonymous access. |  | String |
 | **serverSideEncryption** (security) | Server-side encryption. |  | ServerSideEncryption |
-| **serverSideEncryptionCustomerKey** (security) | Server-side encryption for source object while copy/move objects. |  | ServerSideEncryptionCustomerKey |
+| **serverSideEncryptionCustomerKey** (security) | Server-side encryption for source object while copy/move objects. |  | CustomerKey |
 
 ## Endpoint Options
 
@@ -358,7 +358,7 @@ Enum values:
 | **accessKey** (security) | Amazon AWS Secret Access Key or Minio Access Key. If not set camel will connect to service for anonymous access. |  | String |
 | **secretKey** (security) | Amazon AWS Access Key Id or Minio Secret Key. If not set camel will connect to service for anonymous access. |  | String |
 | **serverSideEncryption** (security) | Server-side encryption. |  | ServerSideEncryption |
-| **serverSideEncryptionCustomerKey** (security) | Server-side encryption for source object while copy/move objects. |  | ServerSideEncryptionCustomerKey |
+| **serverSideEncryptionCustomerKey** (security) | Server-side encryption for source object while copy/move objects. |  | CustomerKey |
 
 ## Message Headers
 

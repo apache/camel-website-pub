@@ -430,6 +430,7 @@ The AWS Security Hub component supports the following message header(s), which i
 | **CamelAwsSecurityHubProcessedFindings** (batchUpdateFindings) Constant: [`PROCESSED_FINDINGS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#PROCESSED_FINDINGS) | The list of findings that were updated successfully. |  | List |
 | **CamelAwsSecurityHubFindingId** (getFindingHistory) Constant: [`FINDING_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FINDING_ID) | The finding ID to get history for. |  | String |
 | **CamelAwsSecurityHubProductArn** (getFindingHistory) Constant: [`PRODUCT_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#PRODUCT_ARN) | The product ARN for the finding. |  | String |
+| **CamelAwsSecurityHubFindingAggregatorArn** (getFindingAggregator) Constant: [`FINDING_AGGREGATOR_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FINDING_AGGREGATOR_ARN) | The ARN of the finding aggregator to retrieve. |  | String |
 
 ## Usage
 

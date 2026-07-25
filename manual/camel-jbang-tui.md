@@ -336,7 +336,11 @@ Open the **F2** actions menu and choose **Settings…​** to change TUI prefere
 
 Use **↑**/**↓** to move between rows, **Space** (or **←**/**→**) to cycle the theme and tab settings, type to edit the default folder, **Enter** to save, and **Esc** to cancel.
 
-Settings are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.selectTab`, `camel.tui.defaultFolder`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` is treated as a project-level override and stays local, while every other key defaults to the global `~/.camel-cli.properties`. This means a project can deliberately pin a starting tab in its local config without redirecting your personal theme into the project file. See [Configuration](camel-jbang-configuration.md) for details on the global and local files.
+Settings are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.selectTab`, `camel.tui.defaultFolder`, `camel.tui.shell.history`, `camel.tui.ai.promptHistory`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` is treated as a project-level override and stays local, while every other key defaults to the global `~/.camel-cli.properties`. This means a project can deliberately pin a starting tab in its local config without redirecting your personal theme into the project file. See [Configuration](camel-jbang-configuration.md) for details on the global and local files.
+
+### Input history
+
+The embedded shell (**F6**) and AI prompt (**F8**) keep a recall list for the command line and prompt respectively. Use **↑**/**↓** on the input line to walk previous entries. Limits are configured with `camel.tui.shell.history` and `camel.tui.ai.promptHistory` in `.camel-cli.properties` (default `100` each; set to `0` to disable recall and persistence). Shell history is stored in `~/.camel/tui-shell.history`; AI prompt history in `~/.camel/tui-ai-prompt.history`.
 
 ## Keyboard Shortcuts
 
@@ -427,6 +431,8 @@ When the AI panel is open, input that starts with `/` runs a local panel command
 | `/run <camel run args>` (`/r`) | Run `camel run` with the provided arguments. |
 | `/infra <camel infra args>` (`/i`) | Run `camel infra` with the provided arguments. |
 | `/send <endpoint> <message text | @file>` (`/s`) | Send a message through `camel cmd send`. A body that is exactly one `@file` token is sent as `file:<path>`; inline `@file` text is sent literally. |
+
+Submitted prompts (including slash commands) participate in AI prompt history when `camel.tui.ai.promptHistory` is not `0`. Use **↑**/**↓** on the prompt line to recall them.
 
 ### Connecting an AI Agent
 

@@ -97,6 +97,17 @@ Installation is always per-user and never requires elevation or `sudo`:
 
 Previously installed version directories are left in place after an upgrade or downgrade and must be removed manually. Reinstalling the same version replaces that version directory.
 
+#### camel self-update and camel doctor
+
+Two new commands are available in the [Camel CLI Launcher](camel-jbang-launcher.md):
+
+-   `camel self-update` checks for and installs newer launcher releases, re-running the same published `install.sh`/`install.ps1` installer described above (see "Website installers for the Camel CLI" above) pinned to the resolved version, after checking whether an update is actually needed. Refuses to act on an installation managed by a package manager (Homebrew, Chocolatey, WinGet, Scoop, SDKMAN) or by JBang, naming that manager’s own upgrade command instead. Also refuses on an installation pinned to an explicit version at install time (`--version`/`-Version`), naming the pin file to remove to resume tracking new releases. Every `camel` invocation (except `self-update` itself) also prints a one-line notice, at most once every 24 hours, when a newer release is available; set `CAMEL_SELF_UPDATE_CHECK=false` to disable it.
+    
+-   `camel doctor` now additionally reports every Camel CLI installation found on the machine across the web installer and all supported package managers, marking which one is actually active on `PATH`, and exits non-zero when more than one is found.
+    
+
+See [Installing the Camel CLI Launcher](camel-jbang-launcher-install.md) for full details.
+
 ### camel-langchain4j-agent
 
 The `Agent.chat()` method return type has changed from `String` to `Result<String>` (from `dev.langchain4j.service.Result`). This allows the agent producer to expose token usage (input, output, total token count) and finish reason as exchange headers, consistent with the chat, tools, and embeddings components.
@@ -111,11 +122,90 @@ String chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
 Result<String> chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
 ```
 
+When RAG or tools are used, the agent producer also exposes `CamelLangChain4jAgentSources` (`List<dev.langchain4j.rag.content.Content>`) and `CamelLangChain4jAgentToolExecutions` (`List<dev.langchain4j.service.tool.ToolExecution>`) as exchange headers when present in the `Result`.
+
+#### Camel route tools now use ai-tool
+
+The `langchain4j-agent` producer now discovers Camel route tools from the `ai-tool` component (`AiToolRegistry`) instead of the `langchain4j-tools` component (`CamelToolExecutorCache`).
+
+Migrate your tool definition routes from `langchain4j-tools:` to `ai-tool:`:
+
+```java
+// Before (no longer works with langchain4j-agent)
+from("langchain4j-tools:userDb?tags=users&description=Query user database&parameter.userId=string")
+    .setBody(constant("{\"name\": \"John Doe\", \"id\": \"123\"}"));
+
+// After
+from("ai-tool:userDb?tags=users&description=Query user database&parameter.userId=string")
+    .setBody(constant("{\"name\": \"John Doe\", \"id\": \"123\"}"));
+```
+
+The `langchain4j-agent` producer endpoint is unchanged — only the tool consumer routes need to be migrated:
+
+```java
+from("direct:chat")
+    .to("langchain4j-agent:assistant?agent=#myAgent&tags=users");
+```
+
+Add the `camel-ai-tool` dependency to your project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-ai-tool</artifactId>
+</dependency>
+```
+
+#### Exchange isolation for Camel route tools
+
+Each Camel route tool invocation now runs on an isolated exchange copy. Previously, the live producer exchange was shared with the tool route, which caused tool side-effects (headers, body mutations) to leak into the calling exchange and introduced a data race when LangChain4j executed tools concurrently.
+
+After this change:
+
+-   Headers set by tool argument mapping (e.g. `input`) no longer appear on the calling exchange after the agent returns.
+    
+-   Headers set inside the tool route (e.g. custom side-effect headers) no longer leak.
+    
+-   The `CamelToolName` header is no longer visible on the calling exchange.
+    
+-   Tool execution errors are rethrown as `RuntimeCamelException` so that LangChain4j’s `ToolExecutionErrorHandler` and `compensateOnToolErrors` fire correctly. Previously, errors were swallowed and returned as a plain string, making LangChain4j believe the tool succeeded.
+    
+
+If your code reads tool-related headers from the calling exchange after agent invocation, you will need to adjust it. The agent’s `Result<String>` (and the new `CamelLangChain4jAgentToolExecutions` header) is the intended way to observe tool execution results.
+
 ### camel-langchain4j-chat
 
 The helper classes `OpenAiChatLanguageModelBuilder` and `HugginFaceChatLanguageModelBuilder` have been removed. They were not wired into the component; the `chatModel` is autowired instead.
 
-If you used these helpers directly, configure your `ChatModel` with LangChain4j’s own builders or Spring Boot starters and inject it into the component. === camel-openai
+If you used these helpers directly, configure your `ChatModel` with LangChain4j’s own builders or Spring Boot starters and inject it into the component.
+
+### camel-langchain4j-tools
+
+#### Tool-calling round trips now bounded by default
+
+The `langchain4j-tools` producer now limits the number of tool-calling round trips to 10 by default (previously the loop was unbounded and could run indefinitely if the LLM kept requesting tools). Each round trip consists of one LLM call and the execution of all tools requested in that call.
+
+If your LLM interaction legitimately requires more than 10 iterations, increase the `maxToolCallingRoundTrips` endpoint option. Set to `0` for unlimited (not recommended). Negative values are rejected with `IllegalArgumentException`.
+
+When the limit is reached, the producer throws a `RuntimeCamelException` with a message indicating the maximum was exceeded.
+
+#### Hallucinated tool names no longer crash the producer
+
+When the LLM requests a tool name that does not exist among the registered tools, the producer now sends an error message back to the LLM listing the available tools, giving it a chance to self-correct. Previously this caused a `NoSuchElementException` crash.
+
+#### Tool execution errors sent to LLM instead of propagating to the route
+
+When a tool route throws an exception, the error is now sent back to the LLM as a `ToolExecutionResultMessage`, allowing the LLM to handle it gracefully (e.g., retry with different parameters or answer directly). Previously the exception was set on the tool exchange and `ExchangeHelper.copyResults` propagated it onto the main exchange, but the loop continued anyway, leaving the exchange in an inconsistent state.
+
+This is a behavior change: routes that used `onException(…​)` to catch tool execution failures will no longer see those exceptions, since the error is now handled within the producer and sent back to the LLM. The previous behavior was unreliable — a later successful tool call would overwrite the exception via `copyResults` — but if you relied on it, be aware that tool errors are now consumed by the producer.
+
+### camel-langchain4j-web-search
+
+The `safeSearch` endpoint option is now correctly propagated to the LangChain4j `WebSearchRequest`. Previously the option was accepted on the endpoint but ignored, so `safeSearch=false` still sent `safeSearch=true` to the search engine (the LangChain4j default).
+
+### camel-openai
+
+The per-call token usage headers `CamelOpenAIPromptTokens`, `CamelOpenAICompletionTokens`, and `CamelOpenAITotalTokens` now declare `javaType = Long` in component metadata (previously `Integer`). The OpenAI SDK returns `long` values, so routes that read these headers with `Integer.class` should switch to `Long.class`.
 
 The `conversationMemory` feature on the `chat-completion` operation has two behavior fixes:
 
@@ -202,6 +292,42 @@ The following 10 Oracle connector options have been removed by Debezium 3.6.0 an
     
 
 If you use any of these options, remove them from your configuration as they will cause errors.
+
+### camel-spring-ai-chat
+
+#### Camel route tools now use ai-tool
+
+The `spring-ai-chat` producer now discovers Camel route tools from the `ai-tool` component (`AiToolRegistry`) instead of the `spring-ai-tools` component (`CamelToolExecutorCache`).
+
+Migrate your tool definition routes from `spring-ai-tools:` to `ai-tool:`:
+
+```java
+// Before (no longer works with spring-ai-chat)
+from("spring-ai-tools:weather?tags=weather&description=Get current weather for a city&parameter.city=string")
+    .setBody(constant("{\"city\": \"Paris\", \"temp\": \"22°C\"}"));
+
+// After
+from("ai-tool:weather?tags=weather&description=Get current weather for a city&parameter.city=string")
+    .setBody(constant("{\"city\": \"Paris\", \"temp\": \"22°C\"}"));
+```
+
+The `spring-ai-chat` producer endpoint is unchanged — only the tool consumer routes need to be migrated:
+
+```java
+from("direct:chat")
+    .to("spring-ai-chat:weatherChat?tags=weather&chatModel=#chatModel");
+```
+
+Add the `camel-ai-tool` dependency to your project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-ai-tool</artifactId>
+</dependency>
+```
+
+The `camel-spring-ai-tools` dependency is no longer required by `camel-spring-ai-chat`.
 
 ### camel-fory with JDK 25+ - Breaking change
 
@@ -331,6 +457,10 @@ Terminal width is now detected on Windows (`cmd` / PowerShell) via `mode con`, i
 
 The `camel infra list` table now sizes its `DESCRIPTION` column to the terminal width, and truncates the `IMPLEMENTATION` and `SERVICE_DATA` columns with an ellipsis instead of letting the raw service data overflow the terminal. The complete, structured service data remains available via `--json`.
 
+### camel-jsonpath
+
+The `writeAsString` option now correctly serializes single JSON object results (Maps) to a JSON String. Previously, a JsonPath expression evaluating to a JSON object (e.g. `$.args`) with `writeAsString=true` would return a `java.util.Map` with individually stringified values instead of a valid JSON String. If you were relying on the old behavior to split a Map result, change the expression to use a wildcard (e.g. `$.content.*` instead of `$.content`) to get a splittable list of JSON strings.
+
 ### camel-aws2-kinesis - Fixed-shardId consumer no longer calls DescribeStream on every poll
 
 The Kinesis consumer with a configured `shardId` previously called the `DescribeStream` API on every poll cycle to locate the shard, risking AWS rate limits (10 TPS per account) and failing for streams with more than 100 shards (no pagination). The consumer now uses the same cached shard list from the `ShardMonitor` background thread that the multi-shard path already uses. The `ShardMonitor` uses the `ListShards` API (paginated, 100 TPS limit) and now paginates through all pages, supporting streams with any number of shards.
@@ -346,6 +476,10 @@ The batch producer (body is an `Iterable`) previously applied a single `CamelAws
 When `fileDir` is configured, the Azure Storage Blob and DataLake consumers now ensure the downloaded local file stays within the configured directory, so a remote object name containing `../` sequences can no longer resolve to a path outside it. This is consistent with the containment already performed by the file-based consumers (see the `localWorkDirectory` note in the 4.21 upgrade guide).
 
 Ordinary object names are unaffected. A name that resolves outside `fileDir` is now rejected with an `IllegalArgumentException`.
+
+### camel-xmpp - Smack upgraded to 4.4
+
+The camel-xmpp component has upgraded Smack from 4.3.5 to 4.4.8. The `smack-java7` module no longer exists in Smack 4.4 and has been replaced by `smack-java8` (relevant if you declared it explicitly alongside camel-xmpp). When extracting headers from a stanza whose JiveProperties extension is not parsed by a registered provider, the unparsed extension is now represented by Smack’s `StandardExtensionElement` (the replacement for the removed `DefaultExtensionElement`); flat child elements are mapped to headers as before. See the [Smack 4.4 readme](https://github.com/igniterealtime/Smack/wiki/Smack-4.4-Readme) for behavioral changes in the Smack library itself.
 
 ### camel-weaviate - potential breaking change
 
@@ -438,6 +572,30 @@ The queue `durable` default has been changed from `false` to `true` when using `
 
 If you were relying on non-durable queues, you can restore the previous behavior by explicitly setting `arg.queue.durable=false&arg.queue.exclusive=true` on the endpoint URI. Note that RabbitMQ 4.3+ requires non-durable queues to also be exclusive.
 
+### camel-core - additional sensitive keywords redacted from sanitized URIs
+
+The URI sanitization used for logs, JMX attributes, exception messages and the developer console (`URISupport.sanitizeUri`) now also redacts endpoint parameters whose name contains `api-key` (hyphenated) or `authorization`. Previously a credential supplied through a hyphenated or `Authorization`\-style parameter/header name — for example `additionalHeader.api-key=…​` (the Azure OpenAI auth header) or `additionalHeader.Authorization=…​` in `camel-openai` — was written in clear text in sanitized URIs, even though the camelCase `apiKey` option was already redacted.
+
+Because matching is a case-insensitive substring match, parameter names that merely contain `authorization` without being secrets — `adjustAuthorization`, `jwtAuthorizationType`, `proxyAuthorizationPolicy` — now also have their values shown as `xxxxxx` in sanitized URIs. This is a cosmetic change to sanitized output only and does not affect the actual endpoint configuration.
+
+### camel-a2a - push notification webhooks pinned to the validated address
+
+Push notifications are now delivered with Apache HttpClient 5 instead of `java.net.http.HttpClient`, so the request can be pinned to the address the webhook URL was validated against.
+
+Previously `WebhookUrlValidator` resolved the webhook host and applied the SSRF checks, and the HTTP client then resolved the same hostname again when it opened the connection. The two lookups are independent, so the address that was validated and the address actually connected to could differ (DNS rebinding). The connection is now opened to the address that passed validation, while the hostname is still used for the `Host` header, TLS SNI and certificate hostname verification. Each retry attempt re-validates and re-resolves, so a config that was safe when first dispatched cannot be rebound between retries (which may be up to an hour apart).
+
+`camel-a2a` therefore has a new dependency on `org.apache.httpcomponents.client5:httpclient5`.
+
+The `PushNotificationDispatcher` constructor now takes an `org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient` instead of a `java.net.http.HttpClient`. This only affects code constructing the dispatcher directly; the client must be started before use. Endpoint behaviour is unchanged — redirects were already never followed for push webhooks, and still are not, since a redirect would be resolved by the client and escape the validation applied to the registered URL.
+
+### camel-kafka - batch exchange carries the batch-wide topic and partition
+
+When using the batching consumer (`batching=true`), the exchange carrying the batch now also has the `CamelKafkaTopic` and `CamelKafkaPartition` headers set, so they can be read before the batch is split — for example to store the topic in a variable and reuse it after the split.
+
+A header is only set when **every** record in the batch has the same value for it; if the batch spans multiple topics or partitions, that header is left unset, because no single value would be correct for the batch. Per-record headers that naturally differ, such as `CamelKafkaOffset`, are not set on the batch exchange.
+
+This is additive — these headers were previously absent from the batch exchange, so nothing that worked before changes. The headers on the individual record exchanges in the body are unchanged.
+
 ### camel-core - Multicast UseOriginalAggregationStrategy fix
 
 The Multicast EIP now correctly honors `UseOriginalAggregationStrategy`, consistent with the Splitter and Recipient List EIPs. Previously, Multicast did not bind the original exchange on the strategy, so the strategy was silently ineffective — especially in error scenarios where the aggregated result could overwrite the original exchange body instead of preserving it.
@@ -461,6 +619,12 @@ The table-name validation in `JdbcAggregationRepository` now accepts schema-qual
 The `remove()` method in `JdbcAggregationRepository` and `ClusteredJdbcAggregationRepository` now throws `OptimisticLockingException` when it detects a stale version during the delete. Previously a stale remove was silently treated as successful. If your error handling or aggregation strategy catches specific exception types around `remove()`, you may need to account for `OptimisticLockingException`.
 
 The `TemplateParser` now catches `TokenMgrError` (a JavaCC lexer error) and wraps it in `ParseRuntimeException`. Previously a malformed stored-procedure template with characters outside the token alphabet would propagate as a raw `java.lang.Error`.
+
+### camel-aws - Migrated from apache-client to apache5-client
+
+All camel-aws modules now use `software.amazon.awssdk:apache5-client` (Apache HttpClient 5) instead of `software.amazon.awssdk:apache-client` (Apache HttpClient 4), aligning with the [new default](https://github.com/aws/aws-sdk-java-v2/issues/7007) in AWS SDK for Java v2.46.0.
+
+If your project has `<dependencyManagement>` entries, exclusions, or explicit dependencies referencing `software.amazon.awssdk:apache-client`, update them to `software.amazon.awssdk:apache5-client`.
 
 ### camel-aws-cloudtrail - consumer event delivery fixed
 
@@ -522,3 +686,154 @@ If you relied on the implicit `precision=0` behavior to round `BigDecimal` value
 ### camel-xslt / camel-xslt-saxon - transformerFactoryConfigurationStrategy now honored
 
 The `transformerFactoryConfigurationStrategy` option is now applied on all factory creation paths. Previously on `xslt-saxon` it was never invoked, and on plain `xslt` it was only invoked when `transformerFactoryClass` was explicitly set.
+
+### Circuit Breaker EIP - onFallbackViaNetwork deprecated
+
+The `onFallbackViaNetwork()` DSL method and the `fallbackViaNetwork` option on `onFallback` have been deprecated for removal. This was a Hystrix-era concept that has never been supported by any current circuit breaker implementation — both `camel-resilience4j` and `camel-microprofile-fault-tolerance` throw `UnsupportedOperationException` at route initialization when it is enabled. Use `onFallback()` instead.
+
+### camel-resilience4j - Duration options now use Camel duration format
+
+The following Resilience4j configuration options now use `java.time.Duration` type instead of plain integers, and accept Camel duration expressions (e.g. `60s`, `1m`, `PT1M`) as well as plain millisecond values:
+
+-   `waitDurationInOpenState` — previously accepted seconds (default `60`), now accepts millis or duration strings (default `60000` or `60s`)
+    
+-   `slowCallDurationThreshold` — previously accepted seconds (default `60`), now accepts millis or duration strings (default `60000` or `60s`)
+    
+-   `timeoutDuration` — unchanged (was already millis, default `1000`)
+    
+-   `bulkheadMaxWaitDuration` — unchanged (was already millis, default `0`)
+    
+
+If you configured `waitDurationInOpenState` or `slowCallDurationThreshold` with a plain integer meaning seconds, you must update the value to use a duration suffix (e.g. `60s`) or convert to milliseconds (e.g. `60000`).
+
+**Java DSL:**
+
+```java
+// Before (seconds):
+.waitDurationInOpenState(60)
+
+// After (millis):
+.waitDurationInOpenState(60000)
+
+// Or using duration string (preferred):
+.waitDurationInOpenState("60s")
+```
+
+The `int` overloads for `waitDurationInOpenState(int)`, `slowCallDurationThreshold(int)`, `timeoutDuration(int)`, and `bulkheadMaxWaitDuration(int)` have been deprecated. Use the `String` overloads with Camel duration expressions instead.
+
+**Application properties (camel-main, Spring Boot, Quarkus):**
+
+If you configure circuit breaker settings via `application.properties`, the same migration applies:
+
+```properties
+# Before (seconds):
+camel.resilience4j.waitDurationInOpenState = 60
+
+# After (duration string):
+camel.resilience4j.waitDurationInOpenState = 60s
+
+# Or milliseconds:
+camel.resilience4j.waitDurationInOpenState = 60000
+```
+
+### camel-resilience4j - Vavr dependency removed
+
+The `io.vavr:vavr` and `io.vavr:vavr-match` runtime dependencies have been removed from `camel-resilience4j`. The single internal usage of Vavr’s `Try` monad has been replaced with a plain try-catch. This eliminates two transitive runtime JARs. No user-facing behavior change.
+
+### camel-clickhouse (new component)
+
+A new `camel-clickhouse` producer component has been added. It integrates with [ClickHouse](https://clickhouse.com/), the high-performance columnar OLAP database, using the official ClickHouse Java client (client-v2). It exposes ClickHouse’s native capabilities as first-class endpoint options: native format streaming inserts (`RowBinary`, `JSONEachRow`, `CSV`, `TSV`, `Parquet`), server-side asynchronous inserts, OLAP queries and health checks.
+
+```java
+from("direct:events")
+    .to("clickhouse://analytics.events?operation=insert&format=JSONEachRow");
+```
+
+The component supports the `insert` (default), `query` and `ping` operations, and can either use a shared autowired `com.clickhouse.client.api.Client` bean or build its own client from the `serverUrl`, `username`, `password` and `ssl` endpoint options. See the [ClickHouse component](../components/next/clickhouse-component.md) documentation for details.
+
+### camel-minio - Upgraded to minio 9.0.3 - Breaking Changes
+
+The underlying `io.minio:minio` library has been upgraded from 8.x to 9.0.3. This release contains several breaking API changes that affect users who pass `io.minio` objects directly through the Camel Minio component (e.g. via `pojoRequest=true` or custom `MinioClient` configuration).
+
+#### ServerSideEncryptionCustomerKey renamed
+
+`io.minio.ServerSideEncryptionCustomerKey` has been removed as a top-level class. Use the inner class `io.minio.ServerSideEncryption.CustomerKey` instead.
+
+```java
+// Before:
+import io.minio.ServerSideEncryptionCustomerKey;
+ServerSideEncryptionCustomerKey ssec = ...;
+
+// After:
+import io.minio.ServerSideEncryption;
+ServerSideEncryption.CustomerKey ssec = ...;
+```
+
+The `serverSideEncryptionCustomerKey` endpoint/component option type has changed accordingly.
+
+#### CopySource renamed to SourceObject
+
+`io.minio.CopySource` has been removed. Use `io.minio.SourceObject` instead. `CopyObjectArgs.Builder.source()` now accepts a `SourceObject`.
+
+```java
+// Before:
+import io.minio.CopySource;
+CopySource src = CopySource.builder().bucket("b").object("o").build();
+
+// After:
+import io.minio.SourceObject;
+SourceObject src = SourceObject.builder().bucket("b").object("o").build();
+```
+
+#### Method enum moved inside Http class
+
+`io.minio.http.Method` (package `io.minio.http`) has been removed. Use the nested enum `io.minio.Http.Method` instead.
+
+```java
+// Before:
+import io.minio.http.Method;
+
+// After:
+import io.minio.Http;
+// reference as Http.Method.GET, Http.Method.PUT, etc.
+```
+
+#### Bucket type changed for listBuckets
+
+`io.minio.messages.Bucket` has been removed. The `MinioClient.listBuckets()` method now returns `List<io.minio.messages.ListAllMyBucketsResult.Bucket>`.
+
+```java
+// Before:
+import io.minio.messages.Bucket;
+List<Bucket> buckets = minioClient.listBuckets();
+
+// After:
+import io.minio.messages.ListAllMyBucketsResult;
+List<ListAllMyBucketsResult.Bucket> buckets = minioClient.listBuckets();
+```
+
+#### DeleteObject renamed to DeleteRequest.Object
+
+`io.minio.messages.DeleteObject` has been removed. Use `io.minio.messages.DeleteRequest.Object` instead.
+
+```java
+// Before:
+import io.minio.messages.DeleteObject;
+new DeleteObject("my-object-name");
+
+// After:
+import io.minio.messages.DeleteRequest;
+new DeleteRequest.Object("my-object-name");
+```
+
+#### MinioClient methods now throw MinioException only
+
+All `MinioClient` methods previously declared multiple checked exceptions (`InvalidKeyException`, `NoSuchAlgorithmException`, `IOException`, etc.). In 9.x they now uniformly declare `throws io.minio.errors.MinioException`. Update any catch blocks or method `throws` declarations accordingly.
+
+```java
+// Before:
+} catch (MinioException | InvalidKeyException | NoSuchAlgorithmException | IOException e) { ... }
+
+// After:
+} catch (MinioException e) { ... }
+```

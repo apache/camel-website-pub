@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[220]{title,link,pubDate,description}:
+posts[221]{title,link,pubDate,description}:
+  Echonect: Fifteen Years on Apache Camel|https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/index.md|Fri, 24 Jul 2026 00:00:00 +0000|By Andriy Andrunevchyn, CTO @Software Service &amp; Innovation A five-part story of building and running one of Europe&rsquo;s larger SMS gateways. In 2011, PayPal gave Echovox twelve months to walk a
   Apache Camel Is Not Afraid of AI|https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/index.md|Mon, 20 Jul 2026 00:00:00 +0000|The Apache Camel project pointed a frontier AI model at 19 years of integration code and said: find what we missed. It found 165 bugs for the upcoming 4.22 LTS release. Not cosmetic issues — concurren
   Installing the Apache Camel CLI Launcher|https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/index.md|Mon, 20 Jul 2026 00:00:00 +0000|Getting started with the Camel CLI used to mean installing a JDK, then jbang, then finally running jbang camel@apache/camel init for the first time. That friction is gone. install.sh and install.ps1 g
   Hawtio AI: Utilizing AI in the Operational Phase of Camel Integrations|https://camel.apache.org/blog/2026/07/hawtio-ai/index.md|Fri, 10 Jul 2026 00:00:00 +0000|Apache Camel and AI AI is a hot topic in the Apache Camel community. When thinking about how to leverage AI in the Apache Camel ecosystem, there are broadly two directions: Incorporating AI services i

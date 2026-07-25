@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 24 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Echonect: Fifteen Years on Apache Camel</title>
+      <link>https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/</link>
+      <pubDate>Fri, 24 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/</guid>
+      <description>By Andriy Andrunevchyn, CTO @Software Service &amp;amp; Innovation&#xA;A five-part story of building and running one of Europe&amp;rsquo;s larger SMS gateways.&#xA;In 2011, PayPal gave Echovox twelve months to walk away from the platform its business ran on. This is the story of the platform a small Swiss-Ukrainian team built to replace it, Echonect, and of the boring, durable engineering that has kept it running ever since. It was first published as a five-part series; the five parts are collected here as one.</description>
+    </item>
     <item>
       <title>Apache Camel Is Not Afraid of AI</title>
       <link>https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/</link>

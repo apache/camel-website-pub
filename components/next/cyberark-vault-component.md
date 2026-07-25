@@ -661,17 +661,23 @@ The easiest way to get started is using the official [Conjur Quickstart](https:/
 git clone https://github.com/cyberark/conjur-quickstart.git
 cd conjur-quickstart
 
+# Generate the master key
+docker compose run --no-deps --rm conjur data-key generate > data_key
+
+# Load master key as an environment variable
+export CONJUR_DATA_KEY="$(< data_key)"
+
 # Start Conjur and database
 docker-compose up -d
 
-# Wait for services to be ready
-sleep 15
+# Create an admin account (in another terminal)
+docker compose exec conjur conjurctl account create myConjurAccount > admin_data
 
-# The admin API key will be displayed in the logs
-docker-compose logs conjur_server | grep "admin API key"
+# The admin API key will be in the admin_data file
+cat admin_data | grep "API key"
 ```
 
-Default connection details: - **URL**: `[http://localhost:8080](http://localhost:8080)` - **Account**: `myConjurAccount` - **Username**: `admin` - **API Key**: Check the container logs (see command above)
+Default connection details: - **URL**: `[http://localhost:8080](http://localhost:8080)` - **Account**: `myConjurAccount` - **Username**: `admin` - **API Key**: See admin\_data
 
 #### Step 2: Load Conjur Policy
 

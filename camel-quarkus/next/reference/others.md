@@ -1,6 +1,6 @@
 # Camel misc. components supported on Quarkus
 
-There are 35 misc. components (5 deprecated, 7 JVM only)
+There are 36 misc. components (5 deprecated, 7 JVM only)
 
      
 | Misc. component | Artifact | JVM  
@@ -33,6 +33,7 @@ level | Description |
 | [Oauth](extensions/oauth.md) | camel-quarkus-oauth | 3.31.0 | 3.31.0 | Stable | Camel OAuth (Preview) |
 | [Observability Services](extensions/observability-services.md) | camel-quarkus-observability-services | 3.19.0 | 3.19.0 | Stable | Camel Observability Services |
 | [Openapi Java](extensions/openapi-java.md) | camel-quarkus-openapi-java | 1.0.0 | 1.0.0 | Stable | Rest DSL support for using OpenApi doc |
+| [Openapi Validator](extensions/openapi-validator.md) | camel-quarkus-openapi-validator | 3.38.0 | 3.38.0 | Stable | OpenAPI validator for Camel Rest DSL |
 | [OpenTelemetry](extensions/opentelemetry.md) | camel-quarkus-opentelemetry | 2.1.0 | 2.1.0 | Stable | Distributed tracing using OpenTelemetry |
 | [Opentelemetry2](extensions/opentelemetry2.md) | camel-quarkus-opentelemetry2 | 3.22.0 | 3.22.0 | Stable | Implementation of Camel Opentelemetry based on the Camel Telemetry spec |
 | [Reactive Executor Vert.x](extensions/reactive-executor.md) | camel-quarkus-reactive-executor | 0.3.0 | 0.3.0 | Stable | Reactive Executor for camel-core using Vert.x |

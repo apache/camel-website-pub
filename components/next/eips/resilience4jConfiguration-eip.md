@@ -28,20 +28,39 @@ Enum values:
 
 
  | COUNT\_BASED | String |
+| **slidingWindowSynchronizationStrategy** | 
+
+Configures the synchronization strategy for the sliding window. LOCK\_FREE uses a CAS-based lock-free algorithm for better performance under high concurrency. SYNCHRONIZED uses blocking locks with lower memory allocation.
+
+Enum values:
+
+-   LOCK\_FREE
+    
+-   SYNCHRONIZED
+    
+
+
+
+
+
+ | SYNCHRONIZED | String |
 | **minimumNumberOfCalls** | Configures the minimum number of calls which are required (per sliding window period) before the CircuitBreaker can calculate the error rate. | 100 | Integer |
 | **writableStackTraceEnabled** | Enables writable stack traces. When set to false, Exception.getStackTrace returns a zero length array. This may be used to reduce log spam when the circuit breaker is open. | true | Boolean |
-| **waitDurationInOpenState** | Configures the wait duration (in seconds) which specifies how long the CircuitBreaker should stay open, before it switches to half open. | 60 | Integer |
+| **waitDurationInOpenState** | Configures the wait duration which specifies how long the CircuitBreaker should stay open, before it switches to half open. The default is 60 seconds. | 60000 | String |
 | **automaticTransitionFromOpenToHalfOpenEnabled** | Enables automatic transition from OPEN to HALF\_OPEN state once the waitDurationInOpenState has passed. | false | Boolean |
+| **maxWaitDurationInHalfOpenState** | Configures the maximum wait duration which controls how long the CircuitBreaker should stay in Half Open state, before it switches to open. Value 0 means circuit breaker will wait in half open state until all permitted calls have been completed. | 0 | String |
 | **slowCallRateThreshold** | Configures a threshold in percentage. The CircuitBreaker considers a call as slow when the call duration is greater than slowCallDurationThreshold. When the percentage of slow calls is equal or greater the threshold, the CircuitBreaker transitions to open and starts short-circuiting calls. | 100 | Float |
-| **slowCallDurationThreshold** | Configures the duration threshold (seconds) above which calls are considered as slow and increase the slow calls percentage. | 60 | Integer |
+| **slowCallDurationThreshold** | Configures the duration threshold above which calls are considered as slow and increase the slow calls percentage. The default is 60 seconds. | 60000 | String |
 | **bulkheadEnabled** | Whether bulkhead is enabled or not on the circuit breaker. | false | Boolean |
 | **bulkheadMaxConcurrentCalls** | Configures the max amount of concurrent calls the bulkhead will support. | 25 | Integer |
-| **bulkheadMaxWaitDuration** | Configures a maximum amount of time which the calling thread will wait to enter the bulkhead. | 0 | Integer |
+| **bulkheadMaxWaitDuration** | Configures a maximum amount of time which the calling thread will wait to enter the bulkhead. The default is 0 (no waiting). | 0 | String |
+| **bulkheadFairCallHandlingEnabled** | Configures whether the bulkhead uses a fair calling strategy. When enabled (default), a fair strategy guarantees the order of incoming requests (FIFO). When disabled, no ordering is guaranteed and may improve throughput. | true | Boolean |
+| **asynchronous** | Whether to use asynchronous (non-blocking) processing with CompletionStage-based circuit breaker decorators. When enabled, the circuit breaker releases the caller thread immediately and completes processing asynchronously. This is most valuable when the downstream processor supports asynchronous processing (e.g. Netty HTTP, Kafka). When used with timeout, the timeoutExecutorService must be a ScheduledExecutorService. | false | Boolean |
 | **timeoutEnabled** | Whether timeout is enabled or not on the circuit breaker. | false | Boolean |
 | **timeoutExecutorService** | References to a custom thread pool to use when timeout is enabled (uses ForkJoinPool.commonPool() by default). |  | ExecutorService |
-| **timeoutDuration** | Configures the thread execution timeout. Default value is 1 second. | 1000 | Integer |
+| **timeoutDuration** | Configures the thread execution timeout. Default value is 1 second. | 1000 | String |
 | **timeoutCancelRunningFuture** | Configures whether cancel is called on the running future. Defaults to true. | true | Boolean |
-| **micrometerEnabled** | Whether to enable collecting statistics using Micrometer. This requires adding camel-resilience4j-micrometer JAR to the classpath. | false | Boolean |
+| **micrometerEnabled** | Whether to enable collecting statistics using Micrometer for all circuit breaker instances. This is a global setting (configure via camel.resilience4j.micrometerEnabled=true) and requires adding camel-resilience4j-micrometer JAR to the classpath. | false | Boolean |
 | **recordException** | Configure a list of exceptions that are recorded as a failure and thus increase the failure rate. Any exception matching or inheriting from one of the list counts as a failure, unless explicitly ignored via ignoreExceptions. |  | List |
 | **ignoreException** | Configure a list of exceptions that are ignored and neither count as a failure nor success. Any exception matching or inheriting from one of the list will not count as a failure nor success, even if the exception is part of recordExceptions. |  | List |
 

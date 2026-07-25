@@ -81,6 +81,7 @@ The OpenSearch component supports the following options which are listed below.
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **client** (advanced) | **Autowired** To use an existing configured OpenSearch client, instead of creating a client per endpoint. This allows customizing the client with specific settings. |  | RestClient |
 | **enableSniffer** (advanced) | Enable automatically discover nodes from a running OpenSearch cluster. If this option is used in conjunction with Spring Boot, then it’s managed by the Spring Boot configuration (see: Disable Sniffer in Spring Boot). | false | boolean |
+| **openSearchClient** (advanced) | **Autowired** To use a custom configured OpenSearchClient instance. When set, this takes precedence over the RestClient-based client option. |  | OpenSearchClient |
 | **sniffAfterFailureDelay** (advanced) | The delay of a sniff execution scheduled after a failure (in milliseconds). | 60000 | int |
 | **snifferInterval** (advanced) | The interval between consecutive ordinary sniff executions in milliseconds. Will be honoured when sniffOnFailure is disabled or when there are no failures between consecutive sniff executions. | 300000 | int |
 | **enableSSL** (security) | Enable SSL. | false | boolean |
@@ -511,3 +512,19 @@ MsearchRequest.Builder builder = new MsearchRequest.Builder().index("twitter").s
                 .body(new MultisearchBody.Builder().query(b -> b.matchAll(x -> x)).build()).build());
 List<MultiSearchResponseItem<?>> response = template.requestBody("direct:multiSearch", builder, List.class);
 ```
+
+### Custom OpenSearchClient Example
+
+You can provide a pre-configured `OpenSearchClient` instance instead of letting the component build one from host addresses. This is useful when you need a custom transport, for example when connecting to AWS OpenSearch Service with IAM-based authentication.
+
+_Java-only: programmatic CamelContext configuration_
+
+```java
+// Build a custom OpenSearchClient (e.g., with AWS SDK transport)
+OpenSearchClient customClient = new OpenSearchClient(myCustomTransport);
+
+// Bind it to the registry so it can be autowired
+context.getRegistry().bind("myOpenSearchClient", customClient);
+```
+
+The component will automatically pick up the `OpenSearchClient` from the registry via autowiring. When both a `RestClient` and an `OpenSearchClient` are available, the `OpenSearchClient` takes precedence.

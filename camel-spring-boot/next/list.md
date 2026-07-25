@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 394 spring boot starter json files.
+There are 396 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -158,6 +158,8 @@ cbor
 chatscript
 
 chunk
+
+clickhouse
 
 clickup
 
@@ -396,6 +398,8 @@ jackson3
 jackson3xml
 
 jacksonxml
+
+jactl
 
 jasypt
 
@@ -896,6 +900,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [ChatScript](../../components/next/chatscript-component.md) | camel-chatscript-starter | Stable | 3.0 | Chat with a ChatScript Server. |
 | [Chunk](../../components/next/chunk-component.md) | camel-chunk-starter | Stable | 2.15 | Transform messages using Chunk templating engine. |
 | [Class](../../components/next/class-component.md) | camel-bean-starter | Stable | 2.4 | Invoke methods of Java beans specified by class name. |
+| [ClickHouse](../../components/next/clickhouse-component.md) | camel-clickhouse-starter | Preview | 4.22 | Interact with ClickHouse, the high-performance columnar OLAP database, for high-throughput ingestion and OLAP queries. |
 | [ClickUp](../../components/next/clickup-component.md) | camel-clickup-starter | Preview | 4.9 | Receives events from ClickUp |
 | [CM SMS Gateway](../../components/next/cm-sms-component.md) | camel-cm-sms-starter | Stable | 2.18 | Send SMS messages via CM SMS Gateway. |
 | [CoAP](../../components/next/coap-component.md) | camel-coap-starter | Stable | 2.16 | Send and receive messages to/from CoAP (Constrained Application Protocol) capable devices. |
@@ -1099,7 +1104,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [OPC UA Browser](../../components/next/milo-browse-component.md) | camel-milo-starter | Stable | 3.15 | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
 | [OPC UA Client](../../components/next/milo-client-component.md) | camel-milo-starter | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](../../components/next/milo-server-component.md) | camel-milo-starter | Stable | 2.19 | Make telemetry data available as an OPC UA server. |
-| [OpenAI](../../components/next/openai-component.md) | camel-openai-starter | Stable | 4.17 | OpenAI endpoint for chat completion, embeddings, and audio transcription. |
+| [OpenAI](../../components/next/openai-component.md) | camel-openai-starter | Stable | 4.17 | OpenAI endpoint for chat completion, embeddings, audio transcription, audio translation, and text-to-speech. |
 | [OpenSearch](../../components/next/opensearch-component.md) | camel-opensearch-starter | Stable | 4.0 | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](../../components/next/openshift-build-configs-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](../../components/next/openshift-builds-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Builds. |
@@ -1310,6 +1315,7 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [Groovy](../../components/next/languages/groovy-language.md) | camel-groovy-starter | Stable | 1.3 | Evaluates a Groovy script |
 | [Header](../../components/next/languages/header-language.md) | camel-core-languages-starter | Stable | 1.5 | Gets a header from the Exchange |
 | [HL7 Terser](../../components/next/languages/hl7terser-language.md) | camel-hl7-starter | Stable | 2.11 | Get the value of a HL7 message field specified by terse location specification syntax |
+| [Jactl](../../components/next/languages/jactl-language.md) | camel-jactl-starter | Preview | 4.22 | Evaluates a Jactl script |
 | [Java](../../components/next/languages/java-language.md) | camel-joor-starter | Stable | 4.3 | Evaluates a Java (Java compiled once at runtime) expression |
 | [JavaScript](../../components/next/languages/js-language.md) | camel-javascript-starter | Stable | 3.20 | Evaluates a JavaScript expression |
 | [jOOR](../../components/next/languages/joor-language.md) | camel-joor-starter | Stable-deprecated | 3.7 | Evaluates a jOOR (Java compiled once at runtime) expression |

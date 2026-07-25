@@ -14,6 +14,8 @@ The catalog is shipped in an independent standalone `camel-catalog` JAR containi
     
 -   Human-readable documentation for every option
     
+-   AsciiDoc documentation pages for components, EIPs, data formats, languages, and more
+    
 -   Categorization of options (for example, find all database components)
     
 -   XML schema for the XML DSLs
@@ -62,6 +64,7 @@ org
       ├── components (JSON schema)
       ├── dataformats (JSON schema)
       ├── dev-consoles (JSON schema)
+      ├── docs (AsciiDoc documentation)
       ├── jbang (JSON schema)
       ├── languages (JSON schema)
       ├── main (JSON schema)
@@ -75,3 +78,41 @@ org
 ```
 
 Each directory contains files with the information. Every Camel component is included as JSON schema files in the components directory. For example, the Timer component is included in the file timer.json.
+
+The `docs` directory contains the AsciiDoc documentation pages for all components, EIPs, data formats, languages, and other artifacts. A `docs.properties` index file lists all available documentation names.
+
+### Documentation in the Catalog
+
+The catalog includes the AsciiDoc documentation pages from all modules. This makes the full documentation available to tooling such as AI agents (via MCP tools), the Camel CLI/TUI, and IDE plugins — for every Camel version, including SNAPSHOT and non-LTS releases.
+
+The documentation filenames follow the naming convention used in each module’s `src/main/docs/` directory:
+
+-   Components: `<name>-component.adoc` (e.g., `kafka-component.adoc`)
+    
+-   Data formats: `<name>-dataformat.adoc` (e.g., `jackson2-dataformat.adoc`)
+    
+-   Languages: `<name>-language.adoc` (e.g., `simple-language.adoc`)
+    
+-   EIPs: `<name>-eip.adoc` (e.g., `split-eip.adoc`)
+    
+-   Others: `<name>.adoc` (e.g., `yaml-dsl.adoc`)
+    
+
+The Java API provides the following methods for accessing documentation:
+
+```java
+CamelCatalog catalog = new DefaultCamelCatalog();
+
+// list all available documentation names
+List<String> docNames = catalog.findDocNames();
+
+// load documentation by exact name (without .adoc extension)
+String doc = catalog.asciiDoc("kafka-component");
+
+// convenience methods that append the type suffix automatically
+String componentDoc = catalog.componentAsciiDoc("kafka");        // loads kafka-component.adoc
+String dataFormatDoc = catalog.dataFormatAsciiDoc("jackson2");   // loads jackson2-dataformat.adoc
+String languageDoc = catalog.languageAsciiDoc("simple");         // loads simple-language.adoc
+String modelDoc = catalog.modelAsciiDoc("split-eip");            // loads split-eip.adoc
+String otherDoc = catalog.otherAsciiDoc("yaml-dsl");             // loads yaml-dsl.adoc
+```

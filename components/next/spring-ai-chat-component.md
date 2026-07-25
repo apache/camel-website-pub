@@ -654,9 +654,9 @@ template.requestBodyAndHeader("direct:vector-memory",
 
 ### Function Calling / Tool Integration
 
-The component integrates with the [Spring AI Tools Component](spring-ai-tools-component.md) to enable LLMs to call Camel routes as functions/tools. This extends the LLM’s capabilities with custom logic, external APIs, database queries, and more.
+The component integrates with the [AI Tool Component](ai-tool-component.md) to enable LLMs to call Camel routes as functions/tools. This extends the LLM’s capabilities with custom logic, external APIs, database queries, and more.
 
-When you configure the `tags` parameter, the chat component discovers all matching tools from `spring-ai-tools` routes, registers them with Spring AI’s ChatClient, and allows the LLM to call them during conversation.
+When you configure the `tags` parameter, the chat component discovers all matching tools from `ai-tool` routes, registers them with Spring AI’s ChatClient, and allows the LLM to call them during conversation.
 
 -   Java
     
@@ -667,13 +667,13 @@ When you configure the `tags` parameter, the chat component discovers all matchi
 
 ```java
 // Define tools
-from("spring-ai-tools:weather?tags=weather&description=Get current weather for a location")
+from("ai-tool:weather?tags=weather&description=Get current weather for a location")
     .setBody(constant("Sunny"));
 
-from("spring-ai-tools:calculator?tags=math&description=Evaluate mathematical expressions")
+from("ai-tool:calculator?tags=math&description=Evaluate mathematical expressions")
     .setBody(constant("42"));
 
-from("spring-ai-tools:stock?tags=finance&description=Get current stock price")
+from("ai-tool:stock?tags=finance&description=Get current stock price")
     .setBody(constant("42"));
 
 // Chat endpoints with different tool combinations
@@ -690,17 +690,17 @@ from("direct:multiToolChat")
 ```xml
 <!-- Define tools -->
 <route>
-  <from uri="spring-ai-tools:weather?tags=weather&amp;description=Get current weather for a location"/>
+  <from uri="ai-tool:weather?tags=weather&amp;description=Get current weather for a location"/>
   <setBody><constant>Sunny</constant></setBody>
 </route>
 
 <route>
-  <from uri="spring-ai-tools:calculator?tags=math&amp;description=Evaluate mathematical expressions"/>
+  <from uri="ai-tool:calculator?tags=math&amp;description=Evaluate mathematical expressions"/>
   <setBody><constant>42</constant></setBody>
 </route>
 
 <route>
-  <from uri="spring-ai-tools:stock?tags=finance&amp;description=Get current stock price"/>
+  <from uri="ai-tool:stock?tags=finance&amp;description=Get current stock price"/>
   <setBody><constant>42</constant></setBody>
 </route>
 
@@ -725,7 +725,7 @@ from("direct:multiToolChat")
 # Define tools
 - route:
     from:
-      uri: spring-ai-tools:weather
+      uri: ai-tool:weather
       parameters:
         tags: weather
         description: Get current weather for a location
@@ -735,7 +735,7 @@ from("direct:multiToolChat")
 
 - route:
     from:
-      uri: spring-ai-tools:calculator
+      uri: ai-tool:calculator
       parameters:
         tags: math
         description: Evaluate mathematical expressions
@@ -745,7 +745,7 @@ from("direct:multiToolChat")
 
 - route:
     from:
-      uri: spring-ai-tools:stock
+      uri: ai-tool:stock
       parameters:
         tags: finance
         description: Get current stock price
@@ -1195,7 +1195,7 @@ template.request("direct:chat", e -> {
 ```
 
 > **Note**
-> Tool context works with Spring AI `@Tool` methods and MCP tools. Camel route tools (defined via `spring-ai-tools` consumer) do not receive the `ToolContext`.
+> Tool context works with Spring AI `@Tool` methods and MCP tools. Camel route tools (defined via `ai-tool` consumer) do not receive the `ToolContext`.
 
 ### Structured Output Validation
 
@@ -1507,7 +1507,7 @@ logging.level.org.springframework.ai.chat.client.advisor=DEBUG
     
 -   [Spring AI Function Calling](https://docs.spring.io/spring-ai/reference/api/tools.md)
     
--   [Spring AI Tools Component](spring-ai-tools-component.md)
+-   [AI Tool Component](ai-tool-component.md)
     
 -   [Spring AI Embeddings Component](spring-ai-embeddings-component.md)
     

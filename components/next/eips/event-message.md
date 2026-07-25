@@ -10,7 +10,7 @@ Use an Event Message for reliable, asynchronous event notification between appli
 
 Camel supports Event Message by the [Exchange Pattern](../../../manual/exchange-pattern.md) on a [Message](message.md) which can be set to `InOnly` to indicate a oneway event message. Camel [Components](../index.md) then implement this pattern using the underlying transport or protocols.
 
-The default behaviour of many [Components](../index.md) is `InOnly` such as for [JMS](../jms-component.md), [File](../jms-component.md) or [SEDA](../seda-component.md).
+The default behaviour of many [Components](../index.md) is `InOnly` such as for [JMS](../jms-component.md), [File](../file-component.md) or [SEDA](../seda-component.md).
 
 Some components support both `InOnly` and `InOut` and act accordingly. For example, the [JMS](../jms-component.md) can send messages as one-way (`InOnly`) or use request/reply messaging (`InOut`).
 
@@ -59,6 +59,14 @@ from("mq:someQueue?exchangePattern=InOnly")
         - to:
             uri: activemq:queue:one-way
 ```
+
+## How It Works
+
+The `InOnly` exchange pattern is a contract between the route and the component endpoint. It tells the producer component that the caller does **not** expect a reply (fire-and-forget).
+
+The exchange pattern does **not** affect how EIPs and processors work within the route. Processors such as `setBody`, `transform`, `process`, and `bean` always operate on the current message regardless of the exchange pattern. The pattern only matters when the exchange reaches a producer endpoint that acts on it.
+
+Whether a component acts on the pattern depends on the component. Components that support both modes, such as [JMS](../jms-component.md), [SEDA](../seda-component.md), and [AMQP](../amqp-component.md), use `InOnly` to dispatch the message without waiting for a reply (fire-and-forget). Synchronous components such as [Direct](../direct-component.md) always process in the same thread and call stack, so the pattern has no practical effect on the dispatch behavior — the caller still waits for the called route to complete.
 
 ## Using `setExchangePattern` EIP
 

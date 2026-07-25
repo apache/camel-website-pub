@@ -136,6 +136,76 @@ from("direct:start")
 
 In this example if calling the downstream service does not return a response within 2 seconds, a timeout is triggered, and the exchange will fail with a `TimeoutException`.
 
+### Asynchronous (non-blocking) processing
+
+By default, the Resilience4j circuit breaker processes exchanges synchronously, blocking the caller thread until the protected operation completes. When `asynchronous` is enabled, the circuit breaker uses Resilience4j’s CompletionStage-based decorators, which release the caller thread immediately and complete processing asynchronously.
+
+This is most valuable when the downstream processor supports asynchronous processing (e.g., Netty HTTP, Kafka), as it avoids blocking threads while waiting for responses.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .circuitBreaker()
+        .resilience4jConfiguration()
+            .asynchronous(true)
+            .timeoutEnabled(true)
+            .timeoutDuration(2000)
+        .end()
+        .to("http://fooservice.com/faulty")
+    .onFallback()
+        .transform().constant("Fallback message")
+    .end()
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <circuitBreaker>
+    <resilience4jConfiguration asynchronous="true" timeoutEnabled="true" timeoutDuration="2000"/>
+    <to uri="http://fooservice.com/faulty"/>
+    <onFallback>
+      <transform>
+        <constant>Fallback message</constant>
+      </transform>
+    </onFallback>
+  </circuitBreaker>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - circuitBreaker:
+            steps:
+              - resilience4jConfiguration:
+                  asynchronous: "true"
+                  timeoutDuration: 2000
+                  timeoutEnabled: "true"
+              - to:
+                  uri: http://fooservice.com/faulty
+              - onFallback:
+                  steps:
+                    - transform:
+                        expression:
+                          constant:
+                            expression: Fallback message
+        - to:
+            uri: mock:result
+```
+
+> **Note**
+> When using asynchronous mode with timeout, the `timeoutExecutorService` must be a `ScheduledExecutorService`. If not provided, Camel will automatically create one. If a custom executor is provided that is not a `ScheduledExecutorService`, the route will fail to start with an `IllegalArgumentException`.
+
 ### Camel’s Error Handler and Circuit Breaker EIP
 
 By default, the [Circuit Breaker](circuitBreaker-eip.md) EIP handles errors by itself. This means if the circuit breaker is open, and the message fails, then Camel’s error handler is not reacting also.

@@ -795,7 +795,7 @@ To enable the metrics, add `camel-micrometer` (or Micrometer directly) to your a
 
 The PQC component documentation is split into focused sub-pages:
 
--   [Key Lifecycle Management](others/pqc-key-lifecycle.md) - Key generation, storage, rotation, expiration, revocation, and format conversion with FileBasedKeyLifecycleManager, InMemoryKeyLifecycleManager, HashiCorp Vault, and AWS Secrets Manager implementations
+-   [Key Lifecycle Management](others/pqc-key-lifecycle.md) - Key generation, storage, rotation, expiration, revocation, and format conversion with FileBasedKeyLifecycleManager, InMemoryKeyLifecycleManager, HashiCorp Vault, AWS Secrets Manager, and Azure Key Vault implementations
     
 -   [Hybrid Cryptography](others/pqc-hybrid.md) - Combining classical and post-quantum algorithms for defense-in-depth, including wire format v2
     

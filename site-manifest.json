@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1784580940343,
+  "generated": 1784977533590,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -10239,6 +10239,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/openapi-validator.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/openapi-validator.html",
+              "title": "OpenAPI Validator"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/opensearch.adoc",
               "url": "/camel-quarkus/next/reference/extensions/opensearch.html",
               "title": "OpenSearch"
@@ -17075,6 +17081,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/clickhouse.adoc",
+              "url": "/camel-spring-boot/next/starters/clickhouse.html",
+              "title": "ClickHouse"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/clickup.adoc",
               "url": "/camel-spring-boot/next/starters/clickup.html",
               "title": "ClickUp"
@@ -17804,6 +17816,12 @@
               "path": "starters/jacksonxml.adoc",
               "url": "/camel-spring-boot/next/starters/jacksonxml.html",
               "title": "Jackson XML"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/jactl.adoc",
+              "url": "/camel-spring-boot/next/starters/jactl.html",
+              "title": "Jactl"
             },
             {
               "module": "ROOT",
@@ -19599,6 +19617,12 @@
             },
             {
               "module": "eips",
+              "path": "a2aSubTask-eip.adoc",
+              "url": "/components/next/eips/a2aSubTask-eip.html",
+              "title": "A2A Sub Task"
+            },
+            {
+              "module": "eips",
               "path": "aggregate-eip.adoc",
               "url": "/components/next/eips/aggregate-eip.html",
               "title": "Aggregate"
@@ -19716,6 +19740,12 @@
               "path": "delay-eip.adoc",
               "url": "/components/next/eips/delay-eip.html",
               "title": "Delay"
+            },
+            {
+              "module": "eips",
+              "path": "doTry-eip.adoc",
+              "url": "/components/next/eips/doTry-eip.html",
+              "title": "Do Try"
             },
             {
               "module": "eips",
@@ -19929,6 +19959,12 @@
             },
             {
               "module": "eips",
+              "path": "pausable-eip.adoc",
+              "url": "/components/next/eips/pausable-eip.html",
+              "title": "Pausable"
+            },
+            {
+              "module": "eips",
               "path": "pipeline-eip.adoc",
               "url": "/components/next/eips/pipeline-eip.html",
               "title": "Pipeline"
@@ -20040,6 +20076,12 @@
               "path": "resilience4jConfiguration-eip.adoc",
               "url": "/components/next/eips/resilience4jConfiguration-eip.html",
               "title": "Resilience4j Configuration"
+            },
+            {
+              "module": "eips",
+              "path": "resumable-eip.adoc",
+              "url": "/components/next/eips/resumable-eip.html",
+              "title": "Resumable"
             },
             {
               "module": "eips",
@@ -20211,6 +20253,12 @@
             },
             {
               "module": "eips",
+              "path": "tokenizer-eip.adoc",
+              "url": "/components/next/eips/tokenizer-eip.html",
+              "title": "Specialized tokenizer for AI applications"
+            },
+            {
+              "module": "eips",
               "path": "topicLoadBalancer-eip.adoc",
               "url": "/components/next/eips/topicLoadBalancer-eip.html",
               "title": "Topic Load Balancer"
@@ -20316,6 +20364,12 @@
               "path": "index.adoc",
               "url": "/components/next/languages/index.html",
               "title": "Expression Languages"
+            },
+            {
+              "module": "languages",
+              "path": "jactl-language.adoc",
+              "url": "/components/next/languages/jactl-language.html",
+              "title": "Jactl"
             },
             {
               "module": "languages",
@@ -21504,6 +21558,12 @@
               "path": "class-component.adoc",
               "url": "/components/next/class-component.html",
               "title": "Class"
+            },
+            {
+              "module": "ROOT",
+              "path": "clickhouse-component.adoc",
+              "url": "/components/next/clickhouse-component.html",
+              "title": "ClickHouse"
             },
             {
               "module": "ROOT",
@@ -31636,6 +31696,12 @@
               "path": "camel-jbang-kubernetes.adoc",
               "url": "/manual/camel-jbang-kubernetes.html",
               "title": "Camel Kubernetes plugin"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-launcher-install.adoc",
+              "url": "/manual/camel-jbang-launcher-install.html",
+              "title": "Installing the Camel CLI Launcher"
             },
             {
               "module": "ROOT",

@@ -13,7 +13,7 @@ The On Fallback eip supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
-| **fallbackViaNetwork** | Whether the fallback goes over the network. If so, the fallback is executed on a separate thread-pool to avoid exhausting the main thread-pool. | false | Boolean |
+| **fallbackViaNetwork** | **Deprecated** Whether the fallback goes over the network. If so, the fallback is executed on a separate thread-pool to avoid exhausting the main thread-pool. | false | Boolean |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

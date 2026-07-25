@@ -6,7 +6,7 @@ Index of Camel expression and predicate languages.
 
 Below is the list of expression languages that are provided by Apache Camel.
 
-Number of Languages: 30 in 18 JAR artifacts (3 deprecated)
+Number of Languages: 31 in 19 JAR artifacts (3 deprecated)
 
     
 | Language | Artifact | Support Level | Since | Description |
@@ -20,6 +20,7 @@ Number of Languages: 30 in 18 JAR artifacts (3 deprecated)
 | [Groovy](groovy-language.md) | camel-groovy | Stable | 1.3 | Evaluates a Groovy script |
 | [Header](header-language.md) | camel-core-languages | Stable | 1.5 | Gets a header from the Exchange |
 | [HL7 Terser](hl7terser-language.md) | camel-hl7 | Stable | 2.11 | Get the value of a HL7 message field specified by terse location specification syntax |
+| [Jactl](jactl-language.md) | camel-jactl | Preview | 4.22 | Evaluates a Jactl script |
 | [Java](java-language.md) | camel-joor | Stable | 4.3 | Evaluates a Java (Java compiled once at runtime) expression |
 | [JavaScript](js-language.md) | camel-javascript | Stable | 3.20 | Evaluates a JavaScript expression |
 | [jOOR](joor-language.md) | camel-joor | Stable-deprecated | 3.7 | Evaluates a jOOR (Java compiled once at runtime) expression |

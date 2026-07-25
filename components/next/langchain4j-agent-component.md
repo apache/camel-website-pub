@@ -12,7 +12,7 @@ The LangChain4j Agent component offers the following key features:
 
 -   **Agent-Based Architecture**: Flexible agent creation using the `Agent` API interface
     
--   **Tool Integration**: Seamless integration with Camel routes via the `langchain4j-tools` component
+-   **Tool Integration**: Seamless integration with Camel routes via the `ai-tool` component
     
 -   **MCP Tools**: Integration with Model Context Protocol (MCP) tools for external system access
     
@@ -177,6 +177,8 @@ Enum values:
 | **CamelLangChain4jAgentInputTokenCount** (producer) Constant: [`INPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#INPUT_TOKEN_COUNT) | The Input Token Count. |  | int |
 | **CamelLangChain4jAgentOutputTokenCount** (producer) Constant: [`OUTPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#OUTPUT_TOKEN_COUNT) | The Output Token Count. |  | int |
 | **CamelLangChain4jAgentTotalTokenCount** (producer) Constant: [`TOTAL_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#TOTAL_TOKEN_COUNT) | The Total Token Count. |  | int |
+| **CamelLangChain4jAgentSources** (producer) Constant: [`SOURCES`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#SOURCES) | RAG sources retrieved during agent invocation. |  | List |
+| **CamelLangChain4jAgentToolExecutions** (producer) Constant: [`TOOL_EXECUTIONS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#TOOL_EXECUTIONS) | Tool executions performed during agent invocation. |  | List |
 
 ## OAuth Authentication
 
@@ -589,7 +591,7 @@ String response = template.requestBody("direct:chat", body, String.class);
 
 ### Chat with Tools
 
-Integrate with Camel routes as tools. The LangChain4j Agent component integrates with Camel Routes defined using the Camel LangChain4j Tools component via the `tags` parameter.
+Integrate with Camel routes as tools. The LangChain4j Agent component integrates with Camel Routes defined using the `ai-tool` component via the `tags` parameter.
 
 -   Java
     
@@ -600,10 +602,10 @@ Integrate with Camel routes as tools. The LangChain4j Agent component integrates
 
 ```java
 // Define tool routes
-from("langchain4j-tools:userDb?tags=users&description=Query user database&parameter.userId=string")
+from("ai-tool:userDb?tags=users&description=Query user database&parameter.userId=string")
     .setBody(constant("{\"name\": \"John Doe\", \"id\": \"123\"}"));
 
-from("langchain4j-tools:weather?tags=weather&description=Get weather information&parameter.city=string")
+from("ai-tool:weather?tags=weather&description=Get weather information&parameter.city=string")
     .setBody(constant("{\"weather\": \"sunny\", \"temperature\": \"22°C\"}"));
 
 // Agent with tools (using the created agent)
@@ -614,14 +616,14 @@ from("direct:chat")
 ```xml
 <!-- Define tool routes -->
 <route>
-  <from uri="langchain4j-tools:userDb?tags=users&amp;description=Query user database&amp;parameter.userId=string"/>
+  <from uri="ai-tool:userDb?tags=users&amp;description=Query user database&amp;parameter.userId=string"/>
   <setBody>
     <constant>{"name": "John Doe", "id": "123"}</constant>
   </setBody>
 </route>
 
 <route>
-  <from uri="langchain4j-tools:weather?tags=weather&amp;description=Get weather information&amp;parameter.city=string"/>
+  <from uri="ai-tool:weather?tags=weather&amp;description=Get weather information&amp;parameter.city=string"/>
   <setBody>
     <constant>{"weather": "sunny", "temperature": "22°C"}</constant>
   </setBody>
@@ -638,7 +640,7 @@ from("direct:chat")
 # Define tool routes
 - route:
     from:
-      uri: langchain4j-tools:userDb
+      uri: ai-tool:userDb
       parameters:
         tags: users
         description: Query user database
@@ -649,7 +651,7 @@ from("direct:chat")
 
 - route:
     from:
-      uri: langchain4j-tools:weather
+      uri: ai-tool:weather
       parameters:
         tags: weather
         description: Get weather information
@@ -681,7 +683,14 @@ String response = template.requestBodyAndHeader("direct:chat",
 ```
 
 > **Note**
-> There’s no need to add Camel LangChain4j Tools component as a dependency when using the tools with LangChain4j Agent component.
+> Add the `camel-ai-tool` dependency to use Camel route tools with the LangChain4j Agent component:
+>
+> ```xml
+> <dependency>
+>     <groupId>org.apache.camel</groupId>
+>     <artifactId>camel-ai-tool</artifactId>
+> </dependency>
+> ```
 
 ### Custom LangChain4j Tools
 
@@ -797,7 +806,7 @@ _Java-only: LangChain4j `@Tool` instances, `AgentConfiguration`, and bean regist
 
 ```java
 // Define Camel route tools
-from("langchain4j-tools:weatherService?tags=weather&description=Get current weather information&parameter.location=string")
+from("ai-tool:weatherService?tags=weather&description=Get current weather information&parameter.location=string")
     .setBody(constant("{\"weather\": \"sunny\", \"location\": \"Current Location\"}"));
 
 // Create custom tool instances
