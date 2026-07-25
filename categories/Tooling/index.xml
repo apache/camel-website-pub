@@ -13,7 +13,7 @@
       <link>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</link>
       <pubDate>Mon, 20 Jul 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</guid>
-      <description>Getting started with the Camel CLI used to mean installing a JDK, then jbang, then finally running jbang camel@apache/camel init for the first time. That friction is gone. install.sh and install.ps1 get the Camel CLI Launcher running on your machine with a single command, no package manager and no separate jbang install required.&#xA;One-line install On macOS and Linux:&#xA;curl -fsSL https://camel.apache.org/install.sh | sh On Windows, in PowerShell:&#xA;irm https://camel.apache.org/install.ps1 | iex Both installers resolve and install the latest published release by default, or a specific version if you request one with --version (install.</description>
+      <description>Getting started with the Camel CLI used to mean installing a JDK, then jbang, then finally running jbang camel@apache/camel init for the first time. That friction is gone. install.sh and install.ps1 get the Camel CLI Launcher running on your machine with a single command, no package manager and no separate jbang install required.&#xA;One-line install On macOS and Linux:&#xA;curl -fsSL https://camel.apache.org/install.sh | sh On Windows, in PowerShell:&#xA;irm https://camel.apache.org/install.ps1 | iex Update (2026-07-25): A server configuration issue was briefly returning a 403 for the install.</description>
     </item>
     <item>
       <title>Hawtio AI: Utilizing AI in the Operational Phase of Camel Integrations</title>
