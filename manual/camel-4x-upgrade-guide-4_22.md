@@ -740,6 +740,12 @@ camel.resilience4j.waitDurationInOpenState = 60000
 
 The `io.vavr:vavr` and `io.vavr:vavr-match` runtime dependencies have been removed from `camel-resilience4j`. The single internal usage of Vavr’s `Try` monad has been replaced with a plain try-catch. This eliminates two transitive runtime JARs. No user-facing behavior change.
 
+### camel-resilience4j - JMX waitDurationInOpenState now reports milliseconds
+
+The JMX managed attribute `CircuitBreakerWaitDurationInOpenState` previously reported seconds (using `Duration.getSeconds()`). It now reports milliseconds (using `Duration.toMillis()`) to be consistent with all other duration attributes (`BulkheadMaxWaitDuration`, `TimeoutDuration`) and with the option itself, which was changed from seconds to milliseconds in the same release (see above).
+
+If you have JMX-based monitoring that reads this attribute, update the expected unit from seconds to milliseconds.
+
 ### camel-clickhouse (new component)
 
 A new `camel-clickhouse` producer component has been added. It integrates with [ClickHouse](https://clickhouse.com/), the high-performance columnar OLAP database, using the official ClickHouse Java client (client-v2). It exposes ClickHouse’s native capabilities as first-class endpoint options: native format streaming inserts (`RowBinary`, `JSONEachRow`, `CSV`, `TSV`, `Parquet`), server-side asynchronous inserts, OLAP queries and health checks.
