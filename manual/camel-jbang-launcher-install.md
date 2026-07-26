@@ -16,6 +16,30 @@ With no arguments, both installers resolve and install the latest published rele
 
 Both installers download the release archive from Maven Central, verify it against a SHA-256 recorded in a signed-path manifest before extracting it, and reject archives containing absolute paths, `../` traversal, escaping symlinks/reparse points, or more than one top-level directory. The staged launcher is run once to confirm a Java 17+ runtime can be discovered; if that check fails, the previously active installation, if any, is left untouched and the installer exits nonzero.
 
+## Installing a specific version
+
+On Linux and macOS, pass the argument through to the piped shell with `-s --`:
+
+```bash
+curl -fsSL https://camel.apache.org/install.sh | sh -s -- --version 4.22.0
+```
+
+On Windows, download the script first, then run it with the parameter:
+
+```powershell
+irm https://camel.apache.org/install.ps1 -OutFile install.ps1
+.\install.ps1 -Version 4.22.0
+```
+
+## Requirements
+
+-   A Java 17+ runtime available at install and run time. The launcher locates Java from `JAVACMD`, `JAVA_HOME`, or `PATH`.
+    
+-   Linux and macOS: `curl` or `wget`; `tar`; and one of `sha256sum`, `shasum`, or `openssl`.
+    
+-   Windows: PowerShell 5.1 or later (`Invoke-WebRequest`, `Expand-Archive`, `Get-FileHash`).
+    
+
 ## Where the CLI is installed
 
 Installation is always per-user and never requires elevation or `sudo`:
@@ -67,3 +91,28 @@ shell currently runs; the others are unused but still present.
 ```
 
 `camel doctor` exits non-zero when more than one installation is found, so the check is scriptable in CI.
+
+## Uninstalling
+
+The installers do not modify shell profiles or the machine `PATH`, so removal is a matter of deleting the per-user files:
+
+On Linux and macOS:
+
+```bash
+rm -f "$HOME/.local/bin/camel"
+rm -rf "${XDG_DATA_HOME:-$HOME/.local/share}/camel-cli"
+```
+
+On Windows, remove the install directory and drop its bin directory from your user `PATH`:
+
+```powershell
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Apache Camel"
+```
+
+## See also
+
+-   [Camel CLI Launcher](camel-jbang-launcher.md) — the distribution the installers install.
+    
+-   [Camel CLI - Installation Options](camel-jbang-installation.md) — installing via JBang, version pinning, the Camel Wrapper, and the container image.
+    
+-   [Getting Started](camel-jbang-getting-started.md) — the standard JBang-based install.

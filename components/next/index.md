@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 378 in 304 JAR artifacts (12 deprecated)
+Number of Non-Core Components: 379 in 305 JAR artifacts (12 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -156,6 +156,7 @@ Number of Non-Core Components: 378 in 304 JAR artifacts (12 deprecated)
 | [Docling](docling-component.md) | camel-docling | Stable | 4.15 | Process documents using Docling library for parsing and conversion. |
 | [Drill](drill-component.md) | camel-drill | Stable | 2.19 | Perform queries against an Apache Drill cluster. |
 | [Dropbox](dropbox-component.md) | camel-dropbox | Stable | 2.14 | Upload, download and manage files, folders, groups, collaborations, etc on Dropbox. |
+| [DuckDB](duckdb-component.md) | camel-duckdb | Preview | 4.22 | Interact with DuckDB, the in-process analytical SQL database, for embedded analytics workloads. |
 | [Dynamic Router Control](dynamic-router-control-component.md) | camel-dynamic-router | Stable | 4.4 | The Dynamic Router control endpoint for operations that allow routing participants to subscribe or unsubscribe to participate in dynamic message routing. |
 | [Ehcache](ehcache-component.md) | camel-ehcache | Stable | 2.18 | Perform caching operations using Ehcache. |
 | [Elasticsearch](elasticsearch-component.md) | camel-elasticsearch | Stable | 3.19 | Send requests to Elasticsearch via Java Client API. |

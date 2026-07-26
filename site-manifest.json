@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1784989518702,
+  "generated": 1785045749726,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -17351,6 +17351,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/duckdb.adoc",
+              "url": "/camel-spring-boot/next/starters/duckdb.html",
+              "title": "DuckDB"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/dynamic-router.adoc",
               "url": "/camel-spring-boot/next/starters/dynamic-router.html",
               "title": "Dynamic Router"
@@ -21786,6 +21792,12 @@
               "path": "dropbox-component.adoc",
               "url": "/components/next/dropbox-component.html",
               "title": "Dropbox"
+            },
+            {
+              "module": "ROOT",
+              "path": "duckdb-component.adoc",
+              "url": "/components/next/duckdb-component.html",
+              "title": "DuckDB"
             },
             {
               "module": "ROOT",

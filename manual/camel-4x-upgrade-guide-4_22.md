@@ -108,6 +108,10 @@ Two new commands are available in the [Camel CLI Launcher](camel-jbang-launcher.
 
 See [Installing the Camel CLI Launcher](camel-jbang-launcher-install.md) for full details.
 
+#### Camel CLI package-native validation (maintainers)
+
+The `camel-launcher` module adds an offline package-native validator (`src/jreleaser/bin/camel-validate.sh`) that installs each generated package, asserts `camel version` and an offline `camel init`, then uninstalls. Each validator self-skips when its package manager is absent, so the same entry point runs on macOS, Linux, and Windows x64 CI. Validation performs no remote publication and calls no SDKMAN Vendor API; that is the `publish` workflow.
+
 ### camel-langchain4j-agent
 
 The `Agent.chat()` method return type has changed from `String` to `Result<String>` (from `dev.langchain4j.service.Result`). This allows the agent producer to expose token usage (input, output, total token count) and finish reason as exchange headers, consistent with the chat, tools, and embeddings components.
@@ -746,6 +750,23 @@ The JMX managed attribute `CircuitBreakerWaitDurationInOpenState` previously rep
 
 If you have JMX-based monitoring that reads this attribute, update the expected unit from seconds to milliseconds.
 
+### camel-microprofile-fault-tolerance
+
+The deprecated `timeoutPoolSize` option has been removed from the Fault Tolerance configuration. This option was never used by SmallRye Fault Tolerance and had no effect. Remove any references to `timeoutPoolSize` from your configuration.
+
+The JMX attribute `FailureRate` has been renamed to `FailureRatio` to match the configuration property name and avoid confusion with live failure rate metrics.
+
+New JMX attributes have been added for live call monitoring:
+
+-   `NumberOfSuccessfulCalls` - count of successful executions
+    
+-   `NumberOfFailedCalls` - count of failed executions
+    
+-   `NumberOfNotPermittedCalls` - count of calls rejected by an open circuit breaker
+    
+
+A new `transitionToCloseState` JMX operation resets the circuit breaker to CLOSED and clears the call counters.
+
 ### camel-clickhouse (new component)
 
 A new `camel-clickhouse` producer component has been added. It integrates with [ClickHouse](https://clickhouse.com/), the high-performance columnar OLAP database, using the official ClickHouse Java client (client-v2). It exposes ClickHouse’s native capabilities as first-class endpoint options: native format streaming inserts (`RowBinary`, `JSONEachRow`, `CSV`, `TSV`, `Parquet`), server-side asynchronous inserts, OLAP queries and health checks.
@@ -756,6 +777,17 @@ from("direct:events")
 ```
 
 The component supports the `insert` (default), `query` and `ping` operations, and can either use a shared autowired `com.clickhouse.client.api.Client` bean or build its own client from the `serverUrl`, `username`, `password` and `ssl` endpoint options. See the [ClickHouse component](../components/next/clickhouse-component.md) documentation for details.
+
+### camel-duckdb (new component)
+
+A new `camel-duckdb` producer component integrates with [DuckDB](https://duckdb.org/) using the official JDBC driver. It targets embedded analytics: in-memory or file-backed databases, SQL `execute` and `query`, batch `insert`, bulk file `copy` (CSV, Parquet, JSON), and `ping`.
+
+```java
+from("direct:events")
+    .to("duckdb:analytics.db?operation=insert&table=events&batchSize=1000");
+```
+
+See the [DuckDB component](../components/next/duckdb-component.md) documentation for details. Test support is provided by the `camel-test-infra-duckdb` module (in-process embedded database).
 
 ### camel-minio - Upgraded to minio 9.0.3 - Breaking Changes
 

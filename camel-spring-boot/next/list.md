@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 396 spring boot starter json files.
+There are 397 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -242,6 +242,8 @@ docling
 drill
 
 dropbox
+
+duckdb
 
 dynamic-router
 
@@ -936,6 +938,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Docling](../../components/next/docling-component.md) | camel-docling-starter | Stable | 4.15 | Process documents using Docling library for parsing and conversion. |
 | [Drill](../../components/next/drill-component.md) | camel-drill-starter | Stable | 2.19 | Perform queries against an Apache Drill cluster. |
 | [Dropbox](../../components/next/dropbox-component.md) | camel-dropbox-starter | Stable | 2.14 | Upload, download and manage files, folders, groups, collaborations, etc on Dropbox. |
+| [DuckDB](../../components/next/duckdb-component.md) | camel-duckdb-starter | Preview | 4.22 | Interact with DuckDB, the in-process analytical SQL database, for embedded analytics workloads. |
 | [Dynamic Router](../../components/next/dynamic-router-component.md) | camel-dynamic-router-starter | Stable | 3.15 | The Dynamic Router component routes exchanges to recipients, and the recipients (and their rules) may change at runtime. |
 | [Dynamic Router Control](../../components/next/dynamic-router-control-component.md) | camel-dynamic-router-starter | Stable | 4.4 | The Dynamic Router control endpoint for operations that allow routing participants to subscribe or unsubscribe to participate in dynamic message routing. |
 | [Ehcache](../../components/next/ehcache-component.md) | camel-ehcache-starter | Stable | 2.18 | Perform caching operations using Ehcache. |
