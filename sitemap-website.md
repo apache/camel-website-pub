@@ -1,8 +1,10 @@
-urls[818]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-07-24T00:00:00+00:00
+urls[819]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-07-27T00:00:00+00:00
+  https://camel.apache.org/categories/Features/,2026-07-27T00:00:00+00:00
+  https://camel.apache.org/,2026-07-27T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/camel-tui/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/,2026-07-24T00:00:00+00:00
-  https://camel.apache.org/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/categories/Usecases/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/,2026-07-20T00:00:00+00:00
@@ -58,7 +60,6 @@ urls[818]{loc,lastmod}:
   https://camel.apache.org/blog/2026/07/RELEASE-4.21.0/,2026-07-01T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-who-maintains/,2026-07-01T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.21.0/,2026-06-30T00:00:00+00:00
-  https://camel.apache.org/categories/Features/,2026-06-26T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-route-topology/,2026-06-26T00:00:00+00:00
   https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/,2026-06-22T00:00:00+00:00
   https://camel.apache.org/categories/Security/,2026-06-22T00:00:00+00:00

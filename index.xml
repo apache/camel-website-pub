@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 27 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introducing Camel TUI — A Terminal Dashboard for Apache Camel</title>
+      <link>https://camel.apache.org/blog/2026/07/camel-tui/</link>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/camel-tui/</guid>
+      <description>Apache Camel has always excelled at connecting systems, but observing what happens inside your running integrations has traditionally meant switching between CLI commands, log files, or firing up a web console. With Camel 4.21, we are introducing something new.&#xA;Camel TUI is an interactive terminal dashboard that gives you a live view of your Camel integrations as they run on your local machine. Built on top of the Camel CLI, it renders real-time data with a modern terminal UI — mouse support, keyboard navigation, Unicode graphics, and even pixel-rendered route diagrams.</description>
+    </item>
     <item>
       <title>Echonect: Fifteen Years on Apache Camel</title>
       <link>https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/</link>

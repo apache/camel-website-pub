@@ -3,15 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-07-24T00:00:00+00:00</lastmod>
+    <lastmod>2026-07-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Features/</loc>
+    <lastmod>2026-07-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-07-27T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/07/camel-tui/</loc>
+    <lastmod>2026-07-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Community/</loc>
     <lastmod>2026-07-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/</loc>
-    <lastmod>2026-07-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/</loc>
     <lastmod>2026-07-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Usecases/</loc>
@@ -178,9 +184,6 @@
   </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.21.0/</loc>
     <lastmod>2026-06-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Features/</loc>
-    <lastmod>2026-06-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/06/camel-route-topology/</loc>
     <lastmod>2026-06-26T00:00:00+00:00</lastmod>

@@ -57,7 +57,7 @@ mvn clean test</code></pre> </div> </div> </li> <li> <p>If all tests are passing
 git fetch upstream
 git checkout camel-quarkus-main
 git reset --hard upstream/camel-quarkus-main
-./mvnw org.l2x6.cq:cq-maven-plugin:2.10.0:examples-set-platform -Dcq.quarkus.platform.version=$NEW_PLATFORM_VERSION
+./mvnw org.l2x6.cq:cq-maven-plugin:examples-set-platform -Dcq.quarkus.platform.version=$NEW_PLATFORM_VERSION
 ./refresh-dockerfiles.sh
 git add -A
 git commit -m "Upgrade to Quarkus Platform $NEW_PLATFORM_VERSION"</code></pre> </div> </div> </li> <li> <p>Make sure that the tests are still passing:</p> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">./mvnw clean verify</code></pre> </div> </div> </li> <li> <p>If everything works for you locally, open a PR to merge <code>camel-quarkus-main</code> to <code>main</code></p> </li> <li> <p>Once the PR is merged, tag the <code>main</code> branch with the <code>$NEW_CQ_VERSION</code>:</p> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">NEW_CQ_VERSION=... # the recent release of Camel Quarkus; e.g. 2.2.0
@@ -78,7 +78,7 @@ git checkout -b $BRANCH $NEW_CQ_VERSION
 git push upstream $BRANCH</code></pre> </div> </div> </li> <li> <p>Prepare the <code>camel-quarkus-main</code> branch for the next development iteration:</p> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-shell hljs" data-lang="shell">NEXT_CQ_VERSION=... # The version used in the current Camel Quarkus main branch without the -SNAPSHOT suffix; e.g. 2.3.0
 git checkout camel-quarkus-main
 git reset --hard main
-./mvnw org.l2x6.cq:cq-maven-plugin:2.10.0:examples-set-platform -Dcq.camel-quarkus.version=${NEXT_CQ_VERSION}-SNAPSHOT -Dcq.newVersion=${NEXT_CQ_VERSION}-SNAPSHOT
+./mvnw org.l2x6.cq:cq-maven-plugin:examples-set-platform -Dcq.camel-quarkus.version=${NEXT_CQ_VERSION}-SNAPSHOT -Dcq.newVersion=${NEXT_CQ_VERSION}-SNAPSHOT
 ./mvnw versions:update-child-modules -N
 # Update version labels in Kubernetes resources
 ./mvnw process-sources

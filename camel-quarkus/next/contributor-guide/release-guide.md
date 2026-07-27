@@ -402,7 +402,7 @@ This section needs to be executed only when a Quarkus Platform release has been 
     git fetch upstream
     git checkout camel-quarkus-main
     git reset --hard upstream/camel-quarkus-main
-    ./mvnw org.l2x6.cq:cq-maven-plugin:2.10.0:examples-set-platform -Dcq.quarkus.platform.version=$NEW_PLATFORM_VERSION
+    ./mvnw org.l2x6.cq:cq-maven-plugin:examples-set-platform -Dcq.quarkus.platform.version=$NEW_PLATFORM_VERSION
     ./refresh-dockerfiles.sh
     git add -A
     git commit -m "Upgrade to Quarkus Platform $NEW_PLATFORM_VERSION"
@@ -443,7 +443,7 @@ This section needs to be executed only when a Quarkus Platform release has been 
     NEXT_CQ_VERSION=... # The version used in the current Camel Quarkus main branch without the -SNAPSHOT suffix; e.g. 2.3.0
     git checkout camel-quarkus-main
     git reset --hard main
-    ./mvnw org.l2x6.cq:cq-maven-plugin:2.10.0:examples-set-platform -Dcq.camel-quarkus.version=${NEXT_CQ_VERSION}-SNAPSHOT -Dcq.newVersion=${NEXT_CQ_VERSION}-SNAPSHOT
+    ./mvnw org.l2x6.cq:cq-maven-plugin:examples-set-platform -Dcq.camel-quarkus.version=${NEXT_CQ_VERSION}-SNAPSHOT -Dcq.newVersion=${NEXT_CQ_VERSION}-SNAPSHOT
     ./mvnw versions:update-child-modules -N
     # Update version labels in Kubernetes resources
     ./mvnw process-sources
