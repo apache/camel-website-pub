@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 102 in 70 JAR artifacts (8 deprecated)
+Number of Miscellaneous Components: 103 in 70 JAR artifacts (8 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -70,6 +70,7 @@ Number of Miscellaneous Components: 102 in 70 JAR artifacts (8 deprecated)
 | [OpenAI - Compatible Providers](openai-providers.md) |  |  |  |  |
 | [OpenAI - Embeddings and Audio Operations](openai-operations.md) |  |  |  |  |
 | [OpenAI - MCP Tool Calling](openai-mcp.md) |  |  |  |  |
+| [OpenAI - Responses API Operation](openai-responses.md) |  |  |  |  |
 | [Openapi Java](openapi-java.md) | camel-openapi-java | Stable | 3.1 | Rest DSL support for using OpenApi doc |
 | [Openapi Validator](openapi-validator.md) | camel-openapi-validator | Stable | 4.7 | OpenAPI validator for Camel Rest DSL |
 | [OpenTelemetry](opentelemetry.md) | camel-opentelemetry | Stable-deprecated | 3.5 | Distributed tracing using OpenTelemetry |

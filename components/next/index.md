@@ -322,7 +322,7 @@ Number of Non-Core Components: 379 in 305 JAR artifacts (12 deprecated)
 | [OPC UA Browser](milo-browse-component.md) | camel-milo | Stable | 3.15 | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
 | [OPC UA Client](milo-client-component.md) | camel-milo | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](milo-server-component.md) | camel-milo | Stable | 2.19 | Make telemetry data available as an OPC UA server. |
-| [OpenAI](openai-component.md) | camel-openai | Stable | 4.17 | OpenAI endpoint for chat completion, embeddings, audio transcription, audio translation, and text-to-speech. |
+| [OpenAI](openai-component.md) | camel-openai | Stable | 4.17 | OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech. |
 | [OpenSearch](opensearch-component.md) | camel-opensearch | Stable | 4.0 | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](openshift-build-configs-component.md) | camel-kubernetes | Stable | 2.17 | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](openshift-builds-component.md) | camel-kubernetes | Stable | 2.17 | Perform operations on OpenShift Builds. |

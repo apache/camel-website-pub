@@ -1107,7 +1107,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [OPC UA Browser](../../components/next/milo-browse-component.md) | camel-milo-starter | Stable | 3.15 | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
 | [OPC UA Client](../../components/next/milo-client-component.md) | camel-milo-starter | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](../../components/next/milo-server-component.md) | camel-milo-starter | Stable | 2.19 | Make telemetry data available as an OPC UA server. |
-| [OpenAI](../../components/next/openai-component.md) | camel-openai-starter | Stable | 4.17 | OpenAI endpoint for chat completion, embeddings, audio transcription, audio translation, and text-to-speech. |
+| [OpenAI](../../components/next/openai-component.md) | camel-openai-starter | Stable | 4.17 | OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech. |
 | [OpenSearch](../../components/next/opensearch-component.md) | camel-opensearch-starter | Stable | 4.0 | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](../../components/next/openshift-build-configs-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](../../components/next/openshift-builds-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Builds. |
@@ -1415,6 +1415,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [OpenAI - Compatible Providers](../../components/next/others/openai-providers.md) | undefined-starter |  |  |  |
 | [OpenAI - Embeddings and Audio Operations](../../components/next/others/openai-operations.md) | undefined-starter |  |  |  |
 | [OpenAI - MCP Tool Calling](../../components/next/others/openai-mcp.md) | undefined-starter |  |  |  |
+| [OpenAI - Responses API Operation](../../components/next/others/openai-responses.md) | undefined-starter |  |  |  |
 | [Openapi Java](../../components/next/others/openapi-java.md) | camel-openapi-java-starter | Stable | 3.1 | Rest DSL support for using OpenApi doc |
 | [Openapi Validator](../../components/next/others/openapi-validator.md) | camel-openapi-validator-starter | Stable | 4.7 | OpenAPI validator for Camel Rest DSL |
 | [OpenTelemetry](../../components/next/others/opentelemetry.md) | camel-opentelemetry-starter | Stable-deprecated | 3.5 | Distributed tracing using OpenTelemetry |

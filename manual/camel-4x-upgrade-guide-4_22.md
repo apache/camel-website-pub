@@ -211,12 +211,16 @@ The `safeSearch` endpoint option is now correctly propagated to the LangChain4j 
 
 The per-call token usage headers `CamelOpenAIPromptTokens`, `CamelOpenAICompletionTokens`, and `CamelOpenAITotalTokens` now declare `javaType = Long` in component metadata (previously `Integer`). The OpenAI SDK returns `long` values, so routes that read these headers with `Integer.class` should switch to `Long.class`.
 
+Component metadata for exchange property `CamelOpenAIResponse` (`storeFullResponse=true` on `chat-completion`) now declares `javaType = com.openai.models.chat.completions.ChatCompletion` (previously `com.openai.models.ChatCompletion`). The runtime type was already the nested SDK class; update imports and `exchange.getProperty(…​, ChatCompletion.class)` references if your code still uses the old package name.
+
 The `conversationMemory` feature on the `chat-completion` operation has two behavior fixes:
 
 -   User messages are now stored in the `CamelOpenAIConversationHistory` exchange property (configurable via `conversationHistoryProperty`) alongside assistant responses. Previously only assistant turns were appended, so code that reads the history property directly will see roughly twice as many entries (alternating user and assistant messages) compared to Camel 4.21 and earlier.
     
 -   When `systemMessage` is set together with `conversationMemory=true`, the conversation history is now correctly cleared via `exchange.removeProperty()`. Previously `removeHeader()` was used on a property that is stored as an exchange property, so the documented reset had no effect and stale history was kept.
     
+
+A new `responses` operation calls the OpenAI Responses API (non-streaming). Use `openai:responses` with the same ergonomics as chat completion for text/image input, `systemMessage` (sent as `instructions`), `model`, `temperature`, `maxTokens` (mapped to `maxOutputTokens`), structured output (`outputClass` / `jsonSchema`), and response headers including `CamelOpenAIResponseId`. Server-side multi-turn state uses `previousResponseId` / `CamelOpenAIPreviousResponseId`. Hosted tools: `builtinTools` (`web_search`, `file_search`, `code_interpreter`; `file_search` requires `fileSearchVectorStoreIds`) and optional `hostedMcpTools` JSON for Tool.Mcp pass-through. Streaming is not supported on this operation. The full SDK response is stored in exchange property `CamelOpenAIResponsesResponse` when `storeFullResponse=true`.
 
 ### camel-management - Throughput MBean attribute uses EWMA smoothing
 
@@ -581,6 +585,19 @@ If you were relying on non-durable queues, you can restore the previous behavior
 The URI sanitization used for logs, JMX attributes, exception messages and the developer console (`URISupport.sanitizeUri`) now also redacts endpoint parameters whose name contains `api-key` (hyphenated) or `authorization`. Previously a credential supplied through a hyphenated or `Authorization`\-style parameter/header name — for example `additionalHeader.api-key=…​` (the Azure OpenAI auth header) or `additionalHeader.Authorization=…​` in `camel-openai` — was written in clear text in sanitized URIs, even though the camelCase `apiKey` option was already redacted.
 
 Because matching is a case-insensitive substring match, parameter names that merely contain `authorization` without being secrets — `adjustAuthorization`, `jwtAuthorizationType`, `proxyAuthorizationPolicy` — now also have their values shown as `xxxxxx` in sanitized URIs. This is a cosmetic change to sanitized output only and does not affect the actual endpoint configuration.
+
+### camel-support - DefaultMaskingFormatter masks URI userinfo and PEM private keys
+
+`DefaultMaskingFormatter` (used when `logMask=true`, and by tooling that reuses the same formatter) previously masked secrets only when a known sensitive **key name** appeared in key/value, XML or JSON text. Two credential shapes that have no such key are now also masked:
+
+-   URI userinfo passwords such as `mongodb://user:pass@host/db` or `amqp://admin:secret@broker/vhost` (the `:pass` / `:secret` portion is replaced; the username and host remain).
+    
+-   PEM private-key blocks (`-----BEGIN … PRIVATE KEY-----` … `-----END … PRIVATE KEY-----`); the key body is replaced while the BEGIN/END markers are kept. Certificates and public keys are not masked.
+    
+
+Helpers for these value shapes live on `org.apache.camel.util.SensitiveUtils` (`maskUserInfoCredentials`, `maskPemPrivateKeyBlocks`, `maskSensitiveValueShapes`). This is a cosmetic change to masked/logged output only and does not affect endpoint configuration.
+
+If you use `DefaultMaskingFormatter` with an empty keyword set, `format()` previously returned the source unchanged; it now still applies URI userinfo and PEM private-key masking on the text.
 
 ### camel-a2a - push notification webhooks pinned to the validated address
 

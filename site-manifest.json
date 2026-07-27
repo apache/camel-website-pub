@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1785045749726,
+  "generated": 1785140656916,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -20880,6 +20880,12 @@
               "path": "openai-providers.adoc",
               "url": "/components/next/others/openai-providers.html",
               "title": "OpenAI - Compatible Providers"
+            },
+            {
+              "module": "others",
+              "path": "openai-responses.adoc",
+              "url": "/components/next/others/openai-responses.html",
+              "title": "OpenAI - Responses API Operation"
             },
             {
               "module": "others",
