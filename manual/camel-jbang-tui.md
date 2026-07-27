@@ -4,7 +4,7 @@
 
 Camel TUI is a terminal dashboard for developing, prototyping, and understanding Camel integrations. It makes your integration visible — you can see your route topology, watch messages flow through processors, step through exchanges like scrubbing through a video timeline, and understand what Camel actually does with your routes. No more black box.
 
-![TUI Overview showing multiple routes](_images/jbang/camel-tui-topology-overview.svg)
+![TUI Overview showing multiple routes](_images/jbang/camel-tui-overview.png)
 
 ## Getting Started
 
@@ -25,8 +25,6 @@ camel tui
 ```
 
 The TUI auto-discovers every running Camel integration on your machine — no configuration needed.
-
-![TUI showing a simple hello route](_images/jbang/camel-tui-hello-overview.svg)
 
 ### Option 2: Built-in Examples
 
@@ -70,6 +68,8 @@ The TUI organizes information into tabs. Press number keys **1** through **0** t
 | 9 | Errors | Failures with stack traces and exchange context. |
 | 0 | More | Additional tabs: Beans, Browse, Circuit Breaker, Classpath, Configuration, Consumers, CVE Audit, Health, Inflight, Memory, Metrics, Spans, Process, Startup, and more. |
 
+Tabs appear dynamically based on what the integration uses. For example, the SQL tab appears when a DataSource is present, Circuit Breaker when resilience4j is in use, and Spans when OpenTelemetry is enabled. The TUI adapts to show only what’s relevant to your integration.
+
 Tab badges show live counts — the Errors tab shows a red badge when errors exist and Routes shows the route count.
 
 ## Activity
@@ -88,7 +88,7 @@ Use **s** to cycle sort order, **S** to reverse, and **F5** to clear the activit
 
 The Diagram tab (Tab 4) renders the route topology as interactive ASCII art. It shows how routes connect to each other through shared endpoints (direct, seda, kafka, etc.).
 
-![Diagram topology view](_images/jbang/camel-tui-topology-diagram.svg)
+![Diagram topology view](_images/jbang/camel-tui-diagram.png)
 
 ### Topology View
 
@@ -107,8 +107,6 @@ Navigate between route boxes with arrow keys. When a route is selected, an **Inf
 
 Press **Enter** on a selected route to drill down into its internal EIP structure. Each processor and EIP node is displayed with its type (colored by category), endpoint URI, and per-node statistics.
 
-![Drill-down showing internal processors](_images/jbang/camel-tui-topology-diagram-drilldown.svg)
-
 Nodes that connect to other routes show a **Enter** indicator — press **Enter** to jump directly to the linked route. Navigation history is maintained as a breadcrumb stack: press **Esc** to go back to the previous route, and eventually back to the topology view.
 
 Press **t** to jump straight back to the topology from any depth.
@@ -124,8 +122,6 @@ Press **e** to cycle through three modes for external endpoints:
 -   **all** — routes sharing an external endpoint are connected through an intermediary box
     
 
-![Diagram with external endpoints visible](_images/jbang/camel-tui-topology-diagram-external.svg)
-
 ### Metrics and Source Code
 
 -   Press **m** to toggle metrics overlay (message counts on each node)
@@ -138,6 +134,8 @@ Press **e** to cycle through three modes for external endpoints:
 ## Message Insight
 
 The Inspect tab lets you step through an exchange processor by processor — like scrubbing through a video timeline of your message’s journey. This is the key to understanding what Camel does with your data at every step.
+
+![Inspect tab showing message history and exchange details](_images/jbang/camel-tui-inspect.png)
 
 ### History of Last Exchange
 
@@ -212,8 +210,6 @@ Use **s** to cycle sort order (time, route, elapsed, exchange) and **S** to reve
 
 The Errors tab collects failures with full stack traces and exchange context. When errors occur, a red badge appears on the tab.
 
-![Errors tab with failure details](_images/jbang/camel-tui-topology-errors.svg)
-
 For deeper troubleshooting, switch to the Inspect tab and use the diagram replay (press **d**) to visualize exactly where the failure occurred:
 
 -   Failed steps are highlighted in red on the diagram
@@ -278,6 +274,8 @@ Press **F2** to open the actions menu with quick access to common operations:
 ### Sending Test Messages
 
 Select **Send Message** from the F2 menu (or press **F2** then choose it):
+
+![Send Message view with body editor and response area](_images/jbang/camel-tui-send.png)
 
 -   **Choose the route** — use left/right arrows to pick the target route
     
