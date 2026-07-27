@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1785140656916,
+  "generated": 1785158706314,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -10047,6 +10047,12 @@
               "path": "reference/extensions/mdc.adoc",
               "url": "/camel-quarkus/next/reference/extensions/mdc.html",
               "title": "Mdc"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/micrometer-observability.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/micrometer-observability.html",
+              "title": "Micrometer Observability 2"
             },
             {
               "module": "ROOT",
