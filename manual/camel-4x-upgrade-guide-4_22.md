@@ -13,6 +13,8 @@ The Camel JBang CLI (Camel CLI) and TUI have been promoted from _Preview_ to _St
 
 The Camel JBang CLI now automatic resolves quarkus version to use, instead of hardcoded `3.33.1.1` ([https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b](https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b)).
 
+The Camel CLI and TUI AI prompt (`camel ask`, TUI F8 panel) now auto-detect **Azure OpenAI** when `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_ENDPOINT` are set (optional `AZURE_OPENAI_DEPLOYMENT_NAME` and `AZURE_OPENAI_API_VERSION`). Azure requests use the `api-key` header instead of `Authorization: Bearer`. See [Camel CLI - AI Tools](camel-jbang-ai.md) for the full detection order.
+
 The `camel cmd route-diagram` and `camel cmd route-topology` now accept one or more Camel route source files (instead of only the name/pid of a running integration), so diagrams and inter-route topology can be generated at design/source time without starting the application first, for example:
 
 ```bash
@@ -337,10 +339,6 @@ Add the `camel-ai-tool` dependency to your project:
 
 The `camel-spring-ai-tools` dependency is no longer required by `camel-spring-ai-chat`.
 
-### camel-fory with JDK 25+ - Breaking change
-
-Due to new requirements from Apache Fory, when using Apache Fory Dataformat, the JVM parameter `--add-opens java.base/java.lang.invoke=ALL-UNNAMED` must be provided.
-
 ### camel-pqc - potential breaking change
 
 The `pqc` data format now encrypts the message payload with **authenticated encryption (AEAD)** instead of the previous unauthenticated ECB mode. 128-bit block ciphers are encrypted with GCM and the ChaCha20 stream cipher is encrypted with ChaCha20-Poly1305, so both the confidentiality and the integrity of the data are now protected, and tampered or corrupted messages are detected and rejected on decryption.
@@ -616,6 +614,14 @@ When using the batching consumer (`batching=true`), the exchange carrying the ba
 A header is only set when **every** record in the batch has the same value for it; if the batch spans multiple topics or partitions, that header is left unset, because no single value would be correct for the batch. Per-record headers that naturally differ, such as `CamelKafkaOffset`, are not set on the batch exchange.
 
 This is additive — these headers were previously absent from the batch exchange, so nothing that worked before changes. The headers on the individual record exchanges in the body are unchanged.
+
+### camel-kafka - Unified reconnection task
+
+The Kafka consumer’s internal reconnection logic has been simplified. Previously, creating a `KafkaConsumer` (kafka-client) and subscribing to topics were handled by two separate foreground tasks with independent backoff settings. These have been merged into a single background reconnection task that is visible via Camel management, including the TUI, CLI, Hawtio, and other tooling.
+
+As a result, the `subscribeConsumerBackoffMaxAttempts` and `subscribeConsumerBackoffInterval` component options are now deprecated and no longer used. The unified reconnection task uses the `createConsumerBackoffMaxAttempts` and `createConsumerBackoffInterval` options to control retry behavior for both consumer creation and topic subscription.
+
+If you previously configured `subscribeConsumerBackoffMaxAttempts` or `subscribeConsumerBackoffInterval`, migrate those settings to use `createConsumerBackoffMaxAttempts` and `createConsumerBackoffInterval` instead.
 
 ### camel-core - Multicast UseOriginalAggregationStrategy fix
 
@@ -909,3 +915,27 @@ All `MinioClient` methods previously declared multiple checked exceptions (`Inva
 // After:
 } catch (MinioException e) { ... }
 ```
+
+### camel-aws2 - producers now fail fast on a wrong POJO request type
+
+When an AWS2 producer is configured with `pojoRequest=true`, it expects the Exchange body to be the AWS SDK request object for the selected operation (for example an `AssumeRoleRequest` for the `assumeRole` operation of `camel-aws2-sts`). Previously, if the body was some other type, the operation silently did nothing: no AWS call was made, no response was set, and the original body was returned with no error.
+
+These producers now throw an `IllegalArgumentException` naming the required request type, consistent with the behaviour already shipped for `camel-aws-bedrock` in 4.21 (CAMEL-23462). This roll-out across the remaining AWS2 producers is tracked by CAMEL-24261.
+
+If you relied on the previous silent no-op, ensure the body is the correct request type when `pojoRequest=true`, or drive the operation through headers with `pojoRequest=false`.
+
+### camel-google-storage - downloads are confined to the configured directory
+
+When the consumer is configured with `downloadFileName` pointing at a directory, the remote object name is appended to that directory to build the local file to write. The resolved path is now verified to stay within the configured directory, and an `IllegalArgumentException` is thrown if it does not.
+
+Object names are still allowed to contain `/` and are mapped to sub-directories of the download directory as before, so nested object names keep working unchanged. Only names that resolve outside the configured directory are rejected.
+
+If `downloadFileName` is configured with an expression (i.e. it contains `$`), the local path is built by that expression as before and is not subject to this check.
+
+### camel-main - JWT authentication requires an issuer or an audience
+
+The embedded HTTP server and the management server build their JWT authenticator from the configured keystore. When neither `jwtIssuer` nor `jwtAudience` was set, no `JWTOptions` was applied, so tokens were only checked for signature and expiry and the `iss` and `aud` claims were not validated.
+
+The server now fails to start when a JWT keystore is configured but neither `camel.server.jwtIssuer` nor `camel.server.jwtAudience` is set (and likewise for `camel.management.*`). Configure the issuer and/or the audience that tokens are expected to carry.
+
+If a deployment genuinely wants signature and expiry validation only, set `camel.server.jwtAllowMissingIssuerAndAudience=true` (or `camel.management.jwtAllowMissingIssuerAndAudience=true`) to keep the previous behaviour.

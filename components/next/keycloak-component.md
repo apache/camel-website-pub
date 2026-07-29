@@ -303,6 +303,12 @@ Enum values:
     
 -   listOrganizationIdentityProviders
     
+-   addFederatedIdentity
+    
+-   removeFederatedIdentity
+    
+-   getFederatedIdentities
+    
 
 
 
@@ -567,6 +573,12 @@ Enum values:
 -   unlinkOrganizationIdentityProvider
     
 -   listOrganizationIdentityProviders
+    
+-   addFederatedIdentity
+    
+-   removeFederatedIdentity
+    
+-   getFederatedIdentities
     
 
 
@@ -882,6 +894,12 @@ Enum values:
     
 -   listOrganizationIdentityProviders
     
+-   addFederatedIdentity
+    
+-   removeFederatedIdentity
+    
+-   getFederatedIdentities
+    
 
 
 
@@ -951,6 +969,9 @@ Enum values:
 | **CamelKeycloakOrganizationRedirectUrl** (common) Constant: [`ORGANIZATION_REDIRECT_URL`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_REDIRECT_URL) | The organization redirect URL. |  | String |
 | **CamelKeycloakOrganizationDomain** (common) Constant: [`ORGANIZATION_DOMAIN`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_DOMAIN) | The organization domain name. |  | String |
 | **CamelKeycloakOrganizationSearch** (common) Constant: [`ORGANIZATION_SEARCH`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#ORGANIZATION_SEARCH) | Search query for organizations. |  | String |
+| **CamelKeycloakIdentityProvider** (common) Constant: [`IDENTITY_PROVIDER`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#IDENTITY_PROVIDER) | The identity provider alias for a federated identity link. |  | String |
+| **CamelKeycloakFederatedUserId** (common) Constant: [`FEDERATED_USER_ID`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#FEDERATED_USER_ID) | The user id at the external identity provider. |  | String |
+| **CamelKeycloakFederatedUsername** (common) Constant: [`FEDERATED_USERNAME`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#FEDERATED_USERNAME) | The username at the external identity provider. |  | String |
 
 ## Overview
 
@@ -1050,6 +1071,67 @@ from("rest:get:/api/documents")
         route:
           policy:
             ref: documentsPolicy
+```
+
+### Federated Identity Operations
+
+Federated identity operations manage the links between a Keycloak user and an external identity provider account (Google, GitHub, a SAML provider, and so on). They are useful for SSO scenarios and for provisioning users with pre-linked IdP accounts during a migration.
+
+-   `addFederatedIdentity` — link a user to an identity provider account.
+    
+-   `removeFederatedIdentity` — unlink a user from an identity provider.
+    
+-   `getFederatedIdentities` — list all identity provider links for a user.
+    
+
+All three require `CamelKeycloakRealmName` and `CamelKeycloakUserId`. In addition:
+
+-   `addFederatedIdentity` requires `CamelKeycloakIdentityProvider` (the IdP alias) and `CamelKeycloakFederatedUserId` (the user id at the provider). `CamelKeycloakFederatedUsername` is optional — when it is not supplied the external user id is used as the username.
+    
+-   `removeFederatedIdentity` requires `CamelKeycloakIdentityProvider`.
+    
+
+`getFederatedIdentities` sets the out-message body to the `List<FederatedIdentityRepresentation>` of links.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:linkAccount")
+    .setHeader(KeycloakConstants.REALM_NAME, constant("myrealm"))
+    .setHeader(KeycloakConstants.USER_ID, constant("user-uuid"))
+    .setHeader(KeycloakConstants.IDENTITY_PROVIDER, constant("google"))
+    .setHeader(KeycloakConstants.FEDERATED_USER_ID, constant("google-account-id"))
+    .setHeader(KeycloakConstants.FEDERATED_USERNAME, constant("jane@example.com"))
+    .to("keycloak:admin?operation=addFederatedIdentity");
+
+from("direct:listLinks")
+    .setHeader(KeycloakConstants.REALM_NAME, constant("myrealm"))
+    .setHeader(KeycloakConstants.USER_ID, constant("user-uuid"))
+    .to("keycloak:admin?operation=getFederatedIdentities");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:linkAccount
+      steps:
+        - setHeader:
+            name: CamelKeycloakRealmName
+            constant: "myrealm"
+        - setHeader:
+            name: CamelKeycloakUserId
+            constant: "user-uuid"
+        - setHeader:
+            name: CamelKeycloakIdentityProvider
+            constant: "google"
+        - setHeader:
+            name: CamelKeycloakFederatedUserId
+            constant: "google-account-id"
+        - to:
+            uri: keycloak:admin?operation=addFederatedIdentity
 ```
 
 ## Configuration Options

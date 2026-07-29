@@ -1,7 +1,11 @@
-urls[819]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-07-27T00:00:00+00:00
+urls[821]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-07-29T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/,2026-07-29T00:00:00+00:00
+  https://camel.apache.org/releases/q-3.38.0/,2026-07-29T00:00:00+00:00
+  https://camel.apache.org/,2026-07-29T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-07-29T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/categories/Features/,2026-07-27T00:00:00+00:00
-  https://camel.apache.org/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-tui/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/,2026-07-24T00:00:00+00:00
@@ -11,7 +15,6 @@ urls[819]{loc,lastmod}:
   https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.18.3/,2026-07-17T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.21.0/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/hawtio-ai/,2026-07-10T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-elevates-citrus/,2026-07-06T00:00:00+00:00
@@ -21,7 +24,6 @@ urls[819]{loc,lastmod}:
   https://camel.apache.org/security/,2026-07-05T10:00:00+02:00
   https://camel.apache.org/releases/release-4.14.8/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/,2026-07-04T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-40047.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-40859.md,2026-07-03T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-43865.md,2026-07-03T10:00:00+02:00

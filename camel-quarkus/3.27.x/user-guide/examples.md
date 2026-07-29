@@ -2,7 +2,7 @@
 
 We offer several examples in [Camel Quarkus examples repository](https://github.com/apache/camel-quarkus-examples). To learn how to use them, please follow the [First steps](first-steps.md) chapter of the User guide.
 
-Number of Examples: 33
+Number of Examples: 35
 
  
 | Example | Description |
@@ -12,6 +12,7 @@ Number of Examples: 33
 | [Camel Quarkus CXF SOAP example](https://github.com/apache/camel-quarkus-examples/tree/main/cxf-soap) | Shows how to use Camel CXF SOAP component. |
 | [Communication with Netty over TCP](https://github.com/apache/camel-quarkus-examples/tree/main/netty-custom-correlation) | Shows how to use TCP communication with Netty using a custom codec to encode and decode the data over the wire. |
 | [Custom `main()`](https://github.com/apache/camel-quarkus-examples/tree/main/timer-log-main) | Shows how to start Camel from a custom `main()` method |
+| [CyberArk Vault](https://github.com/apache/camel-quarkus-examples/tree/main/cyberark-vault) | Shows how to retrieve secrets from CyberArk Vault via property placeholders with a local Conjur container |
 | [Deploying a Camel Route in AWS Lambda](https://github.com/apache/camel-quarkus-examples/tree/main/aws-lambda) | Shows how to deploy a Camel Quarkus route as an AWS Lambda function |
 | [Extract, Transform and Load between two databases](https://github.com/apache/camel-quarkus-examples/tree/main/jdbc-datasource) | Shows how to extract, transform and load between two databases |
 | [FHIR](https://github.com/apache/camel-quarkus-examples/tree/main/fhir) | Shows how to use Camel FHIR with Quarkus. |
@@ -30,6 +31,7 @@ Number of Examples: 33
 | [Observability](https://github.com/apache/camel-quarkus-examples/tree/main/observability) | Demonstrates how to add support for metrics, health checks and distributed tracing |
 | [OpenAPI Contract First](https://github.com/apache/camel-quarkus-examples/tree/main/openapi-contract-first) | Shows how to run with Contract First OpenAPI. |
 | [Platform HTTP security with Keycloak](https://github.com/apache/camel-quarkus-examples/tree/main/platform-http-security-keycloak) | Shows how to secure platform HTTP with Keycloak |
+| [REST to SOAP with Keycloak and JMS](https://github.com/apache/camel-quarkus-examples/tree/main/rest-keycloak-soap-jms) | Demonstrates REST-to-SOAP synchronous bridging with Keycloak security and asynchronous JMS topic events |
 | [REST with Jackson](https://github.com/apache/camel-quarkus-examples/tree/main/rest-json) | Demonstrates how to create a REST service using the Camel REST DSL and Jackson. |
 | [REST with Jackson: A Quarkus based example](https://github.com/apache/camel-quarkus-examples/tree/main/quarkus-rest-json) | Demonstrates how to use REST (Jackson) endpoints from a Quarkus project and invoke Camel routes. |
 | [Saga and LRA](https://github.com/apache/camel-quarkus-examples/tree/main/saga) | Shows how to use saga and lra |

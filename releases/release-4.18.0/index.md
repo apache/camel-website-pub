@@ -541,7 +541,7 @@ Camel-Azure-Storage-Blob: Add deleteAfterRead option for consumer side
 
 Camel-github: Implement a component supporting kohsuke github-api
 
-### New Feature (28)
+### New Feature (29)
 
 [CAMEL-22960](https://issues.apache.org/jira/browse/CAMEL-22960)
 
@@ -610,6 +610,10 @@ Auto-generate JBang commands documentation
 [CAMEL-22851](https://issues.apache.org/jira/browse/CAMEL-22851)
 
 camel-langchain4j-tools - Implement native tool-search-tool
+
+[CAMEL-22850](https://issues.apache.org/jira/browse/CAMEL-22850)
+
+camel-langchain4j-\*: Use Spring Boot starters in Camel Spring Boot
 
 [CAMEL-22843](https://issues.apache.org/jira/browse/CAMEL-22843)
 

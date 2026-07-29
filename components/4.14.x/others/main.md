@@ -179,7 +179,7 @@ The camel.routecontroller supports 12 options, which are listed below.
 
 ### Camel Embedded HTTP Server (only for standalone; not Spring Boot or Quarkus) configurations
 
-The camel.server supports 17 options, which are listed below.
+The camel.server supports 19 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -191,6 +191,8 @@ The camel.server supports 17 options, which are listed below.
 | **camel.server.fileUpload​Directory** | Directory to temporary store file uploads while Camel routes the incoming request. If no directory has been explicit configured, then a temporary directory is created in the java.io.tmpdir directory. |  | String |
 | **camel.server.fileUploadEnabled** | Whether to enable file uploads being supported (such as POST multipart/form-data) and stored into a temporary directory. | true | boolean |
 | **camel.server.host** | Hostname to use for binding embedded HTTP server | 0.0.0.0 | String |
+| **camel.server.jwtAudience** | Expected JWT audience (aud claim) for token validation. Multiple values can be separated by comma. When set, tokens whose audience does not contain any of the configured values are rejected. |  | String |
+| **camel.server.jwtIssuer** | Expected JWT issuer (iss claim) for token validation. When set, tokens whose issuer does not match are rejected. |  | String |
 | **camel.server.jwtKeystore​Password** | Password from the keystore used for JWT tokens validation. |  | String |
 | **camel.server.jwtKeystorePath** | Path to the keystore file used for JWT tokens validation. |  | String |
 | **camel.server.jwtKeystoreType** | Type of the keystore used for JWT tokens validation (jks, pkcs12, etc.). |  | String |
@@ -204,7 +206,7 @@ The camel.server supports 17 options, which are listed below.
 
 ### Camel Embedded HTTP management Server (only for standalone; not Spring Boot or Quarkus) configurations
 
-The camel.management supports 23 options, which are listed below.
+The camel.management supports 25 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -222,6 +224,8 @@ The camel.management supports 23 options, which are listed below.
 | **camel.management.infoPath** | The path endpoint used to expose the info status | /observe/info | String |
 | **camel.management.jolokia​Enabled** | Whether to enable jolokia. If enabled then you can access jolokia api on context-path: /observe/jolokia | false | boolean |
 | **camel.management.jolokiaPath** | The path endpoint used to expose the jolokia data. | /observe/jolokia | String |
+| **camel.management.jwtAudience** | Expected JWT audience (aud claim) for token validation. Multiple values can be separated by comma. When set, tokens whose audience does not contain any of the configured values are rejected. |  | String |
+| **camel.management.jwtIssuer** | Expected JWT issuer (iss claim) for token validation. When set, tokens whose issuer does not match are rejected. |  | String |
 | **camel.management.jwtKeystore​Password** | Password from the keystore used for JWT tokens validation. |  | String |
 | **camel.management.jwtKeystore​Path** | Path to the keystore file used for JWT tokens validation. |  | String |
 | **camel.management.jwtKeystore​Type** | Type of the keystore used for JWT tokens validation (jks, pkcs12, etc.). |  | String |

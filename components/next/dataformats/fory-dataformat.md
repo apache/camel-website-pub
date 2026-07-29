@@ -7,9 +7,6 @@ Fory is a Data Format that uses the [Fory Library](https://fory.apache.org/)
 > **Note**
 > Apache Fory is not supporting architecture using Big Endian (s390x, for instance).
 
-> **Note**
-> With JDK 25+, the JVM parameter `--add-opens java.base/java.lang.invoke=ALL-UNNAMED` must be provided to be able to use this dataformat.
-
 ## Fory Options
 
 The Fory dataformat supports the following options which are listed below.

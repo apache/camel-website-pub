@@ -113,11 +113,13 @@ All commands auto-detect the LLM provider. The detection order is:
     
 2.  `CLOUD_ML_REGION` + `ANTHROPIC_VERTEX_PROJECT_ID` → Vertex AI (`ask` and `explain` only)
     
-3.  `OPENAI_API_KEY` or `LLM_API_KEY` → OpenAI-compatible API
+3.  `AZURE_OPENAI_API_KEY` + `AZURE_OPENAI_ENDPOINT` → Azure OpenAI (uses the `api-key` header; optional `AZURE_OPENAI_DEPLOYMENT_NAME` and `AZURE_OPENAI_API_VERSION`)
     
-4.  Ollama running via `camel infra` → local Ollama
+4.  `OPENAI_API_KEY` or `LLM_API_KEY` → OpenAI-compatible API
     
-5.  Ollama at `localhost:11434` → local Ollama
+5.  Ollama running via `camel infra` → local Ollama
+    
+6.  Ollama at `localhost:11434` → local Ollama
     
 
 Override with explicit options:

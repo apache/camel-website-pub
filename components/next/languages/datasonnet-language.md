@@ -2,7 +2,7 @@
 
 **Since Camel 3.7**
 
-Camel supports [DataSonnet](https://datasonnet.com/) transformations to allow an [Expression](../../../manual/expression.md) or [Predicate](../../../manual/predicate.md) to be used in the [DSL](../../../manual/dsl.md).
+Camel supports [DataSonnet](https://github.com/datasonnet/datasonnet-mapper) transformations to allow an [Expression](../../../manual/expression.md) or [Predicate](../../../manual/predicate.md) to be used in the [DSL](../../../manual/dsl.md).
 
 For example, you could use DataSonnet to create a Predicate in a [Message Filter](../eips/filter-eip.md) or as an Expression for a [Recipient List](../eips/recipientList-eip.md).
 

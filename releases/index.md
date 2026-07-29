@@ -222,6 +222,7 @@ Releases by release date
 Releases by release date
 | Version | Release date | Description |
 | --- | --- | --- |
+| [3.38.0](../releases/q-3.38.0/) | 2026-07-29 |  |
 | [3.36.0](../releases/q-3.36.0/) | 2026-05-26 |  |
 | [3.27.4](../releases/q-3.27.4/) | 2026-05-07 |  |
 | [3.33.1](../releases/q-3.33.1/) | 2026-05-06 |  |

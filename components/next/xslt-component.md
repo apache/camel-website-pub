@@ -88,7 +88,7 @@ The XSLT component supports the following options which are listed below.
 | **transformerFactoryConfigurationStrategy** (advanced) | A configuration strategy to apply on freshly created instances of TransformerFactory. |  | TransformerFactoryConfigurationStrategy |
 | **uriResolver** (advanced) | To use a custom UriResolver. Should not be used together with the option 'uriResolverFactory'. |  | URIResolver |
 | **uriResolverFactory** (advanced) | To use a custom UriResolver which depends on a dynamic endpoint resource URI. Should not be used together with the option 'uriResolver'. |  | XsltUriResolverFactory |
-| **xpathTotalOpLimit** (advanced) | Limits the total number of XPath operators in an XSL Stylesheet. The default (from JDK) is 10000. Configuring this corresponds to setting JVM system property: jdk.xml.xpathTotalOpLimit. | 10000 | int |
+| **xpathTotalOpLimit** (advanced) | Limits the total number of XPath operators in an XSL Stylesheet. The default (from JDK) is 10000. The limit is set per TransformerFactory instance used by each endpoint, not as a JVM-global system property. | 10000 | int |
 
 ## Endpoint Options
 
@@ -143,6 +143,7 @@ Enum values:
 | **transformerFactoryClass** (advanced) | To use a custom XSLT transformer factory, specified as a FQN class name. |  | String |
 | **transformerFactoryConfigurationStrategy** (advanced) | A configuration strategy to apply on freshly created instances of TransformerFactory. |  | TransformerFactoryConfigurationStrategy |
 | **uriResolver** (advanced) | To use a custom javax.xml.transform.URIResolver. |  | URIResolver |
+| **xpathTotalOpLimit** (advanced) | Limits the total number of XPath operators in an XSL Stylesheet. The default (from JDK) is 10000. The limit is set per TransformerFactory instance used by this endpoint. | 10000 | int |
 | **xsltMessageLogger** (advanced) | A consumer to messages generated during XSLT transformations. |  | XsltMessageLogger |
 
 ## Message Headers

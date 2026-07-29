@@ -1,6 +1,6 @@
 # OpenAI
 
-OpenAI endpoint for chat completion, embeddings, audio transcription, audio translation, and text-to-speech.
+OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech.
 
 ## What’s inside
 

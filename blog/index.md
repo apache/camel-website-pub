@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[222]{title,link,pubDate,description}:
+posts[223]{title,link,pubDate,description}:
+  Camel Quarkus 3.38.0 Released|https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/index.md|Wed, 29 Jul 2026 00:00:00 +0000|Camel Quarkus 3.38.0 release
   Introducing Camel TUI — A Terminal Dashboard for Apache Camel|https://camel.apache.org/blog/2026/07/camel-tui/index.md|Mon, 27 Jul 2026 00:00:00 +0000|Apache Camel has always excelled at connecting systems, but observing what happens inside your running integrations has traditionally meant switching between CLI commands, log files, or firing up a we
   Echonect: Fifteen Years on Apache Camel|https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/index.md|Fri, 24 Jul 2026 00:00:00 +0000|By Andriy Andrunevchyn, CTO @Software Service &amp; Innovation A five-part story of building and running one of Europe&rsquo;s larger SMS gateways. In 2011, PayPal gave Echovox twelve months to walk a
   Apache Camel Is Not Afraid of AI|https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/index.md|Mon, 20 Jul 2026 00:00:00 +0000|The Apache Camel project pointed a frontier AI model at 19 years of integration code and said: find what we missed. It found 165 bugs for the upcoming 4.22 LTS release. Not cosmetic issues — concurren
