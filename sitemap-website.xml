@@ -5,6 +5,9 @@
     <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/</loc>
+    <lastmod>2026-07-29T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
@@ -18,6 +21,9 @@
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-07-29T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Security/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Features/</loc>
@@ -195,9 +201,6 @@
     <lastmod>2026-06-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/06/camel-sbom-supply-chain/</loc>
-    <lastmod>2026-06-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Security/</loc>
     <lastmod>2026-06-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/06/camel-ai-trained/</loc>

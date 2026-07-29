@@ -9,6 +9,13 @@
     <lastBuildDate>Wed, 29 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Built to Patch Fast: Apache Camel&#39;s Security Response in 2026</title>
+      <link>https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/</link>
+      <pubDate>Wed, 29 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/</guid>
+      <description>Camel 4.21.0 shipped on 1 July with 32 security fixes. 4.18.3 followed on 3 July with 34, and 4.14.8 on 4 July with 27. All three supported release lines were patched inside four days, and every finding got a signed public advisory.&#xA;A batch of 32 gets noticed, usually for the wrong reason. So I want to write about the process that produced it rather than walk through the list. If you are running Camel in production, the number of advisories in a release tells you very little.</description>
+    </item>
+    <item>
       <title>Camel Quarkus 3.38.0 Released</title>
       <link>https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/</link>
       <pubDate>Wed, 29 Jul 2026 00:00:00 +0000</pubDate>
