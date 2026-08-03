@@ -63,6 +63,22 @@ SNAPSHOTs are built and published on push for each branch to:
 
 [https://repository.apache.org/snapshots/](https://repository.apache.org/snapshots/)
 
+## Develocity
+
+The project is integrated with [Develocity](https://develocity.apache.org).
+
+### Build Scans
+
+Build scans from GitHub Actions CI builds are uploaded to the Apache Develocity instance. Published scans can be found at [Camel Quarkus build scans](https://develocity.apache.org/scans/?search.rootProjectNames=camel%20quarkus).
+
+### Local Build Cache
+
+The Develocity local build cache is disabled by default. To enable it, set the following environment variable:
+
+```shell
+export DEVELOCITY_LOCAL_CACHE_ENABLED=true
+```
+
 ## Sonarcloud
 
 [https://ci-builds.apache.org/job/Camel/job/Camel%20Quarkus%20Sonarcloud%20Deploy/](https://ci-builds.apache.org/job/Camel/job/Camel%20Quarkus%20Sonarcloud%20Deploy/)

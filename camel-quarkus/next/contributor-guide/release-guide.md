@@ -423,7 +423,7 @@ This section needs to be executed only when a Quarkus Platform release has been 
     git checkout main
     git fetch upstream
     git reset --hard upstream/main
-    ./mvnw versions:set versions:update-child-modules -DnewVersion=$NEW_CQ_VERSION
+    ./mvnw versions:set -DnewVersion=$NEW_CQ_VERSION -DprocessAllModules=true
     # Update version labels in Kubernetes resources
     ./mvnw process-sources
     git add -A

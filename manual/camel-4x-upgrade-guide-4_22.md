@@ -7,13 +7,34 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.21 to 4.22
 
+### camel-core
+
+#### Property placeholders in toD and enrich dynamic endpoint URIs
+
+`toD` and `enrich` no longer resolve Camel property placeholders (`{{…​}}`) on the _per-message evaluated_ recipient. Property placeholders are resolved once, at build time, on the endpoint URI written in the route (the static template); a `{{…​}}` token that only appears at runtime in the value produced by the `toD` / `enrich` expression (for example coming from a message header or body) is now treated as a literal part of the endpoint URI instead of being expanded.
+
+This only affects routes that produced a `{{…​}}` token from message content and relied on it being expanded, such as a `toD` whose recipient came from a header that contained a `{{…​}}` placeholder. Placeholders written directly in the route continue to work unchanged, for example:
+
+```java
+.toD("{{myEndpoint}}/${header.id}")
+.toD("mock:{{name}}")
+```
+
+`recipientList`, `routingSlip` and `dynamicRouter` are unchanged: their recipients are computed entirely from a runtime expression (there is no static template resolved at build time), so they continue to resolve `{{…​}}` placeholders in the computed recipient.
+
+`pollEnrich` is also left unchanged in this release. It does resolve the static endpoint URI at build time (like `toD` / `enrich`), but its per-message recipient goes through the same shared resolution path as `recipientList` / `routingSlip`, so it still resolves `{{…​}}` in the computed recipient; aligning it with `toD` / `enrich` is deferred to a follow-up.
+
+If you need a placeholder resolved by `toD` / `enrich`, keep it in the route’s endpoint URI rather than in the message.
+
 ### camel-jbang
 
 The Camel JBang CLI (Camel CLI) and TUI have been promoted from _Preview_ to _Stable_ support level. The MCP Server has also been promoted to _Stable_.
 
 The Camel JBang CLI now automatic resolves quarkus version to use, instead of hardcoded `3.33.1.1` ([https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b](https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b)).
 
-The Camel CLI and TUI AI prompt (`camel ask`, TUI F8 panel) now auto-detect **Azure OpenAI** when `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_ENDPOINT` are set (optional `AZURE_OPENAI_DEPLOYMENT_NAME` and `AZURE_OPENAI_API_VERSION`). Azure requests use the `api-key` header instead of `Authorization: Bearer`. See [Camel CLI - AI Tools](camel-jbang-ai.md) for the full detection order.
+The Camel CLI and TUI AI prompt (`camel ask`, TUI F8 panel) now auto-detect **Azure OpenAI** when `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_ENDPOINT` are set (optional `AZURE_OPENAI_DEPLOYMENT_NAME` and `AZURE_OPENAI_API_VERSION`). Azure requests use the `api-key` header instead of `Authorization: Bearer`.
+
+The Camel CLI and TUI AI prompt now support native **Google Gemini** when `GEMINI_API_KEY` is set (auto-detected before OpenAI). With `--api-type=gemini`, `GOOGLE_API_KEY` is also accepted. Gemini uses the `generativelanguage.googleapis.com` API with function-calling support. See [Camel CLI - AI Tools](camel-jbang-ai.md) for the full detection order.
 
 The `camel cmd route-diagram` and `camel cmd route-topology` now accept one or more Camel route source files (instead of only the name/pid of a running integration), so diagrams and inter-route topology can be generated at design/source time without starting the application first, for example:
 
@@ -73,6 +94,21 @@ The `--open-telemetry-agent-export` option has been extended with new values and
     
 
 The `camel.opentelemetry2.exportTarget` property in `OpenTelemetryTracer` now accepts any non-empty value to signal external export mode (previously only `"jaeger"` was recognized).
+
+#### `camel run --jfr` now actually enables Java Flight Recorder
+
+`--jfr` and `--jfr-profile` were previously accepted by `camel run` but had no effect on any runtime (`main`, `quarkus`, `springBoot`): the flags only wrote an internal `camel.jbang.jfr`/`camel.jbang.jfr-profile` property that nothing read.
+
+They now start a real recording:
+
+-   For the default in-process runtime, a `jdk.jfr.Recording` is started before the routes start and stopped/dumped to `<name>.jfr` on shutdown.
+    
+-   For `quarkus` and `springBoot` (including running against an existing Maven project), a `-XX:StartFlightRecording=filename=<name>.jfr[,settings=<jfr-profile>]` JVM argument is passed to the forked process.
+    
+
+In both cases the JFR support for the runtime is now added automatically (`camel-jfr`, `camel-quarkus-jfr` or `camel-jfr-starter`), and `camel.main.startup-recorder-runtime-enabled` is set to `true`, so the Camel runtime events (route, processor, exchange, send, failed, redelivery) are captured, not just JVM-level events. If you were passing `--jfr` expecting no effect, this now writes a `.jfr` file and adds a JFR dependency to the classpath.
+
+If `--jvm-args` already contains `-XX:StartFlightRecording`, `--jfr` stands down with a warning rather than starting a second, competing recording.
 
 #### Website installers for the Camel CLI
 
@@ -214,6 +250,17 @@ The `safeSearch` endpoint option is now correctly propagated to the LangChain4j 
 The per-call token usage headers `CamelOpenAIPromptTokens`, `CamelOpenAICompletionTokens`, and `CamelOpenAITotalTokens` now declare `javaType = Long` in component metadata (previously `Integer`). The OpenAI SDK returns `long` values, so routes that read these headers with `Integer.class` should switch to `Long.class`.
 
 Component metadata for exchange property `CamelOpenAIResponse` (`storeFullResponse=true` on `chat-completion`) now declares `javaType = com.openai.models.chat.completions.ChatCompletion` (previously `com.openai.models.ChatCompletion`). The runtime type was already the nested SDK class; update imports and `exchange.getProperty(…​, ChatCompletion.class)` references if your code still uses the old package name.
+
+#### Configurable tool error strategies in the agentic loop
+
+Two new endpoint options control how the agentic loop handles tool execution errors and hallucinated tool names:
+
+-   `toolExecutionErrorStrategy` — default `failExchange` (propagates exceptions to the Camel exchange). Set to `repromptModel` to catch exceptions and send them back to the model as tool results so it can attempt recovery. Note that `repromptModel` sends raw exception messages to the LLM provider, which may include internal details.
+    
+-   `hallucinatedToolNameStrategy` — default `failExchange` (throws `IllegalStateException`). Set to `repromptModel` to send a corrective tool result listing available tools.
+    
+
+Previously, tool execution errors were always sent back to the model and hallucinated tool names always threw an `IllegalStateException`. The new defaults change the tool execution error behavior: errors now propagate to the exchange by default. Routes that rely on the model recovering from tool errors must add `&toolExecutionErrorStrategy=repromptModel` to their endpoint URI.
 
 The `conversationMemory` feature on the `chat-completion` operation has two behavior fixes:
 
@@ -807,6 +854,18 @@ New JMX attributes have been added for live call monitoring:
 
 A new `transitionToCloseState` JMX operation resets the circuit breaker to CLOSED and clears the call counters.
 
+### camel-jms - IBM MQ client upgraded to 10.0
+
+The IBM MQ client library (`com.ibm.mq:com.ibm.mq.jakarta.client`) has been upgraded from 9.4.x to 10.0.0.0, and the IBM MQ test container image from 9.4.x to 10.0.0.0.
+
+IBM MQ 10.0 marks the `JMS_IBM_MsgToken` vendor property as read-only. When Camel copies headers from an incoming JMS message to an outgoing reply or forwarded message, this reserved property previously caused a `MessageFormatException` that silently prevented the reply from being sent.
+
+### camel-jms - vendor-specific JMS properties skipped when read-only
+
+When setting JMS properties on an outgoing message, Camel now catches `JMSException` for JMS vendor-specific properties (those with a `JMS_` prefix, per JMS spec section 3.5.1) and logs a `WARN` instead of propagating the exception. There is no standard JMS API to query which vendor properties are reserved, and the set can change between provider versions. Non-vendor properties still throw on failure as before.
+
+This change is necessary for IBM MQ 10.0 compatibility but applies to all JMS providers. If you relied on exceptions from vendor-specific property failures propagating through `JmsBinding.appendJmsProperty()`, be aware that they are now caught and logged at `WARN` level for `JMS_`\-prefixed properties only.
+
 ### camel-clickhouse (new component)
 
 A new `camel-clickhouse` producer component has been added. It integrates with [ClickHouse](https://clickhouse.com/), the high-performance columnar OLAP database, using the official ClickHouse Java client (client-v2). It exposes ClickHouse’s native capabilities as first-class endpoint options: native format streaming inserts (`RowBinary`, `JSONEachRow`, `CSV`, `TSV`, `Parquet`), server-side asynchronous inserts, OLAP queries and health checks.
@@ -939,3 +998,17 @@ The embedded HTTP server and the management server build their JWT authenticator
 The server now fails to start when a JWT keystore is configured but neither `camel.server.jwtIssuer` nor `camel.server.jwtAudience` is set (and likewise for `camel.management.*`). Configure the issuer and/or the audience that tokens are expected to carry.
 
 If a deployment genuinely wants signature and expiry validation only, set `camel.server.jwtAllowMissingIssuerAndAudience=true` (or `camel.management.jwtAllowMissingIssuerAndAudience=true`) to keep the previous behaviour.
+
+### camel-tarfile / camel-zipfile - CamelFileName is stripped to the entry base name on unmarshal
+
+When unmarshalling a tar or zip archive, the `CamelFileName` header was previously set to the raw archive entry name, which for a crafted archive can contain path segments (e.g. `../../etc/passwd`). If a downstream route wrote the message to disk using that header, the entry name could escape the intended directory (Tar Slip / Zip Slip).
+
+`CamelFileName` is now set to the entry’s base name only (path segments stripped) for both the data format and the iterator/splitter modes. The full, unmodified entry name remains available so routes that intentionally recreate the archive’s directory structure keep working — read it from `CamelTarFileEntryName` for tar and from `zipFileName` for zip instead of `CamelFileName`.
+
+### camel-jfr
+
+`camel-jfr` can now also emit JFR events during message routing, in addition to the existing startup instrumentation. This is **opt-in and disabled by default**, so having `camel-jfr` on the classpath keeps behaving exactly as it did in 4.21.
+
+Enable it with `camel.main.startup-recorder-runtime-enabled=true`, or programmatically with `setRuntimeEnabled(true)` on the `FlightRecorderStartupStepRecorder`. The option is read once while the `CamelContext` initializes and cannot be changed afterwards.
+
+`org.apache.camel.spi.StartupStepRecorder` gained the default methods `isRuntimeEnabled()` and `setRuntimeEnabled(boolean)`. Both have no-op defaults, so existing implementations continue to compile and behave as before.

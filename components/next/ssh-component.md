@@ -73,8 +73,6 @@ The SSH component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **failOnUnknownHost** (common) | Specifies whether a connection to an unknown host should fail or not. This value is only checked when the property knownHosts is set. | false | boolean |
-| **knownHostsResource** (common) | Sets the resource path for a known\_hosts file. |  | String |
 | **timeout** (common) | Sets the timeout in milliseconds to wait in establishing the remote SSH server connection. Defaults to 30000 milliseconds. | 30000 | long |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **pollCommand** (consumer) | Sets the command string to send to the remote SSH server during every poll cycle. Only works with camel-ssh component being used as a consumer, i.e. from(ssh://…​) You may need to end your command with a newline, and that must be URL encoded %0A. |  | String |
@@ -97,9 +95,11 @@ The SSH component supports the following options which are listed below.
 | **certResource** (security) | Sets the resource path of the certificate to use for Authentication. Will use ResourceHelperKeyPairProvider to resolve file based certificate, and depends on keyType setting. |  | String |
 | **certResourcePassword** (security) | Sets the password to use in loading certResource, if certResource is an encrypted key. |  | String |
 | **ciphers** (security) | Comma-separated list of allowed/supported ciphers in their order of preference. |  | String |
+| **failOnUnknownHost** (security) | Specifies whether a connection to an unknown SSH server host key should fail. When false, host keys that are not present in the known\_hosts resource are accepted. | false | boolean |
 | **kex** (security) | Comma-separated list of allowed/supported key exchange algorithms in their order of preference. |  | String |
 | **keyPairProvider** (security) | Sets the KeyPairProvider reference to use when connecting using Certificates to the remote SSH Server. |  | KeyPairProvider |
 | **keyType** (security) | Sets the key type to pass to the KeyPairProvider as part of authentication. KeyPairProvider.loadKey(…​) will be passed this value. From Camel 3.0.0 / 2.25.0, by default Camel will select the first available KeyPair that is loaded. Prior to this, a KeyType of 'ssh-rsa' was enforced by default. |  | String |
+| **knownHostsResource** (security) | Sets the resource path for a known\_hosts file used to verify the SSH server host key. When not set, the client does not verify the server host key against a known\_hosts file. |  | String |
 | **macs** (security) | Comma-separated list of allowed/supported message authentication code algorithms in their order of preference. The MAC algorithm is used for data integrity protection. |  | String |
 | **password** (security) | Sets the password to use in connecting to remote SSH server. Requires keyPairProvider to be set to null. |  | String |
 | **signatures** (security) | Comma-separated list of allowed/supported signature algorithms in their order of preference. |  | String |
@@ -126,8 +126,6 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **failOnUnknownHost** (common) | Specifies whether a connection to an unknown host should fail or not. This value is only checked when the property knownHosts is set. | false | boolean |
-| **knownHostsResource** (common) | Sets the resource path for a known\_hosts file. |  | String |
 | **timeout** (common) | Sets the timeout in milliseconds to wait in establishing the remote SSH server connection. Defaults to 30000 milliseconds. | 30000 | long |
 | **pollCommand** (consumer) | Sets the command string to send to the remote SSH server during every poll cycle. Only works with camel-ssh component being used as a consumer, i.e. from(ssh://…​) You may need to end your command with a newline, and that must be URL encoded %0A. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
@@ -226,9 +224,11 @@ Enum values:
 | **certResource** (security) | Sets the resource path of the certificate to use for Authentication. Will use ResourceHelperKeyPairProvider to resolve file based certificate, and depends on keyType setting. |  | String |
 | **certResourcePassword** (security) | Sets the password to use in loading certResource, if certResource is an encrypted key. |  | String |
 | **ciphers** (security) | Comma-separated list of allowed/supported ciphers in their order of preference. |  | String |
+| **failOnUnknownHost** (security) | Specifies whether a connection to an unknown SSH server host key should fail. When false, host keys that are not present in the known\_hosts resource are accepted. | false | boolean |
 | **kex** (security) | Comma-separated list of allowed/supported key exchange algorithms in their order of preference. |  | String |
 | **keyPairProvider** (security) | Sets the KeyPairProvider reference to use when connecting using Certificates to the remote SSH Server. |  | KeyPairProvider |
 | **keyType** (security) | Sets the key type to pass to the KeyPairProvider as part of authentication. KeyPairProvider.loadKey(…​) will be passed this value. From Camel 3.0.0 / 2.25.0, by default Camel will select the first available KeyPair that is loaded. Prior to this, a KeyType of 'ssh-rsa' was enforced by default. |  | String |
+| **knownHostsResource** (security) | Sets the resource path for a known\_hosts file used to verify the SSH server host key. When not set, the client does not verify the server host key against a known\_hosts file. |  | String |
 | **macs** (security) | Comma-separated list of allowed/supported message authentication code algorithms in their order of preference. The MAC algorithm is used for data integrity protection. |  | String |
 | **password** (security) | Sets the password to use in connecting to remote SSH server. Requires keyPairProvider to be set to null. |  | String |
 | **signatures** (security) | Comma-separated list of allowed/supported signature algorithms in their order of preference. |  | String |

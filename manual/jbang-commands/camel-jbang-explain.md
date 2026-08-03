@@ -13,8 +13,8 @@ camel explain [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
-| `--api-key` | API key for authentication. Also reads ANTHROPIC\_API\_KEY, OPENAI\_API\_KEY, or LLM\_API\_KEY env vars |  | String |
-| `--api-type` | API type: 'ollama', 'openai' (OpenAI-compatible), or 'anthropic' (Anthropic/Vertex AI) |  | ApiType |
+| `--api-key` | API key for authentication. Also reads ANTHROPIC\_API\_KEY, OPENAI\_API\_KEY, WATSONX\_APIKEY, or LLM\_API\_KEY env vars |  | String |
+| `--api-type` | API type: 'ollama', 'openai' (OpenAI-compatible), 'anthropic' (Anthropic/Vertex AI), or 'watsonx' (IBM watsonx.ai) |  | ApiType |
 | `--catalog-context` | Include Camel Catalog descriptions in the prompt |  | boolean |
 | `--format` | Output format (text, markdown) | text | String |
 | `--model` | Model to use | DEFAULT\_MODEL | String |
@@ -23,7 +23,7 @@ camel explain [options]
 | `--system-prompt` | Custom system prompt |  | String |
 | `--temperature` | Temperature for response generation (0.0-2.0) | 0.7 | double |
 | `--timeout` | Timeout in seconds for LLM response | 120 | int |
-| `--url` | LLM API endpoint URL. Auto-detected from 'camel infra' for Ollama if not specified. |  | String |
+| `--url` | LLM API endpoint URL. Auto-detected from 'camel infra' for Ollama if not specified. Also reads AZURE\_OPENAI\_ENDPOINT or WATSONX\_URL env vars |  | String |
 | `--verbose,-v` | Include detailed technical information |  | boolean |
 | `-h,--help` | Display the help and sub-commands |  | boolean |
 

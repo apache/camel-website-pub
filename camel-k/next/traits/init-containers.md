@@ -18,8 +18,8 @@ The following configuration options are available:
 | Property | Type | Description |
 | --- | --- | --- |
 | `init-containers.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `init-containers.initTasks` | `[]string` | A list of init tasks to be executed with format `<name>;<container-image>;<container-command>`. |
-| `init-containers.sideCarTasks` | `[]string` | A list of sidecar tasks to be executed with format `<name>;<container-image>;<container-command>`. |
+| `init-containers.initTasks` | `[]string` | A list of init tasks to be executed. Each task accepts the format `<name>;<container-image>;<container-command>` or key=value format `name=<name>;image=<image>;command=<command>;request-cpu=<quantity>;limit-cpu=<quantity>;request-memory=<quantity>;limit-memory=<quantity>`. Resource keys (request-cpu, limit-cpu, request-memory, limit-memory) are optional and accept Kubernetes resource quantities. |
+| `init-containers.sideCarTasks` | `[]string` | A list of sidecar tasks to be executed. Each task accepts the format `<name>;<container-image>;<container-command>` or key=value format `name=<name>;image=<image>;command=<command>;request-cpu=<quantity>;limit-cpu=<quantity>;request-memory=<quantity>;limit-memory=<quantity>`. Resource keys (request-cpu, limit-cpu, request-memory, limit-memory) are optional and accept Kubernetes resource quantities. |
 > **Note**
 > the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
 

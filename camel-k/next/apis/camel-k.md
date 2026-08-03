@@ -3989,9 +3989,9 @@ The Init Containers trait can be used to configure `init containers` or `sidecar
 | `Trait`  
 **[Trait](#_camel_apache_org_v1_trait_Trait)** | (Members of `Trait` are embedded into this type.) |
 | `initTasks`  
-\[\]string | A list of init tasks to be executed with format `<name>;<container-image>;<container-command>`. |
+\[\]string | A list of init tasks to be executed. Each task accepts the format `<name>;<container-image>;<container-command>` or key=value format `name=<name>;image=<image>;command=<command>;request-cpu=<quantity>;limit-cpu=<quantity>;request-memory=<quantity>;limit-memory=<quantity>`. Resource keys (request-cpu, limit-cpu, request-memory, limit-memory) are optional and accept Kubernetes resource quantities. |
 | `sideCarTasks`  
-\[\]string | A list of sidecar tasks to be executed with format `<name>;<container-image>;<container-command>`. |
+\[\]string | A list of sidecar tasks to be executed. Each task accepts the format `<name>;<container-image>;<container-command>` or key=value format `name=<name>;image=<image>;command=<command>;request-cpu=<quantity>;limit-cpu=<quantity>;request-memory=<quantity>;limit-memory=<quantity>`. Resource keys (request-cpu, limit-cpu, request-memory, limit-memory) are optional and accept Kubernetes resource quantities. |
 
 ### IstioTrait
 

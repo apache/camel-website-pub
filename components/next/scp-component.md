@@ -146,22 +146,6 @@ Enum values:
 | **jailStartingDirectory** (common) | Used for jailing (restricting) writing files to the starting directory (and sub) only. This is enabled by default to not allow Camel to write files to outside directories (to be more secured out of the box). You can turn this off to allow writing files to directories outside the starting directory, such as parent or root folders. For consumers that use a localWorkDirectory, this also restricts the downloaded files to stay within the configured localWorkDirectory. | true | boolean |
 | **checksumWriteFile** (producer) | If checksumFileAlgorithm has been configured then this option controls whether to write a checksum file as well or not. The checksum file will always be written in the same folder as the original file. | true | boolean |
 | **flatten** (producer) | Flatten is used to flatten the file name path to strip any leading paths, so it’s just the file name. This allows you to consume recursively into sub-directories, but when you eg write the files to another directory they will be written in a single directory. Setting this to true on the producer enforces that any file name in CamelFileName header will be stripped for any leading paths. | false | boolean |
-| **strictHostKeyChecking** (producer) | 
-
-Sets whether to use strict host key checking. Possible values are: no, yes.
-
-Enum values:
-
--   no
-    
--   yes
-    
-
-
-
-
-
- | no | String |
 | **allowNullBody** (producer (advanced)) | Used to specify if a null body is allowed during file writing. If set to true then an empty file will be created, when set to false, and attempting to send a null body to the file component, a GenericFileWriteException of 'Cannot write null body to file.' will be thrown. If the fileExist option is set to 'Override', then the file will be truncated, and if set to append the file will remain unchanged. | false | boolean |
 | **disconnectOnBatchComplete** (producer (advanced)) | Whether or not to disconnect from remote FTP server right after a Batch upload is complete. disconnectOnBatchComplete will only disconnect the current connection to the FTP server. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -180,6 +164,22 @@ Enum values:
 | **privateKeyBytes** (security) | Set the private key bytes to that the endpoint can do private key verification. This must be used only if privateKeyFile wasn’t set. Otherwise the file will have the priority. |  | byte\[\] |
 | **privateKeyFile** (security) | Set the private key file to that the endpoint can do private key verification. You can prefix with classpath: to load the file from classpath instead of file system. |  | String |
 | **privateKeyFilePassphrase** (security) | Set the private key file passphrase to that the endpoint can do private key verification. |  | String |
+| **strictHostKeyChecking** (security) | 
+
+Sets whether to use strict host key checking. Setting this to 'no' (the default) disables host key verification and makes the connection vulnerable to man-in-the-middle attacks. Use 'yes' in production environments.
+
+Enum values:
+
+-   no
+    
+-   yes
+    
+
+
+
+
+
+ | no | String |
 | **username** (security) | Username to use for login. |  | String |
 | **useUserKnownHostsFile** (security) | If knownHostFile has not been explicit configured, then use the host file from System.getProperty(user.home) /.ssh/known\_hosts. | true | boolean |
 | **ciphers** (security (advanced)) | Set a comma separated list of ciphers that will be used in order of preference. Possible cipher names are defined by JCraft JSCH. Some examples include: aes128-ctr,aes128-cbc,3des-ctr,3des-cbc,blowfish-cbc,aes192-cbc,aes256-cbc. If not specified the default list from JSCH will be used. |  | String |

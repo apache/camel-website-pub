@@ -203,6 +203,22 @@ Enum values:
 
  | base64 | String |
 | **fileSearchVectorStoreIds** (producer) | Comma-separated vector store ids required when builtinTools includes file\_search. |  | String |
+| **hallucinatedToolNameStrategy** (producer) | 
+
+Strategy for handling tool names hallucinated by the model (tool not found in any MCP server). 'failExchange' (default) throws an IllegalStateException, failing the exchange immediately. 'repromptModel' sends a corrective tool result listing the available tools so the model can self-correct and retry. The maxToolIterations option bounds retries.
+
+Enum values:
+
+-   failExchange
+    
+-   repromptModel
+    
+
+
+
+
+
+ | failExchange | HallucinatedToolNameStrategy |
 | **hostedMcpTools** (producer) | JSON array of hosted MCP tool definitions (OpenAI Tool.Mcp) passed through to the Responses API. |  | String |
 | **jsonSchema** (producer) | JSON schema for structured output validation. |  | String |
 | **maxAgenticTokens** (producer) | Maximum cumulative prompt plus completion tokens allowed across the MCP agentic loop. When 0 or negative, no token budget is enforced. Enforcement runs after each API call that requests further tool execution, so actual spend may exceed the configured budget by up to one call (typically the largest, as the prompt grows each iteration). A final text response is returned even when cumulative usage exceeds the budget. | 0 | long |
@@ -213,7 +229,7 @@ Enum values:
 | **maxToolIterations** (producer) | Maximum number of tool call loop iterations to prevent infinite loops. | 50 | int |
 | **mcpProtocolVersions** (producer) | Comma-separated list of MCP protocol versions to advertise when connecting to MCP servers using Streamable HTTP transport. When not set, the SDK default is used. Example: 2024-11-05,2025-03-26,2025-06-18. |  | String |
 | **mcpReconnect** (producer) | Automatically reconnect to MCP servers when a tool call fails due to a transport error, and retry the call once. | true | boolean |
-| **mcpServer** (producer) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdiossestreamableHttp, (Note that sse is deprecated) mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
+| **mcpServer** (producer) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdiossestreamableHttp, (Note that sse is deprecated) mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth), mcpServer..toolNames= (optional include list to restrict which tools are registered from this server). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **mcpTimeout** (producer) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
 | **model** (producer) | The model to use for chat completion. |  | String |
 | **outputClass** (producer) | Fully qualified class name for structured output using response format. |  | String |
@@ -252,6 +268,22 @@ Enum values:
 | **stripThinking** (producer) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
 | **systemMessage** (producer) | System message to prepend. When set and conversationMemory is enabled, the conversation history is reset. |  | String |
 | **temperature** (producer) | Temperature for response generation (0.0 to 2.0). |  | Double |
+| **toolExecutionErrorStrategy** (producer) | 
+
+Strategy for handling exceptions thrown during MCP tool execution. 'failExchange' (default) propagates the exception to the Camel exchange so that standard Camel error handling (onException, dead-letter channel) can process it. This is the safer default because 'repromptModel' sends raw exception messages (which may contain connection strings, hostnames, or internal paths) to a third-party LLM provider. 'repromptModel' catches the error and sends it back to the model as a tool result so the model can attempt to recover.
+
+Enum values:
+
+-   failExchange
+    
+-   repromptModel
+    
+
+
+
+
+
+ | failExchange | ToolExecutionErrorStrategy |
 | **topP** (producer) | Top P for response generation (0.0 to 1.0). |  | Double |
 | **userMessage** (producer) | Default user message text to use when no prompt is provided. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |

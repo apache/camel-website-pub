@@ -115,11 +115,13 @@ All commands auto-detect the LLM provider. The detection order is:
     
 3.  `AZURE_OPENAI_API_KEY` + `AZURE_OPENAI_ENDPOINT` → Azure OpenAI (uses the `api-key` header; optional `AZURE_OPENAI_DEPLOYMENT_NAME` and `AZURE_OPENAI_API_VERSION`)
     
-4.  `OPENAI_API_KEY` or `LLM_API_KEY` → OpenAI-compatible API
+4.  `GEMINI_API_KEY` environment variable → Google Gemini native API (`generativelanguage.googleapis.com`). With `--api-type=gemini`, `GOOGLE_API_KEY` is also accepted.
     
-5.  Ollama running via `camel infra` → local Ollama
+5.  `OPENAI_API_KEY` or `LLM_API_KEY` → OpenAI-compatible API
     
-6.  Ollama at `localhost:11434` → local Ollama
+6.  Ollama running via `camel infra` → local Ollama
+    
+7.  Ollama at `localhost:11434` → local Ollama
     
 
 Override with explicit options:
@@ -127,6 +129,7 @@ Override with explicit options:
 ```bash
 camel ask "check health" --api-type=anthropic --api-key=sk-...
 camel ask "check health" --api-type=openai --model=gpt-4
+camel ask "check health" --api-type=gemini --model=gemini-2.0-flash
 camel ask "check health" --api-type=ollama --model=llama3.1
 ```
 

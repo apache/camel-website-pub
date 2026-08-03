@@ -157,6 +157,52 @@ from("direct:chat")
             message: "${body}"
 ```
 
+#### Tool Filtering
+
+By default, all tools from every configured MCP server are registered and advertised to the model. Use the per-server `toolNames` property to restrict which tools are included. This is useful to reduce prompt size and cost, keep destructive tools away from the model, or avoid duplicate tool names across servers.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpServer.fs.transportType=stdio"
+        + "&mcpServer.fs.command=npx"
+        + "&mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp"
+        + "&mcpServer.fs.toolNames=read_file,list_directory");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;mcpServer.fs.transportType=stdio&amp;mcpServer.fs.command=npx&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp&amp;mcpServer.fs.toolNames=read_file,list_directory"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpServer.fs.transportType: stdio
+              mcpServer.fs.command: npx
+              mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
+              mcpServer.fs.toolNames: read_file,list_directory
+```
+
+When `toolNames` is set, only tools whose names appear in the comma-separated list are registered. Tools not in the list are silently excluded. If a name in the list does not match any tool provided by the server, a warning is logged. When `toolNames` is not set or is empty, all tools from the server are registered (the default behavior).
+
+The filter is also applied consistently on MCP server reconnection (`mcpReconnect=true`), so the tool set remains stable across connection recovery.
+
 ### Agentic Loop Behavior
 
 When the model responds with tool calls, the component automatically:
@@ -490,13 +536,30 @@ from("direct:chat")
 
 ### Error Handling in the Agentic Loop
 
+Two endpoint options control what happens when a tool call fails:
+
+-   **`toolExecutionErrorStrategy`** (default `failExchange`): controls what happens when a tool execution throws an exception (including malformed tool arguments).
+    
+    -   `failExchange` — propagates the exception to the Camel exchange so that standard Camel error handling (`onException`, dead-letter channel) can process it. This is the safer default because `repromptModel` sends raw exception messages (which may contain connection strings, hostnames, or internal paths) to a third-party LLM provider.
+        
+    -   `repromptModel` — catches the error, logs a WARN, and sends it back to the model as a tool result so the model can attempt recovery.
+        
+    
+-   **`hallucinatedToolNameStrategy`** (default `failExchange`): controls what happens when the model requests a tool that does not exist in any configured MCP server.
+    
+    -   `failExchange` — throws an `IllegalStateException`, failing the exchange immediately.
+        
+    -   `repromptModel` — sends a corrective tool result listing the available tools so the model can self-correct and retry with a valid tool name. The `maxToolIterations` option bounds the number of retries.
+        
+    
+
  
 | Scenario | Behavior |
 | --- | --- |
 | MCP client initialization failure | Route fails to start (`RuntimeException` during `doStart()`) |
-| Tool execution throws an exception | Error is caught, logged as WARN, and sent as tool result text to the model |
-| MCP transport error (`mcpReconnect=true`) | Automatic reconnection and retry (once). If retry fails, error is sent to the model |
+| Tool execution throws an exception | Governed by `toolExecutionErrorStrategy`: `failExchange` (default) propagates the exception to the exchange; `repromptModel` catches the error, logs it as WARN, and sends it as tool result text to the model |
+| MCP transport error (`mcpReconnect=true`) | Automatic reconnection and retry (once). If retry fails, behavior follows `toolExecutionErrorStrategy` |
 | MCP `CallToolResult.isError()` is true | Error content is sent as tool result text to the model |
-| Tool name not found in any server | `IllegalStateException` is thrown |
+| Tool name not found in any server | Governed by `hallucinatedToolNameStrategy`: `failExchange` (default) throws `IllegalStateException`; `repromptModel` sends a corrective tool result listing available tools |
 | Max iterations exceeded | `IllegalStateException` is thrown with the tool call log |
 | Streaming + MCP tools with autoToolExecution | Falls back to non-streaming (logged as INFO) |
