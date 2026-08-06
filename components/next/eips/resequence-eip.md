@@ -30,7 +30,7 @@ The Resequence eip supports the following options which are listed below.
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **expression** | **Required** Expression to use for re-ordering the messages, such as a header with a sequence number. |  | ExpressionDefinition |
-| **resequencerConfig** | Resequencer configuration using either batch or stream mode. Defaults to batch mode. |  | ResequencerConfig |
+| **resequencerConfig** | **Required** Resequencer configuration using either batch or stream mode. Defaults to batch mode. |  | ResequencerConfig |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

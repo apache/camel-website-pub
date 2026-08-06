@@ -14,7 +14,7 @@ The Specialized tokenizer for AI applications eip supports the following options
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
-| **tokenizerImplementation** | The tokenizer implementation to use, such as LangChain4j character, line, paragraph, sentence, or word tokenizers. |  | TokenizerImplementationDefinition |
+| **tokenizerImplementation** | **Required** The tokenizer implementation to use, such as LangChain4j character, line, paragraph, sentence, or word tokenizers. |  | TokenizerImplementationDefinition |
 
 ## Supported Splitters
 

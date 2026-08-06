@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 379 in 305 JAR artifacts (12 deprecated)
+Number of Non-Core Components: 379 in 304 JAR artifacts (13 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -290,10 +290,11 @@ Number of Non-Core Components: 379 in 305 JAR artifacts (12 deprecated)
 | [LangChain4j Chat](langchain4j-chat-component.md) | camel-langchain4j-chat | Stable | 4.5 | LangChain4j Chat component |
 | [LangChain4j Embedding Store](langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore | Stable | 4.14 | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](langchain4j-embeddings-component.md) | camel-langchain4j-embeddings | Stable | 4.5 | LangChain4j Embeddings |
-| [LangChain4j Tools](langchain4j-tools-component.md) | camel-langchain4j-tools | Preview | 4.8 | LangChain4j Tools and Function Calling Features |
+| [LangChain4j Tools](langchain4j-tools-component.md) | camel-langchain4j-tools | Preview-deprecated | 4.8 | LangChain4j Tools and Function Calling Features |
 | [LangChain4j Web Search](langchain4j-web-search-component.md) | camel-langchain4j-web-search | Stable | 4.8 | LangChain4j Web Search Engine |
 | [LDAP](ldap-component.md) | camel-ldap | Stable | 1.5 | Perform searches on LDAP servers. |
 | [LDIF](ldif-component.md) | camel-ldif | Stable | 2.20 | Perform updates on an LDAP server from an LDIF body content. |
+| [LLM Integration Guide](ai-llm-integration-guide.md) |  |  |  |  |
 | [Lucene](lucene-component.md) | camel-lucene | Stable | 2.2 | Perform inserts or queries against Apache Lucene databases. |
 | [Lumberjack](lumberjack-component.md) | camel-lumberjack | Stable | 2.18 | Receive logs messages using the Lumberjack protocol. |
 | [Mail](mail-component.md) | camel-mail | Stable | 1.0 | Send and receive emails using imap, pop3 and smtp protocols. |
@@ -381,7 +382,6 @@ Number of Non-Core Components: 379 in 305 JAR artifacts (12 deprecated)
 | [Spring AI Chat](spring-ai-chat-component.md) | camel-spring-ai-chat | Stable | 4.17 | Perform chat operations using Spring AI. |
 | [Spring AI Embeddings](spring-ai-embeddings-component.md) | camel-spring-ai-embeddings | Stable | 4.17 | Spring AI Embeddings |
 | [Spring AI Image](spring-ai-image-component.md) | camel-spring-ai-image | Stable | 4.19 | Spring AI Image Generation |
-| [Spring AI Tools](spring-ai-tools-component.md) | camel-spring-ai-tools | Stable | 4.17 | Spring AI Tools and Function Calling Features |
 | [Spring AI Vector Store](spring-ai-vector-store-component.md) | camel-spring-ai-vector-store | Stable | 4.17 | Spring AI Vector Store |
 | [Spring Batch](spring-batch-component.md) | camel-spring-batch | Stable | 2.10 | Send messages to Spring Batch for further processing. |
 | [Spring Event](spring-event-component.md) | camel-spring | Stable | 1.4 | Listen for Spring Application Events. |

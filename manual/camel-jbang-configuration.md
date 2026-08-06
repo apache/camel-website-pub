@@ -4,13 +4,14 @@ This page covers configuring the Camel CLI — available options, configuration 
 
 ## Camel CLI configurations
 
-The camel.jbang supports 50 options, which are listed below.
+The camel.jbang supports 53 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **camel.jbang.camel-version** | The version of Apache Camel to use |  | String |
 | **camel.jbang.camelSpringBootVersion** | To use a custom Camel version when running or export to Spring Boot |  | String |
+| **camel.jbang.camelWrapper** | Include Camel Wrapper scripts in the exported project for version pinning | false | boolean |
 | **camel.jbang.classpathFiles** | Additional files to add to classpath (Use commas to separate multiple files). |  | String |
 | **camel.jbang.compileWorkDir** | Work directory for compiler. Can be used to write compiled classes or other resources. | .camel-jbang/compile | String |
 | **camel.jbang.console** | Developer console at /q/dev on local HTTP server (port 8080 by default) | false | boolean |
@@ -40,8 +41,10 @@ The camel.jbang supports 50 options, which are listed below.
 | **camel.jbang.maven-settings** | Optional location of Maven settings.xml file to configure servers, repositories, mirrors, and proxies. If set to false, not even the default /.m2/settings.xml will be used. |  | String |
 | **camel.jbang.maven-settings-security** | Optional location of Maven settings-security.xml file to decrypt Maven Settings (settings.xml) file |  | String |
 | **camel.jbang.mavenWrapper** | Include Maven Wrapper files in the exported project | true | boolean |
+| **camel.jbang.mcp** | Embed dev/diagnostics MCP tools on the local HTTP management server (/mcp by default) | false | boolean |
 | **camel.jbang.metrics** | Metrics (Micrometer and Prometheus) at /observe/metrics on local HTTP server (port 8080 by default) when running standalone Camel | false | boolean |
 | **camel.jbang.openApi** | File name of open-api spec file (JSON or YAML) to generate routes from the swagger/openapi API spec file. |  | String |
+| **camel.jbang.openapiUi** | Swagger UI for REST OpenAPI at /q/openapi on local HTTP server (port 8080 by default) | false | boolean |
 | **camel.jbang.packageScanJars** | Whether to automatic package scan JARs for custom Spring or Quarkus beans making them available for Camel CLI | false | boolean |
 | **camel.jbang.parentPom** | Parent POM coordinate (groupId:artifactId:version) to use in the exported project |  | String |
 | **camel.jbang.prompt** | Allow user to type in required parameters in prompt if not present in application | false | boolean |

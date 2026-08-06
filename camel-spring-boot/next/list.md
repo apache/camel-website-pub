@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 397 spring boot starter json files.
+There are 398 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -22,6 +22,8 @@ Of these 0 are used in components, dataformats, etc.
 activemq
 
 activemq6
+
+ai-tool
 
 amqp
 
@@ -513,6 +515,8 @@ mapstruct
 
 master
 
+mcp-server
+
 mdc
 
 metrics
@@ -688,8 +692,6 @@ spring-ai-chat
 spring-ai-embeddings
 
 spring-ai-image
-
-spring-ai-tools
 
 spring-ai-vector-store
 
@@ -1071,11 +1073,12 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [LangChain4j Chat](../../components/next/langchain4j-chat-component.md) | camel-langchain4j-chat-starter | Stable | 4.5 | LangChain4j Chat component |
 | [LangChain4j Embedding Store](../../components/next/langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore-starter | Stable | 4.14 | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](../../components/next/langchain4j-embeddings-component.md) | camel-langchain4j-embeddings-starter | Stable | 4.5 | LangChain4j Embeddings |
-| [LangChain4j Tools](../../components/next/langchain4j-tools-component.md) | camel-langchain4j-tools-starter | Preview | 4.8 | LangChain4j Tools and Function Calling Features |
+| [LangChain4j Tools](../../components/next/langchain4j-tools-component.md) | camel-langchain4j-tools-starter | Preview-deprecated | 4.8 | LangChain4j Tools and Function Calling Features |
 | [LangChain4j Web Search](../../components/next/langchain4j-web-search-component.md) | camel-langchain4j-web-search-starter | Stable | 4.8 | LangChain4j Web Search Engine |
 | [Language](../../components/next/language-component.md) | camel-language-starter | Stable | 2.5 | Execute scripts in any of the languages supported by Camel. |
 | [LDAP](../../components/next/ldap-component.md) | camel-ldap-starter | Stable | 1.5 | Perform searches on LDAP servers. |
 | [LDIF](../../components/next/ldif-component.md) | camel-ldif-starter | Stable | 2.20 | Perform updates on an LDAP server from an LDIF body content. |
+| [LLM Integration Guide](../../components/next/ai-llm-integration-guide.md) | undefined-starter |  |  |  |
 | [Log Data](../../components/next/log-component.md) | camel-log-starter | Stable | 1.1 | Prints data from the routed message (such as body and headers) to the logger. |
 | [Lucene](../../components/next/lucene-component.md) | camel-lucene-starter | Stable | 2.2 | Perform inserts or queries against Apache Lucene databases. |
 | [Lumberjack](../../components/next/lumberjack-component.md) | camel-lumberjack-starter | Stable | 2.18 | Receive logs messages using the Lumberjack protocol. |
@@ -1169,7 +1172,6 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Spring AI Chat](../../components/next/spring-ai-chat-component.md) | camel-spring-ai-chat-starter | Stable | 4.17 | Perform chat operations using Spring AI. |
 | [Spring AI Embeddings](../../components/next/spring-ai-embeddings-component.md) | camel-spring-ai-embeddings-starter | Stable | 4.17 | Spring AI Embeddings |
 | [Spring AI Image](../../components/next/spring-ai-image-component.md) | camel-spring-ai-image-starter | Stable | 4.19 | Spring AI Image Generation |
-| [Spring AI Tools](../../components/next/spring-ai-tools-component.md) | camel-spring-ai-tools-starter | Stable | 4.17 | Spring AI Tools and Function Calling Features |
 | [Spring AI Vector Store](../../components/next/spring-ai-vector-store-component.md) | camel-spring-ai-vector-store-starter | Stable | 4.17 | Spring AI Vector Store |
 | [Spring Batch](../../components/next/spring-batch-component.md) | camel-spring-batch-starter | Stable | 2.10 | Send messages to Spring Batch for further processing. |
 | [Spring Event](../../components/next/spring-event-component.md) | camel-spring-starter | Stable | 1.4 | Listen for Spring Application Events. |
@@ -1400,6 +1402,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](../../components/next/others/mail-microsoft-oauth.md) | camel-mail-microsoft-oauth-starter | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](../../components/next/others/main.md) | camel-main-starter | Stable | 3.0 | Camel Main |
+| [MCP Server](../../components/next/others/mcp-server.md) | camel-mcp-server-starter | Preview | 4.22 | Expose ai-tool routes as MCP tools over streamable HTTP |
 | [MDC Logging](../../components/next/others/mdc.md) | camel-mdc-starter | Preview | 4.15 | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer Observability](../../components/next/others/observation.md) | camel-observation-starter | Stable-deprecated | 3.21 | Observability using Micrometer Observation |
 | [Micrometer Observability 2](../../components/next/others/micrometer-observability.md) | camel-micrometer-observability-starter | Preview | 4.15 | Micrometer Observability implementation of Camel Telemetry |
@@ -1425,7 +1428,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Platform Http Vertx](../../components/next/others/platform-http-vertx.md) | camel-platform-http-vertx-starter | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [PQC Hybrid Cryptography](../../components/next/others/pqc-hybrid.md) | undefined-starter |  |  |  |
 | [PQC Key Lifecycle Management](../../components/next/others/pqc-key-lifecycle.md) | undefined-starter |  |  |  |
-| [Reactive Executor Tomcat](../../components/next/others/reactive-executor-tomcat.md) | camel-reactive-executor-tomcat-starter | Experimental | 3.17 | Reactive Executor for camel-core using Apache Tomcat |
+| [Reactive Executor Tomcat](../../components/next/others/reactive-executor-tomcat.md) | camel-reactive-executor-tomcat-starter | Experimental-deprecated | 3.17 | Reactive Executor for camel-core using Apache Tomcat (deprecated) |
 | [Reactive Executor Vert.x](../../components/next/others/reactive-executor-vertx.md) | camel-reactive-executor-vertx-starter | Experimental-deprecated | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](../../components/next/others/reactor.md) | camel-reactor-starter | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](../../components/next/others/redis.md) | camel-redis-starter | Stable | 3.5 | Aggregation repository using Redis as datastore |

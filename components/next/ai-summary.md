@@ -2,6 +2,33 @@
 
 The Camel AI components are a group of components for applying Apache Camel to various AI-related technologies.
 
+## Getting started with LLMs
+
+New to Camel AI? Start with the [LLM Integration Guide](ai-llm-integration-guide.md) — it explains when to use [OpenAI](openai-component.md) vs [LangChain4j Chat](langchain4j-chat-component.md), structured JSON extraction, streaming to browsers, dynamic prompts, and prompt management patterns.
+
+## Choosing the Right AI Component
+
+Camel offers two main paths for integrating Large Language Models (LLMs) into routes:
+
+-   **[OpenAI](openai-component.md)** — talks directly to OpenAI and any OpenAI-compatible API (OpenRouter, Ollama, vLLM, LM Studio). Native support for streaming, structured output (`outputClass` / `jsonSchema`), MCP tool calling, conversation memory, and the Responses API. Best when you are committed to the OpenAI ecosystem or using an OpenAI-compatible gateway.
+    
+-   **[LangChain4j Chat](langchain4j-chat-component.md)** — abstracts through [LangChain4j](https://github.com/langchain4j/langchain4j) so you can switch LLM providers (OpenAI, Anthropic, Google Gemini, Mistral, Ollama, and others) by swapping a dependency. Also provides prompt templates with variables, RAG integration via the Content Enricher pattern, and multi-message conversation history.
+    
+
+  
+| Need | camel-openai | camel-langchain4j-chat |
+| --- | --- | --- |
+| OpenAI or compatible API (OpenRouter, Ollama, vLLM) | Yes | Via LangChain4j provider |
+| Switch providers without code changes | No (OpenAI-compatible only) | Yes |
+| MCP tool calling / agentic loops | Yes | No (use [langchain4j-tools](langchain4j-tools-component.md) instead) |
+| Streaming responses | Yes | Manual (via `StreamingChatLanguageModel`) |
+| Structured output (JSON schema) | Yes (`outputClass`, `jsonSchema`) | No |
+| Prompt templates with variables | No (use Simple expressions) | Yes (built-in \`{{variable}}\` syntax) |
+| RAG pipelines | Manual | Yes (with `LangChain4jRagAggregatorStrategy`) |
+| Embeddings | Yes | Via [langchain4j-embeddingstore](langchain4j-embeddingstore-component.md) |
+> **Tip**
+> If you already use an OpenAI-compatible API and want the richest feature set (streaming, MCP, structured output), start with `camel-openai`. If multi-provider flexibility is a hard requirement, use `camel-langchain4j-chat`. Both can coexist in the same project. For end-to-end pipeline examples, see the [LLM Integration Guide](ai-llm-integration-guide.md).
+
 ## AI components
 
 See the following for usage of each component:
@@ -54,6 +81,8 @@ LangChain4j Tools and Function Calling Features
 
 LangChain4j Web Search Engine
 
+[LLM Integration Guide](ai-llm-integration-guide.md)
+
 [Milvus](milvus-component.md)
 
 Perform operations on the Milvus Vector Database.
@@ -89,10 +118,6 @@ Spring AI Embeddings
 [Spring AI Image](spring-ai-image-component.md)
 
 Spring AI Image Generation
-
-[Spring AI Tools](spring-ai-tools-component.md)
-
-Spring AI Tools and Function Calling Features
 
 [Spring AI Vector Store](spring-ai-vector-store-component.md)
 

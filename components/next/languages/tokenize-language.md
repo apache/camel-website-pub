@@ -13,7 +13,7 @@ The Tokenize language supports the following options which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **token** (common) |  | `String` | The (start) token to use as tokenizer, for example you can use the new line token. You can use simple language as the token to support dynamic tokens. |
+| **token** (common) |  | `String` | **Required** The (start) token to use as tokenizer, for example you can use the new line token. You can use simple language as the token to support dynamic tokens. |
 | **endToken** (common) |  | `String` | The end token to use as tokenizer if using start/end token pairs. You can use simple language as the token to support dynamic tokens. |
 | **inheritNamespaceTagName** (advanced) |  | `String` | To inherit namespaces from a root/parent tag name when using XML. You can use simple language as the tag name to support dynamic names. |
 | **regex** (advanced) | `false` | `Boolean` | If the token is a regular expression pattern. |

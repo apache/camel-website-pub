@@ -140,7 +140,7 @@ The Grok dataformat supports the following options which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **pattern** (common) |  | `String` | The grok pattern to match lines of input. |
+| **pattern** (common) |  | `String` | **Required** The grok pattern to match lines of input. |
 | **flattened** (common) | `false` | `Boolean` | Whether to use flattened mode. In flattened mode an exception is thrown when there are multiple pattern matches with the same key. |
 | **allowMultipleMatchesPerLine** (common) | `true` | `Boolean` | Whether to allow multiple matches per line. If false, every line of input is matched for the pattern only once. Otherwise the line can be scanned multiple times when a non-terminal pattern is used. |
 | **namedOnly** (common) | `false` | `Boolean` | Whether to capture named expressions only or not (i.e. %\\{IP:ip} but not ${IP}). |

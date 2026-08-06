@@ -1,4 +1,4 @@
-urls[822]{loc,lastmod}:
+urls[826]{loc,lastmod}:
   https://camel.apache.org/blog/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/,2026-07-29T00:00:00+00:00
@@ -18,6 +18,10 @@ urls[822]{loc,lastmod}:
   https://camel.apache.org/categories/Tooling/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.18.3/,2026-07-17T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.21.0/,2026-07-17T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/camel-quarkus-3.27.5/,2026-07-13T00:00:00+00:00
+  https://camel.apache.org/blog/2026/07/camel-quarkus-3.33.2/,2026-07-13T00:00:00+00:00
+  https://camel.apache.org/releases/q-3.27.5/,2026-07-13T00:00:00+00:00
+  https://camel.apache.org/releases/q-3.33.2/,2026-07-13T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/hawtio-ai/,2026-07-10T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-elevates-citrus/,2026-07-06T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-07-06T00:00:00+00:00

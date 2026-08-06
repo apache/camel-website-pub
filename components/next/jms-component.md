@@ -55,7 +55,7 @@ You append query options to the URI by using the following format, `?option=valu
 
 ### Using ActiveMQ
 
-The JMS component reuses Spring 2’s `JmsTemplate` for sending messages. This is not ideal for use in a non-J2EE container and typically requires some caching in the JMS provider to avoid [poor performance](http://activemq.apache.org/jmstemplate-gotchas.md).
+The JMS component reuses Spring’s `JmsTemplate` for sending messages. This is not ideal for use in a non-J2EE container and typically requires some caching in the JMS provider to avoid [poor performance](http://activemq.apache.org/jmstemplate-gotchas.md).
 
 If you intend to use [Apache ActiveMQ](http://activemq.apache.org/) as your message broker, the recommendation is that you do one of the following:
 
@@ -1082,7 +1082,7 @@ JMS appears in many of the examples for other components and EIP patterns, as we
 
 ### Using JMS as a Dead Letter Queue storing Exchange
 
-Normally, when using [JMS](#) as the transport, it only transfers the body and headers as the payload. If you want to use [JMS](#) with a [Dead Letter Channel](eips/dead-letter-channel.md), using a JMS queue as the Dead Letter Queue, then normally the caused Exception is not stored in the JMS message. You can, however, use the `transferExchange` option on the JMS dead letter queue to instruct Camel to store the entire Exchange in the queue as a `javax.jms.ObjectMessage` that holds a `org.apache.camel.support.DefaultExchangeHolder`. This allows you to consume from the Dead Letter Queue and retrieve the caused exception from the Exchange property with the key `Exchange.EXCEPTION_CAUGHT`. The demo below illustrates this:
+Normally, when using [JMS](#) as the transport, it only transfers the body and headers as the payload. If you want to use [JMS](#) with a [Dead Letter Channel](eips/dead-letter-channel.md), using a JMS queue as the Dead Letter Queue, then normally the caused Exception is not stored in the JMS message. You can, however, use the `transferExchange` option on the JMS dead letter queue to instruct Camel to store the entire Exchange in the queue as a `jakarta.jms.ObjectMessage` that holds a `org.apache.camel.support.DefaultExchangeHolder`. This allows you to consume from the Dead Letter Queue and retrieve the caused exception from the Exchange property with the key `Exchange.EXCEPTION_CAUGHT`. The demo below illustrates this:
 
 _Java-only: `errorHandler` configuration is Java DSL specific_
 
@@ -1151,36 +1151,41 @@ Here we only store the original cause error message in the transform. You can, h
 
 ### Message Mapping between JMS and Camel
 
-Camel automatically maps messages between `javax.jms.Message` and `org.apache.camel.Message`.
+Camel automatically maps messages between `jakarta.jms.Message` and `org.apache.camel.Message`.
 
 When sending a JMS message, Camel converts the message body to the following JMS message types:
 
   
 | Body Type | JMS Message | Comment |
 | --- | --- | --- |
-| `String` | `javax.jms.TextMessage` |  |
-| `org.w3c.dom.Node` | `javax.jms.TextMessage` | The DOM will be converted to `String`. |
-| `Map` | `javax.jms.MapMessage` |  |
-| `java.io.Serializable` | `javax.jms.ObjectMessage` |  |
-| `byte[]` | `javax.jms.BytesMessage` |  |
-| `java.io.File` | `javax.jms.BytesMessage` |  |
-| `java.io.Reader` | `javax.jms.BytesMessage` |  |
-| `java.io.InputStream` | `javax.jms.BytesMessage` |  |
-| `java.nio.ByteBuffer` | `javax.jms.BytesMessage` |  |
+| `String` | `jakarta.jms.TextMessage` |  |
+| `org.w3c.dom.Node` | `jakarta.jms.TextMessage` | The DOM will be converted to `String`. |
+| `Map` | `jakarta.jms.MapMessage` |  |
+| `java.io.Serializable` | `jakarta.jms.ObjectMessage` |  |
+| `byte[]` | `jakarta.jms.BytesMessage` |  |
+| `java.io.File` | `jakarta.jms.BytesMessage` |  |
+| `java.io.Reader` | `jakarta.jms.BytesMessage` |  |
+| `java.io.InputStream` | `jakarta.jms.BytesMessage` |  |
+| `org.apache.camel.WrappedFile` | `jakarta.jms.BytesMessage` |  |
+| `org.apache.camel.StreamCache` | `jakarta.jms.BytesMessage` |  |
+| `java.nio.ByteBuffer` | `jakarta.jms.BytesMessage` |  |
+> **Note**
+> When the `streamMessageTypeEnabled` option is enabled, bodies of type `java.io.File`, `java.io.Reader`, `java.io.InputStream`, `org.apache.camel.WrappedFile` and `org.apache.camel.StreamCache` are sent as `jakarta.jms.StreamMessage` instead of `jakarta.jms.BytesMessage`. When `artemisStreamingEnabled` is in effect, Camel enforces `jakarta.jms.BytesMessage` even then, because ActiveMQ Artemis has an optimised streaming mode that requires bytes messages.
 
 When receiving a JMS message, Camel converts the JMS message to the following body type:
 
  
 | JMS Message | Body Type |
 | --- | --- |
-| `javax.jms.TextMessage` | `String` |
-| `javax.jms.BytesMessage` | `byte[]` |
-| `javax.jms.MapMessage` | `Map<String, Object>` |
-| `javax.jms.ObjectMessage` | `Object` |
+| `jakarta.jms.TextMessage` | `String` |
+| `jakarta.jms.BytesMessage` | `byte[]` |
+| `jakarta.jms.MapMessage` | `Map<String, Object>` |
+| `jakarta.jms.ObjectMessage` | `Object` |
+| `jakarta.jms.StreamMessage` | `java.io.InputStream` |
 
 ### Disabling auto-mapping of JMS messages
 
-You can use the `mapJmsMessage` option to disable the auto-mapping above. If disabled, Camel will not try to map the received JMS message, but instead uses it directly as the payload. This allows you to avoid the overhead of mapping and let Camel just pass through the JMS message. For instance, it even allows you to route `javax.jms.ObjectMessage` JMS messages with classes you do **not** have on the classpath.
+You can use the `mapJmsMessage` option to disable the auto-mapping above. If disabled, Camel will not try to map the received JMS message, but instead uses it directly as the payload. This allows you to avoid the overhead of mapping and let Camel just pass through the JMS message. For instance, it even allows you to route `jakarta.jms.ObjectMessage` JMS messages with classes you do **not** have on the classpath.
 
 ### Using a custom MessageConverter
 
@@ -1223,7 +1228,7 @@ You can also use a custom message converter when consuming from a JMS destinatio
 
 You can use the `jmsMessageType` option on the endpoint URL to force a specific message type for all messages.
 
-In the route below, we poll files from a folder and send them as `javax.jms.TextMessage` as we have forced the JMS producer endpoint to use text messages:
+In the route below, we poll files from a folder and send them as `jakarta.jms.TextMessage` as we have forced the JMS producer endpoint to use text messages:
 
 -   Java
     
@@ -1298,7 +1303,7 @@ Camel adds the following properties to the `Exchange` when it receives a message
   
 | Property | Type | Description |
 | --- | --- | --- |
-| `org.apache.camel.jms.replyDestination` | `javax.jms.Destination` | The reply destination. |
+| `org.apache.camel.jms.replyDestination` | `jakarta.jms.Destination` | The reply destination. |
 
 Camel adds the following JMS properties to the In message headers when it receives a JMS message:
 
@@ -1307,12 +1312,12 @@ Camel adds the following JMS properties to the In message headers when it receiv
 | --- | --- | --- |
 | `JMSCorrelationID` | `String` | The JMS correlation ID. |
 | `JMSDeliveryMode` | `int` | The JMS delivery mode. |
-| `JMSDestination` | `javax.jms.Destination` | The JMS destination. |
+| `JMSDestination` | `jakarta.jms.Destination` | The JMS destination. |
 | `JMSExpiration` | `long` | The JMS expiration. |
 | `JMSMessageID` | `String` | The JMS unique message ID. |
 | `JMSPriority` | `int` | The JMS priority (with 0 as the lowest priority and 9 as the highest). |
 | `JMSRedelivered` | `boolean` | Whether the JMS message is redelivered. |
-| `JMSReplyTo` | `javax.jms.Destination` | The JMS reply-to destination. |
+| `JMSReplyTo` | `jakarta.jms.Destination` | The JMS reply-to destination. |
 | `JMSTimestamp` | `long` | The JMS timestamp. |
 | `JMSType` | `String` | The JMS type. |
 | `JMSXGroupID` | `String` | The JMS group ID. |
@@ -1344,7 +1349,7 @@ The `JmsProducer` behaves as follows, depending on configuration:
 | _InOut_ | \- | Camel will expect a reply, set a temporary `JMSReplyTo`, and after sending the message, it will start to listen for the reply message on the temporary queue. |
 | _InOut_ | `JMSReplyTo` is set | Camel will expect a reply and, after sending the message, it will start to listen for the reply message on the specified `JMSReplyTo` queue. |
 | _InOnly_ | \- | Camel will send the message and **not** expect a reply. |
-| _InOnly_ | `JMSReplyTo` is set | By default, Camel discards the `JMSReplyTo` destination and clears the `JMSReplyTo` header before sending the message. Camel then sends the message and does **not** expect a reply. Camel logs this in the log at `WARN` level (changed to `DEBUG` level from **Camel 2.6** onwards. You can use `preserveMessageQuo=true` to instruct Camel to keep the `JMSReplyTo`. In all situations the `JmsProducer` does **not** expect any reply and thus continue after sending the message. |
+| _InOnly_ | `JMSReplyTo` is set | By default, Camel discards the `JMSReplyTo` destination and clears the `JMSReplyTo` header before sending the message. Camel then sends the message and does **not** expect a reply. Camel logs this in the log at `DEBUG` level. You can use `preserveMessageQos=true` to instruct Camel to keep the `JMSReplyTo`. In all situations the `JmsProducer` does **not** expect any reply and thus continue after sending the message. |
 
 #### JmsConsumer
 
@@ -1407,7 +1412,7 @@ You can specify the destination in the following headers:
   
 | Header | Type | Description |
 | --- | --- | --- |
-| `CamelJmsDestination` | `javax.jms.Destination` | A destination object. |
+| `CamelJmsDestination` | `jakarta.jms.Destination` | A destination object. |
 | `CamelJmsDestinationName` | `String` | The destination name. |
 
 For example, the following route shows how you can compute a destination at run time and use it to override the destination appearing in the JMS URL:
@@ -1784,7 +1789,7 @@ The benefit of doing so is that the cacheLevel setting will be honored when usin
 
 ### Using JMSReplyTo for late replies
 
-When using Camel as a JMS listener, it sets an Exchange property with the value of the ReplyTo `javax.jms.Destination` object, having the key `ReplyTo`. You can obtain this `Destination` as follows:
+When using Camel as a JMS listener, it sets an Exchange property with the value of the ReplyTo `jakarta.jms.Destination` object, having the key `ReplyTo`. You can obtain this `Destination` as follows:
 
 _Java-only: uses JMS `Destination` object and Camel Java API_
 

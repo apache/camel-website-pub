@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 103 in 70 JAR artifacts (8 deprecated)
+Number of Miscellaneous Components: 104 in 71 JAR artifacts (9 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -55,6 +55,7 @@ Number of Miscellaneous Components: 103 in 70 JAR artifacts (8 deprecated)
 | [LRA](lra.md) | camel-lra | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](mail-microsoft-oauth.md) | camel-mail-microsoft-oauth | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](main.md) | camel-main | Stable | 3.0 | Camel Main |
+| [MCP Server](mcp-server.md) | camel-mcp-server | Preview | 4.22 | Expose ai-tool routes as MCP tools over streamable HTTP |
 | [MDC Logging](mdc.md) | camel-mdc | Preview | 4.15 | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer Observability](observation.md) | camel-observation | Stable-deprecated | 3.21 | Observability using Micrometer Observation |
 | [Micrometer Observability 2](micrometer-observability.md) | camel-micrometer-observability | Preview | 4.15 | Micrometer Observability implementation of Camel Telemetry |
@@ -80,7 +81,7 @@ Number of Miscellaneous Components: 103 in 70 JAR artifacts (8 deprecated)
 | [Platform Http Vertx](platform-http-vertx.md) | camel-platform-http-vertx | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [PQC Hybrid Cryptography](pqc-hybrid.md) |  |  |  |  |
 | [PQC Key Lifecycle Management](pqc-key-lifecycle.md) |  |  |  |  |
-| [Reactive Executor Tomcat](reactive-executor-tomcat.md) | camel-reactive-executor-tomcat | Experimental | 3.17 | Reactive Executor for camel-core using Apache Tomcat |
+| [Reactive Executor Tomcat](reactive-executor-tomcat.md) | camel-reactive-executor-tomcat | Experimental-deprecated | 3.17 | Reactive Executor for camel-core using Apache Tomcat (deprecated) |
 | [Reactive Executor Vert.x](reactive-executor-vertx.md) | camel-reactive-executor-vertx | Experimental-deprecated | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](reactor.md) | camel-reactor | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](redis.md) | camel-redis | Stable | 3.5 | Aggregation repository using Redis as datastore |

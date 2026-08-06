@@ -10,7 +10,7 @@ The Convert Body To eip supports the following options which are listed below.
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
-| **type** | The java type to convert to. |  | String |
+| **type** | **Required** The java type to convert to. |  | String |
 | **mandatory** | Whether the conversion is mandatory. If mandatory and conversion is not possible, a NoTypeConversionAvailableException is thrown. Setting this to false means null may be returned if conversion is not possible. | true | Boolean |
 | **charset** | To use a specific charset when converting. |  | String |
 > **Note**

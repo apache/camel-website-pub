@@ -96,11 +96,11 @@ The Salesforce component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **apexMethod** (common) | APEX method name. |  | String |
+| **apexMethod** (common) | HTTP verb used for the Apex REST invocation, such as GET, POST, PUT, PATCH or DELETE. Applies to the apexCall operation and defaults to GET. Can be overridden per message with the CamelSalesforceApexMethod header. | GET | String |
 | **apexQueryParams** (common) | Query params for APEX method. |  | Map |
 | **apiVersion** (common) | Salesforce API version. | 56.0 | String |
 | **backoffIncrement** (common) | Backoff interval increment for Streaming connection restart attempts for failures beyond CometD auto-reconnect. | 1000 | long |
-| **batchId** (common) | Bulk API Batch ID. |  | String |
+| **batchId** (common) | Identifies a batch within a Bulk API v1 job. Required by getBatch, getRequest, getResults, getQueryResultIds and getQueryResult unless a BatchInfo message body supplies it. Not used by Bulk API 2.0. |  | String |
 | **contentType** (common) | 
 Bulk API content type, one of XML, CSV, ZIP\_XML, ZIP\_CSV.
 
@@ -151,7 +151,7 @@ Enum values:
 | **includeDetails** (common) | Include details in Salesforce1 Analytics report, defaults to false. | false | Boolean |
 | **initialReplayIdMap** (common) | Replay IDs to start from per channel name. |  | Map |
 | **instanceId** (common) | Salesforce1 Analytics report execution instance ID. |  | String |
-| **jobId** (common) | Bulk API Job ID. |  | String |
+| **jobId** (common) | Identifies the Bulk API job to act on, for Bulk API v1 operations such as getJob, closeJob, abortJob, createBatch and getResults, and for the bulk2 operations that target an existing job. Operations that accept a JobInfo or BatchInfo message body can take the id from there instead. |  | String |
 | **limit** (common) | Limit on number of returned records. Applicable to some of the API, check the Salesforce documentation. |  | Integer |
 | **locator** (common) | Locator provided by salesforce Bulk 2.0 API for use in getting results for a Query job. |  | String |
 | **maxBackoff** (common) | Maximum backoff interval for Streaming connection restart attempts for failures beyond CometD auto-reconnect. | 30000 | long |
@@ -226,7 +226,7 @@ Enum values:
 | **rawPayload** (common) | Use raw payload String for request and response (either JSON or XML depending on format), instead of DTOs, false by default. | false | boolean |
 | **reportId** (common) | Salesforce1 Analytics report Id. |  | String |
 | **reportMetadata** (common) | Salesforce1 Analytics report metadata for filtering. |  | ReportMetadata |
-| **resultId** (common) | Bulk API Result ID. |  | String |
+| **resultId** (common) | Identifies one result set of a completed Bulk API v1 query batch, as returned by the getQueryResultIds operation. Used only by getQueryResult, together with jobId and batchId. |  | String |
 | **sObjectBlobFieldName** (common) | SObject blob field name. |  | String |
 | **sObjectClass** (common) | Fully qualified SObject class name, usually generated using camel-salesforce-maven-plugin. |  | String |
 | **sObjectFields** (common) | SObject fields to retrieve. |  | String |
@@ -293,7 +293,7 @@ Enum values:
 | **consumerWorkerPoolSize** (consumer (advanced)) | Core thread pool size size for consumer worker pool. | 10 | int |
 | **initialReplyIdTimeout** (consumer (advanced)) | Timeout in seconds to validate when a custom pubSubReplayId has been configured, when starting the Camel Salesforce consumer. | 30 | int |
 | **allOrNone** (producer) | Composite API option to indicate to rollback all records if any are not successful. | false | boolean |
-| **apexUrl** (producer) | APEX method URL. |  | String |
+| **apexUrl** (producer) | Path of the Apex REST resource to invoke, appended to /services/apexrest/ on the instance URL, for example MyApexClass/. The apexCall operation needs this value, which can be given as this option, in the endpoint path as apexCall/MyApexClass/, or in the CamelSalesforceApexUrl header. Placeholders written in curly braces are resolved from message headers of the same name. |  | String |
 | **compositeMethod** (producer) | Composite (raw) method. |  | String |
 | **eventName** (producer) | Name of Platform Event, Change Data Capture Event, custom event, etc. |  | String |
 | **eventSchemaFormat** (producer) | 
@@ -360,8 +360,8 @@ Enum values:
 | **loginConfig** (security) | All authentication configuration in one nested bean, all properties set there can be set directly on the component as well. |  | SalesforceLoginConfig |
 | **loginUrl** (security) | **Required** URL of the Salesforce instance used for authentication, by default set to [https://login.salesforce.com](https://login.salesforce.com). | [https://login.salesforce.com](https://login.salesforce.com) | String |
 | **password** (security) | Password used in OAuth flow to gain access to access token. It’s easy to get started with password OAuth flow, but in general one should avoid it as it is deemed less secure than other flows. Make sure that you append security token to the end of the password if using one. |  | String |
-| **pubSubHost** (security) | Pub/Sub host. | api.pubsub.salesforce.com | String |
-| **pubSubPort** (security) | Pub/Sub port. | 7443 | int |
+| **pubSubHost** (security) | Host name of the Salesforce Pub/Sub API gRPC service used by the pubSubSubscribe and pubSubPublish operations. Give a bare host name, without scheme or port. | api.pubsub.salesforce.com | String |
+| **pubSubPort** (security) | TCP port of the Salesforce Pub/Sub API gRPC service used by the pubSubSubscribe and pubSubPublish operations. | 7443 | int |
 | **refreshToken** (security) | Refresh token already obtained in the refresh token OAuth flow. One needs to setup a web application and configure a callback URL to receive the refresh token, or configure using the builtin callback at [https://login.salesforce.com/services/oauth2/success](https://login.salesforce.com/services/oauth2/success) or [https://test.salesforce.com/services/oauth2/success](https://test.salesforce.com/services/oauth2/success) and then retrive the refresh\_token from the URL at the end of the flow. Note that in development organizations Salesforce allows hosting the callback web application at localhost. |  | String |
 | **sslContextParameters** (security) | SSL parameters to use, see SSLContextParameters class for all available options. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
@@ -536,11 +536,11 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **apexMethod** (common) | APEX method name. |  | String |
+| **apexMethod** (common) | HTTP verb used for the Apex REST invocation, such as GET, POST, PUT, PATCH or DELETE. Applies to the apexCall operation and defaults to GET. Can be overridden per message with the CamelSalesforceApexMethod header. | GET | String |
 | **apexQueryParams** (common) | Query params for APEX method. |  | Map |
 | **apiVersion** (common) | Salesforce API version. | 56.0 | String |
 | **backoffIncrement** (common) | Backoff interval increment for Streaming connection restart attempts for failures beyond CometD auto-reconnect. | 1000 | long |
-| **batchId** (common) | Bulk API Batch ID. |  | String |
+| **batchId** (common) | Identifies a batch within a Bulk API v1 job. Required by getBatch, getRequest, getResults, getQueryResultIds and getQueryResult unless a BatchInfo message body supplies it. Not used by Bulk API 2.0. |  | String |
 | **contentType** (common) | 
 Bulk API content type, one of XML, CSV, ZIP\_XML, ZIP\_CSV.
 
@@ -586,7 +586,7 @@ Enum values:
 | **includeDetails** (common) | Include details in Salesforce1 Analytics report, defaults to false. | false | Boolean |
 | **initialReplayIdMap** (common) | Replay IDs to start from per channel name. |  | Map |
 | **instanceId** (common) | Salesforce1 Analytics report execution instance ID. |  | String |
-| **jobId** (common) | Bulk API Job ID. |  | String |
+| **jobId** (common) | Identifies the Bulk API job to act on, for Bulk API v1 operations such as getJob, closeJob, abortJob, createBatch and getResults, and for the bulk2 operations that target an existing job. Operations that accept a JobInfo or BatchInfo message body can take the id from there instead. |  | String |
 | **limit** (common) | Limit on number of returned records. Applicable to some of the API, check the Salesforce documentation. |  | Integer |
 | **locator** (common) | Locator provided by salesforce Bulk 2.0 API for use in getting results for a Query job. |  | String |
 | **maxBackoff** (common) | Maximum backoff interval for Streaming connection restart attempts for failures beyond CometD auto-reconnect. | 30000 | long |
@@ -660,7 +660,7 @@ Enum values:
 | **rawPayload** (common) | Use raw payload String for request and response (either JSON or XML depending on format), instead of DTOs, false by default. | false | boolean |
 | **reportId** (common) | Salesforce1 Analytics report Id. |  | String |
 | **reportMetadata** (common) | Salesforce1 Analytics report metadata for filtering. |  | ReportMetadata |
-| **resultId** (common) | Bulk API Result ID. |  | String |
+| **resultId** (common) | Identifies one result set of a completed Bulk API v1 query batch, as returned by the getQueryResultIds operation. Used only by getQueryResult, together with jobId and batchId. |  | String |
 | **sObjectBlobFieldName** (common) | SObject blob field name. |  | String |
 | **sObjectClass** (common) | Fully qualified SObject class name, usually generated using camel-salesforce-maven-plugin. |  | String |
 | **sObjectFields** (common) | SObject fields to retrieve. |  | String |
@@ -740,7 +740,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **allOrNone** (producer) | Composite API option to indicate to rollback all records if any are not successful. | false | boolean |
-| **apexUrl** (producer) | APEX method URL. |  | String |
+| **apexUrl** (producer) | Path of the Apex REST resource to invoke, appended to /services/apexrest/ on the instance URL, for example MyApexClass/. The apexCall operation needs this value, which can be given as this option, in the endpoint path as apexCall/MyApexClass/, or in the CamelSalesforceApexUrl header. Placeholders written in curly braces are resolved from message headers of the same name. |  | String |
 | **compositeMethod** (producer) | Composite (raw) method. |  | String |
 | **eventName** (producer) | Name of Platform Event, Change Data Capture Event, custom event, etc. |  | String |
 | **eventSchemaFormat** (producer) | 
@@ -776,22 +776,22 @@ The Salesforce component supports the following message header(s), which is/are 
 | **CamelSalesforceReplayId** (consumer) Constant: [`HEADER_SALESFORCE_REPLAY_ID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_REPLAY_ID) | The Streaming API replayId. |  | Object |
 | **CamelSalesforceEventUuid** (consumer) Constant: [`HEADER_SALESFORCE_EVENT_UUID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_EVENT_UUID) | The Streaming API eventUuid. |  | Object |
 | **CamelSalesforceChangeEventSchema** (consumer) Constant: [`HEADER_SALESFORCE_CHANGE_EVENT_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CHANGE_EVENT_SCHEMA) | The change event schema. |  | Object |
-| **CamelSalesforceEventType** (consumer) Constant: [`HEADER_SALESFORCE_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_EVENT_TYPE) | The event type. |  | String |
-| **CamelSalesforceCommitTimestamp** (consumer) Constant: [`HEADER_SALESFORCE_COMMIT_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_COMMIT_TIMESTAMP) | The commit timestamp. |  | Object |
-| **CamelSalesforceCommitUser** (consumer) Constant: [`HEADER_SALESFORCE_COMMIT_USER`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_COMMIT_USER) | The commit user. |  | Object |
-| **CamelSalesforceCommitNumber** (consumer) Constant: [`HEADER_SALESFORCE_COMMIT_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_COMMIT_NUMBER) | The commit number. |  | Object |
-| **CamelSalesforceRecordIds** (consumer) Constant: [`HEADER_SALESFORCE_RECORD_IDS`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_RECORD_IDS) | The record ids. |  | Object |
-| **CamelSalesforceChangeType** (consumer) Constant: [`HEADER_SALESFORCE_CHANGE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CHANGE_TYPE) | The change type. |  | Object |
-| **CamelSalesforceChangeOrigin** (consumer) Constant: [`HEADER_SALESFORCE_CHANGE_ORIGIN`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CHANGE_ORIGIN) | The change origin. |  | Object |
-| **CamelSalesforceTransactionKey** (consumer) Constant: [`HEADER_SALESFORCE_TRANSACTION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_TRANSACTION_KEY) | The transaction key. |  | Object |
-| **CamelSalesforceSequenceNumber** (consumer) Constant: [`HEADER_SALESFORCE_SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_SEQUENCE_NUMBER) | The sequence number. |  | Object |
-| **CamelSalesforceIsTransactionEnd** (consumer) Constant: [`HEADER_SALESFORCE_IS_TRANSACTION_END`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_IS_TRANSACTION_END) | Is transaction end. |  | Object |
-| **CamelSalesforceEntityName** (consumer) Constant: [`HEADER_SALESFORCE_ENTITY_NAME`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_ENTITY_NAME) | The entity name. |  | Object |
+| **CamelSalesforceEventType** (consumer) Constant: [`HEADER_SALESFORCE_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_EVENT_TYPE) | For change and platform events, the last segment of the configured topic name, such as AccountChangeEvent. For PushTopic messages, the Salesforce event type of the notification, such as created. |  | String |
+| **CamelSalesforceCommitTimestamp** (consumer) Constant: [`HEADER_SALESFORCE_COMMIT_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_COMMIT_TIMESTAMP) | Time of the Salesforce transaction that produced the change event, from the ChangeEventHeader. |  | Object |
+| **CamelSalesforceCommitUser** (consumer) Constant: [`HEADER_SALESFORCE_COMMIT_USER`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_COMMIT_USER) | Id of the Salesforce user whose transaction produced the change event, from the ChangeEventHeader. |  | Object |
+| **CamelSalesforceCommitNumber** (consumer) Constant: [`HEADER_SALESFORCE_COMMIT_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_COMMIT_NUMBER) | System change number of the Salesforce transaction that produced the change event, from the ChangeEventHeader. |  | Object |
+| **CamelSalesforceRecordIds** (consumer) Constant: [`HEADER_SALESFORCE_RECORD_IDS`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_RECORD_IDS) | Ids of the records affected by the change event, from the ChangeEventHeader. Holds more than one id when a single transaction changed several records. |  | Object |
+| **CamelSalesforceChangeType** (consumer) Constant: [`HEADER_SALESFORCE_CHANGE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CHANGE_TYPE) | Kind of change carried by the change event, from the ChangeEventHeader, for example CREATE or UPDATE. |  | Object |
+| **CamelSalesforceChangeOrigin** (consumer) Constant: [`HEADER_SALESFORCE_CHANGE_ORIGIN`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CHANGE_ORIGIN) | Identifies the Salesforce API and client that made the change, from the ChangeEventHeader. |  | Object |
+| **CamelSalesforceTransactionKey** (consumer) Constant: [`HEADER_SALESFORCE_TRANSACTION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_TRANSACTION_KEY) | Key shared by every change event produced by the same Salesforce transaction, from the ChangeEventHeader. Use it to group events that belong to one transaction. |  | Object |
+| **CamelSalesforceSequenceNumber** (consumer) Constant: [`HEADER_SALESFORCE_SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_SEQUENCE_NUMBER) | Position of this change event within its Salesforce transaction, from the ChangeEventHeader. |  | Object |
+| **CamelSalesforceIsTransactionEnd** (consumer) Constant: [`HEADER_SALESFORCE_IS_TRANSACTION_END`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_IS_TRANSACTION_END) | True when this change event is the last one of its Salesforce transaction, from the ChangeEventHeader. Use it together with CamelSalesforceTransactionKey to detect the end of a transaction. |  | Object |
+| **CamelSalesforceEntityName** (consumer) Constant: [`HEADER_SALESFORCE_ENTITY_NAME`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_ENTITY_NAME) | Name of the Salesforce object the change event applies to, such as Account, from the ChangeEventHeader. |  | Object |
 | **CamelSalesforcePlatformEventSchema** (consumer) Constant: [`HEADER_SALESFORCE_PLATFORM_EVENT_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_PLATFORM_EVENT_SCHEMA) | The platform event schema. |  | Object |
-| **CamelSalesforceCreatedDate** (consumer) Constant: [`HEADER_SALESFORCE_CREATED_DATE`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CREATED_DATE) | The created date. |  | ZonedDateTime |
-| **CamelSalesforceTopicName** (consumer) Constant: [`HEADER_SALESFORCE_TOPIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_TOPIC_NAME) | The topic name. |  | String |
-| **CamelSalesforceChannel** (consumer) Constant: [`HEADER_SALESFORCE_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CHANNEL) | The channel. |  | String |
-| **CamelSalesforceClientId** (consumer) Constant: [`HEADER_SALESFORCE_CLIENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CLIENT_ID) | The client id. |  | String |
+| **CamelSalesforceCreatedDate** (consumer) Constant: [`HEADER_SALESFORCE_CREATED_DATE`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CREATED_DATE) | Creation time of the event. Platform events supply a ZonedDateTime taken from the event payload, while PushTopic notifications supply the raw createdDate value as a String. |  | ZonedDateTime |
+| **CamelSalesforceTopicName** (consumer) Constant: [`HEADER_SALESFORCE_TOPIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_TOPIC_NAME) | Name of the PushTopic the message was received from. Set for PushTopic messages only. |  | String |
+| **CamelSalesforceChannel** (consumer) Constant: [`HEADER_SALESFORCE_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CHANNEL) | Streaming API channel the message was received on, such as /topic/MyTopic or /data/AccountChangeEvent. |  | String |
+| **CamelSalesforceClientId** (consumer) Constant: [`HEADER_SALESFORCE_CLIENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_CLIENT_ID) | Client id of the Streaming API subscription that received the message. Set only when the server supplies one. |  | String |
 | **CamelSalesforcePubSubReplayId** (consumer) Constant: [`HEADER_SALESFORCE_PUBSUB_REPLAY_ID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_PUBSUB_REPLAY_ID) | The Pub/Sub API replayId. |  | String |
 | **CamelSalesforcePubSubEventId** (consumer) Constant: [`HEADER_SALESFORCE_PUBSUB_EVENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_PUBSUB_EVENT_ID) | The Pub/Sub API event id. |  | String |
 | **CamelSalesforcePubSubRpcId** (consumer) Constant: [`HEADER_SALESFORCE_PUBSUB_RPC_ID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_PUBSUB_RPC_ID) | The Pub/Sub API rpc id. |  | String |

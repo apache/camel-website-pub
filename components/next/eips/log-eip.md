@@ -23,7 +23,7 @@ The Logger eip supports the following options which are listed below.
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
-| **message** | The log message to output. Supports simple language expressions. |  | String |
+| **message** | **Required** The log message to output. Supports simple language expressions. |  | String |
 | **loggingLevel** | 
 Sets the logging level to use for the log message. Available levels: TRACE, DEBUG, INFO, WARN, ERROR, OFF.
 

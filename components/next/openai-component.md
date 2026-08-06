@@ -231,8 +231,11 @@ Enum values:
 | **mcpReconnect** (producer) | Automatically reconnect to MCP servers when a tool call fails due to a transport error, and retry the call once. | true | boolean |
 | **mcpServer** (producer) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdiossestreamableHttp, (Note that sse is deprecated) mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth), mcpServer..toolNames= (optional include list to restrict which tools are registered from this server). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **mcpTimeout** (producer) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
+| **mcpToolRefresh** (producer) | Refresh the advertised tool list when an MCP server notifies that its tools changed. Set to false to keep the tool list fixed to what was listed when the endpoint started, for deployments that require a deterministic set of tools. | true | boolean |
 | **model** (producer) | The model to use for chat completion. |  | String |
 | **outputClass** (producer) | Fully qualified class name for structured output using response format. |  | String |
+| **parallelToolExecution** (producer) | Execute the tool calls returned by the model in a single response concurrently instead of sequentially. Tool calls in the same batch are independent by design, so this reduces the latency of a batch to that of its slowest tool. Results are always fed back to the model in the original tool call order. Note that with toolExecutionErrorStrategy=failExchange the sibling tool calls already dispatched complete before the exchange fails. | false | boolean |
+| **parallelToolTimeout** (producer) | Timeout in milliseconds for a batch of parallel tool calls, so that one slow tool cannot block the whole batch. The timeout applies to the batch as a whole, not per tool call. A tool call that exceeds it is cancelled and handled according to toolExecutionErrorStrategy. The default of 0 disables the batch timeout and relies on mcpTimeout, which already bounds each individual MCP request. Only used when parallelToolExecution=true. | 0 | long |
 | **previousResponseId** (producer) | Previous response id for OpenAI server-side conversation state (Responses API only). |  | String |
 | **requestTimeout** (producer) | HTTP request timeout in milliseconds for the OpenAI SDK client. When 0 or negative, the SDK default (10 minutes) is used. | 0 | long |
 | **speechInstructions** (producer) | Optional instructions to control the voice of the generated audio. Does not work with tts-1 or tts-1-hd. |  | String |
@@ -461,6 +464,9 @@ from("direct:chat")
               mcpServer.tools.oauthProfile: keycloak
 ```
 
+> **Tip**
+> For component selection, structured extraction, streaming, and prompt management patterns, see the [LLM Integration Guide](ai-llm-integration-guide.md).
+
 ### Basic Chat Completion with String Input
 
 -   Java
@@ -500,6 +506,63 @@ from("direct:chat")
         - log:
             message: "Response: ${body}"
 ```
+
+### Dynamic prompts per exchange
+
+The user prompt can change on every exchange. Set the body to the prompt text, or override with the `CamelOpenAIUserMessage` header (Simple expressions work):
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:score")
+    .setHeader("CamelOpenAIUserMessage", simple("Rate 1-10 for ${header.role}: ${body}"))
+    .to("openai:chat-completion?model=gpt-4o-mini&temperature=0.2")
+    .log("${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:score
+      steps:
+        - setHeader:
+            name: CamelOpenAIUserMessage
+            simple: "Rate 1-10 for ${header.role}: ${body}"
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4o-mini
+              temperature: 0.2
+```
+
+### Chat generation parameters
+
+Control randomness for chat completions with `temperature` (0.0–2.0) and `topP` (0.0–1.0). Low temperature (for example `0.1`) is recommended for structured JSON extraction.
+
+-   YAML
+    
+-   Java
+    
+
+```yaml
+- to:
+    uri: openai:chat-completion
+    parameters:
+      model: gpt-4o-mini
+      temperature: 0.1
+      topP: 1.0
+```
+
+```java
+.to("openai:chat-completion?model=gpt-4o-mini&temperature=0.1")
+```
+
+Per-exchange overrides use headers: `CamelOpenAITemperature`, `CamelOpenAITopP`.
+
+For provider-specific request fields not exposed as URI options, use `additionalBodyProperty` (see [OpenAI-Compatible Providers](others/openai-providers.md)).
 
 ### File-Backed Prompt with Text File
 
@@ -664,7 +727,9 @@ from("direct:image")
 
 ### Streaming Response
 
-When `streaming=true`, the component returns an `Iterator<ChatCompletionChunk>` in the message body. You can consume this iterator using Camel’s streaming EIPs or process it directly:
+When `streaming=true`, the component returns an `Iterator<ChatCompletionChunk>` in the message body. You can consume this iterator using Camel’s streaming EIPs or process it directly.
+
+For Server-Sent Events to web clients (platform-http), structured extraction pipelines, and when to stream through Camel vs. a dedicated handler, see [LLM Integration Guide — Streaming responses](ai-llm-integration-guide.html#_streaming_responses).
 
 Usage example:
 
@@ -701,6 +766,9 @@ Usage example:
 ```
 
 ### Structured Output with outputClass
+
+> **Tip**
+> For extraction tasks (resumes, invoices, classification), prefer `jsonSchema` or `outputClass` instead of hand-written JSON parsing. Use low `temperature` (0.0–0.2). See [LLM Integration Guide — Structured output](ai-llm-integration-guide.html#_structured_output_recommended_for_extraction).
 
 _Java-only: uses Java class definition for `outputClass` schema_
 
@@ -1258,10 +1326,168 @@ String-valued fields are set directly. Non-string fields (numbers, booleans, obj
 > **Note**
 > This maps fields from the response message’s additional properties (fields not part of the standard schema). Standard response fields like `content`, `role`, and `tool_calls` are not accessible through this option.
 
+## Tips for Production Use
+
+This section covers practical advice for production routes. For component selection, streaming to browsers, and prompt management at scale, see the [LLM Integration Guide](ai-llm-integration-guide.md).
+
+### Temperature and Model Parameters
+
+The `temperature` endpoint option controls how deterministic the model’s output is. Lower values produce more consistent, predictable responses; higher values produce more varied, creative output.
+
+For structured extraction tasks (JSON parsing, data extraction, classification), use a low temperature such as `0.1` to reduce the chance of the model adding unexpected commentary or formatting around the structured output:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:extract-skills")
+    .to("openai:chat-completion?temperature=0.1&outputClass=com.example.SkillList")
+    .log("Extracted: ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:extract-skills
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              temperature: 0.1
+              outputClass: com.example.SkillList
+        - log:
+            message: "Extracted: ${body}"
+```
+
+Temperature can also be set per-exchange via the `CamelOpenAITemperature` header. Other tuning options include `topP` (nucleus sampling) and `maxTokens` (response length limit).
+
+### Dynamic Prompts
+
+The `CamelOpenAIUserMessage` header is evaluated per-exchange, so you can construct prompts dynamically using Camel’s Simple language or any other expression:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:summarize")
+    .setHeader("CamelOpenAIUserMessage",
+        simple("Summarize this ${header.documentType} in 3 bullet points: ${body}"))
+    .to("openai:chat-completion")
+    .log("Summary: ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:summarize
+      steps:
+        - setHeader:
+            name: CamelOpenAIUserMessage
+            simple: "Summarize this ${header.documentType} in 3 bullet points: ${body}"
+        - to:
+            uri: openai:chat-completion
+        - log:
+            message: "Summary: ${body}"
+```
+
+This is useful when chaining multiple enrichment steps where each step needs a different instruction based on the current exchange state.
+
+### Use Structured Output for JSON Extraction
+
+When you need the model to return structured data (JSON objects, arrays, typed fields), prefer the built-in `outputClass` or `jsonSchema` options over manually parsing the model’s text output. These options instruct the model to produce valid JSON matching your schema, which significantly reduces parsing failures:
+
+```java
+// Recommended — structured output handles JSON formatting:
+from("direct:extract")
+    .to("openai:chat-completion?outputClass=com.example.Skills")
+    .log("${body}");
+
+// Avoid — manual JSON parsing is fragile:
+from("direct:extract")
+    .setHeader("CamelOpenAIUserMessage",
+        constant("Extract skills as a JSON array. Respond with valid JSON only."))
+    .to("openai:chat-completion")
+    .process(exchange -> {
+        // This breaks when the model adds commentary around the JSON
+        String json = exchange.getIn().getBody(String.class);
+        List<String> skills = objectMapper.readValue(json, new TypeReference<>() {});
+        exchange.getIn().setBody(skills);
+    });
+```
+
+See [Structured Output with outputClass](#_structured_output_with_outputclass) and [Structured Output with JSON Schema](#_structured_output_with_json_schema) above for full examples. For additional validation, pipe the response through the [JSON Validator](json-validator-component.md) component.
+
+### Handling Model Output Errors
+
+A successful HTTP 200 response from the model does not guarantee the content is usable. The model may ignore formatting instructions, return truncated output, or produce content that does not match your expected shape. These are not Camel exceptions — they appear as downstream parsing failures in your own processors.
+
+For production routes, add a lightweight validation step after the model call:
+
+```java
+from("direct:extract")
+    .to("openai:chat-completion?outputClass=com.example.Result")
+    .process(exchange -> {
+        String response = exchange.getIn().getBody(String.class);
+        if (response == null || response.isBlank()) {
+            throw new IllegalStateException("Empty model response");
+        }
+    })
+    .to("direct:downstream");
+```
+
+Using `outputClass` or `jsonSchema` already reduces this risk substantially by constraining the model’s output format at the API level.
+
+### Prompt Management
+
+When your project grows beyond a few routes, keeping prompt strings inline in route definitions becomes hard to maintain. Consider these approaches:
+
+**Load prompts from resource files:**
+
+```java
+from("direct:analyze")
+    .setHeader("CamelOpenAISystemMessage",
+        constant("resource:classpath:prompts/system-analyst.txt"))
+    .to("openai:chat-completion");
+```
+
+**Use Camel property placeholders for reusable fragments:**
+
+```properties
+# application.properties
+prompt.system.analyst=You are a technical analyst. Be concise and factual.
+prompt.output.json=Respond with valid JSON only, no commentary.
+```
+
+```java
+from("direct:analyze")
+    .setHeader("CamelOpenAISystemMessage", constant("{{prompt.system.analyst}}"))
+    .setHeader("CamelOpenAIUserMessage",
+        simple("{{prompt.output.json}} Analyze: ${body}"))
+    .to("openai:chat-completion");
+```
+
+> **Tip**
+> For prompt templates with named variables (e.g., \`{{dishType}}\`), the [LangChain4j Chat](langchain4j-chat-component.md) component offers built-in template support via the `CHAT_SINGLE_MESSAGE_WITH_PROMPT` operation.
+
+### Streaming Considerations
+
+The `streaming=true` option returns an `Iterator<ChatCompletionChunk>` that can be consumed with Camel’s Split EIP (see [Streaming Response](#_streaming_response) above). This works well for pipeline-style processing where each chunk is handled as part of a longer integration flow.
+
+For user-facing scenarios that require Server-Sent Events (SSE) or WebSocket delivery to a browser, see [LLM Integration Guide — Streaming responses](ai-llm-integration-guide.html#_streaming_responses) for platform-http patterns and when to stream through Camel vs. a dedicated handler.
+
+> **Note**
+> When MCP tools with `autoToolExecution` are active, streaming automatically falls back to non-streaming to allow the agentic tool-calling loop to function. See [MCP Tool Calling](others/openai-mcp.md) for details.
+
 ## Sub-Pages
 
 For more details on specific features, see:
 
+-   [LLM Integration Guide](ai-llm-integration-guide.md) - Choosing components, structured output, streaming, dynamic prompts
+    
 -   [Responses API operation](others/openai-responses.md) - OpenAI Responses API, hosted tools, and server-side conversation state
     
 -   [MCP Tool Calling](others/openai-mcp.md) - Model Context Protocol server configuration, agentic loop, streaming, and connection recovery

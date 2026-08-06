@@ -25,6 +25,7 @@ The Wire Tap eip supports the following options which are listed below.
 | **ignoreInvalidEndpoint** | Whether to ignore invalid endpoint URIs and skip sending the message. | false | Boolean |
 | **allowOptimisedComponents** | Whether to allow components to optimise toD if they are SendDynamicAware. | true | Boolean |
 | **autoStartComponents** | Whether to auto startup components when toD is starting up. | true | Boolean |
+| **allowedSchemes** | Sets an optional comma-separated allow-list of component schemes that the dynamic recipient may resolve to (e.g. http,https). When set, a dynamic endpoint whose scheme is not in the list is rejected. This is a defence-in-depth restriction, useful for low-code / Kamelet deployments; by default (unset) any scheme is allowed. |  | String |
 
 ## Exchange properties
 

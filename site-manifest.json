@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1785736006281,
+  "generated": 1786016796137,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8532,6 +8532,12 @@
             },
             {
               "module": "ROOT",
+              "path": "migration-guide/3.39.0.adoc",
+              "url": "/camel-quarkus/next/migration-guide/3.39.0.html",
+              "title": "Camel Quarkus 3.39.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
               "path": "migration-guide/camel-spring-boot-to-camel-quarkus.adoc",
               "url": "/camel-quarkus/next/migration-guide/camel-spring-boot-to-camel-quarkus.html",
               "title": "Camel Spring Boot to Camel Quarkus Migration Guide"
@@ -16679,6 +16685,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/ai-tool.adoc",
+              "url": "/camel-spring-boot/next/starters/ai-tool.html",
+              "title": "AI Tool"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/amqp.adoc",
               "url": "/camel-spring-boot/next/starters/amqp.html",
               "title": "AMQP"
@@ -18203,6 +18215,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/mcp-server.adoc",
+              "url": "/camel-spring-boot/next/starters/mcp-server.html",
+              "title": "Mcp Server"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/mdc.adoc",
               "url": "/camel-spring-boot/next/starters/mdc.html",
               "title": "Mdc"
@@ -18746,12 +18764,6 @@
               "path": "starters/spring-ai-image.adoc",
               "url": "/camel-spring-boot/next/starters/spring-ai-image.html",
               "title": "Spring AI Image"
-            },
-            {
-              "module": "ROOT",
-              "path": "starters/spring-ai-tools.adoc",
-              "url": "/camel-spring-boot/next/starters/spring-ai-tools.html",
-              "title": "Spring AI Tools"
             },
             {
               "module": "ROOT",
@@ -20799,6 +20811,12 @@
             },
             {
               "module": "others",
+              "path": "mcp-server.adoc",
+              "url": "/components/next/others/mcp-server.html",
+              "title": "MCP Server"
+            },
+            {
+              "module": "others",
               "path": "mdc.adoc",
               "url": "/components/next/others/mdc.html",
               "title": "MDC Logging"
@@ -21150,6 +21168,12 @@
               "path": "activemq6-component.adoc",
               "url": "/components/next/activemq6-component.html",
               "title": "ActiveMQ 6.x"
+            },
+            {
+              "module": "ROOT",
+              "path": "ai-llm-integration-guide.adoc",
+              "url": "/components/next/ai-llm-integration-guide.html",
+              "title": "LLM Integration Guide"
             },
             {
               "module": "ROOT",
@@ -23238,12 +23262,6 @@
               "path": "spring-ai-image-component.adoc",
               "url": "/components/next/spring-ai-image-component.html",
               "title": "Spring AI Image"
-            },
-            {
-              "module": "ROOT",
-              "path": "spring-ai-tools-component.adoc",
-              "url": "/components/next/spring-ai-tools-component.html",
-              "title": "Spring AI Tools"
             },
             {
               "module": "ROOT",

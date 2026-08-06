@@ -95,7 +95,7 @@ Note that `jcmd <pid> JFR.configure` does **not** change event selection. It con
 
 ### The `jfr` dev console
 
-When `camel-jfr` is on the classpath, a `jfr` dev console is available with four commands (pass as the `command` option):
+When `camel-jfr` is on the classpath, a `jfr` dev console is available with five commands (pass as the `command` option):
 
  
 | Command | Description |
@@ -103,6 +103,7 @@ When `camel-jfr` is on the classpath, a `jfr` dev console is available with four
 | `status` | Whether runtime instrumentation is registered, any recording(s), and the current enabled/disabled state of each of the six events. |
 | `enable` / `disable` | Take an `event` option (`route`, `processor`, `exchange`, `send`, `failed`, `redelivery`, or `all`, the default). Live-toggles the event on every **running** recording. Reports plainly if no recording is running rather than silently doing nothing. |
 | `jfc` | Generates a `.jfc` overlay for the six events, honoring an optional comma-separated `disable` option, and a ready-to-copy `jcmd JFR.start settings=…​` line. |
+| `snapshot` | Takes a point-in-time snapshot of the active JFR recording and aggregates Camel runtime events into per-route, per-processor, and per-endpoint duration statistics, plus recent failures and redeliveries. Accepts optional `routeId` and `limit` options. |
 
 The console is reachable wherever dev consoles are, for example over HTTP when the developer console is enabled:
 
@@ -111,3 +112,43 @@ curl "http://localhost:8080/q/dev/jfr?command=status"
 ```
 
 It is also available as a **JFR** tab in the CLI terminal UI (`camel tui`), which renders the status and binds `E` / `D` / `J` to enable all, disable all, and generate a `.jfc`.
+
+### Snapshot
+
+The `snapshot` command captures the current state of a running JFR recording without stopping it, and returns aggregated statistics for Camel runtime events. This gives you a lightweight alternative to exporting a `.jfr` file and opening it in Java Mission Control.
+
+A recording must be active for the snapshot to contain data. If no recording is running, the command returns an error message.
+
+#### Options
+
+  
+| Option | Default | Description |
+| --- | --- | --- |
+| `routeId` | _(all)_ | Filter results to a single route. Applies to routes, processors, failures, and redeliveries. |
+| `limit` | `50` | Maximum number of failure and redelivery entries to return. |
+
+#### Example
+
+```bash
+curl "http://localhost:8080/q/dev/jfr?command=snapshot"
+curl "http://localhost:8080/q/dev/jfr?command=snapshot&routeId=order-in&limit=20"
+```
+
+#### Response
+
+The JSON response contains five sections:
+
+ 
+| Section | Description |
+| --- | --- |
+| `routes` | Per-route totals, failure counts, and min/mean/max duration in milliseconds. Sorted by total descending. |
+| `processors` | Per-processor statistics with processor type and owning route. Sorted by mean duration descending (slowest first). |
+| `endpoints` | Per-endpoint send statistics with duration. Sorted by total descending. |
+| `failures` | Recent exchange failures with exception type and message. Newest first, capped at `limit`. |
+| `redeliveries` | Recent redelivery attempts with attempt number and max attempts. Newest first, capped at `limit`. |
+
+The top-level `eventCount` field reports the total number of Camel events found in the snapshot.
+
+#### TUI integration
+
+In the CLI terminal UI (`camel tui`), the **JFR** tab shows the snapshot data in five navigable table views. Press `F5` to take a snapshot, and use keys `1`–`5` to switch between Routes, Processors, Endpoints, Failures, and Redeliveries. Press `Enter` on a route to drill down into its processors, and `Esc` to go back.

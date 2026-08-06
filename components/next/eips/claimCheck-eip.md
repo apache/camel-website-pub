@@ -18,7 +18,7 @@ The Claim Check eip supports the following options which are listed below.
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **operation** | 
-The claim check operation to use. Get=retrieve, GetAndRemove=retrieve and remove, Set=store with key, Push=store on stack, Pop=retrieve from stack.
+**Required** The claim check operation to use. Get=retrieve, GetAndRemove=retrieve and remove, Set=store with key, Push=store on stack, Pop=retrieve from stack.
 
 Enum values:
 

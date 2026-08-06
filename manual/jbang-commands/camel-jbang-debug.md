@@ -55,6 +55,7 @@ camel debug [options]
 | `--max-idle-seconds` | For how long time in seconds Camel can be idle before stopping | 0 | int |
 | `--max-messages` | Max number of messages to process before stopping | 0 | int |
 | `--max-seconds` | Max seconds to run before stopping | 0 | int |
+| `--mcp` | Embed dev/diagnostics MCP tools on the local HTTP management server (/mcp by default). When management shares the main HTTP port, MCP is served on the main server bind address. Also binds the management server to 127.0.0.1 (affecting health/metrics when --observe is used). | false | boolean |
 | `--metrics` _(deprecated)_ | Deprecated: use --observe instead. Metrics (Micrometer and Prometheus) at /q/metrics on local HTTP server (port 8080 by default) | false | boolean |
 | `--modeline` | Whether to support JBang style //DEPS to specify additional dependencies | true | boolean |
 | `--name` | The name of the Camel application | CamelJBang | String |
@@ -62,6 +63,7 @@ camel debug [options]
 | `--open-api` | Adds an OpenAPI spec from the given file (json or yaml file) |  | String |
 | `--open-telemetry-agent` | Enable OpenTelemetry Java Agent for auto-instrumentation of third-party libraries (HTTP clients, JDBC, Kafka clients, gRPC, etc.). Traces are shown in the TUI Spans tab with Camel spans in cyan and 3rd-party agent spans in magenta. | false | boolean |
 | `--open-telemetry-agent-export` | Where to export OpenTelemetry Agent telemetry: tui (embedded receiver in TUI), otlp (external OTLP collector for traces), or observability (full stack with traces and logs). With otlp, start a trace backend first (e.g. 'camel infra run jaeger'). With observability, start the stack via 'camel infra run observability'. The value 'jaeger' is deprecated and works as an alias for 'otlp'. | tui | String |
+| `--openapi-ui` | Swagger UI for REST OpenAPI at /q/openapi (OpenAPI document at /q/openapi.json; port 8080 by default) | false | boolean |
 | `--output` | File to store the current message body (will override). This allows for manual inspecting the message later. |  | String |
 | `--package-scan-jars` | Whether to automatic package scan JARs for custom Spring or Quarkus beans making them available for Camel CLI | false | boolean |
 | `--port` | Embeds a local HTTP server on this port (port 8080 by default; use 0 to dynamic assign a free random port number) |  | int |

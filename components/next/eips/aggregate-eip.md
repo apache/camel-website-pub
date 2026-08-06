@@ -22,7 +22,7 @@ The Aggregate eip supports the following options which are listed below.
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
-| **correlationExpression** | The expression used to calculate the correlation key to use for aggregation. Exchanges with the same correlation key are aggregated together. If the correlation key cannot be evaluated an Exception is thrown. |  | ExpressionSubElementDefinition |
+| **correlationExpression** | **Required** The expression used to calculate the correlation key to use for aggregation. Exchanges with the same correlation key are aggregated together. If the correlation key cannot be evaluated an Exception is thrown. |  | ExpressionSubElementDefinition |
 | **completionPredicate** | A predicate to indicate when an aggregated exchange is complete. If not specified and the AggregationStrategy implements Predicate, it will be used as the completionPredicate. |  | ExpressionSubElementDefinition |
 | **completionTimeoutExpression** | Time in millis that an aggregated exchange should be inactive before its complete (timeout), evaluated as an expression allowing dynamic timeout values. |  | ExpressionSubElementDefinition |
 | **completionSizeExpression** | Number of messages aggregated before the aggregation is complete, evaluated as an expression allowing dynamic size values. |  | ExpressionSubElementDefinition |
@@ -34,7 +34,7 @@ The Aggregate eip supports the following options which are listed below.
 | **timeoutCheckerExecutorService** | Reference to a custom thread pool for the background completion timeout checker. |  | ScheduledExecutorService |
 | **aggregateController** | Reference to an AggregateController to allow external sources to control this aggregator. |  | AggregateController |
 | **aggregationRepository** | Reference to the AggregationRepository to use. By default uses MemoryAggregationRepository. |  | AggregationRepository |
-| **aggregationStrategy** | The AggregationStrategy to use. Required. Merges each incoming exchange with the existing already merged exchanges. At first call the oldExchange parameter is null. |  | AggregationStrategy |
+| **aggregationStrategy** | **Required** The AggregationStrategy to use. Required. Merges each incoming exchange with the existing already merged exchanges. At first call the oldExchange parameter is null. |  | AggregationStrategy |
 | **aggregationStrategyMethodName** | The method name to use when using a POJO as the AggregationStrategy. |  | String |
 | **aggregationStrategyMethodAllowNull** | If true then null is used as the oldExchange at the very first aggregation, when using POJOs as the AggregationStrategy. | false | Boolean |
 | **completionSize** | Number of messages aggregated before the aggregation is complete. Can also be set as an expression via completionSizeExpression. |  | Integer |

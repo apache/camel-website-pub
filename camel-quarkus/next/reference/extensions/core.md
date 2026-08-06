@@ -265,6 +265,62 @@ Note that this configuration item only has any effect when observers configured 
 Build time configuration options for enable/disable camel source location.
 
  | `boolean` | `false` |
+| `[quarkus.camel.dev-ui.update-interval](#quarkus-camel-dev-ui-update-interval)`
+
+The interval at which data is updated in Camel Quarkus Dev UI pages.
+
+ | [`Duration`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.md)[](#duration-note-anchor-core) | `5S` |
+| `[quarkus.camel.main.shutdown.timeout](#quarkus-camel-main-shutdown-timeout)`
+
+A timeout (with millisecond precision) to wait for `CamelMain#stop()` to finish
+
+ | [`Duration`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.md)[](#duration-note-anchor-core) | `PT3S` |
+| `[quarkus.camel.main.arguments.on-unknown](#quarkus-camel-main-arguments-on-unknown)`
+
+The action to take when `CamelMain` encounters an unknown argument. fail - Prints the `CamelMain` usage statement and throws a `RuntimeException` ignore - Suppresses any warnings and the application startup proceeds as normal warn - Prints the `CamelMain` usage statement but allows the application startup to proceed as normal
+
+ | `fail`, `warn`, `ignore` | `warn` |
+| 
+
+`[camel.dataformat."data-format-configs"](#camel-dataformat-data-format-configs)`
+
+Camel data format configuration.
+
+The format of the configuration is as follows.
+
+```properties
+camel.dataformat.<name>.<property> = value
+```
+
+For example.
+
+```properties
+camel.dataformat.beanio.stream-name = test-stream
+camel.dataformat.beanio.mapping = test-mapping.xml
+```
+
+
+
+
+
+
+
+ | `Map<String,Map<String,String>>` |  |
+| `[quarkus.camel.bootstrap.enabled](#quarkus-camel-bootstrap-enabled)`
+
+When set to true, the {@link CamelRuntime} will be started automatically.
+
+ | `boolean` | `true` |
+| `[quarkus.camel.routes-discovery.enabled](#quarkus-camel-routes-discovery-enabled)`
+
+Enable automatic discovery of routes during static initialization.
+
+ | `boolean` | `true` |
+| `[quarkus.camel.csimple.on-build-time-analysis-failure](#quarkus-camel-csimple-on-build-time-analysis-failure)`
+
+What to do if it is not possible to extract CSimple expressions from a route definition at build time.
+
+ | `fail`, `warn`, `ignore` | `warn` |
 | `[quarkus.camel.trace.enabled](#quarkus-camel-trace-enabled)`
 
 Enables tracer in your Camel application.
@@ -340,62 +396,6 @@ Filter for tracing messages.
 Whether type converter statistics are enabled. By default, type converter utilization statistics are disabled. Note that enabling statistics incurs a minor performance impact under very heavy load.
 
  | `boolean` | `false` |
-| `[quarkus.camel.dev-ui.update-interval](#quarkus-camel-dev-ui-update-interval)`
-
-The interval at which data is updated in Camel Quarkus Dev UI pages.
-
- | [`Duration`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.md)[](#duration-note-anchor-core) | `5S` |
-| `[quarkus.camel.main.shutdown.timeout](#quarkus-camel-main-shutdown-timeout)`
-
-A timeout (with millisecond precision) to wait for `CamelMain#stop()` to finish
-
- | [`Duration`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.md)[](#duration-note-anchor-core) | `PT3S` |
-| `[quarkus.camel.main.arguments.on-unknown](#quarkus-camel-main-arguments-on-unknown)`
-
-The action to take when `CamelMain` encounters an unknown argument. fail - Prints the `CamelMain` usage statement and throws a `RuntimeException` ignore - Suppresses any warnings and the application startup proceeds as normal warn - Prints the `CamelMain` usage statement but allows the application startup to proceed as normal
-
- | `fail`, `warn`, `ignore` | `warn` |
-| 
-
-`[camel.dataformat."data-format-configs"](#camel-dataformat-data-format-configs)`
-
-Camel data format configuration.
-
-The format of the configuration is as follows.
-
-```properties
-camel.dataformat.<name>.<property> = value
-```
-
-For example.
-
-```properties
-camel.dataformat.beanio.stream-name = test-stream
-camel.dataformat.beanio.mapping = test-mapping.xml
-```
-
-
-
-
-
-
-
- | `Map<String,Map<String,String>>` |  |
-| `[quarkus.camel.bootstrap.enabled](#quarkus-camel-bootstrap-enabled)`
-
-When set to true, the {@link CamelRuntime} will be started automatically.
-
- | `boolean` | `true` |
-| `[quarkus.camel.routes-discovery.enabled](#quarkus-camel-routes-discovery-enabled)`
-
-Enable automatic discovery of routes during static initialization.
-
- | `boolean` | `true` |
-| `[quarkus.camel.csimple.on-build-time-analysis-failure](#quarkus-camel-csimple-on-build-time-analysis-failure)`
-
-What to do if it is not possible to extract CSimple expressions from a route definition at build time.
-
- | `fail`, `warn`, `ignore` | `warn` |
 
 Configuration property fixed at build time. All other configuration properties are overridable at runtime.
 

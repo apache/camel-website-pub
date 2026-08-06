@@ -1,8 +1,14 @@
 # LangChain4j Tools
 
+> **Warning**
+> **Deprecated:** This langchain4j-tools is deprecated and may be removed in a future release.
+
 **Since Camel 4.8**
 
 **Both producer and consumer are supported**
+
+> **Warning**
+> This component is deprecated since Camel 4.22. Use [camel-ai-tool](ai-tool-component.md) to define tools and [camel-langchain4j-agent](langchain4j-agent-component.md) to invoke them.
 
 The LangChain4j Tools Component allows you to use function calling features from Large Language Models (LLMs) supported by [LangChain4j](https://github.com/langchain4j/langchain4j).
 

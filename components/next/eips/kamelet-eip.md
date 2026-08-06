@@ -123,7 +123,7 @@ The Kamelet eip supports the following options which are listed below.
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
-| **name** | Name of the Kamelet (templateId/routeId) to call. Options for the kamelet can be specified using uri syntax, eg mynamecount=4&type=gold. |  | String |
+| **name** | **Required** Name of the Kamelet (templateId/routeId) to call. Options for the kamelet can be specified using uri syntax, eg mynamecount=4&type=gold. |  | String |
 | **outputs** | **Required** |  | List |
 
 ## Exchange properties

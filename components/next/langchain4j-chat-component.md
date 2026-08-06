@@ -6,6 +6,9 @@
 
 The LangChain4j Chat Component allows you to integrate with any Large Language Model (LLM) supported by [LangChain4j](https://github.com/langchain4j/langchain4j).
 
+> **Tip**
+> Not sure whether to use this component or [OpenAI](openai-component.md)? See the [LLM Integration Guide](ai-llm-integration-guide.md) decision matrix. If you need streaming responses, structured output (`outputClass` / `jsonSchema`), or MCP tool calling, see the [OpenAI](openai-component.md) component.
+
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
 ```xml

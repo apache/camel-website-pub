@@ -17,7 +17,7 @@ The Idempotent Consumer eip supports the following options which are listed belo
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **expression** | **Required** The expression to compute the unique message ID used for duplicate detection. Messages with the same ID are treated as duplicates and skipped. |  | ExpressionDefinition |
-| **idempotentRepository** | Sets the reference name of the message id repository to use for storing processed message ids to detect duplicates. |  | IdempotentRepository |
+| **idempotentRepository** | **Required** Sets the reference name of the message id repository to use for storing processed message ids to detect duplicates. |  | IdempotentRepository |
 | **eager** | Sets whether to eagerly add the key to the idempotent repository or wait until the exchange is complete. Eager is default enabled. | true | Boolean |
 | **completionEager** | Sets whether to complete the idempotent consumer eager or when the exchange is done. | false | Boolean |
 | **skipDuplicate** | Sets whether to skip duplicates or not. The default behavior is to skip duplicates. | true | Boolean |

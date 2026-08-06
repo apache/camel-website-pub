@@ -44,6 +44,7 @@ Enum values:
 | **ignoreInvalidEndpoint** | Whether to ignore invalid endpoint URIs and skip sending the message. | false | Boolean |
 | **allowOptimisedComponents** | Whether to allow components to optimise toD if they are SendDynamicAware. | true | Boolean |
 | **autoStartComponents** | Whether to auto startup components when toD is starting up. | true | Boolean |
+| **allowedSchemes** | Sets an optional comma-separated allow-list of component schemes that the dynamic recipient may resolve to (e.g. http,https). When set, a dynamic endpoint whose scheme is not in the list is rejected. This is a defence-in-depth restriction, useful for low-code / Kamelet deployments; by default (unset) any scheme is allowed. |  | String |
 
 ## Exchange properties
 
@@ -396,3 +397,36 @@ In case of problems then you can turn on `DEBUG` logging level on `org.apache.ca
 ```text
 Detected SendDynamicAware component: http optimising toD: http:myloginserver:8080/login?userid=${header.userName}
 ```
+
+## Restricting the allowed component schemes
+
+Because `toD` computes its endpoint uri at runtime, a route that interpolates message content into the uri (for example `toD("${header.target}")`) can end up resolving to any component on the classpath. In low-code or Kamelet-style deployments you may want to constrain this to a fixed set of components. The optional `allowedSchemes` option takes a comma-separated allow-list of component schemes; a resolved recipient whose scheme is not in the list is rejected (independently of `ignoreInvalidEndpoint`). By default the option is unset and any scheme is allowed.
+
+```java
+from("direct:start")
+    // only http and https recipients are permitted
+    .toD().allowedSchemes("http,https").uri("${header.target}");
+```
+
+And in XML:
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <toD uri="${header.target}" allowedSchemes="http,https"/>
+</route>
+```
+
+And in YAML:
+
+```yaml
+- from:
+    uri: direct:start
+    steps:
+      - toD:
+          uri: "${header.target}"
+          allowedSchemes: "http,https"
+```
+
+> **Note**
+> `wireTap` extends `toD` and therefore honours the same `allowedSchemes` option.

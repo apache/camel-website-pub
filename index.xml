@@ -72,6 +72,34 @@
       <description>Upgrade Instructions For detailed instructions on using Apache Camel Upgrade Recipes, please see the Apache Camel Upgrade Recipes Tool Manual.&#xA;This release introduces new recipes for migration to Camel 4.21. For more information, please see the README.adoc.&#xA;Full Release Notes Complete release notes for this version are available in the Camel Upgrade Recipes repository.</description>
     </item>
     <item>
+      <title>Camel Quarkus 3.27.5 Released</title>
+      <link>https://camel.apache.org/blog/2026/07/camel-quarkus-3.27.5/</link>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/camel-quarkus-3.27.5/</guid>
+      <description>Camel Quarkus 3.27.5 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.33.2 Released</title>
+      <link>https://camel.apache.org/blog/2026/07/camel-quarkus-3.33.2/</link>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/camel-quarkus-3.33.2/</guid>
+      <description>Camel Quarkus 3.33.2 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.27.5</title>
+      <link>https://camel.apache.org/releases/q-3.27.5/</link>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.27.5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.33.2</title>
+      <link>https://camel.apache.org/releases/q-3.33.2/</link>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.33.2/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Hawtio AI: Utilizing AI in the Operational Phase of Camel Integrations</title>
       <link>https://camel.apache.org/blog/2026/07/hawtio-ai/</link>
       <pubDate>Fri, 10 Jul 2026 00:00:00 +0000</pubDate>

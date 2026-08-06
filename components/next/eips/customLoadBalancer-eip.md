@@ -7,7 +7,7 @@ The Custom Load Balancer eip supports the following options which are listed bel
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **ref** | Refers to the custom load balancer to lookup from the registry. |  | String |
+| **ref** | **Required** Refers to the custom load balancer to lookup from the registry. |  | String |
 
 ## Exchange properties
 

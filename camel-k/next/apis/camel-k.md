@@ -2708,6 +2708,8 @@ Deprecated: to be removed in future versions.
 | --- | --- |
 | `automountServiceAccountToken`  
 bool | AutomountServiceAccountToken |
+| `enableServiceLinks`  
+bool | EnableServiceLinks indicates whether information about services should be injected into the Pod’s environment variables, matching the syntax of Docker links. Defaults to true. |
 | `volumes`  
 **[\[\]Kubernetes core/v1.Volume](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#volume-v1-core)** | Volumes |
 | `initContainers`  
@@ -4179,6 +4181,11 @@ map\[string\]map\[string\]string | Additional metadata to merge into auto-discov
 | --- | --- |
 | `type`  
 string | The autoscaler type. |
+| `metricType`  
+string | **(Optional)**
+The metric type for this trigger, mapping to KEDA’s trigger-level `metricType` (`Utilization`, `AverageValue` or `Value`).
+
+ |
 | `metadata`  
 map\[string\]string | The trigger metadata (see Keda documentation to learn how to fill for each type). |
 | `secrets`  
@@ -4443,9 +4450,9 @@ The Owner trait ensures that all created resources belong to the integration bei
 | `Trait`  
 **[Trait](#_camel_apache_org_v1_trait_Trait)** | (Members of `Trait` are embedded into this type.) |
 | `targetAnnotations`  
-\[\]string | The set of annotations to be transferred |
+\[\]string | The set of annotations to be transferred. Use "\*" to transfer all annotations. |
 | `targetLabels`  
-\[\]string | The set of labels to be transferred |
+\[\]string | The set of labels to be transferred. Use "\*" to transfer all labels. |
 
 ### PDBTrait
 

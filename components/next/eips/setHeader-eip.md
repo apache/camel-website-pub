@@ -12,8 +12,8 @@ The Set Header eip supports the following options which are listed below.
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **name** | **Required** Name of message header to set a new value. The simple language can be used to define a dynamic evaluated header name. Otherwise a constant name will be used. |  | String |
 | **expression** | **Required** The expression whose result is used as the header value. |  | ExpressionDefinition |
-| **name** | Name of message header to set a new value. The simple language can be used to define a dynamic evaluated header name. Otherwise a constant name will be used. |  | String |
 
 ## Exchange properties
 

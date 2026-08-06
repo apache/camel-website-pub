@@ -1163,7 +1163,7 @@ camel-core - Remove deprecated service call EIP
 
 camel-spring-boot - Remove arquilliam based tests
 
-### Test (12)
+### Test (11)
 
 [CAMEL-23253](https://issues.apache.org/jira/browse/CAMEL-23253)
 
@@ -1192,10 +1192,6 @@ Failing test RunCommandITCase.runWithProperties
 [CAMEL-23140](https://issues.apache.org/jira/browse/CAMEL-23140)
 
 camel-spring-xml - MisspelledRouteRefTest.testApplicationContextFailed test is failing
-
-[CAMEL-23129](https://issues.apache.org/jira/browse/CAMEL-23129)
-
-Tests frozen in camel-core on Jenkisn CI
 
 [CAMEL-23121](https://issues.apache.org/jira/browse/CAMEL-23121)
 

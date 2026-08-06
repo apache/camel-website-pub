@@ -271,6 +271,18 @@ curl -s -X POST -H "Accept: application/json" -H "Content-Type: application/json
   http://0.0.0.0:8080/q/dev/eval-language | jq
 ```
 
+## OpenAPI Swagger UI
+
+For integrations using the [REST DSL](rest-dsl.md), you can browse the generated OpenAPI document in Swagger UI (similar to Hawtio for JMX):
+
+```bash
+camel run hello.java --openapi-ui
+```
+
+Swagger UI is served at [http://localhost:8080/q/openapi](http://localhost:8080/q/openapi). The OpenAPI JSON document is at [http://localhost:8080/q/openapi.json](http://localhost:8080/q/openapi.json) (configured automatically via `camel.rest.apiContextPath`).
+
+You can combine this with REST routes defined in Java, YAML, or XML DSL. The flag also works on `camel run --dev` and adds `camel-openapi-java` and `camel-platform-http-main` to the runtime classpath when needed.
+
 ## Message history
 
 **Available since Camel 4.17**

@@ -72,7 +72,7 @@ org
       ├── models-app (JSON schema)
       ├── others (JSON schema)
       ├── releases (JSON schema)
-      ├── schemas (XML schema)
+      ├── schemas (XML and JSON schemas)
       ├── test-infra (JSON schema)
       └── transformers (JSON schema)
 ```
@@ -80,6 +80,8 @@ org
 Each directory contains files with the information. Every Camel component is included as JSON schema files in the components directory. For example, the Timer component is included in the file timer.json.
 
 The `docs` directory contains the AsciiDoc documentation pages for all components, EIPs, data formats, languages, and other artifacts. A `docs.properties` index file lists all available documentation names.
+
+The `schemas` directory contains the XML schemas for the XML DSLs (`camel-spring.xsd`, `camel-xml-io.xsd`) and the YAML DSL model (`camelYamlDsl-model.json`). The YAML DSL model is a generated data structure describing every valid key at every nesting level in the YAML DSL, with types, descriptions, required flags, default values, and enum choices. It can be used by third-party tooling (editors, IDE plugins, visual designers) to provide context-aware code completion and validation for YAML DSL routes.
 
 ### Documentation in the Catalog
 

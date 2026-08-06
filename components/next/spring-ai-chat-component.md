@@ -119,7 +119,7 @@ Enum values:
  | CHAT\_SINGLE\_MESSAGE | SpringAiChatOperations |
 | **systemMessage** (producer) | Default system message to set context for the conversation. Can be overridden by the CamelSpringAiChatSystemMessage header. |  | String |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
-| **toolNames** (producer) | Comma-separated tool names for selecting tools by name via Spring AI’s ToolCallbackResolver. This enables selecting Spring Tool annotated beans or any registered ToolCallback by name. |  | String |
+| **toolNames** (producer) | Comma-separated tool names for selecting tools by name. Names are resolved against a ToolCallbackResolver bound in the registry (Spring Boot applications get Spring AI’s auto-configured one), then against the tools discovered via tags and configured via toolCallbacks, and finally against a ToolCallback bound in the registry under that name. An unresolvable name fails the exchange. |  | String |
 | **userMessage** (producer) | Default user message text for multimodal requests. Can be combined with media data in the message body. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **advisors** (advanced) | List of custom advisors to add to the ChatClient. These advisors will be added after the built-in advisors (SimpleLogger, SafeGuard, ChatMemory, QuestionAnswer) in the order they are provided in the list. |  | List |
@@ -1107,7 +1107,7 @@ In addition to Camel route tools (via `tags`), you can use Spring AI `@Tool`\-an
 
 #### Camel Spring Boot (Recommended)
 
-When using Camel Spring Boot, Spring AI’s auto-configuration automatically discovers `@Tool`\-annotated methods from Spring beans via `ToolCallbackResolver`. Simply define your tool as a Spring bean and reference it by name using `toolNames`:
+When using Camel Spring Boot, Spring AI’s auto-configuration contributes a `ToolCallbackResolver` built from the `ToolCallback` and `ToolCallbackProvider` beans in the application context. Expose your `@Tool`\-annotated bean as a `ToolCallbackProvider` and reference the tool by name using `toolNames`:
 
 _Java-only: Spring `@Component` with `@Tool` annotation_
 
@@ -1126,14 +1126,22 @@ public class MyTools {
     }
 }
 
-// In your route — no manual callback registration needed
+@Bean
+ToolCallbackProvider myTools(MyTools myTools) {
+    return MethodToolCallbackProvider.builder().toolObjects(myTools).build();
+}
+
+// In your route
 from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel&toolNames=getCapital");
 ```
 
+> **Note**
+> Spring AI 2.0 removed `SpringBeanToolCallbackResolver`, so a bare `@Bean Function<…​>` is no longer resolvable by bean name. Expose tools as `ToolCallback` or `ToolCallbackProvider` beans instead.
+
 #### Without Spring Boot
 
-Outside Spring Boot (e.g., in plain Camel or tests), there is no `ToolCallbackResolver`. You need to resolve the callbacks manually and bind them in the registry:
+Outside Spring Boot (e.g., in plain Camel or tests), there is no auto-configured `ToolCallbackResolver`. You need to resolve the callbacks manually and bind them in the registry:
 
 _Java-only: programmatic `ToolCallbackProvider` setup_
 
@@ -1163,7 +1171,7 @@ template.requestBodyAndHeader("direct:chat", "What is the capital of France?",
     SpringAiChatConstants.TOOL_NAMES, "getCapital", String.class);
 ```
 
-Tool names are resolved via Spring AI’s `ToolCallbackResolver`. You can combine `toolNames` with `tags` — both tool sources are additive.
+Each name is resolved, in order, against a `ToolCallbackResolver` bound in the registry, then against the tools discovered via `tags` and configured via `toolCallbacks`, and finally against a `ToolCallback` bound in the registry under that name. A name that resolves nowhere fails the exchange with an `IllegalArgumentException` listing the available tools. You can combine `toolNames` with `tags` — both tool sources are additive.
 
 ### Tool Context
 

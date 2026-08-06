@@ -12,7 +12,7 @@ The Remove Properties eip supports the following options which are listed below.
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
-| **pattern** | Name or pattern of properties to remove. Supports exact match, wildcard (ending with ), and regular expression (all case-insensitive). |  | String |
+| **pattern** | **Required** Name or pattern of properties to remove. Supports exact match, wildcard (ending with ), and regular expression (all case-insensitive). |  | String |
 | **excludePattern** | Name or pattern of properties to not remove. You can use comma to separate multiple patterns. |  | String |
 
 ## Exchange properties
