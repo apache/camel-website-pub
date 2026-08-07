@@ -18,6 +18,7 @@ The Dynamic Router eip supports the following options which are listed below.
 | **uriDelimiter** | The delimiter used to separate endpoint URIs when the expression returns multiple endpoints. Default is comma. | , | String |
 | **ignoreInvalidEndpoints** | If enabled then invalid endpoint URIs are ignored and logged instead of throwing an exception. | false | Boolean |
 | **cacheSize** | Configures the cache size for ProducerCache which caches producers for reuse. The default cache size is 1000. Set to -1 to turn off caching. |  | Integer |
+| **allowedSchemes** | Sets an optional comma-separated allow-list of component schemes that the dynamic recipient may resolve to (e.g. http,https). When set, a dynamic endpoint whose scheme is not in the list is rejected. This is a defence-in-depth restriction, useful for low-code / Kamelet deployments; by default (unset) any scheme is allowed. |  | String |
 
 ## Exchange properties
 

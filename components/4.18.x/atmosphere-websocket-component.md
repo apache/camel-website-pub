@@ -151,10 +151,10 @@ The Atmosphere Websocket component supports 4 message header(s), which is/are li
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **websocket.connectionKey** (common) Constant: [`CONNECTION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#CONNECTION_KEY) | The connection key. |  | String |
-| **websocket.connectionKey.list** (common) Constant: [`CONNECTION_KEY_LIST`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#CONNECTION_KEY_LIST) | The list of connection keys. |  | List |
-| **websocket.eventType** (consumer) Constant: [`EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#EVENT_TYPE) | The type of event received. It can be ONOPEN\_EVENT\_TYPE, ONERROR\_EVENT\_TYPE or ONCLOSE\_EVENT\_TYPE. |  | int |
-| **websocket.errorType** (consumer) Constant: [`ERROR_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#ERROR_TYPE) | The type of error that occurred. It can be MESSAGE\_NOT\_SENT\_ERROR\_TYPE. |  | int |
+| **CamelAtmosphereWebsocketConnectionKey** (common) Constant: [`CONNECTION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#CONNECTION_KEY) | The connection key. |  | String |
+| **CamelAtmosphereWebsocketConnectionKeyList** (common) Constant: [`CONNECTION_KEY_LIST`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#CONNECTION_KEY_LIST) | The list of connection keys. |  | List |
+| **CamelAtmosphereWebsocketEventType** (consumer) Constant: [`EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#EVENT_TYPE) | The type of event received. It can be ONOPEN\_EVENT\_TYPE, ONERROR\_EVENT\_TYPE or ONCLOSE\_EVENT\_TYPE. |  | int |
+| **CamelAtmosphereWebsocketErrorType** (consumer) Constant: [`ERROR_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#ERROR_TYPE) | The type of error that occurred. It can be MESSAGE\_NOT\_SENT\_ERROR\_TYPE. |  | int |
 
 ## Reading and Writing Data over Websocket
 

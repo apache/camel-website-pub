@@ -45,6 +45,7 @@ The Enrich eip supports the following options which are listed below.
 | **ignoreInvalidEndpoint** | Whether to ignore an invalid endpoint URI when trying to create a producer with that endpoint. | false | Boolean |
 | **allowOptimisedComponents** | Whether to allow components to optimise enricher if they are SendDynamicAware. | true | Boolean |
 | **autoStartComponents** | Whether to auto startup components when enricher is starting up. | true | Boolean |
+| **allowedSchemes** | Sets an optional comma-separated allow-list of component schemes that the dynamic recipient may resolve to (e.g. http,https). When set, a dynamic endpoint whose scheme is not in the list is rejected. This is a defence-in-depth restriction, useful for low-code / Kamelet deployments; by default (unset) any scheme is allowed. |  | String |
 
 ## Exchange properties
 

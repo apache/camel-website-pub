@@ -34,6 +34,7 @@ The Recipient List eip supports the following options which are listed below.
 | **onPrepare** | Uses the Processor when preparing the exchange to be sent. This can be used to deep-clone messages that should be sent, or any custom logic needed before the exchange is sent. |  | Processor |
 | **cacheSize** | Sets the maximum size used by the ProducerCache which is used to cache and reuse producers when uris are reused. Use 0 for default cache size, or -1 to turn cache off. |  | Integer |
 | **shareUnitOfWork** | Shares the UnitOfWork with the parent and each of the sub messages. Recipient List will by default not share unit of work between the parent exchange and each recipient exchange. This means each sub exchange has its own individual unit of work. | false | Boolean |
+| **allowedSchemes** | Sets an optional comma-separated allow-list of component schemes that the dynamic recipient may resolve to (e.g. http,https). When set, a dynamic endpoint whose scheme is not in the list is rejected. This is a defence-in-depth restriction, useful for low-code / Kamelet deployments; by default (unset) any scheme is allowed. |  | String |
 > **Tip**
 > See the `cacheSize` option for more details on _how much cache_ to use depending on how many or few unique endpoints are used.
 

@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 07 Aug 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Routes as AI Tools: Unified Tooling and MCP Server in Camel 4.22</title>
+      <link>https://camel.apache.org/blog/2026/08/camel-ai-tools-mcp-422/</link>
+      <pubDate>Fri, 07 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/08/camel-ai-tools-mcp-422/</guid>
+      <description>Camel 4.22 brings two features that change how Camel integrates with AI: a unified tool abstraction (camel-ai-tool) and a built-in MCP server (camel-mcp-server). Together, they let you turn any Camel route into an AI tool that works across frameworks and protocols.&#xA;This post covers both features.&#xA;The Problem: Fragmented Tool Definitions Before 4.22, defining AI tools in Camel meant picking a framework and committing to it. Want to expose a route as a tool for LangChain4j?</description>
+    </item>
     <item>
       <title>Built to Patch Fast: Apache Camel&#39;s Security Response in 2026</title>
       <link>https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/</link>

@@ -93,7 +93,6 @@ Enum values:
  |  | EKS2Operations |
 | **overrideEndpoint** (producer) | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | boolean |
 | **pojoRequest** (producer) | If we want to use a POJO request as body or not. | false | boolean |
-| **profileCredentialsName** (producer) | If using a profile credentials provider, this parameter will set the profile name. | false | String |
 | **region** (producer) | 
 
 The region in which EKS client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example, ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id().
@@ -216,6 +215,7 @@ Enum values:
 
  | HTTPS | Protocol |
 | **accessKey** (security) | Amazon AWS Access Key. |  | String |
+| **profileCredentialsName** (security) | If using a profile credentials provider, this parameter will set the profile name. |  | String |
 | **secretKey** (security) | Amazon AWS Secret Key. |  | String |
 | **sessionToken** (security) | Amazon AWS Session Token used when the user needs to assume an IAM role. |  | String |
 | **trustAllCertificates** (security) | If we want to trust all certificates in case of overriding the endpoint. | false | boolean |
@@ -262,7 +262,6 @@ Enum values:
  |  | EKS2Operations |
 | **overrideEndpoint** (producer) | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | boolean |
 | **pojoRequest** (producer) | If we want to use a POJO request as body or not. | false | boolean |
-| **profileCredentialsName** (producer) | If using a profile credentials provider, this parameter will set the profile name. | false | String |
 | **region** (producer) | 
 
 The region in which EKS client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example, ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id().
@@ -383,6 +382,7 @@ Enum values:
 
  | HTTPS | Protocol |
 | **accessKey** (security) | Amazon AWS Access Key. |  | String |
+| **profileCredentialsName** (security) | If using a profile credentials provider, this parameter will set the profile name. |  | String |
 | **secretKey** (security) | Amazon AWS Secret Key. |  | String |
 | **sessionToken** (security) | Amazon AWS Session Token used when the user needs to assume an IAM role. |  | String |
 | **trustAllCertificates** (security) | If we want to trust all certificates in case of overriding the endpoint. | false | boolean |

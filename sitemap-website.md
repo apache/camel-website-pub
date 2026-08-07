@@ -1,9 +1,12 @@
-urls[826]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-07-29T00:00:00+00:00
+urls[827]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-08-07T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-08-07T00:00:00+00:00
+  https://camel.apache.org/categories/Camel/,2026-08-07T00:00:00+00:00
+  https://camel.apache.org/blog/2026/08/camel-ai-tools-mcp-422/,2026-08-07T00:00:00+00:00
+  https://camel.apache.org/,2026-08-07T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/releases/q-3.38.0/,2026-07-29T00:00:00+00:00
-  https://camel.apache.org/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/releases/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/categories/Security/,2026-07-29T00:00:00+00:00
@@ -12,7 +15,6 @@ urls[826]{loc,lastmod}:
   https://camel.apache.org/categories/Community/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/categories/Usecases/,2026-07-24T00:00:00+00:00
-  https://camel.apache.org/categories/AI/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-07-20T00:00:00+00:00
@@ -428,7 +430,6 @@ urls[826]{loc,lastmod}:
   https://camel.apache.org/releases/q-3.2.3/,2023-12-05T00:00:00+00:00
   https://camel.apache.org/blog/2023/12/camel-data-types/,2023-12-04T00:00:00+00:00
   https://camel.apache.org/releases/q-3.6.0/,2023-11-29T00:00:00+00:00
-  https://camel.apache.org/categories/Camel/,2023-11-26T00:00:00+00:00
   https://camel.apache.org/blog/2023/11/camel-4-performance-improvements-2/,2023-11-26T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.2.0/,2023-11-20T00:00:00+00:00
   https://camel.apache.org/releases/release-4.0.3/,2023-11-20T00:00:00+00:00

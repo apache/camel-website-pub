@@ -110,6 +110,7 @@ Enum values:
 
  |  | LangChain4jEmbeddingStoreAction |
 | **configuration** (producer) | The configuration;. |  | LangChain4jEmbeddingStoreConfiguration |
+| **embeddingModel** (producer) | **Autowired** Embedding model for auto-computing embeddings from message body text. When set, ADD and SEARCH operations can accept plain text body instead of requiring a pre-computed embedding in the CamelLangChain4jEmbeddingsEmbedding header. The header always takes precedence when present. |  | EmbeddingModel |
 | **embeddingStore** (producer) | **Autowired** Direct embedding store instance for vector operations. |  | EmbeddingStore |
 | **embeddingStoreFactory** (producer) | **Autowired** The embedding store factory to use for creating embedding stores if no embeddingstore is provided. |  | EmbeddingStoreFactory |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -155,6 +156,7 @@ Enum values:
 
 
  |  | LangChain4jEmbeddingStoreAction |
+| **embeddingModel** (producer) | **Autowired** Embedding model for auto-computing embeddings from message body text. When set, ADD and SEARCH operations can accept plain text body instead of requiring a pre-computed embedding in the CamelLangChain4jEmbeddingsEmbedding header. The header always takes precedence when present. |  | EmbeddingModel |
 | **embeddingStore** (producer) | **Autowired** Direct embedding store instance for vector operations. |  | EmbeddingStore |
 | **embeddingStoreFactory** (producer) | **Autowired** The embedding store factory to use for creating embedding stores if no embeddingstore is provided. |  | EmbeddingStoreFactory |
 | **maxResults** (producer) | Maximum number of results to return for SEARCH operation. | 5 | Integer |
@@ -212,9 +214,50 @@ EmbeddingStore<TextSegment> embeddingStore = PgVectorEmbeddingStore.builder()
 context.getRegistry().bind("myEmbeddingStore", embeddingStore);
 ```
 
+### Auto-Embedding with `embeddingModel`
+
+When an `EmbeddingModel` is configured (either explicitly or via autowiring from the registry), the ADD and SEARCH operations can accept plain text in the message body instead of requiring a pre-computed embedding in the `CamelLangChain4jEmbeddingsEmbedding` header. The component will automatically compute the embedding from the body text.
+
+If the `CamelLangChain4jEmbeddingsEmbedding` header is present, it always takes precedence over auto-embedding.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:store")
+    .to("langchain4j-embeddingstore:myStore?action=ADD");
+
+from("direct:search")
+    .to("langchain4j-embeddingstore:myStore?action=SEARCH&returnTextContent=true");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:store
+    steps:
+      - to:
+          uri: langchain4j-embeddingstore:myStore
+          parameters:
+            action: ADD
+- route:
+    from:
+      uri: direct:search
+    steps:
+      - to:
+          uri: langchain4j-embeddingstore:myStore
+          parameters:
+            action: SEARCH
+            returnTextContent: true
+```
+
+This eliminates the need for a separate `langchain4j-embeddings:embed` step in the route.
+
 ### Storing Embeddings (ADD Operation)
 
-Store embeddings with optional text segments:
+Store embeddings with optional text segments. Without `embeddingModel`, a pre-computed embedding must be provided via the `langchain4j-embeddings` component:
 
 -   Java
     
@@ -244,7 +287,7 @@ The response body contains the generated embedding ID.
 
 ### Searching Embeddings (SEARCH Operation)
 
-Perform similarity search to find relevant content:
+Perform similarity search to find relevant content. Without `embeddingModel`, a pre-computed query embedding must be provided:
 
 -   Java
     
