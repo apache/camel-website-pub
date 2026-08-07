@@ -280,32 +280,6 @@ A timeout (with millisecond precision) to wait for `CamelMain#stop()` to finish
 The action to take when `CamelMain` encounters an unknown argument. fail - Prints the `CamelMain` usage statement and throws a `RuntimeException` ignore - Suppresses any warnings and the application startup proceeds as normal warn - Prints the `CamelMain` usage statement but allows the application startup to proceed as normal
 
  | `fail`, `warn`, `ignore` | `warn` |
-| 
-
-`[camel.dataformat."data-format-configs"](#camel-dataformat-data-format-configs)`
-
-Camel data format configuration.
-
-The format of the configuration is as follows.
-
-```properties
-camel.dataformat.<name>.<property> = value
-```
-
-For example.
-
-```properties
-camel.dataformat.beanio.stream-name = test-stream
-camel.dataformat.beanio.mapping = test-mapping.xml
-```
-
-
-
-
-
-
-
- | `Map<String,Map<String,String>>` |  |
 | `[quarkus.camel.bootstrap.enabled](#quarkus-camel-bootstrap-enabled)`
 
 When set to true, the {@link CamelRuntime} will be started automatically.
