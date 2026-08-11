@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[227]{title,link,pubDate,description}:
+posts[228]{title,link,pubDate,description}:
+  Camel TUI: A Low-Code YAML Editor in Your Terminal|https://camel.apache.org/blog/2026/08/camel-tui-editor/index.md|Tue, 11 Aug 2026 00:00:00 +0000|Two weeks ago we introduced the Camel TUI &ndash; a terminal dashboard for monitoring and managing Apache Camel integrations. Since then, development has continued at a rapid pace. This post covers th
   Camel Routes as AI Tools: Unified Tooling and MCP Server in Camel 4.22|https://camel.apache.org/blog/2026/08/camel-ai-tools-mcp-422/index.md|Fri, 07 Aug 2026 00:00:00 +0000|Camel 4.22 brings two features that change how Camel integrates with AI: a unified tool abstraction (camel-ai-tool) and a built-in MCP server (camel-mcp-server). Together, they let you turn any Camel 
   Built to Patch Fast: Apache Camel's Security Response in 2026|https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/index.md|Wed, 29 Jul 2026 00:00:00 +0000|Camel 4.21.0 shipped on 1 July with 32 security fixes. 4.18.3 followed on 3 July with 34, and 4.14.8 on 4 July with 27. All three supported release lines were patched inside four days, and every findi
   Camel Quarkus 3.38.0 Released|https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/index.md|Wed, 29 Jul 2026 00:00:00 +0000|Camel Quarkus 3.38.0 release

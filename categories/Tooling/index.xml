@@ -6,8 +6,15 @@
     <description>Recent content in Tooling on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 11 Aug 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Tooling/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel TUI: A Low-Code YAML Editor in Your Terminal</title>
+      <link>https://camel.apache.org/blog/2026/08/camel-tui-editor/</link>
+      <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/08/camel-tui-editor/</guid>
+      <description>Two weeks ago we introduced the Camel TUI &amp;ndash; a terminal dashboard for monitoring and managing Apache Camel integrations. Since then, development has continued at a rapid pace. This post covers the latest additions landing in Camel 4.22.&#xA;Open Any Project You can now launch the TUI directly from any existing Camel project &amp;ndash; Spring Boot, Quarkus, or Camel Main &amp;ndash; by pointing it at the project directory:&#xA;camel tui .</description>
+    </item>
     <item>
       <title>Installing the Apache Camel CLI Launcher</title>
       <link>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</link>
