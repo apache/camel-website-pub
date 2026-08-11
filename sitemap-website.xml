@@ -11,6 +11,18 @@
     <loc>https://camel.apache.org/</loc>
     <lastmod>2026-08-11T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/releases/release-4.22.0/</loc>
+    <lastmod>2026-08-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/08/RELEASE-4.22.0/</loc>
+    <lastmod>2026-08-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
+    <lastmod>2026-08-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-08-11T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/categories/Tooling/</loc>
     <lastmod>2026-08-11T00:00:00+00:00</lastmod>
   </url><url>
@@ -30,12 +42,6 @@
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.38.0/</loc>
-    <lastmod>2026-07-29T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
-    <lastmod>2026-07-29T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Security/</loc>

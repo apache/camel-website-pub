@@ -1,7 +1,11 @@
-urls[828]{loc,lastmod}:
+urls[830]{loc,lastmod}:
   https://camel.apache.org/blog/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/camel-tui-editor/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/,2026-08-11T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.22.0/,2026-08-11T00:00:00+00:00
+  https://camel.apache.org/blog/2026/08/RELEASE-4.22.0/,2026-08-11T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-08-11T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-08-07T00:00:00+00:00
   https://camel.apache.org/categories/Camel/,2026-08-07T00:00:00+00:00
@@ -9,8 +13,6 @@ urls[828]{loc,lastmod}:
   https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/releases/q-3.38.0/,2026-07-29T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-07-29T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/categories/Security/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/categories/Features/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-tui/,2026-07-27T00:00:00+00:00
