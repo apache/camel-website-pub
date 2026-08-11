@@ -1,4 +1,5 @@
-urls[830]{loc,lastmod}:
+urls[831]{loc,lastmod}:
+  https://camel.apache.org/blog/2026/08/camel422-whatsnew/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/blog/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/camel-tui-editor/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/,2026-08-11T00:00:00+00:00

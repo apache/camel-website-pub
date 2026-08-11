@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/blog/2026/08/camel422-whatsnew/</loc>
+    <lastmod>2026-08-11T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2026-08-11T00:00:00+00:00</lastmod>
   </url><url>

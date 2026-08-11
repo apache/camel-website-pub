@@ -9,6 +9,13 @@
     <lastBuildDate>Tue, 11 Aug 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Apache Camel 4.22 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/08/camel422-whatsnew/</link>
+      <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/08/camel422-whatsnew/</guid>
+      <description>Apache Camel 4.22 LTS has just been released.&#xA;This is a Long Term Support (LTS) release, which means it will receive patch releases with bug fixes and security updates for approximately one year. The supported LTS lines are now 4.18.x and 4.22.x (4.14.x reaches end of life with this release).&#xA;This release introduces a large set of new features and noticeable improvements that we will cover in this blog post.</description>
+    </item>
+    <item>
       <title>Camel TUI: A Low-Code YAML Editor in Your Terminal</title>
       <link>https://camel.apache.org/blog/2026/08/camel-tui-editor/</link>
       <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
