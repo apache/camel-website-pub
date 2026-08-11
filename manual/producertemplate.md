@@ -32,9 +32,9 @@ You can also supply an `Exchange` or a `Processor` to customize the exchange.
 
 The `ProducerTemplate` supports [Message Exchange Patterns](exchange-pattern.md) (MEP) that are used to control the messaging style to use:
 
--   _send methods_ - [Event Message](../components/4.18.x/eips/event-message.md) (InOnly)
+-   _send methods_ - [Event Message](../components/4.22.x/eips/event-message.md) (InOnly)
     
--   _request methods_ - [Request Reply](../components/4.18.x/eips/requestReply-eip.md) (InOut)
+-   _request methods_ - [Request Reply](../components/4.22.x/eips/requestReply-eip.md) (InOut)
     
 
 In other words, all the methods on the `ProducerTemplate` that starts with `sendXXX` are for InOnly messaging, and all the methods starting with `requestXXX` are for InOut messaging.

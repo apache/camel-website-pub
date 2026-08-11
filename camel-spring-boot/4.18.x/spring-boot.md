@@ -611,7 +611,7 @@ To test a Camel Spring Boot application, annotate your test class(es) with `@Cam
 
 To get the `CamelContext` or `ProducerTemplate`, you can inject them into the class in the normal Spring manner, using `@Autowired`.
 
-You can also use [camel-test-spring-junit5](../../components/4.18.x/others/test-spring-junit5.md) to configure tests declaratively. This example uses the `@MockEndpoints` annotation to auto-mock an endpoint:
+You can also use [camel-test-spring-junit5](../../components/4.22.x/others/test-spring-junit5.md) to configure tests declaratively. This example uses the `@MockEndpoints` annotation to auto-mock an endpoint:
 
 ```java
 @CamelSpringBootTest

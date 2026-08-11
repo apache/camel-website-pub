@@ -103,7 +103,7 @@ validator()
       uri: validator:xsd/schema.xsd
 ```
 
-Note that the Endpoint Validator just forwards the message to the specified endpoint. In above example, camel forwards the message to the `validator:` endpoint, which actually is a [Validation Component](../components/4.18.x/validator-component.md). You can also use any other validation component like Bean Validation Component.
+Note that the Endpoint Validator just forwards the message to the specified endpoint. In above example, camel forwards the message to the `validator:` endpoint, which actually is a [Validation Component](../components/4.22.x/validator-component.md). You can also use any other validation component like Bean Validation Component.
 
 ## Custom Validator Options
 

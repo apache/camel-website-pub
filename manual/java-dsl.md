@@ -49,7 +49,7 @@ _Java-only: the from endpoint that consumes files_
 from("file:src/data?noop=true")
 ```
 
-Then we use the [Content-Based Router](../components/4.18.x/eips/choice-eip.md) EIP (the `choice`) to route the message whether the person is from London or not.
+Then we use the [Content-Based Router](../components/4.22.x/eips/choice-eip.md) EIP (the `choice`) to route the message whether the person is from London or not.
 
 _Java-only: content-based router using choice and xpath_
 

@@ -108,7 +108,7 @@ from("direct:a")
 
 ### Setting an exchange property with the current message body
 
-It is also possible to set an exchange property with a value from anything on the `Exchange` such as the message body, where we use the [Simple](../../4.18.x/languages/simple-language.md) language to refer to the message body:
+It is also possible to set an exchange property with a value from anything on the `Exchange` such as the message body, where we use the [Simple](../../4.22.x/languages/simple-language.md) language to refer to the message body:
 
 -   Java
     

@@ -6,17 +6,17 @@ The JSSE Utility allows you to easily configure aspects of the [Java Secure Sock
 
 A number of Camel components support this (such as but not limited to):
 
--   [Cometd](../components/4.18.x/cometd-component.md)
+-   [Cometd](../components/4.22.x/cometd-component.md)
     
--   [HTTP](../components/4.18.x/http-component.md)
+-   [HTTP](../components/4.22.x/http-component.md)
     
--   [IRC](../components/4.18.x/irc-component.md)
+-   [IRC](../components/4.22.x/irc-component.md)
     
--   [Jetty](../components/4.18.x/jetty-component.md)
+-   [Jetty](../components/4.22.x/jetty-component.md)
     
--   [Netty](../components/4.18.x/netty-component.md)
+-   [Netty](../components/4.22.x/netty-component.md)
     
--   [Mail](../components/4.18.x/mail-component.md)
+-   [Mail](../components/4.22.x/mail-component.md)
     
 
 ## Configuring JSSE with Camel
@@ -541,7 +541,7 @@ Both layers are complementary and can be used together for defense in depth:
 -   **Application-layer PQC** (`camel-pqc`) secures the message content itself, independent of transport
     
 
-For full application-layer PQC documentation, see [PQC Component](../components/4.18.x/pqc-component.md) and [PQC Data Format](../components/4.18.x/dataformats/pqc-dataformat.md).
+For full application-layer PQC documentation, see [PQC Component](../components/4.22.x/pqc-component.md) and [PQC Data Format](../components/4.22.x/dataformats/pqc-dataformat.md).
 
 ### Migration from Classical TLS
 

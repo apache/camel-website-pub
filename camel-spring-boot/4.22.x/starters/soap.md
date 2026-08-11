@@ -1,0 +1,35 @@
+# SOAP
+
+Marshal Java objects to SOAP messages and back
+
+## What’s inside
+
+-   [SOAP data format](../../../components/4.22.x/dataformats/soap-dataformat.md)
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-soap-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 8 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.dataformat.soap.context-path | Package name where your JAXB classes are located. |  | String |
+| camel.dataformat.soap.element-name-strategy | Refers to an element strategy to lookup from the registry. The option is a org.apache.camel.dataformat.soap.name.ElementNameStrategy type. |  | String |
+| camel.dataformat.soap.enabled | Whether to enable auto configuration of the soap data format. This is enabled by default. |  | Boolean |
+| camel.dataformat.soap.encoding | To overrule and use a specific encoding. |  | String |
+| camel.dataformat.soap.ignore-unmarshalled-headers | Whether to ignore headers that were not unmarshalled. | false | Boolean |
+| camel.dataformat.soap.namespace-prefix | When marshalling using JAXB or SOAP then the JAXB implementation will automatic assign namespace prefixes. To control this mapping, Camel allows you to refer to a map which contains the desired mapping. |  | Map |
+| camel.dataformat.soap.schema | To validate against an existing schema. You can use the prefix classpath:, file: or http: to specify how the resource should be resolved. You can separate multiple schema files by using the ',' character. |  | String |
+| camel.dataformat.soap.version | SOAP version should either be 1.1 or 1.2. Is by default 1.1. | 1.1 | String |

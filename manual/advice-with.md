@@ -37,7 +37,7 @@ The `AdviceWithRouteBuilder` extends the regular `RouteBuilder` adding specializ
 
 ### Pattern matching
 
-The pattern option is used for matching. It uses the same rules as [Intercept](../components/4.18.x/eips/intercept.md), which is applied in the following order:
+The pattern option is used for matching. It uses the same rules as [Intercept](../components/4.22.x/eips/intercept.md), which is applied in the following order:
 
 -   match exact
     
@@ -106,7 +106,7 @@ This happens for every _adviced_ route during startup of your unit tests. It hap
 3.  Start Camel after you have _adviced_ the routes
     
 
-When using [camel-test-junit5](../components/4.18.x/others/test-junit5.md) for unit testing, then you can tell Camel that advice is in use by either overriding the `isUsedAdviceWith` method from `CamelTestSupport` as shown:
+When using [camel-test-junit5](../components/4.22.x/others/test-junit5.md) for unit testing, then you can tell Camel that advice is in use by either overriding the `isUsedAdviceWith` method from `CamelTestSupport` as shown:
 
 _Java-only: enabling AdviceWith in CamelTestSupport_
 
@@ -119,7 +119,7 @@ public class MyAdviceWithTest extends CamelTestSupport {
 }
 ```
 
-Or when using [camel-test-spring-junit5](../components/4.18.x/others/test-spring-junit5.md) for unit testing you can use the `@UseAdviceWith` annotation as shown:
+Or when using [camel-test-spring-junit5](../components/4.22.x/others/test-spring-junit5.md) for unit testing you can use the `@UseAdviceWith` annotation as shown:
 
 _Java-only: enabling AdviceWith using @UseAdviceWith annotation_
 
@@ -175,7 +175,7 @@ AdviceWith.adviceWith(context, "myRoute", false, a ->
 
 You may have built Camel routes that start from endpoints that consume from databases, message brokers, cloud systems, or other external systems.
 
-To make unit testing these kinds of routes easier, you can replace the route input endpoints with internal endpoints such as [direct](../components/4.18.x/direct-component.md), [seda](../components/4.18.x/seda-component.md), [stub](../components/4.18.x/stub-component.md).
+To make unit testing these kinds of routes easier, you can replace the route input endpoints with internal endpoints such as [direct](../components/4.22.x/direct-component.md), [seda](../components/4.22.x/seda-component.md), [stub](../components/4.22.x/stub-component.md).
 
 The following illustrates how to do this:
 
@@ -332,7 +332,7 @@ That means the message being sent after mock:bar would have been transformed to 
 
 When weaving a route, you need to use one of the `weaveBy` methods as criteria to select one or more nodes in the route graph.
 
-Suppose you use the [Split](../components/4.18.x/eips/split-eip.md) EIP in a route; then you can use `weaveByType` to select this EIP. Given the following route:
+Suppose you use the [Split](../components/4.22.x/eips/split-eip.md) EIP in a route; then you can use `weaveByType` to select this EIP. Given the following route:
 
 _Java-only: route with a Split EIP used for weaveByType example_
 
@@ -345,7 +345,7 @@ from("file:inbox").routeId("inbox")
     .to("mock:combined");
 ```
 
-Due to that route has only one [Split](../components/4.18.x/eips/split-eip.md) EIP, you can use `weaveByType` to find this single splitter in the route. Using `weaveByType` requires you to pass in the model type of the EIP. The name of the model type is using the pattern \_name\_Definition.
+Due to that route has only one [Split](../components/4.22.x/eips/split-eip.md) EIP, you can use `weaveByType` to find this single splitter in the route. Using `weaveByType` requires you to pass in the model type of the EIP. The name of the model type is using the pattern \_name\_Definition.
 
 _Java-only: using weaveByType to insert a node before the Split EIP_
 
@@ -355,13 +355,13 @@ weaveByType(SplitDefinition.class)
         .transform(simple("${body},Camel is awesome"));
 ```
 
-Here we weave and select the [Split](../components/4.18.x/eips/split-eip.md) EIP and weave in a message transformation, that is processed before calling the splitter. This means the message body is appended with _Camel is awesome_.
+Here we weave and select the [Split](../components/4.22.x/eips/split-eip.md) EIP and weave in a message transformation, that is processed before calling the splitter. This means the message body is appended with _Camel is awesome_.
 
 ### weaveByToUri
 
 The `weaveByToUri` is a handy method that makes it easy to _weave_ a Camel route that send messages to a given endpoint URI or pattern.
 
-Given the following route having two branches in the [Content Based Router](../components/4.18.x/eips/choice-eip.md) EIP:
+Given the following route having two branches in the [Content Based Router](../components/4.22.x/eips/choice-eip.md) EIP:
 
 _Java-only: route with content-based router for weaveByToUri example_
 
@@ -407,7 +407,7 @@ The `weaveBy` methods, select all matching nodes, which can be anything from non
 -   `maxDeep(level)` Limits the selection to at most N levels deep in the Camel route tree. The first level is number 1. So number 2 is the children of the first-level nodes.
     
 
-Given the following route which has multiple [Filter](../components/4.18.x/eips/filter-eip.md) EIP, then we want to only advise the second filter.
+Given the following route which has multiple [Filter](../components/4.22.x/eips/filter-eip.md) EIP, then we want to only advise the second filter.
 
 _Java-only: route with multiple Filter EIPs for selectIndex example_
 

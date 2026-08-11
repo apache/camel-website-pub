@@ -62,7 +62,7 @@ It is now possible with `xml-io-dsl` to declare some beans to be bound to [Camel
 
 While keeping all the benefits of fast XML parser used by `xml-io-dsl`, Camel can also process XML elements declared in other XML namespaces and process them separately. With this mechanism it is possible to include XML elements using Spring’s `[http://www.springframework.org/schema/beans](http://www.springframework.org/schema/beans)` namespace.
 
-This brings the flexibility of Spring Beans into [Camel Main](main.md) without actually running any Spring Application Context (or Spring Boot). When elements from Spring namespace are found, they are used to populate and configure an instance of `org.springframework.beans.factory.support.DefaultListableBeanFactory` and leverage Spring dependency injection to wire the beans together. These beans are then exposed through normal [Camel Registry](../../../manual/registry.md) and may be used by Camel routes.
+This brings the flexibility of Spring Beans into [Camel Main](../../4.22.x/others/main.md) without actually running any Spring Application Context (or Spring Boot). When elements from Spring namespace are found, they are used to populate and configure an instance of `org.springframework.beans.factory.support.DefaultListableBeanFactory` and leverage Spring dependency injection to wire the beans together. These beans are then exposed through normal [Camel Registry](../../../manual/registry.md) and may be used by Camel routes.
 
 Here’s an example `camel.xml` file, which defines both the routes and beans used (referred to) by the route definition:
 

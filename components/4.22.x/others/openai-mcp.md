@@ -1,0 +1,679 @@
+# OpenAI - MCP Tool Calling
+
+[Back to OpenAI Component](../openai-component.md)
+
+## MCP Tool Calling (Agentic Loop)
+
+The component supports automatic tool calling via the [Model Context Protocol (MCP)](https://modelcontextprotocol.io). When MCP servers are configured, the component acts as an MCP client: it lists available tools, converts them to OpenAI function-calling format, and runs an agentic loop — the model requests tool calls, the component executes them via MCP, feeds results back, and repeats until the model produces a final text answer.
+
+### MCP Server Configuration
+
+MCP servers are configured inline on the endpoint URI using the `mcpServer.` prefix pattern. Each server is identified by a name, with sub-properties for transport type, command/URL, and arguments.
+
+#### Streamable HTTP Transport
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://localhost:9090/mcp");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;mcpServer.api.transportType=streamableHttp&amp;mcpServer.api.url=http://localhost:9090/mcp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: http://localhost:9090/mcp
+```
+
+#### SSE Transport (Deprecated)
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpServer.weather.transportType=sse"
+        + "&mcpServer.weather.url=http://localhost:8080");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;mcpServer.weather.transportType=sse&amp;mcpServer.weather.url=http://localhost:8080"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpServer.weather.transportType: sse
+              mcpServer.weather.url: http://localhost:8080
+```
+
+#### Stdio Transport
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpServer.fs.transportType=stdio"
+        + "&mcpServer.fs.command=npx"
+        + "&mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;mcpServer.fs.transportType=stdio&amp;mcpServer.fs.command=npx&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpServer.fs.transportType: stdio
+              mcpServer.fs.command: npx
+              mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
+```
+
+#### Multiple MCP Servers
+
+Multiple servers can be configured on the same endpoint. Tools from all servers are merged and made available to the model:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpServer.fs.transportType=stdio"
+        + "&mcpServer.fs.command=npx"
+        + "&mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp"
+        + "&mcpServer.weather.transportType=sse"
+        + "&mcpServer.weather.url=http://localhost:8080");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpServer.fs.transportType: stdio
+              mcpServer.fs.command: npx
+              mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
+              mcpServer.weather.transportType: sse
+              mcpServer.weather.url: http://localhost:8080
+        - log:
+            message: "${body}"
+```
+
+#### Tool Filtering
+
+By default, all tools from every configured MCP server are registered and advertised to the model. Use the per-server `toolNames` property to restrict which tools are included. This is useful to reduce prompt size and cost, keep destructive tools away from the model, or avoid duplicate tool names across servers.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpServer.fs.transportType=stdio"
+        + "&mcpServer.fs.command=npx"
+        + "&mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp"
+        + "&mcpServer.fs.toolNames=read_file,list_directory");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;mcpServer.fs.transportType=stdio&amp;mcpServer.fs.command=npx&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp&amp;mcpServer.fs.toolNames=read_file,list_directory"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpServer.fs.transportType: stdio
+              mcpServer.fs.command: npx
+              mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
+              mcpServer.fs.toolNames: read_file,list_directory
+```
+
+When `toolNames` is set, only tools whose names appear in the comma-separated list are registered. Tools not in the list are silently excluded. If a name in the list does not match any tool provided by the server, a warning is logged. When `toolNames` is not set or is empty, all tools from the server are registered (the default behavior).
+
+The filter is also applied consistently on MCP server reconnection (`mcpReconnect=true`), so the tool set remains stable across connection recovery.
+
+### Agentic Loop Behavior
+
+When the model responds with tool calls, the component automatically:
+
+1.  Executes each tool call via the corresponding MCP server
+    
+2.  Sends the tool results back to the model
+    
+3.  Repeats until the model produces a final text response
+    
+
+The `maxToolIterations` option (default: 50) prevents infinite loops. If exceeded, an `IllegalStateException` is thrown.
+
+The `maxAgenticTokens` option (default: `0`, unlimited) caps cumulative prompt plus completion tokens across the agentic loop. When the budget is exceeded after an API call that requests further tool execution, an `IllegalStateException` is thrown and no additional API calls are made. Enforcement is post-call, so actual spend may exceed the configured budget by up to one API call. A final text response is still returned when cumulative usage exceeds the budget, because no further spend occurs after that point.
+
+During the agentic loop, `CamelOpenAIAgenticPromptTokens`, `CamelOpenAIAgenticCompletionTokens`, and `CamelOpenAIAgenticTotalTokens` expose cumulative usage across all iterations. The per-call headers `CamelOpenAIPromptTokens`, `CamelOpenAICompletionTokens`, and `CamelOpenAITotalTokens` reflect only the latest API call.
+
+Set `autoToolExecution=false` to disable the agentic loop and receive raw tool calls in the message body instead:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&autoToolExecution=false"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://localhost:9090/mcp")
+    .log("Tool calls: ${body}"); // body is the raw tool calls list
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;autoToolExecution=false&amp;mcpServer.api.transportType=streamableHttp&amp;mcpServer.api.url=http://localhost:9090/mcp"/>
+  <log message="Tool calls: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              autoToolExecution: false
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: http://localhost:9090/mcp
+        - log:
+            message: "Tool calls: ${body}"
+```
+
+### Parallel Tool Execution
+
+A model can request several tool calls in a single response. By default, the component executes them one after another, so the batch takes as long as the sum of its tool calls. Because tool calls emitted in the same assistant message are independent by design, `parallelToolExecution=true` dispatches them concurrently instead, reducing the batch to the duration of its slowest tool:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&parallelToolExecution=true"
+        + "&parallelToolTimeout=30000"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://localhost:9090/mcp");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;parallelToolExecution=true&amp;parallelToolTimeout=30000&amp;mcpServer.api.transportType=streamableHttp&amp;mcpServer.api.url=http://localhost:9090/mcp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              parallelToolExecution: true
+              parallelToolTimeout: 30000
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: http://localhost:9090/mcp
+```
+
+The option applies to both the agentic loop and the `openai:tool-execution` operation.
+
+Notes:
+
+-   Results are always fed back to the model in the order the model requested the tools, as required by the OpenAI API, regardless of the order in which the tool calls complete.
+    
+-   A batch containing a single tool call is executed inline, without a thread hand-off.
+    
+-   `parallelToolTimeout` (milliseconds, default `0` = disabled) bounds the batch as a whole, so that one slow tool cannot block it. A tool call that exceeds it is cancelled and then handled according to `toolExecutionErrorStrategy`. Leaving it disabled is reasonable, because `mcpTimeout` already bounds each individual MCP request.
+    
+-   With `toolExecutionErrorStrategy=failExchange`, the sibling tool calls that were already dispatched are allowed to complete before the exchange fails. Sequential execution instead abandons the remaining calls at the first failure.
+    
+-   The thread pool comes from Camel’s `ExecutorServiceManager` and follows the default thread pool profile, so it is visible over JMX and shut down with the `CamelContext`. When virtual threads are enabled (`camel.main.virtualThreadsEnabled=true`), the pool automatically becomes a thread-per-task virtual thread executor and the profile’s pool sizes no longer apply — concurrency is then bounded by the profile’s `maxQueueSize` instead.
+    
+-   `stdio` MCP servers multiplex all calls over a single child process, so the achievable parallelism there depends on the server implementation. HTTP-based transports (`streamableHttp`, `sse`) benefit the most.
+    
+
+### Manual Tool Loop with `tool-execution` Operation
+
+When `autoToolExecution=false`, you can implement your own tool loop using the `openai:tool-execution` operation and Camel’s `loopDoWhile` EIP. This gives you full control to add logging, filtering, retry logic, or custom routing between tool calls — without writing any Java code.
+
+The `tool-execution` operation:
+
+-   Reads the stored `ChatCompletion` response (requires `storeFullResponse=true` on the chat-completion call)
+    
+-   Extracts tool calls and executes them via MCP
+    
+-   Rebuilds the conversation history with the proper message chain
+    
+-   Clears the body for the next chat-completion call
+    
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    // Save the original prompt for the tool-execution operation
+    .setProperty("originalPrompt", body())
+
+    // Initial call: tools are listed but not auto-executed
+    .to("openai:chat-completion?autoToolExecution=false"
+        + "&conversationMemory=true&storeFullResponse=true"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://localhost:9090/mcp")
+
+    // Loop while the model requests tool calls
+    .loopDoWhile(header("CamelOpenAIFinishReason").isEqualTo("tool_calls"))
+        // Execute tool calls via MCP
+        .to("openai:tool-execution"
+            + "?mcpServer.api.transportType=streamableHttp"
+            + "&mcpServer.api.url=http://localhost:9090/mcp")
+        // Send updated conversation back to the model
+        .to("openai:chat-completion?autoToolExecution=false"
+            + "&conversationMemory=true&storeFullResponse=true"
+            + "&mcpServer.api.transportType=streamableHttp"
+            + "&mcpServer.api.url=http://localhost:9090/mcp")
+    .end()
+
+    .log("Final answer: ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - setProperty:
+            name: originalPrompt
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              autoToolExecution: false
+              conversationMemory: true
+              storeFullResponse: true
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: http://localhost:9090/mcp
+        - loopDoWhile:
+            expression:
+              simple:
+                expression: "${header.CamelOpenAIFinishReason} == 'tool_calls'"
+            steps:
+              - to:
+                  uri: openai:tool-execution
+                  parameters:
+                    mcpServer.api.transportType: streamableHttp
+                    mcpServer.api.url: http://localhost:9090/mcp
+              - to:
+                  uri: openai:chat-completion
+                  parameters:
+                    autoToolExecution: false
+                    conversationMemory: true
+                    storeFullResponse: true
+                    mcpServer.api.transportType: streamableHttp
+                    mcpServer.api.url: http://localhost:9090/mcp
+        - log:
+            message: "Final answer: ${body}"
+```
+
+> **Note**
+> The `tool-execution` operation requires the `originalPrompt` exchange property (set via `setProperty` before the first call) and the `CamelOpenAIResponse` exchange property (set by `storeFullResponse=true`).
+
+### returnDirect
+
+MCP tools can declare `returnDirect=true` in their annotations. When **all** tools invoked in a single batch carry this flag, the component short-circuits: it returns the tool result directly as the exchange body without sending it back to the model for further processing.
+
+This is useful for tools whose output is the definitive answer (e.g., a database lookup) and does not need LLM interpretation.
+
+The `CamelOpenAIMcpReturnDirect` header is set to `true` when this occurs, so downstream processors can distinguish tool-direct responses from LLM-generated ones.
+
+> **Note**
+> Tool execution errors always bypass `returnDirect` — errors are sent back to the model for graceful handling.
+
+### MCP Tool Call Headers
+
+The following headers are set after the agentic loop completes:
+
+  
+| Header | Type | Description |
+| --- | --- | --- |
+| `CamelOpenAIToolIterations` | Integer | Number of tool call iterations performed |
+| `CamelOpenAIMcpToolCalls` | List<String> | Ordered list of tool names called during the loop |
+| `CamelOpenAIMcpReturnDirect` | Boolean | `true` if the response came directly from a tool with `returnDirect` |
+
+### Conversation Memory with MCP Tools
+
+When `conversationMemory=true`, the full tool call chain is stored in the conversation history exchange property (`CamelOpenAIConversationHistory`). This includes:
+
+-   Assistant messages containing tool call requests
+    
+-   Tool result messages with execution outputs
+    
+-   The final assistant text response
+    
+
+This enables multi-turn agentic conversations where the model can reference previous tool interactions across exchanges.
+
+#### Multi-Turn Example
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?conversationMemory=true"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://localhost:9090/mcp")
+    .to("mock:response");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              conversationMemory: true
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: http://localhost:9090/mcp
+        - log:
+            message: "${body}"
+```
+
+With this route, a multi-turn conversation works as follows:
+
+_Java-only: ProducerTemplate test API with conversation history management_
+
+```java
+// Turn 1: the model calls the "add" tool and returns the result
+Exchange turn1 = template.request("direct:chat", e ->
+    e.getIn().setBody("Use the add tool to add 15 and 27"));
+// Response: "The result of adding 15 and 27 is 42."
+
+// Turn 2: carry forward the conversation history
+List<?> history = turn1.getProperty("CamelOpenAIConversationHistory", List.class);
+Exchange turn2 = template.request("direct:chat", e -> {
+    e.getIn().setBody("What numbers did you just add?");
+    e.setProperty("CamelOpenAIConversationHistory", history);
+});
+// Response: "I added 15 and 27." — the model remembers the tool interaction
+```
+
+The conversation history includes the full tool call chain from turn 1 (the assistant’s tool call request, the tool result, and the final answer), so in turn 2 the model has complete context of what happened — including which tools were called and what they returned.
+
+> **Note**
+> When `systemMessage` is set and `conversationMemory` is enabled, the conversation history is reset. This allows starting fresh conversations within the same route.
+
+### MCP Protocol Version
+
+When using the Streamable HTTP transport, the component advertises MCP protocol versions during initialization. By default, the SDK’s built-in versions are used. If your MCP server does not support the latest protocol version, you can restrict the advertised versions:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://localhost:9090/mcp"
+        + "&mcpProtocolVersions=2024-11-05,2025-03-26,2025-06-18");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;mcpServer.api.transportType=streamableHttp&amp;mcpServer.api.url=http://localhost:9090/mcp&amp;mcpProtocolVersions=2024-11-05,2025-03-26,2025-06-18"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: http://localhost:9090/mcp
+              mcpProtocolVersions: "2024-11-05,2025-03-26,2025-06-18"
+```
+
+### Runtime Tool Refresh
+
+MCP servers may add, remove or change tools while they are running, and announce it with a `tools/list_changed` notification. When `mcpToolRefresh=true` (the default), the component subscribes to that notification and refreshes the tool list it advertises to the model, so a long-running route picks up server-side changes without being restarted.
+
+Set `mcpToolRefresh=false` to pin the tool list to whatever was listed when the endpoint started, for deployments that require a deterministic set of tools:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpToolRefresh=false"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://localhost:9090/mcp");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;mcpToolRefresh=false&amp;mcpServer.api.transportType=streamableHttp&amp;mcpServer.api.url=http://localhost:9090/mcp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpToolRefresh: false
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: http://localhost:9090/mcp
+```
+
+Notes:
+
+-   A refresh replaces only the tools of the server that sent the notification. Tools from the other configured servers are left untouched.
+    
+-   The per-server `toolNames` include list is re-applied on every refresh, so a server cannot widen its exposed tool set by announcing new tools.
+    
+-   Duplicate tool names are resolved the same way as at startup: the server that registered the name first keeps it.
+    
+-   A tool call already in flight when a refresh lands runs to completion. If the model then calls a tool that the refresh removed, it is handled as a hallucinated tool name according to `hallucinatedToolNameStrategy`.
+    
+-   `returnDirect` flags set programmatically with `addReturnDirectTool` / `removeReturnDirectTool` survive a refresh and a reconnect.
+    
+
+### MCP Connection Recovery
+
+When `mcpReconnect=true` (the default), the component automatically recovers from MCP server connection failures. If a tool call fails with a transport error, the component:
+
+1.  Closes the failed connection
+    
+2.  Creates a new transport and client using the original server configuration
+    
+3.  Re-initializes and re-lists available tools
+    
+4.  Retries the tool call once on the new connection
+    
+
+This handles scenarios where an MCP server restarts, a network connection drops, or a stdio subprocess dies. If reconnection fails, the original transport error is propagated.
+
+Set `mcpReconnect=false` to disable automatic recovery:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:chat")
+    .to("openai:chat-completion?model=gpt-4"
+        + "&mcpReconnect=false"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://localhost:9090/mcp");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="openai:chat-completion?model=gpt-4&amp;mcpReconnect=false&amp;mcpServer.api.transportType=streamableHttp&amp;mcpServer.api.url=http://localhost:9090/mcp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4
+              mcpReconnect: false
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: http://localhost:9090/mcp
+```
+
+### Error Handling in the Agentic Loop
+
+Two endpoint options control what happens when a tool call fails:
+
+-   **`toolExecutionErrorStrategy`** (default `failExchange`): controls what happens when a tool execution throws an exception (including malformed tool arguments).
+    
+    -   `failExchange` — propagates the exception to the Camel exchange so that standard Camel error handling (`onException`, dead-letter channel) can process it. This is the safer default because `repromptModel` sends raw exception messages (which may contain connection strings, hostnames, or internal paths) to a third-party LLM provider.
+        
+    -   `repromptModel` — catches the error, logs a WARN, and sends it back to the model as a tool result so the model can attempt recovery.
+        
+    
+-   **`hallucinatedToolNameStrategy`** (default `failExchange`): controls what happens when the model requests a tool that does not exist in any configured MCP server.
+    
+    -   `failExchange` — throws an `IllegalStateException`, failing the exchange immediately.
+        
+    -   `repromptModel` — sends a corrective tool result listing the available tools so the model can self-correct and retry with a valid tool name. The `maxToolIterations` option bounds the number of retries.
+        
+    
+
+ 
+| Scenario | Behavior |
+| --- | --- |
+| MCP server unreachable at startup | Route starts anyway: a WARN is logged and initialization of that server is deferred and retried on first use. This lets an application consume its own MCP endpoint (or one of a service starting concurrently) on runtimes where the HTTP server only accepts connections after the application has started. Invalid configuration (for example a missing `transportType`) still fails the route at startup. |
+| Tool execution throws an exception | Governed by `toolExecutionErrorStrategy`: `failExchange` (default) propagates the exception to the exchange; `repromptModel` catches the error, logs it as WARN, and sends it as tool result text to the model |
+| MCP transport error (`mcpReconnect=true`) | Automatic reconnection and retry (once). If retry fails, behavior follows `toolExecutionErrorStrategy` |
+| MCP `CallToolResult.isError()` is true | Error content is sent as tool result text to the model |
+| Tool name not found in any server | Governed by `hallucinatedToolNameStrategy`: `failExchange` (default) throws `IllegalStateException`; `repromptModel` sends a corrective tool result listing available tools |
+| Max iterations exceeded | `IllegalStateException` is thrown with the tool call log |
+| Streaming + MCP tools with autoToolExecution | Falls back to non-streaming (logged as INFO) |

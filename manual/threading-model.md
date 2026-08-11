@@ -4,13 +4,13 @@ The threading model in Camel is based on a pluggable reactive routing engine, an
 
 This page focuses on thread pools. Camel leverages thread pools in several places such as:
 
--   Several [EIP](../components/4.18.x/eips/enterprise-integration-patterns.md) patterns support using thread pools for concurrency
+-   Several [EIP](../components/4.22.x/eips/enterprise-integration-patterns.md) patterns support using thread pools for concurrency
     
--   [SEDA](../components/4.18.x/seda-component.md) component for asynchronous connectivity
+-   [SEDA](../components/4.22.x/seda-component.md) component for asynchronous connectivity
     
--   [Threads](../components/4.18.x/eips/threads-eip.md) EIP in Camel routes
+-   [Threads](../components/4.22.x/eips/threads-eip.md) EIP in Camel routes
     
--   Several components use thread pools out of the box, such as [JMS](../components/4.18.x/jms-component.md), [Kafka](../components/4.18.x/kafka-component.md), [Netty](../components/4.18.x/netty-component.md) or [Jetty](../components/4.18.x/jetty-component.md)
+-   Several components use thread pools out of the box, such as [JMS](../components/4.22.x/jms-component.md), [Kafka](../components/4.22.x/kafka-component.md), [Netty](../components/4.22.x/netty-component.md) or [Jetty](../components/4.22.x/jetty-component.md)
     
 
 ## Thread pool profiles
@@ -29,7 +29,7 @@ The default profile is pre-configured out of the box with the following settings
 | **allowCoreThreadTimeOut** | `true` | Sets default whether to allow core threads to timeout |
 | **rejectedPolicy** | `CallerRuns` | Sets the default handler for tasks which cannot be executed by the thread pool. Has three options: `Abort`, `CallerRuns`, `Block`. See [Rejected Policy](#rejected-policy) for details. |
 
-What that means is that for example when you use [Multicast](../components/4.18.x/eips/multicast-eip.md) with `parallelProcessing=true` enabled, then it would create a thread pool based on the profile above.
+What that means is that for example when you use [Multicast](../components/4.22.x/eips/multicast-eip.md) with `parallelProcessing=true` enabled, then it would create a thread pool based on the profile above.
 
 You can define as many thread pool profiles as you like. But there must be only **one** default profile. A custom thread pool profile will inherit from the default profile. Which means that any option you do not explicit define will fallback and use the option from the default profile.
 
@@ -129,7 +129,7 @@ And then you can refer to the thread pool in the Camel route:
                   uri: log:hello
 ```
 
-What Camel will do at runtime is to lookup in the [Registry](registry.md) for a `ExecutorService` with the id `fooProfile`. If none found it will fallback and see if there is a `ThreadPoolProfile` defined with that id. In this example there is a profile, so the profile is used as base settings for creating a new `ExecutorService` which is handed back to the [Multicast](../components/4.18.x/eips/multicast-eip.md) EIP to use in the Camel route.
+What Camel will do at runtime is to lookup in the [Registry](registry.md) for a `ExecutorService` with the id `fooProfile`. If none found it will fallback and see if there is a `ThreadPoolProfile` defined with that id. In this example there is a profile, so the profile is used as base settings for creating a new `ExecutorService` which is handed back to the [Multicast](../components/4.22.x/eips/multicast-eip.md) EIP to use in the Camel route.
 
 ## Creating custom thread pools
 

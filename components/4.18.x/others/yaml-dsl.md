@@ -376,9 +376,9 @@ The init and destroy methods are optional, so a bean does not have to have both,
 
 ## Configuring options on languages
 
-Some [Languages](../languages/index.md) have additional configurations you may need to use.
+Some [Languages](../../4.22.x/languages/index.md) have additional configurations you may need to use.
 
-For example, the [JSONPath](../languages/jsonpath-language.md) can be configured to ignore JSon parsing errors. This is intended when you use a [Content Based Router](../eips/choice-eip.md) and want to route the message to different endpoints. But the JSon payload of the message can be in different forms; meaning that the JSonPath expressions in some cases would fail with an exception, and other times not. In this situation, you need to set `suppress-exception` to true, as shown below:
+For example, the [JSONPath](../../4.22.x/languages/jsonpath-language.md) can be configured to ignore JSon parsing errors. This is intended when you use a [Content Based Router](../../4.22.x/eips/choice-eip.md) and want to route the message to different endpoints. But the JSon payload of the message can be in different forms; meaning that the JSonPath expressions in some cases would fail with an exception, and other times not. In this situation, you need to set `suppress-exception` to true, as shown below:
 
 ```yaml
 - from:

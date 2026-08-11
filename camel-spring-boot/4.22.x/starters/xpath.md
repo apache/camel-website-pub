@@ -1,0 +1,39 @@
+# XPath
+
+Evaluates an XPath expression against an XML payload
+
+## What’s inside
+
+-   [XPath language](../../../components/4.22.x/languages/xpath-language.md)
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-xpath-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 12 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.language.xpath.document-type | Name of class for document type. The default value is org.w3c.dom.Document. |  | String |
+| camel.language.xpath.enabled | Whether to enable auto configuration of the xpath language. This is enabled by default. |  | Boolean |
+| camel.language.xpath.factory-ref | References to a custom XPathFactory to lookup in the registry. |  | String |
+| camel.language.xpath.log-namespaces | Whether to log namespaces which can assist during troubleshooting. | false | Boolean |
+| camel.language.xpath.namespace | Injects the XML Namespaces of prefix to uri mappings. |  | PropertyDefinition> |
+| camel.language.xpath.object-model | The XPath object model to use. |  | String |
+| camel.language.xpath.pre-compile | Whether to enable pre-compiling the xpath expression during initialization phase. pre-compile is enabled by default. | true | Boolean |
+| camel.language.xpath.result-q-name | Sets the output type supported by XPath. | NODESET | String |
+| camel.language.xpath.saxon | Whether to use Saxon. | false | Boolean |
+| camel.language.xpath.source | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |  | String |
+| camel.language.xpath.thread-safety | Whether to enable thread-safety for the returned result of the xpath expression. This applies to when using NODESET as the result type, and the returned set has multiple elements. | false | Boolean |
+| camel.language.xpath.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |

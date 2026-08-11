@@ -1,0 +1,45 @@
+# Jackson XML
+
+Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson
+
+## What’s inside
+
+-   [Jackson XML data format](../../../components/4.22.x/dataformats/jacksonXml2-dataformat.md)
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-jacksonxml-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 18 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.dataformat.jackson-xml.allow-jms-type | Whether to allow the JMSType header from the JMS spec to specify a FQN classname to use to unmarshal to. | false | Boolean |
+| camel.dataformat.jackson-xml.allow-unmarshall-type | Whether to allow Jackson to use the CamelJacksonUnmarshalType header during unmarshalling. Should only be enabled when desired. | false | Boolean |
+| camel.dataformat.jackson-xml.collection-type | Refers to a custom collection type to lookup in the registry to use. This option should rarely be used, but allows using different collection types than java.util.Collection based as default. |  | String |
+| camel.dataformat.jackson-xml.content-type-header | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON | true | Boolean |
+| camel.dataformat.jackson-xml.disable-features | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from SerializationFeature, DeserializationFeature, or MapperFeature. Multiple features can be separated by comma. |  | String |
+| camel.dataformat.jackson-xml.enable-features | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. The features should be a name that matches a enum from SerializationFeature, DeserializationFeature, or MapperFeature. Multiple features can be separated by comma. |  | String |
+| camel.dataformat.jackson-xml.enable-jaxb-annotation-module | Whether to enable the JAXB annotations module when using Jackson. When enabled then JAXB annotations can be used by Jackson. | false | Boolean |
+| camel.dataformat.jackson-xml.enabled | Whether to enable auto configuration of the jacksonXml data format. This is enabled by default. |  | Boolean |
+| camel.dataformat.jackson-xml.include | If you want to marshal a POJO to JSON, and the POJO has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |  | String |
+| camel.dataformat.jackson-xml.json-view | When marshalling a POJO to JSON you might want to exclude certain fields from the JSON output. With Jackson you can use JSON views to accomplish this. This option is to refer to the class which has JsonView annotations. |  | String |
+| camel.dataformat.jackson-xml.max-string-length | Maximum allowed string length when deserializing (in chars or bytes, depending on input context). The default is 20,000,000. |  | Integer |
+| camel.dataformat.jackson-xml.module-class-names | To use custom Jackson modules com.fasterxml.jackson.databind.Module specified as a String with FQN class names. Multiple classes can be separated by comma. |  | String |
+| camel.dataformat.jackson-xml.module-refs | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |  | String |
+| camel.dataformat.jackson-xml.pretty-print | Whether to enable pretty printing output nicely formatted. Is by default false. | false | Boolean |
+| camel.dataformat.jackson-xml.timezone | If set then Jackson will use the Timezone when marshalling/unmarshalling. |  | String |
+| camel.dataformat.jackson-xml.unmarshal-type | Class name of the java type to use when unmarshalling. |  | String |
+| camel.dataformat.jackson-xml.use-list | Whether to unmarshal to a List of Map or a List of Pojo. | false | Boolean |
+| camel.dataformat.jackson-xml.xml-mapper | Lookup and use the existing XmlMapper with the given id. |  | String |

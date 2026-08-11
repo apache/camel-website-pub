@@ -19,7 +19,7 @@ public class Foo {
 }
 ```
 
-The [Bean Binding](bean-binding.md) is then used to convert the inbound [Message](../components/4.18.x/eips/message.md) to the parameter list used to invoke the method.
+The [Bean Binding](bean-binding.md) is then used to convert the inbound [Message](../components/4.22.x/eips/message.md) to the parameter list used to invoke the method.
 
 This basically creates a route that looks kinda like this (based on the example above):
 

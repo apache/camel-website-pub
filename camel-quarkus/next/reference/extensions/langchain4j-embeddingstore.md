@@ -2,7 +2,7 @@
 
 JVM since3.29.0 Native since3.29.0
 
-Perform operations on the Langchain4jEmbeddingStores.
+Perform operations on the LangChain4jEmbeddingStores.
 
 ## What’s inside
 

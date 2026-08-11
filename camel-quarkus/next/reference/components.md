@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 311 components (20 deprecated, 57 JVM only)
+There are 312 components (21 deprecated, 57 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -11,7 +11,8 @@ level | Description |
 | [A2A](extensions/a2a.md) | camel-quarkus-a2a | 3.38.0 | 3.38.0 | Stable | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](extensions/activemq.md) | camel-quarkus-activemq | 1.0.0 | 1.0.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](extensions/activemq6.md) | camel-quarkus-activemq6 | 3.30.0 | 3.30.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
-| [AMQP](extensions/amqp.md) | camel-quarkus-amqp | 1.0.0 | 1.0.0 | Stable | Messaging with AMQP protocol using Apache QPid Client. |
+| [AI Tool](extensions/ai-tool.md) | camel-quarkus-ai-tool | 3.39.0 | 3.39.0 | Stable | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
+| [AMQP](extensions/amqp.md) | camel-quarkus-amqp | 1.0.0 | 1.0.0 | Stable | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](extensions/arangodb.md) | camel-quarkus-arangodb | 1.1.0 | 1.1.0 | Stable | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](extensions/as2.md) | camel-quarkus-as2 | 1.0.0 | 1.0.0 | Stable | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
 | [Asterisk](extensions/asterisk.md) | camel-quarkus-asterisk | 1.1.0 | n/a | Preview | Interact with Asterisk PBX Server (VoIP). |
@@ -19,7 +20,7 @@ level | Description |
 | [AWS Bedrock Agent Runtime](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Invoke Model of AWS Bedrock Agent Runtime service. |
 | [AWS Bedrock Agent](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Operate on AWS Bedrock through its Agent. |
 | [AWS Bedrock](extensions/aws-bedrock.md) | camel-quarkus-aws-bedrock | 3.10.0 | 3.10.0 | Stable | Invoke Model of AWS Bedrock service. |
-| [AWS Cloudtrail](extensions/aws-cloudtrail.md) | camel-quarkus-aws-cloudtrail | 3.38.0 | 3.38.0 | Stable | Consume events from Amazon Cloudtrail using AWS SDK version 2.x. |
+| [AWS CloudTrail](extensions/aws-cloudtrail.md) | camel-quarkus-aws-cloudtrail | 3.38.0 | 3.38.0 | Stable | Consume events from Amazon CloudTrail using AWS SDK version 2.x. |
 | [AWS Secrets Manager](extensions/aws-secrets-manager.md) | camel-quarkus-aws-secrets-manager | 2.0.0 | 3.19.0 | Stable | Manage secrets using AWS Secrets Manager. |
 | [AWS Athena](extensions/aws2-athena.md) | camel-quarkus-aws2-athena | 1.0.0 | 1.0.0 | Stable | Access AWS Athena. |
 | [AWS CloudWatch](extensions/aws2-cw.md) | camel-quarkus-aws2-cw | 1.0.0 | 1.0.0 | Stable | Sending metrics to AWS CloudWatch. |
@@ -79,7 +80,7 @@ level | Description |
 | [Debezium MongoDB Connector](extensions/debezium-mongodb.md) | camel-quarkus-debezium-mongodb | 1.0.0 | 1.6.0 | Stable | Capture changes from a MongoDB database. |
 | [Debezium MySQL Connector](extensions/debezium-mysql.md) | camel-quarkus-debezium-mysql | 1.0.0 | 1.0.0 | Stable | Capture changes from a MySQL database. |
 | [Debezium Oracle Connector](extensions/debezium-oracle.md) | camel-quarkus-debezium-oracle | 3.24.0 | 3.24.0 | Stable | Capture changes from an Oracle database. |
-| [Debezium PostgresSQL Connector](extensions/debezium-postgres.md) | camel-quarkus-debezium-postgres | 1.0.0 | 1.0.0 | Stable | Capture changes from a PostgresSQL database. |
+| [Debezium PostgreSQL Connector](extensions/debezium-postgres.md) | camel-quarkus-debezium-postgres | 1.0.0 | 1.0.0 | Stable | Capture changes from a PostgreSQL database. |
 | [Debezium SQL Server Connector](extensions/debezium-sqlserver.md) | camel-quarkus-debezium-sqlserver | 1.0.0 | 1.0.0 | Stable | Capture changes from an SQL Server database. |
 | [DFDL](extensions/dfdl.md) | camel-quarkus-dfdl | 3.22.0 | n/a | Preview | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
 | [DigitalOcean](extensions/digitalocean.md) | camel-quarkus-digitalocean | 1.1.0 | 2.0.0 | Stable | Manage Droplets and resources within the DigitalOcean cloud. |
@@ -92,7 +93,7 @@ level | Description |
 | [Dropbox](extensions/dropbox.md) | camel-quarkus-dropbox | 1.1.0 | 1.1.0 | Stable | Upload, download and manage files, folders, groups, collaborations, etc on Dropbox. |
 | [Ehcache](extensions/ehcache.md) | camel-quarkus-ehcache | 1.1.0 | n/a | Preview | Perform caching operations using Ehcache. |
 | [Elasticsearch Low level Rest Client](extensions/elasticsearch-rest-client.md) | camel-quarkus-elasticsearch-rest-client | 3.8.0 | 3.12.0 | Stable | Perform queries and other operations on Elasticsearch or OpenSearch (uses low-level client). |
-| [Elasticsearch](extensions/elasticsearch.md) | camel-quarkus-elasticsearch | 3.2.0 | 3.36.0 | Stable | Send requests to ElasticSearch via Java Client API. |
+| [Elasticsearch](extensions/elasticsearch.md) | camel-quarkus-elasticsearch | 3.2.0 | 3.36.0 | Stable | Send requests to Elasticsearch via Java Client API. |
 | [Exec](extensions/exec.md) | camel-quarkus-exec | 0.4.0 | 0.4.0 | Stable | Execute commands on the underlying operating system. |
 | [FHIR](extensions/fhir.md) | camel-quarkus-fhir | 0.3.0 | 0.3.0 | Stable | Exchange information in the healthcare domain using the FHIR (Fast Healthcare Interoperability Resources) standard. |
 | [File Watch](extensions/file-watch.md) | camel-quarkus-file-watch | 1.0.0 | 1.0.0 | Stable | Get notified about file events in a directory using java.nio.file.WatchService. |
@@ -121,7 +122,7 @@ level | Description |
 | [Google Storage](extensions/google-storage.md) | camel-quarkus-google-storage | 2.0.0 | 2.0.0 | Stable | Store and retrieve objects from Google Cloud Storage Service using the google-cloud-storage library. |
 | [GraphQL](extensions/graphql.md) | camel-quarkus-graphql | 1.0.0 | 1.0.0 | Stable | Send GraphQL queries and mutations to external systems. |
 | [gRPC](extensions/grpc.md) | camel-quarkus-grpc | 1.0.0 | 1.0.0 | Stable | Expose gRPC endpoints and access external gRPC endpoints. |
-| [Hashicorp Vault](extensions/hashicorp-vault.md) | camel-quarkus-hashicorp-vault | 2.11.0 | 3.15.0 | Stable | Manage secrets in Hashicorp Vault Service |
+| [HashiCorp Vault](extensions/hashicorp-vault.md) | camel-quarkus-hashicorp-vault | 2.11.0 | 3.15.0 | Stable | Manage secrets in HashiCorp Vault Service |
 | [Hazelcast Atomic Number](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
 | [Hazelcast Instance](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Consume join/leave events of a cache instance in a Hazelcast cluster. |
 | [Hazelcast List](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed list. |
@@ -151,7 +152,7 @@ level | Description |
 | [Ignite Sets](extensions/ignite.md) | camel-quarkus-ignite | 1.1.0 | n/a | Preview | Interact with Ignite Set data structures. |
 | [Infinispan](extensions/infinispan.md) | camel-quarkus-infinispan | 0.0.1 | 0.0.1 | Stable | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [InfluxDB](extensions/influxdb.md) | camel-quarkus-influxdb | 1.0.0 | 1.0.0 | Stable | Interact with InfluxDB v1, a time series database. |
-| [IRC](extensions/irc.md) | camel-quarkus-irc | 1.1.0 | n/a | Preview | Send and receive messages to/from and IRC chat. |
+| [IRC](extensions/irc.md) | camel-quarkus-irc | 1.1.0 | n/a | Preview | Send and receive messages to/from an IRC chat. |
 | [JCache](extensions/jcache.md) | camel-quarkus-jcache | 1.2.0 | 2.13.0 | Stable | Perform caching operations against JSR107/JCache. |
 | [JCR](extensions/jcr.md) | camel-quarkus-jcr | 1.1.0 | n/a | Preview | Read and write nodes to/from a JCR compliant content repository. |
 | [JDBC](extensions/jdbc.md) | camel-quarkus-jdbc | 0.0.1 | 0.0.1 | Stable | Access databases through SQL and JDBC. |
@@ -192,18 +193,18 @@ level | Description |
 | [LangChain4j Agent](extensions/langchain4j-agent.md) | camel-quarkus-langchain4j-agent | 3.26.0 | 3.27.0 | Stable | LangChain4j Agent component |
 | [LangChain4j Chat](extensions/langchain4j-chat.md) | camel-quarkus-langchain4j-chat | 3.11.0 | 3.12.0 | Stable | LangChain4j Chat component |
 | [LangChain4j Embeddings](extensions/langchain4j-embeddings.md) | camel-quarkus-langchain4j-embeddings | 3.10.0 | 3.29.0 | Stable | LangChain4j Embeddings |
-| [LangChain4j Embedding Store](extensions/langchain4j-embeddingstore.md) | camel-quarkus-langchain4j-embeddingstore | 3.29.0 | 3.29.0 | Stable | Perform operations on the Langchain4jEmbeddingStores. |
+| [LangChain4j Embedding Store](extensions/langchain4j-embeddingstore.md) | camel-quarkus-langchain4j-embeddingstore | 3.29.0 | 3.29.0 | Stable | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Tools](extensions/langchain4j-tools.md) | camel-quarkus-langchain4j-tools | 3.15.0 | 3.24.0 | Stable | LangChain4j Tools and Function Calling Features |
 | [LangChain4j Web Search](extensions/langchain4j-web-search.md) | camel-quarkus-langchain4j-web-search | 3.15.0 | 3.24.0 | Stable | LangChain4j Web Search Engine |
 | [Language](extensions/language.md) | camel-quarkus-language | 1.1.0 | 2.2.0 | Stable | Execute scripts in any of the languages supported by Camel. |
 | [LDAP](extensions/ldap.md) | camel-quarkus-ldap | 1.1.0 | 3.2.0 | Stable | Perform searches on LDAP servers. |
 | [LDIF](extensions/ldif.md) | camel-quarkus-ldif | 1.1.0 | n/a | Preview | Perform updates on an LDAP server from an LDIF body content. |
-| [Log Data](extensions/log.md) | camel-quarkus-log | 0.0.1 | 0.0.1 | Stable | Prints data form the routed message (such as body and headers) to the logger. |
+| [Log Data](extensions/log.md) | camel-quarkus-log | 0.0.1 | 0.0.1 | Stable | Prints data from the routed message (such as body and headers) to the logger. |
 | [Printer](extensions/printer.md) | camel-quarkus-printer | 1.1.0 | n/a | Preview | Send print jobs to printers. |
 | [Lucene](extensions/lucene.md) | camel-quarkus-lucene | 1.1.0 | n/a | Preview | Perform inserts or queries against Apache Lucene databases. |
 | [Lumberjack](extensions/lumberjack.md) | camel-quarkus-lumberjack | 1.1.0 | 1.4.0 | Stable | Receive logs messages using the Lumberjack protocol. |
 | [IMAP](extensions/mail.md) | camel-quarkus-mail | 0.2.0 | 0.2.0 | Stable | Send and receive emails using imap, pop3 and smtp protocols. |
-| [MapStruct](extensions/mapstruct.md) | camel-quarkus-mapstruct | 3.2.0 | 3.2.0 | Stable | Type Conversion using Mapstruct |
+| [MapStruct](extensions/mapstruct.md) | camel-quarkus-mapstruct | 3.2.0 | 3.2.0 | Stable | Type Conversion using MapStruct |
 | [Master](extensions/master.md) | camel-quarkus-master | 1.0.0 | 1.0.0 | Stable | Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies. |
 | [Micrometer](extensions/micrometer.md) | camel-quarkus-micrometer | 1.5.0 | 1.5.0 | Stable | Collect various metrics directly from Camel routes using the Micrometer library. |
 | [OPC UA Browser](extensions/milo.md) | camel-quarkus-milo | 3.31.0 | 3.31.0 | Stable | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
@@ -226,7 +227,7 @@ level | Description |
 | [OAI-PMH](extensions/oaipmh.md) | camel-quarkus-oaipmh | 1.7.0 | 1.7.0 | Stable | Harvest metadata using OAI-PMH protocol |
 | [Olingo4](extensions/olingo4.md) | camel-quarkus-olingo4 | 1.0.0 | 1.0.0 | Stable | Communicate with OData 4.0 services using Apache Olingo OData API. |
 | [Once](extensions/once.md) | camel-quarkus-once | 3.31.0 | 3.31.0 | Stable | Trigger a single message only once at startup (useful for development and testing purposes). |
-| [OpenAI](extensions/openai.md) | camel-quarkus-openai | 3.32.0 | 3.32.0 | Stable | OpenAI endpoint for chat completion, embeddings, and audio transcription. |
+| [OpenAI](extensions/openai.md) | camel-quarkus-openai | 3.32.0 | 3.32.0 | Stable | OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech. |
 | [OpenSearch](extensions/opensearch.md) | camel-quarkus-opensearch | 3.8.0 | n/a | Preview | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](extensions/kubernetes.md) | camel-quarkus-kubernetes | 1.0.0 | 1.0.0 | Stable | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](extensions/kubernetes.md) | camel-quarkus-kubernetes | 1.0.0 | 1.0.0 | Stable | Perform operations on OpenShift Builds. |
@@ -241,8 +242,8 @@ level | Description |
 | [Paho MQTT 5](extensions/paho-mqtt5.md) | camel-quarkus-paho-mqtt5 | 1.8.0 | 1.8.0 | Stable | Communicate with MQTT message brokers using Eclipse Paho MQTT v5 Client. |
 | [Paho](extensions/paho.md) | camel-quarkus-paho | 0.2.0 | 0.2.0 | Stable | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |
 | [PDF](extensions/pdf.md) | camel-quarkus-pdf | 0.3.1 | 0.3.1 | Stable | Create, modify or extract content from PDF documents. |
-| [PostgresSQL Replication Slot](extensions/pg-replication-slot.md) | camel-quarkus-pg-replication-slot | 1.1.0 | 1.2.0 | Stable | Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots. |
-| [PostgresSQL Event](extensions/pgevent.md) | camel-quarkus-pgevent | 1.1.0 | 1.2.0 | Stable | Send and receive PostgreSQL events via LISTEN and NOTIFY commands. |
+| [PostgreSQL Replication Slot](extensions/pg-replication-slot.md) | camel-quarkus-pg-replication-slot | 1.1.0 | 1.2.0 | Stable | Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots. |
+| [PostgreSQL Event](extensions/pgevent.md) | camel-quarkus-pgevent | 1.1.0 | 1.2.0 | Stable | Send and receive PostgreSQL events via LISTEN and NOTIFY commands. |
 | [Pinecone](extensions/pinecone.md) | camel-quarkus-pinecone | 3.12.0 | 3.12.0 | Stable | Perform operations on the Pinecone Vector Database. |
 | [Platform HTTP](extensions/platform-http.md) | camel-quarkus-platform-http | 0.3.0 | 0.3.0 | Stable | Expose HTTP endpoints using the HTTP server available in the current platform. |
 | [PQC Algorithms](extensions/pqc.md) | camel-quarkus-pqc | 3.24.0 | 3.35.0 | Stable | Post Quantum Cryptography Signature and Verification component. |

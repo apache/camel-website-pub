@@ -1085,7 +1085,7 @@ This component has log level **TRACE** that can be helpful if you have problems.
 
 ### Why does FTP component not download any files?
 
-The [FTP](../4.18.x/ftp-component.md) component has many options. So make sure you have configured it properly. Also, a common issue is that you have to use either active or passive mode. So you may have to set `passiveMode=true` on the endpoint configuration.
+The [FTP](../4.22.x/ftp-component.md) component has many options. So make sure you have configured it properly. Also, a common issue is that you have to use either active or passive mode. So you may have to set `passiveMode=true` on the endpoint configuration.
 
 ## Examples
 

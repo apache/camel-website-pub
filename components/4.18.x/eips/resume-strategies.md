@@ -6,21 +6,21 @@ The resume strategies can be used to allow quicker stop and resume operations wh
 
 Support for resume varies according to the component. Initially, the support is available for the following components:
 
--   [camel-atom](../atom-component.md)
+-   [camel-atom](../../4.22.x/atom-component.md)
     
--   [camel-aws2-kinesis](../aws2-kinesis-component.md)
+-   [camel-aws2-kinesis](../../4.22.x/aws2-kinesis-component.md)
     
--   [camel-cassandracql](../cql-component.md)
+-   [camel-cassandracql](../../4.22.x/cql-component.md)
     
--   [camel-couchbase](../couchbase-component.md)
+-   [camel-couchbase](../../4.22.x/couchbase-component.md)
     
--   [camel-couchdb](../couchdb-component.md)
+-   [camel-couchdb](../../4.22.x/couchdb-component.md)
     
--   [camel-file](../file-component.md)
+-   [camel-file](../../4.22.x/file-component.md)
     
--   [camel-kafka](../kafka-component.md)
+-   [camel-kafka](../../4.22.x/kafka-component.md)
     
--   [camel-rss](../rss-component.md)
+-   [camel-rss](../../4.22.x/rss-component.md)
     
 
 The resume strategies comes in three parts:
@@ -97,7 +97,7 @@ Camel comes with a few builtin strategies that can be used to store, retrieve an
 
 -   `SingleNodeKafkaResumeStrategy`: a resume strategy from the `camel-kafka` component that uses Kafka as the store for the offsets and is suitable for single node integrations.
     
--   `MultiNodeKafkaResumeStrategy`: a resume strategy from the `camel-kafka` component that uses Kafka as the store for the offsets and is suitable for multi node integrations (i.e.: integrations running on clusters using the [camel-master](../master-component.md) component.
+-   `MultiNodeKafkaResumeStrategy`: a resume strategy from the `camel-kafka` component that uses Kafka as the store for the offsets and is suitable for multi node integrations (i.e.: integrations running on clusters using the [camel-master](../../4.22.x/master-component.md) component.
     
 
 ### Configuring the Strategies
@@ -152,7 +152,7 @@ The Pausable consumers API is a subset of the resume API that provides pause and
 
 Currently, support for pausable consumers is available for the following components:
 
--   [camel-kafka](../kafka-component.md)
+-   [camel-kafka](../../4.22.x/kafka-component.md)
     
 
 To use the API, it needs an instance of a Consumer listener along with a predicate that tests whether to continue.

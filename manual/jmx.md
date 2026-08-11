@@ -121,7 +121,7 @@ By default, Camel automatically registers MBeans for all routes configured at st
 In **Camel 4.5** onwards, there are additional options to configure whether routes created from route templates or Kamelets should be registered as MBeans or not. By default, Kamelets are now disabled with the intention to regard a Kamelet as a component, instead of a set of additional routes and processors MBeans that is essentially unnecessary for management and monitoring. The option `registerRoutesCreateByKamelet` can be set to `true` to enable MBeans, which is how Camel 4.4 or older behaves. On the other hand, routes created from route templates (not Kamelets) are default enabled.
 
 > **Caution**
-> However, be cautious when using the `registerAlways` option in conjunction with dynamic EIP patterns, such as the [Recipient List](../components/4.18.x/eips/recipientList-eip.md), which have unique endpoints. This can potentially lead to system degradation due to the increasing number of MBeans in the registry from its associated services/producers. Keep in mind that an MBean is not a lightweight object and consumes memory.
+> However, be cautious when using the `registerAlways` option in conjunction with dynamic EIP patterns, such as the [Recipient List](../components/4.22.x/eips/recipientList-eip.md), which have unique endpoints. This can potentially lead to system degradation due to the increasing number of MBeans in the registry from its associated services/producers. Keep in mind that an MBean is not a lightweight object and consumes memory.
 
 ### Why is my processor not showing up in JMX?
 

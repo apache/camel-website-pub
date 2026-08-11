@@ -29,14 +29,14 @@ See the Javadoc of the `org.apache.camel.spi.RoutePolicy` for more details; and 
 
 Camel provides the following policies out of the box:
 
--   `org.apache.camel.throttling.ThrottlingInflightRoutePolicy` - a throttling based policy that automatically suspends/resumes route(s) based on metrics from the current in flight exchanges. You can use this to dynamically throttle, e.g. a [JMS](../components/4.18.x/jms-component.md) consumer, to avoid it consuming too fast.
+-   `org.apache.camel.throttling.ThrottlingInflightRoutePolicy` - a throttling based policy that automatically suspends/resumes route(s) based on metrics from the current in flight exchanges. You can use this to dynamically throttle, e.g. a [JMS](../components/4.22.x/jms-component.md) consumer, to avoid it consuming too fast.
     
 -   `org.apache.camel.throttling.ThrottlingExceptionRoutePolicy` - a throttling based policy modeled after the circuit breaker. This policy will stop consuming from an endpoint based on the type of exceptions that are thrown and the threshold setting.
     
 -   `org.apache.camel.impl.cluster.ClusteredRoutePolicy` - is the foundation for `camel-cluster` which handles Camel routes to become active if a node becomes leader in a cluster.
     
 
-Camel also provides an ability to schedule routes to be activated, deactivated, suspended and/or resumed at certain times during the day using a [ScheduledRoutePolicy](scheduledroutepolicy.md) (offered via the [Quartz](../components/4.18.x/quartz-component.md) component).
+Camel also provides an ability to schedule routes to be activated, deactivated, suspended and/or resumed at certain times during the day using a [ScheduledRoutePolicy](scheduledroutepolicy.md) (offered via the [Quartz](../components/4.22.x/quartz-component.md) component).
 
 And route policy is also used as an implementation details for some of the Camel observability components.
 
@@ -61,9 +61,9 @@ The throttling in flight route policy has the following options:
 
 ### ThrottlingInflightRoutePolicy compared to the Throttler EIP
 
-The `ThrottlingInflightRoutePolicy` compared to [Throttler](../components/4.18.x/eips/throttle-eip.md) EIP is that it does **not** block during throttling. Its throttling is approximate-based, meaning that its coarser grained and not explicitly precise as the [Throttler](../components/4.18.x/eips/throttle-eip.md) EIP.
+The `ThrottlingInflightRoutePolicy` compared to [Throttler](../components/4.22.x/eips/throttle-eip.md) EIP is that it does **not** block during throttling. Its throttling is approximate-based, meaning that its coarser grained and not explicitly precise as the [Throttler](../components/4.22.x/eips/throttle-eip.md) EIP.
 
-The [Throttler](../components/4.18.x/eips/throttle-eip.md) EIP can be much more accurate and only allow a specific number of messages being passed per a given time unit. Also, the `ThrottlingInflightRoutePolicy` is based its metrics on number of in flight exchanges whereas [Throttler](../components/4.18.x/eips/throttle-eip.md) EIP is based on number o messages per time unit.
+The [Throttler](../components/4.22.x/eips/throttle-eip.md) EIP can be much more accurate and only allow a specific number of messages being passed per a given time unit. Also, the `ThrottlingInflightRoutePolicy` is based its metrics on number of in flight exchanges whereas [Throttler](../components/4.22.x/eips/throttle-eip.md) EIP is based on number o messages per time unit.
 
 ## ScheduledRoutePolicy
 

@@ -1,14 +1,14 @@
 # DSL
 
-Camel uses a Java _Domain Specific Language_ or DSL for creating [Enterprise Integration Patterns](../components/4.18.x/eips/enterprise-integration-patterns.md) or [Routes](routes.md) in a variety of domain-specific languages (DSL) as listed below:
+Camel uses a Java _Domain Specific Language_ or DSL for creating [Enterprise Integration Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md) or [Routes](routes.md) in a variety of domain-specific languages (DSL) as listed below:
 
 -   [Java DSL](java-dsl.md): a Java-based DSL using the fluent builder style.
     
--   [XML DSL](../components/4.18.x/others/java-xml-io-dsl.md): an XML-based DSL in Camel XML files only.
+-   [XML DSL](../components/4.22.x/others/java-xml-io-dsl.md): an XML-based DSL in Camel XML files only.
     
--   [Spring XML](../components/4.18.x/spring-summary.md): an XML-based DSL in classic Spring XML files.
+-   [Spring XML](../components/4.22.x/spring-summary.md): an XML-based DSL in classic Spring XML files.
     
--   [YAML DSL](../components/4.18.x/others/yaml-dsl.md): for creating routes using YAML format.
+-   [YAML DSL](../components/4.22.x/others/yaml-dsl.md): for creating routes using YAML format.
     
 -   [Rest DSL](rest-dsl.md): a DSL to define REST services using REST verbs.
     

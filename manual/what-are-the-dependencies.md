@@ -33,4 +33,4 @@ Camel core itself is lightweight, and only requires the `slf4j-api` logging API 
 
 ## Components
 
-All the [Components](../components/4.18.x/index.md) have a range of 3rd party jars they depend on. They are listed in the maven pom files which files they require.
+All the [Components](../components/4.22.x/index.md) have a range of 3rd party jars they depend on. They are listed in the maven pom files which files they require.

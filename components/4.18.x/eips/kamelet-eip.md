@@ -3,11 +3,11 @@
 Kamelets (Kamel route snippets) allow users to connect to external systems via a simplified interface, hiding all the low-level details about how those connections are implemented.
 
 > **Important**
-> By default, calling kamelets should be done as [endpoints](message-endpoint.md) with the [kamelet](../kamelet-component.md) component, such as `to("kamelet:mykamelet")`.
+> By default, calling kamelets should be done as [endpoints](message-endpoint.md) with the [kamelet](../../4.22.x/kamelet-component.md) component, such as `to("kamelet:mykamelet")`.
 
 The Kamelet EIP allows calling Kamelets (i.e., [Route Template](../../../manual/route-template.md)), **for special use-cases**.
 
-When a Kamelet is designed for a special use-case such as aggregating messages, and returning a response message only when a group of aggregated messages is completed. In other words, kamelet does not return a response message for every incoming message. In special situations like these, then you **must** use this Kamelet EIP instead of using the [kamelet](../kamelet-component.md) component.
+When a Kamelet is designed for a special use-case such as aggregating messages, and returning a response message only when a group of aggregated messages is completed. In other words, kamelet does not return a response message for every incoming message. In special situations like these, then you **must** use this Kamelet EIP instead of using the [kamelet](../../4.22.x/kamelet-component.md) component.
 
 Given the following Kamelet (as a route template):
 

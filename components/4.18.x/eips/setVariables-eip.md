@@ -64,9 +64,9 @@ from("direct:a")
           uri: direct:b
 ```
 
-For example, the variables values are [constants](../languages/constant-language.md).
+For example, the variables values are [constants](../../4.22.x/languages/constant-language.md).
 
-Any of the Camel languages can be used, such as [Simple](../languages/simple-language.md).
+Any of the Camel languages can be used, such as [Simple](../../4.22.x/languages/simple-language.md).
 
 -   Java
     

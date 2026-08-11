@@ -15,11 +15,11 @@ Scheduling of routes typically involves the following capabilities:
 
 Camel offers two such concrete policies that offer scheduled route policy support in the `camel-quartz` component:
 
--   [SimpleScheduledRoutePolicy](simplescheduledroutepolicy.md) - An ability to offer route scheduling services using a Simple [Quartz](../components/4.18.x/quartz-component.md) trigger.
+-   [SimpleScheduledRoutePolicy](simplescheduledroutepolicy.md) - An ability to offer route scheduling services using a Simple [Quartz](../components/4.22.x/quartz-component.md) trigger.
     
--   [CronScheduledRoutePolicy](cronscheduledroutepolicy.md) - An ability to offer route scheduling services using a Cron based [Quartz](../components/4.18.x/quartz-component.md) trigger.
+-   [CronScheduledRoutePolicy](cronscheduledroutepolicy.md) - An ability to offer route scheduling services using a Cron based [Quartz](../components/4.22.x/quartz-component.md) trigger.
     
 
 ## More Information
 
-See [Route Policy](route-policy.md) and [Quartz](../components/4.18.x/quartz-component.md) component.
+See [Route Policy](route-policy.md) and [Quartz](../components/4.22.x/quartz-component.md) component.

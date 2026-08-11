@@ -70,7 +70,7 @@ from("seda:inputB")
             uri: activemq:anotherQueue
 ```
 
-Here if the processing of **`seda:inputA`** or **`seda:inputB`** cause a **`ValidationException`** to be thrown (such as due to the XSD validation of the [Validation](../components/4.18.x/validator-component.md) component), then the message will be sent to the **`activemq:validationFailed`** queue.
+Here if the processing of **`seda:inputA`** or **`seda:inputB`** cause a **`ValidationException`** to be thrown (such as due to the XSD validation of the [Validation](../components/4.22.x/validator-component.md) component), then the message will be sent to the **`activemq:validationFailed`** queue.
 
 You can define multiple **`onException`** clauses for different behavior:
 

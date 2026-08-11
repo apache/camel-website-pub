@@ -17,7 +17,7 @@ Camel comes with Stream Caching that caches the stream, so it can be re-readable
 > **Important**
 > **StreamCache - Affecting the message payload**
 >
-> The `StreamCache` will affect your payload object as it will replace the `Stream` payload with a `org.apache.camel.StreamCache` object. This `StreamCache` is capable of being re-readable and thus possible to better be routed within Camel using redelivery or [Content Based Router](../components/4.18.x/eips/choice-eip.md) or the likes.
+> The `StreamCache` will affect your payload object as it will replace the `Stream` payload with a `org.apache.camel.StreamCache` object. This `StreamCache` is capable of being re-readable and thus possible to better be routed within Camel using redelivery or [Content Based Router](../components/4.22.x/eips/choice-eip.md) or the likes.
 
 In order to determine if a message payload requires caching, then Camel uses the [Type Converter](type-converter.md) functionality, to determine if the message payload type can be converted into an `org.apache.camel.StreamCache` instance.
 

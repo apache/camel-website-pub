@@ -564,7 +564,7 @@ $ camel get metric
 
 ## Circuit breaker status
 
-View the state of [Circuit Breakers](../components/4.18.x/eips/circuitBreaker-eip.md):
+View the state of [Circuit Breakers](../components/4.22.x/eips/circuitBreaker-eip.md):
 
 ```bash
 camel get circuit-breaker

@@ -84,7 +84,7 @@ headers.put("quoteRequestId", "quoteRequest-1");
 template.sendBodyAndHeaders("direct:start", "<quote_request item=\"beer\"/>", headers);
 ```
 
-This message will be distributed to the following Endpoints: bean:vendor1, bean:vendor2, and bean:vendor3. These are all Java beans (called via the Camel [Bean](../bean-component.md) endpoint), which look like:
+This message will be distributed to the following Endpoints: bean:vendor1, bean:vendor2, and bean:vendor3. These are all Java beans (called via the Camel [Bean](../../4.22.x/bean-component.md) endpoint), which look like:
 
 ```java
 public class MyVendor {

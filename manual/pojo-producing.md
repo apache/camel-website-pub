@@ -60,9 +60,9 @@ public class MyBean {
 
 Here Camel will automatically inject a smart client side proxy at the `@Produce` annotation - an instance of the `MyListener` interface.
 
-When we invoke methods on this interface the method call is turned into an object and is sent to the endpoint; in this case the ActiveMQ endpoint to queue **`foo`**. Because the `sayHello` method has a return type (`String`) then Camel will use [Request Reply](../components/4.18.x/eips/requestReply-eip.md) (InOut) messaging.
+When we invoke methods on this interface the method call is turned into an object and is sent to the endpoint; in this case the ActiveMQ endpoint to queue **`foo`**. Because the `sayHello` method has a return type (`String`) then Camel will use [Request Reply](../components/4.22.x/eips/requestReply-eip.md) (InOut) messaging.
 
-If the method is a `void` method, then Camel will use [Event Message](../components/4.18.x/eips/event-message.md) (InOnly) messaging, as shown below:
+If the method is a `void` method, then Camel will use [Event Message](../components/4.22.x/eips/event-message.md) (InOnly) messaging, as shown below:
 
 ```java
 public interface MyListener {

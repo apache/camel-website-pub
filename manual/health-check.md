@@ -354,7 +354,7 @@ context.setLoadHealthChecks(true);
 
 ### Loading custom health checks in Camel Quarkus
 
-If you use Camel Quarkus then you can write custom health checks with [MicroProfile Health](../components/4.18.x/others/microprofile-health.md), which Camel Quarkus can automatically discover during build time compilation and ensure are automatically loaded.
+If you use Camel Quarkus then you can write custom health checks with [MicroProfile Health](../components/4.22.x/others/microprofile-health.md), which Camel Quarkus can automatically discover during build time compilation and ensure are automatically loaded.
 
 Using Camel’s own health check APIs does however allow building health checks that are usable anywhere you use Camel whether its standalone, spring boot, quarkus, or something else.
 

@@ -1,0 +1,449 @@
+# Claim Check
+
+The [Claim Check](http://www.enterpriseintegrationpatterns.com/patterns/messaging/StoreInLibrary.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to replace message content with a claim check (a unique key), which can be used to retrieve the message content at a later time.
+
+![image](_images/eip/StoreInLibrary.gif)
+
+It can also be useful in situations where you cannot trust the information with an outside party; in this case, you can use the Claim Check to hide the sensitive portions of data.
+
+> **Note**
+> The Camel implementation of this EIP pattern stores the message content temporarily in an internal memory store.
+
+The Claim Check eip supports the following options which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **operation** | 
+**Required** The claim check operation to use. Get=retrieve, GetAndRemove=retrieve and remove, Set=store with key, Push=store on stack, Pop=retrieve from stack.
+
+Enum values:
+
+-   Get
+    
+-   GetAndRemove
+    
+-   Set
+    
+-   Push
+    
+-   Pop
+    
+
+
+
+
+
+ |  | ClaimCheckOperation |
+| **key** | The unique claim check key to use for Get, GetAndRemove, and Set operations. |  | String |
+| **filter** | Specifies a filter to control what data gets merged back when using Get or Pop operations. Use body, headers, header:pattern to include only matching data. |  | String |
+| **aggregationStrategy** | Reference to a custom AggregationStrategy to use for merging data back from the claim check repository. |  | AggregationStrategy |
+| **aggregationStrategyMethodName** | The method name to use when using a POJO as the AggregationStrategy. |  | String |
+
+## Exchange properties
+
+The Claim Check eip has no exchange properties.
+
+## Claim Check Operation
+
+When using this EIP, you must specify the operation to use which can be of the following:
+
+-   `**Get**`: Gets (does not remove) the claim check by the given key.
+    
+-   `**GetAndRemove**`: Gets and removes the claim check by the given key.
+    
+-   `**Set**`: Sets a new (will override if key already exists) claim check with the given key.
+    
+-   `**Push**`: Sets a new claim check on the stack (does not use key).
+    
+-   `**Pop**`: Gets the latest claim check from the stack (does not use key).
+    
+
+When using the `Get`, `GetAndRemove`, or `Set` operation you must specify a key. These operations will then store and retrieve the data using this key. You can use this to store multiple data in different keys.
+
+The `Push` and `Pop` operations do **not** use a key but stores the data in a stack structure.
+
+## Merging data using get or pop operation
+
+The `Get`, `GetAndRemove` and `Pop` operations will claim data back from the claim check repository. The data is then merged with the current data on the exchange. This is done with an `AggregationStrategy`. The default strategy uses the `filter` option to easily specify what data to merge back.
+
+The `filter` option takes a `String` value with the following syntax:
+
+-   `body`: to aggregate the message body.
+    
+-   `attachments`: to aggregate all the message attachments.
+    
+-   `headers`: to aggregate all the message headers.
+    
+-   `header:pattern`: to aggregate all the message headers that match the pattern.
+    
+
+The pattern rule supports wildcards and regular expressions:
+
+-   wildcard match (pattern ends with a `*`, and the name starts with the pattern)
+    
+-   regular expression match
+    
+
+You can specify multiple rules separated by comma.
+
+### Basic filter examples
+
+For example, to include the message body and all headers starting with _foo_:
+
+```text
+body,header:foo*
+```
+
+To only merge back the message body:
+
+```text
+body
+```
+
+To only merge back the message attachments:
+
+```text
+attachments
+```
+
+To only merge back headers:
+
+```text
+headers
+```
+
+To only merge back a header name foo:
+
+```text
+header:foo
+```
+
+If the filter rule is specified as empty or as wildcard, then everything is merged.
+
+Notice that when merging back data, any data in the Message that is not overwritten is preserved.
+
+### Filtering with include and exclude patterns
+
+The syntax also supports the following prefixes which can be used to specify include, exclude, or remove patterns:
+
+-   `+` to include (which is the default mode)
+    
+-   `-` to exclude (exclude takes precedence over include)
+    
+-   `--` to remove (remove takes precedence)
+    
+
+For example, to skip the message body, and merge back everything else
+
+```text
+-body
+```
+
+Or to skip the message header foo and merge back everything else
+
+```text
+-header:foo
+```
+
+You can also remove headers when merging data back. For example, to remove all headers starting with _bar_:
+
+```text
+--headers:bar*
+```
+
+Note you cannot have both include (`+`) and exclude (`-`) `header:pattern` at the same time.
+
+## Dynamic keys
+
+The claim check keys are static, but you can use the `simple` language syntax to define dynamic keys. For example, to use a header from the message named `myKey`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("mock:a")
+    .claimCheck(ClaimCheckOperation.Set, "${header.myKey}")
+    .transform().constant("Bye World")
+    .to("mock:b")
+    .claimCheck(ClaimCheckOperation.Get, "${header.myKey}")
+    .to("mock:c")
+    .transform().constant("Hi World")
+    .to("mock:d")
+    .claimCheck(ClaimCheckOperation.Get, "${header.myKey}")
+    .to("mock:e");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="mock:a"/>
+    <claimCheck operation="Set" key="${header.myKey}"/>
+    <transform>
+        <constant>Bye World</constant>
+    </transform>
+    <to uri="mock:b"/>
+    <claimCheck operation="Get" key="${header.myKey}"/>
+    <to uri="mock:c"/>
+    <transform>
+        <constant>Hi World</constant>
+    </transform>
+    <to uri="mock:d"/>
+    <claimCheck operation="Get" key="${header.myKey}"/>
+    <to uri="mock:e"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct
+      parameters:
+        name: start
+      steps:
+        - to:
+            uri: mock
+            parameters:
+              name: a
+        - claimCheck:
+            operation: Set
+            key: "${header.myKey}"
+        - transform:
+            expression:
+              constant:
+                expression: Bye World
+        - to:
+            uri: mock
+            parameters:
+              name: b
+        - claimCheck:
+            operation: Get
+            key: "${header.myKey}"
+        - to:
+            uri: mock
+            parameters:
+              name: c
+        - transform:
+            expression:
+              constant:
+                expression: Hi World
+        - to:
+            uri: mock
+            parameters:
+              name: d
+        - claimCheck:
+            operation: Get
+            key: "${header.myKey}"
+        - to:
+            uri: mock
+            parameters:
+              name: e
+```
+
+## Example
+
+The following example shows the `Push` and `Pop` operations in action:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("mock:a")
+    .claimCheck(ClaimCheckOperation.Push)
+    .transform().constant("Bye World")
+    .to("mock:b")
+    .claimCheck(ClaimCheckOperation.Pop)
+    .to("mock:c");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="mock:a"/>
+  <claimCheck operation="Push"/>
+  <transform>
+    <constant>Bye World</constant>
+  </transform>
+  <to uri="mock:b"/>
+  <claimCheck operation="Pop"/>
+  <to uri="mock:c"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to: mock:a
+        - claimCheck:
+            operation: Push
+        - transform:
+            expression:
+              constant: Bye World
+        - to:
+            uri: mock:b
+        - claimCheck:
+            operation: Pop
+        - to:
+            uri: mock:c
+```
+
+In the above example, imagine message body from the beginning is `Hello World`. That data is pushed on the stack of the Claim Check EIP. Then the message body is transformed to `Bye World`, which is what `mock:b` endpoint receives. When we `Pop` from the Claim Check EIP, the original message body is retrieved and merged back, so `mock:c` will retrieve the message body with `Hello World`.
+
+Here is an example using `Get` and `Set` operations, which uses the key `foo`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("mock:a")
+    .claimCheck(ClaimCheckOperation.Set, "foo")
+    .transform().constant("Bye World")
+    .to("mock:b")
+    .claimCheck(ClaimCheckOperation.Get, "foo")
+    .to("mock:c")
+    .transform().constant("Hi World")
+    .to("mock:d")
+    .claimCheck(ClaimCheckOperation.Get, "foo")
+    .to("mock:e");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="mock:a"/>
+  <claimCheck operation="Set" key="foo"/>
+  <transform>
+    <constant>Bye World</constant>
+  </transform>
+  <to uri="mock:b"/>
+  <claimCheck operation="Get" key="foo"/>
+  <to uri="mock:c"/>
+  <transform>
+    <constant>Hi World</constant>
+  </transform>
+  <to uri="mock:d"/>
+  <claimCheck operation="Get" key="foo"/>
+  <to uri="mock:e"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to: mock:a
+        - claimCheck:
+            operation: Set
+            key: foo
+        - transform:
+            expression:
+              constant: Bye World
+        - to:
+            uri: mock:b
+        - claimCheck:
+            operation: Get
+            key: foo
+        - to:
+            uri: mock:c
+        - transform:
+            expression:
+              constant: Hi World
+        - to:
+            uri: mock:d
+        - claimCheck:
+            operation: Get
+            key: foo
+        - to:
+            uri: mock:e
+```
+
+Notice how we can `Get` the same data twice using the `Get` operation as it will not remove the data. If you only want to get the data once, you can use `GetAndRemove`.
+
+The last example shows how to use the `filter` option where we only want to get back header named `foo` or `bar`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("mock:a")
+    .claimCheck(ClaimCheckOperation.Push)
+    .transform().constant("Bye World")
+    .setHeader("foo", constant(456))
+    .removeHeader("bar")
+    .to("mock:b")
+    // only merge in the message headers foo or bar
+    .claimCheck(ClaimCheckOperation.Pop, null, "header:(foo|bar)")
+    .to("mock:c");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="mock:a"/>
+  <claimCheck operation="Push"/>
+  <transform>
+    <constant>Bye World</constant>
+  </transform>
+  <setHeader name="foo">
+    <constant>456</constant>
+  </setHeader>
+  <removeHeader headerName="bar"/>
+  <to uri="mock:b"/>
+  <!-- only merge in the message headers foo or bar -->
+  <claimCheck operation="Pop" filter="header:(foo|bar)"/>
+  <to uri="mock:c"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: mock:a
+        - claimCheck:
+            operation: Push
+        - transform:
+            expression:
+              constant: ByeWorld
+        - setHeader:
+            name: foo
+            expression:
+              constant: 456
+        - removeHeader:
+            name: bar
+        - to:
+            uri: mock:b
+        - claimCheck:
+            operation: Pop
+            filter: "header:(foo|bar)"
+        - to:
+            uri: mock:c
+```

@@ -2,7 +2,7 @@
 
 **Since Camel 4.9**
 
-The Smooks Data Format uses [Smooks](https://www.smooks.org/) to transform from one data format to another and back again. A configuration for a Smooks Data Format should not allocate system resources because the data format does not close those resources. Use this data format when you are primarily interested in transformation and binding; not other Smooks features like routing. The latter should be done with the [Smooks component](../smooks-component.md).
+The Smooks Data Format uses [Smooks](https://www.smooks.org/) to transform from one data format to another and back again. A configuration for a Smooks Data Format should not allocate system resources because the data format does not close those resources. Use this data format when you are primarily interested in transformation and binding; not other Smooks features like routing. The latter should be done with the [Smooks component](../../4.22.x/smooks-component.md).
 
 Maven users will need to add the following dependency to their `pom.xml` for this data format:
 

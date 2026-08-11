@@ -390,7 +390,7 @@ restConfiguration()
         value: myprofile
 ```
 
-When using the default validator implementation, add the [camel-oauth](../components/4.18.x/others/oauth.md) component to the application classpath and configure the named profile with `camel.oauth.<profile>.*` properties. The OAuth check runs before route processors. Depending on the selected HTTP consumer, the transport may already have accepted, decoded, or bound parts of the inbound request.
+When using the default validator implementation, add the [camel-oauth](../components/4.22.x/others/oauth.md) component to the application classpath and configure the named profile with `camel.oauth.<profile>.*` properties. The OAuth check runs before route processors. Depending on the selected HTTP consumer, the transport may already have accepted, decoded, or bound parts of the inbound request.
 
 For valid tokens, route code can read the validation result from the exchange property:
 

@@ -171,7 +171,7 @@ When shutting down Camel, then the default timeout has changed from 300 seconds 
 
 ### Message History
 
-The message history is now default disabled (due to optimize core for lower footprint out of the box). See the [Message History](../components/4.18.x/eips/message-history.md) documentation for how to enabled message history.
+The message history is now default disabled (due to optimize core for lower footprint out of the box). See the [Message History](../components/4.22.x/eips/message-history.md) documentation for how to enabled message history.
 
 ### Inflight Repository
 

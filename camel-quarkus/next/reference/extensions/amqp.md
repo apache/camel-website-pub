@@ -2,7 +2,7 @@
 
 JVM since1.0.0 Native since1.0.0
 
-Messaging with AMQP protocol using Apache QPid Client.
+Messaging with AMQP protocol using Apache Qpid Client.
 
 ## What’s inside
 

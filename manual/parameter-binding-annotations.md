@@ -14,9 +14,9 @@ The bean parameter binding annotations from Camel are as follows:
 | `` `org.apache.camel.ExchangeProperties` `` | To bind to the exchange property map on the exchange |
 | `` `org.apache.camel.ExchangeException` `` | To bind to an Exception set on the exchange |
 
-These annotations can be used with the [Bean](../components/4.18.x/bean-component.md) component or when invoking beans in the [DSL](dsl.md)
+These annotations can be used with the [Bean](../components/4.22.x/bean-component.md) component or when invoking beans in the [DSL](dsl.md)
 
-Annotations can be used to define an [Expression](expression.md) or to extract various headers, properties or payloads from a [Message](../components/4.18.x/eips/message.md) when invoking a bean method. See [Bean Integration](bean-integration.md) for more in depth details on invoking beans.
+Annotations can be used to define an [Expression](expression.md) or to extract various headers, properties or payloads from a [Message](../components/4.22.x/eips/message.md) when invoking a bean method. See [Bean Integration](bean-integration.md) for more in depth details on invoking beans.
 
 If no annotations are used then Camel assumes that a single parameter is the body of the message. Camel will then use the [Type Converter](type-converter.md) mechanism to convert from the expression value to the actual type of the parameter.
 
@@ -137,14 +137,14 @@ You can also use any of the [Languages](languages.md) supported in Camel to bind
  
 | Annotation | Description |
 | --- | --- |
-| `` `@Bean` `` | Inject a [Bean](../components/4.18.x/languages/bean-language.md) expression |
-| `` `@Constant` `` | Inject a [Constant](../components/4.18.x/languages/constant-language.md) expression |
-| `` `@Groovy` `` | Inject a [Groovy](../components/4.18.x/languages/groovy-language.md) expression |
-| `` `@Header` `` | Inject a [Header](../components/4.18.x/languages/header-language.md) expression |
-| `` `@Simple` `` | Inject an [Simple](../components/4.18.x/languages/simple-language.md) expression |
-| `` `@XPath` `` | Inject an [XPath](../components/4.18.x/languages/xpath-language.md) expression |
+| `` `@Bean` `` | Inject a [Bean](../components/4.22.x/languages/bean-language.md) expression |
+| `` `@Constant` `` | Inject a [Constant](../components/4.22.x/languages/constant-language.md) expression |
+| `` `@Groovy` `` | Inject a [Groovy](../components/4.22.x/languages/groovy-language.md) expression |
+| `` `@Header` `` | Inject a [Header](../components/4.22.x/languages/header-language.md) expression |
+| `` `@Simple` `` | Inject an [Simple](../components/4.22.x/languages/simple-language.md) expression |
+| `` `@XPath` `` | Inject an [XPath](../components/4.22.x/languages/xpath-language.md) expression |
 
-The table above only list some of the commonly used languages. You can find a list of all supported [Languages](../components/4.18.x/languages/index.md) which each have their own annotation that can be used.
+The table above only list some of the commonly used languages. You can find a list of all supported [Languages](../components/4.22.x/languages/index.md) which each have their own annotation that can be used.
 
 It is required to include the JAR of the language, for example `camel-groovy`, or `camel-jsonpath` to use the `@JSonPath` annotation.
 
@@ -163,7 +163,7 @@ public class Foo {
 
 #### Advanced example using @Bean
 
-And an example of using the `@Bean` binding annotation, where you can call a [POJO](../components/4.18.x/bean-component.md) to supply the parameter value:
+And an example of using the `@Bean` binding annotation, where you can call a [POJO](../components/4.22.x/bean-component.md) to supply the parameter value:
 
 ```java
 public class MyBean {
@@ -190,7 +190,7 @@ public class MyIdGenerator {
 }
 ```
 
-The [POJO](../components/4.18.x/bean-component.md) MyIdGenerator has one public method that accepts two parameters. We have also annotated this one with the `@Header` and `@Body` annotations to help Camel know what to bind here from the Exchange being processed.
+The [POJO](../components/4.22.x/bean-component.md) MyIdGenerator has one public method that accepts two parameters. We have also annotated this one with the `@Header` and `@Body` annotations to help Camel know what to bind here from the Exchange being processed.
 
 Of course this could be simplified a lot if you for instance just have a simple id generator. But we wanted to demonstrate that you can use the [Bean Binding](bean-binding.md) annotations anywhere.
 
@@ -214,7 +214,7 @@ For example in Spring XML:
 
 #### Example using Groovy
 
-In this example we have an Exchange that has a User object stored in the in header. This User object has methods to get some user information. We want to use [Groovy](../components/4.18.x/languages/groovy-language.md) to inject an expression that extracts and concat the names of the user into the fullName parameter.
+In this example we have an Exchange that has a User object stored in the in header. This User object has methods to get some user information. We want to use [Groovy](../components/4.22.x/languages/groovy-language.md) to inject an expression that extracts and concat the names of the user into the fullName parameter.
 
 ```java
 public class MyBean {

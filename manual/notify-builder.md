@@ -2,7 +2,7 @@
 
 The `NotifyBuilder` is a builder from the `org.apache.camel.builder` package which allows you to build expressions and then test or wait for that condition to occur. The expressions are based around notifications about [Exchange](exchange.md) being routed. So what does that mean?
 
-It means that you can build an expressions which can tell you when Camel is finished with routing 5 messages etc. You may want to use this when testing a route which you cannot or will not use [Mocks](../components/4.18.x/mock-component.md).
+It means that you can build an expressions which can tell you when Camel is finished with routing 5 messages etc. You may want to use this when testing a route which you cannot or will not use [Mocks](../components/4.22.x/mock-component.md).
 
 > **Note**
 > The `NotifyBuilder` is only intended for testing purposes and you can only use this with Java coding.
@@ -181,7 +181,7 @@ NotifyBuilder notify = new NotifyBuilder(context)
     .create();
 ```
 
-Here we combine a [Mock](../components/4.18.x/mock-component.md) with the `NotifyBuilder`. We use the mock to set fine-grained expectations such as we should receive 3 messages in any order. Then using the builder we can tell that those messages should be received from the direct:foo endpoint. You can combine multiple expressions as much as you like. However, we suggest using the mock for fine-grained expectations that you may already know how to use. You can also specify that the Exchanges must have been sent to a given endpoint.
+Here we combine a [Mock](../components/4.22.x/mock-component.md) with the `NotifyBuilder`. We use the mock to set fine-grained expectations such as we should receive 3 messages in any order. Then using the builder we can tell that those messages should be received from the direct:foo endpoint. You can combine multiple expressions as much as you like. However, we suggest using the mock for fine-grained expectations that you may already know how to use. You can also specify that the Exchanges must have been sent to a given endpoint.
 
 ### Using wereSentTo
 

@@ -20,7 +20,7 @@ When implementing an [Endpoint](endpoint.md) you typically may implement one or 
 
 -   `createProducer` will create a producer for sending message exchanges to the endpoint
     
--   `createConsumer` implements the [Event Driven Consumer](../components/4.18.x/eips/eventDrivenConsumer-eip.md) pattern for consuming message exchanges from the endpoint.
+-   `createConsumer` implements the [Event Driven Consumer](../components/4.22.x/eips/eventDrivenConsumer-eip.md) pattern for consuming message exchanges from the endpoint.
     
 
 Typically, you just derive from `DefaultEndpoint`
@@ -45,7 +45,7 @@ The parameters are provided by Camel in the `createEndpoint` method from `Defaul
 protected abstract Endpoint<E> createEndpoint(String uri, String remaining, Map parameters)
 ```
 
-The code is an example from the [SEDA](../components/4.18.x/seda-component.md) component that removes the size parameter:
+The code is an example from the [SEDA](../components/4.22.x/seda-component.md) component that removes the size parameter:
 
 ```java
     public BlockingQueue<Exchange> createQueue(String uri, Map parameters) {

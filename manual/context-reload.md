@@ -2,7 +2,7 @@
 
 The context reload functionality in Camel is capable of reloading all existing routes and property placeholders upon an external triggered event.
 
-For example, if you are using [AWS Secrets](../components/4.18.x/aws-secrets-manager-component.md), then enabling context-reload would then reload Camel routes upon a secret is updated in AWS.
+For example, if you are using [AWS Secrets](../components/4.22.x/aws-secrets-manager-component.md), then enabling context-reload would then reload Camel routes upon a secret is updated in AWS.
 
 The context reload is limited to refresh the following on reload:
 

@@ -2,7 +2,7 @@
 
 JVM since3.2.0 Native since3.2.0
 
-Type Conversion using Mapstruct
+Type Conversion using MapStruct
 
 ## What’s inside
 

@@ -2,7 +2,7 @@
 
 ## What is Idempotency?
 
-The Idempotent Consumer from the EIP patterns is used to filter out duplicate messages: it essentially acts like a Message Filter to filter out duplicates, as reported in the [Camel documentation](../../../components/4.18.x/eips/idempotentConsumer-eip.md).
+The Idempotent Consumer from the EIP patterns is used to filter out duplicate messages: it essentially acts like a Message Filter to filter out duplicates, as reported in the [Camel documentation](../../../components/4.22.x/eips/idempotentConsumer-eip.md).
 
 From the [Enterprise Integration Patterns documentation](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessagingEndpointsIntro.md): _Sometimes the same message gets delivered more than once, either because the messaging system is not certain the message has been successfully delivered yet, or because the Message Channel’s quality-of-service has been lowered to improve performance. Message receivers, on the other hand, tend to assume that each message will be delivered exactly once, and tend to cause problems when they repeat processing because of repeat messages. A receiver designed as an Idempotent Receiver handles duplicate messages and prevents them from causing problems in the receiver application._
 

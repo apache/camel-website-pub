@@ -547,8 +547,8 @@ If you experience timeout errors:
 
 -   [LangChain4j Spring Boot Integration Documentation](https://docs.langchain4j.dev/tutorials/spring-boot-integration)
     
--   [Camel LangChain4j Chat Component](../components/4.18.x/langchain4j-chat-component.md)
+-   [Camel LangChain4j Chat Component](../components/4.22.x/langchain4j-chat-component.md)
     
--   [Camel LangChain4j Embeddings Component](../components/4.18.x/langchain4j-embeddings-component.md)
+-   [Camel LangChain4j Embeddings Component](../components/4.22.x/langchain4j-embeddings-component.md)
     
--   [Camel LangChain4j Agent Component](../components/4.18.x/langchain4j-agent-component.md)
+-   [Camel LangChain4j Agent Component](../components/4.22.x/langchain4j-agent-component.md)

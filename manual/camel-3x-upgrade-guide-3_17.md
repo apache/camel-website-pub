@@ -221,7 +221,7 @@ Notice how we must use `depends-on="VerySimple-context"` in the `cxf:cxfEndpoint
 
 ### camel-sftp
 
-The underlying JSch library has been updated ([CAMEL-17835](https://issues.apache.org/jira/browse/CAMEL-17835)) to a more secure and actively maintained fork which has removed key types and algorithms that rely on SHA1. For information on how these can be restored, consult the [SFTP component](../components/4.18.x/sftp-component.md) documentation.
+The underlying JSch library has been updated ([CAMEL-17835](https://issues.apache.org/jira/browse/CAMEL-17835)) to a more secure and actively maintained fork which has removed key types and algorithms that rely on SHA1. For information on how these can be restored, consult the [SFTP component](../components/4.22.x/sftp-component.md) documentation.
 
 ### camel-rabbitmq
 

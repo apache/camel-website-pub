@@ -4,7 +4,7 @@ Index of Apache Camel user manual pages.
 
 # Apache Camel user manual
 
-Apache Camel™ is a versatile open-source integration framework based on known [Enterprise Integration Patterns](../components/4.18.x/eips/enterprise-integration-patterns.md).
+Apache Camel™ is a versatile open-source integration framework based on known [Enterprise Integration Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md).
 
 Camel empowers you to define routing and mediation rules in a variety of domain-specific languages ([DSL](dsl.md), such as Java, XML, Groovy, and YAML). This means you get smart completion of routing rules in your IDE, whether in a Java or XML editor.
 
@@ -40,7 +40,7 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [Architecture](architecture.md)
     
--   [EIP Patterns](../components/4.18.x/eips/enterprise-integration-patterns.md)
+-   [EIP Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md)
     
 -   [AI Patterns](../components/next/eips/ai-patterns.md)
     
@@ -54,9 +54,9 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [DSL](dsl.md)
     
--   [Components](../components/4.18.x/index.md)
+-   [Components](../components/4.22.x/index.md)
     
--   [Data Formats](../components/4.18.x/dataformats/index.md)
+-   [Data Formats](../components/4.22.x/dataformats/index.md)
     
 -   [Languages](languages.md)
     
@@ -95,7 +95,7 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [Camel Maven Archetypes](camel-maven-archetypes.md)
     
--   [Camel JMX](../components/4.18.x/jmx-component.md)
+-   [Camel JMX](../components/4.22.x/jmx-component.md)
     
 -   [Working with REST and Rest DSL](rest-dsl.md)
     
@@ -119,7 +119,7 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [Clustering and loadbalancing](clustering.md)
     
--   [Component](../components/4.18.x/index.md)
+-   [Component](../components/4.22.x/index.md)
     
 -   [Data Format](data-format.md)
     
@@ -149,7 +149,7 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [Injector](injector.md)
     
--   [Intercept](../components/4.18.x/eips/intercept.md)
+-   [Intercept](../components/4.22.x/eips/intercept.md)
     
 -   [Languages](languages.md)
     
@@ -204,7 +204,7 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [Java Annotation DSL](bean-integration.md)
     
--   [Spring XML DSL](../components/4.18.x/spring-summary.md)
+-   [Spring XML DSL](../components/4.22.x/spring-summary.md)
     
 -   [Rest DSL](rest-dsl.md)
     

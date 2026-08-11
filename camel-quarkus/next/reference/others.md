@@ -1,6 +1,6 @@
 # Camel misc. components supported on Quarkus
 
-There are 37 misc. components (5 deprecated, 7 JVM only)
+There are 38 misc. components (5 deprecated, 7 JVM only)
 
      
 | Misc. component | Artifact | JVM  
@@ -27,6 +27,7 @@ level | Description |
 | [LRA](extensions/lra.md) | camel-quarkus-lra | 1.2.0 | 1.8.0 | Stable | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](extensions/mail-microsoft-oauth.md) | camel-quarkus-mail-microsoft-oauth | 3.8.0 | 3.25.0 | Stable | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Management](extensions/management.md) | camel-quarkus-management | 1.1.0 | n/a | Preview | Camel Management |
+| [MCP Server](extensions/mcp-server.md) | camel-quarkus-mcp-server | 3.39.0 | 3.39.0 | Stable | Expose ai-tool routes as MCP tools over streamable HTTP |
 | [MDC Logging](extensions/mdc.md) | camel-quarkus-mdc | 3.29.0 | 3.29.0 | Stable | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer Observability 2](extensions/micrometer-observability.md) | camel-quarkus-micrometer-observability | 3.39.0 | 3.39.0 | Stable | Micrometer Observability implementation of Camel Telemetry |
 | [Microprofile Fault Tolerance](extensions/microprofile-fault-tolerance.md) | camel-quarkus-microprofile-fault-tolerance | 1.0.0 | 1.0.0 | Stable | Circuit Breaker EIP using MicroProfile Fault Tolerance |

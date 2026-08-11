@@ -1,11 +1,11 @@
 # Predicates
 
-Expressions and [Predicates](#) can then be used to create the various [Enterprise Integration Patterns](../components/4.18.x/eips/enterprise-integration-patterns.md) in the [DSL](dsl.md) like with the [Content Based Router](../components/4.18.x/eips/choice-eip.md) EIP, or [Recipient List](../components/4.18.x/eips/recipientList-eip.md) EIP.
+Expressions and [Predicates](#) can then be used to create the various [Enterprise Integration Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md) in the [DSL](dsl.md) like with the [Content Based Router](../components/4.22.x/eips/choice-eip.md) EIP, or [Recipient List](../components/4.22.x/eips/recipientList-eip.md) EIP.
 
-To support dynamic rules Camel supports pluggable [Predicate](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Predicate.md) strategies using a variety of different [Languages](../components/4.18.x/languages/index.md).
+To support dynamic rules Camel supports pluggable [Predicate](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Predicate.md) strategies using a variety of different [Languages](../components/4.22.x/languages/index.md).
 
 > **Note**
-> The [Simple](../components/4.18.x/languages/simple-language.md) is often used as predicates and expressions with the Camel EIPs.
+> The [Simple](../components/4.22.x/languages/simple-language.md) is often used as predicates and expressions with the Camel EIPs.
 
 ## Predicate API
 
@@ -28,7 +28,7 @@ public interface Predicate {
 
 A `Predicate` is being evaluated to a boolean value so the result is either `true` or `false`. This makes predicates so powerful as it is often used to control the routing of message in which path they should be routed.
 
-A simple example is to route an [Exchange](exchange.md) based on a header value with the [Content Based Router](../components/4.18.x/eips/choice-eip.md) EIP:
+A simple example is to route an [Exchange](exchange.md) based on a header value with the [Content Based Router](../components/4.22.x/eips/choice-eip.md) EIP:
 
 -   Java
     

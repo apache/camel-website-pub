@@ -112,7 +112,7 @@ The copied exchange is no longer having exchange property CORRELATION\_ID set th
 
 Previously, Camel used a throttler based on the total number of requests over a period of time ("TotalRequests" mode). That was the default on Camel up to version 4.2.0. On Camel 4.3.0 we introduced a new one based on the number of concurrent requests and replaced the former.
 
-With Camel 4.4.0 we refactored the [Throttle EIP](../components/4.18.x/eips/throttle-eip.md) implementation so that Camel can support two different modes of throttling.
+With Camel 4.4.0 we refactored the [Throttle EIP](../components/4.22.x/eips/throttle-eip.md) implementation so that Camel can support two different modes of throttling.
 
 Check the component documentation for details about how to use each mode.
 

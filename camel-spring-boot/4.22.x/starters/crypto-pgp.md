@@ -1,0 +1,42 @@
+# PGP (Pretty Good Privacy Cryptographic)
+
+Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP
+
+## What’s inside
+
+-   [PGP (Pretty Good Privacy Cryptographic) data format](../../../components/4.22.x/dataformats/pgp-dataformat.md)
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-crypto-pgp-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 15 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.dataformat.pgp.algorithm | Symmetric key encryption algorithm; possible values are defined in org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags. Only relevant for encrypting. |  | Integer |
+| camel.dataformat.pgp.armored | This option will cause PGP to base64 encode the encrypted text, making it available for copy/paste, etc. | false | Boolean |
+| camel.dataformat.pgp.compression-algorithm | Compression algorithm; possible values are defined in org.bouncycastle.bcpg.CompressionAlgorithmTags. Only relevant for encrypting. |  | Integer |
+| camel.dataformat.pgp.enabled | Whether to enable auto configuration of the pgp data format. This is enabled by default. |  | Boolean |
+| camel.dataformat.pgp.hash-algorithm | Signature hash algorithm; possible values are defined in org.bouncycastle.bcpg.HashAlgorithmTags. Only relevant for signing. |  | Integer |
+| camel.dataformat.pgp.integrity | Adds an integrity check/sign into the encryption file. | true | Boolean |
+| camel.dataformat.pgp.key-file-name | Filename of the keyring; must be accessible as a classpath resource (but you can specify a location in the file system by using the file: prefix). |  | String |
+| camel.dataformat.pgp.key-userid | The user ID of the key in the PGP keyring used during encryption. Can also be only a part of a user ID. |  | String |
+| camel.dataformat.pgp.password | Password used when opening the private key (not used for encryption). |  | String |
+| camel.dataformat.pgp.provider | Java Cryptography Extension (JCE) provider, default is Bouncy Castle (BC). Alternatively you can use, for example, the IAIK JCE provider. |  | String |
+| camel.dataformat.pgp.signature-key-file-name | Filename of the keyring to use for signing (during encryption) or for signature verification (during decryption); must be accessible as a classpath resource (but you can specify a location in the file system by using the file: prefix). |  | String |
+| camel.dataformat.pgp.signature-key-ring | Keyring used for signing/verifying as byte array. You cannot set the signatureKeyFileName and signatureKeyRing at the same time. |  | String |
+| camel.dataformat.pgp.signature-key-userid | User ID of the key in the PGP keyring used for signing (during encryption) or signature verification (during decryption). |  | String |
+| camel.dataformat.pgp.signature-password | Password used when opening the private key used for signing (during encryption). |  | String |
+| camel.dataformat.pgp.signature-verification-option | Controls the behavior for verifying the signature during unmarshaling. Possible values: optional, required, ignore, no\_signature\_allowed. |  | String |

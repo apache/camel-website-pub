@@ -1,0 +1,30 @@
+# Opentelemetry2
+
+Spring Boot auto-configuration for Camel OpenTelemetry2.
+
+This starter integrates Camel with [OpenTelemetry](https://opentelemetry.io) to provide distributed tracing for Camel routes. It is the newer replacement for `camel-opentelemetry-starter` with improved trace context propagation and better alignment with OpenTelemetry semantic conventions.
+
+Use the `@CamelOpenTelemetry2` annotation on your Spring Boot main class or configuration to enable.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-opentelemetry2-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 6 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.opentelemetry2.disable-core-processors | Disable any inner core processors (any core DSL processor provided in the route, for example `bean`, `log`, …​). | false | Boolean |
+| camel.opentelemetry2.exclude-patterns | Sets exclude pattern(s) that will disable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. |  | String |
+| camel.opentelemetry2.include-patterns | Sets include pattern(s) that will explicitly enable tracing for Camel processors that matches the pattern. Multiple patterns can be separated by comma. All processors included by default if nothing is specified. |  | String |
+| camel.opentelemetry2.trace-custom-id-only | Setting this to true will only create trace spans for routes and nodes that have a custom id assigned. | false | Boolean |
+| camel.opentelemetry2.trace-headers-inclusion | Setting this to true will include the message headers in the trace spans. | false | Boolean |
+| camel.opentelemetry2.trace-processors | Setting this to true will create new telemetry spans for each Camel custom Processors. Use the excludePattern property to filter out Processors. |  | Boolean |

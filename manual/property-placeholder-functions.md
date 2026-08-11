@@ -2,7 +2,7 @@
 
 [Back to Property Placeholders](using-propertyplaceholder.md)
 
-The [Properties](../components/4.18.x/properties-component.md) component includes the following functions out of the box:
+The [Properties](../components/4.22.x/properties-component.md) component includes the following functions out of the box:
 
 -   `env` - A function to lookup the property from OS environment variables
     
@@ -157,7 +157,7 @@ from("direct:start")
 > ```
 
 > **Tip**
-> The boolean function uses the [Simple](../components/4.18.x/languages/simple-language.md) language which has many functions and operators to build the condition.
+> The boolean function uses the [Simple](../components/4.22.x/languages/simple-language.md) language which has many functions and operators to build the condition.
 
 The service function is for looking up a service which is defined using OS environment variables using the service naming idiom, to refer to a service location using `hostname : port`
 
@@ -597,7 +597,7 @@ mydb/mypass=tiger
 
 ## Using custom property placeholder functions
 
-The [Properties](../components/4.18.x/properties-component.md) component allow to plugin 3rd party functions which can be used during parsing of the property placeholders. These functions are then able to do custom logic to resolve the placeholders, such as looking up in databases, do custom computations, or whatnot. The name of the function becomes the prefix used in the placeholder.
+The [Properties](../components/4.22.x/properties-component.md) component allow to plugin 3rd party functions which can be used during parsing of the property placeholders. These functions are then able to do custom logic to resolve the placeholders, such as looking up in databases, do custom computations, or whatnot. The name of the function becomes the prefix used in the placeholder.
 
 This is best illustrated in the example route below, where we use `beer` as the prefix:
 

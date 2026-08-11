@@ -1,11 +1,11 @@
 # Expressions
 
-Expressions and [Predicates](predicate.md) can then be used to create the various [Enterprise Integration Patterns](../components/4.18.x/eips/enterprise-integration-patterns.md) in the [DSL](dsl.md) like with the [Content Based Router](../components/4.18.x/eips/choice-eip.md) EIP, or [Recipient List](../components/4.18.x/eips/recipientList-eip.md) EIP.
+Expressions and [Predicates](predicate.md) can then be used to create the various [Enterprise Integration Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md) in the [DSL](dsl.md) like with the [Content Based Router](../components/4.22.x/eips/choice-eip.md) EIP, or [Recipient List](../components/4.22.x/eips/recipientList-eip.md) EIP.
 
-To support dynamic rules Camel supports pluggable [Expression](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Expression.md) strategies using a variety of different [Languages](../components/4.18.x/languages/index.md).
+To support dynamic rules Camel supports pluggable [Expression](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Expression.md) strategies using a variety of different [Languages](../components/4.22.x/languages/index.md).
 
 > **Note**
-> The [Simple](../components/4.18.x/languages/simple-language.md) is often used as predicates and expressions with the Camel EIPs.
+> The [Simple](../components/4.22.x/languages/simple-language.md) is often used as predicates and expressions with the Camel EIPs.
 
 If you are outside the DSL and want to create your own expressions you can either implement the [Expression interface](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Expression.md), reuse one of the other builders or try the [ExpressionBuilder class](https://www.javadoc.io/doc/org.apache.camel/camel-support/current/org/apache/camel/support/builder/ExpressionBuilder.md).
 

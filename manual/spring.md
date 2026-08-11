@@ -37,8 +37,8 @@ See [Using Property Placeholder](using-propertyplaceholder.md) documentation.
 
 ## Using Camel with Spring transactions
 
-See [Transactional Client](../components/4.18.x/eips/transactional-client.md) EIP.
+See [Transactional Client](../components/4.22.x/eips/transactional-client.md) EIP.
 
 ## Using Camel with Spring testing
 
-See [camel-test-spring-junit5](../components/4.18.x/others/test-spring-junit5.md) and [camel-test-spring-junit6](../components/4.18.x/others/test-spring-junit6.md) documentation.
+See [camel-test-spring-junit5](../components/4.22.x/others/test-spring-junit5.md) and [camel-test-spring-junit6](../components/4.22.x/others/test-spring-junit6.md) documentation.

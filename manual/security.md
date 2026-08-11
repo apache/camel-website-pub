@@ -28,24 +28,24 @@ Camel offers [Route Policy](route-policy.md) driven security capabilities that m
 
 The components offering authentication and authorization services utilizing [Route Policy](route-policy.md) based on `org.apache.camel.spi.AuthorizationPolicy` are:
 
--   [Shiro Security](../components/4.18.x/others/shiro.md)
+-   [Shiro Security](../components/4.22.x/others/shiro.md)
     
--   [Spring Security](../components/4.18.x/others/spring-security.md)
+-   [Spring Security](../components/4.22.x/others/spring-security.md)
     
 
 ## Payload Security
 
 Camel offers encryption/decryption services to secure payloads or selectively apply encryption/decryption capabilities on portions/sections of a payload.
 
-The data-formats offering encryption/decryption of payloads utilizing [Marshal](../components/4.18.x/eips/marshal-eip.md) are:
+The data-formats offering encryption/decryption of payloads utilizing [Marshal](../components/4.22.x/eips/marshal-eip.md) are:
 
--   [Crypto](../components/4.18.x/dataformats/crypto-dataformat.md)
+-   [Crypto](../components/4.22.x/dataformats/crypto-dataformat.md)
     
--   [PGP](../components/4.18.x/dataformats/pgp-dataformat.md)
+-   [PGP](../components/4.22.x/dataformats/pgp-dataformat.md)
     
--   [Post Quantum Cryptography](../components/4.18.x/dataformats/pqc-dataformat.md)
+-   [Post Quantum Cryptography](../components/4.22.x/dataformats/pqc-dataformat.md)
     
--   [XML Security](../components/4.18.x/dataformats/xmlSecurity-dataformat.md)
+-   [XML Security](../components/4.22.x/dataformats/xmlSecurity-dataformat.md)
     
 
 ## Endpoint Security
@@ -58,16 +58,16 @@ Camel provides Post-Quantum Cryptography (PQC) protection at two complementary l
 
 -   **Transport layer (TLS).** On JDK 25+, Camel automatically configures hybrid post-quantum key exchange (`X25519MLKEM768`) on all `SSLContextParameters` to protect connections against harvest-now-decrypt-later attacks. See [PQC TLS Configuration](camel-configuration-utilities.html#_post_quantum_cryptography_pqc_tls_configuration) for the full configuration guide.
     
--   **Message layer.** The [PQC component](../components/4.18.x/pqc-component.md) and [PQC data format](../components/4.18.x/dataformats/pqc-dataformat.md) encrypt and sign message payloads using post-quantum algorithms (ML-KEM, ML-DSA, SLH-DSA, and more), protecting data independently of the transport.
+-   **Message layer.** The [PQC component](../components/4.22.x/pqc-component.md) and [PQC data format](../components/4.22.x/dataformats/pqc-dataformat.md) encrypt and sign message payloads using post-quantum algorithms (ML-KEM, ML-DSA, SLH-DSA, and more), protecting data independently of the transport.
     
 
 ## Configuration Security
 
-Camel offers the [Properties](../components/4.18.x/properties-component.md) component to externalize configuration values to properties files. Those values could contain sensitive information such as usernames and passwords.
+Camel offers the [Properties](../components/4.22.x/properties-component.md) component to externalize configuration values to properties files. Those values could contain sensitive information such as usernames and passwords.
 
 Those values can be encrypted and automatically decrypted by Camel using:
 
--   [Jasypt](../components/4.18.x/others/jasypt.md)
+-   [Jasypt](../components/4.22.x/others/jasypt.md)
     
 
 Camel also supports accessing the secured configuration from an external vault systems.
@@ -76,17 +76,17 @@ Camel also supports accessing the secured configuration from an external vault s
 
 The following _Vaults_ are supported by Camel:
 
--   [AWS Secrets Manager](../components/4.18.x/aws-secrets-manager-component.md)
+-   [AWS Secrets Manager](../components/4.22.x/aws-secrets-manager-component.md)
     
--   [Azure Key Vault](../components/4.18.x/azure-key-vault-component.md)
+-   [Azure Key Vault](../components/4.22.x/azure-key-vault-component.md)
     
--   [CyberArk Conjur Vault](../components/4.18.x/cyberark-vault-component.md)
+-   [CyberArk Conjur Vault](../components/4.22.x/cyberark-vault-component.md)
     
--   [Google Secret Manager](../components/4.18.x/google-secret-manager-component.md)
+-   [Google Secret Manager](../components/4.22.x/google-secret-manager-component.md)
     
--   [Hashicorp Vault](../components/4.18.x/hashicorp-vault-component.md)
+-   [Hashicorp Vault](../components/4.22.x/hashicorp-vault-component.md)
     
--   [IBM Secrets Manager](../components/4.18.x/ibm-secrets-manager-component.md)
+-   [IBM Secrets Manager](../components/4.22.x/ibm-secrets-manager-component.md)
     
 
 #### Vault Usage Syntax

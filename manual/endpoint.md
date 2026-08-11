@@ -1,12 +1,12 @@
 # Endpoints
 
-Camel supports the [Message Endpoint](../components/4.18.x/eips/message-endpoint.md) pattern using the [Endpoint](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.md) interface.
+Camel supports the [Message Endpoint](../components/4.22.x/eips/message-endpoint.md) pattern using the [Endpoint](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.md) interface.
 
 Endpoints are created by a [Component](component.md) and these endpoints are referred to in the [DSL](dsl.md) via their endpoint [URIs](uris.md).
 
 ## Example
 
-The following example route demonstrates the use of a [File](../components/4.18.x/file-component.md) consumer endpoint and a \* [JMS](../components/4.18.x/jms-component.md) producer endpoint, by their [URIs](uris.md):
+The following example route demonstrates the use of a [File](../components/4.22.x/file-component.md) consumer endpoint and a \* [JMS](../components/4.22.x/jms-component.md) producer endpoint, by their [URIs](uris.md):
 
 -   Java
     
@@ -218,7 +218,7 @@ In the above example, we have declared the password value as raw, and the actual
 
 #### Using ENV variables with raw values
 
-If you need to use environment variables, for example as username or passwords then this is now possible by inlining the [Simple](../components/4.18.x/languages/simple-language.md) language using `$simple{xxx}` syntax in `RAW(…​)` as shown below:
+If you need to use environment variables, for example as username or passwords then this is now possible by inlining the [Simple](../components/4.22.x/languages/simple-language.md) language using `$simple{xxx}` syntax in `RAW(…​)` as shown below:
 
 -   Java
     
@@ -345,7 +345,7 @@ In Camel you can configure this in a more readable syntax as explained:
 | m | minute |
 | s | second |
 
-So for example the [Timer](../components/4.18.x/timer-component.md) endpoint can be configured as follows:
+So for example the [Timer](../components/4.22.x/timer-component.md) endpoint can be configured as follows:
 
 -   Java
     
@@ -471,6 +471,6 @@ From an `Endpoint` you can use the following Java API methods to create producer
 
 -   [`createProducer()`](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.html#createProducer--) will create a [Producer](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Producer.md) for sending message exchanges to the endpoint.
     
--   [`createConsumer()`](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.html#createConsumer-org.apache.camel.Processor) implements the [Event Driven Consumer](../components/4.18.x/eips/eventDrivenConsumer-eip.md) pattern for consuming message exchanges from the endpoint via a [Processor](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Processor.md) when creating a [Consumer](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Consumer.md).
+-   [`createConsumer()`](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.html#createConsumer-org.apache.camel.Processor) implements the [Event Driven Consumer](../components/4.22.x/eips/eventDrivenConsumer-eip.md) pattern for consuming message exchanges from the endpoint via a [Processor](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Processor.md) when creating a [Consumer](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Consumer.md).
     
--   [`createPollingConsumer()`](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.html#createPollingConsumer) implements the [Polling Consumer](../components/4.18.x/eips/polling-consumer.md) pattern for consuming message exchanges from the endpoint via a [PollingConsumer](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/PollingConsumer.md).
+-   [`createPollingConsumer()`](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.html#createPollingConsumer) implements the [Polling Consumer](../components/4.22.x/eips/polling-consumer.md) pattern for consuming message exchanges from the endpoint via a [PollingConsumer](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/PollingConsumer.md).

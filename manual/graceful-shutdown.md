@@ -121,7 +121,7 @@ This option can control how a given route should act during graceful shutdown. I
 
 This option control how a given route consumer acts during shutdown. Most route consumer will only operate on a single task (message), however the [Batch Consumer](batch-consumer.md) can operate on many messages (in a batch). This option is for batch consumers.
 
-The default value is `CompleteCurrentTaskOnly` which mean that the current _in progress_ task (message) will be completed and then the consumer will shut down. The other option `CompleteAllTasks` allows the consumer to complete all the tasks (messages) before shutting down. For example a [File](../components/4.18.x/file-component.md) consumer will process all the pending files it has picked up before shutting down.
+The default value is `CompleteCurrentTaskOnly` which mean that the current _in progress_ task (message) will be completed and then the consumer will shut down. The other option `CompleteAllTasks` allows the consumer to complete all the tasks (messages) before shutting down. For example a [File](../components/4.22.x/file-component.md) consumer will process all the pending files it has picked up before shutting down.
 
 ## Stop individual routes
 
@@ -161,7 +161,7 @@ You can implement your own strategy to control the shutdown by implementing the 
 
 ### ShutdownAware
 
-The interface `org.apache.camel.spi.ShutdownAware` is an optional interface consumers can implement to have fine-grained control during shutdown. The `ShutdownStrategy` must be able to deal with consumers which implement this interface. This interface was introduced to cater for in memory consumers such as [SEDA](../components/4.18.x/seda-component.md) which potentially have a number of pending messages on its internal in memory queues. What this allows is to let it control the shutdown process to let it complete its pending messages.
+The interface `org.apache.camel.spi.ShutdownAware` is an optional interface consumers can implement to have fine-grained control during shutdown. The `ShutdownStrategy` must be able to deal with consumers which implement this interface. This interface was introduced to cater for in memory consumers such as [SEDA](../components/4.22.x/seda-component.md) which potentially have a number of pending messages on its internal in memory queues. What this allows is to let it control the shutdown process to let it complete its pending messages.
 
 The method `getPendingExchangesSize` should return the number of pending messages which reside on the in memory queues. The method `deferShutdown` should return `true` to defer the shutdown to a later stage, when there are no more pending and inflight messages.
 

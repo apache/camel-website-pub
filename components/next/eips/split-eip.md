@@ -98,7 +98,7 @@ from("direct:a")
                   uri: direct:b
 ```
 
-The Split EIP has special support for splitting using a delimiter, instead of using [Tokenize](../../4.18.x/languages/tokenize-language.md) language.
+The Split EIP has special support for splitting using a delimiter, instead of using [Tokenize](../../4.22.x/languages/tokenize-language.md) language.
 
 The previous example can also be done as follows:
 
@@ -140,7 +140,7 @@ from("direct:a")
                   uri: direct:b
 ```
 
-The splitter can use any [Expression](../../../manual/expression.md), so you could use any of the supported languages such as [Simple](../../4.18.x/languages/simple-language.md), [XPath](../../4.18.x/languages/xpath-language.md), [JSonPath](../../4.18.x/languages/jsonpath-language.md), [Groovy](../../4.18.x/languages/groovy-language.md) to perform the split.
+The splitter can use any [Expression](../../../manual/expression.md), so you could use any of the supported languages such as [Simple](../../4.22.x/languages/simple-language.md), [XPath](../../4.22.x/languages/xpath-language.md), [JSonPath](../../4.22.x/languages/jsonpath-language.md), [Groovy](../../4.22.x/languages/groovy-language.md) to perform the split.
 
 -   Java
     
@@ -217,7 +217,7 @@ from("direct:splitUsingBody")
         .to("mock:result");
 ```
 
-In XML, you use [Simple](../../4.18.x/languages/simple-language.md) to refer to the message body:
+In XML, you use [Simple](../../4.22.x/languages/simple-language.md) to refer to the message body:
 
 ```xml
 <route>
@@ -229,7 +229,7 @@ In XML, you use [Simple](../../4.18.x/languages/simple-language.md) to refer to 
 </route>
 ```
 
-In YAML, you use [Simple](../../4.18.x/languages/simple-language.md) to refer to the message body:
+In YAML, you use [Simple](../../4.22.x/languages/simple-language.md) to refer to the message body:
 
 ```yaml
 - route:
@@ -478,7 +478,7 @@ from("direct:streaming")
                   uri: activemq:my.parts
 ```
 
-You can also supply a custom [Bean](../../4.18.x/languages/bean-language.md) to perform the splitting in streaming mode like this:
+You can also supply a custom [Bean](../../4.22.x/languages/bean-language.md) to perform the splitting in streaming mode like this:
 
 -   Java
     
@@ -548,19 +548,19 @@ The bean should just return something that the splitter can work with when split
 
 There are two tokenizers that can be used to tokenize an XML payload:
 
--   [Tokenize](../../4.18.x/languages/tokenize-language.md) language
+-   [Tokenize](../../4.22.x/languages/tokenize-language.md) language
     
--   [XML Tokenize](../../4.18.x/languages/xtokenize-language.md) language
+-   [XML Tokenize](../../4.22.x/languages/xtokenize-language.md) language
     
 
 ### Streaming big XML payloads using Tokenize language
 
-The first tokenizer uses the same principle as in the text tokenizer to scan the XML payload and extract a sequence of tokens. If you have a big XML payload, from a file source, and want to split it in streaming mode, then you can use the [Tokenize](../../4.18.x/languages/tokenize-language.md) language with start/end tokens to do this with low memory footprint.
+The first tokenizer uses the same principle as in the text tokenizer to scan the XML payload and extract a sequence of tokens. If you have a big XML payload, from a file source, and want to split it in streaming mode, then you can use the [Tokenize](../../4.22.x/languages/tokenize-language.md) language with start/end tokens to do this with low memory footprint.
 
 > **Note**
 > **StAX component**
 >
-> The Camel StAX component can also be used to split big XML files in a streaming mode. See more details at [StAX](../../4.18.x/stax-component.md).
+> The Camel StAX component can also be used to split big XML files in a streaming mode. See more details at [StAX](../../4.22.x/stax-component.md).
 
 For example, you may have an XML payload structured as follows:
 
@@ -579,7 +579,7 @@ For example, you may have an XML payload structured as follows:
 </orders>
 ```
 
-Now to split this big file using [XPath](../../4.18.x/languages/xpath-language.md) would cause the entire content to be loaded into memory. So instead, we can use the [Tokenize](../../4.18.x/languages/tokenize-language.md) language to do this as follows:
+Now to split this big file using [XPath](../../4.22.x/languages/xpath-language.md) would cause the entire content to be loaded into memory. So instead, we can use the [Tokenize](../../4.22.x/languages/tokenize-language.md) language to do this as follows:
 
 -   Java
     
@@ -676,7 +676,7 @@ You can set `inheritNamsepaceTagName` property to `*` to include the preceding c
 
 ### Streaming big XML payloads using XML Tokenize language
 
-The second tokenizer ([XML Tokenize](../../4.18.x/languages/xtokenize-language.md)) uses a StAX parser to overcome these limitations. This tokenizer recognizes XML namespaces and also handles simple and complex XML structures more naturally and efficiently.
+The second tokenizer ([XML Tokenize](../../4.22.x/languages/xtokenize-language.md)) uses a StAX parser to overcome these limitations. This tokenizer recognizes XML namespaces and also handles simple and complex XML structures more naturally and efficiently.
 
 To split with XML namespaces on a tag with a local namespace such as `{urn:shop}order`, we can write:
 
@@ -795,7 +795,7 @@ For example, the snippet could be wrongly terminated:
 
 ### Splitting files by grouping N lines together
 
-The [Tokenize](../../4.18.x/languages/tokenize-language.md) language can be used for grouping N parts together, for example, to split big files into chunks of 1000 lines.
+The [Tokenize](../../4.22.x/languages/tokenize-language.md) language can be used for grouping N parts together, for example, to split big files into chunks of 1000 lines.
 
 Doing this is easy as the following example shows:
 
@@ -1028,7 +1028,7 @@ from("direct:start")
 If the input has 7 items, the route above produces 3 exchanges: one with items 1-3, one with items 4-6, and one with item 7.
 
 > **Note**
-> This `group` option is on the Split EIP definition itself and works with any expression. It is different from the `group` option on the [Tokenize](../../4.18.x/languages/tokenize-language.md) language, which groups tokenized text lines together.
+> This `group` option is on the Split EIP definition itself and works with any expression. It is different from the `group` option on the [Tokenize](../../4.22.x/languages/tokenize-language.md) language, which groups tokenized text lines together.
 
 ### Error handling with maxFailedRecords and errorThreshold
 

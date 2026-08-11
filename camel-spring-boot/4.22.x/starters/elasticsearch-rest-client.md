@@ -1,0 +1,42 @@
+# Elasticsearch Low level Rest Client
+
+Perform queries and other operations on Elasticsearch or OpenSearch (uses low-level client).
+
+## What’s inside
+
+-   [Elasticsearch Low level Rest Client component](../../../components/4.22.x/elasticsearch-rest-client-component.md), URI syntax: `elasticsearch-rest-client:clusterName`
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-elasticsearch-rest-client-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 15 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.component.elasticsearch-rest-client.autowired-enabled | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| camel.component.elasticsearch-rest-client.certificate-path | Certificate Path |  | String |
+| camel.component.elasticsearch-rest-client.connection-timeout | Connection timeout | 30000 | Integer |
+| camel.component.elasticsearch-rest-client.enable-sniffer | Enabling Sniffer | false | Boolean |
+| camel.component.elasticsearch-rest-client.enabled | Whether to enable auto configuration of the elasticsearch-rest-client component. This is enabled by default. |  | Boolean |
+| camel.component.elasticsearch-rest-client.host-addresses-list | List of host Addresses, multiple hosts can be separated by comma. |  | String |
+| camel.component.elasticsearch-rest-client.lazy-start-producer | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| camel.component.elasticsearch-rest-client.password | Password |  | String |
+| camel.component.elasticsearch-rest-client.rest-client | Rest Client of type org.elasticsearch.client.RestClient. This is only for advanced usage. The option is a org.elasticsearch.client.RestClient type. |  | RestClient |
+| camel.component.elasticsearch-rest-client.sniff-after-failure-delay | Sniffer after failure delay (in millis) | 60000 | Integer |
+| camel.component.elasticsearch-rest-client.sniffer-interval | Sniffer interval (in millis) | 60000 | Integer |
+| camel.component.elasticsearch-rest-client.socket-timeout | Socket timeout | 30000 | Integer |
+| camel.component.elasticsearch-rest-client.ssl-context-parameters | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. The option is a org.apache.camel.support.jsse.SSLContextParameters type. |  | SSLContextParameters |
+| camel.component.elasticsearch-rest-client.use-global-ssl-context-parameters | Enable usage of global SSL context parameters. | false | Boolean |
+| camel.component.elasticsearch-rest-client.user | Username |  | String |

@@ -1,0 +1,454 @@
+# DataSonnet
+
+**Since Camel 3.7**
+
+Camel supports [DataSonnet](https://github.com/datasonnet/datasonnet-mapper) transformations to allow an [Expression](../../../manual/expression.md) or [Predicate](../../../manual/predicate.md) to be used in the [DSL](../../../manual/dsl.md).
+
+For example, you could use DataSonnet to create a Predicate in a [Message Filter](../eips/filter-eip.md) or as an Expression for a [Recipient List](../eips/recipientList-eip.md).
+
+To use a DataSonnet expression, use the following Java code:
+
+_Java-only: creating a DataSonnet expression_
+
+```java
+datasonnet("someDSExpression");
+```
+
+## DataSonnet Options
+
+The DataSonnet language supports the following options which are listed below.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **bodyMediaType** (common) |  | `String` | The media type of the message body, such as application/json. |
+| **outputMediaType** (common) |  | `String` | The media type to use for the output result. |
+| **source** (common) |  | `String` | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |
+| **resultType** (common) |  | `String` | The class of the result type (type from output). |
+| **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
+
+## Usage
+
+### Setting a result type
+
+The [DataSonnet](#) expression will return a `com.datasonnet.document.Document` by default. The document preserves the content type metadata along with the contents of the transformation result. In predicates, however, the Document will be automatically unwrapped and the boolean content will be returned. Similarly, any time you want the content in a specific result type like a String. To do this, you have to instruct the [DataSonnet](#) which result type to return.
+
+-   Java
+    
+-   XML
+    
+
+```java
+datasonnet("body.foo", String.class);
+```
+
+```xml
+<datasonnet resultType="java.lang.String">body.foo</datasonnet>
+```
+
+> **Note**
+> In XML DSL you use the `resultType` attribute to provide a fully qualified class name.
+
+If the expression results in an array, or an object, you can instruct the expression to return you `List.class` or `Map.class`, respectively. However, you must also set the output media type to `application/x-java-object`.
+
+> **Note**
+> The default `Document` object is useful in situations where there are intermediate transformation steps, and so retaining the content metadata through a route execution is valuable.
+
+### Specifying Media Types
+
+Traditionally, the input and output media types are specified through the [DataSonnet Header](https://datasonnet.s3-us-west-2.amazonaws.com/docs-ci/primary/master/datasonnet/1.0-SNAPSHOT/headers.md). The [DataSonnet](#) expression provides convenience options for specifying the body and output media types without the need for a Header, this is useful if the transformation is a one-liner, for example.
+
+The DataSonnet expression will look for a body media type in the following order:
+
+1.  If the body is a `Document` it will use the metadata in the object
+    
+2.  If the bodyMediaType parameter was provided in the DSL, it will use its value
+    
+3.  A `CamelDatasonnetBodyMediaType` exchange property
+    
+4.  A `Content-Type` message header
+    
+5.  The DataSonnet Header payload media type directive
+    
+6.  `application/x-java-object`
+    
+
+And for output media type:
+
+1.  If the outputMediaType parameter was provided in the DSL, it will use its value
+    
+2.  A "CamelDatasonnetOutputMediaType" exchange property
+    
+3.  A "CamelDatasonnetOutputMediaType" message header
+    
+4.  The DataSonnet Header output media type directive
+    
+5.  `application/x-java-object`
+    
+
+### Functions
+
+Camel adds the following DataSonnet functions that can be used to access the exchange:
+
+   
+| Function | Argument | Type | Description |
+| --- | --- | --- | --- |
+| cml.properties | key for property | String | To look up a property using the [Properties](../properties-component.md) component (property placeholders). |
+| cml.header | the header name | String | Will return the message header. |
+| cml.exchangeProperty | key for property | String | Will return the exchange property. |
+| cml.variable | the variable name | String | Will return the exchange variable. |
+
+### Null Handling Functions
+
+  
+| Function | Example | Description |
+| --- | --- | --- |
+| cml.defaultVal(value, fallback) | `cml.defaultVal(body.currency, 'USD')` | Returns `value` if non-null, `fallback` otherwise. |
+| cml.isEmpty(value) | `cml.isEmpty(body.name)` | Returns `true` if the value is null, an empty string, or an empty array. |
+
+### Type Coercion Functions
+
+  
+| Function | Example | Description |
+| --- | --- | --- |
+| cml.toInteger(value) | `cml.toInteger('42')` | Converts a string or number to an integer. Returns null for null input. |
+| cml.toDecimal(value) | `cml.toDecimal('3.14')` | Converts a string to a decimal number. Returns null for null input. |
+| cml.toBoolean(value) | `cml.toBoolean('true')` | Converts a string (`true`/`false`/`yes`/`no`/`1`/`0`) or number to boolean. Returns null for null input. |
+
+### Date/Time Functions
+
+  
+| Function | Example | Description |
+| --- | --- | --- |
+| cml.now() | `cml.now()` | Returns the current timestamp as an ISO-8601 string. |
+| cml.nowFmt(format) | `cml.nowFmt('yyyy-MM-dd')` | Returns the current UTC time formatted with the given pattern. |
+| cml.formatDate(value, format) | `cml.formatDate('2026-03-20T10:30:00Z', 'dd/MM/yyyy')` | Reformats an ISO-8601 date string using the given pattern. Returns null for null input. |
+| cml.parseDate(value, format) | `cml.parseDate('20/03/2026', 'dd/MM/yyyy')` | Parses a date string into epoch milliseconds. Returns null for null input. |
+
+### Math Functions
+
+  
+| Function | Example | Description |
+| --- | --- | --- |
+| cml.sqrt(value) | `cml.sqrt(body.x)` | Computes the square root of a number. Returns null for null input. |
+
+### Utility Functions
+
+  
+| Function | Example | Description |
+| --- | --- | --- |
+| cml.uuid() | `cml.uuid()` | Generates a random UUID string. |
+| cml.typeOf(value) | `cml.typeOf(body.x)` | Returns the type name: `string`, `number`, `boolean`, `object`, `array`, `null`, or `function`. |
+
+### Camel Standard Library (`camel.libsonnet`)
+
+Camel ships a standard library of helper functions that can be imported in any DataSonnet script:
+
+```datasonnet
+local c = import 'camel.libsonnet';
+{
+  total: c.sumBy(body.items, function(i) i.price * i.qty),
+  names: c.join(std.map(function(i) i.name, body.items), ', '),
+  topItem: c.first(c.sortBy(body.items, function(i) -i.price))
+}
+```
+
+#### String Helpers
+
+ 
+| Function | Description |
+| --- | --- |
+| `c.capitalize(s)` | Capitalizes the first letter. |
+| `c.trim(s)` | Strips whitespace from both ends. |
+| `c.split(s, sep)` | Splits a string by separator. |
+| `c.join(arr, sep)` | Joins an array of strings with separator. |
+| `c.contains(s, sub)` | Checks if string contains substring. |
+| `c.startsWith(s, prefix)` | Checks if string starts with prefix. |
+| `c.endsWith(s, suffix)` | Checks if string ends with suffix. |
+| `c.replace(s, old, new)` | Replaces all occurrences. |
+| `c.lower(s)` / `c.upper(s)` | Case conversion. |
+
+#### Collection Helpers
+
+ 
+| Function | Description |
+| --- | --- |
+| `c.sum(arr)` | Sums all elements. |
+| `c.sumBy(arr, f)` | Sums by applying function `f` to each element. |
+| `c.first(arr)` / `c.last(arr)` | First/last element, or null if empty. |
+| `c.count(arr)` | Array length. |
+| `c.avg(arr)` | Average of all elements, or null if empty. |
+| `c.distinct(arr)` | Removes duplicates. |
+| `c.distinctBy(arr, f)` | Removes duplicates by key function (keeps first occurrence). |
+| `c.flatMap(arr, f)` | Maps and flattens. |
+| `c.sortBy(arr, f)` | Sorts by key function. |
+| `c.groupBy(arr, f)` | Groups into object by key function. |
+| `c.min(arr)` / `c.max(arr)` | Minimum/maximum element. |
+| `c.take(arr, n)` / `c.drop(arr, n)` | First/last n elements. |
+| `c.zip(a, b)` | Zips two arrays into pairs. |
+
+#### Math Helpers
+
+ 
+| Function | Description |
+| --- | --- |
+| `c.abs(x)` | Absolute value. |
+| `c.round(x)` | Rounds to nearest integer. |
+
+#### Object Helpers
+
+ 
+| Function | Description |
+| --- | --- |
+| `c.pick(obj, keys)` | Selects only the listed keys. |
+| `c.omit(obj, keys)` | Removes the listed keys. |
+| `c.merge(a, b)` | Merges two objects (b overrides a). |
+| `c.keys(obj)` / `c.values(obj)` | Object keys/values as arrays. |
+| `c.entries(obj)` | Converts to `[{key, value}]` array. |
+| `c.fromEntries(arr)` | Converts `[{key, value}]` array back to object. |
+
+Here’s an example showing some of these functions in use:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:in")
+    .setBody(datasonnet("'hello, ' + cml.properties('toGreet')", String.class))
+    .to("mock:camel");
+```
+
+```xml
+<route>
+    <from uri="direct:in"/>
+    <setBody>
+        <datasonnet resultTypeName="java.lang.String">'hello, ' + cml.properties('toGreet')</datasonnet>
+    </setBody>
+    <to uri="mock:camel"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setBody:
+            expression:
+              datasonnet:
+                expression: "'hello, ' + cml.properties('toGreet')"
+                resultType: java.lang.String
+        - to:
+            uri: mock:camel
+```
+
+### Loading script from external resource
+
+You can externalize the script and have Apache Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`.  
+This is done using the following syntax: `"resource:scheme:location"`, e.g., to refer to a file on the classpath you can do:
+
+_Java-only: loading a DataSonnet script from an external resource_
+
+```java
+.setHeader("myHeader").datasonnet("resource:classpath:mydatasonnet.ds");
+```
+
+## Examples
+
+Here is a simple example using a DataSonnet expression as a predicate in a Message Filter:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+// let's route if a line item is over $100
+from("queue:foo")
+    .filter(datasonnet("ds.arrays.firstWith(body.lineItems, function(item) item > 100) != null"))
+    .to("queue:bar");
+```
+
+```xml
+<route>
+    <from uri="queue:foo"/>
+    <filter>
+        <datasonnet>ds.arrays.firstWith(body.lineItems, function(item) item > 100) != null</datasonnet>
+        <to uri="queue:bar"/>
+    </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: queue:foo
+      steps:
+        - filter:
+            expression:
+              datasonnet:
+                expression: "ds.arrays.firstWith(body.lineItems, function(item) item > 100) != null"
+            steps:
+              - to:
+                  uri: queue:bar
+```
+
+Here is an example of a simple DataSonnet expression as a transformation EIP. This example will transform an XML body with `lineItems` into JSON while filtering out lines that are under 100.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("queue:foo")
+    .transform(datasonnet("ds.filter(body.lineItems, function(item) item > 100)", String.class, "application/xml", "application/json"))
+    .to("queue:bar");
+```
+
+```xml
+<route>
+    <from uri="queue:foo"/>
+    <filter>
+        <datasonnet bodyMediaType="application/xml" outputMediaType="application/json" resultTypeName="java.lang.String" >
+            ds.filter(body.lineItems, function(item) item > 100)
+        </datasonnet>
+        <to uri="queue:bar"/>
+    </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: queue:foo
+      steps:
+        - transform:
+            expression:
+              datasonnet:
+                expression: "ds.filter(body.lineItems, function(item) item > 100)"
+                resultType: java.lang.String
+                bodyMediaType: application/xml
+                outputMediaType: application/json
+        - to:
+            uri: queue:bar
+```
+
+## DataWeave Support
+
+Camel can execute DataWeave (`.dwl`) scripts directly by auto-detecting and transpiling them to DataSonnet at load time. No extra configuration is needed — just reference a `.dwl` resource and Camel handles the conversion automatically.
+
+### Auto-detection
+
+DataWeave scripts are detected in two ways:
+
+-   **By file extension**: any resource ending in `.dwl` (e.g., `resource:classpath:transform.dwl`)
+    
+-   **By content**: inline expressions starting with the `%dw` header
+    
+
+Once detected, the script is transpiled to DataSonnet and executed via the datasonnet-mapper runtime. The conversion happens once at route initialization, so there is no runtime overhead.
+
+### Example
+
+Given a DataWeave file `transform.dwl` on the classpath:
+
+```dataweave
+%dw 2.0
+output application/json
+---
+{
+    orderId: payload.order_id,
+    customer: payload.customer.first_name ++ " " ++ payload.customer.last_name,
+    total: payload.items map ((item) -> item.price * item.qty)
+                         reduce ((item, acc = 0) -> acc + item)
+}
+```
+
+You can use it directly in a route:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:in")
+    .transform(datasonnet("resource:classpath:transform.dwl", String.class))
+    .to("mock:result");
+```
+
+```xml
+<route>
+    <from uri="direct:in"/>
+    <transform>
+        <datasonnet resultTypeName="java.lang.String">resource:classpath:transform.dwl</datasonnet>
+    </transform>
+    <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - transform:
+            expression:
+              datasonnet:
+                expression: "resource:classpath:transform.dwl"
+                resultType: java.lang.String
+        - to:
+            uri: mock:result
+```
+
+### CLI Transpiler
+
+You can also convert DataWeave scripts ahead of time using the Camel CLI:
+
+```bash
+camel transform dataweave -e "payload.name ++ ' ' ++ payload.surname"
+camel transform dataweave --input my-transform.dwl --output my-transform.ds
+camel transform dataweave --input src/main/resources/dwl/ --output src/main/resources/ds/
+```
+
+### Supported Constructs
+
+The transpiler automatically maps DataWeave constructs to their DataSonnet equivalents, including:
+
+-   `payload` to `body`, `vars` to `cml.variable()`, `attributes.headers` to `cml.header()`
+    
+-   Operators: `++` to `+`, `default` to `cml.defaultVal()`, `as Number/String/Boolean` to `cml.toInteger()/std.toString()/cml.toBoolean()`
+    
+-   Collection operations: `map`, `filter`, `reduce`, `flatMap`, `groupBy`, `orderBy`, `distinctBy`
+    
+-   String operations: `contains`, `startsWith`, `endsWith`, `splitBy`, `joinBy`, `replace`
+    
+-   Functions: `sizeOf`, `upper`, `lower`, `trim`, `now`, `uuid`, `abs`, `round`, `sqrt`
+    
+
+Constructs that cannot be automatically converted (such as `match` expressions) are emitted as `null` for manual review.
+
+## Dependencies
+
+To use scripting languages in your camel routes, you need to add a dependency on **camel-datasonnet**.
+
+If you use Maven you could just add the following to your `pom.xml`, substituting the version number for the latest and greatest release (see the download page for the latest versions).
+
+```xml
+<dependency>
+  <groupId>org.apache.camel</groupId>
+  <artifactId>camel-datasonnet</artifactId>
+  <version>x.x.x</version>
+</dependency>
+```

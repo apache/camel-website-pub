@@ -53,7 +53,7 @@ These Jakarta/MicroProfile annotations work in Camel standalone (no Quarkus cont
 
 ## Defining beans in XML DSL
 
-When using [XML DSL](../components/4.18.x/others/java-xml-io-dsl.md), you can declare beans that are added to the [Registry](registry.md):
+When using [XML DSL](../components/4.22.x/others/java-xml-io-dsl.md), you can declare beans that are added to the [Registry](registry.md):
 
 ```xml
 <camel>

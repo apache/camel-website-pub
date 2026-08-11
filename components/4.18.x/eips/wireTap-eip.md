@@ -112,7 +112,7 @@ from("direct:tap")
 
 ### Wire tapping with dynamic URIs
 
-For example, to wire tap to a dynamic URI, then the URI uses the [Simple](../languages/simple-language.md) language that allows to construct dynamic URIs.
+For example, to wire tap to a dynamic URI, then the URI uses the [Simple](../../4.22.x/languages/simple-language.md) language that allows to construct dynamic URIs.
 
 For example, to wire tap to a JMS queue where the header ID is part of the queue name:
 

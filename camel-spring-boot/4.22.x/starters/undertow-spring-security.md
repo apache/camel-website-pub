@@ -1,0 +1,27 @@
+# Undertow Spring Security
+
+Spring Boot auto-configuration for Camel Undertow with Spring Security.
+
+This starter secures Camel HTTP endpoints served by the Undertow component using Spring Security. It supports OAuth2/OpenID Connect providers (such as Keycloak) for authentication and authorization of incoming HTTP requests to Camel routes.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-undertow-spring-security-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 5 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.security.undertow.keycloak | Properties defined for keycloak provider. Value is gathered together from properties with prefix "camel.component.undertow.spring.security.keycloak" |  | KeycloakProviderConfiguration |
+| camel.security.undertow.keycloak.client-id | Client id from the Keycloak server used for authentication. |  | String |
+| camel.security.undertow.keycloak.realm-id | Realm id from the keycloak server used for authentication. |  | String |
+| camel.security.undertow.keycloak.url | Url to keycloak server which will be used in spring security configuration. (Example "http://localhost:8080") |  | String |
+| camel.security.undertow.keycloak.user-name-attribute | Name of the attribute, which will be used as username. | preferred\_username | String |

@@ -9,23 +9,23 @@ The intention is to allow end users to define REST services (hosted by Camel) us
 
 ## How it works
 
-The Rest DSL is a facade that builds [Rest](../components/4.18.x/rest-component.md) endpoints as consumers for Camel routes. The actual REST transport is leveraged by using Camel REST components such as [Netty HTTP](../components/4.18.x/netty-http-component.md), [Servlet](../components/4.18.x/servlet-component.md), and others that have native REST integration.
+The Rest DSL is a facade that builds [Rest](../components/4.22.x/rest-component.md) endpoints as consumers for Camel routes. The actual REST transport is leveraged by using Camel REST components such as [Netty HTTP](../components/4.22.x/netty-http-component.md), [Servlet](../components/4.22.x/servlet-component.md), and others that have native REST integration.
 
 ## Components supporting Rest DSL
 
 The following Camel components support the Rest DSL:
 
--   [camel-rest](../components/4.18.x/rest-component.md) **required** contains the base rest component needed by Rest DSL
+-   [camel-rest](../components/4.22.x/rest-component.md) **required** contains the base rest component needed by Rest DSL
     
--   [camel-netty-http](../components/4.18.x/netty-http-component.md)
+-   [camel-netty-http](../components/4.22.x/netty-http-component.md)
     
--   [camel-jetty](../components/4.18.x/jetty-component.md)
+-   [camel-jetty](../components/4.22.x/jetty-component.md)
     
--   [camel-platform-http](../components/4.18.x/platform-http-component.md) (recommended)
+-   [camel-platform-http](../components/4.22.x/platform-http-component.md) (recommended)
     
--   [camel-servlet](../components/4.18.x/servlet-component.md)
+-   [camel-servlet](../components/4.22.x/servlet-component.md)
     
--   [camel-undertow](../components/4.18.x/undertow-component.md)
+-   [camel-undertow](../components/4.22.x/undertow-component.md)
     
 
 ## Rest DSL

@@ -81,4 +81,4 @@ The component includes a periodic task that monitors Spring Cloud Config propert
 
 ## See Also
 
-[Camel Properties Component](../properties-component.md) [Spring Cloud Config](https://spring.io/projects/spring-cloud-config) [Using Property Placeholders](../../../manual/using-propertyplaceholder.md)
+[Camel Properties Component](../../4.22.x/properties-component.md) [Spring Cloud Config](https://spring.io/projects/spring-cloud-config) [Using Property Placeholders](../../../manual/using-propertyplaceholder.md)

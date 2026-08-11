@@ -4,7 +4,7 @@ Index of Camel Spring Boot documentation pages.
 
 # Apache Camel Spring Boot starters
 
-Camel support for Spring Boot provides auto-configuration of the Camel and starters for many Camel [components](../../components/4.18.x/index.md). Our opinionated auto-configuration of the Camel context auto-detects Camel routes available in the Spring context and registers the key Camel utilities (like producer template, consumer template and the type converter) as beans.
+Camel support for Spring Boot provides auto-configuration of the Camel and starters for many Camel [components](../../components/4.22.x/index.md). Our opinionated auto-configuration of the Camel context auto-detects Camel routes available in the Spring context and registers the key Camel utilities (like producer template, consumer template and the type converter) as beans.
 
 Get started by adding the Camel and Spring Boot BOMs to your Maven `pom.xml` file.
 
@@ -49,7 +49,7 @@ Next, add the [Camel Spring Boot starter](spring-boot.md) to start up the [Camel
     </dependencies>
 ```
 
-Also add any [component starters](list.md) your Spring Boot application requires. For example this adds the [auto-configuration starter](starters/jms.md) for the [JMS component](../../components/4.18.x/jms-component.md).
+Also add any [component starters](list.md) your Spring Boot application requires. For example this adds the auto-configuration starter for the [JMS component](../../components/4.22.x/jms-component.md).
 
 ```xml
     <dependencies>

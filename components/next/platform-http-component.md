@@ -187,7 +187,7 @@ To use it with different runtimes:
 
 ### OAuth Bearer token validation
 
-Platform HTTP consumers can validate incoming `Authorization: Bearer` tokens by setting the `oauthProfile` endpoint option. The profile is resolved through Camel’s `OAuthTokenValidationFactory` SPI. The [camel-oauth](../4.18.x/others/oauth.md) component provides the default implementation for standalone Camel applications; runtimes such as Camel Spring Boot or Camel Quarkus can provide their own implementation backed by their native security stack.
+Platform HTTP consumers can validate incoming `Authorization: Bearer` tokens by setting the `oauthProfile` endpoint option. The profile is resolved through Camel’s `OAuthTokenValidationFactory` SPI. The [camel-oauth](../4.22.x/others/oauth.md) component provides the default implementation for standalone Camel applications; runtimes such as Camel Spring Boot or Camel Quarkus can provide their own implementation backed by their native security stack.
 
 ```xml
 <dependency>
@@ -246,10 +246,10 @@ camel.oauth.myprofile.connect-timeout-seconds=5
 camel.oauth.myprofile.read-timeout-seconds=10
 ```
 
-See [camel-oauth](../4.18.x/others/oauth.md) for OIDC discovery and opaque-token introspection profile examples.
+See [camel-oauth](../4.22.x/others/oauth.md) for OIDC discovery and opaque-token introspection profile examples.
 
 > **Note**
-> Opaque-token introspection performs a blocking outbound HTTP call for every request. For high-traffic endpoints, prefer JWT validation with JWKS when the identity provider publishes signing keys. See [camel-oauth](../4.18.x/others/oauth.md) for timeout and validation profile options.
+> Opaque-token introspection performs a blocking outbound HTTP call for every request. For high-traffic endpoints, prefer JWT validation with JWKS when the identity provider publishes signing keys. See [camel-oauth](../4.22.x/others/oauth.md) for timeout and validation profile options.
 
 When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. Requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. With the Vert.x platform-http engine, Bearer token validation runs before the request body handler, so unauthenticated requests are rejected before body buffering, form parsing, or file uploads. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. Route code can use the result to read the principal name, token scopes, and immutable token attributes/claims. The raw `Authorization` header is removed before the route is invoked and from OAuth rejection responses.
 

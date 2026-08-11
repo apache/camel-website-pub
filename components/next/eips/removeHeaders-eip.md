@@ -103,7 +103,7 @@ from("seda:b")
 
 ## Leaking Camel headers when sending to an endpoint
 
-When I send a message to a Camel endpoint such as the [Mail](../../4.18.x/mail-component.md) component, then the mail include some message headers I do not want. How can I avoid this?
+When I send a message to a Camel endpoint such as the [Mail](../../4.22.x/mail-component.md) component, then the mail include some message headers I do not want. How can I avoid this?
 
 This is a gotcha more people encounter. However, it’s very easy to solve. To remove all headers (see above) use a `*` expression:
 

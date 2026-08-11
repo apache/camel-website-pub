@@ -14,7 +14,7 @@ In the route configuration, you can set up common strategies for:
     
 -   [OnCompletion EIP](oncompletion.md)
     
--   [Intercept EIP](../components/4.18.x/eips/intercept.md)
+-   [Intercept EIP](../components/4.22.x/eips/intercept.md)
     
 
 ## Route Configuration Builder in Java DSL

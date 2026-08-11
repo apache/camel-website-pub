@@ -113,7 +113,7 @@ Components reference a profile by name via the `oauthProfile` parameter:
 
 ### Incoming Bearer Token Validation
 
-The camel-oauth module also provides an `OAuthTokenValidationFactory` SPI for validating incoming `Authorization: Bearer` tokens. HTTP consumer components such as [Platform HTTP](../../4.18.x/platform-http-component.md), [Servlet](../../4.18.x/servlet-component.md), [Jetty](../../4.18.x/jetty-component.md), [Netty HTTP](../../4.18.x/netty-http-component.md), and [Undertow HTTP/WebSocket](../../4.18.x/undertow-component.md) can use this SPI without a compile-time dependency on camel-oauth. This module is the default provider for the SPI; runtime-specific integrations can provide their own implementation backed by their native security stack.
+The camel-oauth module also provides an `OAuthTokenValidationFactory` SPI for validating incoming `Authorization: Bearer` tokens. HTTP consumer components such as [Platform HTTP](../../4.22.x/platform-http-component.md), [Servlet](../../4.22.x/servlet-component.md), [Jetty](../../4.22.x/jetty-component.md), [Netty HTTP](../../4.22.x/netty-http-component.md), and [Undertow HTTP/WebSocket](../../4.22.x/undertow-component.md) can use this SPI without a compile-time dependency on camel-oauth. This module is the default provider for the SPI; runtime-specific integrations can provide their own implementation backed by their native security stack.
 
 JWT tokens are validated locally with JWKS. The validator verifies the JWS signature, checks `exp` and `nbf`, and validates `iss` and `aud`. Opaque tokens are validated with RFC 7662 introspection using a strict bounded HTTP/JSON implementation.
 

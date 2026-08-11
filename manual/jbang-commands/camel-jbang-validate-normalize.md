@@ -8,7 +8,7 @@ This command parses YAML routes and rewrites them in canonical form, expanding a
 
 The normalized output is valid against both the classic and canonical schemas.
 
-See the [YAML DSL Schema Variants](../../components/4.18.x/others/yaml-dsl.md) documentation for details on the differences between the classic and canonical schemas.
+See the [YAML DSL Schema Variants](../../components/4.22.x/others/yaml-dsl.md) documentation for details on the differences between the classic and canonical schemas.
 
 ## Usage
 

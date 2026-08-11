@@ -226,13 +226,13 @@ In this sample we define a route that exposes an HTTP service at `http://localho
 
 ### How do I let Jetty match wildcards?
 
-By default [Jetty](jetty-component.md) will only match on exact uri’s. But you can instruct Jetty to match prefixes. For example:
+By default [Jetty](../4.22.x/jetty-component.md) will only match on exact uri’s. But you can instruct Jetty to match prefixes. For example:
 
 ```java
 from("jetty://0.0.0.0:8123/foo").to("mock:foo");
 ```
 
-In the route above [Jetty](jetty-component.md) will only match if the uri is an exact match, so it will match if you enter `http://0.0.0.0:8123/foo` but not match if you do `http://0.0.0.0:8123/foo/bar`.
+In the route above [Jetty](../4.22.x/jetty-component.md) will only match if the uri is an exact match, so it will match if you enter `http://0.0.0.0:8123/foo` but not match if you do `http://0.0.0.0:8123/foo/bar`.
 
 So if you want to enable wildcard matching you do as follows:
 

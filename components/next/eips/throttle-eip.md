@@ -126,7 +126,7 @@ from("seda:a")
 
 ### Dynamically changing maximum requests per period
 
-The Throttler uses an [Expression](../../../manual/expression.md) to configure the number of requests. In all the examples from above, we used a [constant](../../4.18.x/languages/constant-language.md). However, the expression can be dynamic, such as determined from a message header from the current `Exchange`.
+The Throttler uses an [Expression](../../../manual/expression.md) to configure the number of requests. In all the examples from above, we used a [constant](../../4.22.x/languages/constant-language.md). However, the expression can be dynamic, such as determined from a message header from the current `Exchange`.
 
 At runtime Camel evaluates the expression and converts the result to a `java.lang.Long` type. In the example below, we use a header from the message to determine the maximum requests per period. If the header is absent, then the Throttler uses the old value. This allows you to only provide a header if the value is to be changed:
 

@@ -6,9 +6,9 @@ Property placeholders are used to define a _placeholder_ instead of the actual v
 
 ## Properties component
 
-Camel provides the [Properties](../components/4.18.x/properties-component.md) out of the box from the core, which is responsible for handling and resolving the property placeholders.
+Camel provides the [Properties](../components/4.22.x/properties-component.md) out of the box from the core, which is responsible for handling and resolving the property placeholders.
 
-See the [Properties](../components/4.18.x/properties-component.md) documentation for how to configure Camel to known from which location(a) to load properties.
+See the [Properties](../components/4.22.x/properties-component.md) documentation for how to configure Camel to known from which location(a) to load properties.
 
 ## Property placeholder syntax
 
@@ -340,7 +340,7 @@ myQuery = {"query":{"match_all":{}}}
 
 Notice how the JSon query ends with `}}` which interfere with the Camel property placeholder syntax.
 
-Nested placeholders can also be turned off globally on the [Properties](../components/4.18.x/properties-component.md) component, such as:
+Nested placeholders can also be turned off globally on the [Properties](../components/4.22.x/properties-component.md) component, such as:
 
 ```java
 CamelContext context = ...
@@ -495,7 +495,7 @@ Previously it was only the `xs:string` type attributes in the XML DSL that suppo
 
 In the example below we use the `prop` prefix for the namespace `http://camel.apache.org/schema/placeholder`. Now we can use `prop:` as prefix to configure any kind of XML attributes in Spring XML files.
 
-In the example below we want to use a placeholder for the `stopOnException` option in the [Multicast](../components/4.18.x/eips/multicast-eip.md) EIP. The `stopOnException` is a `xs:boolean` type, so we cannot configure this as:
+In the example below we want to use a placeholder for the `stopOnException` option in the [Multicast](../components/4.22.x/eips/multicast-eip.md) EIP. The `stopOnException` is a `xs:boolean` type, so we cannot configure this as:
 
 ```xml
 <multicast stopOnException="{{stop}}">
@@ -609,7 +609,7 @@ A `PropertySource` can define that it supports loading all its properties (by im
 
 For example the `camel-microprofile-config` component is implemented using this. The 3rd-party `PropertySource` can automatically be discovered from classpath when Camel is starting up. This is done by including the file `META-INF/services/org/apache/camel/property-source-factory` which refers to the fully qualified class name of the `PropertySource` implementation.
 
-See [MicroProfile Config](../components/4.18.x/others/microprofile-config.md) component as an example.
+See [MicroProfile Config](../components/4.22.x/others/microprofile-config.md) component as an example.
 
 You can also register 3rd-party property sources via Java API on the `PropertiesComponent` as shown:
 

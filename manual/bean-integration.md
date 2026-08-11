@@ -26,11 +26,11 @@ See more details at:
     
 -   [POJO Producing](pojo-producing.md) to make it easy to produce camel messages from your POJOs
     
--   `@DynamicRouter` Annotation for creating a [Dynamic Router](../components/4.18.x/eips/dynamicRouter-eip.md) from a POJO method
+-   `@DynamicRouter` Annotation for creating a [Dynamic Router](../components/4.22.x/eips/dynamicRouter-eip.md) from a POJO method
     
--   `@RecipientList` Annotation for creating a [Recipient List](../components/4.18.x/eips/recipientList-eip.md) from a POJO method
+-   `@RecipientList` Annotation for creating a [Recipient List](../components/4.22.x/eips/recipientList-eip.md) from a POJO method
     
--   `@RoutingSlip` Annotation for creating a [Routing Slip](../components/4.18.x/eips/routingSlip-eip.md) for a POJO method
+-   `@RoutingSlip` Annotation for creating a [Routing Slip](../components/4.22.x/eips/routingSlip-eip.md) for a POJO method
     
 -   [Bean Injection](bean-injection.md) to inject Camel related resources into your POJOs
     

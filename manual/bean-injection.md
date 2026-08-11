@@ -2,7 +2,7 @@
 
 We support the injection of various resources using `@EndpointInject` or `@BeanInject`. This can be used to inject
 
--   [Endpoint](endpoint.md) instances which can be used for testing when used with [Mock](../components/4.18.x/mock-component.md) endpoints; see the [Testing](testing.md) for an example.
+-   [Endpoint](endpoint.md) instances which can be used for testing when used with [Mock](../components/4.22.x/mock-component.md) endpoints; see the [Testing](testing.md) for an example.
     
 -   [ProducerTemplate](producertemplate.md) instances for [POJO Producing](pojo-producing.md)
     

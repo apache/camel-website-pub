@@ -1,6 +1,6 @@
 # Property binding in Camel
 
-Camel supports binding property values (key=value) in many places such as configuration of Camel components, endpoints, [EIPs](../components/4.18.x/eips/enterprise-integration-patterns.md), routes, and Camel bootstrap configuration.
+Camel supports binding property values (key=value) in many places such as configuration of Camel components, endpoints, [EIPs](../components/4.22.x/eips/enterprise-integration-patterns.md), routes, and Camel bootstrap configuration.
 
 Together with [property placeholders](using-propertyplaceholder.md), then there is plenty of power, but also something that takes a little learning to master.
 
@@ -230,4 +230,4 @@ Property binding is notably used when running Camel in standalone mode such as w
 
 When using Camel Spring Boot, or Camel Quarkus, then these runtimes have their own way of doing dependency injection and property binding.
 
-See more at [Camel Main](../components/4.18.x/others/main.md)
+See more at [Camel Main](../components/4.22.x/others/main.md)

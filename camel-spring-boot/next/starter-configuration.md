@@ -37,7 +37,7 @@ public JmsTransactionManager myjtaTransactionManager(PooledConnectionFactory poo
 }
 ```
 
-Beans can also be created in [configuration files](../../components/4.18.x/others/main.html#_specifying_custom_beans) but it isn’t recommended for complex use cases.
+Beans can also be created in [configuration files](../../components/4.22.x/others/main.html#_specifying_custom_beans) but it isn’t recommended for complex use cases.
 
 ## Using Beans
 

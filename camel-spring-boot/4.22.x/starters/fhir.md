@@ -1,0 +1,97 @@
+# FHIR
+
+Exchange information in the healthcare domain using the FHIR (Fast Healthcare Interoperability Resources) standard.
+
+## What’s inside
+
+-   [FHIR component](../../../components/4.22.x/fhir-component.md), URI syntax: `fhir:apiName/methodName`
+    
+-   [FHIR JSon data format](../../../components/4.22.x/dataformats/fhirJson-dataformat.md)
+    
+-   [FHIR XML data format](../../../components/4.22.x/dataformats/fhirXml-dataformat.md)
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-fhir-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 66 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.component.fhir.access-token | OAuth access token |  | String |
+| camel.component.fhir.autowired-enabled | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| camel.component.fhir.bridge-error-handler | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | Boolean |
+| camel.component.fhir.client | To use the custom client. The option is a ca.uhn.fhir.rest.client.api.IGenericClient type. |  | IGenericClient |
+| camel.component.fhir.client-factory | To use the custom client factory. The option is a ca.uhn.fhir.rest.client.api.IRestfulClientFactory type. |  | IRestfulClientFactory |
+| camel.component.fhir.compress | Compresses outgoing (POST/PUT) contents to the GZIP format | false | Boolean |
+| camel.component.fhir.configuration | To use the shared configuration. The option is a org.apache.camel.component.fhir.FhirConfiguration type. |  | FhirConfiguration |
+| camel.component.fhir.connection-timeout | How long to try and establish the initial TCP connection (in ms) | 10000 | Integer |
+| camel.component.fhir.defer-model-scanning | When this option is set, model classes will not be scanned for children until the child list for the given type is actually accessed. | false | Boolean |
+| camel.component.fhir.enabled | Whether to enable auto configuration of the fhir component. This is enabled by default. |  | Boolean |
+| camel.component.fhir.encoding | Encoding to use for all request |  | String |
+| camel.component.fhir.fhir-context | FhirContext is an expensive object to create. To avoid creating multiple instances, it can be set directly. The option is a ca.uhn.fhir.context.FhirContext type. |  | FhirContext |
+| camel.component.fhir.fhir-version | The FHIR Version to use | R4 | String |
+| camel.component.fhir.force-conformance-check | Force conformance check | false | Boolean |
+| camel.component.fhir.lazy-start-producer | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| camel.component.fhir.log | Will log every requests and responses | false | Boolean |
+| camel.component.fhir.password | Password to use for basic authentication |  | String |
+| camel.component.fhir.pretty-print | Pretty print all request | false | Boolean |
+| camel.component.fhir.proxy-host | The proxy host |  | String |
+| camel.component.fhir.proxy-password | The proxy password |  | String |
+| camel.component.fhir.proxy-port | The proxy port |  | Integer |
+| camel.component.fhir.proxy-user | The proxy username |  | String |
+| camel.component.fhir.server-url | The FHIR server base URL |  | String |
+| camel.component.fhir.session-cookie | HTTP session cookie to add to every request |  | String |
+| camel.component.fhir.socket-timeout | How long to block for individual read/write operations (in ms) | 10000 | Integer |
+| camel.component.fhir.summary | Request that the server modify the response using the \_summary param |  | String |
+| camel.component.fhir.username | Username to use for basic authentication |  | String |
+| camel.component.fhir.validation-mode | When should Camel validate the FHIR Server’s conformance statement | ONCE | String |
+| camel.dataformat.fhir-json.content-type-header | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON | true | Boolean |
+| camel.dataformat.fhir-json.dont-encode-elements | If provided, specifies the elements which should NOT be encoded. Multiple elements can be separated by comma. |  | String |
+| camel.dataformat.fhir-json.dont-strip-versions-from-references-at-paths | If supplied value(s), any resource references at the specified paths will have their resource versions encoded instead of being automatically stripped during the encoding process. Multiple elements can be separated by comma. |  | String |
+| camel.dataformat.fhir-json.enabled | Whether to enable auto configuration of the fhirJson data format. This is enabled by default. |  | Boolean |
+| camel.dataformat.fhir-json.encode-elements | If provided, specifies the elements which should be encoded, to the exclusion of all others. Multiple elements can be separated by comma. |  | String |
+| camel.dataformat.fhir-json.encode-elements-applies-to-child-resources-only | If set to true (default is false), the values supplied to setEncodeElements will not be applied to the root resource (typically a Bundle), but will be applied to any sub-resources contained within it. | false | Boolean |
+| camel.dataformat.fhir-json.fhir-context | To use a custom fhir context. Reference to object of type ca.uhn.fhir.context.FhirContext. |  | String |
+| camel.dataformat.fhir-json.fhir-version | The version of FHIR to use. Possible values are: DSTU2, DSTU2\_HL7ORG, DSTU2\_1, DSTU3, R4, R5. | R4 | String |
+| camel.dataformat.fhir-json.force-resource-id | When encoding, force this resource ID to be encoded as the resource ID. Reference to object of type org.hl7.fhir.instance.model.api.IIdType. |  | String |
+| camel.dataformat.fhir-json.omit-resource-id | If set to true (default is false) the ID of any resources being encoded will not be included in the output. | false | Boolean |
+| camel.dataformat.fhir-json.override-resource-id-with-bundle-entry-full-url | If set to true (which is the default), the Bundle.entry.fullUrl will override the Bundle.entry.resource’s resource id if the fullUrl is defined. | false | Boolean |
+| camel.dataformat.fhir-json.parser-error-handler | Registers an error handler which will be invoked when any parse errors are found. Reference to object of type ca.uhn.fhir.parser.IParserErrorHandler. |  | String |
+| camel.dataformat.fhir-json.parser-options | Sets the parser options object which will be used to supply default options to newly created parsers. Reference to object of type ca.uhn.fhir.context.ParserOptions. |  | String |
+| camel.dataformat.fhir-json.prefer-types | If set (FQN class names), when parsing resources the parser will try to use the given types when possible. Multiple class names can be separated by comma. |  | String |
+| camel.dataformat.fhir-json.pretty-print | Sets the pretty print flag, meaning that the parser will encode resources with human-readable spacing and newlines between elements. | false | Boolean |
+| camel.dataformat.fhir-json.server-base-url | Sets the server’s base URL used by this parser. If a value is set, resource references will be turned into relative references if they are provided as absolute URLs but have a base matching the given base. |  | String |
+| camel.dataformat.fhir-json.strip-versions-from-references | If set to true (which is the default), resource references containing a version will have the version removed when the resource is encoded. | false | Boolean |
+| camel.dataformat.fhir-json.summary-mode | If set to true (default is false) only elements marked by the FHIR specification as being summary elements will be included. | false | Boolean |
+| camel.dataformat.fhir-json.suppress-narratives | If set to true (default is false), narratives will not be included in the encoded values. | false | Boolean |
+| camel.dataformat.fhir-xml.content-type-header | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON | true | Boolean |
+| camel.dataformat.fhir-xml.dont-encode-elements | If provided, specifies the elements which should NOT be encoded. Multiple elements can be separated by comma. |  | String |
+| camel.dataformat.fhir-xml.dont-strip-versions-from-references-at-paths | If supplied value(s), any resource references at the specified paths will have their resource versions encoded instead of being automatically stripped during the encoding process. Multiple elements can be separated by comma. |  | String |
+| camel.dataformat.fhir-xml.enabled | Whether to enable auto configuration of the fhirXml data format. This is enabled by default. |  | Boolean |
+| camel.dataformat.fhir-xml.encode-elements | If provided, specifies the elements which should be encoded, to the exclusion of all others. Multiple elements can be separated by comma. |  | String |
+| camel.dataformat.fhir-xml.encode-elements-applies-to-child-resources-only | If set to true (default is false), the values supplied to setEncodeElements will not be applied to the root resource (typically a Bundle), but will be applied to any sub-resources contained within it. | false | Boolean |
+| camel.dataformat.fhir-xml.fhir-context | To use a custom fhir context. Reference to object of type ca.uhn.fhir.context.FhirContext. |  | String |
+| camel.dataformat.fhir-xml.fhir-version | The version of FHIR to use. Possible values are: DSTU2, DSTU2\_HL7ORG, DSTU2\_1, DSTU3, R4, R5. | R4 | String |
+| camel.dataformat.fhir-xml.force-resource-id | When encoding, force this resource ID to be encoded as the resource ID. Reference to object of type org.hl7.fhir.instance.model.api.IIdType. |  | String |
+| camel.dataformat.fhir-xml.omit-resource-id | If set to true (default is false) the ID of any resources being encoded will not be included in the output. | false | Boolean |
+| camel.dataformat.fhir-xml.override-resource-id-with-bundle-entry-full-url | If set to true (which is the default), the Bundle.entry.fullUrl will override the Bundle.entry.resource’s resource id if the fullUrl is defined. | false | Boolean |
+| camel.dataformat.fhir-xml.parser-error-handler | Registers an error handler which will be invoked when any parse errors are found. Reference to object of type ca.uhn.fhir.parser.IParserErrorHandler. |  | String |
+| camel.dataformat.fhir-xml.parser-options | Sets the parser options object which will be used to supply default options to newly created parsers. Reference to object of type ca.uhn.fhir.context.ParserOptions. |  | String |
+| camel.dataformat.fhir-xml.prefer-types | If set (FQN class names), when parsing resources the parser will try to use the given types when possible. Multiple class names can be separated by comma. |  | String |
+| camel.dataformat.fhir-xml.pretty-print | Sets the pretty print flag, meaning that the parser will encode resources with human-readable spacing and newlines between elements. | false | Boolean |
+| camel.dataformat.fhir-xml.server-base-url | Sets the server’s base URL used by this parser. If a value is set, resource references will be turned into relative references if they are provided as absolute URLs but have a base matching the given base. |  | String |
+| camel.dataformat.fhir-xml.strip-versions-from-references | If set to true (which is the default), resource references containing a version will have the version removed when the resource is encoded. | false | Boolean |
+| camel.dataformat.fhir-xml.summary-mode | If set to true (default is false) only elements marked by the FHIR specification as being summary elements will be included. | false | Boolean |
+| camel.dataformat.fhir-xml.suppress-narratives | If set to true (default is false), narratives will not be included in the encoded values. | false | Boolean |

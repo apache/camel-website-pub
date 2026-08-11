@@ -1,6 +1,6 @@
 # CamelContext Auto Configuration
 
-The [CamelContext](camelcontext.md) is autoconfigured when running Camel with either [Camel Main](../components/4.18.x/others/main.md), Camel Spring Boot, Camel Quarkus.
+The [CamelContext](camelcontext.md) is autoconfigured when running Camel with either [Camel Main](../components/4.22.x/others/main.md), Camel Spring Boot, Camel Quarkus.
 
 ## Camel Autoconfiguration
 
@@ -8,14 +8,14 @@ Under these runtimes then the autoconfiguration is performed by shared code from
 
 The autoconfiguration is executed in several steps:
 
-1.  Configure `CamelContext` (and more such as components) from [properties](../components/4.18.x/properties-component.md) from external sources like `application.properties|yaml`
+1.  Configure `CamelContext` (and more such as components) from [properties](../components/4.22.x/properties-component.md) from external sources like `application.properties|yaml`
     
 2.  Configure optional services that have been registered in the [Registry](registry.md)
     
 
 ### Autoconfiguration of Properties
 
-This is used for configuring the standard set of more than 100 options which are listed in the _Camel Main Options_ table at [Camel Main](../components/4.18.x/others/main.md).
+This is used for configuring the standard set of more than 100 options which are listed in the _Camel Main Options_ table at [Camel Main](../components/4.22.x/others/main.md).
 
 > **Note**
 > When using Camel on Spring Boot, then these options are prefixed with `camel.springboot`, and not `camel.main`.
@@ -43,10 +43,10 @@ The following SPI services can only a single instance (singleton) be in the [Reg
 | `InflightRepository` | To use a custom in flight repository |
 | `ManagementObjectNameStrategy` | To use a custom JMX MBean object naming |
 | `ManagementStrategy` | To use a custom JMX management strategy |
-| `MessageHistoryFactory` | To use a custom factory for [message history](../components/4.18.x/eips/message-history.md) |
+| `MessageHistoryFactory` | To use a custom factory for [message history](../components/4.22.x/eips/message-history.md) |
 | `ModelJAXBContextFactory` | To use a custom `JAXBContext` factory (only needed if you run Camel on a special application server to deal with JAXB classloading) |
 | `NodeIdFactory` | To use a custom factory for creating auto generated node ids |
-| `ProcessorFactory` | To use a custom factory for creating [EIP](../components/4.18.x/eips/enterprise-integration-patterns.md) processors |
+| `ProcessorFactory` | To use a custom factory for creating [EIP](../components/4.22.x/eips/enterprise-integration-patterns.md) processors |
 | `PropertiesComponent` | To use a custom properties component |
 | `ReactiveExecutor` | To use a custom reactive engine in the Camel routing engine |
 | `RouteController` | To use a custom [route controller](route-controller.md) |

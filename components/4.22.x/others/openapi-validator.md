@@ -1,0 +1,66 @@
+# Openapi Validator
+
+**Since Camel 4.7**
+
+Camel comes with a default client request/response validator for the Camel Rest DSL.
+
+The `camel-openapi-validator` uses the third party [Atlassian Swagger Request Validator](https://bitbucket.org/atlassian/swagger-request-validator/src/master/) library instead for client request/response validator. This library is a more extensive validator than the default validator from `camel-core`.
+
+## Auto-detection from classpath
+
+To use this implementation all you need to do is to add the `camel-openapi-validator` dependency to the classpath:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-openapi-validator</artifactId>
+</dependency>
+```
+
+When this dependency is present, the OpenAPI validator is automatically discovered and used instead of the default validator. No additional configuration is required.
+
+## Usage with REST DSL
+
+To enable request validation on incoming HTTP requests, use `clientRequestValidation(true)` in the REST DSL and load the OpenAPI specification with `openApi()`:
+
+_Java-only: enabling client request validation with REST DSL and OpenAPI_
+
+```java
+rest().clientRequestValidation(true)
+    .openApi()
+    .specification("petstore-v3.json")
+    .missingOperation("ignore");
+
+from("direct:updatePet")
+    .to("bean:petService?method=update");
+
+from("direct:findPetsByStatus")
+    .to("bean:petService?method=findByStatus");
+```
+
+With this setup, incoming requests are validated against the OpenAPI specification before reaching the route handler. If validation fails, a `400 Bad Request` response is returned automatically with a message describing the validation error.
+
+The validator checks request body schema (required fields, types, formats), required query parameters, required headers, and content types — all based on what is defined in the OpenAPI specification.
+
+### Configuring levels of errors
+
+The Atlassian Swagger Request Validator supports configuring [fine-grained levels](https://bitbucket.org/atlassian/swagger-request-validator/src/c6200d0d849ae69be679f7fe01042cd9e84637c4/swagger-request-validator-core/README.md) for validating. This allows to turn on ignoring some specific errors.
+
+For example, you can ignore query parameters
+
+```properties
+camel.rest.validation-levels[validation.schema.required] = INFO
+camel.rest.validation-levels[validation.request.parameter.query.missing] = IGNORE
+camel.rest.validation-levels[validation.response.body.missing] = WARN
+```
+
+Or configure them in Java DSL:
+
+_Java-only: configuring validation levels programmatically_
+
+```java
+restConfiguration()
+    .clientRequestValidation(true)
+    .validationLevelProperty("validation.request.body.schema.required", "INFO")
+    .validationLevelProperty("validation.request.parameter.query.missing", "IGNORE");
+```

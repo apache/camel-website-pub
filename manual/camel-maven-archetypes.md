@@ -7,8 +7,8 @@ Camel is distributed with the following archetypes for Maven end users.
  
 | Archetype | Description |
 | --- | --- |
-| camel-archetype-api-component | This archetype is used for creating a new Maven project for Camel [Components](../components/4.18.x/index.md). Use this if there is an API component missing in Camel that you want to create yourself. |
-| camel-archetype-component | This archetype is used for creating a new Maven project for Camel [Components](../components/4.18.x/index.md). Use this if there is a component missing in Camel that you want to create yourself. |
+| camel-archetype-api-component | This archetype is used for creating a new Maven project for Camel [Components](../components/4.22.x/index.md). Use this if there is an API component missing in Camel that you want to create yourself. |
+| camel-archetype-component | This archetype is used for creating a new Maven project for Camel [Components](../components/4.22.x/index.md). Use this if there is a component missing in Camel that you want to create yourself. |
 | camel-archetype-dataformat | This archetype is used for creating a new Maven project for Camel [Data Format](data-format.md)s. Use this if there is a data format missing in Camel that you want to create yourself. |
 | camel-archetype-java | This archetype is used to create a new Maven project for Camel routes using Java DSL. |
 | camel-archetype-main | This archetype is used to create a new Maven project for Camel routes running Camel standalone (camel-main). |

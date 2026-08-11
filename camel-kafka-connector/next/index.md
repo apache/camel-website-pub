@@ -16,7 +16,7 @@ Index of Camel Kafka Connector documentation pages.
 >
 > This is the development version of Camel Kafka Connector. It should not be used in production.
 
-Camel Kafka Connector allows you to use all Camel [components](../../components/4.18.x/index.md) as [Kafka Connect](http://kafka.apache.org/documentation/#connect) connectors.
+Camel Kafka Connector allows you to use all Camel [components](../../components/4.22.x/index.md) as [Kafka Connect](http://kafka.apache.org/documentation/#connect) connectors.
 
 The basic idea is reusing the available Camel components as Kafka sink and source connectors in a simple way.
 

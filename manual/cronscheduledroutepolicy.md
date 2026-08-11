@@ -1,11 +1,11 @@
 # CronScheduledRoutePolicy
 
-`CronScheduledRoutePolicy` is a [ScheduledRoutePolicy](scheduledroutepolicy.md) that facilitates route activation, deactivation, suspension and resumption of routes based on a [Quartz](../components/4.18.x/quartz-component.md) cron trigger.
+`CronScheduledRoutePolicy` is a [ScheduledRoutePolicy](scheduledroutepolicy.md) that facilitates route activation, deactivation, suspension and resumption of routes based on a [Quartz](../components/4.22.x/quartz-component.md) cron trigger.
 
 > **Tip**
 > Relationship to the Quartz component
 >
-> All Scheduled route policies share the scheduler created by the [Quartz](../components/4.18.x/quartz-component.md) component. In this way, scheduler, jobs and triggers can be managed in a common and consistent way.
+> All Scheduled route policies share the scheduler created by the [Quartz](../components/4.22.x/quartz-component.md) component. In this way, scheduler, jobs and triggers can be managed in a common and consistent way.
 
 ## Using cron scheduled route policy
 

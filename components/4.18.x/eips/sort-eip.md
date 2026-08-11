@@ -51,7 +51,7 @@ from("file:inbox")
     .to("bean:MyServiceBean.processLine");
 ```
 
-In the route below, it will read the file content and tokenize by line breaks so each line can be sorted. In XML, you use the [Tokenize](../languages/tokenize-language.md) language as shown:
+In the route below, it will read the file content and tokenize by line breaks so each line can be sorted. In XML, you use the [Tokenize](../../4.22.x/languages/tokenize-language.md) language as shown:
 
 ```xml
 <route>

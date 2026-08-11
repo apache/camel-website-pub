@@ -1,0 +1,68 @@
+# PQC (Post-Quantum Cryptography)
+
+Encrypt and decrypt messages using Post-Quantum Cryptography Key Encapsulation Mechanisms (KEM)
+
+## What’s inside
+
+-   [PQC (Post-Quantum Cryptography) data format](../../../components/4.22.x/dataformats/pqc-dataformat.md)
+    
+-   [PQC Algorithms component](../../../components/4.22.x/pqc-component.md), URI syntax: `pqc:label`
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-pqc-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 39 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.component.pqc.autowired-enabled | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| camel.component.pqc.classical-k-e-m-algorithm | The classical key agreement algorithm to use in hybrid KEM operations |  | String |
+| camel.component.pqc.classical-key-agreement | The classical KeyAgreement instance to be used in hybrid KEM operations. The option is a javax.crypto.KeyAgreement type. |  | KeyAgreement |
+| camel.component.pqc.classical-key-pair | The classical KeyPair to be used in hybrid operations. The option is a java.security.KeyPair type. |  | KeyPair |
+| camel.component.pqc.classical-signature-algorithm | The classical signature algorithm to use in hybrid operations |  | String |
+| camel.component.pqc.classical-signer | The classical Signature instance to be used in hybrid signature operations. The option is a java.security.Signature type. |  | Signature |
+| camel.component.pqc.configuration | Component configuration. The option is a org.apache.camel.component.pqc.PQCConfiguration type. |  | PQCConfiguration |
+| camel.component.pqc.enabled | Whether to enable auto configuration of the pqc component. This is enabled by default. |  | Boolean |
+| camel.component.pqc.health-check-consumer-enabled | Used for enabling or disabling all consumer based health checks from this component | true | Boolean |
+| camel.component.pqc.health-check-producer-enabled | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
+| camel.component.pqc.hybrid-kdf-algorithm | The KDF algorithm to use for combining secrets in hybrid KEM operations | HKDF-SHA256 | String |
+| camel.component.pqc.key-encapsulation-algorithm | In case there is no keyGenerator, we specify an algorithm to build the KeyGenerator |  | String |
+| camel.component.pqc.key-generator | The Key Generator to be used in encapsulation and extraction. The option is a javax.crypto.KeyGenerator type. |  | KeyGenerator |
+| camel.component.pqc.key-lifecycle-manager | The KeyLifecycleManager to use for key lifecycle operations such as generation, rotation, import/export, expiration, and revocation. The option is a org.apache.camel.component.pqc.lifecycle.KeyLifecycleManager type. |  | KeyLifecycleManager |
+| camel.component.pqc.key-pair | The KeyPair to be used. The option is a java.security.KeyPair type. |  | KeyPair |
+| camel.component.pqc.key-pair-alias | A KeyPair alias to use in combination with KeyStore parameter |  | String |
+| camel.component.pqc.key-rotation-check-interval | Interval between key rotation checks when the scheduler is enabled. The option is a long type. | 3600000 | Long |
+| camel.component.pqc.key-rotation-max-age | When the scheduler is enabled, rotate keys older than this age. If not set, age is not used as a rotation signal. The option is a long type. |  | Long |
+| camel.component.pqc.key-rotation-max-usage | When the scheduler is enabled, rotate keys whose recorded usage count reaches this value. 0 disables usage-based rotation. | 0 | Long |
+| camel.component.pqc.key-rotation-scheduler-enabled | Whether to start an automated background key rotation scheduler for this component. Requires keyLifecycleManager to be set. The scheduler periodically rotates keys that exceed the configured age and/or usage policy. | false | Boolean |
+| camel.component.pqc.key-store | A KeyStore where we could get Cryptographic material. The option is a java.security.KeyStore type. |  | KeyStore |
+| camel.component.pqc.key-store-password | The KeyStore password to use in combination with KeyStore Parameter |  | String |
+| camel.component.pqc.lazy-start-producer | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| camel.component.pqc.operation | The operation to perform |  | PQCOperations |
+| camel.component.pqc.parameter-spec | The NIST parameter set (security level) to use for the configured signature or key encapsulation algorithm, using the BouncyCastle parameter-set names: for example ML-DSA-44, ML-DSA-65 or ML-DSA-87 for MLDSA, and ML-KEM-512, ML-KEM-768 or ML-KEM-1024 for MLKEM. Names are case-insensitive and the underscore form (ml\_dsa\_87) is accepted as an alias. When set, the key material is generated with this parameter set instead of the algorithm default. Not supported for the stateful signature algorithms (XMSS, XMSSMT, LMS, HSS), for MAYO and SNOVA, nor for the hybrid operations: for those, register a KeyPair bean in the registry instead. |  | String |
+| camel.component.pqc.signature-algorithm | In case there is no signer, we specify an algorithm to build the KeyPair or the Signer |  | String |
+| camel.component.pqc.signer | The Signer to be used. The option is a java.security.Signature type. |  | Signature |
+| camel.component.pqc.stateful-key-warning-threshold | The warning threshold for stateful key exhaustion as a fraction of total signatures (0.0 to 1.0). When the remaining signatures for a stateful key (XMSS, XMSSMT, LMS/HSS) drop below this fraction of the total capacity, a WARN log is emitted. When remaining signatures reach zero, an exception is thrown to prevent key reuse. Set to 0 to disable warnings. |  | Double |
+| camel.component.pqc.store-extracted-secret-key-as-header | In the context of extractSecretKeyFromEncapsulation operation, this option define if we want to have the key set as header | false | Boolean |
+| camel.component.pqc.strict-key-lifecycle | Whether to enforce key status checks before cryptographic operations. When enabled, REVOKED keys are rejected for all operations, EXPIRED keys are rejected for signing/encapsulation but allowed for verification/extraction, and DEPRECATED keys produce a warning but still function. Requires a KeyLifecycleManager and a CamelPQCKeyId header to be set. | true | Boolean |
+| camel.component.pqc.symmetric-key-algorithm | In case we are using KEM operations, we need a Symmetric algorithm to be defined for the flow to work. |  | String |
+| camel.component.pqc.symmetric-key-length | The required length of the symmetric key used | 128 | Integer |
+| camel.dataformat.pqc.enabled | Whether to enable auto configuration of the pqc data format. This is enabled by default. |  | Boolean |
+| camel.dataformat.pqc.key-encapsulation-algorithm | The Post-Quantum KEM algorithm to use for key encapsulation. | MLKEM | String |
+| camel.dataformat.pqc.key-generator | Refers to a custom KeyGenerator to lookup from the registry for KEM operations. The option is a javax.crypto.KeyGenerator type. |  | String |
+| camel.dataformat.pqc.key-pair | Refers to the KeyPair to lookup from the registry to use for KEM operations. The option is a java.security.KeyPair type. |  | String |
+| camel.dataformat.pqc.provider | The JCE security provider to use. |  | String |
+| camel.dataformat.pqc.symmetric-key-algorithm | The symmetric encryption algorithm to use with the shared secret. Only algorithms that support authenticated encryption (AEAD) are allowed: AES, ARIA, CAMELLIA, CAST6, DSTU7624, GOST3412\_2015, SEED and SM4 are encrypted with GCM, and CHACHA7539 with ChaCha20-Poly1305. | AES | String |
+| camel.dataformat.pqc.symmetric-key-length | The length (in bits) of the symmetric key. | 128 | Integer |

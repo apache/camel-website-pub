@@ -56,7 +56,7 @@ The exchange properties are set on the `Exchange` by the EIP, unless otherwise s
 
 The `to` is used for sending messages to a static [endpoint](message-endpoint.md). In other words `to` sends messages only to the **same** endpoint.
 
-The `toD` is used for sending messages to a dynamic [endpoint](message-endpoint.md). The dynamic endpoint is evaluated _on-demand_ by an [Expression](../../../manual/expression.md). By default, the [Simple](../languages/simple-language.md) expression is used to compute the dynamic endpoint URI.
+The `toD` is used for sending messages to a dynamic [endpoint](message-endpoint.md). The dynamic endpoint is evaluated _on-demand_ by an [Expression](../../../manual/expression.md). By default, the [Simple](../../4.22.x/languages/simple-language.md) expression is used to compute the dynamic endpoint URI.
 
 > **Note**
 > the Java DSL also provides a `toF` EIP, which can be used to avoid concatenating route parameters and making the code harder to read.

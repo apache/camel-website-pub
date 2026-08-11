@@ -1,13 +1,13 @@
 # Using Exchange Pattern Annotations
 
-Invoking InOut methods for [request/reply](../components/4.18.x/eips/requestReply-eip.md) when working with [POJO Producing](pojo-producing.md) is typically synchronous. As such, the caller will block until the server returns a result.
+Invoking InOut methods for [request/reply](../components/4.22.x/eips/requestReply-eip.md) when working with [POJO Producing](pojo-producing.md) is typically synchronous. As such, the caller will block until the server returns a result.
 
 InOut means that there is an In message for the input and an Out for the output/result.
 
 > **Note**
 > Other books, posts and reference guides may use the terms In/Out and In/Only for the patterns. In this guide we use InOut and InOnly respectively, as these are the names used within Camel.
 
-You can also implement support for [Event Messages](../components/4.18.x/eips/event-message.md) with Apache Camel, using the InOnly [pattern](exchange-pattern.md). These are often called "fire and forget" (i.e., like sending a JMS message but not waiting for any response).
+You can also implement support for [Event Messages](../components/4.22.x/eips/event-message.md) with Apache Camel, using the InOnly [pattern](exchange-pattern.md). These are often called "fire and forget" (i.e., like sending a JMS message but not waiting for any response).
 
 ## Specifying InOnly and InOut methods
 

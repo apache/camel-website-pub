@@ -2,9 +2,9 @@
 
 This is the default [Error Handler](error-handler.md) in Camel.
 
-The default [Error Handler](error-handler.md) has the same power as the [Dead Letter Channel.](../components/4.18.x/eips/dead-letter-channel.md) However, it does **not** support a _dead letter queue_, which is the only difference between the two of them.
+The default [Error Handler](error-handler.md) has the same power as the [Dead Letter Channel.](../components/4.22.x/eips/dead-letter-channel.md) However, it does **not** support a _dead letter queue_, which is the only difference between the two of them.
 
-The `DefaultErrorHandler` is configured differently from [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) as it is configured to:
+The `DefaultErrorHandler` is configured differently from [Dead Letter Channel](../components/4.22.x/eips/dead-letter-channel.md) as it is configured to:
 
 -   not redeliver
     

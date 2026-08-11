@@ -2,7 +2,7 @@
 
 JVM since3.2.0 Native since3.36.0
 
-Send requests to ElasticSearch via Java Client API.
+Send requests to Elasticsearch via Java Client API.
 
 ## What’s inside
 

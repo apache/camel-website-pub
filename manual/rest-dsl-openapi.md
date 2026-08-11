@@ -4,7 +4,7 @@ From **Camel 4.6** onwards, the [Rest DSL](rest-dsl.md) has been improved with a
 
 ## How it works
 
-The Rest DSL OpenAPI is a facade that builds [Rest OpenAPI](../components/4.18.x/rest-openapi-component.md) endpoint as consumer for Camel routes. The actual HTTP transport is leveraged by using the [Platform HTTP](../components/4.18.x/platform-http-component.md), which makes it plugin to Camel Spring Boot, Camel Quarkus or can run standalone with Camel Main.
+The Rest DSL OpenAPI is a facade that builds [Rest OpenAPI](../components/4.22.x/rest-openapi-component.md) endpoint as consumer for Camel routes. The actual HTTP transport is leveraged by using the [Platform HTTP](../components/4.22.x/platform-http-component.md), which makes it plugin to Camel Spring Boot, Camel Quarkus or can run standalone with Camel Main.
 
 ### Limitations
 
@@ -48,7 +48,7 @@ rest().openApi("petstore-v3.json");
       specification: petstore-v3.json
 ```
 
-The built-in Rest OpenAPI consumer uses [platform-http](../components/4.18.x/platform-http-component.md), which supports the `oauthProfile` option. Custom `RestOpenApiConsumerFactory` delegates can also receive the endpoint property if they support it. Direct `rest-openapi` consumer endpoint URIs can also pass the option to the delegate, for example `rest-openapi:petstore-v3.json?consumerComponentName=platform-http&oauthProfile=myprofile`. Consumer endpoint URIs identify the OpenAPI specification and do not include an `#operationId` fragment. The `oauthProfile` option is forwarded to the selected delegate, which is responsible for enforcing it. The route fails at startup when the resolved `RestOpenApiConsumerFactory` does not declare that its consumers enforce `oauthProfile`, so a misconfigured delegate cannot start without the expected protection.
+The built-in Rest OpenAPI consumer uses [platform-http](../components/4.22.x/platform-http-component.md), which supports the `oauthProfile` option. Custom `RestOpenApiConsumerFactory` delegates can also receive the endpoint property if they support it. Direct `rest-openapi` consumer endpoint URIs can also pass the option to the delegate, for example `rest-openapi:petstore-v3.json?consumerComponentName=platform-http&oauthProfile=myprofile`. Consumer endpoint URIs identify the OpenAPI specification and do not include an `#operationId` fragment. The `oauthProfile` option is forwarded to the selected delegate, which is responsible for enforcing it. The route fails at startup when the resolved `RestOpenApiConsumerFactory` does not declare that its consumers enforce `oauthProfile`, so a misconfigured delegate cannot start without the expected protection.
 
 ## Contract first
 

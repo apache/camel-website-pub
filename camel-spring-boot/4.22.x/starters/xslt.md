@@ -1,0 +1,37 @@
+# XSLT
+
+Transforms XML payload using an XSLT template.
+
+## What’s inside
+
+-   [XSLT component](../../../components/4.22.x/xslt-component.md), URI syntax: `xslt:resourceUri`
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-xslt-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 10 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.component.xslt.allow-template-from-header | Whether to allow to use resource template from header or not (default false). Enabling this allows to specify dynamic templates via message header. However this can be seen as a potential security vulnerability if the header is coming from a malicious user, so use this with care. | false | Boolean |
+| camel.component.xslt.autowired-enabled | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| camel.component.xslt.content-cache | Cache for the resource content (the stylesheet file) when it is loaded. If set to false Camel will reload the stylesheet file on each message processing. This is good for development. A cached stylesheet can be forced to reload at runtime via JMX using the clearCachedStylesheet operation. | true | Boolean |
+| camel.component.xslt.enabled | Whether to enable auto configuration of the xslt component. This is enabled by default. |  | Boolean |
+| camel.component.xslt.lazy-start-producer | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| camel.component.xslt.transformer-factory-class | To use a custom XSLT transformer factory, specified as a FQN class name |  | String |
+| camel.component.xslt.transformer-factory-configuration-strategy | A configuration strategy to apply on freshly created instances of TransformerFactory. The option is a org.apache.camel.component.xslt.TransformerFactoryConfigurationStrategy type. |  | TransformerFactoryConfigurationStrategy |
+| camel.component.xslt.uri-resolver | To use a custom UriResolver. Should not be used together with the option 'uriResolverFactory'. The option is a javax.xml.transform.URIResolver type. |  | URIResolver |
+| camel.component.xslt.uri-resolver-factory | To use a custom UriResolver which depends on a dynamic endpoint resource URI. Should not be used together with the option 'uriResolver'. The option is a org.apache.camel.component.xslt.XsltUriResolverFactory type. |  | XsltUriResolverFactory |
+| camel.component.xslt.xpath-total-op-limit | Limits the total number of XPath operators in an XSL Stylesheet. The default (from JDK) is 10000. The limit is set per TransformerFactory instance used by each endpoint, not as a JVM-global system property. | 10000 | Integer |

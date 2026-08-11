@@ -47,7 +47,7 @@ Similar to the [Component DSL](component-dsl.md), uses the meta-model, which is 
 
 ### Using custom component names
 
-The Endpoint-DSL uses the default name of the [Component](component.md), so in the example above the name is `ftp`. There can be use-cases where you may have multiple Camel [components](../components/4.18.x/index.md) of the same type registered with different names. An example is if you have two JMS broker systems (for example ActiveMQ and WebSphereMQ).
+The Endpoint-DSL uses the default name of the [Component](component.md), so in the example above the name is `ftp`. There can be use-cases where you may have multiple Camel [components](../components/4.22.x/index.md) of the same type registered with different names. An example is if you have two JMS broker systems (for example ActiveMQ and WebSphereMQ).
 
 Then you can set up two Camel JMS components with unique names such as: `myAMQ` and `myWMQ`
 

@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Nativeunsupported ⚠️Deprecated
 
-Send and receive messages to/from and IRC chat.
+Send and receive messages to/from an IRC chat.
 
 ## What’s inside
 

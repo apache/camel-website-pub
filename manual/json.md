@@ -11,4 +11,4 @@ For JSON to object marshalling, Camel provides integration with many popular JSO
 -   JSonB
     
 
-How to use JSON with Camel then see the documentation (for the JSON data library of choice) in the list of [Data Formats](../components/4.18.x/dataformats/index.md).
+How to use JSON with Camel then see the documentation (for the JSON data library of choice) in the list of [Data Formats](../components/4.22.x/dataformats/index.md).

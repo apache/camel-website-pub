@@ -15,7 +15,7 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 </dependency>
 ```
 
-The Mail Microsoft OAuth2 provides an authenticator usable by [Mail](../../4.18.x/mail-component.md) component. Importing `camel-mail-microsoft-oauth` it will automatically import the `camel-mail` component.
+The Mail Microsoft OAuth2 provides an authenticator usable by [Mail](../../4.22.x/mail-component.md) component. Importing `camel-mail-microsoft-oauth` it will automatically import the `camel-mail` component.
 
 Parameters `authenticator` and `mail.imaps.auth.mechanisms` (with value `XOAUTH2`) are mandatory. See the example below for more information.
 

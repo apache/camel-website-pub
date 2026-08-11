@@ -12,14 +12,14 @@ Make the consumer a Selective Consumer, one that filteres the messages delivered
 
 In Camel, the Selective Consumer EIP is implemented in two ways:
 
--   Using [Components](../../4.18.x/index.md) which supports message selecting.
+-   Using [Components](../../4.22.x/index.md) which supports message selecting.
     
 -   Using the [Filter](filter-eip.md) EIP as message selecting.
     
 
 ### Selective Consumer using Components
 
-The first solution is to provide a Message Selector to the underlying URIs when creating your consumer. For example, when using [JMS](../../4.18.x/jms-component.md), you can specify a JMS selector parameter so that the message broker will only deliver messages matching your criteria.
+The first solution is to provide a Message Selector to the underlying URIs when creating your consumer. For example, when using [JMS](../../4.22.x/jms-component.md), you can specify a JMS selector parameter so that the message broker will only deliver messages matching your criteria.
 
 -   Java
     

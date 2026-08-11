@@ -11,12 +11,12 @@ The following modules are supported:
  
 | Component | Description |
 | --- | --- |
-| `[camel-test-junit5](../components/4.18.x/others/test-junit5.md)` | **JUnit 5**: Used for testing Camel in standalone mode (or without Spring) |
-| `[camel-test-main-junit5](../components/4.18.x/others/test-main-junit5.md)` | **JUnit 5**: Used for testing Camel in Camel Main mode |
-| `[camel-test-spring-junit5](../components/4.18.x/others/test-spring-junit5.md)` | **JUnit 5**: Used for testing Camel with Spring / Spring Boot |
-| `[camel-test-junit5](../components/4.18.x/others/test-junit6.md)` | **JUnit 6**: Used for testing Camel in standalone mode (or without Spring) |
-| `[camel-test-main-junit5](../components/4.18.x/others/test-main-junit6.md)` | **JUnit 6**: Used for testing Camel in Camel Main mode |
-| `[camel-test-spring-junit5](../components/4.18.x/others/test-spring-junit6.md)` | **JUnit 6**: Used for testing Camel with Spring / Spring Boot |
+| `[camel-test-junit5](../components/4.22.x/others/test-junit5.md)` | **JUnit 5**: Used for testing Camel in standalone mode (or without Spring) |
+| `[camel-test-main-junit5](../components/4.22.x/others/test-main-junit5.md)` | **JUnit 5**: Used for testing Camel in Camel Main mode |
+| `[camel-test-spring-junit5](../components/4.22.x/others/test-spring-junit5.md)` | **JUnit 5**: Used for testing Camel with Spring / Spring Boot |
+| `[camel-test-junit5](../components/4.22.x/others/test-junit6.md)` | **JUnit 6**: Used for testing Camel in standalone mode (or without Spring) |
+| `[camel-test-main-junit5](../components/4.22.x/others/test-main-junit6.md)` | **JUnit 6**: Used for testing Camel in Camel Main mode |
+| `[camel-test-spring-junit5](../components/4.22.x/others/test-spring-junit6.md)` | **JUnit 6**: Used for testing Camel with Spring / Spring Boot |
 | `[camel-test-infra](test-infra.md)` | **Camel Test Infra**: Camel Test Infra is a set of modules that leverage modern JUnit 5 features to abstract the provisioning and execution of test infrastructure. Among other things, it provides abstraction of the infrastructure (based on Test Containers - being the de-facto successor of the camel-testcontainers components) as well as JUnit 5 extensions for the Camel Context itself. |
 | `[camel-jbang-test](camel-jbang-test.md)` | **Camel CLI Test Plugin**: A Camel CLI plugin to help writing automated tests during prototyping with JBang. The tests are able to start the Camel integration and verify its logic from the very beginning. The test plugin does not require any project setup so you can just start writing and executing automated tests. |
 > **Note**
@@ -38,11 +38,11 @@ Camel provides a number of [endpoints](endpoint.md) which can make testing easie
  
 | Name | Description |
 | --- | --- |
-| [Mock](../components/4.18.x/mock-component.md) | For testing routes and mediation rules using mocks and allowing assertions to be added to an endpoint. |
-| [DataSet](../components/4.18.x/dataset-component.md) | For load & soak testing, this endpoint provides a way to create huge numbers of messages for sending to components and asserting that they are consumed correctly. |
-| [DataSet Test](../components/4.18.x/dataset-test-component.md) | Used to automatically load a set of expected messages from another endpoint which is then compared to the messages that arrive at this endpoint. |
+| [Mock](../components/4.22.x/mock-component.md) | For testing routes and mediation rules using mocks and allowing assertions to be added to an endpoint. |
+| [DataSet](../components/4.22.x/dataset-component.md) | For load & soak testing, this endpoint provides a way to create huge numbers of messages for sending to components and asserting that they are consumed correctly. |
+| [DataSet Test](../components/4.22.x/dataset-test-component.md) | Used to automatically load a set of expected messages from another endpoint which is then compared to the messages that arrive at this endpoint. |
 
-The main endpoint is the [Mock](../components/4.18.x/mock-component.md) endpoint, which allows expectations to be added to different endpoints; you can then run your tests and assert that your expectations are met at the end.
+The main endpoint is the [Mock](../components/4.22.x/mock-component.md) endpoint, which allows expectations to be added to different endpoints; you can then run your tests and assert that your expectations are met at the end.
 
 ### Stubbing out physical transport technologies
 
@@ -54,13 +54,13 @@ If you wish to test out a route but want to avoid actually using real physical t
  
 | Name | Description |
 | --- | --- |
-| [Direct](../components/4.18.x/direct-component.md) | Direct invocation of the consumer from the producer so that single threaded (non-SEDA) in VM invocation is performed which can be useful to mock out physical transports |
-| [SEDA](../components/4.18.x/seda-component.md) | Deliver messages asynchronously to consumers via a `BlockingQueue` which is good for testing asynchronous transports |
-| [Stub](../components/4.18.x/stub-component.md) | Works like [SEDA](../components/4.18.x/stub-component.md) but does not validate the endpoint URI, which makes stubbing straightforward. |
+| [Direct](../components/4.22.x/direct-component.md) | Direct invocation of the consumer from the producer so that single threaded (non-SEDA) in VM invocation is performed which can be useful to mock out physical transports |
+| [SEDA](../components/4.22.x/seda-component.md) | Deliver messages asynchronously to consumers via a `BlockingQueue` which is good for testing asynchronous transports |
+| [Stub](../components/4.22.x/stub-component.md) | Works like [SEDA](../components/4.22.x/stub-component.md) but does not validate the endpoint URI, which makes stubbing straightforward. |
 
 ### Testing existing routes
 
-Camel provides some features to aid during testing of existing routes where you cannot or will not use [Mock](../components/4.18.x/mock-component.md) etc.
+Camel provides some features to aid during testing of existing routes where you cannot or will not use [Mock](../components/4.22.x/mock-component.md) etc.
 
 For example, you may have a production ready route which you want to test with some third party API that sends messages into this route.
 
@@ -68,7 +68,7 @@ For example, you may have a production ready route which you want to test with s
 | Name | Description |
 | --- | --- |
 | [NotifyBuilder](notify-builder.md) | Allows you to be notified when a certain condition has occurred. For example, when the route has completed five messages. You can build complex expressions to match your criteria when to be notified. |
-| [AdviceWith](advice-with.md) | Allows you to _advice_ (enhance) an existing route using a [RouteBuilder](route-builder.md) style. For example, you can send (or send and skip) a message to a [Mock](../components/4.18.x/mock-component.md) endpoint for validating the message send by Camel is as expected. |
+| [AdviceWith](advice-with.md) | Allows you to _advice_ (enhance) an existing route using a [RouteBuilder](route-builder.md) style. For example, you can send (or send and skip) a message to a [Mock](../components/4.22.x/mock-component.md) endpoint for validating the message send by Camel is as expected. |
 
 ## Integration testing
 

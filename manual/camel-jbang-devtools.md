@@ -212,7 +212,7 @@ Enable logging with `--logging=true` (writes to `~/.camel/camel-script.log`).
 
 ### Using stream:in with line vs. raw mode
 
-The [Stream component](../components/4.18.x/stream-component.md) reads from _System in_ in two modes:
+The [Stream component](../components/4.22.x/stream-component.md) reads from _System in_ in two modes:
 
 -   **line mode** (default): reads single lines. Body is a `String`.
     

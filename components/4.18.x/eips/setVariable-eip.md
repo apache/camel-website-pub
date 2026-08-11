@@ -84,7 +84,7 @@ from("direct:a")
     .to("direct:b");
 ```
 
-We use the [Simple](../languages/simple-language.md) language to refer to the message body:
+We use the [Simple](../../4.22.x/languages/simple-language.md) language to refer to the message body:
 
 ```xml
 <route>

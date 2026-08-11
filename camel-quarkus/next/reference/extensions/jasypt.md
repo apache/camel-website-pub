@@ -39,7 +39,7 @@ By default, you do not need to write custom code to configure the Camel `JasyptP
 Any Camel configuration property added to `application.properties` can be secured with Jasypt. To encrypt a value, there is a utility that can be run with [JBang](https://www.jbang.dev/).
 
 ```shell
-jbang org.apache.camel:camel-jasypt:4.21.0 -c encrypt -p secret-password -i "Some secret content"
+jbang org.apache.camel:camel-jasypt:4.22.0 -c encrypt -p secret-password -i "Some secret content"
 ```
 
 > **Important**

@@ -133,4 +133,4 @@ Camel core offers a default filter strategy implementation, the `DefaultHeaderFi
 
 ## See Also
 
--   List of all Camel [Components](../components/4.18.x/index.md)
+-   List of all Camel [Components](../components/4.22.x/index.md)

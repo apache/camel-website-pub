@@ -393,7 +393,7 @@ templatedRoute("myTemplate")
 
 ### Using template parameters with Java DSL Simple builder
 
-When using Java DSL and [Simple](../components/4.18.x/languages/simple-language.md) language, then beware that you should not use the _simple fluent builder_ when defining the simple expressions/predicates.
+When using Java DSL and [Simple](../components/4.22.x/languages/simple-language.md) language, then beware that you should not use the _simple fluent builder_ when defining the simple expressions/predicates.
 
 For example, given the following route template in Java DSL:
 

@@ -383,7 +383,7 @@ template.send("direct:alias-verify", signed);
 
 The Digital Signature EIP supports Post-Quantum Cryptography algorithms through the standard JCE provider mechanism. Since the `algorithm` and `provider` options accept any value supported by the underlying JCE implementation, you can use PQC signature algorithms such as ML-DSA (NIST FIPS 204) by registering a Bouncy Castle provider and supplying the corresponding keys.
 
-This approach is useful when you want to apply PQC signatures directly using the `crypto:sign` / `crypto:verify` pair without the full `camel-pqc` component. For hybrid signatures (combining classical + PQC) or key lifecycle management, use the [PQC component](../4.18.x/pqc-component.md) instead.
+This approach is useful when you want to apply PQC signatures directly using the `crypto:sign` / `crypto:verify` pair without the full `camel-pqc` component. For hybrid signatures (combining classical + PQC) or key lifecycle management, use the [PQC component](../4.22.x/pqc-component.md) instead.
 
 ### Prerequisites
 
@@ -552,7 +552,7 @@ from("direct:verify")
 
 ### Hybrid Signatures (Classical + PQC)
 
-For hybrid signatures that combine a classical algorithm (e.g., ECDSA) with a PQC algorithm (e.g., ML-DSA) in a single route, the recommended approach is to use the [PQC component](../4.18.x/pqc-component.md) which provides built-in hybrid operations.
+For hybrid signatures that combine a classical algorithm (e.g., ECDSA) with a PQC algorithm (e.g., ML-DSA) in a single route, the recommended approach is to use the [PQC component](../4.22.x/pqc-component.md) which provides built-in hybrid operations.
 
 #### Using the PQC component (recommended)
 
@@ -616,7 +616,7 @@ Other hybrid combinations include:
 -   `ECDSA_P384` + `SLHDSA` — ECDSA P-384 + SLH-DSA
     
 
-See the [PQC component](../4.18.x/pqc-component.md) for the full list of supported classical algorithms and details on the hybrid wire format.
+See the [PQC component](../4.22.x/pqc-component.md) for the full list of supported classical algorithms and details on the hybrid wire format.
 
 #### Chaining crypto: endpoints (manual approach)
 

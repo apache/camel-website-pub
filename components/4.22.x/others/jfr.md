@@ -1,0 +1,154 @@
+# JFR
+
+**Since Camel 3.8**
+
+The Camel Java Flight Recorder (JFR) component is used for integrating Camel with Java Flight Recorder (JFR).
+
+This allows you to monitor and troubleshoot your Camel applications with JFR.
+
+The camel-jfr component emits lifecycle events for startup to JFR. This can, for example, be used to pinpoint which Camel routes may be slow to startup.
+
+See the _startupRecorder_ options from [Camel Main](main.md)
+
+## Example
+
+To enable you just need to add `camel-jfr` to the classpath, and enable JFR recording.
+
+JFR recordings can be started at:
+
+-   When running the JVM using JVM arguments
+    
+-   When starting Camel by setting `camel.main.startup-recorder-recording=true`.
+    
+
+See the `flight-recorder` from the Camel Examples.
+
+## Runtime instrumentation
+
+Since **4.22**, `camel-jfr` can also emit JFR events during message routing, so you can inspect per-exchange, per-route, per-processor and per-endpoint timing in the JVM’s own profiler.
+
+This is **opt-in and disabled by default**, because it emits one event per processor per message and would otherwise change the profile of every application that merely has `camel-jfr` on the classpath. Enable it with:
+
+```properties
+camel.main.startup-recorder-runtime-enabled=true
+```
+
+The option is read once while the `CamelContext` initializes, so it must be set before startup and cannot be changed while the JVM is running. With the Camel CLI, `camel run --jfr` sets it for you.
+
+With the option left at its default, `camel-jfr` behaves as it did in 4.21 and records startup steps only.
+
+The following event types are emitted under the `Camel Application / Runtime` category:
+
+  
+| Event | Description | Fields |
+| --- | --- | --- |
+| `org.apache.camel.route` | Time an exchange spends in a single route | routeId, exchangeId, failed |
+| `org.apache.camel.processor` | Time spent in an individual processor | exchangeId, routeId, processorId, processorType, failed |
+| `org.apache.camel.exchange` | End-to-end time of an exchange | exchangeId, routeId, failed |
+| `org.apache.camel.exchange.send` | Time to send to an endpoint | exchangeId, endpointUri, failed |
+| `org.apache.camel.exchange.failed` | Emitted when an exchange fails | exchangeId, routeId, exceptionType, exceptionMessage |
+| `org.apache.camel.redelivery` | Emitted on each redelivery attempt | exchangeId, routeId, attempt, maxAttempts |
+
+Endpoint URIs are sanitized so credentials are not written to the recording, and exception messages are truncated to 256 characters so a single oversized message cannot bloat the recording.
+
+To capture the events on a running application:
+
+```bash
+jcmd <pid> JFR.start name=camel duration=60s filename=camel.jfr
+```
+
+Then open `camel.jfr` in Java Mission Control and look under **Event Browser → Camel Application → Runtime**.
+
+### Selecting events when starting a recording
+
+A `.jfc` settings file selects which events a recording captures. Because the events are renamed by `@Name`, a `.jfc` entry must use the JFR event name from the table above and not the Java class name:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration version="2.0">
+<event name="org.apache.camel.route">
+    <setting name="enabled">false</setting>
+</event>
+</configuration>
+```
+
+Save it as, for example, `camel-runtime-events.jfc` and pass it alongside a base profile:
+
+```bash
+jcmd <pid> JFR.start settings=default,camel-runtime-events.jfc
+```
+
+The `jfr` dev console can generate this file for you, see below.
+
+### Toggling events on a running recording
+
+Individual events can also be enabled or disabled on an already-`RUNNING` recording without restarting the JVM:
+
+-   The `jfr` dev console `enable` / `disable` commands, described below.
+    
+-   The JDK’s own `jdk.management.jfr.FlightRecorderMXBean` (`setRecordingSettings`), which is available on every JVM and can be driven from any JMX client.
+    
+-   Java Mission Control, which drives the same MXBean from its user interface.
+    
+
+Note that `jcmd <pid> JFR.configure` does **not** change event selection. It configures JVM-wide recorder settings such as the repository path and stack depth.
+
+### The `jfr` dev console
+
+When `camel-jfr` is on the classpath, a `jfr` dev console is available with five commands (pass as the `command` option):
+
+ 
+| Command | Description |
+| --- | --- |
+| `status` | Whether runtime instrumentation is registered, any recording(s), and the current enabled/disabled state of each of the six events. |
+| `enable` / `disable` | Take an `event` option (`route`, `processor`, `exchange`, `send`, `failed`, `redelivery`, or `all`, the default). Live-toggles the event on every **running** recording. Reports plainly if no recording is running rather than silently doing nothing. |
+| `jfc` | Generates a `.jfc` overlay for the six events, honoring an optional comma-separated `disable` option, and a ready-to-copy `jcmd JFR.start settings=…​` line. |
+| `snapshot` | Takes a point-in-time snapshot of the active JFR recording and aggregates Camel runtime events into per-route, per-processor, and per-endpoint duration statistics, plus recent failures and redeliveries. Accepts optional `routeId` and `limit` options. |
+
+The console is reachable wherever dev consoles are, for example over HTTP when the developer console is enabled:
+
+```bash
+curl "http://localhost:8080/q/dev/jfr?command=status"
+```
+
+It is also available as a **JFR** tab in the CLI terminal UI (`camel tui`), which renders the status and binds `E` / `D` / `J` to enable all, disable all, and generate a `.jfc`.
+
+### Snapshot
+
+The `snapshot` command captures the current state of a running JFR recording without stopping it, and returns aggregated statistics for Camel runtime events. This gives you a lightweight alternative to exporting a `.jfr` file and opening it in Java Mission Control.
+
+A recording must be active for the snapshot to contain data. If no recording is running, the command returns an error message.
+
+#### Options
+
+  
+| Option | Default | Description |
+| --- | --- | --- |
+| `routeId` | _(all)_ | Filter results to a single route. Applies to routes, processors, failures, and redeliveries. |
+| `limit` | `50` | Maximum number of failure and redelivery entries to return. |
+
+#### Example
+
+```bash
+curl "http://localhost:8080/q/dev/jfr?command=snapshot"
+curl "http://localhost:8080/q/dev/jfr?command=snapshot&routeId=order-in&limit=20"
+```
+
+#### Response
+
+The JSON response contains five sections:
+
+ 
+| Section | Description |
+| --- | --- |
+| `routes` | Per-route totals, failure counts, and min/mean/max duration in milliseconds. Sorted by total descending. |
+| `processors` | Per-processor statistics with processor type and owning route. Sorted by mean duration descending (slowest first). |
+| `endpoints` | Per-endpoint send statistics with duration. Sorted by total descending. |
+| `failures` | Recent exchange failures with exception type and message. Newest first, capped at `limit`. |
+| `redeliveries` | Recent redelivery attempts with attempt number and max attempts. Newest first, capped at `limit`. |
+
+The top-level `eventCount` field reports the total number of Camel events found in the snapshot.
+
+#### TUI integration
+
+In the CLI terminal UI (`camel tui`), the **JFR** tab shows the snapshot data in five navigable table views. Press `F5` to take a snapshot, and use keys `1`–`5` to switch between Routes, Processors, Endpoints, Failures, and Redeliveries. Press `Enter` on a route to drill down into its processors, and `Esc` to go back.

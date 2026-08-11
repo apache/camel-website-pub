@@ -88,7 +88,7 @@ If not already preloaded by the configuration the Transformer resolving mechanis
 | type | Data Format type |
 | ref | reference to the Data Format ID |
 
-Here is an example to specify [Bindy](../components/4.18.x/dataformats/bindy-dataformat.md) DataFormat type:
+Here is an example to specify [Bindy](../components/4.22.x/dataformats/bindy-dataformat.md) DataFormat type:
 
 -   Java
     

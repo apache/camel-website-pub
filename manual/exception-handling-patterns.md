@@ -17,7 +17,7 @@ onException(MyFunctionalException.class)
   .stop();
 ```
 
-So what happens is that whenever a **`MyFunctionalException`** is thrown it is being routed to our processor **`MyFunctionFailureHandler`**. So you can say that the exchange is diverted when a **`MyFunctionalException`** is thrown during processing. It’s important to distinct this as perfectly valid. The default redelivery policy from the [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) will not kick in, so our processor receives the Exchange directly, without any redeliver attempted. In our processor we need to determine what to do. Camel regards the Exchange as **failure handled**. So our processor is the end of the route. So lets look the code for our processor.
+So what happens is that whenever a **`MyFunctionalException`** is thrown it is being routed to our processor **`MyFunctionFailureHandler`**. So you can say that the exchange is diverted when a **`MyFunctionalException`** is thrown during processing. It’s important to distinct this as perfectly valid. The default redelivery policy from the [Dead Letter Channel](../components/4.22.x/eips/dead-letter-channel.md) will not kick in, so our processor receives the Exchange directly, without any redeliver attempted. In our processor we need to determine what to do. Camel regards the Exchange as **failure handled**. So our processor is the end of the route. So lets look the code for our processor.
 
 _Java-only: custom failure handler processor_
 
@@ -317,7 +317,7 @@ _Java-only: correct way to get exception in onException_
 
 ## Handling and Sending a Fixed Response Back to the Client
 
-In the route above we handled the exception but routed it to a different endpoint. What if you need to alter the response and send a fixed response back to the original caller (the client). No secret here just do as you do in normal Camel routing, use [transform](../components/4.18.x/eips/message-translator.md) to set the response, as shown in the sample below:
+In the route above we handled the exception but routed it to a different endpoint. What if you need to alter the response and send a fixed response back to the original caller (the client). No secret here just do as you do in normal Camel routing, use [transform](../components/4.22.x/eips/message-translator.md) to set the response, as shown in the sample below:
 
 _Java-only: returning a fixed response with transform_
 
@@ -345,7 +345,7 @@ onException(MyFunctionalException.class)
   .transform(exceptionMessage());
 ```
 
-And we can use the [Simple](../components/4.18.x/languages/simple-language.md) language to set a readable error message with the caused exception message:
+And we can use the [Simple](../components/4.22.x/languages/simple-language.md) language to set a readable error message with the caused exception message:
 
 _Java-only: using Simple language in error response_
 

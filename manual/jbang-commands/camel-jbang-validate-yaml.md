@@ -4,7 +4,7 @@ Parse and validate YAML routes against the Camel YAML DSL schema.
 
 By default, routes are validated against the classic schema which accepts both shorthand and explicit forms. Use the `--canonical` flag to validate against the canonical schema, which rejects shorthands and implicit expressions.
 
-See the [YAML DSL Schema Variants](../../components/4.18.x/others/yaml-dsl.md) documentation for details on the differences between the classic and canonical schemas.
+See the [YAML DSL Schema Variants](../../components/4.22.x/others/yaml-dsl.md) documentation for details on the differences between the classic and canonical schemas.
 
 ## Usage
 

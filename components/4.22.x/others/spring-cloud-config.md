@@ -1,0 +1,113 @@
+# Spring Cloud Config
+
+**Since Camel 4.12**
+
+The Spring Cloud Config component provides integration between Apache Camel and Spring Cloud Config, allowing applications to retrieve configuration properties from a centralized Spring Cloud Config Server. This component includes a Properties Function implementation that allows Apache Camel to resolve property placeholders directly from Spring Cloud Config.
+
+## Components
+
+This component provides the following features:
+
+-   Property resolution from Spring Cloud Config via property placeholders
+    
+-   Periodic monitoring for property changes
+    
+-   Automatic context reloading when configuration changes are detected
+    
+
+## Maven Dependency
+
+To use the Spring Cloud Config component in your project, add the following Maven dependency:
+
+```xml
+<dependency>
+  <groupId>org.apache.camel</groupId>
+  <artifactId>camel-spring-cloud-config</artifactId>
+  <version>x.x.x</version> <!-- Use the appropriate Camel version -->
+</dependency>
+```
+
+## Property Function
+
+This component provides a PropertiesFunction implementation that resolves property placeholders with the prefix spring-config: using values from a Spring Cloud Config Server.
+
+### Configuration
+
+The integration with Spring Cloud Config is configured through the Camel context’s vault configuration. The following properties can be set:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| username | String | Username for authentication with the Config Server |
+| password | String | Password for authentication with the Config Server |
+| token | String | Authentication token for the Config Server |
+| uris | String | Comma-separated list of Config Server URIs |
+| label | String | Config Server label to use (e.g., git branch) |
+| profile | String | Configuration profile to use |
+
+These properties should be configured using the SpringCloudConfigConfiguration on the Camel context.
+
+### Usage
+
+To use the Spring Cloud Config property function in your Camel routes or configuration, use the following syntax:
+
+```text
+{{spring-config:myProperty}}
+```
+
+The property function will resolve `myProperty` from the Spring Cloud Config Server.
+
+### Example
+
+A simple example of using the Spring Cloud Config property function in a Camel route, given that a Spring Cloud Config Server is running at `config-server:8888` and Spring Security is enabled on the server:
+
+```properties
+camel.vault.spring-config.uris=http://config-server:8888
+camel.vault.spring-config.refresh-enabled=true
+camel.vault.spring-config.username=configUser
+camel.vault.spring-config.password=configPass
+camel.vault.spring-config.label=latest
+```
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct")
+  .setHeader("MyHeader", simple("{{spring-config:custom.property}}"))
+  .to("log");
+```
+
+```xml
+<route>
+  <from uri="direct"/>
+  <setHeader name="MyHeader">
+    <simple>{{spring-config:custom.property}}</simple>
+  </setHeader>
+  <to uri="log"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct
+      steps:
+        - setHeader:
+            name: MyHeader
+            simple: "{{spring-config:custom.property}}"
+        - to:
+            uri: log
+```
+
+## Automatic Configuration Reload
+
+The component includes a periodic task that monitors Spring Cloud Config properties for changes and triggers a Camel context reload when property values have changed.
+
+## See Also
+
+[Camel Properties Component](../properties-component.md) [Spring Cloud Config](https://spring.io/projects/spring-cloud-config) [Using Property Placeholders](../../../manual/using-propertyplaceholder.md)

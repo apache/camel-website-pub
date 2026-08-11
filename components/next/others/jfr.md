@@ -8,7 +8,7 @@ This allows you to monitor and troubleshoot your Camel applications with JFR.
 
 The camel-jfr component emits lifecycle events for startup to JFR. This can, for example, be used to pinpoint which Camel routes may be slow to startup.
 
-See the _startupRecorder_ options from [Camel Main](../../4.18.x/others/main.md)
+See the _startupRecorder_ options from [Camel Main](../../4.22.x/others/main.md)
 
 ## Example
 

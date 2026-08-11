@@ -11,7 +11,7 @@ Conversely, Sagas are suitable for many use cases where usage of distributed tra
 Differently from transactions, Sagas are also not required to be completed in a small amount of time because they don’t use database-level locks. They can live for a longer time span: from a few seconds to several days. The Saga EIP implementation based on the MicroProfile sandbox spec is indeed called LRA that stands for _"Long-Running Action"_. It also supports coordination of external **heterogeneous services**, written with any language/technology and also running outside a JVM.
 
 > **Note**
-> See also [Camel LRA](../others/lra.md)
+> See also [Camel LRA](../../4.22.x/others/lra.md)
 
 Sagas don’t use locks on data. Instead, they define the concept of "Compensating Action" that is an action that should be executed when the standard flow encounters an error, with the purpose of restoring the status that was present before the flow execution. Compensating actions can be declared in Camel routes using the Java or XML DSL and will be invoked by Camel only when needed (if the saga is canceled due to an error).
 

@@ -1,8 +1,8 @@
 # Processor
 
-The [Processor](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Processor.md) interface is used to implement consumers of message exchanges, or to implement a [Message Translator](../components/4.18.x/eips/message-translator.md), and other use-cases.
+The [Processor](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Processor.md) interface is used to implement consumers of message exchanges, or to implement a [Message Translator](../components/4.22.x/eips/message-translator.md), and other use-cases.
 
-The `Processor` is a central API both internally and externally with Camel. The `Processor` has a single method `processor` (see below) that for example every [EIPs](../components/4.18.x/eips/enterprise-integration-patterns.md) implements.
+The `Processor` is a central API both internally and externally with Camel. The `Processor` has a single method `processor` (see below) that for example every [EIPs](../components/4.22.x/eips/enterprise-integration-patterns.md) implements.
 
 ## Using a processor in a route
 

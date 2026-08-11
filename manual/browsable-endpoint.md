@@ -4,8 +4,8 @@ The `BrowseableEndpoint` is an extension interface an `Endpoint` may implement t
 
 Some implementations include:
 
--   [JMS](../components/4.18.x/jms-component.md) for queues only
+-   [JMS](../components/4.22.x/jms-component.md) for queues only
     
--   [Mock](../components/4.18.x/mock-component.md)
+-   [Mock](../components/4.22.x/mock-component.md)
     
--   [SEDA](../components/4.18.x/seda-component.md)
+-   [SEDA](../components/4.22.x/seda-component.md)

@@ -388,7 +388,7 @@ from("direct:order")
             uri: mock:reply
 ```
 
-We can use the `?method=methodname` option that we are familiar with the [Bean](../../4.18.x/bean-component.md) component itself:
+We can use the `?method=methodname` option that we are familiar with the [Bean](../../4.22.x/bean-component.md) component itself:
 
 -   Java
     

@@ -19,7 +19,7 @@ The following list all requires at most one bean defined. If there is more than 
 | `BacklogTracer` | 0..1 | To use a third-party [BacklogTracer](backlog-tracer.md). |
 | `ClassResolver` | 0..1 | To use a third-party class resolver. More details at [Pluggable Class Resolvers](pluggable-class-resolvers.md). |
 | `Debugger` | 0..1 | To use a [Debugger](debugger.md) usually for tooling. |
-| `Delayer` | 0..1 | To use a third-party [Delayer](../components/4.18.x/eips/delay-eip.md). |
+| `Delayer` | 0..1 | To use a third-party [Delayer](../components/4.22.x/eips/delay-eip.md). |
 | `EventFactory` | 0..1 | To use a third-party event factory. |
 | `ExecutorServiceManager` | 0..1 | To use a third-party executor service manager. More details at [Threading Model](threading-model.md). |
 | `ExecutorServiceStrategy` | 0..1 | To use a third-party executor service strategy. More details at [Threading Model](threading-model.md). |
@@ -27,7 +27,7 @@ The following list all requires at most one bean defined. If there is more than 
 | `HeadersMapFactory` | 0..1 | To use a third-party HeadersMapFactory implementation. |
 | `HealthCheckRegistry` | 0..1 | To use a third-party [HealthCheckRegistry](health-check.md) implementation. |
 | `InflightRepository` | 0..1 | To use a third-party in flight repository. |
-| `Logger` | 0..1 | To use provided org.slf4j.Logger for [Log](../components/4.18.x/log-component.md) component and [log() EIP](../components/4.18.x/eips/log-eip.md). |
+| `Logger` | 0..1 | To use provided org.slf4j.Logger for [Log](../components/4.22.x/log-component.md) component and [log() EIP](../components/4.22.x/eips/log-eip.md). |
 | `ManagementObjectNameStrategy` | 0..1 | To use a third-party strategy for naming `MBeans` for [management](jmx.md). |
 | `ManagementStrategy` | 0..1 | To use a third-party strategy for [management](jmx.md), for example, JMX management. |
 | `MessageHistoryFactory` | 0..1 | To use a third-party MessageHistoryFactory implementation. |
@@ -55,7 +55,7 @@ And the following options have support for any number of beans defined.
 | `EndpointStrategy` | 0..n | To use third-party endpoint strategies. |
 | `EventNotifier` | 0..n | To use third-party event notifiers. |
 | `HealthCheckRepository` | 0..n | To use Camel [Health Check](health-check.md) repositories. |
-| `InterceptStrategy` | 0..n | To use your own [Intercept](../components/4.18.x/eips/intercept.md)that intercepts every processing step in all routes in the [CamelContext](camelcontext.md). For instance, you can use this to do an AOP like performance timer interceptor. |
+| `InterceptStrategy` | 0..n | To use your own [Intercept](../components/4.22.x/eips/intercept.md)that intercepts every processing step in all routes in the [CamelContext](camelcontext.md). For instance, you can use this to do an AOP like performance timer interceptor. |
 | `LifecycleStrategy` | 0..n | To use third-party lifecycle strategies. |
 | `LogListener` | 0..n | To use custom `LogListener` implementations. |
 | `MainListener` | 0..n | To use custom `MainListener` implementations. |

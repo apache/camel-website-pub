@@ -97,7 +97,7 @@ from("seda:foo")
 
 ### Dynamic header name
 
-The ConvertHeaderTo supports using [Simple](../languages/simple-language.md) language for dynamic header name.
+The ConvertHeaderTo supports using [Simple](../../4.22.x/languages/simple-language.md) language for dynamic header name.
 
 Suppose you have multiple headers:
 

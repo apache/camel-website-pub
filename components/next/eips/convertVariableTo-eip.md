@@ -99,7 +99,7 @@ from("seda:foo")
 
 ### Dynamic variable name
 
-The ConvertVariableTo supports using [Simple](../../4.18.x/languages/simple-language.md) language for dynamic variable name.
+The ConvertVariableTo supports using [Simple](../../4.22.x/languages/simple-language.md) language for dynamic variable name.
 
 Suppose you have multiple variables:
 

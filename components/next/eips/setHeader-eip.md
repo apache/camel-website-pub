@@ -60,9 +60,9 @@ from("direct:a")
             uri: direct:b
 ```
 
-In the example, the header value is a [constant](../../4.18.x/languages/constant-language.md).
+In the example, the header value is a [constant](../../4.22.x/languages/constant-language.md).
 
-Any of the Camel languages can be used, such as [Simple](../../4.18.x/languages/simple-language.md).
+Any of the Camel languages can be used, such as [Simple](../../4.22.x/languages/simple-language.md).
 
 -   Java
     
@@ -109,7 +109,7 @@ from("direct:a")
             uri: direct:b
 ```
 
-See [JSONPath](../../4.18.x/languages/jsonpath-language.html#_using_header_as_input) for another example.
+See [JSONPath](../../4.22.x/languages/jsonpath-language.html#_using_header_as_input) for another example.
 
 ### Setting a header from another header
 

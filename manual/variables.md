@@ -108,14 +108,14 @@ Group variables are shared across all routes that use the same group name, which
 
 It is also possible to use variables in Camel [routes](routes.md) using the:
 
--   [setVariable](../components/4.18.x/eips/setVariable-eip.md) EIP
+-   [setVariable](../components/4.22.x/eips/setVariable-eip.md) EIP
     
--   [removeVariable](../components/4.18.x/eips/removeVariable-eip.md) EIP
+-   [removeVariable](../components/4.22.x/eips/removeVariable-eip.md) EIP
     
--   [convertVariableTo](../components/4.18.x/eips/convertVariableTo-eip.md) EIP
+-   [convertVariableTo](../components/4.22.x/eips/convertVariableTo-eip.md) EIP
     
 
-These EIPs make it possible to set and remove variables from routes. And you can also access variables from the [Simple](../components/4.18.x/languages/simple-language.md) language.
+These EIPs make it possible to set and remove variables from routes. And you can also access variables from the [Simple](../components/4.22.x/languages/simple-language.md) language.
 
 In the following route, we set a variable on the exchange which we use later to build a human-readable event message:
 
@@ -315,7 +315,7 @@ The following commonly used EIPs for sending and receiving, and transforming mes
 -   marshal
     
 
-The intention is to make it more convenient and easy to _gather data_ from other systems without any ceremony to keep existing data by using techniques such as storing the data temporary using headers, exchange properties, or with the [Claim Check](../components/4.18.x/eips/claimCheck-eip.md) EIP.
+The intention is to make it more convenient and easy to _gather data_ from other systems without any ceremony to keep existing data by using techniques such as storing the data temporary using headers, exchange properties, or with the [Claim Check](../components/4.22.x/eips/claimCheck-eip.md) EIP.
 
 ### Important concept when using variables and EIPs
 

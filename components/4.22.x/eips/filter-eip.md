@@ -1,0 +1,275 @@
+# Filter
+
+The [Message Filter](http://www.enterpriseintegrationpatterns.com/Filter.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to filter messages.
+
+How can a component avoid receiving uninteresting messages?
+
+![image](_images/eip/MessageFilter.gif)
+
+Use a special kind of Message Router, a Message Filter, to eliminate undesired messages from a channel based on a set of criteria.
+
+The message filter implemented in Camel is similar to `if (predicate) { block }` in Java. The filter will **include** the message if the predicate evaluated to `true`.
+
+## EIP options
+
+The Filter eip supports the following options which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **note** | The note for this node. |  | String |
+| **description** | The description for this node. |  | String |
+| **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **expression** | **Required** The predicate expression to evaluate. Messages where the predicate returns false are filtered out and not routed further. |  | ExpressionDefinition |
+| **statusPropertyName** | Name of an exchange property to store whether the filter predicate matched or not. The value is stored as a boolean. |  | String |
+| **outputs** | **Required** |  | List |
+
+## Exchange properties
+
+The Filter eip has no exchange properties.
+
+## Example
+
+The Camel [Simple](../languages/simple-language.md) language is great to use with the Filter EIP when routing is based on the content of the message, such as checking message headers.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:a")
+    .filter(simple("${header.foo} == 'bar'"))
+        .to("direct:bar")
+    .end()
+    .to("direct:b")
+```
+
+```xml
+<route>
+    <from uri="direct:a"/>
+    <filter>
+        <simple>${header.foo} == 'bar'</simple>
+        <to uri="direct:bar"/>
+    </filter>
+    <to uri="direct:b"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - filter:
+            expression:
+              simple:
+                expression: "${header.foo} == 'bar'"
+            steps:
+              - to:
+                  uri: direct:bar
+        - to:
+            uri: direct:b
+```
+
+You can use many languages as the predicate, such as [XPath](../languages/xpath-language.md):
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start").
+        filter().xpath("/person[@name='James']").
+        to("mock:result");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <filter>
+        <xpath>/person[@name='James']</xpath>
+        <to uri="mock:result"/>
+    </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - filter:
+            expression:
+              xpath:
+                expression: "/person[@name='James']"
+            steps:
+              - to:
+                  uri: mock:result
+```
+
+Here is another example of calling a [method on a bean](../languages/bean-language.md) to define the filter behavior:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .filter().method(MyBean.class, "isGoldCustomer")
+      .to("mock:gold")
+    .end()
+    .to("mock:all");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <filter>
+        <method beanType="com.foo.MyBean" method="isGoldCustomer"/>
+        <to uri="mock:gold"/>
+    </filter>
+    <to uri="mock:all"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - filter:
+            expression:
+              method:
+                method: isGoldCustomer
+                beanType: com.foo.MyBean
+            steps:
+              - to:
+                  uri: mock:gold
+        - to:
+            uri: mock:all
+```
+
+The bean can have a method that returns a `boolean` as the predicate:
+
+```java
+public static class MyBean {
+
+    public boolean isGoldCustomer(@Header("level") String level) {
+        return level.equals("gold");
+    }
+
+}
+```
+
+### Filtering with status property
+
+To know whether an `Exchange` was filtered or not, then you can choose to specify a name of a property to store on the exchange with the result (boolean), using `statusPropertyName` as shown below:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .filter().method(MyBean.class, "isGoldCustomer").statusPropertyName("gold")
+      .to("mock:gold")
+    .end()
+    .to("mock:all");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <filter statusPropertyName="gold">
+        <method beanType="com.foo.MyBean" method="isGoldCustomer"/>
+        <to uri="mock:gold"/>
+    </filter>
+    <to uri="mock:all"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - filter:
+            statusPropertyName: gold
+            expression:
+              method:
+                method: isGoldCustomer
+                beanType: com.foo.MyBean
+            steps:
+              - to:
+                  uri: mock:gold
+        - to:
+            uri: mock:all
+```
+
+In the example above then Camel will store an exchange property with key `gold` with the result of the filtering, whether it was `true` or `false`.
+
+### Filtering and stopping
+
+When using the Message Filter EIP, then it only applies to its children.
+
+For example, in the previous example then for a message that is a gold customer will be routed to both `mock:gold` and `mock:all` (predicate is true). However, for a non-gold message (predicate is false) then the message will not be routed in the filter block, but will be routed to mock:all.
+
+Sometimes you may want to stop routing for messages that were filtered. To do this, you can use the [Stop](stop-eip.md) EIP as shown:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .filter().method(MyBean.class, "isGoldCustomer").statusPropertyName("gold")
+      .to("mock:gold")
+      .stop()
+    .end()
+    .to("mock:all");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <filter>
+        <method beanType="com.foo.MyBean" method="isGoldCustomer"/>
+        <to uri="mock:gold"/>
+        <stop/>
+    </filter>
+    <to uri="mock:all"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - filter:
+            expression:
+              method:
+                method: isGoldCustomer
+                beanType: com.foo.MyBean
+            steps:
+              - to:
+                  uri: mock:gold
+              - stop: {}
+        - to:
+            uri: mock:all
+```

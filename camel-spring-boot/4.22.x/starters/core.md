@@ -1,0 +1,145 @@
+# Core
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-core-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 127 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.cloud.consul.service-discovery.acl-token | Sets the ACL token to be used with Consul |  | String |
+| camel.cloud.consul.service-discovery.block-seconds | The seconds to wait for a watch event, default 10 seconds | 10 | Integer |
+| camel.cloud.consul.service-discovery.configurations | Define additional configuration definitions |  | ConsulServiceCallServiceDiscoveryConfigurationCommon> |
+| camel.cloud.consul.service-discovery.connect-timeout-millis | Connect timeout for OkHttpClient |  | Long |
+| camel.cloud.consul.service-discovery.datacenter | The data center |  | String |
+| camel.cloud.consul.service-discovery.enabled | Enable the component | true | Boolean |
+| camel.cloud.consul.service-discovery.password | Sets the password to be used for basic authentication |  | String |
+| camel.cloud.consul.service-discovery.properties | Set client properties to use. These properties are specific to what service call implementation are in use. For example if using a different one, then the client properties are defined according to the specific service in use. |  | String> |
+| camel.cloud.consul.service-discovery.read-timeout-millis | Read timeout for OkHttpClient |  | Long |
+| camel.cloud.consul.service-discovery.url | The Consul agent URL |  | String |
+| camel.cloud.consul.service-discovery.user-name | Sets the username to be used for basic authentication |  | String |
+| camel.cloud.consul.service-discovery.write-timeout-millis | Write timeout for OkHttpClient |  | Long |
+| camel.cloud.dns.service-discovery.configurations | Define additional configuration definitions |  | DnsServiceCallServiceDiscoveryConfigurationCommon> |
+| camel.cloud.dns.service-discovery.domain | The domain name; |  | String |
+| camel.cloud.dns.service-discovery.enabled | Enable the component | true | Boolean |
+| camel.cloud.dns.service-discovery.properties | Set client properties to use. These properties are specific to what service call implementation are in use. For example if using a different one, then the client properties are defined according to the specific service in use. |  | String> |
+| camel.cloud.dns.service-discovery.proto | The transport protocol of the desired service. | \_tcp | String |
+| camel.cloud.kubernetes.service-discovery.api-version | Sets the API version when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.ca-cert-data | Sets the Certificate Authority data when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.ca-cert-file | Sets the Certificate Authority data that are loaded from the file when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.client-cert-data | Sets the Client Certificate data when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.client-cert-file | Sets the Client Certificate data that are loaded from the file when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.client-key-algo | Sets the Client Keystore algorithm, such as RSA when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.client-key-data | Sets the Client Keystore data when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.client-key-file | Sets the Client Keystore data that are loaded from the file when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.client-key-passphrase | Sets the Client Keystore passphrase when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.configurations | Define additional configuration definitions |  | KubernetesServiceCallServiceDiscoveryConfigurationCommon> |
+| camel.cloud.kubernetes.service-discovery.dns-domain | Sets the DNS domain to use for DNS lookup. |  | String |
+| camel.cloud.kubernetes.service-discovery.enabled | Enable the component | true | Boolean |
+| camel.cloud.kubernetes.service-discovery.lookup | How to perform service lookup. Possible values: client, dns, environment. When using client, then the client queries the kubernetes master to obtain a list of active pods that provides the service, and then random (or round robin) select a pod. When using dns the service name is resolved as name.namespace.svc.dnsDomain. When using dnssrv the service name is resolved with SRV query for _._…​svc…​ When using environment then environment variables are used to lookup the service. By default environment is used. | environment | String |
+| camel.cloud.kubernetes.service-discovery.master-url | Sets the URL to the master when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.namespace | Sets the namespace to use. Will by default use namespace from the ENV variable KUBERNETES\_MASTER. |  | String |
+| camel.cloud.kubernetes.service-discovery.oauth-token | Sets the OAUTH token for authentication (instead of username/password) when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.password | Sets the password for authentication when using client lookup |  | String |
+| camel.cloud.kubernetes.service-discovery.port-name | Sets the Port Name to use for DNS/DNSSRV lookup. |  | String |
+| camel.cloud.kubernetes.service-discovery.port-protocol | Sets the Port Protocol to use for DNS/DNSSRV lookup. |  | String |
+| camel.cloud.kubernetes.service-discovery.properties | Set client properties to use. These properties are specific to what service call implementation are in use. For example if using a different one, then the client properties are defined according to the specific service in use. |  | String> |
+| camel.cloud.kubernetes.service-discovery.trust-certs | Sets whether to turn on trust certificate check when using client lookup | false | Boolean |
+| camel.cloud.kubernetes.service-discovery.username | Sets the username for authentication when using client lookup |  | String |
+| camel.language.constant.enabled | Whether to enable auto configuration of the constant language. This is enabled by default. |  | Boolean |
+| camel.language.constant.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.csimple.enabled | Whether to enable auto configuration of the csimple language. This is enabled by default. |  | Boolean |
+| camel.language.csimple.pretty | To pretty format the output (only JSon or XML supported). | false | Boolean |
+| camel.language.csimple.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.csimple.trim-result | Whether to trim the returned values when this language is in use. | false | Boolean |
+| camel.language.exchange-property.enabled | Whether to enable auto configuration of the exchangeProperty language. This is enabled by default. |  | Boolean |
+| camel.language.exchange-property.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.file.enabled | Whether to enable auto configuration of the file language. This is enabled by default. |  | Boolean |
+| camel.language.file.nested | If the result is a nested simple expression should this expression be evaluated as well. | false | Boolean |
+| camel.language.file.pretty | To pretty format the output (only JSon or XML supported). | false | Boolean |
+| camel.language.file.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.file.trim-result | Whether to trim the returned values when this language is in use. | false | Boolean |
+| camel.language.header.enabled | Whether to enable auto configuration of the header language. This is enabled by default. |  | Boolean |
+| camel.language.header.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.ref.enabled | Whether to enable auto configuration of the ref language. This is enabled by default. |  | Boolean |
+| camel.language.ref.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.simple.enabled | Whether to enable auto configuration of the simple language. This is enabled by default. |  | Boolean |
+| camel.language.simple.nested | If the result is a nested simple expression should this expression be evaluated as well. | false | Boolean |
+| camel.language.simple.pretty | To pretty format the output (only JSon or XML supported). | false | Boolean |
+| camel.language.simple.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.simple.trim-result | Whether to trim the returned values when this language is in use. | false | Boolean |
+| camel.language.tokenize.enabled | Whether to enable auto configuration of the tokenize language. This is enabled by default. |  | Boolean |
+| camel.language.tokenize.group-delimiter | Sets the delimiter to use when grouping. If this has not been set then token will be used as the delimiter. |  | String |
+| camel.language.tokenize.source | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |  | String |
+| camel.language.tokenize.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.variable.enabled | Whether to enable auto configuration of the variable language. This is enabled by default. |  | Boolean |
+| camel.language.variable.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.resilience4j.asynchronous | Whether to use asynchronous (non-blocking) processing with CompletionStage-based circuit breaker decorators. When enabled, the circuit breaker releases the caller thread immediately and completes processing asynchronously. This is most valuable when the downstream processor supports asynchronous processing (e.g. Netty HTTP, Kafka). When used with timeout, the timeoutExecutorService must be a ScheduledExecutorService. | false | Boolean |
+| camel.resilience4j.automatic-transition-from-open-to-half-open-enabled | Enables automatic transition from OPEN to HALF\_OPEN state once the waitDurationInOpenState has passed. | false | Boolean |
+| camel.resilience4j.bulkhead-enabled | Whether bulkhead is enabled or not on the circuit breaker. | false | Boolean |
+| camel.resilience4j.bulkhead-fair-call-handling-enabled | Configures whether the bulkhead uses a fair calling strategy. When enabled (default), a fair strategy guarantees the order of incoming requests (FIFO). When disabled, no ordering is guaranteed and may improve throughput. | true | Boolean |
+| camel.resilience4j.bulkhead-max-concurrent-calls | Configures the max amount of concurrent calls the bulkhead will support. | 25 | Integer |
+| camel.resilience4j.bulkhead-max-wait-duration | Configures a maximum amount of time which the calling thread will wait to enter the bulkhead. The default is 0 (no waiting). | 0 | String |
+| camel.resilience4j.circuit-breaker | Refers to an existing io.github.resilience4j.circuitbreaker.CircuitBreaker instance to lookup and use from the registry. When using this, then any other circuit breaker options are not in use. |  | String |
+| camel.resilience4j.config | Refers to an existing io.github.resilience4j.circuitbreaker.CircuitBreakerConfig instance to lookup and use from the registry. |  | String |
+| camel.resilience4j.configurations | Define additional configuration definitions |  | Resilience4jConfigurationDefinitionCommon> |
+| camel.resilience4j.enabled | Enable the component | true | Boolean |
+| camel.resilience4j.failure-rate-threshold | Configures the failure rate threshold in percentage. If the failure rate is equal or greater than the threshold the CircuitBreaker transitions to open and starts short-circuiting calls. |  | Float |
+| camel.resilience4j.ignore-exception | Configure a list of exceptions that are ignored and neither count as a failure nor success. Any exception matching or inheriting from one of the list will not count as a failure nor success, even if the exception is part of recordExceptions. |  | String> |
+| camel.resilience4j.max-wait-duration-in-half-open-state | Configures the maximum wait duration which controls how long the CircuitBreaker should stay in Half Open state, before it switches to open. Value 0 means circuit breaker will wait in half open state until all permitted calls have been completed. | 0 | String |
+| camel.resilience4j.micrometer-enabled | Whether to enable collecting statistics using Micrometer for all circuit breaker instances. This is a global setting (configure via camel.resilience4j.micrometerEnabled=true) and requires adding camel-resilience4j-micrometer JAR to the classpath. | false | Boolean |
+| camel.resilience4j.minimum-number-of-calls | Configures the minimum number of calls which are required (per sliding window period) before the CircuitBreaker can calculate the error rate. | 100 | Integer |
+| camel.resilience4j.permitted-number-of-calls-in-half-open-state | Configures the number of permitted calls when the CircuitBreaker is half open. | 10 | Integer |
+| camel.resilience4j.record-exception | Configure a list of exceptions that are recorded as a failure and thus increase the failure rate. Any exception matching or inheriting from one of the list counts as a failure, unless explicitly ignored via ignoreExceptions. |  | String> |
+| camel.resilience4j.sliding-window-size | Configures the size of the sliding window which is used to record the outcome of calls when the CircuitBreaker is closed. Sliding window can either be count-based or time-based. | 100 | Integer |
+| camel.resilience4j.sliding-window-synchronization-strategy | Configures the synchronization strategy for the sliding window. LOCK\_FREE uses a CAS-based lock-free algorithm for better performance under high concurrency. SYNCHRONIZED uses blocking locks with lower memory allocation. | SYNCHRONIZED | String |
+| camel.resilience4j.sliding-window-type | Configures the type of the sliding window which is used to record the outcome of calls when the CircuitBreaker is closed. Sliding window can either be count-based or time-based. | COUNT\_BASED | String |
+| camel.resilience4j.slow-call-duration-threshold | Configures the duration threshold above which calls are considered as slow and increase the slow calls percentage. The default is 60 seconds. | 60000 | String |
+| camel.resilience4j.slow-call-rate-threshold | Configures a threshold in percentage. The CircuitBreaker considers a call as slow when the call duration is greater than slowCallDurationThreshold. When the percentage of slow calls is equal or greater the threshold, the CircuitBreaker transitions to open and starts short-circuiting calls. |  | Float |
+| camel.resilience4j.throw-exception-when-half-open-or-open-state | Whether to throw io.github.resilience4j.circuitbreaker.CallNotPermittedException when the call is rejected because the circuit breaker is half open or open. | false | Boolean |
+| camel.resilience4j.timeout-cancel-running-future | Configures whether cancel is called on the running future. Defaults to true. | true | Boolean |
+| camel.resilience4j.timeout-duration | Configures the thread execution timeout. Default value is 1 second. | 1000 | String |
+| camel.resilience4j.timeout-enabled | Whether timeout is enabled or not on the circuit breaker. | false | Boolean |
+| camel.resilience4j.timeout-executor-service | References to a custom thread pool to use when timeout is enabled (uses ForkJoinPool.commonPool() by default). |  | ExecutorService |
+| camel.resilience4j.wait-duration-in-open-state | Configures the wait duration which specifies how long the CircuitBreaker should stay open, before it switches to half open. The default is 60 seconds. | 60000 | String |
+| camel.resilience4j.writable-stack-trace-enabled | Enables writable stack traces. When set to false, Exception.getStackTrace returns a zero length array. This may be used to reduce log spam when the circuit breaker is open. | true | Boolean |
+| camel.rest.api-component | The name of the Camel component to use as the REST API (such as OpenApi). |  | String |
+| camel.rest.api-context-path | Sets a leading context-path the REST API will be using. |  | String |
+| camel.rest.api-context-route-id | Sets the route id to use for the route that services the REST API. The route will by default use an auto assigned route id. |  | String |
+| camel.rest.api-host | To use a specific hostname for the API documentation (such as swagger or openapi). This can be used to override the generated host with this configured hostname. |  | String |
+| camel.rest.api-property | Allows to configure as many additional properties for the api documentation. |  | Object> |
+| camel.rest.api-vendor-extension | Whether vendor extension is enabled in the Rest APIs. If enabled then Camel will include additional information as vendor extension (eg keys starting with x-) such as route ids, class names etc. | false | Boolean |
+| camel.rest.binding-mode | Sets the binding mode for automatic marshalling and unmarshalling of request and response bodies. off (default) disables binding. auto detects JSON or XML from the Content-Type header. json binds using a JSON data format only. xml binds using an XML data format only. json\_xml supports both JSON and XML. | off | RestBindingMode |
+| camel.rest.binding-package-scan | Package name to use as base (offset) for classpath scanning of POJO classes are located when using binding mode is enabled for JSon or XML. Multiple package names can be separated by comma. |  | String |
+| camel.rest.client-request-validation | Whether to enable validation of the client request to check whether Content-Type/Accept headers, required parameters, and message body are valid. | false | Boolean |
+| camel.rest.client-response-validation | Whether to validate what Camel is returning as response to the client, such as checking status-code, Content-Type, and headers match the Rest DSL response definition. | false | Boolean |
+| camel.rest.component | The Camel Rest component to use for the REST transport (consumer), such as netty-http, jetty, servlet, undertow. |  | String |
+| camel.rest.component-property | Allows to configure as many additional properties for the rest component in use. |  | Object> |
+| camel.rest.consumer-property | Allows to configure as many additional properties for the rest consumer in use. |  | Object> |
+| camel.rest.context-path | Sets a leading context-path the REST services will be using. This can be used when using components such as camel-servlet where the deployed web application is deployed using a context-path. |  | String |
+| camel.rest.cors-headers | Allows to configure custom CORS headers. |  | Object> |
+| camel.rest.data-format-property | Allows to configure as many additional properties for the data formats in use. For example set property prettyPrint to true to have json outputted in pretty mode. |  | Object> |
+| camel.rest.enable-cors | Whether to enable CORS headers in the HTTP response. | false | Boolean |
+| camel.rest.enable-no-content-response | Whether to return HTTP 204 with an empty body when a response contains an empty JSON object or XML root object. | false | Boolean |
+| camel.rest.endpoint-property | Allows to configure as many additional properties for the rest endpoint in use. |  | Object> |
+| camel.rest.host | The hostname to use for exposing the REST service. |  | String |
+| camel.rest.host-name-resolver | If no hostname has been explicit configured, then this resolver is used to compute the hostname the REST service will be using. | alllocalip | RestHostNameResolver |
+| camel.rest.inline-routes | Inline routes in rest-dsl which are linked using direct endpoints. By inlining, Camel can optimize and inline this as a single route, however this requires to use direct endpoints, which must be unique per service. | true | Boolean |
+| camel.rest.json-data-format | Name of specific json data format to use. By default jackson will be used. Important: This option is only for setting a custom name of the data format, not to refer to an existing data format instance. | jackson | String |
+| camel.rest.port | The port number to use for exposing the REST service. |  | String |
+| camel.rest.producer-api-doc | Sets the location of the api document the REST producer will use to validate the REST uri and query parameters are valid accordingly to the api document. |  | String |
+| camel.rest.producer-component | Sets the name of the Camel component to use as the REST producer. |  | String |
+| camel.rest.scheme | The scheme to use for exposing the REST service. Usually http or https is supported. |  | String |
+| camel.rest.skip-binding-on-error-code | Whether to skip binding on output if there is a custom HTTP error code header. This allows to build custom error messages that do not bind to json / xml etc, as success messages otherwise will do. | false | Boolean |
+| camel.rest.use-x-forward-headers | Whether to use X-Forward headers to set host etc. for OpenApi. This may be needed in special cases involving reverse-proxy and networking going from HTTP to HTTPS etc. | false | Boolean |
+| camel.rest.validation-levels | Allows to configure custom validation levels when using camel-openapi-validator with client request/response validator. |  | Object> |
+| camel.rest.xml-data-format | Name of specific XML data format to use. By default jaxb will be used. Important: This option is only for setting a custom name of the data format, not to refer to an existing data format instance. | jaxb | String |

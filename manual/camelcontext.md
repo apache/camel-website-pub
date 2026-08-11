@@ -41,7 +41,7 @@ Camel’s routing engine moves messages under the hood and does all the heavy li
     
 -   Foster better design practices by connecting disparate systems that do one thing well
     
--   Allow for clients of servers to be stubbed out (using [mocks](../components/4.18.x/mock-component.md)) for testing purposes
+-   Allow for clients of servers to be stubbed out (using [mocks](../components/4.22.x/mock-component.md)) for testing purposes
     
 
 Each route in Camel has a unique identifier. You can use the identifier to log, debug, monitor, and start and stop routes.
@@ -54,7 +54,7 @@ To wire processors and endpoints together to form routes, Camel defines a [DSL](
 
 In Camel with Java, DSL means a fluent Java API that contains methods named for EIP terms. Camel provides multiple DSL languages. You could define the same route using the XML and YAML DSL as well.
 
-Here, in a single Java statement, you define a route that consumes files from a [file](../components/4.18.x/file-component.md) endpoint. Camel uses the [Filter EIP](../components/4.18.x/eips/filter-eip.md) to route the messages using an XPath predicate to test whether the message is not a test order. If a message passes the test, Camel forwards it to the [JMS](../components/4.18.x/jms-component.md) endpoint. Messages failing the filter test are skipped.
+Here, in a single Java statement, you define a route that consumes files from a [file](../components/4.22.x/file-component.md) endpoint. Camel uses the [Filter EIP](../components/4.22.x/eips/filter-eip.md) to route the messages using an XPath predicate to test whether the message is not a test order. If a message passes the test, Camel forwards it to the [JMS](../components/4.22.x/jms-component.md) endpoint. Messages failing the filter test are skipped.
 
 -   Java
     
@@ -157,7 +157,7 @@ A [Message](exchange.md) has three parts:
 
 ### Component
 
-[Components](../components/4.18.x/index.md) are the main extension point in Camel.
+[Components](../components/4.22.x/index.md) are the main extension point in Camel.
 
 From a programming point of view, components are fairly simple: they’re associated with a name that’s used in a [URI](uris.md), and they act as a factory of [endpoints](endpoint.md).
 
@@ -204,7 +204,7 @@ This kind of consumer is mostly associated with client-server architectures and 
 In contrast to the event-driven consumer, the polling consumer actively goes and fetches messages from a particular source, such as an FTP server. The polling consumer is also known as a synchronous receiver in EIP lingo, because it won’t poll for more messages until it’s finished processing the current message. A common flavor of the polling consumer is the scheduled polling consumer, which polls at scheduled intervals. File, FTP, and email components all use scheduled polling consumers.
 
 > **Note**
-> In the Camel components, its only either the event driven or scheduled polling consumers that are in use. The polling consumer (non-scheduled) is only used to poll on-demand, such as when using the [Poll Enrich](../components/4.18.x/eips/pollEnrich-eip.md) EIP, or from Java by creating a `PollingConsumer` instance via the `createPollingConsumer()` method from `Endpoint`.
+> In the Camel components, its only either the event driven or scheduled polling consumers that are in use. The polling consumer (non-scheduled) is only used to poll on-demand, such as when using the [Poll Enrich](../components/4.22.x/eips/pollEnrich-eip.md) EIP, or from Java by creating a `PollingConsumer` instance via the `createPollingConsumer()` method from `Endpoint`.
 
 ## Startup Order
 

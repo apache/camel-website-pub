@@ -4,7 +4,7 @@ The [Marshal](#) and [Unmarshal](unmarshal-eip.md) EIPs are used for [Message Tr
 
 ![image](_images/eip/MessageTranslator.gif)
 
-Camel has support for message transformation using several techniques. One such technique is [Data Formats](../../4.18.x/dataformats/index.md), where marshal and unmarshal come from.
+Camel has support for message transformation using several techniques. One such technique is [Data Formats](../../4.22.x/dataformats/index.md), where marshal and unmarshal come from.
 
 So in other words, the [Marshal](#) and [Unmarshal](unmarshal-eip.md) EIPs are used with [Data Formats](../dataformats/index.md).
 

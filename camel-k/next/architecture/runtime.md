@@ -10,7 +10,7 @@ Camel runtime application is in charge to bridge the output produced by the oper
 
 Camel Quarkus is an Apache Camel subproject that will make your Camel Integration run with the technology offered by [Quarkus](https://quarkus.io/) project. Thanks to it, you will be able to reduce resource footprint and have a faster startup, which is a fundamental aspect of cloud native development.
 
-Learn more in the [Camel Quarkus documentation section](../../../camel-quarkus/3.33.x/index.md).
+Learn more in the [Camel Quarkus documentation section](../../../camel-quarkus/next/index.md).
 
 ## Runtime main duties
 

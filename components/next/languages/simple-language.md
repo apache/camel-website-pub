@@ -2,7 +2,7 @@
 
 **Since Camel 1.1**
 
-The Simple Expression Language was a really simple language when it was created, but has since grown more powerful. It is primarily intended for being a very small and Camel specific scripting language used anywhere in Camel such as with [EIPs](../../4.18.x/eips/enterprise-integration-patterns.md) and [Route](../../../manual/routes.md).
+The Simple Expression Language was a really simple language when it was created, but has since grown more powerful. It is primarily intended for being a very small and Camel specific scripting language used anywhere in Camel such as with [EIPs](../../4.22.x/eips/enterprise-integration-patterns.md) and [Route](../../../manual/routes.md).
 
 The simple language is designed with intent to cover almost all the common use cases when little need for scripting in your Camel routes.
 
@@ -20,7 +20,7 @@ The simple language uses `${body}` placeholders for dynamic expressions and func
 
 ## A quick Simple Language example
 
-You often use Simple together with [EIPs](../../4.18.x/eips/enterprise-integration-patterns.md) such as [Content-Based Router](../eips/choice-eip.md) EIP.
+You often use Simple together with [EIPs](../../4.22.x/eips/enterprise-integration-patterns.md) such as [Content-Based Router](../eips/choice-eip.md) EIP.
 
 In the example below we want to route the message depending on whether a message header with key `foo` is equal to different values:
 

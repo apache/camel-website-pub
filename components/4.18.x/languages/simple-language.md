@@ -2,7 +2,7 @@
 
 **Since Camel 1.1**
 
-The Simple Expression Language was a really simple language when it was created, but has since grown more powerful. It is primarily intended for being a very small and Camel specific scripting language used anywhere in Camel such as with [EIPs](../eips/enterprise-integration-patterns.md) and [Route](../../../manual/routes.md).
+The Simple Expression Language was a really simple language when it was created, but has since grown more powerful. It is primarily intended for being a very small and Camel specific scripting language used anywhere in Camel such as with [EIPs](../../4.22.x/eips/enterprise-integration-patterns.md) and [Route](../../../manual/routes.md).
 
 The simple language is designed with intent to cover almost all the common use cases when little need for scripting in your Camel routes.
 
@@ -20,7 +20,7 @@ The simple language uses `${body}` placeholders for dynamic expressions and func
 
 ## A quick Simple Language example
 
-You often use Simple together with [EIPs](../eips/enterprise-integration-patterns.md) such as [Content-Based Router](../eips/choice-eip.md) EIP.
+You often use Simple together with [EIPs](../../4.22.x/eips/enterprise-integration-patterns.md) such as [Content-Based Router](../eips/choice-eip.md) EIP.
 
 In the example below we want to route the message depending on whether a message header with key `foo` is equal to different values:
 
@@ -110,7 +110,7 @@ The Camel functions are as the name implies specific to Apache Camel and these f
   
 | Function | Response Type | Description |
 | --- | --- | --- |
-| `bean(name.method)` | `Object` | Invoking a bean expression using the [Bean](../bean-component.md) language. Specifying a method name, you must use dot as the separator. We also support the ?method=methodname syntax that is used by the [Bean](../bean-component.md) component. Camel will by default lookup a bean by the given name. However, if you need to refer to a bean class (such as calling a static method), then you can prefix with the type, such as `bean:type:fqnClassName`. |
+| `bean(name.method)` | `Object` | Invoking a bean expression using the [Bean](../../4.22.x/bean-component.md) language. Specifying a method name, you must use dot as the separator. We also support the ?method=methodname syntax that is used by the [Bean](../../4.22.x/bean-component.md) component. Camel will by default lookup a bean by the given name. However, if you need to refer to a bean class (such as calling a static method), then you can prefix with the type, such as `bean:type:fqnClassName`. |
 | `body._OGNL_` | `Object` | The body invoked using a Camel _OGNL syntax_. For example to invoke the `getCountryCode` on the message body, you can use `${body.getCountryCode()}`. In the message body is a POJO then you can use a short-hand syntax `${body.countryCode}`. |
 | `bodyAs(type)` | `<T>` | Converts the body to the given type determined by its classname. |
 | `bodyAs(type)._OGNL_` | `Object` | Converts the body to the given type determined by its classname and then invoke methods using a Camel _OGNL syntax_. |
@@ -1360,7 +1360,7 @@ from("direct:order")
     .to("mock:reply");
 ```
 
-We can use the `?method=methodname` option that we are familiar with the [Bean](../bean-component.md) component itself:
+We can use the `?method=methodname` option that we are familiar with the [Bean](../../4.22.x/bean-component.md) component itself:
 
 ```java
 from("direct:order")

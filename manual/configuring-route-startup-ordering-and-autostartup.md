@@ -129,7 +129,7 @@ Or in `application.properties`:
 camel.main.auto-startup = false
 ```
 
-To startup based on a boolean, String or [Property](../components/4.18.x/properties-component.md), do one of the following:
+To startup based on a boolean, String or [Property](../components/4.22.x/properties-component.md), do one of the following:
 
 _Java-only: autoStartup with boolean, string, and property placeholder variants_
 

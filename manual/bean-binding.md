@@ -1,13 +1,13 @@
 # Bean Binding
 
-Bean Binding in Camel defines both which methods are invoked and also how the [Message](../components/4.18.x/eips/message.md) is converted into the parameters of the method invoked.
+Bean Binding in Camel defines both which methods are invoked and also how the [Message](../components/4.22.x/eips/message.md) is converted into the parameters of the method invoked.
 
 > **Note**
 > This requires to include `camel-bean` as dependency on the classpath.
 
 ## Choosing the method to invoke
 
-The binding of a Camel [Message](../components/4.18.x/eips/message.md) to a bean method call can occur in different ways, in the following order of importance:
+The binding of a Camel [Message](../components/4.22.x/eips/message.md) to a bean method call can occur in different ways, in the following order of importance:
 
 -   You can qualify parameter types to select exactly which method to use among overloads with the same name (see below for more details).
     
@@ -79,7 +79,7 @@ The following Camel-specific types are automatically bound:
 -   `java.lang.Exception`
     
 
-So, if you declare any of these types, they will be provided by Camel. **Note that `Exception` will bind to the caught exception in the [Exchange](exchange.md)** - so it’s often usable if you employ a [Bean](../components/4.18.x/bean-component.md) to handle, e.g., an `onException` route.
+So, if you declare any of these types, they will be provided by Camel. **Note that `Exception` will bind to the caught exception in the [Exchange](exchange.md)** - so it’s often usable if you employ a [Bean](../components/4.22.x/bean-component.md) to handle, e.g., an `onException` route.
 
 What is most interesting is that Camel will also try to bind the body of the [Exchange](exchange.md) to the first parameter of the method signature (albeit not any of the types above). So if, for instance, we declare a parameter as `String body`, then Camel will bind the message body to this type. Camel will also automatically convert to the type declared in the method signature.
 
@@ -117,7 +117,7 @@ _Java-only: method signature with multiple parameter types_
 public String doSomething(String body, Exchange exchange, TypeConverter converter)
 ```
 
-And imagine you use a [Pojo](../components/4.18.x/bean-component.md) to handle a given custom exception `InvalidOrderException` - we can then bind that as well:
+And imagine you use a [Pojo](../components/4.22.x/bean-component.md) to handle a given custom exception `InvalidOrderException` - we can then bind that as well:
 
 _Java-only: method signature with exception binding_
 
@@ -133,11 +133,11 @@ See the following sections for more detail.
 
 ## Binding Annotations
 
-You can use the [Parameter Binding Annotations](parameter-binding-annotations.md) to customize how parameter values are created from the [Message](../components/4.18.x/eips/message.md)
+You can use the [Parameter Binding Annotations](parameter-binding-annotations.md) to customize how parameter values are created from the [Message](../components/4.22.x/eips/message.md)
 
 ### Examples
 
-For example, a [Bean](../components/4.18.x/eips/bean-eip.md) such as:
+For example, a [Bean](../components/4.22.x/eips/bean-eip.md) such as:
 
 _Java-only: bean class with method binding_
 
@@ -193,12 +193,12 @@ Camel uses the following rules to determine if it’s a parameter value in the m
     
 -   The value is null which denotes a `null` value
     
--   It can be evaluated using the [Simple](../components/4.18.x/languages/simple-language.md) language, which means you can use, e.g., `${body}`, `${header.foo}` and others [Simple](../components/4.18.x/languages/simple-language.md) tokens. Notice the tokens must be enclosed with `${ }`.
+-   It can be evaluated using the [Simple](../components/4.22.x/languages/simple-language.md) language, which means you can use, e.g., `${body}`, `${header.foo}` and others [Simple](../components/4.22.x/languages/simple-language.md) tokens. Notice the tokens must be enclosed with `${ }`.
     
 -   The value ends with `.class` then it’s a type declaration instead - see the next section about specifying types for overloaded methods.
     
 
-When invoking a [Bean](../components/4.18.x/eips/bean-eip.md) you can instruct Camel to invoke a specific method by providing the method name:
+When invoking a [Bean](../components/4.22.x/eips/bean-eip.md) you can instruct Camel to invoke a specific method by providing the method name:
 
 _Java-only: specifying method name on bean call_
 
@@ -232,7 +232,7 @@ _Java-only: bean binding with Simple expression parameter_
 .bean(OrderService.class, "doSomething(${body}, true)")
 ```
 
-The syntax of the parameters is using the [Simple](../components/4.18.x/languages/simple-language.md) language so we have to use `${ }` placeholders in the body to refer to the message body.
+The syntax of the parameters is using the [Simple](../components/4.22.x/languages/simple-language.md) language so we have to use `${ }` placeholders in the body to refer to the message body.
 
 If you want to pass in a `null` value, then you can explicitly define this in the method option as shown below:
 
@@ -262,7 +262,7 @@ _Java-only: bean binding with String and integer parameters_
 
 In the example above, we invoke the echo method with two parameters. The first has the content 'World' (without quotes), and the second has the value of 5. Camel will automatically convert these values to the parameters' types.
 
-Having the power of the [Simple](../components/4.18.x/languages/simple-language.md) language allows us to bind to message headers and other values such as:
+Having the power of the [Simple](../components/4.22.x/languages/simple-language.md) language allows us to bind to message headers and other values such as:
 
 _Java-only: bean binding with header value parameter_
 
@@ -270,7 +270,7 @@ _Java-only: bean binding with header value parameter_
 .bean(OrderService.class, "doSomething(${body}, ${header.high})")
 ```
 
-You can also use the OGNL support of the [Simple](../components/4.18.x/languages/simple-language.md) expression language. Now suppose the message body is an object that has a method named `asXml`. To invoke the `asXml` method we can do as follows:
+You can also use the OGNL support of the [Simple](../components/4.22.x/languages/simple-language.md) expression language. Now suppose the message body is an object that has a method named `asXml`. To invoke the `asXml` method we can do as follows:
 
 _Java-only: bean binding with OGNL expression_
 
@@ -288,7 +288,7 @@ _Java-only: bean binding using .to() with method parameter_
 
 ### Using type qualifiers to select among overloaded methods
 
-If you have a [Bean](../components/4.18.x/eips/bean-eip.md) with overloaded methods, you can now specify parameter types (must use `.class` style, e.g. `com.foo.MyClass.class`) in the method name so Camel can match the method you intend to use.
+If you have a [Bean](../components/4.22.x/eips/bean-eip.md) with overloaded methods, you can now specify parameter types (must use `.class` style, e.g. `com.foo.MyClass.class`) in the method name so Camel can match the method you intend to use.
 
 Given the following bean:
 

@@ -32,4 +32,4 @@ The Integration pod will run as soon as the `jvm` build completes (within second
 
 ## Supported Camel Components
 
-Camel K only supports the Camel components that are available as Camel Quarkus Extensions out-of-the-box. These extensions are listed in the [Camel Quarkus documentation](../../../camel-quarkus/3.33.x/reference/index.md).
+Camel K only supports the Camel components that are available as Camel Quarkus Extensions out-of-the-box. These extensions are listed in the [Camel Quarkus documentation](../../../camel-quarkus/next/reference/index.md).

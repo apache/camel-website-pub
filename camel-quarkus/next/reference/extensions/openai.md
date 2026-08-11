@@ -2,7 +2,7 @@
 
 JVM since3.32.0 Native since3.32.0
 
-OpenAI endpoint for chat completion, embeddings, and audio transcription.
+OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech.
 
 ## What’s inside
 

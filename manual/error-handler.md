@@ -1,6 +1,6 @@
 # Error Handler
 
-Camel supports pluggable [ErrorHandler](https://www.javadoc.io/doc/org.apache.camel/camel-base/current/org/apache/camel/processor/ErrorHandler.md) strategies to deal with errors processing an [Event Driven Consumer](../components/4.18.x/eips/eventDrivenConsumer-eip.md).
+Camel supports pluggable [ErrorHandler](https://www.javadoc.io/doc/org.apache.camel/camel-base/current/org/apache/camel/processor/ErrorHandler.md) strategies to deal with errors processing an [Event Driven Consumer](../components/4.22.x/eips/eventDrivenConsumer-eip.md).
 
 An alternative is to specify the error handling directly in the [DSL](dsl.md) using the [Exception Clause](exception-clause.md).
 
@@ -34,7 +34,7 @@ These error handlers can be applied in the DSL to an entire set of rules or a sp
 
 ### DefaultErrorHandler
 
-The DefaultErrorHandler is the default error handler in Camel. Unlike [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) it does not have any dead letter queue, and do **not** handle exceptions by default.
+The DefaultErrorHandler is the default error handler in Camel. Unlike [Dead Letter Channel](../components/4.22.x/eips/dead-letter-channel.md) it does not have any dead letter queue, and do **not** handle exceptions by default.
 
 ### Dead Letter Channel
 
@@ -167,7 +167,7 @@ The error handler is configured with the `errorHandlerRef` attribute.
 > **Error Handler Hierarchy**  
 > The error handlers are inherited, so if you only have set a global error handler, then it is used everywhere. But you can override this in a route and use another error handler.
 
-In this example, we configure a [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) on the route that should redeliver at most 3 times and use a little delay before retrying.
+In this example, we configure a [Dead Letter Channel](../components/4.22.x/eips/dead-letter-channel.md) on the route that should redeliver at most 3 times and use a little delay before retrying.
 
 -   XML
     
@@ -241,30 +241,30 @@ Then we configure **myDeadLetterErrorHandler** that is our Dead Letter Channel. 
 
 The transactional error handler is based on spring transaction. This requires the usage of the camel-spring or camel-jta component.
 
-See [Transactional Client](../components/4.18.x/eips/transactional-client.md) that has many samples for how to use and transactional behavior and configuration with this error handler.
+See [Transactional Client](../components/4.22.x/eips/transactional-client.md) that has many samples for how to use and transactional behavior and configuration with this error handler.
 
 ## How do I retry failed messages forever?
 
 If you want to keep the bad message in the original system (such as a message broker), then you are also blocking the following messages that has arrived on the queue after the bad message.
 
-For example with [ActiveMQ](../components/4.18.x/activemq-component.md), Camel will retry consuming a message up til 6 times before its moved to the default dead letter queue on the broker (this is ActiveMQ broker specific).
+For example with [ActiveMQ](../components/4.22.x/activemq-component.md), Camel will retry consuming a message up til 6 times before its moved to the default dead letter queue on the broker (this is ActiveMQ broker specific).
 
-If you configure the [Default Error Handler](defaulterrorhandler.md) or [Dead Letter Channel](../components/4.18.x/eips/dead-letter-channel.md) to use `maximumRedeliveries = -1` then Camel will retry forever.
+If you configure the [Default Error Handler](defaulterrorhandler.md) or [Dead Letter Channel](../components/4.22.x/eips/dead-letter-channel.md) to use `maximumRedeliveries = -1` then Camel will retry forever.
 
 > **Important**
-> Beware that there is a difference between letting Camel retry processing a message, such as Camel fails to route a message to an external system (producer) vs consuming messages from a messaging system that offers redelivery such as [ActiveMQ](../components/4.18.x/activemq-component.md). The latter allows to roll back the entire message and attempt processing the same message again from Camel.
+> Beware that there is a difference between letting Camel retry processing a message, such as Camel fails to route a message to an external system (producer) vs consuming messages from a messaging system that offers redelivery such as [ActiveMQ](../components/4.22.x/activemq-component.md). The latter allows to roll back the entire message and attempt processing the same message again from Camel.
 
-If an external system such as [ActiveMQ](../components/4.18.x/activemq-component.md) is redelivering a message, then Camel enriches the message with headers that mark this.
+If an external system such as [ActiveMQ](../components/4.22.x/activemq-component.md) is redelivering a message, then Camel enriches the message with headers that mark this.
 
 The `CamelRedeliveryCounter` contains the number of times it has been redelivered. The `CamelRedelivered` contains a boolean if its redelivered or if it is the first time the message is processed.
 
-See also [Transactional Client](../components/4.18.x/eips/transactional-client.md).
+See also [Transactional Client](../components/4.22.x/eips/transactional-client.md).
 
 ## How do I retry processing a message from a certain point back or an entire route
 
 By default, Camel will perform any redelivery (retry) attempts from the point of failure. So if you want to retry from a point before this, you would need to split up your route.
 
-In the example below we have 2 routes (`direct:start`, `direct:sub`). In case of a failure anywhere in the `direct:sub` route, then the entire route is retried. This happens because we have instructed the `direct:sub` route to not use any error handler (e.g. the no error handler). Then we link the routes using the [Direct](../components/4.18.x/direct-component.md) component by calling the sub route from the 1st route.
+In the example below we have 2 routes (`direct:start`, `direct:sub`). In case of a failure anywhere in the `direct:sub` route, then the entire route is retried. This happens because we have instructed the `direct:sub` route to not use any error handler (e.g. the no error handler). Then we link the routes using the [Direct](../components/4.22.x/direct-component.md) component by calling the sub route from the 1st route.
 
 -   Java
     

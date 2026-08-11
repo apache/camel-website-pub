@@ -10,9 +10,9 @@ As an interface component, the Cron component does not contain a default impleme
 
 The following standard Camel components support the Cron endpoints:
 
--   [Camel Quartz](quartz-component.md)
+-   [Camel Quartz](../4.22.x/quartz-component.md)
     
--   [Camel Spring](spring-summary.md)
+-   [Camel Spring](../4.22.x/spring-summary.md)
     
 
 The Cron component is also supported in **Camel K**, which can use the Kubernetes scheduler to trigger the routes when required by the cron expression. Camel K does not require additional libraries to be plugged when using cron expressions compatible with Kubernetes cron syntax.

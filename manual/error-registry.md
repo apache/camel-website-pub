@@ -65,7 +65,7 @@ Each error entry captures:
 
 ## Message History
 
-When [Message History](../components/4.18.x/eips/message-history.md) is enabled on the `CamelContext`, the error registry also captures the message history trace for each error. This shows every node the message was routed through up until the point of failure, which is very useful for debugging.
+When [Message History](../components/4.22.x/eips/message-history.md) is enabled on the `CamelContext`, the error registry also captures the message history trace for each error. This shows every node the message was routed through up until the point of failure, which is very useful for debugging.
 
 ## Dev Console
 

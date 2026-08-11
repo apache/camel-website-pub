@@ -4,7 +4,7 @@ You can annotate [Endpoint](endpoint.md) and [Component](component.md) classes, 
 
 The documentation is then included into the jar as JSON schema files.
 
-The Camel project uses this to automatic keep the website documentation up-to-date with all the latest options on the Camel [Components](../components/4.18.x/index.md).
+The Camel project uses this to automatic keep the website documentation up-to-date with all the latest options on the Camel [Components](../components/4.22.x/index.md).
 
 ## Supported Annotations
 

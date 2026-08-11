@@ -2,11 +2,11 @@
 
 JVM since2.11.0 Native since3.15.0
 
-Manage secrets in Hashicorp Vault Service
+Manage secrets in HashiCorp Vault Service
 
 ## What’s inside
 
--   [Hashicorp Vault component](../../../../components/next/hashicorp-vault-component.md), URI syntax: `hashicorp-vault:secretsEngine`
+-   [HashiCorp Vault component](../../../../components/next/hashicorp-vault-component.md), URI syntax: `hashicorp-vault:secretsEngine`
     
 
 Please refer to the above link for usage and configuration details.

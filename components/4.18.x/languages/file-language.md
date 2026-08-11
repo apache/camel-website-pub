@@ -2,7 +2,7 @@
 
 **Since Camel 1.1**
 
-The File Expression Language is an extension to the [Simple](simple-language.md) language, adding file related capabilities. These capabilities are related to common use cases working with file path and names. The goal is to allow expressions to be used with the [File](../file-component.md) and [FTP](../ftp-component.md) components for setting dynamic file patterns for both consumer and producer.
+The File Expression Language is an extension to the [Simple](simple-language.md) language, adding file related capabilities. These capabilities are related to common use cases working with file path and names. The goal is to allow expressions to be used with the [File](../../4.22.x/file-component.md) and [FTP](../../4.22.x/ftp-component.md) components for setting dynamic file patterns for both consumer and producer.
 
 > **Note**
 > The file language is merged with [Simple](simple-language.md) language, which means you can use all the file syntax directly within the simple language.
@@ -24,7 +24,7 @@ The File language supports 5 options, which are listed below.
 
 This language is an **extension** to the [Simple](simple-language.md) language, so the [Simple](simple-language.md) syntax applies also. So the table below only lists the additional file related functions.
 
-All the file tokens use the same expression name as the method on the `java.io.File` object, for instance `file:absolute` refers to the `java.io.File.getAbsolute()` method. Notice that not all expressions are supported by the current Exchange. For instance, the [FTP](../ftp-component.md) component supports some options, whereas the File component supports all of them.
+All the file tokens use the same expression name as the method on the `java.io.File` object, for instance `file:absolute` refers to the `java.io.File.getAbsolute()` method. Notice that not all expressions are supported by the current Exchange. For instance, the [FTP](../../4.22.x/ftp-component.md) component supports some options, whereas the File component supports all of them.
 
       
 | Expression | Type | File Consumer | File Producer | FTP Consumer | FTP Producer | Description |
@@ -123,7 +123,7 @@ And finally, we can also use a bean expression to invoke a POJO class that gener
 fileName="uniquefile-${bean:myguidgenerator.generateid}.txt"
 ```
 
-Of course, all this can be combined in one expression where you can use the [File Language](#), [Simple](#) and the [Bean](../bean-component.md) language in one combined expression. This is pretty powerful for those common file path patterns.
+Of course, all this can be combined in one expression where you can use the [File Language](#), [Simple](#) and the [Bean](../../4.22.x/bean-component.md) language in one combined expression. This is pretty powerful for those common file path patterns.
 
 ## Dependencies
 

@@ -1,0 +1,48 @@
+# Kubernetes Cluster Service
+
+Spring Boot auto-configuration for the Camel Kubernetes Cluster Service.
+
+This starter provides leader election for Camel routes using Kubernetes [Lease resources](https://kubernetes.io/docs/concepts/architecture/leases/). It integrates with Camel’s `CamelClusterService` SPI so you can use the clustered route controller to ensure only one instance of a route runs at a time across pods in a Kubernetes cluster.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-kubernetes-cluster-service-starter</artifactId>
+</dependency>
+```
+
+## Usage
+
+To use this cluster service, enable the clustered route controller and configure routes with `routePolicy=ClusteredRoutePolicy`:
+
+```properties
+# enable the cluster service
+camel.cluster.kubernetes.enabled = true
+
+# enable the clustered route controller
+camel.clustered.controller.enabled = true
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 14 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.cluster.kubernetes.attributes | Custom service attributes. |  | Object> |
+| camel.cluster.kubernetes.cluster-labels | Set the labels used to identify the pods composing the cluster. |  | String> |
+| camel.cluster.kubernetes.config-map-name | Set the name of the ConfigMap used to do optimistic locking (defaults to 'leaders'). |  | String |
+| camel.cluster.kubernetes.connection-timeout-millis | Connection timeout in milliseconds to use when making requests to the Kubernetes API server. |  | Integer |
+| camel.cluster.kubernetes.enabled | Sets if the Kubernetes cluster service should be enabled or not, default is true. | true | Boolean |
+| camel.cluster.kubernetes.id | Cluster Service ID |  | String |
+| camel.cluster.kubernetes.jitter-factor | A jitter factor to apply in order to prevent all pods to call Kubernetes APIs in the same instant. |  | Double |
+| camel.cluster.kubernetes.kubernetes-namespace | Set the name of the Kubernetes namespace containing the pods and the configmap (autodetected by default) |  | String |
+| camel.cluster.kubernetes.lease-duration-millis | The default duration of the lease for the current leader. |  | Long |
+| camel.cluster.kubernetes.master-url | Set the URL of the Kubernetes master (read from Kubernetes client properties by default). |  | String |
+| camel.cluster.kubernetes.order | Service lookup order/priority. |  | Integer |
+| camel.cluster.kubernetes.pod-name | Set the name of the current pod (autodetected from container host name by default). |  | String |
+| camel.cluster.kubernetes.renew-deadline-millis | The deadline after which the leader must stop its services because it may have lost the leadership. |  | Long |
+| camel.cluster.kubernetes.retry-period-millis | The time between two subsequent attempts to check and acquire the leadership. It is randomized using the jitter factor. |  | Long |

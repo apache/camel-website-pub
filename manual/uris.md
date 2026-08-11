@@ -8,7 +8,7 @@ For example, consider the following URI:
 kafka:cheese?brokers=mykafka:1234&clientId=foo
 ```
 
-This endpoint is created by the [Kafka](../components/4.18.x/kafka-component.md) component. The URI contains endpoint configurations as context-path and query parameters. In this example, the context-path is `cheese` which is the kafka topic to use.
+This endpoint is created by the [Kafka](../components/4.22.x/kafka-component.md) component. The URI contains endpoint configurations as context-path and query parameters. In this example, the context-path is `cheese` which is the kafka topic to use.
 
 The query parameters have two parameters:
 

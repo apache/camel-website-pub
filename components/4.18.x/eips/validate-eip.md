@@ -80,7 +80,7 @@ from("file:inbox")
   .to("bean:myServiceBean.processLine");
 ```
 
-You can also use `validate` together with the [Simple](../languages/simple-language.md) language.
+You can also use `validate` together with the [Simple](../../4.22.x/languages/simple-language.md) language.
 
 ```java
 from("file:inbox")

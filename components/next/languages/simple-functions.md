@@ -37,7 +37,7 @@ The Camel functions are as the name implies specific to Apache Camel and these f
   
 | Function | Response Type | Description |
 | --- | --- | --- |
-| `bean(name.method)` | `Object` | Invoking a bean expression using the [Bean](../../4.18.x/bean-component.md) language. Specifying a method name, you must use dot as the separator. We also support the ?method=methodname syntax that is used by the [Bean](../../4.18.x/bean-component.md) component. Camel will by default lookup a bean by the given name. However, if you need to refer to a bean class (such as calling a static method), then you can prefix with the type, such as `bean:type:fqnClassName`. |
+| `bean(name.method)` | `Object` | Invoking a bean expression using the [Bean](../../4.22.x/bean-component.md) language. Specifying a method name, you must use dot as the separator. We also support the ?method=methodname syntax that is used by the [Bean](../../4.22.x/bean-component.md) component. Camel will by default lookup a bean by the given name. However, if you need to refer to a bean class (such as calling a static method), then you can prefix with the type, such as `bean:type:fqnClassName`. |
 | `body._OGNL_` | `Object` | The body invoked using a Camel _OGNL syntax_. For example to invoke the `getCountryCode` on the message body, you can use `${body.getCountryCode()}`. In the message body is a POJO then you can use a short-hand syntax `${body.countryCode}`. |
 | `bodyAs(type)` | `<T>` | Converts the body to the given type determined by its classname. |
 | `bodyAs(type)._OGNL_` | `Object` | Converts the body to the given type determined by its classname and then invoke methods using a Camel _OGNL syntax_. |

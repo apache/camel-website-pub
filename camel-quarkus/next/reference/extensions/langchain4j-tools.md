@@ -1,6 +1,6 @@
 # LangChain4j Tools
 
-JVM since3.15.0 Native since3.24.0
+JVM since3.15.0 Native since3.24.0 ⚠️Deprecated
 
 LangChain4j Tools and Function Calling Features
 

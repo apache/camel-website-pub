@@ -1,0 +1,44 @@
+# OpenSearch
+
+Send requests to OpenSearch via Java Client API.
+
+## What’s inside
+
+-   [OpenSearch component](../../../components/4.22.x/opensearch-component.md), URI syntax: `opensearch:clusterName`
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-opensearch-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 17 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.component.opensearch.autowired-enabled | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| camel.component.opensearch.client | To use an existing configured OpenSearch client, instead of creating a client per endpoint. This allows customizing the client with specific settings. The option is a org.opensearch.client.RestClient type. |  | RestClient |
+| camel.component.opensearch.connection-timeout | The time in ms to wait before connection will time out. | 30000 | Integer |
+| camel.component.opensearch.enable-s-s-l | Enable SSL | false | Boolean |
+| camel.component.opensearch.enable-sniffer | Enable automatically discover nodes from a running OpenSearch cluster. If this option is used in conjunction with Spring Boot, then it’s managed by the Spring Boot configuration (see: Disable Sniffer in Spring Boot). | false | Boolean |
+| camel.component.opensearch.enabled | Whether to enable auto configuration of the opensearch component. This is enabled by default. |  | Boolean |
+| camel.component.opensearch.host-addresses | Comma separated list with ip:port formatted remote transport addresses to use. The ip and port options must be left blank for hostAddresses to be considered instead. |  | String |
+| camel.component.opensearch.lazy-start-producer | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |
+| camel.component.opensearch.max-retry-timeout | The time in ms before retry | 30000 | Integer |
+| camel.component.opensearch.open-search-client | To use a custom configured OpenSearchClient instance. When set, this takes precedence over the RestClient-based client option. The option is a org.opensearch.client.opensearch.OpenSearchClient type. |  | OpenSearchClient |
+| camel.component.opensearch.password | Password for authenticating |  | String |
+| camel.component.opensearch.sniff-after-failure-delay | The delay of a sniff execution scheduled after a failure (in milliseconds) | 60000 | Integer |
+| camel.component.opensearch.sniffer-interval | The interval between consecutive ordinary sniff executions in milliseconds. Will be honoured when sniffOnFailure is disabled or when there are no failures between consecutive sniff executions | 300000 | Integer |
+| camel.component.opensearch.socket-timeout | The timeout in ms to wait before the socket will time out. | 30000 | Integer |
+| camel.component.opensearch.ssl-context-parameters | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. The option is a org.apache.camel.support.jsse.SSLContextParameters type. |  | SSLContextParameters |
+| camel.component.opensearch.use-global-ssl-context-parameters | Enable usage of global SSL context parameters. | false | Boolean |
+| camel.component.opensearch.user | Basic authenticate user |  | String |

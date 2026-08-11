@@ -324,7 +324,7 @@ For example, if the message body is an instance of `java.util.List`, the first i
 
 If `batch` is set to `true`, then the interpretation of the inbound message body changes slightly – instead of an iterator of parameters, the component expects an iterator that contains the parameter iterators; the size of the outer iterator determines the batch size.
 
-You can use the option `useMessageBodyForSql` that allows to use the message body as the SQL statement, and then the SQL parameters must be provided in a header with the key `CamelSqlParameters`. This allows the SQL component to work more dynamically as the SQL query is from the message body. Use templating (such as [Velocity](../4.18.x/velocity-component.md), [Freemarker](../4.18.x/freemarker-component.md)) for conditional processing, e.g., to include or exclude `where` clauses depending on the presence of query parameters.
+You can use the option `useMessageBodyForSql` that allows to use the message body as the SQL statement, and then the SQL parameters must be provided in a header with the key `CamelSqlParameters`. This allows the SQL component to work more dynamically as the SQL query is from the message body. Use templating (such as [Velocity](../4.22.x/velocity-component.md), [Freemarker](../4.22.x/freemarker-component.md)) for conditional processing, e.g., to include or exclude `where` clauses depending on the presence of query parameters.
 
 ### Result of the query
 

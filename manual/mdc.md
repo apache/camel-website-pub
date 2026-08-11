@@ -3,7 +3,7 @@
 The Mapped Diagnostic Context is a technology used in Java to provide a set of customized information into each log trace. The major logging frameworks implements it, and, although it may have certain limitations, this technology is used to enhance the logging and monitoring of a Java application (Camel applications included).
 
 > **Tip**
-> You’re invited to try the new [camel-mdc](../components/4.18.x/others/mdc.md) component for an improved user experience.
+> You’re invited to try the new [camel-mdc](../components/4.22.x/others/mdc.md) component for an improved user experience.
 
 The main limitation of this technology is the fact that it stores values on a context that is available at thread level. Since Camel is an application that manages multiple thread, when it deals with asynchronous calls, the context propagation may not work correctly.
 
@@ -13,7 +13,7 @@ The main limitation of this technology is the fact that it stores values on a co
 ## Enabling MDC
 
 > **Note**
-> This feature is deprecated. Use the new [camel-mdc](../components/4.18.x/others/mdc.md) service component instead.
+> This feature is deprecated. Use the new [camel-mdc](../components/4.22.x/others/mdc.md) service component instead.
 
 The first thing you need to do is to enable MDC logging in Camel.
 

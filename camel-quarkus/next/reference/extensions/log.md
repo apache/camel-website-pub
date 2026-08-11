@@ -2,7 +2,7 @@
 
 JVM since0.0.1 Native since0.0.1
 
-Prints data form the routed message (such as body and headers) to the logger.
+Prints data from the routed message (such as body and headers) to the logger.
 
 ## What’s inside
 

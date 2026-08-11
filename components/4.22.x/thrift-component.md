@@ -1,0 +1,287 @@
+# Thrift
+
+**Since Camel 2.20**
+
+**Both producer and consumer are supported**
+
+The Thrift component allows you to call or expose Remote Procedure Call (RPC) services using [Apache Thrift](https://thrift.apache.org/) binary communication protocol and serialization mechanism.
+
+Maven users will need to add the following dependency to their `pom.xml` for this component:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-thrift</artifactId>
+    <version>x.x.x</version>
+    <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+## URI format
+
+thrift://service\[?options\]
+
+## Configuring Options
+
+Camel components are configured on two separate levels:
+
+-   component level
+    
+-   endpoint level
+    
+
+### Configuring Component Options
+
+At the component level, you set general and shared configurations that are, then, inherited by the endpoints. It is the highest configuration level.
+
+For example, a component may have security settings, credentials for authentication, urls for network connection and so forth.
+
+Some components only have a few options, and others may have many. Because components typically have pre-configured defaults that are commonly used, then you may often only need to configure a few options on a component; or none at all.
+
+You can configure components using:
+
+-   the [Component DSL](../../manual/component-dsl.md).
+    
+-   in a configuration file (`application.properties`, `*.yaml` files, etc).
+    
+-   directly in the Java code.
+    
+
+### Configuring Endpoint Options
+
+You usually spend more time setting up endpoints because they have many options. These options help you customize what you want the endpoint to do. The options are also categorized into whether the endpoint is used as a consumer (_from_), as a producer (_to_), or both.
+
+Configuring endpoints is most often done directly in the endpoint URI as _path_ and _query_ parameters. You can also use the [Endpoint DSL](../../manual/Endpoint-dsl.md) and [DataFormat DSL](../../manual/dataformat-dsl.md) as a _type safe_ way of configuring endpoints and data formats in Java.
+
+A good practice when configuring options is to use [Property Placeholders](../../manual/using-propertyplaceholder.md).
+
+Property placeholders provide a few benefits:
+
+-   They help prevent using hardcoded urls, port numbers, sensitive information, and other settings.
+    
+-   They allow externalizing the configuration from the code.
+    
+-   They help the code to become more flexible and reusable.
+    
+
+The following two sections list all the options, firstly for the component followed by the endpoint.
+
+## Component Options
+
+The Thrift component supports the following options which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **useGlobalSslContextParameters** (security) | Determine if the thrift component is using global SSL context parameters. | false | boolean |
+
+## Endpoint Options
+
+The Thrift endpoint is configured using URI syntax:
+
+thrift:host:port/service
+
+With the following _path_ and _query_ parameters:
+
+### Path Parameters
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **host** (common) | **Required** The Thrift server host name. This is localhost or 0.0.0.0 (if not defined) when being a consumer or remote server host name when using producer. |  | String |
+| **port** (common) | **Required** The Thrift server port. |  | int |
+| **service** (common) | **Required** Fully qualified service name from the thrift descriptor file (package dot service definition name). |  | String |
+
+### Query Parameters
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **compressionType** (common) | 
+Protocol compression mechanism type.
+
+Enum values:
+
+-   NONE
+    
+-   ZLIB
+    
+
+
+
+
+
+ | NONE | ThriftCompressionType |
+| **exchangeProtocol** (common) | 
+
+Exchange protocol serialization type.
+
+Enum values:
+
+-   BINARY
+    
+-   JSON
+    
+-   SJSON
+    
+-   COMPACT
+    
+
+
+
+
+
+ | BINARY | ThriftExchangeProtocol |
+| **clientTimeout** (consumer) | Client timeout for consumers. |  | int |
+| **maxPoolSize** (consumer) | The Thrift server consumer max thread pool size. | 10 | int |
+| **poolSize** (consumer) | The Thrift server consumer initial thread pool size. | 1 | int |
+| **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
+| **exchangePattern** (consumer (advanced)) | 
+
+Sets the exchange pattern when the consumer creates an exchange.
+
+Enum values:
+
+-   InOnly
+    
+-   InOut
+    
+
+
+
+
+
+ |  | ExchangePattern |
+| **method** (producer) | The Thrift invoked method name. |  | String |
+| **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **synchronous** (advanced) | Sets whether synchronous processing should be strictly used. | false | boolean |
+| **negotiationType** (security) | 
+
+Security negotiation type.
+
+Enum values:
+
+-   PLAINTEXT
+    
+-   SSL
+    
+-   SASL
+    
+
+
+
+
+
+ | PLAINTEXT | ThriftNegotiationType |
+| **sslParameters** (security) | Configuration parameters for SSL/TLS security negotiation. |  | SSLContextParameters |
+
+## Message Headers
+
+The Thrift component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelThriftMethodName** (consumer) Constant: [`THRIFT_METHOD_NAME_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-thrift/latest/org/apache/camel/component/thrift/ThriftConstants.html#THRIFT_METHOD_NAME_HEADER) | Method name handled by the consumer service. |  | String |
+
+## Thrift method parameters mapping
+
+Parameters in the called procedure must be passed as a list of objects inside the message body. The primitives are converted from the objects on the fly. To correctly find the corresponding method, all types must be transmitted regardless of the values. Please see an example below, how to pass different parameters to the method with the Camel body:
+
+_Java-only: passing different parameter types in the Thrift method request body_
+
+```java
+List requestBody = new ArrayList();
+
+requestBody.add((boolean)true);
+requestBody.add((byte)THRIFT_TEST_NUM1);
+requestBody.add((short)THRIFT_TEST_NUM1);
+requestBody.add((int)THRIFT_TEST_NUM1);
+requestBody.add((long)THRIFT_TEST_NUM1);
+requestBody.add((double)THRIFT_TEST_NUM1);
+requestBody.add("empty"); // String parameter
+requestBody.add(ByteBuffer.allocate(10)); // binary parameter
+requestBody.add(new Work(THRIFT_TEST_NUM1, THRIFT_TEST_NUM2, Operation.MULTIPLY)); // Struct parameter
+requestBody.add(new ArrayList<Integer>()); // list parameter
+requestBody.add(new HashSet<String>()); // set parameter
+requestBody.add(new HashMap<String, Long>()); // map parameter
+
+Object responseBody = template.requestBody("direct:thrift-alltypes", requestBody);
+```
+
+Incoming parameters in the service consumer will also be passed to the message body as a list of objects.
+
+## Examples
+
+Below is a simple synchronous method invoke with host and port parameters
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:thrift-calculate")
+    .to("thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator?method=calculate&synchronous=true");
+```
+
+```xml
+<route>
+  <from uri="direct:thrift-calculate"/>
+  <to uri="thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator?method=calculate&amp;synchronous=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:thrift-calculate
+      steps:
+        - to:
+            uri: thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator
+            parameters:
+              method: calculate
+              synchronous: true
+```
+
+Thrift service consumer with asynchronous communication
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator")
+    .to("direct:thrift-service");
+```
+
+```xml
+<route>
+  <from uri="thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator"/>
+  <to uri="direct:thrift-service"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calculator
+      steps:
+        - to:
+            uri: direct:thrift-service
+```
+
+It’s possible to automate Java code generation for .thrift files using **thrift-maven-plugin**, but before start the thrift compiler binary distribution for your operating system must be present on the running host.
+
+## For more information, see these resources
+
+[Thrift project GitHub](https://github.com/apache/thrift/) [https://thrift.apache.org/tutorial/java](https://thrift.apache.org/tutorial/java) \[Apache Thrift Java tutorial\]
