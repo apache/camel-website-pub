@@ -51,6 +51,8 @@ You can find the upgrade guide for each release in the following pages:
     
 -   [Upgrade guide 4.21 → 4.22](camel-4x-upgrade-guide-4_22.md)
     
+-   [Upgrade guide 4.22 → 4.23](camel-4x-upgrade-guide-4_23.md)
+    
 
 > **Note**
 > [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.

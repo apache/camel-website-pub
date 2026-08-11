@@ -68,7 +68,7 @@ camel run hello.yaml --dev
 | [Camel CLI Launcher](camel-jbang-launcher.md) | Self-contained executable JAR — run the CLI without JBang. |
 | [Kubernetes Plugin](camel-jbang-kubernetes.md) | Build and deploy Camel integrations to Kubernetes. |
 | [Testing Plugin](camel-jbang-test.md) | Automated testing with the Citrus test framework. |
-| [Camel TUI](camel-jbang-tui.md) | Terminal dashboard for visualizing route topology and message flow. |
+| [Camel TUI](camel-jbang-tui.md) | Terminal dashboard for developing, monitoring, and debugging Camel integrations with a source editor, route topology, message tracing, and AI integration. |
 | [Camel MCP Server](camel-jbang-mcp.md) | Expose the Camel catalog and tools to AI coding assistants via the Model Context Protocol. |
 
 ## How It Works

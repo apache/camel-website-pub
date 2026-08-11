@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1786197747389,
+  "generated": 1786428087623,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -31605,6 +31605,12 @@
               "module": "ROOT",
               "path": "camel-4x-upgrade-guide-4_22.adoc",
               "url": "/manual/camel-4x-upgrade-guide-4_22.html",
+              "title": "Apache Camel 4.x Upgrade Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-4x-upgrade-guide-4_23.adoc",
+              "url": "/manual/camel-4x-upgrade-guide-4_23.html",
               "title": "Apache Camel 4.x Upgrade Guide"
             },
             {

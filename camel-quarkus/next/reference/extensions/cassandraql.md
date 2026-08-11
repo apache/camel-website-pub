@@ -28,6 +28,16 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Additional Camel Quarkus configuration
 
+### Cassandra health check
+
+The `cassandra-quarkus-client` dependency, which is used internally by this extension, automatically registers a health check. However, Camel manages its own `CqlSession` independently and does not use the Quarkus-managed Cassandra client, so the health check may fail and cause Kubernetes readiness probes to report the pod as not ready.
+
+To work around this, disable the Cassandra health check in your `application.properties`:
+
+```properties
+quarkus.cassandra.health.enabled=false
+```
+
 ### Cassandra aggregation repository in native mode
 
 In order to use Cassandra aggregation repositories like `CassandraAggregationRepository` in native mode, you must [enable native serialization support](core.html#quarkus-camel-native-reflection-serialization-enabled).
