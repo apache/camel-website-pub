@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 11 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 12 Aug 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Real-Time Analytics with Apache Camel and ClickHouse</title>
+      <link>https://camel.apache.org/blog/2026/08/camel-clickhouse-analytics/</link>
+      <pubDate>Wed, 12 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/08/camel-clickhouse-analytics/</guid>
+      <description>If you are building event pipelines, metrics dashboards, or log analytics, there is a good chance ClickHouse sits at the end of the line. It is fast, column-oriented, and built for append-heavy workloads. The question for Camel users is usually not whether to use ClickHouse, but how to connect to it cleanly from routes.&#xA;You can already reach ClickHouse through JDBC or the generic SQL component. That works — but you miss native format streaming, server-side async inserts, and the tuning knobs that make ClickHouse fast at scale.</description>
+    </item>
     <item>
       <title>Apache Camel 4.22 What&#39;s New</title>
       <link>https://camel.apache.org/blog/2026/08/camel422-whatsnew/</link>

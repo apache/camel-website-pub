@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[230]{title,link,pubDate,description}:
+posts[231]{title,link,pubDate,description}:
+  Real-Time Analytics with Apache Camel and ClickHouse|https://camel.apache.org/blog/2026/08/camel-clickhouse-analytics/index.md|Wed, 12 Aug 2026 00:00:00 +0000|If you are building event pipelines, metrics dashboards, or log analytics, there is a good chance ClickHouse sits at the end of the line. It is fast, column-oriented, and built for append-heavy worklo
   Apache Camel 4.22 What's New|https://camel.apache.org/blog/2026/08/camel422-whatsnew/index.md|Tue, 11 Aug 2026 00:00:00 +0000|Apache Camel 4.22 LTS has just been released. This is a Long Term Support (LTS) release, which means it will receive patch releases with bug fixes and security updates for approximately one year. The 
   Camel TUI: A Low-Code YAML Editor in Your Terminal|https://camel.apache.org/blog/2026/08/camel-tui-editor/index.md|Tue, 11 Aug 2026 00:00:00 +0000|Two weeks ago we introduced the Camel TUI &ndash; a terminal dashboard for monitoring and managing Apache Camel integrations. Since then, development has continued at a rapid pace. This post covers th
   RELEASE 4.22.0|https://camel.apache.org/blog/2026/08/RELEASE-4.22.0/index.md|Tue, 11 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.22.0 LTS release with 526 new features and improvements. The artifacts are published and ready for you to download from the Cent

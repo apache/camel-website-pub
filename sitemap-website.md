@@ -1,8 +1,10 @@
-urls[831]{loc,lastmod}:
+urls[832]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-08-12T00:00:00+00:00
+  https://camel.apache.org/,2026-08-12T00:00:00+00:00
+  https://camel.apache.org/categories/Howtos/,2026-08-12T00:00:00+00:00
+  https://camel.apache.org/blog/2026/08/camel-clickhouse-analytics/,2026-08-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/camel422-whatsnew/,2026-08-11T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/camel-tui-editor/,2026-08-11T00:00:00+00:00
-  https://camel.apache.org/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/releases/release-4.22.0/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/RELEASE-4.22.0/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-08-11T00:00:00+00:00
@@ -30,7 +32,6 @@ urls[831]{loc,lastmod}:
   https://camel.apache.org/releases/q-3.33.2/,2026-07-13T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/hawtio-ai/,2026-07-10T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-elevates-citrus/,2026-07-06T00:00:00+00:00
-  https://camel.apache.org/categories/Howtos/,2026-07-06T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-43866.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-43867.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/,2026-07-05T10:00:00+02:00

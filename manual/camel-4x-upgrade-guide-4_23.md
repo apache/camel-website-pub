@@ -29,3 +29,9 @@ NAT64 and 6to4 addresses carrying a globally routable IPv4 address remain allowe
 In the other direction, host names are no longer rejected on the basis of their spelling. Names beginning with `fc` or `fd`, such as `fcm.googleapis.com`, were previously refused because those are the leading hex digits of the IPv6 unique local prefixes; they are now resolved and classified like any other name.
 
 Set `allowLocalWebhookUrls=true` to permit loopback targets during local development. That option is unchanged and still does not permit any of the ranges above.
+
+### camel-archetypes
+
+The Camel Maven archetypes now generate a `README.md` instead of the previous `ReadMe.txt`, with the content rewritten in Markdown and the documentation links updated. Each generated project also gets an `AGENTS.md` file with guidance for AI coding assistants, pointing at the Apache Camel LLM index (`/llms.txt`), the Camel CLI and the Camel MCP server.
+
+The `camel-archetype-api-component` archetype also generates its readme again: the file was declared in the wrong file set and was therefore silently skipped.
