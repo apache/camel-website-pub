@@ -6,7 +6,7 @@ Communicate with MQTT message brokers using Eclipse Paho MQTT Client.
 
 ## What’s inside
 
--   [Paho component](../../../../components/next/paho-component.md), URI syntax: `paho:topic`
+-   [Paho component](../../../../components/4.22.x/paho-component.md), URI syntax: `paho:topic`
     
 
 Please refer to the above link for usage and configuration details.

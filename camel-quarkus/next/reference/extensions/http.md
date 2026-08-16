@@ -6,9 +6,9 @@ Send requests to external HTTP servers using Apache HTTP Client 5.x.
 
 ## What’s inside
 
--   [HTTP component](../../../../components/next/http-component.md), URI syntax: `[http://httpUri](http://httpUri)`
+-   [HTTP component](../../../../components/4.22.x/http-component.md), URI syntax: `[http://httpUri](http://httpUri)`
     
--   [HTTPS (Secure) component](../../../../components/next/http-component.md), URI syntax: `[https://httpUri](https://httpUri)`
+-   [HTTPS (Secure) component](../../../../components/4.22.x/http-component.md), URI syntax: `[https://httpUri](https://httpUri)`
     
 
 Please refer to the above links for usage and configuration details.

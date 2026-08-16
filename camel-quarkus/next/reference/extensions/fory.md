@@ -6,7 +6,7 @@ Serialize and deserialize messages using Apache Fory
 
 ## What’s inside
 
--   [Fory data format](../../../../components/next/dataformats/fory-dataformat.md)
+-   [Fory data format](../../../../components/4.22.x/dataformats/fory-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

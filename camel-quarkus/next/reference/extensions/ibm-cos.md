@@ -6,7 +6,7 @@ Store and retrieve objects from IBM Cloud Object Storage.
 
 ## What’s inside
 
--   [IBM Cloud Object Storage component](../../../../components/next/ibm-cos-component.md), URI syntax: `ibm-cos:bucketName`
+-   [IBM Cloud Object Storage component](../../../../components/4.22.x/ibm-cos-component.md), URI syntax: `ibm-cos:bucketName`
     
 
 Please refer to the above link for usage and configuration details.

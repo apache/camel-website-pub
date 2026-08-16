@@ -271,7 +271,8 @@ The Milvus component provides a datatype transformer, from langchain4j-embedding
 
 As an example, you could think about these routes:
 
-Java
+-   Java
+    
 
 ```java
     protected RoutesBuilder createRouteBuilder() {

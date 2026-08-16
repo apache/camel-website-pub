@@ -6,7 +6,7 @@ Rest DSL support for using OpenApi doc
 
 ## What’s inside
 
--   [Openapi Java](../../../../components/next/others/openapi-java.md)
+-   [Openapi Java](../../../../components/4.22.x/others/openapi-java.md)
     
 
 Please refer to the above link for usage and configuration details.

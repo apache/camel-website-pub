@@ -6,7 +6,7 @@ Send and receive messages to/from an IRC chat.
 
 ## What’s inside
 
--   [IRC component](../../../../components/next/irc-component.md), URI syntax: `irc:hostname:port`
+-   [IRC component](../../../../components/4.22.x/irc-component.md), URI syntax: `irc:hostname:port`
     
 
 Please refer to the above link for usage and configuration details.

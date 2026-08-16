@@ -6,7 +6,7 @@ A2A endpoint for agent-to-agent communication.
 
 ## What’s inside
 
--   [A2A component](../../../../components/next/a2a-component.md), URI syntax: `a2a:agentCardSource`
+-   [A2A component](../../../../components/4.22.x/a2a-component.md), URI syntax: `a2a:agentCardSource`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Chat with a ChatScript Server.
 
 ## What’s inside
 
--   [ChatScript component](../../../../components/next/chatscript-component.md), URI syntax: `chatscript:host:port/botName`
+-   [ChatScript component](../../../../components/4.22.x/chatscript-component.md), URI syntax: `chatscript:host:port/botName`
     
 
 Please refer to the above link for usage and configuration details.

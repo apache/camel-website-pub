@@ -6,7 +6,7 @@ Send messages to AWS MQ.
 
 ## What’s inside
 
--   [AWS MQ component](../../../../components/next/aws2-mq-component.md), URI syntax: `aws2-mq:label`
+-   [AWS MQ component](../../../../components/4.22.x/aws2-mq-component.md), URI syntax: `aws2-mq:label`
     
 
 Please refer to the above link for usage and configuration details.

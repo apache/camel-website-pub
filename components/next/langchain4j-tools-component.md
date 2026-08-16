@@ -171,6 +171,8 @@ Enum values:
 | **CamelLangChain4jToolsInputTokenCount** (common) Constant: [`INPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#INPUT_TOKEN_COUNT) | The Input Token Count. |  | int |
 | **CamelLangChain4jToolsOutputTokenCount** (common) Constant: [`OUTPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#OUTPUT_TOKEN_COUNT) | The Output Token Count. |  | int |
 | **CamelLangChain4jToolsTotalTokenCount** (common) Constant: [`TOTAL_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#TOTAL_TOKEN_COUNT) | The Total Token Count. |  | int |
+| **CamelLangChain4jToolsRequestModel** (common) Constant: [`REQUEST_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#REQUEST_MODEL) | The request model name. |  | String |
+| **CamelLangChain4jToolsResponseModel** (common) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-tools/latest/org/apache/camel/component/langchain4j/tools/LangChain4jToolsHeaders.html#RESPONSE_MODEL) | The response model name. |  | String |
 
 ## Usage
 

@@ -6,9 +6,9 @@ Transforms fixed format data such as EDI message from/to XML using a Data Format
 
 ## What’s inside
 
--   [DFDL component](../../../../components/next/dfdl-component.md), URI syntax: `dfdl:schemaUri`
+-   [DFDL component](../../../../components/4.22.x/dfdl-component.md), URI syntax: `dfdl:schemaUri`
     
--   [DFDL data format](../../../../components/next/dataformats/dfdl-dataformat.md)
+-   [DFDL data format](../../../../components/4.22.x/dataformats/dfdl-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

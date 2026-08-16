@@ -6,7 +6,7 @@ Send and receive events to/from Azure Event Hubs using AMQP protocol.
 
 ## What’s inside
 
--   [Azure Event Hubs component](../../../../components/next/azure-eventhubs-component.md), URI syntax: `azure-eventhubs:namespace/eventHubName`
+-   [Azure Event Hubs component](../../../../components/4.22.x/azure-eventhubs-component.md), URI syntax: `azure-eventhubs:namespace/eventHubName`
     
 
 Please refer to the above link for usage and configuration details.

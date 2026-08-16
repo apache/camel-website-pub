@@ -6,7 +6,7 @@ Manage AWS IAM instances.
 
 ## What’s inside
 
--   [AWS Identity and Access Management (IAM) component](../../../../components/next/aws2-iam-component.md), URI syntax: `aws2-iam:label`
+-   [AWS Identity and Access Management (IAM) component](../../../../components/4.22.x/aws2-iam-component.md), URI syntax: `aws2-iam:label`
     
 
 Please refer to the above link for usage and configuration details.

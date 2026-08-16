@@ -6,7 +6,7 @@ Interact with Twilio REST APIs using Twilio Java SDK.
 
 ## What’s inside
 
--   [Twilio component](../../../../components/next/twilio-component.md), URI syntax: `twilio:apiName/methodName`
+-   [Twilio component](../../../../components/4.22.x/twilio-component.md), URI syntax: `twilio:apiName/methodName`
     
 
 Please refer to the above link for usage and configuration details.

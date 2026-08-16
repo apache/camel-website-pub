@@ -6,7 +6,7 @@ Distributed tracing using OpenTelemetry
 
 ## What’s inside
 
--   [OpenTelemetry](../../../../components/next/others/opentelemetry.md)
+-   [OpenTelemetry](../../../../components/4.22.x/others/opentelemetry.md)
     
 
 Please refer to the above link for usage and configuration details.

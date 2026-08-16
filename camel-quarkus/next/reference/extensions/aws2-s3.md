@@ -6,7 +6,7 @@ Store and retrieve objects from AWS S3 Storage Service.
 
 ## What’s inside
 
--   [AWS S3 Storage Service component](../../../../components/next/aws2-s3-component.md), URI syntax: `aws2-s3://bucketNameOrArn`
+-   [AWS S3 Storage Service component](../../../../components/4.22.x/aws2-s3-component.md), URI syntax: `aws2-s3://bucketNameOrArn`
     
 
 Please refer to the above link for usage and configuration details.

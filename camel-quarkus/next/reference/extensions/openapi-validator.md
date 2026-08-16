@@ -6,7 +6,7 @@ OpenAPI validator for Camel Rest DSL
 
 ## What’s inside
 
--   [Openapi Validator](../../../../components/next/others/openapi-validator.md)
+-   [Openapi Validator](../../../../components/4.22.x/others/openapi-validator.md)
     
 
 Please refer to the above link for usage and configuration details.

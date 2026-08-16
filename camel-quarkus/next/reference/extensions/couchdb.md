@@ -6,7 +6,7 @@ Consume changesets for inserts, updates and deletes in a CouchDB database, as we
 
 ## What’s inside
 
--   [CouchDB component](../../../../components/next/couchdb-component.md), URI syntax: `couchdb:protocol:hostname:port/database`
+-   [CouchDB component](../../../../components/4.22.x/couchdb-component.md), URI syntax: `couchdb:protocol:hostname:port/database`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Perform operations on the Pinecone Vector Database.
 
 ## What’s inside
 
--   [Pinecone component](../../../../components/next/pinecone-component.md), URI syntax: `pinecone:collection`
+-   [Pinecone component](../../../../components/4.22.x/pinecone-component.md), URI syntax: `pinecone:collection`
     
 
 Please refer to the above link for usage and configuration details.

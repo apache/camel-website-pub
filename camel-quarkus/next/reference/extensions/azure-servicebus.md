@@ -6,7 +6,7 @@ Send and receive messages to/from Azure Service Bus.
 
 ## What’s inside
 
--   [Azure ServiceBus component](../../../../components/next/azure-servicebus-component.md), URI syntax: `azure-servicebus:topicOrQueueName`
+-   [Azure ServiceBus component](../../../../components/4.22.x/azure-servicebus-component.md), URI syntax: `azure-servicebus:topicOrQueueName`
     
 
 Please refer to the above link for usage and configuration details.

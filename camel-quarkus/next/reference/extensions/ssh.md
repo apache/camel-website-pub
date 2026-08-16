@@ -6,7 +6,7 @@ Execute commands on remote hosts using SSH.
 
 ## What’s inside
 
--   [SSH component](../../../../components/next/ssh-component.md), URI syntax: `ssh:host:port`
+-   [SSH component](../../../../components/4.22.x/ssh-component.md), URI syntax: `ssh:host:port`
     
 
 Please refer to the above link for usage and configuration details.

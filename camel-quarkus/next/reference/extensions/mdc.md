@@ -6,7 +6,7 @@ Logging MDC (Mapped Diagnostic Context) Service
 
 ## What’s inside
 
--   [MDC Logging](../../../../components/next/others/mdc.md)
+-   [MDC Logging](../../../../components/4.22.x/others/mdc.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Pass camel exchanges to acceptance test written in Robot DSL.
 
 ## What’s inside
 
--   [Robot Framework component](../../../../components/next/robotframework-component.md), URI syntax: `robotframework:resourceUri`
+-   [Robot Framework component](../../../../components/4.22.x/robotframework-component.md), URI syntax: `robotframework:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

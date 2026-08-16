@@ -6,7 +6,7 @@ Create, modify or extract content from PDF documents.
 
 ## What’s inside
 
--   [PDF component](../../../../components/next/pdf-component.md), URI syntax: `pdf:operation`
+-   [PDF component](../../../../components/4.22.x/pdf-component.md), URI syntax: `pdf:operation`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Access databases through SQL and JDBC.
 
 ## What’s inside
 
--   [JDBC component](../../../../components/next/jdbc-component.md), URI syntax: `jdbc:dataSourceName`
+-   [JDBC component](../../../../components/4.22.x/jdbc-component.md), URI syntax: `jdbc:dataSourceName`
     
 
 Please refer to the above link for usage and configuration details.

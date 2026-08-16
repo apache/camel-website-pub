@@ -6,7 +6,7 @@ Camel YAML DSL
 
 ## What’s inside
 
--   [YAML DSL](../../../../components/next/others/yaml-dsl.md)
+-   [YAML DSL](../../../../components/4.22.x/others/yaml-dsl.md)
     
 
 Please refer to the above link for usage and configuration details.

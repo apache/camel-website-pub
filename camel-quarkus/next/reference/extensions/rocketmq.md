@@ -6,7 +6,7 @@ Send and receive messages from RocketMQ cluster.
 
 ## What’s inside
 
--   [RocketMQ component](../../../../components/next/rocketmq-component.md), URI syntax: `rocketmq:topicName`
+-   [RocketMQ component](../../../../components/4.22.x/rocketmq-component.md), URI syntax: `rocketmq:topicName`
     
 
 Please refer to the above link for usage and configuration details.

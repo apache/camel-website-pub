@@ -6,7 +6,7 @@ Send and receive messages from RabbitMQ using the Spring RabbitMQ client.
 
 ## What’s inside
 
--   [Spring RabbitMQ component](../../../../components/next/spring-rabbitmq-component.md), URI syntax: `spring-rabbitmq:exchangeName`
+-   [Spring RabbitMQ component](../../../../components/4.22.x/spring-rabbitmq-component.md), URI syntax: `spring-rabbitmq:exchangeName`
     
 
 Please refer to the above link for usage and configuration details.

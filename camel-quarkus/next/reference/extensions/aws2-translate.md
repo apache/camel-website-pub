@@ -6,7 +6,7 @@ Translate texts using AWS Translate and AWS SDK version 2.x.
 
 ## What’s inside
 
--   [AWS Translate component](../../../../components/next/aws2-translate-component.md), URI syntax: `aws2-translate:label`
+-   [AWS Translate component](../../../../components/4.22.x/aws2-translate-component.md), URI syntax: `aws2-translate:label`
     
 
 Please refer to the above link for usage and configuration details.

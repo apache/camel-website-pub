@@ -6,7 +6,7 @@ Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool
 
 ## What’s inside
 
--   [AI Tool component](../../../../components/next/ai-tool-component.md), URI syntax: `ai-tool:toolName`
+-   [AI Tool component](../../../../components/4.22.x/ai-tool-component.md), URI syntax: `ai-tool:toolName`
     
 
 Please refer to the above link for usage and configuration details.
@@ -69,3 +69,7 @@ from("ai-tool:greet?description=Greet a user"
         + "&parameter.name=string&parameter.name.required=true")
     .setBody(simple("Hello, ${header.name}!"));
 ```
+
+### Who receives registered tools
+
+Camel agents (`langchain4j-agent` endpoints) receive registry tools only through their endpoint’s `tags` parameter — an agent without `tags` receives no registry tools (tools from the agent’s other sources, such as MCP clients or custom tool objects, are unaffected). Quarkus LangChain4j AI services (`@RegisterAiService` interfaces and programmatically built `AiServices`) receive every registered tool by default; restrict a service to a subset with the `@CamelAiTools` annotation.

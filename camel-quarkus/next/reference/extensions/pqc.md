@@ -6,9 +6,9 @@ Post Quantum Computing Signature and Verification component.
 
 ## What’s inside
 
--   [PQC (Post-Quantum Cryptography) data format](../../../../components/next/dataformats/pqc-dataformat.md)
+-   [PQC (Post-Quantum Cryptography) data format](../../../../components/4.22.x/dataformats/pqc-dataformat.md)
     
--   [PQC Algorithms component](../../../../components/next/pqc-component.md), URI syntax: `pqc:label`
+-   [PQC Algorithms component](../../../../components/4.22.x/pqc-component.md), URI syntax: `pqc:label`
     
 
 Please refer to the above links for usage and configuration details.

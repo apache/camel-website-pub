@@ -6,7 +6,7 @@ Serve HTTP requests by a Servlet.
 
 ## What’s inside
 
--   [Servlet component](../../../../components/next/servlet-component.md), URI syntax: `servlet:contextPath`
+-   [Servlet component](../../../../components/4.22.x/servlet-component.md), URI syntax: `servlet:contextPath`
     
 
 Please refer to the above link for usage and configuration details.

@@ -39,7 +39,7 @@ If all the above is set, then, you should be ready to pull and push from the con
 
 The procedure contains a script that will package the entire set of Camel K Runtime dependencies required by Maven build in order to run offline builds.
 
-It requires that the Maven version from where you’re running the scripts (likely your machine) is the same used in the Camel K operator target version (ie, 3.9.14 for Camel K version 2.10.0) - required to enforce reproducible builds. The script will download the correct version if needed.
+It requires that the Maven version from where you’re running the scripts (likely your machine) is the same used in the Camel K operator target version (ie, 3.9.14 for Camel K version 2.10.1) - required to enforce reproducible builds. The script will download the correct version if needed.
 
 It’s quite important to know that the operator will expect the dependencies to be owned by 1001 user. So, make sure that the script is executed by such a USER to avoid the maven build to fail due to privileges faults.
 

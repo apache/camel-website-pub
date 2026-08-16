@@ -6,9 +6,9 @@ Transform messages using an MVEL template.
 
 ## What’s inside
 
--   [MVEL component](../../../../components/next/mvel-component.md), URI syntax: `mvel:resourceUri`
+-   [MVEL component](../../../../components/4.22.x/mvel-component.md), URI syntax: `mvel:resourceUri`
     
--   [MVEL language](../../../../components/next/languages/mvel-language.md)
+-   [MVEL language](../../../../components/4.22.x/languages/mvel-language.md)
     
 
 Please refer to the above links for usage and configuration details.

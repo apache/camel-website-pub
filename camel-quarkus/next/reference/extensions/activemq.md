@@ -6,7 +6,7 @@ Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends t
 
 ## What’s inside
 
--   [ActiveMQ 5.x component](../../../../components/next/activemq-component.md), URI syntax: `activemq:destinationType:destinationName`
+-   [ActiveMQ 5.x component](../../../../components/4.22.x/activemq-component.md), URI syntax: `activemq:destinationType:destinationName`
     
 
 Please refer to the above link for usage and configuration details.

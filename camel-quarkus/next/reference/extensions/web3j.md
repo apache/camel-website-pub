@@ -6,7 +6,7 @@ Interact with Ethereum nodes using web3j client API.
 
 ## What’s inside
 
--   [Web3j Ethereum Blockchain component](../../../../components/next/web3j-component.md), URI syntax: `web3j:nodeAddress`
+-   [Web3j Ethereum Blockchain component](../../../../components/4.22.x/web3j-component.md), URI syntax: `web3j:nodeAddress`
     
 
 Please refer to the above link for usage and configuration details.

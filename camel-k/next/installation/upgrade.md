@@ -9,7 +9,7 @@ Camel K is delivering new features with each new release, so, you’ll be probab
 
 If you want to upgrade via [Kustomize](https://kustomize.io) you’ll need to execute the same installation procedure you did for the previous version and add the `--force-conflicts` flag which will take care to overwrite any conflicting configuration (ie, rewriting the CRDs). Here an example for a descoped (global) installation procedure:
 
-$ kubectl apply -k github.com/apache/camel-k/install/overlays/all-namespaces?ref=v2.10.0  --server-side --force-conflicts
+$ kubectl apply -k github.com/apache/camel-k/install/overlays/all-namespaces?ref=v2.10.1  --server-side --force-conflicts
 
 ## Upgrade via Operator Hub
 

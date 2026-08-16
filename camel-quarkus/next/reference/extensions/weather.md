@@ -6,7 +6,7 @@ Poll the weather information from Open Weather Map.
 
 ## What’s inside
 
--   [Weather component](../../../../components/next/weather-component.md), URI syntax: `weather:name`
+-   [Weather component](../../../../components/4.22.x/weather-component.md), URI syntax: `weather:name`
     
 
 Please refer to the above link for usage and configuration details.

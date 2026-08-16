@@ -6,7 +6,7 @@ Read and write from/to Infinispan distributed key/value store and data grid.
 
 ## What’s inside
 
--   [Infinispan component](../../../../components/next/infinispan-component.md), URI syntax: `infinispan:cacheName`
+-   [Infinispan component](../../../../components/4.22.x/infinispan-component.md), URI syntax: `infinispan:cacheName`
     
 
 Please refer to the above link for usage and configuration details.
@@ -32,7 +32,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 You can configure Camel Infinispan in one of two ways.
 
-1.  Using the relevant Camel Infinispan [component & endpoint options](../../../../components/next/infinispan-component.html#_component_options)
+1.  Using the relevant Camel Infinispan [component & endpoint options](../../../../components/4.22.x/infinispan-component.html#_component_options)
     
 2.  Using the [Quarkus Infinispan extension configuration properties](https://quarkus.io/guides/infinispan-client#configuration-reference).
     

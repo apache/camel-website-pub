@@ -6,11 +6,11 @@ Invoke Model of AWS Bedrock service.
 
 ## What’s inside
 
--   [AWS Bedrock component](../../../../components/next/aws-bedrock-component.md), URI syntax: `aws-bedrock:label`
+-   [AWS Bedrock component](../../../../components/4.22.x/aws-bedrock-component.md), URI syntax: `aws-bedrock:label`
     
--   [AWS Bedrock Agent component](../../../../components/next/aws-bedrock-agent-component.md), URI syntax: `aws-bedrock-agent:label`
+-   [AWS Bedrock Agent component](../../../../components/4.22.x/aws-bedrock-agent-component.md), URI syntax: `aws-bedrock-agent:label`
     
--   [AWS Bedrock Agent Runtime component](../../../../components/next/aws-bedrock-agent-runtime-component.md), URI syntax: `aws-bedrock-agent-runtime:label`
+-   [AWS Bedrock Agent Runtime component](../../../../components/4.22.x/aws-bedrock-agent-runtime-component.md), URI syntax: `aws-bedrock-agent-runtime:label`
     
 
 Please refer to the above links for usage and configuration details.

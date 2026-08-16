@@ -6,7 +6,7 @@ Capture changes from an Oracle database.
 
 ## What’s inside
 
--   [Debezium Oracle Connector component](../../../../components/next/debezium-oracle-component.md), URI syntax: `debezium-oracle:name`
+-   [Debezium Oracle Connector component](../../../../components/4.22.x/debezium-oracle-component.md), URI syntax: `debezium-oracle:name`
     
 
 Please refer to the above link for usage and configuration details.

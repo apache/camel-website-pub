@@ -6,7 +6,7 @@ Communicate with external systems using the MLLP protocol.
 
 ## What’s inside
 
--   [MLLP component](../../../../components/next/mllp-component.md), URI syntax: `mllp:hostname:port`
+-   [MLLP component](../../../../components/4.22.x/mllp-component.md), URI syntax: `mllp:hostname:port`
     
 
 Please refer to the above link for usage and configuration details.

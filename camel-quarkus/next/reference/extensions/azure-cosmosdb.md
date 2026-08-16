@@ -6,7 +6,7 @@ To read and write records to the CosmosDB database on Azure cloud platform.
 
 ## What’s inside
 
--   [Azure CosmosDB component](../../../../components/next/azure-cosmosdb-component.md), URI syntax: `azure-cosmosdb:databaseName/containerName`
+-   [Azure CosmosDB component](../../../../components/4.22.x/azure-cosmosdb-component.md), URI syntax: `azure-cosmosdb:databaseName/containerName`
     
 
 Please refer to the above link for usage and configuration details.

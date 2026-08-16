@@ -6,7 +6,7 @@ Security using Shiro
 
 ## What’s inside
 
--   [Shiro](../../../../components/next/others/shiro.md)
+-   [Shiro](../../../../components/4.22.x/others/shiro.md)
     
 
 Please refer to the above link for usage and configuration details.

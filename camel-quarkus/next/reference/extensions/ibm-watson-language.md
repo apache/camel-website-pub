@@ -6,7 +6,7 @@ Perform natural language processing using IBM Watson Natural Language Understand
 
 ## What’s inside
 
--   [IBM Watson Language component](../../../../components/next/ibm-watson-language-component.md), URI syntax: `ibm-watson-language:label`
+-   [IBM Watson Language component](../../../../components/4.22.x/ibm-watson-language-component.md), URI syntax: `ibm-watson-language:label`
     
 
 Please refer to the above link for usage and configuration details.

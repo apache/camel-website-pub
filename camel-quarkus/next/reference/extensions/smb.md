@@ -6,7 +6,7 @@ Read and write files to Server Message Block (SMB) file shares.
 
 ## What’s inside
 
--   [SMB component](../../../../components/next/smb-component.md), URI syntax: `smb:hostname:port/shareName/path`
+-   [SMB component](../../../../components/4.22.x/smb-component.md), URI syntax: `smb:hostname:port/shareName/path`
     
 
 Please refer to the above link for usage and configuration details.

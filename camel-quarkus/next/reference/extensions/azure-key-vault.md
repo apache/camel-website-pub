@@ -6,7 +6,7 @@ Manage secrets and keys in Azure Key Vault Service
 
 ## What’s inside
 
--   [Azure Key Vault component](../../../../components/next/azure-key-vault-component.md), URI syntax: `azure-key-vault:vaultName`
+-   [Azure Key Vault component](../../../../components/4.22.x/azure-key-vault-component.md), URI syntax: `azure-key-vault:vaultName`
     
 
 Please refer to the above link for usage and configuration details.

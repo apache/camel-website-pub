@@ -6,7 +6,7 @@ Infer Deep Learning models from message exchanges data using Deep Java Library (
 
 ## What’s inside
 
--   [Deep Java Library component](../../../../components/next/djl-component.md), URI syntax: `djl:application`
+-   [Deep Java Library component](../../../../components/4.22.x/djl-component.md), URI syntax: `djl:application`
     
 
 Please refer to the above link for usage and configuration details.

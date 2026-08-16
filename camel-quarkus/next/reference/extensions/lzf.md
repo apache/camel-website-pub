@@ -6,7 +6,7 @@ Compress and decompress streams using LZF deflate algorithm
 
 ## What’s inside
 
--   [LZF Deflate Compression data format](../../../../components/next/dataformats/lzf-dataformat.md)
+-   [LZF Deflate Compression data format](../../../../components/4.22.x/dataformats/lzf-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

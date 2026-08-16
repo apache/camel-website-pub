@@ -8,7 +8,7 @@ It is built on top of the Eclipse Vert.x HTTP server provided by the `quarkus-ve
 
 ## What’s inside
 
--   [Platform HTTP component](../../../../components/next/platform-http-component.md), URI syntax: `platform-http:path`
+-   [Platform HTTP component](../../../../components/4.22.x/platform-http-component.md), URI syntax: `platform-http:path`
     
 
 Please refer to the above link for usage and configuration details.

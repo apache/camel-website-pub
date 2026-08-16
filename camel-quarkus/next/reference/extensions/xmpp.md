@@ -6,7 +6,7 @@ Send and receive messages to/from an XMPP chat server.
 
 ## What’s inside
 
--   [XMPP component](../../../../components/next/xmpp-component.md), URI syntax: `xmpp:host:port/participant`
+-   [XMPP component](../../../../components/4.22.x/xmpp-component.md), URI syntax: `xmpp:host:port/participant`
     
 
 Please refer to the above link for usage and configuration details.

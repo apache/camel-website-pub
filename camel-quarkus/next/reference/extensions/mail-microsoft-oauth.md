@@ -6,7 +6,7 @@ Camel Mail OAuth2 Authenticator for Microsoft Exchange Online
 
 ## What’s inside
 
--   [Mail Microsoft Oauth](../../../../components/next/others/mail-microsoft-oauth.md)
+-   [Mail Microsoft Oauth](../../../../components/4.22.x/others/mail-microsoft-oauth.md)
     
 
 Please refer to the above link for usage and configuration details.

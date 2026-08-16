@@ -6,7 +6,7 @@ Evaluates a Python expression
 
 ## What’s inside
 
--   [Python language](../../../../components/next/languages/python-language.md)
+-   [Python language](../../../../components/4.22.x/languages/python-language.md)
     
 
 Please refer to the above link for usage and configuration details.

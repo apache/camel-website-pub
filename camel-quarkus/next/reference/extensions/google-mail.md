@@ -6,9 +6,9 @@ Manage messages in Google Mail.
 
 ## What’s inside
 
--   [Google Mail component](../../../../components/next/google-mail-component.md), URI syntax: `google-mail:apiName/methodName`
+-   [Google Mail component](../../../../components/4.22.x/google-mail-component.md), URI syntax: `google-mail:apiName/methodName`
     
--   [Google Mail Stream component](../../../../components/next/google-mail-stream-component.md), URI syntax: `google-mail-stream:index`
+-   [Google Mail Stream component](../../../../components/4.22.x/google-mail-stream-component.md), URI syntax: `google-mail-stream:index`
     
 
 Please refer to the above links for usage and configuration details.

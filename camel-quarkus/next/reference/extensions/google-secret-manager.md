@@ -6,7 +6,7 @@ Manage Google Secret Manager Secrets
 
 ## What’s inside
 
--   [Google Secret Manager component](../../../../components/next/google-secret-manager-component.md), URI syntax: `google-secret-manager:project`
+-   [Google Secret Manager component](../../../../components/4.22.x/google-secret-manager-component.md), URI syntax: `google-secret-manager:project`
     
 
 Please refer to the above link for usage and configuration details.

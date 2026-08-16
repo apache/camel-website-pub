@@ -6,7 +6,7 @@ Expose SOAP WebServices using Apache CXF or connect to external WebServices usin
 
 ## What’s inside
 
--   [CXF component](../../../../components/next/cxf-component.md), URI syntax: `cxf:beanId:address`
+-   [CXF component](../../../../components/4.22.x/cxf-component.md), URI syntax: `cxf:beanId:address`
     
 
 Please refer to the above link for usage and configuration details.

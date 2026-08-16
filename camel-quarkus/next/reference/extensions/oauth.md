@@ -6,7 +6,7 @@ Camel OAuth (Preview)
 
 ## What’s inside
 
--   [Oauth](../../../../components/next/others/oauth.md)
+-   [Oauth](../../../../components/4.22.x/others/oauth.md)
     
 
 Please refer to the above link for usage and configuration details.

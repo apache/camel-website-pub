@@ -6,7 +6,7 @@ To call Kamelets
 
 ## What’s inside
 
--   [Kamelet component](../../../../components/next/kamelet-component.md), URI syntax: `kamelet:templateId/routeId`
+-   [Kamelet component](../../../../components/4.22.x/kamelet-component.md), URI syntax: `kamelet:templateId/routeId`
     
 
 Please refer to the above link for usage and configuration details.

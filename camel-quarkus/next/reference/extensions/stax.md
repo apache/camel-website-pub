@@ -6,9 +6,9 @@ Process XML payloads by a SAX ContentHandler.
 
 ## What’s inside
 
--   [StAX component](../../../../components/next/stax-component.md), URI syntax: `stax:contentHandlerClass`
+-   [StAX component](../../../../components/4.22.x/stax-component.md), URI syntax: `stax:contentHandlerClass`
     
--   [XML Tokenize language](../../../../components/next/languages/xtokenize-language.md)
+-   [XML Tokenize language](../../../../components/4.22.x/languages/xtokenize-language.md)
     
 
 Please refer to the above links for usage and configuration details.

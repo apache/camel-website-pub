@@ -6,7 +6,7 @@ Use a Camel Data Format as a regular Camel Component. For more details of the su
 
 ## What’s inside
 
--   [Data Format component](../../../../components/next/dataformat-component.md), URI syntax: `dataformat:name:operation`
+-   [Data Format component](../../../../components/4.22.x/dataformat-component.md), URI syntax: `dataformat:name:operation`
     
 
 Please refer to the above link for usage and configuration details.

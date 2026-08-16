@@ -6,7 +6,7 @@ Compiled Simple language
 
 ## What’s inside
 
--   [CSimple language](../../../../components/next/languages/csimple-language.md)
+-   [CSimple language](../../../../components/4.22.x/languages/csimple-language.md)
     
 
 Please refer to the above link for usage and configuration details.

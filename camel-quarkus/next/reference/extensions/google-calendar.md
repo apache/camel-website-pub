@@ -6,9 +6,9 @@ Perform various operations on a Google Calendar.
 
 ## What’s inside
 
--   [Google Calendar component](../../../../components/next/google-calendar-component.md), URI syntax: `google-calendar:apiName/methodName`
+-   [Google Calendar component](../../../../components/4.22.x/google-calendar-component.md), URI syntax: `google-calendar:apiName/methodName`
     
--   [Google Calendar Stream component](../../../../components/next/google-calendar-stream-component.md), URI syntax: `google-calendar-stream:index`
+-   [Google Calendar Stream component](../../../../components/4.22.x/google-calendar-stream-component.md), URI syntax: `google-calendar-stream:index`
     
 
 Please refer to the above links for usage and configuration details.

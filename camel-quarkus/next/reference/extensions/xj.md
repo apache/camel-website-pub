@@ -6,7 +6,7 @@ Transform JSON and XML message using a XSLT.
 
 ## What’s inside
 
--   [XJ component](../../../../components/next/xj-component.md), URI syntax: `xj:resourceUri`
+-   [XJ component](../../../../components/4.22.x/xj-component.md), URI syntax: `xj:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

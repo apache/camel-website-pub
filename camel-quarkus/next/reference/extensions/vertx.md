@@ -6,7 +6,7 @@ Send and receive messages to/from Vert.x Event Bus.
 
 ## What’s inside
 
--   [Vert.x component](../../../../components/next/vertx-component.md), URI syntax: `vertx:address`
+-   [Vert.x component](../../../../components/4.22.x/vertx-component.md), URI syntax: `vertx:address`
     
 
 Please refer to the above link for usage and configuration details.

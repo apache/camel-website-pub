@@ -6,7 +6,7 @@ Marshal POJOs to JSON and back using Gson
 
 ## What’s inside
 
--   [JSON Gson data format](../../../../components/next/dataformats/gson-dataformat.md)
+-   [JSON Gson data format](../../../../components/4.22.x/dataformats/gson-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

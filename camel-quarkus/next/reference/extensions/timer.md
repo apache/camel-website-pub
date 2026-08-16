@@ -6,7 +6,7 @@ Generate messages in specified intervals using java.util.Timer.
 
 ## What’s inside
 
--   [Timer component](../../../../components/next/timer-component.md), URI syntax: `timer:timerName`
+-   [Timer component](../../../../components/4.22.x/timer-component.md), URI syntax: `timer:timerName`
     
 
 Please refer to the above link for usage and configuration details.

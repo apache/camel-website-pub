@@ -6,7 +6,7 @@ Get notified about file events in a directory using java.nio.file.WatchService.
 
 ## What’s inside
 
--   [File Watch component](../../../../components/next/file-watch-component.md), URI syntax: `file-watch:path`
+-   [File Watch component](../../../../components/4.22.x/file-watch-component.md), URI syntax: `file-watch:path`
     
 
 Please refer to the above link for usage and configuration details.

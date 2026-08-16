@@ -6,7 +6,7 @@ Perform DNS queries using DNSJava.
 
 ## What’s inside
 
--   [DNS component](../../../../components/next/dns-component.md), URI syntax: `dns:dnsType`
+-   [DNS component](../../../../components/4.22.x/dns-component.md), URI syntax: `dns:dnsType`
     
 
 Please refer to the above link for usage and configuration details.

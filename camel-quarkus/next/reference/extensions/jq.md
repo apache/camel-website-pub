@@ -6,7 +6,7 @@ Evaluates a JQ expression against a JSON message body
 
 ## What’s inside
 
--   [JQ language](../../../../components/next/languages/jq-language.md)
+-   [JQ language](../../../../components/4.22.x/languages/jq-language.md)
     
 
 Please refer to the above link for usage and configuration details.

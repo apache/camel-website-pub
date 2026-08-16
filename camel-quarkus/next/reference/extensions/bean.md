@@ -6,11 +6,11 @@ Invoke methods of Java beans
 
 ## What’s inside
 
--   [Bean component](../../../../components/next/bean-component.md), URI syntax: `bean:beanName`
+-   [Bean component](../../../../components/4.22.x/bean-component.md), URI syntax: `bean:beanName`
     
--   [Bean Method language](../../../../components/next/languages/bean-language.md)
+-   [Bean Method language](../../../../components/4.22.x/languages/bean-language.md)
     
--   [Class component](../../../../components/next/class-component.md), URI syntax: `class:beanName`
+-   [Class component](../../../../components/4.22.x/class-component.md), URI syntax: `class:beanName`
     
 
 Please refer to the above links for usage and configuration details.

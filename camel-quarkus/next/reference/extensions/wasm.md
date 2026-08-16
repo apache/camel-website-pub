@@ -6,9 +6,9 @@ Invoke Wasm functions.
 
 ## What’s inside
 
--   [Wasm component](../../../../components/next/wasm-component.md), URI syntax: `wasm:functionName`
+-   [Wasm component](../../../../components/4.22.x/wasm-component.md), URI syntax: `wasm:functionName`
     
--   [Wasm language](../../../../components/next/languages/wasm-language.md)
+-   [Wasm language](../../../../components/4.22.x/languages/wasm-language.md)
     
 
 Please refer to the above links for usage and configuration details.

@@ -6,7 +6,7 @@ Micrometer Observability implementation of Camel Telemetry
 
 ## What’s inside
 
--   [Micrometer Observability 2](../../../../components/next/others/micrometer-observability.md)
+-   [Micrometer Observability 2](../../../../components/4.22.x/others/micrometer-observability.md)
     
 
 Please refer to the above link for usage and configuration details.
@@ -30,7 +30,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 The extension automatically creates a `MicrometerObservabilityTracer` and binds it to the Camel registry. It bridges Camel’s telemetry SPI to Micrometer Tracing via the OTel bridge, using the `OpenTelemetry` CDI bean provided by `quarkus-opentelemetry` (pulled in transitively).
 
-Refer to the [Micrometer Observability 2](../../../../components/next/others/micrometer-observability.md) documentation for full details on tracing configuration. The following Quarkus config properties map directly to the tracer options described there:
+Refer to the [Micrometer Observability 2](../../../../components/4.22.x/others/micrometer-observability.md) documentation for full details on tracing configuration. The following Quarkus config properties map directly to the tracer options described there:
 
 ```properties
 quarkus.camel.micrometer-observability.exclude-patterns=direct:*,timer:*

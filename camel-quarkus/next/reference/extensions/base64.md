@@ -6,7 +6,7 @@ Encode and decode data using Base64
 
 ## What’s inside
 
--   [Base64 data format](../../../../components/next/dataformats/base64-dataformat.md)
+-   [Base64 data format](../../../../components/4.22.x/dataformats/base64-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Find geocodes (latitude and longitude) for a given address or the other way roun
 
 ## What’s inside
 
--   [Geocoder component](../../../../components/next/geocoder-component.md), URI syntax: `geocoder:address:latlng`
+-   [Geocoder component](../../../../components/4.22.x/geocoder-component.md), URI syntax: `geocoder:address:latlng`
     
 
 Please refer to the above link for usage and configuration details.

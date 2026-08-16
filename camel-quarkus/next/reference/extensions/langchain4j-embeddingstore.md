@@ -6,7 +6,7 @@ Perform operations on the LangChain4jEmbeddingStores.
 
 ## What’s inside
 
--   [LangChain4j Embedding Store component](../../../../components/next/langchain4j-embeddingstore-component.md), URI syntax: `langchain4j-embeddingstore:embeddingStoreId`
+-   [LangChain4j Embedding Store component](../../../../components/4.22.x/langchain4j-embeddingstore-component.md), URI syntax: `langchain4j-embeddingstore:embeddingStoreId`
     
 
 Please refer to the above link for usage and configuration details.
@@ -25,6 +25,21 @@ Or add the coordinates to your existing project:
 ```
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
+
+## Usage
+
+### Named embedding stores from Quarkus LangChain4j
+
+When the [Quarkus LangChain4j](https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.md) extensions are present, any `EmbeddingStore` CDI bean qualified with `@EmbeddingStoreName` is automatically bound into the Camel registry under its qualifier value. This covers both stores declared through Quarkus LangChain4j named configuration (for example `quarkus.langchain4j.pgvector.products.\*`) and stores produced by your own `@Produces` methods.
+
+Such a store can be referenced from a route by name, with no manual registry binding:
+
+```java
+from("direct:ingest-products")
+    .to("langchain4j-embeddingstore:products?embeddingStore=#products&embeddingModel=#embeddingModel");
+```
+
+A store only referenced from routes does not need to be injected anywhere in Java code; it is retained and instantiated lazily on first use. If the Camel registry already resolves a different `EmbeddingStore` under the same name (for example a `@Named` bean), that existing bean keeps winning lookups and a warning is logged at startup.
 
 ## LangChain4j usage
 

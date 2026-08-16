@@ -6,7 +6,7 @@ Solve planning problems with OptaPlanner.
 
 ## What’s inside
 
--   [OptaPlanner component](../../../../components/next/optaplanner-component.md), URI syntax: `optaplanner:problemName`
+-   [OptaPlanner component](../../../../components/4.22.x/optaplanner-component.md), URI syntax: `optaplanner:problemName`
     
 
 Please refer to the above link for usage and configuration details.

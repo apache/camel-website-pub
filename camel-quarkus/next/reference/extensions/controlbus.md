@@ -6,7 +6,7 @@ Manage and monitor Camel routes.
 
 ## What’s inside
 
--   [Control Bus component](../../../../components/next/controlbus-component.md), URI syntax: `controlbus:command:language`
+-   [Control Bus component](../../../../components/4.22.x/controlbus-component.md), URI syntax: `controlbus:command:language`
     
 
 Please refer to the above link for usage and configuration details.

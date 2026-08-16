@@ -6,7 +6,7 @@ Send print jobs to printers.
 
 ## What’s inside
 
--   [Printer component](../../../../components/next/lpr-component.md), URI syntax: `lpr:hostname:port/printername`
+-   [Printer component](../../../../components/4.22.x/lpr-component.md), URI syntax: `lpr:hostname:port/printername`
     
 
 Please refer to the above link for usage and configuration details.

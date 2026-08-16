@@ -6,7 +6,7 @@ Detect and parse documents using Workday.
 
 ## What’s inside
 
--   [Workday component](../../../../components/next/workday-component.md), URI syntax: `workday:entity:path`
+-   [Workday component](../../../../components/4.22.x/workday-component.md), URI syntax: `workday:entity:path`
     
 
 Please refer to the above link for usage and configuration details.

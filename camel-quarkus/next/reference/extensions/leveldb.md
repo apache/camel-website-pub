@@ -6,7 +6,7 @@ Using LevelDB as persistent EIP store
 
 ## What’s inside
 
--   [LevelDB](../../../../components/next/others/leveldb.md)
+-   [LevelDB](../../../../components/4.22.x/others/leveldb.md)
     
 
 Please refer to the above link for usage and configuration details.

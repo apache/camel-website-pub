@@ -6,11 +6,11 @@ Send tweets and receive tweets, direct messages and access Twitter Search
 
 ## What’s inside
 
--   [Twitter Direct Message component](../../../../components/next/twitter-directmessage-component.md), URI syntax: `twitter-directmessage:user`
+-   [Twitter Direct Message component](../../../../components/4.22.x/twitter-directmessage-component.md), URI syntax: `twitter-directmessage:user`
     
--   [Twitter Search component](../../../../components/next/twitter-search-component.md), URI syntax: `twitter-search:keywords`
+-   [Twitter Search component](../../../../components/4.22.x/twitter-search-component.md), URI syntax: `twitter-search:keywords`
     
--   [Twitter Timeline component](../../../../components/next/twitter-timeline-component.md), URI syntax: `twitter-timeline:timelineType`
+-   [Twitter Timeline component](../../../../components/4.22.x/twitter-timeline-component.md), URI syntax: `twitter-timeline:timelineType`
     
 
 Please refer to the above links for usage and configuration details.

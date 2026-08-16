@@ -6,7 +6,7 @@ Exchange messages with reactive stream processing libraries compatible with the 
 
 ## What’s inside
 
--   [Reactive Streams component](../../../../components/next/reactive-streams-component.md), URI syntax: `reactive-streams:stream`
+-   [Reactive Streams component](../../../../components/4.22.x/reactive-streams-component.md), URI syntax: `reactive-streams:stream`
     
 
 Please refer to the above link for usage and configuration details.

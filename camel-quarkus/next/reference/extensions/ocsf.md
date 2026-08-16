@@ -6,7 +6,7 @@ Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events
 
 ## What’s inside
 
--   [OCSF data format](../../../../components/next/dataformats/ocsf-dataformat.md)
+-   [OCSF data format](../../../../components/4.22.x/dataformats/ocsf-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

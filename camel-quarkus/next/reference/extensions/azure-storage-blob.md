@@ -6,7 +6,7 @@ Store and retrieve blobs from Azure Storage Blob Service.
 
 ## What’s inside
 
--   [Azure Storage Blob Service component](../../../../components/next/azure-storage-blob-component.md), URI syntax: `azure-storage-blob:accountName/containerName`
+-   [Azure Storage Blob Service component](../../../../components/4.22.x/azure-storage-blob-component.md), URI syntax: `azure-storage-blob:accountName/containerName`
     
 
 Please refer to the above link for usage and configuration details.

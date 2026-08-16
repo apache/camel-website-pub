@@ -6,7 +6,7 @@ Circuit Breaker EIP using MicroProfile Fault Tolerance
 
 ## What’s inside
 
--   [Microprofile Fault Tolerance](../../../../components/next/others/microprofile-fault-tolerance.md)
+-   [Microprofile Fault Tolerance](../../../../components/4.22.x/others/microprofile-fault-tolerance.md)
     
 
 Please refer to the above link for usage and configuration details.

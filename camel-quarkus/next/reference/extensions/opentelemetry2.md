@@ -6,7 +6,7 @@ Implementation of Camel Opentelemetry based on the Camel Telemetry spec
 
 ## What’s inside
 
--   [Opentelemetry2](../../../../components/next/others/opentelemetry2.md)
+-   [Opentelemetry2](../../../../components/4.22.x/others/opentelemetry2.md)
     
 
 Please refer to the above link for usage and configuration details.

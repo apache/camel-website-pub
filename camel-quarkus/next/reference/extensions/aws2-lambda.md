@@ -6,7 +6,7 @@ Manage and invoke AWS Lambda functions.
 
 ## What’s inside
 
--   [AWS Lambda component](../../../../components/next/aws2-lambda-component.md), URI syntax: `aws2-lambda:function`
+-   [AWS Lambda component](../../../../components/4.22.x/aws2-lambda-component.md), URI syntax: `aws2-lambda:function`
     
 
 Please refer to the above link for usage and configuration details.

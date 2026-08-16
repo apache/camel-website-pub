@@ -6,7 +6,7 @@ Transforms JSON payload using JSONata transformation.
 
 ## What’s inside
 
--   [JSONata component](../../../../components/next/jsonata-component.md), URI syntax: `jsonata:resourceUri`
+-   [JSONata component](../../../../components/4.22.x/jsonata-component.md), URI syntax: `jsonata:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

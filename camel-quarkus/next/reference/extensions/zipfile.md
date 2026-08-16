@@ -6,7 +6,7 @@ Compression and decompress streams using java.util.zip.Zip\*Stream
 
 ## What’s inside
 
--   [Zip File data format](../../../../components/next/dataformats/zipFile-dataformat.md)
+-   [Zip File data format](../../../../components/4.22.x/dataformats/zipFile-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

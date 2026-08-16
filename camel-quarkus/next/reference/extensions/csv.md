@@ -6,7 +6,7 @@ Handle CSV (Comma Separated Values) payloads
 
 ## What’s inside
 
--   [CSV data format](../../../../components/next/dataformats/csv-dataformat.md)
+-   [CSV data format](../../../../components/4.22.x/dataformats/csv-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Camel saga binding for Long-Running-Action framework
 
 ## What’s inside
 
--   [LRA](../../../../components/next/others/lra.md)
+-   [LRA](../../../../components/4.22.x/others/lra.md)
     
 
 Please refer to the above link for usage and configuration details.

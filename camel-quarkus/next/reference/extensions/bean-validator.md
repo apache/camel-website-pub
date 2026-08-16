@@ -6,7 +6,7 @@ Validate the message body using the Java Bean Validation API.
 
 ## What’s inside
 
--   [Bean Validator component](../../../../components/next/bean-validator-component.md), URI syntax: `bean-validator:label`
+-   [Bean Validator component](../../../../components/4.22.x/bean-validator-component.md), URI syntax: `bean-validator:label`
     
 
 Please refer to the above link for usage and configuration details.

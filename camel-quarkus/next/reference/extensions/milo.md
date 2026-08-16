@@ -6,11 +6,11 @@ Connect to OPC UA servers using the binary protocol for browsing the node tree.
 
 ## What’s inside
 
--   [OPC UA Browser component](../../../../components/next/milo-browse-component.md), URI syntax: `milo-browse:endpointUri`
+-   [OPC UA Browser component](../../../../components/4.22.x/milo-browse-component.md), URI syntax: `milo-browse:endpointUri`
     
--   [OPC UA Client component](../../../../components/next/milo-client-component.md), URI syntax: `milo-client:endpointUri`
+-   [OPC UA Client component](../../../../components/4.22.x/milo-client-component.md), URI syntax: `milo-client:endpointUri`
     
--   [OPC UA Server component](../../../../components/next/milo-server-component.md), URI syntax: `milo-server:itemId`
+-   [OPC UA Server component](../../../../components/4.22.x/milo-server-component.md), URI syntax: `milo-server:itemId`
     
 
 Please refer to the above links for usage and configuration details.

@@ -6,7 +6,7 @@ Publish or search for events in Splunk.
 
 ## What’s inside
 
--   [Splunk component](../../../../components/next/splunk-component.md), URI syntax: `splunk:name`
+-   [Splunk component](../../../../components/4.22.x/splunk-component.md), URI syntax: `splunk:name`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Perform operations against Apache Lucene Solr.
 
 ## What’s inside
 
--   [Solr component](../../../../components/next/solr-component.md), URI syntax: `solr:host:port/basePath`
+-   [Solr component](../../../../components/4.22.x/solr-component.md), URI syntax: `solr:host:port/basePath`
     
 
 Please refer to the above link for usage and configuration details.

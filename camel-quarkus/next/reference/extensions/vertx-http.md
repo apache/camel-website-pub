@@ -6,7 +6,7 @@ Send requests to external HTTP servers using Vert.x
 
 ## What’s inside
 
--   [Vert.x HTTP Client component](../../../../components/next/vertx-http-component.md), URI syntax: `vertx-http:httpUri`
+-   [Vert.x HTTP Client component](../../../../components/4.22.x/vertx-http-component.md), URI syntax: `vertx-http:httpUri`
     
 
 Please refer to the above link for usage and configuration details.

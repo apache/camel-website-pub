@@ -6,7 +6,7 @@ Exchange messages with JGroups clusters.
 
 ## What’s inside
 
--   [JGroups component](../../../../components/next/jgroups-component.md), URI syntax: `jgroups:clusterName`
+-   [JGroups component](../../../../components/4.22.x/jgroups-component.md), URI syntax: `jgroups:clusterName`
     
 
 Please refer to the above link for usage and configuration details.

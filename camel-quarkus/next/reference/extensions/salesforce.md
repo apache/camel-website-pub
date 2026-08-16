@@ -6,7 +6,7 @@ Communicate with Salesforce using Java DTOs.
 
 ## What’s inside
 
--   [Salesforce component](../../../../components/next/salesforce-component.md), URI syntax: `salesforce:operationName:topicName`
+-   [Salesforce component](../../../../components/4.22.x/salesforce-component.md), URI syntax: `salesforce:operationName:topicName`
     
 
 Please refer to the above link for usage and configuration details.

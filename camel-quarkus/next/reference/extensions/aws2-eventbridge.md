@@ -6,7 +6,7 @@ Manage AWS EventBridge cluster instances and consume events via SQS-backed polli
 
 ## What’s inside
 
--   [AWS Eventbridge component](../../../../components/next/aws2-eventbridge-component.md), URI syntax: `aws2-eventbridge://eventbusNameOrArn`
+-   [AWS Eventbridge component](../../../../components/4.22.x/aws2-eventbridge-component.md), URI syntax: `aws2-eventbridge://eventbusNameOrArn`
     
 
 Please refer to the above link for usage and configuration details.

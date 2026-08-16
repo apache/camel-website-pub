@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1786520223161,
+  "generated": 1786871372497,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -10089,6 +10089,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/rest-postman.adoc",
+              "url": "/camel-spring-boot/next/starters/rest-postman.html",
+              "title": "REST Postman"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/rest.adoc",
               "url": "/camel-spring-boot/next/starters/rest.html",
               "title": "REST"
@@ -10458,6 +10464,12 @@
               "path": "starters/twitter.adoc",
               "url": "/camel-spring-boot/next/starters/twitter.html",
               "title": "Twitter Direct Message"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ubl.adoc",
+              "url": "/camel-spring-boot/next/starters/ubl.html",
+              "title": "UBL"
             },
             {
               "module": "ROOT",
@@ -13627,6 +13639,12 @@
             },
             {
               "module": "dataformats",
+              "path": "ubl-dataformat.adoc",
+              "url": "/components/next/dataformats/ubl-dataformat.html",
+              "title": "UBL"
+            },
+            {
+              "module": "dataformats",
               "path": "univocityCsv-dataformat.adoc",
               "url": "/components/next/dataformats/univocityCsv-dataformat.html",
               "title": "uniVocity CSV"
@@ -14557,6 +14575,12 @@
             },
             {
               "module": "others",
+              "path": "ai-observability.adoc",
+              "url": "/components/next/others/ai-observability.html",
+              "title": "AI Observability"
+            },
+            {
+              "module": "others",
               "path": "attachments.adoc",
               "url": "/components/next/others/attachments.html",
               "title": "Attachments"
@@ -14919,7 +14943,7 @@
               "module": "others",
               "path": "openai-operations.adoc",
               "url": "/components/next/others/openai-operations.html",
-              "title": "OpenAI - Embeddings and Audio Operations"
+              "title": "OpenAI - Embeddings, Moderation and Audio Operations"
             },
             {
               "module": "others",
@@ -15208,6 +15232,42 @@
               "path": "ai-tool-component.adoc",
               "url": "/components/next/ai-tool-component.html",
               "title": "AI Tool"
+            },
+            {
+              "module": "ROOT",
+              "path": "alibaba-eventbridge-component.adoc",
+              "url": "/components/next/alibaba-eventbridge-component.html",
+              "title": "Alibaba EventBridge"
+            },
+            {
+              "module": "ROOT",
+              "path": "alibaba-fc-component.adoc",
+              "url": "/components/next/alibaba-fc-component.html",
+              "title": "Alibaba Function Compute (FC)"
+            },
+            {
+              "module": "ROOT",
+              "path": "alibaba-kms-component.adoc",
+              "url": "/components/next/alibaba-kms-component.html",
+              "title": "Alibaba Key Management Service (KMS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "alibaba-mns-component.adoc",
+              "url": "/components/next/alibaba-mns-component.html",
+              "title": "Alibaba Message Service (MNS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "alibaba-oss-component.adoc",
+              "url": "/components/next/alibaba-oss-component.html",
+              "title": "Alibaba Object Storage Service (OSS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "alibaba-sms-component.adoc",
+              "url": "/components/next/alibaba-sms-component.html",
+              "title": "Alibaba Short Message Service (SMS)"
             },
             {
               "module": "ROOT",
@@ -17122,6 +17182,12 @@
               "path": "rest-openapi-component.adoc",
               "url": "/components/next/rest-openapi-component.html",
               "title": "REST OpenApi"
+            },
+            {
+              "module": "ROOT",
+              "path": "rest-postman-component.adoc",
+              "url": "/components/next/rest-postman-component.html",
+              "title": "REST Postman"
             },
             {
               "module": "ROOT",

@@ -6,7 +6,7 @@ Transform messages using Chunk templating engine.
 
 ## What’s inside
 
--   [Chunk component](../../../../components/next/chunk-component.md), URI syntax: `chunk:resourceUri`
+-   [Chunk component](../../../../components/4.22.x/chunk-component.md), URI syntax: `chunk:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

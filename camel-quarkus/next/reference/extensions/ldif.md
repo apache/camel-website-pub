@@ -6,7 +6,7 @@ Perform updates on an LDAP server from an LDIF body content.
 
 ## What’s inside
 
--   [LDIF component](../../../../components/next/ldif-component.md), URI syntax: `ldif:ldapConnectionName`
+-   [LDIF component](../../../../components/4.22.x/ldif-component.md), URI syntax: `ldif:ldapConnectionName`
     
 
 Please refer to the above link for usage and configuration details.

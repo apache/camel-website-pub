@@ -6,7 +6,7 @@ Encrypt and decrypt messages using Java Cryptographic Extension (JCE) and PGP
 
 ## What’s inside
 
--   [PGP (Pretty Good Privacy Cryptographic) data format](../../../../components/next/dataformats/pgp-dataformat.md)
+-   [PGP (Pretty Good Privacy Cryptographic) data format](../../../../components/4.22.x/dataformats/pgp-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

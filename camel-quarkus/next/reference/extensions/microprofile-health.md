@@ -6,7 +6,7 @@ Expose Camel health checks via MicroProfile Health
 
 ## What’s inside
 
--   [Microprofile Health](../../../../components/next/others/microprofile-health.md)
+-   [Microprofile Health](../../../../components/4.22.x/others/microprofile-health.md)
     
 
 Please refer to the above link for usage and configuration details.

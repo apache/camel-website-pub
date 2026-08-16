@@ -6,7 +6,7 @@ Execute commands on the underlying operating system.
 
 ## What’s inside
 
--   [Exec component](../../../../components/next/exec-component.md), URI syntax: `exec:executable`
+-   [Exec component](../../../../components/4.22.x/exec-component.md), URI syntax: `exec:executable`
     
 
 Please refer to the above link for usage and configuration details.

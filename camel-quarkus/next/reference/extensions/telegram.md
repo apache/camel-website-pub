@@ -6,7 +6,7 @@ Send and receive messages using the Telegram Bot API.
 
 ## What’s inside
 
--   [Telegram component](../../../../components/next/telegram-component.md), URI syntax: `telegram:type`
+-   [Telegram component](../../../../components/4.22.x/telegram-component.md), URI syntax: `telegram:type`
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Query Couchbase databases using SQL (N1QL) queries or MapReduce Views with a pol
 
 ## What’s inside
 
--   [Couchbase component](../../../../components/next/couchbase-component.md), URI syntax: `couchbase:protocol://hostname:port`
+-   [Couchbase component](../../../../components/4.22.x/couchbase-component.md), URI syntax: `couchbase:protocol://hostname:port`
     
 
 Please refer to the above link for usage and configuration details.

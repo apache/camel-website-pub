@@ -6,7 +6,7 @@ Aggregation repository using Redis as datastore
 
 ## What’s inside
 
--   [Redis](../../../../components/next/others/redis.md)
+-   [Redis](../../../../components/4.22.x/others/redis.md)
     
 
 Please refer to the above link for usage and configuration details.

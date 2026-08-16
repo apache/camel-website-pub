@@ -6,7 +6,7 @@ Send and receive messages to/from AWS SQS.
 
 ## What’s inside
 
--   [AWS Simple Queue Service (SQS) component](../../../../components/next/aws2-sqs-component.md), URI syntax: `aws2-sqs:queueNameOrArn`
+-   [AWS Simple Queue Service (SQS) component](../../../../components/4.22.x/aws2-sqs-component.md), URI syntax: `aws2-sqs:queueNameOrArn`
     
 
 Please refer to the above link for usage and configuration details.

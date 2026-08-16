@@ -6,17 +6,17 @@ Interact with OpenStack APIs
 
 ## What’s inside
 
--   [OpenStack Cinder component](../../../../components/next/openstack-cinder-component.md), URI syntax: `openstack-cinder:host`
+-   [OpenStack Cinder component](../../../../components/4.22.x/openstack-cinder-component.md), URI syntax: `openstack-cinder:host`
     
--   [OpenStack Glance component](../../../../components/next/openstack-glance-component.md), URI syntax: `openstack-glance:host`
+-   [OpenStack Glance component](../../../../components/4.22.x/openstack-glance-component.md), URI syntax: `openstack-glance:host`
     
--   [OpenStack Keystone component](../../../../components/next/openstack-keystone-component.md), URI syntax: `openstack-keystone:host`
+-   [OpenStack Keystone component](../../../../components/4.22.x/openstack-keystone-component.md), URI syntax: `openstack-keystone:host`
     
--   [OpenStack Neutron component](../../../../components/next/openstack-neutron-component.md), URI syntax: `openstack-neutron:host`
+-   [OpenStack Neutron component](../../../../components/4.22.x/openstack-neutron-component.md), URI syntax: `openstack-neutron:host`
     
--   [OpenStack Nova component](../../../../components/next/openstack-nova-component.md), URI syntax: `openstack-nova:host`
+-   [OpenStack Nova component](../../../../components/4.22.x/openstack-nova-component.md), URI syntax: `openstack-nova:host`
     
--   [OpenStack Swift component](../../../../components/next/openstack-swift-component.md), URI syntax: `openstack-swift:host`
+-   [OpenStack Swift component](../../../../components/4.22.x/openstack-swift-component.md), URI syntax: `openstack-swift:host`
     
 
 Please refer to the above links for usage and configuration details.

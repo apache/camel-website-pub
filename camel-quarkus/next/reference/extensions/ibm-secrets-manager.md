@@ -6,7 +6,7 @@ Manage secrets in IBM Secrets Manager Service
 
 ## What’s inside
 
--   [IBM Secrets Manager component](../../../../components/next/ibm-secrets-manager-component.md), URI syntax: `ibm-secrets-manager:label`
+-   [IBM Secrets Manager component](../../../../components/4.22.x/ibm-secrets-manager-component.md), URI syntax: `ibm-secrets-manager:label`
     
 
 Please refer to the above link for usage and configuration details.

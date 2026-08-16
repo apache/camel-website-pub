@@ -6,7 +6,7 @@ Read and write nodes to/from a JCR compliant content repository.
 
 ## What’s inside
 
--   [JCR component](../../../../components/next/jcr-component.md), URI syntax: `jcr:host/base`
+-   [JCR component](../../../../components/4.22.x/jcr-component.md), URI syntax: `jcr:host/base`
     
 
 Please refer to the above link for usage and configuration details.

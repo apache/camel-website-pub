@@ -6,7 +6,7 @@ Manage secrets using AWS Secrets Manager.
 
 ## What’s inside
 
--   [AWS Secrets Manager component](../../../../components/next/aws-secrets-manager-component.md), URI syntax: `aws-secrets-manager:label`
+-   [AWS Secrets Manager component](../../../../components/4.22.x/aws-secrets-manager-component.md), URI syntax: `aws-secrets-manager:label`
     
 
 Please refer to the above link for usage and configuration details.

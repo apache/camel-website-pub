@@ -6,7 +6,7 @@ Camel XML DSL with camel-xml-io
 
 ## What’s inside
 
--   [XML DSL](../../../../components/next/others/java-xml-io-dsl.md)
+-   [XML DSL](../../../../components/4.22.x/others/java-xml-io-dsl.md)
     
 
 Please refer to the above link for usage and configuration details.

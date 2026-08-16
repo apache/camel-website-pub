@@ -6,7 +6,7 @@ LangChain4j Tools and Function Calling Features
 
 ## What’s inside
 
--   [LangChain4j Tools component](../../../../components/next/langchain4j-tools-component.md), URI syntax: `langchain4j-tools:toolId`
+-   [LangChain4j Tools component](../../../../components/4.22.x/langchain4j-tools-component.md), URI syntax: `langchain4j-tools:toolId`
     
 
 Please refer to the above link for usage and configuration details.

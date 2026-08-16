@@ -66,7 +66,7 @@ Some of our test modules have very similar sets of dependencies. While it is imp
 
 When porting a Camel component to Quarkus, we generally do not want to duplicate all the fine-grained tests that are often available in Camel already. Our main goal is to make sure that the main use cases work well in native mode. But how can you figure out which are those?
 
-The use cases explained in the given components documentation usually give a good guidance. For example, when writing tests for the SQL extension, you would go to documentation page of the [SQL component](../../../components/next/sql-component.md) and try to cover the use cases mentioned there: [Treatment of the message body](../../../components/next/sql-component.html#_treatment_of_the_message_body) [Result of the query](../../../components/next/sql-component.html#_result_of_the_query), [Using StreamList](../../../components/next/sql-component.html#_using_streamlist), etc.
+The use cases explained in the given components documentation usually give a good guidance. For example, when writing tests for the SQL extension, you would go to documentation page of the [SQL component](../../../components/4.22.x/sql-component.md) and try to cover the use cases mentioned there: [Treatment of the message body](../../../components/4.22.x/sql-component.html#_treatment_of_the_message_body) [Result of the query](../../../components/4.22.x/sql-component.html#_result_of_the_query), [Using StreamList](../../../components/4.22.x/sql-component.html#_using_streamlist), etc.
 
 In any case, both consumer and producer of the component (if the component supports both) should be covered.
 

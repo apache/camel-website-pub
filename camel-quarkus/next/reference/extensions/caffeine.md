@@ -6,9 +6,9 @@ Perform caching operations using Caffeine Cache.
 
 ## What’s inside
 
--   [Caffeine Cache component](../../../../components/next/caffeine-cache-component.md), URI syntax: `caffeine-cache:cacheName`
+-   [Caffeine Cache component](../../../../components/4.22.x/caffeine-cache-component.md), URI syntax: `caffeine-cache:cacheName`
     
--   [Caffeine LoadCache component](../../../../components/next/caffeine-loadcache-component.md), URI syntax: `caffeine-loadcache:cacheName`
+-   [Caffeine LoadCache component](../../../../components/4.22.x/caffeine-loadcache-component.md), URI syntax: `caffeine-loadcache:cacheName`
     
 
 Please refer to the above links for usage and configuration details.

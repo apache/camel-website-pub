@@ -989,7 +989,7 @@ pollEnrich with cacheSize(-1) does not disable consumer cache (dynamic endpoints
 
 camel-jbang TUI: F1/? help broken - NoClassDefFoundError from commonmark version conflict and ? not bound
 
-### Dependency upgrade (5)
+### Dependency upgrade (6)
 
 [CAMEL-24239](https://issues.apache.org/jira/browse/CAMEL-24239)
 
@@ -998,6 +998,10 @@ camel-jbang - Upgrade to jkube 1.20
 [CAMEL-24212](https://issues.apache.org/jira/browse/CAMEL-24212)
 
 camel-spring - Upgrade to spring-ai 2.0.x
+
+[CAMEL-23753](https://issues.apache.org/jira/browse/CAMEL-23753)
+
+camel-spring-boot - Upgrade spring ai to v2
 
 [CAMEL-23562](https://issues.apache.org/jira/browse/CAMEL-23562)
 
@@ -1011,7 +1015,7 @@ Upgrade weaviate client to 6.x
 
 Upgrade minio to 9+
 
-### Improvement (152)
+### Improvement (153)
 
 [CAMEL-24366](https://issues.apache.org/jira/browse/CAMEL-24366)
 
@@ -1288,6 +1292,10 @@ Add rolling 1-minute exchange rate to performance counters
 [CAMEL-24025](https://issues.apache.org/jira/browse/CAMEL-24025)
 
 camel-observability-services-starter: ship defaults via EnvironmentPostProcessor instead of config/application.properties so users can override them
+
+[CAMEL-24007](https://issues.apache.org/jira/browse/CAMEL-24007)
+
+camel-jbang TUI: skip redundant full-screen re-render on idle ticks
 
 [CAMEL-24003](https://issues.apache.org/jira/browse/CAMEL-24003)
 

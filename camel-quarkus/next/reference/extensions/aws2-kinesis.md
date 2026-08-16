@@ -6,9 +6,9 @@ Consume and produce records from and to AWS Kinesis Streams. Produce data to AWS
 
 ## What’s inside
 
--   [AWS Kinesis component](../../../../components/next/aws2-kinesis-component.md), URI syntax: `aws2-kinesis:streamName`
+-   [AWS Kinesis component](../../../../components/4.22.x/aws2-kinesis-component.md), URI syntax: `aws2-kinesis:streamName`
     
--   [AWS Kinesis Firehose component](../../../../components/next/aws2-kinesis-firehose-component.md), URI syntax: `aws2-kinesis-firehose:streamName`
+-   [AWS Kinesis Firehose component](../../../../components/4.22.x/aws2-kinesis-firehose-component.md), URI syntax: `aws2-kinesis-firehose:streamName`
     
 
 Please refer to the above links for usage and configuration details.

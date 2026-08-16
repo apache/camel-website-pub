@@ -6,7 +6,7 @@ Manage AWS MSK instances.
 
 ## What’s inside
 
--   [AWS Managed Streaming for Apache Kafka (MSK) component](../../../../components/next/aws2-msk-component.md), URI syntax: `aws2-msk:label`
+-   [AWS Managed Streaming for Apache Kafka (MSK) component](../../../../components/4.22.x/aws2-msk-component.md), URI syntax: `aws2-msk:label`
     
 
 Please refer to the above link for usage and configuration details.

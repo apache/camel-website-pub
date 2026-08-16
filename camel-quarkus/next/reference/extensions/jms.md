@@ -6,7 +6,7 @@ Send and receive messages to/from JMS message brokers.
 
 ## What’s inside
 
--   [JMS component](../../../../components/next/jms-component.md), URI syntax: `jms:destinationType:destinationName`
+-   [JMS component](../../../../components/4.22.x/jms-component.md), URI syntax: `jms:destinationType:destinationName`
     
 
 Please refer to the above link for usage and configuration details.

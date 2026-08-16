@@ -6,7 +6,7 @@ Send and receive messages to/from Google Cloud Platform PubSub Service.
 
 ## What’s inside
 
--   [Google Pubsub component](../../../../components/next/google-pubsub-component.md), URI syntax: `google-pubsub:projectId:destinationName`
+-   [Google Pubsub component](../../../../components/4.22.x/google-pubsub-component.md), URI syntax: `google-pubsub:projectId:destinationName`
     
 
 Please refer to the above link for usage and configuration details.

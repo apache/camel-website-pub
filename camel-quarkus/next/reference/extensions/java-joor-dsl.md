@@ -6,7 +6,7 @@ Camel Java DSL with jOOR
 
 ## What’s inside
 
--   [Java DSL (runtime compiled)](../../../../components/next/others/java-joor-dsl.md)
+-   [Java DSL (runtime compiled)](../../../../components/4.22.x/others/java-joor-dsl.md)
     
 
 Please refer to the above link for usage and configuration details.

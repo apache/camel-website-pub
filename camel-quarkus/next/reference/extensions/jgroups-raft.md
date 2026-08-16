@@ -6,7 +6,7 @@ Exchange messages with JGroups-raft clusters.
 
 ## What’s inside
 
--   [JGroups raft component](../../../../components/next/jgroups-raft-component.md), URI syntax: `jgroups-raft:clusterName`
+-   [JGroups raft component](../../../../components/4.22.x/jgroups-raft-component.md), URI syntax: `jgroups-raft:clusterName`
     
 
 Please refer to the above link for usage and configuration details.

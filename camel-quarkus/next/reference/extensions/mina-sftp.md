@@ -6,7 +6,7 @@ Upload and download files to/from SFTP servers using Apache MINA SSHD.
 
 ## What’s inside
 
--   [MINA SFTP component](../../../../components/next/mina-sftp-component.md), URI syntax: `mina-sftp:host:port/directoryName`
+-   [MINA SFTP component](../../../../components/4.22.x/mina-sftp-component.md), URI syntax: `mina-sftp:host:port/directoryName`
     
 
 Please refer to the above link for usage and configuration details.

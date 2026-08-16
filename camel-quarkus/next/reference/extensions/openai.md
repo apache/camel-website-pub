@@ -6,7 +6,7 @@ OpenAI endpoint for chat completion, Responses API, embeddings, audio transcript
 
 ## What’s inside
 
--   [OpenAI component](../../../../components/next/openai-component.md), URI syntax: `openai:operation`
+-   [OpenAI component](../../../../components/4.22.x/openai-component.md), URI syntax: `openai:operation`
     
 
 Please refer to the above link for usage and configuration details.

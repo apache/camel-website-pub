@@ -6,7 +6,7 @@ To use DataSonnet scripts for message transformations
 
 ## What’s inside
 
--   [DataSonnet language](../../../../components/next/languages/datasonnet-language.md)
+-   [DataSonnet language](../../../../components/4.22.x/languages/datasonnet-language.md)
     
 
 Please refer to the above link for usage and configuration details.

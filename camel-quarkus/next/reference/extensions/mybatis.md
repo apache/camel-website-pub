@@ -6,9 +6,9 @@ Performs a query, poll, insert, update or delete in a relational database using 
 
 ## What’s inside
 
--   [MyBatis component](../../../../components/next/mybatis-component.md), URI syntax: `mybatis:statement`
+-   [MyBatis component](../../../../components/4.22.x/mybatis-component.md), URI syntax: `mybatis:statement`
     
--   [MyBatis Bean component](../../../../components/next/mybatis-bean-component.md), URI syntax: `mybatis-bean:beanName:methodName`
+-   [MyBatis Bean component](../../../../components/4.22.x/mybatis-bean-component.md), URI syntax: `mybatis-bean:beanName:methodName`
     
 
 Please refer to the above links for usage and configuration details.

@@ -6,7 +6,7 @@ Marshal and unmarshal iCal (\*.ics) documents to/from model objects
 
 ## What’s inside
 
--   [iCal data format](../../../../components/next/dataformats/ical-dataformat.md)
+-   [iCal data format](../../../../components/4.22.x/dataformats/ical-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

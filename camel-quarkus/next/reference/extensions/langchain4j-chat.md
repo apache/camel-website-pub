@@ -6,7 +6,7 @@ LangChain4j Chat component
 
 ## What’s inside
 
--   [LangChain4j Chat component](../../../../components/next/langchain4j-chat-component.md), URI syntax: `langchain4j-chat:chatId`
+-   [LangChain4j Chat component](../../../../components/4.22.x/langchain4j-chat-component.md), URI syntax: `langchain4j-chat:chatId`
     
 
 Please refer to the above link for usage and configuration details.

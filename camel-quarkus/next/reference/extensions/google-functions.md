@@ -6,7 +6,7 @@ Manage and invoke Google Cloud Functions
 
 ## What’s inside
 
--   [Google Cloud Functions component](../../../../components/next/google-functions-component.md), URI syntax: `google-functions:functionName`
+-   [Google Cloud Functions component](../../../../components/4.22.x/google-functions-component.md), URI syntax: `google-functions:functionName`
     
 
 Please refer to the above link for usage and configuration details.

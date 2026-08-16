@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 379 in 304 JAR artifacts (13 deprecated)
+Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -57,6 +57,12 @@ Number of Non-Core Components: 379 in 304 JAR artifacts (13 deprecated)
 | [ActiveMQ 6.x](activemq6-component.md) | camel-activemq6 | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI](ai-summary.md) |  |  |  |  |
 | [AI Tool](ai-tool-component.md) | camel-ai-tool | Preview | 4.22 | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
+| [Alibaba EventBridge](alibaba-eventbridge-component.md) | camel-alibaba-eventbridge | Preview | 4.23 | Publish events to Alibaba Cloud EventBridge. |
+| [Alibaba Function Compute (FC)](alibaba-fc-component.md) | camel-alibaba-fc | Preview | 4.23 | Invoke serverless functions on Alibaba Cloud Function Compute (FC). |
+| [Alibaba Key Management Service (KMS)](alibaba-kms-component.md) | camel-alibaba-kms | Preview | 4.23 | Encrypt and decrypt data using Alibaba Cloud Key Management Service (KMS). |
+| [Alibaba Message Service (MNS)](alibaba-mns-component.md) | camel-alibaba-mns | Preview | 4.23 | Send and receive messages to/from Alibaba Cloud Message Service (MNS). |
+| [Alibaba Object Storage Service (OSS)](alibaba-oss-component.md) | camel-alibaba-oss | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
+| [Alibaba Short Message Service (SMS)](alibaba-sms-component.md) | camel-alibaba-sms | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
 | [AMQP](amqp-component.md) | camel-amqp | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](arangodb-component.md) | camel-arangodb | Stable | 3.5 | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](as2-component.md) | camel-as2 | Stable | 2.22 | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
@@ -356,6 +362,7 @@ Number of Non-Core Components: 379 in 304 JAR artifacts (13 deprecated)
 | [QuickFix](quickfix-component.md) | camel-quickfix | Stable | 2.1 | Open a Financial Interchange (FIX) session using an embedded QuickFix/J engine. |
 | [Reactive Streams](reactive-streams-component.md) | camel-reactive-streams | Stable | 2.19 | Exchange messages with reactive stream processing libraries compatible with the reactive streams standard. |
 | [REST OpenApi](rest-openapi-component.md) | camel-rest-openapi | Stable | 3.1 | To call and expose REST services using OpenAPI specification as contract. |
+| [REST Postman](rest-postman-component.md) | camel-rest-postman | Preview | 4.23 | To call and expose REST services using a Postman Collection as contract. |
 | [Robot Framework](robotframework-component.md) | camel-robotframework | Stable | 3.0 | Pass camel exchanges to acceptance test written in Robot DSL. |
 | [RocketMQ](rocketmq-component.md) | camel-rocketmq | Stable | 3.20 | Send and receive messages from RocketMQ cluster. |
 | [RSS](rss-component.md) | camel-rss | Stable | 2.0 | Poll RSS feeds. |

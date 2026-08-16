@@ -6,7 +6,7 @@ Send SMS messages via CM SMS Gateway.
 
 ## What’s inside
 
--   [CM SMS Gateway component](../../../../components/next/cm-sms-component.md), URI syntax: `cm-sms:host`
+-   [CM SMS Gateway component](../../../../components/4.22.x/cm-sms-component.md), URI syntax: `cm-sms:host`
     
 
 Please refer to the above link for usage and configuration details.

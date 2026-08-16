@@ -6,7 +6,7 @@ Cleanup HTML content
 
 ## What’s inside
 
--   [Jsoup](../../../../components/next/others/jsoup.md)
+-   [Jsoup](../../../../components/4.22.x/others/jsoup.md)
     
 
 Please refer to the above link for usage and configuration details.

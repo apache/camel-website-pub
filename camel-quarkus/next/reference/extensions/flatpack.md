@@ -6,9 +6,9 @@ Parse fixed width and delimited files using the FlatPack library.
 
 ## What’s inside
 
--   [Flatpack component](../../../../components/next/flatpack-component.md), URI syntax: `flatpack:type:resourceUri`
+-   [Flatpack component](../../../../components/4.22.x/flatpack-component.md), URI syntax: `flatpack:type:resourceUri`
     
--   [Flatpack data format](../../../../components/next/dataformats/flatpack-dataformat.md)
+-   [Flatpack data format](../../../../components/4.22.x/dataformats/flatpack-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

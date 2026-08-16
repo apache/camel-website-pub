@@ -6,7 +6,7 @@ Send e-mails through AWS SES service.
 
 ## What’s inside
 
--   [AWS Simple Email Service (SES) component](../../../../components/next/aws2-ses-component.md), URI syntax: `aws2-ses:from`
+-   [AWS Simple Email Service (SES) component](../../../../components/4.22.x/aws2-ses-component.md), URI syntax: `aws2-ses:from`
     
 
 Please refer to the above link for usage and configuration details.

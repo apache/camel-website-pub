@@ -6,7 +6,7 @@ Fast case-insensitive headers map implementation
 
 ## What’s inside
 
--   [Headersmap](../../../../components/next/others/headersmap.md)
+-   [Headersmap](../../../../components/4.22.x/others/headersmap.md)
     
 
 Please refer to the above link for usage and configuration details.

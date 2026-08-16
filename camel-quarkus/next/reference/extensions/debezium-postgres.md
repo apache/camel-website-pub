@@ -6,7 +6,7 @@ Capture changes from a PostgreSQL database.
 
 ## What’s inside
 
--   [Debezium PostgreSQL Connector component](../../../../components/next/debezium-postgres-component.md), URI syntax: `debezium-postgres:name`
+-   [Debezium PostgreSQL Connector component](../../../../components/4.22.x/debezium-postgres-component.md), URI syntax: `debezium-postgres:name`
     
 
 Please refer to the above link for usage and configuration details.

@@ -210,7 +210,7 @@ The camel.server supports 28 options, which are listed below.
 | **camel.server.mcpServerName** | MCP server name advertised to clients. Defaults to the CamelContext name. |  | String |
 | **camel.server.mcpSessionIdleTtl** | Idle TTL in milliseconds for MCP sessions on the Vert.x streamable transport. Sessions with no activity for longer than this interval are evicted. 0 disables idle eviction. | 300000 | long |
 | **camel.server.mcpSessionKeepAliveInterval** | Keep-alive ping interval in milliseconds for MCP sessions on the Vert.x streamable transport. Dead sessions are evicted after consecutive ping failures. 0 disables keep-alive pings. | 30000 | long |
-| **camel.server.mcpTags** | Comma-separated list of ai-tool tags to expose as MCP tools. Only tools registered under one of these tags are exposed; the untagged default pool is never exposed. When not set, no tools are exposed. |  | String |
+| **camel.server.mcpTags** | Comma-separated list of ai-tool tag patterns to expose as MCP tools. Matching is case-insensitive and supports exact match, wildcard prefix ( {code foo} ), and {code } to match all tags. Only tools registered under a matching tag are exposed; the untagged default pool is never exposed. When not set, no tools are exposed. |  | String |
 | **camel.server.mcpToolTimeout** | Per-call MCP tool execution timeout in milliseconds. A call exceeding the timeout returns an error result to the MCP client; the underlying route keeps running until it completes on its own. | 20000 | long |
 | **camel.server.path** | Context-path to use for embedded HTTP server | / | String |
 | **camel.server.port** | Port to use for binding embedded HTTP server. Use 0 to dynamic assign a free random port number. | 8080 | int |
@@ -615,7 +615,7 @@ The camel.mdc supports 3 options, which are listed below.
 
 ### Camel Micrometer Metrics configurations
 
-The camel.metrics supports 16 options, which are listed below.
+The camel.metrics supports 17 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -631,6 +631,7 @@ The camel.metrics supports 16 options, which are listed below.
 | **camel.metrics.enableRoutePolicy** | Set whether to enable the MicrometerRoutePolicyFactory for capturing metrics on route processing times. | true | boolean |
 | **camel.metrics.logMetricsOnShutdown** | Log metrics when application is shutting down. (default, false). | false | boolean |
 | **camel.metrics.logMetricsOnShutdownFilters** | List of metrics (comma separated) to log when application is shutting down. You can use character to log any metrics containing the wildcard, for example camel.exchanges. (default to all metrics available). |  | String |
+| **camel.metrics.logMetricsOnShutdownFormat** | Format used to log metrics when application is shutting down. Either json (default) or prometheus format. | json | String |
 | **camel.metrics.namingStrategy** | Controls the name style to use for metrics. Default = uses micrometer naming convention. Legacy = uses the classic naming style (camelCase) | default | String |
 | **camel.metrics.path** | The path endpoint used to expose the metrics. | /observe/metrics | String |
 | **camel.metrics.routePolicyLevel** | Sets the level of information to capture. all = both context and routes. | all | String |

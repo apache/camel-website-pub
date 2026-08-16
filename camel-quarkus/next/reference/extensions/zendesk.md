@@ -6,7 +6,7 @@ Manage Zendesk tickets, users, organizations, etc.
 
 ## What’s inside
 
--   [Zendesk component](../../../../components/next/zendesk-component.md), URI syntax: `zendesk:methodName`
+-   [Zendesk component](../../../../components/4.22.x/zendesk-component.md), URI syntax: `zendesk:methodName`
     
 
 Please refer to the above link for usage and configuration details.

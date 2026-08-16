@@ -385,6 +385,24 @@ Complete the following steps to create a new Camel-spring-boot release:
     git push origin --delete release/VERSION
     
 
+## Publishing camel-cli packages
+
+Once the `camel-launcher` binary artifacts (`camel-launcher-<version>-bin.tar.gz` / `.zip`) have been built and staged, `camel-publish.sh` drives the JReleaser-based publish to the camel-cli package destinations. It is a single resumable orchestrator, not something invoked destination by destination.
+
+cd ${CAMEL\_ROOT\_DIR}/dsl/camel-jbang/camel-launcher/src/jreleaser/bin
+./camel-publish.sh <Camel version> --channel stable|lts \[--lts-line X.Y\]
+
+-   `--channel lts` requires `--lts-line X.Y` (e.g. `--lts-line 4.18`) and targets a versioned Homebrew formula (`apache-camel@X.Y`); `--channel stable` targets the unversioned formula (`apache-camel`).
+    
+-   Required environment: `GITHUB_TOKEN`, `SDKMAN_CONSUMER_KEY`, `SDKMAN_CONSUMER_SECRET`, `CHOCO_API_KEY`.
+    
+-   The `homebrew-core` and `winget-pkgs` destinations push to your own fork, not upstream. Fork both repositories first (`gh repo fork homebrew/homebrew-core --clone=false` and `gh repo fork microsoft/winget-pkgs --clone=false`) and make sure the `FORK_REMOTE`/ `CAMEL_PUB_FORK_REMOTE` git remote used by the script is configured before running it.
+    
+
+The script publishes to destinations in this order: JReleaser package → Homebrew tap → Camel website → WinGet → Scoop → SDKMAN → Chocolatey. `--channel lts` skips Scoop and SDKMAN (no versioned Scoop manifest, and SDKMAN only tracks the latest stable release).
+
+Progress is recorded in `target/jreleaser/publish-state.json`; re-running the same command after a partial failure resumes from the first incomplete destination instead of repeating completed ones. The script never merges the PRs it opens against `homebrew-core` or `winget-pkgs` — merge timing for those is up to each project’s own maintainers.
+
 ## Publish xsd schemas
 
 -   On [https://github.com/apache/camel-website/tree/main/static/schema](https://github.com/apache/camel-website/tree/main/static/schema) the xsd related to cxf,spring-security and spring must be pushed to make them available to end users.

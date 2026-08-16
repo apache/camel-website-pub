@@ -6,7 +6,7 @@ To call and expose REST services using OpenAPI specification as contract.
 
 ## What’s inside
 
--   [REST OpenApi component](../../../../components/next/rest-openapi-component.md), URI syntax: `rest-openapi:specificationUri#operationId`
+-   [REST OpenApi component](../../../../components/4.22.x/rest-openapi-component.md), URI syntax: `rest-openapi:specificationUri#operationId`
     
 
 Please refer to the above link for usage and configuration details.

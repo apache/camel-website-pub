@@ -6,7 +6,7 @@ Store and retrieve Java objects from an SQL database using JOOQ.
 
 ## What’s inside
 
--   [JOOQ component](../../../../components/next/jooq-component.md), URI syntax: `jooq:entityType`
+-   [JOOQ component](../../../../components/4.22.x/jooq-component.md), URI syntax: `jooq:entityType`
     
 
 Please refer to the above link for usage and configuration details.

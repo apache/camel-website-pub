@@ -6,9 +6,9 @@ Query and/or transform XML payloads using XQuery and Saxon.
 
 ## What’s inside
 
--   [XQuery component](../../../../components/next/xquery-component.md), URI syntax: `xquery:resourceUri`
+-   [XQuery component](../../../../components/4.22.x/xquery-component.md), URI syntax: `xquery:resourceUri`
     
--   [XQuery language](../../../../components/next/languages/xquery-language.md)
+-   [XQuery language](../../../../components/4.22.x/languages/xquery-language.md)
     
 
 Please refer to the above links for usage and configuration details.

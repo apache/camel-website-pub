@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 398 spring boot starter json files.
+There are 400 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -633,6 +633,8 @@ resilience4j
 
 rest-openapi
 
+rest-postman
+
 rest
 
 robotframework
@@ -755,6 +757,8 @@ twilio
 
 twitter
 
+ubl
+
 undertow-spring-security
 
 undertow
@@ -836,6 +840,12 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [ActiveMQ 5.x](../../components/next/activemq-component.md) | camel-activemq-starter | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](../../components/next/activemq6-component.md) | camel-activemq6-starter | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI Tool](../../components/next/ai-tool-component.md) | camel-ai-tool-starter | Preview | 4.22 | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
+| [Alibaba EventBridge](../../components/next/alibaba-eventbridge-component.md) | camel-alibaba-eventbridge-starter | Preview | 4.23 | Publish events to Alibaba Cloud EventBridge. |
+| [Alibaba Function Compute (FC)](../../components/next/alibaba-fc-component.md) | camel-alibaba-fc-starter | Preview | 4.23 | Invoke serverless functions on Alibaba Cloud Function Compute (FC). |
+| [Alibaba Key Management Service (KMS)](../../components/next/alibaba-kms-component.md) | camel-alibaba-kms-starter | Preview | 4.23 | Encrypt and decrypt data using Alibaba Cloud Key Management Service (KMS). |
+| [Alibaba Message Service (MNS)](../../components/next/alibaba-mns-component.md) | camel-alibaba-mns-starter | Preview | 4.23 | Send and receive messages to/from Alibaba Cloud Message Service (MNS). |
+| [Alibaba Object Storage Service (OSS)](../../components/next/alibaba-oss-component.md) | camel-alibaba-oss-starter | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
+| [Alibaba Short Message Service (SMS)](../../components/next/alibaba-sms-component.md) | camel-alibaba-sms-starter | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
 | [AMQP](../../components/next/amqp-component.md) | camel-amqp-starter | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](../../components/next/arangodb-component.md) | camel-arangodb-starter | Stable | 3.5 | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](../../components/next/as2-component.md) | camel-as2-starter | Stable | 2.22 | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
@@ -1145,6 +1155,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [REST](../../components/next/rest-component.md) | camel-rest-starter | Stable | 2.14 | Expose REST services or call external REST services. |
 | [REST API](../../components/next/rest-api-component.md) | camel-rest-starter | Stable | 2.16 | Expose OpenAPI Specification of the REST services defined using Camel REST DSL. |
 | [REST OpenApi](../../components/next/rest-openapi-component.md) | camel-rest-openapi-starter | Stable | 3.1 | To call and expose REST services using OpenAPI specification as contract. |
+| [REST Postman](../../components/next/rest-postman-component.md) | camel-rest-postman-starter | Preview | 4.23 | To call and expose REST services using a Postman Collection as contract. |
 | [Robot Framework](../../components/next/robotframework-component.md) | camel-robotframework-starter | Stable | 3.0 | Pass camel exchanges to acceptance test written in Robot DSL. |
 | [RocketMQ](../../components/next/rocketmq-component.md) | camel-rocketmq-starter | Stable | 3.20 | Send and receive messages from RocketMQ cluster. |
 | [RSS](../../components/next/rss-component.md) | camel-rss-starter | Stable | 2.0 | Poll RSS feeds. |
@@ -1290,6 +1301,7 @@ Number of Camel data formats: 0 in 0 JAR artifacts (0 deprecated)
 | [Syslog](../../components/next/dataformats/syslog-dataformat.md) | camel-syslog-starter | Stable | 2.6 | Marshall SyslogMessages to RFC3164 and RFC5424 messages and back |
 | [Tar File](../../components/next/dataformats/tarFile-dataformat.md) | camel-tarfile-starter | Stable | 2.16 | Archive files into tarballs or extract files from tarballs |
 | [Thrift](../../components/next/dataformats/thrift-dataformat.md) | camel-thrift-starter | Stable | 2.20 | Serialize and deserialize messages using Apache Thrift binary data format |
+| [UBL](../../components/next/dataformats/ubl-dataformat.md) | camel-ubl-starter | Preview | 4.23 | Marshal and unmarshal UBL 2.1 (Universal Business Language) documents. |
 | [uniVocity CSV](../../components/next/dataformats/univocityCsv-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to CSV (Comma Separated Values) using UniVocity Parsers |
 | [uniVocity Fixed Length](../../components/next/dataformats/univocityFixed-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to fixed length records using UniVocity Parsers |
 | [uniVocity TSV](../../components/next/dataformats/univocityTsv-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to TSV (Tab-Separated Values) records using UniVocity Parsers |
@@ -1358,6 +1370,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | --- | --- | --- | --- | --- |
 | [A2A - Consumer Guide](../../components/next/others/a2a-consumer.md) | undefined-starter |  |  |  |
 | [A2A - Producer Guide](../../components/next/others/a2a-producer.md) | undefined-starter |  |  |  |
+| [AI Observability](../../components/next/others/ai-observability.md) | camel-ai-observability-starter | Preview | 4.23 | GenAI observability support for Camel AI components (OpenTelemetry and Micrometer) |
 | [Attachments](../../components/next/others/attachments.md) | camel-attachments-starter | Stable | 3.0 | Support for attachments on Camel messages |
 | [AWS Bedrock - Examples](../../components/next/others/aws-bedrock-examples.md) | undefined-starter |  |  |  |
 | [AWS Bedrock - Supported Models](../../components/next/others/aws-bedrock-models.md) | undefined-starter |  |  |  |
@@ -1416,7 +1429,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Oauth](../../components/next/others/oauth.md) | camel-oauth-starter | Preview | 4.12 | Camel OAuth (Preview) |
 | [Observability Services](../../components/next/others/observability-services.md) | camel-observability-services-starter | Preview | 4.9 | Camel Observability Services |
 | [OpenAI - Compatible Providers](../../components/next/others/openai-providers.md) | undefined-starter |  |  |  |
-| [OpenAI - Embeddings and Audio Operations](../../components/next/others/openai-operations.md) | undefined-starter |  |  |  |
+| [OpenAI - Embeddings, Moderation and Audio Operations](../../components/next/others/openai-operations.md) | undefined-starter |  |  |  |
 | [OpenAI - MCP Tool Calling](../../components/next/others/openai-mcp.md) | undefined-starter |  |  |  |
 | [OpenAI - Responses API Operation](../../components/next/others/openai-responses.md) | undefined-starter |  |  |  |
 | [Openapi Java](../../components/next/others/openapi-java.md) | camel-openapi-java-starter | Stable | 3.1 | Rest DSL support for using OpenApi doc |

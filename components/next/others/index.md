@@ -4,13 +4,14 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 104 in 71 JAR artifacts (9 deprecated)
+Number of Miscellaneous Components: 105 in 72 JAR artifacts (9 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
 | [A2A - Consumer Guide](a2a-consumer.md) |  |  |  |  |
 | [A2A - Producer Guide](a2a-producer.md) |  |  |  |  |
+| [AI Observability](ai-observability.md) | camel-ai-observability | Preview | 4.23 | GenAI observability support for Camel AI components (OpenTelemetry and Micrometer) |
 | [Attachments](attachments.md) | camel-attachments | Stable | 3.0 | Support for attachments on Camel messages |
 | [AWS Bedrock - Examples](aws-bedrock-examples.md) |  |  |  |  |
 | [AWS Bedrock - Supported Models](aws-bedrock-models.md) |  |  |  |  |
@@ -69,7 +70,7 @@ Number of Miscellaneous Components: 104 in 71 JAR artifacts (9 deprecated)
 | [Oauth](oauth.md) | camel-oauth | Preview | 4.12 | Camel OAuth (Preview) |
 | [Observability Services](observability-services.md) | camel-observability-services | Preview | 4.9 | Camel Observability Services |
 | [OpenAI - Compatible Providers](openai-providers.md) |  |  |  |  |
-| [OpenAI - Embeddings and Audio Operations](openai-operations.md) |  |  |  |  |
+| [OpenAI - Embeddings, Moderation and Audio Operations](openai-operations.md) |  |  |  |  |
 | [OpenAI - MCP Tool Calling](openai-mcp.md) |  |  |  |  |
 | [OpenAI - Responses API Operation](openai-responses.md) |  |  |  |  |
 | [Openapi Java](openapi-java.md) | camel-openapi-java | Stable | 3.1 | Rest DSL support for using OpenApi doc |

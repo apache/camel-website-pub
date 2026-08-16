@@ -6,7 +6,7 @@ Communicate with a remote Bonita BPM process engine.
 
 ## What’s inside
 
--   [Bonita component](../../../../components/next/bonita-component.md), URI syntax: `bonita:operation`
+-   [Bonita component](../../../../components/4.22.x/bonita-component.md), URI syntax: `bonita:operation`
     
 
 Please refer to the above link for usage and configuration details.

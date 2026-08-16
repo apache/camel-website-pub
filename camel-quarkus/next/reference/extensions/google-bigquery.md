@@ -6,9 +6,9 @@ Access Google Cloud BigQuery service using SQL queries or Google Client Services
 
 ## What’s inside
 
--   [Google BigQuery component](../../../../components/next/google-bigquery-component.md), URI syntax: `google-bigquery:projectId:datasetId:tableId`
+-   [Google BigQuery component](../../../../components/4.22.x/google-bigquery-component.md), URI syntax: `google-bigquery:projectId:datasetId:tableId`
     
--   [Google BigQuery Standard SQL component](../../../../components/next/google-bigquery-sql-component.md), URI syntax: `google-bigquery-sql:projectId:queryString`
+-   [Google BigQuery Standard SQL component](../../../../components/4.22.x/google-bigquery-sql-component.md), URI syntax: `google-bigquery-sql:projectId:queryString`
     
 
 Please refer to the above links for usage and configuration details.

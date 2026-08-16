@@ -6,11 +6,11 @@ Marshal and unmarshal Java objects from and to CSV (Comma Separated Values) usin
 
 ## What’s inside
 
--   [uniVocity CSV data format](../../../../components/next/dataformats/univocityCsv-dataformat.md)
+-   [uniVocity CSV data format](../../../../components/4.22.x/dataformats/univocityCsv-dataformat.md)
     
--   [uniVocity Fixed Length data format](../../../../components/next/dataformats/univocityFixed-dataformat.md)
+-   [uniVocity Fixed Length data format](../../../../components/4.22.x/dataformats/univocityFixed-dataformat.md)
     
--   [uniVocity TSV data format](../../../../components/next/dataformats/univocityTsv-dataformat.md)
+-   [uniVocity TSV data format](../../../../components/4.22.x/dataformats/univocityTsv-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

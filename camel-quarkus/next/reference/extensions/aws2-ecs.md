@@ -6,7 +6,7 @@ Manage AWS ECS cluster instances.
 
 ## What’s inside
 
--   [AWS Elastic Container Service (ECS) component](../../../../components/next/aws2-ecs-component.md), URI syntax: `aws2-ecs:label`
+-   [AWS Elastic Container Service (ECS) component](../../../../components/4.22.x/aws2-ecs-component.md), URI syntax: `aws2-ecs:label`
     
 
 Please refer to the above link for usage and configuration details.

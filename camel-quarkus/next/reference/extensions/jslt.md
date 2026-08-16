@@ -6,7 +6,7 @@ Query or transform JSON payloads using JSLT.
 
 ## What’s inside
 
--   [JSLT component](../../../../components/next/jslt-component.md), URI syntax: `jslt:resourceUri`
+-   [JSLT component](../../../../components/4.22.x/jslt-component.md), URI syntax: `jslt:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.

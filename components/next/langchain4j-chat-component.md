@@ -173,6 +173,8 @@ Enum values:
 | **CamelLangChain4jChatInputTokenCount** (producer) Constant: [`INPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#INPUT_TOKEN_COUNT) | The Input Token Count. |  | int |
 | **CamelLangChain4jChatOutputTokenCount** (producer) Constant: [`OUTPUT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#OUTPUT_TOKEN_COUNT) | The Output Token Count. |  | int |
 | **CamelLangChain4jChatTotalTokenCount** (producer) Constant: [`TOTAL_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#TOTAL_TOKEN_COUNT) | The Total Token Count. |  | int |
+| **CamelLangChain4jChatRequestModel** (producer) Constant: [`REQUEST_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#REQUEST_MODEL) | The request model name. |  | String |
+| **CamelLangChain4jChatResponseModel** (producer) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#RESPONSE_MODEL) | The response model name. |  | String |
 
 ## Usage
 

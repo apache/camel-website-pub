@@ -6,7 +6,7 @@ Support for attachments on Camel messages
 
 ## What’s inside
 
--   [Attachments](../../../../components/next/others/attachments.md)
+-   [Attachments](../../../../components/4.22.x/others/attachments.md)
     
 
 Please refer to the above link for usage and configuration details.

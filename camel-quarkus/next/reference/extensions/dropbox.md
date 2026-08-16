@@ -6,7 +6,7 @@ Upload, download and manage files, folders, groups, collaborations, etc on Dropb
 
 ## What’s inside
 
--   [Dropbox component](../../../../components/next/dropbox-component.md), URI syntax: `dropbox:operation`
+-   [Dropbox component](../../../../components/4.22.x/dropbox-component.md), URI syntax: `dropbox:operation`
     
 
 Please refer to the above link for usage and configuration details.

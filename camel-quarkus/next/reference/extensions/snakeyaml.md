@@ -6,7 +6,7 @@ Marshal and unmarshal Java objects to and from YAML using SnakeYAML
 
 ## What’s inside
 
--   [YAML SnakeYAML data format](../../../../components/next/dataformats/snakeYaml-dataformat.md)
+-   [YAML SnakeYAML data format](../../../../components/4.22.x/dataformats/snakeYaml-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

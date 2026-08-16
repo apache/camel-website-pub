@@ -6,9 +6,9 @@ Call and expose remote procedures (RPC) with Apache Thrift data format and seria
 
 ## What’s inside
 
--   [Thrift component](../../../../components/next/thrift-component.md), URI syntax: `thrift:host:port/service`
+-   [Thrift component](../../../../components/4.22.x/thrift-component.md), URI syntax: `thrift:host:port/service`
     
--   [Thrift data format](../../../../components/next/dataformats/thrift-dataformat.md)
+-   [Thrift data format](../../../../components/4.22.x/dataformats/thrift-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

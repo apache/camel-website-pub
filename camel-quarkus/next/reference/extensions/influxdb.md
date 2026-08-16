@@ -6,7 +6,7 @@ Interact with InfluxDB v1, a time series database.
 
 ## What’s inside
 
--   [InfluxDB component](../../../../components/next/influxdb-component.md), URI syntax: `influxdb:connectionBean`
+-   [InfluxDB component](../../../../components/4.22.x/influxdb-component.md), URI syntax: `influxdb:connectionBean`
     
 
 Please refer to the above link for usage and configuration details.

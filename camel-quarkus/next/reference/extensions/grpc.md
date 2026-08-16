@@ -6,7 +6,7 @@ Expose gRPC endpoints and access external gRPC endpoints.
 
 ## What’s inside
 
--   [gRPC component](../../../../components/next/grpc-component.md), URI syntax: `grpc:host:port/service`
+-   [gRPC component](../../../../components/4.22.x/grpc-component.md), URI syntax: `grpc:host:port/service`
     
 
 Please refer to the above link for usage and configuration details.

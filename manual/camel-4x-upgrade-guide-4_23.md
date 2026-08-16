@@ -30,6 +30,14 @@ In the other direction, host names are no longer rejected on the basis of their 
 
 Set `allowLocalWebhookUrls=true` to permit loopback targets during local development. That option is unchanged and still does not permit any of the ranges above.
 
+### camel-ai-observability (GenAI observability)
+
+LangChain4j and OpenAI producers now emit GenAI observability data (OpenTelemetry span attributes and Micrometer metrics) when `camel-opentelemetry2` and/or `camel-micrometer` is on the classpath. Disable globally with `camel.ai.observability.enabled=false` (default is enabled).
+
+OpenAI streaming chat sets `stream_options.include_usage=true` only when GenAI observability is enabled, adding a final chunk with token usage for span/metric recording.
+
+LangChain4j components also expose request model names on new exchange headers (`CamelLangChain4j*RequestModel`). The response model header (`CamelLangChain4j*ResponseModel`) is set when the underlying client exposes it (for example langchain4j-chat); the agent and embeddings producers omit it when unavailable. See [AI Observability](../components/next/others/ai-observability.md) for metric names and span attributes.
+
 ### camel-archetypes
 
 The Camel Maven archetypes now generate a `README.md` instead of the previous `ReadMe.txt`, with the content rewritten in Markdown and the documentation links updated. Each generated project also gets an `AGENTS.md` file with guidance for AI coding assistants, pointing at the Apache Camel LLM index (`/llms.txt`), the Camel CLI and the Camel MCP server.

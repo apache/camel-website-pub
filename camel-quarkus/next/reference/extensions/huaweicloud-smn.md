@@ -6,7 +6,7 @@ To broadcast messages and connect cloud services through notifications on Huawei
 
 ## What’s inside
 
--   [Huawei Simple Message Notification (SMN) component](../../../../components/next/hwcloud-smn-component.md), URI syntax: `hwcloud-smn:smnService`
+-   [Huawei Simple Message Notification (SMN) component](../../../../components/4.22.x/hwcloud-smn-component.md), URI syntax: `hwcloud-smn:smnService`
     
 
 Please refer to the above link for usage and configuration details.

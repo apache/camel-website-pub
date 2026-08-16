@@ -6,7 +6,7 @@ Perform document understanding and search using IBM Watson Discovery
 
 ## What’s inside
 
--   [IBM Watson Discovery component](../../../../components/next/ibm-watson-discovery-component.md), URI syntax: `ibm-watson-discovery:label`
+-   [IBM Watson Discovery component](../../../../components/4.22.x/ibm-watson-discovery-component.md), URI syntax: `ibm-watson-discovery:label`
     
 
 Please refer to the above link for usage and configuration details.

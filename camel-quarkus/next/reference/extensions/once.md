@@ -6,7 +6,7 @@ Trigger a single message only once at startup (useful for development and testin
 
 ## What’s inside
 
--   [Once component](../../../../components/next/once-component.md), URI syntax: `once:name`
+-   [Once component](../../../../components/4.22.x/once-component.md), URI syntax: `once:name`
     
 
 Please refer to the above link for usage and configuration details.

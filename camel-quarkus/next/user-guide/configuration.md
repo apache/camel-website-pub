@@ -13,7 +13,7 @@ After the configuration is done, a minimal Camel Runtime is assembled and starte
 
 To configure components and other aspects of Apache Camel through properties, make sure that your application depends on `camel-quarkus-core` directly or transitively. Because most Camel Quarkus extensions depend on `camel-quarkus-core`, you typically do not need to add it explicitly.
 
-`camel-quarkus-core` brings functionalities from [Camel Main](../../../components/next/others/main.md) to Camel Quarkus.
+`camel-quarkus-core` brings functionalities from [Camel Main](../../../components/4.22.x/others/main.md) to Camel Quarkus.
 
 In the example below, we set a specific `ExchangeFormatter` configuration on the `LogComponent` via `application.properties`:
 
@@ -99,7 +99,7 @@ public class Configurations {
 
 In addition to support configuring Camel through properties, `camel-quarkus-core` allows you to use conventions to configure the Camel behavior. For example, if there is a single `ExchangeFormatter` instance in the CDI container, then it will automatically wire that bean to the `LogComponent`.
 
-Component options for which this is supported are marked as _Autowired_ on their documentation pages - see e.g. the `exchangeFormatter` option on the [Log component](../../../components/next/log-component.html#_component_option_exchangeFormatter) page.
+Component options for which this is supported are marked as _Autowired_ on their documentation pages - see e.g. the `exchangeFormatter` option on the [Log component](../../../components/4.22.x/log-component.html#_component_option_exchangeFormatter) page.
 
 You can pass `autowiredEnabled=false` to disable it.
 

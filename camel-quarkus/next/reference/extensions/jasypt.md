@@ -6,7 +6,7 @@ Security using Jasypt
 
 ## What’s inside
 
--   [Jasypt](../../../../components/next/others/jasypt.md)
+-   [Jasypt](../../../../components/4.22.x/others/jasypt.md)
     
 
 Please refer to the above link for usage and configuration details.

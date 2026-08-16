@@ -6,7 +6,7 @@ Perform queries and other operations on Elasticsearch or OpenSearch (uses low-le
 
 ## What’s inside
 
--   [Elasticsearch Low level Rest Client component](../../../../components/next/elasticsearch-rest-client-component.md), URI syntax: `elasticsearch-rest-client:clusterName`
+-   [Elasticsearch Low level Rest Client component](../../../../components/4.22.x/elasticsearch-rest-client-component.md), URI syntax: `elasticsearch-rest-client:clusterName`
     
 
 Please refer to the above link for usage and configuration details.

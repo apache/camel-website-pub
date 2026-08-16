@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, audio transcription, audio translation, and text-to-speech using the official openai-java SDK.
+The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, content moderation, audio transcription, audio translation, and text-to-speech using the official openai-java SDK.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -41,6 +41,8 @@ See [Responses API operation](others/openai-responses.md) for usage (`previousRe
 -   `audio-translation` - Transcribe and translate audio files into English text (e.g., Whisper)
     
 -   `audio-speech` - Synthesize spoken audio from text using text-to-speech models (e.g., gpt-4o-mini-tts, tts-1)
+    
+-   `moderation` - Check text against the OpenAI usage policies before it reaches a model
     
 
 ## Configuring Options
@@ -118,7 +120,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform: 'chat-completion', 'responses', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', or 'audio-speech'.
+**Required** The operation to perform: 'chat-completion', 'responses', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', or 'moderation'.
 
 Enum values:
 
@@ -135,6 +137,8 @@ Enum values:
 -   audio-translation
     
 -   audio-speech
+    
+-   moderation
     
 
 
@@ -233,6 +237,7 @@ Enum values:
 | **mcpTimeout** (producer) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
 | **mcpToolRefresh** (producer) | Refresh the advertised tool list when an MCP server notifies that its tools changed. Set to false to keep the tool list fixed to what was listed when the endpoint started, for deployments that require a deterministic set of tools. | true | boolean |
 | **model** (producer) | The model to use for chat completion. |  | String |
+| **moderationModel** (producer) | The model to use for moderation. | omni-moderation-latest | String |
 | **outputClass** (producer) | Fully qualified class name for structured output using response format. |  | String |
 | **parallelToolExecution** (producer) | Execute the tool calls returned by the model in a single response concurrently instead of sequentially. Tool calls in the same batch are independent by design, so this reduces the latency of a batch to that of its slowest tool. Results are always fed back to the model in the original tool call order. Note that with toolExecutionErrorStrategy=failExchange the sibling tool calls already dispatched complete before the exchange fails. | false | boolean |
 | **parallelToolTimeout** (producer) | Timeout in milliseconds for a batch of parallel tool calls, so that one slow tool cannot block the whole batch. The timeout applies to the batch as a whole, not per tool call. A tool call that exceeds it is cancelled and handled according to toolExecutionErrorStrategy. The default of 0 disables the batch timeout and relies on mcpTimeout, which already bounds each individual MCP request. Only used when parallelToolExecution=true. | 0 | long |
@@ -266,7 +271,7 @@ Enum values:
  | mp3 | String |
 | **speechSpeed** (producer) | The speed of the generated audio, from 0.25 to 4.0 where 1.0 is normal speed. |  | Double |
 | **speechVoice** (producer) | The voice to use for text-to-speech (e.g., alloy, echo, fable, onyx, nova, shimmer). See the OpenAI documentation for the full list of supported voices. | alloy | String |
-| **storeFullResponse** (producer) | Store the full SDK response in non-streaming mode: chat-completion uses exchange property 'CamelOpenAIResponse'; responses uses 'CamelOpenAIResponsesResponse'. | false | boolean |
+| **storeFullResponse** (producer) | Store the full SDK response in non-streaming mode: chat-completion uses exchange property 'CamelOpenAIResponse'; responses uses 'CamelOpenAIResponsesResponse'; moderation uses 'CamelOpenAIModerationResponse'. | false | boolean |
 | **streaming** (producer) | Enable streaming responses. | false | boolean |
 | **stripThinking** (producer) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
 | **systemMessage** (producer) | System message to prepend. When set and conversationMemory is enabled, the conversation history is reset. |  | String |
@@ -340,6 +345,7 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIAgenticTotalTokens** (producer) Constant: [`AGENTIC_TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_TOTAL_TOKENS) | Cumulative total tokens consumed across all agentic loop iterations. |  | Long |
 | **CamelOpenAIResponse** (producer) Constant: [`RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE) | The complete OpenAI chat completion response object. |  | ChatCompletion |
 | **CamelOpenAIResponsesResponse** (producer) Constant: [`RESPONSES_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSES_RESPONSE) | The complete OpenAI Responses API response object. |  | Response |
+| **CamelOpenAIModerationResponse** (producer) Constant: [`MODERATION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE) | The complete OpenAI moderation response object. |  | ModerationCreateResponse |
 | **CamelOpenAIEmbeddingModel** (producer) Constant: [`EMBEDDING_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_MODEL) | The model to use for embeddings. |  | String |
 | **CamelOpenAIEmbeddingDimensions** (producer) Constant: [`EMBEDDING_DIMENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_DIMENSIONS) | Number of output dimensions. |  | Integer |
 | **CamelOpenAIEmbeddingResponseModel** (producer) Constant: [`EMBEDDING_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_RESPONSE_MODEL) | The embedding model used in the response. |  | String |
@@ -348,6 +354,12 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIReferenceEmbedding** (producer) Constant: [`REFERENCE_EMBEDDING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REFERENCE_EMBEDDING) | Reference embedding vector for similarity comparison. |  | List |
 | **CamelOpenAISimilarityScore** (producer) Constant: [`SIMILARITY_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SIMILARITY_SCORE) | Calculated cosine similarity score (0.0 to 1.0). |  | Double |
 | **CamelOpenAIOriginalText** (producer) Constant: [`ORIGINAL_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#ORIGINAL_TEXT) | Original text content when embeddings operation is used. |  | String or List |
+| **CamelOpenAIModerationModel** (producer) Constant: [`MODERATION_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_MODEL) | The model to use for moderation (e.g., omni-moderation-latest). |  | String |
+| **CamelOpenAIModerationFlagged** (producer) Constant: [`MODERATION_FLAGGED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_FLAGGED) | Whether the moderation API flagged the input as violating the usage policies. For a batch of inputs this is true when at least one input was flagged. |  | Boolean |
+| **CamelOpenAIModerationResults** (producer) Constant: [`MODERATION_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESULTS) | One verdict per moderated input, in the order of the inputs. Each entry holds the keys 'input', 'flagged', 'categories' and 'categoryScores', so a batch can be split and routed per item. |  | List |
+| **CamelOpenAIModerationCategories** (producer) Constant: [`MODERATION_CATEGORIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_CATEGORIES) | The moderation categories and whether each one was violated, for a single input. Not set for a list body, where 'CamelOpenAIModerationResults' carries the verdicts. |  | Map |
+| **CamelOpenAIModerationCategoryScores** (producer) Constant: [`MODERATION_CATEGORY_SCORES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_CATEGORY_SCORES) | The moderation confidence score per category, for a single input. Not set for a list body, where 'CamelOpenAIModerationResults' carries the verdicts. |  | Map |
+| **CamelOpenAIModerationResponseModel** (producer) Constant: [`MODERATION_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE_MODEL) | The moderation model used in the response. |  | String |
 | **CamelOpenAIAudioModel** (producer) Constant: [`AUDIO_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_MODEL) | The model to use for audio transcription. |  | String |
 | **CamelOpenAIAudioLanguage** (producer) Constant: [`AUDIO_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_LANGUAGE) | The language of the input audio (ISO-639-1). |  | String |
 | **CamelOpenAIAudioResponseFormat** (producer) Constant: [`AUDIO_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_RESPONSE_FORMAT) | The response format for audio transcription (json, text, srt, verbose\_json, vtt). |  | String |
@@ -1494,7 +1506,7 @@ For more details on specific features, see:
     
 -   [OpenAI-Compatible Providers](others/openai-providers.md) - Using Ollama, LM Studio, vLLM, and OpenRouter as alternative backends
     
--   [Embeddings and Audio Operations](others/openai-operations.md) - Text embeddings, vector database integration, and audio transcription
+-   [Embeddings, Moderation and Audio Operations](others/openai-operations.md) - Text embeddings, vector database integration, content moderation, and audio transcription
     
 
 ## Error Handling
@@ -1503,7 +1515,7 @@ The component may throw the following exceptions:
 
 -   `IllegalArgumentException`:
     
-    -   When an invalid operation is specified (supported: `chat-completion`, `embeddings`, `tool-execution`, `audio-transcription`, `audio-translation`, `audio-speech`)
+    -   When an invalid operation is specified (supported: `chat-completion`, `responses`, `embeddings`, `tool-execution`, `audio-transcription`, `audio-translation`, `audio-speech`, `moderation`)
         
     -   When message body or user message is missing
         
@@ -1514,6 +1526,13 @@ The component may throw the following exceptions:
     -   When unsupported file type is provided (only text and image files are supported)
         
     -   When invalid JSON schema string is provided
+        
+    -   When the moderation input list is empty or contains null elements (moderation)
+        
+    
+-   `CamelExchangeException`:
+    
+    -   When moderation returns a number of results that does not match the number of inputs (moderation)
         
     
 -   API-specific exceptions from the OpenAI SDK for network errors, authentication failures, rate limiting, etc.

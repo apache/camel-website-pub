@@ -6,7 +6,7 @@ Send and receive messages from/to Apache Pulsar messaging system.
 
 ## What’s inside
 
--   [Pulsar component](../../../../components/next/pulsar-component.md), URI syntax: `pulsar:persistence://tenant/namespace/topic`
+-   [Pulsar component](../../../../components/4.22.x/pulsar-component.md), URI syntax: `pulsar:persistence://tenant/namespace/topic`
     
 
 Please refer to the above link for usage and configuration details.

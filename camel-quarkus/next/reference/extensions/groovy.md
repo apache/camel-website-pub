@@ -6,11 +6,11 @@ Evaluate a Groovy script
 
 ## What’s inside
 
--   [Groovy language](../../../../components/next/languages/groovy-language.md)
+-   [Groovy language](../../../../components/4.22.x/languages/groovy-language.md)
     
--   [Groovy JSon data format](../../../../components/next/dataformats/groovyJson-dataformat.md)
+-   [Groovy JSon data format](../../../../components/4.22.x/dataformats/groovyJson-dataformat.md)
     
--   [Groovy XML data format](../../../../components/next/dataformats/groovyXml-dataformat.md)
+-   [Groovy XML data format](../../../../components/4.22.x/dataformats/groovyXml-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

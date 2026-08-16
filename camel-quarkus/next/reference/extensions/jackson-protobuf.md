@@ -6,7 +6,7 @@ Marshal POJOs to Protobuf and back using Jackson.
 
 ## What’s inside
 
--   [Protobuf Jackson data format](../../../../components/next/dataformats/protobufJackson2-dataformat.md)
+-   [Protobuf Jackson data format](../../../../components/4.22.x/dataformats/protobufJackson2-dataformat.md)
     
 
 Please refer to the above link for usage and configuration details.

@@ -6,7 +6,7 @@ Manage Keycloak instances via Admin API.
 
 ## What’s inside
 
--   [Keycloak component](../../../../components/next/keycloak-component.md), URI syntax: `keycloak:label`
+-   [Keycloak component](../../../../components/4.22.x/keycloak-component.md), URI syntax: `keycloak:label`
     
 
 Please refer to the above link for usage and configuration details.

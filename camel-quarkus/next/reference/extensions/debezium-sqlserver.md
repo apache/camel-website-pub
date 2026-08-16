@@ -6,7 +6,7 @@ Capture changes from an SQL Server database.
 
 ## What’s inside
 
--   [Debezium SQL Server Connector component](../../../../components/next/debezium-sqlserver-component.md), URI syntax: `debezium-sqlserver:name`
+-   [Debezium SQL Server Connector component](../../../../components/4.22.x/debezium-sqlserver-component.md), URI syntax: `debezium-sqlserver:name`
     
 
 Please refer to the above link for usage and configuration details.

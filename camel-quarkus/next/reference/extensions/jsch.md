@@ -6,7 +6,7 @@ Copy files to/from remote hosts using the secure copy protocol (SCP).
 
 ## What’s inside
 
--   [SCP component](../../../../components/next/scp-component.md), URI syntax: `scp:host:port/directoryName`
+-   [SCP component](../../../../components/4.22.x/scp-component.md), URI syntax: `scp:host:port/directoryName`
     
 
 Please refer to the above link for usage and configuration details.

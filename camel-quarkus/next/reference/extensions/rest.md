@@ -6,9 +6,9 @@ Expose REST services and their OpenAPI Specification or call external REST servi
 
 ## What’s inside
 
--   [REST component](../../../../components/next/rest-component.md), URI syntax: `rest:method:path:uriTemplate`
+-   [REST component](../../../../components/4.22.x/rest-component.md), URI syntax: `rest:method:path:uriTemplate`
     
--   [REST API component](../../../../components/next/rest-api-component.md), URI syntax: `rest-api:path`
+-   [REST API component](../../../../components/4.22.x/rest-api-component.md), URI syntax: `rest-api:path`
     
 
 Please refer to the above links for usage and configuration details.

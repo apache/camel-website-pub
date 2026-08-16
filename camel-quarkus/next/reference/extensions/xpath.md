@@ -6,7 +6,7 @@ Evaluates an XPath expression against an XML payload
 
 ## What’s inside
 
--   [XPath language](../../../../components/next/languages/xpath-language.md)
+-   [XPath language](../../../../components/4.22.x/languages/xpath-language.md)
     
 
 Please refer to the above link for usage and configuration details.

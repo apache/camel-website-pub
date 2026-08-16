@@ -6,7 +6,7 @@ Interact with Apache Kudu, a free and open source column-oriented data store of 
 
 ## What’s inside
 
--   [Kudu component](../../../../components/next/kudu-component.md), URI syntax: `kudu:host:port/tableName`
+-   [Kudu component](../../../../components/4.22.x/kudu-component.md), URI syntax: `kudu:host:port/tableName`
     
 
 Please refer to the above link for usage and configuration details.

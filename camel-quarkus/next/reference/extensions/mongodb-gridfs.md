@@ -6,7 +6,7 @@ Interact with MongoDB GridFS.
 
 ## What’s inside
 
--   [MongoDB GridFS component](../../../../components/next/mongodb-gridfs-component.md), URI syntax: `mongodb-gridfs:connectionBean`
+-   [MongoDB GridFS component](../../../../components/4.22.x/mongodb-gridfs-component.md), URI syntax: `mongodb-gridfs:connectionBean`
     
 
 Please refer to the above link for usage and configuration details.

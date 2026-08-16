@@ -6,7 +6,7 @@ The Netty HTTP extension provides HTTP transport on top of the [Netty extension]
 
 ## What’s inside
 
--   [Netty HTTP component](../../../../components/next/netty-http-component.md), URI syntax: `netty-http:protocol://host:port/path`
+-   [Netty HTTP component](../../../../components/4.22.x/netty-http-component.md), URI syntax: `netty-http:protocol://host:port/path`
     
 
 Please refer to the above link for usage and configuration details.

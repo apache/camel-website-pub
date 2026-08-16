@@ -6,7 +6,7 @@ Send and receive messages to/from PubNub data stream network for connected devic
 
 ## What’s inside
 
--   [PubNub component](../../../../components/next/pubnub-component.md), URI syntax: `pubnub:channel`
+-   [PubNub component](../../../../components/4.22.x/pubnub-component.md), URI syntax: `pubnub:channel`
     
 
 Please refer to the above link for usage and configuration details.

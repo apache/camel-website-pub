@@ -6,7 +6,7 @@ Schedule sending of messages using the Quartz 2.x scheduler.
 
 ## What’s inside
 
--   [Quartz component](../../../../components/next/quartz-component.md), URI syntax: `quartz:groupName/triggerName`
+-   [Quartz component](../../../../components/4.22.x/quartz-component.md), URI syntax: `quartz:groupName/triggerName`
     
 
 Please refer to the above link for usage and configuration details.

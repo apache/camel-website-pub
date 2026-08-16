@@ -6,9 +6,9 @@ Use Smooks to transform, route, and bind both XML and non-XML data, including ED
 
 ## What’s inside
 
--   [Smooks component](../../../../components/next/smooks-component.md), URI syntax: `smooks:smooksConfig`
+-   [Smooks component](../../../../components/4.22.x/smooks-component.md), URI syntax: `smooks:smooksConfig`
     
--   [Smooks data format](../../../../components/next/dataformats/smooks-dataformat.md)
+-   [Smooks data format](../../../../components/4.22.x/dataformats/smooks-dataformat.md)
     
 
 Please refer to the above links for usage and configuration details.

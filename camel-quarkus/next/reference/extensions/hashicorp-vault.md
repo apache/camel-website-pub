@@ -6,7 +6,7 @@ Manage secrets in HashiCorp Vault Service
 
 ## What’s inside
 
--   [HashiCorp Vault component](../../../../components/next/hashicorp-vault-component.md), URI syntax: `hashicorp-vault:secretsEngine`
+-   [HashiCorp Vault component](../../../../components/4.22.x/hashicorp-vault-component.md), URI syntax: `hashicorp-vault:secretsEngine`
     
 
 Please refer to the above link for usage and configuration details.

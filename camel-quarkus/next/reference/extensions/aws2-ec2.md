@@ -6,7 +6,7 @@ Manage AWS EC2 instances.
 
 ## What’s inside
 
--   [AWS Elastic Compute Cloud (EC2) component](../../../../components/next/aws2-ec2-component.md), URI syntax: `aws2-ec2:label`
+-   [AWS Elastic Compute Cloud (EC2) component](../../../../components/4.22.x/aws2-ec2-component.md), URI syntax: `aws2-ec2:label`
     
 
 Please refer to the above link for usage and configuration details.

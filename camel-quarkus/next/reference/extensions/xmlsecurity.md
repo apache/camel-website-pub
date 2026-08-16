@@ -6,11 +6,11 @@ Sign XML payloads using the XML signature specification.
 
 ## What’s inside
 
--   [XML Security data format](../../../../components/next/dataformats/xmlSecurity-dataformat.md)
+-   [XML Security data format](../../../../components/4.22.x/dataformats/xmlSecurity-dataformat.md)
     
--   [XML Security Sign component](../../../../components/next/xmlsecurity-sign-component.md), URI syntax: `xmlsecurity-sign:name`
+-   [XML Security Sign component](../../../../components/4.22.x/xmlsecurity-sign-component.md), URI syntax: `xmlsecurity-sign:name`
     
--   [XML Security Verify component](../../../../components/next/xmlsecurity-verify-component.md), URI syntax: `xmlsecurity-verify:name`
+-   [XML Security Verify component](../../../../components/4.22.x/xmlsecurity-verify-component.md), URI syntax: `xmlsecurity-verify:name`
     
 
 Please refer to the above links for usage and configuration details.

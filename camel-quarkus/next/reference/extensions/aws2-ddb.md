@@ -6,9 +6,9 @@ Store and retrieve data from AWS DynamoDB. Receive messages from AWS DynamoDB St
 
 ## What’s inside
 
--   [AWS DynamoDB component](../../../../components/next/aws2-ddb-component.md), URI syntax: `aws2-ddb:tableName`
+-   [AWS DynamoDB component](../../../../components/4.22.x/aws2-ddb-component.md), URI syntax: `aws2-ddb:tableName`
     
--   [AWS DynamoDB Streams component](../../../../components/next/aws2-ddbstream-component.md), URI syntax: `aws2-ddbstream:tableName`
+-   [AWS DynamoDB Streams component](../../../../components/4.22.x/aws2-ddbstream-component.md), URI syntax: `aws2-ddbstream:tableName`
     
 
 Please refer to the above links for usage and configuration details.

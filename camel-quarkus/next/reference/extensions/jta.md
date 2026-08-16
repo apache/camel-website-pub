@@ -6,7 +6,7 @@ Using Camel With JTA Transaction Manager
 
 ## What’s inside
 
--   [JTA](../../../../components/next/others/jta.md)
+-   [JTA](../../../../components/4.22.x/others/jta.md)
     
 
 Please refer to the above link for usage and configuration details.

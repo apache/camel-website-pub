@@ -6,9 +6,9 @@ Perform SQL queries.
 
 ## What’s inside
 
--   [SQL component](../../../../components/next/sql-component.md), URI syntax: `sql:query`
+-   [SQL component](../../../../components/4.22.x/sql-component.md), URI syntax: `sql:query`
     
--   [SQL Stored Procedure component](../../../../components/next/sql-stored-component.md), URI syntax: `sql-stored:template`
+-   [SQL Stored Procedure component](../../../../components/4.22.x/sql-stored-component.md), URI syntax: `sql-stored:template`
     
 
 Please refer to the above links for usage and configuration details.

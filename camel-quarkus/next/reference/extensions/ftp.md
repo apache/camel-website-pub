@@ -6,11 +6,11 @@ Upload and download files to/from SFTP, FTP or SFTP servers
 
 ## What’s inside
 
--   [FTP component](../../../../components/next/ftp-component.md), URI syntax: `ftp:host:port/directoryName`
+-   [FTP component](../../../../components/4.22.x/ftp-component.md), URI syntax: `ftp:host:port/directoryName`
     
--   [FTPS component](../../../../components/next/ftps-component.md), URI syntax: `ftps:host:port/directoryName`
+-   [FTPS component](../../../../components/4.22.x/ftps-component.md), URI syntax: `ftps:host:port/directoryName`
     
--   [SFTP component](../../../../components/next/sftp-component.md), URI syntax: `sftp:host:port/directoryName`
+-   [SFTP component](../../../../components/4.22.x/sftp-component.md), URI syntax: `sftp:host:port/directoryName`
     
 
 Please refer to the above links for usage and configuration details.

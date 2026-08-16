@@ -6,7 +6,7 @@ Asynchronously call another endpoint from any Camel Context in the same JVM.
 
 ## What’s inside
 
--   [SEDA component](../../../../components/next/seda-component.md), URI syntax: `seda:name`
+-   [SEDA component](../../../../components/4.22.x/seda-component.md), URI syntax: `seda:name`
     
 
 Please refer to the above link for usage and configuration details.

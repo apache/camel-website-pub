@@ -6,9 +6,9 @@ Offers publish/subscribe, peer-to-peer (via a server), and RPC style messaging u
 
 ## What’s inside
 
--   [CometD component](../../../../components/next/cometd-component.md), URI syntax: `cometd:host:port/channelName`
+-   [CometD component](../../../../components/4.22.x/cometd-component.md), URI syntax: `cometd:host:port/channelName`
     
--   [CometD (Secure) component](../../../../components/next/cometd-component.md), URI syntax: `cometds:host:port/channelName`
+-   [CometD (Secure) component](../../../../components/4.22.x/cometd-component.md), URI syntax: `cometds:host:port/channelName`
     
 
 Please refer to the above links for usage and configuration details.

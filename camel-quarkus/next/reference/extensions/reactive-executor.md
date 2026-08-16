@@ -6,7 +6,7 @@ Reactive Executor for camel-core using Vert.x
 
 ## What’s inside
 
--   [Reactive Executor Vert.x](../../../../components/next/others/reactive-executor-vertx.md)
+-   [Reactive Executor Vert.x](../../../../components/4.22.x/others/reactive-executor-vertx.md)
     
 
 Please refer to the above link for usage and configuration details.

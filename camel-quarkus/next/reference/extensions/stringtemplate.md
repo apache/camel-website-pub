@@ -6,7 +6,7 @@ Transform messages using StringTemplate engine.
 
 ## What’s inside
 
--   [String Template component](../../../../components/next/string-template-component.md), URI syntax: `string-template:resourceUri`
+-   [String Template component](../../../../components/4.22.x/string-template-component.md), URI syntax: `string-template:resourceUri`
     
 
 Please refer to the above link for usage and configuration details.
