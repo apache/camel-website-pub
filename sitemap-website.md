@@ -1,10 +1,12 @@
-urls[834]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-08-16T00:00:00+00:00
-  https://camel.apache.org/,2026-08-16T00:00:00+00:00
+urls[836]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-08-17T00:00:00+00:00
+  https://camel.apache.org/,2026-08-17T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.18.4/,2026-08-17T00:00:00+00:00
+  https://camel.apache.org/blog/2026/08/RELEASE-4.18.4/,2026-08-17T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-08-17T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-08-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.14.9/,2026-08-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/RELEASE-4.14.9/,2026-08-16T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-08-16T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-08-16T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-08-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/camel-clickhouse-analytics/,2026-08-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/camel422-whatsnew/,2026-08-11T00:00:00+00:00

@@ -2,7 +2,8 @@
 
 Release feed for Apache Camel and related projects.
 
-releases[111]{title,link,pubDate,description}:
+releases[112]{title,link,pubDate,description}:
+  RELEASE 4.18.4|https://camel.apache.org/blog/2026/08/RELEASE-4.18.4/index.md|Mon, 17 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.4 LTS release with 66 new features and improvements. The artifacts are published and ready for you to download from the Centr
   RELEASE 4.14.9|https://camel.apache.org/blog/2026/08/RELEASE-4.14.9/index.md|Sun, 16 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.9 patch release with 38 bug fixes and improvements. The artifacts are published and ready for you to download from the Centra
   Apache Camel 4.22 What's New|https://camel.apache.org/blog/2026/08/camel422-whatsnew/index.md|Tue, 11 Aug 2026 00:00:00 +0000|Apache Camel 4.22 LTS has just been released. This is a Long Term Support (LTS) release, which means it will receive patch releases with bug fixes and security updates for approximately one year. The 
   RELEASE 4.22.0|https://camel.apache.org/blog/2026/08/RELEASE-4.22.0/index.md|Tue, 11 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.22.0 LTS release with 526 new features and improvements. The artifacts are published and ready for you to download from the Cent
