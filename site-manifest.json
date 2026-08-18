@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1786956836793,
+  "generated": 1787054156060,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -5242,7 +5242,7 @@
     {
       "name": "camel-quarkus",
       "title": "Camel Quarkus",
-      "latest": "next",
+      "latest": "3.33.x",
       "versions": [
         {
           "version": "next",
@@ -8082,6 +8082,2790 @@
               "module": "ROOT",
               "path": "user-guide/testing.adoc",
               "url": "/camel-quarkus/next/user-guide/testing.html",
+              "title": "Testing",
+              "attributes": {
+                "page-aliases": "testing.adoc"
+              }
+            }
+          ]
+        },
+        {
+          "version": "3.33.x",
+          "url": "/camel-quarkus/3.33.x/index.html",
+          "pages": [
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/ci.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/ci.html",
+              "title": "Camel Quarkus CI Builds",
+              "attributes": {
+                "page-aliases": "ci.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/create-jvm-only-extension.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/create-jvm-only-extension.html",
+              "title": "Create a JVM-only extension"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/create-new-dev-ui-page.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/create-new-dev-ui-page.html",
+              "title": "Create a new Dev UI page",
+              "attributes": {
+                "page-aliases": "create-new-dev-ui.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/create-new-example.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/create-new-example.html",
+              "title": "Create a new example project",
+              "attributes": {
+                "page-aliases": "create-new-example.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/create-new-extension.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/create-new-extension.html",
+              "title": "Create a new extension",
+              "attributes": {
+                "page-aliases": "create-new-extension.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/extension-documentation.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/extension-documentation.html",
+              "title": "Extension documentation",
+              "attributes": {
+                "page-aliases": "extension-documentation.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/extension-metadata.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/extension-metadata.html",
+              "title": "Extension metadata",
+              "attributes": {
+                "page-aliases": "extension-metadata.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/extension-testing.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/extension-testing.html",
+              "title": "Testing extensions"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/index.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/index.html",
+              "title": "Contributor guide",
+              "attributes": {
+                "page-aliases": "contributor-guide.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/promote-jvm-to-native.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/promote-jvm-to-native.html",
+              "title": "Promote JVM extension to Native",
+              "attributes": {
+                "page-aliases": "promote-jvm-to-native.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "contributor-guide/release-guide.adoc",
+              "url": "/camel-quarkus/3.33.x/contributor-guide/release-guide.html",
+              "title": "Apache Camel Quarkus release process",
+              "attributes": {
+                "page-aliases": "release-guide.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "index.adoc",
+              "url": "/camel-quarkus/3.33.x/index.html",
+              "title": "Apache Camel extensions for Quarkus"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/2.0.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/2.0.0.html",
+              "title": "Camel Quarkus 2.0.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/2.1.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/2.1.0.html",
+              "title": "Camel Quarkus 2.1.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/2.10.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/2.10.0.html",
+              "title": "Camel Quarkus 2.10.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/2.11.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/2.11.0.html",
+              "title": "Camel Quarkus 2.11.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/2.2.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/2.2.0.html",
+              "title": "Camel Quarkus 2.2.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/2.6.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/2.6.0.html",
+              "title": "Camel Quarkus 2.6.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/2.7.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/2.7.0.html",
+              "title": "Camel Quarkus 2.7.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/2.8.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/2.8.0.html",
+              "title": "Camel Quarkus 2.8.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.15.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.15.0.html",
+              "title": "Camel Quarkus 3.15.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.17.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.17.0.html",
+              "title": "Camel Quarkus 3.17.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.18.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.18.0.html",
+              "title": "Camel Quarkus 3.18.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.2.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.2.0.html",
+              "title": "Camel Quarkus 3.2.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.23.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.23.0.html",
+              "title": "Camel Quarkus 3.23.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.26.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.26.0.html",
+              "title": "Camel Quarkus 3.26.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.27.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.27.0.html",
+              "title": "Camel Quarkus 3.27.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.31.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.31.0.html",
+              "title": "Camel Quarkus 3.31.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.33.0.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.33.0.html",
+              "title": "Camel Quarkus 3.33.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/camel-spring-boot-to-camel-quarkus.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/camel-spring-boot-to-camel-quarkus.html",
+              "title": "Camel Spring Boot to Camel Quarkus Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/index.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/index.html",
+              "title": "Camel Quarkus Migration And Upgrade Guides"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/components.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/components.html",
+              "title": "Camel components supported on Quarkus"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/components/stringtemplate.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/components/stringtemplate.html",
+              "title": "String Template"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/dataformats.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/dataformats.html",
+              "title": "Camel data formats supported on Quarkus"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/activemq.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/activemq.html",
+              "title": "ActiveMQ",
+              "attributes": {
+                "page-aliases": "extensions/activemq.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/activemq6.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/activemq6.html",
+              "title": "ActiveMQ 6.x"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/amqp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/amqp.html",
+              "title": "AMQP",
+              "attributes": {
+                "page-aliases": "extensions/amqp.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/arangodb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/arangodb.html",
+              "title": "ArangoDb"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/as2.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/as2.html",
+              "title": "AS2",
+              "attributes": {
+                "page-aliases": "extensions/as2.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/asn1.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/asn1.html",
+              "title": "ASN.1 File"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/asterisk.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/asterisk.html",
+              "title": "Asterisk"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/atom.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/atom.html",
+              "title": "Atom"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/attachments.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/attachments.html",
+              "title": "Attachments",
+              "attributes": {
+                "page-aliases": "extensions/attachments.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/avro.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/avro.html",
+              "title": "Avro",
+              "attributes": {
+                "page-aliases": "extensions/avro.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws-bedrock.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws-bedrock.html",
+              "title": "AWS Bedrock"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws-secrets-manager.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws-secrets-manager.html",
+              "title": "AWS Secrets Manager"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws-xray.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws-xray.html",
+              "title": "AWS XRay"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-athena.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-athena.html",
+              "title": "AWS 2 Athena",
+              "attributes": {
+                "page-aliases": "extensions/aws2-athena.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-cw.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-cw.html",
+              "title": "AWS 2 CloudWatch",
+              "attributes": {
+                "page-aliases": "extensions/aws2-cw.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-ddb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-ddb.html",
+              "title": "AWS 2 DynamoDB",
+              "attributes": {
+                "page-aliases": "extensions/aws2-ddb.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-ec2.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-ec2.html",
+              "title": "AWS 2 Elastic Compute Cloud (EC2)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-ec2.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-ecs.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-ecs.html",
+              "title": "AWS 2 Elastic Container Service (ECS)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-ecs.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-eks.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-eks.html",
+              "title": "AWS 2 Elastic Kubernetes Service (EKS)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-eks.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-eventbridge.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-eventbridge.html",
+              "title": "AWS 2 Eventbridge"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-iam.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-iam.html",
+              "title": "AWS 2 Identity and Access Management (IAM)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-iam.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-kinesis.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-kinesis.html",
+              "title": "AWS 2 Kinesis"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-kms.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-kms.html",
+              "title": "AWS 2 Key Management Service (KMS)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-kms.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-lambda.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-lambda.html",
+              "title": "AWS 2 Lambda"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-mq.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-mq.html",
+              "title": "AWS 2 MQ",
+              "attributes": {
+                "page-aliases": "extensions/aws2-mq.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-msk.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-msk.html",
+              "title": "AWS 2 Managed Streaming for Apache Kafka (MSK)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-msk.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-s3.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-s3.html",
+              "title": "AWS 2 S3 Storage Service",
+              "attributes": {
+                "page-aliases": "extensions/aws2-s3.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-ses.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-ses.html",
+              "title": "AWS 2 Simple Email Service (SES)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-ses.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-sns.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-sns.html",
+              "title": "AWS 2 Simple Notification System (SNS)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-sns.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-sqs.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-sqs.html",
+              "title": "AWS 2 Simple Queue Service (SQS)",
+              "attributes": {
+                "page-aliases": "extensions/aws2-sqs.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-sts.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-sts.html",
+              "title": "AWS 2 Security Token Service (STS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/aws2-translate.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/aws2-translate.html",
+              "title": "AWS 2 Translate",
+              "attributes": {
+                "page-aliases": "extensions/aws2-translate.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/azure-cosmosdb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/azure-cosmosdb.html",
+              "title": "Azure CosmosDB"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/azure-eventhubs.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/azure-eventhubs.html",
+              "title": "Azure Event Hubs"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/azure-files.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/azure-files.html",
+              "title": "Azure Files"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/azure-key-vault.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/azure-key-vault.html",
+              "title": "Azure Key Vault"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/azure-servicebus.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/azure-servicebus.html",
+              "title": "Azure ServiceBus"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/azure-storage-blob.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/azure-storage-blob.html",
+              "title": "Azure Storage Blob Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/azure-storage-datalake.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/azure-storage-datalake.html",
+              "title": "Azure storage datalake service"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/azure-storage-queue.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/azure-storage-queue.html",
+              "title": "Azure Storage Queue Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/barcode.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/barcode.html",
+              "title": "Barcode"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/base64.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/base64.html",
+              "title": "Base64",
+              "attributes": {
+                "page-aliases": "extensions/base64.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/bean-validator.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/bean-validator.html",
+              "title": "Bean Validator",
+              "attributes": {
+                "page-aliases": "extensions/bean-validator.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/bean.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/bean.html",
+              "title": "Bean",
+              "attributes": {
+                "page-aliases": "extensions/bean.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/beanio.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/beanio.html",
+              "title": "BeanIO"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/bindy.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/bindy.html",
+              "title": "Bindy",
+              "attributes": {
+                "page-aliases": "extensions/bindy.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/bonita.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/bonita.html",
+              "title": "Bonita"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/box.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/box.html",
+              "title": "Box",
+              "attributes": {
+                "page-aliases": "extensions/box.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/braintree.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/braintree.html",
+              "title": "Braintree",
+              "attributes": {
+                "page-aliases": "extensions/braintree.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/browse.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/browse.html",
+              "title": "Browse"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/caffeine.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/caffeine.html",
+              "title": "Caffeine Cache"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cassandraql.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cassandraql.html",
+              "title": "Cassandra CQL",
+              "attributes": {
+                "page-aliases": "extensions/cassandraql.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cbor.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cbor.html",
+              "title": "CBOR"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/chatscript.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/chatscript.html",
+              "title": "ChatScript"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/chunk.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/chunk.html",
+              "title": "Chunk"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cli-connector.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cli-connector.html",
+              "title": "CLI Connector"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cli-debug.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cli-debug.html",
+              "title": "CLI Debug"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cloudevents.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cloudevents.html",
+              "title": "Cloudevents"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cm-sms.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cm-sms.html",
+              "title": "CM SMS Gateway"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/coap.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/coap.html",
+              "title": "CoAP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cometd.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cometd.html",
+              "title": "CometD"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/console.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/console.html",
+              "title": "Console"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/consul.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/consul.html",
+              "title": "Consul",
+              "attributes": {
+                "page-aliases": "extensions/consul.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/controlbus.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/controlbus.html",
+              "title": "Control Bus",
+              "attributes": {
+                "page-aliases": "extensions/controlbus.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/core-cloud.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/core-cloud.html",
+              "title": "Cloud",
+              "attributes": {
+                "page-aliases": "extensions/core-cloud.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/core.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/core.html",
+              "title": "Core",
+              "attributes": {
+                "page-aliases": "extensions/core.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/couchbase.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/couchbase.html",
+              "title": "Couchbase",
+              "attributes": {
+                "page-aliases": "extensions/couchbase.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/couchdb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/couchdb.html",
+              "title": "CouchDB",
+              "attributes": {
+                "page-aliases": "extensions/couchdb.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cron.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cron.html",
+              "title": "Cron",
+              "attributes": {
+                "page-aliases": "extensions/cron.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/crypto-pgp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/crypto-pgp.html",
+              "title": "PGP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/crypto.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/crypto.html",
+              "title": "Crypto (JCE)"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/csimple.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/csimple.html",
+              "title": "CSimple"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/csv.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/csv.html",
+              "title": "CSV",
+              "attributes": {
+                "page-aliases": "extensions/csv.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cxf-soap.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cxf-soap.html",
+              "title": "CXF"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/cyberark-vault.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/cyberark-vault.html",
+              "title": "CyberArk Vault"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/dataformat.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/dataformat.html",
+              "title": "Data Format",
+              "attributes": {
+                "page-aliases": "extensions/dataformat.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/dataset.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/dataset.html",
+              "title": "Dataset"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/datasonnet.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/datasonnet.html",
+              "title": "DataSonnet"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/debezium-mongodb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/debezium-mongodb.html",
+              "title": "Debezium MongoDB Connector",
+              "attributes": {
+                "page-aliases": "extensions/debezium-mongodb.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/debezium-mysql.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/debezium-mysql.html",
+              "title": "Debezium MySQL Connector",
+              "attributes": {
+                "page-aliases": "extensions/debezium-mysql.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/debezium-oracle.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/debezium-oracle.html",
+              "title": "Debezium Oracle Connector"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/debezium-postgres.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/debezium-postgres.html",
+              "title": "Debezium PostgresSQL Connector",
+              "attributes": {
+                "page-aliases": "extensions/debezium-postgres.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/debezium-sqlserver.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/debezium-sqlserver.html",
+              "title": "Debezium SQL Server Connector",
+              "attributes": {
+                "page-aliases": "extensions/debezium-sqlserver.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/debug.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/debug.html",
+              "title": "Debug"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/dfdl.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/dfdl.html",
+              "title": "DFDL"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/digitalocean.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/digitalocean.html",
+              "title": "DigitalOcean"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/direct.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/direct.html",
+              "title": "Direct",
+              "attributes": {
+                "page-aliases": "extensions/direct.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/disruptor.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/disruptor.html",
+              "title": "Disruptor"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/djl.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/djl.html",
+              "title": "Deep Java Library"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/dns.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/dns.html",
+              "title": "DNS"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/docling.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/docling.html",
+              "title": "Docling"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/drill.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/drill.html",
+              "title": "Drill"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/dropbox.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/dropbox.html",
+              "title": "Dropbox"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/dsl-modeline.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/dsl-modeline.html",
+              "title": "DSL Modeline"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ehcache.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ehcache.html",
+              "title": "Ehcache"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/elasticsearch-rest-client.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/elasticsearch-rest-client.html",
+              "title": "Elasticsearch Low level Rest Client"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/elasticsearch.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/elasticsearch.html",
+              "title": "Elasticsearch"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/exec.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/exec.html",
+              "title": "Exec",
+              "attributes": {
+                "page-aliases": "extensions/exec.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/fastjson.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/fastjson.html",
+              "title": "JSON Fastjson"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/fhir.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/fhir.html",
+              "title": "FHIR",
+              "attributes": {
+                "page-aliases": "extensions/fhir.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/file-cluster-service.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/file-cluster-service.html",
+              "title": "File Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/file-watch.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/file-watch.html",
+              "title": "File Watch",
+              "attributes": {
+                "page-aliases": "extensions/file-watch.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/file.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/file.html",
+              "title": "File",
+              "attributes": {
+                "page-aliases": "extensions/file.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/flatpack.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/flatpack.html",
+              "title": "Flatpack"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/flink.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/flink.html",
+              "title": "Flink"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/fop.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/fop.html",
+              "title": "FOP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/fory.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/fory.html",
+              "title": "Fory"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/freemarker.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/freemarker.html",
+              "title": "Freemarker"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ftp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ftp.html",
+              "title": "FTP",
+              "attributes": {
+                "page-aliases": "extensions/ftp.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/geocoder.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/geocoder.html",
+              "title": "Geocoder"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/git.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/git.html",
+              "title": "Git"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/github.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/github.html",
+              "title": "GitHub",
+              "attributes": {
+                "page-aliases": "extensions/github.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-bigquery.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-bigquery.html",
+              "title": "Google BigQuery",
+              "attributes": {
+                "page-aliases": "extensions/google-bigquery.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-calendar.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-calendar.html",
+              "title": "Google Calendar",
+              "attributes": {
+                "page-aliases": "extensions/google-calendar.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-drive.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-drive.html",
+              "title": "Google Drive",
+              "attributes": {
+                "page-aliases": "extensions/google-drive.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-functions.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-functions.html",
+              "title": "GoogleCloudFunctions"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-mail.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-mail.html",
+              "title": "Google Mail",
+              "attributes": {
+                "page-aliases": "extensions/google-mail.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-pubsub.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-pubsub.html",
+              "title": "Google Pubsub",
+              "attributes": {
+                "page-aliases": "extensions/google-pubsub.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-secret-manager.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-secret-manager.html",
+              "title": "Google Secret Manager"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-sheets.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-sheets.html",
+              "title": "Google Sheets",
+              "attributes": {
+                "page-aliases": "extensions/google-sheets.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/google-storage.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/google-storage.html",
+              "title": "Google Storage"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/graphql.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/graphql.html",
+              "title": "GraphQL",
+              "attributes": {
+                "page-aliases": "extensions/graphql.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/grok.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/grok.html",
+              "title": "Grok",
+              "attributes": {
+                "page-aliases": "extensions/grok.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/groovy-xml.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/groovy-xml.html",
+              "title": "Groovy XML"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/groovy.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/groovy.html",
+              "title": "Groovy",
+              "attributes": {
+                "page-aliases": "extensions/groovy.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/grpc.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/grpc.html",
+              "title": "gRPC",
+              "attributes": {
+                "page-aliases": "extensions/grpc.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/gson.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/gson.html",
+              "title": "Gson",
+              "attributes": {
+                "page-aliases": "extensions/gson.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/guava-eventbus.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/guava-eventbus.html",
+              "title": "Guava EventBus"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/hashicorp-vault.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/hashicorp-vault.html",
+              "title": "Hashicorp Vault"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/hazelcast.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/hazelcast.html",
+              "title": "Hazelcast Atomic Number"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/headersmap.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/headersmap.html",
+              "title": "Headersmap"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/hl7.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/hl7.html",
+              "title": "HL7"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/http.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/http.html",
+              "title": "HTTP",
+              "attributes": {
+                "page-aliases": "extensions/http.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/huaweicloud-smn.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/huaweicloud-smn.html",
+              "title": "SimpleNotification"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ibm-cos.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ibm-cos.html",
+              "title": "IBM Cloud Object Storage"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ibm-secrets-manager.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ibm-secrets-manager.html",
+              "title": "IBM Secrets Manager"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ibm-watson-discovery.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ibm-watson-discovery.html",
+              "title": "IBM Watson Discovery"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ibm-watson-language.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ibm-watson-language.html",
+              "title": "IBM Watson Language"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ical.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ical.html",
+              "title": "iCal",
+              "attributes": {
+                "page-aliases": "extensions/ical.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/iec60870.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/iec60870.html",
+              "title": "IEC 60870 Client"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ignite.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ignite.html",
+              "title": "Ignite Cache"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/infinispan-cluster-service.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/infinispan-cluster-service.html",
+              "title": "Infinispan Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/infinispan.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/infinispan.html",
+              "title": "Infinispan",
+              "attributes": {
+                "page-aliases": "extensions/infinispan.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/influxdb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/influxdb.html",
+              "title": "InfluxDB",
+              "attributes": {
+                "page-aliases": "extensions/influxdb.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/irc.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/irc.html",
+              "title": "IRC"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/iso8583.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/iso8583.html",
+              "title": "ISO-8583"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jackson-avro.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jackson-avro.html",
+              "title": "Avro Jackson"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jackson-protobuf.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jackson-protobuf.html",
+              "title": "Protobuf Jackson"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jackson.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jackson.html",
+              "title": "Jackson",
+              "attributes": {
+                "page-aliases": "extensions/jackson.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jacksonxml.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jacksonxml.html",
+              "title": "JacksonXML",
+              "attributes": {
+                "page-aliases": "extensions/jacksonxml.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jasypt.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jasypt.html",
+              "title": "Jasypt"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/java-joor-dsl.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/java-joor-dsl.html",
+              "title": "Java jOOR DSL"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/javascript.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/javascript.html",
+              "title": "JavaScript"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jaxb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jaxb.html",
+              "title": "JAXB",
+              "attributes": {
+                "page-aliases": "extensions/jaxb.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jcache.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jcache.html",
+              "title": "JCache"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jcr.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jcr.html",
+              "title": "JCR"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jdbc.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jdbc.html",
+              "title": "JDBC",
+              "attributes": {
+                "page-aliases": "extensions/jdbc.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jfr.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jfr.html",
+              "title": "Jfr"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jgroups-raft.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jgroups-raft.html",
+              "title": "JGroups raft"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jgroups.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jgroups.html",
+              "title": "JGroups"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jira.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jira.html",
+              "title": "Jira",
+              "attributes": {
+                "page-aliases": "extensions/jira.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jms.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jms.html",
+              "title": "JMS",
+              "attributes": {
+                "page-aliases": "extensions/jms.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jolokia.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jolokia.html",
+              "title": "Jolokia"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jolt.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jolt.html",
+              "title": "JOLT",
+              "attributes": {
+                "page-aliases": "extensions/jolt.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jooq.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jooq.html",
+              "title": "JOOQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/joor.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/joor.html",
+              "title": "jOOR"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jpa.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jpa.html",
+              "title": "JPA",
+              "attributes": {
+                "page-aliases": "extensions/jpa.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jq.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jq.html",
+              "title": "JQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jsch.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jsch.html",
+              "title": "SCP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jslt.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jslt.html",
+              "title": "JSLT"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/json-patch.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/json-patch.html",
+              "title": "JsonPatch"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/json-validator.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/json-validator.html",
+              "title": "JSON Schema Validator",
+              "attributes": {
+                "page-aliases": "extensions/json-validator.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jsonapi.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jsonapi.html",
+              "title": "JSonApi"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jsonata.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jsonata.html",
+              "title": "JSONATA"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jsonb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jsonb.html",
+              "title": "JSON-B"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jsonpath.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jsonpath.html",
+              "title": "JSON Path",
+              "attributes": {
+                "page-aliases": "extensions/jsonpath.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jt400.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jt400.html",
+              "title": "JT400"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/jta.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/jta.html",
+              "title": "JTA",
+              "attributes": {
+                "page-aliases": "extensions/jta.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/kafka.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/kafka.html",
+              "title": "Kafka",
+              "attributes": {
+                "page-aliases": "extensions/kafka.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/kamelet.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/kamelet.html",
+              "title": "Kamelet"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/keycloak.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/keycloak.html",
+              "title": "Keycloak"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/knative-consumer.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/knative-consumer.html",
+              "title": "Knative Consumer"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/knative-producer.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/knative-producer.html",
+              "title": "Knative Producer"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/knative.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/knative.html",
+              "title": "Knative"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/kubernetes-cluster-service.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/kubernetes-cluster-service.html",
+              "title": "Kubernetes Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/kubernetes.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/kubernetes.html",
+              "title": "Kubernetes",
+              "attributes": {
+                "page-aliases": "extensions/kubernetes.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/kudu.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/kudu.html",
+              "title": "Kudu",
+              "attributes": {
+                "page-aliases": "extensions/kudu.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/langchain4j-agent.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/langchain4j-agent.html",
+              "title": "LangChain4j Agent"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/langchain4j-chat.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/langchain4j-chat.html",
+              "title": "langChain4j Chat"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/langchain4j-embeddings.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/langchain4j-embeddings.html",
+              "title": "LangChain4j Embeddings"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/langchain4j-embeddingstore.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/langchain4j-embeddingstore.html",
+              "title": "LangChain4j Embedding Store"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/langchain4j-tokenizer.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/langchain4j-tokenizer.html",
+              "title": "LangChain4j Tokenizer"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/langchain4j-tools.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/langchain4j-tools.html",
+              "title": "LangChain4j Tools"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/langchain4j-web-search.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/langchain4j-web-search.html",
+              "title": "LangChain4j Web Search"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/language.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/language.html",
+              "title": "Language"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ldap.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ldap.html",
+              "title": "LDAP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ldif.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ldif.html",
+              "title": "LDIF"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/leveldb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/leveldb.html",
+              "title": "LevelDB"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/log.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/log.html",
+              "title": "Log",
+              "attributes": {
+                "page-aliases": "extensions/log.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/lra.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/lra.html",
+              "title": "LRA"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/lucene.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/lucene.html",
+              "title": "Lucene"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/lumberjack.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/lumberjack.html",
+              "title": "Lumberjack"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/lzf.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/lzf.html",
+              "title": "LZF Deflate Compression",
+              "attributes": {
+                "page-aliases": "extensions/lzf.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mail-microsoft-oauth.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mail-microsoft-oauth.html",
+              "title": "Mail Microsoft Oauth"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mail.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mail.html",
+              "title": "Mail",
+              "attributes": {
+                "page-aliases": "extensions/mail.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/management.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/management.html",
+              "title": "Management"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mapstruct.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mapstruct.html",
+              "title": "MapStruct"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/master.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/master.html",
+              "title": "Master",
+              "attributes": {
+                "page-aliases": "extensions/master.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mdc.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mdc.html",
+              "title": "Mdc"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/micrometer.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/micrometer.html",
+              "title": "Micrometer"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/microprofile-fault-tolerance.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/microprofile-fault-tolerance.html",
+              "title": "Microprofile Fault Tolerance",
+              "attributes": {
+                "page-aliases": "extensions/microprofile-fault-tolerance.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/microprofile-health.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/microprofile-health.html",
+              "title": "MicroProfile Health",
+              "attributes": {
+                "page-aliases": "extensions/microprofile-health.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/milo.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/milo.html",
+              "title": "OPC UA Browser"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/milvus.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/milvus.html",
+              "title": "Milvus"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mina-sftp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mina-sftp.html",
+              "title": "MINA SFTP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/minio.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/minio.html",
+              "title": "Minio"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mllp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mllp.html",
+              "title": "MLLP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mock.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mock.html",
+              "title": "Mock",
+              "attributes": {
+                "page-aliases": "extensions/mock.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mongodb-gridfs.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mongodb-gridfs.html",
+              "title": "MongoDB GridFS",
+              "attributes": {
+                "page-aliases": "extensions/mongodb-gridfs.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mongodb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mongodb.html",
+              "title": "MongoDB",
+              "attributes": {
+                "page-aliases": "extensions/mongodb.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mustache.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mustache.html",
+              "title": "Mustache",
+              "attributes": {
+                "page-aliases": "extensions/mustache.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mvel.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mvel.html",
+              "title": "MVEL"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/mybatis.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/mybatis.html",
+              "title": "MyBatis"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/nats.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/nats.html",
+              "title": "Nats"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/netty-http.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/netty-http.html",
+              "title": "Netty HTTP",
+              "attributes": {
+                "page-aliases": "extensions/netty-http.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/netty.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/netty.html",
+              "title": "Netty",
+              "attributes": {
+                "page-aliases": "extensions/netty.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/nitrite.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/nitrite.html",
+              "title": "Nitrite",
+              "attributes": {
+                "page-aliases": "extensions/nitrite.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/oaipmh.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/oaipmh.html",
+              "title": "OAI-PMH"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/oauth.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/oauth.html",
+              "title": "Oauth"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/observability-services.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/observability-services.html",
+              "title": "Observability Services"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ognl.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ognl.html",
+              "title": "OGNL",
+              "attributes": {
+                "page-aliases": "extensions/ognl.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/olingo4.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/olingo4.html",
+              "title": "Olingo4",
+              "attributes": {
+                "page-aliases": "extensions/olingo4.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/once.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/once.html",
+              "title": "Once"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/openai.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/openai.html",
+              "title": "OpenAI"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/openapi-java.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/openapi-java.html",
+              "title": "OpenAPI Java",
+              "attributes": {
+                "page-aliases": "extensions/openapi-java.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/opensearch.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/opensearch.html",
+              "title": "OpenSearch"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/openstack.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/openstack.html",
+              "title": "OpenStack",
+              "attributes": {
+                "page-aliases": "extensions/openstack.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/opentelemetry.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/opentelemetry.html",
+              "title": "OpenTelemetry"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/opentelemetry2.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/opentelemetry2.html",
+              "title": "Opentelemetry2"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/optaplanner.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/optaplanner.html",
+              "title": "OptaPlanner"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/paho-mqtt5.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/paho-mqtt5.html",
+              "title": "Paho MQTT5"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/paho.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/paho.html",
+              "title": "Paho",
+              "attributes": {
+                "page-aliases": "extensions/paho.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/pdf.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/pdf.html",
+              "title": "PDF",
+              "attributes": {
+                "page-aliases": "extensions/pdf.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/pg-replication-slot.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/pg-replication-slot.html",
+              "title": "PostgresSQL Replication Slot"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/pgevent.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/pgevent.html",
+              "title": "PostgresSQL Event"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/pinecone.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/pinecone.html",
+              "title": "Pinecone"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/platform-http.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/platform-http.html",
+              "title": "Platform HTTP",
+              "attributes": {
+                "page-aliases": "extensions/platform-http.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/pqc.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/pqc.html",
+              "title": "PQC Algorithms"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/printer.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/printer.html",
+              "title": "Printer"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/protobuf.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/protobuf.html",
+              "title": "Protobuf",
+              "attributes": {
+                "page-aliases": "extensions/protobuf.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/pubnub.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/pubnub.html",
+              "title": "PubNub",
+              "attributes": {
+                "page-aliases": "extensions/pubnub.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/pulsar.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/pulsar.html",
+              "title": "Pulsar"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/python.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/python.html",
+              "title": "Python"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/qdrant.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/qdrant.html",
+              "title": "Qdrant"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/quartz.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/quartz.html",
+              "title": "Quartz",
+              "attributes": {
+                "page-aliases": "extensions/quartz.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/quickfix.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/quickfix.html",
+              "title": "QuickFix"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/qute.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/qute.html",
+              "title": "Qute",
+              "attributes": {
+                "page-aliases": "extensions/qute.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/reactive-executor.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/reactive-executor.html",
+              "title": "Reactive Executor",
+              "attributes": {
+                "page-aliases": "extensions/reactive-executor.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/reactive-streams.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/reactive-streams.html",
+              "title": "Reactive Streams",
+              "attributes": {
+                "page-aliases": "extensions/reactive-streams.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/redis.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/redis.html",
+              "title": "Redis"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ref.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ref.html",
+              "title": "Ref",
+              "attributes": {
+                "page-aliases": "extensions/ref.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/rest-openapi.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/rest-openapi.html",
+              "title": "REST OpenApi",
+              "attributes": {
+                "page-aliases": "extensions/rest-openapi.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/rest.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/rest.html",
+              "title": "Rest",
+              "attributes": {
+                "page-aliases": "extensions/rest.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/robotframework.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/robotframework.html",
+              "title": "Robot Framework"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/rss.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/rss.html",
+              "title": "RSS"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/saga.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/saga.html",
+              "title": "Saga"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/salesforce.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/salesforce.html",
+              "title": "Salesforce",
+              "attributes": {
+                "page-aliases": "extensions/salesforce.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/sap-netweaver.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/sap-netweaver.html",
+              "title": "SAP NetWeaver",
+              "attributes": {
+                "page-aliases": "extensions/sap-netweaver.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/saxon.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/saxon.html",
+              "title": "XQuery"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/scheduler.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/scheduler.html",
+              "title": "Scheduler",
+              "attributes": {
+                "page-aliases": "extensions/scheduler.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/schematron.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/schematron.html",
+              "title": "Schematron"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/seda.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/seda.html",
+              "title": "SEDA",
+              "attributes": {
+                "page-aliases": "extensions/seda.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/servicenow.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/servicenow.html",
+              "title": "ServiceNow",
+              "attributes": {
+                "page-aliases": "extensions/servicenow.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/servlet.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/servlet.html",
+              "title": "Servlet",
+              "attributes": {
+                "page-aliases": "extensions/servlet.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/shiro.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/shiro.html",
+              "title": "Shiro"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/sjms.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/sjms.html",
+              "title": "Simple JMS",
+              "attributes": {
+                "page-aliases": "extensions/sjms.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/sjms2.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/sjms2.html",
+              "title": "Simple JMS2",
+              "attributes": {
+                "page-aliases": "extensions/sjms2.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/slack.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/slack.html",
+              "title": "Slack",
+              "attributes": {
+                "page-aliases": "extensions/slack.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/smallrye-reactive-messaging.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/smallrye-reactive-messaging.html",
+              "title": "SmallRye Reactive Messaging",
+              "attributes": {
+                "page-aliases": "extensions/smallrye-reactive-messaging.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/smb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/smb.html",
+              "title": "SMB"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/smooks.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/smooks.html",
+              "title": "Smooks"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/smpp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/smpp.html",
+              "title": "SMPP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/snakeyaml.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/snakeyaml.html",
+              "title": "SnakeYAML",
+              "attributes": {
+                "page-aliases": "extensions/snakeyaml.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/snmp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/snmp.html",
+              "title": "SNMP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/soap.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/soap.html",
+              "title": "SOAP dataformat",
+              "attributes": {
+                "page-aliases": "extensions/soap.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/solr.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/solr.html",
+              "title": "Solr"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/splunk-hec.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/splunk-hec.html",
+              "title": "Splunk HEC"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/splunk.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/splunk.html",
+              "title": "Splunk"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/spring-rabbitmq.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/spring-rabbitmq.html",
+              "title": "Spring RabbitMQ"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/spring-redis.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/spring-redis.html",
+              "title": "Spring Redis"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/sql.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/sql.html",
+              "title": "SQL",
+              "attributes": {
+                "page-aliases": "extensions/sql.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/ssh.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/ssh.html",
+              "title": "SSH"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/stax.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/stax.html",
+              "title": "StAX"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/stitch.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/stitch.html",
+              "title": "Stitch"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/stomp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/stomp.html",
+              "title": "Stomp"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/stream.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/stream.html",
+              "title": "Stream",
+              "attributes": {
+                "page-aliases": "extensions/stream.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/stringtemplate.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/stringtemplate.html",
+              "title": "String Template"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/stub.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/stub.html",
+              "title": "Stub"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/swift.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/swift.html",
+              "title": "SWIFT"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/syslog.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/syslog.html",
+              "title": "Syslog"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/tarfile.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/tarfile.html",
+              "title": "Tar File",
+              "attributes": {
+                "page-aliases": "extensions/tarfile.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/telegram.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/telegram.html",
+              "title": "Telegram",
+              "attributes": {
+                "page-aliases": "extensions/telegram.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/telemetry-dev.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/telemetry-dev.html",
+              "title": "Telemetry Dev"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/threadpoolfactory-vertx.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/threadpoolfactory-vertx.html",
+              "title": "ThreadPoolFactory Vert.x",
+              "attributes": {
+                "page-aliases": "extensions/threadpoolfactory-vertx.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/thrift.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/thrift.html",
+              "title": "Thrift"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/tika.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/tika.html",
+              "title": "Tika",
+              "attributes": {
+                "page-aliases": "extensions/tika.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/timer.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/timer.html",
+              "title": "Timer",
+              "attributes": {
+                "page-aliases": "extensions/timer.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/twilio.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/twilio.html",
+              "title": "Twilio"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/twitter.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/twitter.html",
+              "title": "Twitter",
+              "attributes": {
+                "page-aliases": "extensions/twitter.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/univocity-parsers.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/univocity-parsers.html",
+              "title": "uniVocity CSV"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/validator.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/validator.html",
+              "title": "Validator",
+              "attributes": {
+                "page-aliases": "extensions/validator.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/velocity.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/velocity.html",
+              "title": "Velocity"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/vertx-http.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/vertx-http.html",
+              "title": "Vert.x HTTP Client"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/vertx-websocket.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/vertx-websocket.html",
+              "title": "Vert.x WebSocket"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/vertx.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/vertx.html",
+              "title": "Vert.x",
+              "attributes": {
+                "page-aliases": "extensions/vertx.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/wasm.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/wasm.html",
+              "title": "Wasm"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/weather.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/weather.html",
+              "title": "Weather"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/weaviate.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/weaviate.html",
+              "title": "weaviate"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/web3j.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/web3j.html",
+              "title": "Web3j Ethereum Blockchain"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/wordpress.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/wordpress.html",
+              "title": "Wordpress"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/workday.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/workday.html",
+              "title": "Workday"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xchange.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xchange.html",
+              "title": "XChange"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xj.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xj.html",
+              "title": "XJ"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xml-io-dsl.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xml-io-dsl.html",
+              "title": "XML IO DSL"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xml-jaxb.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xml-jaxb.html",
+              "title": "XML JAXB",
+              "attributes": {
+                "page-aliases": "extensions/xml-jaxb.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xml-jaxp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xml-jaxp.html",
+              "title": "XML JAXP",
+              "attributes": {
+                "page-aliases": "extensions/xml-jaxp.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xmlsecurity.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xmlsecurity.html",
+              "title": "XML Security Sign"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xmpp.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xmpp.html",
+              "title": "XMPP"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xpath.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xpath.html",
+              "title": "XPath",
+              "attributes": {
+                "page-aliases": "extensions/xpath.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xslt-saxon.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xslt-saxon.html",
+              "title": "XSLT Saxon"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/xslt.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/xslt.html",
+              "title": "XSLT",
+              "attributes": {
+                "page-aliases": "extensions/xslt.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/yaml-dsl.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/yaml-dsl.html",
+              "title": "YAML DSL"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/yaml-io.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/yaml-io.html",
+              "title": "YAML IO"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/zendesk.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/zendesk.html",
+              "title": "Zendesk"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/zip-deflater.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/zip-deflater.html",
+              "title": "Zip Deflate Compression",
+              "attributes": {
+                "page-aliases": "extensions/zip-deflater.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/zipfile.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/zipfile.html",
+              "title": "Zip File",
+              "attributes": {
+                "page-aliases": "extensions/zipfile.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/zookeeper-master.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/zookeeper-master.html",
+              "title": "ZooKeeper Master"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/zookeeper.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/extensions/zookeeper.html",
+              "title": "ZooKeeper"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/index.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/index.html",
+              "title": "Camel Quarkus extensions reference",
+              "attributes": {
+                "page-aliases": "list-of-camel-quarkus-extensions.adoc,reference/extensions/index.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/languages.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/languages.html",
+              "title": "Camel languages supported on Quarkus"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/others.adoc",
+              "url": "/camel-quarkus/3.33.x/reference/others.html",
+              "title": "Camel misc. components supported on Quarkus"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/cdi.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/cdi.html",
+              "title": "Contexts and Dependency Injection (CDI) in Camel Quarkus",
+              "attributes": {
+                "page-aliases": "cdi.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/command-mode.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/command-mode.html",
+              "title": "Command Mode Applications"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/configuration.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/configuration.html",
+              "title": "Configuration",
+              "attributes": {
+                "page-aliases": "user-guide/bootstrap.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/defining-camel-routes.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/defining-camel-routes.html",
+              "title": "Defining Camel routes"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/dependency-management.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/dependency-management.html",
+              "title": "Dependency management"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/examples.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/examples.html",
+              "title": "Camel Quarkus Examples"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/first-steps.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/first-steps.html",
+              "title": "First steps",
+              "attributes": {
+                "page-aliases": "first-steps.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/index.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/index.html",
+              "title": "User guide",
+              "attributes": {
+                "page-aliases": "user-guide.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/kubernetes.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/kubernetes.html",
+              "title": "Kubernetes",
+              "attributes": {
+                "page-aliases": "kubernetes.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/messaging.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/messaging.html",
+              "title": "Messaging Support"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/native-mode.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/native-mode.html",
+              "title": "Native mode",
+              "attributes": {
+                "page-aliases": "native-mode.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/observability.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/observability.html",
+              "title": "Observability"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/testing.adoc",
+              "url": "/camel-quarkus/3.33.x/user-guide/testing.html",
               "title": "Testing",
               "attributes": {
                 "page-aliases": "testing.adoc"

@@ -1,0 +1,31 @@
+# Mail Microsoft Oauth
+
+JVM since3.8.0 Native since3.25.0
+
+Camel Mail OAuth2 Authenticator for Microsoft Exchange Online
+
+## What’s inside
+
+-   [Mail Microsoft Oauth](../../../../components/4.18.x/others/mail-microsoft-oauth.md)
+    
+
+Please refer to the above link for usage and configuration details.
+
+## Maven coordinates
+
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-mail-microsoft-oauth)
+
+Or add the coordinates to your existing project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-mail-microsoft-oauth</artifactId>
+</dependency>
+```
+
+Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
+
+## SSL in native mode
+
+This extension auto-enables SSL support in native mode. Hence you do not need to add `quarkus.ssl.native=true` to your `application.properties` yourself. See also [Quarkus SSL guide](https://quarkus.io/guides/native-and-ssl).
