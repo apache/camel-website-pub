@@ -1,8 +1,11 @@
 # Knative Trait
 
-The Knative trait automatically discovers addresses of Knative resources and inject them into the running integration.
+Deprecated since2.11.0 The Knative trait automatically discovers addresses of Knative resources and inject them into the running integration.
 
 The Camel Knative component will then use the full configuration to configure the routes.
+
+> **Warning**
+> The Knative trait is **deprecated** and will be removed in future release versions: use Camel (Quarkus) Knative component instead.
 
 The trait is enabled by default when the Knative profile is active.
 

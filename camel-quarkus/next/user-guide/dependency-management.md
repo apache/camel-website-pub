@@ -26,7 +26,7 @@ The generated `pom.xml` will look similar to the following:
 <project>
   ...
   <properties>
-    <quarkus.platform.version>3.39.0.CR1</quarkus.platform.version>
+    <quarkus.platform.version>3.39.0</quarkus.platform.version>
     ...
   </properties>
   <dependencyManagement>
@@ -89,8 +89,8 @@ Note that if you do this, some dependencies in `camel-quarkus-bom` may not be pe
 <project>
   ...
   <properties>
-    <quarkus.platform.version>3.39.0.CR1</quarkus.platform.version>
-    <camel-quarkus.version>3.39.0</camel-quarkus.version>
+    <quarkus.platform.version>3.39.0</quarkus.platform.version>
+    <camel-quarkus.version>3.40.0</camel-quarkus.version>
     ...
   </properties>
   <dependencyManagement>

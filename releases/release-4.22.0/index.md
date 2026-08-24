@@ -91,19 +91,7 @@ git checkout camel-4.22.0
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (224)
-
-[CAMEL-24384](https://issues.apache.org/jira/browse/CAMEL-24384)
-
-camel-azure-eventgrid: the dataVersion header is read but never applied to the published CloudEvent
-
-[CAMEL-24383](https://issues.apache.org/jira/browse/CAMEL-24383)
-
-camel-azure-key-vault: producer throws a copy-pasted "createSecret" validation message for every operation
-
-[CAMEL-24382](https://issues.apache.org/jira/browse/CAMEL-24382)
-
-camel-azure-cosmosdb: change-feed consumer checkpoints the lease before the exchange is processed, losing events on failure
+### Bug (221)
 
 [CAMEL-24371](https://issues.apache.org/jira/browse/CAMEL-24371)
 

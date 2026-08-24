@@ -14,7 +14,7 @@ We suggest to edit the Deployment to configure the [`NodeSelector` Kubernetes fe
 
 ### Builder Pods and Integrations
 
-Builder Pods and Integration Pods can be also scheduled and assigned in the cluster. For this reason you need to use [builder trait](../../traits/builder.md) configuration (for builder Pod when using `pod` building strategy) and [affinity](../../traits/affinity.md), [pod](../../traits/pod.md), [toleration](../../traits/toleration.md) traits for Integration Pods.
+Builder Pods and Integration Pods can be also scheduled and assigned in the cluster. For this reason you need to use [builder trait](../../traits/builder.md) configuration (for builder Pod when using `pod` building strategy) and [affinity](../../traits/affinity.md), [toleration](../../traits/toleration.md) traits for Integration Pods. In advanced cases you can also use `.spec.template` Integration to specify a Pod template to use.
 
 ## Resources
 

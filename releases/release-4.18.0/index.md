@@ -541,7 +541,7 @@ Camel-Azure-Storage-Blob: Add deleteAfterRead option for consumer side
 
 Camel-github: Implement a component supporting kohsuke github-api
 
-### New Feature (29)
+### New Feature (30)
 
 [CAMEL-22960](https://issues.apache.org/jira/browse/CAMEL-22960)
 
@@ -658,6 +658,10 @@ camel-jbang - camel cmd send to work with infra services
 [CAMEL-22179](https://issues.apache.org/jira/browse/CAMEL-22179)
 
 Create AWS Rekognition component
+
+[CAMEL-18272](https://issues.apache.org/jira/browse/CAMEL-18272)
+
+Camel-AWS2-Lambda: Support Function URL management through producer operations
 
 ### Sub-task (11)
 

@@ -6,8 +6,64 @@
     <description>Recent content in Security on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 Jul 2026 10:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 24 Aug 2026 10:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-59230</title>
+      <link>https://camel.apache.org/security/CVE-2026-59230.html</link>
+      <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-59230.html</guid>
+      <description>Camel-Mail: the MimeMultipart data format copied MIME headers onto the Camel message without a header filter strategy when unmarshalling with headersInline enabled, so a crafted message could inject Camel-internal headers</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-60093</title>
+      <link>https://camel.apache.org/security/CVE-2026-60093.html</link>
+      <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-60093.html</guid>
+      <description>Camel-Azure-Storage-DataLake: the downloadToFile operation built the local download target from the remote path name without constraining it to the configured fileDir, so a name containing traversal segments could write outside that directory</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-63621</title>
+      <link>https://camel.apache.org/security/CVE-2026-63621.html</link>
+      <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-63621.html</guid>
+      <description>Camel-Knative: CloudEvent extension fields received in structured content mode were mapped onto message headers without applying any header filter strategy, so an untrusted sender could inject Camel-internal headers</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-66906</title>
+      <link>https://camel.apache.org/security/CVE-2026-66906.html</link>
+      <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-66906.html</guid>
+      <description>Camel-Azure-Storage-Blob: the downloadBlobToFile operation built the local download target from the remote blob name without constraining it to the configured fileDir, so a name containing traversal segments could write outside that directory</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-66907</title>
+      <link>https://camel.apache.org/security/CVE-2026-66907.html</link>
+      <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-66907.html</guid>
+      <description>Camel-Google-Storage: the consumer appended the remote object name to the configured downloadFileName directory without constraining the result, so an object name containing traversal segments could write outside that directory</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-66908</title>
+      <link>https://camel.apache.org/security/CVE-2026-66908.html</link>
+      <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-66908.html</guid>
+      <description>Camel-platform-http-main: when JWT authentication was configured with a keystore but no issuer or audience, the iss and aud claims were never validated, so any unexpired token signed by a trusted key was accepted</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-71300</title>
+      <link>https://camel.apache.org/security/CVE-2026-71300.html</link>
+      <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-71300.html</guid>
+      <description>Camel-Atmosphere-Websocket: WebSocket dispatch header injection - the producer selected its target peers through Exchange headers whose names sat outside the filtered Camel namespace, so an external sender could take over the dispatch decision</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-78329</title>
+      <link>https://camel.apache.org/security/CVE-2026-78329.html</link>
+      <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-78329.html</guid>
+      <description>Camel-Undertow: the endpoint discarded the undertow-specific header filter strategy in favour of the base HTTP one, so the undertow filtering never ran on endpoint-configured routes</description>
+    </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-43866</title>
       <link>https://camel.apache.org/security/CVE-2026-43866.html</link>

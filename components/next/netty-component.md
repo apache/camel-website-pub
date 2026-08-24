@@ -903,6 +903,15 @@ from("netty:udp://0.0.0.0:5155?sync=true&decoders=#decoder")
     .to("bean:poetryProcessor");
 ```
 
+> **Note**
+> Since Camel 4.23, `ObjectDecoder` and `DatagramPacketObjectDecoder` always install a JEP-290 `java.io.ObjectInputFilter` while decoding, as a defense-in-depth measure against unsafe Java deserialization. When no explicit pattern is passed, the JVM-wide `jdk.serialFilter` is honoured if set, otherwise the shared Camel default allow-list is applied (it permits standard Java and Apache Camel types, denies `java.net.**`, and enforces JEP-290 graph-shape limits).
+>
+> For decoders exposed to untrusted peers, configure a stricter allow-list by passing a filter pattern (same syntax as `jdk.serialFilter`) to the two-argument constructor:
+>
+> ```java
+> return new DatagramPacketObjectDecoder(ClassResolvers.weakCachingResolver(null), "com.example.model.**;java.**;!*");
+> ```
+
 ### A TCP-based Netty consumer endpoint using One-way communication
 
 -   Java

@@ -2,7 +2,19 @@
 
 Camel K allows us to run Camel integrations directly on a Kubernetes cluster. To use it, you need to be connected to a cloud environment or to a local cluster created for development purposes (ie, Minikube or Kind).
 
-The first step is to install and run the Camel K operator. You can do it via any of the following methodologies:
+## Container registry configuration
+
+You will need a container registry available in order to push and pull the generated Camel applications. The easiest way to configure it is to store the configuration on a Configmap which will be used by the operator:
+
+```none
+kubectl create configmap camel-k-operator-configmap-configuration \
+  --from-literal=REGISTRY_ADDRESS="docker.io" \
+  --from-literal=REGISTRY_SECRET="my-docker-secret"
+```
+
+Have a further look at the [production ready registry configuration documentation](registry.md).
+
+You can now install and run the Camel K operator. You can do it via any of the following methodologies:
 
 ## Installation via Kustomize
 
@@ -52,20 +64,14 @@ When you decide to install the operator, you can decide to install the following
 
 The namespace(s) to watch is configured via `WATCH_NAMESPACE` variable in the operator `Deployment` resource. You can provide an empty value (watch all namespaces), a single value (watch either the own namespace or any other namespace) or a comma separated value (watching as many namespaces as provided).
 
-It’s important to notice that when running the single or multiple namespace operator, you will need to provide the RBACs which are expected by the operator to run properly. For such a configuration you can take as a reference the `Kustomize` examples available in `/install/overlays/single-namespace/` and `/install/overlays/multi-namespace/`. The last topology is probably the most secure as it will avoid the operator to access to any resource outside those namespaces for which you’ve provided the proper security rules.
+It’s important to notice that when running the single or multiple namespace operator, you _may_ need to provide the RBACs which are expected by the operator to run properly. For such a configuration you can take as a reference the `Kustomize` examples available in `/install/overlays/single-namespace/` and `/install/overlays/multi-namespace/`. The last topology is probably the most secure as it will avoid the operator to access to any resource outside those namespaces for which you’ve provided the proper security rules.
 
 > **Note**
-> OLM only allows own and global installation mode.
+> RBAC custom configuration may vary depending on the installation methodology.
 
 ## Setup the operator configuration
 
 Each installation method have its proper way to setup configuration. A common one is the creation of a `Configmap` named `camel-k-operator-configmap-configuration` and a `Secret` named `camel-k-operator-secret-configuration` in the same namespace where the operator is installed. If available, the operator will read the environment variable from these resources.
-
-## Setup the container registry
-
-The only configuration you may want to change is the container registry which the operator need to use in order to store the container images used to run the Camel applications built. The default installation expects a container registry available in the `kube-system` namespace exposed by a `Service` named `registry` (this is the location where development environment Minikube install the registry via `minikube addons enable registry`).
-
-Have a further look at the [production ready registry configuration documentation](registry.md).
 
 ## Verify that the operator is up and running
 

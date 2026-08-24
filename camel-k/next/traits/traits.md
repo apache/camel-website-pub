@@ -50,7 +50,7 @@ The `.spec.traits` holds an array of traits, identified by their id (`jvm`, in t
 
 ## List of available traits
 
-There are 34 traits. See each trait description page for more information on a specific trait:
+There are 32 traits. See each trait description page for more information on a specific trait:
 
 -   [Affinity Trait](affinity.md)
     
@@ -80,8 +80,6 @@ There are 34 traits. See each trait description page for more information on a s
     
 -   [Istio Trait](istio.md)
     
--   [Jolokia Trait](jolokia.md)
-    
 -   [Jvm Trait](jvm.md)
     
 -   [Kamelets Trait](kamelets.md)
@@ -101,8 +99,6 @@ There are 34 traits. See each trait description page for more information on a s
 -   [Owner Trait](owner.md)
     
 -   [Pdb Trait](pdb.md)
-    
--   [Pod Trait](pod.md)
     
 -   [Prometheus Trait](prometheus.md)
     

@@ -2,10 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-08-17T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/security/CVE-2026-59230.html</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-60093.html</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-63621.html</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-66906.html</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-66907.html</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-66908.html</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-71300.html</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-78329.html</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/</loc>
+    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2026-08-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.18.4/</loc>
@@ -117,9 +144,6 @@
     <lastmod>2026-07-05T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-43867.html</loc>
-    <lastmod>2026-07-05T10:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-07-05T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.14.8/</loc>

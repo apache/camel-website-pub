@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1787054156060,
+  "generated": 1787574126914,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -698,12 +698,6 @@
             },
             {
               "module": "traits",
-              "path": "jolokia.adoc",
-              "url": "/camel-k/next/traits/jolokia.html",
-              "title": "Jolokia Trait"
-            },
-            {
-              "module": "traits",
               "path": "jvm.adoc",
               "url": "/camel-k/next/traits/jvm.html",
               "title": "Jvm Trait"
@@ -761,12 +755,6 @@
               "path": "pdb.adoc",
               "url": "/camel-k/next/traits/pdb.html",
               "title": "Pdb Trait"
-            },
-            {
-              "module": "traits",
-              "path": "pod.adoc",
-              "url": "/camel-k/next/traits/pod.html",
-              "title": "Pod Trait"
             },
             {
               "module": "traits",
@@ -6877,6 +6865,12 @@
               "path": "reference/extensions/langchain4j-embeddingstore.adoc",
               "url": "/camel-quarkus/next/reference/extensions/langchain4j-embeddingstore.html",
               "title": "LangChain4j Embedding Store"
+            },
+            {
+              "module": "ROOT",
+              "path": "reference/extensions/langchain4j-ingest.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/langchain4j-ingest.html",
+              "title": "LangChain4j Ingest"
             },
             {
               "module": "ROOT",

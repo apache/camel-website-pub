@@ -1820,11 +1820,7 @@ Deprecated: may be removed in future releases.
 | `traits`  
 **[Traits](#_camel_apache_org_v1_Traits)** | the traits needed to run this Integration |
 | `template`  
-**[PodSpecTemplate](#_camel_apache_org_v1_PodSpecTemplate)** | Pod template customization.
-
-Deprecated: use container, init-containers or owner traits instead
-
- |
+**[PodSpecTemplate](#_camel_apache_org_v1_PodSpecTemplate)** | Pod template customization. |
 | `configuration`  
 **[\[\]ConfigurationSpec](#_camel_apache_org_v1_ConfigurationSpec)** | Deprecated:
 
@@ -2701,8 +2697,6 @@ string |
 
 PodSpec defines a group of Kubernetes resources.
 
-Deprecated: to be removed in future versions.
-
  
 | Field | Description |
 | --- | --- |
@@ -2741,8 +2735,6 @@ map\[string\]string | NodeSelector |
     
 
 PodSpecTemplate represent a template used to deploy an Integration `Pod`.
-
-Deprecated: to be removed in future versions.
 
  
 | Field | Description |
@@ -3248,7 +3240,7 @@ Deprecated: no longer in use.
 | `jolokia`  
 **[JolokiaTrait](#_camel_apache_org_v1_trait_JolokiaTrait)** | The configuration of Jolokia trait.
 
-Deprecated: use jvm.agent instead.
+Deprecated: no longer in use.
 
  |
 | `jvm`  
@@ -3280,11 +3272,7 @@ Deprecated: no longer in use.
 | `platform`  
 **[PlatformTrait](#_camel_apache_org_v1_trait_PlatformTrait)** | The configuration of Platform trait |
 | `pod`  
-**[PodTrait](#_camel_apache_org_v1_trait_PodTrait)** | The configuration of Pod trait.
-
-Deprecated: use init-containers instead.
-
- |
+**[PodTrait](#_camel_apache_org_v1_trait_PodTrait)** | The configuration of Pod trait. |
 | `prometheus`  
 **[PrometheusTrait](#_camel_apache_org_v1_trait_PrometheusTrait)** | The configuration of Prometheus trait |
 | `pull-secret`  
@@ -3294,7 +3282,7 @@ Deprecated: use init-containers instead.
 | `registry`  
 **[RegistryTrait](#_camel_apache_org_v1_trait_RegistryTrait)** | The configuration of Registry trait (support removed since version 2.5.0).
 
-Deprecated: use jvm trait or read documentation.
+Deprecated: no longer in use.
 
  |
 | `route`  
@@ -4067,6 +4055,9 @@ string | Deprecated: Use CACertificates instead. Path to a file containing the t
 -   [Traits](#_camel_apache_org_v1_Traits)
     
 
+> **Warning**
+> This trait is no longer in use.
+
 The Jolokia trait activates and configures the Jolokia Java agent. This trait is useful to enable JMX access to Camel application. Make sure you have the right privileges to perform such an action on the cluster.
 
 See [https://jolokia.org/reference/html/manual/agents.html](https://jolokia.org/reference/html/manual/agents.md)
@@ -4278,6 +4269,9 @@ Refer to the Knative documentation for more information.
 The Knative trait automatically discovers addresses of Knative resources and inject them into the running integration.
 
 The Camel Knative component will then use the full configuration to configure the routes.
+
+> **Warning**
+> The Knative trait is **deprecated** and will be removed in future release versions: use Camel (Quarkus) Knative component instead.
 
 The trait is enabled by default when the Knative profile is active.
 
@@ -4499,6 +4493,8 @@ string | The number of pods for the Integration that can be unavailable after an
     
 -   [PlatformTrait](#_camel_apache_org_v1_trait_PlatformTrait)
     
+-   [PodTrait](#_camel_apache_org_v1_trait_PodTrait)
+    
 -   [QuarkusTrait](#_camel_apache_org_v1_trait_QuarkusTrait)
     
 -   [SecurityContextTrait](#_camel_apache_org_v1_trait_SecurityContextTrait)
@@ -4545,18 +4541,13 @@ bool | Deprecated: no longer in use. |
 -   [Traits](#_camel_apache_org_v1_Traits)
     
 
-> **Warning**
-> The Pod trait is **deprecated** and will removed in future release versions: use InitContainers trait instead.
-
 The pod trait allows the customization of the Integration pods. It applies the `PodSpecTemplate` struct contained in the Integration `.spec.podTemplate` field, into the Integration deployment Pods template, using strategic merge patch.
-
-This can be used to customize the container where Camel routes execute, by using the `integration` container name.
 
  
 | Field | Description |
 | --- | --- |
-| `Trait`  
-**[Trait](#_camel_apache_org_v1_trait_Trait)** | (Members of `Trait` are embedded into this type.) |
+| `PlatformBaseTrait`  
+**[PlatformBaseTrait](#_camel_apache_org_v1_trait_PlatformBaseTrait)** | (Members of `PlatformBaseTrait` are embedded into this type.) |
 
 ### PrometheusTrait
 
@@ -4597,11 +4588,9 @@ bool | Whether a `PodMonitor` resource is created (default `true`). |
 -   [Traits](#_camel_apache_org_v1_Traits)
     
 
-The Pull Secret trait sets a pull secret on the pod, to allow Kubernetes to retrieve the container image from an external registry.
+The Pull Secret trait sets a pull secret on the pod to allow Kubernetes to retrieve the container image from an external registry.
 
-It’s enabled by default whenever you configure authentication for an external container registry, so it assumes that external registries are private.
-
-If your registry does not need authentication for pulling images, you can disable this trait.
+In a production environment it is highly advisable to provide such authentication and ensure the secret exists in the Integration namespace.
 
  
 | Field | Description |
@@ -4609,7 +4598,7 @@ If your registry does not need authentication for pulling images, you can disabl
 | `Trait`  
 **[Trait](#_camel_apache_org_v1_trait_Trait)** | (Members of `Trait` are embedded into this type.) |
 | `secretName`  
-string | The pull secret name to set on the Pod. If left empty this is automatically taken from the platform registry configuration. |
+string | The pull secret name to set on the Pod. |
 | `imagePullerDelegation`  
 bool | When using a global operator with a shared platform, this enables delegation of the `system:image-puller` cluster role on the operator namespace to the integration service account.
 Deprecated: may be removed in future releases.
@@ -4978,8 +4967,6 @@ It’s disabled by default.
 -   [OwnerTrait](#_camel_apache_org_v1_trait_OwnerTrait)
     
 -   [PDBTrait](#_camel_apache_org_v1_trait_PDBTrait)
-    
--   [PodTrait](#_camel_apache_org_v1_trait_PodTrait)
     
 -   [PrometheusTrait](#_camel_apache_org_v1_trait_PrometheusTrait)
     

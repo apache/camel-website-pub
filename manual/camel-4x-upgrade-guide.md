@@ -49,7 +49,7 @@ You can find the upgrade guide for each release in the following pages:
     
 -   [Upgrade guide 4.20 → 4.21](camel-4x-upgrade-guide-4_21.md)
     
--   [Upgrade guide 4.21 → 4.22](camel-4x-upgrade-guide-4_22.md)
+-   [Upgrade guide 4.21 → 4.22 LTS](camel-4x-upgrade-guide-4_22.md)
     
 -   [Upgrade guide 4.22 → 4.23](camel-4x-upgrade-guide-4_23.md)
     

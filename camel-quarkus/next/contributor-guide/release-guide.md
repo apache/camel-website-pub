@@ -443,8 +443,9 @@ This section needs to be executed only when a Quarkus Platform release has been 
     NEXT_CQ_VERSION=... # The version used in the current Camel Quarkus main branch without the -SNAPSHOT suffix; e.g. 2.3.0
     git checkout camel-quarkus-main
     git reset --hard main
-    ./mvnw org.l2x6.cq:cq-maven-plugin:examples-set-platform -Dcq.camel-quarkus.version=${NEXT_CQ_VERSION}-SNAPSHOT -Dcq.newVersion=${NEXT_CQ_VERSION}-SNAPSHOT
-    ./mvnw versions:update-child-modules -N
+    ./mvnw org.l2x6.cq:cq-maven-plugin:examples-set-platform -Dcq.camel-quarkus.version=${NEXT_CQ_VERSION}-SNAPSHOT
+    # Set the version of the aggregator pom.xml and of all example projects
+    ./mvnw versions:set -DnewVersion=${NEXT_CQ_VERSION}-SNAPSHOT -DprocessAllModules=true
     # Update version labels in Kubernetes resources
     ./mvnw process-sources
     git add -A
@@ -489,3 +490,17 @@ ssh -T git@gitbox.apache.org
 git config --global credential.helper store
 ssh-add -l
 mvn help:evaluate -Dexpression=env.SSH\_AUTH\_SOCK -q -DforceStdout
+
+### GPG signing failure caused by a stale lock file
+
+If GPG signing fails during the release with output such as:
+
+\[INFO\] \[INFO\] Signer 'gpg' is signing 4 files with key default
+\[INFO\] gpg: Note: database\_open 134217901 waiting for lock (held by 5376) ...
+\[INFO\] gpg: keydb\_search failed: Connection timed out
+\[INFO\] gpg: no default secret key: Connection timed out
+\[INFO\] gpg: signing failed: Connection timed out
+
+the cause may be a stale lock file in the GnuPG keybox database. The lock references the process ID that created it (`held by 5376`). If no such process is running, remove the lock file:
+
+sudo rm ~/.gnupg/public-keys.d/pubring.db.lock

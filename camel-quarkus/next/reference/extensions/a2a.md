@@ -37,3 +37,11 @@ quarkus.native.resources.includes=cards/*.json
 ```
 
 More information about selecting resources for inclusion in the native executable can be found at [Embedding resources in native executable](../../user-guide/native-mode.html#embedding-resource-in-native-executable).
+
+## Camel Quarkus limitations
+
+### `HTTP+JSON` protocol binding not supported
+
+The [A2A component](../../../../components/4.22.x/a2a-component.md) supports two protocol bindings: `JSONRPC` and `HTTP+JSON`. Only the `JSONRPC` binding works with the default Quarkus HTTP server (Vert.x / `platform-http`).
+
+The `HTTP+JSON` binding uses A2A custom-method paths that contain colons, such as `/message:send`. Vert.x Web does not support colon characters in URI path segments, causing these routes to fail.

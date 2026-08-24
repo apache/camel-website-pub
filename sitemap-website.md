@@ -1,6 +1,15 @@
-urls[836]{loc,lastmod}:
+urls[844]{loc,lastmod}:
+  https://camel.apache.org/security/CVE-2026-59230.md,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-60093.md,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-63621.md,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-66906.md,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-66907.md,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-66908.md,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-71300.md,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-78329.md,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/,2026-08-24T10:00:00+02:00
+  https://camel.apache.org/security/,2026-08-24T10:00:00+02:00
   https://camel.apache.org/blog/,2026-08-17T00:00:00+00:00
-  https://camel.apache.org/,2026-08-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.4/,2026-08-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/RELEASE-4.18.4/,2026-08-17T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-08-17T00:00:00+00:00
@@ -38,7 +47,6 @@ urls[836]{loc,lastmod}:
   https://camel.apache.org/blog/2026/07/camel-elevates-citrus/,2026-07-06T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-43866.md,2026-07-05T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-43867.md,2026-07-05T10:00:00+02:00
-  https://camel.apache.org/security/,2026-07-05T10:00:00+02:00
   https://camel.apache.org/releases/release-4.14.8/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/RELEASE-4.14.8/,2026-07-04T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-40047.md,2026-07-03T10:00:00+02:00

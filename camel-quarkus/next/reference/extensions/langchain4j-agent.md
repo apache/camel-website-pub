@@ -26,6 +26,10 @@ Or add the coordinates to your existing project:
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
 
+## Camel Quarkus limitations
+
+The `sse` MCP transport type is not available. It is backed by `HttpMcpTransport`, which was removed in LangChain4j 1.19.0. Use the `streamableHttp` transport type instead.
+
 ## LangChain4j usage
 
 ### Dependency management
@@ -38,7 +42,7 @@ In order to ensure alignment across all Quarkus and LangChain4j related dependen
     <dependency>
       <groupId>dev.langchain4j</groupId>
       <artifactId>langchain4j-bom</artifactId>
-      <version>1.17.2</version>
+      <version>1.19.0</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
