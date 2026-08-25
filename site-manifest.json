@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1787574126914,
+  "generated": 1787643761590,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -12813,6 +12813,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/python3.adoc",
+              "url": "/camel-spring-boot/next/starters/python3.html",
+              "title": "Python 3"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/qdrant.adoc",
               "url": "/camel-spring-boot/next/starters/qdrant.html",
               "title": "Qdrant"
@@ -17260,6 +17266,12 @@
               "path": "python-language.adoc",
               "url": "/components/next/languages/python-language.html",
               "title": "Python"
+            },
+            {
+              "module": "languages",
+              "path": "python3-language.adoc",
+              "url": "/components/next/languages/python3-language.html",
+              "title": "Python 3"
             },
             {
               "module": "languages",

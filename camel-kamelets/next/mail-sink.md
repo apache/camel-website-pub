@@ -16,8 +16,9 @@ The following table summarizes the configuration options available for the `mail
 | **connectionHost** | Host | **Required** The mail server host. | string |  | smtp.gmail.com |
 | **password** | Password | **Required** The password to access the mail box. | string |  |  |
 | **username** | Username | **Required** The username to access the mail box. | string |  |  |
-| **connectionPort** | Port | The mail server port. | string | 25 |  |
+| **connectionPort** | Port | The mail server port. | string | 465 |  |
 | **from** | From | The `from` field of the outgoing mail. | string |  |  |
+| **protocol** | Protocol | The mail protocol to use. Use smtps for an implicitly TLS-encrypted connection; smtp connects in the clear, which sends the configured credentials unencrypted. Enum values: \* smtp \* smtps | string | smtps |  |
 | **subject** | Subject | The mail subject of the outgoing mail. | string |  |  |
 | **to** | To | The `to` field of the outgoing mail. | string |  |  |
 

@@ -18,7 +18,7 @@ The following table summarizes the configuration options available for the `open
 | **indexName** | Index in OpenSearch | **Required** The name of the index to act against. | string |  |  |
 | **query** | Query | **Required** The query we want to use to search on OpenSearch. | string |  |  |
 | **certificate** | Certificate | The Certificate for accessing the Opensearch cluster. You must encode this value in base64. | string |  |  |
-| **enableSSL** | Enable SSL | Do we want to connect using SSL?. | boolean | false |  |
+| **enableSSL** | Enable SSL | Do we want to connect using SSL?. | boolean | true |  |
 | **password** | Password | Password to connect to OpenSearch. | string |  |  |
 | **period** | Period | The time interval between two searches. | integer | 1000 |  |
 | **user** | Username | Username to connect to OpenSearch. | string |  |  |

@@ -25,7 +25,7 @@ The following table summarizes the configuration options available for the `aws-
 | **overrideEndpoint** | Endpoint Overwrite | Select this option to override the endpoint URI. To use this option, you must also provide a URI for the `uriEndpointOverride` option. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | If using a profile credentials provider this parameter sets the profile name. | string |  |  |
 | **protocol** | Protocol | The underlying protocol used to communicate with SQS. | string | https | http or https |
-| **queueURL** | Queue URL | The full SQS Queue URL. | string |  |  |
+| **queueURL** | Queue URL | The full SQS Queue URL. When set, it is used verbatim and every other property that would otherwise determine the queue URL is ignored. Intended for connecting to a mock SQS implementation. | string |  |  |
 | **secretKey** | Secret Key | The secret key obtained from AWS. | string |  |  |
 | **sessionToken** | Session Token | Amazon AWS Session Token used when the user needs to assume a IAM role. | string |  |  |
 | **uriEndpointOverride** | Overwrite Endpoint URI | The overriding endpoint URI. To use this option, you must also select the `overrideEndpoint` option. | string |  |  |

@@ -101,6 +101,8 @@ For more information, see the [Azure Identity documentation](https://learn.micro
 
 In the headers, you can set the `file` / `ce-file` property to specify the filename to upload. If you do set property in the header, the Kamelet uses the exchange ID as filename.
 
+The value is reduced to a single file name before use: any directory component is dropped, so `reports/2026/data.csv` is stored as `data.csv`. The file is always written inside the configured directory.
+
 ## Kamelet source file
 
 [https://github.com/apache/camel-kamelets/blob/main/kamelets/azure-storage-files-sink.kamelet.yaml](https://github.com/apache/camel-kamelets/blob/main/kamelets/azure-storage-files-sink.kamelet.yaml)

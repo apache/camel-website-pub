@@ -16,7 +16,7 @@ The following table summarizes the configuration options available for the `open
 | **clusterName** | OpenSearch Cluster Name | **Required** The name of the OpenSearch cluster. | string |  | quickstart |
 | **hostAddresses** | Host Addresses | **Required** A comma-separated list of remote transport addresses in `ip:port format`. | string |  | quickstart-es-http:9200 |
 | **certificate** | Certificate | The Certificate for accessing the OpenSearch cluster. You must encode this value in base64. | string |  |  |
-| **enableSSL** | Enable SSL | Specifies to connect by using SSL. | boolean | false |  |
+| **enableSSL** | Enable SSL | Specifies to connect by using SSL. | boolean | true |  |
 | **indexName** | Index in OpenSearch | The name of the OpenSearch index. | string |  | data |
 | **password** | Password | The password to connect to OpenSearch. | string |  |  |
 | **user** | Username | The username to connect to OpenSearch. | string |  |  |

@@ -57,4 +57,4 @@ resources:
 
 ### Builder Pod configuration
 
-You can set the resources requests and limits for the builder Pod using [container](../../traits/builder.md) trait.
+You can set the resources requests and limits for the builder Pod using [container](../../traits/container.md) trait.

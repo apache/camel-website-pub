@@ -17,6 +17,7 @@ The following table summarizes the configuration options available for the `ssh-
 | **connectionPort** | Connection Port | **Required** The SSH Port. | string | 22 |  |
 | **password** | Password | **Required** The SSH password to use. | string |  |  |
 | **username** | Username | **Required** The SSH username to use. | string |  |  |
+| **knownHostsResource** | Known Hosts Resource | The resource path of a known\_hosts file used to verify the SSH server host key. When not set, the client does not verify the server host key against a known\_hosts file. | string |  |  |
 
 ## Dependencies
 

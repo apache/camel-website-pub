@@ -139,6 +139,51 @@ The Alibaba EventBridge component supports the following message header(s), whic
 
 ## Usage
 
+### Message headers evaluated by the EventBridge producer
+
+  
+| Header | Type | Description |
+| --- | --- | --- |
+| `CamelAlibabaEventBridgeOperation` | `String` | Name of operation to invoke |
+| `CamelAlibabaEventBridgeEventBusName` | `String` | Event bus name to publish events to (overrides the endpoint option) |
+| `CamelAlibabaEventBridgeEventSource` | `String` | Event source URI (overrides the endpoint option) |
+| `CamelAlibabaEventBridgeEventType` | `String` | Event type (overrides the endpoint option) |
+| `CamelAlibabaEventBridgeEventSubject` | `String` | Event subject (overrides the endpoint option) |
+
+If any of the above headers are set, they will override their corresponding query parameter value.
+
+### Message headers set by the EventBridge producer
+
+  
+| Header | Type | Description |
+| --- | --- | --- |
+| `CamelAlibabaEventBridgeRequestId` | `String` | Alibaba Cloud request ID returned by EventBridge |
+
+### Event payload Map keys evaluated by the producer
+
+When the message body is a `Map` (or `List<Map>` for publishing multiple events), the following keys are evaluated:
+
+  
+| Key | Type | Description |
+| --- | --- | --- |
+| `eventBusName` | `String` | Event bus name (overrides header or endpoint option) |
+| `eventSource` | `String` | Event source URI (overrides header or endpoint option) |
+| `eventType` | `String` | Event type (overrides header or endpoint option) |
+| `eventSubject` | `String` | Event subject (overrides header or endpoint option) |
+| `eventData` | `Object` | Event payload data (serialized to JSON) |
+
+### Response metadata in message body
+
+The `putEvents` producer operation returns structured response metadata in the message body (`Map<String, Object>`):
+
+  
+| Key | Type | Description |
+| --- | --- | --- |
+| `requestId` | `String` | Request identifier returned by EventBridge |
+| `resourceOwnerAccountId` | `String` | Resource owner account identifier |
+| `failedEntryCount` | `Integer` | Number of failed entries |
+| `entryList` | `List<Map>` | List of entry results, where each entry map contains `eventId`, `errorCode`, and `errorMessage` |
+
 ### Operations
 
 The component supports the following operations:
@@ -146,7 +191,9 @@ The component supports the following operations:
 -   `putEvents` - publish one or more CloudEvents (producer)
     
 
-### Producer example
+## Examples
+
+### Publish event with String / JSON body
 
 ```java
 from("direct:start")
@@ -154,6 +201,27 @@ from("direct:start")
     .to("alibaba-eventbridge:putEvents?eventBusName=my-bus&eventSource=camel.test&eventType=OrderCreated&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
-## Examples
+### Publish event with Map body
+
+```java
+Map<String, Object> event = new HashMap<>();
+event.put("eventBusName", "my-bus");
+event.put("eventSource", "camel.test");
+event.put("eventType", "OrderCreated");
+event.put("eventSubject", "order/123");
+event.put("eventData", Map.of("orderId", "123"));
+
+from("direct:start")
+    .setBody(constant(event))
+    .to("alibaba-eventbridge:putEvents?region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+```
+
+### Publish multiple events
+
+```java
+from("direct:start")
+    .setBody(constant(List.of(event1, event2)))
+    .to("alibaba-eventbridge:putEvents?region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+```
 
 For more examples, see the unit tests in the `camel-alibaba-eventbridge` module.

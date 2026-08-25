@@ -18,6 +18,7 @@ The following table summarizes the configuration options available for the `drop
 | **period** | Period between Polls | **Required** The interval between fetches to the Dropbox remote path in milliseconds. | integer | 10000 |  |
 | **query** | Queries | **Required** A space-separated list of sub-strings to search for. A file matches only if it contains all the sub-strings. If this option is not set, all files is matched. | string |  |  |
 | **remotePath** | Remote Path | **Required** Original file or folder to work with. | string |  |  |
+| **deleteAfterRead** | Auto-delete File | Delete each file from Dropbox after it has been consumed. This Kamelet polls with a timer and keeps no record of what it has already read, so turning this off makes every poll re-deliver the whole folder unless you add your own idempotency. | boolean | true |  |
 
 ## Dependencies
 

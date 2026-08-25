@@ -160,7 +160,6 @@ The Azure Event Grid component supports the following message header(s), which i
 | **CamelAzureEventGridSubject** (producer) Constant: [`SUBJECT`](https://javadoc.io/doc/org.apache.camel/camel-azure-eventgrid/latest/org/apache/camel/component/azure/eventgrid/EventGridConstants.html#SUBJECT) | The subject of the event. |  | String |
 | **CamelAzureEventGridEventTime** (producer) Constant: [`EVENT_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-eventgrid/latest/org/apache/camel/component/azure/eventgrid/EventGridConstants.html#EVENT_TIME) | The time the event was generated. |  | OffsetDateTime |
 | **CamelAzureEventGridId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-eventgrid/latest/org/apache/camel/component/azure/eventgrid/EventGridConstants.html#ID) | The unique identifier for the event. |  | String |
-| **CamelAzureEventGridDataVersion** (producer) Constant: [`DATA_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-azure-eventgrid/latest/org/apache/camel/component/azure/eventgrid/EventGridConstants.html#DATA_VERSION) | The schema version of the data object. |  | String |
 
 ## Authentication
 

@@ -18,9 +18,9 @@ The following table summarizes the configuration options available for the `sqls
 | **query** | Query | **Required** The query to execute against the SQL Server Database. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
 | **serverName** | Server Name | **Required** The server name for the data source. | string |  | localhost |
 | **username** | Username | **Required** The username to access a secured SQL Server Database. | string |  |  |
-| **encrypt** | Encrypt Connection | Encrypt the connection to SQL Server. | boolean | false |  |
+| **encrypt** | Encrypt Connection | Encrypt the connection to SQL Server. | boolean | true |  |
 | **serverPort** | Server Port | The server port for the data source. | string | 1433 |  |
-| **trustServerCertificate** | Trust Server Certificate | Trust Server Certificate. | boolean | true |  |
+| **trustServerCertificate** | Trust Server Certificate | Trust the server certificate without validating it against a certificate authority. Intended for development and test environments only. | boolean | false |  |
 
 ## Dependencies
 

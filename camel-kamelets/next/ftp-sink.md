@@ -94,6 +94,8 @@ In the header, you can optionally set the `file` / `ce-file` property to specify
 
 If you do not set the property in the header, the Kamelet uses a default naming convention.
 
+The value is reduced to a single file name before use: any directory component is dropped, so `reports/2026/data.csv` is stored as `data.csv`. The file is always written inside the configured directory.
+
 ## Kamelet source file
 
 [https://github.com/apache/camel-kamelets/blob/main/kamelets/ftp-sink.kamelet.yaml](https://github.com/apache/camel-kamelets/blob/main/kamelets/ftp-sink.kamelet.yaml)

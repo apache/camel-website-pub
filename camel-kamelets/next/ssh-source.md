@@ -19,6 +19,7 @@ The following table summarizes the configuration options available for the `ssh-
 | **pollCommand** | Poll Command | **Required** The command to run while polling the SSH session. | string |  | date |
 | **username** | Username | **Required** The SSH username to use. | string |  |  |
 | **delay** | Delay | The number of milliseconds before the next poll. | integer | 500 |  |
+| **knownHostsResource** | Known Hosts Resource | The resource path of a known\_hosts file used to verify the SSH server host key. When not set, the client does not verify the server host key against a known\_hosts file. | string |  |  |
 
 ## Dependencies
 

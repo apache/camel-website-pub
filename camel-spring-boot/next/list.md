@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 400 spring boot starter json files.
+There are 401 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -616,6 +616,8 @@ pubnub
 pulsar
 
 python
+
+python3
 
 qdrant
 
@@ -1341,6 +1343,7 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [MVEL](../../components/next/languages/mvel-language.md) | camel-mvel-starter | Stable | 2.0 | Evaluates a MVEL template |
 | [OGNL](../../components/next/languages/ognl-language.md) | camel-ognl-starter | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL) |
 | [Python](../../components/next/languages/python-language.md) | camel-python-starter | Experimental | 3.19 | Evaluates a Python expression |
+| [Python 3](../../components/next/languages/python3-language.md) | camel-python3-starter | Preview | 4.23 | Evaluates a Python 3 expression |
 | [Ref](../../components/next/languages/ref-language.md) | camel-core-languages-starter | Stable | 2.8 | Uses an existing expression from the registry |
 | [Simple](../../components/next/languages/simple-language.md) | camel-core-languages-starter | Stable | 1.1 | Evaluates a Camel simple expression |
 | [Simple - Advanced Features](../../components/next/languages/simple-advanced.md) | undefined-starter |  |  |  |

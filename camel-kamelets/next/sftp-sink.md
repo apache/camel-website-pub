@@ -19,12 +19,13 @@ The following table summarizes the configuration options available for the `sftp
 | **autoCreate** | Autocreate Missing Directories | Automatically create the directory the files should be written to. | boolean | true |  |
 | **binary** | Binary | Specifies the file transfer mode, BINARY or ASCII. Default is ASCII (false). | boolean | false |  |
 | **fileExist** | File Existence | How to behave in case of file already existent. Enum values: \* Override \* Append \* Fail \* Ignore | string | Override |  |
+| **knownHostsUri** | Known Hosts URI | The known\_hosts file used to verify the server host key, loaded from the classpath by default. Needed when the process has no $HOME/.ssh/known\_hosts to fall back on. | string |  |  |
 | **passiveMode** | Passive Mode | Specifies to use passive mode connection. | boolean | false |  |
 | **password** | Password | The password to access the FTP server. | string |  |  |
 | **privateKeyFile** | Private Key File | Set the private key file so that the SFTP endpoint can do private key verification. | string |  |  |
 | **privateKeyPassphrase** | Private Key Passphrase | Set the private key file passphrase so that the SFTP endpoint can do private key verification. | string |  |  |
 | **privateKeyUri** | Private Key URI | Set the private key file (loaded from classpath by default) so that the SFTP endpoint can do private key verification. | string |  |  |
-| **strictHostKeyChecking** | Strict Host Checking | Sets whether to use strict host key checking. | string | no |  |
+| **strictHostKeyChecking** | Strict Host Checking | Sets whether to use strict host key checking. One of yes, no or ask. With no, the server host key is accepted without being checked against a known\_hosts entry. Enum values: \* yes \* no \* ask | string | yes |  |
 | **useUserKnownHostsFile** | Use User Known Hosts File | If knownHostFile has not been explicit configured then use the host file from System.getProperty(user.home)/.ssh/known\_hosts. | boolean | true |  |
 | **username** | Username | The username to access the FTP server. | string |  |  |
 
@@ -115,6 +116,14 @@ SFTP supports file transfer resume capabilities, allowing interrupted transfers 
 ### Cross-Platform Compatibility
 
 Works seamlessly across different operating systems and platforms, providing consistent secure file transfer capabilities in heterogeneous environments.
+
+### Optional Headers
+
+In the header, you can optionally set the `file` / `ce-file` property to specify the name of the file to upload.
+
+If you do not set the property in the header, the Kamelet uses a default naming convention.
+
+The value is reduced to a single file name before use: any directory component is dropped, so `reports/2026/data.csv` is stored as `data.csv`. The file is always written inside the configured directory.
 
 ## Kamelet source file
 

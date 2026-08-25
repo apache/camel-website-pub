@@ -20,9 +20,9 @@ The following table summarizes the configuration options available for the `sqls
 | **username** | Username | **Required** The username to access a secured SQL Server Database. | string |  |  |
 | **consumedQuery** | Consumed Query | A query to run on a tuple consumed. | string |  | DELETE FROM accounts where user\_id = :#user\_id |
 | **delay** | Delay | The number of milliseconds before the next poll. | integer | 500 |  |
-| **encrypt** | Encrypt Connection | Encrypt the connection to SQL Server. | boolean | false |  |
+| **encrypt** | Encrypt Connection | Encrypt the connection to SQL Server. | boolean | true |  |
 | **serverPort** | Server Port | The server port for the data source. | string | 1433 |  |
-| **trustServerCertificate** | Trust Server Certificate | Trust Server Certificate. | boolean | true |  |
+| **trustServerCertificate** | Trust Server Certificate | Trust the server certificate without validating it against a certificate authority. Intended for development and test environments only. | boolean | false |  |
 
 ## Dependencies
 

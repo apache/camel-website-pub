@@ -386,6 +386,7 @@ Enum values:
  |  | ExchangePattern |
 | **listenerContainer** (consumer (advanced)) | Reference to a pre-configured RedisMessageListenerContainer instance to use. |  | RedisMessageListenerContainer |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied when the default JDK serializer deserializes Redis payloads, both on the consumer and on producer read commands. When not set, the JVM-wide jdk.serialFilter is used if present; otherwise a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. packages is applied. Ignored when a custom serializer is set. |  | String |
 
 ## Message Headers
 

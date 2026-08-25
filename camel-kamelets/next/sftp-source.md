@@ -21,13 +21,14 @@ The following table summarizes the configuration options available for the `sftp
 | **delete** | Delete | If true, the file is deleted after it is processed successfully. | boolean | false |  |
 | **idempotent** | Idempotency | Skip already-processed files. | boolean | true |  |
 | **ignoreFileNotFoundOrPermissionError** | Ignore File Not Found Or Permission Error | Whether to ignore when (trying to list files in directories or when downloading a file), which does not exist or due to permission error. By default when a directory or file does not exists or insufficient permission, then an exception is thrown. Setting this option to true allows to ignore that instead. | boolean | false |  |
+| **knownHostsUri** | Known Hosts URI | The known\_hosts file used to verify the server host key, loaded from the classpath by default. Needed when the process has no $HOME/.ssh/known\_hosts to fall back on. | string |  |  |
 | **passiveMode** | Passive Mode | Sets the passive mode connection. | boolean | false |  |
 | **password** | Password | The password to access the SFTP server. | string |  |  |
 | **privateKeyFile** | Private Key File | Set the private key file so that the SFTP endpoint can do private key verification. | string |  |  |
 | **privateKeyPassphrase** | Private Key Passphrase | Set the private key file passphrase so that the SFTP endpoint can do private key verification. | string |  |  |
 | **privateKeyUri** | Private Key URI | Set the private key file (loaded from classpath by default) so that the SFTP endpoint can do private key verification. | string |  |  |
 | **recursive** | Recursive | If a directory, look for files in all sub-directories as well. | boolean | false |  |
-| **strictHostKeyChecking** | Strict Host Checking | Sets whether to use strict host key checking. | string | no |  |
+| **strictHostKeyChecking** | Strict Host Checking | Sets whether to use strict host key checking. One of yes, no or ask. With no, the server host key is accepted without being checked against a known\_hosts entry. Enum values: \* yes \* no \* ask | string | yes |  |
 | **useUserKnownHostsFile** | Use User Known Hosts File | If knownHostFile has not been explicit configured then use the host file from System.getProperty(user.home)/.ssh/known\_hosts. | boolean | true |  |
 | **username** | Username | The username to access the SFTP server. | string |  |  |
 

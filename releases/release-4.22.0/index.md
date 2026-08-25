@@ -1617,7 +1617,11 @@ Complete support of Virtual Threads
 
 camel-joor - Reloading compiled code should update beans created from inlined script
 
-### New Feature (19)
+### New Feature (20)
+
+[CAMEL-24308](https://issues.apache.org/jira/browse/CAMEL-24308)
+
+camel-mcp-server - expose ai-tool routes as MCP tools over streamable HTTP
 
 [CAMEL-24287](https://issues.apache.org/jira/browse/CAMEL-24287)
 

@@ -127,6 +127,8 @@ Enum values:
     
 -   python
     
+-   python3
+    
 -   ref
     
 -   simple
