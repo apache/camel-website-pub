@@ -203,7 +203,7 @@ Camel invokes the `timeout` method on `AggregationStrategy` when the timeout occ
 
 The aggregator provides a pluggable repository which you can implement your own `org.apache.camel.spi.AggregationRepository`.
 
-If you need a persistent repository, then Camel provides numerous implementations, such as from the [Caffeine](../caffeine-cache-component.md), [CassandraQL](../cql-component.md), [EHCache](../ehcache-component.md), [Infinispan](../infinispan-component.md), [JCache](../jcache-component.md), [LevelDB](../others/leveldb.md), [Redis](../others/redis.md), or [SQL](../sql-component.md) components.
+If you need a persistent repository, then Camel provides numerous implementations, such as from the [Caffeine](../caffeine-cache-component.md), [CassandraQL](../cql-component.md), [EHCache](../ehcache-component.md), [Infinispan](../infinispan-component.md), [JCache](../jcache-component.md), [Redis](../others/redis.md), or [SQL](../sql-component.md) components.
 
 ## Completion
 

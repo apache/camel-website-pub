@@ -101,9 +101,12 @@ The LangChain4j Agent component supports the following options which are listed 
 | **agent** (producer) | **Autowired** The agent to use for the component. |  | Agent |
 | **agentConfiguration** (producer) | **Autowired** AgentConfiguration used by Camel to create the agent internally. When set, Camel creates an AgentWithMemory if a ChatMemoryProvider is configured, otherwise an AgentWithoutMemory. If an agentFactory is also configured, the factory takes precedence. |  | AgentConfiguration |
 | **agentFactory** (producer) | **Autowired** The agent factory to use for creating agents if no Agent is provided. |  | AgentFactory |
+| **compensateOnToolErrors** (producer) | Whether LangChain4j should compensate when a tool execution fails. Only supported in inline agent creation mode (agentConfiguration without agent or agentFactory). URI value overrides the same option on the agentConfiguration bean. | false | Boolean |
 | **configuration** (producer) | The configuration. |  | LangChain4jAgentConfiguration |
+| **executeToolsConcurrently** (producer) | Whether multiple tools requested in a single LLM turn are executed concurrently. Camel route tools run on isolated exchange copies. Only supported in inline agent creation mode (agentConfiguration without agent or agentFactory). URI value overrides the same option on the agentConfiguration bean. | false | Boolean |
 | **jsonSchema** (producer) | JSON schema for structured output validation. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. Mutually exclusive with outputClass. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **maxToolCallingRoundTrips** (producer) | Maximum number of tool-calling round trips allowed per request. Each round trip is one LLM call plus execution of the tools requested in that call. Set to 0 to leave unset and use the LangChain4j default. Only supported in inline agent creation mode (agentConfiguration without agent or agentFactory). URI value overrides the same option on the agentConfiguration bean. | 0 | int |
 | **outputClass** (producer) | Java class to use for structured output. Camel derives the JSON schema from the class and instructs the model to produce matching JSON; the response body is left as a raw JSON string. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. The class must be a POJO with public fields or getters; simple types, enums, and collections are not supported. Mutually exclusive with jsonSchema. |  | Class |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
@@ -133,7 +136,10 @@ With the following _path_ and _query_ parameters:
 | **agent** (producer) | **Autowired** The agent to use for the component. |  | Agent |
 | **agentConfiguration** (producer) | **Autowired** AgentConfiguration used by Camel to create the agent internally. When set, Camel creates an AgentWithMemory if a ChatMemoryProvider is configured, otherwise an AgentWithoutMemory. If an agentFactory is also configured, the factory takes precedence. |  | AgentConfiguration |
 | **agentFactory** (producer) | **Autowired** The agent factory to use for creating agents if no Agent is provided. |  | AgentFactory |
+| **compensateOnToolErrors** (producer) | Whether LangChain4j should compensate when a tool execution fails. Only supported in inline agent creation mode (agentConfiguration without agent or agentFactory). URI value overrides the same option on the agentConfiguration bean. | false | Boolean |
+| **executeToolsConcurrently** (producer) | Whether multiple tools requested in a single LLM turn are executed concurrently. Camel route tools run on isolated exchange copies. Only supported in inline agent creation mode (agentConfiguration without agent or agentFactory). URI value overrides the same option on the agentConfiguration bean. | false | Boolean |
 | **jsonSchema** (producer) | JSON schema for structured output validation. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. Mutually exclusive with outputClass. |  | String |
+| **maxToolCallingRoundTrips** (producer) | Maximum number of tool-calling round trips allowed per request. Each round trip is one LLM call plus execution of the tools requested in that call. Set to 0 to leave unset and use the LangChain4j default. Only supported in inline agent creation mode (agentConfiguration without agent or agentFactory). URI value overrides the same option on the agentConfiguration bean. | 0 | int |
 | **outputClass** (producer) | Java class to use for structured output. Camel derives the JSON schema from the class and instructs the model to produce matching JSON; the response body is left as a raw JSON string. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. The class must be a POJO with public fields or getters; simple types, enums, and collections are not supported. Mutually exclusive with jsonSchema. |  | Class |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -305,6 +311,25 @@ AgentConfiguration configuration = new AgentConfiguration()
 ```
 
 Tool-route header side-effects are not merged back onto the main exchange when tools run concurrently; only the tool result text is returned to the LLM.
+
+The same tool-calling options can also be set directly on the endpoint URI when using inline agent creation mode (`agentConfiguration` without `agent` or `agentFactory`). URI values override the same options on the `AgentConfiguration` bean:
+
+```yaml
+- to:
+    uri: "langchain4j-agent:assistant"
+    parameters:
+      agentConfiguration: "#myConfig"
+      tags: "orders"
+      maxToolCallingRoundTrips: 5
+      compensateOnToolErrors: true
+      executeToolsConcurrently: true
+```
+
+```java
+from("direct:start")
+    .to("langchain4j-agent:assistant?agentConfiguration=#myConfig&tags=orders"
+        + "&maxToolCallingRoundTrips=5&compensateOnToolErrors=true&executeToolsConcurrently=true");
+```
 
 #### Creating an Agent without Memory
 

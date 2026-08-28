@@ -12,7 +12,6 @@ Camel is distributed with the following archetypes for Maven end users.
 | camel-archetype-dataformat | This archetype is used for creating a new Maven project for Camel [Data Format](data-format.md)s. Use this if there is a data format missing in Camel that you want to create yourself. |
 | camel-archetype-java | This archetype is used to create a new Maven project for Camel routes using Java DSL. |
 | camel-archetype-main | This archetype is used to create a new Maven project for Camel routes running Camel standalone (camel-main). |
-| camel-archetype-spring | This archetype is used to create a new Maven project for XML DSL routes using Spring. |
 | camel-archetype-spring-boot | This archetype is used to create a new Maven project for Camel routes using Spring Boot. |
 
 The maven coordinates for these archetypes is the following:

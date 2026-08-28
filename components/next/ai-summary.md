@@ -20,7 +20,6 @@ Camel offers two main paths for integrating Large Language Models (LLMs) into ro
 | --- | --- | --- |
 | OpenAI or compatible API (OpenRouter, Ollama, vLLM) | Yes | Via LangChain4j provider |
 | Switch providers without code changes | No (OpenAI-compatible only) | Yes |
-| MCP tool calling / agentic loops | Yes | No (use [langchain4j-tools](langchain4j-tools-component.md) instead) |
 | Streaming responses | Yes | Manual (via `StreamingChatLanguageModel`) |
 | Structured output (JSON schema) | Yes (`outputClass`, `jsonSchema`) | No |
 | Prompt templates with variables | No (use Simple expressions) | Yes (built-in \`{{variable}}\` syntax) |
@@ -72,10 +71,6 @@ Perform operations on the LangChain4jEmbeddingStores.
 [LangChain4j Embeddings](langchain4j-embeddings-component.md)
 
 LangChain4j Embeddings
-
-[LangChain4j Tools](langchain4j-tools-component.md)
-
-LangChain4j Tools and Function Calling Features
 
 [LangChain4j Web Search](langchain4j-web-search-component.md)
 

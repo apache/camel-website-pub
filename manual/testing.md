@@ -88,7 +88,7 @@ There are a number of third party testing libraries that Camel users have found 
 
 ### Citrus test framework
 
-As an example of writing integration tests for Camel applications you can use the [Citrus](https://citfrusframework.org) test framework. Citrus is an Open Source Java testing framework with focus on integration testing and messaging.
+As an example of writing integration tests for Camel applications you can use the [Citrus](https://citrusframework.org) test framework. Citrus is an Open Source Java testing framework with focus on integration testing and messaging.
 
 The framework provides a very good integration with Apache Camel. Citrus helps you to write automated integration tests with a proper preparation of test infrastructure and connects with the exposed services to verify the Camel application with powerful message validation capabilities for different message data formats (e.g. XML, Json, YAML, plaintext).
 

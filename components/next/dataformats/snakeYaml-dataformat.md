@@ -6,7 +6,7 @@ YAML is a Data Format to marshal and unmarshal Java objects to and from [YAML](h
 
 For YAML to object marshalling, Camel provides integration with three popular YAML libraries:
 
--   The [SnakeYAML](http://www.snakeyaml.org/) library
+-   The [SnakeYAML](https://bitbucket.org/snakeyaml/snakeyaml) library
     
 
 Every library requires adding the special camel component (see "Dependency…​" paragraphs further down). By default Camel uses the SnakeYAML library.

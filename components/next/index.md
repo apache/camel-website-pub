@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
+Number of Non-Core Components: 381 in 307 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -63,6 +63,8 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [Alibaba Message Service (MNS)](alibaba-mns-component.md) | camel-alibaba-mns | Preview | 4.23 | Send and receive messages to/from Alibaba Cloud Message Service (MNS). |
 | [Alibaba Object Storage Service (OSS)](alibaba-oss-component.md) | camel-alibaba-oss | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
 | [Alibaba Short Message Service (SMS)](alibaba-sms-component.md) | camel-alibaba-sms | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
+| [Alibaba Simple Log Service (SLS)](alibaba-sls-component.md) | camel-alibaba-sls | Preview | 4.23 | Manage logs on Alibaba Cloud Simple Log Service (SLS). |
+| [Alibaba Tablestore (OTS)](alibaba-ots-component.md) | camel-alibaba-ots | Preview | 4.23 | Perform row operations on Alibaba Cloud Tablestore (OTS). |
 | [AMQP](amqp-component.md) | camel-amqp | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](arangodb-component.md) | camel-arangodb | Stable | 3.5 | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](as2-component.md) | camel-as2 | Stable | 2.22 | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
@@ -154,7 +156,6 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [Deep Java Library](djl-component.md) | camel-djl | Stable | 3.3 | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
 | [DFDL](dfdl-component.md) | camel-dfdl | Stable | 4.11 | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
 | [DHIS2](dhis2-component.md) | camel-dhis2 | Stable | 4.0 | Leverages the DHIS2 Java SDK to integrate Apache Camel with the DHIS2 Web API. |
-| [DigitalOcean](digitalocean-component.md) | camel-digitalocean | Stable-deprecated | 2.19 | Manage Droplets and resources within the DigitalOcean cloud. |
 | [Disruptor](disruptor-component.md) | camel-disruptor | Stable | 2.12 | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [Disruptor VM](disruptor-vm-component.md) | camel-disruptor | Stable | 2.12 | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [DNS](dns-component.md) | camel-dns | Stable | 2.7 | Perform DNS queries using DNSJava. |
@@ -233,8 +234,6 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [IBM Watson Text to Speech](ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
 | [IBM watsonx.ai](ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
 | [IBM watsonx.data](ibm-watsonx-data-component.md) | camel-ibm-watsonx-data | Stable | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
-| [IEC 60870 Client](iec60870-client-component.md) | camel-iec60870 | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
-| [IEC 60870 Server](iec60870-server-component.md) | camel-iec60870 | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
 | [Iggy](iggy-component.md) | camel-iggy | Preview | 4.17 | Send and receive message to Apache Iggy streaming platform. |
 | [Ignite](ignite-summary.md) | camel-ignite |  | 2.17 |  |
 | [Ignite Cache](ignite-cache-component.md) | camel-ignite | Stable | 2.17 | Perform cache operations on an Ignite cache or consume changes from a continuous query. |
@@ -248,8 +247,6 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [Infinispan Embedded](infinispan-embedded-component.md) | camel-infinispan-embedded | Stable | 2.13 | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [InfluxDB](influxdb-component.md) | camel-influxdb | Stable | 2.18 | Interact with InfluxDB v1, a time series database. |
 | [InfluxDB2](influxdb2-component.md) | camel-influxdb2 | Stable | 3.20 | Interact with InfluxDB v2, a time series database. |
-| [IRC](irc-component.md) | camel-irc | Stable-deprecated | 1.1 | Send and receive messages to/from an IRC chat. |
-| [IronMQ](ironmq-component.md) | camel-ironmq | Stable-deprecated | 2.17 | Send and receive messages to/from IronMQ an elastic and durable hosted message queue as a service. |
 | [JCache](jcache-component.md) | camel-jcache | Stable | 2.17 | Perform caching operations against JSR107/JCache. |
 | [JCR](jcr-component.md) | camel-jcr | Stable | 1.3 | Read and write nodes to/from a JCR compliant content repository. |
 | [JDBC](jdbc-component.md) | camel-jdbc | Stable | 1.2 | Access databases through SQL and JDBC. |
@@ -265,7 +262,6 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [JSLT](jslt-component.md) | camel-jslt | Stable | 3.1 | Query or transform JSON payloads using JSLT. |
 | [JSON Schema Validator](json-validator-component.md) | camel-json-validator | Stable | 2.20 | Validate JSON payloads using NetworkNT JSON Schema. |
 | [JSONata](jsonata-component.md) | camel-jsonata | Stable | 3.5 | Transforms JSON payload using JSONata transformation. |
-| [JsonPatch](json-patch-component.md) | camel-json-patch | Stable-deprecated | 3.12 | Transforms JSON using JSON patch (RFC 6902). |
 | [JT400](jt400-component.md) | camel-jt400 | Stable | 1.5 | Exchanges messages with an IBM i system using data queues, message queues, or program call. IBM i is the replacement for AS/400 and iSeries servers. |
 | [JTE](jte-component.md) | camel-jte | Stable | 4.4 | Transform messages using a Java based template engine (JTE). |
 | [Kafka](kafka-component.md) | camel-kafka | Stable | 2.13 | Send and receive messages to/from an Apache Kafka broker. |
@@ -296,7 +292,6 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [LangChain4j Chat](langchain4j-chat-component.md) | camel-langchain4j-chat | Stable | 4.5 | LangChain4j Chat component |
 | [LangChain4j Embedding Store](langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore | Stable | 4.14 | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](langchain4j-embeddings-component.md) | camel-langchain4j-embeddings | Stable | 4.5 | LangChain4j Embeddings |
-| [LangChain4j Tools](langchain4j-tools-component.md) | camel-langchain4j-tools | Preview-deprecated | 4.8 | LangChain4j Tools and Function Calling Features |
 | [LangChain4j Web Search](langchain4j-web-search-component.md) | camel-langchain4j-web-search | Stable | 4.8 | LangChain4j Web Search Engine |
 | [LDAP](ldap-component.md) | camel-ldap | Stable | 1.5 | Perform searches on LDAP servers. |
 | [LDIF](ldif-component.md) | camel-ldif | Stable | 2.20 | Perform updates on an LDAP server from an LDIF body content. |
@@ -383,7 +378,7 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [SMPP](smpp-component.md) | camel-smpp | Stable | 2.2 | Send and receive SMS messages using a SMSC (Short Message Service Center). |
 | [SNMP](snmp-component.md) | camel-snmp | Stable | 2.1 | Receive traps and poll SNMP (Simple Network Management Protocol) capable devices. |
 | [Solr](solr-component.md) | camel-solr | Stable | 4.8 | Perform operations against Apache Lucene Solr. |
-| [Splunk](splunk-component.md) | camel-splunk | Stable-deprecated | 2.13 | Publish or search for events in Splunk. |
+| [SPIFFE](spiffe-component.md) | camel-spiffe | Preview | 4.23 | Fetch and validate SPIFFE workload identity (X.509-SVID and JWT-SVID) from the SPIFFE Workload API. |
 | [Splunk HEC](splunk-hec-component.md) | camel-splunk-hec | Stable | 3.3 | The splunk component allows publishing events in Splunk using the HTTP Event Collector. |
 | [Spring](spring-summary.md) | camel-spring |  |  |  |
 | [Spring AI Chat](spring-ai-chat-component.md) | camel-spring-ai-chat | Stable | 4.17 | Perform chat operations using Spring AI. |
@@ -400,6 +395,7 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [SQL](sql-component.md) | camel-sql | Stable | 1.4 | Perform SQL queries using Spring JDBC. |
 | [SQL Stored Procedure](sql-stored-component.md) | camel-sql | Stable | 2.17 | Perform SQL queries as a JDBC Stored Procedures using Spring JDBC. |
 | [SSH](ssh-component.md) | camel-ssh | Stable | 2.10 | Execute commands on remote hosts using SSH. |
+| [State Store](state-store-component.md) | camel-state-store | Preview | 4.23 | Perform key-value operations against a pluggable KeyValueRepository backend. |
 | [StAX](stax-component.md) | camel-stax | Stable | 2.9 | Process XML payloads by a SAX ContentHandler. |
 | [Stitch](stitch-component.md) | camel-stitch | Stable | 3.8 | Stitch is a cloud ETL service that integrates various data sources into a central data warehouse through various integrations. |
 | [String Template](string-template-component.md) | camel-stringtemplate | Stable | 1.2 | Transform messages using StringTemplate engine. |
@@ -434,7 +430,6 @@ Number of Non-Core Components: 386 in 311 JAR artifacts (13 deprecated)
 | [XML Security Verify](xmlsecurity-verify-component.md) | camel-xmlsecurity | Stable | 2.12 | Verify XML payloads using the XML signature specification. |
 | [XMPP](xmpp-component.md) | camel-xmpp | Stable | 1.0 | Send and receive messages to/from an XMPP chat server. |
 | [XQuery](xquery-component.md) | camel-saxon | Stable | 1.0 | Query and/or transform XML payloads using XQuery and Saxon. |
-| [Zeebe](zeebe-component.md) | camel-zeebe | Preview-deprecated | 3.21 | Zeebe component which integrates with Camunda Zeebe to interact with the API. |
 | [Zendesk](zendesk-component.md) | camel-zendesk | Stable | 2.19 | Manage Zendesk tickets, users, organizations, etc. |
 | [ZooKeeper](zookeeper-component.md) | camel-zookeeper | Stable | 2.9 | Manage ZooKeeper clusters. |
 | [ZooKeeper Master](zookeeper-master-component.md) | camel-zookeeper-master | Stable | 2.19 | Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies. |

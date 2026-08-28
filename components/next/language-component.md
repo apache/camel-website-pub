@@ -129,6 +129,8 @@ Enum values:
     
 -   python3
     
+-   quickjs
+    
 -   ref
     
 -   simple

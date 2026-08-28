@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 105 in 72 JAR artifacts (9 deprecated)
+Number of Miscellaneous Components: 101 in 68 JAR artifacts (5 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -34,7 +34,6 @@ Number of Miscellaneous Components: 105 in 72 JAR artifacts (9 deprecated)
 | [Docling - Using Docling-Serve API](docling-serve.md) |  |  |  |  |
 | [DSL](dsl.md) |  |  |  |  |
 | [DSL Modeline](dsl-modeline.md) | camel-dsl-modeline | Stable | 3.16 | Camel DSL modeline |
-| [Headersmap](headersmap.md) | camel-headersmap | Stable-deprecated | 2.20 | Fast case-insensitive headers map implementation |
 | [IBM watsonx.ai - Examples](ibm-watsonx-ai-examples.md) |  |  |  |  |
 | [Jandex](jandex.md) | camel-jandex | Stable | 4.12 | Custom class and resource loader using jandex.idx |
 | [Jasypt](jasypt.md) | camel-jasypt | Stable | 2.5 | Security using Jasypt |
@@ -52,7 +51,6 @@ Number of Miscellaneous Components: 105 in 72 JAR artifacts (9 deprecated)
 | [LangChain4j Agent - MCP Tools Integration](langchain4j-agent-mcp.md) |  |  |  |  |
 | [LangChain4j Agent - Multimodal Content Support](langchain4j-agent-multimodal.md) |  |  |  |  |
 | [LangChain4j Tokenizer](langchain4j-tokenizer.md) | camel-langchain4j-tokenizer | Preview | 4.8 | LangChain4j Tokenizer |
-| [LevelDB](leveldb.md) | camel-leveldb | Stable-deprecated | 2.10 | Using LevelDB as persistent EIP store |
 | [LRA](lra.md) | camel-lra | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](mail-microsoft-oauth.md) | camel-mail-microsoft-oauth | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](main.md) | camel-main | Stable | 3.0 | Camel Main |
@@ -70,7 +68,7 @@ Number of Miscellaneous Components: 105 in 72 JAR artifacts (9 deprecated)
 | [Oauth](oauth.md) | camel-oauth | Preview | 4.12 | Camel OAuth (Preview) |
 | [Observability Services](observability-services.md) | camel-observability-services | Preview | 4.9 | Camel Observability Services |
 | [OpenAI - Compatible Providers](openai-providers.md) |  |  |  |  |
-| [OpenAI - Embeddings, Moderation and Audio Operations](openai-operations.md) |  |  |  |  |
+| [OpenAI - Embeddings, Moderation, Audio and Image Operations](openai-operations.md) |  |  |  |  |
 | [OpenAI - MCP Tool Calling](openai-mcp.md) |  |  |  |  |
 | [OpenAI - Responses API Operation](openai-responses.md) |  |  |  |  |
 | [Openapi Java](openapi-java.md) | camel-openapi-java | Stable | 3.1 | Rest DSL support for using OpenApi doc |
@@ -82,7 +80,6 @@ Number of Miscellaneous Components: 105 in 72 JAR artifacts (9 deprecated)
 | [Platform Http Vertx](platform-http-vertx.md) | camel-platform-http-vertx | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [PQC Hybrid Cryptography](pqc-hybrid.md) |  |  |  |  |
 | [PQC Key Lifecycle Management](pqc-key-lifecycle.md) |  |  |  |  |
-| [Reactive Executor Tomcat](reactive-executor-tomcat.md) | camel-reactive-executor-tomcat | Experimental-deprecated | 3.17 | Reactive Executor for camel-core using Apache Tomcat (deprecated) |
 | [Reactive Executor Vert.x](reactive-executor-vertx.md) | camel-reactive-executor-vertx | Experimental-deprecated | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](reactor.md) | camel-reactor | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](redis.md) | camel-redis | Stable | 3.5 | Aggregation repository using Redis as datastore |
@@ -108,7 +105,6 @@ Number of Miscellaneous Components: 105 in 72 JAR artifacts (9 deprecated)
 | [Test Main JUnit6](test-main-junit6.md) | camel-test-main-junit6 | Stable | 4.17 | Camel unit testing with Main and JUnit 6 |
 | [Test Spring JUnit5](test-spring-junit5.md) | camel-test-spring-junit5 | Stable | 3.0 | Camel unit testing with Spring and JUnit 5 |
 | [Test Spring JUnit6](test-spring-junit6.md) | camel-test-spring-junit6 | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
-| [ThreadPoolFactory Vert.x](threadpoolfactory-vertx.md) | camel-threadpoolfactory-vertx | Experimental-deprecated | 3.5 | ThreadPoolFactory for camel-core using Vert.x |
 | [Tracing](tracing.md) | camel-tracing | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
 | [Undertow Spring Security](undertow-spring-security.md) | camel-undertow-spring-security | Stable | 3.3 | Spring Security Provider for camel-undertow |
 | [Write Ahead Log Strategy for Resume API](wal.md) | camel-wal | Stable | 3.20 | Write Ahead Log Strategy for Resume API |

@@ -6,7 +6,7 @@ Index of Camel data formats.
 
 Below is the list of data formats that are provided by Apache Camel.
 
-Number of Data Formats: 57 in 51 JAR artifacts (0 deprecated)
+Number of Data Formats: 58 in 52 JAR artifacts (0 deprecated)
 
     
 | Data Format | Artifact | Support Level | Since | Description |
@@ -60,6 +60,7 @@ Number of Data Formats: 57 in 51 JAR artifacts (0 deprecated)
 | [Syslog](syslog-dataformat.md) | camel-syslog | Stable | 2.6 | Marshall SyslogMessages to RFC3164 and RFC5424 messages and back |
 | [Tar File](tarFile-dataformat.md) | camel-tarfile | Stable | 2.16 | Archive files into tarballs or extract files from tarballs |
 | [Thrift](thrift-dataformat.md) | camel-thrift | Stable | 2.20 | Serialize and deserialize messages using Apache Thrift binary data format |
+| [TOON](toon-dataformat.md) | camel-toon | Preview | 4.23 | Marshal JSON-compatible Java values to TOON (Token-Oriented Object Notation) and unmarshal TOON back to Java objects. |
 | [UBL](ubl-dataformat.md) | camel-ubl | Preview | 4.23 | Marshal and unmarshal UBL 2.1 (Universal Business Language) documents. |
 | [uniVocity CSV](univocityCsv-dataformat.md) | camel-univocity-parsers | Stable | 2.15 | Marshal and unmarshal Java objects from and to CSV (Comma Separated Values) using UniVocity Parsers |
 | [uniVocity Fixed Length](univocityFixed-dataformat.md) | camel-univocity-parsers | Stable | 2.15 | Marshal and unmarshal Java objects from and to fixed length records using UniVocity Parsers |

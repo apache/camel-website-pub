@@ -18,6 +18,7 @@ Compatibility between Kamelets catalog and Camel core
 | Camel-Kamelets Version | Using Camel Version | LTS Until | Branch |
 | --- | --- | --- | --- |
 | [Next (Pre-release)](index.md) | [4.8.0](../../components/next/index.md) |  | [main](https://github.com/apache/camel-kamelets) |
+| [4.22.x](../4.22.x/index.md) | [4.22.0](../../components/4.22.x/index.md) |  | [4.22.x](https://github.com/apache/camel-kamelets/tree/4.22.x) |
 | [4.18.x (LTS)](../4.18.x/index.md) | [4.18.0](../../components/4.18.x/index.md) |  | [4.18.x](https://github.com/apache/camel-kamelets/tree/4.18.x) |
 
 This page contains the default Apache Camel Kamelets catalog.

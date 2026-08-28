@@ -10,8 +10,6 @@ A number of Camel components support this (such as but not limited to):
     
 -   [HTTP](../components/4.22.x/http-component.md)
     
--   [IRC](../components/4.22.x/irc-component.md)
-    
 -   [Jetty](../components/4.22.x/jetty-component.md)
     
 -   [Netty](../components/4.22.x/netty-component.md)

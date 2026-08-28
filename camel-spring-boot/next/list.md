@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 401 spring boot starter json files.
+There are 394 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -227,8 +227,6 @@ dfdl
 
 dhis2
 
-digitalocean
-
 direct
 
 disruptor
@@ -365,8 +363,6 @@ ibm-watsonx-ai
 
 ical
 
-iec60870
-
 iggy
 
 ignite
@@ -380,10 +376,6 @@ infinispan
 influxdb
 
 influxdb2
-
-irc
-
-ironmq
 
 iso8583
 
@@ -447,8 +439,6 @@ jsch
 
 jslt
 
-json-patch
-
 json-validator
 
 jsonapi
@@ -487,8 +477,6 @@ langchain4j-embeddings
 
 langchain4j-embeddingstore
 
-langchain4j-tools
-
 langchain4j-web-search
 
 language
@@ -496,8 +484,6 @@ language
 ldap
 
 ldif
-
-leveldb
 
 log
 
@@ -625,6 +611,8 @@ quartz
 
 quickfix
 
+quickjs
+
 reactive-streams
 
 reactor
@@ -688,8 +676,6 @@ soap
 solr
 
 splunk-hec
-
-splunk
 
 spring-ai-chat
 
@@ -755,6 +741,8 @@ tika
 
 timer
 
+toon
+
 twilio
 
 twitter
@@ -807,8 +795,6 @@ xslt-saxon
 
 xslt
 
-zeebe
-
 zendesk
 
 zip-deflater
@@ -848,6 +834,8 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Alibaba Message Service (MNS)](../../components/next/alibaba-mns-component.md) | camel-alibaba-mns-starter | Preview | 4.23 | Send and receive messages to/from Alibaba Cloud Message Service (MNS). |
 | [Alibaba Object Storage Service (OSS)](../../components/next/alibaba-oss-component.md) | camel-alibaba-oss-starter | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
 | [Alibaba Short Message Service (SMS)](../../components/next/alibaba-sms-component.md) | camel-alibaba-sms-starter | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
+| [Alibaba Simple Log Service (SLS)](../../components/next/alibaba-sls-component.md) | camel-alibaba-sls-starter | Preview | 4.23 | Manage logs on Alibaba Cloud Simple Log Service (SLS). |
+| [Alibaba Tablestore (OTS)](../../components/next/alibaba-ots-component.md) | camel-alibaba-ots-starter | Preview | 4.23 | Perform row operations on Alibaba Cloud Tablestore (OTS). |
 | [AMQP](../../components/next/amqp-component.md) | camel-amqp-starter | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](../../components/next/arangodb-component.md) | camel-arangodb-starter | Stable | 3.5 | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](../../components/next/as2-component.md) | camel-as2-starter | Stable | 2.22 | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
@@ -943,7 +931,6 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Deep Java Library](../../components/next/djl-component.md) | camel-djl-starter | Stable | 3.3 | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
 | [DFDL](../../components/next/dfdl-component.md) | camel-dfdl-starter | Stable | 4.11 | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
 | [DHIS2](../../components/next/dhis2-component.md) | camel-dhis2-starter | Stable | 4.0 | Leverages the DHIS2 Java SDK to integrate Apache Camel with the DHIS2 Web API. |
-| [DigitalOcean](../../components/next/digitalocean-component.md) | camel-digitalocean-starter | Stable-deprecated | 2.19 | Manage Droplets and resources within the DigitalOcean cloud. |
 | [Direct](../../components/next/direct-component.md) | camel-direct-starter | Stable | 1.0 | Call another endpoint from the same Camel Context synchronously. |
 | [Disruptor](../../components/next/disruptor-component.md) | camel-disruptor-starter | Stable | 2.12 | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [Disruptor VM](../../components/next/disruptor-vm-component.md) | camel-disruptor-starter | Stable | 2.12 | Provides asynchronous SEDA behavior using LMAX Disruptor. |
@@ -1023,8 +1010,6 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [IBM Watson Text to Speech](../../components/next/ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech-starter | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
 | [IBM watsonx.ai](../../components/next/ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai-starter | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |
 | [IBM watsonx.data](../../components/next/ibm-watsonx-data-component.md) | camel-ibm-watsonx-data-starter | Stable | 4.19 | Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management. |
-| [IEC 60870 Client](../../components/next/iec60870-client-component.md) | camel-iec60870-starter | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
-| [IEC 60870 Server](../../components/next/iec60870-server-component.md) | camel-iec60870-starter | Stable-deprecated | 2.20 | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
 | [Iggy](../../components/next/iggy-component.md) | camel-iggy-starter | Preview | 4.17 | Send and receive message to Apache Iggy streaming platform. |
 | [Ignite Cache](../../components/next/ignite-cache-component.md) | camel-ignite-starter | Stable | 2.17 | Perform cache operations on an Ignite cache or consume changes from a continuous query. |
 | [Ignite Compute](../../components/next/ignite-compute-component.md) | camel-ignite-starter | Stable | 2.17 | Run compute operations on an Ignite cluster. |
@@ -1037,8 +1022,6 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Infinispan Embedded](../../components/next/infinispan-embedded-component.md) | camel-infinispan-embedded-starter | Stable | 2.13 | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [InfluxDB](../../components/next/influxdb-component.md) | camel-influxdb-starter | Stable | 2.18 | Interact with InfluxDB v1, a time series database. |
 | [InfluxDB2](../../components/next/influxdb2-component.md) | camel-influxdb2-starter | Stable | 3.20 | Interact with InfluxDB v2, a time series database. |
-| [IRC](../../components/next/irc-component.md) | camel-irc-starter | Stable-deprecated | 1.1 | Send and receive messages to/from an IRC chat. |
-| [IronMQ](../../components/next/ironmq-component.md) | camel-ironmq-starter | Stable-deprecated | 2.17 | Send and receive messages to/from IronMQ an elastic and durable hosted message queue as a service. |
 | [JCache](../../components/next/jcache-component.md) | camel-jcache-starter | Stable | 2.17 | Perform caching operations against JSR107/JCache. |
 | [JCR](../../components/next/jcr-component.md) | camel-jcr-starter | Stable | 1.3 | Read and write nodes to/from a JCR compliant content repository. |
 | [JDBC](../../components/next/jdbc-component.md) | camel-jdbc-starter | Stable | 1.2 | Access databases through SQL and JDBC. |
@@ -1054,7 +1037,6 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [JSLT](../../components/next/jslt-component.md) | camel-jslt-starter | Stable | 3.1 | Query or transform JSON payloads using JSLT. |
 | [JSON Schema Validator](../../components/next/json-validator-component.md) | camel-json-validator-starter | Stable | 2.20 | Validate JSON payloads using NetworkNT JSON Schema. |
 | [JSONata](../../components/next/jsonata-component.md) | camel-jsonata-starter | Stable | 3.5 | Transforms JSON payload using JSONata transformation. |
-| [JsonPatch](../../components/next/json-patch-component.md) | camel-json-patch-starter | Stable-deprecated | 3.12 | Transforms JSON using JSON patch (RFC 6902). |
 | [JT400](../../components/next/jt400-component.md) | camel-jt400-starter | Stable | 1.5 | Exchanges messages with an IBM i system using data queues, message queues, or program call. IBM i is the replacement for AS/400 and iSeries servers. |
 | [JTE](../../components/next/jte-component.md) | camel-jte-starter | Stable | 4.4 | Transform messages using a Java based template engine (JTE). |
 | [Kafka](../../components/next/kafka-component.md) | camel-kafka-starter | Stable | 2.13 | Send and receive messages to/from an Apache Kafka broker. |
@@ -1085,7 +1067,6 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [LangChain4j Chat](../../components/next/langchain4j-chat-component.md) | camel-langchain4j-chat-starter | Stable | 4.5 | LangChain4j Chat component |
 | [LangChain4j Embedding Store](../../components/next/langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore-starter | Stable | 4.14 | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](../../components/next/langchain4j-embeddings-component.md) | camel-langchain4j-embeddings-starter | Stable | 4.5 | LangChain4j Embeddings |
-| [LangChain4j Tools](../../components/next/langchain4j-tools-component.md) | camel-langchain4j-tools-starter | Preview-deprecated | 4.8 | LangChain4j Tools and Function Calling Features |
 | [LangChain4j Web Search](../../components/next/langchain4j-web-search-component.md) | camel-langchain4j-web-search-starter | Stable | 4.8 | LangChain4j Web Search Engine |
 | [Language](../../components/next/language-component.md) | camel-language-starter | Stable | 2.5 | Execute scripts in any of the languages supported by Camel. |
 | [LDAP](../../components/next/ldap-component.md) | camel-ldap-starter | Stable | 1.5 | Perform searches on LDAP servers. |
@@ -1180,7 +1161,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [SMPP](../../components/next/smpp-component.md) | camel-smpp-starter | Stable | 2.2 | Send and receive SMS messages using a SMSC (Short Message Service Center). |
 | [SNMP](../../components/next/snmp-component.md) | camel-snmp-starter | Stable | 2.1 | Receive traps and poll SNMP (Simple Network Management Protocol) capable devices. |
 | [Solr](../../components/next/solr-component.md) | camel-solr-starter | Stable | 4.8 | Perform operations against Apache Lucene Solr. |
-| [Splunk](../../components/next/splunk-component.md) | camel-splunk-starter | Stable-deprecated | 2.13 | Publish or search for events in Splunk. |
+| [SPIFFE](../../components/next/spiffe-component.md) | camel-spiffe-starter | Preview | 4.23 | Fetch and validate SPIFFE workload identity (X.509-SVID and JWT-SVID) from the SPIFFE Workload API. |
 | [Splunk HEC](../../components/next/splunk-hec-component.md) | camel-splunk-hec-starter | Stable | 3.3 | The splunk component allows publishing events in Splunk using the HTTP Event Collector. |
 | [Spring AI Chat](../../components/next/spring-ai-chat-component.md) | camel-spring-ai-chat-starter | Stable | 4.17 | Perform chat operations using Spring AI. |
 | [Spring AI Embeddings](../../components/next/spring-ai-embeddings-component.md) | camel-spring-ai-embeddings-starter | Stable | 4.17 | Spring AI Embeddings |
@@ -1196,6 +1177,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [SQL](../../components/next/sql-component.md) | camel-sql-starter | Stable | 1.4 | Perform SQL queries using Spring JDBC. |
 | [SQL Stored Procedure](../../components/next/sql-stored-component.md) | camel-sql-starter | Stable | 2.17 | Perform SQL queries as a JDBC Stored Procedures using Spring JDBC. |
 | [SSH](../../components/next/ssh-component.md) | camel-ssh-starter | Stable | 2.10 | Execute commands on remote hosts using SSH. |
+| [State Store](../../components/next/state-store-component.md) | camel-state-store-starter | Preview | 4.23 | Perform key-value operations against a pluggable KeyValueRepository backend. |
 | [StAX](../../components/next/stax-component.md) | camel-stax-starter | Stable | 2.9 | Process XML payloads by a SAX ContentHandler. |
 | [Stitch](../../components/next/stitch-component.md) | camel-stitch-starter | Stable | 3.8 | Stitch is a cloud ETL service that integrates various data sources into a central data warehouse through various integrations. |
 | [Stream](../../components/next/stream-component.md) | camel-stream-starter | Stable | 1.3 | Read from system-in and write to system-out and system-err streams. |
@@ -1236,7 +1218,6 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [XQuery](../../components/next/xquery-component.md) | camel-saxon-starter | Stable | 1.0 | Query and/or transform XML payloads using XQuery and Saxon. |
 | [XSLT](../../components/next/xslt-component.md) | camel-xslt-starter | Stable | 1.3 | Transforms XML payload using an XSLT template. |
 | [XSLT Saxon](../../components/next/xslt-saxon-component.md) | camel-xslt-saxon-starter | Stable | 3.0 | Transform XML payloads using an XSLT template using Saxon. |
-| [Zeebe](../../components/next/zeebe-component.md) | camel-zeebe-starter | Preview-deprecated | 3.21 | Zeebe component which integrates with Camunda Zeebe to interact with the API. |
 | [Zendesk](../../components/next/zendesk-component.md) | camel-zendesk-starter | Stable | 2.19 | Manage Zendesk tickets, users, organizations, etc. |
 | [ZooKeeper](../../components/next/zookeeper-component.md) | camel-zookeeper-starter | Stable | 2.9 | Manage ZooKeeper clusters. |
 | [ZooKeeper Master](../../components/next/zookeeper-master-component.md) | camel-zookeeper-master-starter | Stable | 2.19 | Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies. |
@@ -1303,6 +1284,7 @@ Number of Camel data formats: 0 in 0 JAR artifacts (0 deprecated)
 | [Syslog](../../components/next/dataformats/syslog-dataformat.md) | camel-syslog-starter | Stable | 2.6 | Marshall SyslogMessages to RFC3164 and RFC5424 messages and back |
 | [Tar File](../../components/next/dataformats/tarFile-dataformat.md) | camel-tarfile-starter | Stable | 2.16 | Archive files into tarballs or extract files from tarballs |
 | [Thrift](../../components/next/dataformats/thrift-dataformat.md) | camel-thrift-starter | Stable | 2.20 | Serialize and deserialize messages using Apache Thrift binary data format |
+| [TOON](../../components/next/dataformats/toon-dataformat.md) | camel-toon-starter | Preview | 4.23 | Marshal JSON-compatible Java values to TOON (Token-Oriented Object Notation) and unmarshal TOON back to Java objects. |
 | [UBL](../../components/next/dataformats/ubl-dataformat.md) | camel-ubl-starter | Preview | 4.23 | Marshal and unmarshal UBL 2.1 (Universal Business Language) documents. |
 | [uniVocity CSV](../../components/next/dataformats/univocityCsv-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to CSV (Comma Separated Values) using UniVocity Parsers |
 | [uniVocity Fixed Length](../../components/next/dataformats/univocityFixed-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to fixed length records using UniVocity Parsers |
@@ -1344,6 +1326,7 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [OGNL](../../components/next/languages/ognl-language.md) | camel-ognl-starter | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL) |
 | [Python](../../components/next/languages/python-language.md) | camel-python-starter | Experimental | 3.19 | Evaluates a Python expression |
 | [Python 3](../../components/next/languages/python3-language.md) | camel-python3-starter | Preview | 4.23 | Evaluates a Python 3 expression |
+| [QuickJS](../../components/next/languages/quickjs-language.md) | camel-quickjs-starter | Preview | 4.23 | Evaluates a JavaScript expression using QuickJS4J |
 | [Ref](../../components/next/languages/ref-language.md) | camel-core-languages-starter | Stable | 2.8 | Uses an existing expression from the registry |
 | [Simple](../../components/next/languages/simple-language.md) | camel-core-languages-starter | Stable | 1.1 | Evaluates a Camel simple expression |
 | [Simple - Advanced Features](../../components/next/languages/simple-advanced.md) | undefined-starter |  |  |  |
@@ -1396,7 +1379,6 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Docling - Using Docling-Serve API](../../components/next/others/docling-serve.md) | undefined-starter |  |  |  |
 | [DSL](../../components/next/others/dsl.md) | undefined-starter |  |  |  |
 | [DSL Modeline](../../components/next/others/dsl-modeline.md) | camel-dsl-modeline-starter | Stable | 3.16 | Camel DSL modeline |
-| [Headersmap](../../components/next/others/headersmap.md) | camel-headersmap-starter | Stable-deprecated | 2.20 | Fast case-insensitive headers map implementation |
 | [IBM watsonx.ai - Examples](../../components/next/others/ibm-watsonx-ai-examples.md) | undefined-starter |  |  |  |
 | [Jandex](../../components/next/others/jandex.md) | camel-jandex-starter | Stable | 4.12 | Custom class and resource loader using jandex.idx |
 | [Jasypt](../../components/next/others/jasypt.md) | camel-jasypt-starter | Stable | 2.5 | Security using Jasypt |
@@ -1414,7 +1396,6 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [LangChain4j Agent - MCP Tools Integration](../../components/next/others/langchain4j-agent-mcp.md) | undefined-starter |  |  |  |
 | [LangChain4j Agent - Multimodal Content Support](../../components/next/others/langchain4j-agent-multimodal.md) | undefined-starter |  |  |  |
 | [LangChain4j Tokenizer](../../components/next/others/langchain4j-tokenizer.md) | camel-langchain4j-tokenizer-starter | Preview | 4.8 | LangChain4j Tokenizer |
-| [LevelDB](../../components/next/others/leveldb.md) | camel-leveldb-starter | Stable-deprecated | 2.10 | Using LevelDB as persistent EIP store |
 | [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](../../components/next/others/mail-microsoft-oauth.md) | camel-mail-microsoft-oauth-starter | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](../../components/next/others/main.md) | camel-main-starter | Stable | 3.0 | Camel Main |
@@ -1432,7 +1413,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Oauth](../../components/next/others/oauth.md) | camel-oauth-starter | Preview | 4.12 | Camel OAuth (Preview) |
 | [Observability Services](../../components/next/others/observability-services.md) | camel-observability-services-starter | Preview | 4.9 | Camel Observability Services |
 | [OpenAI - Compatible Providers](../../components/next/others/openai-providers.md) | undefined-starter |  |  |  |
-| [OpenAI - Embeddings, Moderation and Audio Operations](../../components/next/others/openai-operations.md) | undefined-starter |  |  |  |
+| [OpenAI - Embeddings, Moderation, Audio and Image Operations](../../components/next/others/openai-operations.md) | undefined-starter |  |  |  |
 | [OpenAI - MCP Tool Calling](../../components/next/others/openai-mcp.md) | undefined-starter |  |  |  |
 | [OpenAI - Responses API Operation](../../components/next/others/openai-responses.md) | undefined-starter |  |  |  |
 | [Openapi Java](../../components/next/others/openapi-java.md) | camel-openapi-java-starter | Stable | 3.1 | Rest DSL support for using OpenApi doc |
@@ -1444,7 +1425,6 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Platform Http Vertx](../../components/next/others/platform-http-vertx.md) | camel-platform-http-vertx-starter | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [PQC Hybrid Cryptography](../../components/next/others/pqc-hybrid.md) | undefined-starter |  |  |  |
 | [PQC Key Lifecycle Management](../../components/next/others/pqc-key-lifecycle.md) | undefined-starter |  |  |  |
-| [Reactive Executor Tomcat](../../components/next/others/reactive-executor-tomcat.md) | camel-reactive-executor-tomcat-starter | Experimental-deprecated | 3.17 | Reactive Executor for camel-core using Apache Tomcat (deprecated) |
 | [Reactive Executor Vert.x](../../components/next/others/reactive-executor-vertx.md) | camel-reactive-executor-vertx-starter | Experimental-deprecated | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](../../components/next/others/reactor.md) | camel-reactor-starter | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](../../components/next/others/redis.md) | camel-redis-starter | Stable | 3.5 | Aggregation repository using Redis as datastore |
@@ -1470,7 +1450,6 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Test Main JUnit6](../../components/next/others/test-main-junit6.md) | camel-test-main-junit6-starter | Stable | 4.17 | Camel unit testing with Main and JUnit 6 |
 | [Test Spring JUnit5](../../components/next/others/test-spring-junit5.md) | camel-test-spring-junit5-starter | Stable | 3.0 | Camel unit testing with Spring and JUnit 5 |
 | [Test Spring JUnit6](../../components/next/others/test-spring-junit6.md) | camel-test-spring-junit6-starter | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
-| [ThreadPoolFactory Vert.x](../../components/next/others/threadpoolfactory-vertx.md) | camel-threadpoolfactory-vertx-starter | Experimental-deprecated | 3.5 | ThreadPoolFactory for camel-core using Vert.x |
 | [Tracing](../../components/next/others/tracing.md) | camel-tracing-starter | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
 | [Undertow Spring Security](../../components/next/others/undertow-spring-security.md) | camel-undertow-spring-security-starter | Stable | 3.3 | Spring Security Provider for camel-undertow |
 | [Write Ahead Log Strategy for Resume API](../../components/next/others/wal.md) | camel-wal-starter | Stable | 3.20 | Write Ahead Log Strategy for Resume API |

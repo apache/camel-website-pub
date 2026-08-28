@@ -18,8 +18,6 @@ A range of Camel components support batching such as:
     
 -   [FTP](../components/4.22.x/ftp-component.md)
     
--   [IronMQ](../components/4.22.x/ironmq-component.md)
-    
 -   [Jooq](../components/4.22.x/jooq-component.md)
     
 -   [JPA](../components/4.22.x/jpa-component.md)
@@ -31,8 +29,6 @@ A range of Camel components support batching such as:
 -   [MyBatis](../components/4.22.x/mybatis-component.md)
     
 -   [Slack](../components/4.22.x/slack-component.md)
-    
--   [Splunk](../components/4.22.x/splunk-component.md)
     
 -   [SQL](../components/4.22.x/sql-component.md)
     

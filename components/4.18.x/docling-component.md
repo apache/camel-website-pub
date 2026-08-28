@@ -113,7 +113,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Docling component supports 46 options, which are listed below.
+The Docling component supports 49 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -196,6 +196,8 @@ Enum values:
 | **splitBatchResults** (batch) | Split batch results into individual exchanges (one per document) instead of single BatchProcessingResults. | false | boolean |
 | **includeMetadataInHeaders** (metadata) | Include metadata in message headers when extracting metadata. | true | boolean |
 | **includeRawMetadata** (metadata) | Include raw metadata as returned by the parser. | false | boolean |
+| **allowFilePathSource** (security) | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte or explicit path collection bodies used by the batch operations. | false | boolean |
+| **allowUrlSource** (security) | Whether a String message body that starts with http:// or https:// is interpreted as a remote URL for Docling to fetch. When disabled, such a body is rejected instead of being fetched. This does not affect the CamelDoclingInputFilePath header, nor bodies of any other type. | false | boolean |
 | **apiKeyHeader** (security) | Header name for API key authentication. | X-API-Key | String |
 | **authenticationScheme** (security) | 
 
@@ -216,6 +218,7 @@ Enum values:
 
  | NONE | AuthenticationScheme |
 | **authenticationToken** (security) | Authentication token for docling-serve API (Bearer token or API key). |  | String |
+| **inputBaseDirectory** (security) | When set, every local input file path must resolve inside this directory once normalized. Applies to the CamelDoclingInputFilePath header, to file path message bodies, and to the paths used by the batch operations. When empty, no directory restriction is applied. |  | String |
 | **maxFileSize** (security) | Maximum file size in bytes for processing. | 52428800 | long |
 
 ## Endpoint Options
@@ -233,7 +236,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **operationId** (producer) | **Required** The operation identifier. |  | String |
 
-### Query Parameters (44 parameters)
+### Query Parameters (47 parameters)
 
    
 | Name | Description | Default | Type |
@@ -314,6 +317,8 @@ Enum values:
 | **splitBatchResults** (batch) | Split batch results into individual exchanges (one per document) instead of single BatchProcessingResults. | false | boolean |
 | **includeMetadataInHeaders** (metadata) | Include metadata in message headers when extracting metadata. | true | boolean |
 | **includeRawMetadata** (metadata) | Include raw metadata as returned by the parser. | false | boolean |
+| **allowFilePathSource** (security) | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte or explicit path collection bodies used by the batch operations. | false | boolean |
+| **allowUrlSource** (security) | Whether a String message body that starts with http:// or https:// is interpreted as a remote URL for Docling to fetch. When disabled, such a body is rejected instead of being fetched. This does not affect the CamelDoclingInputFilePath header, nor bodies of any other type. | false | boolean |
 | **apiKeyHeader** (security) | Header name for API key authentication. | X-API-Key | String |
 | **authenticationScheme** (security) | 
 
@@ -334,6 +339,7 @@ Enum values:
 
  | NONE | AuthenticationScheme |
 | **authenticationToken** (security) | Authentication token for docling-serve API (Bearer token or API key). |  | String |
+| **inputBaseDirectory** (security) | When set, every local input file path must resolve inside this directory once normalized. Applies to the CamelDoclingInputFilePath header, to file path message bodies, and to the paths used by the batch operations. When empty, no directory restriction is applied. |  | String |
 | **maxFileSize** (security) | Maximum file size in bytes for processing. | 52428800 | long |
 
 ## Message Headers
@@ -378,7 +384,7 @@ The Docling component supports 28 message header(s), which is/are listed below:
 
 The component accepts the following input types in the message body:
 
--   `String` - File path or document content
+-   `String` - Document content. It is only read as a location when the endpoint opts in - see [Input Sources](#_input_sources) below
     
 -   `byte[]` - Binary document content
     
@@ -386,6 +392,33 @@ The component accepts the following input types in the message body:
     
 -   `InputStream` - Input stream containing document data
     
+
+For the batch operations the body may also be a `List<String>` or `String[]` of file paths, a `List<File>` or `File[]`, or a single directory path `String`.
+
+### Input Sources
+
+A `String` body is ambiguous: it could be the document itself, a URL to fetch, or a path to read. By default the component treats it as the document, and the two location readings must be enabled explicitly:
+
+  
+| Option | Default | Effect when enabled |
+| --- | --- | --- |
+| `allowUrlSource` | `false` | A body starting with `http://` or `https://` is handed to Docling as a remote URL to fetch. |
+| `allowFilePathSource` | `false` | A body starting with `/`, or containing `\`, is read from the local filesystem. This also covers the single directory-or-file `String` body accepted by the batch operations. |
+| `inputBaseDirectory` | _(none)_ | When set, every local input path must resolve inside this directory once normalized. Applies to the `CamelDoclingInputFilePath` header, to file path bodies, and to the paths used by the batch operations. |
+
+With both options left at their defaults, a body that is neither a URL nor a path is written to a temporary file and converted as document content, exactly as before.
+
+The `CamelDoclingInputFilePath` header is an explicit "the document lives here" signal from the route, so it keeps working without `allowFilePathSource`. It is still subject to `inputBaseDirectory` when one is set. Typed bodies - `File`, `byte[]`, `InputStream`, and the explicit path collections used by the batch operations - are unambiguous and are likewise unaffected.
+
+```java
+// the body is the document itself - no opt-in needed
+from("direct:content")
+    .to("docling:convert?operation=CONVERT_TO_MARKDOWN");
+
+// the body is a path, confined to /var/docs
+from("direct:paths")
+    .to("docling:convert?operation=CONVERT_TO_MARKDOWN&allowFilePathSource=true&inputBaseDirectory=/var/docs");
+```
 
 ### Output Behavior
 

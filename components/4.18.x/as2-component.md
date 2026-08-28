@@ -119,7 +119,7 @@ Enum values:
  |  | AS2ApiName |
 | **methodName** (common) | **Required** What sub operation to use for the selected operation. |  | String |
 
-### Query Parameters (47 parameters)
+### Query Parameters (48 parameters)
 
    
 | Name | Description | Default | Type |
@@ -248,6 +248,7 @@ Enum values:
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **accessToken** (security) | The access token that is used by the client for bearer authentication. |  | String |
+| **asyncMdnAllowedHosts** (security) | Comma separated list of host names an asynchronous MDN may be delivered to. The delivery address is chosen by the sender of the AS2 message, so this is the list of hosts the operator vouches for. When set, an asynchronous MDN whose delivery address names a host outside the list is refused, and the configured mdnUserName/mdnPassword/mdnAccessToken are attached only to a host on the list. When not set, the MDN is still delivered to the sender-supplied address but no credentials are attached. |  | String |
 | **decryptingPrivateKey** (security) | The key used to encrypt the EDI message. |  | PrivateKey |
 | **encryptingAlgorithm** (security) | 
 
@@ -490,7 +491,7 @@ The as2/send API method has the parameters listed in the table below:
 | **subject** | Message subject | String |
 | **userName** | The user-name that is used for basic authentication | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (47 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters (48 parameters)](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 
@@ -527,7 +528,7 @@ The as2/receive API method has the parameters listed in the table below:
 | **requestUriPattern** | 
  | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (47 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters (48 parameters)](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 
@@ -564,7 +565,7 @@ The as2/listen API method has the parameters listed in the table below:
 | **requestUriPattern** | 
  | String |
 
-In addition to the parameters above, the as2 API can also use any of the [Query Parameters (47 parameters)](#_query_parameters).
+In addition to the parameters above, the as2 API can also use any of the [Query Parameters (48 parameters)](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 

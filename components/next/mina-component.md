@@ -137,7 +137,7 @@ Enum values:
 | **encoderMaxLineLength** (codec) | To set the textline protocol encoder max line length. By default the default value of Mina itself is used which are Integer.MAX\_VALUE. | \-1 | int |
 | **encoding** (codec) | You can configure the encoding (a charset name) to use for the TCP textline codec and the UDP protocol. If not provided, Camel will use the JVM default Charset. |  | String |
 | **filters** (codec) | You can set a list of Mina IoFilters to use. |  | List |
-| **objectCodecPattern** (codec) | Accept the wildcard specified classes for Object deserialization, unless they are otherwise rejected. Multiple patterns can be separated by comma. |  | String |
+| **objectCodecPattern** (codec) | Accept the wildcard specified classes for Object deserialization, unless they are otherwise rejected. Multiple patterns can be separated by comma. This widens the codec’s deserialization allow-list, so keep it as narrow as the route actually needs. Avoid : it accepts every class the classpath can load from an untrusted peer, including Camel’s own org.apache.camel types. Leaving the option unset is the safest choice - the codec then accepts only the small built-in set and refuses anything else. |  | String |
 | **textline** (codec) | Only used for TCP. If no codec is specified, you can use this flag to indicate a text line based codec; if not specified or the value is false, then Object Serialization is assumed over TCP. | false | boolean |
 | **textlineDelimiter** (codec) | 
 
@@ -246,7 +246,7 @@ Enum values:
 | **encoderMaxLineLength** (codec) | To set the textline protocol encoder max line length. By default the default value of Mina itself is used which are Integer.MAX\_VALUE. | \-1 | int |
 | **encoding** (codec) | You can configure the encoding (a charset name) to use for the TCP textline codec and the UDP protocol. If not provided, Camel will use the JVM default Charset. |  | String |
 | **filters** (codec) | You can set a list of Mina IoFilters to use. |  | List |
-| **objectCodecPattern** (codec) | Accept the wildcard specified classes for Object deserialization, unless they are otherwise rejected. Multiple patterns can be separated by comma. |  | String |
+| **objectCodecPattern** (codec) | Accept the wildcard specified classes for Object deserialization, unless they are otherwise rejected. Multiple patterns can be separated by comma. This widens the codec’s deserialization allow-list, so keep it as narrow as the route actually needs. Avoid : it accepts every class the classpath can load from an untrusted peer, including Camel’s own org.apache.camel types. Leaving the option unset is the safest choice - the codec then accepts only the small built-in set and refuses anything else. |  | String |
 | **textline** (codec) | Only used for TCP. If no codec is specified, you can use this flag to indicate a text line based codec; if not specified or the value is false, then Object Serialization is assumed over TCP. | false | boolean |
 | **textlineDelimiter** (codec) | 
 

@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, content moderation, audio transcription, audio translation, and text-to-speech using the official openai-java SDK.
+The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, content moderation, audio transcription, audio translation, text-to-speech, and image generation and editing using the official openai-java SDK.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -43,6 +43,10 @@ See [Responses API operation](others/openai-responses.md) for usage (`previousRe
 -   `audio-speech` - Synthesize spoken audio from text using text-to-speech models (e.g., gpt-4o-mini-tts, tts-1)
     
 -   `moderation` - Check text against the OpenAI usage policies before it reaches a model
+    
+-   `image-generation` - Generate images from a text prompt (e.g., gpt-image-1, gpt-image-1-mini)
+    
+-   `image-edit` - Edit an existing image, optionally through a mask, from a text prompt
     
 
 ## Configuring Options
@@ -120,7 +124,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform: 'chat-completion', 'responses', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', or 'moderation'.
+**Required** The operation to perform: 'chat-completion', 'responses', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', or 'image-edit'.
 
 Enum values:
 
@@ -139,6 +143,10 @@ Enum values:
 -   audio-speech
     
 -   moderation
+    
+-   image-generation
+    
+-   image-edit
     
 
 
@@ -224,6 +232,135 @@ Enum values:
 
  | failExchange | HallucinatedToolNameStrategy |
 | **hostedMcpTools** (producer) | JSON array of hosted MCP tool definitions (OpenAI Tool.Mcp) passed through to the Responses API. |  | String |
+| **imageBackground** (producer) | 
+
+The background of the generated image. Only supported by the GPT image models, and a transparent background requires the png or webp output format.
+
+Enum values:
+
+-   transparent
+    
+-   opaque
+    
+-   auto
+    
+
+
+
+
+
+ |  | String |
+| **imageCount** (producer) | The number of images to generate, between 1 and 10. dall-e-3 only supports 1. |  | Integer |
+| **imageInputFidelity** (producer) | 
+
+How closely the edit must match the style and features of the input image. Only supported by the image-edit operation on gpt-image-1 and gpt-image-1.5.
+
+Enum values:
+
+-   high
+    
+-   low
+    
+
+
+
+
+
+ |  | String |
+| **imageModel** (producer) | The model to use for image generation or editing (e.g., gpt-image-1, gpt-image-1-mini, gpt-image-1.5, gpt-image-2). Required for the image-generation and image-edit operations, because the model determines which of the other image options are accepted. The DALL-E models are no longer offered by OpenAI, but remain valid values for OpenAI-compatible providers. |  | String |
+| **imageModeration** (producer) | 
+
+The content moderation level applied to image generation. Only supported by the GPT image models.
+
+Enum values:
+
+-   low
+    
+-   auto
+    
+
+
+
+
+
+ |  | String |
+| **imageOutputCompression** (producer) | The compression level from 0 to 100 for the webp and jpeg output formats. Only supported by the GPT image models. |  | Integer |
+| **imageOutputFormat** (producer) | 
+
+The output format of the generated image. Only supported by the GPT image models, which default to png.
+
+Enum values:
+
+-   png
+    
+-   jpeg
+    
+-   webp
+    
+
+
+
+
+
+ |  | String |
+| **imagePrompt** (producer) | The prompt describing the image to generate, or the edit to apply. For image-generation the message body is used when this is not set; for image-edit the body carries the input image, so the prompt must come from this option or from the CamelOpenAIImagePrompt header. |  | String |
+| **imageQuality** (producer) | 
+
+The quality of the generated image. GPT image models accept auto, high, medium and low; hd and standard are DALL-E values kept for OpenAI-compatible providers.
+
+Enum values:
+
+-   auto
+    
+-   high
+    
+-   medium
+    
+-   low
+    
+-   hd
+    
+-   standard
+    
+
+
+
+
+
+ |  | String |
+| **imageResponseFormat** (producer) | 
+
+The response format of the generated image. The OpenAI images endpoint rejects this option: the GPT image models always return base64, and the DALL-E models that used to accept it are no longer offered. It is only sent when explicitly set, and is kept for OpenAI-compatible providers that still implement the older images API.
+
+Enum values:
+
+-   url
+    
+-   b64\_json
+    
+
+
+
+
+
+ |  | String |
+| **imageSize** (producer) | The size of the generated image (e.g., 1024x1024, 1536x1024, 1024x1536, auto). The accepted values depend on the model. |  | String |
+| **imageStyle** (producer) | 
+
+The style of the generated image. A dall-e-3 option, so only useful with OpenAI-compatible providers.
+
+Enum values:
+
+-   vivid
+    
+-   natural
+    
+
+
+
+
+
+ |  | String |
 | **jsonSchema** (producer) | JSON schema for structured output validation. |  | String |
 | **maxAgenticTokens** (producer) | Maximum cumulative prompt plus completion tokens allowed across the MCP agentic loop. When 0 or negative, no token budget is enforced. Enforcement runs after each API call that requests further tool execution, so actual spend may exceed the configured budget by up to one call (typically the largest, as the prompt grows each iteration). A final text response is returned even when cumulative usage exceeds the budget. | 0 | long |
 | **maxHistoryMessages** (producer) | When conversationMemory is enabled, retain at most this many messages in the exchange conversation history. System and developer messages are prepended separately and are not stored in history. Assistant tool-call blocks are kept intact and may retain slightly more than this limit to preserve tool result pairing. When 0, no message limit is applied. | 0 | int |
@@ -271,10 +408,11 @@ Enum values:
  | mp3 | String |
 | **speechSpeed** (producer) | The speed of the generated audio, from 0.25 to 4.0 where 1.0 is normal speed. |  | Double |
 | **speechVoice** (producer) | The voice to use for text-to-speech (e.g., alloy, echo, fable, onyx, nova, shimmer). See the OpenAI documentation for the full list of supported voices. | alloy | String |
-| **storeFullResponse** (producer) | Store the full SDK response in non-streaming mode: chat-completion uses exchange property 'CamelOpenAIResponse'; responses uses 'CamelOpenAIResponsesResponse'; moderation uses 'CamelOpenAIModerationResponse'. | false | boolean |
+| **storeFullResponse** (producer) | Store the full SDK response in non-streaming mode: chat-completion uses exchange property 'CamelOpenAIResponse'; responses uses 'CamelOpenAIResponsesResponse'; moderation uses 'CamelOpenAIModerationResponse'; image-generation and image-edit use 'CamelOpenAIImageResponse'. | false | boolean |
 | **streaming** (producer) | Enable streaming responses. | false | boolean |
 | **stripThinking** (producer) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
 | **systemMessage** (producer) | System message to prepend. When set and conversationMemory is enabled, the conversation history is reset. |  | String |
+| **tags** (producer) | Comma-separated tags for discovering route-based tools registered via the ai-tool component. When set, matching tools from the shared AiToolRegistry are exposed to the model alongside MCP tools. |  | String |
 | **temperature** (producer) | Temperature for response generation (0.0 to 2.0). |  | Double |
 | **toolExecutionErrorStrategy** (producer) | 
 
@@ -346,6 +484,7 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIResponse** (producer) Constant: [`RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE) | The complete OpenAI chat completion response object. |  | ChatCompletion |
 | **CamelOpenAIResponsesResponse** (producer) Constant: [`RESPONSES_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSES_RESPONSE) | The complete OpenAI Responses API response object. |  | Response |
 | **CamelOpenAIModerationResponse** (producer) Constant: [`MODERATION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE) | The complete OpenAI moderation response object. |  | ModerationCreateResponse |
+| **CamelOpenAIImageResponse** (producer) Constant: [`IMAGE_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESPONSE) | The complete OpenAI image generation or edit response object. |  | ImagesResponse |
 | **CamelOpenAIEmbeddingModel** (producer) Constant: [`EMBEDDING_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_MODEL) | The model to use for embeddings. |  | String |
 | **CamelOpenAIEmbeddingDimensions** (producer) Constant: [`EMBEDDING_DIMENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_DIMENSIONS) | Number of output dimensions. |  | Integer |
 | **CamelOpenAIEmbeddingResponseModel** (producer) Constant: [`EMBEDDING_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_RESPONSE_MODEL) | The embedding model used in the response. |  | String |
@@ -373,6 +512,25 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAISpeechResponseFormat** (producer) Constant: [`SPEECH_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_RESPONSE_FORMAT) | The audio format for text-to-speech output (mp3, opus, aac, flac, wav, pcm). |  | String |
 | **CamelOpenAISpeechSpeed** (producer) Constant: [`SPEECH_SPEED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_SPEED) | The speed of the generated audio (0.25 to 4.0, where 1.0 is normal speed). |  | Double |
 | **CamelOpenAISpeechInstructions** (producer) Constant: [`SPEECH_INSTRUCTIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_INSTRUCTIONS) | Optional instructions to control the voice of the generated audio (does not work with tts-1 or tts-1-hd). |  | String |
+| **CamelOpenAIImageModel** (producer) Constant: [`IMAGE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MODEL) | The model to use for image generation or editing (e.g., gpt-image-1, dall-e-3, dall-e-2). |  | String |
+| **CamelOpenAIImagePrompt** (producer) Constant: [`IMAGE_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_PROMPT) | The prompt describing the image to generate, or the edit to apply. Takes precedence over the imagePrompt endpoint option and, for image-generation, over the message body. |  | String |
+| **CamelOpenAIImageSize** (producer) Constant: [`IMAGE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_SIZE) | The size of the generated image (e.g., 1024x1024, 1536x1024, auto). |  | String |
+| **CamelOpenAIImageQuality** (producer) Constant: [`IMAGE_QUALITY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_QUALITY) | The quality of the generated image (auto, high, medium, low for GPT image models; hd, standard for dall-e-3; standard for dall-e-2). |  | String |
+| **CamelOpenAIImageResponseFormat** (producer) Constant: [`IMAGE_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESPONSE_FORMAT) | The response format of the generated image (url or b64\_json). Only supported by dall-e-2 and dall-e-3; GPT image models always return base64. |  | String |
+| **CamelOpenAIImageCount** (producer) Constant: [`IMAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_COUNT) | The number of images to generate. |  | Integer |
+| **CamelOpenAIImageBackground** (producer) Constant: [`IMAGE_BACKGROUND`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_BACKGROUND) | The background of the generated image (transparent, opaque, auto). Only supported by GPT image models. |  | String |
+| **CamelOpenAIImageOutputFormat** (producer) Constant: [`IMAGE_OUTPUT_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_FORMAT) | The output format of the generated image (png, jpeg, webp). Only supported by GPT image models. |  | String |
+| **CamelOpenAIImageOutputCompression** (producer) Constant: [`IMAGE_OUTPUT_COMPRESSION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_COMPRESSION) | The compression level (0-100) for the webp or jpeg output formats. Only supported by GPT image models. |  | Integer |
+| **CamelOpenAIImageStyle** (producer) Constant: [`IMAGE_STYLE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_STYLE) | The style of the generated image (vivid or natural). Only supported by dall-e-3. |  | String |
+| **CamelOpenAIImageModeration** (producer) Constant: [`IMAGE_MODERATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MODERATION) | The content moderation level for image generation (low or auto). Only supported by GPT image models. |  | String |
+| **CamelOpenAIImageInputFidelity** (producer) Constant: [`IMAGE_INPUT_FIDELITY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_INPUT_FIDELITY) | How closely the edit must match the style and features of the input image (high or low). Only supported by the image-edit operation on gpt-image-1 and gpt-image-1.5. |  | String |
+| **CamelOpenAIImageMask** (producer) Constant: [`IMAGE_MASK`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MASK) | An optional PNG mask for the image-edit operation, where the fully transparent areas indicate where the image should be edited. |  | InputStream |
+| **CamelOpenAIImageResultCount** (producer) Constant: [`IMAGE_RESULT_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESULT_COUNT) | The number of images returned in the response. |  | Integer |
+| **CamelOpenAIImageRevisedPrompt** (producer) Constant: [`IMAGE_REVISED_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_REVISED_PROMPT) | The prompt as revised by the model, when a single image is returned (dall-e-3). |  | String |
+| **CamelOpenAIImageRevisedPrompts** (producer) Constant: [`IMAGE_REVISED_PROMPTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_REVISED_PROMPTS) | The prompts as revised by the model, one entry per returned image (dall-e-3). |  | List |
+| **CamelOpenAIImageInputTokens** (producer) Constant: [`IMAGE_INPUT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_INPUT_TOKENS) | The number of input tokens billed for the image request. Only reported by GPT image models. |  | Long |
+| **CamelOpenAIImageOutputTokens** (producer) Constant: [`IMAGE_OUTPUT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_TOKENS) | The number of output tokens billed for the image request. Only reported by GPT image models. |  | Long |
+| **CamelOpenAIImageTotalTokens** (producer) Constant: [`IMAGE_TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_TOTAL_TOKENS) | The total number of tokens billed for the image request. Only reported by GPT image models. |  | Long |
 
 ## Usage
 
@@ -1506,7 +1664,7 @@ For more details on specific features, see:
     
 -   [OpenAI-Compatible Providers](others/openai-providers.md) - Using Ollama, LM Studio, vLLM, and OpenRouter as alternative backends
     
--   [Embeddings, Moderation and Audio Operations](others/openai-operations.md) - Text embeddings, vector database integration, content moderation, and audio transcription
+-   [Embeddings, Moderation, Audio and Image Operations](others/openai-operations.md) - Text embeddings, vector database integration, content moderation, audio transcription, and image generation
     
 
 ## Error Handling
@@ -1515,7 +1673,7 @@ The component may throw the following exceptions:
 
 -   `IllegalArgumentException`:
     
-    -   When an invalid operation is specified (supported: `chat-completion`, `responses`, `embeddings`, `tool-execution`, `audio-transcription`, `audio-translation`, `audio-speech`, `moderation`)
+    -   When an invalid operation is specified (supported: `chat-completion`, `responses`, `embeddings`, `tool-execution`, `audio-transcription`, `audio-translation`, `audio-speech`, `moderation`, `image-generation`, `image-edit`)
         
     -   When message body or user message is missing
         
@@ -1529,10 +1687,18 @@ The component may throw the following exceptions:
         
     -   When the moderation input list is empty or contains null elements (moderation)
         
+    -   When the image model is missing (image-generation, image-edit)
+        
+    -   When the prompt is missing (image-generation, image-edit) or the image list is empty (image-edit)
+        
+    -   When an unsupported image or mask body type is provided (image-edit)
+        
     
 -   `CamelExchangeException`:
     
     -   When moderation returns a number of results that does not match the number of inputs (moderation)
+        
+    -   When the image response contains no images, or an image with neither `b64_json` nor `url` (image-generation, image-edit)
         
     
 -   API-specific exceptions from the OpenAI SDK for network errors, authentication failures, rate limiting, etc.

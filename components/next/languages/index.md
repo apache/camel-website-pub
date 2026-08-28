@@ -6,7 +6,7 @@ Index of Camel expression and predicate languages.
 
 Below is the list of expression languages that are provided by Apache Camel.
 
-Number of Languages: 32 in 20 JAR artifacts (3 deprecated)
+Number of Languages: 33 in 21 JAR artifacts (3 deprecated)
 
     
 | Language | Artifact | Support Level | Since | Description |
@@ -30,6 +30,7 @@ Number of Languages: 32 in 20 JAR artifacts (3 deprecated)
 | [OGNL](ognl-language.md) | camel-ognl | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL) |
 | [Python](python-language.md) | camel-python | Experimental | 3.19 | Evaluates a Python expression |
 | [Python 3](python3-language.md) | camel-python3 | Preview | 4.23 | Evaluates a Python 3 expression |
+| [QuickJS](quickjs-language.md) | camel-quickjs | Preview | 4.23 | Evaluates a JavaScript expression using QuickJS4J |
 | [Ref](ref-language.md) | camel-core-languages | Stable | 2.8 | Uses an existing expression from the registry |
 | [Simple](simple-language.md) | camel-core-languages | Stable | 1.1 | Evaluates a Camel simple expression |
 | [Simple - Advanced Features](simple-advanced.md) |  |  |  |  |
