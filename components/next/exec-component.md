@@ -81,7 +81,7 @@ The Exec component supports the following options which are listed below.
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **timeout** (producer) | The timeout, in milliseconds, after which the executable should be terminated. If execution has not completed within the timeout, the component will send a termination request. |  | long |
 | **workingDir** (producer) | The directory in which the command should be executed. If null, the working directory of the current process will be used. |  | String |
-| **allowControlHeaders** (advanced) | Whether to allow to use Camel headers or not (default false). Enabling this allows to specify dynamic command line arguments via message header. However this can be seen as a potential security vulnerability if the header is coming from a malicious user, so use this with care. | false | boolean |
+| **allowControlHeaders** (advanced) | Whether \\{code CamelExec} in-headers may override URI options (default false since Camel 4.20). When false, CamelExecCommandExecutable, CamelExecCommandArgs, CamelExecCommandOutFile, CamelExecCommandWorkingDir, CamelExecCommandTimeout, CamelExecExitValues, CamelExecUseStderrOnEmptyStdout, and CamelExecCommandLogLevel are ignored. Enable only when those headers come from a trusted route, not from an untrusted consumer. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **binding** (advanced) | To use a custom org.apache.commons.exec.ExecBinding for advanced use-cases. |  | ExecBinding |
 | **commandExecutor** (advanced) | To use a custom org.apache.commons.exec.ExecCommandExecutor that customizes the command execution. The default command executor utilizes the commons-exec library, which adds a shutdown hook for every executed command. |  | ExecCommandExecutor |
@@ -136,7 +136,7 @@ Enum values:
 | **useStderrOnEmptyStdout** (producer) | A boolean indicating that when stdout is empty, this component will populate the Camel Message Body with stderr. This behavior is disabled (false) by default. | false | boolean |
 | **workingDir** (producer) | The directory in which the command should be executed. If null, the working directory of the current process will be used. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **allowControlHeaders** (advanced) | Whether to allow to use Camel headers or not (default false). Enabling this allows to specify dynamic command line arguments via message header. However this can be seen as a potential security vulnerability if the header is coming from a malicious user, so use this with care. | false | boolean |
+| **allowControlHeaders** (advanced) | Whether \\{code CamelExec} in-headers may override URI options (default false since Camel 4.20). When false, CamelExecCommandExecutable, CamelExecCommandArgs, CamelExecCommandOutFile, CamelExecCommandWorkingDir, CamelExecCommandTimeout, CamelExecExitValues, CamelExecUseStderrOnEmptyStdout, and CamelExecCommandLogLevel are ignored. Enable only when those headers come from a trusted route, not from an untrusted consumer. | false | boolean |
 | **binding** (advanced) | To use a custom org.apache.commons.exec.ExecBinding for advanced use-cases. |  | ExecBinding |
 | **commandExecutor** (advanced) | To use a custom org.apache.commons.exec.ExecCommandExecutor that customizes the command execution. The default command executor utilizes the commons-exec library, which adds a shutdown hook for every executed command. |  | ExecCommandExecutor |
 
@@ -147,18 +147,49 @@ The Exec component supports the following message header(s), which is/are listed
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelExecCommandExecutable** (in) Constant: [`EXEC_COMMAND_EXECUTABLE`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_EXECUTABLE) | The name of the system command that will be executed. Overrides executable in the URI. |  | String |
-| **CamelExecCommandArgs** (in) Constant: [`EXEC_COMMAND_ARGS`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_ARGS) | Command-line argument(s) to pass to the executed process. The argument(s) is/are used literally - no quoting is applied. Overrides any existing args in the URI. |  | List or String |
-| **CamelExecCommandOutFile** (in) Constant: [`EXEC_COMMAND_OUT_FILE`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_OUT_FILE) | The name of a file, created by the executable, that should be considered as its output. Overrides any existing outFile in the URI. |  | String |
-| **CamelExecCommandWorkingDir** (in) Constant: [`EXEC_COMMAND_WORKING_DIR`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_WORKING_DIR) | The directory in which the command should be executed. Overrides any existing workingDir in the URI. |  | String |
-| **CamelExecCommandTimeout** (in) Constant: [`EXEC_COMMAND_TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_TIMEOUT) | The timeout, in milliseconds, after which the executable should be terminated. Overrides any existing timeout in the URI. |  | long |
-| **CamelExecExitValues** (in) Constant: [`EXEC_COMMAND_EXIT_VALUES`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_EXIT_VALUES) | The exit values for successful execution of the process. Overrides any existing exitValues in the URI. |  | String |
+| **CamelExecCommandExecutable** (in) Constant: [`EXEC_COMMAND_EXECUTABLE`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_EXECUTABLE) | The name of the system command that will be executed. Overrides executable in the URI. Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | String |
+| **CamelExecCommandArgs** (in) Constant: [`EXEC_COMMAND_ARGS`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_ARGS) | Command-line argument(s) to pass to the executed process. The argument(s) is/are used literally - no quoting is applied. Overrides any existing args in the URI. Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | List or String |
+| **CamelExecCommandOutFile** (in) Constant: [`EXEC_COMMAND_OUT_FILE`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_OUT_FILE) | The name of a file, created by the executable, that should be considered as its output. Overrides any existing outFile in the URI. Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | String |
+| **CamelExecCommandWorkingDir** (in) Constant: [`EXEC_COMMAND_WORKING_DIR`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_WORKING_DIR) | The directory in which the command should be executed. Overrides any existing workingDir in the URI. Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | String |
+| **CamelExecCommandTimeout** (in) Constant: [`EXEC_COMMAND_TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_TIMEOUT) | The timeout, in milliseconds, after which the executable should be terminated. Overrides any existing timeout in the URI. Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | long |
+| **CamelExecExitValues** (in) Constant: [`EXEC_COMMAND_EXIT_VALUES`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_EXIT_VALUES) | The exit values for successful execution of the process. Overrides any existing exitValues in the URI. Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | String |
 | **CamelExecStderr** (out) Constant: [`EXEC_STDERR`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_STDERR) | The value of this header points to the standard error stream (stderr) of the executable. If no stderr is written, the value is null. |  | InputStream |
 | **CamelExecExitValue** (out) Constant: [`EXEC_EXIT_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_EXIT_VALUE) | The value of this header is the _exit value_ of the executable. Non-zero exit values typically indicate abnormal termination. Note that the exit value is OS-dependent. |  | int |
-| **CamelExecUseStderrOnEmptyStdout** (in) Constant: [`EXEC_USE_STDERR_ON_EMPTY_STDOUT`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_USE_STDERR_ON_EMPTY_STDOUT) | Indicates that when stdout is empty, this component will populate the Camel Message Body with stderr. This behavior is disabled (false) by default. |  | boolean |
-| **CamelExecCommandLogLevel** (in) Constant: [`EXEC_COMMAND_LOG_LEVEL`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_LOG_LEVEL) | Logging level to be used for commands during execution. The default value is DEBUG. Possible values are TRACE, DEBUG, INFO, WARN, ERROR or OFF (Values of LoggingLevel enum). |  | String |
+| **CamelExecUseStderrOnEmptyStdout** (in) Constant: [`EXEC_USE_STDERR_ON_EMPTY_STDOUT`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_USE_STDERR_ON_EMPTY_STDOUT) | Indicates that when stdout is empty, this component will populate the Camel Message Body with stderr. This behavior is disabled (false) by default. Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | boolean |
+| **CamelExecCommandLogLevel** (in) Constant: [`EXEC_COMMAND_LOG_LEVEL`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_LOG_LEVEL) | Logging level to be used for commands during execution. The default value is DEBUG. Possible values are TRACE, DEBUG, INFO, WARN, ERROR or OFF (Values of LoggingLevel enum). Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | String |
 
 ## Usage
+
+### Control headers
+
+Since Camel 4.20, the exec in-headers that override URI options (`CamelExecCommand*`, `CamelExecExitValues`, and `CamelExecUseStderrOnEmptyStdout`) are disabled by default. This prevents untrusted message sources from redirecting command execution. To use dynamic executable, arguments, working directory, or other command settings from headers, enable the opt-in flag on the endpoint or component:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:run")
+    .setHeader("CamelExecCommandArgs", constant("ARGS-WORK"))
+    .to("exec:echo?allowControlHeaders=true");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:run
+      steps:
+        - setHeader:
+            name: CamelExecCommandArgs
+            constant: "ARGS-WORK"
+        - to:
+            uri: exec:echo
+            parameters:
+              allowControlHeaders: true
+```
+
+When `allowControlHeaders` is `false` (the default), those in-headers on the exchange are ignored (they are not removed), and a WARN is logged once per exec endpoint. URI parameters such as `args` continue to work as before.
 
 ### Message body
 

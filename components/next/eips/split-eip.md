@@ -718,7 +718,8 @@ from("file:inbox")
               xtokenize:
                 expression: //ns1:order
                 namespace:
-                  ns1: urn:shop
+                  - key: ns1
+                    value: urn:shop
             steps:
               - to:
                   uri: activemq:queue:order
