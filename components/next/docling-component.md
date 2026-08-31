@@ -613,7 +613,7 @@ from("file:///data/documents?include=.*\\.pdf")
 
 Docling recognizes page headers and footers (page numbers, copyright lines, running titles, footnotes, and similar content) during OCR, classifying them as page _furniture_ in docling’s `FURNITURE` content layer.
 
-Since docling v1.30.0, page furniture (headers and footers) is included in the default body export (Markdown, text and HTML). Earlier versions excluded the `FURNITURE` layer, so header and footer text was omitted from the converted output even though the OCR engine read it correctly.
+Docling’s Markdown, text and HTML exports include only the `BODY` layer by default, so header and footer text is omitted from the converted output even though the OCR engine read it correctly. When using `useDoclingServe=true`, the component cannot currently include the `FURNITURE` layer because docling-serve does not expose a content-layer selection option. This is tracked in [docling-serve#271](https://github.com/docling-project/docling-serve/issues/271).
 
 ### Using headers to control processing
 

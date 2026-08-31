@@ -23,6 +23,8 @@ activemq
 
 activemq6
 
+ai-observability
+
 ai-tool
 
 amqp
@@ -188,8 +190,6 @@ cron
 crypto-pgp
 
 crypto
-
-csimple-joor
 
 csv
 
@@ -1309,7 +1309,6 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | --- | --- | --- | --- | --- |
 | [Bean Method](../../components/next/languages/bean-language.md) | camel-bean-starter | Stable | 1.3 | Calls a Java bean method |
 | [Constant](../../components/next/languages/constant-language.md) | camel-core-languages-starter | Stable | 1.5 | A fixed value set only once during the route startup |
-| [CSimple](../../components/next/languages/csimple-language.md) | camel-core-languages-starter | Stable-deprecated | 3.7 | Evaluate a compiled simple expression |
 | [DataSonnet](../../components/next/languages/datasonnet-language.md) | camel-datasonnet-starter | Stable | 3.7 | To use DataSonnet scripts for message transformations |
 | [ExchangeProperty](../../components/next/languages/exchangeProperty-language.md) | camel-core-languages-starter | Stable | 2.0 | Gets a property from the Exchange |
 | [File](../../components/next/languages/file-language.md) | camel-core-languages-starter | Stable | 1.1 | File related capabilities for the Simple language |
@@ -1370,7 +1369,6 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [CLI Connector](../../components/next/others/cli-connector.md) | camel-cli-connector-starter | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
 | [CLI Debug](../../components/next/others/cli-debug.md) | camel-cli-debug-starter | Stable | 4.17 | Remote CLI debugger |
 | [Cloudevents](../../components/next/others/cloudevents.md) | camel-cloudevents-starter | Stable | 3.15 | Camel support for the CloudEvents specification |
-| [CSimple jOOR](../../components/next/others/csimple-joor.md) | camel-csimple-joor-starter | Stable-deprecated | 3.7 | jOOR compiler for csimple language |
 | [CXF Transport](../../components/next/others/cxf-transport.md) | camel-cxf-transport-starter | Stable | 2.8 | Camel Transport for Apache CXF |
 | [Debug](../../components/next/others/debug.md) | camel-debug-starter | Stable | 3.15 | Enables Camel Route Debugging |
 | [Diagram](../../components/next/others/diagram.md) | camel-diagram-starter | Preview | 4.21 | Camel Route Diagram rendering |
@@ -1425,7 +1423,6 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Platform Http Vertx](../../components/next/others/platform-http-vertx.md) | camel-platform-http-vertx-starter | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [PQC Hybrid Cryptography](../../components/next/others/pqc-hybrid.md) | undefined-starter |  |  |  |
 | [PQC Key Lifecycle Management](../../components/next/others/pqc-key-lifecycle.md) | undefined-starter |  |  |  |
-| [Reactive Executor Vert.x](../../components/next/others/reactive-executor-vertx.md) | camel-reactive-executor-vertx-starter | Experimental-deprecated | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](../../components/next/others/reactor.md) | camel-reactor-starter | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](../../components/next/others/redis.md) | camel-redis-starter | Stable | 3.5 | Aggregation repository using Redis as datastore |
 | [Resilience4j](../../components/next/others/resilience4j.md) | camel-resilience4j-starter | Stable | 3.0 | Circuit Breaker EIP using Resilience4j |

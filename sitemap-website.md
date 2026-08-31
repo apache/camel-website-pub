@@ -1,4 +1,7 @@
-urls[844]{loc,lastmod}:
+urls[847]{loc,lastmod}:
+  https://camel.apache.org/,2026-08-29T00:00:00+00:00
+  https://camel.apache.org/releases/kamelets-4.22.0/,2026-08-29T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-08-29T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-59230.md,2026-08-24T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-60093.md,2026-08-24T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-63621.md,2026-08-24T10:00:00+02:00
@@ -7,13 +10,13 @@ urls[844]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-66908.md,2026-08-24T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-71300.md,2026-08-24T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-78329.md,2026-08-24T10:00:00+02:00
-  https://camel.apache.org/,2026-08-24T10:00:00+02:00
   https://camel.apache.org/security/,2026-08-24T10:00:00+02:00
-  https://camel.apache.org/blog/,2026-08-17T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-08-24T00:00:00+00:00
+  https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/,2026-08-24T00:00:00+00:00
+  https://camel.apache.org/releases/q-3.39.0/,2026-08-24T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-08-24T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.4/,2026-08-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/RELEASE-4.18.4/,2026-08-17T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-08-17T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-08-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.14.9/,2026-08-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/RELEASE-4.14.9/,2026-08-16T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-08-12T00:00:00+00:00

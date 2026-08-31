@@ -193,6 +193,7 @@ Enum values:
 | **autoToolExecution** (producer) | When true and MCP servers are configured, automatically execute tool calls and loop back to the model. When false, tool calls are returned as the message body for manual handling. | true | boolean |
 | **baseUrl** (producer) | Base URL for OpenAI API. Defaults to OpenAI’s official endpoint. Can be used for local or third-party providers. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
 | **builtinTools** (producer) | Comma-separated hosted tools for the Responses API: web\_search, file\_search, code\_interpreter. |  | String |
+| **connectTimeout** (producer) | Timeout in milliseconds for establishing the TCP connection to the API. A connect timeout means the endpoint was unreachable, so the request never ran and is safe to retry. When 0 or negative, the SDK default (1 minute) is used. | 0 | long |
 | **conversationHistoryProperty** (producer) | Exchange property name for storing conversation history. | CamelOpenAIConversationHistory | String |
 | **conversationMemory** (producer) | Enable conversation memory per Exchange. | false | boolean |
 | **developerMessage** (producer) | Developer message to prepend before user messages. |  | String |
@@ -379,7 +380,8 @@ Enum values:
 | **parallelToolExecution** (producer) | Execute the tool calls returned by the model in a single response concurrently instead of sequentially. Tool calls in the same batch are independent by design, so this reduces the latency of a batch to that of its slowest tool. Results are always fed back to the model in the original tool call order. Note that with toolExecutionErrorStrategy=failExchange the sibling tool calls already dispatched complete before the exchange fails. | false | boolean |
 | **parallelToolTimeout** (producer) | Timeout in milliseconds for a batch of parallel tool calls, so that one slow tool cannot block the whole batch. The timeout applies to the batch as a whole, not per tool call. A tool call that exceeds it is cancelled and handled according to toolExecutionErrorStrategy. The default of 0 disables the batch timeout and relies on mcpTimeout, which already bounds each individual MCP request. Only used when parallelToolExecution=true. | 0 | long |
 | **previousResponseId** (producer) | Previous response id for OpenAI server-side conversation state (Responses API only). |  | String |
-| **requestTimeout** (producer) | HTTP request timeout in milliseconds for the OpenAI SDK client. When 0 or negative, the SDK default (10 minutes) is used. | 0 | long |
+| **readTimeout** (producer) | Timeout in milliseconds for reading the response. A read timeout means the model was slow mid-generation, so the request may have been processed. When 0 or negative, requestTimeout applies. | 0 | long |
+| **requestTimeout** (producer) | Overall HTTP request timeout in milliseconds for the OpenAI SDK client. When 0 or negative, the SDK default (10 minutes) is used. Acts as the fallback for readTimeout and writeTimeout when those are not set. | 0 | long |
 | **speechInstructions** (producer) | Optional instructions to control the voice of the generated audio. Does not work with tts-1 or tts-1-hd. |  | String |
 | **speechModel** (producer) | The model to use for text-to-speech (e.g., gpt-4o-mini-tts, tts-1, tts-1-hd). |  | String |
 | **speechResponseFormat** (producer) | 
@@ -432,6 +434,7 @@ Enum values:
  | failExchange | ToolExecutionErrorStrategy |
 | **topP** (producer) | Top P for response generation (0.0 to 1.0). |  | Double |
 | **userMessage** (producer) | Default user message text to use when no prompt is provided. |  | String |
+| **writeTimeout** (producer) | Timeout in milliseconds for writing the request body, which matters for large payloads such as audio and image uploads. When 0 or negative, requestTimeout applies. | 0 | long |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used instead of apiKey. Requires camel-oauth on the classpath. The profile properties are resolved from camel.oauth..client-id, camel.oauth..client-secret, and camel.oauth..token-endpoint. |  | String |
 | **sslContextParameters** (security) | SSLContextParameters to use for configuring SSL/TLS. When set, takes precedence over the individual sslTruststore, sslKeystore, and sslProtocol options. |  | SSLContextParameters |
@@ -1500,6 +1503,31 @@ String-valued fields are set directly. Non-string fields (numbers, booleans, obj
 
 This section covers practical advice for production routes. For component selection, streaming to browsers, and prompt management at scale, see the [LLM Integration Guide](ai-llm-integration-guide.md).
 
+### Timeouts
+
+Four options bound the HTTP call to the API, all in milliseconds and all unset by default so the SDK defaults apply. Which phase times out tells you whether a retry is safe:
+
+  
+| Option | SDK default | Bounds |
+| --- | --- | --- |
+| `connectTimeout` | 1 minute | Establishing the TCP connection. Hitting this means the request never reached the model, so retrying is safe |
+| `readTimeout` | falls back to `requestTimeout` | Reading the response. Hitting this means the model may have processed the request already, so a retry can duplicate work and cost |
+| `writeTimeout` | falls back to `requestTimeout` | Writing the request body, which is what bites on large audio and image uploads |
+| `requestTimeout` | 10 minutes | The request as a whole, and the fallback for the read and write phases |
+
+Setting only `requestTimeout` behaves exactly as it did before the per-phase options existed.
+
+```java
+from("direct:ask")
+    .to("openai:chat-completion?model=gpt-4o-mini"
+        + "&connectTimeout=5000&readTimeout=120000&requestTimeout=180000");
+```
+
+A short `connectTimeout` with a long `readTimeout` is the usual shape for chat: fail fast when the endpoint is unreachable, but leave the model room to generate. Reasoning models need the read budget in particular, because a long thinking phase produces no bytes on the wire.
+
+> **Note**
+> These timeouts bound a single HTTP request, not the exchange. The SDK retries internally, so one exchange can span several of them. See `maxRetries`.
+
 ### Temperature and Model Parameters
 
 The `temperature` endpoint option controls how deterministic the model’s output is. Lower values produce more consistent, predictable responses; higher values produce more varied, creative output.
@@ -1701,4 +1729,117 @@ The component may throw the following exceptions:
     -   When the image response contains no images, or an image with neither `b64_json` nor `url` (image-generation, image-edit)
         
     
--   API-specific exceptions from the OpenAI SDK for network errors, authentication failures, rate limiting, etc.
+-   API-specific exceptions from the OpenAI SDK for network errors, authentication failures, rate limiting, etc. These are propagated unchanged, so routes can match them by type. See [Targeting SDK Exceptions with onException](#_targeting_sdk_exceptions_with_onexception).
+    
+
+### Targeting SDK Exceptions with onException
+
+The producer does not wrap or reclassify what the OpenAI SDK throws. The SDK exception reaches the exchange as-is, so `onException` can match the concrete type and treat a transient failure differently from a terminal one.
+
+Every HTTP error response maps to a subclass of `com.openai.errors.OpenAIServiceException`:
+
+  
+| Exception | Status | Worth retrying |
+| --- | --- | --- |
+| `BadRequestException` | 400 | No, the request is malformed |
+| `UnauthorizedException` | 401 | No, fix the API key |
+| `PermissionDeniedException` | 403 | No |
+| `NotFoundException` | 404 | No, usually an unknown model or a wrong `baseUrl` |
+| `UnprocessableEntityException` | 422 | No, typically a context-length or validation error |
+| `RateLimitException` | 429 | Yes, with backoff |
+| `InternalServerException` | 5xx | Yes, with backoff |
+| `UnexpectedStatusCodeException` | other | Depends on the provider |
+
+Three further exceptions carry no status code and extend `com.openai.errors.OpenAIException` directly: `OpenAIIoException` for connect and read failures, `OpenAIRetryableException` when the SDK gave up after exhausting its own retries, and `OpenAIInvalidDataException` when the response body cannot be parsed.
+
+Retrying the transient cases while failing fast on the rest:
+
+```java
+onException(RateLimitException.class, InternalServerException.class, OpenAIIoException.class)
+    .maximumRedeliveries(3)
+    .redeliveryDelay(2000)
+    .backOffMultiplier(2)
+    .useExponentialBackOff();
+
+onException(BadRequestException.class, UnprocessableEntityException.class,
+            UnauthorizedException.class)
+    .maximumRedeliveries(0)
+    .handled(true)
+    .to("direct:rejected");
+
+from("direct:ask")
+    .to("openai:chat-completion?model=gpt-4o-mini");
+```
+
+`OpenAIServiceException` carries the details of the failed call, which is what you want for logging or for routing on the provider’s own error code:
+
+```java
+onException(OpenAIServiceException.class)
+    .handled(true)
+    .process(exchange -> {
+        OpenAIServiceException cause
+                = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, OpenAIServiceException.class);
+        exchange.getIn().setHeader("FailureStatus", cause.statusCode());
+        exchange.getIn().setHeader("FailureCode", cause.code().orElse(null));
+        exchange.getIn().setHeader("FailureType", cause.type().orElse(null));
+    })
+    .to("direct:failed-calls");
+```
+
+`headers()` on the same exception exposes the response headers, including `Retry-After` on a 429.
+
+### Structured error exchange properties
+
+When an OpenAI producer call fails, Camel sets structured metadata on the exchange **before** the SDK exception propagates. This works even when GenAI observability is disabled.
+
+ 
+| Exchange property | Meaning |
+| --- | --- |
+| `CamelAiErrorCategory` | Coarse category: `RATE_LIMIT`, `SERVER_ERROR`, `VALIDATION`, `AUTH`, or `UNKNOWN` |
+| `CamelAiRetryAfterMillis` | Suggested retry delay in milliseconds when the OpenAI SDK exposes `Retry-After` or `Retry-After-Ms` on a 429; absent for other providers and error types |
+
+Use these when a route should branch on category without matching every SDK type, or when you want a single `onException` policy across OpenAI, LangChain4j, and Spring AI producers:
+
+```java
+onException(Exception.class)
+    .process(exchange -> {
+        String category = exchange.getProperty("CamelAiErrorCategory", String.class);
+        Long retryAfter = exchange.getProperty("CamelAiRetryAfterMillis", Long.class);
+        if ("RATE_LIMIT".equals(category)) {
+            long delay = retryAfter != null ? retryAfter : 2000L;
+            exchange.getIn().setHeader("RetryDelay", delay);
+        }
+    })
+    .maximumRedeliveries(3)
+    .handled(true)
+    .to("direct:rate-limited");
+```
+
+The SDK exception is still available as `Exchange.EXCEPTION_CAUGHT`, so you can combine coarse categories with the fine-grained types in [Targeting SDK Exceptions with onException](#_targeting_sdk_exceptions_with_onexception).
+
+### SDK Retry vs Camel Redelivery
+
+The SDK client retries on its own before the exception ever reaches Camel. The `maxRetries` option controls this and defaults to `2`, so one exchange already issues up to three HTTP requests. The SDK retries 408, 409, 429 and 5xx responses as well as connection failures, backing off exponentially and honoring the `Retry-After` and `Retry-After-Ms` response headers.
+
+Camel redelivery multiplies with that layer rather than replacing it. With the default `maxRetries=2` and `maximumRedeliveries(3)`, a single message can produce twelve HTTP requests, which is rarely what you want against a rate-limited endpoint.
+
+Pick one layer and keep the other out of the way:
+
+-   Leave `maxRetries` at its default and do not add Camel redelivery for rate limits. The SDK backoff already reads `Retry-After`, and this is the simplest choice for a plain request/response route.
+    
+-   Set `maxRetries=0` and drive retries from `onException` when the retry has to be visible to Camel, for example to reach a dead letter channel, apply a per-route policy, or show up in error handler metrics.
+    
+
+```java
+from("direct:ask")
+    .to("openai:chat-completion?model=gpt-4o-mini&maxRetries=0");
+```
+
+> **Note**
+> `requestTimeout` bounds a single HTTP request, not the whole retry sequence. At the default `maxRetries=2`, worst-case wall time is roughly three times `requestTimeout` plus the backoff between attempts.
+
+### Errors in Streaming Mode
+
+With `streaming=true` the producer issues the initial HTTP request and then hands Camel an `Iterator<ChatCompletionChunk>`. Failures on that first request (authentication, rate limiting, connection errors) are thrown by the producer and behave like any other producer exception.
+
+A failure that occurs after the first chunk is different: it surfaces while the iterator is consumed, so it is reported against the step doing the consuming, usually a Split EIP, and not against the `to("openai:…​")` step. Route-scoped `onException` still applies, but an error handler attached to the producer step alone will not see it.

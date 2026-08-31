@@ -1520,6 +1520,33 @@ The component automatically adds Spring AI’s `SimpleLoggerAdvisor` to log requ
 logging.level.org.springframework.ai.chat.client.advisor=DEBUG
 ```
 
+### Structured error exchange properties
+
+When a Spring AI chat call fails, Camel sets structured metadata on the exchange **before** the Spring AI exception propagates. This works even when GenAI observability is disabled.
+
+ 
+| Exchange property | Meaning |
+| --- | --- |
+| `CamelAiErrorCategory` | Coarse category derived from Spring AI retry exceptions: `SERVER_ERROR` for `TransientAiException`, `VALIDATION` for `NonTransientAiException`, or `UNKNOWN` when no mapping applies |
+| `CamelAiRetryAfterMillis` | Not populated for Spring AI providers (OpenAI-only today) |
+
+Category-based handling complements matching on Spring AI exception types directly:
+
+```java
+onException(Exception.class)
+    .process(exchange -> {
+        String category = exchange.getProperty("CamelAiErrorCategory", String.class);
+        if ("SERVER_ERROR".equals(category)) {
+            exchange.getIn().setHeader("Retryable", true);
+        }
+    })
+    .maximumRedeliveries(3)
+    .handled(true)
+    .to("direct:retry");
+```
+
+See [AI LLM integration guide](ai-llm-integration-guide.html#_structured_error_exchange_properties) for a cross-component overview.
+
 ## See Also
 
 -   [Spring AI Documentation](https://docs.spring.io/spring-ai/reference/)

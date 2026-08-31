@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1787898682105,
+  "generated": 1788162188192,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -12498,6 +12498,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/ai-observability.adoc",
+              "url": "/camel-spring-boot/next/starters/ai-observability.html",
+              "title": "Ai Observability"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/ai-tool.adoc",
               "url": "/camel-spring-boot/next/starters/ai-tool.html",
               "title": "AI Tool"
@@ -13005,12 +13011,6 @@
               "path": "starters/crypto.adoc",
               "url": "/camel-spring-boot/next/starters/crypto.html",
               "title": "Crypto (JCE)"
-            },
-            {
-              "module": "ROOT",
-              "path": "starters/csimple-joor.adoc",
-              "url": "/camel-spring-boot/next/starters/csimple-joor.html",
-              "title": "Csimple Joor"
             },
             {
               "module": "ROOT",
@@ -18664,12 +18664,6 @@
             },
             {
               "module": "languages",
-              "path": "csimple-language.adoc",
-              "url": "/components/next/languages/csimple-language.html",
-              "title": "CSimple"
-            },
-            {
-              "module": "languages",
               "path": "datasonnet-language.adoc",
               "url": "/components/next/languages/datasonnet-language.html",
               "title": "DataSonnet"
@@ -18949,12 +18943,6 @@
               "path": "cloudevents.adoc",
               "url": "/components/next/others/cloudevents.html",
               "title": "Cloudevents"
-            },
-            {
-              "module": "others",
-              "path": "csimple-joor.adoc",
-              "url": "/components/next/others/csimple-joor.html",
-              "title": "CSimple jOOR"
             },
             {
               "module": "others",
@@ -19291,12 +19279,6 @@
               "path": "pqc-key-lifecycle.adoc",
               "url": "/components/next/others/pqc-key-lifecycle.html",
               "title": "PQC Key Lifecycle Management"
-            },
-            {
-              "module": "others",
-              "path": "reactive-executor-vertx.adoc",
-              "url": "/components/next/others/reactive-executor-vertx.html",
-              "title": "Reactive Executor Vert.x"
             },
             {
               "module": "others",

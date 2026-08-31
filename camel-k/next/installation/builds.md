@@ -34,7 +34,8 @@ Beside the values above, you can also configure specifically Maven using the fol
 | MAVEN\_SETTINGS\_SECURITY | Configmap or Secret Maven `settings-security.xml` configuration used for decrypting encrypted credentials in `settings.xml`. Format expected `configmap|secret:my-resource`. |  |
 | MAVEN\_CA\_SECRETS | Comma separated list or reference to secrets containing custom CA certificates to trust when connecting to Maven repositories over TLS. |  |
 | MAVEN\_CLI\_OPTIONS | Comma separated list of command-line options passed to Maven (e.g. `-B`, `-U`, `-DskipTests`). | \-V,--no-transfer-progress,-Dstyle.color=never |
-| MAVEN\_REPOSITORIES | Comma separated list of Maven repository definitions (Repository format: `<repository-url>[@snapshots][@noreleases][@id=<value>][@name=<value>][@checksumpolicy=<value>]` - appends `@`\-separated attributes to configure behavior (e.g. `[http://my-nexus:8081/repository/public@id=my-repo@snapshots](http://my-nexus:8081/repository/public@id=my-repo@snapshots)`)). |  |
+| MAVEN\_REPOSITORIES | Comma separated list of default Maven repository definitions (repository format: `<repository-url>[@snapshots][@noreleases][@id=<value>][@name=<value>][@checksumpolicy=<value>]` - appends `@`\-separated attributes to configure behavior (e.g. `[http://my-nexus:8081/repository/public@id=my-repo@snapshots](http://my-nexus:8081/repository/public@id=my-repo@snapshots)`)). |  |
+| MAVEN\_REPOSITORIES\_ALLOWED | Comma separated list of Maven repository definitions (repository format same as `MAVEN_REPOSITORIES`) which are allowed to be used by final users in Integrations. |  |
 > **Note**
 > if no maven settings is specified, the system will fallback to the Maven central repository.
 

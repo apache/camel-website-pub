@@ -147,6 +147,7 @@ The Google Firestore component supports the following options which are listed b
 | **serviceAccountKey** (common) | The Service account key that can be used as credentials for the Firestore client. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **realtimeUpdates** (consumer) | When true, the consumer will listen for real-time updates on the collection. | false | boolean |
+| **maxPendingChanges** (consumer (advanced)) | Maximum number of realtime document changes buffered between two polls. The changes reported by the snapshot listener are buffered until the next poll picks them up, so a collection changing faster than the route consumes it makes that buffer grow. When the buffer is full the oldest buffered change is discarded and a warning is logged. Use 0 for an unbounded buffer. Only used when realtimeUpdates is enabled. | 0 | int |
 | **documentId** (producer) | The document ID to use for document-specific operations. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
@@ -223,6 +224,7 @@ Enum values:
 
 
  |  | ExchangePattern |
+| **maxPendingChanges** (consumer (advanced)) | Maximum number of realtime document changes buffered between two polls. The changes reported by the snapshot listener are buffered until the next poll picks them up, so a collection changing faster than the route consumes it makes that buffer grow. When the buffer is full the oldest buffered change is discarded and a warning is logged. Use 0 for an unbounded buffer. Only used when realtimeUpdates is enabled. | 0 | int |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
 | **documentId** (producer) | The document ID to use for document-specific operations. |  | String |
 | **operation** (producer) | 
@@ -502,6 +504,13 @@ from("google-firestore://myCollection?realtimeUpdates=true")
       steps:
         - to:
             uri: log:changes
+```
+
+In real-time mode the document changes reported by the listener are buffered until the next poll picks them up. That buffer is unbounded by default, so a collection changing faster than the route consumes it makes the buffer grow, and it keeps growing while the route is suspended. Set `maxPendingChanges` to bound it: when the buffer is full the oldest buffered change is discarded and a warning is logged, which leaves the route with the most recent state of the collection.
+
+```java
+from("google-firestore://myCollection?realtimeUpdates=true&maxPendingChanges=1000")
+    .to("log:changes");
 ```
 
 ### Advanced Component Configuration

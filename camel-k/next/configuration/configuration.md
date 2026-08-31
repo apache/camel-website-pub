@@ -32,3 +32,7 @@ Another configuration you may be interested in controlling is the [Camel runtime
 ## Deployment configuration
 
 The goal of the operator is to simplify the building and deployment process of a Camel application on the cloud. Most of the time the default settings to configure the deployment resources should be enough. However, if you need to fine tune the final resulting deployment, then you need to know how to configure the so called [Camel K traits](../traits/traits.md).
+
+## Integration Profiles
+
+When you’re managing a cluster with several users and namespace it will turn useful the `IntegrationProfile` custom resource. This can be used to specify different common configuration that an `Integration` can inherit, just by annotating the `Integration` resource properly. You can learn more in the [IntegrationProfile](integrationprofiles.md) section.

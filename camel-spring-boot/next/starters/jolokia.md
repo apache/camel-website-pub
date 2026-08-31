@@ -4,7 +4,7 @@ Spring Boot auto-configuration for Camel Jolokia integration.
 
 The Jolokia Starter integrates [Jolokia](https://jolokia.org/) agent configuration in Spring Boot, wrapping the [Jolokia Spring Support](https://jolokia.org/reference/html/manual/spring.md) with default configurations to let the application work out-of-the-box without manually declaring Jolokia servers.
 
-This starter can be considered an alternative to the [Jolokia JVM agent](https://jolokia.org/reference/html/manual/agents.md). When enabled, it exposes the Jolokia endpoint at `[http://0.0.0.0:8778/jolokia](http://0.0.0.0:8778/jolokia)`.
+This starter can be considered an alternative to the [Jolokia JVM agent](https://jolokia.org/reference/html/manual/agents.md). When enabled, it exposes the Jolokia endpoint at `[http://127.0.0.1:8778/jolokia](http://127.0.0.1:8778/jolokia)`. The agent ships no authenticator, so it binds to loopback by default; exposing it beyond the host is a conscious step via `camel.component.jolokia.server-config.host`, and should be paired with authentication or a network policy.
 
 ## Maven coordinates
 
@@ -30,6 +30,10 @@ camel.component.jolokia.server-config.discoveryEnabled=true
 ### Security Restrictor
 
 To avoid exposing all JMX MBeans (see [Security](https://jolokia.org/reference/html/manual/security.md) considerations), a default Jolokia [Restrictor](https://jolokia.org/reference/html/manual/security.html#security-restrictor) is provided that allows only Camel related data and some basic information from Java.
+
+The restrictor limits which MBeans are reachable, not what may be done to them: within the allowed domains, reading and writing attributes and invoking operations are all permitted, since managing Camel through Jolokia (starting and stopping routes from Hawtio, for example) is what the starter is for. That capability is why the agent binds to loopback by default. Browser requests from origins outside loopback are rejected, so a remote page the user visits cannot drive the agent.
+
+If the endpoint is exposed beyond the host, put authentication or a network policy in front of it, or supply a stricter restrictor.
 
 You can disable the restrictor with `camel.component.jolokia.use-camel-restrictor=false` or use your own custom one with `camel.component.jolokia.server-config.restrictorClass=org.example.MyRestrictor`.
 
@@ -85,7 +89,7 @@ logging.level.org.jolokia=TRACE
 
 ### Kubernetes Support
 
-The starter provides default configurations for Kubernetes environments. It checks for the existence of a certification authority file at `/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt` and, if present, initializes the server using TLS protocol and client authentication. The endpoint becomes `[https://0.0.0.0:8778/jolokia](https://0.0.0.0:8778/jolokia)`.
+The starter provides default configurations for Kubernetes environments. It checks for the existence of a certification authority file at `/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt` and, if present, initializes the server using TLS protocol and client authentication. The endpoint becomes `[https://127.0.0.1:8778/jolokia](https://127.0.0.1:8778/jolokia)`; set `camel.component.jolokia.server-config.host` to expose it to the cluster.
 
 You can disable this behaviour with `camel.component.jolokia.kubernetes-discover=false`.
 

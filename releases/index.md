@@ -225,6 +225,7 @@ Releases by release date
 Releases by release date
 | Version | Release date | Description |
 | --- | --- | --- |
+| [3.39.0](../releases/q-3.39.0/) | 2026-08-24 |  |
 | [3.38.0](../releases/q-3.38.0/) | 2026-07-29 |  |
 | [3.27.5](../releases/q-3.27.5/) | 2026-07-13 |  |
 | [3.33.2](../releases/q-3.33.2/) | 2026-07-13 |  |
@@ -371,6 +372,7 @@ Releases by release date
 Releases by release date
 | Version | Release date | Description |
 | --- | --- | --- |
+| [4.22.0](../releases/kamelets-4.22.0/) | 2026-08-29 |  |
 | [4.18.3](../releases/kamelets-4.18.3/) | 2026-07-17 |  |
 | [4.21.0](../releases/kamelets-4.21.0/) | 2026-06-30 |  |
 | [4.18.2](../releases/kamelets-4.18.2/) | 2026-05-15 |  |

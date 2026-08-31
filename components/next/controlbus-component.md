@@ -130,8 +130,6 @@ Enum values:
     
 -   constant
     
--   csimple
-    
 -   datasonnet
     
 -   exchangeProperty

@@ -10,17 +10,13 @@ When `camel-opentelemetry2` and/or `camel-micrometer` is on the classpath, langc
 
 Global toggle: set `camel.aiObservability.enabled=false` (default is `true` when a tracing or metrics backend is present). Camel Main exposes the same setting via `camel.aiObservability.enabled` in application.properties or programmatically with `main.configure().aiObservability().withEnabled(false)`.
 
-Phase 1 coverage: `langchain4j-chat`, `langchain4j-tools`, `langchain4j-agent`, `langchain4j-embeddings`, and `openai`.
-
-Phase 3 coverage: `spring-ai-chat`.
+Supported producers: `langchain4j-chat`, `langchain4j-agent`, `langchain4j-embeddings`, `openai`, and `spring-ai-chat`.
 
 When using `spring-ai-chat` with only a pre-built `chatClient` (no `chatModel` on the endpoint), Camel attempts to read the backing Spring AI `ChatModel` via a private field on Spring AI’s internal `ChatClientRequestSpec` implementation. That field is not public API and may change between Spring AI releases. If extraction fails, `gen_ai.system` and `gen_ai.request.model` span attributes may report `unknown`. Configure `chatModel` explicitly on the endpoint URI or component when GenAI observability is enabled so model metadata is always populated.
 
 New exchange headers for model identification on langchain4j components:
 
 -   `CamelLangChain4jChatRequestModel` / `CamelLangChain4jChatResponseModel`
-    
--   `CamelLangChain4jToolsRequestModel` / `CamelLangChain4jToolsResponseModel`
     
 -   `CamelLangChain4jAgentRequestModel` / `CamelLangChain4jAgentResponseModel`
     
@@ -34,7 +30,32 @@ Metrics recorded (when Micrometer is available):
 -   `gen_ai.client.token.usage` — token usage counter (tags: `gen_ai.token.type=input|output`)
     
 
-## Camel TUI integration (Phase 2)
+## Micrometer Observation
+
+When a non-NOOP `io.micrometer.observation.ObservationRegistry` is in the Camel registry (for example a Spring Boot Actuator bean), each GenAI client call is recorded as a Micrometer `io.micrometer.observation.Observation` named `gen_ai.client.operation`. The contextual name uses the same `{operation} {model}` form as GenAI telemetry spans (for example `chat test-model`).
+
+That is not the same type as Camel’s `org.apache.camel.component.ai.observability.GenAiObservation` handle used by AI producers.
+
+`camel-micrometer-observability` is not required. Bind the `ObservationRegistry` in the Camel registry; Spring Boot does this automatically when observation support is enabled.
+
+When Observation is used:
+
+-   Camel does not create the GenAI CLIENT span through `camel-telemetry` / `camel-opentelemetry2`.
+    
+-   Camel does not record the direct `gen_ai.client.operation` timer.
+    
+-   Tracing is emitted only if the registry has a tracing handler. Without one, the Observation path produces no GenAI trace.
+    
+-   The operation timer is emitted only if the registry has a meter handler. Without one, the Observation path produces no operation timer.
+    
+-   Token usage counters (`gen_ai.client.token.usage`) still use `MeterRegistry` when one is present.
+    
+
+When no `ObservationRegistry` is available, existing OpenTelemetry spans and Micrometer timers continue to work as before.
+
+Low-cardinality keys: `gen_ai.operation.name`, `gen_ai.system`, `gen_ai.request.model`, `camel.component`, and `error.type` on failure. Prompts, completions, and token counts are not used as Observation keys.
+
+## Camel TUI integration
 
 When monitoring a running integration with `camel tui` and observability enabled, the AI panel usage view (**Ctrl+U** while the AI panel is open) combines:
 

@@ -16,6 +16,9 @@ kubectl apply -k github.com/apache/camel-k/install/base/config/prometheus?ref=v2
 > **Note**
 > change the ref value with the installation version tag you want to install.
 
+> **Important**
+> The provided Prometheus configuration does not create a `NetworkPolicy`. As a post-installation step, cluster administrators should [configure a network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) that only allows the Prometheus scraper to access the operator metrics port. Adapt the namespace and pod selectors to your Prometheus deployment, and verify that the cluster networking solution supports `NetworkPolicy` resources.
+
 However, most of the time you want to probably configure and add different thresholds and KPIs in order to monitor in a properly manner your installation.
 
 ## Metrics

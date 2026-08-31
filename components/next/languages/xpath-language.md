@@ -41,6 +41,7 @@ Enum values:
 | **logNamespaces** (advanced) | `false` | `Boolean` | Whether to log namespaces which can assist during troubleshooting. |
 | **threadSafety** (advanced) | `false` | `Boolean` | Whether to enable thread-safety for the returned result of the xpath expression. This applies to when using NODESET as the result type, and the returned set has multiple elements. |
 | **preCompile** (advanced) | `true` | `Boolean` | Whether to enable pre-compiling the xpath expression during initialization phase. pre-compile is enabled by default. |
+| **namespacesRef** (advanced) |  | `String` | Reference to a org.apache.camel.support.builder.Namespaces bean in the registry to use for the XML Namespaces of prefix to uri mappings. |
 | **source** (common) |  | `String` | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |
 | **resultType** (common) |  | `String` | The class of the result type (type from output). |
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
@@ -48,6 +49,75 @@ Enum values:
 ## Namespaces
 
 You can use namespaces with XPath expressions using the `Namespaces` helper class.
+
+### Sharing namespaces via a registry bean
+
+When the same prefix to URI mappings are needed by several expressions, you can register a single `org.apache.camel.support.builder.Namespaces` bean and refer to it from each expression with the `namespacesRef` option, instead of repeating the mappings inline.
+
+This is intended for XML and YAML DSL, where a `Namespaces` instance cannot be passed programmatically. In Java DSL you keep passing the builder directly.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+Namespaces ns = new Namespaces("c", "http://acme.com/cheese")
+                     .add("w", "http://acme.com/wine");
+
+from("direct:start")
+    .filter(xpath("/c:number = 55", ns))
+        .to("mock:result");
+```
+
+```xml
+<camel xmlns="http://camel.apache.org/schema/xml-io">
+
+  <bean name="myNamespaces" type="org.apache.camel.support.builder.Namespaces">
+    <properties>
+      <property key="namespaces[c]" value="http://acme.com/cheese"/>
+      <property key="namespaces[w]" value="http://acme.com/wine"/>
+    </properties>
+  </bean>
+
+  <route>
+    <from uri="direct:start"/>
+    <filter>
+      <xpath namespacesRef="myNamespaces">/c:number = 55</xpath>
+      <to uri="mock:result"/>
+    </filter>
+  </route>
+
+</camel>
+```
+
+```yaml
+- beans:
+    - name: myNamespaces
+      type: org.apache.camel.support.builder.Namespaces
+      properties:
+        namespaces[c]: "http://acme.com/cheese"
+        namespaces[w]: "http://acme.com/wine"
+- route:
+    from:
+      uri: "direct:start"
+      steps:
+        - filter:
+            expression:
+              xpath:
+                expression: "/c:number = 55"
+                namespacesRef: "myNamespaces"
+            steps:
+              - to: "mock:result"
+```
+
+Each prefix is configured as a `namespaces[prefix]` property on the bean, with the namespace URI as the value.
+
+If an expression declares namespaces inline as well, then the inline namespaces win and `namespacesRef` is ignored.
+
+The `namespacesRef` option is also available on the [XQuery](xquery-language.md) and [XML Tokenize](xtokenize-language.md) languages.
 
 ## Variables
 

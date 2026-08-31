@@ -121,7 +121,7 @@ string | `IntegrationProfile` |
 **[IntegrationProfileSpec](#_camel_apache_org_v1_IntegrationProfileSpec)** | 
  |
 | `status`  
-**[IntegrationProfileStatus](#_camel_apache_org_v1_IntegrationProfileStatus)** | Deprecated: no longer in use. |
+**[DeprecatedIntegrationProfileStatus](#_camel_apache_org_v1_DeprecatedIntegrationProfileStatus)** | Deprecated: no longer in use. |
 
 ### Kamelet
 
@@ -302,6 +302,8 @@ BuildConditionType — .
 -   [BuildSpec](#_camel_apache_org_v1_BuildSpec)
     
 -   [IntegrationPlatformBuildSpec](#_camel_apache_org_v1_IntegrationPlatformBuildSpec)
+    
+-   [IntegrationProfileBuildSpec](#_camel_apache_org_v1_IntegrationProfileBuildSpec)
     
 
 BuildConfiguration represent the configuration required to build the runtime.
@@ -909,6 +911,56 @@ string | the default data type for this Kamelet |
 | `headers`  
 **[map\[string\]github.com/apache/camel-k/v2/pkg/apis/camel/v1.HeaderSpec](#_camel_apache_org_v1_HeaderSpec)** | one to many header specifications |
 
+### DeprecatedIntegrationProfileCondition
+
+**Appears on:**
+
+-   [DeprecatedIntegrationProfileStatus](#_camel_apache_org_v1_DeprecatedIntegrationProfileStatus)
+    
+
+DeprecatedIntegrationProfileCondition describes the state of a resource at a certain point.
+
+Deprecated: no longer in use.
+
+ 
+| Field | Description |
+| --- | --- |
+| `type`  
+**[IntegrationProfileConditionType](#_camel_apache_org_v1_IntegrationProfileConditionType)** | Type of integration condition. |
+| `status`  
+**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
+| `lastUpdateTime`  
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
+| `lastTransitionTime`  
+**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
+| `reason`  
+string | The reason for the condition’s last transition. |
+| `message`  
+string | A human-readable message indicating details about the transition. |
+
+### DeprecatedIntegrationProfileStatus
+
+**Appears on:**
+
+-   [IntegrationProfile](#_camel_apache_org_v1_IntegrationProfile)
+    
+
+DeprecatedIntegrationProfileStatus defines the observed state of IntegrationProfile.
+
+Deprecated: no longer in use.
+
+ 
+| Field | Description |
+| --- | --- |
+| `IntegrationProfileSpec`  
+**[IntegrationProfileSpec](#_camel_apache_org_v1_IntegrationProfileSpec)** | (Members of `IntegrationProfileSpec` are embedded into this type.) |
+| `observedGeneration`  
+int64 | ObservedGeneration is the most recent generation observed for this IntegrationProfile. |
+| `phase`  
+**[IntegrationProfilePhase](#_camel_apache_org_v1_IntegrationProfilePhase)** | defines in what phase the IntegrationProfile is found |
+| `conditions`  
+**[\[\]DeprecatedIntegrationProfileCondition](#_camel_apache_org_v1_DeprecatedIntegrationProfileCondition)** | which are the conditions met (particularly useful when in ERROR phase) |
+
 ### Endpoint
 
 **Appears on:**
@@ -1481,6 +1533,8 @@ IntegrationPhase --.
 
 -   [IntegrationPlatformBuildSpec](#_camel_apache_org_v1_IntegrationPlatformBuildSpec)
     
+-   [IntegrationProfileBuildSpec](#_camel_apache_org_v1_IntegrationProfileBuildSpec)
+    
 
 IntegrationPlatformBuildPublishStrategy defines the strategy used to package and publish an Integration base image.
 
@@ -1666,10 +1720,10 @@ IntegrationProfileBuildSpec contains profile related build information. This con
  
 | Field | Description |
 | --- | --- |
-| `runtimeVersion`  
-string | the Camel K Runtime dependency version |
 | `runtimeProvider`  
-**[RuntimeProvider](#_camel_apache_org_v1_RuntimeProvider)** | the runtime used. Likely Camel Quarkus (we used to have main runtime which has been discontinued since version 1.5) |
+**[RuntimeProvider](#_camel_apache_org_v1_RuntimeProvider)** | the runtime provider to use. Likely Camel Quarkus. |
+| `runtimeVersion`  
+string | the runtime dependency version to use. |
 | `baseImage`  
 string | a base image that can be used as base layer for all images. It can be useful if you want to provide some custom base image with further utility software |
 | `registry`  
@@ -1677,41 +1731,29 @@ string | a base image that can be used as base layer for all images. It can be u
 | `timeout`  
 **[Kubernetes meta/v1.Duration](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#duration-v1-meta)** | how much time to wait before time out the pipeline process |
 | `maven`  
-**[MavenSpec](#_camel_apache_org_v1_MavenSpec)** | Maven configuration used to build the Camel/Camel-Quarkus applications |
+**[MavenSpec](#_camel_apache_org_v1_MavenSpec)** | Maven configuration used to build the Camel applications |
+| `repositories`  
+\[\]string | Maven repositories used to build the Camel applications |
+| `BuildConfiguration`  
+**[BuildConfiguration](#_camel_apache_org_v1_BuildConfiguration)** | (Members of `BuildConfiguration` are embedded into this type.)
+the configuration required to build an Integration container image
 
-### IntegrationProfileCondition
-
-**Appears on:**
-
--   [IntegrationProfileStatus](#_camel_apache_org_v1_IntegrationProfileStatus)
-    
-
-IntegrationProfileCondition describes the state of a resource at a certain point.
-
- 
-| Field | Description |
-| --- | --- |
-| `type`  
-**[IntegrationProfileConditionType](#_camel_apache_org_v1_IntegrationProfileConditionType)** | Type of integration condition. |
-| `status`  
-**[Kubernetes core/v1.ConditionStatus](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#conditionstatus-v1-core)** | Status of the condition, one of True, False, Unknown. |
-| `lastUpdateTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | The last time this condition was updated. |
-| `lastTransitionTime`  
-**[Kubernetes meta/v1.Time](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.36/#time-v1-meta)** | Last time the condition transitioned from one status to another. |
-| `reason`  
-string | The reason for the condition’s last transition. |
-| `message`  
-string | A human-readable message indicating details about the transition. |
+ |
+| `publishStrategy`  
+**[IntegrationPlatformBuildPublishStrategy](#_camel_apache_org_v1_IntegrationPlatformBuildPublishStrategy)** | the strategy to adopt for publishing an Integration container image |
+| `maxRunningBuilds`  
+int32 | the maximum amount of parallel running pipelines started by this operator instance |
 
 ### IntegrationProfileConditionType(`string` alias)
 
 **Appears on:**
 
--   [IntegrationProfileCondition](#_camel_apache_org_v1_IntegrationProfileCondition)
+-   [DeprecatedIntegrationProfileCondition](#_camel_apache_org_v1_DeprecatedIntegrationProfileCondition)
     
 
 IntegrationProfileConditionType defines the type of condition.
+
+Deprecated: no longer in use.
 
 ### IntegrationProfileKameletSpec
 
@@ -1734,10 +1776,12 @@ Deprecated: to be removed in future versions.
 
 **Appears on:**
 
--   [IntegrationProfileStatus](#_camel_apache_org_v1_IntegrationProfileStatus)
+-   [DeprecatedIntegrationProfileStatus](#_camel_apache_org_v1_DeprecatedIntegrationProfileStatus)
     
 
 IntegrationProfilePhase is the phase of an IntegrationProfile.
+
+Deprecated: no longer in use.
 
 ### IntegrationProfileSpec
 
@@ -1745,7 +1789,7 @@ IntegrationProfilePhase is the phase of an IntegrationProfile.
 
 -   [IntegrationProfile](#_camel_apache_org_v1_IntegrationProfile)
     
--   [IntegrationProfileStatus](#_camel_apache_org_v1_IntegrationProfileStatus)
+-   [DeprecatedIntegrationProfileStatus](#_camel_apache_org_v1_DeprecatedIntegrationProfileStatus)
     
 
 IntegrationProfileSpec applies user defined settings to the IntegrationProfile.
@@ -1764,27 +1808,6 @@ IntegrationProfileSpec applies user defined settings to the IntegrationProfile.
 Deprecated: to be removed in future versions.
 
  |
-
-### IntegrationProfileStatus
-
-**Appears on:**
-
--   [IntegrationProfile](#_camel_apache_org_v1_IntegrationProfile)
-    
-
-IntegrationProfileStatus defines the observed state of IntegrationProfile.
-
- 
-| Field | Description |
-| --- | --- |
-| `IntegrationProfileSpec`  
-**[IntegrationProfileSpec](#_camel_apache_org_v1_IntegrationProfileSpec)** | (Members of `IntegrationProfileSpec` are embedded into this type.) |
-| `observedGeneration`  
-int64 | ObservedGeneration is the most recent generation observed for this IntegrationProfile. |
-| `phase`  
-**[IntegrationProfilePhase](#_camel_apache_org_v1_IntegrationProfilePhase)** | defines in what phase the IntegrationProfile is found |
-| `conditions`  
-**[\[\]IntegrationProfileCondition](#_camel_apache_org_v1_IntegrationProfileCondition)** | which are the conditions met (particularly useful when in ERROR phase) |
 
 ### IntegrationSpec
 

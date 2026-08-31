@@ -15,9 +15,6 @@ The simple language uses `${body}` placeholders for dynamic expressions and func
 >
 > You can also use the alternative syntax which uses `$simple{ }` as placeholders. This can be used in situations to avoid clashes when using, for example, Spring property placeholder together with Camel.
 
-> **Note**
-> See also the [CSimple](csimple-language.md) language which is **pre compiled**.
-
 ## A quick Simple Language example
 
 You often use Simple together with [EIPs](../../4.22.x/eips/enterprise-integration-patterns.md) such as [Content-Based Router](../eips/choice-eip.md) EIP.

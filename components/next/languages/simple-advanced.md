@@ -6,9 +6,6 @@
 
 Starting from **Camel 4.18** you can in the top of your Simple expressions declare an _initialization_ block that are used to define a set of local variables that are pre-computed, and can be used in the following Simple expression. This allows to reuse variables, and also avoid making the simple expression complicated when having inlined functions, and in general make the simple expression easier to maintain and understand.
 
-> **Important**
-> Init Blocks is not supported with [CSimple](csimple-language.md) language.
-
 > **Note**
 > The init block declaration `$init{ …​ }init$` may be changed in the future.
 

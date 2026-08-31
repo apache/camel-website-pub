@@ -6,8 +6,15 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Aug 2026 10:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 29 Aug 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kamelets 4.22.0</title>
+      <link>https://camel.apache.org/releases/kamelets-4.22.0/</link>
+      <pubDate>Sat, 29 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.22.0/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-59230</title>
       <link>https://camel.apache.org/security/CVE-2026-59230.html</link>
@@ -63,6 +70,20 @@
       <pubDate>Mon, 24 Aug 2026 10:00:00 +0200</pubDate>
       <guid>https://camel.apache.org/security/CVE-2026-78329.html</guid>
       <description>Camel-Undertow: the endpoint discarded the undertow-specific header filter strategy in favour of the base HTTP one, so the undertow filtering never ran on endpoint-configured routes</description>
+    </item>
+    <item>
+      <title>Camel Quarkus 3.39.0 Released</title>
+      <link>https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/</link>
+      <pubDate>Mon, 24 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/</guid>
+      <description>Camel Quarkus 3.39.0 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.39.0</title>
+      <link>https://camel.apache.org/releases/q-3.39.0/</link>
+      <pubDate>Mon, 24 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.39.0/</guid>
+      <description></description>
     </item>
     <item>
       <title>Release 4.18.4</title>

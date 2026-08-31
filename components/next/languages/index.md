@@ -6,14 +6,13 @@ Index of Camel expression and predicate languages.
 
 Below is the list of expression languages that are provided by Apache Camel.
 
-Number of Languages: 33 in 21 JAR artifacts (3 deprecated)
+Number of Languages: 32 in 21 JAR artifacts (2 deprecated)
 
     
 | Language | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
 | [Bean Method](bean-language.md) | camel-bean | Stable | 1.3 | Calls a Java bean method |
 | [Constant](constant-language.md) | camel-core-languages | Stable | 1.5 | A fixed value set only once during the route startup |
-| [CSimple](csimple-language.md) | camel-core-languages | Stable-deprecated | 3.7 | Evaluate a compiled simple expression |
 | [DataSonnet](datasonnet-language.md) | camel-datasonnet | Stable | 3.7 | To use DataSonnet scripts for message transformations |
 | [ExchangeProperty](exchangeProperty-language.md) | camel-core-languages | Stable | 2.0 | Gets a property from the Exchange |
 | [File](file-language.md) | camel-core-languages | Stable | 1.1 | File related capabilities for the Simple language |

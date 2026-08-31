@@ -14,6 +14,7 @@ The XQuery language supports the following options which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **configurationRef** (advanced) |  | `String` | Reference to a saxon configuration instance in the registry to use for xquery (requires camel-saxon). |
+| **namespacesRef** (advanced) |  | `String` | Reference to a org.apache.camel.support.builder.Namespaces bean in the registry to use for the XML Namespaces of prefix to uri mappings. |
 | **source** (common) |  | `String` | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |
 | **resultType** (common) |  | `String` | The class of the result type (type from output). |
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
@@ -165,6 +166,60 @@ _XML-only:_
 ```
 
 This namespace uses `foo` as prefix, so the `<xquery>` expression uses `foo:` to use this namespace.
+
+### Sharing namespaces via a registry bean
+
+Declaring the prefixes on the XML root tag only works when the route itself is written in XML. To share one set of prefix to URI mappings across several expressions, register a `org.apache.camel.support.builder.Namespaces` bean and refer to it with the `namespacesRef` option:
+
+-   XML
+    
+-   YAML
+    
+
+```xml
+<camel xmlns="http://camel.apache.org/schema/xml-io">
+
+  <bean name="myNamespaces" type="org.apache.camel.support.builder.Namespaces">
+    <properties>
+      <property key="namespaces[c]" value="http://acme.com/cheese"/>
+      <property key="namespaces[w]" value="http://acme.com/wine"/>
+    </properties>
+  </bean>
+
+  <route>
+    <from uri="direct:start"/>
+    <filter>
+      <xquery namespacesRef="myNamespaces">/c:person[@name='James']</xquery>
+      <to uri="mock:result"/>
+    </filter>
+  </route>
+
+</camel>
+```
+
+```yaml
+- beans:
+    - name: myNamespaces
+      type: org.apache.camel.support.builder.Namespaces
+      properties:
+        namespaces[c]: "http://acme.com/cheese"
+        namespaces[w]: "http://acme.com/wine"
+- route:
+    from:
+      uri: "direct:start"
+      steps:
+        - filter:
+            expression:
+              xquery:
+                expression: "/c:person[@name='James']"
+                namespacesRef: "myNamespaces"
+            steps:
+              - to: "mock:result"
+```
+
+Each prefix is configured as a `namespaces[prefix]` property on the bean, with the namespace URI as the value. In Java DSL there is no need for this, as the `Namespaces` builder is passed to the expression directly, as shown above.
+
+If an expression declares namespaces inline as well, then the inline namespaces win and `namespacesRef` is ignored.
 
 ## Using XQuery as transformation
 

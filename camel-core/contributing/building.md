@@ -50,6 +50,19 @@ If you do not like installing Maven manually, you can keep using `mvnw` instead 
 
 To build Camel maven has to be configured to use more memory, which is done automatically via the `.mvn/jvm.config` file.
 
+> **Note**
+> The build uses the Develocity Maven extension (`.mvn/extensions.xml`), which enables a **local** build cache by default (`.mvn/develocity.xml`) so incremental local builds can reuse unchanged module outputs. Remote caching is always disabled. If you rebuild a module and your changes don’t seem to take effect — for example a jar in `~/.m2` doesn’t reflect a source change you just made — disable the local cache for that build to force a real compile:
+>
+> ```bash
+> mvn clean install -Pfastinstall -Ddevelocity.cache.local.enabled=false
+> ```
+>
+> To disable it for every local build without changing the command line each time, set it once via an environment variable (e.g. in your shell profile):
+>
+> ```bash
+> export MAVEN_OPTS="$MAVEN_OPTS -Ddevelocity.cache.local.enabled=false"
+> ```
+
 ## A normal build
 
 Beware this runs all the unit tests which takes many hours.

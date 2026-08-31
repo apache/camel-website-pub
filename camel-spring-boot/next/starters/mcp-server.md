@@ -2,7 +2,27 @@
 
 The MCP Server starter exposes Camel routes registered via the `ai-tool` component as tools of a Model Context Protocol (MCP) server, served through the Spring AI MCP server over streamable HTTP. No route is needed for the server itself: add the starter, tag the `ai-tool` routes to expose, and any MCP client (another Camel application, an IDE, a coding agent) can discover and call them.
 
-Tool semantics — tag-based opt-in (the untagged default pool is never exposed), flat-namespace collision refusal, per-call timeout and error sanitization — are owned by the runtime-agnostic `camel-mcp-server-api` bridge and are identical on every Camel runtime. Serving concerns (endpoint path, protocol, server identity, authentication) are owned by the Spring AI MCP server and configured via `spring.ai.mcp.server.*`; use `spring.ai.mcp.server.protocol=STREAMABLE` for the streamable HTTP transport.
+Tool semantics — tag-based opt-in (the untagged default pool is never exposed), flat-namespace collision refusal, per-call timeout and error sanitization — are owned by the runtime-agnostic `camel-mcp-server-api` bridge and are identical on every Camel runtime. Serving concerns (endpoint path, protocol, server identity) are owned by the Spring AI MCP server and configured via `spring.ai.mcp.server.*`; use `spring.ai.mcp.server.protocol=STREAMABLE` for the streamable HTTP transport.
+
+## Securing the MCP endpoint
+
+`spring.ai.mcp.server.*` provides **no authentication**. The MCP endpoint is served on the application’s own HTTP port, and anything that can reach it can list and call every exposed tool. Protecting it is the application’s responsibility.
+
+Nothing is exposed until `camel.mcp-server.tags` is set — the untagged default pool is never served — so the surface is opt-in. Once tags are configured, secure the endpoint path, for example with a Spring Security filter chain:
+
+```java
+@Bean
+SecurityFilterChain mcpSecurity(HttpSecurity http) throws Exception {
+    return http.securityMatcher("/mcp/**")
+            .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+            .build();
+}
+```
+
+Adjust the matcher to whatever `spring.ai.mcp.server` is configured to serve on. A network policy that keeps the port off untrusted networks is an alternative where the deployment allows it.
+
+See the camel-mcp-server component documentation for the trust boundary this sits in: external MCP clients are untrusted senders under the Camel security model.
 
 ## Maven coordinates
 

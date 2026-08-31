@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 101 in 68 JAR artifacts (5 deprecated)
+Number of Miscellaneous Components: 99 in 66 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -25,7 +25,6 @@ Number of Miscellaneous Components: 101 in 68 JAR artifacts (5 deprecated)
 | [CLI Connector](cli-connector.md) | camel-cli-connector | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
 | [CLI Debug](cli-debug.md) | camel-cli-debug | Stable | 4.17 | Remote CLI debugger |
 | [Cloudevents](cloudevents.md) | camel-cloudevents | Stable | 3.15 | Camel support for the CloudEvents specification |
-| [CSimple jOOR](csimple-joor.md) | camel-csimple-joor | Stable-deprecated | 3.7 | jOOR compiler for csimple language |
 | [CXF Transport](cxf-transport.md) | camel-cxf-transport | Stable | 2.8 | Camel Transport for Apache CXF |
 | [Debug](debug.md) | camel-debug | Stable | 3.15 | Enables Camel Route Debugging |
 | [Diagram](diagram.md) | camel-diagram | Preview | 4.21 | Camel Route Diagram rendering |
@@ -80,7 +79,6 @@ Number of Miscellaneous Components: 101 in 68 JAR artifacts (5 deprecated)
 | [Platform Http Vertx](platform-http-vertx.md) | camel-platform-http-vertx | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [PQC Hybrid Cryptography](pqc-hybrid.md) |  |  |  |  |
 | [PQC Key Lifecycle Management](pqc-key-lifecycle.md) |  |  |  |  |
-| [Reactive Executor Vert.x](reactive-executor-vertx.md) | camel-reactive-executor-vertx | Experimental-deprecated | 3.0 | Reactive Executor for camel-core using Vert.x |
 | [Reactor](reactor.md) | camel-reactor | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](redis.md) | camel-redis | Stable | 3.5 | Aggregation repository using Redis as datastore |
 | [Resilience4j](resilience4j.md) | camel-resilience4j | Stable | 3.0 | Circuit Breaker EIP using Resilience4j |

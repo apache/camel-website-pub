@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[233]{title,link,pubDate,description}:
+posts[234]{title,link,pubDate,description}:
+  Camel Quarkus 3.39.0 Released|https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/index.md|Mon, 24 Aug 2026 00:00:00 +0000|Camel Quarkus 3.39.0 release
   RELEASE 4.18.4|https://camel.apache.org/blog/2026/08/RELEASE-4.18.4/index.md|Mon, 17 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.4 LTS release with 66 new features and improvements. The artifacts are published and ready for you to download from the Centr
   RELEASE 4.14.9|https://camel.apache.org/blog/2026/08/RELEASE-4.14.9/index.md|Sun, 16 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.9 patch release with 38 bug fixes and improvements. The artifacts are published and ready for you to download from the Centra
   Real-Time Analytics with Apache Camel and ClickHouse|https://camel.apache.org/blog/2026/08/camel-clickhouse-analytics/index.md|Wed, 12 Aug 2026 00:00:00 +0000|If you are building event pipelines, metrics dashboards, or log analytics, there is a good chance ClickHouse sits at the end of the line. It is fast, column-oriented, and built for append-heavy worklo

@@ -1003,7 +1003,7 @@ Upgrade weaviate client to 6.x
 
 Upgrade minio to 9+
 
-### Improvement (153)
+### Improvement (155)
 
 [CAMEL-24366](https://issues.apache.org/jira/browse/CAMEL-24366)
 
@@ -1112,6 +1112,14 @@ Use BackgroundTask instead of ForegroundTask for reconnection loops so they are 
 [CAMEL-24271](https://issues.apache.org/jira/browse/CAMEL-24271)
 
 camel-kafka - Use BackgroundTask for reconnection so it is visible in internal tasks
+
+[CAMEL-24270](https://issues.apache.org/jira/browse/CAMEL-24270)
+
+Make AiToolSpecToLangChain4j public for reuse by downstream projects
+
+[CAMEL-24267](https://issues.apache.org/jira/browse/CAMEL-24267)
+
+ThrottlingInflightRoutePolicy.setResumePercentOfMax has writer-side race condition
 
 [CAMEL-24266](https://issues.apache.org/jira/browse/CAMEL-24266)
 
@@ -1943,7 +1951,7 @@ camel-jpa: replace Thread.sleep in tests
 
 camel-microprofile-faulttolerance: timeoutScheduledExecutorServiceRef and bulkHead\* to be deprecated ?
 
-### Test (71)
+### Test (72)
 
 [CAMEL-24323](https://issues.apache.org/jira/browse/CAMEL-24323)
 
@@ -1952,6 +1960,10 @@ MongoDbSslConnectionIT test is broken "message":"Could not find the file / in co
 [CAMEL-24284](https://issues.apache.org/jira/browse/CAMEL-24284)
 
 SjmsConnectionRecoveryTest is very flaky on Jenkins CI
+
+[CAMEL-24229](https://issues.apache.org/jira/browse/CAMEL-24229)
+
+Fix flaky BacklogTracerActivityTest (volatile) and QuartzPersistentStore (MBean collision)
 
 [CAMEL-24053](https://issues.apache.org/jira/browse/CAMEL-24053)
 
