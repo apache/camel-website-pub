@@ -6,7 +6,7 @@ The PGP Data Format integrates the Java Cryptographic Extension into Camel, allo
 
 ## PGPDataFormat Options
 
-The PGP dataformat supports 14 options, which are listed below.
+The PGP dataformat supports 15 options, which are listed below.
 
    
 | Name | Default | Java Type | Description |
@@ -25,6 +25,7 @@ The PGP dataformat supports 14 options, which are listed below.
 | **compressionAlgorithm** (common) |  | `Integer` | Compression algorithm; possible values are defined in org.bouncycastle.bcpg.CompressionAlgorithmTags; for example 0 (= UNCOMPRESSED), 1 (= ZIP), 2 (= ZLIB), 3 (= BZIP2). Only relevant for encrypting. |
 | **hashAlgorithm** (common) |  | `Integer` | Signature hash algorithm; possible values are defined in org.bouncycastle.bcpg.HashAlgorithmTags; for example 2 (= SHA1), 8 (= SHA256), 9 (= SHA384), 10 (= SHA512), 11 (=SHA224). Only relevant for signing. |
 | **signatureVerificationOption** (common) |  | `String` | Controls the behavior for verifying the signature during unmarshaling. There are 4 values possible: optional: The PGP message may or may not contain signatures; if it does contain signatures, then a signature verification is executed. required: The PGP message must contain at least one signature; if this is not the case an exception (PGPException) is thrown. A signature verification is executed. ignore: Contained signatures in the PGP message are ignored; no signature verification is executed. no\_signature\_allowed: The PGP message must not contain a signature; otherwise an exception (PGPException) is thrown. |
+| **requireIntegrityProtection** (common) | `true` | `Boolean` | Whether a message must be integrity protected in order to be decrypted. The legacy symmetrically encrypted data packet carries no modification detection code, and the packet type is chosen by whoever produced the message, so accepting it lets the sender decide whether the integrity check applies. Set to false only to interoperate with a sender that still emits the legacy packet. |
 
 ## PGPDataFormat Message Headers
 

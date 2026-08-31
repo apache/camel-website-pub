@@ -861,6 +861,8 @@ Enum values:
     
 -   VERIFY\_USER\_IDENTITY\_2
     
+-   WARM\_UP
+    
 
 
 
@@ -988,7 +990,7 @@ The DEFAULT API is defined in the syntax as follows:
 zendesk:DEFAULT/methodName?[parameters]
 ```
 
-The 286 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
+The 287 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
 
   
 | Method | Alias | Description |
@@ -1814,6 +1816,7 @@ The 286 method(s) is(are) listed in the table below, followed by detailed syntax
 | [**verifyUserIdentity**](#_api_DEFAULT_method_verifyUserIdentity) |  | 
 
  |
+| [**warmUp**](#_api_DEFAULT_method_warmUp) |  | Prepares authentication up front, so the first request does not pay for it: a client-credentials client mints an access token here |
 
 #### Method addTagToOrganisations
 
@@ -6705,6 +6708,19 @@ The zendesk/verifyUserIdentity API method has the parameters listed in the table
 | **userId** | 
 
  | Long |
+
+#### Method warmUp
+
+Signatures:
+
+-   void warmUp();
+    
+
+The zendesk/warmUp API method has the parameters listed in the table below:
+
+  
+| Parameter | Description | Type |
+| --- | --- | --- |
 
 In addition to the parameters above, the zendesk API can also use any of the [Query Parameters](#_query_parameters).
 

@@ -1,7 +1,8 @@
-urls[847]{loc,lastmod}:
-  https://camel.apache.org/,2026-08-29T00:00:00+00:00
+urls[848]{loc,lastmod}:
+  https://camel.apache.org/,2026-08-31T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-08-31T00:00:00+00:00
+  https://camel.apache.org/releases/upgrade-recipes-4.22.0/,2026-08-31T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.22.0/,2026-08-29T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-08-29T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-59230.md,2026-08-24T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-60093.md,2026-08-24T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-63621.md,2026-08-24T10:00:00+02:00

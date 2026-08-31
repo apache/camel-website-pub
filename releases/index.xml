@@ -6,8 +6,15 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 31 Aug 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Upgrade Recipes 4.22.0</title>
+      <link>https://camel.apache.org/releases/upgrade-recipes-4.22.0/</link>
+      <pubDate>Mon, 31 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/upgrade-recipes-4.22.0/</guid>
+      <description>Upgrade Instructions For detailed instructions on using Apache Camel Upgrade Recipes, please see the Apache Camel Upgrade Recipes Tool Manual.&#xA;This release introduces new recipes for migration to Camel 4.22. For more information, please see the README.adoc.&#xA;Full Release Notes Complete release notes for this version are available in the Camel Upgrade Recipes repository.</description>
+    </item>
     <item>
       <title>Kamelets 4.22.0</title>
       <link>https://camel.apache.org/releases/kamelets-4.22.0/</link>

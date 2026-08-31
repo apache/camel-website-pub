@@ -94,7 +94,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | **Required** The gRPC local or remote server port. |  | int |
 | **service** (common) | **Required** Fully qualified service name from the protocol buffer descriptor file (package dot service definition name). |  | String |
 
-### Query Parameters (42 parameters)
+### Query Parameters (43 parameters)
 
    
 | Name | Description | Default | Type |
@@ -131,6 +131,7 @@ Enum values:
 | **maxInboundMetadataSize** (consumer) | Sets the maximum size of metadata allowed to be received. The default is 8 KiB. | 8192 | int |
 | **maxRstFramesPerWindow** (consumer) | Limits the rate of incoming RST\_STREAM frames per connection to maxRstFramesPerWindow per maxRstPeriodSeconds. This option MUST be used in conjunction with maxRstPeriodSeconds for it to be effective. | 0 | int |
 | **maxRstPeriodSeconds** (consumer) | Limits the rate of incoming RST\_STREAM frames per maxRstPeriodSeconds. This option MUST be used in conjunction with maxRstFramesPerWindow for it to be effective. | 0 | int |
+| **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side the status description returned to the client won’t contain the exception’s message. | true | boolean |
 | **permitKeepAliveTime** (consumer) | Sets the most aggressive keep-alive time in milliseconds that clients are permitted to configure. The server will try to detect clients exceeding this rate and will forcefully close the connection. | 300000 | long |
 | **permitKeepAliveWithoutCalls** (consumer) | Sets whether to allow clients to send keep-alive HTTP/ 2 PINGs even if there are no outstanding RPCs on the connection. | false | boolean |
 | **routeControlledStreamObserver** (consumer) | Lets the route to take control over stream observer. If this value is set to true, then the response observer of gRPC call will be set with the name GrpcConstants.GRPC\_RESPONSE\_OBSERVER in the Exchange object. Please note that the stream observer’s onNext(), onError(), onCompleted() methods should be called in the route. | false | boolean |

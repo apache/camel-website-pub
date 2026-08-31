@@ -134,7 +134,7 @@ Enum values:
 | **tcpNoDelay** (producer) | Enable/disable the TCP\_NODELAY socket option. | true | Boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **defaultCharset** (advanced) | Set the default character set to use for byte to/from String conversions. | ISO-8859-1 | String |
-| **logPhi** (advanced) | Whether to log PHI. | true | Boolean |
+| **logPhi** (advanced) | Whether to log PHI. | false | Boolean |
 | **logPhiMaxBytes** (advanced) | Set the maximum number of bytes of PHI that will be logged in a log entry. | 5120 | Integer |
 | **maxBufferSize** (advanced) | Maximum buffer size used when receiving or sending data over the wire. | 1073741824 | int |
 | **minBufferSize** (advanced) | Minimum buffer size used when receiving or sending data over the wire. | 2048 | int |

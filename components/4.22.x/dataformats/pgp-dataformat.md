@@ -25,6 +25,7 @@ The PGP (Pretty Good Privacy Cryptographic) dataformat supports the following op
 | **compressionAlgorithm** (common) |  | `Integer` | Compression algorithm; possible values are defined in org.bouncycastle.bcpg.CompressionAlgorithmTags. Only relevant for encrypting. |
 | **hashAlgorithm** (common) |  | `Integer` | Signature hash algorithm; possible values are defined in org.bouncycastle.bcpg.HashAlgorithmTags. Only relevant for signing. |
 | **signatureVerificationOption** (common) |  | `String` | Controls the behavior for verifying the signature during unmarshaling. Possible values: optional, required, ignore, no\_signature\_allowed. |
+| **requireIntegrityProtection** (common) | `true` | `Boolean` | Whether a message must be integrity protected in order to be decrypted. The legacy symmetrically encrypted data packet carries no modification detection code, and the packet type is chosen by whoever produced the message, so accepting it lets the sender decide whether the integrity check applies. Set to false only to interoperate with a sender that still emits the legacy packet. |
 
 ## PGPDataFormat Message Headers
 
