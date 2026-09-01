@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788250246606,
+  "generated": 1788255943268,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -3501,6 +3501,24 @@
               "path": "slack-source.adoc",
               "url": "/camel-kamelets/next/slack-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/slack-source.svg\" alt=\"slack source\"></span> Slack Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "smpp-sink.adoc",
+              "url": "/camel-kamelets/next/smpp-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/smpp-sink.svg\" alt=\"smpp sink\"></span> SMPP Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "smpp-source.adoc",
+              "url": "/camel-kamelets/next/smpp-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/smpp-source.svg\" alt=\"smpp source\"></span> SMPP Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "snmp-source.adoc",
+              "url": "/camel-kamelets/next/snmp-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/snmp-source.svg\" alt=\"snmp source\"></span> SNMP Source"
             },
             {
               "module": "ROOT",

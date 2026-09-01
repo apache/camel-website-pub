@@ -473,6 +473,12 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![slack source](_images/kamelets/slack-source.svg) Slack Source](slack-source.html)
 
+ [![smpp sink](_images/kamelets/smpp-sink.svg) SMPP Sink](smpp-sink.html)
+
+ [![smpp source](_images/kamelets/smpp-source.svg) SMPP Source](smpp-source.html)
+
+ [![snmp source](_images/kamelets/snmp-source.svg) SNMP Source](snmp-source.html)
+
  [![snowflake sink](_images/kamelets/snowflake-sink.svg) Snowflake Sink](snowflake-sink.html)
 
  [![snowflake source](_images/kamelets/snowflake-source.svg) Snowflake Source](snowflake-source.html)
