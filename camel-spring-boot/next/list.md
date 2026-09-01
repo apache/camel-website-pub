@@ -827,6 +827,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [A2A](../../components/next/a2a-component.md) | camel-a2a-starter | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](../../components/next/activemq-component.md) | camel-activemq-starter | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](../../components/next/activemq6-component.md) | camel-activemq6-starter | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
+| [AI Resource](../../components/next/ai-resource-component.md) | camel-ai-resource-starter | Preview | 4.23 | Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry. |
 | [AI Tool](../../components/next/ai-tool-component.md) | camel-ai-tool-starter | Preview | 4.22 | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
 | [Alibaba EventBridge](../../components/next/alibaba-eventbridge-component.md) | camel-alibaba-eventbridge-starter | Preview | 4.23 | Publish events to Alibaba Cloud EventBridge. |
 | [Alibaba Function Compute (FC)](../../components/next/alibaba-fc-component.md) | camel-alibaba-fc-starter | Preview | 4.23 | Invoke serverless functions on Alibaba Cloud Function Compute (FC). |
@@ -1397,7 +1398,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](../../components/next/others/mail-microsoft-oauth.md) | camel-mail-microsoft-oauth-starter | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](../../components/next/others/main.md) | camel-main-starter | Stable | 3.0 | Camel Main |
-| [MCP Server](../../components/next/others/mcp-server.md) | camel-mcp-server-starter | Preview | 4.22 | Expose ai-tool routes as MCP tools over streamable HTTP |
+| [MCP Server](../../components/next/others/mcp-server.md) | camel-mcp-server-starter | Preview | 4.22 | Expose ai-tool routes as MCP tools and ai-resource routes as MCP resources over streamable HTTP |
 | [MDC Logging](../../components/next/others/mdc.md) | camel-mdc-starter | Preview | 4.15 | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer Observability](../../components/next/others/observation.md) | camel-observation-starter | Stable-deprecated | 3.21 | Observability using Micrometer Observation |
 | [Micrometer Observability 2](../../components/next/others/micrometer-observability.md) | camel-micrometer-observability-starter | Preview | 4.15 | Micrometer Observability implementation of Camel Telemetry |

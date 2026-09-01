@@ -2,7 +2,9 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[234]{title,link,pubDate,description}:
+posts[236]{title,link,pubDate,description}:
+  GenAI Observability with Spring Boot and the Camel Observability Stack|https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/index.md|Tue, 01 Sep 2026 00:00:00 +0000|In Part 1 we prototyped GenAI observability with the Camel CLI and TUI. This follow-up — Phase 3 (Operate) — shows the same gen_ai.* telemetry in a Spring Boot application wired to the observability s
+  Observe Your Camel AI Routes with GenAI OpenTelemetry|https://camel.apache.org/blog/2026/09/camel-genai-observability-jbang/index.md|Tue, 01 Sep 2026 00:00:00 +0000|Once LLMs live inside Camel routes, the next question is always the same: how much are we spending, and where is latency coming from? Apache Camel 4.23 introduces GenAI observability — OpenTelemetry s
   Camel Quarkus 3.39.0 Released|https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/index.md|Mon, 24 Aug 2026 00:00:00 +0000|Camel Quarkus 3.39.0 release
   RELEASE 4.18.4|https://camel.apache.org/blog/2026/08/RELEASE-4.18.4/index.md|Mon, 17 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.4 LTS release with 66 new features and improvements. The artifacts are published and ready for you to download from the Centr
   RELEASE 4.14.9|https://camel.apache.org/blog/2026/08/RELEASE-4.14.9/index.md|Sun, 16 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.9 patch release with 38 bug fixes and improvements. The artifacts are published and ready for you to download from the Centra

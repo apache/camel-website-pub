@@ -53,7 +53,7 @@ Number of Miscellaneous Components: 99 in 66 JAR artifacts (3 deprecated)
 | [LRA](lra.md) | camel-lra | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](mail-microsoft-oauth.md) | camel-mail-microsoft-oauth | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](main.md) | camel-main | Stable | 3.0 | Camel Main |
-| [MCP Server](mcp-server.md) | camel-mcp-server | Preview | 4.22 | Expose ai-tool routes as MCP tools over streamable HTTP |
+| [MCP Server](mcp-server.md) | camel-mcp-server | Preview | 4.22 | Expose ai-tool routes as MCP tools and ai-resource routes as MCP resources over streamable HTTP |
 | [MDC Logging](mdc.md) | camel-mdc | Preview | 4.15 | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer Observability](observation.md) | camel-observation | Stable-deprecated | 3.21 | Observability using Micrometer Observation |
 | [Micrometer Observability 2](micrometer-observability.md) | camel-micrometer-observability | Preview | 4.15 | Micrometer Observability implementation of Camel Telemetry |

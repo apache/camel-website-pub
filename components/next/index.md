@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 381 in 307 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 382 in 308 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -56,6 +56,7 @@ Number of Non-Core Components: 381 in 307 JAR artifacts (4 deprecated)
 | [ActiveMQ 5.x](activemq-component.md) | camel-activemq | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](activemq6-component.md) | camel-activemq6 | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI](ai-summary.md) |  |  |  |  |
+| [AI Resource](ai-resource-component.md) | camel-ai-resource | Preview | 4.23 | Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry. |
 | [AI Tool](ai-tool-component.md) | camel-ai-tool | Preview | 4.22 | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
 | [Alibaba EventBridge](alibaba-eventbridge-component.md) | camel-alibaba-eventbridge | Preview | 4.23 | Publish events to Alibaba Cloud EventBridge. |
 | [Alibaba Function Compute (FC)](alibaba-fc-component.md) | camel-alibaba-fc | Preview | 4.23 | Invoke serverless functions on Alibaba Cloud Function Compute (FC). |

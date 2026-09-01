@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788207669445,
+  "generated": 1788250246606,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -19471,6 +19471,12 @@
               "path": "ai-llm-integration-guide.adoc",
               "url": "/components/next/ai-llm-integration-guide.html",
               "title": "LLM Integration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "ai-resource-component.adoc",
+              "url": "/components/next/ai-resource-component.html",
+              "title": "AI Resource"
             },
             {
               "module": "ROOT",

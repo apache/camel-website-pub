@@ -36,6 +36,10 @@ See the following for usage of each component:
 
 A2A endpoint for agent-to-agent communication.
 
+[AI Resource](ai-resource-component.md)
+
+Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry.
+
 [AI Tool](ai-tool-component.md)
 
 Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry.

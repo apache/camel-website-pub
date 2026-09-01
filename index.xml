@@ -6,8 +6,22 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 31 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Sep 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GenAI Observability with Spring Boot and the Camel Observability Stack</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/</link>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/</guid>
+      <description>In Part 1 we prototyped GenAI observability with the Camel CLI and TUI. This follow-up — Phase 3 (Operate) — shows the same gen_ai.* telemetry in a Spring Boot application wired to the observability stack Camel ships for local development: Prometheus, VictoriaTraces, and Perses.&#xA;The runnable sample lives in the camel-spring-boot-examples repository at genai-observability (reworked in PR #192).&#xA;Architecture Terminal 1: ollama serve Terminal 2: camel infra run observability Terminal 3: mvn spring-boot:run ┌─────────────────┐ scrape :9876/observe/metrics ┌──────────────┐ │ Spring Boot │ ───────────────────────────────► │ Prometheus │ │ Camel + 2 LLMs │ │ :9090 │ │ app :8080 │ └──────┬───────┘ │ mgmt :9876 │ │ └────────┬────────┘ ▼ │ OTLP (Micrometer Tracing) ┌──────────────┐ ▼ │ Perses │ ┌─────────────────┐ dashboards │ :3000 │ │ VictoriaTraces │ ◄────────────────────────────────└──────────────┘ │ :10428 │ └─────────────────┘ Two timer routes call two small Ollama models (llama3.</description>
+    </item>
+    <item>
+      <title>Observe Your Camel AI Routes with GenAI OpenTelemetry</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-genai-observability-jbang/</link>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-genai-observability-jbang/</guid>
+      <description>Once LLMs live inside Camel routes, the next question is always the same: how much are we spending, and where is latency coming from? Apache Camel 4.23 introduces GenAI observability — OpenTelemetry spans and Micrometer metrics for LLM producers, aligned with the OpenTelemetry GenAI semantic conventions.&#xA;This is Blog 1 in a two-part series. We start with the fastest path to visible AI telemetry: the Camel CLI, a LangChain4j chat route, Ollama, and the Camel TUI — no Spring Boot required.</description>
+    </item>
     <item>
       <title>Upgrade Recipes 4.22.0</title>
       <link>https://camel.apache.org/releases/upgrade-recipes-4.22.0/</link>
