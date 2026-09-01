@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788255943268,
+  "generated": 1788294681672,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -7012,6 +7012,12 @@
               "path": "migration-guide/3.39.0.adoc",
               "url": "/camel-quarkus/next/migration-guide/3.39.0.html",
               "title": "Camel Quarkus 3.39.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.40.0.adoc",
+              "url": "/camel-quarkus/next/migration-guide/3.40.0.html",
+              "title": "Camel Quarkus 3.40.0 Migration Guide"
             },
             {
               "module": "ROOT",
@@ -18007,6 +18013,12 @@
               "path": "bean-eip.adoc",
               "url": "/components/next/eips/bean-eip.html",
               "title": "Bean"
+            },
+            {
+              "module": "eips",
+              "path": "cache-eip.adoc",
+              "url": "/components/next/eips/cache-eip.html",
+              "title": "Cache"
             },
             {
               "module": "eips",

@@ -98,7 +98,7 @@ The security protocol to use. Its value is a string determined by the service pr
 
 The security level to use. Its value is one of the following strings: "none", "simple", "strong". If this property is unspecified, the behaviour is determined by the service provider.
 
- | `string` | `none` |
+ | `string` |  |
 | `[quarkus.camel.ldap.dir-contexts."dir-contexts".socket-factory](#quarkus-camel-ldap-dir-contexts-dir-contexts-socket-factory)`
 
 The custom socket factory to use. The value of the property should be the fully qualified class name of the socket factory class.

@@ -154,6 +154,7 @@ Enum values:
 | **timeout** (common) | Sets a total timeout specified in millis, when using parallel processing. If the Dynamic Router hasn’t been able to send and process all replies within the given timeframe, then the timeout triggers and the Dynamic Router breaks out and continues. The timeout method is invoked before breaking out. If the timeout is reached with running tasks still remaining, certain tasks for which it is difficult for Camel to shut down in a graceful manner may continue to run. So use this option with a bit of care. | \-1 | long |
 | **warnDroppedMessage** (common) | Flag to log a warning if no predicates match for an exchange. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **allowedSchemes** (security) | Sets an optional comma-separated allow-list of component schemes that a subscription destination may resolve to (e.g. http,https). When set, a subscription whose destination URI uses a scheme that is not in the list is rejected. By default (unset) any scheme is allowed. |  | String |
 
 ## Usage
 
@@ -363,7 +364,10 @@ ObjectMapper mapper = new ObjectMapper(new JsonFactory());
 producerTemplate.sendBody("kafka://subscriptions", mapper.writeValueAsString(controlMessage));
 ```
 
-In another module, additional routing will serve as a bridge to get the message from Kafka to the control channel of the Dynamic Router:
+In another module, additional routing will serve as a bridge to get the message from Kafka to the control channel of the Dynamic Router. The subscriptions above carry their predicate in the control message, so the bridge has to opt in with `allowPredicateFromMessage=true`.
+
+> **Warning**
+> `allowPredicateFromMessage` lets whoever puts a message on the bridged transport choose both the expression language and the expression that the Dynamic Router compiles and evaluates, which means it decides what runs inside the Camel process. Only enable it when the transport that feeds the control channel is trusted. When it is not, have the participants subscribe with `predicateBean`, which selects a `Predicate` that the route author bound in the registry, and leave the flag at its default of `false`. See [the control component documentation](dynamic-router-control-component.md) for the alternatives.
 
 Bridge from Kafka to the Dynamic Router control channel
 
@@ -377,7 +381,7 @@ Bridge from Kafka to the Dynamic Router control channel
 ```java
 from("kafka:subscriptions")
     .unmarshal().json(DynamicRouterControlMessage.class)
-    .to("dynamic-router-control:subscribe");
+    .to("dynamic-router-control:subscribe?allowPredicateFromMessage=true");
 ```
 
 ```xml
@@ -386,7 +390,7 @@ from("kafka:subscriptions")
   <unmarshal>
     <json library="Jackson" unmarshalType="org.apache.camel.component.dynamicrouter.control.DynamicRouterControlMessage"/>
   </unmarshal>
-  <to uri="dynamic-router-control:subscribe"/>
+  <to uri="dynamic-router-control:subscribe?allowPredicateFromMessage=true"/>
 </route>
 ```
 
@@ -401,6 +405,8 @@ from("kafka:subscriptions")
               unmarshalType: org.apache.camel.component.dynamicrouter.control.DynamicRouterControlMessage
         - to:
             uri: dynamic-router-control:subscribe
+            parameters:
+              allowPredicateFromMessage: true
 ```
 
 Order requests or return requests might also arrive via Kafka. The route is essentially the same as the route in the single-JVM example. Instead of forwarding the incoming message, as-is, from the "direct" component to the router, the messages are deserialized from a String, and converted to an instance of the "order" object. Then, it can be sent to the Dynamic Router for evaluation and distribution to the appropriate subscribing recipients:
