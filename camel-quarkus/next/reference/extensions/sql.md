@@ -58,6 +58,6 @@ quarkus.native.resources.includes = queries.sql, sql/*.sql
 
 ### SQL aggregation repository in native mode
 
-In order to use SQL aggregation repositories like `JdbcAggregationRepository` in native mode, you must [enable native serialization support](core.html#quarkus-camel-native-reflection-serialization-enabled).
+SQL aggregation repositories like `JdbcAggregationRepository` require native serialization support, which this extension enables for you. Refer to the [native mode user guide](../../user-guide/native-mode.html#serialization) for more information.
 
 In addition, if your exchange bodies are custom types, they must be registered for serialization by annotating their class declaration with `@RegisterForReflection(serialization = true)`.

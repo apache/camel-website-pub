@@ -44,6 +44,32 @@ from("vertx-websocket:/my-websocket-path")
 > **Note**
 > While you do not need to explicitly configure the host/port on the vertx-websocket consumer. If you choose to, the host & port must exactly match the value of the Quarkus HTTP server configuration values for `quarkus.http.host` and `quarkus.http.port`. Otherwise, an exception will be thrown at runtime.
 
+#### Restricting WebSocket origins
+
+Since consumers are hosted on the Quarkus HTTP server, they sit behind whatever authentication is configured for that server, for example via `quarkus.http.auth.permission`. WebSocket upgrade requests are not subject to the same-origin policy and are exempt from CORS preflight, so a browser attaches ambient credentials such as session cookies to an upgrade request issued by any page. If a consumer path is protected by cookie based authentication and any origin is accepted, a page loaded in an authenticated user’s browser could open the WebSocket with that user’s session.
+
+The Quarkus session cookie defaults limit this. The form authentication cookie defaults to `SameSite=Strict` and the OIDC session cookie defaults to `SameSite=Lax`, and neither is sent on a WebSocket handshake initiated from a cross-site page. If you relax those defaults (for example `quarkus.http.auth.form.cookie-same-site=none`), or you authenticate with a cookie mechanism of your own, then restrict the origins that consumers accept.
+
+The simplest option is to enable the Quarkus CORS filter, which runs ahead of the Camel WebSocket route and rejects upgrade requests whose `Origin` header is neither same-origin nor listed in `quarkus.http.cors.origins`, with a `403` response.
+
+```properties
+quarkus.http.cors.enabled = true
+```
+
+Requests carrying no `Origin` header, such as those from non-browser WebSocket clients, are not affected.
+
+> **Warning**
+> Setting `quarkus.http.cors.origins` to `*` allows WebSocket upgrade requests from any origin.
+
+Alternatively, restrict origins for an individual consumer with the `allowedOriginPattern` option.
+
+```java
+from("vertx-websocket:/my-websocket-path?allowedOriginPattern=https://app\\.example\\.org")
+    .setBody().constant("Hello World");
+```
+
+See the [Security model](../../user-guide/security-model.md) for more about the Camel Quarkus security model.
+
 ### Vert.x WebSocket producers
 
 Similar to above, if you want to produce messages to the internal Vert.x WebSocket consumer, then you can omit the host and port from the endpoint URI.

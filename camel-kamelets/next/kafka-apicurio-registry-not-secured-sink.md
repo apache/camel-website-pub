@@ -16,7 +16,7 @@ The following table summarizes the configuration options available for the `kafk
 | **apicurioRegistryUrl** | Apicurio Registry URL | **Required** The Apicurio Schema Registry URL. | string |  |  |
 | **bootstrapServers** | Bootstrap Servers | **Required** Comma separated list of Kafka Broker URLs. | string |  |  |
 | **topic** | Topic Names | **Required** Comma separated list of Kafka topic names. | string |  |  |
-| **avroDatumProvider** | Avro Datum Provider | How to write data with Avro. | string | io.apicurio.registry.serde.avro.ReflectAvroDatumProvider |  |
+| **avroDatumProvider** | Avro Datum Provider | How to write data with Avro. Defaults to Apicurio’s own DefaultAvroDatumProvider, which handles GenericRecord and generated SpecificRecord classes. Set io.apicurio.registry.serde.avro.ReflectAvroDatumProvider to map arbitrary POJOs onto Avro by reflection instead. | string | io.apicurio.registry.serde.avro.DefaultAvroDatumProvider |  |
 | **valueSerializer** | Value Serializer | Serliazer class for value that implements the Serializer interface. | string | io.apicurio.registry.serde.avro.AvroKafkaSerializer |  |
 
 ## Dependencies

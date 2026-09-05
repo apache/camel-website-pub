@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 382 in 308 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 383 in 309 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -216,6 +216,7 @@ Number of Non-Core Components: 382 in 308 JAR artifacts (4 deprecated)
 | [Hazelcast SEDA](hazelcast-seda-component.md) | camel-hazelcast | Stable | 2.7 | Asynchronously send/receive Exchanges between Camel routes running on potentially distinct JVMs/hosts backed by Hazelcast BlockingQueue. |
 | [Hazelcast Set](hazelcast-set-component.md) | camel-hazelcast | Stable | 2.7 | Perform operations on Hazelcast distributed set. |
 | [Hazelcast Topic](hazelcast-topic-component.md) | camel-hazelcast | Stable | 2.15 | Send and receive messages to/from Hazelcast distributed topic. |
+| [HiveMQ](hivemq-component.md) | camel-hivemq | Preview | 4.23 | Camel HiveMQ MQTT Client support |
 | [HTTP](http-component.md) | camel-http | Stable | 2.3 | Send requests to external HTTP servers using Apache HTTP Client 5.x. |
 | [Huawei Cloud](hwcloud-summary.md) |  |  |  |  |
 | [Huawei Cloud Face Recognition Service (FRS)](hwcloud-frs-component.md) | camel-huaweicloud-frs | Stable | 3.15 | Face Recognition Service (FRS) is an intelligent service that uses computers to process, analyze, and understand facial images based on human facial features. |

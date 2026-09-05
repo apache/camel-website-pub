@@ -10,6 +10,10 @@ Apache Camel is a widely used project. As such, several companies have built pro
 
 [Digital Change](https://digitalchange.eu) is an Austrian consultancy and ISV specializing in system integration with Apache Camel and modern middleware.
 
+## [EADX](https://www.eadx.com/apachecamel)
+
+[EADX](https://www.eadx.com/apachecamel) offers worldwide services for Apache Camel through service centers in Europe and Asia, with consulting available in English and German. Services focus on enterprise integration development with Apache Camel, managed service offerings, and commercial maintenance support for Apache Camel.
+
 ## [Fluxygen](https://fluxygen.com)
 
 [Fluxygen](https://fluxygen.com) is a company based in the Netherlands. It offers a low-code integration platform based on Apache Camel, Apache ActiveMQ and [Assimbly](https://assimbly.org). The aim is to make integration as easy as possible, and enable businesses to automate processes. We also provide cloud services, support and training.

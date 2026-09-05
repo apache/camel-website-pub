@@ -28,6 +28,7 @@ The Avro dataformat supports the following options which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **instanceClassName** (common) |  | `String` | Class name to use for marshal and unmarshalling. |
+| **serializablePackages** (security) |  | `String` | Comma-separated list of additional packages that contain trusted Avro model classes. Avro 1.12 validates classes resolved from schemas; Camel automatically trusts packages derived from the configured schema or instance class. |
 
 ## Examples
 

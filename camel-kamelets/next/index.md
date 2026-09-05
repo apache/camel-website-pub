@@ -37,6 +37,8 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![aws bedrock agent runtime sink](_images/kamelets/aws-bedrock-agent-runtime-sink.svg) AWS Bedrock Agent Runtime Sink](aws-bedrock-agent-runtime-sink.html)
 
+ [![aws bedrock agent sink](_images/kamelets/aws-bedrock-agent-sink.svg) AWS Bedrock Agent Sink](aws-bedrock-agent-sink.html)
+
  [![aws bedrock text sink](_images/kamelets/aws-bedrock-text-sink.svg) AWS Bedrock Text Sink](aws-bedrock-text-sink.html)
 
  [![aws cloudtrail source](_images/kamelets/aws-cloudtrail-source.svg) AWS Cloudtrail Source](aws-cloudtrail-source.html)

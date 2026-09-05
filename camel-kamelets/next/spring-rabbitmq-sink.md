@@ -17,8 +17,11 @@ The following table summarizes the configuration options available for the `spri
 | **host** | Server Address | **Required** RabbitMQ broker address. | string |  | localhost |
 | **port** | Server Port | **Required** RabbitMQ broker port. | integer |  | 5672 |
 | **autoDeclareProducer** | Auto Declare Producer | Specifies whether the producer should auto declare binding between exchange, queue and routing key when starting. | boolean | false |  |
+| **confirm** | Confirm | Controls whether to wait for publisher confirms. auto lets Camel detect whether the connection factory is configured for confirms, enabled always waits, disabled never waits. Requires publisherConfirmType to be SIMPLE or CORRELATED. Enum values: \* auto \* enabled \* disabled | string | auto |  |
+| **confirmTimeout** | Confirm Timeout | How long in milliseconds to wait for a sent message to be confirmed by RabbitMQ when doing send-only (InOnly) messaging. A negative value waits indefinitely. | string | 5000 |  |
 | **password** | Password | The password to access the RabbitMQ server. | string |  |  |
 | **protocol** | Protocol | The AMQP protocol to use. Enum values: \* amqp \* amqps | string | amqp |  |
+| **publisherConfirmType** | Publisher Confirm Type | The publisher confirm mode of the underlying connection factory. Must be SIMPLE or CORRELATED for the confirm option below to have anything to wait on. NONE, the default, leaves publisher confirms switched off. Enum values: \* NONE \* SIMPLE \* CORRELATED | string | NONE |  |
 | **queues** | Queue name | The queue to receive messages from. | string |  |  |
 | **routingKey** | Routing Key | The routing key to use when binding a consumer queue to the exchange. | string |  |  |
 | **username** | Username | The username to access the RabbitMQ server. | string |  |  |

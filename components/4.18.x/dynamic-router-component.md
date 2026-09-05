@@ -326,7 +326,10 @@ ObjectMapper mapper = new ObjectMapper(new JsonFactory());
 producerTemplate.sendBody("kafka://subscriptions", mapper.writeValueAsString(controlMessage));
 ```
 
-In another module, additional routing will serve as a bridge to get the message from Kafka to the control channel of the Dynamic Router:
+In another module, additional routing will serve as a bridge to get the message from Kafka to the control channel of the Dynamic Router. The subscriptions above carry their predicate in the control message, so the bridge has to opt in with `allowPredicateFromMessage=true`.
+
+> **Warning**
+> `allowPredicateFromMessage` lets whoever puts a message on the bridged transport choose both the expression language and the expression that the Dynamic Router compiles and evaluates, which means it decides what runs inside the Camel process. Only enable it when the transport that feeds the control channel is trusted. When it is not, have the participants subscribe with `predicateBean`, which selects a `Predicate` that the route author bound in the registry, and leave the flag at its default of `false`. See [the control component documentation](dynamic-router-control-component.md) for the alternatives.
 
 Bridge from Kafka to the Dynamic Router control channel
 
@@ -337,7 +340,7 @@ RouteBuilder subscriptionRouter() {
         public void configure() {
             from("kafka:subscriptions")
                 .unmarshal().json(DynamicRouterControlMessage.class)
-                .to("dynamic-router-control:subscribe");
+                .to("dynamic-router-control:subscribe?allowPredicateFromMessage=true");
         }
     };
 }

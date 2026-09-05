@@ -25,7 +25,7 @@ The following table summarizes the configuration options available for the `kafk
 | **allowManualCommit** | Allow Manual Commit | Whether to allow doing manual commits. | boolean | false |  |
 | **autoCommitEnable** | Auto Commit Enable | If true, periodically commit to ZooKeeper the offset of messages already fetched by the consumer. | boolean | true |  |
 | **autoOffsetReset** | Auto Offset Reset | What to do when there is no initial offset. There are 3 enums and the value can be one of latest, earliest, none. | string | latest |  |
-| **avroDatumProvider** | Avro Datum Provider | How to read data with Avro. | string | io.apicurio.registry.serde.avro.ReflectAvroDatumProvider |  |
+| **avroDatumProvider** | Avro Datum Provider | How to read data with Avro. Defaults to Apicurio’s own DefaultAvroDatumProvider, which handles GenericRecord and generated SpecificRecord classes. Set io.apicurio.registry.serde.avro.ReflectAvroDatumProvider to map Avro onto arbitrary POJOs by reflection instead. | string | io.apicurio.registry.serde.avro.DefaultAvroDatumProvider |  |
 | **consumerGroup** | Consumer Group | A string that uniquely identifies the group of consumers to which this source belongs. | string |  | my-group-id |
 | **deserializeHeaders** | Automatically Deserialize Headers | When enabled the Kamelet source will deserialize all message headers to String representation. | boolean | true |  |
 | **pollOnError** | Poll On Error Behavior | What to do if kafka threw an exception while polling for new messages. There are 5 enums and the value can be one of `DISCARD`, `ERROR_HANDLER`, `RECONNECT`, `RETRY`, `STOP`. | string | ERROR\_HANDLER |  |

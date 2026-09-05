@@ -30,7 +30,7 @@ At runtime, the `jms-pooled-apache-artemis-source` Kamelet relies upon the prese
     
 -   camel:kamelet
     
--   mvn:org.apache.activemq:artemis-jakarta-client-all:2.55.0
+-   mvn:org.apache.activemq:artemis-jakarta-client-all:2.56.0
     
 -   mvn:org.messaginghub:pooled-jms:3.2.4
     

@@ -1,0 +1,32 @@
+# Alibaba Simple Log Service (SLS)
+
+Manage logs on Alibaba Cloud Simple Log Service (SLS).
+
+## What’s inside
+
+-   [Alibaba Simple Log Service (SLS) component](../../../components/next/alibaba-sls-component.md), URI syntax: `alibaba-sls:operation`
+    
+
+Please refer to the above links for usage and configuration details.
+
+## Maven coordinates
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-alibaba-sls-starter</artifactId>
+</dependency>
+```
+
+## Spring Boot Auto-Configuration
+
+The starter supports 5 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| camel.component.alibaba-sls.autowired-enabled | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | Boolean |
+| camel.component.alibaba-sls.enabled | Whether to enable auto configuration of the alibaba-sls component. This is enabled by default. |  | Boolean |
+| camel.component.alibaba-sls.health-check-consumer-enabled | Used for enabling or disabling all consumer based health checks from this component | true | Boolean |
+| camel.component.alibaba-sls.health-check-producer-enabled | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | Boolean |
+| camel.component.alibaba-sls.lazy-start-producer | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | Boolean |

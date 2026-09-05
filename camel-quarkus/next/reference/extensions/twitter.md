@@ -30,6 +30,18 @@ Or add the coordinates to your existing project:
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
 
+## Camel Quarkus limitations
+
+The Twitter Java client parses timestamps with `Locale.US`. In native mode, GraalVM includes only the build machine locale by default. A non-English locale (for example French) then fails to parse Twitter API responses.
+
+Set the default locale to `en-US` in `application.properties`:
+
+```properties
+quarkus.default-locale=en-US
+```
+
+See also [Locale in native mode](../../user-guide/native-mode.html#locale).
+
 ## SSL in native mode
 
 This extension auto-enables SSL support in native mode. Hence you do not need to add `quarkus.ssl.native=true` to your `application.properties` yourself. See also [Quarkus SSL guide](https://quarkus.io/guides/native-and-ssl).

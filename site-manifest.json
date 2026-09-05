@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788328493046,
+  "generated": 1788639881896,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -2175,6 +2175,12 @@
               "path": "aws-bedrock-agent-runtime-sink.adoc",
               "url": "/camel-kamelets/next/aws-bedrock-agent-runtime-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/aws-bedrock-agent-runtime-sink.svg\" alt=\"aws bedrock agent runtime sink\"></span> AWS Bedrock Agent Runtime Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "aws-bedrock-agent-sink.adoc",
+              "url": "/camel-kamelets/next/aws-bedrock-agent-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/aws-bedrock-agent-sink.svg\" alt=\"aws bedrock agent sink\"></span> AWS Bedrock Agent Sink"
             },
             {
               "module": "ROOT",
@@ -9847,6 +9853,12 @@
             },
             {
               "module": "ROOT",
+              "path": "migration-guide/3.33.3.adoc",
+              "url": "/camel-quarkus/3.33.x/migration-guide/3.33.3.html",
+              "title": "Camel Quarkus 3.33.3 Migration Guide"
+            },
+            {
+              "module": "ROOT",
               "path": "migration-guide/camel-spring-boot-to-camel-quarkus.adoc",
               "url": "/camel-quarkus/3.33.x/migration-guide/camel-spring-boot-to-camel-quarkus.html",
               "title": "Camel Spring Boot to Camel Quarkus Migration Guide"
@@ -12510,6 +12522,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/a2a.adoc",
+              "url": "/camel-spring-boot/next/starters/a2a.html",
+              "title": "A2A"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/activemq.adoc",
               "url": "/camel-spring-boot/next/starters/activemq.html",
               "title": "ActiveMQ 5.x"
@@ -12531,6 +12549,54 @@
               "path": "starters/ai-tool.adoc",
               "url": "/camel-spring-boot/next/starters/ai-tool.html",
               "title": "AI Tool"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/alibaba-eventbridge.adoc",
+              "url": "/camel-spring-boot/next/starters/alibaba-eventbridge.html",
+              "title": "Alibaba EventBridge"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/alibaba-fc.adoc",
+              "url": "/camel-spring-boot/next/starters/alibaba-fc.html",
+              "title": "Alibaba Function Compute (FC)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/alibaba-kms.adoc",
+              "url": "/camel-spring-boot/next/starters/alibaba-kms.html",
+              "title": "Alibaba Key Management Service (KMS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/alibaba-mns.adoc",
+              "url": "/camel-spring-boot/next/starters/alibaba-mns.html",
+              "title": "Alibaba Message Service (MNS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/alibaba-oss.adoc",
+              "url": "/camel-spring-boot/next/starters/alibaba-oss.html",
+              "title": "Alibaba Object Storage Service (OSS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/alibaba-ots.adoc",
+              "url": "/camel-spring-boot/next/starters/alibaba-ots.html",
+              "title": "Alibaba Tablestore (OTS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/alibaba-sls.adoc",
+              "url": "/camel-spring-boot/next/starters/alibaba-sls.html",
+              "title": "Alibaba Simple Log Service (SLS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/alibaba-sms.adoc",
+              "url": "/camel-spring-boot/next/starters/alibaba-sms.html",
+              "title": "Alibaba Short Message Service (SMS)"
             },
             {
               "module": "ROOT",
@@ -13449,6 +13515,12 @@
               "path": "starters/hazelcast.adoc",
               "url": "/camel-spring-boot/next/starters/hazelcast.html",
               "title": "Hazelcast Atomic Number"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/hivemq.adoc",
+              "url": "/camel-spring-boot/next/starters/hivemq.html",
+              "title": "HiveMQ"
             },
             {
               "module": "ROOT",
@@ -15046,6 +15118,12 @@
               "path": "starter-configuration.adoc",
               "url": "/camel-spring-boot/4.22.x/starter-configuration.html",
               "title": "Starter Configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/a2a.adoc",
+              "url": "/camel-spring-boot/4.22.x/starters/a2a.html",
+              "title": "A2A"
             },
             {
               "module": "ROOT",
@@ -18214,6 +18292,12 @@
             },
             {
               "module": "eips",
+              "path": "keyValueRepository.adoc",
+              "url": "/components/next/eips/keyValueRepository.html",
+              "title": "KeyValueRepository Backends"
+            },
+            {
+              "module": "eips",
               "path": "loadBalance-eip.adoc",
               "url": "/components/next/eips/loadBalance-eip.html",
               "title": "Load Balance"
@@ -20539,6 +20623,12 @@
               "path": "hazelcast-topic-component.adoc",
               "url": "/components/next/hazelcast-topic-component.html",
               "title": "Hazelcast Topic"
+            },
+            {
+              "module": "ROOT",
+              "path": "hivemq-component.adoc",
+              "url": "/components/next/hivemq-component.html",
+              "title": "HiveMQ"
             },
             {
               "module": "ROOT",
@@ -31931,6 +32021,12 @@
               "path": "json.adoc",
               "url": "/manual/json.html",
               "title": "JSON"
+            },
+            {
+              "module": "ROOT",
+              "path": "key-value-repository.adoc",
+              "url": "/manual/key-value-repository.html",
+              "title": "KeyValueRepository"
             },
             {
               "module": "ROOT",

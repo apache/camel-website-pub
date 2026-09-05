@@ -100,7 +100,7 @@ Enum values:
 
  |  | String |
 
-### Query Parameters (8 parameters)
+### Query Parameters (9 parameters)
 
    
 | Name | Description | Default | Type |
@@ -113,6 +113,7 @@ Enum values:
 | **priority** (control) | The subscription priority. |  | Integer |
 | **subscribeChannel** (control) | The channel to subscribe to. |  | String |
 | **subscriptionId** (control) | The subscription ID; if unspecified, one will be assigned and returned. |  | String |
+| **allowPredicateFromMessage** (security) | Whether the subscription predicate, and the language used to compile it, may be taken from the incoming control message. When disabled, the predicate and expressionLanguage configured on this endpoint are used instead. Enabling this lets the sender of a control message choose both the expression language and the expression that the Dynamic Router compiles into a live predicate, so only enable it when control messages come from a trusted source. | false | boolean |
 
 ## Message Headers
 
@@ -129,6 +130,29 @@ The Dynamic Router Control component supports 8 message header(s), which is/are 
 | **CamelDynamicRouterPredicate** (producer) Constant: [`CONTROL_PREDICATE`](https://javadoc.io/doc/org.apache.camel/camel-dynamic-router/latest/org/apache/camel/component/dynamicrouter/control/DynamicRouterControlConstants.html#CONTROL_PREDICATE) | The predicate to evaluate exchanges for this subscription. |  | String |
 | **CamelDynamicRouterPredicateBean** (producer) Constant: [`CONTROL_PREDICATE_BEAN`](https://javadoc.io/doc/org.apache.camel/camel-dynamic-router/latest/org/apache/camel/component/dynamicrouter/control/DynamicRouterControlConstants.html#CONTROL_PREDICATE_BEAN) | The name of the bean in the registry that identifies the subscription predicate. |  | String |
 | **CamelDynamicRouterExpressionLanguage** (producer) Constant: [`CONTROL_EXPRESSION_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-dynamic-router/latest/org/apache/camel/component/dynamicrouter/control/DynamicRouterControlConstants.html#CONTROL_EXPRESSION_LANGUAGE) | The language for the predicate when supplied as a string. |  | String |
+
+## Supplying the subscription predicate
+
+A subscription needs a predicate that decides which exchanges the participant receives. There are three ways to supply one, and they differ in who chooses it:
+
+-   `predicateBean` — the name of a `Predicate` bound in the registry. The route author decides which predicates exist, and the control message only selects one of them by name.
+    
+-   `predicate` and `expressionLanguage` as control endpoint URI parameters — the route author writes the expression, and every subscription made through that endpoint uses it.
+    
+-   `predicate` and `expressionLanguage` carried in the control message, in its body or its headers — the sender of the control message chooses both the expression language and the expression.
+    
+
+The third form is disabled by default. The predicate is compiled and then evaluated against every exchange on the channel, so letting the control message choose both the language and the expression means the sender of that message decides what runs inside the Camel process. Set `allowPredicateFromMessage=true` on the control endpoint to enable it, and only do so when control messages can only come from a trusted source:
+
+```java
+from("kafka:subscriptions")
+    .unmarshal().json(DynamicRouterControlMessage.class)
+    .to("dynamic-router-control:subscribe?allowPredicateFromMessage=true");
+```
+
+When `allowPredicateFromMessage` is `false`, which is the default, a control message that supplies a `predicate` or an `expressionLanguage` is rejected with an `IllegalArgumentException`. Prefer `predicateBean`, or configure the predicate on the endpoint, when control messages arrive from outside the application.
+
+Subscription parameters that the control message does not carry fall back to the values configured on the control endpoint, so a participant can send only the parameters that identify it and let the endpoint supply the rest.
 
 ## Subscribing
 

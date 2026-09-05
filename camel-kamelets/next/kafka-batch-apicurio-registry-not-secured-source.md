@@ -19,7 +19,7 @@ The following table summarizes the configuration options available for the `kafk
 | **allowManualCommit** | Allow Manual Commit | Whether to allow doing manual commits. | boolean | false |  |
 | **autoCommitEnable** | Auto Commit Enable | If true, periodically commit to ZooKeeper the offset of messages already fetched by the consumer. | boolean | true |  |
 | **autoOffsetReset** | Auto Offset Reset | What to do when there is no initial offset. There are 3 enums and the value can be one of `latest`, `earliest`, `none`. | string | latest |  |
-| **avroDatumProvider** | Avro Datum Provider | How to read data with Avro. | string | io.apicurio.registry.serde.avro.ReflectAvroDatumProvider |  |
+| **avroDatumProvider** | Avro Datum Provider | How to read data with Avro. Defaults to Apicurio’s own DefaultAvroDatumProvider, which handles GenericRecord and generated SpecificRecord classes. Set io.apicurio.registry.serde.avro.ReflectAvroDatumProvider to map Avro onto arbitrary POJOs by reflection instead.. | string | io.apicurio.registry.serde.avro.DefaultAvroDatumProvider |  |
 | **batchSize** | Batch Dimension | The maximum number of records returned in a single call to poll(). | integer | 500 |  |
 | **batchingIntervalMs** | Batching Interval | In consumer batching mode, then this option is specifying a time in millis, to trigger batch completion eager when the current batch size has not reached the maximum size defined by maxPollRecords. Notice the trigger is not exact at the given interval, as this can only happen between kafka polls (see pollTimeoutMs option). | integer |  |  |
 | **consumerGroup** | Consumer Group | A string that uniquely identifies the group of consumers to which this source belongs. | string |  | my-group-id |

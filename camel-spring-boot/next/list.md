@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 394 spring boot starter json files.
+There are 404 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -19,6 +19,8 @@ Of these 0 are used in components, dataformats, etc.
 
 ### Unused spring-boot-starter names
 
+a2a
+
 activemq
 
 activemq6
@@ -26,6 +28,22 @@ activemq6
 ai-observability
 
 ai-tool
+
+alibaba-eventbridge
+
+alibaba-fc
+
+alibaba-kms
+
+alibaba-mns
+
+alibaba-oss
+
+alibaba-ots
+
+alibaba-sls
+
+alibaba-sms
 
 amqp
 
@@ -326,6 +344,8 @@ gson
 hashicorp-vault
 
 hazelcast
+
+hivemq
 
 hl7
 
@@ -994,6 +1014,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Hazelcast SEDA](../../components/next/hazelcast-seda-component.md) | camel-hazelcast-starter | Stable | 2.7 | Asynchronously send/receive Exchanges between Camel routes running on potentially distinct JVMs/hosts backed by Hazelcast BlockingQueue. |
 | [Hazelcast Set](../../components/next/hazelcast-set-component.md) | camel-hazelcast-starter | Stable | 2.7 | Perform operations on Hazelcast distributed set. |
 | [Hazelcast Topic](../../components/next/hazelcast-topic-component.md) | camel-hazelcast-starter | Stable | 2.15 | Send and receive messages to/from Hazelcast distributed topic. |
+| [HiveMQ](../../components/next/hivemq-component.md) | camel-hivemq-starter | Preview | 4.23 | Camel HiveMQ MQTT Client support |
 | [HTTP](../../components/next/http-component.md) | camel-http-starter | Stable | 2.3 | Send requests to external HTTP servers using Apache HTTP Client 5.x. |
 | [Huawei Cloud Face Recognition Service (FRS)](../../components/next/hwcloud-frs-component.md) | camel-huaweicloud-frs-starter | Stable | 3.15 | Face Recognition Service (FRS) is an intelligent service that uses computers to process, analyze, and understand facial images based on human facial features. |
 | [Huawei Cloud Image Recognition](../../components/next/hwcloud-imagerecognition-component.md) | camel-huaweicloud-imagerecognition-starter | Stable | 3.12 | To identify objects, scenes, and concepts in images on Huawei Cloud |

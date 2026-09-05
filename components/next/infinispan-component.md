@@ -387,7 +387,7 @@ Enum values:
 
 
  |  | InfinispanOperation |
-| **CamelInfinispanOperationResult** (producer) Constant: [`RESULT`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#RESULT) | The name of the header whose value is the result. |  | String |
+| **CamelInfinispanOperationResult** (producer) Constant: [`RESULT`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#RESULT) | **Deprecated** The name of the header whose value is the result. Deprecation note: Never set nor read by the component. Use CamelInfinispanOperationResultHeader to choose the header that carries the result of an operation. |  | String |
 | **CamelInfinispanOperationResultHeader** (producer) Constant: [`RESULT_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#RESULT_HEADER) | Store the operation result in a header instead of the message body. |  | String |
 | **CamelInfinispanLifespanTime** (producer) Constant: [`LIFESPAN_TIME`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#LIFESPAN_TIME) | The Lifespan time of a value inside the cache. Negative values are interpreted as infinity. |  | long |
 | **CamelInfinispanTimeUnit** (producer) Constant: [`LIFESPAN_TIME_UNIT`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#LIFESPAN_TIME_UNIT) | 
@@ -444,7 +444,7 @@ Enum values:
 
  |  | TimeUnit |
 | **CamelInfinispanEventData** (consumer) Constant: [`EVENT_DATA`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#EVENT_DATA) | The event data. |  | Object |
-| **CamelInfinispanQueryBuilder** (producer) Constant: [`QUERY_BUILDER`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#QUERY_BUILDER) | The QueryBuilder to use for QUERY command, if not present the command defaults to InifinispanConfiguration’s one. |  | InfinispanQueryBuilder |
+| **CamelInfinispanQueryBuilder** (producer) Constant: [`QUERY_BUILDER`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#QUERY_BUILDER) | The QueryBuilder to use for QUERY command, if not present the command defaults to the InfinispanConfiguration one. |  | InfinispanQueryBuilder |
 | **CamelInfinispanEntryVersion** (consumer) Constant: [`ENTRY_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#ENTRY_VERSION) | Provides access to the version of the created cache entry. |  | long |
 | **CamelInfinispanCommandRetried** (consumer) Constant: [`COMMAND_RETRIED`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#COMMAND_RETRIED) | This will be true if the write command that caused this had to be retried again due to a topology change. |  | boolean |
 

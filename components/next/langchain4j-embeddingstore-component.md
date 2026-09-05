@@ -25,9 +25,9 @@ The LangChain4j Embedding Store component offers the following key features:
 
 The component supports three main operations controlled by the `CamelLangchain4jEmbeddingStoreAction` header:
 
--   **ADD** - Store embeddings with optional text segments and metadata
+-   **ADD** - Store embeddings with optional text segments and metadata. Supports single and batch operations, as well as caller-supplied IDs.
     
--   **REMOVE** - Delete embeddings by their unique identifier
+-   **REMOVE** - Delete embeddings by single ID, collection of IDs, or metadata filter.
     
 -   **SEARCH** - Perform similarity search with configurable filters and scoring
     
@@ -190,7 +190,9 @@ Enum values:
  |  | String |
 | **CamelLangchain4jEmbeddingStoreMaxResults** (producer) Constant: [`MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#MAX_RESULTS) | Maximum number of search results to return. | 5 | Integer |
 | **CamelLangchain4jEmbeddingStoreMinScore** (producer) Constant: [`MIN_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#MIN_SCORE) | Minimum similarity score for search results. |  | Double |
-| **CamelLangchain4jEmbeddingStoreFilter** (producer) Constant: [`FILTER`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#FILTER) | Search filter for metadata-based constraints. |  | Filter |
+| **CamelLangchain4jEmbeddingStoreFilter** (producer) Constant: [`FILTER`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#FILTER) | Filter for metadata-based constraints (used in SEARCH and REMOVE operations). |  | Filter |
+| **CamelLangchain4jEmbeddingStoreEmbeddingId** (producer) Constant: [`EMBEDDING_ID`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#EMBEDDING_ID) | Caller-supplied embedding ID for single ADD operations. |  | String |
+| **CamelLangchain4jEmbeddingStoreEmbeddingIds** (producer) Constant: [`EMBEDDING_IDS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#EMBEDDING_IDS) | Caller-supplied embedding IDs for batch ADD operations. |  | List |
 
 ## Usage
 
@@ -285,6 +287,38 @@ from("direct:store")
 
 The response body contains the generated embedding ID.
 
+#### ADD with Caller-Supplied ID
+
+You can provide your own embedding ID using the `CamelLangchain4jEmbeddingStoreEmbeddingId` header:
+
+```java
+from("direct:store-with-id")
+    .to("langchain4j-embeddings:embed")
+    .setHeader("CamelLangchain4jEmbeddingStoreEmbeddingId", constant("my-custom-id"))
+    .to("langchain4j-embeddingstore:myStore?action=ADD");
+```
+
+When both a caller-supplied ID and a text segment are present, the component preserves both using `addAll` with singleton lists.
+
+#### Batch ADD (addAll)
+
+For RAG ingestion pipelines, batch adding is significantly more efficient. Send a `List<String>` or `List<TextSegment>` as the body to the `langchain4j-embeddings` component to produce batch embeddings:
+
+```java
+from("direct:batch-store")
+    // Body is a List<String> or List<TextSegment>
+    .to("langchain4j-embeddings:embed")
+    // After batch embed, the CamelLangChain4jEmbeddingsEmbeddings header contains List<Embedding>
+    // and the CamelLangChain4jEmbeddingsTextSegments header preserves the original text segments
+    .to("langchain4j-embeddingstore:myStore?action=ADD");
+// Body: List<String> of generated IDs
+```
+
+You can also supply caller-supplied IDs for the batch via the `CamelLangchain4jEmbeddingStoreEmbeddingIds` header.
+
+> **Note**
+> The sizes of `EMBEDDING_IDS`, `EMBEDDINGS`, and text segments must all match. A size mismatch throws `IllegalArgumentException`.
+
 ### Searching Embeddings (SEARCH Operation)
 
 Perform similarity search to find relevant content. Without `embeddingModel`, a pre-computed query embedding must be provided:
@@ -352,7 +386,11 @@ from("direct:search")
 
 ### Removing Embeddings (REMOVE Operation)
 
-Delete embeddings by their ID:
+The REMOVE operation supports multiple strategies:
+
+#### Remove by Single ID
+
+Delete a single embedding by its ID (body is a `String`):
 
 -   Java
     
@@ -379,6 +417,29 @@ from("direct:remove")
           parameters:
             action: REMOVE
 ```
+
+#### Remove by Collection of IDs
+
+Delete multiple embeddings by passing a `Collection<String>` as the body:
+
+```java
+from("direct:remove-batch")
+    .setBody(constant(List.of("id-1", "id-2", "id-3")))
+    .to("langchain4j-embeddingstore:myStore?action=REMOVE");
+```
+
+#### Remove by Metadata Filter
+
+Delete all embeddings matching a metadata filter using the `CamelLangchain4jEmbeddingStoreFilter` header:
+
+```java
+from("direct:remove-by-filter")
+    .setHeader("CamelLangchain4jEmbeddingStoreFilter", constant(metadataFilter))
+    .to("langchain4j-embeddingstore:myStore?action=REMOVE");
+```
+
+> **Note**
+> A REMOVE with no body and no filter throws `IllegalArgumentException`. This is intentional — destructive "clear all" operations require explicit intent.
 
 ### Complete RAG Pipeline Example
 
