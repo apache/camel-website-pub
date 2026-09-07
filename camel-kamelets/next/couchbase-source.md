@@ -27,7 +27,7 @@ The following table summarizes the configuration options available for the `couc
 | **limit** | Limit | The maximum number of documents to return per poll. A negative value means no limit. | integer | \-1 |  |
 | **password** | Password | Password to connect to Couchbase. | string |  |  |
 | **skip** | Skip | How many documents to skip before returning results. A negative value means none. | integer | \-1 |  |
-| **statement** | N1QL Statement | The N1QL query to run against the bucket on each poll. Used unless useView is true. | string |  | SELECT \* FROM `travel-sample` LIMIT 10 |
+| **statement** | N1QL Statement | The N1QL query to run against the bucket on each poll. Used unless useView is true. The query runs in the bucket scope, so the keyspace is the collection - use \_default for the default collection rather than the bucket name. It must also alias the document id as \_\_id, because rows without that field are skipped. | string |  | SELECT META().id AS \_\_id, \* FROM \_default |
 | **useView** | Use View | Poll a MapReduce view instead of running the N1QL statement. | boolean | false |  |
 | **username** | Username | Username to connect to Couchbase. | string |  |  |
 | **viewName** | View Name | The view to query. Only used when useView is true. | string | brewery\_beers |  |

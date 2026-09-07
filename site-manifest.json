@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788774535378,
+  "generated": 1788790869164,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -3459,6 +3459,12 @@
               "path": "salesforce-update-sink.adoc",
               "url": "/camel-kamelets/next/salesforce-update-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/salesforce-update-sink.svg\" alt=\"salesforce update sink\"></span> Salesforce Update Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "sap-netweaver-sink.adoc",
+              "url": "/camel-kamelets/next/sap-netweaver-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/sap-netweaver-sink.svg\" alt=\"sap netweaver sink\"></span> SAP NetWeaver Sink"
             },
             {
               "module": "ROOT",

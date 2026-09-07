@@ -270,6 +270,7 @@ Enum values:
 | **streaming** (producer) | Enable streaming responses. | false | boolean |
 | **stripThinking** (producer) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
 | **systemMessage** (producer) | System message to prepend. When set and conversationMemory is enabled, the conversation history is reset. |  | String |
+| **tags** (producer) | Comma-separated tags for discovering route-based tools registered via the ai-tool component. When set, matching tools from the shared AiToolRegistry are exposed to the model alongside MCP tools. |  | String |
 | **temperature** (producer) | Temperature for response generation (0.0 to 2.0). |  | Double |
 | **toolExecutionErrorStrategy** (producer) | 
 

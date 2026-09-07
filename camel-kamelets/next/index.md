@@ -461,6 +461,8 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![salesforce update sink](_images/kamelets/salesforce-update-sink.svg) Salesforce Update Sink](salesforce-update-sink.html)
 
+ [![sap netweaver sink](_images/kamelets/sap-netweaver-sink.svg) SAP NetWeaver Sink](sap-netweaver-sink.html)
+
  [![scp sink](_images/kamelets/scp-sink.svg) SCP Sink](scp-sink.html)
 
  [![set body action](_images/kamelets/set-body-action.svg) Set Body Action](set-body-action.html)
