@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788679944894,
+  "generated": 1788774535378,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -2523,6 +2523,12 @@
               "path": "couchbase-sink.adoc",
               "url": "/camel-kamelets/next/couchbase-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/couchbase-sink.svg\" alt=\"couchbase sink\"></span> Couchbase Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "couchbase-source.adoc",
+              "url": "/camel-kamelets/next/couchbase-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/couchbase-source.svg\" alt=\"couchbase source\"></span> Couchbase Source"
             },
             {
               "module": "ROOT",

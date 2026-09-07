@@ -153,6 +153,8 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![couchbase sink](_images/kamelets/couchbase-sink.svg) Couchbase Sink](couchbase-sink.html)
 
+ [![couchbase source](_images/kamelets/couchbase-source.svg) Couchbase Source](couchbase-source.html)
+
  [![counter source](_images/kamelets/counter-source.svg) Counter Source](counter-source.html)
 
  [![cron source](_images/kamelets/cron-source.svg) Cron Source](cron-source.html)

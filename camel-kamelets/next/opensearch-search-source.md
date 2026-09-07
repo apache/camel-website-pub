@@ -21,6 +21,7 @@ The following table summarizes the configuration options available for the `open
 | **enableSSL** | Enable SSL | Do we want to connect using SSL?. | boolean | true |  |
 | **password** | Password | Password to connect to OpenSearch. | string |  |  |
 | **period** | Period | The time interval between two searches. | integer | 1000 |  |
+| **sslContextParameters** | SSL Context Parameters | Reference to a registry bean of type org.apache.camel.support.jsse.SSLContextParameters, written as "#bean:myBeanName". Use this for anything the certificate property cannot express - mutual TLS with a client keystore, a custom trust store, a specific TLS protocol version, or cipher suite selection. When set it takes precedence over certificate, so configure one or the other rather than both. | string |  |  |
 | **user** | Username | Username to connect to OpenSearch. | string |  |  |
 
 ## Dependencies
