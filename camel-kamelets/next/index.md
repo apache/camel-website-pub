@@ -457,6 +457,8 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![salesforce delete sink](_images/kamelets/salesforce-delete-sink.svg) Salesforce Delete Sink](salesforce-delete-sink.html)
 
+ [![salesforce pubsub source](_images/kamelets/salesforce-pubsub-source.svg) Salesforce Pub/Sub Source](salesforce-pubsub-source.html)
+
  [![salesforce source](_images/kamelets/salesforce-source.svg) Salesforce Source](salesforce-source.html)
 
  [![salesforce update sink](_images/kamelets/salesforce-update-sink.svg) Salesforce Update Sink](salesforce-update-sink.html)

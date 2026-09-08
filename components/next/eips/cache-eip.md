@@ -59,8 +59,6 @@ Cache errors are handled gracefully:
 
 ## Examples
 
-### Java DSL
-
 Cache with an auto-created in-memory store (zero config):
 
 ```java
@@ -74,28 +72,22 @@ from("direct:start")
 
 Cache with TTL and an explicit `KeyValueRepository`:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .cache(simple("${header.productId}"))
         .ttl("10m")
-        .keyValueRepository("myRedisKvr")
+        .keyValueRepository("myCache")
         .to("http://product-service/api/product")
     .end()
     .to("direct:continue");
 ```
-
-Expression clause form:
-
-```java
-from("direct:start")
-    .cache().simple("${header.productId}")
-        .ttl("5m")
-        .to("http://product-service/api/product")
-    .end()
-    .to("direct:continue");
-```
-
-### XML DSL
 
 ```xml
 <route>
@@ -108,8 +100,6 @@ from("direct:start")
 </route>
 ```
 
-### YAML DSL
-
 ```yaml
 - from:
     uri: "direct:start"
@@ -121,6 +111,17 @@ from("direct:start")
           steps:
             - to: "http://product-service/api/product"
       - to: "direct:continue"
+```
+
+Expression clause form:
+
+```java
+from("direct:start")
+    .cache().simple("${header.productId}")
+        .ttl("5m")
+        .to("http://product-service/api/product")
+    .end()
+    .to("direct:continue");
 ```
 
 ## Using with KeyValueRepository

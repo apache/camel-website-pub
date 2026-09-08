@@ -135,7 +135,6 @@ Enum values:
 | **maxRetryRequests** (common) | Specifies the maximum number of additional HTTP Get requests that will be made while reading the data from a response body. | 0 | int |
 | **prefix** (common) | Filters the results to return only blobs whose names begin with the specified prefix. May be null to return all blobs. |  | String |
 | **regex** (common) | Filters the results to return only blobs whose names match the specified regular expression. May be null to return all if both prefix and regex are set, regex takes the priority and prefix is ignored. |  | String |
-| **sasToken** (common) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **serviceClient** (common) | **Autowired** Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). |  | BlobServiceClient |
 | **snapshotId** (common) | The snapshot identifier used to target a specific blob snapshot on read operations (getBlob, downloadBlobToFile, downloadLink). When set, the read targets the snapshot scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobSnapshotId header. |  | String |
 | **timeout** (common) | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
@@ -254,6 +253,7 @@ Enum values:
 | **azureClientId** (security) | Azure Client ID for authentication with Azure Identity. |  | String |
 | **azureClientSecret** (security) | Azure Client Secret for authentication with Azure Identity. |  | String |
 | **azureTenantId** (security) | Azure Tenant ID for authentication with Azure Identity. |  | String |
+| **sasToken** (security) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **sourceBlobAccessKey** (security) | Source Blob Access Key: for copyblob operation, sadly, we need to have an accessKey for the source blob we want to copy Passing an accessKey as header, it’s unsafe so we could set as key. |  | String |
 
 ## Endpoint Options
@@ -327,7 +327,6 @@ Enum values:
 | **maxRetryRequests** (common) | Specifies the maximum number of additional HTTP Get requests that will be made while reading the data from a response body. | 0 | int |
 | **prefix** (common) | Filters the results to return only blobs whose names begin with the specified prefix. May be null to return all blobs. |  | String |
 | **regex** (common) | Filters the results to return only blobs whose names match the specified regular expression. May be null to return all if both prefix and regex are set, regex takes the priority and prefix is ignored. |  | String |
-| **sasToken** (common) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **serviceClient** (common) | **Autowired** Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). |  | BlobServiceClient |
 | **snapshotId** (common) | The snapshot identifier used to target a specific blob snapshot on read operations (getBlob, downloadBlobToFile, downloadLink). When set, the read targets the snapshot scoped client instead of the live blob. Can also be provided per-exchange via the CamelAzureStorageBlobSnapshotId header. |  | String |
 | **timeout** (common) | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
@@ -524,6 +523,7 @@ Enum values:
 | **azureClientId** (security) | Azure Client ID for authentication with Azure Identity. |  | String |
 | **azureClientSecret** (security) | Azure Client Secret for authentication with Azure Identity. |  | String |
 | **azureTenantId** (security) | Azure Tenant ID for authentication with Azure Identity. |  | String |
+| **sasToken** (security) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **sourceBlobAccessKey** (security) | Source Blob Access Key: for copyblob operation, sadly, we need to have an accessKey for the source blob we want to copy Passing an accessKey as header, it’s unsafe so we could set as key. |  | String |
 
 ## Message Headers

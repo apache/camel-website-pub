@@ -72,4 +72,14 @@ from("ai-tool:greet?description=Greet a user"
 
 ### Who receives registered tools
 
-Camel agents (`langchain4j-agent` endpoints) receive registry tools only through their endpoint’s `tags` parameter — an agent without `tags` receives no registry tools (tools from the agent’s other sources, such as MCP clients or custom tool objects, are unaffected). Quarkus LangChain4j AI services (`@RegisterAiService` interfaces and programmatically built `AiServices`) receive every registered tool by default; restrict a service to a subset with the `@CamelAiTools` annotation.
+Camel agents (`langchain4j-agent` endpoints) receive registry tools only through their endpoint’s `tags` parameter — an agent without `tags` receives no registry tools (tools from the agent’s other sources, such as MCP clients or custom tool objects, are unaffected). Quarkus LangChain4j AI services (`@RegisterAiService` interfaces and programmatically built `AiServices`) receive every registered tool by default; restrict a service to a subset with the `org.apache.camel.quarkus.component.ai.tool.CamelAiTools` annotation.
+
+```java
+@RegisterAiService
+@CamelAiTools("support")
+public interface SupportAgent {
+    String chat(@UserMessage String message);
+}
+```
+
+The tool provider backing this is registered automatically when Quarkus LangChain4j and `camel-langchain4j-agent` are on the classpath.

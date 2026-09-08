@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788849736729,
+  "generated": 1788860793545,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4965,6 +4965,12 @@
               "path": "salesforce-delete-sink.adoc",
               "url": "/camel-kamelets/next/salesforce-delete-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/salesforce-delete-sink.svg\" alt=\"salesforce delete sink\"></span> Salesforce Delete Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "salesforce-pubsub-source.adoc",
+              "url": "/camel-kamelets/next/salesforce-pubsub-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/salesforce-pubsub-source.svg\" alt=\"salesforce pubsub source\"></span> Salesforce Pub/Sub Source"
             },
             {
               "module": "ROOT",
