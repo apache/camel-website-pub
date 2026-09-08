@@ -1,0 +1,28 @@
+# Runtime
+
+![runtimes](../_images/architecture/camel-k-runtimes.jpg)
+
+Camel runtime application is in charge to bridge the output produced by the operator during a `Build` to the Camel runtime. It will finally execute an application containing the `Route` as defined by `Camel K` user. It will take care of converting all the different configuration and tuning into something meaningful to `Apache Camel` framework. We use a java application, `camel-k-runtime` which is based on `camel-quarkus` to achieve the goal.
+
+## Based on Camel Quarkus
+
+[Camel K runtime](https://github.com/apache/camel-k-runtime) is a java application in charge to prepare the Camel environment needed to run an `Integration`. The application is shipped as a java dependency with Camel K releases and uses Camel Quarkus under the hood.
+
+Camel Quarkus is an Apache Camel subproject that will make your Camel Integration run with the technology offered by [Quarkus](https://quarkus.io/) project. Thanks to it, you will be able to reduce resource footprint and have a faster startup, which is a fundamental aspect of cloud native development.
+
+Learn more in the [Camel Quarkus documentation section](../../../camel-quarkus/3.33.x/index.md).
+
+## Runtime main duties
+
+The main goal of the Camel-k-runtime is to launch a Camel Quarkus application and setup the routes configured by the Camel K user. When a user run a new `Integration`, the [`Operator`](operator.md) will take care of building an application basing it on Camel K Runtime dependency.
+
+## Plain Camel Quarkus runtime
+
+More recently we are working to make it easier and run a Camel Quarkus application out of the box instead. You’re strongly recommended to use the `plain-quarkus` Camel trait runtime provider for any Integration you’re running. You can do this following the example:
+
+```shell
+kamel run test.yaml -t camel.runtime-provider=plain-quarkus
+```
+
+> **Note**
+> we plan to graduate plain Camel Quarkus runtime as default runtime in the future (likely in the next major release).

@@ -1,0 +1,31 @@
+# Configuring a secret for the container registry
+
+You can host your container images on [Docker Hub](https://hub.docker.com/) or any other registry out there. Most of the time, the following procedure will be enough to create a secret credentials and let Camel K access privately to a container registry.
+
+## How to create a registry secret
+
+In some cases, you might already have a push/pull secret for your container registry in your current namespace. If it’s not the case, you can use the following command to create one:
+
+```bash
+kubectl create secret docker-registry registry --docker-server <my-server> --docker-username <my-user> --docker-password <my-password>
+```
+
+Another possibility is to upload to the cluster your entire list of push/pull secrets:
+
+```bash
+# First login to your registry and provide credentials
+docker login
+# Then create a secret from your credentials file (may contain passwords for other registries)
+kubectl create secret generic your-secret-name --from-file ~/.docker/config.json
+```
+
+After you’ve created the secret, you can provide it to your environment variable configuration:
+
+```none
+REGISTRY_ADDRESS: <my-registry-address>
+REGISTRY_ORGANIZATION: <my-organization> (optional)
+REGISTRY_SECRET: <my-secret-credentials>
+```
+
+> **Note**
+> make sure any credential contains the valid authentication servers: for instance, `docker.io` is used by **Jib**.

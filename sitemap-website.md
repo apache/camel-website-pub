@@ -1,11 +1,15 @@
-urls[850]{loc,lastmod}:
+urls[852]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-09-08T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/camel-k-2-11/,2026-09-08T00:00:00+00:00
+  https://camel.apache.org/,2026-09-08T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-09-08T00:00:00+00:00
+  https://camel.apache.org/categories/Roadmap/,2026-09-08T00:00:00+00:00
+  https://camel.apache.org/releases/k-2.11.0/,2026-09-07T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-09-01T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-09-01T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/,2026-09-01T00:00:00+00:00
-  https://camel.apache.org/,2026-09-01T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-09-01T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-genai-observability-jbang/,2026-09-01T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-08-31T00:00:00+00:00
   https://camel.apache.org/releases/upgrade-recipes-4.22.0/,2026-08-31T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.22.0/,2026-08-29T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-59230.md,2026-08-24T10:00:00+02:00
@@ -19,7 +23,6 @@ urls[850]{loc,lastmod}:
   https://camel.apache.org/security/,2026-08-24T10:00:00+02:00
   https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/,2026-08-24T00:00:00+00:00
   https://camel.apache.org/releases/q-3.39.0/,2026-08-24T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-08-24T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.4/,2026-08-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/RELEASE-4.18.4/,2026-08-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.14.9/,2026-08-16T00:00:00+00:00
@@ -153,7 +156,6 @@ urls[850]{loc,lastmod}:
   https://camel.apache.org/blog/2026/04/RELEASE-4.19.0/,2026-04-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/04/camel-k-2-10/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/releases/k-2.10.0/,2026-04-13T00:00:00+00:00
-  https://camel.apache.org/categories/Roadmap/,2026-04-13T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.18.1/,2026-04-03T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.14.5/,2026-03-30T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.18.0/,2026-03-30T00:00:00+00:00

@@ -1,0 +1,42 @@
+# Knative Trait
+
+Deprecated since2.11.0 The Knative trait automatically discovers addresses of Knative resources and inject them into the running integration.
+
+The Camel Knative component will then use the full configuration to configure the routes.
+
+> **Warning**
+> The Knative trait is **deprecated** and will be removed in future release versions: use Camel (Quarkus) Knative component instead.
+
+The trait is enabled by default when the Knative profile is active.
+
+This trait is available in the following profiles: **Knative**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait knative.[key]=[value] --trait knative.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `knative.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `knative.config` | `string` | Can be used to inject a Knative complete configuration in JSON format. |
+| `knative.channelSources` | `[]string` | List of channels used as source of integration routes. Can contain simple channel names or full Camel URIs. |
+| `knative.channelSinks` | `[]string` | List of channels used as destination of integration routes. Can contain simple channel names or full Camel URIs. |
+| `knative.endpointSources` | `[]string` | List of channels used as source of integration routes. |
+| `knative.endpointSinks` | `[]string` | List of endpoints used as destination of integration routes. Can contain simple endpoint names or full Camel URIs. |
+| `knative.eventSources` | `[]string` | List of event types that the integration will be subscribed to. Can contain simple event types or full Camel URIs (to use a specific broker different from "default"). |
+| `knative.eventSinks` | `[]string` | List of event types that the integration will produce. Can contain simple event types or full Camel URIs (to use a specific broker). |
+| `knative.filterSourceChannels` | `bool` | Enables filtering on events based on the header "ce-knativehistory". Since this header has been removed in newer versions of Knative, filtering is disabled by default. |
+| `knative.sinkBinding` | `bool` | Allows binding the integration to a sink via a Knative SinkBinding resource. This can be used when the integration targets a single sink. It’s enabled by default when the integration targets a single sink (except when the integration is owned by a Knative source). |
+| `knative.auto` | `bool` | Enable automatic discovery of all trait properties. |
+| `knative.namespaceLabel` | `bool` | Enables the camel-k-operator to set the "bindings.knative.dev/include=true" label to the namespace As Knative requires this label to perform injection of K\_SINK URL into the service. If this is false, the integration pod may start and fail, read the SinkBinding Knative documentation. (default: true) |
+| `knative.filters` | `[]string` | Sets filter attributes on the event stream (such as event type, source, subject and so on). A list of key-value pairs that represent filter attributes and its values. The syntax is KEY=VALUE, e.g., `source="my.source"`. Filter attributes get set on the Knative trigger that is being created as part of this integration. |
+| `knative.filterEventType` | `bool` | Enables the default filtering for the Knative trigger using the event type If this is true, the created Knative trigger uses the event type as a filter on the event stream when no other filter criteria is given. (default: true) |
+> **Note**
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

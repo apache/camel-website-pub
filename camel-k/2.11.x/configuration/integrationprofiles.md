@@ -1,0 +1,66 @@
+# Integration Profiles
+
+Admin users may add an `IntegrationProfile` resource to any namespace. The profile holds custom settings which can be applied to all Integrations.
+
+The profile must be explicitly selected by an annotation referencing the integration profile name (any resource belonging to the "camel.apache.org" group can select a particular profile configuration).
+
+To specify which profile should be used for an Integration, the resource can be annotated like in the following example:
+
+```yaml
+kind: Integration
+apiVersion: camel.apache.org/v1
+metadata:
+  annotations:
+    camel.apache.org/integration-profile.id: my-profile
+# ...
+```
+
+The value of the `camel.apache.org/integration-profile.id` annotation must match the name of an IntegrationProfile custom resource which is available in the same namespace of the Integration. Here an example of a profile:
+
+```yaml
+kind: IntegrationProfile
+apiVersion: camel.apache.org/v1
+metadata:
+  name: my-profile
+spec:
+  traits:
+    camel:
+      runtimeProvider: plain-quarkus
+      runtimeVersion: 3.30.8
+    owner:
+      targetLabels:
+      - camel.apache.org/app
+...
+# ...
+```
+
+The selection of a IntegrationProfile enables new configuration scenarios, for example, sharing global configuration options for groups of Integrations.
+
+## Security
+
+The `IntegrationProfile` is the secure way to provide sensitive building information and common configuration. For example, you can provide a common security configuration to access securely to a container registry. Or, as seen above a common runtime configuration (traits) to adopt. The profile contains all the configuration required for the operator to build, package and run the application. Here a quick snapshot of the main parameters (see more in the API definition):
+
+```yaml
+kind: IntegrationProfile
+apiVersion: camel.apache.org/v1
+metadata:
+  name: my-profile
+spec:
+  build:
+    ...
+    registry:
+      ...
+    maven:
+      ...
+    repositories:
+      ...
+  dependencies:
+    ...
+  traits:
+    ...
+```
+
+The presence of the profile overrides the default operator configuration which is normally configured via environment variables.
+
+> **Note**
+> each Integration can use any IntegrationProfile available in their namespace.

@@ -1,0 +1,56 @@
+# Health Trait
+
+The health trait is responsible for configuring the container probes on the Integration container.
+
+> **Note**
+> this trait is enabled by default in `plain-quarkus` runtime, leveraging the `camel-observability-services` component. You can disable turning it off.
+
+The trait uses Camel health component in order to provide a readiness probe. You can also configure liveness and startup probes which are disabled by default. The default values (delay, timeout, etc…​), whereas not specified are the default ones provided by Kubernetes.
+
+You can also configure manually the trait parameters in order to provide a customized probes configuration.
+
+This trait is available in the following profiles: **Kubernetes, Knative, OpenShift**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait health.[key]=[value] --trait health.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `health.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `health.livenessProbeEnabled` | `bool` | Configures the liveness probe for the integration container (default `false`). |
+| `health.livenessScheme` | `string` | Scheme to use when connecting to the liveness probe (default `HTTP`). |
+| `health.livenessInitialDelay` | `int32` | Number of seconds after the container has started before the liveness probe is initiated. |
+| `health.livenessTimeout` | `int32` | Number of seconds after which the liveness probe times out. |
+| `health.livenessPeriod` | `int32` | How often to perform the liveness probe. |
+| `health.livenessSuccessThreshold` | `int32` | Minimum consecutive successes for the liveness probe to be considered successful after having failed. |
+| `health.livenessFailureThreshold` | `int32` | Minimum consecutive failures for the liveness probe to be considered failed after having succeeded. |
+| `health.livenessProbe` | `string` | The liveness probe path to use (default provided by the dependency used). |
+| `health.livenessPort` | `int32` | The liveness port to use (default 8080). |
+| `health.readinessProbeEnabled` | `bool` | Configures the readiness probe for the integration container (default `true`). |
+| `health.readinessScheme` | `string` | Scheme to use when connecting to the readiness probe (default `HTTP`). |
+| `health.readinessInitialDelay` | `int32` | Number of seconds after the container has started before the readiness probe is initiated. |
+| `health.readinessTimeout` | `int32` | Number of seconds after which the readiness probe times out. |
+| `health.readinessPeriod` | `int32` | How often to perform the readiness probe. |
+| `health.readinessSuccessThreshold` | `int32` | Minimum consecutive successes for the readiness probe to be considered successful after having failed. |
+| `health.readinessFailureThreshold` | `int32` | Minimum consecutive failures for the readiness probe to be considered failed after having succeeded. |
+| `health.readinessProbe` | `string` | The readiness probe path to use (default provided by the dependency used). |
+| `health.readinessPort` | `int32` | The readiness port to use (default 8080). |
+| `health.startupProbeEnabled` | `bool` | Configures the startup probe for the integration container (default `false`). |
+| `health.startupScheme` | `string` | Scheme to use when connecting to the startup probe (default `HTTP`). |
+| `health.startupInitialDelay` | `int32` | Number of seconds after the container has started before the startup probe is initiated. |
+| `health.startupTimeout` | `int32` | Number of seconds after which the startup probe times out. |
+| `health.startupPeriod` | `int32` | How often to perform the startup probe. |
+| `health.startupSuccessThreshold` | `int32` | Minimum consecutive successes for the startup probe to be considered successful after having failed. |
+| `health.startupFailureThreshold` | `int32` | Minimum consecutive failures for the startup probe to be considered failed after having succeeded (default 10 if not specified). |
+| `health.startupProbe` | `string` | The startup probe path to use (default provided by the dependency used). |
+| `health.startupPort` | `int32` | The startup port to use (default 8080). |
+> **Note**
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`

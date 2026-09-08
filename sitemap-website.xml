@@ -2,16 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2026-09-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/09/camel-k-2-11/</loc>
+    <lastmod>2026-09-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-09-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
+    <lastmod>2026-09-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Roadmap/</loc>
+    <lastmod>2026-09-08T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/k-2.11.0/</loc>
+    <lastmod>2026-09-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-09-07T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/categories/AI/</loc>
     <lastmod>2026-09-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-09-01T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/</loc>
-    <lastmod>2026-09-01T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/</loc>
     <lastmod>2026-09-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Howtos/</loc>
@@ -19,9 +34,6 @@
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camel-genai-observability-jbang/</loc>
     <lastmod>2026-09-01T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
-    <lastmod>2026-08-31T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/upgrade-recipes-4.22.0/</loc>
     <lastmod>2026-08-31T00:00:00+00:00</lastmod>
@@ -60,9 +72,6 @@
     <lastmod>2026-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.39.0/</loc>
-    <lastmod>2026-08-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
     <lastmod>2026-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.18.4/</loc>
@@ -462,9 +471,6 @@
     <lastmod>2026-04-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/k-2.10.0/</loc>
-    <lastmod>2026-04-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Roadmap/</loc>
     <lastmod>2026-04-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.18.1/</loc>

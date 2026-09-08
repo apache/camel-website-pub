@@ -128,6 +128,7 @@ Enum values:
 | **produces** (consumer) | The content type this endpoint produces, such as application/xml or application/json. |  | String |
 | **requestTimeout** (consumer) | The period in milliseconds after which the request should be timed out. |  | long |
 | **returnHttpRequestHeaders** (consumer) | Whether to include HTTP request headers (Accept, User-Agent, etc.) into HTTP response produced by this endpoint. | false | boolean |
+| **stripUriPrefix** (consumer) | Whether to strip the registered consumer path from CamelHttpPath after the request has been matched, so the exchange sees the path relative to this consumer instead of the full raw request path. Combined with the http producer’s bridgeEndpoint option this allows building a path-based reverse proxy without manual header manipulation, e.g. a route on platform-http:/reverse-proxy with matchOnUriPrefix=true and stripUriPrefix=true bridged to [http://backend](http://backend) forwards /reverse-proxy/get to [http://backend/get](http://backend/get) instead of [http://backend/reverse-proxy/get](http://backend/reverse-proxy/get). CamelHttpUri and CamelHttpUrl are left untouched. The other HTTP consumers (camel-servlet, camel-jetty, camel-netty-http, camel-undertow) already behave this way by default; this option brings platform-http in line with them without changing its default behavior. | false | boolean |
 | **useBodyHandler** (consumer) | Whether to use BodyHandler for the request. If set to false then the request will no be read and parsed. | true | boolean |
 | **useCookieHandler** (consumer) | Whether to enable the Cookie Handler that allows Cookie addition, expiry, and retrieval (currently only supported by camel-platform-http-vertx). | false | boolean |
 | **useStreaming** (consumer) | Whether to use streaming for large requests and responses (currently only supported by camel-platform-http-vertx). | false | boolean |
@@ -275,6 +276,26 @@ Configure `expected-issuer` and `expected-audience` for production resource-serv
 Platform HTTP component can act as a reverse proxy. In that case, some headers are populated from the absolute URL received on the request line of the HTTP request. Those headers are specific to the underlining platform.
 
 At this moment, this feature is only supported for Quarkus implemented in `camel-platform-http-vertx` component.
+
+### Forwarding requests under a path prefix (path-based reverse proxy)
+
+This is a different scenario from the `platform-http:proxy` forward proxy described above, which is a `Host` header based forward proxy and only supported in `camel-platform-http-vertx`. Here, the consumer is registered under an ordinary path, e.g. `/reverse-proxy`, and requests received under that path should be forwarded to a fixed backend with the prefix stripped, using the [http](../4.22.x/http-component.md) producer’s `bridgeEndpoint` option.
+
+Enable the consumer option `stripUriPrefix` so the matched consumer path is removed from `CamelHttpPath` before the route runs:
+
+```java
+from("platform-http:/reverse-proxy?matchOnUriPrefix=true&stripUriPrefix=true")
+    .to("http://backend?bridgeEndpoint=true");
+```
+
+`matchOnUriPrefix` is not required for `stripUriPrefix`; it is only needed to also forward requests under sub-paths. On an exact match (e.g. `GET /reverse-proxy`) the path is stripped to `/`.
+
+   
+| Incoming request | `CamelHttpPath` (`stripUriPrefix=false`, default) | `CamelHttpPath` (`stripUriPrefix=true`) | Forwarded to |
+| --- | --- | --- | --- |
+| `GET /reverse-proxy/get` | `/reverse-proxy/get` | `/get` | `[http://backend/get](http://backend/get)` |
+
+`CamelHttpUri`/`CamelHttpUrl` still hold the full original request, only `CamelHttpPath` is rewritten. This option is currently implemented in `camel-platform-http-vertx`.
 
 ### File Attachments handling
 

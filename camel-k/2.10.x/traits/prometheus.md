@@ -1,0 +1,52 @@
+# Prometheus Trait
+
+The Prometheus trait configures a Prometheus-compatible endpoint. It also creates a `PodMonitor` resource, so that the endpoint can be scraped automatically, when using the Prometheus operator.
+
+The metrics are exposed using Micrometer Metrics.
+
+> **Warning**
+> The creation of the `PodMonitor` resource requires the [Prometheus Operator](https://github.com/coreos/prometheus-operator) custom resource definition to be installed. You can set `pod-monitor` to `false` for the Prometheus trait to work without the Prometheus Operator.
+
+> **Warning**
+> By default the metrics API is not available in JSON
+
+The Prometheus trait is disabled by default.
+
+This trait is available in the following profiles: **Kubernetes, Knative, OpenShift**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait prometheus.[key]=[value] --trait prometheus.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `prometheus.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `prometheus.pod-monitor` | `bool` | Whether a `PodMonitor` resource is created (default `true`). |
+| `prometheus.pod-monitor-labels` | `[]string` | The `PodMonitor` resource labels, applicable when `pod-monitor` is `true`. |
+
+## Examples
+
+-   To activate the metrics and default scrapping through a new PodMonitor:
+    
+    ```console
+    $ kamel run -t prometheus.enable=true ...
+    ```
+    
+-   To activate the metrics when the Prometheus Operator is not available:
+    
+    ```console
+    $ kamel run -t prometheus.enable=true -t pod-monitor=false ...
+    ```
+    
+-   To activate the metrics with JSON format available :
+    
+    ```console
+    $ kamel run -t prometheus.enable=true -t builder.properties="quarkus.micrometer.export.json.enabled=true"...
+    ```

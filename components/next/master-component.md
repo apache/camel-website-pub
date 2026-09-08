@@ -114,6 +114,12 @@ Enum values:
 
 ## Usage
 
+### Starting the delegated consumer
+
+When a node takes the leadership, the delegated consumer is started in the background, and the start is retried when it fails, for instance because the back end it consumes from is not reachable yet. The retries are configured on the component with `backOffDelay` (the delay between attempts, 5000 millis by default) and `backOffMaxAttempts` (the number of attempts, 10 by default).
+
+Once the attempts are used up, the node keeps the leadership but consumes nothing until the leadership changes again, which is logged at ERROR level. Set `backOffMaxAttempts` to 0 to keep retrying for as long as the node is the leader instead.
+
 ### Using the master endpoint
 
 Prefix any camel endpoint with **master:someName:** where _someName_ is a logical name and is used to acquire the master lock. For instance:

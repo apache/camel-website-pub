@@ -1,0 +1,157 @@
+# Jvm Trait
+
+The JVM trait is used to configure the JVM that runs the Integration. This trait is configured only for Integration and related IntegrationKits (bound to a container image) built by Camel K operator. If the system detects the usage of a different container image (ie, built externally), then, the trait is disabled by the platform.
+
+This trait is available in the following profiles: **Kubernetes, Knative, OpenShift**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait jvm.[key]=[value] --trait jvm.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `jvm.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `jvm.debug` | `bool` | Activates remote debugging, so that a debugger can be attached to the JVM, e.g., using port-forwarding |
+| `jvm.debug-suspend` | `bool` | Suspends the target JVM immediately before the main class is loaded |
+| `jvm.print-command` | `bool` | Prints the command used the start the JVM in the container logs (default `true`).
+Deprecated: no longer in use.
+
+ |
+| `jvm.debug-address` | `string` | Transport address at which to listen for the newly launched JVM (default `*:5005`) |
+| `jvm.options` | `[]string` | A list of JVM options |
+| `jvm.classpath` | `string` | Additional JVM classpath (use `Linux` classpath separator) |
+| `jvm.jar` | `string` | The Jar dependency which will run the application. Leave it empty for managed Integrations. |
+| `jvm.agents` | `[]string` | A list of JVM agents to download and execute with format `<agent-name>;<agent-url>[;<jvm-agent-options>]`. |
+| `jvm.ca-certificates` | `[]github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.CACertConfig` | A list of CA certificates to import into the truststore. Certificates must be mounted via the mount trait. |
+| `jvm.base-truststore` | `github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.BaseTruststore` | Optional base truststore to use as the starting point for adding certificates. |
+| `jvm.truststore-password-path` | `string` | Path to a file containing the password for the generated truststore. Required when using ca-certificates without base-truststore. |
+| `jvm.ca-cert-mount-path` | `string` | The path where the generated truststore will be mounted (default `/etc/camel/conf.d/_truststore`). |
+| `jvm.ca-cert` | `string` | Deprecated: Use CACertificates instead. Path to a PEM-encoded CA certificate file. |
+| `jvm.ca-cert-password` | `string` | Deprecated: Use CACertificates instead. Path to a file containing the truststore password. |
+
+## Usage of jar parameters
+
+The `jar` parameter is something the user should not worry about, unless that, for any reason, he wants to specify which is the executable dependency to use. Mind that, in order to do that, the base image used to build the container require a java binary executable from path (ie, `/usr/bin/java`).
+
+This parameters enables also the possibility to use the trait when running a self managed build Integrations. In such circumstances, the user can run a Camel application built externally and make use of the trait configuration as well as for example:
+
+```console
+$ kamel run --image docker.io/squakez/my-camel-sb:1.0.0 -t jvm.jar=/deployments/my-camel-app.jar -t jvm.options=-Xmx1024M
+```
+
+The above command would allow the execution of the JVM trait given that the user specify the path to the jar to execute.
+
+## Jolokia agent configuration
+
+You can use the `jvm.agents` configuration to run any given agent. Additionally you can use the other traits to expose any service provided by your agent. Take, as an example, the Jolokia JVM agent:
+
+```console
+$ kamel run test.yaml -t jvm.agents=jolokia;https://repo1.maven.org/maven2/org/jolokia/jolokia-agent-jvm/2.3.0/jolokia-agent-jvm-2.3.0-javaagent.jar;host=* -t container.ports=jolokia;8778 -t service.ports=jolokia;8778;8778 -d camel:management
+```
+
+The Jolokia endpoint will be exposed to port `8778` on the Service created for this Integration.
+
+## JVM classpath
+
+You can use `jvm.classpath` configuration with dependencies available externally (ie, via `mount.resources` trait):
+
+```console
+kubectl create configmap my-dep --from-file=sample-1.0.jar
+...
+$ kamel run --resource configmap:my-dep -t jvm.classpath=/etc/camel/resources/my-dep/sample-1.0.jar MyApp.java
+```
+
+## Trusting Custom CA Certificates
+
+When connecting to services that use TLS with certificates signed by a private CA (e.g., internal Elasticsearch, Kafka, or databases), you can use the `ca-certificates` option to add CA certificates to the JVM’s truststore.
+
+### Single Certificate
+
+First, create Kubernetes Secrets containing the CA certificate and truststore password:
+
+```console
+kubectl create secret generic my-private-ca --from-file=ca.crt=/path/to/ca-certificate.pem
+kubectl create secret generic my-truststore-pwd --from-literal=password=mysecurepassword
+```
+
+Then mount the secrets using the mount trait and reference the file paths:
+
+```console
+$ kamel run MyRoute.java \
+  -t mount.configs=secret:my-private-ca \
+  -t mount.configs=secret:my-truststore-pwd \
+  -t jvm.ca-certificates[0].cert-path=/etc/camel/conf.d/_secrets/my-private-ca/ca.crt \
+  -t jvm.truststore-password-path=/etc/camel/conf.d/_secrets/my-truststore-pwd/password
+```
+
+### Multiple Certificates
+
+You can add multiple CA certificates to the truststore:
+
+```console
+$ kamel run MyRoute.java \
+  -t mount.configs=secret:ca1 \
+  -t mount.configs=secret:ca2 \
+  -t mount.configs=secret:truststore-pwd \
+  -t jvm.ca-certificates[0].cert-path=/etc/camel/conf.d/_secrets/ca1/ca.crt \
+  -t jvm.ca-certificates[1].cert-path=/etc/camel/conf.d/_secrets/ca2/ca.crt \
+  -t jvm.truststore-password-path=/etc/camel/conf.d/_secrets/truststore-pwd/password
+```
+
+### Using a Base Truststore (Preserving JDK Public CAs)
+
+To preserve the JDK’s default public CA certificates while adding your custom certificates, use the `base-truststore` option:
+
+```console
+$ kamel run MyRoute.java \
+  -t mount.configs=secret:my-private-ca \
+  -t mount.configs=secret:cacerts-pwd \
+  -t jvm.base-truststore.truststore-path=/opt/java/openjdk/lib/security/cacerts \
+  -t jvm.base-truststore.password-path=/etc/camel/conf.d/_secrets/cacerts-pwd/password \
+  -t jvm.ca-certificates[0].cert-path=/etc/camel/conf.d/_secrets/my-private-ca/ca.crt
+```
+
+> **Note**
+> When using `base-truststore`, you can optionally provide `truststore-password-path` to set a different password for the output truststore. If not provided, the base truststore password is used.
+
+### Truststore Password Resolution
+
+The truststore password is determined using this priority:
+
+1.  `truststore-password-path` (if explicitly provided)
+    
+2.  `base-truststore.password-path` (if base-truststore is configured)
+    
+3.  Validation error (password is required when using `ca-certificates`)
+    
+
+This will automatically:
+
+1.  Mount the secrets to the integration container (via mount trait)
+    
+2.  Generate a JVM truststore using an init container
+    
+3.  Configure the JVM to use the generated truststore via `-Djavax.net.ssl.trustStore`
+    
+
+### Deprecated Syntax (Backward Compatible)
+
+The legacy `ca-cert` and `ca-cert-password` options are still supported but deprecated:
+
+```console
+$ kamel run MyRoute.java \
+  -t mount.configs=secret:my-private-ca \
+  -t mount.configs=secret:my-truststore-pwd \
+  -t jvm.ca-cert=/etc/camel/conf.d/_secrets/my-private-ca/ca.crt \
+  -t jvm.ca-cert-password=/etc/camel/conf.d/_secrets/my-truststore-pwd/password
+```
+
+> **Note**
+> We recommend migrating to the new `ca-certificates` syntax for better multi-certificate support and explicit truststore password configuration.

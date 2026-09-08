@@ -1,0 +1,154 @@
+# Dependencies and Component Resolution
+
+Camel K tries to resolve automatically a wide range of dependencies that are required to run your integration code.
+
+For example, take the following integration:
+
+```none
+from("imap://admin@myserver.com")
+  .to("seda:output")
+```
+
+Since the integration has a endpoint starting with the **"imap:" prefix**, Camel K is able to **automatically add the "camel-mail" component** to the list of required dependencies. The `seda:` endpoint belongs to `camel-core` that is automatically added to all integrations, so Camel K will not add additional dependencies for it. This dependency resolution mechanism is transparent to the user, that will just see the integration running.
+
+Automatic resolution is also a nice feature in _dev mode_, because you are allowed to add all components you need **without exiting the dev loop**.
+
+> **Note**
+> Camel K won’t be able to resolve automatically the dependencies when your routes specify dynamic URIs.
+
+## Import path dependencies
+
+While developing your route, you will start including references to Camel dependencies via Java (or any other DSL) import mechanism. Camel K is able to scan and detect such dependencies as well. Take the following example:
+
+```java
+import org.apache.camel.builder.RouteBuilder;
+...
+import org.apache.camel.component.kafka.KafkaComponent;
+
+public class Test extends RouteBuilder {
+
+    @Override
+    public void configure() throws Exception {
+        from("timer:java?period={{time:1000}}").
+            ...
+    }
+}
+```
+
+Camel K will be able to include `camel-kafka` dependency as it discover scanning the import paths. No need to specify it in such circumstances.
+
+## Add explicit dependencies
+
+You can explicitly add dependency using the `-d` flag (short name of the flag `--dependency`) of the `kamel run` command. This is useful when you need to use dependencies that are not included in the Camel catalog or when the URI of your routes cannot be automatically discovered (see Dynamic URIs). For example:
+
+```none
+kamel run -d mvn:com.google.guava:guava:26.0-jre -d camel:http Integration.java
+```
+
+With that command you will add a dependency of Guava and the Camel HTTP component.
+
+## Kind of dependencies
+
+The `-d` flag of the `kamel run` command is flexible and support multiple kind of dependencies.
+
+**Camel dependencies** can be added directly using the `-d` flag like this:
+
+```none
+kamel run -d camel:http Integration.java
+```
+
+In this case, the dependency will be added with the correct version. Note that the standard notation for specifying a Camel dependency is `camel:xxx`, while `kamel` also accepts `camel-xxx` for usability.
+
+While resolving Camel dependencies (`camel:xxx` or `camel-xxx`) the Camel K operator tries to find the dependency in the [Camel catalog](../architecture/cr/camel-catalog.md). In case the dependency is not listed in the catalog for some reason you will be provided with an error. Please make sure to use Camel dependencies listed in the catalog as these components are eligible to being used in Camel K (e.g. due to proper version resolving and runtime optimization).
+
+Using Camel dependencies not listed in the catalog may lead to unexpected behavior and is not supported. In case you do have a custom Camel dependency that you want to use as part of an Integration you can add this as an external Maven dependency using the respective Maven coordinates of your project.
+
+> **Note**
+> altough not recommeded, you can use `mvn:org.apache.camel` group id to skip the catalog validation in case of Camel dependencies not yet available in the catalog. Mind that this may not always work.
+
+**External dependencies** can be added using the `-d` flag, the `mvn` prefix, and the maven coordinates:
+
+```none
+kamel run -d mvn:com.google.guava:guava:26.0-jre Integration.java
+```
+
+Note that if your dependencies belong to a private repository, this repository needs to be defined. See [Configure Builds](../installation/builds.md).
+
+### Jitpack dependencies
+
+If your dependency is not published in a `maven` repository you will find very useful [Jitpack](https://jitpack.io/) as a way to provide any custom dependency to your runtime Integration environment. In certain occasion you will find useful to include not only your route definition, but also some helper class or any other class which has to be used while defining the Integration behavior. With Jitpack you will be able to compile on the fly a java project hosted in a remote repository and use the produced package as a dependency of your Integration.
+
+The usage is the same as defined above for any maven dependency. It can be added using the `-d` flag, but, this time, you need to define the prefix as expected for the project repository you are using (ie, `github`). It has to be provided in the form `repository-kind:user/repo/version`. As an example, you can provide the Apache Commons CSV dependency by executing:
+
+```none
+kamel run -d github:apache/commons-csv/1.1 Integration.java
+```
+
+We support the most important public code repositories:
+
+```none
+github:user/repo/version
+gitlab:user/repo/version
+bitbucket:user/repo/version
+gitee:user/repo/version
+azure:user/repo/version
+```
+
+The `version` can be omitted when you are willing to use the `main` branch. Otherwise it will represent the branch or tag used in the project repo.
+
+## Custom components
+
+When you are running advanced Integrations you may find useful the possibility to create a Camel custom component. A custom component is like any other embedded component, but, it is not available out of the box in the catalog, hence, you will need to provide the dependency explicitly. For example, given the following route configured to run an `echo:test` endpoint:
+
+```yaml
+- route:
+    from:
+      uri: timer:yaml
+      parameters:
+        period: "1000"
+      steps:
+        - setBody:
+            simple: Hello Camel from ${routeId}
+        - to:
+            uri: echo:test
+        - log: ${body}
+```
+
+you will need to include the custom component dependency (which, must be developed as expected by Camel framework) and a few more build time properties (only for Quarkus runtime). You can see the example we’ve provided in the [`camel-echo` component Github repository](https://github.com/squakez/camel-echo). What’s important is that the dependency is published and your Maven repository can reach it. In the example below we’re using the Jitpack dependency:
+
+```bash
+kamel run custom-echo-component-route.yaml \
+    -d github:squakez/camel-echo \
+	-t builder.properties=quarkus.index-dependency.camel-echo.group-id=com.github.squakez \
+	-t builder.properties=quarkus.index-dependency.camel-echo.artifact-id=camel-echo \
+	-t builder.properties=quarkus.camel.service.discovery.include-patterns=META-INF/services/org/apache/camel/echo
+```
+
+This is required to instruct the compiler about the Jandex index. You can replace the `custom-echo` with the name of your dependency and you will need to provide the same SPI also provided in your custom component dependency.
+
+> **Note**
+> if you’re running Camel Main or Spring Boot runtimes (for example, via Git repository build) you won’t need to provide any build time property because those runtimes leverage the existing SPI provided in the dependency.
+
+The above approach is the simplest one you can use and it will work if your custom component has not any particular Quarkus requirement or you don’t need to run in Quarkus native mode. If that is the case or you want to avoid proving the builder properties, then, you will have to write a Quarkus extension and provide just the runtime extension dependency to your application. Take as example the [`camel-echo-quarkus-extenstion` Github repository](https://github.com/squakez/camel-echo-quarkus-extension). You will need to publish it to a Maven repository reachable by your operator and later you can just run something like:
+
+```bash
+kamel run custom-echo-component-route.yaml -d mvn:com.example.camel:camel-quarkus-echo:1.0.0
+```
+
+During the compilation, the runtime dependency will instruct the compiler how to properly use the Camel custom component it refers.
+
+## Dynamic URIs
+
+Unfortunately, Camel K won’t be able to always discover all your dependencies. When you are creating an URI dynamically, then you will also need to instruct Camel K which component to load (via `-d` parameter). An example is illustrated in the following code snippet:
+
+DynamicURI.java
+
+```java
+...
+String myTopic = "purchases"
+from("kafka:" + myTopic + "? ... ")
+    .to(...)
+...
+```
+
+Here the `from` URI is dynamically created from some variables that will be resolved at runtime. In cases like this, you will need to specify the component and the related dependency to be loaded in the `Integration`.

@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 383 in 309 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 384 in 310 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -323,6 +323,7 @@ Number of Non-Core Components: 383 in 309 JAR artifacts (4 deprecated)
 | [OAI-PMH](oaipmh-component.md) | camel-oaipmh | Stable | 3.5 | Harvest metadata using OAI-PMH protocol |
 | [Olingo2](olingo2-component.md) | camel-olingo2 | Stable-deprecated | 2.14 | Communicate with OData 2.0 services using Apache Olingo. |
 | [Olingo4](olingo4-component.md) | camel-olingo4 | Stable-deprecated | 2.19 | Communicate with OData 4.0 services using Apache Olingo OData API. |
+| [OPA](opa-component.md) | camel-opa | Preview | 4.23 | Evaluate Open Policy Agent (Rego) policies against an Exchange and record the allow/deny decision on it. |
 | [OPC UA Browser](milo-browse-component.md) | camel-milo | Stable | 3.15 | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
 | [OPC UA Client](milo-client-component.md) | camel-milo | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](milo-server-component.md) | camel-milo | Stable | 2.19 | Make telemetry data available as an OPC UA server. |

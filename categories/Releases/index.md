@@ -2,7 +2,8 @@
 
 Release feed for Apache Camel and related projects.
 
-releases[113]{title,link,pubDate,description}:
+releases[114]{title,link,pubDate,description}:
+  Camel K 2.11.0|https://camel.apache.org/blog/2026/09/camel-k-2-11/index.md|Tue, 08 Sep 2026 00:00:00 +0000|*© National Gallery of Art (nga.gov) We&rsquo;re happy to announce the availability of Apache Camel K version 2.11.0. This is a special release as we have decided to move to a new runtime provider, pl
   Camel Quarkus 3.39.0 Released|https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/index.md|Mon, 24 Aug 2026 00:00:00 +0000|Camel Quarkus 3.39.0 release
   RELEASE 4.18.4|https://camel.apache.org/blog/2026/08/RELEASE-4.18.4/index.md|Mon, 17 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.4 LTS release with 66 new features and improvements. The artifacts are published and ready for you to download from the Centr
   RELEASE 4.14.9|https://camel.apache.org/blog/2026/08/RELEASE-4.14.9/index.md|Sun, 16 Aug 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.14.9 patch release with 38 bug fixes and improvements. The artifacts are published and ready for you to download from the Centra

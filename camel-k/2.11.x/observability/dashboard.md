@@ -1,0 +1,102 @@
+# Camel Monitor Operator
+
+[Camel Monitor operator](https://camel-tooling.github.io/camel-dashboard/docs/installation-guide/advanced/operator/) is a Kubernetes operator that you can use to **monitor your fleet of Camel applications** deployed in the cloud. Whether you use Camel K to deploy or not, the Camel Monitor operator is a great tool that you can use to monitor your Camel fleet.
+
+> **Note**
+> the project is in developer preview mode.
+
+The Camel Monitor operator (and the GUI exposed via [Camel Dashboard](https://camel-tooling.github.io/camel-dashboard/)) was originally born as a spin off from Camel K Synthetic Integrations feature and matured into a brand new operator whose goal is to provide a meaningful set of information about typical KPIs of your fleet of Camel workloads running on the cloud.
+
+From Camel K version 2.10.0 onward, the applications deployed by the operator will be automatically instructed with the labels required by the Camel Monitor operator to discover and monitor. This is controlled via a Kubernetes label injected to the Deployments (or CronJob or KnativeService) configured on the Camel K operator side with the environment variable `CAMEL_MONITOR_OPERATOR_LABEL` (set by default to `camel.apache.org/monitor`).
+
+On the Camel Monitor side, any application containing the label will be watched and monitored providing a set of useful Camel metrics (for example, health, number of exchanges succeeded, failed, …​).
+
+> **Note**
+> From version 2.11.0 onward the `camel-observability-services` component, required to get the full power of this monitoring tool, is included by default.
+
+Take this example:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: sample-it
+spec:
+  flows:
+    - route:
+        id: send-5-messages
+        from:
+          uri: "timer:tick?repeatCount=5"
+          steps:
+            - setBody:
+                simple: "Hello!"
+            - to: "log:myLogger"
+```
+
+The information will be stored in a Custom Resource provided by the Camel Monitor installation procedure: `CamelMonitor` (or abbreviated to `cmon`). Here a basic example:
+
+```bash
+$ kubectl get cmon -w
+
+NAME           IMAGE                                              PHASE     REPLICAS   HEALTHY   MONITORED   INFO                        EXCHANGE SLI   LAST EXCHANGE
+camel-sample   10.104.35.69/camel-k/camel-k-kit-d67egl6snmec...   Running   1          True      True        Quarkus - 3.30.8 (4.16.0)                  4m3s
+```
+
+More in detail, the specific info are stored in the custom resource status:
+
+```bash
+$ kubectl get cmon -o yaml
+apiVersion: v1
+items:
+- apiVersion: camel.apache.org/v1alpha1
+  kind: CamelMonitor
+  metadata:
+    annotations:
+      camel.apache.org/imported-from-kind: Deployment
+      camel.apache.org/imported-from-name: sample-it
+...
+  status:
+    conditions:
+    - lastTransitionTime: "2026-02-18T08:32:59Z"
+      message: Success
+      reason: MonitoringComplete
+      status: "True"
+      type: Monitored
+    - lastTransitionTime: "2026-02-18T08:32:59Z"
+      message: All pods are reported as healthy.
+      reason: HealthCheckCompleted
+      status: "True"
+      type: Healthy
+    image: 10.104.35.69/camel-k/camel-k-kit-d67egl6snmec73e6oqgg@sha256:0ba2fdcc091c62e2a121ebe795d59cb42e34af176b84398e40862bf2fb09c3d1
+    info: Quarkus - 3.30.8 (4.16.0)
+    phase: Running
+    pods:
+    - internalIp: 10.244.0.225
+      name: sample-it-75c5fd6c6f-wfbc7
+      observe:
+        healthEndpoint: observe/health
+        healthPort: 9876
+        metricsEndpoint: observe/metrics
+        metricsPort: 9876
+      ready: true
+      runtime:
+        camelVersion: 4.16.0
+        exchange:
+          lastTimestamp: "2026-02-18T08:27:28Z"
+          succeed: 5
+          total: 5
+        runtimeProvider: Quarkus
+        runtimeVersion: 3.30.8
+        status: UP
+      status: Running
+      uptimeTimestamp: "2026-02-18T08:26:57Z"
+    replicas: 1
+    sliExchangeSuccessRate:
+      lastTimestamp: "2026-02-18T08:27:28Z"
+      samplingInterval: 60000000000
+```
+
+> **Note**
+> Camel K won’t require the availability of Camel Monitor operator to work, neither Camel Monitor operator would require Camel K. They are independent projects which can cooperate to provide a Build and Monitoring tool respectively.
+
+Learn more by reading the official [Camel Dashboard documentation](https://camel-tooling.github.io/camel-dashboard/).

@@ -6,8 +6,15 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 08 Sep 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel K 2.11.0</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-k-2-11/</link>
+      <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-k-2-11/</guid>
+      <description>*© National Gallery of Art (nga.gov)&#xA;We&amp;rsquo;re happy to announce the availability of Apache Camel K version 2.11.0. This is a special release as we have decided to move to a new runtime provider, plain-quarkus (ie, the regular Quarkus runtime), in order to upgrade with most recent Camel and Quarkus platform developments. See the warning emoji (⚠️) to understand which new feature can impact the upgrade process.&#xA;Camel Quarkus (plain-quarkus) default runtime In the very first days of the Camel K project (even before Camel Quarkus existed), the team decided to create a special Java runtime, Camel K Runtime which was the unique available runtime back in time.</description>
+    </item>
     <item>
       <title>Camel Quarkus 3.39.0 Released</title>
       <link>https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/</link>

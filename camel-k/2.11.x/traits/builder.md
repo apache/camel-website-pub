@@ -1,0 +1,103 @@
+# Builder Trait
+
+The builder trait is internally used to determine the best strategy to build and configure IntegrationKits.
+
+This trait is available in the following profiles: **Kubernetes, Knative, OpenShift**.
+
+> **Note**
+> The builder trait is a **platform trait** and cannot be disabled by the user.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait builder.[key]=[value] --trait builder.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `builder.enabled` | `bool` | Deprecated: no longer in use. |
+| `builder.verbose` | `bool` | Enable verbose logging on build components that support it (e.g. Kaniko build pod).
+Deprecated: no longer in use
+
+ |
+| `builder.properties` | `[]string` | A list of properties to be provided to the build task |
+| `builder.strategy` | `string` | The strategy to use, either `pod` or `routine` (default `routine`) |
+| `builder.baseImage` | `string` | Specify a base image. In order to have the application working properly it must be a container image which has a Java JDK installed and ready to use on path (ie `/usr/bin/java`). |
+| `builder.incrementalImageBuild` | `bool` | Use the incremental image build option, to reuse existing containers (default `true`) |
+| `builder.orderStrategy` | `string` | The build order strategy to use, either `dependencies`, `fifo` or `sequential` (default is the platform default) |
+| `builder.requestCPU` | `string` | When using `pod` strategy, the minimum amount of CPU required by the pod builder.
+
+Deprecated: use TasksRequestCPU instead with task name `builder`.
+
+ |
+| `builder.requestMemory` | `string` | When using `pod` strategy, the minimum amount of memory required by the pod builder.
+
+Deprecated: use TasksRequestCPU instead with task name `builder`.
+
+ |
+| `builder.limitCPU` | `string` | When using `pod` strategy, the maximum amount of CPU required by the pod builder.
+
+Deprecated: use TasksRequestCPU instead with task name `builder`.
+
+ |
+| `builder.limitMemory` | `string` | When using `pod` strategy, the maximum amount of memory required by the pod builder.
+
+Deprecated: use TasksRequestCPU instead with task name `builder`.
+
+ |
+| `builder.mavenProfiles` | `[]string` | Deprecated: no longer in use. |
+| `builder.tasks` | `[]string` | A list of tasks to be executed (available only when using `pod` strategy) with format `<name>;<container-image>;<container-command>`.
+
+Deprecated: may be removed in future versions.
+
+ |
+| `builder.tasksFilter` | `string` | A list of tasks sorted by the order of execution in a csv format, ie, `<taskName1>,<taskName2>,…​`. Mind that you must include also the operator tasks (`builder`, `quarkus-native`, `package`, `jib`, `s2i`) if you need to execute them. Useful only with `pod` strategy. Disabled by default, you need to enable via BUILDER\_TASKS\_ENABLED=true environment variable on operator Deployment.
+
+Deprecated: may be removed in future versions.
+
+ |
+| `builder.tasksRequestCPU` | `[]string` | A list of request cpu configuration for the specific task with format `<task-name>:<request-cpu-conf>`. |
+| `builder.tasksRequestMemory` | `[]string` | A list of request memory configuration for the specific task with format `<task-name>:<request-memory-conf>`. |
+| `builder.tasksLimitCPU` | `[]string` | A list of limit cpu configuration for the specific task with format `<task-name>:<limit-cpu-conf>`. |
+| `builder.tasksLimitMemory` | `[]string` | A list of limit memory configuration for the specific task with format `<task-name>:<limit-memory-conf>`. |
+| `builder.nodeSelector` | `map[string]string` | Defines a set of nodes the builder pod is eligible to be scheduled on, based on labels on the node. |
+| `builder.annotations` | `map[string]string` | When using `pod` strategy, annotation to use for the builder pod. |
+| `builder.platforms` | `[]string` | The list of manifest platforms to use to build a container image (default `linux/amd64`). |
+> **Note**
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+
+## Node Selectors
+
+With this trait you will also be able to define node selectors for the `builder` pod when using the `` pod` `` build strategy. Here is a simple example:
+
+template.yaml
+
+```yaml
+  traits:
+    builder:
+      nodeSelector:
+        size: large
+```
+
+The `builder` pod will be created with a node selector that allows it to run only on nodes where the `size` label is equal to `large`.
+
+Node selectors can be specified when running an integration with the CLI:
+
+```console
+$ kamel run --trait builder.node-selector.'size'=large integration.yaml
+```
+
+> **Note**
+> Operators can restrict which node-selector label keys CR authors are permitted to use by setting the `BUILDER_NODE_SELECTOR_ALLOWED_LABELS` environment variable on the operator deployment to a comma-separated list of allowed keys (e.g. `kubernetes.io/hostname,topology.kubernetes.io/zone`). Any key not in the list is dropped and an info message is logged. When the variable is unset or empty, all keys are accepted (default behavior). See Camel K operator tuning documentation for details.
+
+## Custom Pipeline Tasks
+
+The `builder.tasks` trait option lets CR authors inject arbitrary containers into the build pipeline (only when using the `pod` build strategy). Each task entry has the format `<name>;<image>;<command>[;<userID>]`.
+
+> **Note**
+> Operators can enable custom task injection by setting `BUILDER_TASKS_ENABLED=true` on the operator deployment. When disabled, any `builder.tasks` values provided by CR authors are silently ignored and an info message is logged. The default is `false` (custom tasks are not allowed). See build environment variables documentation for details.

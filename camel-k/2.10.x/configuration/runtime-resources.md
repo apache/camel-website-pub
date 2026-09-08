@@ -1,0 +1,126 @@
+# Runtime resources
+
+When you develop an integration with `Camel K` there are many ways you can provide a **resource** to the runtime `Integration`. Since we are dealing with `Kubernetes` we use `Configmap` or `Secret`. The `kamel run` command is provided with a `--resource` flag that help you setting any resource your `Integration` may need.
+
+The **runtime resources** are expected to be any resource type (text or binary content). These resources are materialized as files in the `Integration` `Pod`. The `mount` trait will be declared on the `Integration`. The destination path can be either a default location or any path specified by the user. Only default resource directory is available within the `Integration` classpath.
+
+> **Note**
+> you’ll find `--resource` is very similar to the `--config` run flag. The main difference is that a `resource` can have a binary content and it won’t be parsed by the Camel Context.
+
+## Runtime configmap resource
+
+In a `Kubernetes` world we’re dealing with `Configmap` that are containing configuration previously stored in the platform. When you need to materialize a `Configmap` into a file resource available at your `Integration`, you can use the `--resource` _configmap_ syntax.
+
+As an example, let’s create a `Configmap` named _my-cm_ containing certain information. You can alternatively use any `Configmap` you’ve already stored in your cluster:
+
+kubectl create configmap my-cm --from-literal=my-configmap-key="configmap content"
+
+We want to use the materialized file in an integration:
+
+resource-configmap-route.yaml
+
+```yaml
+- from:
+    uri: "file:/etc/camel/resources.d/_configmaps/my-cm/?fileName=my-configmap-key&noop=true&idempotent=false"
+    steps:
+      - setBody:
+          simple: "resource file content is: ${body}"
+      - to: "log:info"
+```
+
+You can see that we’re expecting to use a _my-configmap-key_ file stored in the default resource location (_/etc/camel/resources.d/\_configmaps/_). In order to materialize the `Configmap` will be as easy as running the `--resource` _configmap_ syntax:
+
+kamel run --resource configmap:my-cm resource-configmap-route.yaml
+
+As soon as the `Integration` starts, the `Camel K` operator will take care to mount a volume with the `Configmap` 's content.
+
+> **Note**
+> you can provide a `Configmap` which is not yet available on the cluster. The `Integration` won’t start until the resource will be made available.
+
+## Runtime secret resource
+
+We can apply the very same concept seen in the previous section for the Kubernetes `Secret` 's.
+
+As an example, let’s create a `Secret` named _my-sec_ containing certain information. You can alternatively use any `Secret` you’ve already stored in your cluster:
+
+kubectl create secret generic my-sec --from-literal=my-secret-key="very top secret"
+
+We want to use the materialized secret file in an integration:
+
+resource-secret-route.yaml
+
+```yaml
+- from:
+    uri: "file:/etc/camel/resources.d/_secrets/my-sec/?fileName=my-secret-key&noop=true&idempotent=false"
+    steps:
+      - setBody:
+          simple: "secret file content is: ${body}"
+      - to: "log:info"
+```
+
+You can see that we’re expecting to use a _my-secret-key_ file stored in the default resource location (_/etc/camel/resources.d/\_secrets/_). In order to materialize the `Secret` will be as easy as running the `--resource` _secret_ syntax:
+
+kamel run --resource secret:my-sec resource-secret-route.yaml
+
+As soon as the `Integration` starts, the `Camel K` operator will take care to mount a volume with the `Secret` 's content.
+
+> **Note**
+> you can provide a `Secret` which is not yet available on the cluster. The `Integration` won’t start until the resource will be made available.
+
+## Resource destination path
+
+When you are programming an `Integration` you may find yourself in the situation to specify where exactly a resource has to be mounted. For such purpose you can specify the location where a file is expected with the `--resource` _@path_ syntax.
+
+As an example, let’s create a `Configmap` named _my-cm_ containing certain information. You can alternatively use any `Configmap` you’ve already stored in your cluster:
+
+kubectl create configmap my-cm-files --from-literal=input.txt="configmap input.txt content"
+
+Let’s see an example where your integration expect a text file to be consumed under a specific filesystem location:
+
+resource-file-location-route.yaml
+
+```yaml
+- from:
+    uri: "file:/tmp/inputs/?fileName=input.txt&noop=true&idempotent=false"
+    steps:
+      - setBody:
+          simple: "resource file content is: ${body}"
+      - to: "log:info"
+```
+
+When running the `Integration`, you can specify where to mount the resource content (either a `Configmap` or `Secret`) with the _@path_ syntax:
+
+kamel run --resource configmap:my-cm-files@/tmp/inputs resource-file-location-route.yaml
+
+You may check in the `Integration` `Pod` and verify that the file was mounted in the _tmp/inputs/input.txt_ destination.
+
+## Configmap/Secret key filtering
+
+When you deal with `Configmap` or `Secret`, you may want to limit the quantity of information to recover from such resources. Both `Configmap` and `Secret` can hold more than one resource in the same unit. For this reason you will find a _key_ filtering feature available in the `--resource` flag. In order to use it, you can add a _/key_ notation after the `Configmap` or `Secret` name (ie, `--resource configmap:my-cm/my-key`).
+
+Let’s see an example with multiple `Configmap` in action. The very same concept can be easily applied to `Secret`. We start creating a `Configmap` containing multiple resources:
+
+kubectl create configmap my-cm-multi --from-literal=my-configmap-key="configmap content" --from-literal=my-configmap-key-2="another content"
+
+In our `Integration` we plan to use only one of the resources of the `Secret`:
+
+resource-configmap-key-location-route.yaml
+
+```yaml
+- from:
+    uri: "file:/tmp/app/data/?fileName=test.txt&noop=true&idempotent=false"
+    steps:
+      - setBody:
+          simple: "resource file content is: ${body} consumed from ${header.CamelFileName}"
+      - to: "log:info"
+```
+
+Let’s use the _key_ filtering. Also notice that we’re combining with the _@path_ syntax to declare where to mount the file:
+
+kamel run --resource configmap:my-cm-multi/my-configmap-key-2@/tmp/app/data/test.txt resource-configmap-key-location-route.yaml
+
+You may check in the `Integration` `Pod` that only the _test.txt_ file has been mounted under _/tmp/app/data_ directory containing the information you had in _my-configmap-key-2_.
+
+## Runtime config
+
+If you’re looking for **runtime configuration** you can look at the [runtime configuration](runtime-config.md) section.

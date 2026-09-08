@@ -1,0 +1,56 @@
+# Prometheus Trait
+
+Deprecated since2.11.0 WARNING: The Prometheus trait is **deprecated** and will removed in future release versions: use Camel Monitor operator ([https://camel-tooling.github.io/camel-dashboard/docs/installation-guide/advanced/operator/](https://camel-tooling.github.io/camel-dashboard/docs/installation-guide/advanced/operator/)) instead.
+
+The Prometheus trait configures a Prometheus-compatible endpoint. It also creates a `PodMonitor` resource, so that the endpoint can be scraped automatically, when using the Prometheus operator.
+
+The metrics are exposed using Micrometer Metrics.
+
+> **Warning**
+> The creation of the `PodMonitor` resource requires the [Prometheus Operator](https://github.com/coreos/prometheus-operator) custom resource definition to be installed. You can set `pod-monitor` to `false` for the Prometheus trait to work without the Prometheus Operator.
+
+> **Warning**
+> By default the metrics API is not available in JSON
+
+The Prometheus trait is disabled by default.
+
+This trait is available in the following profiles: **Kubernetes, Knative, OpenShift**.
+
+## Configuration
+
+Trait properties can be specified when running any integration with the CLI:
+
+```console
+$ kamel run --trait prometheus.[key]=[value] --trait prometheus.[key2]=[value2] integration.yaml
+```
+
+The following configuration options are available:
+
+  
+| Property | Type | Description |
+| --- | --- | --- |
+| `prometheus.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
+| `prometheus.podMonitor` | `bool` | Whether a `PodMonitor` resource is created (default `true`). |
+| `prometheus.podMonitorLabels` | `[]string` | The `PodMonitor` resource labels, applicable when `pod-monitor` is `true`. |
+> **Note**
+> the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+
+## Examples
+
+-   To activate the metrics and default scrapping through a new PodMonitor:
+    
+    ```console
+    $ kamel run -t prometheus.enable=true ...
+    ```
+    
+-   To activate the metrics when the Prometheus Operator is not available:
+    
+    ```console
+    $ kamel run -t prometheus.enable=true -t pod-monitor=false ...
+    ```
+    
+-   To activate the metrics with JSON format available :
+    
+    ```console
+    $ kamel run -t prometheus.enable=true -t builder.properties="quarkus.micrometer.export.json.enabled=true"...
+    ```

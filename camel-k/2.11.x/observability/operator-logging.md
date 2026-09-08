@@ -1,0 +1,15 @@
+# Camel K Operator Logging
+
+The operator provides [structured logging](https://kubernetes.io/blog/2020/09/04/kubernetes-1-19-introducing-structured-logs/), so that the logs are more easily parsable. This includes the output of components managed by the operator, such as the Maven build, and the Integration container image build. For example, the Maven build logs display like this:
+
+```json
+...
+{"level":"info","ts":"2024-09-04T09:09:18Z","logger":"camel-k.maven.build","msg":"Building camel-k-integration 2.5.0-SNAPSHOT"}
+...
+```
+
+## Logging Level
+
+The operator log level is controlled by an environment setting (`LOG_LEVEL`) on the operator deployment. You can set the log level during installation procedure (see details in installation section). The default level is `info`.
+
+In general log levels are represented by numeric verbosity levels where `0` is the standard info log level and `1` is debug level. All values `2-10` represent different trace levels. You can set numeric values or one of the preset values `info`, `debug`, `error`.

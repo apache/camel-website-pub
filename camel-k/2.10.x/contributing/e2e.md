@@ -1,0 +1,69 @@
+# End To End local integration test
+
+Camel K has a suite of integration test that will run on every Pull Request. You can contribute by adding an integration test to cover any new feature introduced (or increment the coverage with features still untested).
+
+Since both unit test and integration test names end with `_test.go`, both would be executed by go during the build, so you need to put a special **build tag** to mark integration tests. An integration test should start with the following line:
+
+```none
+//go:build integration
+// +build integration
+```
+
+Look into the [/e2e](https://github.com/apache/camel-k/tree/main/e2e) directory for examples of integration tests.
+
+Before running an integration test, you need to be connected to a Kubernetes/OpenShift namespace and have the Camel K operator installed globally into a namespaced named `camel-k`. After you log into your cluster, you can run the following command to execute the suite of smoke tests:
+
+```none
+make test-smoke
+```
+
+The test script will run the Integrations in random namespaces, execute all expected tests and clean themselves. Cleaning may not be performed if the execution of tests fails or the test process is interrupted. In that case you can look for any namespace similar to `test-29ed8147-c9fc-4c04-9c29-744eaf4750c6` and remove it manually.
+
+## End-To-End tests structure
+
+We have several groups of end-to-end tests. Most of them will only require the installation of Camel K operator, but, others need some particular configuration. This is the reason why they may not work out of the box on your cluster. The main goal of the test is to run in a CI environment, so, all requirements are scripted accordingly. If you want to run a test in your cluster, make sure to provide the configuration as expected by the test suite.
+
+There may be a `files/setup.sh` script in some groups (e.g. knative) that can help to get the required configuration in place.
+
+This is the list of the groups we are using (please, notice that they can slightly change in the future):
+
+-   common (`make test-common`)
+    
+-   advanced (`make test-advanced`)
+    
+-   install (`make test-install`)
+    
+-   knative (`make test-knative`)
+    
+-   native (`make test-quarkus-native`)
+    
+-   telemetry (`make test-telemetry`)
+    
+
+Each group tests a specific feature of Camel K. Typically any new test should be falling under the `common` group, unless it belongs to any other category or it requires some particular customization. As an example, `telemetry` requires the configuration of an OTLP Collector, reason why it requires its own group. If the test still is a common one but needs to perform customization on the Camel K Operator, then, it should be developed under `advanced`: as an example, we have there tests which requires the configuration of a Maven proxy.
+
+It’s important to know that a subset of `common` named `test-smoke` is used as smoke test in the nightly release process. We want to keep this group of test as fast as possible.
+
+## Testing Operator under development
+
+You probably want to test your changes on Camel-K Operator locally after some development. You will need to make the operator docker image available to your cluster registry before launching the tests. We have a script which will take care of that.
+
+First, you must connect and point to the `docker daemon`. If you’re on a local environment such as `minikube`, it will be as simple as executing
+
+```none
+eval $(minikube -p minikube docker-env)
+```
+
+For other cluster types you may check the specific documentation. As soon as you’re connected to the `docker daemon` you can build images via:
+
+```none
+make images
+```
+
+The script will build the operator docker image and push it to the underlying docker daemon registry. At this stage, the cluster will be able to pickup this latest image when it executes the tests.
+
+You can also execute the following script, if by any chance you have some change applied to the `camel-k-runtime`. You can optionally point to your local Camel K runtime project directory if you need to install any local SNAPSHOT dependency:
+
+```none
+make images [CAMEL_K_RUNTIME_DIR=/path/to/camel-k-runtime-project]
+```

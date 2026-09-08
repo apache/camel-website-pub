@@ -131,7 +131,7 @@ Enum values:
 | **proxyAuthPort** (proxy) | **Deprecated** Proxy server port. |  | Integer |
 | **proxyAuthScheme** (proxy) | 
 
-Proxy server authentication protocol scheme to use.
+Proxy server connection protocol scheme. Defaults to http regardless of the target endpoint scheme, because most corporate HTTP proxies expect a plain HTTP connection on their listener port.
 
 Enum values:
 
@@ -144,7 +144,7 @@ Enum values:
 
 
 
- |  | String |
+ | http | String |
 | **proxyAuthUsername** (proxy) | Proxy server username. |  | String |
 | **proxyHost** (proxy) | Proxy server host. |  | String |
 | **proxyPort** (proxy) | Proxy server port. |  | Integer |
@@ -265,7 +265,7 @@ Enum values:
 | **proxyAuthPort** (proxy) | **Deprecated** Proxy server port. |  | int |
 | **proxyAuthScheme** (proxy) | 
 
-Proxy server authentication protocol scheme to use.
+Proxy server connection protocol scheme. Defaults to http regardless of the target endpoint scheme, because most corporate HTTP proxies expect a plain HTTP connection on their listener port.
 
 Enum values:
 
@@ -278,7 +278,7 @@ Enum values:
 
 
 
- |  | String |
+ | http | String |
 | **proxyAuthUsername** (proxy) | Proxy server username. |  | String |
 | **proxyHost** (proxy) | Proxy server host. |  | String |
 | **proxyPort** (proxy) | Proxy server port. |  | int |

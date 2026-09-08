@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 404 spring boot starter json files.
+There are 405 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -577,6 +577,8 @@ olingo4
 
 once
 
+opa
+
 openai
 
 openapi-java
@@ -1122,6 +1124,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Olingo2](../../components/next/olingo2-component.md) | camel-olingo2-starter | Stable-deprecated | 2.14 | Communicate with OData 2.0 services using Apache Olingo. |
 | [Olingo4](../../components/next/olingo4-component.md) | camel-olingo4-starter | Stable-deprecated | 2.19 | Communicate with OData 4.0 services using Apache Olingo OData API. |
 | [Once](../../components/next/once-component.md) | camel-once-starter | Stable | 4.17 | Trigger a single message only once at startup (useful for development and testing purposes). |
+| [OPA](../../components/next/opa-component.md) | camel-opa-starter | Preview | 4.23 | Evaluate Open Policy Agent (Rego) policies against an Exchange and record the allow/deny decision on it. |
 | [OPC UA Browser](../../components/next/milo-browse-component.md) | camel-milo-starter | Stable | 3.15 | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
 | [OPC UA Client](../../components/next/milo-client-component.md) | camel-milo-starter | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](../../components/next/milo-server-component.md) | camel-milo-starter | Stable | 2.19 | Make telemetry data available as an OPC UA server. |

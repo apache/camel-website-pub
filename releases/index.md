@@ -320,6 +320,7 @@ Releases by release date
 Releases by release date
 | Version | Release date | Description |
 | --- | --- | --- |
+| [2.11.0](../releases/k-2.11.0/) | 2026-09-07 |  |
 | [2.10.1](../releases/k-2.10.1/) | 2026-05-18 |  |
 | [2.8.1](../releases/k-2.8.1/) | 2026-05-18 |  |
 | [2.9.2](../releases/k-2.9.2/) | 2026-05-18 |  |

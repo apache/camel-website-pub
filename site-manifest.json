@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788790869164,
+  "generated": 1788849736729,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -68,7 +68,7 @@
     {
       "name": "camel-k",
       "title": "Camel K",
-      "latest": "next",
+      "latest": "2.11.x",
       "versions": [
         {
           "version": "next",
@@ -808,6 +808,1524 @@
               "module": "traits",
               "path": "traits.adoc",
               "url": "/camel-k/next/traits/traits.html",
+              "title": "Traits"
+            }
+          ]
+        },
+        {
+          "version": "2.11.x",
+          "url": "/camel-k/2.11.x/index.html",
+          "pages": [
+            {
+              "module": "ROOT",
+              "path": "apis/camel-k.adoc",
+              "url": "/camel-k/2.11.x/apis/camel-k.html",
+              "title": "Camel K API",
+              "attributes": {
+                "page-aliases": "camel.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/architecture.adoc",
+              "url": "/camel-k/2.11.x/architecture/architecture.html",
+              "title": "Architecture"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/build.adoc",
+              "url": "/camel-k/2.11.x/architecture/cr/build.html",
+              "title": "Build"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/camel-catalog.adoc",
+              "url": "/camel-k/2.11.x/architecture/cr/camel-catalog.html",
+              "title": "CamelCatalog"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/integration-kit.adoc",
+              "url": "/camel-k/2.11.x/architecture/cr/integration-kit.html",
+              "title": "IntegrationKit"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/integration-platform.adoc",
+              "url": "/camel-k/2.11.x/architecture/cr/integration-platform.html",
+              "title": "IntegrationPlatform"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/integration.adoc",
+              "url": "/camel-k/2.11.x/architecture/cr/integration.html",
+              "title": "Integration"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/incremental-image.adoc",
+              "url": "/camel-k/2.11.x/architecture/incremental-image.html",
+              "title": "Incremental image"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/operator.adoc",
+              "url": "/camel-k/2.11.x/architecture/operator.html",
+              "title": "Operator"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/runtime.adoc",
+              "url": "/camel-k/2.11.x/architecture/runtime.html",
+              "title": "Runtime"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/traits.adoc",
+              "url": "/camel-k/2.11.x/architecture/traits.html",
+              "title": "Traits"
+            },
+            {
+              "module": "ROOT",
+              "path": "concepts/dependencies.adoc",
+              "url": "/camel-k/2.11.x/concepts/dependencies.html",
+              "title": "Camel dependencies matrix"
+            },
+            {
+              "module": "ROOT",
+              "path": "concepts/overview.adoc",
+              "url": "/camel-k/2.11.x/concepts/overview.html",
+              "title": "What is Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "concepts/releases.adoc",
+              "url": "/camel-k/2.11.x/concepts/releases.html",
+              "title": "Releases"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/base-image.adoc",
+              "url": "/camel-k/2.11.x/configuration/base-image.html",
+              "title": "Base image"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/build-time-properties.adoc",
+              "url": "/camel-k/2.11.x/configuration/build-time-properties.html",
+              "title": "Build time properties"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/camel-properties.adoc",
+              "url": "/camel-k/2.11.x/configuration/camel-properties.html",
+              "title": "Runtime properties"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/configuration.adoc",
+              "url": "/camel-k/2.11.x/configuration/configuration.html",
+              "title": "Configure Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/dependencies.adoc",
+              "url": "/camel-k/2.11.x/configuration/dependencies.html",
+              "title": "Dependencies and Component Resolution"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/integrationprofiles.adoc",
+              "url": "/camel-k/2.11.x/configuration/integrationprofiles.html",
+              "title": "Integration Profiles"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/quarkus-native.adoc",
+              "url": "/camel-k/2.11.x/configuration/quarkus-native.html",
+              "title": "Run Quarkus native applications"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/runtime-config.adoc",
+              "url": "/camel-k/2.11.x/configuration/runtime-config.html",
+              "title": "Runtime configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/runtime-resources.adoc",
+              "url": "/camel-k/2.11.x/configuration/runtime-resources.html",
+              "title": "Runtime resources"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/runtime-version.adoc",
+              "url": "/camel-k/2.11.x/configuration/runtime-version.html",
+              "title": "Choose a Camel runtime version"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/developers.adoc",
+              "url": "/camel-k/2.11.x/contributing/developers.html",
+              "title": "Contributing to Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/e2e.adoc",
+              "url": "/camel-k/2.11.x/contributing/e2e.html",
+              "title": "End To End local integration test"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/local-development.adoc",
+              "url": "/camel-k/2.11.x/contributing/local-development.html",
+              "title": "Local development environment"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/local-execution.adoc",
+              "url": "/camel-k/2.11.x/contributing/local-execution.html",
+              "title": "Running operator as a local process"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/remote-debugging.adoc",
+              "url": "/camel-k/2.11.x/contributing/remote-debugging.html",
+              "title": "Remote Debugging Camel-K"
+            },
+            {
+              "module": "ROOT",
+              "path": "index.adoc",
+              "url": "/camel-k/2.11.x/index.html",
+              "title": "Apache Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/advanced.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/advanced.html",
+              "title": "Camel K Operator fine tuning"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/http-proxy.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/http-proxy.html",
+              "title": "HTTP Proxy"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/jdk-version.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/jdk-version.html",
+              "title": "Choose your JDK version"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/maven-proxy.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/maven-proxy.html",
+              "title": "Run a Maven Proxy"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/multi.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/multi.html",
+              "title": "Multiple Operators and Selective Upgrades"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/network.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/network.html",
+              "title": "Components topology"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/offline.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/offline.html",
+              "title": "Camel K offline"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/platform-architecture.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/platform-architecture.html",
+              "title": "Platform architecture"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/pruning-registry.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/pruning-registry.html",
+              "title": "Pruning unused images from container registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/resources.adoc",
+              "url": "/camel-k/2.11.x/installation/advanced/resources.html",
+              "title": "Infrastructure Pods and Resource Management"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/builds.adoc",
+              "url": "/camel-k/2.11.x/installation/builds.html",
+              "title": "Configuring Maven Builds"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/installation.adoc",
+              "url": "/camel-k/2.11.x/installation/installation.html",
+              "title": "Camel K operator installation"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/keda.adoc",
+              "url": "/camel-k/2.11.x/installation/keda.html",
+              "title": "Keda configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/knative.adoc",
+              "url": "/camel-k/2.11.x/installation/knative.html",
+              "title": "Knative configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/platform/gke.adoc",
+              "url": "/camel-k/2.11.x/installation/platform/gke.html",
+              "title": "Installing Camel K on Google Kubernetes Engine (GKE)"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/platform/iks.adoc",
+              "url": "/camel-k/2.11.x/installation/platform/iks.html",
+              "title": "Installing Camel K on IBM Kubernetes Service (IKS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry.adoc",
+              "url": "/camel-k/2.11.x/installation/registry.html",
+              "title": "Configuring Registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/registry-secret.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/registry-secret.html",
+              "title": "Configuring a secret for the container registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/docker-desktop.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/special/docker-desktop.html",
+              "title": "Configure a registry on Docker Desktop"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/gcr.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/special/gcr.html",
+              "title": "Configuring a Gcr.io Registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/github.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/special/github.html",
+              "title": "Configuring a Github Packages Registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/icr.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/special/icr.html",
+              "title": "Configuring a Namespace on IBM Container Registry (ICR)"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/kind.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/special/kind.html",
+              "title": "Configuring a local registry on Kind"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/minikube.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/special/minikube.html",
+              "title": "Configuring registry on Minikube"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/openshift.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/special/openshift.html",
+              "title": "Configuring Openshift registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/own.adoc",
+              "url": "/camel-k/2.11.x/installation/registry/special/own.html",
+              "title": "Run your own container registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/uninstalling.adoc",
+              "url": "/camel-k/2.11.x/installation/uninstalling.html",
+              "title": "Uninstalling Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/upgrade.adoc",
+              "url": "/camel-k/2.11.x/installation/upgrade.html",
+              "title": "Upgrade Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "kamelets/architecture.adoc",
+              "url": "/camel-k/2.11.x/kamelets/architecture.html",
+              "title": "Kamelets architecture in Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "kamelets/configuration.adoc",
+              "url": "/camel-k/2.11.x/kamelets/configuration.html",
+              "title": "How to configure a Kamelet"
+            },
+            {
+              "module": "ROOT",
+              "path": "kamelets/distribution.adoc",
+              "url": "/camel-k/2.11.x/kamelets/distribution.html",
+              "title": "Kamelets Distribution"
+            },
+            {
+              "module": "ROOT",
+              "path": "kamelets/kamelets.adoc",
+              "url": "/camel-k/2.11.x/kamelets/kamelets.html",
+              "title": "Kamelets"
+            },
+            {
+              "module": "ROOT",
+              "path": "languages/java.adoc",
+              "url": "/camel-k/2.11.x/languages/java.html",
+              "title": "Writing Integrations in Java"
+            },
+            {
+              "module": "ROOT",
+              "path": "languages/languages.adoc",
+              "url": "/camel-k/2.11.x/languages/languages.html",
+              "title": "Languages"
+            },
+            {
+              "module": "ROOT",
+              "path": "languages/xml.adoc",
+              "url": "/camel-k/2.11.x/languages/xml.html",
+              "title": "Writing Integrations in XML"
+            },
+            {
+              "module": "ROOT",
+              "path": "languages/yaml.adoc",
+              "url": "/camel-k/2.11.x/languages/yaml.html",
+              "title": "Writing Integrations in YAML"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/dashboard.adoc",
+              "url": "/camel-k/2.11.x/observability/dashboard.html",
+              "title": "Camel Monitor Operator"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/monitoring.adoc",
+              "url": "/camel-k/2.11.x/observability/monitoring.html",
+              "title": "Camel K Operator Monitoring"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/monitoring/operator-sops.adoc",
+              "url": "/camel-k/2.11.x/observability/monitoring/operator-sops.html",
+              "title": "Standard Operating Procedures"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/monitoring/operator.adoc",
+              "url": "/camel-k/2.11.x/observability/monitoring/operator.html",
+              "title": "Camel K Operator Monitoring"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/operator-logging.adoc",
+              "url": "/camel-k/2.11.x/observability/operator-logging.html",
+              "title": "Camel K Operator Logging"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipeline/external.adoc",
+              "url": "/camel-k/2.11.x/pipeline/external.html",
+              "title": "Full fledged Pipeline"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipeline/pipeline.adoc",
+              "url": "/camel-k/2.11.x/pipeline/pipeline.html",
+              "title": "Build Pipeline"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipes/bind-cli.adoc",
+              "url": "/camel-k/2.11.x/pipes/bind-cli.html",
+              "title": "Bind Pipes with kamel CLI"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipes/error-handler.adoc",
+              "url": "/camel-k/2.11.x/pipes/error-handler.html",
+              "title": "Pipes Error Handler"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipes/pipes.adoc",
+              "url": "/camel-k/2.11.x/pipes/pipes.html",
+              "title": "Running a Pipe"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipes/promoting.adoc",
+              "url": "/camel-k/2.11.x/pipes/promoting.html",
+              "title": "Promoting Pipes across environments"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/build-from-git.adoc",
+              "url": "/camel-k/2.11.x/running/build-from-git.html",
+              "title": "Build project hosted in a Git repository"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/dry-build.adoc",
+              "url": "/camel-k/2.11.x/running/dry-build.html",
+              "title": "Dry Build"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/gitops.adoc",
+              "url": "/camel-k/2.11.x/running/gitops.html",
+              "title": "Camel GitOps"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/promoting.adoc",
+              "url": "/camel-k/2.11.x/running/promoting.html",
+              "title": "Promoting Integrations across environments"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/running-cli.adoc",
+              "url": "/camel-k/2.11.x/running/running-cli.html",
+              "title": "Camel K CLI: kamel"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/running.adoc",
+              "url": "/camel-k/2.11.x/running/running.html",
+              "title": "Running an Integration"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/self-managed.adoc",
+              "url": "/camel-k/2.11.x/running/self-managed.html",
+              "title": "Self Managed Build Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/synthetic.adoc",
+              "url": "/camel-k/2.11.x/running/synthetic.html",
+              "title": "Synthetic Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "scaling/integration.adoc",
+              "url": "/camel-k/2.11.x/scaling/integration.html",
+              "title": "Camel K Integration Scaling"
+            },
+            {
+              "module": "ROOT",
+              "path": "scaling/pipe.adoc",
+              "url": "/camel-k/2.11.x/scaling/pipe.html",
+              "title": "Camel K Pipe Scaling"
+            },
+            {
+              "module": "ROOT",
+              "path": "troubleshooting/debugging.adoc",
+              "url": "/camel-k/2.11.x/troubleshooting/debugging.html",
+              "title": "Debugging Camel K Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "troubleshooting/troubleshooting.adoc",
+              "url": "/camel-k/2.11.x/troubleshooting/troubleshooting.html",
+              "title": "Troubleshooting Camel K Integrations"
+            },
+            {
+              "module": "traits",
+              "path": "affinity.adoc",
+              "url": "/camel-k/2.11.x/traits/affinity.html",
+              "title": "Affinity Trait"
+            },
+            {
+              "module": "traits",
+              "path": "builder.adoc",
+              "url": "/camel-k/2.11.x/traits/builder.html",
+              "title": "Builder Trait"
+            },
+            {
+              "module": "traits",
+              "path": "camel.adoc",
+              "url": "/camel-k/2.11.x/traits/camel.html",
+              "title": "Camel Trait"
+            },
+            {
+              "module": "traits",
+              "path": "container.adoc",
+              "url": "/camel-k/2.11.x/traits/container.html",
+              "title": "Container Trait"
+            },
+            {
+              "module": "traits",
+              "path": "cron.adoc",
+              "url": "/camel-k/2.11.x/traits/cron.html",
+              "title": "Cron Trait"
+            },
+            {
+              "module": "traits",
+              "path": "deployer.adoc",
+              "url": "/camel-k/2.11.x/traits/deployer.html",
+              "title": "Deployer Trait"
+            },
+            {
+              "module": "traits",
+              "path": "deployment.adoc",
+              "url": "/camel-k/2.11.x/traits/deployment.html",
+              "title": "Deployment Trait"
+            },
+            {
+              "module": "traits",
+              "path": "environment.adoc",
+              "url": "/camel-k/2.11.x/traits/environment.html",
+              "title": "Environment Trait"
+            },
+            {
+              "module": "traits",
+              "path": "gateway.adoc",
+              "url": "/camel-k/2.11.x/traits/gateway.html",
+              "title": "Gateway Trait"
+            },
+            {
+              "module": "traits",
+              "path": "gitops.adoc",
+              "url": "/camel-k/2.11.x/traits/gitops.html",
+              "title": "Gitops Trait"
+            },
+            {
+              "module": "traits",
+              "path": "health.adoc",
+              "url": "/camel-k/2.11.x/traits/health.html",
+              "title": "Health Trait"
+            },
+            {
+              "module": "traits",
+              "path": "ingress.adoc",
+              "url": "/camel-k/2.11.x/traits/ingress.html",
+              "title": "Ingress Trait"
+            },
+            {
+              "module": "traits",
+              "path": "init-containers.adoc",
+              "url": "/camel-k/2.11.x/traits/init-containers.html",
+              "title": "Init Containers Trait"
+            },
+            {
+              "module": "traits",
+              "path": "istio.adoc",
+              "url": "/camel-k/2.11.x/traits/istio.html",
+              "title": "Istio Trait"
+            },
+            {
+              "module": "traits",
+              "path": "jvm.adoc",
+              "url": "/camel-k/2.11.x/traits/jvm.html",
+              "title": "Jvm Trait"
+            },
+            {
+              "module": "traits",
+              "path": "kamelets.adoc",
+              "url": "/camel-k/2.11.x/traits/kamelets.html",
+              "title": "Kamelets Trait"
+            },
+            {
+              "module": "traits",
+              "path": "keda.adoc",
+              "url": "/camel-k/2.11.x/traits/keda.html",
+              "title": "Keda Trait"
+            },
+            {
+              "module": "traits",
+              "path": "knative-service.adoc",
+              "url": "/camel-k/2.11.x/traits/knative-service.html",
+              "title": "Knative Service Trait"
+            },
+            {
+              "module": "traits",
+              "path": "knative.adoc",
+              "url": "/camel-k/2.11.x/traits/knative.html",
+              "title": "Knative Trait"
+            },
+            {
+              "module": "traits",
+              "path": "logging.adoc",
+              "url": "/camel-k/2.11.x/traits/logging.html",
+              "title": "Logging Trait"
+            },
+            {
+              "module": "traits",
+              "path": "master.adoc",
+              "url": "/camel-k/2.11.x/traits/master.html",
+              "title": "Master Trait"
+            },
+            {
+              "module": "traits",
+              "path": "mount.adoc",
+              "url": "/camel-k/2.11.x/traits/mount.html",
+              "title": "Mount Trait"
+            },
+            {
+              "module": "traits",
+              "path": "owner.adoc",
+              "url": "/camel-k/2.11.x/traits/owner.html",
+              "title": "Owner Trait"
+            },
+            {
+              "module": "traits",
+              "path": "pdb.adoc",
+              "url": "/camel-k/2.11.x/traits/pdb.html",
+              "title": "Pdb Trait"
+            },
+            {
+              "module": "traits",
+              "path": "prometheus.adoc",
+              "url": "/camel-k/2.11.x/traits/prometheus.html",
+              "title": "Prometheus Trait"
+            },
+            {
+              "module": "traits",
+              "path": "pull-secret.adoc",
+              "url": "/camel-k/2.11.x/traits/pull-secret.html",
+              "title": "Pull Secret Trait"
+            },
+            {
+              "module": "traits",
+              "path": "quarkus.adoc",
+              "url": "/camel-k/2.11.x/traits/quarkus.html",
+              "title": "Quarkus Trait"
+            },
+            {
+              "module": "traits",
+              "path": "route.adoc",
+              "url": "/camel-k/2.11.x/traits/route.html",
+              "title": "Route Trait"
+            },
+            {
+              "module": "traits",
+              "path": "security-context.adoc",
+              "url": "/camel-k/2.11.x/traits/security-context.html",
+              "title": "Security Context Trait"
+            },
+            {
+              "module": "traits",
+              "path": "service.adoc",
+              "url": "/camel-k/2.11.x/traits/service.html",
+              "title": "Service Trait"
+            },
+            {
+              "module": "traits",
+              "path": "telemetry.adoc",
+              "url": "/camel-k/2.11.x/traits/telemetry.html",
+              "title": "Telemetry Trait"
+            },
+            {
+              "module": "traits",
+              "path": "toleration.adoc",
+              "url": "/camel-k/2.11.x/traits/toleration.html",
+              "title": "Toleration Trait"
+            },
+            {
+              "module": "traits",
+              "path": "traits.adoc",
+              "url": "/camel-k/2.11.x/traits/traits.html",
+              "title": "Traits"
+            }
+          ]
+        },
+        {
+          "version": "2.10.x",
+          "url": "/camel-k/2.10.x/index.html",
+          "pages": [
+            {
+              "module": "ROOT",
+              "path": "apis/camel-k.adoc",
+              "url": "/camel-k/2.10.x/apis/camel-k.html",
+              "title": "Camel K API",
+              "attributes": {
+                "page-aliases": "camel.adoc"
+              }
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/architecture.adoc",
+              "url": "/camel-k/2.10.x/architecture/architecture.html",
+              "title": "Architecture"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/build.adoc",
+              "url": "/camel-k/2.10.x/architecture/cr/build.html",
+              "title": "Build"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/camel-catalog.adoc",
+              "url": "/camel-k/2.10.x/architecture/cr/camel-catalog.html",
+              "title": "CamelCatalog"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/integration-kit.adoc",
+              "url": "/camel-k/2.10.x/architecture/cr/integration-kit.html",
+              "title": "IntegrationKit"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/integration-platform.adoc",
+              "url": "/camel-k/2.10.x/architecture/cr/integration-platform.html",
+              "title": "IntegrationPlatform"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/cr/integration.adoc",
+              "url": "/camel-k/2.10.x/architecture/cr/integration.html",
+              "title": "Integration"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/incremental-image.adoc",
+              "url": "/camel-k/2.10.x/architecture/incremental-image.html",
+              "title": "Incremental image"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/operator.adoc",
+              "url": "/camel-k/2.10.x/architecture/operator.html",
+              "title": "Operator"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/runtime.adoc",
+              "url": "/camel-k/2.10.x/architecture/runtime.html",
+              "title": "Runtime"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture/traits.adoc",
+              "url": "/camel-k/2.10.x/architecture/traits.html",
+              "title": "Traits"
+            },
+            {
+              "module": "ROOT",
+              "path": "concepts/dependencies.adoc",
+              "url": "/camel-k/2.10.x/concepts/dependencies.html",
+              "title": "Camel dependencies matrix"
+            },
+            {
+              "module": "ROOT",
+              "path": "concepts/overview.adoc",
+              "url": "/camel-k/2.10.x/concepts/overview.html",
+              "title": "What is Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "concepts/releases.adoc",
+              "url": "/camel-k/2.10.x/concepts/releases.html",
+              "title": "Releases"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/base-image.adoc",
+              "url": "/camel-k/2.10.x/configuration/base-image.html",
+              "title": "Base image"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/build-time-properties.adoc",
+              "url": "/camel-k/2.10.x/configuration/build-time-properties.html",
+              "title": "Build time properties"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/camel-properties.adoc",
+              "url": "/camel-k/2.10.x/configuration/camel-properties.html",
+              "title": "Runtime properties"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/configuration.adoc",
+              "url": "/camel-k/2.10.x/configuration/configuration.html",
+              "title": "Configure Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/dependencies.adoc",
+              "url": "/camel-k/2.10.x/configuration/dependencies.html",
+              "title": "Dependencies and Component Resolution"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/integrationprofiles.adoc",
+              "url": "/camel-k/2.10.x/configuration/integrationprofiles.html",
+              "title": "Integration Profiles"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/quarkus-native.adoc",
+              "url": "/camel-k/2.10.x/configuration/quarkus-native.html",
+              "title": "Run Quarkus native applications"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/runtime-config.adoc",
+              "url": "/camel-k/2.10.x/configuration/runtime-config.html",
+              "title": "Runtime configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/runtime-resources.adoc",
+              "url": "/camel-k/2.10.x/configuration/runtime-resources.html",
+              "title": "Runtime resources"
+            },
+            {
+              "module": "ROOT",
+              "path": "configuration/runtime-version.adoc",
+              "url": "/camel-k/2.10.x/configuration/runtime-version.html",
+              "title": "Choose a Camel runtime version"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/developers.adoc",
+              "url": "/camel-k/2.10.x/contributing/developers.html",
+              "title": "Contributing to Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/e2e.adoc",
+              "url": "/camel-k/2.10.x/contributing/e2e.html",
+              "title": "End To End local integration test"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/local-development.adoc",
+              "url": "/camel-k/2.10.x/contributing/local-development.html",
+              "title": "Local development environment"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/local-execution.adoc",
+              "url": "/camel-k/2.10.x/contributing/local-execution.html",
+              "title": "Running operator as a local process"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/remote-debugging.adoc",
+              "url": "/camel-k/2.10.x/contributing/remote-debugging.html",
+              "title": "Remote Debugging Camel-K"
+            },
+            {
+              "module": "ROOT",
+              "path": "index.adoc",
+              "url": "/camel-k/2.10.x/index.html",
+              "title": "Apache Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/advanced.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/advanced.html",
+              "title": "Camel K Operator fine tuning"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/build-config.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/build-config.html",
+              "title": "Build configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/http-proxy.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/http-proxy.html",
+              "title": "HTTP Proxy"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/jdk-version.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/jdk-version.html",
+              "title": "Choose your JDK version"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/maven-proxy.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/maven-proxy.html",
+              "title": "Run a Maven Proxy"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/maven.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/maven.html",
+              "title": "Configuring Maven"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/multi.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/multi.html",
+              "title": "Multiple Operators and Selective Upgrades"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/network.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/network.html",
+              "title": "Components topology"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/offline.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/offline.html",
+              "title": "Camel K offline"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/platform-architecture.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/platform-architecture.html",
+              "title": "Platform architecture"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/pruning-registry.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/pruning-registry.html",
+              "title": "Pruning unused images from container registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/advanced/resources.adoc",
+              "url": "/camel-k/2.10.x/installation/advanced/resources.html",
+              "title": "Infrastructure Pods and Resource Management"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/installation.adoc",
+              "url": "/camel-k/2.10.x/installation/installation.html",
+              "title": "Installation"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/integrationplatform.adoc",
+              "url": "/camel-k/2.10.x/installation/integrationplatform.html",
+              "title": "Configure an IntegrationPlatform"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/keda.adoc",
+              "url": "/camel-k/2.10.x/installation/keda.html",
+              "title": "Keda configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/knative.adoc",
+              "url": "/camel-k/2.10.x/installation/knative.html",
+              "title": "Knative configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/platform/gke.adoc",
+              "url": "/camel-k/2.10.x/installation/platform/gke.html",
+              "title": "Installing Camel K on Google Kubernetes Engine (GKE)"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/platform/iks.adoc",
+              "url": "/camel-k/2.10.x/installation/platform/iks.html",
+              "title": "Installing Camel K on IBM Kubernetes Service (IKS)"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/registry-secret.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/registry-secret.html",
+              "title": "Configuring a secret for the container registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/registry.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/registry.html",
+              "title": "Configuring Registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/docker-desktop.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/special/docker-desktop.html",
+              "title": "Configure a registry on Docker Desktop"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/gcr.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/special/gcr.html",
+              "title": "Configuring a Gcr.io Registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/github.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/special/github.html",
+              "title": "Configuring a Github Packages Registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/icr.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/special/icr.html",
+              "title": "Configuring a Namespace on IBM Container Registry (ICR)"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/kind.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/special/kind.html",
+              "title": "Configuring a local registry on Kind"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/minikube.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/special/minikube.html",
+              "title": "Configuring registry on Minikube"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/openshift.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/special/openshift.html",
+              "title": "Configuring Openshift registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/registry/special/own.adoc",
+              "url": "/camel-k/2.10.x/installation/registry/special/own.html",
+              "title": "Run your own container registry"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/uninstalling.adoc",
+              "url": "/camel-k/2.10.x/installation/uninstalling.html",
+              "title": "Uninstalling Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/upgrade.adoc",
+              "url": "/camel-k/2.10.x/installation/upgrade.html",
+              "title": "Upgrade Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "kamelets/architecture.adoc",
+              "url": "/camel-k/2.10.x/kamelets/architecture.html",
+              "title": "Kamelets architecture in Camel K"
+            },
+            {
+              "module": "ROOT",
+              "path": "kamelets/configuration.adoc",
+              "url": "/camel-k/2.10.x/kamelets/configuration.html",
+              "title": "How to configure a Kamelet"
+            },
+            {
+              "module": "ROOT",
+              "path": "kamelets/distribution.adoc",
+              "url": "/camel-k/2.10.x/kamelets/distribution.html",
+              "title": "Kamelets Distribution"
+            },
+            {
+              "module": "ROOT",
+              "path": "kamelets/kamelets.adoc",
+              "url": "/camel-k/2.10.x/kamelets/kamelets.html",
+              "title": "Kamelets"
+            },
+            {
+              "module": "ROOT",
+              "path": "languages/java.adoc",
+              "url": "/camel-k/2.10.x/languages/java.html",
+              "title": "Writing Integrations in Java"
+            },
+            {
+              "module": "ROOT",
+              "path": "languages/languages.adoc",
+              "url": "/camel-k/2.10.x/languages/languages.html",
+              "title": "Languages"
+            },
+            {
+              "module": "ROOT",
+              "path": "languages/xml.adoc",
+              "url": "/camel-k/2.10.x/languages/xml.html",
+              "title": "Writing Integrations in XML"
+            },
+            {
+              "module": "ROOT",
+              "path": "languages/yaml.adoc",
+              "url": "/camel-k/2.10.x/languages/yaml.html",
+              "title": "Writing Integrations in YAML"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/dashboard.adoc",
+              "url": "/camel-k/2.10.x/observability/dashboard.html",
+              "title": "Camel Dashboard"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/monitoring.adoc",
+              "url": "/camel-k/2.10.x/observability/monitoring.html",
+              "title": "Camel K Monitoring"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/monitoring/integration.adoc",
+              "url": "/camel-k/2.10.x/observability/monitoring/integration.html",
+              "title": "Camel K Integration Monitoring"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/monitoring/operator-sops.adoc",
+              "url": "/camel-k/2.10.x/observability/monitoring/operator-sops.html",
+              "title": "Standard Operating Procedures"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/monitoring/operator.adoc",
+              "url": "/camel-k/2.10.x/observability/monitoring/operator.html",
+              "title": "Camel K Operator Monitoring"
+            },
+            {
+              "module": "ROOT",
+              "path": "observability/operator-logging.adoc",
+              "url": "/camel-k/2.10.x/observability/operator-logging.html",
+              "title": "Camel K Operator Logging"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipeline/external.adoc",
+              "url": "/camel-k/2.10.x/pipeline/external.html",
+              "title": "Full fledged Pipeline"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipeline/pipeline.adoc",
+              "url": "/camel-k/2.10.x/pipeline/pipeline.html",
+              "title": "Build Pipeline"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipes/bind-cli.adoc",
+              "url": "/camel-k/2.10.x/pipes/bind-cli.html",
+              "title": "Bind Pipes with kamel CLI"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipes/error-handler.adoc",
+              "url": "/camel-k/2.10.x/pipes/error-handler.html",
+              "title": "Pipes Error Handler"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipes/pipes.adoc",
+              "url": "/camel-k/2.10.x/pipes/pipes.html",
+              "title": "Running a Pipe"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipes/promoting.adoc",
+              "url": "/camel-k/2.10.x/pipes/promoting.html",
+              "title": "Promoting Pipes across environments"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/build-from-git.adoc",
+              "url": "/camel-k/2.10.x/running/build-from-git.html",
+              "title": "Build project hosted in a Git repository"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/dry-build.adoc",
+              "url": "/camel-k/2.10.x/running/dry-build.html",
+              "title": "Dry Build"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/gitops.adoc",
+              "url": "/camel-k/2.10.x/running/gitops.html",
+              "title": "Camel GitOps"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/promoting.adoc",
+              "url": "/camel-k/2.10.x/running/promoting.html",
+              "title": "Promoting Integrations across environments"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/running-cli.adoc",
+              "url": "/camel-k/2.10.x/running/running-cli.html",
+              "title": "Camel K CLI: kamel"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/running.adoc",
+              "url": "/camel-k/2.10.x/running/running.html",
+              "title": "Running an Integration"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/self-managed.adoc",
+              "url": "/camel-k/2.10.x/running/self-managed.html",
+              "title": "Self Managed Build Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "running/synthetic.adoc",
+              "url": "/camel-k/2.10.x/running/synthetic.html",
+              "title": "Synthetic Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "scaling/integration.adoc",
+              "url": "/camel-k/2.10.x/scaling/integration.html",
+              "title": "Camel K Integration Scaling"
+            },
+            {
+              "module": "ROOT",
+              "path": "scaling/pipe.adoc",
+              "url": "/camel-k/2.10.x/scaling/pipe.html",
+              "title": "Camel K Pipe Scaling"
+            },
+            {
+              "module": "ROOT",
+              "path": "troubleshooting/debugging.adoc",
+              "url": "/camel-k/2.10.x/troubleshooting/debugging.html",
+              "title": "Debugging Camel K Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "troubleshooting/troubleshooting.adoc",
+              "url": "/camel-k/2.10.x/troubleshooting/troubleshooting.html",
+              "title": "Troubleshooting Camel K Integrations"
+            },
+            {
+              "module": "traits",
+              "path": "affinity.adoc",
+              "url": "/camel-k/2.10.x/traits/affinity.html",
+              "title": "Affinity Trait"
+            },
+            {
+              "module": "traits",
+              "path": "builder.adoc",
+              "url": "/camel-k/2.10.x/traits/builder.html",
+              "title": "Builder Trait"
+            },
+            {
+              "module": "traits",
+              "path": "camel.adoc",
+              "url": "/camel-k/2.10.x/traits/camel.html",
+              "title": "Camel Trait"
+            },
+            {
+              "module": "traits",
+              "path": "container.adoc",
+              "url": "/camel-k/2.10.x/traits/container.html",
+              "title": "Container Trait"
+            },
+            {
+              "module": "traits",
+              "path": "cron.adoc",
+              "url": "/camel-k/2.10.x/traits/cron.html",
+              "title": "Cron Trait"
+            },
+            {
+              "module": "traits",
+              "path": "deployer.adoc",
+              "url": "/camel-k/2.10.x/traits/deployer.html",
+              "title": "Deployer Trait"
+            },
+            {
+              "module": "traits",
+              "path": "deployment.adoc",
+              "url": "/camel-k/2.10.x/traits/deployment.html",
+              "title": "Deployment Trait"
+            },
+            {
+              "module": "traits",
+              "path": "environment.adoc",
+              "url": "/camel-k/2.10.x/traits/environment.html",
+              "title": "Environment Trait"
+            },
+            {
+              "module": "traits",
+              "path": "gateway.adoc",
+              "url": "/camel-k/2.10.x/traits/gateway.html",
+              "title": "Gateway Trait"
+            },
+            {
+              "module": "traits",
+              "path": "gitops.adoc",
+              "url": "/camel-k/2.10.x/traits/gitops.html",
+              "title": "Gitops Trait"
+            },
+            {
+              "module": "traits",
+              "path": "health.adoc",
+              "url": "/camel-k/2.10.x/traits/health.html",
+              "title": "Health Trait"
+            },
+            {
+              "module": "traits",
+              "path": "ingress.adoc",
+              "url": "/camel-k/2.10.x/traits/ingress.html",
+              "title": "Ingress Trait"
+            },
+            {
+              "module": "traits",
+              "path": "init-containers.adoc",
+              "url": "/camel-k/2.10.x/traits/init-containers.html",
+              "title": "Init Containers Trait"
+            },
+            {
+              "module": "traits",
+              "path": "istio.adoc",
+              "url": "/camel-k/2.10.x/traits/istio.html",
+              "title": "Istio Trait"
+            },
+            {
+              "module": "traits",
+              "path": "jolokia.adoc",
+              "url": "/camel-k/2.10.x/traits/jolokia.html",
+              "title": "Jolokia Trait"
+            },
+            {
+              "module": "traits",
+              "path": "jvm.adoc",
+              "url": "/camel-k/2.10.x/traits/jvm.html",
+              "title": "Jvm Trait"
+            },
+            {
+              "module": "traits",
+              "path": "kamelets.adoc",
+              "url": "/camel-k/2.10.x/traits/kamelets.html",
+              "title": "Kamelets Trait"
+            },
+            {
+              "module": "traits",
+              "path": "keda.adoc",
+              "url": "/camel-k/2.10.x/traits/keda.html",
+              "title": "Keda Trait"
+            },
+            {
+              "module": "traits",
+              "path": "knative-service.adoc",
+              "url": "/camel-k/2.10.x/traits/knative-service.html",
+              "title": "Knative Service Trait"
+            },
+            {
+              "module": "traits",
+              "path": "knative.adoc",
+              "url": "/camel-k/2.10.x/traits/knative.html",
+              "title": "Knative Trait"
+            },
+            {
+              "module": "traits",
+              "path": "logging.adoc",
+              "url": "/camel-k/2.10.x/traits/logging.html",
+              "title": "Logging Trait"
+            },
+            {
+              "module": "traits",
+              "path": "master.adoc",
+              "url": "/camel-k/2.10.x/traits/master.html",
+              "title": "Master Trait"
+            },
+            {
+              "module": "traits",
+              "path": "mount.adoc",
+              "url": "/camel-k/2.10.x/traits/mount.html",
+              "title": "Mount Trait"
+            },
+            {
+              "module": "traits",
+              "path": "openapi.adoc",
+              "url": "/camel-k/2.10.x/traits/openapi.html",
+              "title": "Openapi Trait"
+            },
+            {
+              "module": "traits",
+              "path": "owner.adoc",
+              "url": "/camel-k/2.10.x/traits/owner.html",
+              "title": "Owner Trait"
+            },
+            {
+              "module": "traits",
+              "path": "pdb.adoc",
+              "url": "/camel-k/2.10.x/traits/pdb.html",
+              "title": "Pdb Trait"
+            },
+            {
+              "module": "traits",
+              "path": "pod.adoc",
+              "url": "/camel-k/2.10.x/traits/pod.html",
+              "title": "Pod Trait"
+            },
+            {
+              "module": "traits",
+              "path": "prometheus.adoc",
+              "url": "/camel-k/2.10.x/traits/prometheus.html",
+              "title": "Prometheus Trait"
+            },
+            {
+              "module": "traits",
+              "path": "pull-secret.adoc",
+              "url": "/camel-k/2.10.x/traits/pull-secret.html",
+              "title": "Pull Secret Trait"
+            },
+            {
+              "module": "traits",
+              "path": "quarkus.adoc",
+              "url": "/camel-k/2.10.x/traits/quarkus.html",
+              "title": "Quarkus Trait"
+            },
+            {
+              "module": "traits",
+              "path": "route.adoc",
+              "url": "/camel-k/2.10.x/traits/route.html",
+              "title": "Route Trait"
+            },
+            {
+              "module": "traits",
+              "path": "security-context.adoc",
+              "url": "/camel-k/2.10.x/traits/security-context.html",
+              "title": "Security Context Trait"
+            },
+            {
+              "module": "traits",
+              "path": "service.adoc",
+              "url": "/camel-k/2.10.x/traits/service.html",
+              "title": "Service Trait"
+            },
+            {
+              "module": "traits",
+              "path": "telemetry.adoc",
+              "url": "/camel-k/2.10.x/traits/telemetry.html",
+              "title": "Telemetry Trait"
+            },
+            {
+              "module": "traits",
+              "path": "toleration.adoc",
+              "url": "/camel-k/2.10.x/traits/toleration.html",
+              "title": "Toleration Trait"
+            },
+            {
+              "module": "traits",
+              "path": "traits.adoc",
+              "url": "/camel-k/2.10.x/traits/traits.html",
               "title": "Traits"
             }
           ]
@@ -14268,6 +15786,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/opa.adoc",
+              "url": "/camel-spring-boot/next/starters/opa.html",
+              "title": "OPA"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/openai.adoc",
               "url": "/camel-spring-boot/next/starters/openai.html",
               "title": "OpenAI"
@@ -21331,6 +22855,12 @@
               "path": "once-component.adoc",
               "url": "/components/next/once-component.html",
               "title": "Once"
+            },
+            {
+              "module": "ROOT",
+              "path": "opa-component.adoc",
+              "url": "/components/next/opa-component.html",
+              "title": "OPA"
             },
             {
               "module": "ROOT",
