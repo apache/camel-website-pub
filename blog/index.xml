@@ -16,6 +16,13 @@
       <description>*© National Gallery of Art (nga.gov)&#xA;We&amp;rsquo;re happy to announce the availability of Apache Camel K version 2.11.0. This is a special release as we have decided to move to a new runtime provider, plain-quarkus (ie, the regular Quarkus runtime), in order to upgrade with most recent Camel and Quarkus platform developments. See the warning emoji (⚠️) to understand which new feature can impact the upgrade process.&#xA;Camel Quarkus (plain-quarkus) default runtime In the very first days of the Camel K project (even before Camel Quarkus existed), the team decided to create a special Java runtime, Camel K Runtime which was the unique available runtime back in time.</description>
     </item>
     <item>
+      <title>Workload identity in Apache Camel with SPIFFE and SPIRE</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/</link>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/</guid>
+      <description>Camel 4.23 is planned for October and it adds a new component, camel-spiffe. The problem it solves is not obvious if you have never looked at SPIFFE, so I want to explain what it is for, what it does, and point at the example I wrote for it.&#xA;The problem Two services that talk to each other need to know who is on the other side. The usual answer is a credential that one side stores and the other side checks: an API key in a properties file, a password in a Kubernetes secret, a client certificate that somebody generated years ago.</description>
+    </item>
+    <item>
       <title>GenAI Observability with Spring Boot and the Camel Observability Stack</title>
       <link>https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/</link>
       <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>

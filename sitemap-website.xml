@@ -17,10 +17,19 @@
     <loc>https://camel.apache.org/categories/Roadmap/</loc>
     <lastmod>2026-09-08T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/categories/Camel/</loc>
+    <lastmod>2026-09-07T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/releases/k-2.11.0/</loc>
     <lastmod>2026-09-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-09-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Security/</loc>
+    <lastmod>2026-09-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/</loc>
     <lastmod>2026-09-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/AI/</loc>
@@ -104,9 +113,6 @@
     <loc>https://camel.apache.org/categories/Tooling/</loc>
     <lastmod>2026-08-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Camel/</loc>
-    <lastmod>2026-08-07T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2026/08/camel-ai-tools-mcp-422/</loc>
     <lastmod>2026-08-07T00:00:00+00:00</lastmod>
   </url><url>
@@ -117,9 +123,6 @@
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.38.0/</loc>
-    <lastmod>2026-07-29T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Security/</loc>
     <lastmod>2026-07-29T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Features/</loc>

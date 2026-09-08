@@ -6,8 +6,15 @@
     <description>Recent content in Security on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 07 Sep 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Workload identity in Apache Camel with SPIFFE and SPIRE</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/</link>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/</guid>
+      <description>Camel 4.23 is planned for October and it adds a new component, camel-spiffe. The problem it solves is not obvious if you have never looked at SPIFFE, so I want to explain what it is for, what it does, and point at the example I wrote for it.&#xA;The problem Two services that talk to each other need to know who is on the other side. The usual answer is a credential that one side stores and the other side checks: an API key in a properties file, a password in a Kubernetes secret, a client certificate that somebody generated years ago.</description>
+    </item>
     <item>
       <title>Built to Patch Fast: Apache Camel&#39;s Security Response in 2026</title>
       <link>https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/</link>

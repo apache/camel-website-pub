@@ -2,8 +2,9 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[237]{title,link,pubDate,description}:
+posts[238]{title,link,pubDate,description}:
   Camel K 2.11.0|https://camel.apache.org/blog/2026/09/camel-k-2-11/index.md|Tue, 08 Sep 2026 00:00:00 +0000|*© National Gallery of Art (nga.gov) We&rsquo;re happy to announce the availability of Apache Camel K version 2.11.0. This is a special release as we have decided to move to a new runtime provider, pl
+  Workload identity in Apache Camel with SPIFFE and SPIRE|https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/index.md|Mon, 07 Sep 2026 00:00:00 +0000|Camel 4.23 is planned for October and it adds a new component, camel-spiffe. The problem it solves is not obvious if you have never looked at SPIFFE, so I want to explain what it is for, what it does,
   GenAI Observability with Spring Boot and the Camel Observability Stack|https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/index.md|Tue, 01 Sep 2026 00:00:00 +0000|In Part 1 we prototyped GenAI observability with the Camel CLI and TUI. This follow-up — Phase 3 (Operate) — shows the same gen_ai.* telemetry in a Spring Boot application wired to the observability s
   Observe Your Camel AI Routes with GenAI OpenTelemetry|https://camel.apache.org/blog/2026/09/camel-genai-observability-jbang/index.md|Tue, 01 Sep 2026 00:00:00 +0000|Once LLMs live inside Camel routes, the next question is always the same: how much are we spending, and where is latency coming from? Apache Camel 4.23 introduces GenAI observability — OpenTelemetry s
   Camel Quarkus 3.39.0 Released|https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/index.md|Mon, 24 Aug 2026 00:00:00 +0000|Camel Quarkus 3.39.0 release

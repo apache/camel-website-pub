@@ -1,11 +1,14 @@
-urls[852]{loc,lastmod}:
+urls[853]{loc,lastmod}:
   https://camel.apache.org/blog/,2026-09-08T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-k-2-11/,2026-09-08T00:00:00+00:00
   https://camel.apache.org/,2026-09-08T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-09-08T00:00:00+00:00
   https://camel.apache.org/categories/Roadmap/,2026-09-08T00:00:00+00:00
+  https://camel.apache.org/categories/Camel/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/releases/k-2.11.0/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/releases/,2026-09-07T00:00:00+00:00
+  https://camel.apache.org/categories/Security/,2026-09-07T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-09-01T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/,2026-09-01T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-09-01T00:00:00+00:00
@@ -33,12 +36,10 @@ urls[852]{loc,lastmod}:
   https://camel.apache.org/releases/release-4.22.0/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/RELEASE-4.22.0/,2026-08-11T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-08-11T00:00:00+00:00
-  https://camel.apache.org/categories/Camel/,2026-08-07T00:00:00+00:00
   https://camel.apache.org/blog/2026/08/camel-ai-tools-mcp-422/,2026-08-07T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-security-advisories-4.21.0/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-quarkus-release-3.38.0/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/releases/q-3.38.0/,2026-07-29T00:00:00+00:00
-  https://camel.apache.org/categories/Security/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/categories/Features/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-tui/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-07-24T00:00:00+00:00
