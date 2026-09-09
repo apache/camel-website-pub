@@ -1091,6 +1091,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [LangChain4j Chat](../../components/next/langchain4j-chat-component.md) | camel-langchain4j-chat-starter | Stable | 4.5 | LangChain4j Chat component |
 | [LangChain4j Embedding Store](../../components/next/langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore-starter | Stable | 4.14 | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](../../components/next/langchain4j-embeddings-component.md) | camel-langchain4j-embeddings-starter | Stable | 4.5 | LangChain4j Embeddings |
+| [LangChain4j Ingest](../../components/next/langchain4j-ingest-component.md) | camel-langchain4j-ingest-starter | Preview | 4.23 | Ingest documents into a LangChain4j EmbeddingStore: split, embed and store the message body. |
 | [LangChain4j Web Search](../../components/next/langchain4j-web-search-component.md) | camel-langchain4j-web-search-starter | Stable | 4.8 | LangChain4j Web Search Engine |
 | [Language](../../components/next/language-component.md) | camel-language-starter | Stable | 2.5 | Execute scripts in any of the languages supported by Camel. |
 | [LDAP](../../components/next/ldap-component.md) | camel-ldap-starter | Stable | 1.5 | Perform searches on LDAP servers. |

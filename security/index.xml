@@ -6,8 +6,29 @@
     <description>Recent content in Security on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Aug 2026 10:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 08 Sep 2026 11:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-80351</title>
+      <link>https://camel.apache.org/security/CVE-2026-80351.html</link>
+      <pubDate>Tue, 08 Sep 2026 11:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-80351.html</guid>
+      <description>Camel K Tenant repositories reach Maven execution inside operator pod</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-80352</title>
+      <link>https://camel.apache.org/security/CVE-2026-80352.html</link>
+      <pubDate>Tue, 08 Sep 2026 11:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-80352.html</guid>
+      <description>Camel K Master trait serviceAccountName YAML injection lets CR author apply arbitrary objects</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-80354</title>
+      <link>https://camel.apache.org/security/CVE-2026-80354.html</link>
+      <pubDate>Tue, 08 Sep 2026 11:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-80354.html</guid>
+      <description>Camel K Builder trait mavenProfiles ValueSources resolve tenant-named secrets in operator namespace</description>
+    </item>
     <item>
       <title>Apache Camel Security Advisory - CVE-2026-59230</title>
       <link>https://camel.apache.org/security/CVE-2026-59230.html</link>

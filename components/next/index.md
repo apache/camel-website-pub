@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 384 in 310 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 385 in 311 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -294,6 +294,7 @@ Number of Non-Core Components: 384 in 310 JAR artifacts (4 deprecated)
 | [LangChain4j Chat](langchain4j-chat-component.md) | camel-langchain4j-chat | Stable | 4.5 | LangChain4j Chat component |
 | [LangChain4j Embedding Store](langchain4j-embeddingstore-component.md) | camel-langchain4j-embeddingstore | Stable | 4.14 | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](langchain4j-embeddings-component.md) | camel-langchain4j-embeddings | Stable | 4.5 | LangChain4j Embeddings |
+| [LangChain4j Ingest](langchain4j-ingest-component.md) | camel-langchain4j-ingest | Preview | 4.23 | Ingest documents into a LangChain4j EmbeddingStore: split, embed and store the message body. |
 | [LangChain4j Web Search](langchain4j-web-search-component.md) | camel-langchain4j-web-search | Stable | 4.8 | LangChain4j Web Search Engine |
 | [LDAP](ldap-component.md) | camel-ldap | Stable | 1.5 | Perform searches on LDAP servers. |
 | [LDIF](ldif-component.md) | camel-ldif | Stable | 2.20 | Perform updates on an LDAP server from an LDIF body content. |

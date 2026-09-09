@@ -135,7 +135,6 @@ Enum values:
 | **maxRetryRequests** (common) | Specifies the maximum number of additional HTTP Get requests that will be made while reading the data from a response body. | 0 | int |
 | **prefix** (common) | Filters the results to return only blobs whose names begin with the specified prefix. May be null to return all blobs. |  | String |
 | **regex** (common) | Filters the results to return only blobs whose names match the specified regular expression. May be null to return all if both prefix and regex are set, regex takes the priority and prefix is ignored. |  | String |
-| **sasToken** (common) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **serviceClient** (common) | **Autowired** Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). |  | BlobServiceClient |
 | **timeout** (common) | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -236,6 +235,7 @@ Enum values:
 | **azureClientId** (security) | Azure Client ID for authentication with Azure Identity. |  | String |
 | **azureClientSecret** (security) | Azure Client Secret for authentication with Azure Identity. |  | String |
 | **azureTenantId** (security) | Azure Tenant ID for authentication with Azure Identity. |  | String |
+| **sasToken** (security) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **sourceBlobAccessKey** (security) | Source Blob Access Key: for copyblob operation, sadly, we need to have an accessKey for the source blob we want to copy Passing an accessKey as header, it’s unsafe so we could set as key. |  | String |
 
 ## Endpoint Options
@@ -309,7 +309,6 @@ Enum values:
 | **maxRetryRequests** (common) | Specifies the maximum number of additional HTTP Get requests that will be made while reading the data from a response body. | 0 | int |
 | **prefix** (common) | Filters the results to return only blobs whose names begin with the specified prefix. May be null to return all blobs. |  | String |
 | **regex** (common) | Filters the results to return only blobs whose names match the specified regular expression. May be null to return all if both prefix and regex are set, regex takes the priority and prefix is ignored. |  | String |
-| **sasToken** (common) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **serviceClient** (common) | **Autowired** Client to a storage account. This client does not hold any state about a particular storage account but is instead a convenient way of sending off appropriate requests to the resource on the service. It may also be used to construct URLs to blobs and containers. This client contains operations on a service account. Operations on a container are available on BlobContainerClient through BlobServiceClient#getBlobContainerClient(String), and operations on a blob are available on BlobClient through BlobContainerClient#getBlobClient(String). |  | BlobServiceClient |
 | **timeout** (common) | An optional timeout value beyond which a RuntimeException will be raised. |  | Duration |
 | **deleteAfterRead** (consumer) | Delete blobs from Azure after they have been retrieved. The delete is only performed if the Exchange is committed. If a rollback occurs, the blob is not deleted. If this option is false, then the same blobs will be retrieved over and over again in the polls. Therefore, you need to use the Idempotent Consumer EIP in the route to filter out duplicates. You can filter using the BlobConstants#BLOB\_NAME header, or only the blob name. | false | boolean |
@@ -488,6 +487,7 @@ Enum values:
 | **azureClientId** (security) | Azure Client ID for authentication with Azure Identity. |  | String |
 | **azureClientSecret** (security) | Azure Client Secret for authentication with Azure Identity. |  | String |
 | **azureTenantId** (security) | Azure Tenant ID for authentication with Azure Identity. |  | String |
+| **sasToken** (security) | In case of usage of Shared Access Signature we’ll need to set a SAS Token. |  | String |
 | **sourceBlobAccessKey** (security) | Source Blob Access Key: for copyblob operation, sadly, we need to have an accessKey for the source blob we want to copy Passing an accessKey as header, it’s unsafe so we could set as key. |  | String |
 
 ## Message Headers

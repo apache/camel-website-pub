@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1788861699424,
+  "generated": 1788936407998,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -22645,6 +22645,12 @@
               "path": "langchain4j-embeddingstore-component.adoc",
               "url": "/components/next/langchain4j-embeddingstore-component.html",
               "title": "LangChain4j Embedding Store"
+            },
+            {
+              "module": "ROOT",
+              "path": "langchain4j-ingest-component.adoc",
+              "url": "/components/next/langchain4j-ingest-component.html",
+              "title": "LangChain4j Ingest"
             },
             {
               "module": "ROOT",

@@ -164,7 +164,7 @@ camel cmd route-topology myApp
 camel cmd route-topology myApp --external
 ```
 
-The `--external` flag includes external systems (Kafka, databases, etc.) as nodes in the graph. Both commands include live metrics by default — use `--metric=false` to disable.
+The `--external` flag includes external systems (Kafka, databases, etc.) as nodes in the graph. Routes created by Kamelets are hidden, as they are an implementation detail of the Kamelet; use `--kamelets` to include them. Both commands include live metrics by default — use `--metric=false` to disable.
 
 > **Tip**
 > The [Camel TUI](camel-jbang-tui.md) shows route diagrams and topology interactively.

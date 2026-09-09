@@ -2,13 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/security/CVE-2026-80351.html</loc>
+    <lastmod>2026-09-08T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-80352.html</loc>
+    <lastmod>2026-09-08T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-80354.html</loc>
+    <lastmod>2026-09-08T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-09-08T11:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/</loc>
+    <lastmod>2026-09-08T11:00:00+02:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2026-09-08T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camel-k-2-11/</loc>
-    <lastmod>2026-09-08T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/</loc>
     <lastmod>2026-09-08T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Releases/</loc>
@@ -72,9 +84,6 @@
     <lastmod>2026-08-24T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-78329.html</loc>
-    <lastmod>2026-08-24T10:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-08-24T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/08/camel-quarkus-release-3.39.0/</loc>

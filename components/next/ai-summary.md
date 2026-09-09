@@ -76,6 +76,10 @@ Perform operations on the LangChain4jEmbeddingStores.
 
 LangChain4j Embeddings
 
+[LangChain4j Ingest](langchain4j-ingest-component.md)
+
+Ingest documents into a LangChain4j EmbeddingStore: split, embed and store the message body.
+
 [LangChain4j Web Search](langchain4j-web-search-component.md)
 
 LangChain4j Web Search Engine

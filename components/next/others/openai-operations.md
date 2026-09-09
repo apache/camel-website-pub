@@ -161,6 +161,8 @@ The following headers are set after an embeddings request:
 | `CamelOpenAIOriginalText` | String/List | Original input text(s) |
 | `CamelOpenAISimilarityScore` | Double | Cosine similarity (if reference embedding provided) |
 
+Set `storeFullResponse=true` to keep the complete SDK response in the `CamelOpenAIEmbeddingsResponse` exchange property.
+
 ## Moderation Operation
 
 The `moderation` operation checks text against the OpenAI usage policies. It is the canonical pre-filter for untrusted input on a public-facing route: rejecting policy-violating content before spending chat tokens or triggering tool calls.
@@ -332,6 +334,8 @@ Supported audio formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm.
 | `CamelOpenAIAudioDuration` | Double | Duration of the audio in seconds (verbose\_json only) |
 | `CamelOpenAIAudioDetectedLanguage` | String | Language detected in the audio (verbose\_json only) |
 
+Set `storeFullResponse=true` to keep the complete SDK response in the `CamelOpenAIAudioTranscriptionResponse` exchange property.
+
 ### Audio Models by Provider
 
   
@@ -457,6 +461,8 @@ The audio translation operation accepts the same message body types as transcrip
 | --- | --- | --- |
 | `CamelOpenAIAudioDuration` | Double | Duration of the audio in seconds (verbose\_json only) |
 | `CamelOpenAIAudioDetectedLanguage` | String | Source language detected in the audio (verbose\_json only) |
+
+Set `storeFullResponse=true` to keep the complete SDK response in the `CamelOpenAIAudioTranslationResponse` exchange property.
 
 ## Audio Speech (Text-to-Speech) Operation
 
