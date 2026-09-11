@@ -68,3 +68,4 @@ The Smooks dataformat supports the following options which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **smooksConfig** (common) |  | `String` | **Required** Path to the Smooks configuration file. |
+| **allowExternalEntities** (security) | `false` | `Boolean` | Whether to allow the XML reader used by Smooks to resolve external XML entities (external general and parameter entities) when parsing XML input. This is disabled by default so that external entities in the message body are not resolved; enable it only for trusted legacy configurations that rely on external entity resolution. |

@@ -70,7 +70,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The JGroups component supports 6 options, which are listed below.
+The JGroups component supports 7 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -81,6 +81,7 @@ The JGroups component supports 6 options, which are listed below.
 | **enableViewMessages** (consumer) | If set to true, the consumer endpoint will receive org.jgroups.View messages as well (not only org.jgroups.Message instances). By default only regular messages are consumed by the endpoint. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the message body deserialized by org.jgroups.Message.getObject(). The pattern is evaluated after JGroups has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the JGroups receive path; to block such attacks, also configure the JVM-wide -Djdk.serialFilter and secure the channel with AUTH and encryption. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. is applied. Use to accept any type. |  | String |
 
 ## Endpoint Options
 
@@ -97,7 +98,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **clusterName** (common) | **Required** The name of the JGroups cluster the component should connect to. |  | String |
 
-### Query Parameters (6 parameters)
+### Query Parameters (7 parameters)
 
    
 | Name | Description | Default | Type |
@@ -122,6 +123,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the message body deserialized by org.jgroups.Message.getObject(). The pattern is evaluated after JGroups has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the JGroups receive path; to block such attacks, also configure the JVM-wide -Djdk.serialFilter and secure the channel with AUTH and encryption. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. is applied. Use to accept any type. |  | String |
 
 ## Message Headers
 
@@ -134,6 +136,41 @@ The JGroups component supports 4 message header(s), which is/are listed below:
 | **CamelJGroupsDest** (common) Constant: [`HEADER_JGROUPS_DEST`](https://javadoc.io/doc/org.apache.camel/camel-jgroups/latest/org/apache/camel/component/jgroups/JGroupsConstants.html#HEADER_JGROUPS_DEST) | Consumer: The org.jgroups.Address instance extracted by org.jgroups.Message.getDest() method of the consumed message. Producer: The custom destination org.jgroups.Address of the message to be sent. |  | Address |
 | **CamelJGroupsSrc** (common) Constant: [`HEADER_JGROUPS_SRC`](https://javadoc.io/doc/org.apache.camel/camel-jgroups/latest/org/apache/camel/component/jgroups/JGroupsConstants.html#HEADER_JGROUPS_SRC) | Consumer : The org.jgroups.Address instance extracted by org.jgroups.Message.getSrc() method of the consumed message. Producer: The custom source org.jgroups.Address of the message to be sent. |  | Address |
 | **CamelJGroupsOriginalMessage** (common) Constant: [`HEADER_JGROUPS_ORIGINAL_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-jgroups/latest/org/apache/camel/component/jgroups/JGroupsConstants.html#HEADER_JGROUPS_ORIGINAL_MESSAGE) | The original org.jgroups.Message instance from which the body of the consumed message has been extracted. |  | Message |
+
+## Security
+
+The `jgroups` consumer converts an incoming cluster message into the exchange body by calling `org.jgroups.Message.getObject()`, which Java-deserializes the payload carried by the message. Deserialization is performed by JGroups on its own receive path, and the bodies a consumer receives originate from any peer that has joined the cluster.
+
+The default JGroups protocol stack (`udp.xml`) multicasts over UDP and does **not** authenticate or encrypt peers: any host able to reach the cluster’s multicast group or bind port can join and send messages. Treat cluster peers as part of your trust boundary and harden the deployment accordingly.
+
+-   **Authenticate and encrypt the channel.** Supply a hardened JGroups configuration through the `channelProperties` option and add the `AUTH` protocol together with `SYM_ENCRYPT` or `ASYM_ENCRYPT`, so that only trusted peers can join and message contents are protected on the wire. See the [JGroups documentation](https://www.jgroups.org) for the protocol-stack reference.
+    
+-   **Constrain deserialization at the JVM.** Set a JVM-wide JEP-290 serialization filter (`-Djdk.serialFilter=…​` or `ObjectInputFilter.Config.setSerialFilter(…​)`) to restrict which classes may be deserialized from the network. Because JGroups deserializes messages inside its own receive path, the JVM-wide filter is the mechanism that constrains that deserialization.
+    
+-   **Restrict the accepted body types in Camel.** The consumer applies a JEP-290 `ObjectInputFilter` pattern to the type of the message body before the exchange is routed, and refuses bodies whose type is not allowed. This is a defense-in-depth allow-list applied _after_ JGroups has deserialized the message; it complements, but does not replace, the JVM-wide `jdk.serialFilter` and the channel authentication and encryption above.
+    
+
+### The consumer deserialization filter
+
+The class check is applied by default. When the `deserializationFilter` option is not configured, the JVM-wide `jdk.serialFilter` is honoured if it is set, otherwise the shared Camel default allow-list is applied: it permits standard Java and Apache Camel types, denies `java.net.**`, and rejects everything else.
+
+A route that exchanges its own classes over the cluster must widen the filter through the `deserializationFilter` option, listing the packages it accepts:
+
+```java
+from("jgroups:clusterName?deserializationFilter=com.example.model.**;java.**;!*")
+  .to("seda:queue");
+```
+
+The snippet below accepts only `String` bodies from the cluster, on top of a hardened, authenticated and encrypted channel supplied through `channelProperties`:
+
+```java
+from("jgroups:clusterName?channelProperties=secure-udp.xml&deserializationFilter=java.lang.String;!*")
+  .to("seda:queue");
+```
+
+Setting `deserializationFilter=*` accepts any type and so opts out of the check.
+
+A refused message is not routed. It is reported to the consumer’s `ExceptionHandler`, which logs it at WARN level by default, and is passed to the route error handler when `bridgeErrorHandler=true` is set.
 
 ## Usage
 

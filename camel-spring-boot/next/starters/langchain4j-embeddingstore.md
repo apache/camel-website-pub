@@ -20,6 +20,12 @@ Please refer to the above links for usage and configuration details.
 
 ## Spring Boot Auto-Configuration
 
+### Providing embedding services
+
+The component requires an `EmbeddingStore` bean. It can also use an `EmbeddingModel` to compute embeddings from plain-text message bodies. Configure either dependency with a compatible LangChain4j Spring Boot starter or provide it as a Spring bean. When more than one bean of either type is available, reference the intended bean explicitly with `embeddingStore` or `embeddingModel` on the endpoint.
+
+See the [LangChain4j Spring Boot integration documentation](https://docs.langchain4j.dev/tutorials/spring-boot-integration) for provider and embedding-store starters, properties, and compatible versions.
+
 The starter supports 11 options, which are listed below.
 
    

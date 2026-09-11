@@ -63,7 +63,7 @@ When using spring-boot with Spring Boot make sure to use the following Maven dep
 </dependency>
 ```
 
-The component supports 305 options, which are listed below.
+The component supports 306 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -245,6 +245,7 @@ The component supports 305 options, which are listed below.
 | **camel.routecontroller.unhealthy-on-exhausted** | Whether to mark the route as unhealthy (down) when all restarting attempts (backoff) have failed and the route is not successfully started and the route manager is giving up. If setting this to false will make health checks ignore this problem and allow to report the Camel application as UP. | true | Boolean |
 | **camel.routecontroller.unhealthy-on-restarting** | Whether to mark the route as unhealthy (down) when the route failed to initially start, and is being controlled for restarting (backoff). If setting this to false will make health checks ignore this problem and allow to report the Camel application as UP. | true | Boolean |
 | **camel.routetemplate.config** | Route template configurations. |  | List |
+| **camel.springboot.lenient-configuration-binding** | Whether a camel.component, camel.dataformat or camel.language option that cannot be set on the Camel component, data format or language it configures should be tolerated. When false (the default) an option the application configured explicitly and that cannot be set aborts startup, so a configured option can never be silently dropped. When true the option is logged at WARN and ignored. | false | Boolean |
 | **camel.ssl.cert-alias** | An optional certificate alias to use. This is useful when the keystore has multiple certificates. |  | String |
 | **camel.ssl.cipher-suites** | The optional explicitly configured cipher suites for this configuration. |  | CipherSuitesParameters |
 | **camel.ssl.cipher-suites-filter** | The optional cipher suite filter configuration for this configuration. |  | FilterParameters |

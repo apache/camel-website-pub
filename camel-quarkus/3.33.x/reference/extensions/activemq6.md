@@ -34,7 +34,7 @@ The Camel ActiveMQ component supports message mapping between `jakarta.jms.Messa
 
 ### Native mode support for jakarta.jms.ObjectMessage
 
-When sending JMS message payloads as `jakarta.jms.ObjectMessage`, you must annotate the relevant classes to be registered for serialization with `@RegisterForReflection(serialization = true)`. Note that this extension automatically sets `quarkus.camel.native.reflection.serialization-enabled = true` for you. Refer to the [native mode user guide](../../user-guide/native-mode.html#serialization) for more information.
+When sending JMS message payloads as `jakarta.jms.ObjectMessage`, you must annotate the relevant classes to be registered for serialization with `@RegisterForReflection(serialization = true)`. Note that this extension automatically enables native serialization support for you. Refer to the [native mode user guide](../../user-guide/native-mode.html#serialization) for more information.
 
 ## Camel Quarkus limitations
 

@@ -185,11 +185,16 @@ You can also configure repositories in `application.properties`:
 camel.jbang.repos=https://packages.atlassian.com/maven-external
 ```
 
-Or set a global default via environment variable:
+Or set a global default with the `camel.extra.repos` JVM system property, which applies to every Camel CLI command without having to repeat `--repos`:
 
 ```bash
 export JAVA_TOOL_OPTIONS="-Dcamel.extra.repos=repo1=https://repo1.example.com/maven2,repo2=https://repo2.example.com/releases"
 ```
+
+The value is a comma-separated list of repositories, where each entry is either a plain URL or an `id=url` pair. Prefer the `id=url` form when the repository requires authentication, as the id is what Camel matches against the `<server>` entries in `~/.m2/settings.xml`.
+
+> **Note**
+> A custom Camel distribution can provide a baseline for this via the `camel.default.extra.repos.default.value` system property. It is only consulted when `camel.extra.repos` is not set, so setting `camel.extra.repos` replaces that baseline rather than adding to it. Apache Camel itself sets neither property.
 
 ## Downloading JARs over the internet
 
@@ -210,20 +215,31 @@ To disable automatic downloading:
 camel run foo.java --download=false
 ```
 
-## Running with Spring Boot or Quarkus
+## Runtimes
 
-Camel CLI can run integrations using Spring Boot or Quarkus runtimes:
+By default `camel run` runs the integration in-process, inside the JVM of the Camel CLI itself. This is the `jbang` runtime: it starts in well under a second and downloads any missing dependencies on the fly, which makes it ideal for prototyping. The trade-off is that the JVM classpath also contains the Camel CLI and its own dependencies, so it does not look exactly like a production deployment.
+
+To run in a separate JVM that only contains the dependencies of your integration, choose one of the other runtimes:
 
 ```bash
+camel run foo.camel.yaml --runtime=main
 camel run foo.camel.yaml --runtime=spring-boot
 camel run foo.camel.yaml --runtime=quarkus
 ```
 
-This does an export to a temporary folder and runs using Maven. Source changes are reloaded via Spring Boot dev-tools or Quarkus dev mode.
+This does an export to a temporary folder (the same as `camel export`), builds the project with Maven, and runs it in a new JVM. Camel Main runs the packaged runner JAR with plain `java`, Spring Boot runs via `spring-boot:run`, and Quarkus via `quarkus:dev` (or `quarkus:run`). This is the same JVM you would get from `camel export`, and is what the Camel TUI uses when launching examples and folders.
 
-Limitations:
+Limitations compared to the `jbang` runtime:
 
--   Spring Boot and Quarkus cannot auto-detect new components (stop and run again to update dependencies)
+-   Startup is slower, as the project must be built with Maven first (the first run also downloads the Maven wrapper and plugins).
+    
+-   New components cannot be auto-detected while running (stop and run again to update dependencies).
+    
+-   `--console` is supported with Camel Main (the exported project enables the developer console, health, info and Jolokia), but not yet with Spring Boot and Quarkus. The deprecated `--health` and `--metrics` options are not supported in a separate JVM; use `--observe` instead.
+    
+-   Options that only work in-process are not supported: `--background`, `--code`, `--open-api`, `--empty` and `--mcp-stdio`.
+    
+-   Dev mode reloads YAML and XML route files from the original source directory; Java sources cannot be live-reloaded (Spring Boot uses dev-tools and Quarkus its dev mode instead).
     
 -   Quarkus versions are locked to a specific Camel version (`camel version list --runtime=quarkus`)
     
@@ -234,6 +250,8 @@ Limitations:
 camel run foo.camel.yaml --runtime=spring-boot --spring-boot-version=3.2.3 --camel-version=4.4.1
 camel run foo.camel.yaml --runtime=quarkus --quarkus-version=3.9.4
 ```
+
+When running an existing Maven project (`camel run pom.xml`) the runtime is detected from the `pom.xml`, as such a project cannot run in-process.
 
 ## Running local Kamelets
 

@@ -30,7 +30,7 @@ When using undertow-spring-security with Spring Boot make sure to use the follow
 </dependency>
 ```
 
-The component supports 5 options, which are listed below.
+The component supports 6 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -40,3 +40,4 @@ The component supports 5 options, which are listed below.
 | **camel.security.undertow.keycloak.realm-id** | Realm id from the keycloak server used for authentication. |  | String |
 | **camel.security.undertow.keycloak.url** | Url to keycloak server which will be used in spring security configuration. (Example "http://localhost:8080"). |  | String |
 | **camel.security.undertow.keycloak.user-name-attribute** | Name of the attribute, which will be used as username. | preferred\_username | String |
+| **camel.security.undertow.keycloak.validate-audience** | Whether an incoming token must carry the configured client id in its aud claim. Every client of a realm shares the signing key, so with this disabled a token minted for any other client of the same realm is accepted. | true | Boolean |

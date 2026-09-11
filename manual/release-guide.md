@@ -223,7 +223,18 @@ Complete the following steps to create a new Camel release:
         
         $ ./mvnw release:prepare -Prelease
         
-    -   This command will create the tag and update all pom files with the given version number.
+    -   This command will:
+        
+        1.  Set the release version, build and tag it.
+            
+        2.  Bump all POMs to the next development SNAPSHOT version.
+            
+        3.  Run an additional `install` pass (the `completionGoals`) to regenerate all `src/generated/` metadata files (JSON descriptors, configurer sources, endpoint-dsl, etc.) that embed the project version.
+            
+        4.  Commit the regenerated files together with the SNAPSHOT version POMs in a single "prepare for next development iteration" commit.
+            
+            The regeneration step eliminates the manual "refresh PR" that was previously required after every release to bring `src/generated/` up to date (CAMEL-23376).
+            
         
     
 5.  Perform the release and publish to the Apache staging repository:

@@ -111,6 +111,7 @@ Enum values:
 | **enableDeadLettering** (consumer) | Enable application level deadlettering to the subscription deadletter subqueue if deadletter related headers are set. | false | boolean |
 | **maxAutoLockRenewDuration** (consumer) | Sets the amount of time (millis) to continue auto-renewing the lock. Setting ZERO disables auto-renewal. For ServiceBus receive mode (RECEIVE\_AND\_DELETE RECEIVE\_AND\_DELETE), auto-renewal is disabled. | 300000 | long |
 | **maxConcurrentCalls** (consumer) | Sets maximum number of concurrent calls. | 1 | int |
+| **maxConcurrentSessions** (consumer) | Sets the maximum number of concurrent sessions to process at any given time. Only applies when sessionEnabled is true. | 1 | int |
 | **prefetchCount** (consumer) | Sets the prefetch count of the receiver. For both PEEK\_LOCK PEEK\_LOCK and RECEIVE\_AND\_DELETE RECEIVE\_AND\_DELETE receive modes the default value is 1. Prefetch speeds up the message flow by aiming to have a message readily available for local retrieval when and before the application asks for one using receive message. Setting a non-zero value will prefetch that number of messages. Setting the value to zero turns prefetch off. |  | int |
 | **processorClient** (consumer) | **Autowired** Sets the processorClient in order to consume messages by the consumer. |  | ServiceBusProcessorClient |
 | **serviceBusReceiveMode** (consumer) | 
@@ -252,6 +253,7 @@ Enum values:
 | **enableDeadLettering** (consumer) | Enable application level deadlettering to the subscription deadletter subqueue if deadletter related headers are set. | false | boolean |
 | **maxAutoLockRenewDuration** (consumer) | Sets the amount of time (millis) to continue auto-renewing the lock. Setting ZERO disables auto-renewal. For ServiceBus receive mode (RECEIVE\_AND\_DELETE RECEIVE\_AND\_DELETE), auto-renewal is disabled. | 300000 | long |
 | **maxConcurrentCalls** (consumer) | Sets maximum number of concurrent calls. | 1 | int |
+| **maxConcurrentSessions** (consumer) | Sets the maximum number of concurrent sessions to process at any given time. Only applies when sessionEnabled is true. | 1 | int |
 | **prefetchCount** (consumer) | Sets the prefetch count of the receiver. For both PEEK\_LOCK PEEK\_LOCK and RECEIVE\_AND\_DELETE RECEIVE\_AND\_DELETE receive modes the default value is 1. Prefetch speeds up the message flow by aiming to have a message readily available for local retrieval when and before the application asks for one using receive message. Setting a non-zero value will prefetch that number of messages. Setting the value to zero turns prefetch off. |  | int |
 | **processorClient** (consumer) | **Autowired** Sets the processorClient in order to consume messages by the consumer. |  | ServiceBusProcessorClient |
 | **serviceBusReceiveMode** (consumer) | 

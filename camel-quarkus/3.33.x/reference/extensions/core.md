@@ -238,9 +238,15 @@ where `my-dep` is a label of your choice to tell Quarkus that `org.my-group` and
  | List of `string` |  |
 | `[quarkus.camel.native.reflection.serialization-enabled](#quarkus-camel-native-reflection-serialization-enabled)`
 
-If `true`, basic classes are registered for serialization; otherwise basic classes won’t be registered automatically for serialization in native mode. The list of classes automatically registered for serialization can be found in [CamelSerializationProcessor.BASE\_SERIALIZATION\_CLASSES](https://github.com/apache/camel-quarkus/blob/main/extensions-core/core/deployment/src/main/java/org/apache/camel/quarkus/core/deployment/CamelSerializationProcessor.java). Setting this to `false` helps to reduce the size of the native image. In JVM mode, there is no real benefit of setting this flag to `true` except for making the behavior consistent with native mode.
+Controls whether classes are registered for serialization in native mode. The base set of classes registered can be found in [CamelSerializationProcessor.BASE\_SERIALIZATION\_CLASSES](https://github.com/apache/camel-quarkus/blob/main/extensions-core/core/deployment/src/main/java/org/apache/camel/quarkus/core/deployment/CamelSerializationProcessor.java).
 
- | `boolean` | `false` |
+When this option is not set, classes are registered for serialization only if an extension on the classpath requires it.
+
+Setting this option to `true` always registers the base set of classes for serialization. Setting it to `false` prevents any registration, even when extensions on the classpath require it. Note that this can cause components relying on Java serialization to fail at runtime.
+
+Disabling serialization helps to reduce the size of the native image. In JVM mode, this option has no effect other than making the behavior consistent with native mode.
+
+ | `boolean` |  |
 | `[quarkus.camel.expression.on-build-time-analysis-failure](#quarkus-camel-expression-on-build-time-analysis-failure)`
 
 What to do if it is not possible to extract expressions from a route definition at build time.

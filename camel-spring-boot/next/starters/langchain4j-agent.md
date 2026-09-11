@@ -20,6 +20,12 @@ Please refer to the above links for usage and configuration details.
 
 ## Spring Boot Auto-Configuration
 
+### Providing an agent model
+
+LangChain4j provider starters can create the `ChatModel` used by an agent. Add the provider’s `-spring-boot-starter` variant with Spring Boot 3 or its `-spring-boot4-starter` variant with Spring Boot 4, then inject the resulting model bean into Camel’s `AgentConfiguration`. The provider starter does not create Camel’s `Agent` or `AgentConfiguration`.
+
+See the [LangChain4j Spring Boot integration documentation](https://docs.langchain4j.dev/tutorials/spring-boot-integration) for provider configuration, and the component documentation for creating and configuring a Camel agent.
+
 The starter supports 15 options, which are listed below.
 
    

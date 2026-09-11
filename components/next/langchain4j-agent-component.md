@@ -187,6 +187,7 @@ Enum values:
 | **CamelLangChain4jAgentResponseModel** (producer) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#RESPONSE_MODEL) | The response model name. Not set by the agent producer when langchain4j Result does not expose it. |  | String |
 | **CamelLangChain4jAgentSources** (producer) Constant: [`SOURCES`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#SOURCES) | RAG sources retrieved during agent invocation. |  | List |
 | **CamelLangChain4jAgentToolExecutions** (producer) Constant: [`TOOL_EXECUTIONS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#TOOL_EXECUTIONS) | Tool executions performed during agent invocation. |  | List |
+| **CamelLangChain4jAgentModerationFlagged** (producer) Constant: [`MODERATION_FLAGGED`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#MODERATION_FLAGGED) | Set to true when user input is rejected by the configured moderation model; not set on success. |  | Boolean |
 
 ## OAuth Authentication
 
@@ -291,6 +292,8 @@ Agents are configured using the `AgentConfiguration` class which provides a flue
     
 -   Input and Output Guardrails
     
+-   Content moderation (`withModerationModel`)
+    
 -   Concurrent tool execution (`withExecuteToolsConcurrently`) for parallel Camel route tools and MCP tools within one LLM round trip
     
 -   Tool-calling control: round-trip limits, hallucinated tool handling, and error compensation
@@ -311,6 +314,28 @@ Agents are configured using the `AgentConfiguration` class which provides a flue
 | `withToolArgumentsErrorHandler(…​)` | Handles invalid or unparsable tool arguments |
 | `withCompensateOnToolErrors(Boolean)` | Sends tool errors back to the LLM so it can recover instead of failing the exchange |
 | `withExecuteToolsConcurrently()` / `withExecuteToolsConcurrently(Executor)` | Runs multiple tool calls from one LLM turn in parallel |
+
+#### Content moderation
+
+When `AgentConfiguration.withModerationModel(ModerationModel)` is set, Camel pre-moderates the user message before invoking the chat model. Flagged input raises `ModerationException` before tools run or memory is updated. The producer sets the `CamelLangChain4jAgentModerationFlagged` header to `true` on failure so routes can return a controlled refusal. See [Content Moderation](others/langchain4j-agent-guardrails.html#_content_moderation) for route examples. The flagged text is available via `${exception.moderation}` when handling `ModerationException`.
+
+_Java-only: public support chatbot with moderation_
+
+```java
+AgentConfiguration configuration = new AgentConfiguration()
+    .withChatModel(chatModel)
+    .withModerationModel(openAiModerationModel);
+
+context.getRegistry().bind("supportAgentConfig", configuration);
+
+onException(ModerationException.class)
+    .handled(true)
+    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(422))
+    .setBody(constant("Sorry, your message violates our usage policy."));
+
+from("platform-http:/support/chat")
+    .to("langchain4j-agent:support?agentConfiguration=#supportAgentConfig&tags=orders,billing");
+```
 
 _Java-only: recover from a hallucinated tool name_
 

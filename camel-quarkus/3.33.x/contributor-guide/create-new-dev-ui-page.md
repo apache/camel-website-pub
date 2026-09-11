@@ -59,7 +59,36 @@ For example, if you wanted to add a page for the Camel console `foo`, you would 
     
     <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Extending <code>QwcCamelCore</code> will automatically configure hot reloading of data and provides some useful data formatting helper methods.</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Call <code>super</code>, passing the id of the Camel console (see more information below) and an optional map of options that the console can use for data filtering and other functions.</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Render your UI. You can use Vaadin components or plain HTML. The console data can be obtained via <code>super.consoleData()</code>.</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>When iterating over the console data you can access the returned JSON fields by referring to their name. E.g. if the console returns JSON <code>[{"dataA": "valueA", "dataB": "valueB"}]</code> you can refer to the data like <code>item.dataA</code> etc.</td></tr><tr><td><i class="conum" data-value="5"></i><b>5</b></td><td>You must register the component at the end of the file.</td></tr></tbody></table>
     
-3.  Finally, you must create a `BuildStep` to add a UI link to the extension Dev UI card as described in the [guide](https://quarkus.io/guides/dev-ui#adding-pages-to-the-dev-ui).
+3.  In the `BuildStep` that registers the Dev UI card page, you must set the `consoleId` metadata on each page that uses a Camel console. This is required for security — only console IDs declared via metadata are accessible through the Dev UI JSON-RPC bridge.
+    
+    ```java
+    import org.apache.camel.quarkus.core.deployment.devui.CamelDevUIConstants;
+    
+    cardPageBuildItem.addPage(Page.webComponentPageBuilder()
+            .title("Foo")
+            .icon("font-awesome-solid:bars")
+            .componentLink("qwc-camel-foo.js")
+            .metadata(CamelDevUIConstants.CONSOLE_ID_METADATA_KEY, "foo"));
+    ```
+    
+    If a page with a `qwc-camel` component link does not declare this metadata, the build will fail. Pages that do not use the JSON-RPC console bridge (e.g. pages extending `LitElement` directly) should set the value to `CamelDevUIConstants.CONSOLE_ID_NONE`.
+    
+    If your page passes options to the Camel console (via the second argument to `super()` or via `super.putOption()`), you must also declare the allowed option keys and their permitted values:
+    
+    ```java
+    // Only the 'limit' option is allowed, with any value
+    .metadata(CamelDevUIConstants.ALLOWED_OPTIONS_METADATA_KEY, "limit=*")
+    
+    // Only the 'dump' option is allowed, and only with value 'false'
+    .metadata(CamelDevUIConstants.ALLOWED_OPTIONS_METADATA_KEY, "dump=false")
+    
+    // Multiple options: semicolon-separated. Multiple allowed values: pipe-separated
+    .metadata(CamelDevUIConstants.ALLOWED_OPTIONS_METADATA_KEY, "key1=val1|val2;key2=*")
+    ```
+    
+    Options not declared in this metadata are silently stripped at runtime. Pages that do not use options need not declare this metadata — the secure default is to allow no options.
+    
+4.  Finally, the Dev UI card must be registered as described in the [guide](https://quarkus.io/guides/dev-ui#adding-pages-to-the-dev-ui).
     
 
 ### Finding the Camel console ID

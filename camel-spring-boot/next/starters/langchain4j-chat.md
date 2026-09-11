@@ -20,6 +20,12 @@ Please refer to the above links for usage and configuration details.
 
 ## Spring Boot Auto-Configuration
 
+### Providing a `ChatModel`
+
+The Camel starter configures the component but does not create a LangChain4j `ChatModel`. Add a LangChain4j provider starter to create one from application properties. Use the `-spring-boot-starter` variant with Spring Boot 3 or the `-spring-boot4-starter` variant with Spring Boot 4. For example, `langchain4j-ollama-spring-boot4-starter` creates an `ollamaChatModel` bean that can be referenced with `chatModel=#ollamaChatModel`.
+
+When exactly one `ChatModel` is available, Camel autowires it and the `chatModel` endpoint option can be omitted. See the [LangChain4j Spring Boot integration documentation](https://docs.langchain4j.dev/tutorials/spring-boot-integration) for provider starters, properties, and compatible versions.
+
 The starter supports 6 options, which are listed below.
 
    

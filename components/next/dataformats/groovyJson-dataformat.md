@@ -23,7 +23,7 @@ This data format supports marshalling from the following Java type to JSon:
 
 -   Groovy XML Node object (`groovy.util.Node`) (such as message body is from Groovy XML)
     
--   Jackson Node object (`com.fasterxml.jackson.databind.JsonNode`)
+-   Jackson Node object (`com.fasterxml.jackson.databind.JsonNode` or `tools.jackson.databind.JsonNode`)
     
 -   Camel JSonObject (`org.apache.camel.util.json.JsonObject`)
     

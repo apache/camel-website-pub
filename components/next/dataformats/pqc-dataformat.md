@@ -120,9 +120,12 @@ The KEM encapsulation allows the receiver to decapsulate the shared secret using
 
 ## Basic Usage
 
-### Java DSL
+PQC DataFormat basic encrypt and decrypt routes
 
-_Java-only: PQC DataFormat basic encrypt and decrypt routes_
+-   Java
+    
+-   YAML
+    
 
 ```java
 // Create PQC DataFormat
@@ -139,8 +142,6 @@ from("file:encrypted")
     .unmarshal(pqcFormat)
     .to("direct:decrypted");
 ```
-
-### YAML DSL
 
 ```yaml
 - route:

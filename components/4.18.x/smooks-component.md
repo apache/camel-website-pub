@@ -107,7 +107,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **smooksConfig** (producer) | **Required** Path to the Smooks configuration file. |  | String |
 
-### Query Parameters (3 parameters)
+### Query Parameters (4 parameters)
 
    
 | Name | Description | Default | Type |
@@ -115,6 +115,7 @@ With the following _path_ and _query_ parameters:
 | **reportPath** (producer) | File path to place the generated HTML execution report. The report is a useful tool in the developers arsenal for diagnosing issues or comprehending a transformation. Do not set in production since this is a major performance drain. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **allowExecutionContextFromHeader** (advanced) | Allow execution context to be set from the CamelSmooksExecutionContext header. | false | Boolean |
+| **allowExternalEntities** (security) | Whether to allow the XML reader used by Smooks to resolve external XML entities (external general and parameter entities) when parsing XML input. This is disabled by default so that external entities in the message body are not resolved; enable it only for trusted legacy configurations that rely on external entity resolution. | false | boolean |
 
 ## Message Headers
 

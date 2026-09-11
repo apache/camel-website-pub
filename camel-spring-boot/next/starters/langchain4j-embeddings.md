@@ -20,6 +20,12 @@ Please refer to the above links for usage and configuration details.
 
 ## Spring Boot Auto-Configuration
 
+### Providing an `EmbeddingModel`
+
+The Camel starter configures the component but does not create an `EmbeddingModel`. Add a LangChain4j provider starter and configure its embedding-model properties. Use the `-spring-boot-starter` variant with Spring Boot 3 or the `-spring-boot4-starter` variant with Spring Boot 4. For example, the Ollama starter creates an `ollamaEmbeddingModel` bean, which can be referenced with `embeddingModel=#ollamaEmbeddingModel`.
+
+When exactly one `EmbeddingModel` is available, Camel autowires it and the `embeddingModel` endpoint option can be omitted. See the [LangChain4j Spring Boot integration documentation](https://docs.langchain4j.dev/tutorials/spring-boot-integration) for provider starters, properties, and compatible versions.
+
 The starter supports 5 options, which are listed below.
 
    
