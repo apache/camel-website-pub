@@ -1,3 +1,5 @@
+Camel Components
+
 # Aggregate
 
 The [Aggregator](http://www.enterpriseintegrationpatterns.com/Aggregator.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to combine a number of messages into a single message.

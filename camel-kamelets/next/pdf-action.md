@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![pdf action](_images/kamelets/pdf-action.svg) PDF Action
 
 **Provided by: "Apache Software Foundation"**

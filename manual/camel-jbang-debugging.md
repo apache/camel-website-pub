@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI - Debugging
 
 The Camel CLI provides built-in debugging capabilities — from Camel’s own route debugger to standard Java debugging. For the full overview, see [Camel CLI](camel-jbang.md).

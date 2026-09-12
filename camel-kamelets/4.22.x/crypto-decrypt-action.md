@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![crypto decrypt action](_images/kamelets/crypto-decrypt-action.svg) Crypto Decrypt Action
 
 **Provided by: "Apache Software Foundation"**

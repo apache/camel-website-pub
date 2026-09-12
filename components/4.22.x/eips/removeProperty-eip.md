@@ -1,3 +1,5 @@
+Camel Components
+
 # Remove Property
 
 The Remove Property EIP allows you to remove a single property from the `Exchange`.

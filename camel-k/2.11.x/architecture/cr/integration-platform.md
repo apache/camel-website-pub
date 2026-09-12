@@ -1,3 +1,5 @@
+Camel K
+
 # IntegrationPlatform
 
 The **IntegrationPlatform** CR is the resource used to control the behavior of the Camel K Operator.

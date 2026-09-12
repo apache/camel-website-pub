@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-s3-event-based-source-kafka-connector source configuration
 
 Connector Description: Receive data from AWS SQS subscribed to Eventbridge Bus reporting events related to an S3 bucket or multiple buckets.

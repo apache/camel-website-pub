@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws bedrock agent runtime sink](_images/kamelets/aws-bedrock-agent-runtime-sink.svg) AWS Bedrock Agent Runtime Sink
 
 **Provided by: "Apache Software Foundation"**

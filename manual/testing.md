@@ -1,3 +1,5 @@
+User manual
+
 # Testing
 
 Testing is a crucial activity in any piece of software development or integration. Typically, Camel users would use various different technologies wired together in a variety of EIPs with different endpoints, languages, bean integration, and dependency injection, so it’s easy for things to go wrong! Testing is the crucial weapon to ensure that things work as you would expect.

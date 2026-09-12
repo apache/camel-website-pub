@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![mqtt sink](_images/kamelets/mqtt-sink.svg) MQTT Sink
 
 **Provided by: "Apache Software Foundation"**

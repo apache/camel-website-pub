@@ -1,3 +1,5 @@
+Camel Components
+
 # LangChain4j Ingest
 
 **Since Camel 4.23**

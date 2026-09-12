@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![solr sink](_images/kamelets/solr-sink.svg) Solr Sink
 
 **Provided by: "Apache Software Foundation"**

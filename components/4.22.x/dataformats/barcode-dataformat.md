@@ -1,3 +1,5 @@
+Camel Components
+
 # Barcode
 
 **Since Camel 2.14**

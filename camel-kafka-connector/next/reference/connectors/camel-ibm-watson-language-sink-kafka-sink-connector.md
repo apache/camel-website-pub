@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-ibm-watson-language-sink-kafka-connector sink configuration
 
 Connector Description: Analyze text using IBM Watson Natural Language Understanding to extract sentiment, entities, keywords, concepts, categories, and emotions.

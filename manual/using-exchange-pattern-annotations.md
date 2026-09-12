@@ -1,3 +1,5 @@
+User manual
+
 # Using Exchange Pattern Annotations
 
 Invoking InOut methods for [request/reply](../components/4.22.x/eips/requestReply-eip.md) when working with [POJO Producing](pojo-producing.md) is typically synchronous. As such, the caller will block until the server returns a result.

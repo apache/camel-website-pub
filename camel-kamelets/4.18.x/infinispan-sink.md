@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![infinispan sink](_images/kamelets/infinispan-sink.svg) Infinispan Sink
 
 **Provided by: "Apache Software Foundation"**

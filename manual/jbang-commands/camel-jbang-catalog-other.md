@@ -1,3 +1,5 @@
+User manual
+
 # camel catalog other
 
 List miscellaneous components from the Camel Catalog

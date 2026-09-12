@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Spring Boot XML
 
 **Since Camel 3.9**

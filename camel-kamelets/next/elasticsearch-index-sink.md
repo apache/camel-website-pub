@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![elasticsearch index sink](_images/kamelets/elasticsearch-index-sink.svg) ElasticSearch Index Sink
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![log action](_images/kamelets/log-action.svg) Log Action
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Camel Components
+
 # MyBatis
 
 **Since Camel 2.7**

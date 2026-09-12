@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-nats-source-kafka-connector source configuration
 
 Connector Description: Receive data from NATS topics.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure storage blob source](_images/kamelets/azure-storage-blob-source.svg) Azure Storage Blob Source
 
 **Provided by: "Apache Software Foundation"**

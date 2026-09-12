@@ -1,3 +1,5 @@
+Camel Components
+
 # SEDA
 
 **Since Camel 1.1**

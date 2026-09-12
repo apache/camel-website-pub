@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-dropbox-sink-kafka-connector sink configuration
 
 Connector Description: Upload Files to Dropbox.

@@ -1,3 +1,5 @@
+Camel K
+
 # Releases
 
 Camel K is a software that is constantly evolving. We attempts to make a minor release every quarter and a patch release whenever we discover any important regression or CVE. Major upgrades are happening ad-hoc, only in presence of design and breaking compatibility changes required for the project to evolve (ie, when moving default Camel 3.x to Camel 4.x). There are 3 main drivers to understand the Camel K software release cycle:

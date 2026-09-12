@@ -1,3 +1,5 @@
+Camel K
+
 # Platform architecture
 
 Since version 2, Camel K is publishing an ARM64 architecture beside the default AMD64 architecture. You can build your particular architecture from source as well, following the guidelines in [Local development](../../contributing/local-development.md).

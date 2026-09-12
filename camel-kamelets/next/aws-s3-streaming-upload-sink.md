@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws s3 streaming upload sink](_images/kamelets/aws-s3-streaming-upload-sink.svg) AWS S3 Streaming upload Sink
 
 **Provided by: "Apache Software Foundation"**

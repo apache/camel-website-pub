@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![protobuf deserialize action](_images/kamelets/protobuf-deserialize-action.svg) Protobuf Deserialize Action
 
 **Provided by: "Apache Software Foundation"**

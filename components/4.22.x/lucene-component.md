@@ -1,3 +1,5 @@
+Camel Components
+
 # Lucene
 
 **Since Camel 2.2**

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-rest-openapi-sink-kafka-connector sink configuration
 
 Connector Description: Load an OpenAPI specification from a URI and call an operation on a HTTP service. The request that is generated respects the rules given in the OpenAPI specification (for example, path parameters and Content-Type).

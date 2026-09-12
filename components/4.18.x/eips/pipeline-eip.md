@@ -1,3 +1,5 @@
+Camel Components
+
 # Pipeline
 
 Camel supports the [Pipes and Filters](http://www.enterpriseintegrationpatterns.com/PipesAndFilters.md) from the [EIP patterns](enterprise-integration-patterns.md) in various ways.

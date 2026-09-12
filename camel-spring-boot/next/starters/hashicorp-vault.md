@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # HashiCorp Vault
 
 Manage secrets in HashiCorp Vault Service

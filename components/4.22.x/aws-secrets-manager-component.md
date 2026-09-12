@@ -1,3 +1,5 @@
+Camel Components
+
 # AWS Secrets Manager
 
 **Since Camel 3.9**

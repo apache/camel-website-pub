@@ -1,3 +1,5 @@
+Camel K
+
 # Camel K Operator Logging
 
 The operator provides [structured logging](https://kubernetes.io/blog/2020/09/04/kubernetes-1-19-introducing-structured-logs/), so that the logs are more easily parsable. This includes the output of components managed by the operator, such as the Maven build, and the Integration container image build. For example, the Maven build logs display like this:

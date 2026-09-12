@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-azure-storage-queue-sink-kafka-connector sink configuration
 
 Connector Description: Send events to Azure Storage queues.

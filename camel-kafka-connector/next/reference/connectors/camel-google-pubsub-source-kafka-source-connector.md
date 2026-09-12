@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-pubsub-source-kafka-connector source configuration
 
 Connector Description: Consume messages from Google Cloud Pub/Sub.

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-cloudwatch-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Amazon CloudWatch metrics.

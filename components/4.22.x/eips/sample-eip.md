@@ -1,3 +1,5 @@
+Camel Components
+
 # Sample
 
 A sampling throttler allows you to extract a sample of the exchanges from the traffic through a route.

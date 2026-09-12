@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI - Data Transformation
 
 The Camel CLI includes tools for transforming messages and converting between route DSL formats — with live reload for interactive development. For the full overview, see [Camel CLI](camel-jbang.md).

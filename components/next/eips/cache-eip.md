@@ -1,3 +1,5 @@
+Camel Components
+
 # Cache
 
 The Cache EIP provides a transparent read-through cache for a block of processing steps.

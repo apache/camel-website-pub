@@ -1,3 +1,5 @@
+Camel K
+
 # Uninstalling Camel K
 
 We’re sad to see you go, but If you really need to, it is possible to completely uninstall Camel K from your cluster. The uninstalling procedure typically removes the operator but keeps Custom Resource Definition and any Integration which was previously running. They can be removed by the user by an additional cleaning operation.

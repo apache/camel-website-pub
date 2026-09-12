@@ -1,3 +1,5 @@
+Camel Components
+
 # StreamConfig
 
 Configuring for [Resequence EIP](resequence-eip.md) in stream mode.

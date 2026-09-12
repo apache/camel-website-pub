@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Testing the Camel Kafka Connector
 
 ## Table of Contents

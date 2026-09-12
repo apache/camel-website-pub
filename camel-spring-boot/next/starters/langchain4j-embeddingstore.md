@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # LangChain4j Embedding Store
 
 Perform operations on the LangChain4jEmbeddingStores.

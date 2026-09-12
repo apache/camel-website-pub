@@ -1,3 +1,5 @@
+Camel Components
+
 # Message Bus
 
 Camel supports the [Message Bus](https://www.enterpriseintegrationpatterns.com/MessageBus.md) from the [EIP patterns](enterprise-integration-patterns.md). You could view Camel as a Message Bus itself as it allows producers and consumers to be decoupled.

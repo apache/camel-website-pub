@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Weather
 
 Poll the weather information from Open Weather Map.

@@ -1,3 +1,5 @@
+User manual
+
 # Batch Consumer
 
 Batch Consumer is basically a [Polling Consumer](../components/4.22.x/eips/polling-consumer.md) that is capable of polling multiple Exchanges in a single pool.

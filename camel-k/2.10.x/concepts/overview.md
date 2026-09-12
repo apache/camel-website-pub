@@ -1,3 +1,5 @@
+Camel K
+
 # What is Camel K
 
 Camel K is a [Kubernetes Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) in charge to manage the lifecycle of Camel workloads running on the cloud. It can manages aspects like build and deploy (managed Integrations), only deploy (self managed build Integrations) and any other operational aspects (promoting across environments, monitoring, resource tuning, upgrades, interactions with Knative and Kafka, …​).

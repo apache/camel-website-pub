@@ -1,3 +1,5 @@
+Camel Components
+
 # Filter
 
 The [Message Filter](http://www.enterpriseintegrationpatterns.com/Filter.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to filter messages.

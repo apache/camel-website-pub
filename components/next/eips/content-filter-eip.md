@@ -1,3 +1,5 @@
+Camel Components
+
 # Content Filter
 
 Camel supports the [Content Filter](http://www.enterpriseintegrationpatterns.com/ContentFilter.md) from the [EIP patterns](enterprise-integration-patterns.md) using one of the following mechanisms in the routing logic to transform content from the inbound message.

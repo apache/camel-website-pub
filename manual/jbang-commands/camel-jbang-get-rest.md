@@ -1,3 +1,5 @@
+User manual
+
 # camel get rest
 
 Get REST services of Camel integrations

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![bitcoin source](_images/kamelets/bitcoin-source.svg) Bitcoin Source
 
 **Provided by: "Apache Software Foundation"**

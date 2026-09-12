@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kafka-apicurio-registry-not-secured-source-kafka-connector source configuration
 
 Connector Description: Receive data from Kafka topics on an insecure broker combined with Apicurio Registry.

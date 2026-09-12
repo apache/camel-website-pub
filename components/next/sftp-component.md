@@ -1,3 +1,5 @@
+Camel Components
+
 # SFTP
 
 **Since Camel 1.1**

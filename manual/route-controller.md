@@ -1,3 +1,5 @@
+User manual
+
 # Route Controller
 
 Camel uses a `RouteController` for managing the lifecycle of all the routes. The controller is mainly in use during starting up the routes when Camel startup.

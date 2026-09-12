@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Resilience4j
 
 Spring Boot auto-configuration for Camel Resilience4j Circuit Breaker.

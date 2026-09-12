@@ -1,3 +1,5 @@
+User manual
+
 # camel dependency
 
 Displays all Camel dependencies required to run

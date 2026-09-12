@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-calendar-source-kafka-connector source configuration
 
 Connector Description: Receive event data from Google Calendar.

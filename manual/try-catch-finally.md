@@ -1,3 +1,5 @@
+User manual
+
 # Try, Catch and Finally
 
 Camel supports the Java equivalent of try …​ catch …​ finally directly in the DSL. It aims to work like its Java sisters but with more power.

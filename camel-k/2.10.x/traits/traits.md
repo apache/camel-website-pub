@@ -1,3 +1,5 @@
+Camel K
+
 # Traits
 
 A Camel K trait is a feature which encapsulate a specific Kubernetes behavior. The traits are used to fine tune the building and deployment process of a Camel workload on the cloud.

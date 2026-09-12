@@ -1,3 +1,5 @@
+User manual
+
 # BacklogDebugger
 
 Camel supports a backlog debugger that is used for live debugging of messages that are routed in Camel. The backlog debugger has additional functionality for easier debugging aimed at tooling, than the Debugger. The backlog debugger is exposed in JMX in the tracer node with the name `BacklogDebugger`. The JMX API is defined in the `org.apache.camel.api.management.mbean.ManagedBacklogDebuggerMBean` interface.

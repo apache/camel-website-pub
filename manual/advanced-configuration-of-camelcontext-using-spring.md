@@ -1,3 +1,5 @@
+User manual
+
 # Camel Spring XML Auto Configuration
 
 This is only applicable when using Spring XML files with the `camel-spring-xml` JAR.

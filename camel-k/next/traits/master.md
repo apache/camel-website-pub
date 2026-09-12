@@ -1,3 +1,5 @@
+Camel K
+
 # Master Trait
 
 Deprecated since2.9.0 The Master trait allows to configure the integration to automatically leverage Kubernetes resources for doing leader election and starting **master** routes only on certain instances.

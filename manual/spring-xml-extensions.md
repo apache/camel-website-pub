@@ -1,3 +1,5 @@
+User manual
+
 # Spring XML
 
 Using Camel with Spring XML files, is a classic way, of using XML DSL with Camel.

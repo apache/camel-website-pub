@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # JGroups Raft Cluster Service
 
 The JGroups Raft Cluster Service starter provides a cluster service implementation using [JGroups](http://www.jgroups.org/) with the Raft consensus protocol for clustering in Camel Spring Boot applications.

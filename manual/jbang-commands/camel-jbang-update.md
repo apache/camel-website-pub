@@ -1,3 +1,5 @@
+User manual
+
 # camel update
 
 Update Camel project

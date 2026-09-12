@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws polly sink](_images/kamelets/aws-polly-sink.svg) AWS Polly Sink
 
 **Provided by: "Apache Software Foundation"**

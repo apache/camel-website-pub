@@ -1,3 +1,5 @@
+Camel Components
+
 # Kubernetes Deployments
 
 **Since Camel 2.20**

@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring LDAP
 
 **Since Camel 2.11**

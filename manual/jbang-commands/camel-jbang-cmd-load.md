@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd load
 
 Loads new source files into an existing Camel

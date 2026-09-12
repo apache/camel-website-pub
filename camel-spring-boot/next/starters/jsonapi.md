@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # JSonApi
 
 Marshal and unmarshal JSON:API resources using JSONAPI-Converter library

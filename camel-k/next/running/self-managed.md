@@ -1,3 +1,5 @@
+Camel K
+
 # Self Managed Build Integrations
 
 Camel K operator is traditionally in charge to perform a build from a Camel DSL source. The resulting Integration depends directly on an [IntegrationKit](../architecture/cr/integration-kit.md), which is a reusable custom resource backing the final container image that your application will run.

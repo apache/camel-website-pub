@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # JGroups
 
 Exchange messages with JGroups clusters.

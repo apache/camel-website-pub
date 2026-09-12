@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd gc
 
 Trigger Java Memory Garbage Collector

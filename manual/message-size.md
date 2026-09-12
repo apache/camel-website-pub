@@ -1,3 +1,5 @@
+User manual
+
 # Message Size
 
 Camel can track the size of message payloads (body and headers) at the endpoint level. This is useful for observability — understanding how large messages are, detecting payload bloat, and monitoring size trends over time. Sizes are tracked per endpoint for both incoming (IN) and outgoing (OUT) directions.

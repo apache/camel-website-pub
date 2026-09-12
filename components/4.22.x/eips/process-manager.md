@@ -1,3 +1,5 @@
+Camel Components
+
 # Process Manager
 
 Camel supports the [Process Manager](https://www.enterpriseintegrationpatterns.com/patterns/messaging/ProcessManager.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

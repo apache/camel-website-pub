@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Promote JVM extension to Native
 
 The directory `extensions-jvm` contains extensions that have not been tested in [native mode](https://quarkus.io/guides/building-native-image) yet. Configuring the [native build](https://quarkus.io/guides/writing-native-applications-tips) and implementing integration tests for them may open the door to even faster startup and lower memory footprint. Please find some guiding steps below to start this quest:

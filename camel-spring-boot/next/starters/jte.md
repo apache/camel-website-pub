@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # JTE
 
 Transform messages using a Java based template engine (JTE).

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-sheets-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Google Sheets and update/append values on a spreadsheet.

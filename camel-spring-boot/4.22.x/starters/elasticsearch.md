@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Elasticsearch
 
 Send requests to Elasticsearch via Java Client API.

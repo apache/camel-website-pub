@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws bedrock agent sink](_images/kamelets/aws-bedrock-agent-sink.svg) AWS Bedrock Agent Sink
 
 **Provided by: "Apache Software Foundation"**

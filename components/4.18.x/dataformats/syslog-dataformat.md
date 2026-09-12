@@ -1,3 +1,5 @@
+Camel Components
+
 # Syslog
 
 **Since Camel 2.6**

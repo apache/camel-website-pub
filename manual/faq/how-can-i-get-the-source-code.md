@@ -1,3 +1,5 @@
+User manual
+
 # How can I get the source code?
 
 The source code is on GitHub at: [https://github.com/apache/camel](https://github.com/apache/camel)

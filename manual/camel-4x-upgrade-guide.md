@@ -1,3 +1,5 @@
+User manual
+
 # Apache Camel 4.x Upgrade Guide
 
 > **Important**

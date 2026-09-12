@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Huawei Simple Message Notification (SMN)
 
 To broadcast messages and connect cloud services through notifications on Huawei Cloud

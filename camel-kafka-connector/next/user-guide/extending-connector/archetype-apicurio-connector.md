@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Apicurio connector Archetypes
 
 In camel-kafka-connector we provide the camel-kafka-connector-extensible-apicurio-archetype for extending the features of a connector with a apicurio bits and make it extensible.

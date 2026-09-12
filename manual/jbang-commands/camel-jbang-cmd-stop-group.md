@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd stop-group
 
 Stop Camel route groups

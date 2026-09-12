@@ -1,3 +1,5 @@
+Camel Components
+
 # Bindy
 
 **Since Camel 2.0**

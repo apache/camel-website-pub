@@ -1,3 +1,5 @@
+Camel Components
+
 # KeyValueRepository Backends
 
 `KeyValueRepository` is the unified storage SPI used by the [Cache EIP](cache-eip.md), [Idempotent Consumer](idempotentConsumer-eip.md), and [Aggregator](aggregate-eip.md) patterns. It provides a simple `get / put / delete / clear` contract — plus an optional atomic `putIfAbsent` — that Camel maps onto many storage technologies through pluggable backend implementations.

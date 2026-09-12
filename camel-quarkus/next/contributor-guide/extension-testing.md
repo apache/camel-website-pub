@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Testing extensions
 
 Testing Camel Quarkus extensions is very similar to [testing Camel Quarkus applications](../user-guide/testing.md). In both cases, the tests interact with a Camel Quarkus application. The main difference is in the purpose of the tested application: when testing extensions, it is there just for the sake of testing. We use it as a means to indirectly verify the functionality of the underlying extension(s).

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![avro deserialize action](_images/kamelets/avro-deserialize-action.svg) Avro Deserialize Action
 
 **Provided by: "Apache Software Foundation"**

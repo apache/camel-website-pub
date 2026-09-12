@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring Main
 
 **Since Camel 3.2**

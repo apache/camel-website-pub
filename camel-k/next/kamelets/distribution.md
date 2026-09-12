@@ -1,3 +1,5 @@
+Camel K
+
 # Kamelets Distribution
 
 The Camel K opinionated way of Kamelets distribution is to expect them available on the cluster. You typically develop a Kamelet and then release it in the Integration namespace or the operator namespace. Alternatively you can also deliver them into any other namespace.

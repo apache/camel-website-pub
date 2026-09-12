@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-cassandra-sink-kafka-connector sink configuration
 
 Connector Description: Send data to an Apache Cassandra cluster.

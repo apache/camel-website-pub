@@ -1,3 +1,5 @@
+User manual
+
 # camel harden
 
 Suggest security hardening for Camel routes using AI/LLM

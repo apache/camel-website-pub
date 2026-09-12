@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-http-sink-kafka-connector sink configuration
 
 Connector Description: Forward data to a HTTP or HTTPS endpoint.

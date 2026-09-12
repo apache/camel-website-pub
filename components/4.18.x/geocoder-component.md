@@ -1,3 +1,5 @@
+Camel Components
+
 # Geocoder
 
 **Since Camel 2.12**

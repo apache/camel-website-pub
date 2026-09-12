@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-twitter-timeline-source-kafka-connector source configuration
 
 Connector Description: Allows to get tweets from the timeline of a specific user from Twitter.

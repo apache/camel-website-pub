@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Atmosphere Websocket
 
 Expose WebSocket endpoints using the Atmosphere framework.

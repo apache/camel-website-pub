@@ -1,3 +1,5 @@
+User manual
+
 # Writing Components
 
 Apache Camel is designed to make it very easy to drop in new components whether they be routing components, transformers, transports etc. The idea of a component is to be a factory and manager of [Endpoints](endpoint.md).

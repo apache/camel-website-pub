@@ -1,3 +1,5 @@
+User manual
+
 # Camel Report Maven Plugin
 
 The Camel Report Maven Plugin supports the following goals

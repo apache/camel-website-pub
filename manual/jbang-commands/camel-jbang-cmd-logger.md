@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd logger
 
 List or change logging levels

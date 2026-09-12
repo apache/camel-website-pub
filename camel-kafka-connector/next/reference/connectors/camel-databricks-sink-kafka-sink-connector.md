@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-databricks-sink-kafka-connector sink configuration
 
 Connector Description: Send data to a Databricks Database. This Kamelet expects a JSON-formatted body. Use key:value pairs to map the JSON fields and parameters. For Unity Catalog workspaces, specify catalog and schema parameters.

@@ -1,3 +1,5 @@
+User manual
+
 # camel plugin list
 
 List all available plugins

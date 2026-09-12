@@ -1,3 +1,5 @@
+User manual
+
 # Transformer
 
 Transformer (`org.apache.camel.spi.Transformer`) performs declarative transformation of the message according to the declared _Input Type_ and/or _Output Type_ on a route definition which declares the expected message type. The default Camel Message implements `DataTypeAware`, which allows to hold the message type represented by `DataType`.

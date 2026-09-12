@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring Event
 
 **Since Camel 1.4**

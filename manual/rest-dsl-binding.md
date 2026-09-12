@@ -1,3 +1,5 @@
+User manual
+
 # Rest DSL - Binding and Configuration
 
 [Back to Rest DSL](rest-dsl.md)

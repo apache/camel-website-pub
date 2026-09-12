@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd browse
 
 Browse pending messages on endpoints

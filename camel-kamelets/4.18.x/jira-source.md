@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![jira source](_images/kamelets/jira-source.svg) Jira Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws comprehend sink](_images/kamelets/aws-comprehend-sink.svg) AWS Comprehend Sink
 
 **Provided by: "Apache Software Foundation"**

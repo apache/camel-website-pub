@@ -1,4 +1,4 @@
-urls[856]{loc,lastmod}:
+urls[857]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-80351.md,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-80352.md,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-80354.md,2026-09-08T11:00:00+02:00
@@ -833,6 +833,7 @@ urls[856]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2013-4330.md,2013-10-04T13:55:09+00:00
   https://camel.apache.org/.well-known/security.txt,
   https://camel.apache.org/acknowledgments/,
+  https://camel.apache.org/projects/,
   https://camel.apache.org/camel-core/,
   https://camel.apache.org/community/articles/,
   https://camel.apache.org/community/books/,

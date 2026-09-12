@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![infinispan source](_images/kamelets/infinispan-source.svg) Infinispan Source
 
 **Provided by: "Apache Software Foundation"**

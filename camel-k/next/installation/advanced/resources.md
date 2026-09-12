@@ -1,3 +1,5 @@
+Camel K
+
 # Infrastructure Pods and Resource Management
 
 During the installation procedure you will be able to provide information on how to best "operationalize" your infrastructure. Here we give you some Kubernetes best practices you can use in order to configure a production ready environment.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![chunk template action](_images/kamelets/chunk-template-action.svg) Chunk Template Action
 
 **Provided by: "Apache Software Foundation"**

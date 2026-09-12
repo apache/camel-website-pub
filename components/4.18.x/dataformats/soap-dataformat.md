@@ -1,3 +1,5 @@
+Camel Components
+
 # SOAP
 
 **Since Camel 2.3**

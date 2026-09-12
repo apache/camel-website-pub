@@ -1,3 +1,5 @@
+Camel K
+
 # Build Pipeline
 
 Camel K operator provides an opinionated pipeline used to generate the project from the source code (user submitted DSL or Git based project), build, "containerize" and push to a container registry. This is generally robust enough to perform the building operations required to build and execute an application on the cloud.

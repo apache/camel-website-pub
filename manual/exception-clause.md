@@ -1,3 +1,5 @@
+User manual
+
 # Exception Clause
 
 You can use the _Exception Clause_ in the Java [DSL](dsl.md) to specify the error handling you require on a per exception type basis using the **`onException()`** method. To get started we give quick sample before digging into how it works.

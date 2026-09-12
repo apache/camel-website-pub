@@ -1,3 +1,5 @@
+Camel Components
+
 # XChange
 
 **Since Camel 2.21**

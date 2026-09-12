@@ -1,3 +1,5 @@
+Camel K
+
 # Components topology
 
 Camel K operator requires certain side technologies in order to perform the build and the deployment of a Camel application into the cloud. The operator itself can take care to build an application or delegate to a builder Pod. However, nothing change for the sake of this document. The operator is very fast in performing its tasks and when you experience some slower operation is typically due to the needs to access to external components/resources. In this document we want to highlight which are those components in order to help you tune them properly.

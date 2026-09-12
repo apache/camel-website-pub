@@ -1,3 +1,5 @@
+User manual
+
 # Property placeholders
 
 Camel has extensive support for property placeholders, which can be used _almost anywhere_ in your Camel [routes](routes.md), [endpoints](endpoint.md), [DSL](dsl.md), and [route configuration](route-configuration.md), [bean integration](bean-integration.md) and elsewhere.

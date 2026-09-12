@@ -1,3 +1,5 @@
+Camel K
+
 # Jolokia Trait
 
 Deprecated since2.8.0 The Jolokia trait activates and configures the Jolokia Java agent. This trait is useful to enable JMX access to Camel application. Make sure you have the right privileges to perform such an action on the cluster.

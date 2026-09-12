@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # MapStruct
 
 Type Conversion using MapStruct

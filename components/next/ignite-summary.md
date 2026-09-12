@@ -1,3 +1,5 @@
+Camel Components
+
 # Ignite
 
 **Since Camel 2.17**

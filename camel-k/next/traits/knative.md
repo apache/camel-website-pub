@@ -1,3 +1,5 @@
+Camel K
+
 # Knative Trait
 
 Deprecated since2.11.0 The Knative trait automatically discovers addresses of Knative resources and inject them into the running integration.

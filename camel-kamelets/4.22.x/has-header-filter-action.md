@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![has header filter action](_images/kamelets/has-header-filter-action.svg) Has Header Filter Action
 
 **Provided by: "Apache Software Foundation"**

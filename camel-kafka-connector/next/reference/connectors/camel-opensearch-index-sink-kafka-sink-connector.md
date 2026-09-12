@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-opensearch-index-sink-kafka-connector sink configuration
 
 Connector Description: Stores JSON-formatted data into Opensearch.

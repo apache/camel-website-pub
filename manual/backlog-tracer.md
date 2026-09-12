@@ -1,3 +1,5 @@
+User manual
+
 # BacklogTracer
 
 Camel supports a backlog tracer interceptor that is used for capturing a trace message of each message as they are routed in Camel. The trace message is stored in a backlog queue, which contains the last N messages for each node in the routes (by default 10).

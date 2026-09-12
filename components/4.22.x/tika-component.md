@@ -1,3 +1,5 @@
+Camel Components
+
 # Tika
 
 **Since Camel 2.19**

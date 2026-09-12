@@ -1,3 +1,5 @@
+Camel Components
+
 # Master
 
 **Since Camel 2.20**

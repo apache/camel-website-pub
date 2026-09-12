@@ -1,3 +1,5 @@
+User manual
+
 # Registry
 
 The `org.apache.camel.spi.Registry` API is a common API to lookup beans in any kind of runtime platform, whether you run Camel on Spring Boot, Quarkus, Standalone, Camel CLI or something else.

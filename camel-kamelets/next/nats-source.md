@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![nats source](_images/kamelets/nats-source.svg) NATS Source
 
 **Provided by: "Apache Software Foundation"**

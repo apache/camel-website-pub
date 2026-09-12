@@ -1,3 +1,5 @@
+Camel Components
+
 # Shiro
 
 **Since Camel 2.5**

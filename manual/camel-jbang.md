@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI
 
 The Camel CLI is the command-line interface for Apache Camel. It gives you a complete, terminal-native development environment for building integrations — from a first prototype to a production-ready project — without requiring an IDE, a Maven project, or boilerplate code.

@@ -1,3 +1,5 @@
+Camel Components
+
 # DuckDB
 
 **Since Camel 4.22**

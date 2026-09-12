@@ -1,3 +1,5 @@
+Camel K
+
 # Local development environment
 
 If you plan on contributing to Camel K, you will end up needing to run and troubleshoot your operator code locally. Here is a guideline that will help you configure your local operator running.

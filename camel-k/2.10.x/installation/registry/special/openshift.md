@@ -1,3 +1,5 @@
+Camel K
+
 # Configuring Openshift registry
 
 Openshift has an embedded container registry you can use to store the images produced by Camel K build process. The full details required to provide access to the registry are available in the [Openshift registry documentation](https://docs.openshift.com/container-platform/4.17/registry/accessing-the-registry.md).

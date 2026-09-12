@@ -1,3 +1,5 @@
+User manual
+
 # Route Configuration
 
 Camel 3.12 introduces route configuration which is used for separating configurations from the routes. This can be used in situations such as configuring different error handling across a set of routes. In previous versions of Camel, this was more cumbersome to do, as you would either have to copy the same configuration to a set of routes or rely on global error handling configuration.

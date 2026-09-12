@@ -1,3 +1,5 @@
+Camel Components
+
 # Thrift
 
 **Since Camel 2.20**

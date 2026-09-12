@@ -1,3 +1,5 @@
+Camel Components
+
 # Resilience4j Configuration
 
 This page documents all the specific options for the [Resilience4j](resilience4j-eip.md) EIP.

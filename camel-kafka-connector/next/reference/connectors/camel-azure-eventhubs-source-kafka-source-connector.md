@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-azure-eventhubs-source-kafka-connector source configuration
 
 Connector Description: Receive events from Azure Event Hubs.

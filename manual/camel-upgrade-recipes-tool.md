@@ -1,3 +1,5 @@
+User manual
+
 # Apache Camel Upgrade Recipes Project
 
 This document provides instructions on how to use the automatic update tool to assist in the migration process.

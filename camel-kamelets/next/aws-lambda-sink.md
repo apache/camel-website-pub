@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws lambda sink](_images/kamelets/aws-lambda-sink.svg) AWS Lambda Sink
 
 **Provided by: "Apache Software Foundation"**

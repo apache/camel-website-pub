@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![rest openapi sink](_images/kamelets/rest-openapi-sink.svg) REST OpenAPI Sink
 
 **Provided by: "Apache Software Foundation"**

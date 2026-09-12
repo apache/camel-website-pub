@@ -1,3 +1,5 @@
+Camel Components
+
 # Wasm
 
 **Since Camel 4.4**

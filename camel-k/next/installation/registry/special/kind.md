@@ -1,3 +1,5 @@
+Camel K
+
 # Configuring a local registry on Kind
 
 Installing Camel K on Kind, with a local insecure registry doesn’t require any special configuration. Assuming you have Kind installed, then start by creating a cluster with a pre-configured local registry by executing the following script:

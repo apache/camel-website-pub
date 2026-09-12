@@ -1,3 +1,5 @@
+Camel Components
+
 # Channel Adapter
 
 Camel supports the [Channel Adapter](https://www.enterpriseintegrationpatterns.com/patterns/messaging/ChannelAdapter.md) from the [EIP patterns](enterprise-integration-patterns.md).

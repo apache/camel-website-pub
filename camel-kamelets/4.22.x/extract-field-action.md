@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![extract field action](_images/kamelets/extract-field-action.svg) Extract Field Action
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Camel Core
+
 # Building Camel from Source
 
 ## Common Requirements

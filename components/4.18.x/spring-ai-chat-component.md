@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring AI Chat
 
 **Since Camel 4.17**

@@ -1,3 +1,5 @@
+Camel Components
+
 # Loop
 
 The Loop EIP allows for processing a message a number of times, possibly in a different way for each iteration.

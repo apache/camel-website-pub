@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-http-secured-sink-kafka-connector sink configuration
 
 Connector Description: Forwards an event to a secured HTTP endpoint. Supports Oauth and Basic authentication.

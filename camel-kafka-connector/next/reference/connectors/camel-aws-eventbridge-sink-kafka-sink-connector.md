@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-eventbridge-sink-kafka-connector sink configuration
 
 Connector Description: Send events to an Amazon Eventbridge Eventbus. In the headers, you can set the \`resources-arn\` / \`ce-resources-arn\` property to specify the ARN of resources related to the event. In the headers, you can set the \`detail-type\` / \`ce-detail-type\` property to specify the detail type related to the event. In the headers, you can set the \`event-source\` / \`ce-event-source\` property to specify the event source related to the event. If you do not set the property in the header, the Kamelet uses the given Kamelet properties as a default.

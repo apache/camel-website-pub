@@ -1,3 +1,5 @@
+User manual
+
 # camel get vault
 
 List secrets from security vaults

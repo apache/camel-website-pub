@@ -1,3 +1,5 @@
+Camel Components
+
 # Multicast
 
 The Multicast EIP allows routing **the same** message to a number of [endpoints](../../../manual/endpoint.md) and process them in a different way.

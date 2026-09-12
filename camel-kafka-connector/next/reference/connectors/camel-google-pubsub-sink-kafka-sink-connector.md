@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-pubsub-sink-kafka-connector sink configuration
 
 Connector Description: Send messages to Google Cloud Pub/Sub.

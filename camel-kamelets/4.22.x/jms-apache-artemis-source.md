@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![jms apache artemis source](_images/kamelets/jms-apache-artemis-source.svg) JMS - Apache Artemis Source
 
 **Provided by: "Apache Software Foundation"**

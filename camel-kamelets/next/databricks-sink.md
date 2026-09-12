@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![databricks sink](_images/kamelets/databricks-sink.svg) Databricks Sink
 
 **Provided by: "Apache Software Foundation"**

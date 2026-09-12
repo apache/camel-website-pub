@@ -1,3 +1,5 @@
+User manual
+
 # Commercial Camel Offerings
 
 Apache Camel is a widely used project. As such, several companies have built products and services around Camel. This page is dedicated to providing descriptions of those offerings and links to more information. Companies are definitely encouraged to update this page directly or [send a mail](/community/mailing-list/) to the Camel PMC with a description of your offerings and we can update the page. The products and services listed on this page are provided for information use only to our users. The Camel PMC does not endorse or recommend any of the products or services on this page. See below for information about what is appropriate to add to the page.

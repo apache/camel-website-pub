@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![ms exchange online imap oauth source](_images/kamelets/ms-exchange-online-imap-oauth-source.svg) Microsoft Exchange IMAP OAuth2 Source
 
 **Provided by: "Apache Software Foundation"**

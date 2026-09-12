@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Native mode
 
 Things to consider before you run your application in native mode.

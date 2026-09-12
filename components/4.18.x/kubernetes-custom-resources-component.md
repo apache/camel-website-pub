@@ -1,3 +1,5 @@
+Camel Components
+
 # Kubernetes Custom Resources
 
 **Since Camel 3.7**

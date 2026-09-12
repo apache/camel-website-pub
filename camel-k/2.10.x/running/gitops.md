@@ -1,3 +1,5 @@
+Camel K
+
 # Camel GitOps
 
 Once your build is complete, you can configure the operator to run an opinionated GitOps strategy. Camel K has a built-in feature which allow the operator to push a branch on a given Git repository with the latest Integration or Pipe candidate release built. In order to set the context, this would be the scenario:

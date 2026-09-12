@@ -1,3 +1,5 @@
+Camel Components
+
 # REST
 
 **Since Camel 2.14**

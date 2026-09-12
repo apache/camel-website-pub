@@ -1,3 +1,5 @@
+Camel Components
+
 # Huawei Cloud Image Recognition
 
 **Since Camel 3.12**

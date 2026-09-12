@@ -1,3 +1,5 @@
+Camel Components
+
 # Pinecone
 
 **Since Camel 4.6**

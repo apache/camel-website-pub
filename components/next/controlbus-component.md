@@ -1,3 +1,5 @@
+Camel Components
+
 # Control Bus
 
 **Since Camel 2.11**

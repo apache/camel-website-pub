@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-mail-source-kafka-connector source configuration
 
 Connector Description: Receive data from Google Mail.

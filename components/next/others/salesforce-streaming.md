@@ -1,3 +1,5 @@
+Camel Components
+
 # Salesforce - Streaming and Pub/Sub
 
 [Back to Salesforce Component](../salesforce-component.md)

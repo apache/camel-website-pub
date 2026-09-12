@@ -1,3 +1,5 @@
+Camel Components
+
 # Remove Variable
 
 The Remove Variable EIP allows you to remove a single variable.

@@ -1,3 +1,5 @@
+Camel K
+
 # Runtime properties
 
 During the execution of an `Integration` you can provide a single property or a property file that will be made available at runtime.

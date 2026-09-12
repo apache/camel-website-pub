@@ -1,3 +1,5 @@
+User manual
+
 # Data Format
 
 Camel supports a pluggable `DataFormat` to allow messages to be marshalled to and from binary or text formats to support a kind of [Message Translator](../components/4.22.x/eips/message-translator.md).

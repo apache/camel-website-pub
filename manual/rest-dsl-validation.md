@@ -1,3 +1,5 @@
+User manual
+
 # Rest DSL - Error Handling and Validation
 
 [Back to Rest DSL](rest-dsl.md)

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-twitter-directmessage-source-kafka-connector source configuration
 
 Connector Description: Allows to get all direct messages for your Twitter account.

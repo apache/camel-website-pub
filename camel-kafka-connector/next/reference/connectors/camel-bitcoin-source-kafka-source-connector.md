@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-bitcoin-source-kafka-connector source configuration
 
 Connector Description: Provides a feed of the value of the Bitcoin compared to USDT using the Binance service.

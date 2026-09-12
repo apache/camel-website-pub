@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![sap netweaver sink](_images/kamelets/sap-netweaver-sink.svg) SAP NetWeaver Sink
 
 **Provided by: "Apache Software Foundation"**

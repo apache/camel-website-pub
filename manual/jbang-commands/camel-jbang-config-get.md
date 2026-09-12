@@ -1,3 +1,5 @@
+User manual
+
 # camel config get
 
 Display user configuration value

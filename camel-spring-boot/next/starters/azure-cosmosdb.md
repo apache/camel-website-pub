@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Azure CosmosDB
 
 To read and write records to the CosmosDB database on Azure cloud platform.

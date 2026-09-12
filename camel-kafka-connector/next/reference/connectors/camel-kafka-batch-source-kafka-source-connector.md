@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kafka-batch-source-kafka-connector source configuration
 
 Connector Description: Receive data from Kafka topics in batch and commit them manually through KafkaManualCommit. This provides complete control over when messages are committed, allowing for custom processing logic before acknowledgment.

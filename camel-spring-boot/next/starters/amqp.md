@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # AMQP
 
 Messaging with AMQP protocol using Apache Qpid Client.

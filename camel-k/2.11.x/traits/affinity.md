@@ -1,3 +1,5 @@
+Camel K
+
 # Affinity Trait
 
 Allows constraining which nodes the integration pod(s) are eligible to be scheduled on, based on labels on the node, or with inter-pod affinity and anti-affinity, based on labels on pods that are already running on the nodes.

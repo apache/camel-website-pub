@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-ftps-source-kafka-connector source configuration
 
 Connector Description: Receive data from an FTPS server.

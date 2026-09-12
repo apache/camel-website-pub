@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-sqlserver-source-kafka-connector source configuration
 
 Connector Description: Query data from a Microsoft SQL Server Database.

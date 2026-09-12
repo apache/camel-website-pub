@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-syslog-kafka-connector source configuration
 
 When using camel-syslog-kafka-connector as source make sure to use the following Maven dependency to have support for the connector:

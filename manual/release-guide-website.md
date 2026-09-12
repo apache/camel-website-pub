@@ -1,3 +1,5 @@
+User manual
+
 # Updating the website after a release
 
 Most steps are the same for all releases, although some details may vary. There are several cases:

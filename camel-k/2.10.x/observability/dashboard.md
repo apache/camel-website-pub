@@ -1,3 +1,5 @@
+Camel K
+
 # Camel Dashboard
 
 [Camel Dashboard](https://camel-tooling.github.io/camel-dashboard/) is a Kubernetes operator that you can use to monitor your fleet of Camel applications deployed in the cloud. Whether you use Camel K to deploy or not, the Dashboard is a great tool that you can use to monitor your Camel fleet.

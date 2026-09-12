@@ -1,3 +1,5 @@
+Camel Components
+
 # Resume Strategies
 
 The resume strategies allow users to implement strategies that point the consumer part of the routes to the last point of consumption. This allows Camel to skip reading and processing data that has already been consumed.

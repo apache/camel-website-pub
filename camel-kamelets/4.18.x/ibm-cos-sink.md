@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![ibm cos sink](_images/kamelets/ibm-cos-sink.svg) IBM Cloud Object Storage Sink
 
 **Provided by: "Apache Software Foundation"**

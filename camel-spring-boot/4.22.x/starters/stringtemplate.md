@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # String Template
 
 Transform messages using StringTemplate engine.

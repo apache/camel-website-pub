@@ -2,6 +2,8 @@
 
 Frequently Asked Questions about Apache Camel.
 
+User manual
+
 # Frequently Asked Questions
 
 Here are a list of commonly asked questions and answers. If you have any questions which are not on this list, please talk to us on the [Mailing Lists](/community/mailing-list/).

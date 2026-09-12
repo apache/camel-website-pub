@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-dropbox-source-kafka-connector source configuration
 
 Connector Description: Consume Files from Dropbox.

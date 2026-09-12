@@ -1,3 +1,5 @@
+Camel Components
+
 # CouchDB
 
 **Since Camel 2.11**

@@ -1,3 +1,5 @@
+Camel K
+
 # Pipes Error Handler
 
 Pipes offer a mechanism to specify an error policy to adopt in case an event produced by a `source` or consumed by a `sink`. Through the definition of an `errorHandler` you will be able to apply certain logic to the failing event, such as simply logging, ignoring the event or posting the event to another `Sink`.

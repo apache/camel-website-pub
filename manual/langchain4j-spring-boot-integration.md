@@ -1,3 +1,5 @@
+User manual
+
 # LangChain4j Spring Boot Integration
 
 **Since Camel 4.18**

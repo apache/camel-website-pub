@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Data Format
 
 Use a Camel Data Format as a regular Camel Component.

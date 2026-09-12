@@ -2,6 +2,8 @@
 
 Index of Camel expression and predicate languages.
 
+Camel Components
+
 # Expression Languages
 
 Below is the list of expression languages that are provided by Apache Camel.

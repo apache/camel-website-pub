@@ -1,3 +1,5 @@
+Camel Components
+
 # Script
 
 The Script EIP is used for executing a coding script.

@@ -1,3 +1,5 @@
+Camel Components
+
 # Properties
 
 **Since Camel 2.3**

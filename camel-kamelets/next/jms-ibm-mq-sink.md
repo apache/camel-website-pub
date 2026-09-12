@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![jms ibm mq sink](_images/kamelets/jms-ibm-mq-sink.svg) JMS - IBM MQ Sink
 
 **Provided by: "Apache Software Foundation"**

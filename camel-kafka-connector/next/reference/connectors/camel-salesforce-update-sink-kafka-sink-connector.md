@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-salesforce-update-sink-kafka-connector sink configuration
 
 Connector Description: Update an object in Salesforce.

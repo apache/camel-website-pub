@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws ddb streams source](_images/kamelets/aws-ddb-streams-source.svg) AWS DynamoDB Streams Source
 
 **Provided by: "Apache Software Foundation"**

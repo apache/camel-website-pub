@@ -1,3 +1,5 @@
+Camel Components
+
 # LangChain4j Agent - Input and Output Guardrails
 
 [Back to LangChain4j Agent Component](../langchain4j-agent-component.md)

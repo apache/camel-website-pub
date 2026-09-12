@@ -1,3 +1,5 @@
+User manual
+
 # Security Policy Enforcement
 
 Camel includes a built-in security policy enforcement mechanism that detects insecure configuration at startup time — before your application processes any messages. It catches common mistakes like plain-text passwords, disabled SSL verification, unsafe deserialization settings, and development features left enabled in production.

@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Contributing
 
 ## Building the code

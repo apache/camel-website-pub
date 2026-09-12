@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Cloudevents
 
 ## Maven coordinates

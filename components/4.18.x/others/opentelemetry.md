@@ -1,3 +1,5 @@
+Camel Components
+
 # OpenTelemetry
 
 **Since Camel 3.5**

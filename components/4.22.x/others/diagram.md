@@ -1,3 +1,5 @@
+Camel Components
+
 # Diagram
 
 **Since Camel 4.21**

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![avro serialize action](_images/kamelets/avro-serialize-action.svg) Avro Serialize Action
 
 **Provided by: "Apache Software Foundation"**

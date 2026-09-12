@@ -1,3 +1,5 @@
+User manual
+
 # Camel Component Maven Plugin
 
 The [Camel Component Maven Plugin](https://github.com/apache/camel/tree/main/tooling/maven/camel-component-maven-plugin) allows third party component developers to generate all the necessary metadata and Java classes for configurations to be used since Camel 3.x. These metadata files and Java files allows for more efficiency and faster runs for your component.

@@ -1,3 +1,5 @@
+Camel Components
+
 # DSL
 
 ## DSL components

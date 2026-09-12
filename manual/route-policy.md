@@ -1,3 +1,5 @@
+User manual
+
 # RoutePolicy
 
 A route policy `org.apache.camel.spi.RoutePolicy` is used to control route(s) at runtime. For example, you can use it to determine whether a route should be running or not. However, the policies can support any kind of use cases.

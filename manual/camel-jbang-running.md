@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI - Running Camel
 
 This page covers the essential options for running Camel integrations — dev mode, properties, profiles, HTTP endpoints, dependencies, and runtimes.

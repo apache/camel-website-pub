@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![kubernetes pods source](_images/kamelets/kubernetes-pods-source.svg) Kubernetes Pods Source
 
 **Provided by: "Apache Software Foundation"**

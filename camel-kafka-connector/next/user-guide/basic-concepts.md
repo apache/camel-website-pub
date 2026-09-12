@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Basic Concepts
 
 In this section we’ll explain the basic concepts of Kafka Connect and Camel and how we can create a relation between the two frameworks

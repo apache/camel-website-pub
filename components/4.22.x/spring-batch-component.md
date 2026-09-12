@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring Batch
 
 **Since Camel 2.10**

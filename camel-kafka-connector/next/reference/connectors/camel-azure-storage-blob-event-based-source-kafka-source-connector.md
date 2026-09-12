@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-azure-storage-blob-event-based-source-kafka-connector source configuration
 
 Connector Description: Receive data from Azure Service Bus subscribed to Azure Eventgrid reporting events related to a Azure Storage Blob account.

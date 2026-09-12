@@ -1,3 +1,5 @@
+Camel K
+
 # Build Pipeline
 
 Since version 2.0, we’ve introduced the concept of `Pipeline` in order to provide a degree of flexibility for those user that want to customize the entire building process. We can think of a pipeline as a series of tasks that can be executed to generate a Camel application project, build it accordingly and publish into a container registry.

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-azure-servicebus-source-kafka-connector source configuration
 
 Connector Description: Consume Messages from Azure Servicebus.

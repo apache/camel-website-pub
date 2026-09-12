@@ -1,3 +1,5 @@
+Camel Components
+
 # YAML SnakeYAML
 
 **Since Camel 2.17**

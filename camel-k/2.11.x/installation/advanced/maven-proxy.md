@@ -1,3 +1,5 @@
+Camel K
+
 # Run a Maven Proxy
 
 Production or corporate environments generally relies on a corporate Maven repository manager that can be used as a proxy for your Camel K operator. This is a [Maven best practice](https://maven.apache.org/repository-management.md) we want to foster as it improves efficiency while performing Camel K builds.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![dropbox source](_images/kamelets/dropbox-source.svg) Dropbox Source
 
 **Provided by: "Apache Software Foundation"**

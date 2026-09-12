@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Kubernetes Cluster Service
 
 The Kubernetes Cluster Service starter provides a cluster service implementation using Kubernetes native mechanisms for clustering in Camel Spring Boot applications.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure storage blob append sink](_images/kamelets/azure-storage-blob-append-sink.svg) Azure Storage Blob Append Sink
 
 **Provided by: "Apache Software Foundation"**

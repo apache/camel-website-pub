@@ -1,3 +1,5 @@
+User manual
+
 # Notify Builder
 
 The `NotifyBuilder` is a builder from the `org.apache.camel.builder` package which allows you to build expressions and then test or wait for that condition to occur. The expressions are based around notifications about [Exchange](exchange.md) being routed. So what does that mean?

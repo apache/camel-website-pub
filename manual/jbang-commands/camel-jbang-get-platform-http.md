@@ -1,3 +1,5 @@
+User manual
+
 # camel get platform-http
 
 Get embedded HTTP services of Camel integrations

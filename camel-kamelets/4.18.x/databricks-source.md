@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![databricks source](_images/kamelets/databricks-source.svg) Databricks Source
 
 **Provided by: "Apache Software Foundation"**

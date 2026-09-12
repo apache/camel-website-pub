@@ -1,3 +1,5 @@
+User manual
+
 # Camel Lifecycle
 
 Camel uses a simple _lifecycle_ interface called [Service](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Service.md) which has `start()` and `stop()` methods.

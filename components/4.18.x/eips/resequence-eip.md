@@ -1,3 +1,5 @@
+Camel Components
+
 # Resequence
 
 Camel supports the [Resequencer](http://www.enterpriseintegrationpatterns.com/Resequencer.md) from the [EIP patterns](enterprise-integration-patterns.md).

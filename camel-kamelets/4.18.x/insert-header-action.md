@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![insert header action](_images/kamelets/insert-header-action.svg) Insert Header Action
 
 **Provided by: "Apache Software Foundation"**

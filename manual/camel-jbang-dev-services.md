@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI - Dev Services
 
 The Camel CLI can start and manage local infrastructure services (databases, message brokers, etc.) for development and testing — similar to Spring Boot Dev Services and Quarkus Dev Services. Services are powered by Apache Camel test-infra and run in containers (Docker or Podman).

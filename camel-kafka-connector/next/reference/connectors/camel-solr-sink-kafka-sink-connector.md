@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-solr-sink-kafka-connector sink configuration
 
 Connector Description: Send documents to Solr Collection.

@@ -1,3 +1,5 @@
+Camel Components
+
 # AWS CloudWatch
 
 **Since Camel 3.1**

@@ -1,3 +1,5 @@
+Camel Components
+
 # Guaranteed Delivery
 
 Camel supports the [Guaranteed Delivery](http://www.enterpriseintegrationpatterns.com/GuaranteedMessaging.md) from the [EIP patterns](enterprise-integration-patterns.md) using among others the following components:

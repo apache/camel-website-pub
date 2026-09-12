@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-salesforce-delete-sink-kafka-connector sink configuration
 
 Connector Description: Remove an object from Salesforce.

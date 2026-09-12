@@ -1,3 +1,5 @@
+User manual
+
 # camel infra restart
 
 Restarts a running external service

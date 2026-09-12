@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-postgresql-source-kafka-connector source configuration
 
 Connector Description: Query data from a PostgreSQL Database.

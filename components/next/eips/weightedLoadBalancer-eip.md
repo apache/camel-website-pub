@@ -1,3 +1,5 @@
+Camel Components
+
 # Weighted Load Balancer
 
 Weighted mode for [Load Balancer](loadBalance-eip.md) EIP. With this policy in case of failures, the exchange will be tried on the next endpoint.

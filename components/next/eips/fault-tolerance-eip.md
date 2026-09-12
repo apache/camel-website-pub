@@ -1,3 +1,5 @@
+Camel Components
+
 # Fault Tolerance EIP
 
 This component supports the [Circuit Breaker](circuitBreaker-eip.md) EIP with the [MicroProfile Fault Tolerance](../others/microprofile-fault-tolerance.md) library.

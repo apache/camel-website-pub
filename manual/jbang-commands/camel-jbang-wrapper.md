@@ -1,3 +1,5 @@
+User manual
+
 # camel wrapper
 
 Install Camel wrapper scripts for version pinning

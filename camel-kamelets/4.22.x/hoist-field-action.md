@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![hoist field action](_images/kamelets/hoist-field-action.svg) Hoist Field Action
 
 **Provided by: "Apache Software Foundation"**

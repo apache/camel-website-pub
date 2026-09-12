@@ -1,3 +1,5 @@
+User manual
+
 # Stream caching
 
 While stream types (like `StreamSource`, `InputStream` and `Reader`) are commonly used in messaging for performance reasons, they also have an important drawback: they can only be read once. In order to be able to work with message content multiple times, the stream needs to be cached.

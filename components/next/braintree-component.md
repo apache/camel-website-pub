@@ -1,3 +1,5 @@
+Camel Components
+
 # Braintree
 
 **Since Camel 2.17**

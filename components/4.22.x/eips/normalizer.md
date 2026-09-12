@@ -1,3 +1,5 @@
+Camel Components
+
 # Normalizer
 
 Camel supports the [Normalizer](https://www.enterpriseintegrationpatterns.com/patterns/messaging/Normalizer.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

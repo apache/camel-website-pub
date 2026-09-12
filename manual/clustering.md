@@ -1,3 +1,5 @@
+User manual
+
 # Clustering
 
 Camel offers the following cluster related SPI:

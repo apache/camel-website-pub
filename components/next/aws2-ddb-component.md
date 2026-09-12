@@ -1,3 +1,5 @@
+Camel Components
+
 # AWS DynamoDB
 
 **Since Camel 3.1**

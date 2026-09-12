@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![snowflake sink](_images/kamelets/snowflake-sink.svg) Snowflake Sink
 
 **Provided by: "Apache Software Foundation"**

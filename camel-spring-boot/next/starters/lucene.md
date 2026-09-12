@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Lucene
 
 Perform inserts or queries against Apache Lucene databases.

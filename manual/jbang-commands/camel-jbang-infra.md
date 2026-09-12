@@ -1,3 +1,5 @@
+User manual
+
 # camel infra
 
 List and Run external services for testing and prototyping

@@ -1,3 +1,5 @@
+User manual
+
 # Route Diagram
 
 **Available as of Camel 4.21**

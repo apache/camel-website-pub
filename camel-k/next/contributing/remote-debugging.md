@@ -1,3 +1,5 @@
+Camel K
+
 # Remote Debugging Camel-K
 
 In this article, we describe the steps needed to be able to remotely debug the Camel-K operator directly from the K8s cluster. By doing so, you are sure that the operator is executed in the same context as your target environment, which is not the case if the operator is launched on the local machine.

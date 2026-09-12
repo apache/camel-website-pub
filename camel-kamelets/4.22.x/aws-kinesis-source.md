@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws kinesis source](_images/kamelets/aws-kinesis-source.svg) AWS Kinesis Source
 
 **Provided by: "Apache Software Foundation"**

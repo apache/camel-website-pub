@@ -1,3 +1,5 @@
+User manual
+
 # Integration Test
 
 The integration test is a special form of testing where you usually start a complete Apache Camel application to verify its interaction with other components and services.

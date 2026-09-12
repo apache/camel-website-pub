@@ -1,3 +1,5 @@
+User manual
+
 # KeyValueRepository
 
 **Since Camel 4.23**

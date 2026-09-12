@@ -1,3 +1,5 @@
+User manual
+
 # EventNotifier
 
 The event notifier `org.apache.camel.spi.EventNotifier` is used to get notified about events within the CamelContext. For example, when a route is started or stopped. The events are collected independently of the CamelContext (routes, services, exchanges, and so on). This means that the notifier doesn’t interfere with the rest of Camel, and the events can be processed independently for logging, data offloading or other type of actions.

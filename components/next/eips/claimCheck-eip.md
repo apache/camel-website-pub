@@ -1,3 +1,5 @@
+Camel Components
+
 # Claim Check
 
 The [Claim Check](http://www.enterpriseintegrationpatterns.com/patterns/messaging/StoreInLibrary.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to replace message content with a claim check (a unique key), which can be used to retrieve the message content at a later time.

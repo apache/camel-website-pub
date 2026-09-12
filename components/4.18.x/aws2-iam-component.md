@@ -1,3 +1,5 @@
+Camel Components
+
 # AWS Identity and Access Management (IAM)
 
 **Since Camel 3.1**

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-cloudtrail-source-kafka-connector source configuration
 
 Connector Description: Receive data from an AWS Cloudtrail.

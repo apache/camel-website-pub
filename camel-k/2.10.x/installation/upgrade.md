@@ -1,3 +1,5 @@
+Camel K
+
 # Upgrade Camel K
 
 Camel K is delivering new features with each new release, so, you’ll be probably running the upgrade process quite often. OLM installation method gives you the possibility to even perform this operation automatically, selecting the auto-upgrade feature when installing. The upgrade operation will install all the required configuration for the new operator version, replacing the previous one. Mind that the `Integration` resources running won’t be affected, so they will keep running with the default runtime details provided in the previous operator version.

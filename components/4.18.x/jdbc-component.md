@@ -1,3 +1,5 @@
+Camel Components
+
 # JDBC
 
 **Since Camel 1.2**

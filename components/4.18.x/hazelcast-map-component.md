@@ -1,3 +1,5 @@
+Camel Components
+
 # Hazelcast Map
 
 **Since Camel 2.7**

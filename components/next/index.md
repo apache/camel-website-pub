@@ -2,6 +2,8 @@
 
 Index of all Camel components.
 
+Camel Components
+
 # Components
 
 ## Core Components

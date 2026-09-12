@@ -1,3 +1,5 @@
+Camel Components
+
 # Micrometer
 
 **Since Camel 2.22**

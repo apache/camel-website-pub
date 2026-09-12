@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Spring Batch
 
 Send messages to Spring Batch for further processing.

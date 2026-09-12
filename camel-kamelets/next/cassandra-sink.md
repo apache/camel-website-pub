@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![cassandra sink](_images/kamelets/cassandra-sink.svg) Cassandra Sink
 
 **Provided by: "Apache Software Foundation"**

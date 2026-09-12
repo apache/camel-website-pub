@@ -1,3 +1,5 @@
+Camel Components
+
 # JTA
 
 **Since Camel 3.4**

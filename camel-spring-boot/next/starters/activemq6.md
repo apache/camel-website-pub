@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # ActiveMQ 6.x
 
 Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component.

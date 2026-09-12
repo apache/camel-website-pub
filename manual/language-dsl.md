@@ -1,3 +1,5 @@
+User manual
+
 # Language DSL
 
 The Language DSL is a builder API that allows using type safe construction of Camel [Languages](languages.md).

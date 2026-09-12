@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # JSON Schema Validator
 
 Validate JSON payloads using NetworkNT JSON Schema.

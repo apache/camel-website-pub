@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Jgroups Raft Cluster Service
 
 Spring Boot auto-configuration for the Camel JGroups Raft Cluster Service.

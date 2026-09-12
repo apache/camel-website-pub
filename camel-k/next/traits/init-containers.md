@@ -1,3 +1,5 @@
+Camel K
+
 # Init Containers Trait
 
 The Init Containers trait can be used to configure `init containers` or `sidecar containers`.

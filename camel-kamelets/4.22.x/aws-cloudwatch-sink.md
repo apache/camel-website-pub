@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws cloudwatch sink](_images/kamelets/aws-cloudwatch-sink.svg) AWS CloudWatch Metrics Sink
 
 **Provided by: "Apache Software Foundation"**

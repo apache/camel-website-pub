@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![spring rabbitmq sink](_images/kamelets/spring-rabbitmq-sink.svg) RabbitMQ Sink
 
 **Provided by: "Apache Software Foundation"**

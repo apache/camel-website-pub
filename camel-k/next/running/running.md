@@ -1,3 +1,5 @@
+Camel K
+
 # Running an Integration
 
 After completing the [installation](../installation/installation.md) you should be able to run an Integration containing a Camel DSL application. The most basic configuration required is to wrap a Camel route into the Integration custom resource. Let’s start with a java DSL Camel application:

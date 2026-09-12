@@ -1,3 +1,5 @@
+Camel Components
+
 # Telemetry
 
 **Since Camel 4.11**

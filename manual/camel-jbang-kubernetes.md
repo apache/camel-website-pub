@@ -1,3 +1,5 @@
+User manual
+
 # Camel Kubernetes plugin
 
 Export, build, push, and deploy Camel integrations to Kubernetes — develop locally with Camel CLI, then promote to any cluster.

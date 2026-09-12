@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-s3-sink-kafka-connector sink configuration
 
 Connector Description: Upload data to an Amazon S3 Bucket.

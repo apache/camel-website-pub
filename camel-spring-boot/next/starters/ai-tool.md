@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # AI Tool
 
 Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry.

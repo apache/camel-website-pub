@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-s3-streaming-upload-sink-kafka-connector sink configuration
 
 Connector Description: Upload data to AWS S3 in streaming upload mode.

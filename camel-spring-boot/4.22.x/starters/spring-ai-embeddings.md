@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Spring AI Embeddings
 
 Spring AI Embeddings

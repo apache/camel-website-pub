@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # GitHub2
 
 Interact with the GitHub API.

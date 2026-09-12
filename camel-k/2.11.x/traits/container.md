@@ -1,3 +1,5 @@
+Camel K
+
 # Container Trait
 
 The Container trait can be used to configure properties of the container where the integration will run.

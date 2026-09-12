@@ -1,3 +1,5 @@
+Camel Components
+
 # Hazelcast Instance
 
 **Since Camel 2.7**

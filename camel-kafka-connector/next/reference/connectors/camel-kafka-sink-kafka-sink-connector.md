@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kafka-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Kafka topics.

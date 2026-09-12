@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring AI Image
 
 **Since Camel 4.19**

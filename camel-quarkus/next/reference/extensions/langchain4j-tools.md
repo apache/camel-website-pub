@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # LangChain4j Tools
 
 JVM since3.15.0 Native since3.24.0 ⚠️Deprecated

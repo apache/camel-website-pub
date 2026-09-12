@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-ibm-cos-source-kafka-connector source configuration
 
 Connector Description: Receive data from an IBM Cloud Object Storage Bucket.

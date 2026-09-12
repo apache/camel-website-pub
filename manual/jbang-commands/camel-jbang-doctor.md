@@ -1,3 +1,5 @@
+User manual
+
 # camel doctor
 
 Checks the environment and reports potential issues

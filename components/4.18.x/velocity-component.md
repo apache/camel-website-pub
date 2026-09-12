@@ -1,3 +1,5 @@
+Camel Components
+
 # Velocity
 
 **Since Camel 1.2**

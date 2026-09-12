@@ -1,3 +1,5 @@
+Camel Components
+
 # Hazelcast SEDA
 
 **Since Camel 2.7**

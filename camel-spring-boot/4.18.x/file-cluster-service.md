@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # File Cluster Service
 
 The File Cluster Service starter provides a cluster service implementation using file-based locking for simple clustering scenarios in Camel Spring Boot applications.

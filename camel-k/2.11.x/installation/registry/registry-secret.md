@@ -1,3 +1,5 @@
+Camel K
+
 # Configuring a secret for the container registry
 
 You can host your container images on [Docker Hub](https://hub.docker.com/) or any other registry out there. Most of the time, the following procedure will be enough to create a secret credentials and let Camel K access privately to a container registry.

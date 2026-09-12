@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Spring LDAP
 
 Perform searches in LDAP servers using filters as the message payload.

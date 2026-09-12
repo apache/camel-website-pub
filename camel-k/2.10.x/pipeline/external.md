@@ -1,3 +1,5 @@
+Camel K
+
 # Full fledged Pipeline
 
 If you’re running a build process over any external pipeline, you likely want to use that CICD technology in conjunction with Camel K. The features provided by our [Camel K Pipeline](pipeline.md) may be limited in such situation. For those requirements we suggest to integrate one of the many CICD technologies around. One that we want to suggest and for which we provide an opinionated approach is [Tekton CICD](https://tekton.dev/).

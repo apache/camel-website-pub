@@ -1,3 +1,5 @@
+User manual
+
 # ProducerTemplate
 
 The `ProducerTemplate` interface allows you to send message exchanges to endpoints in a variety of different ways to make it easy to work with Camel [Endpoint](endpoint.md) instances from Java code.

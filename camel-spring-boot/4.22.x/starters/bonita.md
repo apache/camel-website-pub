@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Bonita
 
 Communicate with a remote Bonita BPM process engine.

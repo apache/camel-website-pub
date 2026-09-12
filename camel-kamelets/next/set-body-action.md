@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![set body action](_images/kamelets/set-body-action.svg) Set Body Action
 
 **Provided by: "Apache Software Foundation"**

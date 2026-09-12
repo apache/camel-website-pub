@@ -1,3 +1,5 @@
+Camel K
+
 # Runtime resources
 
 When you develop an integration with `Camel K` there are many ways you can provide a **resource** to the runtime `Integration`. Since we are dealing with `Kubernetes` we use `Configmap` or `Secret`. The `kamel run` command is provided with a `--resource` flag that help you setting any resource your `Integration` may need.

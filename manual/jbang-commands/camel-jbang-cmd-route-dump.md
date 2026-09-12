@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd route-dump
 
 Dump Camel route in XML, YAML, or Java DSL format

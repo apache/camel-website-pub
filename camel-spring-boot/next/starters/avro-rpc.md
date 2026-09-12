@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Avro RPC
 
 Produce or consume Apache Avro RPC services.

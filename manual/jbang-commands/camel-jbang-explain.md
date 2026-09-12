@@ -1,3 +1,5 @@
+User manual
+
 # camel explain
 
 Explain what a Camel route does using AI/LLM

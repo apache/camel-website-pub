@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure storage datalake sink](_images/kamelets/azure-storage-datalake-sink.svg) Azure Storage Blob Data Lake Sink
 
 **Provided by: "Apache Software Foundation"**

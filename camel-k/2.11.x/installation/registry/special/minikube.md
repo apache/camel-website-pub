@@ -1,3 +1,5 @@
+Camel K
+
 # Configuring registry on Minikube
 
 You can run Camel K integrations on plain Kubernetes using the Minikube cluster creation tool. Follow the instructions in the [official doc](https://github.com/kubernetes/minikube#installation) for the installation.

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Apache Camel Kafka Connect release process
 
 The process is _mutatis mutandis_ the same as for the main Apache Camel repository - see the [Release guide](../../../manual/release-guide.md) page of the Camel documentation.

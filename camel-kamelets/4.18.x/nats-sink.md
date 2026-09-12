@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![nats sink](_images/kamelets/nats-sink.svg) NATS Sink
 
 **Provided by: "Apache Software Foundation"**

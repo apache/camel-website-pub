@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kubernetes-nodes-source-kafka-connector source configuration
 
 Connector Description: Consume Events from Kubernetes Nodes

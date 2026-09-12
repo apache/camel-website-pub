@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Jolokia
 
 Spring Boot auto-configuration for Camel Jolokia integration.

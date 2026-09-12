@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring AI Embeddings
 
 **Since Camel 4.17**

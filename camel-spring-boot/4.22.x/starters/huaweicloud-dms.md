@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Huawei Distributed Message Service (DMS)
 
 To integrate with a fully managed, high-performance message queuing service on Huawei Cloud

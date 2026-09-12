@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-http-source-kafka-connector source configuration
 
 Connector Description: Periodically fetches an HTTP resource and provides the content as output.

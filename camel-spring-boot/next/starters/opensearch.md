@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # OpenSearch
 
 Send requests to OpenSearch via Java Client API.

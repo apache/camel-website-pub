@@ -1,3 +1,5 @@
+Camel Components
+
 # Throttle
 
 How can I throttle messages to ensure that a specific endpoint does not get overloaded, or we don’t exceed an agreed SLA with some external service?

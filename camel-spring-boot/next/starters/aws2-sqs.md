@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # AWS Simple Queue Service (SQS)
 
 Send and receive messages to/from AWS SQS.

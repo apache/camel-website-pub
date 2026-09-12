@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-ibm-cos-sink-kafka-connector sink configuration
 
 Connector Description: Upload data to an IBM Cloud Object Storage Bucket.

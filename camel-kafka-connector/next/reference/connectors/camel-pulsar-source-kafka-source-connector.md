@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-pulsar-source-kafka-connector source configuration
 
 Connector Description: Receive data from Pulsar topics.

@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Quartz
 
 Schedule sending of messages using the Quartz 2.x scheduler.

@@ -1,3 +1,5 @@
+Camel Components
+
 # Dead Letter Channel
 
 Camel supports the [Dead Letter Channel](http://www.enterpriseintegrationpatterns.com/DeadLetterChannel.md) from the [EIP patterns](enterprise-integration-patterns.md) using the [DeadLetterChannel](https://www.javadoc.io/doc/org.apache.camel/camel-core-processor/current/org/apache/camel/processor/errorhandler/DeadLetterChannel.md) processor, which is an [Error Handler](../../../manual/error-handler.md).

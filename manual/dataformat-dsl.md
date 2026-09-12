@@ -1,3 +1,5 @@
+User manual
+
 # Data Format DSL
 
 The Data Format DSL is a builder API that allows using type safe construction of Camel [Data Formats](data-format.md).

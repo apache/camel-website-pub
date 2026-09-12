@@ -1,3 +1,5 @@
+Camel Components
+
 # FTP
 
 **Since Camel 1.1**

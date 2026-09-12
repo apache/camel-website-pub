@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # weaviate
 
 Perform operations on the Weaviate Vector Database.

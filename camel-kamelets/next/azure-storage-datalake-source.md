@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure storage datalake source](_images/kamelets/azure-storage-datalake-source.svg) Azure Storage Blob Data Lake Source
 
 **Provided by: "Apache Software Foundation"**

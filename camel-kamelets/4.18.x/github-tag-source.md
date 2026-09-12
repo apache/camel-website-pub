@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![github tag source](_images/kamelets/github-tag-source.svg) GitHub Tag Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-sqs-fifo-sink-kafka-connector sink configuration
 
 Connector Description: Send message to an AWS SQS FIFO Queue.

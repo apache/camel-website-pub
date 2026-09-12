@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # AWS Rekognition
 
 Manage and invoke AWS Rekognition.

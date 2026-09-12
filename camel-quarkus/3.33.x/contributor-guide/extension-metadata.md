@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Extension metadata
 
 ## `quarkus-extension.yaml`

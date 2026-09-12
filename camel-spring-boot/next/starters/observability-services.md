@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Observability Services
 
 Spring Boot auto-configuration bundling the Camel observability services: metrics, tracing and health.

@@ -1,3 +1,5 @@
+Camel K
+
 # Running operator as a local process
 
 If you need a finer control on the operator process (ie, attaching a debugger or quickly building and running the operator locally), then you can run and debug the operator binary locally. The idea is that you execute it on your machine and instruct the local process to **watch** a namespace on a Kubernetes cluster (it may be remote or any local environment).

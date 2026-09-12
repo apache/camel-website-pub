@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws sqs source](_images/kamelets/aws-sqs-source.svg) AWS SQS Source
 
 **Provided by: "Apache Software Foundation"**

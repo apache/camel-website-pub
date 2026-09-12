@@ -1,3 +1,5 @@
+User manual
+
 # camel get variable
 
 List variables of Camel integrations

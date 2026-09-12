@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Jolokia Starter
 
 The Jolokia Starter integrates [Jolokia](https://jolokia.org/) agent configuration in Spring Boot, wrapping the [Jolokia Spring Support](https://jolokia.org/reference/html/manual/spring.md) with default configurations to let the application work out-of-the-box without manually declaring Jolokia servers.

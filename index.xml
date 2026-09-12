@@ -2659,7 +2659,7 @@
       <link>https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/</guid>
-      <description>After the previous 2.0 GA release, we are happy to announce the release of Kaoto 2.1, packed with exciting new features, bug fixes, and various improvements to enhance the user experience.&#xA;This update introduces the capability to choose your preferred Runtime version among other notable upgrades. Read on to discover the key highlights of this release and how they can improve your workflow with Kaoto. New Features Catalog: Empower users to pick a runtime and specific version to display the right components with their precise configurations.</description>
+      <description>After the previous 2.0 GA release, we are happy to announce the release of Kaoto 2.1, packed with exciting new features, bug fixes, and various improvements to enhance the user experience. This update introduces the capability to choose your preferred Runtime version among other notable upgrades. Read on to discover the key highlights of this release and how they can improve your workflow with Kaoto. New Features Catalog: Empower users to pick a runtime and specific version to display the right components with their precise configurations.</description>
     </item>
     <item>
       <title>Apache Camel 4.7 What&#39;s New</title>
@@ -3982,7 +3982,7 @@
       <link>https://camel.apache.org/blog/2022/10/ContentBasedRoutingWithCamelDroolsQuarkusKogitoAltasMapApacheKafka/</link>
       <pubDate>Mon, 10 Oct 2022 11:56:35 +0200</pubDate>
       <guid>https://camel.apache.org/blog/2022/10/ContentBasedRoutingWithCamelDroolsQuarkusKogitoAltasMapApacheKafka/</guid>
-      <description>In this post I want to share with you how to implement a complete, end-to-end Content Based Routing solution using Apache Camel, AtlasMap and Quarkus as a developer platform, including: Drools DMN Engine, Kogito. Apache Kafka is used in this solution as a message broker.&#xA;Content based routing overview Here is the Enterprise Integration Pattern (EIP) diagram of the flow, annotated with some details of the components used:&#xA;The focus of this solution is routing healthcare-related messages; for this demo example, messages are routed accordingly to the following decision table rules:</description>
+      <description>In this post I want to share with you how to implement a complete, end-to-end **Content Based Routing** solution using [Apache Camel](/#apache-camel-projects), [AtlasMap](https://www.atlasmap.io/) and [Quarkus](https://quarkus.io/) as a developer platform, including: [Drools DMN Engine](https://www.drools.org/learn/dmn.html), [Kogito](https://kogito.kie.org/). Apache Kafka is used in this solution as a message broker. Content based routing overview Here is the Enterprise Integration Pattern (EIP) diagram of the flow, annotated with some details of the components used:&#xA;The focus of this solution is routing healthcare-related messages; for this demo example, messages are routed accordingly to the following decision table rules:</description>
     </item>
     <item>
       <title>Apache Camel 3.19 What&#39;s New</title>
@@ -4066,7 +4066,7 @@
       <link>https://camel.apache.org/blog/2022/08/ApacheCon-Asia-2022-videos/</link>
       <pubDate>Mon, 22 Aug 2022 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2022/08/ApacheCon-Asia-2022-videos/</guid>
-      <description>Video recordings from ApacheCon Asia 2022 are now available for viewing on YouTube.&#xA;The five sessions on the Integration Track can also be viewed embedded here.&#xA;Enjoy!&#xA;Sharing the architecture of DevLake, a research and development performance data integration platform by 陈映初 (Chen Yingchu)&#xA;¬&#xA;Citizen Streaming Engineer - A How To by Timothy Spann&#xA;¬&#xA;Camel K goes Quarkus Native by Pasquale Congiusti&#xA;¬&#xA;Integrating systems in the age of Quarkus, serverless and Kafka by Zineb Bendhiba</description>
+      <description>Video recordings from ApacheCon Asia 2022 are now available for viewing on YouTube.&#xA;The five sessions on the Integration Track can also be viewed embedded here.&#xA;Enjoy!&#xA;Sharing the architecture of DevLake, a research and development performance data integration platform by 陈映初 (Chen Yingchu)&#xA;Citizen Streaming Engineer - A How To by Timothy Spann&#xA;Camel K goes Quarkus Native by Pasquale Congiusti&#xA;Integrating systems in the age of Quarkus, serverless and Kafka by Zineb Bendhiba</description>
     </item>
     <item>
       <title>Release 3.14.5</title>

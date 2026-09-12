@@ -1,3 +1,5 @@
+User manual
+
 # camel get activity
 
 Get recent completed exchange activity

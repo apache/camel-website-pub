@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-azure-storage-datalake-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Azure Storage Blob Data Lake.

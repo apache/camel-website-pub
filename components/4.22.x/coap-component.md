@@ -1,3 +1,5 @@
+Camel Components
+
 # CoAP
 
 **Since Camel 2.16**

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-graphql-sink-kafka-connector sink configuration
 
 Connector Description: Forward data to a GraphQL endpoint.

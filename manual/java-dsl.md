@@ -1,3 +1,5 @@
+User manual
+
 # Java DSL
 
 Apache Camel offers a Java-based DSL.

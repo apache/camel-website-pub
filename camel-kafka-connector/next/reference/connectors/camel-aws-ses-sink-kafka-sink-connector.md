@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-ses-sink-kafka-connector sink configuration
 
 Connector Description: Send email through the Amazon Simple Email Service (SES).

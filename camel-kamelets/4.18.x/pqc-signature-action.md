@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![pqc signature action](_images/kamelets/pqc-signature-action.svg) PQC Signature Action
 
 **Provided by: "Apache Software Foundation"**

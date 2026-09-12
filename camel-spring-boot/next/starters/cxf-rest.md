@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # CXF-RS
 
 Expose JAX-RS REST services using Apache CXF or connect to external REST services using CXF REST client.

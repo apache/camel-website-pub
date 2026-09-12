@@ -1,3 +1,5 @@
+User manual
+
 # Examples
 
 Once you have read about [Getting Started](getting-started.md) and looked at the [Enterprise Integration Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md), you might want to try out some examples.

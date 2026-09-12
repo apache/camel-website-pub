@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-timestream-query-sink-kafka-connector sink configuration
 
 Connector Description: Query an AWS Timestream Database

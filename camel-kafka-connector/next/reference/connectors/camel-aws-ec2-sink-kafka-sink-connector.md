@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-ec2-sink-kafka-connector sink configuration
 
 Connector Description: Check the status of EC2 instances

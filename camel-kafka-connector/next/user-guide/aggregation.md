@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Aggregation
 
 In a Sink Connector scenario, there are, sometimes, use cases where an end user want to aggregate his Kafka record before sending them to an external system. Usually this can be done by defining a batch size or a timeout and once the aggregation has been completed, sent the aggregate records collection to the external system.

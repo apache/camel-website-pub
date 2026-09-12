@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![file watch source](_images/kamelets/file-watch-source.svg) File Watch Source
 
 **Provided by: "Apache Software Foundation"**

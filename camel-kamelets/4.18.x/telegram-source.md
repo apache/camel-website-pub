@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![telegram source](_images/kamelets/telegram-source.svg) Telegram Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![json patch action](_images/kamelets/json-patch-action.svg) Json Patch Action
 
 **Provided by: "Apache Software Foundation"**

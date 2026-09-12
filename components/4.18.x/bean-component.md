@@ -1,3 +1,5 @@
+Camel Components
+
 # Bean
 
 **Since Camel 1.0**

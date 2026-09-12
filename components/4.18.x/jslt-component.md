@@ -1,3 +1,5 @@
+Camel Components
+
 # JSLT
 
 **Since Camel 3.1**

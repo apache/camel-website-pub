@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # CyberArk Vault
 
 Retrieve secrets from CyberArk Conjur Vault.

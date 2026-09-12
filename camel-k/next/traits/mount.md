@@ -1,3 +1,5 @@
+Camel K
+
 # Mount Trait
 
 The Mount trait can be used to configure volumes mounted on the Integration Pods.

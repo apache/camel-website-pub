@@ -1,3 +1,5 @@
+Camel Components
+
 # SQL Stored Procedure
 
 **Since Camel 2.17**

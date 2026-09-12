@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-timer-source-kafka-connector source configuration
 
 Connector Description: Produces periodic messages with a custom payload.

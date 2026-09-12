@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Master
 
 Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies.

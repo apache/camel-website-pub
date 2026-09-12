@@ -1,3 +1,5 @@
+Camel K
+
 # Configuring a Namespace on IBM Container Registry (ICR)
 
 You can use a namespace of IBM Container Registry to host Camel K images.

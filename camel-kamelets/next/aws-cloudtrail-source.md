@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws cloudtrail source](_images/kamelets/aws-cloudtrail-source.svg) AWS Cloudtrail Source
 
 **Provided by: "Apache Software Foundation"**

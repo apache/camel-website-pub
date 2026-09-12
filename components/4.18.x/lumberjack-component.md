@@ -1,3 +1,5 @@
+Camel Components
+
 # Lumberjack
 
 **Since Camel 2.18**

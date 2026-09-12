@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-log-sink-kafka-connector sink configuration
 
 Connector Description: A sink that logs all data that it receives, useful for debugging purposes.

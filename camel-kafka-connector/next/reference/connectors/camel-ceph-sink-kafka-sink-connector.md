@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-ceph-sink-kafka-connector sink configuration
 
 Connector Description: Upload data to an Ceph Bucket managed by a Object Storage Gateway.

@@ -1,3 +1,5 @@
+Camel K
+
 # Bind Pipes with kamel CLI
 
 You may be already familiar of the [`kamel run`](../running/running-cli.md) CLI command. The CLI has a similar command thought to easily interact with Pipe custom resource: `kamel bind`.

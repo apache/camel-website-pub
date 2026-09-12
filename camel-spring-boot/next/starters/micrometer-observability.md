@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Micrometer Observability
 
 Spring Boot auto-configuration for Camel Micrometer Observability.

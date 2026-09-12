@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-nats-sink-kafka-connector sink configuration
 
 Connector Description: Send data to NATS topics.

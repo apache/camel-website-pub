@@ -1,3 +1,5 @@
+Camel Components
+
 # Dynamic Router
 
 The [Dynamic Router](http://www.enterpriseintegrationpatterns.com/DynamicRouter.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to route messages while avoiding the dependency of the router on all possible destinations while maintaining its efficiency.

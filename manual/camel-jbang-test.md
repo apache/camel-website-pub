@@ -1,3 +1,5 @@
+User manual
+
 # Camel Testing plugin
 
 Write and run automated tests for Camel integrations using the [Citrus](https://citrusframework.org/) test framework.

@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # AWS Simple Email Service (SES)
 
 Send e-mails through AWS SES service.

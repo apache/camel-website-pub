@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![topic name matches filter action](_images/kamelets/topic-name-matches-filter-action.svg) Kafka Topic Name Matches Filter Action
 
 **Provided by: "Apache Software Foundation"**

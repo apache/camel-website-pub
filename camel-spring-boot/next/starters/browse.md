@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Browse
 
 Inspect the messages received on endpoints supporting BrowsableEndpoint.

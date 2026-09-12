@@ -1,3 +1,5 @@
+Camel K
+
 # Istio Trait
 
 The Istio trait allows configuring properties related to the Istio service mesh, such as sidecar injection and outbound IP ranges.

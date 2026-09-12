@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Dynamic Router
 
 The Dynamic Router component routes exchanges to recipients, and the recipients (and their rules) may change at runtime.

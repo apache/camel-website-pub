@@ -1,3 +1,5 @@
+Camel K
+
 # Kamelets architecture in Camel K
 
 Kamelets are a technology which were originally developed as a Camel K side resource but moved into Camel framework as Kamelet component. From an design point of view, a Kamelet is a specification that is provided into the cluster and which can be used at any point by an Integration or a Pipe, in order to reuse the connector style approach.

@@ -1,3 +1,5 @@
+User manual
+
 # camel catalog kamelet
 
 List Kamelets from the Kamelet Catalog

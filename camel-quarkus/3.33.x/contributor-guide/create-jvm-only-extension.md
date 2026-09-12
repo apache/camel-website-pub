@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Create a JVM-only extension
 
 ## Why JVM-only extensions

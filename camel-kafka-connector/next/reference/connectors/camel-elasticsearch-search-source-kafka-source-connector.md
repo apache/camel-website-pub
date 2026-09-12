@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-elasticsearch-search-source-kafka-connector source configuration
 
 Connector Description: Search data on ElasticSearch

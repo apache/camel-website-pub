@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # XMPP
 
 Send and receive messages to/from an XMPP chat server.

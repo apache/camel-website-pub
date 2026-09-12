@@ -1,3 +1,5 @@
+Camel Components
+
 # ActiveMQ 5.x
 
 **Since Camel 1.0**

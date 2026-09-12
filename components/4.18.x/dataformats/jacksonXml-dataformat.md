@@ -1,3 +1,5 @@
+Camel Components
+
 # Jackson XML
 
 **Since Camel 2.16**

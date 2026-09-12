@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Create a new example project
 
 This guide outlines how to contribute a new example project to [camel-quarkus-examples](https://github.com/apache/camel-quarkus-examples).

@@ -1,3 +1,5 @@
+User manual
+
 # camel version
 
 Manage Camel versions

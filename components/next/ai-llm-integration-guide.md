@@ -1,3 +1,5 @@
+Camel Components
+
 # LLM Integration Guide
 
 This guide helps you choose the right Camel AI component and apply common LLM integration patterns in production routes. It addresses practical gaps reported by users building document-processing and chat pipelines — structured extraction, streaming to browsers, dynamic prompts, and prompt management at scale.

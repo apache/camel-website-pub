@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![value to key action](_images/kamelets/value-to-key-action.svg) Value to Key Action
 
 **Provided by: "Apache Software Foundation"**

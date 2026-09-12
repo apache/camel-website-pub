@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![ssh source](_images/kamelets/ssh-source.svg) SSH Source
 
 **Provided by: "Apache Software Foundation"**

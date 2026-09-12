@@ -1,3 +1,5 @@
+Camel Components
+
 # Idempotent Consumer
 
 The [Idempotent Consumer](http://www.enterpriseintegrationpatterns.com/IdempotentReceiver.md) from the [EIP patterns](enterprise-integration-patterns.md) is used to filter out duplicate messages.

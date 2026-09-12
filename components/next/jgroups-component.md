@@ -1,3 +1,5 @@
+Camel Components
+
 # JGroups
 
 **Since Camel 2.13**

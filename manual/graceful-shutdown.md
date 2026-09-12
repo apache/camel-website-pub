@@ -1,3 +1,5 @@
+User manual
+
 # Graceful Shutdown
 
 Camel supports a pluggable shutdown strategy using `org.apache.camel.spi.ShutdownStrategy`. It’s responsible for shutting down routes in a graceful manner. The other resources will still be handled by [CamelContext](camelcontext.md) to shut down. This leaves the problem at hand with properly shutting down all the routes reliably to the `ShutdownStrategy`.

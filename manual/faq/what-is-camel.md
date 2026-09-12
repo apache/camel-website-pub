@@ -1,3 +1,5 @@
+User manual
+
 # What is Camel?
 
 Apache Camel ™ is a versatile open-source integration framework based on known [Enterprise Integration Patterns](../../components/4.22.x/eips/enterprise-integration-patterns.md).

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![kafka source](_images/kamelets/kafka-source.svg) Kafka Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Azure Storage Queue Service
 
 Stores and retrieves messages to/from Azure Storage Queue.

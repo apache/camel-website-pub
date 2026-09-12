@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # JGroups raft
 
 Exchange messages with JGroups-raft clusters.

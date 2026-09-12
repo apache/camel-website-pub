@@ -1,3 +1,5 @@
+Camel Components
+
 # Message Dispatcher
 
 Camel supports the [Message Dispatcher](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessageDispatcher.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

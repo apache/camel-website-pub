@@ -1,3 +1,5 @@
+Camel Components
+
 # CXF-RS
 
 **Since Camel 2.0**

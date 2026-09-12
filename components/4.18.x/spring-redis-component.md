@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring Redis
 
 **Since Camel 2.11**

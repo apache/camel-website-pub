@@ -1,3 +1,5 @@
+Camel Components
+
 # Messaging Gateway
 
 Camel supports the [Messaging Gateway](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessagingGateway.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

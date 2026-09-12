@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-ceph-source-kafka-connector source configuration
 
 Connector Description: Receive data from an Ceph Bucket, managed by a Object Storage Gateway.

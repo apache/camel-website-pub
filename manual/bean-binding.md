@@ -1,3 +1,5 @@
+User manual
+
 # Bean Binding
 
 Bean Binding in Camel defines both which methods are invoked and also how the [Message](../components/4.22.x/eips/message.md) is converted into the parameters of the method invoked.

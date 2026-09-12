@@ -1,3 +1,5 @@
+User manual
+
 # REST DSL with contract-first OpenAPI
 
 From **Camel 4.6** onwards, the [Rest DSL](rest-dsl.md) has been improved with a _contract-first_ approach using vanilla OpenAPI specification.

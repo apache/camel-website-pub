@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Wasm
 
 Invoke Wasm functions.

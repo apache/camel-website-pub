@@ -1,3 +1,5 @@
+Camel Components
+
 # Wire Tap
 
 [Wire Tap](http://www.enterpriseintegrationpatterns.com/WireTap.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to route messages to a separate location while they are being forwarded to the ultimate destination.

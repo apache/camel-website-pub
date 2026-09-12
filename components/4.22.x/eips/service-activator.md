@@ -1,3 +1,5 @@
+Camel Components
+
 # Service Activator
 
 Camel supports the [Service Activator](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessagingAdapter.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

@@ -1,3 +1,5 @@
+User manual
+
 # camel get endpoint
 
 Get usage of Camel endpoints

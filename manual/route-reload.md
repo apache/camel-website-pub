@@ -1,3 +1,5 @@
+User manual
+
 # Route Reload
 
 The route reload functionality in Camel is capable of watching a directory folder for file changes, and then automatic trigger reload of the running routes in the Camel application.

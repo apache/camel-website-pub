@@ -1,3 +1,5 @@
+Camel Components
+
 # JFR
 
 **Since Camel 3.8**

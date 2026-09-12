@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![opensearch index sink](_images/kamelets/opensearch-index-sink.svg) OpenSearch Index Sink
 
 **Provided by: "Apache Software Foundation"**

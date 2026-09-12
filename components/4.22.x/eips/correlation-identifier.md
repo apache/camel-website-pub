@@ -1,3 +1,5 @@
+Camel Components
+
 # Correlation Identifier
 
 Camel supports the [Correlation Identifier](http://www.enterpriseintegrationpatterns.com/CorrelationIdentifier.md) from the [EIP patterns](enterprise-integration-patterns.md) by getting or setting a header on the [Message](message.md).

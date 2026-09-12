@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws ec2 sink](_images/kamelets/aws-ec2-sink.svg) AWS EC2 Sink
 
 **Provided by: "Apache Software Foundation"**

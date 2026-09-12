@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-splunk-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Splunk either by using "submit" or "stream" mode.

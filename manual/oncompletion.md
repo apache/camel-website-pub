@@ -1,3 +1,5 @@
+User manual
+
 # OnCompletion
 
 Camel has this concept of a _Unit of Work_ that encompass the Exchange. The unit of work among others supports synchronization callbacks that are invoked when the Exchange is complete. The callback API is defined in `org.apache.camel.spi.Synchronization` and the extended synchronization `org.apache.camel.spi.SynchronizationRouteAware` that have callbacks for route events.

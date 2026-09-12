@@ -1,3 +1,5 @@
+Camel Components
+
 # JGroups raft
 
 **Since Camel 2.24**

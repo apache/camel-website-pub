@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd stub
 
 Browse stub endpoints

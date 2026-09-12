@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # AWS Key Management Service (KMS)
 
 Manage keys stored in AWS KMS instances.

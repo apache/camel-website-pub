@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws timestream query sink](_images/kamelets/aws-timestream-query-sink.svg) AWS Timestream Query Sink
 
 **Provided by: "Apache Software Foundation"**

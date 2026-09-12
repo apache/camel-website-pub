@@ -1,3 +1,5 @@
+Camel Components
+
 # Durable Subscriber
 
 Camel supports the [Durable Subscriber](https://www.enterpriseintegrationpatterns.com/patterns/messaging/DurableSubscription.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

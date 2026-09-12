@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Remove Headers
 
 As you know in Camel Kafka Connector there is a mixing between Camel and Kafka headers. There are scenario where a typical user would like to remove some of the Camel Headers, because otherwise he would trigger a particular behavior while moving record between a source connector and sink connector.

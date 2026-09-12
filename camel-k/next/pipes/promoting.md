@@ -1,3 +1,5 @@
+Camel K
+
 # Promoting Pipes across environments
 
 As soon as you have Pipes running in your cluster, you will be challenged to move that Pipe to an higher environment. Ie, you can test your Pipe in a **development** environment, and, as soon as you’re happy with the result, you will need to move it into a **production** environment.

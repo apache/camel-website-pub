@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # OpenTelemetry Metrics
 
 Camel metrics based on the Camel Telemetry spec

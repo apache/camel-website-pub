@@ -1,3 +1,5 @@
+Camel Components
+
 # GraphQL
 
 **Since Camel 3.0**

@@ -1,3 +1,5 @@
+User manual
+
 # Property binding in Camel
 
 Camel supports binding property values (key=value) in many places such as configuration of Camel components, endpoints, [EIPs](../components/4.22.x/eips/enterprise-integration-patterns.md), routes, and Camel bootstrap configuration.

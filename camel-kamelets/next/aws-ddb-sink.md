@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws ddb sink](_images/kamelets/aws-ddb-sink.svg) AWS DynamoDB Sink
 
 **Provided by: "Apache Software Foundation"**

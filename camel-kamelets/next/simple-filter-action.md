@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![simple filter action](_images/kamelets/simple-filter-action.svg) Simple Filter Action
 
 **Provided by: "Apache Software Foundation"**

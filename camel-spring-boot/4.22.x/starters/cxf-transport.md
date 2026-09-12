@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Cxf Transport
 
 ## Maven coordinates

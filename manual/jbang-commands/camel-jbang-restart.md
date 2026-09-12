@@ -1,3 +1,5 @@
+User manual
+
 # camel restart
 
 Restarts running Camel integrations (stop + re-launch)

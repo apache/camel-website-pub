@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![json serialize action](_images/kamelets/json-serialize-action.svg) Json Serialize Action
 
 **Provided by: "Apache Software Foundation"**

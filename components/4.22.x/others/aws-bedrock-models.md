@@ -1,3 +1,5 @@
+Camel Components
+
 # AWS Bedrock - Supported Models
 
 [Back to AWS Bedrock Component](../aws-bedrock-component.md)

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![slack sink](_images/kamelets/slack-sink.svg) Slack Sink
 
 **Provided by: "Apache Software Foundation"**

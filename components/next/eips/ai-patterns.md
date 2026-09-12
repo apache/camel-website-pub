@@ -1,3 +1,5 @@
+Camel Components
+
 # AI Patterns
 
 If you come from an AI, data engineering, or modern distributed systems background, you may know integration patterns by different names. This page maps common terms to the corresponding Camel EIPs.

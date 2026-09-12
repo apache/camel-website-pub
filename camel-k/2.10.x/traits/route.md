@@ -1,3 +1,5 @@
+Camel K
+
 # Route Trait
 
 Deprecated since2.6.0 WARNING: The Route trait is **deprecated** and will removed in future release versions: use Ingress trait istead.

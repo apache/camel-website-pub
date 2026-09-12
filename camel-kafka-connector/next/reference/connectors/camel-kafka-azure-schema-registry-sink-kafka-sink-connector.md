@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kafka-azure-schema-registry-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Kafka topics on Azure Eventhubs combined with Azure Schema Registry.

@@ -1,3 +1,5 @@
+Camel Components
+
 # Mina
 
 **Since Camel 2.10**

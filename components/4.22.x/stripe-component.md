@@ -1,3 +1,5 @@
+Camel Components
+
 # Stripe
 
 **Since Camel 4.17**

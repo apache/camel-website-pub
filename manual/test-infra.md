@@ -1,3 +1,5 @@
+User manual
+
 # Test Infrastructure
 
 The components in the Camel Test Infra provide utilities to simplify testing with Camel and other systems may interact with it.

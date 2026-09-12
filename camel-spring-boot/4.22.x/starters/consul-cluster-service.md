@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Consul Cluster Service
 
 Spring Boot auto-configuration for the Camel Consul Cluster Service.

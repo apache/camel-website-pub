@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Slack
 
 Send and receive messages to/from Slack.

@@ -1,3 +1,5 @@
+User manual
+
 # camel get properties
 
 List configuration properties

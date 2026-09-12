@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-ssh-source-kafka-connector source configuration
 
 Connector Description: Receive data from SSH session.

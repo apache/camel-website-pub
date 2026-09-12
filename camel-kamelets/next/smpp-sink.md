@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![smpp sink](_images/kamelets/smpp-sink.svg) SMPP Sink
 
 **Provided by: "Apache Software Foundation"**

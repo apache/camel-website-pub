@@ -1,3 +1,5 @@
+Camel Components
+
 # AMQP
 
 **Since Camel 1.2**

@@ -1,3 +1,5 @@
+User manual
+
 # Context Reload
 
 The context reload functionality in Camel is capable of reloading all existing routes and property placeholders upon an external triggered event.

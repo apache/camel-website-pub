@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![counter source](_images/kamelets/counter-source.svg) Counter Source
 
 **Provided by: "Apache Software Foundation"**

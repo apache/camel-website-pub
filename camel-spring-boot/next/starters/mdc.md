@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Mdc
 
 Spring Boot auto-configuration for Camel MDC (Mapped Diagnostic Context) logging.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure cosmosdb sink](_images/kamelets/azure-cosmosdb-sink.svg) Azure CosmosDB Sink
 
 **Provided by: "Apache Software Foundation"**

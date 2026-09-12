@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Configuration
 
 Camel Quarkus automatically configures and deploys a Camel Context bean which by default is started/stopped according to the Quarkus Application lifecycle. The configuration step happens at build time during Quarkus' augmentation phase, and it is driven by the Camel Quarkus extensions which can be tuned using Camel Quarkus specific `quarkus.camel.*` properties.

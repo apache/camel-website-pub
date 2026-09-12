@@ -1,3 +1,5 @@
+User manual
+
 # URIs
 
 Camel makes extensive use of URIs to allow you to refer to [Endpoints](endpoint.md).

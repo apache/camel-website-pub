@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws sns sink](_images/kamelets/aws-sns-sink.svg) AWS SNS Sink
 
 **Provided by: "Apache Software Foundation"**

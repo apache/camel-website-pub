@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd span
 
 Display OpenTelemetry spans from running Camel integrations

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-sqs-source-kafka-connector source configuration
 
 Connector Description: Receive data from AWS SQS.

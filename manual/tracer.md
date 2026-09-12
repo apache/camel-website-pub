@@ -1,3 +1,5 @@
+User manual
+
 # Tracer
 
 Camel’s tracer is used for logging message details during routing, where you can see the route path of each message as they happen. Details of the message is also logged such as the message body, and headers.

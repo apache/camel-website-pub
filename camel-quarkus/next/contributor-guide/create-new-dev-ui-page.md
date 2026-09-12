@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Create a new Dev UI page
 
 This guide outlines how to create new Quarkus Dev UI pages for Camel Quarkus extensions.

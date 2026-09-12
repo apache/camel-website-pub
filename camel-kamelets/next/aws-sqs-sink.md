@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws sqs sink](_images/kamelets/aws-sqs-sink.svg) AWS SQS Sink
 
 **Provided by: "Apache Software Foundation"**

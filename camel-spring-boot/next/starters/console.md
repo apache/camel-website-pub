@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Console
 
 ## Maven coordinates

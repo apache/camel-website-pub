@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-slack-source-kafka-connector source configuration
 
 Connector Description: Receive messages from a Slack channel.

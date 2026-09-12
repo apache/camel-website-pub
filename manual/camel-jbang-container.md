@@ -1,3 +1,5 @@
+User manual
+
 # Running Camel JBang in a Container
 
 The Camel JBang container provides a convenient way to run Camel integrations without installing Java, Maven, or Camel JBang locally. The official Camel JBang container image is equipped with the `camel` CLI and it is the default entrypoint.

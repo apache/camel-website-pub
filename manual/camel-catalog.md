@@ -1,3 +1,5 @@
+User manual
+
 # Camel Catalog
 
 Each release includes a catalog with all sorts of information about what’s included in the release.

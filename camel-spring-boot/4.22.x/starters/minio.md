@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Minio
 
 Store and retrieve objects from Minio Storage Service using Minio SDK.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![dns dig action](_images/kamelets/dns-dig-action.svg) DNS DIG Action
 
 **Provided by: "Apache Software Foundation"**

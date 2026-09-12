@@ -2,6 +2,8 @@
 
 Index of Camel data formats.
 
+Camel Components
+
 # Data Formats
 
 Below is the list of data formats that are provided by Apache Camel.

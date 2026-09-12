@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-http-secured-source-kafka-connector source configuration
 
 Connector Description: Periodically fetches a secured HTTP resource and provides the content as output. Supports Oauth and Basic authentication.

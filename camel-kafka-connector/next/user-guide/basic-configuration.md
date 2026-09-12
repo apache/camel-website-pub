@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Basic Configuration
 
 In this page we list the Camel Kafka Configuration which are not part of the camel-catalog material and are not part of the kafka connect framework. For the specific connector configuration you can have a look at the single documentation pages.

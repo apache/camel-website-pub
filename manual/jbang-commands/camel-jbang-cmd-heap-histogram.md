@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd heap-histogram
 
 Display class-level heap memory usage in a running Camel integration

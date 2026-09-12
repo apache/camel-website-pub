@@ -1,3 +1,5 @@
+Camel K
+
 # Base image
 
 Camel K operator builds and containerize a Camel application in order to run it eventually on the cluster. It uses a base image on top of which it copies the Camel runtime dependencies built from the given source. The default image used is a JDK based image as the Java DSL requires a runtime compilation on the fly.

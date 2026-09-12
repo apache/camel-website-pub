@@ -1,3 +1,5 @@
+Camel K
+
 # Configure an IntegrationPlatform
 
 The IntegrationPlatform custom resource is used to configure your operator and the components required to build, publish and run your Camel applications. This custom resource may be provided at installation time (above all when using Helm or Kustomize methodology) or after the Camel K operator is running. The same operator will be in charge to reconcile the configuration provided and run any following Integration with the new values provided.

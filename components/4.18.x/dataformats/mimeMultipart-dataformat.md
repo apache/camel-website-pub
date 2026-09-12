@@ -1,3 +1,5 @@
+Camel Components
+
 # MIME Multipart
 
 **Since Camel 2.17**

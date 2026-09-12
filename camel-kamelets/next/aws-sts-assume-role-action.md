@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws sts assume role action](_images/kamelets/aws-sts-assume-role-action.svg) AWS STS Assume Role Action
 
 **Provided by: "Apache Software Foundation"**

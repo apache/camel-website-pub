@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # CometD
 
 Offers publish/subscribe, peer-to-peer (via a server), and RPC style messaging using the CometD/Bayeux protocol.

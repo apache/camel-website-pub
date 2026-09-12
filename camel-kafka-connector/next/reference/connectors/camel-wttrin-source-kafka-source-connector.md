@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-wttrin-source-kafka-connector source configuration
 
 Connector Description: Get weather forecasts from the wttr.in weather forecast service

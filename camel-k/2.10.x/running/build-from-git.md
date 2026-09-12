@@ -1,3 +1,5 @@
+Camel K
+
 # Build project hosted in a Git repository
 
 The Camel K operator traditionally run an Integration from a Camel DSL source. There are however use cases where instead of a Camel route, the user wants to provide entirely a Camel project. With the Integration `.spec.git` configuration you can instruct the operator to build and run a new Camel application directly from a project stored in a Git repository.

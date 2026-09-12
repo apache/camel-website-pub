@@ -1,3 +1,5 @@
+Camel Components
+
 # Camel YAML DSL Validator Maven Plugin
 
 The Camel YAML DSL Validator Maven Plugin supports the following goals

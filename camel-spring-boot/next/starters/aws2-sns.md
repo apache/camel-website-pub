@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # AWS Simple Notification System (SNS)
 
 Send messages to AWS Simple Notification Topic.

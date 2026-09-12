@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![github event source](_images/kamelets/github-event-source.svg) GitHub Event Source
 
 **Provided by: "Apache Software Foundation"**

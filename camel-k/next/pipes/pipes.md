@@ -1,3 +1,5 @@
+Camel K
+
 # Running a Pipe
 
 The Pipe is a concept that allows you to create a "composable" Event Driven Architecture design. The Pipe can bind **source** and **sink** endpoints where an endpoint represents a source/sink external entity (could be any Camel URI or a Kubernetes resource such as [Kamelets](../kamelets/kamelets.md), Kafka ([Strimzi](https://strimzi.io/)) or [Knative](https://knative.dev) resources).

@@ -2,6 +2,8 @@
 
 Index of other Camel components.
 
+Camel Components
+
 # Miscellaneous Components
 
 Number of Miscellaneous Components: 99 in 66 JAR artifacts (3 deprecated)

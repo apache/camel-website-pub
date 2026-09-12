@@ -1,3 +1,5 @@
+User manual
+
 # camel infra get
 
 Displays running service(s) information

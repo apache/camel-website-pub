@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Jfr
 
 ## Maven coordinates

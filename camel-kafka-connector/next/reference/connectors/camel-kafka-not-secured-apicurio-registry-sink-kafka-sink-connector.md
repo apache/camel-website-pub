@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kafka-not-secured-apicurio-registry-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Kafka topics on an insecure broker with Apicurio Registry secured with Keycloak.

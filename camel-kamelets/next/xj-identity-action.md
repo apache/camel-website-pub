@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![xj identity action](_images/kamelets/xj-identity-action.svg) XJ Identity Action
 
 **Provided by: "Apache Software Foundation"**

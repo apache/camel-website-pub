@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # JMX
 
 Receive JMX notifications.

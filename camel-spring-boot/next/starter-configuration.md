@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Starter Configuration
 
 Clear and accessible configuration is a crucial part of any application. Camel [starters](list.md) (Components, Data Formats, Languages) fully support Spring Boot’s [external configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/features.html#features.external-config) mechanism. We’ve also added the possibility to configure them through Spring [Beans](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-definition) for more complex uses cases.

@@ -1,3 +1,5 @@
+Camel K
+
 # Build configuration
 
 The Camel K operator installation provides some default configuration in order to perform a build and the publishing of the application in a container registry. The configuration can be defined at a global scope in the IntegrationPlatform custom resource, or during each Integration execution via the options available in the builder trait.

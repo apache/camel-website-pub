@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd jfr-old-objects
 
 Diagnose memory leaks using JFR OldObjectSample events in a running Camel integration

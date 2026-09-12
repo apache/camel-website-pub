@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI - Development Tools
 
 The Camel CLI includes a suite of development tools for sending and receiving messages, managing dependencies, scripting, and configuring beans and data sources.

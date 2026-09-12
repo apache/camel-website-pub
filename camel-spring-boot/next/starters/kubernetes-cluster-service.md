@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Kubernetes Cluster Service
 
 Spring Boot auto-configuration for the Camel Kubernetes Cluster Service.

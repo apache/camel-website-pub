@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-azure-cosmosdb-sink-kafka-connector sink configuration
 
 Connector Description: Send Data to an Azure CosmosDB instance

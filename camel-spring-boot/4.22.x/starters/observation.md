@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Observation
 
 Spring Boot auto-configuration for Camel Observation.

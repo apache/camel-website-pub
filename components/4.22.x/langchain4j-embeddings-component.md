@@ -1,3 +1,5 @@
+Camel Components
+
 # LangChain4j Embeddings
 
 **Since Camel 4.5**

@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring XML
 
 **Since Camel 3.9**

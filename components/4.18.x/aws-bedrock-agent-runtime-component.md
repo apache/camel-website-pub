@@ -1,3 +1,5 @@
+Camel Components
+
 # AWS Bedrock Agent Runtime
 
 **Since Camel 4.5**

@@ -1,3 +1,5 @@
+Camel Components
+
 # GZip Deflater
 
 **Since Camel 2.0**

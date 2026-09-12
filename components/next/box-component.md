@@ -1,3 +1,5 @@
+Camel Components
+
 # Box
 
 **Since Camel 2.14**

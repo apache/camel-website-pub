@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-kinesis-firehose-sink-kafka-connector sink configuration
 
 Connector Description: Send message to an AWS Kinesis Firehose Stream.

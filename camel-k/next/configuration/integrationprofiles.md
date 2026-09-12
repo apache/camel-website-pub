@@ -1,3 +1,5 @@
+Camel K
+
 # Integration Profiles
 
 Admin users may add an `IntegrationProfile` resource to any namespace. The profile holds custom settings which can be applied to all Integrations.

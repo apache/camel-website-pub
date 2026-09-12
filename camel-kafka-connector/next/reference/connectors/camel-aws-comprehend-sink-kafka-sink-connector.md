@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-comprehend-sink-kafka-connector sink configuration
 
 Connector Description: Send data to AWS Comprehend for natural language processing.

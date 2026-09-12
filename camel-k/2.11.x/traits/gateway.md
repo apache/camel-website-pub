@@ -1,3 +1,5 @@
+Camel K
+
 # Gateway Trait
 
 The Gateway trait can be used to expose the service associated with the Integration to the outside world with a Kubernetes Gateway API. The trait is in charge to automatically discover associate the Integration Service generated with a Gateway and an HTTPRoute resource (HTTP/HTTPS protocol only supported).

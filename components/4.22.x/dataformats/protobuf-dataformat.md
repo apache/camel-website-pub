@@ -1,3 +1,5 @@
+Camel Components
+
 # Protobuf
 
 **Since Camel 2.2**

@@ -1,3 +1,5 @@
+User manual
+
 # Mapped Diagnostic Context (MDC)
 
 The Mapped Diagnostic Context is a technology used in Java to provide a set of customized information into each log trace. The major logging frameworks implements it, and, although it may have certain limitations, this technology is used to enhance the logging and monitoring of a Java application (Camel applications included).

@@ -1,3 +1,5 @@
+Camel Components
+
 # JAXB
 
 **Since Camel 1.0**

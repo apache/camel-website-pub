@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![log sink](_images/kamelets/log-sink.svg) Log Sink
 
 **Provided by: "Apache Software Foundation"**

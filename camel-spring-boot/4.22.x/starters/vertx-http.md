@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Vert.x HTTP Client
 
 Send requests to external HTTP servers using Vert.x

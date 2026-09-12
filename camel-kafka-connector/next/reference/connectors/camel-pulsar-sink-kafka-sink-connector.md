@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-pulsar-sink-kafka-connector sink configuration
 
 Connector Description: Send documents to Pulsar.

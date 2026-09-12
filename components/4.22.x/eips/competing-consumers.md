@@ -1,3 +1,5 @@
+Camel Components
+
 # Competing Consumers
 
 Camel supports the [Competing Consumers](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CompetingConsumers.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

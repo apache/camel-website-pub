@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Infinispan Cluster Service
 
 Spring Boot auto-configuration for the Camel Infinispan Cluster Service.

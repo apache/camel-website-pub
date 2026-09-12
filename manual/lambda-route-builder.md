@@ -1,3 +1,5 @@
+User manual
+
 # LambdaRouteBuilder
 
 The `LambdaRouteBuilder` is a functional interface which is used for creating a routing rule using the [DSL](dsl.md), using Java lambda style.

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-mongodb-source-kafka-connector source configuration
 
 Connector Description: Consume data from MongoDB.

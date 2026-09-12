@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # File Cluster Service
 
 Spring Boot auto-configuration for the Camel File Lock Cluster Service.

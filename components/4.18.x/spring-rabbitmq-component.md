@@ -1,3 +1,5 @@
+Camel Components
+
 # Spring RabbitMQ
 
 **Since Camel 3.8**

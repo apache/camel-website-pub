@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![splunk sink](_images/kamelets/splunk-sink.svg) Splunk Sink
 
 **Provided by: "Apache Software Foundation"**

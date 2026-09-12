@@ -1,3 +1,5 @@
+User manual
+
 # Camel Maven Plugin
 
 The Camel Maven Plugin supports the following goals

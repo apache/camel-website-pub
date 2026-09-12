@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-fhir-source-kafka-connector source configuration
 
 Connector Description: Receive data from FHIR server.

@@ -1,3 +1,5 @@
+Camel K
+
 # Debugging Camel K Integrations
 
 Sometimes an Integration can fail or behave unexpectedly for unknown reasons, and a developer needs to investigate the cause of such behavior. Attaching a Java debugger to an Integration is a common way to start the investigation.

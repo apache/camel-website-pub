@@ -1,3 +1,5 @@
+Camel Components
+
 # Point to Point Channel
 
 Camel supports the [Point to Point Channel](http://www.enterpriseintegrationpatterns.com/PointToPointChannel.md) from the [EIP patterns](enterprise-integration-patterns.md).

@@ -1,3 +1,5 @@
+User manual
+
 # camel script
 
 Run Camel integration as shell script for terminal scripting

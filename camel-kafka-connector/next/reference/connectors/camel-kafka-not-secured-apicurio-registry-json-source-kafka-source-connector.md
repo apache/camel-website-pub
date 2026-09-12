@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kafka-not-secured-apicurio-registry-json-source-kafka-connector source configuration
 
 Connector Description: Receive data from Kafka topics on an insecure broker combined with Apicurio Registry secured with Keycloak for JSON Schema support.

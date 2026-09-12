@@ -1,3 +1,5 @@
+Camel Components
+
 # Do Try
 
 Camel supports the Java equivalent of try, catch, and finally directly in the DSL. It aims to work like its Java sisters but with more power.

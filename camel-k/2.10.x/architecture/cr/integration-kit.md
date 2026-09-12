@@ -1,3 +1,5 @@
+Camel K
+
 # IntegrationKit
 
 The **IntegrationKit** is a fundamental side resource which describes a container image created by the camel-k operator as well as the configurations that need to be applied to every integration that is executed on top of it. An **IntegrationKit** does not include any source code or resource file defined by the **Integration** from which it has been generated.

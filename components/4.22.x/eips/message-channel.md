@@ -1,3 +1,5 @@
+Camel Components
+
 # Message Channel
 
 Camel supports the [Message Channel](http://www.enterpriseintegrationpatterns.com/MessageChannel.md) from the [EIP patterns](enterprise-integration-patterns.md).

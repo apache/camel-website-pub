@@ -1,3 +1,5 @@
+Camel K
+
 # Configure a registry on Docker Desktop
 
 You can run Camel K integrations on plain Kubernetes using Docker Desktop, for that an external registry is needed and Kubernetes must be enabled.

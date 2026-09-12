@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![google bigquery sink](_images/kamelets/google-bigquery-sink.svg) Google Big Query Sink
 
 **Provided by: "Apache Software Foundation"**

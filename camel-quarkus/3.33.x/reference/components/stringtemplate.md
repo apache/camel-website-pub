@@ -1,1 +1,3 @@
+Camel Quarkus
+
 # String Template

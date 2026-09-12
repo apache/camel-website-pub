@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Ref
 
 Route messages to an endpoint looked up dynamically by name in the Camel Registry.

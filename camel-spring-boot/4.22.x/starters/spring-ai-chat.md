@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Spring AI Chat
 
 Perform chat operations using Spring AI.

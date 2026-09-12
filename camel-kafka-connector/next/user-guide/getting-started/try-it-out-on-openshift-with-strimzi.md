@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Try it out on OpenShift with Strimzi
 
 You can use the Camel Kafka connectors also on Kubernetes and OpenShift with the [Strimzi project](https://strimzi.io). Strimzi provides a set of operators and container images for running Kafka on Kubernetes and OpenShift. The following example shows how to run it with Camel Kafka connectors on OpenShift.

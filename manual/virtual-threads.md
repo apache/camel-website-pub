@@ -1,3 +1,5 @@
+User manual
+
 # Virtual Threads in Apache Camel
 
 This guide covers using virtual threads (Project Loom) with Apache Camel for improved performance in I/O-bound integration workloads.

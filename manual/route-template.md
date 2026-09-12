@@ -1,3 +1,5 @@
+User manual
+
 # Route Template
 
 A Route template is as its name implies a template for a route, which is used to create routes from a set of input parameters. In other words, route templates are parameterized routes.

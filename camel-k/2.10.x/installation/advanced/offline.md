@@ -1,3 +1,5 @@
+Camel K
+
 # Camel K offline
 
 Camel K is naturally developed to fit in an "open world" cluster model. It basically means that the default installation assumes it can pull and push resources from the Internet. However, there could be certain domains or use cases where this is a limitation. For this reason this guide will show you how to setup properly Camel K in an offline (or disconnected, or air gapped) cluster environment.

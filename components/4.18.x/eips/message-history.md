@@ -1,3 +1,5 @@
+Camel Components
+
 # Message History
 
 Camel supports the [Message History](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessageHistory.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

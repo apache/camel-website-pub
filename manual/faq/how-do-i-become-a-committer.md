@@ -1,3 +1,5 @@
+User manual
+
 # How can I become a committer
 
 First of all you need to get involved and [Contribute](/community/contributing/) via the mail list, forums, edit the documentation, work on the issue tracker and submit patches.

@@ -1,3 +1,5 @@
+Camel Components
+
 # Set Header
 
 The SetHeader EIP is used for setting a [message](message.md) header.

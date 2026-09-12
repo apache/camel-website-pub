@@ -1,3 +1,5 @@
+Camel Components
+
 # Platform HTTP Jolokia
 
 **Since Camel 4.5**

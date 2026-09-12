@@ -1,3 +1,5 @@
+User manual
+
 # ConsumerTemplate
 
 The `ConsumerTemplate` interface allows you to receive message exchanges from endpoints in a variety of different ways to make it easy to work with Camel [Endpoint](endpoint.md) instances from Java code.

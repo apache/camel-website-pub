@@ -1,3 +1,5 @@
+Camel Components
+
 # Change Data Capture
 
 Camel supports the [Change Data Capture](https://en.wikipedia.org/wiki/Change_data_capture) pattern.

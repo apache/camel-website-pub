@@ -1,3 +1,5 @@
+Camel Components
+
 # XMPP
 
 **Since Camel 1.0**

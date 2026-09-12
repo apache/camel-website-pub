@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-jms-ibm-mq-source-kafka-connector source configuration
 
 Connector Description: A Kamelet that can read events from an IBM MQ message queue using JMS.

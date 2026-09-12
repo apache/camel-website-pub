@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-sheets-source-kafka-connector source configuration
 
 Connector Description: Receive data from Google Sheets.

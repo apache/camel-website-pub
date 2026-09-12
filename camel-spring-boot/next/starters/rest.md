@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # REST
 
 Expose REST services or call external REST services.

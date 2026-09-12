@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd thread-dump
 
 List threads in a running Camel integration

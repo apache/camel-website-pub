@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure eventhubs sink](_images/kamelets/azure-eventhubs-sink.svg) Azure Eventhubs Sink
 
 **Provided by: "Apache Software Foundation"**

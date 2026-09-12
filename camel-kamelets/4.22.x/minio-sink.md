@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![minio sink](_images/kamelets/minio-sink.svg) Minio Sink
 
 **Provided by: "Apache Software Foundation"**

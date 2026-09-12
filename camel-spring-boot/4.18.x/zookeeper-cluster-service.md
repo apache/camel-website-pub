@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Zookeeper Cluster Service
 
 The Zookeeper Cluster Service starter provides a cluster service implementation using [Apache Zookeeper](https://zookeeper.apache.org/) for distributed coordination in Camel Spring Boot applications.

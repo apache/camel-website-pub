@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-splunk-source-kafka-connector source configuration
 
 Connector Description: Retrieve data from Splunk and outputs in json format.

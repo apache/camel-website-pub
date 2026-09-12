@@ -1,3 +1,5 @@
+Camel Components
+
 # AWS Simple Queue Service (SQS)
 
 **Since Camel 3.1**

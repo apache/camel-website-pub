@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Mail Microsoft Oauth
 
 ## Maven coordinates

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![http sink](_images/kamelets/http-sink.svg) HTTP Sink
 
 **Provided by: "Apache Software Foundation"**

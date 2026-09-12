@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # MongoDB GridFS
 
 Interact with MongoDB GridFS.

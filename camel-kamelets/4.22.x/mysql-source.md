@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![mysql source](_images/kamelets/mysql-source.svg) MySQL Source
 
 **Provided by: "Apache Software Foundation"**

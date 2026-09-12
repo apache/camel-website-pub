@@ -2,6 +2,8 @@
 
 Index of Camel Kafka Connector documentation pages.
 
+Camel Kafka Connector
+
 # Camel Kafka Connector
 
 > **Note**

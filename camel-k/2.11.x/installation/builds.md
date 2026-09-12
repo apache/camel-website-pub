@@ -1,3 +1,5 @@
+Camel K
+
 # Configuring Maven Builds
 
 Camel K builds are performed by [Apache Maven](https://maven.apache.org/). For this reason it may requires certain Maven best practices that will make your application to run faster, more secure and more resiliently. The Maven configuration is defined via operator environment variables. Have a look at the following sections to discover how to configure Maven build in Camel K.

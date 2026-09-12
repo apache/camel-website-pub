@@ -1,3 +1,5 @@
+User manual
+
 # camel config list
 
 Displays user configuration

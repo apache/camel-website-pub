@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![google mail source](_images/kamelets/google-mail-source.svg) Google Mail Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+User manual
+
 # Component DSL
 
 Component-DSL is a builder API that allows using type-safe construction of Camel [Components](component.md) and injecting them directly to the [Camel Context](camelcontext.md) instead of initializing through a constructor.

@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Direct
 
 Call another endpoint from the same Camel Context synchronously.

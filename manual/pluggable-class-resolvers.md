@@ -1,3 +1,5 @@
+User manual
+
 # Pluggable Class Resolvers
 
 Camel provides pluggable class resolvers allowing third party platforms and containers to provide their own resolvers in case the default ones would not fit.

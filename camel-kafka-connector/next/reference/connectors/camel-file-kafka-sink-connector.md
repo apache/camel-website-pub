@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-file-kafka-connector sink configuration
 
 Connector Description: Read and write files.

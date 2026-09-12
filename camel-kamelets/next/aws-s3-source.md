@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws s3 source](_images/kamelets/aws-s3-source.svg) AWS S3 Source
 
 **Provided by: "Apache Software Foundation"**

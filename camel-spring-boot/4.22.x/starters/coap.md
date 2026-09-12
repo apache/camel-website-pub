@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # CoAP
 
 Send and receive messages to/from CoAP (Constrained Application Protocol) capable devices.

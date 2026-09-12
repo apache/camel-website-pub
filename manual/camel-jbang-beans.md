@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI - Java Beans
 
 When running Camel integrations with the CLI, the runtime is `camel-main` based — there is no Spring Boot or Quarkus container. However, annotation-based dependency injection is supported across all three styles: Camel-native, Spring Boot, and Quarkus annotations.

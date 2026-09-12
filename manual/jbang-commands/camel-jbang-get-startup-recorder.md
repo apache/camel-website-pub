@@ -1,3 +1,5 @@
+User manual
+
 # camel get startup-recorder
 
 Display startup recording

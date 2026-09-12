@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd suspend-route
 
 Suspend Camel routes

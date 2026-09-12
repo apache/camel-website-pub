@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![cron source](_images/kamelets/cron-source.svg) Cron Source
 
 **Provided by: "Apache Software Foundation"**

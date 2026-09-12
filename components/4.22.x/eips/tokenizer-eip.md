@@ -1,3 +1,5 @@
+Camel Components
+
 # Specialized tokenizer for AI applications
 
 The Tokenizer EIP provides support to tokenize (chunk) larger blocks of text into text segments that can be used when interacting with LLMs. Tokenization is particularly helpful when used with [vector databases](https://en.wikipedia.org/wiki/Vector_database) to provide better and more contextual search results for [retrieval-augmented generation (RAG)](https://en.wikipedia.org/wiki/Retrieval-augmented_generation).

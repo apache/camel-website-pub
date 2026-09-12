@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![kafka batch manual commit action](_images/kamelets/kafka-batch-manual-commit-action.svg) Kafka Batch Manual Commit Action
 
 **Provided by: "Apache Software Foundation"**

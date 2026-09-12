@@ -1,3 +1,5 @@
+Camel K
+
 # Camel K CLI: kamel
 
 In the previous section you have learnt [how to run an Integration custom resource](running.md). In this page you will learn a simple utility we release beside the operator, the `kamel` CLI.

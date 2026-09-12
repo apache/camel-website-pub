@@ -1,3 +1,5 @@
+Camel Components
+
 # AWS Simple Email Service (SES)
 
 **Since Camel 3.1**

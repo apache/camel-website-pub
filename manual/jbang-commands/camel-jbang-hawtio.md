@@ -1,3 +1,5 @@
+User manual
+
 # camel hawtio
 
 Launch Hawtio web console

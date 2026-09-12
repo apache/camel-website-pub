@@ -1,3 +1,5 @@
+User manual
+
 # Camel Console
 
 The `camel-console` is available from **Camel 3.15** and newer versions.

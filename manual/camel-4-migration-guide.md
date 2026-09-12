@@ -1,3 +1,5 @@
+User manual
+
 # Apache Camel 3.x to 4.0 Migration Guide
 
 This document is intended to help you migrate your Apache Camel applications from version 3.20 or higher to 4.0. If you are upgrading from an older Camel 3.x release, such as 3.14, then make sure to read the individual [Camel 3.x Upgrade Guide](camel-3x-upgrade-guide.md) to upgrade to the 3.20 release, prior to upgrade to Camel 4.

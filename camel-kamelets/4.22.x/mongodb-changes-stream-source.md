@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![mongodb changes stream source](_images/kamelets/mongodb-changes-stream-source.svg) MongoDB Changes Stream Source
 
 **Provided by: "Apache Software Foundation"**

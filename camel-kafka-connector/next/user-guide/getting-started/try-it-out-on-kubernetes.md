@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Try it out on Kubernetes
 
 You can try CamelKafkaConnector using the [Strimzi Operator](https://strimzi.io), which simplifies Kafka cluster deployment and management on top of plain Kubernetes. This procedure assumes that you have `cluster-admin` rights, Internet access and an external registry for pushing images (i.e. quay.io).

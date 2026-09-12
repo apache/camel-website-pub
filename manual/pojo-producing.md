@@ -1,3 +1,5 @@
+User manual
+
 # POJO producing
 
 There are two different ways to send messages to any Camel [Endpoint](endpoint.md) from a POJO:

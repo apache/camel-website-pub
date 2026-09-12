@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![salesforce update sink](_images/kamelets/salesforce-update-sink.svg) Salesforce Update Sink
 
 **Provided by: "Apache Software Foundation"**

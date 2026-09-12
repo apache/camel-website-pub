@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-mail-imap-source-kafka-connector source configuration
 
 Connector Description: Receive unread emails from an IMAP mail server, marking them as read once they are received.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![mask field action](_images/kamelets/mask-field-action.svg) Mask Fields Action
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Camel Components
+
 # Intercept
 
 The intercept feature in Camel supports intercepting [Exchange](../../../manual/exchange.md)'s' while they are being routed.

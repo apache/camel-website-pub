@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-vertexai-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Google Vertex AI for generating content with generative AI models.

@@ -1,3 +1,5 @@
+User manual
+
 # POJO Consuming
 
 To consume a message you use the `@Consume` annotation to mark a particular method of a bean as being a consumer method. The value of the annotation defines the Camel [Endpoint](endpoint.md) to consume from.

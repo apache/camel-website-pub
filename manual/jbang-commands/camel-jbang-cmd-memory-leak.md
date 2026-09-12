@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd memory-leak
 
 Diagnose memory leaks in a running Camel integration

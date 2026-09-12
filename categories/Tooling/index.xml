@@ -146,7 +146,7 @@
       <link>https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/</link>
       <pubDate>Tue, 16 Jul 2024 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2024/07/kaoto-release-2.1.0/</guid>
-      <description>After the previous 2.0 GA release, we are happy to announce the release of Kaoto 2.1, packed with exciting new features, bug fixes, and various improvements to enhance the user experience.&#xA;This update introduces the capability to choose your preferred Runtime version among other notable upgrades. Read on to discover the key highlights of this release and how they can improve your workflow with Kaoto. New Features Catalog: Empower users to pick a runtime and specific version to display the right components with their precise configurations.</description>
+      <description>After the previous 2.0 GA release, we are happy to announce the release of Kaoto 2.1, packed with exciting new features, bug fixes, and various improvements to enhance the user experience. This update introduces the capability to choose your preferred Runtime version among other notable upgrades. Read on to discover the key highlights of this release and how they can improve your workflow with Kaoto. New Features Catalog: Empower users to pick a runtime and specific version to display the right components with their precise configurations.</description>
     </item>
     <item>
       <title>Kaoto v2.0 release</title>

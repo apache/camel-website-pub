@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Telemetry Dev
 
 Spring Boot auto-configuration for Camel Telemetry Dev Console.

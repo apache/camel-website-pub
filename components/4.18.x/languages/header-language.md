@@ -1,3 +1,5 @@
+Camel Components
+
 # Header
 
 **Since Camel 1.5**

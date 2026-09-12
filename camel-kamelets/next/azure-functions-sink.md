@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure functions sink](_images/kamelets/azure-functions-sink.svg) Azure Function Sink
 
 **Provided by: "Apache Software Foundation"**

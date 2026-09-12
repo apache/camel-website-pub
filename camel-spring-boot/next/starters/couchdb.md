@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # CouchDB
 
 Consume changesets for inserts, updates and deletes in a CouchDB database, as well as get, save, update and delete documents from a CouchDB database.

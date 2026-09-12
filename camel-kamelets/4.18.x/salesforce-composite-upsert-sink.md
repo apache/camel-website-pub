@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![salesforce composite upsert sink](_images/kamelets/salesforce-composite-upsert-sink.svg) Salesforce composite upsert Sink
 
 **Provided by: "Apache Software Foundation"**

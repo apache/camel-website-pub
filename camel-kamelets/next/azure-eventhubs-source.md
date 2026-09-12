@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure eventhubs source](_images/kamelets/azure-eventhubs-source.svg) Azure Eventhubs Source
 
 **Provided by: "Apache Software Foundation"**

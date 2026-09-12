@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Chunk
 
 Transform messages using Chunk templating engine.

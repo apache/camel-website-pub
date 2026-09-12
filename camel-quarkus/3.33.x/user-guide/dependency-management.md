@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Dependency management
 
 A specific Camel Quarkus release is supposed to work only with a specific Quarkus release.

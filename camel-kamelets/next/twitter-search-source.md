@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![twitter search source](_images/kamelets/twitter-search-source.svg) Twitter Search Source
 
 **Provided by: "Apache Software Foundation"**

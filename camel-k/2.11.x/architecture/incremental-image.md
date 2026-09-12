@@ -1,3 +1,5 @@
+Camel K
+
 # Incremental image
 
 One of the goal of Camel K is to provide a Cloud Native experience for Camel developers. It means basically to have a quick build of the application based on the Camel route you provide and an execution that should be as fast as possible.

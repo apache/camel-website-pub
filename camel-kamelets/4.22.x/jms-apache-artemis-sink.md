@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![jms apache artemis sink](_images/kamelets/jms-apache-artemis-sink.svg) JMS - Apache Artemis Sink
 
 **Provided by: "Apache Software Foundation"**

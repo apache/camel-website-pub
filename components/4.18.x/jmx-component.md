@@ -1,3 +1,5 @@
+Camel Components
+
 # JMX
 
 **Since Camel 2.6**

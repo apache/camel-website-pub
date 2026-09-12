@@ -1,3 +1,5 @@
+Camel Components
+
 # Class
 
 **Since Camel 2.4**

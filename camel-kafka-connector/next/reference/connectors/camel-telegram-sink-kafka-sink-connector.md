@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-telegram-sink-kafka-connector sink configuration
 
 Connector Description: Send a message to a Telegram chat by using your Telegram bot as sender.

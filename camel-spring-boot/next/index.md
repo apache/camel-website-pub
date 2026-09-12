@@ -2,6 +2,8 @@
 
 Index of Camel Spring Boot documentation pages.
 
+Camel Spring Boot
+
 # Apache Camel Spring Boot starters
 
 Camel support for Spring Boot provides auto-configuration of the Camel and starters for many Camel [components](../../components/4.22.x/index.md). Our opinionated auto-configuration of the Camel context auto-detects Camel routes available in the Spring context and registers the key Camel utilities (like producer template, consumer template and the type converter) as beans.

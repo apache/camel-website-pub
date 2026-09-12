@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Elasticsearch Low level Rest Client
 
 Perform queries and other operations on Elasticsearch or OpenSearch (uses low-level client).

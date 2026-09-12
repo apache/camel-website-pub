@@ -1,3 +1,5 @@
+Camel K
+
 # How to configure a Kamelet
 
 Speaking technically, a Kamelet is a resource that can be installed on any Kubernetes cluster or used as a plain yaml configuration in Apache Camel runtimes. The following is an example of a Kamelet source which can be programmed to trigger events with a `timer`. This is coming directly from Apache Camel Kamelets catalog:

@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # LangChain4j Embeddings
 
 LangChain4j Embeddings

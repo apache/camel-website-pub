@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![google functions sink](_images/kamelets/google-functions-sink.svg) Google Functions Sink
 
 **Provided by: "Apache Software Foundation"**

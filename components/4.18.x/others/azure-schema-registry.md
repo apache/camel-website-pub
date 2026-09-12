@@ -1,3 +1,5 @@
+Camel Components
+
 # Azure Schema Registry
 
 **Since Camel 4.2**

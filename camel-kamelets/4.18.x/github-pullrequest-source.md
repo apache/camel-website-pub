@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![github pullrequest source](_images/kamelets/github-pullrequest-source.svg) GitHub Pull Request Source
 
 **Provided by: "Apache Software Foundation"**

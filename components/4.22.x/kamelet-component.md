@@ -1,3 +1,5 @@
+Camel Components
+
 # Kamelet
 
 **Since Camel 3.8**

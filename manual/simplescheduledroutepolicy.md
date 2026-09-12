@@ -1,3 +1,5 @@
+User manual
+
 # SimpleScheduledRoutePolicy
 
 `SimpleScheduledRoutePolicy` is a [ScheduledRoutePolicy](scheduledroutepolicy.md) that facilitates route activation, de-activation, suspension and resumption of routes based on the [Quartz](../components/4.22.x/quartz-component.md) simple trigger.

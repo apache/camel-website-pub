@@ -1,3 +1,5 @@
+Camel K
+
 # Prometheus Trait
 
 Deprecated since2.11.0 WARNING: The Prometheus trait is **deprecated** and will removed in future release versions: use Camel Monitor operator ([https://camel-tooling.github.io/camel-dashboard/docs/installation-guide/advanced/operator/](https://camel-tooling.github.io/camel-dashboard/docs/installation-guide/advanced/operator/)) instead.

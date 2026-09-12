@@ -1,3 +1,5 @@
+Camel Components
+
 # BeanIO
 
 **Since Camel 2.10**

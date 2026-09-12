@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-netty-kafka-connector sink configuration
 
 Connector Description: Socket level networking using TCP or UDP with Netty 4.x.

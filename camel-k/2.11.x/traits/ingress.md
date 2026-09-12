@@ -1,3 +1,5 @@
+Camel K
+
 # Ingress Trait
 
 The Ingress trait can be used to expose the service associated with the integration to the outside world with a Kubernetes Ingress.

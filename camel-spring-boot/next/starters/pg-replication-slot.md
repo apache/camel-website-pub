@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # PostgreSQL Replication Slot
 
 Poll for PostgreSQL Write-Ahead Log (WAL) records using Streaming Replication Slots.

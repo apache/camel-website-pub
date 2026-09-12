@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # InfluxDB
 
 Interact with InfluxDB v1, a time series database.

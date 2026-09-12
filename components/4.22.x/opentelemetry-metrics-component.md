@@ -1,3 +1,5 @@
+Camel Components
+
 # OpenTelemetry Metrics
 
 **Since Camel 4.17**

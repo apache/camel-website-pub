@@ -1,3 +1,5 @@
+Camel Components
+
 # PostgresSQL Replication Slot
 
 **Since Camel 3.0**

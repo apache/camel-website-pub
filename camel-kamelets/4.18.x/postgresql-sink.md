@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![postgresql sink](_images/kamelets/postgresql-sink.svg) PostgreSQL Sink
 
 **Provided by: "Apache Software Foundation"**

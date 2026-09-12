@@ -1,3 +1,5 @@
+Camel Components
+
 # Debezium PostgreSQL Connector
 
 **Since Camel 3.0**

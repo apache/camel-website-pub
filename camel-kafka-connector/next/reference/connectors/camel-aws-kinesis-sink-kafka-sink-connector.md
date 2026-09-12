@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws-kinesis-sink-kafka-connector sink configuration
 
 Connector Description: Send data to AWS Kinesis.

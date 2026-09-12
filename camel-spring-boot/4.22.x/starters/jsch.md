@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # SCP
 
 Copy files to/from remote hosts using the secure copy protocol (SCP).

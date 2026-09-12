@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # FieldsToHeaders
 
 ## Description

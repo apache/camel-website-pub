@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![sftp sink](_images/kamelets/sftp-sink.svg) SFTP Sink
 
 **Provided by: "Apache Software Foundation"**

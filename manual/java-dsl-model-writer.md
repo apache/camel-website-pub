@@ -1,3 +1,5 @@
+User manual
+
 # Java DSL Model Writer
 
 The Java DSL Model Writer converts Camel model definitions (parsed from XML or YAML) into compilable Java DSL source code. This enables tooling — such as the [Camel CLI](camel-jbang.md), MCP servers, and TUI — to offer route conversion, code generation, and migration workflows.

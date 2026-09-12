@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Mcp Server
 
 The MCP Server starter exposes Camel routes registered via the `ai-tool` component as tools of a Model Context Protocol (MCP) server, served through the Spring AI MCP server over streamable HTTP. No route is needed for the server itself: add the starter, tag the `ai-tool` routes to expose, and any MCP client (another Camel application, an IDE, a coding agent) can discover and call them.

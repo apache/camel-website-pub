@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Platform HTTP
 
 Expose HTTP endpoints using the HTTP server available in the current platform.

@@ -1,3 +1,5 @@
+Camel K
+
 # Integration Profiles
 
 Any running Camel K Integration is associated to a shared IntegrationPlatform resource that contains general configuration options. The integration platform is located in the operator namespace and typically uses the same name as the operator id that this platform belongs to.

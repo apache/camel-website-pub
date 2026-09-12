@@ -1,3 +1,5 @@
+Camel Components
+
 # Composed Message Processor
 
 Camel supports the [Composed Message Processor](https://www.enterpriseintegrationpatterns.com/patterns/messaging/DistributionAggregate.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

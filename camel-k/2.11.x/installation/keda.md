@@ -1,3 +1,5 @@
+Camel K
+
 # Keda configuration
 
 "[Keda](https://keda.sh) is a Kubernetes-based Event Driven Autoscaler. With KEDA, you can drive the scaling of any container in Kubernetes based on the number of events needing to be processed.". The effort done in this project is also a complement to Camel K, which can leverage the features offered by Keda to scale up and down integrations based on the traffic generated on the endpoints. In particular, Camel K will be able to leverage "scale to 0" (hence, serverless) feature when those endpoints are idle.

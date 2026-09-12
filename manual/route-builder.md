@@ -1,3 +1,5 @@
+User manual
+
 # RouteBuilder
 
 The `RouteBuilder` is a base class which is derived from to create routing rules using the Java DSL. Instances of `RouteBuilder` are then added to the `CamelContext`.

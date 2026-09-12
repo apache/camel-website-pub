@@ -1,3 +1,5 @@
+Camel Components
+
 # File
 
 **Since Camel 1.1**

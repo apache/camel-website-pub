@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-ftps-sink-kafka-connector sink configuration
 
 Connector Description: Send data to an FTPS server.

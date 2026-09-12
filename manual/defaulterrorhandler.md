@@ -1,3 +1,5 @@
+User manual
+
 # DefaultErrorHandler
 
 This is the default [Error Handler](error-handler.md) in Camel.

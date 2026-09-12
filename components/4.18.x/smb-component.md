@@ -1,3 +1,5 @@
+Camel Components
+
 # SMB
 
 **Since Camel 4.3**

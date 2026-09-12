@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Validator
 
 Validate the payload using XML Schema and JAXP Validation.

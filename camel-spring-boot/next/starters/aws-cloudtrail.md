@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # AWS CloudTrail
 
 Consume events from Amazon CloudTrail using AWS SDK version 2.x.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![nominatim geocode action](_images/kamelets/nominatim-geocode-action.svg) Nominatim GeoCode Action
 
 **Provided by: "Apache Software Foundation"**

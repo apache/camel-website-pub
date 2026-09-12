@@ -1,3 +1,5 @@
+Camel Components
+
 # Publish Subscribe Channel
 
 Camel supports the [Publish-Subscribe Channel](http://www.enterpriseintegrationpatterns.com/PublishSubscribeChannel.md) from the [EIP patterns](enterprise-integration-patterns.md).

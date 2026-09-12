@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![velocity template action](_images/kamelets/velocity-template-action.svg) Velocity Template Action
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+User manual
+
 # Apache Camel Migration and Upgrade Guides
 
 We do frequent releases, a release almost every month, and even though we strive to maintain backward compatibility, we may on occasion introduce a breaking change in the interest of the long-term evolution of the project.

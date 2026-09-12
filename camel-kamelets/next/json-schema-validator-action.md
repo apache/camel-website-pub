@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![json schema validator action](_images/kamelets/json-schema-validator-action.svg) Json Schema Validator Action
 
 **Provided by: "Apache Software Foundation"**

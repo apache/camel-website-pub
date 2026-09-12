@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![redis sink](_images/kamelets/redis-sink.svg) Redis Sink
 
 **Provided by: "Apache Software Foundation"**

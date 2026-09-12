@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-splunk-hec-sink-kafka-connector sink configuration
 
 Connector Description: The Splunk HEC sink allows to send data to Splunk using the [HTTP Event Collector](https://docs.splunk.com/Documentation/Splunk/latest/Data/UsetheHTTPEventCollector).

@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd stop-route
 
 Stop Camel routes

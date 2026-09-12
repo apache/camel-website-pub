@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Debug
 
 Spring Boot auto-configuration for the Camel Debugger.

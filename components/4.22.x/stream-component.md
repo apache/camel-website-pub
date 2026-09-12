@@ -1,3 +1,5 @@
+Camel Components
+
 # Stream
 
 **Since Camel 1.3**

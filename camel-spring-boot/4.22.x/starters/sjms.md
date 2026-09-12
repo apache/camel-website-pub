@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Simple JMS
 
 Send and receive messages to/from a JMS Queue or Topic using plain JMS 1.x API.

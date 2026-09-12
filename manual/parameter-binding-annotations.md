@@ -1,3 +1,5 @@
+User manual
+
 # Parameter Binding Annotations
 
 The bean parameter binding annotations from Camel are as follows:

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-jms-amqp-10-sink-kafka-connector sink configuration
 
 Connector Description: Send data to any AMQP 1.0 compliant message broker by using the Apache Qpid JMS client. For SSL/TLS connections, use the amqps:// scheme in the remoteURI and configure SSL transport options as query parameters (e.g. transport.trustStoreLocation, transport.trustStorePassword, transport.keyStoreLocation, transport.keyStorePassword, transport.verifyHost, transport.trustAll).

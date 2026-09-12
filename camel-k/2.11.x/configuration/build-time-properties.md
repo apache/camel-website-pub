@@ -1,3 +1,5 @@
+Camel K
+
 # Build time properties
 
 You may be required to provide certain **build-time properties** that are needed only during the process of `Integration` building. Since Camel K version 1.5, we introduced a `--build-property` flag that will be handful in such circumstances. The property value may be also used inside Camel K integrations using the **property placeholder** mechanism.

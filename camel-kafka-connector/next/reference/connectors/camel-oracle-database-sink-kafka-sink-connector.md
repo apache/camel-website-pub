@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-oracle-database-sink-kafka-connector sink configuration
 
 Connector Description: Send data to an Oracle Database. This Kamelet expects a JSON-formatted body. Use key:value pairs to map the JSON fields and parameters.

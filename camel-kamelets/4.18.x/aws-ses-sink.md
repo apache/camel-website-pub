@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws ses sink](_images/kamelets/aws-ses-sink.svg) AWS SES Sink
 
 **Provided by: "Apache Software Foundation"**

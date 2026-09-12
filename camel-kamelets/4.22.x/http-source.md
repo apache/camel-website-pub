@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![http source](_images/kamelets/http-source.svg) HTTP Source
 
 **Provided by: "Apache Software Foundation"**

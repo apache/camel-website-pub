@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Ai Observability
 
 Spring Boot auto-configuration for Camel GenAI observability.

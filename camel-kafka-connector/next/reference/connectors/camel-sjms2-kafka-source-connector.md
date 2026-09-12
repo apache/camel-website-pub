@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-sjms2-kafka-connector source configuration
 
 Connector Description: Send and receive messages to/from a JMS Queue or Topic using plain JMS 2.x API.

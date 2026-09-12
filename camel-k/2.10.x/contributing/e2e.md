@@ -1,3 +1,5 @@
+Camel K
+
 # End To End local integration test
 
 Camel K has a suite of integration test that will run on every Pull Request. You can contribute by adding an integration test to cover any new feature introduced (or increment the coverage with features still untested).

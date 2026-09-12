@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Command Mode Applications
 
 Camel Quarkus is typically used for creating integration applications that run as long living processes. In this chapter, we are going to have a look at a slightly different use case: utilizing Camel Quarkus for writing programs that exit by themselves after performing some desired tasks.

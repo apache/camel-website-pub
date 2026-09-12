@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-storage-source-kafka-connector source configuration
 
 Connector Description: Consume objects from Google Cloud Storage.

@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI - AI Tools
 
 The Camel CLI includes AI-powered commands that use large language models (LLMs) to help you understand, troubleshoot, and secure your integrations.

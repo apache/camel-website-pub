@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # SWIFT MT
 
 Encode and decode SWIFT MT messages

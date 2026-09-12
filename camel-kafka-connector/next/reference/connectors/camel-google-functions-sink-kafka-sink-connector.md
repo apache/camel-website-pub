@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-functions-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Google Functions.

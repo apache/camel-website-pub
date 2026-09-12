@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Huawei Cloud Image Recognition
 
 To identify objects, scenes, and concepts in images on Huawei Cloud

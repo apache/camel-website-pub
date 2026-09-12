@@ -1,3 +1,5 @@
+Camel Components
+
 # Set Variable
 
 The SetVariable EIP is used for setting an [Exchange](../../../manual/exchange.md) variable.

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![fhir sink](_images/kamelets/fhir-sink.svg) FHIR Sink
 
 **Provided by: "Apache Software Foundation"**

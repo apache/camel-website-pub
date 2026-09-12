@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-file-watch-source-kafka-connector source configuration
 
 Connector Description: Receive events related to a file or folder. It may require a volume mounting on Kubernetes.

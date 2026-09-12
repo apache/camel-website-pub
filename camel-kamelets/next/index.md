@@ -2,6 +2,8 @@
 
 Index of Camel Kamelets documentation pages.
 
+Kamelet Catalog
+
 # Kamelet Catalog
 
 ## Kamelet specification

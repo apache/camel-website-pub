@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # HTTP
 
 Send requests to external HTTP servers using Apache HTTP Client 5.x.

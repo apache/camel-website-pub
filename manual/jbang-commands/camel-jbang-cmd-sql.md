@@ -1,3 +1,5 @@
+User manual
+
 # camel cmd sql
 
 Execute SQL query on a DataSource

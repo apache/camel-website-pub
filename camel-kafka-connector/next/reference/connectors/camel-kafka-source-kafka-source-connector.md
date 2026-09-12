@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kafka-source-kafka-connector source configuration
 
 Connector Description: Receive data from Kafka topics.

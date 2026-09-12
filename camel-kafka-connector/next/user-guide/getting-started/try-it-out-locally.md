@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # Try it out locally
 
 ## Run Kafka

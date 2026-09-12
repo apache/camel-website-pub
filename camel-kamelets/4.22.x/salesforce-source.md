@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![salesforce source](_images/kamelets/salesforce-source.svg) Salesforce Source
 
 **Provided by: "Apache Software Foundation"**

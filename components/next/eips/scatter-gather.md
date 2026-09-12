@@ -1,3 +1,5 @@
+Camel Components
+
 # Scatter-Gather
 
 Camel supports the [Scatter-Gather](https://www.enterpriseintegrationpatterns.com/patterns/messaging/BroadcastAggregate.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

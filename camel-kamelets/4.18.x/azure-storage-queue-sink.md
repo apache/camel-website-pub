@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure storage queue sink](_images/kamelets/azure-storage-queue-sink.svg) Azure Storage Queue Sink
 
 **Provided by: "Apache Software Foundation"**

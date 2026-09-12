@@ -1,3 +1,5 @@
+Camel Components
+
 # Convert Header To
 
 The ConvertHeaderTo EIP allows you to transform message header to a different type.

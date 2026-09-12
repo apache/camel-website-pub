@@ -1,3 +1,5 @@
+Camel Components
+
 # From
 
 Every Camel [route](../../../manual/routes.md) starts from an [Endpoint](../../../manual/endpoint.md) as the input (source) to the route.

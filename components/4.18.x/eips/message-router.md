@@ -1,3 +1,5 @@
+Camel Components
+
 # Message Router
 
 The [Message Router](http://www.enterpriseintegrationpatterns.com/MessageRouter.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to consume from an input destination, evaluate some predicate, then choose the right output destination.

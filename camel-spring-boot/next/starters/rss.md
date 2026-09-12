@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # RSS
 
 Poll RSS feeds.

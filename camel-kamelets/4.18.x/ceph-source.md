@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![ceph source](_images/kamelets/ceph-source.svg) Ceph Source
 
 **Provided by: "Apache Software Foundation"**

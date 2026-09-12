@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![jira update issue sink](_images/kamelets/jira-update-issue-sink.svg) Jira Update Issue Sink
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-postgresql-sink-kafka-connector sink configuration
 
 Connector Description: Send data to a PostgreSQL Database. This Kamelet expects a JSON-formatted body. Use key:value pairs to map the JSON fields and parameters.

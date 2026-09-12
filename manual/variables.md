@@ -1,3 +1,5 @@
+User manual
+
 # Variables
 
 **Available from Camel 4.4**

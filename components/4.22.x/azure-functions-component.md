@@ -1,3 +1,5 @@
+Camel Components
+
 # Azure Functions
 
 **Since Camel 4.19**

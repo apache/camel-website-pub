@@ -1,3 +1,5 @@
+User manual
+
 # camel sbom
 
 Generate a CycloneDX or SPDX SBOM for a specific project

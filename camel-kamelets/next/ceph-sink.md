@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![ceph sink](_images/kamelets/ceph-sink.svg) Ceph Sink
 
 **Provided by: "Apache Software Foundation"**

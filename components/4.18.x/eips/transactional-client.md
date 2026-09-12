@@ -1,3 +1,5 @@
+Camel Components
+
 # Transactional Client
 
 Camel supports the [Transactional Client](http://www.enterpriseintegrationpatterns.com/TransactionalClient.md) from the [EIP patterns](enterprise-integration-patterns.md) using JTA transactions.

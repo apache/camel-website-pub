@@ -1,3 +1,5 @@
+User manual
+
 # camel catalog dev-console
 
 List dev-consoles from the Camel Catalog

@@ -1,3 +1,5 @@
+Camel Components
+
 # Printer
 
 **Since Camel 2.1**

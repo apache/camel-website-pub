@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![header matches filter action](_images/kamelets/header-matches-filter-action.svg) Header Matches Filter Action
 
 **Provided by: "Apache Software Foundation"**

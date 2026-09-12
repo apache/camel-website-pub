@@ -1,3 +1,5 @@
+User manual
+
 # Bean Injection
 
 We support the injection of various resources using `@EndpointInject` or `@BeanInject`. This can be used to inject

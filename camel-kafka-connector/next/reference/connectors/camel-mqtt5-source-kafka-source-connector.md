@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-mqtt5-source-kafka-connector source configuration
 
 Connector Description: Allows receiving messages from any endpoint that supports the MQTT v5 protocol, such as a message broker.

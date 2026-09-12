@@ -1,3 +1,5 @@
+Camel Components
+
 # CBOR
 
 **Since Camel 3.0**

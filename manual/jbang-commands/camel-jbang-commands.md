@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI Command Reference
 
 This page provides a reference for all Camel CLI commands.

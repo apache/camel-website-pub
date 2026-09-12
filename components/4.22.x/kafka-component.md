@@ -1,3 +1,5 @@
+Camel Components
+
 # Kafka
 
 **Since Camel 2.13**

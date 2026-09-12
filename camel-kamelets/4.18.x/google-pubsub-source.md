@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![google pubsub source](_images/kamelets/google-pubsub-source.svg) Google Pubsub Source
 
 **Provided by: "Apache Software Foundation"**

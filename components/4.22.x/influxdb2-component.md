@@ -1,3 +1,5 @@
+Camel Components
+
 # InfluxDB2
 
 **Since Camel 3.20**

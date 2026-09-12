@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-azure-storage-datalake-source-kafka-connector source configuration
 
 Connector Description: Consume files from Azure Storage Blob Data Lake.

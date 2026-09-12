@@ -1,3 +1,5 @@
+Camel Components
+
 # RSS
 
 **Since Camel 2.1**

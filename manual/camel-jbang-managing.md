@@ -1,3 +1,5 @@
+User manual
+
 # Camel CLI - Managing Integrations
 
 Once your Camel integrations are running, the CLI provides comprehensive management and monitoring capabilities — from listing processes and tailing logs to tracing messages and checking health.

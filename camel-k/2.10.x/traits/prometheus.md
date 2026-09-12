@@ -1,3 +1,5 @@
+Camel K
+
 # Prometheus Trait
 
 The Prometheus trait configures a Prometheus-compatible endpoint. It also creates a `PodMonitor` resource, so that the endpoint can be scraped automatically, when using the Prometheus operator.

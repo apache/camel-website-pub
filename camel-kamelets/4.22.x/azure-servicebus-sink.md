@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![azure servicebus sink](_images/kamelets/azure-servicebus-sink.svg) Azure Servicebus Sink
 
 **Provided by: "Apache Software Foundation"**

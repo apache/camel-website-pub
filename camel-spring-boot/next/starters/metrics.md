@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Metrics
 
 Collect various metrics directly from Camel routes using the DropWizard metrics library.

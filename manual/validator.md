@@ -1,3 +1,5 @@
+User manual
+
 # Validator
 
 Validator performs declarative validation of the message according to the declared _Input Type_ and/or _Output Type_ on a route definition which declares the expected message type.

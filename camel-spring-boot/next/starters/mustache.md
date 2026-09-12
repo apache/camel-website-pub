@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Mustache
 
 Transform messages using a Mustache template.

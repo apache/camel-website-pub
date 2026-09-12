@@ -1,3 +1,5 @@
+User manual
+
 # camel catalog dataformat
 
 List data formats from the Camel Catalog

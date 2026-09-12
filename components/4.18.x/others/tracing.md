@@ -1,3 +1,5 @@
+Camel Components
+
 # Tracing
 
 **Since Camel 3.5**

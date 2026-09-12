@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Infinispan
 
 Read and write from/to Infinispan distributed key/value store and data grid.

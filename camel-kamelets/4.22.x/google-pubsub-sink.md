@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![google pubsub sink](_images/kamelets/google-pubsub-sink.svg) Google Pubsub Sink
 
 **Provided by: "Apache Software Foundation"**

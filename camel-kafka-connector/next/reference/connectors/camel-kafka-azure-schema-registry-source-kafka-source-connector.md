@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-kafka-azure-schema-registry-source-kafka-connector source configuration
 
 Connector Description: Receive data from Kafka topics on Azure Eventhubs combined with Azure Schema Registry.

@@ -1,3 +1,5 @@
+User manual
+
 # camel debug
 
 Debug local Camel integration

@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![kafka batch azure schema registry source](_images/kamelets/kafka-batch-azure-schema-registry-source.svg) Azure Kafka Batch through Eventhubs with Azure Schema Registry Source
 
 **Provided by: "Apache Software Foundation"**

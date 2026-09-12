@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-jms-apache-artemis-sink-kafka-connector sink configuration
 
 Connector Description: Send data to an Apache Artemis message broker by using JMS.

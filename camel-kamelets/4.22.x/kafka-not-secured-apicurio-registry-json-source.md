@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![kafka not secured apicurio registry json source](_images/kamelets/kafka-not-secured-apicurio-registry-json-source.svg) Kafka not secured with Apicurio Registry secured with Keycloak for JSON schema support Source
 
 **Provided by: "Apache Software Foundation"**

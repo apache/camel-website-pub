@@ -1,3 +1,5 @@
+Camel K
+
 # Configuring a Gcr.io Registry
 
 You can use gcr.io as registry to host Camel K images. Usually, users may want to use gcr.io in combination with [Google GKE](../../platform/gke.md).

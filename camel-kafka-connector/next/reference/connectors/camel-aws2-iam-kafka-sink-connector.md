@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-aws2-iam-kafka-connector sink configuration
 
 Connector Description: Manage AWS IAM instances.

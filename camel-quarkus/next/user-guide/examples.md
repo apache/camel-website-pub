@@ -1,3 +1,5 @@
+Camel Quarkus
+
 # Camel Quarkus Examples
 
 We offer several examples in [Camel Quarkus examples repository](https://github.com/apache/camel-quarkus-examples). To learn how to use them, please follow the [First steps](first-steps.md) chapter of the User guide.

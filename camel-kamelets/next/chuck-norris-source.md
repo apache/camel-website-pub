@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![chuck norris source](_images/kamelets/chuck-norris-source.svg) Chuck Norris Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,3 +1,5 @@
+User manual
+
 # Template engines
 
 A template engine is a tool that generates text output, such as emails, XML, JSon or code, by combining templates with dynamic data. In Camel, templates are primarily used to create layouts while dynamically using data from the current [Message Exchange](exchange.md).

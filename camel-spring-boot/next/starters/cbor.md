@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # CBOR
 
 Unmarshal a CBOR payload to POJO and back

@@ -1,3 +1,5 @@
+User manual
+
 # Error Handler
 
 Camel supports pluggable [ErrorHandler](https://www.javadoc.io/doc/org.apache.camel/camel-base/current/org/apache/camel/processor/ErrorHandler.md) strategies to deal with errors processing an [Event Driven Consumer](../components/4.22.x/eips/eventDrivenConsumer-eip.md).

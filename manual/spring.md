@@ -1,3 +1,5 @@
+User manual
+
 # Spring
 
 Apache Camel is designed to work first class with Spring in a number of ways, such as:

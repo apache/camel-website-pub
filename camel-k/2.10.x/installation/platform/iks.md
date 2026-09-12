@@ -1,3 +1,5 @@
+Camel K
+
 # Installing Camel K on IBM Kubernetes Service (IKS)
 
 This guide assumes you’ve already created an IBM Kubernetes cluster on [https://cloud.ibm.com](https://cloud.ibm.com), also installed the [IBM Command line tool](https://cloud.ibm.com/docs/cli?topic=cli-install-ibmcloud-cli) and `kubectl` command.

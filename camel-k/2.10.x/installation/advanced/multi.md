@@ -1,3 +1,5 @@
+Camel K
+
 # Multiple Operators and Selective Upgrades
 
 It is possible to set up multiple Camel K operators on a cluster to watch resources on namespaces. It’s not possible to configure Camel K this way using OLM (Operator Hub), since OLM prevents two operators from watching the same namespaces, but it’s technically possible to achieve this setup manually.

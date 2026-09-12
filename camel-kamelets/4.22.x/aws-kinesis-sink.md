@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![aws kinesis sink](_images/kamelets/aws-kinesis-sink.svg) AWS Kinesis Sink
 
 **Provided by: "Apache Software Foundation"**

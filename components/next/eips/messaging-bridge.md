@@ -1,3 +1,5 @@
+Camel Components
+
 # Messaging Bridge
 
 Camel supports the [Messaging Bridge](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessagingBridge.md) from the [EIP patterns](enterprise-integration-patterns.md).

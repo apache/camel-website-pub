@@ -1,3 +1,5 @@
+Camel Kafka Connector
+
 # camel-google-storage-sink-kafka-connector sink configuration
 
 Connector Description: Upload objects to Google Cloud Storage.

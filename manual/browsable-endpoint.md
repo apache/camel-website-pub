@@ -1,3 +1,5 @@
+User manual
+
 # BrowsableEndpoint
 
 The `BrowseableEndpoint` is an extension interface an `Endpoint` may implement to support the browsing of the Message [Exchanges](exchange.md) which are pending or have been sent on it.

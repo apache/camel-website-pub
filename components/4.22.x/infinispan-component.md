@@ -1,3 +1,5 @@
+Camel Components
+
 # Infinispan
 
 **Since Camel 2.13**

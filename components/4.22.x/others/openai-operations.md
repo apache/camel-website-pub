@@ -1,3 +1,5 @@
+Camel Components
+
 # OpenAI - Embeddings and Audio Operations
 
 [Back to OpenAI Component](../openai-component.md)

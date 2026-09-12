@@ -1,3 +1,5 @@
+Kamelet Catalog
+
 # ![insert field action](_images/kamelets/insert-field-action.svg) Insert Field Action
 
 **Provided by: "Apache Software Foundation"**

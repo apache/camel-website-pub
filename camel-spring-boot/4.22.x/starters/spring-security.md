@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Spring Security
 
 ## Maven coordinates

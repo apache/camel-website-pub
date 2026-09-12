@@ -1,3 +1,5 @@
+Camel Spring Boot
+
 # Spring RabbitMQ
 
 Send and receive messages from RabbitMQ using the Spring RabbitMQ client.

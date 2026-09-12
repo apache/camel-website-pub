@@ -1,3 +1,5 @@
+User manual
+
 # Apache Camel 2.x to 3.0 Migration Guide
 
 This document is intended to help you migrate your Apache Camel applications from version 2.x to 3.0.
