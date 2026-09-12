@@ -75,6 +75,17 @@ As an expression, the JavaScript value of the script becomes the Camel result (t
 
 As a predicate (`.when().quickjs(…​)` or `.filter().quickjs(…​)`), the result is converted to boolean with Camel’s standard `ObjectHelper.evaluateValuePredicate` rules: a `Boolean` is used directly; the strings `true`/`false` are parsed; any other non-empty, non-null value is true.
 
+## Engine lifecycle
+
+Every worker thread owns one QuickJS engine, created on first use and closed when the language stops. QuickJS keeps every module it has evaluated until its context is freed, and QuickJS4J evaluates a module per call, so an engine grows with every evaluation. The language therefore recycles a thread’s engine once its WebAssembly memory exceeds `engineMaxMemory` (64 MB) or it has run `engineMaxEvaluations` (50,000) evaluations. Both are properties of `QuickjsLanguage` and can be set like any language option, for example in `application.properties`:
+
+```properties
+camel.language.quickjs.engineMaxMemory = 134217728
+camel.language.quickjs.engineMaxEvaluations = 100000
+```
+
+or programmatically through `QuickjsLanguage) context.resolveLanguage("quickjs".setEngineMaxMemory(…​)`.
+
 ## Security
 
 JavaScript runs in the QuickJS4J sandbox. The runtime does not expose Java classes, reflection, class loaders, or live Camel objects. WASI has no filesystem or network preopens. Stdout from scripts is discarded so a reused engine does not accumulate output. Per-evaluation stderr is captured into Camel exceptions (for example `ReferenceError`) and then cleared so later evaluations do not include stale error output.

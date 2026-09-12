@@ -43,7 +43,7 @@ A store only referenced from routes does not need to be injected anywhere in Jav
 
 ### Retrieval augmentors for `@RegisterAiService`
 
-With Quarkus LangChain4j present, a `RetrievalAugmentor` is produced automatically from the `@Default` `EmbeddingStore` and `EmbeddingModel` beans, so an `@RegisterAiService` interface answers from the same store a Camel route ingests into. Nothing is produced when the application declares its own `RetrievalAugmentor`.
+With Quarkus LangChain4j present, a `RetrievalAugmentor` is produced automatically from the `@Default` `EmbeddingStore` and `EmbeddingModel` beans, so an `@RegisterAiService` interface answers from the same store a Camel route ingests into. Nothing is produced when the application declares its own `RetrievalAugmentor`. An AI service that should not answer from the store opts out with `@RegisterAiService(retrievalAugmentor = RegisterAiService.NoRetrievalAugmentorSupplier.class)`.
 
 Augmentors can also be declared explicitly, one per store:
 
@@ -138,3 +138,25 @@ Note that the import order is paramount when using maven `dependencyManagement`.
 
 > **Warning**
 > At present, this extension is neither tested with nor intended to be used in conjunction with any Quarkus LangChain4j extensions. Consequently, both JVM and native modes may exhibit unexpected behaviour or fail to function correctly in such configurations.
+
+## Additional Camel Quarkus configuration
+
+  
+| Configuration property | Type | Default |
+| --- | --- | --- |
+| `[quarkus.camel.langchain4j.rag.augmentors."augmentors".embedding-store-name](#quarkus-camel-langchain4j-rag-augmentors-augmentors-embedding-store-name)`
+CDI bean name of the `EmbeddingStore` to use. Matches beans annotated with `@Named("name")` or `@EmbeddingStoreName("name")`.
+
+ | `string` | required |
+| `[quarkus.camel.langchain4j.rag.augmentors."augmentors".embedding-model-name](#quarkus-camel-langchain4j-rag-augmentors-augmentors-embedding-model-name)`
+
+CDI bean name of the `EmbeddingModel` to use. When not set, the default (unnamed) `EmbeddingModel` is used.
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.rag.augmentors."augmentors".default](#quarkus-camel-langchain4j-rag-augmentors-augmentors-default)`
+
+Marks this augmentor as the one `@RegisterAiService` AI services use when they do not select an augmentor explicitly. Exactly one augmentor must be marked when more than one is configured — otherwise the build fails, because an unmarked ambiguity would silently disable RAG for every AI service in the application.
+
+ | `boolean` | `false` |
+
+Configuration property fixed at build time. All other configuration properties are overridable at runtime.

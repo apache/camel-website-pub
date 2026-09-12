@@ -138,7 +138,7 @@ Note that the import order is paramount when using maven `dependencyManagement`.
 
 ### Quarkus LangChain4j support
 
-This extension is designed and tested to work together with the [Quarkus LangChain4j](https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.md) extensions. The `EmbeddingStore` and `EmbeddingModel` beans a pipeline writes through are ordinary CDI beans shared by both stacks — including stores declared through Quarkus LangChain4j configuration — and with the RAG augmentor bridge an `@RegisterAiService` interface answers from the store a pipeline filled, without glue code. The integration tests run both stacks in one application.
+This extension is designed and tested to work together with the [Quarkus LangChain4j](https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.md) extensions. The `EmbeddingStore` and `EmbeddingModel` beans a pipeline writes through are ordinary CDI beans shared by both stacks — including stores declared through Quarkus LangChain4j configuration — and with the [RAG augmentor bridge](langchain4j-embeddingstore.html#extensions-langchain4j-embeddingstore-usage-retrieval-augmentors-for-registeraiservice) an `@RegisterAiService` interface answers from the store a pipeline filled, without glue code. The integration tests run both stacks in one application.
 
 ## Additional Camel Quarkus configuration
 
