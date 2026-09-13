@@ -1,15 +1,17 @@
-urls[857]{loc,lastmod}:
+urls[859]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-09-09T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/camel-karaf-4.18.4/,2026-09-09T00:00:00+00:00
+  https://camel.apache.org/releases/karaf-4.18.4/,2026-09-09T00:00:00+00:00
+  https://camel.apache.org/,2026-09-09T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-09-09T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-09-09T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-80351.md,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-80352.md,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-80354.md,2026-09-08T11:00:00+02:00
-  https://camel.apache.org/,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/,2026-09-08T11:00:00+02:00
-  https://camel.apache.org/blog/,2026-09-08T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-k-2-11/,2026-09-08T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-09-08T00:00:00+00:00
   https://camel.apache.org/categories/Camel/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/releases/k-2.11.0/,2026-09-07T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/categories/Security/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-09-01T00:00:00+00:00

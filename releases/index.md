@@ -470,6 +470,7 @@ Every release of every Camel project, newest first. Supported releases are on th
 
 | Version | Release date | Description |
 | --- | --- | --- |
+| [4.18.4](../releases/karaf-4.18.4/) | 2026-09-09 |  |
 | [4.14.7](../releases/karaf-4.14.7/) | 2026-05-24 |  |
 | [4.18.2](../releases/karaf-4.18.2/) | 2026-05-24 |  |
 | [4.18.1](../releases/karaf-4.18.1/) | 2026-04-18 |  |
