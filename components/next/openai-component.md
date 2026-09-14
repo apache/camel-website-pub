@@ -31,8 +31,12 @@ Supported operations:
     
 -   `responses` - Call the OpenAI Responses API (hosted tools, server-side conversation state; non-streaming)
     
+-   `responses-retrieve` - Retrieve a stored Responses API response, such as one started in background mode
+    
+-   `responses-cancel` - Cancel a Responses API response still running in background mode
+    
 
-See [Responses API operation](others/openai-responses.md) for usage (`previousResponseId`, builtin tools, MCP pass-through).
+See [Responses API operation](others/openai-responses.md) for usage (`previousResponseId`, builtin tools, MCP pass-through, background mode).
 
 -   `embeddings` - Generate vector embeddings from text for semantic search and RAG applications
     
@@ -126,13 +130,17 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform: 'chat-completion', 'responses', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', or 'image-edit'.
+**Required** The operation to perform: 'chat-completion', 'responses', 'responses-retrieve', 'responses-cancel', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', or 'image-edit'.
 
 Enum values:
 
 -   chat-completion
     
 -   responses
+    
+-   responses-retrieve
+    
+-   responses-cancel
     
 -   embeddings
     
@@ -193,11 +201,13 @@ Enum values:
 | **audioTemperature** (producer) | Sampling temperature for transcription (0.0 to 1.0). |  | Double |
 | **audioTimestampGranularities** (producer) | Comma-separated timestamp granularities: 'word', 'segment', or 'word,segment'. Only applicable with verbose\_json response format. |  | String |
 | **autoToolExecution** (producer) | When true and MCP servers are configured, automatically execute tool calls and loop back to the model. When false, tool calls are returned as the message body for manual handling. | true | boolean |
+| **background** (producer) | Run the model response in the background (Responses API only). The exchange completes as soon as the response is queued, with an empty body and the CamelOpenAIResponseStatus header, and the response is stored so that it can be retrieved later. Cannot be combined with automatic tool execution. | false | boolean |
 | **baseUrl** (producer) | Base URL for OpenAI API. Defaults to OpenAI’s official endpoint. Can be used for local or third-party providers. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
 | **builtinTools** (producer) | Comma-separated hosted tools for the Responses API: web\_search, file\_search, code\_interpreter. |  | String |
 | **connectTimeout** (producer) | Timeout in milliseconds for establishing the TCP connection to the API. A connect timeout means the endpoint was unreachable, so the request never ran and is safe to retry. When 0 or negative, the SDK default (1 minute) is used. | 0 | long |
 | **conversationHistoryProperty** (producer) | Exchange property name for storing conversation history. | CamelOpenAIConversationHistory | String |
-| **conversationMemory** (producer) | Enable conversation memory per Exchange. | false | boolean |
+| **conversationId** (producer) | Id of a conversation created with the OpenAI Conversations API to run the request in. The conversation keeps its items across exchanges. Cannot be combined with previousResponseId (Responses API only). |  | String |
+| **conversationMemory** (producer) | Enable conversation memory per Exchange. The chat-completion operation keeps the message history in the conversationHistoryProperty exchange property. The responses operation keeps the conversation on the server, stores the last response id in that property and sends it as previous\_response\_id, which requires a server that stores responses. | false | boolean |
 | **developerMessage** (producer) | Developer message to prepend before user messages. |  | String |
 | **dimensions** (producer) | Number of dimensions for the embedding output. Only supported by text-embedding-3 models. Reducing dimensions can lower costs and improve performance without significant quality loss. |  | Integer |
 | **embeddingModel** (producer) | The model to use for embeddings. |  | String |
@@ -234,7 +244,7 @@ Enum values:
 
 
  | failExchange | HallucinatedToolNameStrategy |
-| **hostedMcpTools** (producer) | JSON array of hosted MCP tool definitions (OpenAI Tool.Mcp) passed through to the Responses API. |  | String |
+| **hostedMcpTools** (producer) | JSON array of hosted MCP tool definitions passed to the Responses API as OpenAI mcp tools. Every field of the API is sent, such as server\_label, server\_url, require\_approval, allowed\_tools, headers and authorization. Marked secret because it can carry credentials. |  | String |
 | **imageBackground** (producer) | 
 
 The background of the generated image. Only supported by the GPT image models, and a transparent background requires the png or webp output format.
@@ -467,6 +477,7 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAITopP** (producer) Constant: [`TOP_P`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOP_P) | An alternative to temperature for controlling randomness. Uses nucleus sampling where the model considers tokens with top\_p probability mass. |  | Double |
 | **CamelOpenAIMaxTokens** (producer) Constant: [`MAX_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MAX_TOKENS) | The maximum number of tokens to generate in the completion. |  | Integer |
 | **CamelOpenAIPreviousResponseId** (producer) Constant: [`PREVIOUS_RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PREVIOUS_RESPONSE_ID) | Previous response id for server-side conversation state on the Responses API. |  | String |
+| **CamelOpenAIConversationId** (producer) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#CONVERSATION_ID) | The id of a conversation created with the Conversations API to run the Responses API request in. |  | String |
 | **CamelOpenAIStreaming** (producer) Constant: [`STREAMING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STREAMING) | Whether to stream the response back incrementally. |  | Boolean |
 | **CamelOpenAIOutputClass** (producer) Constant: [`OUTPUT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#OUTPUT_CLASS) | The Java class name (FQCN) to use for structured output parsing. |  | String |
 | **CamelOpenAIJsonSchema** (producer) Constant: [`JSON_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA) | The JSON schema to use for structured output validation. |  | String |
@@ -475,11 +486,13 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIThinkingContent** (producer) Constant: [`THINKING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#THINKING_CONTENT) | The thinking content extracted from …​ blocks in the model response. |  | String |
 | **CamelOpenAIReasoningContent** (producer) Constant: [`REASONING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REASONING_CONTENT) | The reasoning content from the model response reasoning\_content field, used by thinking models like Qwen3 and DeepSeek-R1. |  | String |
 | **CamelOpenAIResponseModel** (producer) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_MODEL) | The model used for the completion response. |  | String |
-| **CamelOpenAIResponseId** (producer) Constant: [`RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ID) | The unique identifier for the completion response. |  | String |
+| **CamelOpenAIResponseId** (producer) Constant: [`RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ID) | The unique identifier for the completion response. The responses-retrieve and responses-cancel operations read the id of the response to act on from this header. |  | String |
 | **CamelOpenAIFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#FINISH_REASON) | The reason the completion finished (e.g., stop, length, content\_filter). |  | String |
 | **CamelOpenAIPromptTokens** (producer) Constant: [`PROMPT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PROMPT_TOKENS) | The number of tokens used in the prompt for the latest API call. |  | Long |
 | **CamelOpenAICompletionTokens** (producer) Constant: [`COMPLETION_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#COMPLETION_TOKENS) | The number of tokens used in the completion for the latest API call. |  | Long |
 | **CamelOpenAITotalTokens** (producer) Constant: [`TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOTAL_TOKENS) | The total number of tokens used (prompt completion) for the latest API call. |  | Long |
+| **CamelOpenAIResponseAnnotations** (producer) Constant: [`RESPONSE_ANNOTATIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ANNOTATIONS) | The annotations attached to the output text of a Responses API answer, such as the url\_citation and file\_citation citations of web\_search and file\_search. Each entry is a map of the API fields. |  | List |
+| **CamelOpenAIResponseStatus** (producer) Constant: [`RESPONSE_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_STATUS) | The status of a Responses API response: completed, failed, in\_progress, cancelled, queued or incomplete. |  | String |
 | **CamelOpenAIToolIterations** (producer) Constant: [`TOOL_ITERATIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOOL_ITERATIONS) | Number of tool call iterations performed in the agentic loop. |  | Integer |
 | **CamelOpenAIMcpToolCalls** (producer) Constant: [`MCP_TOOL_CALLS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MCP_TOOL_CALLS) | List of tool names called during the agentic loop. |  | List |
 | **CamelOpenAIMcpReturnDirect** (producer) Constant: [`MCP_RETURN_DIRECT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MCP_RETURN_DIRECT) | Whether the response came directly from a tool with returnDirect=true, rather than from the LLM. |  | Boolean |
@@ -1707,7 +1720,7 @@ The component may throw the following exceptions:
 
 -   `IllegalArgumentException`:
     
-    -   When an invalid operation is specified (supported: `chat-completion`, `responses`, `embeddings`, `tool-execution`, `audio-transcription`, `audio-translation`, `audio-speech`, `moderation`, `image-generation`, `image-edit`)
+    -   When an invalid operation is specified (supported: `chat-completion`, `responses`, `responses-retrieve`, `responses-cancel`, `embeddings`, `tool-execution`, `audio-transcription`, `audio-translation`, `audio-speech`, `moderation`, `image-generation`, `image-edit`)
         
     -   When message body or user message is missing
         

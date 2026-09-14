@@ -8,8 +8,6 @@ Kamelet Catalog
 
 Send SMS messages through a SMSC (Short Message Service Center) using the SMPP protocol.
 
-The message body is sent as the short message text.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `smpp-sink` Kamelet:
@@ -69,6 +67,18 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## SMPP Sink Kamelet Description
+
+### Message
+
+The message body is sent as the short message text.
+
+### Connection
+
+The SMPP producer binds to the SMSC when the route starts, so an unreachable SMSC or wrong credentials fail the route rather than the individual exchange.
+
+Set `usingSSL` to secure the connection with TLS, where the SMSC supports it.
 
 ## Kamelet source file
 

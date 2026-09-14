@@ -8,10 +8,6 @@ Kamelet Catalog
 
 Receive Ceph RGW bucket notifications from a Kafka topic, and optionally fetch the object each notification refers to.
 
-Ceph pushes bucket notifications to an endpoint configured on the topic; this Kamelet consumes the Kafka flavour of that. Configuring the notification and the topic on the Ceph side is done out of band with the S3 and topic APIs, not by this Kamelet.
-
-Set getObject to true to fetch the object body from Ceph for ObjectCreated events. The notification JSON is emitted unchanged otherwise.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `ceph-event-based-source` Kamelet:
@@ -82,6 +78,20 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## Ceph Event Based Source Kamelet Description
+
+### How Notifications Arrive
+
+Ceph RGW pushes bucket notifications to an endpoint configured on the topic rather than being polled. This Kamelet consumes the Kafka flavour of that.
+
+Configuring the notification and the topic on the Ceph side is done out of band, with the S3 and topic APIs, and is not something this Kamelet does.
+
+### Fetching the Object
+
+Set `getObject` to true to fetch the object body from Ceph for `ObjectCreated` events, using the same S3 compatible path that `ceph-source` and `ceph-sink` use. The notification JSON is emitted unchanged otherwise.
+
+When `getObject` is enabled, `cephUrl`, `accessKey`, `secretKey` and `zoneGroup` are required so the object can be read back from the RGW endpoint.
 
 ## Kamelet source file
 

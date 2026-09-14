@@ -8,8 +8,6 @@ Kamelet Catalog
 
 Manage the data source ingestion jobs of an AWS Bedrock knowledge base.
 
-Use startIngestionJob to kick off an ingestion of the configured data source, listIngestionJobs to list the jobs of a knowledge base, or getIngestionJob to look one up. For getIngestionJob the job id is taken from the CamelAwsBedrockAgentIngestionJobId header.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `aws-bedrock-agent-sink` Kamelet:
@@ -74,6 +72,23 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## AWS Bedrock Agent Sink Kamelet Description
+
+### Operations
+
+This Kamelet manages the data source ingestion jobs of a knowledge base. The operation property selects which one runs:
+
+-   `startIngestionJob` - kick off an ingestion of the configured data source
+    
+-   `listIngestionJobs` - list the ingestion jobs of the knowledge base
+    
+-   `getIngestionJob` - look up a single job
+    
+
+### Job Id
+
+For the `getIngestionJob` operation the job id is taken from the `CamelAwsBedrockAgentIngestionJobId` header, which is the one input this Kamelet deliberately reads from the message. Every other `CamelAwsBedrockAgent*` header is removed before the call, so an inbound message cannot change the operation, the knowledge base or the data source.
 
 ## Kamelet source file
 

@@ -8,10 +8,6 @@ Kamelet Catalog
 
 Receive events from the Salesforce Pub/Sub API.
 
-This is the gRPC based Pub/Sub API, not the older streaming API that salesforce-source uses. Subscribe to a channel such as /event/MyEvent\_\_e, /topic/MyTopic or /data/AccountChangeEvent.
-
-The Pub/Sub API is gRPC based and needs a protobuf-java new enough for the generated stubs in camel-salesforce. Under Camel JBang an older protobuf is resolved and the route fails to start with NoClassDefFoundError on com.google.protobuf.RuntimeVersion; adding protobuf-java as an explicit dependency resolves it.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `salesforce-pubsub-source` Kamelet:
@@ -75,6 +71,24 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## Salesforce Pub/Sub Source Kamelet Description
+
+### Which API
+
+This is the gRPC based Pub/Sub API, not the older streaming API that `salesforce-source` uses. Subscribe to a channel such as `/event/MyEvent__e`, `/topic/MyTopic` or `/data/AccountChangeEvent`.
+
+### Deserialization
+
+`deserializeType` defaults to JSON so the body is usable downstream without further decoding. The component’s own default is AVRO, which emits binary. Use POJO together with `pojoClass` to deserialise into a generated class.
+
+### Runtime Dependency
+
+The Pub/Sub API is gRPC based and needs a `protobuf-java` new enough for the generated stubs in `camel-salesforce`. Under Camel JBang an older protobuf is resolved and the route fails to start during class loading:
+
+java.lang.NoClassDefFoundError: com/google/protobuf/RuntimeVersion$RuntimeDomain
+
+Adding protobuf-java as an explicit dependency resolves it.
 
 ## Kamelet source file
 

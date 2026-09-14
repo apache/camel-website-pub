@@ -8,10 +8,6 @@ Kamelet Catalog
 
 Poll SNMP (Simple Network Management Protocol) capable devices, or receive SNMP traps.
 
-Set type to POLL or GET\_NEXT to query the OIDs listed in the oids property on a schedule, or to TRAP to listen for traps sent to this host and port.
-
-SNMP v1 and v2c authenticate with a plaintext community string. Prefer snmpVersion 3 with authentication and privacy where the device supports it.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `snmp-source` Kamelet:
@@ -77,6 +73,20 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## SNMP Source Kamelet Description
+
+### Modes
+
+Set `type` to `POLL` or `GET_NEXT` to query the OIDs listed in the `oids` property on a schedule, or to `TRAP` to listen for traps sent to this host and port.
+
+Polling normally uses port 161 and trap listening normally uses port 162.
+
+### Security
+
+SNMP v1 and v2c authenticate with a community string that is sent in clear text, so the `snmpCommunity` value should be treated as a credential even though it is not encrypted on the wire.
+
+Prefer `snmpVersion` 3 where the device supports it. `securityLevel` defaults to 3 (authPriv), which gives both authentication and privacy.
 
 ## Kamelet source file
 

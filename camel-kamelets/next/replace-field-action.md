@@ -8,8 +8,6 @@ Kamelet Catalog
 
 Replace field with a different key in the message in transit.
 
-Only top level fields are considered. Fields nested inside an object are passed through untouched, so a rename that names a nested field has no effect.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `replace-field-action` Kamelet:
@@ -72,6 +70,16 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## Replace Field Action Kamelet Description
+
+### Scope
+
+Only top level fields are considered. Fields nested inside an object are passed through untouched, so a rename that names a nested field has no effect.
+
+The `enabled` and `disabled` properties filter on the same top level keys.
+
+For example, with a body of `{"message":{"Hola":"mundo"}}`, renaming `message` works while renaming `Hola` does nothing.
 
 ## Kamelet source file
 

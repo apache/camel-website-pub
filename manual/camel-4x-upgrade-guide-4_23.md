@@ -64,6 +64,12 @@ The `context` developer console no longer counts routes created by Kamelets in i
 
 The `route-topology` developer console (used by `camel cmd route-topology` and the Camel TUI diagram) no longer includes routes created by Kamelets, as these are an implementation detail of the Kamelet and were already hidden from the route console. Set the `kamelets=true` option (or `--kamelets` on the CLI) to include them.
 
+### camel-groovy
+
+A `GroovyShellFactory` is now looked up in the registry once per `CamelContext`, when the first groovy expression is evaluated, instead of on every evaluation. A factory bound to the registry after that point is no longer used; bind it before the context starts.
+
+The `exchangeProperties`, `exchangeProperty`, `variables`, `variable` and `attachments` script variables are now read from the exchange the first time the script uses them instead of being copied before the script runs. A script that changes a property or variable through `exchange` and then reads one of these variables for the first time now sees its own change where it previously saw the state from before the script ran.
+
 ### camel-dynamic-router
 
 The `dynamic-router-control` endpoint no longer takes the subscription `predicate`, or the `expressionLanguage` used to compile it, from the incoming control message. A control message that supplies either is now rejected with an `IllegalArgumentException`.
@@ -101,12 +107,6 @@ The Maven archetype `camel-archetype-spring` was deprecated in 4.17. Use spring 
 #### camel-catalog-lucene
 
 The maven plugin was deprecated in 4.12. The catalog now has built-in suggestions (see `camel-catalog` below).
-
-### camel-catalog - did-you-mean suggestions by default, camel-catalog-suggest deprecated
-
-`CamelCatalog` now suggests the closest option names (and enum values) by default when validation finds an unknown one, using the new edit-distance based `org.apache.camel.catalog.impl.EditDistanceSuggestionStrategy` from `camel-core-catalog`. Before, suggestions were only produced when a `SuggestionStrategy` had been set explicitly, which meant the CLI and the TUI validators never gave any. Code that never wants suggestions can call `setSuggestionStrategy(null)`.
-
-The `camel-catalog-suggest` module with its phonetic (Soundex, commons-codec based) `CatalogSuggestionStrategy` is deprecated: the class now delegates to the edit-distance strategy and the module no longer depends on commons-codec. Remove the dependency and the `setSuggestionStrategy` call; the default gives the same or better suggestions. Edit distance also changes what is suggested: a partly typed name lists the names starting with it, and a name with a typo lists the names a few edits away, whereas Soundex matched by the sound of the consonants (for `showE` the `log` component now suggests `showException`, `showExchangeId` and `showExchangePattern`, no longer `showAll`).
 
 #### camel-digitalocean
 
@@ -447,6 +447,14 @@ After:
 ```
 
 Each repository is now an entry in the `repositories` array carrying its own `id`, rather than the id being a dynamic top-level JSON key. Anything that parses this console’s raw JSON directly (custom tooling, or scripts calling the dev console HTTP endpoint) must be updated to the new shape. The `camel get variable` CLI command has already been updated accordingly.
+
+### camel-javascript
+
+The `js` language now shares one GraalJS `Engine` per language instance (a `Context` is still created per evaluation), so the engine is built when the `CamelContext` starts instead of on every evaluation.
+
+Values returned by a script are now converted to plain Java objects before the script’s `Context` is closed. Previously a JavaScript object, array, `Map`, `Set` or `Date` came back as a polyglot `Value` bound to a `Context` that had already been closed, and reading it failed. A script now returns a `LinkedHashMap` for an object or a JavaScript `Map`, an `ArrayList` for an array, a `LinkedHashSet` for a `Set` and a `java.time.Instant` for a `Date`. Code that handled the polyglot `Value` itself needs to work with these types instead.
+
+`JavaScriptHelper.newContext()` is deprecated: contexts are created by the language from its shared engine.
 
 ### camel-jbang
 
@@ -853,6 +861,12 @@ This aligns the MicroProfile health output (and therefore Camel Quarkus, which b
 camel.health.exposure-level = full
 ```
 
+### camel-catalog - did-you-mean suggestions by default, camel-catalog-suggest deprecated
+
+`CamelCatalog` now suggests the closest option names (and enum values) by default when validation finds an unknown one, using the new edit-distance based `org.apache.camel.catalog.impl.EditDistanceSuggestionStrategy` from `camel-core-catalog`. Before, suggestions were only produced when a `SuggestionStrategy` had been set explicitly, which meant the CLI and the TUI validators never gave any. Code that never wants suggestions can call `setSuggestionStrategy(null)`.
+
+The `camel-catalog-suggest` module with its phonetic (Soundex, commons-codec based) `CatalogSuggestionStrategy` is deprecated: the class now delegates to the edit-distance strategy and the module no longer depends on commons-codec. Remove the dependency and the `setSuggestionStrategy` call; the default gives the same or better suggestions. Edit distance also changes what is suggested: a partly typed name lists the names starting with it, and a name with a typo lists the names a few edits away, whereas Soundex matched by the sound of the consonants (for `showE` the `log` component now suggests `showException`, `showExchangeId` and `showExchangePattern`, no longer `showAll`).
+
 ### camel-spring-boot
 
 A set of starter defaults changed in this release. Each is a deliberate change to what an application gets when it configures nothing, so an existing deployment that relied on the previous default has to opt back in.
@@ -1127,7 +1141,9 @@ When `storeFullResponse=true`, the embeddings and audio operations now store the
 
 A route that reads the full embeddings or audio response from `CamelOpenAIResponse` must switch to the matching property. The chat-completion, responses, moderation and image operations are unchanged.
 
-The `moderation` operation now sends an image body to the multi-modal input of the moderation API. A `File`, `Path`, `WrappedFile`, `byte[]` or `InputStream` body whose detected MIME type is an image type was previously converted to a `String` and moderated as text; it is now moderated as an image, which needs a moderation model that accepts images, such as the default `omni-moderation-latest`. A list body containing an image file now fails with an `IllegalArgumentException` instead of moderating the file content as text; split the list to moderate each image on its own.
+The `moderation` operation now sends an image body to the multi-modal input of the moderation API. A `File`, `Path`, `WrappedFile`, `byte[]` or `InputStream` body whose detected MIME type is an image type was previously converted to a `String` and moderated as text; it is now moderated as an image, which needs a moderation model that accepts images, such as the default `omni-moderation-latest`. A list body containing an image file now fails with an `IllegalArgumentException` instead of moderating the file content as text; split the list to moderate each image on its own. The `hostedMcpTools` option of the `responses` operation now sends every field of each MCP tool definition. Previously only `server_label`, `server_url` and `server_description` were sent, so fields such as `require_approval`, `allowed_tools` and `headers` were silently dropped and the API applied its defaults, including asking for approval before every hosted MCP call. The option is now also marked as secret.
+
+A `responses` call whose output asks for the approval of hosted MCP tool calls now fails with a `CamelExchangeException` naming the pending calls. Previously the exchange completed with an empty body.
 
 ### camel-infinispan
 

@@ -27,8 +27,6 @@ At runtime, the `counter-source` Kamelet relies upon the presence of the followi
     
 -   camel:core
     
--   camel:bean
-    
 -   camel:kamelet
     
 

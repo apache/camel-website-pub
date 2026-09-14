@@ -8,8 +8,6 @@ Kamelet Catalog
 
 Poll a Couchbase bucket and emit the results.
 
-By default the bucket is queried with the N1QL statement given in the statement property. Set useView to true to poll a MapReduce view instead, selected with designDocumentName and viewName.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `couchbase-source` Kamelet:
@@ -78,6 +76,22 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## Couchbase Source Kamelet Description
+
+### Query Modes
+
+The bucket is polled in one of two modes.
+
+By default the N1QL statement in the `statement` property is run against the bucket on each poll. Set `useView` to true to poll a MapReduce view instead, selected with `designDocumentName` and `viewName`.
+
+### Writing the Statement
+
+The statement runs in the bucket scope, so the keyspace is the collection rather than the bucket name - use `_default` for the default collection.
+
+It must also alias the document id as `__id`, because the consumer skips any row without that field. A query that omits it produces a source that polls without emitting anything:
+
+SELECT META().id AS \_\_id, \* FROM \_default
 
 ## Kamelet source file
 

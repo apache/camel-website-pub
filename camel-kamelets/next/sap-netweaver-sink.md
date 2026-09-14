@@ -8,8 +8,6 @@ Kamelet Catalog
 
 Send requests to an SAP NetWeaver Gateway over HTTP.
 
-The command property is the OData command to run against the gateway, and is pinned by this Kamelet rather than taken from the message.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `sap-netweaver-sink` Kamelet:
@@ -68,6 +66,14 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## SAP NetWeaver Sink Kamelet Description
+
+### The Command
+
+The `command` property is the OData command to run against the gateway, and it becomes the request path.
+
+The component reads the command from the `CamelNetWeaverCommand` header, which this Kamelet sets from the property. Setting it also overwrites any inbound value, so a caller cannot choose the request path.
 
 ## Kamelet source file
 

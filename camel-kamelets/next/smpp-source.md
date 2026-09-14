@@ -8,8 +8,6 @@ Kamelet Catalog
 
 Receive SMS messages and delivery receipts from a SMSC (Short Message Service Center) using the SMPP protocol.
 
-The short message text is emitted as the message body. Details of the received PDU are available in the CamelSmpp\* headers.
-
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `smpp-source` Kamelet:
@@ -68,6 +66,16 @@ You can now run it directly through the following command
 ```shell
 camel run route.yaml
 ```
+
+## SMPP Source Kamelet Description
+
+### Message
+
+The short message text is emitted as the message body. Details of the received PDU stay in the `CamelSmpp*` headers the component sets, such as `CamelSmppMessageType`, `CamelSmppStatus` and `CamelSmppOptionalParameters`.
+
+### Address Range
+
+`addressRange` is the consumer side option that tells the SMSC which messages to route to this ESME, as defined in section 5.2.7 of the SMPP 3.4 specification.
 
 ## Kamelet source file
 
