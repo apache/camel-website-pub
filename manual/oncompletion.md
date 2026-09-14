@@ -71,17 +71,23 @@ from("direct:start")
 </route>
 ```
 
+In YAML a route scoped `onCompletion` is declared in a `routeConfiguration` that the route refers to, so it only applies to that route.
+
 ```yaml
+- routeConfiguration:
+    id: myConfig
+    onCompletion:
+      - onCompletion:
+          steps:
+            - to:
+                uri: log:sync
+            - to:
+                uri: mock:sync
 - route:
+    routeConfigurationId: myConfig
     from:
       uri: direct:start
       steps:
-        - onCompletion:
-            steps:
-              - to:
-                  uri: log:sync
-              - to:
-                  uri: mock:sync
         - process:
             ref: myProcessor
         - to:
@@ -129,17 +135,21 @@ from("direct:start")
 ```
 
 ```yaml
+- routeConfiguration:
+    id: myConfig
+    onCompletion:
+      - onCompletion:
+          onFailureOnly: "true"
+          steps:
+            - to:
+                uri: log:sync
+            - to:
+                uri: mock:sync
 - route:
+    routeConfigurationId: myConfig
     from:
       uri: direct:start
       steps:
-        - onCompletion:
-            onFailureOnly: "true"
-            steps:
-              - to:
-                  uri: log:sync
-              - to:
-                  uri: mock:sync
         - process:
             ref: myProcessor
         - to:
@@ -244,20 +254,22 @@ from("direct:start")
 ```
 
 ```yaml
+- routeConfiguration:
+    id: myConfig
+    onCompletion:
+      - onCompletion:
+          onWhen:
+            simple: "${body} contains 'Hello'"
+          steps:
+            - to:
+                uri: log:sync
+            - to:
+                uri: mock:sync
 - route:
+    routeConfigurationId: myConfig
     from:
       uri: direct:start
       steps:
-        - onCompletion:
-            steps:
-              - onWhen:
-                  expression:
-                    simple:
-                      expression: "${body} contains 'Hello'"
-              - to:
-                  uri: log:sync
-              - to:
-                  uri: mock:sync
         - to:
             uri: log:original
         - to:
@@ -316,11 +328,11 @@ You can also refer to a specific thread pool to be used, using the `executorServ
               expression: "OnComplete:${body}"
 ```
 
-You can also refer to a specific thread pool to be used, using the `executorServiceRef` option
+You can also refer to a specific thread pool to be used, using the `executorService` option
 
 ```yaml
 - onCompletion:
-    executorServiceRef: myThreadPool
+    executorService: myThreadPool
     steps:
       - to:
           uri: mock:before

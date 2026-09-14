@@ -430,7 +430,7 @@ The transpiler automatically maps DataWeave constructs to their DataSonnet equiv
 
 -   `payload` to `body`, `vars` to `cml.variable()`, `attributes.headers` to `cml.header()`
     
--   Operators: `++` to `+`, `default` to `cml.defaultVal()`, `as Number/String/Boolean` to `cml.toInteger()/std.toString()/cml.toBoolean()`
+-   Operators: `` +` to ` ``, `default` to `cml.defaultVal()`, `as Number/String/Boolean` to `cml.toInteger()/std.toString()/cml.toBoolean()`
     
 -   Collection operations: `map`, `filter`, `reduce`, `flatMap`, `groupBy`, `orderBy`, `distinctBy`
     

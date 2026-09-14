@@ -858,8 +858,8 @@ from("direct:start")
 ```xml
 <route>
   <from uri="direct:start"/>
-  <aggregate strategyRef="groupedBodyStrategy"
-             aggregationRepositoryRef="aggregationRepo"
+  <aggregate aggregationStrategy="groupedBodyStrategy"
+             aggregationRepository="aggregationRepo"
              completionSize="10">
     <correlationExpression>
       <header>orderId</header>
@@ -876,7 +876,7 @@ from("direct:start")
       - aggregate:
           correlationExpression:
             header: orderId
-          strategyRef: groupedBodyStrategy
+          aggregationStrategy: groupedBodyStrategy
           aggregationRepository: aggregationRepo
           completionSize: 10
           steps:

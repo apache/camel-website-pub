@@ -324,6 +324,7 @@ Notice how the Groovy code can be inlined directly in the route template in DSL 
       - name: "bucket"
     beans:
       - name: "myClient"
+        type: "software.amazon.awssdk.services.s3.S3Client"
         scriptLanguage: "groovy"
         script: |
             import software.amazon.awssdk.services.s3.S3Client
@@ -482,6 +483,7 @@ routeTemplate("s3template")
       - name: "bucket"
     beans:
       - name: "myClient"
+        type: "software.amazon.awssdk.services.s3.S3Client"
         scriptLanguage: "bean"
         script: "com.foo.MyAwsHelper?method=createS3Client"
     from:

@@ -59,8 +59,8 @@ from("direct:start")
       uri: direct:start
       steps:
         - loadBalance:
+            failoverLoadBalancer: {}
             steps:
-              - failoverLoadBalancer: {}
               - to:
                   uri: http:service1
               - to:
@@ -117,11 +117,11 @@ In XML and YAML DSL it is easier.
       uri: direct:start
       steps:
         - loadBalance:
+            failoverLoadBalancer:
+              inheritErrorHandler: "false"
+              maximumFailoverAttempts: 10
+              roundRobin: "true"
             steps:
-              - failoverLoadBalancer:
-                  inheritErrorHandler: "false"
-                  maximumFailoverAttempts: 10
-                  roundRobin: "true"
               - to:
                   uri: http:service1
               - to:
@@ -181,12 +181,12 @@ In XML and YAML DSL it is easier.
       uri: direct:start
       steps:
         - loadBalance:
+            failoverLoadBalancer:
+              inheritErrorHandler: "false"
+              sticky: "true"
+              maximumFailoverAttempts: 10
+              roundRobin: "true"
             steps:
-              - failoverLoadBalancer:
-                  inheritErrorHandler: "false"
-                  sticky: "true"
-                  maximumFailoverAttempts: 10
-                  roundRobin: "true"
               - to:
                   uri: http:service1
               - to:
@@ -236,11 +236,11 @@ from("direct:start")
       uri: direct:start
       steps:
         - loadBalance:
+            failoverLoadBalancer:
+              exception:
+                - java.io.IOException
+                - org.apache.camel.http.base.HttpOperationFailedException
             steps:
-              - failoverLoadBalancer:
-                  exception:
-                    - java.io.IOException
-                    - org.apache.camel.http.base.HttpOperationFailedException
               - to:
                   uri: http:service1
               - to:

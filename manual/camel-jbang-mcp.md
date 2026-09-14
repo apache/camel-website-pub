@@ -1,0 +1,468 @@
+User manual
+
+# Camel MCP Server
+
+The Camel MCP Server gives AI coding assistants deep knowledge of Apache Camel. It exposes the full Camel Catalog — components, EIPs, data formats, Kamelets, examples — plus runtime introspection tools for live Camel applications, all through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/).
+
+With the MCP server running, your AI assistant can look up component documentation, validate endpoints and routes, generate test scaffolds, diagnose errors from stack traces, check dependencies, plan migrations, review routes for security concerns, and interact with running Camel applications — without you having to copy-paste anything.
+
+Built on [Quarkus](https://quarkus.io/) with the [quarkus-mcp-server](https://docs.quarkiverse.io/quarkus-mcp-server/dev/index.md) extension.
+
+## Getting Started
+
+The quickest way to get started:
+
+1.  Install [JBang](https://www.jbang.dev/) (one-time)
+    
+2.  Run `camel mcp` (or `jbang org.apache.camel:camel-jbang-mcp:LATEST:runner`)
+    
+3.  Connect your AI assistant (see [Setup](#Setup) below)
+    
+
+That’s it — the MCP server starts with STDIO transport and your AI assistant can immediately query the Camel Catalog, validate routes, and more.
+
+## Running the MCP Server
+
+There are three ways to run the MCP server.
+
+### Using the Camel CLI (recommended)
+
+The `camel mcp` command launches the MCP server as a first-class CLI command:
+
+```bash
+camel mcp
+```
+
+This starts the MCP server with STDIO transport (the default). To enable HTTP transport:
+
+```bash
+camel mcp --http
+camel mcp --http --port 9090
+```
+
+See [`camel mcp` Options](#Options) for all available flags.
+
+### Using JBang directly
+
+If you have [JBang](https://www.jbang.dev/) installed:
+
+```bash
+# STDIO transport (default)
+jbang org.apache.camel:camel-jbang-mcp:LATEST:runner
+
+# HTTP transport
+jbang -Dquarkus.http.host-enabled=true -Dquarkus.http.port=8080 org.apache.camel:camel-jbang-mcp:LATEST:runner
+```
+
+### Using java -jar (no JBang needed)
+
+Download the MCP server uber-JAR from Maven Central and run it directly:
+
+```bash
+# Download (replace VERSION with the desired Camel version, e.g., 4.21.0)
+curl -O https://repo1.maven.org/maven2/org/apache/camel/camel-jbang-mcp/VERSION/camel-jbang-mcp-VERSION-runner.jar
+
+# Run with STDIO transport
+java -jar camel-jbang-mcp-VERSION-runner.jar
+
+# Run with HTTP transport
+java -Dquarkus.http.host-enabled=true -Dquarkus.http.port=8080 -jar camel-jbang-mcp-VERSION-runner.jar
+```
+
+## Transport
+
+-   **STDIO** (default) — communicates over stdin/stdout. Logging goes to stderr.
+    
+-   **HTTP/SSE** — for web-based clients and remote/shared access. Enable with `--http` flag or `-Dquarkus.http.host-enabled=true`. Supports two variants: SSE (`/mcp/sse`, protocol `2024-11-05`) and Streamable HTTP (`/mcp`, protocol `2025-03-26`, recommended for new integrations).
+    
+
+> **Important**
+> The MCP server does **not** expose REST endpoints — all communication uses JSON-RPC over the MCP protocol.
+
+## Setup
+
+### Claude Code (plugin install, recommended)
+
+```bash
+claude plugin marketplace add apache/camel
+claude plugin install camel-mcp@camel-marketplace
+```
+
+### Manual configuration (all AI tools)
+
+Add the server to your MCP configuration file. The JSON is the same for all tools — only the file location differs:
+
+ 
+| Tool | Configuration file |
+| --- | --- |
+| Claude Code | `.mcp.json` (project) or `~/.claude/mcp.json` (global) |
+| OpenAI Codex | MCP configuration file |
+| VS Code / Copilot | `.vscode/mcp.json` (use `"servers"` instead of `"mcpServers"` as the top-level key) |
+| JetBrains IDEs (2025.1+) | Settings > Tools > AI Assistant > MCP Servers, or `.junie/mcp.json` |
+
+```json
+{
+  "mcpServers": {
+    "camel": {
+      "command": "jbang",
+      "args": [
+        "-Dquarkus.log.level=WARN",
+        "org.apache.camel:camel-jbang-mcp:LATEST:runner"
+      ]
+    }
+  }
+}
+```
+
+> **Note**
+> For VS Code, the top-level key is `"servers"` instead of `"mcpServers"`.
+
+### Inspecting with MCP Inspector
+
+Start the server with HTTP enabled, then:
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+Open [http://localhost:6274/](http://localhost:6274/), set Transport Type to `SSE`, URL to `[http://localhost:8080/mcp/sse](http://localhost:8080/mcp/sse)`, Connection to `Via Proxy`.
+
+## `camel mcp` Options
+
+  
+| Option | Default | Description |
+| --- | --- | --- |
+| `--http` | `false` | Enable HTTP transport (Streamable HTTP and SSE). Without this flag, the server uses STDIO transport. |
+| `--port` | `8080` | HTTP server port (only used with `--http`). |
+| `--log-level` | `WARN` | Log level: `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`. |
+| `--version` | _(current Camel version)_ | Camel MCP server version to use. Defaults to the version of the Camel CLI. |
+
+## Examples
+
+Here are example prompts you can give your AI assistant. The assistant automatically selects the right MCP tools.
+
+### Catalog exploration
+
+-   _"List all Camel components in the messaging category"_ — uses `camel_catalog_components`
+    
+-   _"Show me the Kafka component documentation with all options"_ — uses `camel_catalog_component_doc`
+    
+-   _"Show me all AWS source kamelets"_ — uses `camel_catalog_kamelets`
+    
+-   _"What options does aws-s3-source accept?"_ — uses `camel_catalog_kamelet_doc`
+    
+-   _"Show me beginner REST examples"_ — uses `camel_catalog_examples`
+    
+
+### Building routes
+
+Ask the assistant to build a route from requirements:
+
+Build me a Camel route that generates a message every 5 seconds with a random number,
+logs it, and sends it to a SEDA queue called "numbers".
+
+The assistant discovers components, looks up documentation, builds a YAML route, and validates it with `camel_validate_yaml_dsl`. Use the `camel_build_integration` prompt for a structured multi-step workflow.
+
+### Validation
+
+-   _"Validate this endpoint: `kafka:myTopic?brkers=localhost:9092`"_ — detects the typo and suggests `brokers`
+    
+-   _"Validate this YAML route"_ — checks against the YAML DSL JSON schema, reports invalid elements
+    
+
+### Understanding, security, and testing
+
+-   _"Explain what this route does"_ — uses `camel_route_context` for catalog-enriched analysis
+    
+-   _"Analyze this route for security concerns"_ — uses `camel_route_harden_context` to detect hardcoded credentials, plain-text protocols, known CVE advisories, etc.
+    
+-   _"Is my Camel 4.10.1 project affected by known CVEs?"_ — uses `camel_security_advisories` to match the published Apache Camel security advisories against a Camel version or component
+    
+-   _"Generate a JUnit 5 test for this route"_ — uses `camel_route_test_scaffold` to produce test class with mock endpoints and test-infra stubs
+    
+
+### Error diagnosis
+
+Paste a stack trace:
+
+org.apache.camel.FailedToCreateRouteException: Failed to create route route1 at: >>> To\[kafka:myTopic\] <<<
+Caused by: org.apache.camel.NoSuchEndpointException: No endpoint could be found for: kafka:myTopic
+
+The assistant uses `camel_error_diagnose` to identify the exception chain, extract components, and suggest fixes (e.g., missing `camel-kafka` dependency).
+
+### Dependencies and versions
+
+-   _"Check my pom.xml for missing or outdated dependencies"_ — uses `camel_dependency_check`
+    
+-   _"What are the latest LTS versions for Spring Boot?"_ — uses `camel_version_list`
+    
+
+### Migration
+
+-   _"Migrate my project to the latest version (here’s my pom.xml)"_ — uses `camel_migration_analyze` → `camel_migration_compatibility` → `camel_migration_recipes`
+    
+-   _"What changed with direct-vm in Camel 4?"_ — uses `camel_migration_guide_search`
+    
+-   _"Migrate from WildFly to Quarkus"_ — uses `camel_migration_wildfly_karaf` for archetype commands and steps
+    
+-   Use the `camel_migrate_project` prompt for an orchestrated multi-step workflow
+    
+
+### OpenAPI contract-first
+
+-   _"Validate this OpenAPI spec for Camel compatibility"_ — uses `camel_openapi_validate`
+    
+-   _"Generate a Camel YAML scaffold with mock mode"_ — uses `camel_openapi_scaffold`
+    
+-   _"Show me the mock directory structure"_ — uses `camel_openapi_mock_guidance`
+    
+
+Combine all three for a complete prototyping workflow: validate, scaffold, then implement routes one at a time while Camel mocks the rest.
+
+### Runtime introspection
+
+Start a route with `camel run my-route.yaml`, then ask:
+
+-   _"Show me running Camel processes and route statistics"_ — uses `camel_runtime_processes` and `camel_runtime_routes`
+    
+-   _"Enable tracing and show me the traced messages"_ — uses `camel_runtime_trace`
+    
+-   _"Send a test message to direct:start"_ — uses `camel_runtime_send`
+    
+-   _"Which processors are the slowest?"_ — uses `camel_runtime_top`
+    
+-   _"Browse messages in seda:numbers"_ — uses `camel_runtime_browse`
+    
+
+### Prompts (structured workflows)
+
+MCP clients that support prompts expose these as selectable workflows:
+
+-   `camel_build_integration` — 7-step guided workflow: discover components → select EIPs → build → validate → security review
+    
+-   `camel_migrate_project` — 6-step migration: analyze → compatibility → recipes → guide search → summary
+    
+-   `camel_security_review` — 3-step audit: analyze vulnerabilities → understand data flow → produce checklist
+    
+
+## Available Tools
+
+The server exposes catalog tools for exploring components, validating routes, and assisting with migration, runtime introspection tools for inspecting and interacting with live Camel processes, plus prompts that provide structured multi-step workflows.
+
+### Authoring (shared with the Camel TUI)
+
+The tools an agent needs to build and edit an integration are defined once, in the Camel CLI, and exposed under the same `camel_` names by this server and by `camel tui --mcp` (see [Camel TUI](camel-jbang-tui.md)), so an agent gets the same Camel through either door. The tools are self-contained: the file tools take the project `directory` as an argument, the runtime tools take the integration `name` (or use the only one running).
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_catalog_doc` | Catalog documentation of a component, data format, language or EIP: description, options (with a keyword filter), Maven coordinates, and for a component the rules of its endpoint URI spelled out (which options are path parts, the YAML `uri` plus `parameters` form, placeholders, `RAW()`). For the `simple` language the syntax rules, functions and operators (their count and names by group, or with `optionsFilter` the matching ones with parameters and examples), and `docPage` serves the functions, operators, OGNL and advanced pages. With `endpoint` it checks a URI against the catalog: unknown options with the closest real names, invalid values, missing path parts, consumer options on a producer endpoint. `includeDoc=true` adds the AsciiDoc page. |
+| `camel_catalog_find` | Finds components, data formats and languages by a protocol, product or other term that is not the exact name (`mqtt`, `s3`, `snowflake`, `csv`), best match first with title and description. |
+| `camel_catalog_sample` | Validated YAML DSL samples of an EIP or file entry (`onException`, `aggregate`, `split`, `rest`, `beans`) taken from the documentation examples, with where it goes: a top-level entry next to the route, or a step inside it. The name can be kebab-case, a part of another EIP (`doCatch`, `when`, `onFallback` show the whole construct) or what to do (`read file`, `call service`, `retry`, `batch`). The EIP samples come from the documentation of the catalog in use, so they follow its Camel version; the file entries come from the user manual examples that the build validates (`generate-doc-samples` in [Camel YAML DSL Validator Maven Plugin](camel-yaml-dsl-validator-maven-plugin.md)). `limit` is 2 by default, at most 5. Use it before writing an EIP the first time, or after a `not defined in the schema` validation error. |
+| `camel_validate_source` | Validates Camel YAML DSL or `.properties` source without writing: the YAML DSL schema (a misspelled option such as `logLevel` instead of `loggingLevel`), endpoint URIs, simple expressions, and `camel.*` options. Takes the content, or reads the file from the project directory. |
+| `camel_get_files` | The source files of a project directory (name, size, type), or the content of one of them. |
+| `camel_write_file` | Writes the complete content of a file in the project directory. YAML and `.properties` content is validated first; invalid content is not written and the errors are returned (`validate=false` writes anyway). Only a plain file name in the directory is accepted. Nobody is asked before the write: the MCP client (Claude Code, Cursor and the others ask before a tool that is not read-only runs) is where the human sits, and the `read-only` access level of the security layer hides the tool altogether. |
+| `camel_run` | Starts an integration from a project directory with `camel run` in a separate process, in dev mode by default so route files reload when written. Returns the pid, name and log file once the integration is up. |
+| `camel_control` | Controls a running integration: `stop`, `kill`, `restart` (picks up edited files without dev mode), `stop-routes`, `start-routes`, `reset-stats`. |
+| `camel_get_log` | Recent log records of a running integration, newest first, filtered by level or text; a stack trace comes as one record with a `detail` block. |
+| `camel_get_errors` | The failed exchanges of a running integration: route, exchange, exception with stack trace, body and headers. |
+| `camel_eval_expression` | Evaluates an expression (simple by default) in the running integration, or locally when none is named, and returns the value (true/false for a predicate) or the syntax error, so an agent can check a simple expression before writing it into a route. |
+| `camel_error_diagnose` | See [Error Diagnosis](#_error_diagnosis); the same shared tool. |
+
+### Catalog Exploration
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_catalog_components` | List available Camel components with filtering by name, label (e.g., `messaging`, `cloud`, `database`), and runtime type (`main`, `spring-boot`, `quarkus`). Supports querying specific Camel versions. |
+| `camel_catalog_component_doc` | Get documentation for a specific component: URI syntax, component-level and endpoint options. Supports `optionsFilter` (case-insensitive substring on option name) and `includeOptions` (`required`, `common`, or `all`; default `common`, which excludes deprecated and advanced options) to control payload size. |
+| `camel_catalog_component_maven` | Get the Maven coordinates (`groupId`, `artifactId`, `version`) of a specific component, for adding it as a project dependency. |
+| `camel_catalog_dataformats` | List available data formats (JSON, XML, CSV, Avro, Protobuf, and others). |
+| `camel_catalog_dataformat_doc` | Get detailed documentation for a specific data format including all configuration options, Maven coordinates, and model information. |
+| `camel_catalog_languages` | List expression languages (Simple, JsonPath, XPath, JQ, Groovy, and others). |
+| `camel_catalog_language_doc` | Get detailed documentation for a specific expression language including all configuration options and Maven coordinates. |
+| `camel_catalog_eips` | List Enterprise Integration Patterns with filtering by category. |
+| `camel_catalog_eip_doc` | Get detailed documentation for a specific EIP including all its options. |
+| `camel_component_properties` | List valid configuration property keys for a Camel component in `camel.component.<scheme>.<name>` form, including option name, type, default value, and description. |
+
+### Kamelet Catalog
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_catalog_kamelets` | List available Kamelets from the Kamelet Catalog with filtering by name, description, and type (`source`, `sink`, `action`). Supports querying specific Kamelets catalog versions. |
+| `camel_catalog_kamelet_doc` | Get detailed documentation for a specific Kamelet including all properties/options, their types, defaults, examples, and the Kamelet’s Maven dependencies. |
+
+### Example Catalog
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_catalog_examples` | List available Camel CLI examples with filtering by name, description, or tag (case-insensitive substring match). Supports filtering by difficulty level (`beginner`, `intermediate`, `advanced`) and limiting the number of results. Returns name, title, description, level, tags, and file list for each example. |
+| `camel_catalog_example_file` | Get the content of a specific file from a Camel CLI example. For bundled examples, returns the file content directly. For non-bundled examples, returns a GitHub URL where the file can be found. Use `camel_catalog_examples` first to discover example names and their files. |
+
+### Route Understanding
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_route_context` | Given a Camel route (YAML, XML, or Java DSL), extracts all components and EIPs used, looks up their documentation from the catalog, and returns structured context. |
+
+### Test Scaffolding
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_route_test_scaffold` | Generates a JUnit 5 test skeleton from a Camel route definition (YAML or XML). Accepts an optional `format` (`yaml` or `xml`, default `yaml`) and `runtime` (`main` or `spring-boot`, default `main`). For `main` runtime, the generated test extends `CamelTestSupport`; for `spring-boot`, it uses `@CamelSpringBootTest` with `@SpringBootTest`. The tool replaces non-trivial producer endpoints with mock endpoints, generates `@RegisterExtension` stubs for infrastructure components (Kafka, JMS/Artemis, MongoDB, PostgreSQL, Cassandra, Elasticsearch, Redis, RabbitMQ, FTP, Consul, NATS, Pulsar, CouchDB, Infinispan, MinIO, Solr), and produces a `NotifyBuilder` pattern for timer-based routes or `template.sendBody()` for direct/seda consumers. Returns the generated test code, detected components, mock endpoint mappings, test-infra services, and required Maven test dependencies. |
+
+### Security Analysis
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_route_harden_context` | Analyzes a route for security concerns. Identifies security-sensitive components, assigns risk levels, detects issues like hardcoded credentials or plain-text protocols, and returns structured security findings alongside best practices and the known published CVE advisories affecting the components used by the route at the given Camel version. |
+| `camel_security_advisories` | Lists the published Apache Camel CVE security advisories (the data behind [camel.apache.org/security](/security/)), optionally filtered by Camel version, component and severity. Each advisory includes the summary, affected and fixed versions, mitigation, and a best-effort verdict on whether the given Camel version is affected. Use it to answer questions such as "is my Camel 4.10.1 project affected by known CVEs?". |
+
+#### Security advisory data
+
+The advisory data ships with the Camel catalog bundled in the MCP server, where it is synced from the official published Apache Camel security advisories (the sources of [camel.apache.org/security](/security/)) when Camel is built — the same way the known releases are synced. Lookups are therefore fully offline, only published advisories are included, and the data is as fresh as the Camel version of the MCP server: advisories published after that release are not included, so check the web page for the very latest. When the catalog carries no advisory data the tools report it as unavailable rather than returning an empty list, so a missing data set is never mistaken for "no known CVEs". The advisories are also browseable as MCP resources: `camel://security/advisories` (full list) and `camel://security/advisory/{cve}` (detail for one CVE).
+
+### Error Diagnosis
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_error_diagnose` | Diagnoses Camel errors from stack traces or error messages. Identifies the exception type against 17 known Camel exceptions (such as `NoSuchEndpointException`, `ResolveEndpointFailedException`, `FailedToCreateRouteException`, `PropertyBindingException`, and others), extracts the components and EIPs involved, and returns common causes, suggested fixes, and links to relevant Camel documentation. |
+
+### Dependency Check
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_dependency_check` | Checks Camel project dependency hygiene given a `pom.xml` and optional route definitions. Detects outdated Camel versions compared to the latest catalog release, identifies missing Maven dependencies for components used in routes, and flags version conflicts between the Camel BOM and explicit dependency overrides. Returns actionable recommendations with corrected dependency snippets. |
+
+### Validation and Transformation
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_validate_route` | Validates Camel endpoint URIs against the catalog schema. Catches unknown options, missing required parameters, invalid enum values, and type mismatches. Also provides suggestions for misspelled option names. |
+| `camel_validate_yaml_dsl` | Validates a YAML DSL route definition against the Camel YAML DSL JSON schema. Checks for valid DSL elements, correct route structure, and returns detailed schema validation errors including instance path, error type, and schema path. `camel_validate_source` (above) runs the same schema check plus the endpoint URI and simple expression checks in one call, with the messages by line. |
+| `camel_transform_route` | Assists with route DSL format transformation between YAML and XML. |
+| `camel_configuration_validate` | Validate Camel configuration property lines (e.g., from `application.properties`). Detects misspelled option names, invalid values, and returns suggestions. |
+| `camel_properties_translate` | Translate Camel configuration properties between runtimes (`main`, `spring-boot`, `quarkus`). Handles runtime-specific keys like HTTP server and management endpoint configuration. |
+
+### Route Diagram
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_render_route_diagram` | Generate a diagram of Camel routes from a source file (YAML, XML, Java). Supports image themes (dark, light, transparent) written as PNG, and text themes (ascii, unicode) returned directly. Useful for visualizing route structure for review, documentation, or troubleshooting. |
+
+### OpenAPI Contract-First
+
+Since Camel 4.6, the recommended approach for building REST APIs from OpenAPI specifications is **contract-first**: referencing the OpenAPI spec directly at runtime via `rest:openApi` rather than generating REST DSL code. These tools help validate, scaffold, and provide mock guidance for that workflow.
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_openapi_validate` | Validates an OpenAPI specification for compatibility with Camel’s contract-first REST support. Checks for missing `operationId` fields, unsupported security schemes, OpenAPI 3.1 limitations, webhooks usage, and empty paths. Returns errors, warnings, and info-level diagnostics. |
+| `camel_openapi_scaffold` | Generates a Camel YAML scaffold for contract-first OpenAPI integration. Produces a `rest:openApi` configuration block referencing the spec file and a `direct:<operationId>` route stub for each operation, with `Content-Type` and `CamelHttpResponseCode` headers pre-configured from the spec. Supports configuring the `missingOperation` mode (`fail`, `ignore`, or `mock`). |
+| `camel_openapi_mock_guidance` | Provides guidance on configuring Camel’s `missingOperation` modes (`fail`, `ignore`, `mock`). For `mock` mode, returns the `camel-mock/` directory structure, mock file paths derived from the API paths, and example content from the spec. Explains the behavior of each mode. |
+
+### Migration
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_migration_analyze` | Analyzes a Camel project’s `pom.xml` to detect the runtime type (`main`, `spring-boot`, `quarkus`, `wildfly`, `karaf`), Camel version, Java version, and Camel component dependencies. This is the first step in a migration workflow. |
+| `camel_migration_compatibility` | Checks migration compatibility for Camel components by providing relevant migration guide URLs and Java version requirements. The LLM consults the migration guides for detailed component rename mappings and API changes. |
+| `camel_migration_recipes` | Returns Maven commands to run Camel OpenRewrite migration recipes for upgrading between versions. The project must compile successfully before running the recipes, as OpenRewrite requires a compilable project to parse and transform the code. |
+| `camel_migration_guide_search` | Searches Camel migration and upgrade guides for a specific term or component name. Returns matching snippets from the official guides with version info and URLs. Supports fuzzy matching for typo tolerance. Use this instead of web search when looking up migration-related changes, removed components, API renames, or breaking changes. |
+| `camel_migration_wildfly_karaf` | Provides migration guidance for Camel projects running on WildFly, Karaf, or WAR-based application servers. Returns the Maven archetype command to create a new target project, migration steps, and relevant migration guide URLs. |
+
+### Version Management
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_version_list` | Lists available Camel versions for a given runtime, including release dates, JDK requirements, and LTS status. |
+
+### Runtime Introspection
+
+> **Note**
+> Runtime tools require a running Camel application started via `camel run`. They communicate with the application through the file-based IPC protocol in `~/.camel/`. All tools accept an optional `nameOrPid` parameter; when omitted, the server auto-discovers the running Camel process (this works when exactly one process is running).
+
+#### Process Discovery
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_runtime_processes` | List all running Camel processes that can be inspected. Returns PID, name, and context name for each discovered process. |
+
+#### Context and Routes
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_runtime_context` | Get Camel context information: name, version, state, uptime, route count, exchange statistics. |
+| `camel_runtime_routes` | List Camel routes with their state, uptime, messages processed, last error, and throughput statistics. |
+| `camel_runtime_route_source` | Get the source code of routes in the running Camel application. Supports wildcard filtering. |
+| `camel_runtime_route_dump` | Dump route definitions in XML or YAML format. |
+| `camel_runtime_route_structure` | Show the route structure as a tree of processors. |
+| `camel_runtime_route_control` | Control a route: start, stop, suspend, or resume it by route ID. |
+| `camel_runtime_route_topology` | Get the inter-route topology showing how routes connect to each other and to external endpoints. Returns nodes and edges describing the route graph. |
+
+#### Observability
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_runtime_health` | Get health check status for the Camel application. |
+| `camel_runtime_endpoints` | List all endpoints registered in the Camel context with their URIs and usage statistics. |
+| `camel_runtime_inflight` | Show currently in-flight exchanges (messages being processed). |
+| `camel_runtime_blocked` | Show blocked exchanges that are stuck or waiting. |
+| `camel_runtime_top` | Show top processor statistics: which processors are slowest and most active. |
+| `camel_runtime_memory` | Show JVM memory usage (heap/non-heap), garbage collection stats, and thread counts. |
+| `camel_runtime_heap_histogram` | Get a class-level heap histogram showing instance counts and byte usage per class. Useful for diagnosing memory leaks and understanding which classes dominate heap usage. |
+| `camel_runtime_memory_leak` | Diagnose memory leaks in a running Camel integration using Java Flight Recorder (JFR). Use command 'start' to begin recording, 'stop' to get results, 'status' to check state, and 'query' to retrieve cached results. Supports dual-recording mode for trend comparison. |
+| `camel_runtime_errors` | Get captured routing errors from the running application. Returns error details including exception, exchange context, and route information. |
+| `camel_runtime_history` | Get the message history trace of the last completed exchange. Shows the route path, processors visited, headers, body, and timing. |
+| `camel_runtime_thread_dump` | Get a JVM thread dump showing thread names, states, and stack traces. |
+
+#### Configuration and Registry
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_runtime_variables` | Show exchange variables in the Camel context. |
+| `camel_runtime_consumers` | Show consumer statistics (polling consumers, event-driven consumers). |
+| `camel_runtime_properties` | Show configuration properties of the running Camel application. |
+| `camel_runtime_services` | Show services registered in the Camel service registry. |
+
+#### Interaction and Debugging
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_runtime_send` | Send a test message to a Camel endpoint in the running application. |
+| `camel_runtime_trace` | Enable, disable, or dump message tracing for the running Camel application. |
+| `camel_runtime_eval` | Evaluate an expression in the given language (e.g., simple, jsonpath, xpath) against the Camel context. |
+| `camel_runtime_browse` | Browse messages in a Camel endpoint (e.g., messages queued in a SEDA endpoint). |
+| `camel_runtime_receive` | Receive (poll) a message from a Camel endpoint in the running application. Consumes one message from the endpoint. |
+| `camel_runtime_stop` | Initiate graceful shutdown of a running Camel application. Finishes processing in-flight exchanges before stopping. |
+
+## Available Prompts
+
+Prompts are structured multi-step workflows that guide the LLM through orchestrating multiple tools in the correct sequence. Instead of the LLM having to discover which tools to call and in what order, a prompt provides the complete workflow as a step-by-step plan.
+
+MCP clients that support prompts (such as Claude Desktop) expose them as selectable workflows. The LLM receives the instructions and executes each step by calling the referenced tools.
+
+  
+| Prompt | Arguments | Description |
+| --- | --- | --- |
+| `camel_build_integration` | `requirements` (required), `runtime` (optional) | Guided workflow to build a Camel integration from natural-language requirements. Walks through seven steps: identify components, identify EIPs, get component documentation, build the YAML route, validate it with the YAML DSL schema, run a security review, and present the final result with explanations and run instructions. |
+| `camel_migrate_project` | `pomContent` (required), `targetVersion` (optional) | Guided workflow to migrate a Camel project to a newer version. Walks through six steps: analyze the project’s `pom.xml`, determine the target version, check compatibility (including WildFly/Karaf detection), get OpenRewrite migration recipes, search migration guides for breaking changes per component, and produce a structured migration summary with blockers, breaking changes, commands, and manual steps. |
+| `camel_security_review` | `route` (required), `format` (optional) | Guided workflow to perform a security audit of a Camel route. Walks through three steps: analyze the route for security-sensitive components and vulnerabilities, understand the route structure and data flow, and produce an actionable audit checklist organized into critical issues, warnings, positive findings, recommendations, and compliance notes. |
+| `camel_diagnose_route` | `routeId` (optional), `symptom` (optional) | Guided workflow to diagnose issues with a running Camel route: gather runtime state, errors, health, message history, and produce a root cause analysis with actionable fixes. |
+| `camel_optimize_route` | `routeId` (optional), `goal` (optional) | Guided workflow to optimize a Camel application’s performance: analyze throughput, identify bottlenecks, review resource usage, and produce prioritized optimization recommendations. |

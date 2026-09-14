@@ -230,13 +230,13 @@ Then we configure **myDeadLetterErrorHandler** that is our Dead Letter Channel. 
         redeliveryPolicy:
           maximumRedeliveries: 3
           redeliveryDelay: 250
-    steps:
-      - process:
-          ref: myFailureProcessor
-      - to:
-          uri: mock:result
     from:
       uri: direct:in
+      steps:
+        - process:
+            ref: myFailureProcessor
+        - to:
+            uri: mock:result
 ```
 
 ## Using the transactional error handler
@@ -353,23 +353,24 @@ from("direct:sub")
 ```
 
 ```yaml
+- onException:
+    # in case of io exception then try to redeliver up till 2 times
+    # (do not use any delay due faster unit testing)
+    exception:
+      - java.io.IOException
+    redeliveryPolicy:
+      maximumRedeliveries: 2
+      redeliveryDelay: 0
 - route:
     from:
       uri: direct:start
       steps:
-        - onException:
-            exception:
-              - java.io.IOException
-        - redeliveryPolicy:
-            maximumRedeliveries: 2
-            redeliveryDelay: 0
         - to:
             uri: mock:a
         - to:
             uri: direct:sub
         - to:
             uri: mock:c
-
 - route:
     errorHandler:
       noErrorHandler: {}

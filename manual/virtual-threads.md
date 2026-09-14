@@ -164,10 +164,9 @@ from("platform-http:/api/orders")
     from:
       uri: platform-http:/api/orders
       steps:
-        - threads:
-            steps:
-              - to:
-                  uri: jpa:Order
+        - threads: {}
+        - to:
+            uri: jpa:Order
 ```
 
 #### Undertow

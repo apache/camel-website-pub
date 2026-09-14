@@ -120,7 +120,7 @@ from("direct:start")
 <route>
   <from uri="direct:start"/>
   <marshal>
-    <soap contentPath="com.example.customerservice" version="1.2" elementNameStrategyRef="myNameStrategy"/>
+    <soap contextPath="com.example.customerservice" version="1.2" elementNameStrategy="myNameStrategy"/>
   </marshal>
   <to uri="jms:myQueue"/>
 </route>
@@ -135,7 +135,7 @@ from("direct:start")
             soap:
               contextPath: com.example.customerservice
               version: "1.2"
-              elementNameStrategyRef: myNameStrategy
+              elementNameStrategy: myNameStrategy
         - to:
             uri: jms:myQueue
 ```

@@ -1,0 +1,1345 @@
+User manual
+
+# Apache Camel 4.x Upgrade Guide
+
+This document is for helping you upgrade your Apache Camel application from Camel 4.x to 4.y. For example, if you are upgrading Camel 4.0 to 4.2, then you should follow the guides from both 4.0 to 4.1 and 4.1 to 4.2.
+
+> **Note**
+> [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
+
+## Upgrading from 4.22.0 to 4.22.1
+
+### camel-docling
+
+A `String` message body is no longer interpreted as a location by default. Previously the producer inspected the body and, when it started with `http://` or `https://`, handed it to Docling as a remote URL to fetch; when it started with `/` or contained `\`, it read it from the local filesystem; otherwise it converted it as document content.
+
+The two location readings must now be enabled explicitly:
+
+-   `allowUrlSource` (default `false`) - interpret a body starting with `http://` or `https://` as a URL.
+    
+-   `allowFilePathSource` (default `false`) - interpret a body starting with `/`, or containing `\`, as a local file path. This also covers the single directory-or-file `String` body accepted by the batch operations.
+    
+
+A route that passes the document itself in the body is unaffected. A route that passes a URL or a path in the body must set the matching option, otherwise the exchange fails with an `IllegalArgumentException` naming the option to enable.
+
+The `CamelDoclingInputFilePath` header is unchanged and still accepts a path without any opt-in, as are `File`, `byte[]` and `InputStream` bodies and the explicit path collections (`List<String>`, `String[]`, `List<File>`, `File[]`) used by the batch operations.
+
+A new `inputBaseDirectory` option is also available. When set, every local input path - from the header, from a file path body, and from the batch operations - must resolve inside that directory once normalized. It is unset by default, which keeps the previous behaviour of accepting any path.
+
+Additionally, a local input path that does not exist is now reported as a `File not found` `IOException` before Docling is invoked. Previously the size check silently skipped a path that resolved to nothing and the failure surfaced later, from the Docling process or API call.
+
+### camel-dynamic-router
+
+The `dynamic-router-control` endpoint no longer takes the subscription `predicate`, or the `expressionLanguage` used to compile it, from the incoming control message. A control message that supplies either is now rejected with an `IllegalArgumentException`.
+
+The predicate is compiled and then evaluated against every exchange on the channel, so letting the control message choose both the language and the expression means the sender of that message decides what runs inside the Camel process. Only enable this when control messages can only come from a trusted source:
+
+```java
+from("kafka:subscriptions")
+    .unmarshal().json(DynamicRouterControlMessage.class)
+    .to("dynamic-router-control:subscribe?allowPredicateFromMessage=true");
+```
+
+Two alternatives avoid the flag entirely. A control message may still name a `predicateBean`, which selects a `Predicate` that the route author bound in the registry; that path is unchanged. The control endpoint may also carry `predicate` and `expressionLanguage` as URI parameters, in which case every subscription made through that endpoint uses the route author’s expression. Subscription parameters that the control message does not carry now fall back to the values configured on the endpoint.
+
+The option is annotated `security = "insecure:dev"`, so with `camel.main.profile = prod` the default policy for that category is `fail`, and an endpoint that sets `allowPredicateFromMessage=true` will not start unless you relax `camel.security.insecureDevPolicy`.
+
+The `dynamic-router` endpoint gained an `allowedSchemes` option, an optional comma-separated allow-list of component schemes that a subscription destination may resolve to. It is unset by default, which allows any scheme, matching the previous behaviour.
+
+### camel-exec
+
+`allowControlHeaders` is now annotated `security = "insecure:dev"`. With `camel.main.profile = prod` the default policy for that category is `fail`, so an endpoint or component that sets `allowControlHeaders=true` will not start unless you relax `camel.security.insecureDevPolicy`.
+
+When the flag is `false` (the default), any remaining `CamelExecCommand*`, `CamelExecExitValues`, or `CamelExecUseStderrOnEmptyStdout` headers are ignored and a WARN is logged once per exec endpoint. Those headers never overrode the URI without the flag; they were just silent before.
+
+### camel-ftp, camel-sftp, camel-ftps, camel-mina-sftp, camel-azure-files, camel-smb
+
+The remote-file consumers now ensure the path resolved for a polled file stays within the directory being polled. The file name that path is built from is reported by the remote server in its directory listing and is not guaranteed to be a single path segment, so a listing entry containing `../` sequences could previously resolve to a path outside the configured directory and be used as the operand for retrieving, deleting or renaming a file.
+
+The containment check honours the existing `jailStartingDirectory` option (default `true`), consistent with the file producer and with the `localWorkDirectory` download path; set `jailStartingDirectory=false` to disable it. A file that resolves outside the configured directory is now skipped, and a warning is logged.
+
+Ordinary listings are unaffected, as a listed name is normally a single path segment, and a `../` that still resolves back inside the polled directory remains accepted. Two configurations can newly see files skipped: a server that reports names navigating above the polled directory, and a `fileName` expression (used when `useList=false`) that navigates above it. Set `jailStartingDirectory=false` if such a path is intended.
+
+### camel-azure-storage-blob and camel-azure-storage-datalake
+
+Local downloads configured with `fileDir` now resolve existing filesystem path segments before checking that the destination remains inside the configured directory. Downloads through a symbolic link that resolves outside `fileDir` are rejected. Valid nested download paths continue to work.
+
+### camel-google-storage
+
+Local downloads configured with a plain `downloadFileName` directory now resolve existing filesystem path segments before checking that the destination remains inside that directory. Downloads through a symbolic link that resolves outside the configured directory are rejected. Valid object names using `/` as a pseudo-directory separator continue to work.
+
+### camel-spring-redis - the default serializer applies a deserialization filter
+
+The default serializer, `JdkSerializationRedisSerializer`, now installs a JEP-290 `java.io.ObjectInputFilter` while reading Redis payloads, resolved through `DeserializationFilterHelper`. Previously no filter was applied at all. This affects both the consumer, which deserializes the payload of every message published to the subscribed channels, and the producer read commands, which deserialize the values stored in Redis.
+
+When no explicit pattern is configured, the JVM-wide `jdk.serialFilter` is honoured if set, otherwise the shared Camel default allow-list is applied (it permits standard Java and Apache Camel types, denies `java.net.**`, and enforces JEP-290 graph-shape limits). Routes that exchange classes outside that allow-list must widen it through the new `deserializationFilter` endpoint option, for example:
+
+```java
+from("spring-redis://localhost:6379?command=SUBSCRIBE&channels=myChannel"
+     + "&deserializationFilter=com.example.model.**;java.**;!*")
+```
+
+Setting the `serializer` option to a custom `RedisSerializer` bypasses the filter entirely, since Camel then no longer controls how the payload is read.
+
+### camel-infinispan - the aggregation repository keeps completed exchanges for recovery
+
+`InfinispanAggregationRepository` implements `RecoverableAggregationRepository`, but it had no recovery store: `remove` deleted the completed exchange outright, `confirm` removed the exchange id from a cache keyed by correlation key, and `scan` returned the correlation keys of the aggregations still in progress. The recovery task therefore re-delivered aggregations that were still accumulating, marked them `CamelRedelivered`, and sent them to the dead letter channel once `maximumRedeliveries` was reached, while exchanges that genuinely failed after completion could never be recovered.
+
+A completed exchange is now kept in the same cache under a `camel-recovery:<exchange id>` key until it is confirmed, which is what `scan` reports and `recover` reads. `getKeys` continues to report only the aggregations in progress.
+
+Routes that set `useRecovery=false` are unaffected. Routes that left recovery enabled, which is the default, stop seeing in-progress aggregations re-delivered, and start seeing genuine recovery. The cache now also holds one entry per completed and not yet confirmed exchange; those entries are removed on confirmation.
+
+### camel-vertx-http - the REST producer applies the outbound header filter
+
+`VertxHttpRestHeaderFilterStrategy.applyFilterToCamelHeaders` delegated to `applyFilterToExternalHeaders`, so it consulted the inbound filter while implementing the outbound direction. The outbound filter that `VertxHttpHeaderFilterStrategy` installs was therefore never applied, and the sibling REST strategies in `camel-http-common`, `camel-netty-http` and `camel-undertow` all delegate to the matching method.
+
+A REST producer that resolves to `vertx-http` and does not configure its own `headerFilterStrategy` now filters the common HTTP headers on the outbound direction, as the other HTTP components already did. A message header named `Content-Length`, `Content-Type`, `Host`, `Cache-Control`, `Connection`, `Date`, `Pragma`, `Trailer`, `Transfer-Encoding`, `Upgrade`, `Via` or `Warning` is no longer copied onto the outgoing request; the `Content-Type` of the request is still taken from the exchange as before. Headers consumed by the URI template or the query parameters continue to be filtered, and a custom `headerFilterStrategy` is used as-is and is unaffected.
+
+Routes that relied on one of those headers reaching the wire must set it through the endpoint configuration or supply a `headerFilterStrategy` that permits it.
+
+### camel-jgroups - the consumer applies a deserialization filter by default
+
+The consumer maps an incoming cluster message to the exchange body by calling `org.jgroups.Message.getObject()`, which Java-deserializes the payload. The class of that body is now checked against a JEP-290 `java.io.ObjectInputFilter`, resolved through `DeserializationFilterHelper`. Previously no filter was applied at all, and any type a cluster peer sent was routed.
+
+When no explicit pattern is configured, the JVM-wide `jdk.serialFilter` is honoured if set, otherwise the shared Camel default allow-list is applied (it permits standard Java and Apache Camel types and denies `java.net.**`). Routes that exchange their own classes over the cluster must widen it through the new `deserializationFilter` endpoint option, for example:
+
+```java
+from("jgroups:clusterName?deserializationFilter=com.example.model.**;java.**;!*")
+```
+
+Setting `deserializationFilter=*` accepts any type and so restores the previous behavior. A refused message is not routed; it is reported to the consumer’s `ExceptionHandler`, which logs it at WARN level by default.
+
+Note that JGroups deserializes the payload inside its own receive path, so this check is a defense-in-depth allow-list on the resulting body type. The JVM-wide `jdk.serialFilter`, together with a channel secured with `AUTH` and encryption, remain the primary mitigations.
+
+### camel-smooks - external XML entity resolution disabled by default
+
+The Smooks data format and the Smooks component now parse XML input with a reader that does not resolve external general or parameter entities, aligning camel-smooks with the XML parser configuration already applied by the other Camel XML components. When a Smooks configuration parses XML with the default reader, an untrusted body can no longer pull in external entities (for example `<!ENTITY x SYSTEM "file:///…​">` or an `http://` reference).
+
+This only affects configurations that use the default XML reader. Configurations that declare their own reader — EDI, CSV, JSON, DFDL, or a custom reader — are unchanged, and marshalling is unchanged. Documents carrying an internal DTD subset still parse.
+
+To restore the previous behaviour and allow external entity resolution, set the new `allowExternalEntities` option to `true` on the data format or on the endpoint (`smooks:config.xml?allowExternalEntities=true`).
+
+### camel-openai
+
+When `storeFullResponse=true`, the embeddings and audio operations now store their full SDK response under an operation-specific exchange property instead of the chat-completion property `CamelOpenAIResponse`. That property is typed as the chat-completion response (`com.openai.models.chat.completions.ChatCompletion`), so a downstream reader that expected that type received an incompatible object.
+
+-   embeddings now use `CamelOpenAIEmbeddingsResponse` (`com.openai.models.embeddings.CreateEmbeddingResponse`).
+    
+-   audio transcription now uses `CamelOpenAIAudioTranscriptionResponse` (`com.openai.models.audio.transcriptions.TranscriptionCreateResponse`).
+    
+-   audio translation now uses `CamelOpenAIAudioTranslationResponse` (`com.openai.models.audio.translations.TranslationCreateResponse`).
+    
+
+A route that reads the full embeddings or audio response from `CamelOpenAIResponse` must switch to the matching property. The chat-completion and responses operations are unchanged.
+
+## Upgrading Camel 4.21 to 4.22
+
+### camel-tika
+
+The `tikaConfig` and `tikaConfigUri` component options are deprecated for removal in Camel 4.23. Apache Tika 4 removes the `TikaConfig` class and XML configuration support; Camel 4.23 provides the replacement `tikaLoader` and `tikaConfigFile` options based on Tika’s `TikaLoader` and JSON configuration. See the [Tika 4 migration guide](https://tika.apache.org/docs/4.0.x/migration-to-4x/migrating-to-4x.md) for migration details.
+
+### camel-reactive-executor-tomcat
+
+The `camel-reactive-executor-tomcat` component has been deprecated. Its cross-thread `ThreadLocal` cleanup relied on reflective access to the private `Thread.threadLocals` field, which is denied by the JDK module system since JDK 17 and is incompatible with virtual threads. Without that cleanup, this executor is functionally identical to the built-in `DefaultReactiveExecutor`.
+
+To migrate, remove the `camel-reactive-executor-tomcat` dependency from your project. Camel will automatically use the default reactive executor.
+
+### camel-mcp-server
+
+The Vert.x streamable transport now evicts orphaned MCP sessions automatically: keep-alive pings every 30 seconds (evict after consecutive failures on sessions with an open SSE stream) and an idle TTL of 5 minutes (evict sessions with no POST/GET activity). Configure with `camel.server.mcp-session-keep-alive-interval` and `camel.server.mcp-session-idle-ttl`; set either option to `0` to disable that mechanism.
+
+### camel-ai-tool
+
+`AiToolResult.Success` now carries an optional `structuredContent` field when the tool declares an output schema (`outputParameter.*` or `outputSchema`). The MCP bridge maps this to `CallToolResult.structuredContent` and publishes `Tool.outputSchema` to MCP clients. LangChain4j and Spring AI adapters continue to use the string `value()` only.
+
+SPI extensions in this release (before 4.22 ships): `McpToolCallResult` gains a third `structuredContent` component; `McpServerTool` adds `outputSchemaJson()`; `AiToolSpec` constructor accepts output schema fields. Custom `McpServerEngine` implementations should forward structured content when present.
+
+### camel-core
+
+#### Property placeholders in toD and enrich dynamic endpoint URIs
+
+`toD` and `enrich` no longer resolve Camel property placeholders (`{{…​}}`) on the _per-message evaluated_ recipient. Property placeholders are resolved once, at build time, on the endpoint URI written in the route (the static template); a `{{…​}}` token that only appears at runtime in the value produced by the `toD` / `enrich` expression (for example coming from a message header or body) is now treated as a literal part of the endpoint URI instead of being expanded.
+
+This only affects routes that produced a `{{…​}}` token from message content and relied on it being expanded, such as a `toD` whose recipient came from a header that contained a `{{…​}}` placeholder. Placeholders written directly in the route continue to work unchanged, for example:
+
+```java
+.toD("{{myEndpoint}}/${header.id}")
+.toD("mock:{{name}}")
+```
+
+`recipientList`, `routingSlip` and `dynamicRouter` are unchanged: their recipients are computed entirely from a runtime expression (there is no static template resolved at build time), so they continue to resolve `{{…​}}` placeholders in the computed recipient.
+
+`pollEnrich` is also left unchanged in this release. It does resolve the static endpoint URI at build time (like `toD` / `enrich`), but its per-message recipient goes through the same shared resolution path as `recipientList` / `routingSlip`, so it still resolves `{{…​}}` in the computed recipient; aligning it with `toD` / `enrich` is deferred to a follow-up.
+
+If you need a placeholder resolved by `toD` / `enrich`, keep it in the route’s endpoint URI rather than in the message.
+
+### camel-support - CamelObjectInputStream applies a deserialization filter by default
+
+`CamelObjectInputStream` (the shared stream used by Camel’s Java-object deserialization paths, such as the HTTP components) now installs a JEP-290 `java.io.ObjectInputFilter` while reading, as a defense-in-depth measure against unsafe deserialization. When no explicit filter pattern is supplied, the JVM-wide `jdk.serialFilter` is honoured if set, otherwise Camel’s default allow-list (`DeserializationFilterHelper.DEFAULT_DESERIALIZATION_FILTER`) is applied, which permits standard Java and Apache Camel types, denies `java.net.**`, and enforces graph-shape limits.
+
+The built-in HTTP deserialization path already applied this filter, so most users are unaffected. Code that constructs `CamelObjectInputStream` directly and deserializes types outside the default allow-list must pass an explicit filter pattern to the new `CamelObjectInputStream(InputStream, CamelContext, String)` constructor (or configure `jdk.serialFilter`) to permit them.
+
+Because the two-argument `CamelObjectInputStream(InputStream, CamelContext)` constructor now always installs a filter, calling `setObjectInputFilter()` on the resulting stream throws `IllegalStateException` ("filter can not be set more than once") on JDK 17+. Downstream code that previously constructed the stream and then set a filter separately should pass the pattern to the new `CamelObjectInputStream(InputStream, CamelContext, String)` constructor instead.
+
+#### Attachments preserved when a producer creates a fresh OUT message
+
+Since Camel 4.10.1, message attachments were silently lost when a producer (such as `camel-http`) created a fresh OUT message via `exchange.getOut()`. The attachment trait is now copied from the IN message to the new OUT message, restoring the pre-4.10.1 behavior where attachments survived across the exchange. If you added a workaround (for example, stashing and restoring attachments in exchange properties around a producer call), it can be removed.
+
+### camel-jbang
+
+The Camel JBang CLI (Camel CLI) and TUI have been promoted from _Preview_ to _Stable_ support level. The MCP Server has also been promoted to _Stable_.
+
+The Camel JBang CLI now automatic resolves quarkus version to use, instead of hardcoded `3.33.1.1` ([https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b](https://github.com/apache/camel/commit/d1f4713ebdf787ab04a31c50a6f07e3ca66f0c2b)).
+
+The Camel CLI and TUI AI prompt (`camel ask`, TUI F8 panel) now auto-detect **Azure OpenAI** when `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_ENDPOINT` are set (optional `AZURE_OPENAI_DEPLOYMENT_NAME` and `AZURE_OPENAI_API_VERSION`). Azure requests use the `api-key` header instead of `Authorization: Bearer`.
+
+The Camel CLI and TUI AI prompt now support native **Google Gemini** when `GEMINI_API_KEY` is set (auto-detected before OpenAI). With `--api-type=gemini`, `GOOGLE_API_KEY` is also accepted. Gemini uses the `generativelanguage.googleapis.com` API with function-calling support. See [Camel CLI - AI Tools](camel-jbang-ai.md) for the full detection order.
+
+`camel run`, `camel dev`, and `camel debug` accept `--openapi-ui` to expose Swagger UI for REST DSL OpenAPI at `/q/openapi` on the embedded HTTP server (OpenAPI JSON at `/q/openapi.json` by default). The feature is gated as developer-only (`insecure:dev`) via `camel.jbang.openapiUi` and `camel.management.openapiUiEnabled`. When `--port` is set without `--management-port`, the management server is co-bound to the same port so the UI and spec stay together. `--openapi-ui` also sets override properties for `camel.rest.component=platform-http` and `camel.rest.apiContextPath=/q/openapi.json`, which take precedence over values in `application.properties` or other property sources (same as other CLI `--` server flags that use override properties).
+
+The `camel cmd route-diagram` and `camel cmd route-topology` now accept one or more Camel route source files (instead of only the name/pid of a running integration), so diagrams and inter-route topology can be generated at design/source time without starting the application first, for example:
+
+```bash
+camel cmd route-diagram routes/*.yaml
+camel cmd route-topology routes/*.yaml
+```
+
+`route-diagram` previously only accepted a single source file; both commands now accept a set of files. `route-topology` previously required a running integration and printed "No running Camel integration found" when none matched; it now falls back to loading the given files the same way `route-diagram` already did.
+
+As part of this, `camel.main.dumpRoutes=json` (used internally by these commands, and available to users dumping route structure to a folder) now additionally writes a `route-topology.json` file alongside the per-route structure files when topology dumping is enabled (the default). This file is now always written, with empty `nodes`/`edges` arrays if there are no routes to connect, so its presence reliably signals that the dump has completed (previously it was silently skipped when there were no routes).
+
+The Camel TUI (`camel tui`) accepts `--theme=dark` or `--theme=light` to choose the color palette at startup. When omitted, the persisted `camel.tui.theme` value from `.camel-cli.properties` is used.
+
+The Camel TUI now has a **Settings…​** entry in the **F2** actions menu for choosing the theme, the starting tab, and the default run-from-folder. These are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.defaultFolder`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` stays local (project override), while every other key defaults to the global `~/.camel-cli.properties`.
+
+The Camel TUI (`camel tui`) theme is now backed by CSS stylesheets and ships a switchable light/dark palette. Press **F4** to toggle at runtime; the selection is persisted as `camel.tui.theme` in `.camel-cli.properties`.
+
+The Camel CLI user configuration file has been renamed from `camel-jbang-user.properties` to `camel-cli.properties` (global `~/.camel-cli.properties`, local `./camel-cli.properties`). The dot convention is unchanged: the global file is a hidden dotfile, the local file is visible. On first run the CLI automatically renames a pre-existing global `~/.camel-jbang-user.properties` to `~/.camel-cli.properties` and a pre-existing local `./camel-jbang-user.properties` to `./camel-cli.properties`; an existing new file is never overwritten.
+
+#### Camel CLI launcher Java runtime discovery
+
+The self-contained Camel CLI launcher scripts (`bin/camel.sh` and `bin/camel.bat` in the `camel-launcher` distribution) now share a single Java runtime discovery contract. Candidates are evaluated in this fixed order, and the first one that exists, is executable, and reports a Java major version of at least 17 is used:
+
+1.  `JAVACMD` (explicit override, unchanged).
+    
+2.  `$JAVA_HOME/bin/java` (`%JAVA_HOME%\bin\java.exe` on Windows). This is also how the SDKMAN `java` candidate is honored, since SDKMAN exports `JAVA_HOME`.
+    
+3.  The first `java` (`java.exe`) found on `PATH`.
+    
+4.  `CAMEL_FALLBACK_JAVA`, a new variable set by package-manager installs when the JDK location is deterministic.
+    
+
+Candidates older than Java 17, missing, non-executable, or with unparseable version output are skipped. If none qualify, the launcher now exits nonzero with a diagnostic listing the checked sources instead of attempting to run an unsuitable Java.
+
+The obsolete macOS `JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/…​` default was removed from `camel.sh`; set `JAVA_HOME` or `JAVACMD`, or ensure a Java 17+ `java` is on `PATH`. The Gentoo `java-config` auto-detection and the IBM AIX `$JAVA_HOME/jre/sh/java` probe were also removed; set `JAVA_HOME` or `JAVACMD` explicitly on those platforms. `JAVA_OPTS` handling is unchanged: when unset, the default `-Xmx512m` heap is applied.
+
+#### Native `camel.exe` in the WinGet package
+
+The WinGet package now ships two native Windows executables: `bin/camel-x64.exe` (x86\_64) and `bin/camel-arm64.exe` (aarch64), alongside `bin/camel.bat`. Both are thin bootstraps: they forward all arguments to the adjacent `camel.bat` (preserving spaces and Unicode) and return its exit code. WinGet selects the executable matching the host architecture and exposes it as `camel.exe`.
+
+The public `camel-launcher-<version>-bin.zip` and `.tar.gz` archives do not contain these WinGet-specific executables. Windows users of those archives should continue to invoke `bin\camel.bat`.
+
+The native executables are now cross-compiled from any host OS using [clang/llvm-mingw](https://github.com/mstorsjo/llvm-mingw), replacing the previous MSVC-only build that required a Windows host. The build is activated by `-Dcamel.exe.build=true` and requires `llvm-mingw` on `PATH`. Release builds get this from `maven-release-plugin`, which passes it alongside `-Prelease`.
+
+#### OpenTelemetry agent export target changes
+
+The `--open-telemetry-agent-export` option has been extended with new values and a deprecation:
+
+-   `observability` (new) — exports traces to VictoriaTraces and logs to VictoriaLogs when the observability infra stack is running (`camel infra run observability`).
+    
+-   `otlp` (new) — generic external OTLP export for traces. Replaces `jaeger` as the recommended value for sending traces to any external OTLP-compatible collector.
+    
+-   `jaeger` (deprecated) — still works as an alias for `otlp`. Use `otlp` instead.
+    
+-   `tui` (unchanged) — embedded receiver in the TUI (default).
+    
+
+The `camel.opentelemetry2.exportTarget` property in `OpenTelemetryTracer` now accepts any non-empty value to signal external export mode (previously only `"jaeger"` was recognized).
+
+#### `camel run --jfr` now actually enables Java Flight Recorder
+
+`--jfr` and `--jfr-profile` were previously accepted by `camel run` but had no effect on any runtime (`main`, `quarkus`, `springBoot`): the flags only wrote an internal `camel.jbang.jfr`/`camel.jbang.jfr-profile` property that nothing read.
+
+They now start a real recording:
+
+-   For the default in-process runtime, a `jdk.jfr.Recording` is started before the routes start and stopped/dumped to `<name>.jfr` on shutdown.
+    
+-   For `quarkus` and `springBoot` (including running against an existing Maven project), a `-XX:StartFlightRecording=filename=<name>.jfr[,settings=<jfr-profile>]` JVM argument is passed to the forked process.
+    
+
+In both cases the JFR support for the runtime is now added automatically (`camel-jfr`, `camel-quarkus-jfr` or `camel-jfr-starter`), and `camel.main.startup-recorder-runtime-enabled` is set to `true`, so the Camel runtime events (route, processor, exchange, send, failed, redelivery) are captured, not just JVM-level events. If you were passing `--jfr` expecting no effect, this now writes a `.jfr` file and adds a JFR dependency to the classpath.
+
+If `--jvm-args` already contains `-XX:StartFlightRecording`, `--jfr` stands down with a warning rather than starting a second, competing recording.
+
+#### Website installers for the Camel CLI
+
+Two canonical installer scripts are now available for installing the [Camel CLI Launcher](camel-jbang-launcher.md) without a package manager:
+
+```bash
+curl -fsSL https://camel.apache.org/install.sh | sh
+```
+
+```powershell
+irm https://camel.apache.org/install.ps1 | iex
+```
+
+With no arguments, both installers resolve and install the latest published release. An exact version can be requested instead with `--version X.Y.Z` (`install.sh`) or `-Version X.Y.Z` (`install.ps1`); the requested version is validated and matched against the fetched manifest before anything is downloaded.
+
+Both installers download the release archive from Maven Central, verify it against a SHA-256 recorded in a signed-path manifest before extracting it, and reject archives containing absolute paths, `../` traversal, escaping symlinks/reparse points, or more than one top-level directory. The staged launcher is then run once to confirm a Java 17+ runtime can be discovered (see "Camel CLI launcher Java runtime discovery" above); if that check fails, the previously active installation, if any, is left untouched and the installer exits nonzero.
+
+Installation is always per-user and never requires elevation or `sudo`:
+
+-   POSIX (`install.sh`) installs under `${XDG_DATA_HOME:-$HOME/.local/share}/camel-cli/versions/<version>` and activates it via a symlink at `$HOME/.local/bin/camel`. The installer never writes to shell profile files (`.bashrc`, `.profile`, etc.); if `$HOME/.local/bin` is not already on `PATH`, it prints guidance instead.
+    
+-   Windows (`install.ps1`) installs under `%LOCALAPPDATA%\Apache Camel\cli\versions\<version>` and activates it via a `camel.cmd` shim at `%LOCALAPPDATA%\Apache Camel\bin\camel.cmd` that delegates to the staged `camel.bat`. The bin directory is added once, case-insensitively, to the current user’s `PATH`; the machine `PATH` is never modified.
+    
+
+Previously installed version directories are left in place after an upgrade or downgrade and must be removed manually. Reinstalling the same version replaces that version directory.
+
+#### camel self-update and camel doctor
+
+Two new commands are available in the [Camel CLI Launcher](camel-jbang-launcher.md):
+
+-   `camel self-update` checks for and installs newer launcher releases, re-running the same published `install.sh`/`install.ps1` installer described above (see "Website installers for the Camel CLI" above) pinned to the resolved version, after checking whether an update is actually needed. Refuses to act on an installation managed by a package manager (Homebrew, Chocolatey, WinGet, Scoop, SDKMAN) or by JBang, naming that manager’s own upgrade command instead. Also refuses on an installation pinned to an explicit version at install time (`--version`/`-Version`), naming the pin file to remove to resume tracking new releases. Every `camel` invocation (except `self-update` itself) also prints a one-line notice, at most once every 24 hours, when a newer release is available; set `CAMEL_SELF_UPDATE_CHECK=false` to disable it.
+    
+-   `camel doctor` now additionally reports every Camel CLI installation found on the machine across the web installer and all supported package managers, marking which one is actually active on `PATH`, and exits non-zero when more than one is found.
+    
+
+See [Installing the Camel CLI Launcher](camel-jbang-launcher-install.md) for full details.
+
+#### Camel CLI package-native validation (maintainers)
+
+The `camel-launcher` module adds an offline package-native validator (`src/jreleaser/bin/camel-validate.sh`) that installs each generated package, asserts `camel version` and an offline `camel init`, then uninstalls. Each validator self-skips when its package manager is absent, so the same entry point runs on macOS, Linux, and Windows x64 CI. Validation performs no remote publication and calls no SDKMAN Vendor API; that is the `publish` workflow.
+
+### camel-langchain4j-agent
+
+The `Agent.chat()` method return type has changed from `String` to `Result<String>` (from `dev.langchain4j.service.Result`). This allows the agent producer to expose token usage (input, output, total token count) and finish reason as exchange headers, consistent with the chat, tools, and embeddings components.
+
+If you have a custom `Agent` implementation, update the `chat` method signature:
+
+```java
+// Before
+String chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
+
+// After
+Result<String> chat(AiAgentBody<?> aiAgentBody, ToolProvider toolProvider);
+```
+
+When RAG or tools are used, the agent producer also exposes `CamelLangChain4jAgentSources` (`List<dev.langchain4j.rag.content.Content>`) and `CamelLangChain4jAgentToolExecutions` (`List<dev.langchain4j.service.tool.ToolExecution>`) as exchange headers when present in the `Result`.
+
+#### Camel route tools now use ai-tool
+
+The `langchain4j-agent` producer now discovers Camel route tools from the `ai-tool` component (`AiToolRegistry`) instead of the `langchain4j-tools` component (`CamelToolExecutorCache`).
+
+Migrate your tool definition routes from `langchain4j-tools:` to `ai-tool:`:
+
+```java
+// Before (no longer works with langchain4j-agent)
+from("langchain4j-tools:userDb?tags=users&description=Query user database&parameter.userId=string")
+    .setBody(constant("{\"name\": \"John Doe\", \"id\": \"123\"}"));
+
+// After
+from("ai-tool:userDb?tags=users&description=Query user database&parameter.userId=string")
+    .setBody(constant("{\"name\": \"John Doe\", \"id\": \"123\"}"));
+```
+
+The `langchain4j-agent` producer endpoint is unchanged — only the tool consumer routes need to be migrated:
+
+```java
+from("direct:chat")
+    .to("langchain4j-agent:assistant?agent=#myAgent&tags=users");
+```
+
+Add the `camel-ai-tool` dependency to your project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-ai-tool</artifactId>
+</dependency>
+```
+
+#### Exchange isolation for Camel route tools
+
+Each Camel route tool invocation now runs on an isolated exchange copy. Previously, the live producer exchange was shared with the tool route, which caused tool side-effects (headers, body mutations) to leak into the calling exchange and introduced a data race when LangChain4j executed tools concurrently.
+
+After this change:
+
+-   Headers set by tool argument mapping (e.g. `input`) no longer appear on the calling exchange after the agent returns.
+    
+-   Headers set inside the tool route (e.g. custom side-effect headers) no longer leak.
+    
+-   The `CamelToolName` header is no longer visible on the calling exchange.
+    
+-   Tool execution errors are rethrown as `RuntimeCamelException` so that LangChain4j’s `ToolExecutionErrorHandler` and `compensateOnToolErrors` fire correctly. Previously, errors were swallowed and returned as a plain string, making LangChain4j believe the tool succeeded.
+    
+
+If your code reads tool-related headers from the calling exchange after agent invocation, you will need to adjust it. The agent’s `Result<String>` (and the new `CamelLangChain4jAgentToolExecutions` header) is the intended way to observe tool execution results.
+
+### camel-langchain4j-embeddingstore
+
+A new `embeddingModel` option has been added. It is autowired, so if an `EmbeddingModel` bean is present in the registry it will be automatically picked up. When set, ADD and SEARCH operations can accept plain text in the message body instead of requiring a pre-computed embedding in the `CamelLangChain4jEmbeddingsEmbedding` header. The header always takes precedence when present.
+
+### camel-langchain4j-chat
+
+The helper classes `OpenAiChatLanguageModelBuilder` and `HugginFaceChatLanguageModelBuilder` have been removed. They were not wired into the component; the `chatModel` is autowired instead.
+
+If you used these helpers directly, configure your `ChatModel` with LangChain4j’s own builders or Spring Boot starters and inject it into the component.
+
+### camel-langchain4j-tools (deprecated)
+
+The `camel-langchain4j-tools` component is deprecated. Use `camel-ai-tool` to define tools and `camel-langchain4j-agent` for tool-calling with LangChain4j models.
+
+Migrate your tool definition routes from `langchain4j-tools:` to `ai-tool:`:
+
+```java
+// Before
+from("langchain4j-tools:weather?tags=weather&description=Get weather&parameter.city=string")
+    .setBody(constant("{\"city\": \"Paris\", \"temp\": \"22C\"}"));
+
+// After
+from("ai-tool:weather?tags=weather&description=Get weather&parameter.city=string")
+    .setBody(constant("{\"city\": \"Paris\", \"temp\": \"22C\"}"));
+```
+
+Use `langchain4j-agent` with matching tags to invoke tools:
+
+```java
+from("direct:chat")
+    .to("langchain4j-agent:assistant?agent=#myAgent&tags=weather");
+```
+
+Add the `camel-ai-tool` dependency to your project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-ai-tool</artifactId>
+</dependency>
+```
+
+#### Tool-calling round trips now bounded by default
+
+The `langchain4j-tools` producer now limits the number of tool-calling round trips to 10 by default (previously the loop was unbounded and could run indefinitely if the LLM kept requesting tools). Each round trip consists of one LLM call and the execution of all tools requested in that call.
+
+If your LLM interaction legitimately requires more than 10 iterations, increase the `maxToolCallingRoundTrips` endpoint option. Set to `0` for unlimited (not recommended). Negative values are rejected with `IllegalArgumentException`.
+
+When the limit is reached, the producer throws a `RuntimeCamelException` with a message indicating the maximum was exceeded.
+
+#### Hallucinated tool names no longer crash the producer
+
+When the LLM requests a tool name that does not exist among the registered tools, the producer now sends an error message back to the LLM listing the available tools, giving it a chance to self-correct. Previously this caused a `NoSuchElementException` crash.
+
+#### Tool execution errors sent to LLM instead of propagating to the route
+
+When a tool route throws an exception, the error is now sent back to the LLM as a `ToolExecutionResultMessage`, allowing the LLM to handle it gracefully (e.g., retry with different parameters or answer directly). Previously the exception was set on the tool exchange and `ExchangeHelper.copyResults` propagated it onto the main exchange, but the loop continued anyway, leaving the exchange in an inconsistent state.
+
+This is a behavior change: routes that used `onException(…​)` to catch tool execution failures will no longer see those exceptions, since the error is now handled within the producer and sent back to the LLM. The previous behavior was unreliable — a later successful tool call would overwrite the exception via `copyResults` — but if you relied on it, be aware that tool errors are now consumed by the producer.
+
+### camel-langchain4j-web-search
+
+The `safeSearch` endpoint option is now correctly propagated to the LangChain4j `WebSearchRequest`. Previously the option was accepted on the endpoint but ignored, so `safeSearch=false` still sent `safeSearch=true` to the search engine (the LangChain4j default).
+
+### camel-openai
+
+The per-call token usage headers `CamelOpenAIPromptTokens`, `CamelOpenAICompletionTokens`, and `CamelOpenAITotalTokens` now declare `javaType = Long` in component metadata (previously `Integer`). The OpenAI SDK returns `long` values, so routes that read these headers with `Integer.class` should switch to `Long.class`.
+
+Component metadata for exchange property `CamelOpenAIResponse` (`storeFullResponse=true` on `chat-completion`) now declares `javaType = com.openai.models.chat.completions.ChatCompletion` (previously `com.openai.models.ChatCompletion`). The runtime type was already the nested SDK class; update imports and `exchange.getProperty(…​, ChatCompletion.class)` references if your code still uses the old package name.
+
+#### Configurable tool error strategies in the agentic loop
+
+Two new endpoint options control how the agentic loop handles tool execution errors and hallucinated tool names:
+
+-   `toolExecutionErrorStrategy` — default `failExchange` (propagates exceptions to the Camel exchange). Set to `repromptModel` to catch exceptions and send them back to the model as tool results so it can attempt recovery. Note that `repromptModel` sends raw exception messages to the LLM provider, which may include internal details.
+    
+-   `hallucinatedToolNameStrategy` — default `failExchange` (throws `IllegalStateException`). Set to `repromptModel` to send a corrective tool result listing available tools.
+    
+
+Previously, tool execution errors were always sent back to the model and hallucinated tool names always threw an `IllegalStateException`. The new defaults change the tool execution error behavior: errors now propagate to the exchange by default. Routes that rely on the model recovering from tool errors must add `&toolExecutionErrorStrategy=repromptModel` to their endpoint URI.
+
+The `conversationMemory` feature on the `chat-completion` operation has two behavior fixes:
+
+-   User messages are now stored in the `CamelOpenAIConversationHistory` exchange property (configurable via `conversationHistoryProperty`) alongside assistant responses. Previously only assistant turns were appended, so code that reads the history property directly will see roughly twice as many entries (alternating user and assistant messages) compared to Camel 4.21 and earlier.
+    
+-   When `systemMessage` is set together with `conversationMemory=true`, the conversation history is now correctly cleared via `exchange.removeProperty()`. Previously `removeHeader()` was used on a property that is stored as an exchange property, so the documented reset had no effect and stale history was kept.
+    
+
+A new `responses` operation calls the OpenAI Responses API (non-streaming). Use `openai:responses` with the same ergonomics as chat completion for text/image input, `systemMessage` (sent as `instructions`), `model`, `temperature`, `maxTokens` (mapped to `maxOutputTokens`), structured output (`outputClass` / `jsonSchema`), and response headers including `CamelOpenAIResponseId`. Server-side multi-turn state uses `previousResponseId` / `CamelOpenAIPreviousResponseId`. Hosted tools: `builtinTools` (`web_search`, `file_search`, `code_interpreter`; `file_search` requires `fileSearchVectorStoreIds`) and optional `hostedMcpTools` JSON for Tool.Mcp pass-through. Streaming is not supported on this operation. The full SDK response is stored in exchange property `CamelOpenAIResponsesResponse` when `storeFullResponse=true`.
+
+#### Optional parallel MCP tool execution
+
+The new `parallelToolExecution` option (default `false`) executes the tool calls the model requests in a single response concurrently rather than sequentially, and `parallelToolTimeout` (milliseconds, default `0` = disabled) bounds such a batch as a whole. Both apply to the agentic loop and to the `openai:tool-execution` operation. Existing routes are unaffected unless they opt in.
+
+When `parallelToolExecution=true` is combined with `toolExecutionErrorStrategy=failExchange`, the sibling tool calls that were already dispatched complete before the exchange fails, whereas sequential execution abandons the remaining calls at the first failure. Routes whose tools have side effects and that rely on a failure preventing later tool calls in the same batch should keep the sequential default.
+
+#### MCP tool list is refreshed at runtime by default
+
+MCP servers announce tool additions, removals and changes with a `tools/list_changed` notification. That notification was previously ignored, so the tool list advertised to the model was fixed to whatever was listed when the endpoint started (and was only re-listed after a transport reconnect). The component now subscribes to it and refreshes the tool list, which is the behavior the MCP specification expects.
+
+Set the new `mcpToolRefresh` option to `false` to restore the previous behavior and pin the tool list to endpoint startup, for deployments that require a deterministic set of tools.
+
+Related fix: `returnDirect` flags set programmatically through `addReturnDirectTool` and `removeReturnDirectTool` on `OpenAIEndpoint` are now remembered and re-applied when the tool state is rebuilt. Previously a reconnect silently discarded them.
+
+### camel-management - Throughput MBean attribute uses EWMA smoothing
+
+The `Throughput` attribute on the `ManagedPerformanceCounter` JMX MBean now reports an EWMA (exponentially weighted moving average) value with a 1-minute decay window, instead of the previous raw instantaneous rate. This produces a smoother, more stable reading that converges to the true average throughput rather than oscillating between zero and spike values.
+
+If you have tooling that consumes the JMX throughput value and expects the old instantaneous behavior, be aware that the reported value will now ramp up and decay gradually.
+
+### camel-azure-servicebus - Camel-managed message lock renewal
+
+When consuming from Azure Service Bus in `PEEK_LOCK` mode with `maxAutoLockRenewDuration > 0`, Camel now actively renews message locks using a dedicated `ServiceBusReceiverAsyncClient` and Camel’s internal `PeriodTaskScheduler`. This addresses a limitation where the Azure SDK’s built-in lock renewal is tied to the `processMessage` callback duration, which returns immediately for asynchronous Camel routes — causing long-running exchanges to silently lose their message locks.
+
+The new behavior activates automatically when all of the following are true:
+
+-   No custom `processorClient` is provided
+    
+-   Receive mode is `PEEK_LOCK`
+    
+-   `maxAutoLockRenewDuration > 0`
+    
+-   Session mode is disabled
+    
+
+No configuration changes are required. The existing `maxAutoLockRenewDuration` option controls how long Camel will continue renewing a message’s lock.
+
+### camel-azure - component-specific CredentialType enums removed
+
+The component-specific `CredentialType` enums, deprecated since Camel 4.19.0, have been removed in favor of the shared `org.apache.camel.component.azure.common.CredentialType` enum from `camel-azure-common`:
+
+-   `org.apache.camel.component.azure.cosmosdb.CredentialType`
+    
+-   `org.apache.camel.component.azure.eventgrid.CredentialType`
+    
+-   `org.apache.camel.component.azure.eventhubs.CredentialType`
+    
+-   `org.apache.camel.component.file.azure.CredentialType` (camel-azure-files)
+    
+-   `org.apache.camel.component.azure.functions.CredentialType`
+    
+-   `org.apache.camel.component.azure.key.vault.CredentialType`
+    
+-   `org.apache.camel.component.azure.servicebus.CredentialType`
+    
+-   `org.apache.camel.component.azure.storage.blob.CredentialType`
+    
+-   `org.apache.camel.component.azure.storage.datalake.CredentialType`
+    
+-   `org.apache.camel.component.azure.storage.queue.CredentialType`
+    
+
+Endpoint URIs are unaffected: the credential type option values keep the same names. Java code that imports one of the removed enums — including typed Endpoint DSL calls such as `credentialType(CredentialType)` — must switch the import to `org.apache.camel.component.azure.common.CredentialType`.
+
+### camel-debezium
+
+The `camel-debezium` component has upgraded from Debezium 3.5.2 to 3.6.0.
+
+The following 10 Oracle connector options have been removed by Debezium 3.6.0 and are no longer available:
+
+-   `logMiningBatchSizeDefault`
+    
+-   `logMiningBatchSizeIncrement`
+    
+-   `logMiningBatchSizeMax`
+    
+-   `logMiningBatchSizeMin`
+    
+-   `logMiningSleepTimeDefaultMs`
+    
+-   `logMiningSleepTimeIncrementMs`
+    
+-   `logMiningSleepTimeMaxMs`
+    
+-   `logMiningSleepTimeMinMs`
+    
+-   `logMiningScnGapDetectionGapSizeMin`
+    
+-   `logMiningScnGapDetectionTimeIntervalMaxMs`
+    
+
+If you use any of these options, remove them from your configuration as they will cause errors.
+
+### camel-spring-ai-chat
+
+#### Camel route tools now use ai-tool
+
+The `spring-ai-chat` producer now discovers Camel route tools from the `ai-tool` component (`AiToolRegistry`) instead of the `spring-ai-tools` component (`CamelToolExecutorCache`).
+
+Migrate your tool definition routes from `spring-ai-tools:` to `ai-tool:`:
+
+```java
+// Before (no longer works with spring-ai-chat)
+from("spring-ai-tools:weather?tags=weather&description=Get current weather for a city&parameter.city=string")
+    .setBody(constant("{\"city\": \"Paris\", \"temp\": \"22°C\"}"));
+
+// After
+from("ai-tool:weather?tags=weather&description=Get current weather for a city&parameter.city=string")
+    .setBody(constant("{\"city\": \"Paris\", \"temp\": \"22°C\"}"));
+```
+
+The `spring-ai-chat` producer endpoint is unchanged — only the tool consumer routes need to be migrated:
+
+```java
+from("direct:chat")
+    .to("spring-ai-chat:weatherChat?tags=weather&chatModel=#chatModel");
+```
+
+Add the `camel-ai-tool` dependency to your project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-ai-tool</artifactId>
+</dependency>
+```
+
+The `camel-spring-ai-tools` component has been removed. Remove the `camel-spring-ai-tools` dependency from your project.
+
+### camel-pqc - potential breaking change
+
+The `pqc` data format now encrypts the message payload with **authenticated encryption (AEAD)** instead of the previous unauthenticated ECB mode. 128-bit block ciphers are encrypted with GCM and the ChaCha20 stream cipher is encrypted with ChaCha20-Poly1305, so both the confidentiality and the integrity of the data are now protected, and tampered or corrupted messages are detected and rejected on decryption.
+
+As a consequence:
+
+-   The wire format changed. A 12-byte AEAD nonce is now written between the encapsulation and the ciphertext, and the ciphertext carries an authentication tag:
+    
+    ```text
+    [4 bytes: encapsulation length] [N bytes: encapsulation] [12 bytes: AEAD nonce] [M bytes: ciphertext + auth tag]
+    ```
+    
+    Data encrypted by Camel 4.21 or earlier (unauthenticated ECB, no nonce) **cannot be decrypted** by Camel 4.22 or later. Re-encrypt any data at rest with the new version.
+    
+-   Only symmetric algorithms that support AEAD are accepted: `AES`, `ARIA`, `CAMELLIA`, `CAST6`, `DSTU7624`, `GOST3412-2015`, `SEED`, `SM4` (GCM) and `CHACHA7539` (ChaCha20-Poly1305). The previously accepted `RC2`, `RC5`, `CAST5`, `GOST28147`, `DESEDE` and the unauthenticated stream ciphers `GRAIN128`, `HC128`, `HC256` and `SALSA20` are no longer supported and are rejected when the route starts. The default (`AES`) is unchanged.
+    
+-   The message is now processed in memory rather than streamed: the authenticated cipher must verify the authentication tag before releasing any plaintext, so the whole payload is held in memory during marshal and unmarshal. For very large payloads, enable stream caching on the route.
+    
+-   The `bufferSize` option has been removed. It only configured the previous streaming implementation and no longer has any effect with authenticated encryption.
+    
+
+### camel-file / camel-ftp / camel-azure-files / camel-smb - preSort option enhanced
+
+The `preSort` option on the File, FTP, FTPS, SFTP, Azure Files, and SMB consumers has changed from a `boolean` to a `String`. Previously, `preSort=true` sorted files by name only. The option now supports the following values:
+
+-   `name` — sort by file name ascending (same behavior as old `preSort=true`)
+    
+-   `modified` — sort by last-modified timestamp ascending (oldest first)
+    
+-   `size` — sort by file size ascending (smallest first)
+    
+-   `-name`, `-modified`, `-size` — descending (reverse) order
+    
+-   `true` — backward compatible alias for `name`
+    
+-   `false` or not set — disabled (default, unchanged)
+    
+
+The pre-sort is applied on the raw file listing before any filtering or eager limiting, which makes it possible to combine `preSort=modified` with `eagerMaxMessagesPerPoll=true` and `maxMessagesPerPoll=10` to efficiently consume the 10 oldest files without creating Exchange objects for every file on the server.
+
+### camel-file - forceWrites option deprecated
+
+The `forceWrites` producer option on the File endpoint has been deprecated. This option has had no effect since Camel 2.20, when the file-writing implementation was refactored to use `java.nio.file.Files.move()` and `Files.copy()` instead of `FileChannel`\-based streaming. The `forceWrites` flag was intended to call `FileChannel.force(true)` (fsync) after writing, but no write path has invoked it for several major versions.
+
+The default value has been changed from `true` to `false` to reflect the actual behavior. The option will be removed in a future release.
+
+### camel-mail - MimeMultipartDataFormat inbound header filtering
+
+When unmarshalling a MIME message with `headersInline=true`, the `mime-multipart` data format now applies a `HeaderFilterStrategy` to the headers copied from the MIME content onto the Camel message. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) present in the external MIME headers are no longer copied onto the message, consistent with the inbound header filtering already performed by the camel-mail consumer.
+
+Ordinary application headers are unaffected. If a route relied on `Camel*` headers being propagated from the MIME content, set them explicitly after unmarshalling.
+
+### camel-knative - structured-mode CloudEvent header filtering
+
+When consuming a CloudEvent in structured content mode (`application/cloudevents+json`), the Knative component now applies a `HeaderFilterStrategy` to the event fields (extensions) mapped from the payload onto the Camel message. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) present as structured-event fields are no longer mapped onto the message, consistent with the inbound header filtering already performed on the binary content-mode / HTTP header path.
+
+Ordinary CloudEvent extension attributes are unaffected. If a route relied on `Camel*`\-named fields being propagated from the structured payload, set them explicitly after consuming the event.
+
+### camel-ironmq - message envelope header filtering
+
+When consuming a message with `preserveHeaders=true`, the IronMQ consumer now applies a `HeaderFilterStrategy` to the header entries embedded in the JSON message envelope before mapping them onto the Camel message. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) present in the envelope are no longer mapped onto the message, consistent with the inbound header filtering performed by other consumers.
+
+Ordinary application headers are unaffected. If a route relied on `Camel*` headers being propagated from the message envelope, set them explicitly after consuming the message.
+
+### camel-pinecone
+
+The `tls` endpoint option now correctly documents its default as `false` (previously the catalog listed the default as `true`, but the runtime value was always `false`). No behavioral change — the runtime default was already `false`.
+
+### camel-platform-http-main
+
+When `authenticationEnabled=true` but neither a basic-auth properties file (`basicPropertiesFile`) nor a JWT keystore (`jwtKeystoreType`) is configured, Camel now behaves differently under the `prod` profile (`camel.main.profile=prod`).
+
+Under the `prod` profile, startup now fails instead of starting the embedded HTTP server without authentication. Under the `dev` profile and with no profile configured, the existing warning-only behavior is retained for backward compatibility.
+
+### camel-kafka - metadataMaxAgeMs option moved from producer to common
+
+The `metadataMaxAgeMs` (`metadata.max.age.ms`) option was incorrectly labeled as producer-only, but is applied to both consumer and producer Kafka clients. The label has been corrected to `common`.
+
+If you use the Endpoint DSL, the `metadataMaxAgeMs` method has moved from the producer (advanced) builder to the common builder.
+
+### camel-kafka - saslAuthType behavior changes
+
+When `saslAuthType` is set, the generated JAAS configuration and additional SASL properties are now applied using `putIfAbsent` semantics, so explicitly configured `saslJaasConfig`, callback handler classes, or token endpoint URLs take precedence over the auto-generated values.
+
+For OAuth (`saslAuthType=OAUTH`), the JAAS string now contains only login-module parameters (`clientId`, `clientSecret`, `scope`). The `oauth.token.endpoint.uri` and callback handler class are set as separate Kafka client properties instead of being embedded in the JAAS string, matching the Kafka client’s expected configuration format.
+
+For Kerberos (`saslAuthType=KERBEROS`), if the principal is not configured, the configurer now assumes an external JAAS configuration (e.g. via `java.security.auth.login.config`) and skips JAAS string generation instead of throwing an exception. This supports deployment scenarios where Kerberos is configured externally.
+
+### camel-kafka - Producer no longer silently drops scalar Jackson nodes
+
+With `useIterator=true`, the Kafka producer splits an `Iterable` body into one record per element. A Jackson `JsonNode` implements `Iterable`, so a scalar value node (e.g. an `IntNode` produced by `transform().jq(".my-value")`) was seen as an empty iterable and produced no record, silently discarding the message with no exception or log.
+
+Scalar value nodes are now sent as a single record. Only container nodes (`ArrayNode`, `ObjectNode`) are still split, which is unchanged. Any `convertBodyTo(…​)` previously used as a workaround is no longer required.
+
+### camel-kafka - sslEndpointAlgorithm=none now disables hostname verification
+
+Setting `sslEndpointAlgorithm` to `none` or `false` now correctly disables SSL hostname verification by setting `ssl.endpoint.identification.algorithm` to an empty string. Previously the property was simply omitted, which caused Kafka clients to fall back to their default (`https`), leaving hostname verification silently enabled.
+
+### camel-kafka - Auto-generated groupId shared across consumer threads
+
+When no `groupId` is configured, the auto-generated UUID is now shared across all consumer threads (`consumersCount`). Previously each thread received its own random UUID, causing each thread to independently consume all partitions, which resulted in every message being processed `consumersCount` times.
+
+### camel-kafka - Batch producer respects endpoint key for plain list elements
+
+The batch producer (when the body is a `List`) now respects the endpoint-configured `key` option for elements that do not have a `CamelKafkaKey` header. Previously, elements without the header would get a null record key even when `key=fixedKey` was configured on the endpoint. Additionally, plain list elements (not `Exchange` or `Message`) are now properly converted to the configured serializer type.
+
+### camel-kafka - queueBufferingMaxMessages option deprecated
+
+The `queueBufferingMaxMessages` producer option has been deprecated. This option has had no effect since the old Scala Kafka producer was removed in Camel 2.17 (CAMEL-9467). Use `bufferMemorySize` or `maxBlockMs` instead.
+
+### camel-kafka - Manual commit no longer auto-commits offsets
+
+When using `allowManualCommit=true` together with a `DefaultKafkaManualCommitFactory` or `DefaultKafkaManualAsyncCommitFactory`, the framework previously auto-committed offsets for every processed record — even when the route did not call `KafkaManualCommit.commit()`. This defeated the purpose of manual commit mode and could cause message loss.
+
+The framework no longer auto-commits offsets after processing each partition when manual commit is enabled. Offsets are only committed when the route explicitly calls `KafkaManualCommit.commit()` on the exchange header. The configured factory still controls whether that explicit commit executes synchronously or asynchronously.
+
+### camel-jbang catalog tables fill the terminal width
+
+The `camel catalog` commands (`camel catalog component`, `camel catalog dataformat`, `camel catalog language`, `camel catalog transformer`, `camel catalog kamelet`, …​) now size the `DESCRIPTION` column to the detected terminal width instead of the previous fixed 80-character cap, so wide terminals show more of the description before it is truncated with an ellipsis. The `NAME` column width is also standardized across these commands (it previously differed per command, for example 60 for `transformer` and 30 elsewhere).
+
+Terminal width is now detected on Windows (`cmd` / PowerShell) via `mode con`, in addition to the existing `COLUMNS` / `stty size` detection. When no terminal can be detected (for example when the output is piped or redirected), the width falls back to 120 columns. For full, untruncated output suitable for scripting, use the `--json` option.
+
+The `camel infra list` table now sizes its `DESCRIPTION` column to the terminal width, and truncates the `IMPLEMENTATION` and `SERVICE_DATA` columns with an ellipsis instead of letting the raw service data overflow the terminal. The complete, structured service data remains available via `--json`.
+
+### camel-jsonpath
+
+The `writeAsString` option now correctly serializes single JSON object results (Maps) to a JSON String. Previously, a JsonPath expression evaluating to a JSON object (e.g. `$.args`) with `writeAsString=true` would return a `java.util.Map` with individually stringified values instead of a valid JSON String. If you were relying on the old behavior to split a Map result, change the expression to use a wildcard (e.g. `$.content.*` instead of `$.content`) to get a splittable list of JSON strings.
+
+### camel-aws2-kinesis - Fixed-shardId consumer no longer calls DescribeStream on every poll
+
+The Kinesis consumer with a configured `shardId` previously called the `DescribeStream` API on every poll cycle to locate the shard, risking AWS rate limits (10 TPS per account) and failing for streams with more than 100 shards (no pagination). The consumer now uses the same cached shard list from the `ShardMonitor` background thread that the multi-shard path already uses. The `ShardMonitor` uses the `ListShards` API (paginated, 100 TPS limit) and now paginates through all pages, supporting streams with any number of shards.
+
+This is a transparent performance improvement with no configuration changes required.
+
+### camel-aws2-kinesis - Per-record partition keys in batch producer
+
+The batch producer (body is an `Iterable`) previously applied a single `CamelAwsKinesisPartitionKey` header to all records, routing them all to the same shard. A new `CamelAwsKinesisPartitionKeys` header (`List<String>`) is now supported: when set, each record in the batch is assigned the partition key at the corresponding index. If the list has fewer entries than records, the remaining records fall back to the single `CamelAwsKinesisPartitionKey` header. The existing single-key behavior is unchanged when the new header is not set.
+
+### camel-azure-storage-blob / camel-azure-storage-datalake - download contained within fileDir
+
+When `fileDir` is configured, the Azure Storage Blob and DataLake consumers now ensure the downloaded local file stays within the configured directory, so a remote object name containing `../` sequences can no longer resolve to a path outside it. This is consistent with the containment already performed by the file-based consumers (see the `localWorkDirectory` note in the 4.21 upgrade guide).
+
+Ordinary object names are unaffected. A name that resolves outside `fileDir` is now rejected with an `IllegalArgumentException`.
+
+### camel-xmpp - Smack upgraded to 4.4
+
+The camel-xmpp component has upgraded Smack from 4.3.5 to 4.4.8. The `smack-java7` module no longer exists in Smack 4.4 and has been replaced by `smack-java8` (relevant if you declared it explicitly alongside camel-xmpp). When extracting headers from a stanza whose JiveProperties extension is not parsed by a registered provider, the unparsed extension is now represented by Smack’s `StandardExtensionElement` (the replacement for the removed `DefaultExtensionElement`); flat child elements are mapped to headers as before. See the [Smack 4.4 readme](https://github.com/igniterealtime/Smack/wiki/Smack-4.4-Readme) for behavioral changes in the Smack library itself.
+
+### camel-weaviate - potential breaking change
+
+The Weaviate Java client has been upgraded from v5 (`io.weaviate:client`) to v6 (`io.weaviate:client6`). This is a major upgrade with several breaking changes.
+
+#### Scheme default value
+
+The `scheme` endpoint option now defaults to `http`. Previously it had no default. Routes that relied on the old behavior (passing no scheme) should explicitly set `scheme=http` or `scheme=https` as appropriate.
+
+#### Collection name case sensitivity
+
+Weaviate v6 requires collection names to start with an uppercase letter (PascalCase). Existing routes using lowercase collection names (e.g., `weaviate:myCollection`) must be updated to use PascalCase (e.g., `weaviate:MyCollection`).
+
+#### New gRPC configuration options
+
+The v6 client requires a gRPC connection in addition to the HTTP connection. Two new endpoint options have been added: `grpcHost` (defaults to the HTTP host) and `grpcPort` (defaults to `50051`). When connecting to a Weaviate server that exposes gRPC on a non-default host or port, these options must be set explicitly.
+
+#### Response body types changed
+
+The exchange body returned by the producer no longer uses `io.weaviate.client.base.Result<T>` wrappers. Code that casts the response body must be updated:
+
+  
+| Action | Old body type | New body type |
+| --- | --- | --- |
+| `CREATE_COLLECTION` | `Result<Boolean>` | `Boolean` |
+| `CREATE` | `Result<WeaviateObject>` | `WeaviateObject<Map<String, Object>>` |
+| `UPDATE_BY_ID` | `Result<Boolean>` | `Boolean` |
+| `DELETE_BY_ID` | `Result<Boolean>` | `Boolean` |
+| `DELETE_COLLECTION` | `Result<Boolean>` | `Boolean` |
+| `QUERY` | `Result<GraphQLResponse>` | `QueryResponse<Map<String, Object>>` |
+| `QUERY_BY_ID` | `Result<List<WeaviateObject>>` | `Optional<WeaviateObject<Map<String, Object>>>` |
+
+The `WeaviateObject` class has also moved from `io.weaviate.client.v1.data.model` to `io.weaviate.client6.v1.api.collections` and uses accessor methods (`uuid()`, `properties()`) instead of getter methods (`getId()`, `getProperties()`).
+
+#### Client type changed
+
+The autowired client type has changed from `io.weaviate.client.WeaviateClient` to `io.weaviate.client6.v1.api.WeaviateClient`. Routes that inject a custom `WeaviateClient` instance must update the import and construction to use the v6 API (e.g., `WeaviateClient.connectToCustom(…​)` instead of `new WeaviateClient(config)`).
+
+#### Readiness check removed
+
+The v5 client performed a readiness check (`misc().readyChecker()`) during client creation and threw an exception if the Weaviate server was not ready. The v6 client no longer performs this check at startup. Errors will now surface on the first operation instead of during endpoint initialization.
+
+#### Proxy configuration removed
+
+The v6 client no longer supports HTTP proxy configuration. The `proxyHost`, `proxyPort`, and `proxyScheme` endpoint options have been removed.
+
+#### New operations
+
+Four new operations have been added to the Weaviate component, leveraging v6 client capabilities:
+
+-   `BATCH_CREATE` — Insert multiple objects in a single call. The exchange body must be a `List<WeaviateObject<Map<String, Object>>>`. Returns an `InsertManyResponse`.
+    
+-   `HYBRID_QUERY` — Keyword + vector hybrid search. The exchange body is the query text (`String`). Supports `CamelWeaviateQueryTopK` (default 10), `CamelWeaviateHybridAlpha` (0.0 = pure BM25, 1.0 = pure vector), `CamelWeaviateQueryVector` (optional pre-computed vector to override server-side vectorizer), and `CamelWeaviateFields` headers. Returns a `QueryResponse<Map<String, Object>>`.
+    
+-   `BM25_QUERY` — Keyword-only (BM25) search. The exchange body is the query text (`String`). Supports `CamelWeaviateQueryTopK` and `CamelWeaviateFields` headers. Returns a `QueryResponse<Map<String, Object>>`.
+    
+-   `AGGREGATE` — Returns aggregate statistics for a collection. No body required. Returns an `AggregateResponse` with `totalCount()` and per-property aggregations.
+    
+
+### camel-spring-boot - Duration configuration properties
+
+The following configuration properties are now bound as `java.time.Duration` instead of raw milliseconds (`long`/`int`):
+
+-   `camel.routecontroller.initial-delay`
+    
+-   `camel.routecontroller.back-off-delay`
+    
+-   `camel.routecontroller.back-off-max-delay`
+    
+-   `camel.routecontroller.back-off-max-elapsed-time`
+    
+-   `camel.startupcondition.interval`
+    
+-   `camel.startupcondition.timeout`
+    
+
+Plain numeric values in `application.properties`/`application.yaml` are still interpreted as milliseconds, so existing configurations keep working unchanged. In addition, readable duration values such as `5s` or `2m` are now supported.
+
+This is a source-incompatible change for code that reads these values programmatically: the getters and setters of `SupervisingRouteControllerConfiguration` and `CamelStartupConditionConfigurationProperties` now use `java.time.Duration` instead of `long`/`int`.
+
+The clustered route controller property `camel.clustered.controller.initial-delay` is unchanged: it keeps its `String` type because it supports Camel time patterns (for example `10 seconds`) that `Duration` binding does not.
+
+### camel-spring-rabbitmq - replyTimeout default aligned
+
+The `replyTimeout` option on the component level has been fixed to default to 30 seconds, aligning it with the endpoint-level default that was documented since Camel 3.20.7 / 3.21. Previously, the component-level default was still 5 seconds, which would override the endpoint’s declared 30-second default. If you were relying on the effective 5-second timeout, you can restore it by explicitly setting `replyTimeout=5000` on the component or endpoint.
+
+### camel-spring-rabbitmq - queue durable default changed to true
+
+The queue `durable` default has been changed from `false` to `true` when using `autoDeclare`. This aligns queues with the exchange default (which was already `durable=true`) and with RabbitMQ 4.3+ which no longer permits non-durable, non-exclusive queues by default (the `transient_nonexcl_queues` deprecated feature is now denied by default).
+
+If you were relying on non-durable queues, you can restore the previous behavior by explicitly setting `arg.queue.durable=false&arg.queue.exclusive=true` on the endpoint URI. Note that RabbitMQ 4.3+ requires non-durable queues to also be exclusive.
+
+### camel-core - additional sensitive keywords redacted from sanitized URIs
+
+The URI sanitization used for logs, JMX attributes, exception messages and the developer console (`URISupport.sanitizeUri`) now also redacts endpoint parameters whose name contains `api-key` (hyphenated) or `authorization`. Previously a credential supplied through a hyphenated or `Authorization`\-style parameter/header name — for example `additionalHeader.api-key=…​` (the Azure OpenAI auth header) or `additionalHeader.Authorization=…​` in `camel-openai` — was written in clear text in sanitized URIs, even though the camelCase `apiKey` option was already redacted.
+
+Because matching is a case-insensitive substring match, parameter names that merely contain `authorization` without being secrets — `adjustAuthorization`, `jwtAuthorizationType`, `proxyAuthorizationPolicy` — now also have their values shown as `xxxxxx` in sanitized URIs. This is a cosmetic change to sanitized output only and does not affect the actual endpoint configuration.
+
+### camel-support - DefaultMaskingFormatter masks URI userinfo and PEM private keys
+
+`DefaultMaskingFormatter` (used when `logMask=true`, and by tooling that reuses the same formatter) previously masked secrets only when a known sensitive **key name** appeared in key/value, XML or JSON text. Two credential shapes that have no such key are now also masked:
+
+-   URI userinfo passwords such as `mongodb://user:pass@host/db` or `amqp://admin:secret@broker/vhost` (the `:pass` / `:secret` portion is replaced; the username and host remain).
+    
+-   PEM private-key blocks (`-----BEGIN … PRIVATE KEY-----` … `-----END … PRIVATE KEY-----`); the key body is replaced while the BEGIN/END markers are kept. Certificates and public keys are not masked.
+    
+
+Helpers for these value shapes live on `org.apache.camel.util.SensitiveUtils` (`maskUserInfoCredentials`, `maskPemPrivateKeyBlocks`, `maskSensitiveValueShapes`). This is a cosmetic change to masked/logged output only and does not affect endpoint configuration.
+
+If you use `DefaultMaskingFormatter` with an empty keyword set, `format()` previously returned the source unchanged; it now still applies URI userinfo and PEM private-key masking on the text.
+
+### camel-a2a - push notification webhooks pinned to the validated address
+
+Push notifications are now delivered with Apache HttpClient 5 instead of `java.net.http.HttpClient`, so the request can be pinned to the address the webhook URL was validated against.
+
+Previously `WebhookUrlValidator` resolved the webhook host and applied the SSRF checks, and the HTTP client then resolved the same hostname again when it opened the connection. The two lookups are independent, so the address that was validated and the address actually connected to could differ (DNS rebinding). The connection is now opened to the address that passed validation, while the hostname is still used for the `Host` header, TLS SNI and certificate hostname verification. Each retry attempt re-validates and re-resolves, so a config that was safe when first dispatched cannot be rebound between retries (which may be up to an hour apart).
+
+`camel-a2a` therefore has a new dependency on `org.apache.httpcomponents.client5:httpclient5`.
+
+The `PushNotificationDispatcher` constructor now takes an `org.apache.hc.client5.http.impl.async.CloseableHttpAsyncClient` instead of a `java.net.http.HttpClient`. This only affects code constructing the dispatcher directly; the client must be started before use. Endpoint behaviour is unchanged — redirects were already never followed for push webhooks, and still are not, since a redirect would be resolved by the client and escape the validation applied to the registered URL.
+
+### camel-kafka - batch exchange carries the batch-wide topic and partition
+
+When using the batching consumer (`batching=true`), the exchange carrying the batch now also has the `CamelKafkaTopic` and `CamelKafkaPartition` headers set, so they can be read before the batch is split — for example to store the topic in a variable and reuse it after the split.
+
+A header is only set when **every** record in the batch has the same value for it; if the batch spans multiple topics or partitions, that header is left unset, because no single value would be correct for the batch. Per-record headers that naturally differ, such as `CamelKafkaOffset`, are not set on the batch exchange.
+
+This is additive — these headers were previously absent from the batch exchange, so nothing that worked before changes. The headers on the individual record exchanges in the body are unchanged.
+
+### camel-kafka - Unified reconnection task
+
+The Kafka consumer’s internal reconnection logic has been simplified. Previously, creating a `KafkaConsumer` (kafka-client) and subscribing to topics were handled by two separate foreground tasks with independent backoff settings. These have been merged into a single background reconnection task that is visible via Camel management, including the TUI, CLI, Hawtio, and other tooling.
+
+As a result, the `subscribeConsumerBackoffMaxAttempts` and `subscribeConsumerBackoffInterval` component options are now deprecated and no longer used. The unified reconnection task uses the `createConsumerBackoffMaxAttempts` and `createConsumerBackoffInterval` options to control retry behavior for both consumer creation and topic subscription.
+
+If you previously configured `subscribeConsumerBackoffMaxAttempts` or `subscribeConsumerBackoffInterval`, migrate those settings to use `createConsumerBackoffMaxAttempts` and `createConsumerBackoffInterval` instead.
+
+### camel-core - Multicast UseOriginalAggregationStrategy fix
+
+The Multicast EIP now correctly honors `UseOriginalAggregationStrategy`, consistent with the Splitter and Recipient List EIPs. Previously, Multicast did not bind the original exchange on the strategy, so the strategy was silently ineffective — especially in error scenarios where the aggregated result could overwrite the original exchange body instead of preserving it.
+
+### camel-sql - PostgreSQL aggregation repositories fixed
+
+`PostgresAggregationRepository` and `ClusteredPostgresAggregationRepository` were broken since Camel 3.4: every insert failed with a parameter-index error because the `version` column was bound but not included in the generated `INSERT …​ ON CONFLICT DO NOTHING` statement. Both repositories now include the `version` column in the insert, and the clustered variant also writes the `instance_id` column to the completed table when `recoveryByInstance` is enabled (previously instance-scoped recovery could never match any row).
+
+The aggregation tables used with these repositories must have the `version BIGINT` column, as already required by `JdbcAggregationRepository` for reading and updating aggregates. When `recoveryByInstance` is enabled, the completed table must have the `instance_id VARCHAR(255)` column as documented.
+
+### camel-pqc - String payloads are signed and verified as UTF-8
+
+The `sign`, `verify`, `hybridSign` and `hybridVerify` operations previously encoded a `String` message body using the JVM default charset (`String.getBytes()`). The default charset is platform dependent, so signing on one JVM and verifying on another with a different default could disagree on the bytes of a non-ASCII payload and make verification fail.
+
+`String` bodies are now always encoded as UTF-8. On Java 18 and newer the default charset is already UTF-8 (JEP 400), so this is a no-op there; on Java 17 with a non-UTF-8 default, the signature of a non-ASCII `String` payload changes. Binary bodies (`byte[]`, `InputStream`) are unaffected, as they are signed byte-for-byte.
+
+### camel-sql - Schema-qualified aggregation repository names
+
+The table-name validation in `JdbcAggregationRepository` now accepts schema-qualified names such as `myschema.aggregation`. Previously the validation regex only allowed simple identifiers (`[a-zA-Z_][a-zA-Z0-9_]*`), rejecting any name containing a dot. Names starting with a digit, containing spaces, or with multiple dots (e.g. `catalog.schema.table`) are still rejected.
+
+### camel-sql - New exceptions from aggregation and template parsing
+
+The `remove()` method in `JdbcAggregationRepository` and `ClusteredJdbcAggregationRepository` now throws `OptimisticLockingException` when it detects a stale version during the delete. Previously a stale remove was silently treated as successful. If your error handling or aggregation strategy catches specific exception types around `remove()`, you may need to account for `OptimisticLockingException`.
+
+The `TemplateParser` now catches `TokenMgrError` (a JavaCC lexer error) and wraps it in `ParseRuntimeException`. Previously a malformed stored-procedure template with characters outside the token alphabet would propagate as a raw `java.lang.Error`.
+
+### camel-aws - Migrated from apache-client to apache5-client
+
+All camel-aws modules now use `software.amazon.awssdk:apache5-client` (Apache HttpClient 5) instead of `software.amazon.awssdk:apache-client` (Apache HttpClient 4), aligning with the [new default](https://github.com/aws/aws-sdk-java-v2/issues/7007) in AWS SDK for Java v2.46.0.
+
+If your project has `<dependencyManagement>` entries, exclusions, or explicit dependencies referencing `software.amazon.awssdk:apache-client`, update them to `software.amazon.awssdk:apache5-client`.
+
+### camel-aws-cloudtrail - consumer event delivery fixed
+
+The CloudTrail consumer previously kept its lookup cursor in a `static` field (shared across all cloudtrail consumers in the JVM), issued a single non-paginated `LookupEvents` call with a default `maxResults` of `1`, and advanced the cursor by the newest event time plus one second. As a result it could silently drop events. The consumer now keeps the cursor per-endpoint, paginates through every page of the window, and de-duplicates events by id at the window boundary.
+
+Two behavior changes follow:
+
+-   The default `maxResults` is now `50` (the AWS maximum). With pagination this is a page-size hint, not a per-poll cap; set it lower to reduce page sizes.
+    
+-   On startup the consumer tails events from the moment it starts, rather than first replaying the single most-recent historical event.
+    
+
+### camel-aws2-kinesis - Custom KinesisResumeAction requires a public no-arg constructor
+
+Custom `KinesisResumeAction` subclasses registered in the Camel registry under the `CamelKinesisDbResumeAction` key must now provide a public no-arg constructor. The consumer creates a separate instance per shard via reflection to avoid concurrent mutation when multiple shards are processed in parallel. Per-shard state (`builder`, `shardId`, `streamName`) is injected via setters after construction. Any initialization that was previously done in a parameterized constructor should be moved to setters or to the `evalEntry` method.
+
+### camel-aws2-sqs - per-message delay skipped for delay queues and FIFO queues
+
+The SQS producer no longer sets per-message `DelaySeconds` when `delayQueue=true` (delay is queue-level) or when the queue is FIFO (AWS rejects per-message delay with `InvalidParameterValue`). Previously the `CamelAwsSqsDelayHeader` header was applied unconditionally, which could cause AWS errors on FIFO queues and was redundant on delay queues. If your route relied on per-message delay overrides on a delay queue, the override will now be silently ignored.
+
+### camel-xslt-saxon - secure processing now applied unconditionally
+
+The `secureProcessing` option (default `true`) is now applied to the Saxon `TransformerFactory` unconditionally. Previously it was only set when `saxonExtensionFunctions` was configured, meaning the default configuration silently ran without `FEATURE_SECURE_PROCESSING`.
+
+Additionally, the Saxon factory now sets `ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_STYLESHEET` to empty strings (matching the behavior of the plain `xslt` component), restricting stylesheet-driven external fetches.
+
+Users of Saxon Professional or Enterprise editions who rely on Java extension functions called from XSLT stylesheets must now explicitly set `secureProcessing=false` on the endpoint.
+
+### camel-core - InMemorySagaCoordinator now propagates finalization outcome
+
+The `InMemorySagaCoordinator` used for the Saga EIP (when no external LRA coordinator is configured) previously returned an already-completed future from `compensate()` and `complete()`, meaning the exchange finished before any compensation or completion endpoints had been invoked. Finalization failures were only logged as warnings and never propagated to the caller.
+
+The coordinator now returns the actual finalization future, so the exchange waits for the compensation or completion callbacks to finish (including retries). If all retry attempts fail, the failure is propagated as an exception on the exchange, consistent with the `camel-lra` coordinator behavior.
+
+This is a behavior change: routes that previously completed immediately regardless of compensation/completion outcome will now wait for finalization and may see exceptions that were previously swallowed. If your route relies on fire-and-forget saga finalization, consider using `MANUAL` completion mode instead.
+
+### camel-azure-eventhubs - producer now filters Camel-internal headers
+
+The `azure-eventhubs` producer now applies a `DefaultHeaderFilterStrategy` to the headers copied onto `EventData` application properties. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) are no longer forwarded to Azure Event Hubs, consistent with the inbound header filtering performed by other components.
+
+Ordinary application headers are unaffected.
+
+### camel-azure-storage-datalake - openInputStream no longer uses Blob Query API
+
+The `getFile` operation on the Data Lake consumer/producer now uses the standard `client.openInputStream().getInputStream()` instead of `client.openQueryInputStream("SELECT * from BlobStorage")`. The previous implementation relied on the Blob Query API, which had known issues requiring a `SkipLastByteInputStream` workaround. The `SkipLastByteInputStream` class in `camel-util` has been deprecated and will be removed in a future version.
+
+### camel-azure-storage-blob - page-blob range calculation corrected
+
+The page-blob `getRange` calculation has been corrected from `end - start` to `end - start + 1`, since Azure page blob ranges are inclusive on both ends. If you had a workaround adjusting the range values to compensate for this off-by-one, it should be removed.
+
+### camel-bindy - BigDecimal precision default changed
+
+The `@DataField.precision()` attribute default has changed from `0` to `-1` (meaning "unset"). Previously, a `BigDecimal` field without an explicit `precision` would throw `ArithmeticException` on unmarshal when the input had decimal places, and silently truncated decimals to zero on marshal. With this fix, omitting `precision` preserves the original scale from the input value.
+
+The `@DataField.rounding()` attribute is now honored for `BigDecimal` fields that do not use a `pattern`. Previously it was only applied when a `pattern` was specified.
+
+If you relied on the implicit `precision=0` behavior to round `BigDecimal` values to integers, add `precision = 0` explicitly to your `@DataField` annotation.
+
+### camel-xslt / camel-xslt-saxon - transformerFactoryConfigurationStrategy now honored
+
+The `transformerFactoryConfigurationStrategy` option is now applied on all factory creation paths. Previously on `xslt-saxon` it was never invoked, and on plain `xslt` it was only invoked when `transformerFactoryClass` was explicitly set.
+
+### Circuit Breaker EIP - onFallbackViaNetwork deprecated
+
+The `onFallbackViaNetwork()` DSL method and the `fallbackViaNetwork` option on `onFallback` have been deprecated for removal. This was a Hystrix-era concept that has never been supported by any current circuit breaker implementation — both `camel-resilience4j` and `camel-microprofile-fault-tolerance` throw `UnsupportedOperationException` at route initialization when it is enabled. Use `onFallback()` instead.
+
+### camel-resilience4j - Duration options now use Camel duration format
+
+The following Resilience4j configuration options now use `java.time.Duration` type instead of plain integers, and accept Camel duration expressions (e.g. `60s`, `1m`, `PT1M`) as well as plain millisecond values:
+
+-   `waitDurationInOpenState` — previously accepted seconds (default `60`), now accepts millis or duration strings (default `60000` or `60s`)
+    
+-   `slowCallDurationThreshold` — previously accepted seconds (default `60`), now accepts millis or duration strings (default `60000` or `60s`)
+    
+-   `timeoutDuration` — unchanged (was already millis, default `1000`)
+    
+-   `bulkheadMaxWaitDuration` — unchanged (was already millis, default `0`)
+    
+
+If you configured `waitDurationInOpenState` or `slowCallDurationThreshold` with a plain integer meaning seconds, you must update the value to use a duration suffix (e.g. `60s`) or convert to milliseconds (e.g. `60000`).
+
+**Java DSL:**
+
+```java
+// Before (seconds):
+.waitDurationInOpenState(60)
+
+// After (millis):
+.waitDurationInOpenState(60000)
+
+// Or using duration string (preferred):
+.waitDurationInOpenState("60s")
+```
+
+The `int` overloads for `waitDurationInOpenState(int)`, `slowCallDurationThreshold(int)`, `timeoutDuration(int)`, and `bulkheadMaxWaitDuration(int)` have been deprecated. Use the `String` overloads with Camel duration expressions instead.
+
+**Application properties (camel-main, Spring Boot, Quarkus):**
+
+If you configure circuit breaker settings via `application.properties`, the same migration applies:
+
+```properties
+# Before (seconds):
+camel.resilience4j.waitDurationInOpenState = 60
+
+# After (duration string):
+camel.resilience4j.waitDurationInOpenState = 60s
+
+# Or milliseconds:
+camel.resilience4j.waitDurationInOpenState = 60000
+```
+
+**Programmatic configuration (camel-main):**
+
+The same change applies to the Java API in `org.apache.camel.main.Resilience4jConfigurationProperties`. The getters, setters and fluent builders for `waitDurationInOpenState`, `slowCallDurationThreshold`, `timeoutDuration` and `bulkheadMaxWaitDuration` now use `String` instead of `Integer`, so code that configures the circuit breaker through `MainConfigurationProperties` must be updated:
+
+```java
+// Before:
+main.configure().resilience4j().withTimeoutDuration(1000);
+
+// After (milliseconds):
+main.configure().resilience4j().withTimeoutDuration("1000");
+
+// Or using a duration string (preferred):
+main.configure().resilience4j().withTimeoutDuration("1s");
+```
+
+`timeoutDuration` and `bulkheadMaxWaitDuration` were already expressed in milliseconds, so for those two this is only a type change (quote the value) with no unit conversion; `waitDurationInOpenState` and `slowCallDurationThreshold` additionally change from seconds to milliseconds as described above.
+
+### camel-resilience4j - Vavr dependency removed
+
+The `io.vavr:vavr` and `io.vavr:vavr-match` runtime dependencies have been removed from `camel-resilience4j`. The single internal usage of Vavr’s `Try` monad has been replaced with a plain try-catch. This eliminates two transitive runtime JARs. No user-facing behavior change.
+
+### camel-resilience4j - JMX waitDurationInOpenState now reports milliseconds
+
+The JMX managed attribute `CircuitBreakerWaitDurationInOpenState` previously reported seconds (using `Duration.getSeconds()`). It now reports milliseconds (using `Duration.toMillis()`) to be consistent with all other duration attributes (`BulkheadMaxWaitDuration`, `TimeoutDuration`) and with the option itself, which was changed from seconds to milliseconds in the same release (see above).
+
+If you have JMX-based monitoring that reads this attribute, update the expected unit from seconds to milliseconds.
+
+### camel-microprofile-fault-tolerance
+
+The deprecated `timeoutPoolSize` option has been removed from the Fault Tolerance configuration. This option was never used by SmallRye Fault Tolerance and had no effect. Remove any references to `timeoutPoolSize` from your configuration.
+
+The JMX attribute `FailureRate` has been renamed to `FailureRatio` to match the configuration property name and avoid confusion with live failure rate metrics.
+
+New JMX attributes have been added for live call monitoring:
+
+-   `NumberOfSuccessfulCalls` - count of successful executions
+    
+-   `NumberOfFailedCalls` - count of failed executions
+    
+-   `NumberOfNotPermittedCalls` - count of calls rejected by an open circuit breaker
+    
+
+A new `transitionToCloseState` JMX operation resets the circuit breaker to CLOSED and clears the call counters.
+
+### camel-jms - IBM MQ client upgraded to 10.0
+
+The IBM MQ client library (`com.ibm.mq:com.ibm.mq.jakarta.client`) has been upgraded from 9.4.x to 10.0.0.0, and the IBM MQ test container image from 9.4.x to 10.0.0.0.
+
+IBM MQ 10.0 marks the `JMS_IBM_MsgToken` vendor property as read-only. When Camel copies headers from an incoming JMS message to an outgoing reply or forwarded message, this reserved property previously caused a `MessageFormatException` that silently prevented the reply from being sent.
+
+### camel-jms - vendor-specific JMS properties skipped when read-only
+
+When setting JMS properties on an outgoing message, Camel now catches `JMSException` for JMS vendor-specific properties (those with a `JMS_` prefix, per JMS spec section 3.5.1) and logs a `WARN` instead of propagating the exception. There is no standard JMS API to query which vendor properties are reserved, and the set can change between provider versions. Non-vendor properties still throw on failure as before.
+
+This change is necessary for IBM MQ 10.0 compatibility but applies to all JMS providers. If you relied on exceptions from vendor-specific property failures propagating through `JmsBinding.appendJmsProperty()`, be aware that they are now caught and logged at `WARN` level for `JMS_`\-prefixed properties only.
+
+### camel-minio - Upgraded to minio 9.0.3 - Breaking Changes
+
+The underlying `io.minio:minio` library has been upgraded from 8.x to 9.0.3. This release contains several breaking API changes that affect users who pass `io.minio` objects directly through the Camel Minio component (e.g. via `pojoRequest=true` or custom `MinioClient` configuration).
+
+#### ServerSideEncryptionCustomerKey renamed
+
+`io.minio.ServerSideEncryptionCustomerKey` has been removed as a top-level class. Use the inner class `io.minio.ServerSideEncryption.CustomerKey` instead.
+
+```java
+// Before:
+import io.minio.ServerSideEncryptionCustomerKey;
+ServerSideEncryptionCustomerKey ssec = ...;
+
+// After:
+import io.minio.ServerSideEncryption;
+ServerSideEncryption.CustomerKey ssec = ...;
+```
+
+The `serverSideEncryptionCustomerKey` endpoint/component option type has changed accordingly.
+
+#### CopySource renamed to SourceObject
+
+`io.minio.CopySource` has been removed. Use `io.minio.SourceObject` instead. `CopyObjectArgs.Builder.source()` now accepts a `SourceObject`.
+
+```java
+// Before:
+import io.minio.CopySource;
+CopySource src = CopySource.builder().bucket("b").object("o").build();
+
+// After:
+import io.minio.SourceObject;
+SourceObject src = SourceObject.builder().bucket("b").object("o").build();
+```
+
+#### Method enum moved inside Http class
+
+`io.minio.http.Method` (package `io.minio.http`) has been removed. Use the nested enum `io.minio.Http.Method` instead.
+
+```java
+// Before:
+import io.minio.http.Method;
+
+// After:
+import io.minio.Http;
+// reference as Http.Method.GET, Http.Method.PUT, etc.
+```
+
+#### Bucket type changed for listBuckets
+
+`io.minio.messages.Bucket` has been removed. The `MinioClient.listBuckets()` method now returns `List<io.minio.messages.ListAllMyBucketsResult.Bucket>`.
+
+```java
+// Before:
+import io.minio.messages.Bucket;
+List<Bucket> buckets = minioClient.listBuckets();
+
+// After:
+import io.minio.messages.ListAllMyBucketsResult;
+List<ListAllMyBucketsResult.Bucket> buckets = minioClient.listBuckets();
+```
+
+#### DeleteObject renamed to DeleteRequest.Object
+
+`io.minio.messages.DeleteObject` has been removed. Use `io.minio.messages.DeleteRequest.Object` instead.
+
+```java
+// Before:
+import io.minio.messages.DeleteObject;
+new DeleteObject("my-object-name");
+
+// After:
+import io.minio.messages.DeleteRequest;
+new DeleteRequest.Object("my-object-name");
+```
+
+#### MinioClient methods now throw MinioException only
+
+All `MinioClient` methods previously declared multiple checked exceptions (`InvalidKeyException`, `NoSuchAlgorithmException`, `IOException`, etc.). In 9.x they now uniformly declare `throws io.minio.errors.MinioException`. Update any catch blocks or method `throws` declarations accordingly.
+
+```java
+// Before:
+} catch (MinioException | InvalidKeyException | NoSuchAlgorithmException | IOException e) { ... }
+
+// After:
+} catch (MinioException e) { ... }
+```
+
+### camel-aws2 - producers now fail fast on a wrong POJO request type
+
+When an AWS2 producer is configured with `pojoRequest=true`, it expects the Exchange body to be the AWS SDK request object for the selected operation (for example an `AssumeRoleRequest` for the `assumeRole` operation of `camel-aws2-sts`). Previously, if the body was some other type, the operation silently did nothing: no AWS call was made, no response was set, and the original body was returned with no error.
+
+These producers now throw an `IllegalArgumentException` naming the required request type, consistent with the behaviour already shipped for `camel-aws-bedrock` in 4.21 (CAMEL-23462). This roll-out across the remaining AWS2 producers is tracked by CAMEL-24261.
+
+If you relied on the previous silent no-op, ensure the body is the correct request type when `pojoRequest=true`, or drive the operation through headers with `pojoRequest=false`.
+
+### camel-google-storage - downloads are confined to the configured directory
+
+When the consumer is configured with `downloadFileName` pointing at a directory, the remote object name is appended to that directory to build the local file to write. The resolved path is now verified to stay within the configured directory, and an `IllegalArgumentException` is thrown if it does not.
+
+Object names are still allowed to contain `/` and are mapped to sub-directories of the download directory as before, so nested object names keep working unchanged. Only names that resolve outside the configured directory are rejected.
+
+If `downloadFileName` is configured with an expression (i.e. it contains `$`), the local path is built by that expression as before and is not subject to this check.
+
+### camel-main - JWT authentication requires an issuer or an audience
+
+The embedded HTTP server and the management server build their JWT authenticator from the configured keystore. When neither `jwtIssuer` nor `jwtAudience` was set, no `JWTOptions` was applied, so tokens were only checked for signature and expiry and the `iss` and `aud` claims were not validated.
+
+The server now fails to start when a JWT keystore is configured but neither `camel.server.jwtIssuer` nor `camel.server.jwtAudience` is set (and likewise for `camel.management.*`). Configure the issuer and/or the audience that tokens are expected to carry.
+
+If a deployment genuinely wants signature and expiry validation only, set `camel.server.jwtAllowMissingIssuerAndAudience=true` (or `camel.management.jwtAllowMissingIssuerAndAudience=true`) to keep the previous behaviour.
+
+### camel-tarfile / camel-zipfile - CamelFileName is stripped to the entry base name on unmarshal
+
+When unmarshalling a tar or zip archive, the `CamelFileName` header was previously set to the raw archive entry name, which for a crafted archive can contain path segments (e.g. `../../etc/passwd`). If a downstream route wrote the message to disk using that header, the entry name could escape the intended directory (Tar Slip / Zip Slip).
+
+`CamelFileName` is now set to the entry’s base name only (path segments stripped) for both the data format and the iterator/splitter modes. The full, unmodified entry name remains available so routes that intentionally recreate the archive’s directory structure keep working — read it from `CamelTarFileEntryName` for tar and from `zipFileName` for zip instead of `CamelFileName`.
+
+### camel-ldif - a non-LDIF body is no longer dereferenced as a URL by default
+
+The ldif producer previously treated a message body that does not start with `version: 1` as a URL and dereferenced it (`URI.create(body).toURL().openStream()`). This content-sniffed URL fetch is now opt-in: a new `allowUrlBody` option (default `false`) gates it. With the default, a body that is not LDIF content is rejected with an `IllegalArgumentException` instead of being fetched, which avoids a content-sniffed URL fetch (SSRF) from untrusted body content. Routes that rely on passing a URL as the body must set `allowUrlBody=true` on the `ldif` endpoint.
+
+### camel-snakeyaml - typeFilters are now also enforced by the SnakeYAML TagInspector
+
+When `typeFilters` (or `unmarshalType`) is configured, the allow-list is now also enforced by the SnakeYAML 2.x `TagInspector` layer, not only by the `getClassForName` constructor override. A YAML document that references a disallowed global tag is therefore rejected earlier, during composing, and surfaces as an `org.yaml.snakeyaml.composer.ComposerException` (`"Global tag is not allowed: …​"`) instead of the previous `ConstructorException` caused by an `IllegalArgumentException`. The set of accepted types is unchanged; only the exception raised for a rejected type differs. Routes that do not configure `typeFilters` are unaffected.
+
+### camel-jfr
+
+`camel-jfr` can now also emit JFR events during message routing, in addition to the existing startup instrumentation. This is **opt-in and disabled by default**, so having `camel-jfr` on the classpath keeps behaving exactly as it did in 4.21.
+
+Enable it with `camel.main.startup-recorder-runtime-enabled=true`, or programmatically with `setRuntimeEnabled(true)` on the `FlightRecorderStartupStepRecorder`. The option is read once while the `CamelContext` initializes and cannot be changed afterwards.
+
+`org.apache.camel.spi.StartupStepRecorder` gained the default methods `isRuntimeEnabled()` and `setRuntimeEnabled(boolean)`. Both have no-op defaults, so existing implementations continue to compile and behave as before.
+
+### camel-spring-ai - upgraded to Spring AI 2.0
+
+The `camel-spring-ai-chat`, `camel-spring-ai-embeddings`, `camel-spring-ai-image` and `camel-spring-ai-vector-store` components now build on Spring AI 2.0 instead of Spring AI 1.1. Spring AI 1.1 targets Spring Boot 3.5 and Spring Framework 6, while Camel is already on Spring Boot 4.1 and Spring Framework 7, which is the baseline Spring AI 2.0 was designed for. The upgrade also aligns the MCP Java SDK that `camel-spring-ai-chat` pulls in transitively (previously 0.18.2) with the 2.0.0 version already used by `camel-mcp-server` and `camel-openai`.
+
+Applications that configure Spring AI themselves must migrate along with it. The full list of changes is in the [Spring AI upgrade notes](https://docs.spring.io/spring-ai/reference/upgrade-notes.md); the ones most likely to affect a Camel route are:
+
+-   Spring AI moved from Jackson 2 to Jackson 3 (`tools.jackson`).
+    
+-   Configuration property keys lost the `options` segment, for example `spring.ai.openai.chat.options.model` is now `spring.ai.openai.chat.model`.
+    
+-   Spring AI no longer applies a default `temperature` of `0.7`; each provider’s own default is used unless the endpoint or a header sets one.
+    
+-   `spring-ai-advisors-vector-store` was renamed to `spring-ai-vector-store-advisor`, and the `spring-ai-azure-openai` and `spring-ai-openai-sdk` modules were folded into `spring-ai-openai`.
+    
+
+#### camel-spring-ai-chat - toolNames resolution
+
+Spring AI 2.0 removed `ChatClient.ChatClientRequestSpec.toolNames(String…​)` together with the Spring bean based `SpringBeanToolCallbackResolver`, so the `toolNames` endpoint option and the `CamelSpringAiChatToolNames` header are now resolved by the component itself. Each name is looked up, in order, against a `ToolCallbackResolver` bound in the registry, then against the tools discovered via `tags` and configured via `toolCallbacks`, and finally against a `ToolCallback` bound in the registry under that name. A name that resolves nowhere now fails the exchange with an `IllegalArgumentException` listing the available tools, rather than being silently ignored.
+
+Because Spring AI 2.0 rejects a `ToolCallingChatOptions` that carries two tools with the same name, tools reachable through more than one source (tags, `toolCallbacks`, `toolNames`) are now registered only once.
+
+In a Spring Boot application, Spring AI’s auto-configured `ToolCallbackResolver` is built from the `ToolCallback` and `ToolCallbackProvider` beans in the context. A bare `@Bean Function<…​>` is no longer resolvable by bean name; expose such tools as `ToolCallback` or `ToolCallbackProvider` beans.
+
+### camel-undertow - UndertowHeaderFilterStrategy is now the endpoint default
+
+`UndertowEndpoint` defaulted its `headerFilterStrategy` to the base `HttpHeaderFilterStrategy`, and pushed that strategy into the `DefaultUndertowHttpBinding` it creates lazily, overwriting the `UndertowHeaderFilterStrategy` that the binding installs in its own constructor. The undertow-specific filtering was therefore not applied on endpoint-configured routes.
+
+The endpoint now defaults to `UndertowHeaderFilterStrategy`, which makes two already documented behaviours take effect:
+
+-   The legacy `websocket.*` Exchange-header prefix, added to the in and out filters in 4.14.8 / 4.18.3 / 4.21.0 (see the 4.18 upgrade guide), is now filtered at the undertow transport boundary as described there.
+    
+-   Header names that undertow does not accept (those for which `io.undertow.util.HttpString.tryFromString` returns `null`) are skipped when mapping external headers in, rather than being mapped onto the message.
+    
+
+Ordinary application headers are unaffected, and Rest DSL consumers already used an undertow-specific strategy (`UndertowRestHeaderFilterStrategy`) so their behaviour does not change. Routes that relied on `websocket.*` headers crossing the undertow boundary in either direction, and routes that relied on undertow-invalid header names being mapped, can restore the previous behaviour by configuring `headerFilterStrategy` explicitly on the endpoint:
+
+```java
+from("undertow:http://0.0.0.0:8080/foo?headerFilterStrategy=#myStrategy")
+```
+
+Routes that already supply a custom `headerFilterStrategy` or a custom `undertowHttpBinding` are unaffected.
+
+### camel-atmosphere-websocket - potential breaking change
+
+The Exchange header constants in `WebsocketConstants` have been renamed to follow the Camel naming convention used across the rest of the component catalog. The Java field names are unchanged; only the header string values have changed:
+
+  
+| Constant | Previous value | New value |
+| --- | --- | --- |
+| `WebsocketConstants.CONNECTION_KEY` | `websocket.connectionKey` | `CamelAtmosphereWebsocketConnectionKey` |
+| `WebsocketConstants.CONNECTION_KEY_LIST` | `websocket.connectionKey.list` | `CamelAtmosphereWebsocketConnectionKeyList` |
+| `WebsocketConstants.SEND_TO_ALL` | `websocket.sendToAll` | `CamelAtmosphereWebsocketSendToAll` |
+| `WebsocketConstants.EVENT_TYPE` | `websocket.eventType` | `CamelAtmosphereWebsocketEventType` |
+| `WebsocketConstants.ERROR_TYPE` | `websocket.errorType` | `CamelAtmosphereWebsocketErrorType` |
+
+Routes that reference the constant symbolically (for example `setHeader(WebsocketConstants.CONNECTION_KEY, …​)`) continue to work without changes. Routes that set the header by its literal string value must be updated to use the new value:
+
+_Java-only: updated atmosphere-websocket header names in route_
+
+```java
+// before
+from("direct:next")
+    .setHeader("websocket.connectionKey", header("myKey"))
+    .to("atmosphere-websocket:///servicepath");
+
+// after
+from("direct:next")
+    .setHeader("CamelAtmosphereWebsocketConnectionKey", header("myKey"))
+    .to("atmosphere-websocket:///servicepath");
+```
+
+The sibling websocket components are not affected by this change: `camel-undertow` keeps the `websocket.*` values in `UndertowConstants` (as documented in the 4.18 upgrade guide), and `camel-vertx-websocket` keeps its `CamelVertxWebsocket.*` values.
+
+Note that `WebsocketConstants.SEND_TO_ALL` is not read by this component. Broadcast is selected through the `sendToAll` endpoint option, not through the header; the constant is renamed here only to keep the class internally consistent.
+
+#### Behaviour change: cross-transport propagation of the dispatch headers
+
+Because the renamed header values now begin with `Camel`, they are filtered by the standard transport `HeaderFilterStrategy` (`HttpHeaderFilterStrategy`, `JmsHeaderFilterStrategy`, etc.) when crossing a transport boundary, by design — `Camel*` headers are framework-internal and are not propagated over the wire.
+
+Routes that bridge an external transport (HTTP, JMS, …​) into an `atmosphere-websocket:` producer and let the sender choose the dispatch target via headers must therefore carry those values in non-`Camel`\-prefixed application headers and map them to the corresponding `WebsocketConstants` value in the route between the transport `from` and the `atmosphere-websocket:` `to`. Allowing untrusted senders to drive `WebsocketConstants.CONNECTION_KEY_LIST`, which selects the target peers and takes precedence over `CONNECTION_KEY`, without such a mapping step is not the intended use of the component.
+
+### camel-google-mail - the raw option now returns the message
+
+The `google-mail-stream` consumer always asked the Gmail API for the `FULL` message format, but the `raw` field is only populated for the `RAW` format, so `raw=true` produced a `null` body. The consumer now requests the format that matches the option.
+
+Because the Gmail API does not return the parsed `payload` for the `RAW` format, a route running with `raw=true` no longer receives the `CamelGoogleMailStreamSubject`, `…​From`, `…​To`, `…​Cc`, `…​Bcc` and `…​MessageId` headers — those values are part of the RFC 2822 content that is now in the body. `CamelGoogleMailStreamId`, `…​ThreadId` and `…​LabelIds` are still set. Routes that need the parsed headers should keep the default `raw=false`.
+
+### camel-google-vertexai - the streamOutputMode and jsonMode options are now applied
+
+Both options were declared and documented but never read, so they had no effect. They now do what they say:
+
+-   `streamOutputMode=chunks` makes `generateChatStreaming` produce a `List<String>`, one element per streamed chunk, instead of the concatenated text. The default `complete` is unchanged, so routes that never set the option keep receiving a `String`. The value can also be set per message with the `CamelGoogleVertexAIStreamOutputMode` header.
+    
+-   `jsonMode=true` sets the response MIME type of the request to `application/json`, so the model is asked to answer with JSON. The default `false` leaves the request untouched.
+    
+
+### camel-core - REST client request validation and binary bodies
+
+When `clientRequestValidation` is enabled and the REST service declares a required body, the incoming message body is no longer replaced with a `String` version of itself. That conversion corrupted binary payloads such as `application/octet-stream`. The body is still read to check that it is present, using stream caching so it stays re-readable, but it now keeps its original type.
+
+### camel-support
+
+`BackgroundTask.schedule` now cancels the repeating schedule it created once the task has completed or has run out of budget. Previously the returned `Future` stayed armed and the task kept being re-run as a no-op for the lifetime of the executor. Callers that inspect the returned `Future` will see `isCancelled()` return `true` after the task is done, where it previously stayed live. Callers that already cancel the `Future` themselves are unaffected.
+
+### camel-master
+
+The `backOffMaxAttempts` option now bounds the attempts to start the delegated consumer as documented. The retry task previously also carried the default five second duration of its budget, which ended the task before the second attempt for any `backOffDelay` at or above the default of five seconds. A delegate that fails to start is therefore retried for longer than before, up to `backOffMaxAttempts` times.
+
+### camel-servlet, camel-jetty - the multipart upload whitelist is enforced against the submitted file name
+
+`fileNameExtWhitelist` accepts file name extensions, but ``camel-servlet’s `AttachmentHttpBinding`` checked it against `Part.getName()`, which is the multipart **field** name rather than the submitted file name. A field named `file` carries no extension, so the check found nothing to compare and every upload was accepted. The option is now checked against `Part.getSubmittedFileName()`, which is what `camel-platform-http-vertx` already does.
+
+A `camel-servlet` consumer that sets `fileNameExtWhitelist` together with `attachmentMultipartBinding=true` therefore starts rejecting uploads whose file extension is not listed, which is what the option always advertised. Uploads with no file name, such as plain form fields, are unaffected, and a route that does not set the option is unaffected. Review the configured extension list before upgrading.
+
+The `camel-jetty` binding performed no whitelist check at all, although `fileNameExtWhitelist` can be set on its `HttpBinding`. It now applies the same check.
+
+The `camel-jetty` binding also stored the attachment under the multipart field name but looked it up again by the submitted file name, and passed that file name to `HttpHelper.appendHeader`. The lookup therefore only succeeded when the two happened to be equal, and when it did the header was named by the client-supplied file name. The attachment is now looked up and exposed under the field name it is stored with, and only for parts that carry a file name — a plain form field is mapped by `populateRequestParameters` as before. Because the old lookup by file name returned `null` whenever the two names differed, that header never carried a usable `DataHandler` in the first place; only when the names happened to be equal did it resolve, and then the name is unchanged. A route that expected the attachment header under the uploaded file name should read it under the multipart field name.
+
+### camel-tensorflow-serving - the Target and Credentials headers are deprecated
+
+`TensorFlowServingConstants.TARGET` (`CamelTensorFlowServingTarget`) and `TensorFlowServingConstants.CREDENTIALS` (`CamelTensorFlowServingCredentials`) are deprecated. Both were declared with `@Metadata` and advertised through the endpoint’s `headersClass`, but neither has ever been read by the component.
+
+The gRPC channel and its stubs are built once in `TensorFlowServingEndpoint.doInit()` from `configuration.getTarget()` and `configuration.getCredentials()`, so a per-exchange override supplied as a header cannot take effect. A route that set either header was silently ignored. The sibling `camel-kserve` component declares neither.
+
+Configure the `target` and `credentials` endpoint options instead, or route to a different endpoint with `toD` when the destination varies per message. The constants remain in place for backwards compatibility and are now marked deprecated in the component metadata.
+
+### camel-hazelcast - ReplicatedHazelcastAggregationRepository now applies the default serialization filter
+
+`ReplicatedHazelcastAggregationRepository` now applies the same default `JavaSerializationFilterConfig` that the other repositories and the component endpoints have applied since 4.14.8/4.18.3/4.21.0, when it bootstraps its own `HazelcastInstance` (that is, when no `hazelcastInstance` is supplied). It overrides `doStart()` without calling `super.doStart()` and was therefore left out of that change.
+
+The default whitelists the class name prefixes `java.`, `javax.`, `org.apache.camel.` and blacklists `java.net.`, and a user-supplied `JavaSerializationFilterConfig` is still respected and never overwritten.
+
+Applications that aggregate classes outside the default whitelist through the replicated repository without supplying their own `hazelcastInstance` must now provide a `Config` with a `JavaSerializationFilterConfig` covering their class names.

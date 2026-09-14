@@ -61,12 +61,12 @@ from("direct:start")
             steps:
               - to:
                   uri: http://fooservice.com/faulty
-              - onFallback:
-                  steps:
-                    - transform:
-                        expression:
-                          constant:
-                            expression: Fallback message
+            onFallback:
+              steps:
+                - transform:
+                    expression:
+                      constant:
+                        expression: Fallback message
         - to:
             uri: mock:result
 ```
@@ -122,10 +122,10 @@ from("direct:start")
       uri: direct:start
       steps:
         - circuitBreaker:
+            resilience4jConfiguration:
+              timeoutDuration: 2000
+              timeoutEnabled: "true"
             steps:
-              - resilience4jConfiguration:
-                  timeoutDuration: 2000
-                  timeoutEnabled: "true"
               - log:
                   message: "Resilience processing start: ${threadName}"
               - to:
@@ -188,19 +188,19 @@ from("direct:start")
       uri: direct:start
       steps:
         - circuitBreaker:
+            resilience4jConfiguration:
+              asynchronous: "true"
+              timeoutDuration: 2000
+              timeoutEnabled: "true"
             steps:
-              - resilience4jConfiguration:
-                  asynchronous: "true"
-                  timeoutDuration: 2000
-                  timeoutEnabled: "true"
               - to:
                   uri: http://fooservice.com/faulty
-              - onFallback:
-                  steps:
-                    - transform:
-                        expression:
-                          constant:
-                            expression: Fallback message
+            onFallback:
+              steps:
+                - transform:
+                    expression:
+                      constant:
+                        expression: Fallback message
         - to:
             uri: mock:result
 ```

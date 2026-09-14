@@ -44,7 +44,7 @@ See [Responses API operation](others/openai-responses.md) for usage (`previousRe
     
 -   `audio-speech` - Synthesize spoken audio from text using text-to-speech models (e.g., gpt-4o-mini-tts, tts-1)
     
--   `moderation` - Check text against the OpenAI usage policies before it reaches a model
+-   `moderation` - Check text or an image against the OpenAI usage policies before it reaches a model
     
 -   `image-generation` - Generate images from a text prompt (e.g., gpt-image-1, gpt-image-1-mini)
     
@@ -502,8 +502,9 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAISimilarityScore** (producer) Constant: [`SIMILARITY_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SIMILARITY_SCORE) | Calculated cosine similarity score (0.0 to 1.0). |  | Double |
 | **CamelOpenAIOriginalText** (producer) Constant: [`ORIGINAL_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#ORIGINAL_TEXT) | Original text content when embeddings operation is used. |  | String or List |
 | **CamelOpenAIModerationModel** (producer) Constant: [`MODERATION_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_MODEL) | The model to use for moderation (e.g., omni-moderation-latest). |  | String |
+| **CamelOpenAIModerationText** (producer) Constant: [`MODERATION_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_TEXT) | Text to moderate together with an image body, such as the caption the image was posted with. The text and the image are scored as one input and share a single verdict. Ignored when the body is not an image. |  | String |
 | **CamelOpenAIModerationFlagged** (producer) Constant: [`MODERATION_FLAGGED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_FLAGGED) | Whether the moderation API flagged the input as violating the usage policies. For a batch of inputs this is true when at least one input was flagged. |  | Boolean |
-| **CamelOpenAIModerationResults** (producer) Constant: [`MODERATION_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESULTS) | One verdict per moderated input, in the order of the inputs. Each entry holds the keys 'input', 'flagged', 'categories' and 'categoryScores', so a batch can be split and routed per item. |  | List |
+| **CamelOpenAIModerationResults** (producer) Constant: [`MODERATION_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESULTS) | One verdict per moderated input, in the order of the inputs. Each entry holds the keys 'input', 'flagged', 'categories', 'categoryScores' and, when the provider reports it, 'categoryAppliedInputTypes', so a batch can be split and routed per item. |  | List |
 | **CamelOpenAIModerationCategories** (producer) Constant: [`MODERATION_CATEGORIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_CATEGORIES) | The moderation categories and whether each one was violated, for a single input. Not set for a list body, where 'CamelOpenAIModerationResults' carries the verdicts. |  | Map |
 | **CamelOpenAIModerationCategoryScores** (producer) Constant: [`MODERATION_CATEGORY_SCORES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_CATEGORY_SCORES) | The moderation confidence score per category, for a single input. Not set for a list body, where 'CamelOpenAIModerationResults' carries the verdicts. |  | Map |
 | **CamelOpenAIModerationResponseModel** (producer) Constant: [`MODERATION_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE_MODEL) | The moderation model used in the response. |  | String |
@@ -1718,7 +1719,7 @@ The component may throw the following exceptions:
         
     -   When invalid JSON schema string is provided
         
-    -   When the moderation input list is empty or contains null elements (moderation)
+    -   When the moderation input list is empty, contains null elements, or contains an image file (moderation)
         
     -   When the image model is missing (image-generation, image-edit)
         

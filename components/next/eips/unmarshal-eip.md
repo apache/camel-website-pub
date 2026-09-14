@@ -30,18 +30,18 @@ Then the reverse operation happens to transform the Java objects back into XML a
 
 ```java
 from("file:inbox/xml")
-  .unmarshal().jaxb()
+  .unmarshal().jaxb("com.acme.order")
   .to("bean:validateOrder")
-  .marshal().jaxb()
+  .marshal().jaxb("com.acme.order")
   .to("jms:queue:order");
 ```
 
 ```xml
 <route>
   <from uri="file:inbox/xml"/>
-  <unmarshal><jaxb/></unmarshal>
+  <unmarshal><jaxb contextPath="com.acme.order"/></unmarshal>
   <to uri="bean:validateOrder"/>
-  <marshal><jaxb/></marshal>
+  <marshal><jaxb contextPath="com.acme.order"/></marshal>
   <to uri="jms:queue:order"/>
 </route>
 ```
@@ -52,11 +52,13 @@ from("file:inbox/xml")
       uri: file:inbox/xml
       steps:
         - unmarshal:
-            jaxb: {}
+            jaxb:
+              contextPath: com.acme.order
         - to:
             uri: bean:validateOrder
         - marshal:
-            jaxb: {}
+            jaxb:
+              contextPath: com.acme.order
         - to:
             uri: jms:queue:order
 ```
@@ -95,7 +97,8 @@ from("file:inbox/xml")
       steps:
         - unmarshal:
             allowNullBody: "true"
-            jaxb: {}
+            jaxb:
+              contextPath: com.acme.order
         - to:
             uri: bean:validateOrder
 ```

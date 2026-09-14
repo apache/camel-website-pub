@@ -1,0 +1,993 @@
+User manual
+
+# Camel TUI
+
+**Available as of Camel 4.21**
+
+Camel TUI is a terminal dashboard for developing, prototyping, and understanding Camel integrations. With over 40 screens organized across tabs, it makes your entire integration visible — you can browse your project source code with inline documentation, see your route topology, watch messages flow through processors, step through exchanges like scrubbing through a video timeline, inspect Kafka topics, run SQL queries against your DataSources, audit CVE vulnerabilities, and understand what Camel actually does with your routes. No more black box.
+
+![TUI Overview showing multiple routes](_images/jbang/camel-tui-overview.png)
+
+## Getting Started
+
+You can start using the TUI in two ways: with your own route, or by running one of the built-in examples.
+
+### Option 1: Your Own Route
+
+Start a Camel integration in one terminal:
+
+```bash
+camel run my-route.yaml
+```
+
+Open the TUI in another terminal:
+
+```bash
+camel tui
+```
+
+The TUI auto-discovers every running Camel integration on your machine — no configuration needed.
+
+### Option 2: Built-in Examples
+
+Don’t have a route yet? The TUI ships with a catalog of ready-to-run examples. Open the TUI and press **F2**, then select _Run an example_:
+
+```bash
+camel tui
+```
+
+1.  Press **F2** to open the actions menu
+    
+2.  Select **Run an example…​**
+    
+3.  Browse the example catalog — type to filter by name
+    
+4.  Press **Enter** to launch the selected example
+    
+
+Before launching, a run options form lets you choose the **runtime**: Camel Main (standalone), Spring Boot, Quarkus, or JBang. This makes it easy to try any example on all three runtimes without changing a single line of code. The first three run the example in a separate JVM that only contains the dependencies of the example (like a production deployment), while JBang runs it in-process in the Camel CLI JVM, which starts faster but has the CLI on the classpath as well. You can also set the integration name, toggle dev mode, and add extra dependencies.
+
+The example starts running in the background. The TUI auto-selects it as soon as it appears. From there you can explore tabs, watch messages flow, inspect the route diagram, and experiment.
+
+If an example requires infrastructure (like Kafka or a database), the TUI automatically starts the required Docker containers before launching the example. A notification in the footer shows the progress.
+
+The same runtime selector is available in **Run from folder…​** (F2 menu), which lets you point the TUI at a local directory containing your routes. When a `pom.xml` is present, the runtime is auto-detected and locked to match your project.
+
+> **Tip**
+> Press **F1** or **?** on any screen for context-sensitive help. Keyboard shortcuts are always shown in the footer bar.
+
+### Option 3: Open a Project Directory
+
+You can point the TUI directly at a project directory:
+
+```bash
+camel tui .
+camel tui /path/to/my-project
+```
+
+The TUI opens the directory in the Source tab so you can browse the project files immediately. When a `pom.xml` is present, the runtime is auto-detected (Spring Boot, Quarkus, or Camel Main). Press **F10** to run the project — Maven projects are launched with the appropriate goal (`spring-boot:run`, `quarkus:dev`, or `camel:run`), and plain directories are run with `camel run`.
+
+This is a quick way to explore and run any Camel project without starting it separately first.
+
+### Connecting Existing Spring Boot and Quarkus Applications
+
+The TUI auto-discovers integrations started with `camel run`. To monitor and control existing Spring Boot or Quarkus applications, add the `camel-cli-connector` dependency to your project. This is a lightweight runtime adapter that lets the TUI (and the Camel CLI) communicate with your application — all TUI features work the same way regardless of runtime.
+
+Spring Boot:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-cli-connector-starter</artifactId>
+</dependency>
+```
+
+Quarkus:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-cli-connector</artifactId>
+</dependency>
+```
+
+Once added, start your application normally and the TUI will discover it automatically. No additional configuration is needed — the connector auto-detects on the classpath and registers the application with the local Camel CLI.
+
+> **Tip**
+> When you open a Spring Boot project via **F2 > Open Project** and run it with **F10**, the TUI automatically injects the `camel-cli-connector-starter` dependency if it’s not already in your `pom.xml`. This means the TUI can monitor the application without modifying your project.
+
+See [Managing Integrations](camel-jbang-managing.md) for more details.
+
+## Tabs Overview
+
+The TUI organizes information into tabs. Press number keys **1** through **0** to jump directly to any tab, or use **Tab** / **Shift+Tab** to cycle.
+
+  
+| Key | Tab | What It Shows |
+| --- | --- | --- |
+| 1 | Overview | All running integrations and infrastructure services. Start here. |
+| 2 | Source | File explorer for your project code with syntax highlighting and inline Camel documentation. |
+| 3 | Log | Real-time application logs with search and filtering. |
+| 4 | Activity | Live exchange activity with elapsed times, endpoint sends, and failure tracking. |
+| 5 | Diagram | Visual route topology with drill-down into individual routes. |
+| 6 | Routes | Route list with message counts, throughput, and processing times. |
+| 7 | Endpoints | All registered endpoints with usage statistics. |
+| 8 | Inspect | Message history and tracing — step through exchanges processor by processor. |
+| 9 | Errors | Failures with stack traces and exchange context. |
+| 0 | More | 30+ additional tabs organized by category (see below). |
+
+The **More** menu (key **0**) opens a popup with tabs organized into groups:
+
+-   **Routing** — Browse Endpoints, Consumers, HTTP, Inflight, Producers, Route Controller
+    
+-   **Observability** — Circuit Breaker, Health, JFR, Metrics, Network Services, Exchange Events, Recovery Tasks, OpenTelemetry Spans
+    
+-   **Data** — JDBC DataSource, Kafka, SQL Query, SQL Trace
+    
+-   **JVM** — Classpath, Heap Memory Histogram, Memory Usage, Memory Leak, Process, Startup, Threads
+    
+-   **Project** — Beans, Catalog, Configuration, CVE Audit, Maven Dependencies, Type Converters, Data Type Transformers
+    
+
+Tabs appear dynamically based on what the integration uses. For example, the Kafka tab appears when a Kafka component is in use, SQL tabs when a DataSource is present, Circuit Breaker when resilience4j is in use, Spans when OpenTelemetry is enabled, and JFR when `camel-jfr` is on the classpath. The TUI adapts to show only what’s relevant to your integration.
+
+Tab badges show live counts — the Errors tab shows a red badge when errors exist and Routes shows the route count.
+
+Two panels can be opened on top of any tab: **F6** opens an [embedded shell](#_embedded_shell_f6) for running `camel` commands, and **F8** opens the [AI prompt](#_ai_integration_mcp) for asking questions about the running integrations.
+
+## Source Code Browser
+
+The Source tab (Tab 2) gives you a file explorer into your project code. The left panel shows a navigable file tree of the integration’s source directory. Select any file to view it in the right panel with full syntax highlighting.
+
+For Camel source files (YAML, XML, Java routes, and `application.properties`), press **i** to toggle inline documentation. The TUI uses the Camel catalog to look up every component, EIP, language, and data format used in your route and shows their documentation right next to the source code. For properties files, it resolves `camel.component.*` and `camel.main.*` keys to their catalog descriptions. This makes it easy to understand unfamiliar routes without leaving the terminal.
+
+Additional features:
+
+-   **Format cycling** — press **Space** to convert Camel routes between YAML, Java, and XML DSL formats
+    
+-   **Search** — press **/** to search within the source code, **n**/**N** to jump between matches
+    
+-   **Highlight** — press **h** to highlight text occurrences
+    
+-   **Go to node** — press **Ctrl+G** to open a fuzzy-search popup showing the route tree structure, matching the diagram panel format (`route[id]`, `├─to[uri]`, etc.). Select a node to jump to its source line.
+    
+-   **Resizable panels** — drag the split border with the mouse to resize the file list and viewer
+    
+
+### Source Editor
+
+Press **F4** to enter edit mode for YAML routes, `application.properties`, and other local files. The editor provides a plain-text editing experience with features designed for working with Camel routes:
+
+-   **Undo / Redo** — **Ctrl+Z** to undo, **Ctrl+Y** to redo
+    
+-   **Block operations** — **Alt+Up/Down** to move YAML list blocks up/down, **Ctrl+D** to duplicate a block
+    
+-   **Delete line** — **Ctrl+K** to delete the current line
+    
+-   **Word navigation** — **Ctrl+Left/Right** to jump by word
+    
+-   **Smart Home** — **Home** key alternates between content indent and column 0
+    
+-   **Tab completion** — press **Tab** for context-aware completion:
+    
+    -   In `application.properties`: Camel configuration options (`camel.main.*`, `camel.component.*`, etc.) and Spring Boot auto-configuration properties (`server.*`, `spring.*`, `management.*`, etc.) resolved from starter JARs in the local Maven repository — works even for stopped projects
+        
+    -   In YAML DSL routes: EIP names, component URIs, option keys and values
+        
+    
+
+The editor shows **gutter change markers** — a green background on line numbers that have been modified or added since the file was opened. This gives an at-a-glance view of what you’ve changed.
+
+Press **F7** to open a **diff view** showing all unsaved changes in a unified diff format with red/green background coloring (like `git diff`). Line numbers correspond to the actual source file positions. Press **Esc** or **F7** to return to editing.
+
+Press **F5** to save and close, or **Shift+F5** to save and continue editing.
+
+### Validate on Save
+
+When saving, the editor validates the content before writing to disk. If validation fails, the file is not saved and errors are displayed in a popup. This catches mistakes early:
+
+-   **YAML schema validation** — checks the YAML DSL structure against the Camel schema
+    
+-   **Endpoint URI validation** — validates component URIs, option names, and values against the Camel catalog
+    
+-   **Simple expression validation** — validates Simple language expressions for syntax errors, detecting the correct context (predicate vs expression) from the parent EIP
+    
+
+Validation can be toggled off in the Settings (F2 > Settings).
+
+## Activity
+
+The Activity tab shows a live feed of exchange activity — every exchange that flows through the system is captured with its route, status (OK or Failed), elapsed time, endpoint sends, and how long ago it completed.
+
+Activity data is captured when the integration runs in development mode (the `dev` profile), which is the default when running with `camel run`. Activity tracking can also be explicitly enabled via `camel.trace.activityEnabled=true` in `application.properties`. On a production profile without dev mode or explicit enablement, the tab is empty.
+
+The top panel shows aggregated statistics: total / OK / failed exchange counts, total sends, p50 / p95 / max elapsed times, and the time window of the visible entries.
+
+Select an exchange to see its details below: exchange ID, route, elapsed time, the remote endpoints called during the exchange with individual timings, and exception details if the exchange failed.
+
+Use **s** to cycle sort order, **S** to reverse, and **F5** to clear the activity list.
+
+## Route Topology Diagram
+
+The Diagram tab renders the route topology as interactive ASCII art. It shows how routes connect to each other through shared endpoints (direct, seda, kafka, etc.).
+
+![Diagram topology view](_images/jbang/camel-tui-diagram.png)
+
+### Topology View
+
+The topology shows all routes as boxes, connected by arrows:
+
+-   **Trigger routes** (timer, cron, etc.) appear at the top
+    
+-   **Downstream routes** appear below, connected by directed arrows
+    
+-   Route boxes show the route ID, the `from` endpoint, and metrics when enabled
+    
+
+Navigate between route boxes with arrow keys. When a route is selected, an **Info panel** appears on the left showing state, uptime, throughput, exchange counts, and processing times.
+
+### Drill-Down into Routes
+
+Press **Enter** on a selected route to drill down into its internal EIP structure. Each processor and EIP node is displayed with its type (colored by category), endpoint URI, and per-node statistics.
+
+Nodes that connect to other routes show a **Enter** indicator — press **Enter** to jump directly to the linked route. Navigation history is maintained as a breadcrumb stack: press **Esc** to go back to the previous route, and eventually back to the topology view.
+
+Press **t** to jump straight back to the topology from any depth.
+
+### External Endpoints
+
+Press **e** to cycle through three modes for external endpoints:
+
+-   **off** — only route-to-route connections shown
+    
+-   **edges** — external systems (kafka brokers, HTTP endpoints, databases) shown as dashed boxes
+    
+-   **all** — routes sharing an external endpoint are connected through an intermediary box
+    
+
+### Metrics and Source Code
+
+-   Press **m** to toggle metrics overlay (message counts on each node)
+    
+-   Press **c** to view the source code of the selected route, with syntax highlighting
+    
+-   Press **n** to toggle description labels on/off
+    
+
+## Message Insight
+
+The Inspect tab lets you step through an exchange processor by processor — like scrubbing through a video timeline of your message’s journey. This is the key to understanding what Camel does with your data at every step.
+
+![Inspect tab showing message history and exchange details](_images/jbang/camel-tui-inspect.png)
+
+### History of Last Exchange
+
+When you open the Inspect tab, it shows the last completed exchange. The top panel lists every processing step with:
+
+-   **Step number** and direction (-→ or ←-)
+    
+-   **Route** and **Node ID** of the processor
+    
+-   **BHPV** change indicators — letters light up in yellow when Body, Headers, Properties, or Variables changed at that step
+    
+-   **Elapsed** time per step
+    
+
+Select a step with arrow keys, and the detail panel below shows the full exchange state: body content, headers, properties, and variables at that exact point in the processing chain.
+
+### Controlling What You See
+
+Toggle sections of the detail view:
+
+-   **b** — show/hide message body
+    
+-   **h** — show/hide headers
+    
+-   **p** — show/hide exchange properties
+    
+-   **v** — show/hide exchange variables
+    
+-   **w** — toggle word wrap
+    
+-   **n** — toggle description/processor labels
+    
+
+### Waterfall View
+
+Press **g** to switch to the waterfall view — a horizontal bar chart showing how long each processor took. This makes it easy to spot bottlenecks: long bars stand out immediately. The selected step is highlighted with `>>` and processing times are color-coded from green (fast) to red (slow).
+
+### Replay on the Diagram
+
+Press **d** to overlay the message path on the route topology diagram. This is where the timeline replay comes alive:
+
+-   The diagram highlights which route and processor handled the message at each step
+    
+-   Use **Up/Down** arrows to step forward and backward through the path
+    
+-   An **Info panel** on the left shows the exchange state (body, headers, properties, variables) at the current step — values that changed from the previous step are highlighted in yellow
+    
+-   Step through the entire exchange to watch how the message payload transforms as it flows through processors, filters, and content-based routers
+    
+-   Press **Enter** on a route node to drill down into its internal EIP structure while replaying
+    
+-   Press **Esc** to go back, **t** to return to the topology view
+    
+-   Press **i** to cycle the info panel size (narrow / wide / full)
+    
+
+This is especially powerful for understanding complex multi-route flows where messages are routed through direct, seda, or kafka endpoints between routes.
+
+### Live Tracing
+
+When you run your integration with tracing enabled:
+
+```bash
+camel run my-route.yaml --trace
+```
+
+The Inspect tab gains a live trace panel showing every exchange as it flows through the system. Each exchange is listed with its timestamp, starting route, status (Processing/Done/Failed), elapsed time, and step count. Press **Enter** to drill into an exchange and see every processor step — the same step-by-step view and diagram replay work here too.
+
+Use **s** to cycle sort order (time, route, elapsed, exchange) and **S** to reverse. Press **F5** to clear captured traces.
+
+## Troubleshooting Errors
+
+The Errors tab collects failures with full stack traces and exchange context. When errors occur, a red badge appears on the tab.
+
+For deeper troubleshooting, switch to the Inspect tab and use the diagram replay (press **d**) to visualize exactly where the failure occurred:
+
+-   Failed steps are highlighted in red on the diagram
+    
+-   Step through the failing exchange to see the message state at each processor leading up to the failure
+    
+-   The Info panel shows the exception message and which node threw it
+    
+-   Compare the message body and headers before and after the failing step to understand what triggered the error
+    
+
+This combination of error details + visual diagram replay gives you a complete picture of what went wrong and why — without leaving the terminal.
+
+## OpenTelemetry Spans
+
+The Spans tab (under More, shortcut **o**) visualizes OpenTelemetry traces collected from your running integration. It shows every span with trace ID, span name, kind, status, duration, and Camel-specific context (route ID, processor ID).
+
+Run your integration with OpenTelemetry enabled:
+
+```bash
+camel run my-route.yaml --dep=camel:opentelemetry
+```
+
+Features:
+
+-   **Waterfall view** — spans displayed as a timeline showing parent-child relationships and duration bars, color-coded from green (fast) to red (slow)
+    
+-   **Trace grouping** — spans grouped by trace ID so you can follow a complete request across multiple routes and components
+    
+-   **Camel-only filter** — toggle to show only Camel-originated spans, hiding framework and library spans
+    
+-   **Sort and search** — sort by trace ID, route, status, duration, or span count; filter with text search
+    
+-   **Error highlighting** — failed spans (status ERROR) are highlighted in red
+    
+
+This is especially useful for understanding latency in multi-route integrations and for correlating Camel processing with external service calls (HTTP, database, messaging).
+
+## Process Information
+
+The Process tab (under More, shortcut **p**) shows JVM process details for the selected integration: Java version, PID, uptime, command-line arguments, and system properties.
+
+## HTTP Probe
+
+The HTTP tab (under More > Routing > HTTP) lists all HTTP/REST endpoints in your integration. Press **Enter** on any endpoint to open the built-in HTTP probe — a lightweight Postman for testing your REST services directly from the terminal.
+
+### Probe Layout
+
+The probe screen is split into a request panel (left) and response panel (right):
+
+**Request panel** — top to bottom:
+
+-   **Method** — HTTP verb cycler (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`, `HEAD`, `OPTIONS`). Use **Left** / **Right** arrows to cycle.
+    
+-   **Path** — editable path field, pre-filled from the endpoint. Supports `{xxx}` placeholders.
+    
+-   **Path Parameters** — if the path contains `{id}`, `{name}`, etc., a fill-in field appears for each placeholder. Values are substituted into the URL when sending.
+    
+-   **Query Parameters** — key-value pairs appended to the URL as `?key=value&key2=value2`. Press **+** to add a parameter.
+    
+-   **Content-Type** — cycler with common MIME types (`application/json`, `application/xml`, `text/plain`, etc.). Pre-filled from endpoint metadata when available.
+    
+-   **Accept** — cycler for the Accept header. Pre-filled from endpoint metadata.
+    
+-   **Headers** — custom request headers as key-value pairs. Press **+** to add a header.
+    
+-   **Body** — multi-line text area (6 rows) for request body. Supports JSON, XML, plain text, or `file:payload.json` to load from a file. Press **Enter** to insert newlines.
+    
+-   **History** — previously sent requests with status codes and elapsed times. Press **Enter** to replay a request, restoring all fields.
+    
+
+**Response panel** — shows the response body with status code, elapsed time, and response headers. Press **p** to toggle pretty-printing for JSON and XML responses.
+
+The resolved URL is shown at the top of the request panel as a clickable hyperlink that you can copy for use with `curl` or other tools.
+
+### Sending Requests
+
+Press **F5** to send the request (same pattern as the SQL tab). The response appears in the right panel. While sending, the status shows a spinner.
+
+### Keyboard Shortcuts (Probe)
+
+ 
+| Key | Action |
+| --- | --- |
+| F5 | Send request |
+| Enter | Insert newline (body) or advance to next field |
+| Tab / Shift+Tab | Next / previous field |
+| Left / Right | Cycle method, Content-Type, or Accept values |
+| + | Add query parameter or header |
+| Backspace | Remove empty query parameter or header |
+| p | Toggle pretty-print response |
+| Esc | Exit probe mode |
+
+## Actions Menu (F2)
+
+Press **F2** to open the actions menu with quick access to common operations:
+
+ 
+| Action | Description |
+| --- | --- |
+| Send Message | Send a test message to any route with custom body, headers, and exchange pattern. |
+| Run an example…​ | Browse and launch built-in Camel examples from the catalog. |
+| Open Project…​ | Open a project directory in the Source tab for browsing and editing. Run with F10. |
+| Run from folder…​ | Run routes from a local directory. |
+| Run Dev/Infra Service…​ | Start infrastructure services (Kafka, databases, etc.) in Docker. |
+| Browse Files | Browse the integration’s source files with syntax highlighting. |
+| Run Doctor | Check your environment: Java version, JBang, Maven, Docker, port conflicts, disk space. |
+| Reset Stats | Reset all statistics and metrics for the selected integration. |
+| Stop All | Stop running integrations and/or infrastructure services. |
+| Settings…​ | Change the theme, the starting tab, and the default run-from-folder. |
+| Take Screenshot | Export the current screen as SVG, text, or ANSI art. |
+| Start/Stop Tape Recording | Record your session as a `.tape` file for demos. |
+
+### Sending Test Messages
+
+Select **Send Message** from the F2 menu (or press **F2** then choose it):
+
+![Send Message view with body editor and response area](_images/jbang/camel-tui-send.png)
+
+-   **Choose the route** — use left/right arrows to pick the target route
+    
+-   **Enter the body** — type the message body, or use `file:path/to/file` to load from a file
+    
+-   **Add headers** — press **+** to add headers as key=value pairs
+    
+-   **Set exchange pattern** — toggle between InOnly (fire-and-forget) and InOut (request/reply)
+    
+-   Press **Enter** to send
+    
+
+For InOut exchanges, the response is displayed below with status, elapsed time, response headers, and body. Press **P** to toggle pretty-printing for JSON/XML responses.
+
+### Doctor
+
+The Doctor checks your development environment and reports issues:
+
+-   Java version (17+ required, 21+ recommended)
+    
+-   Camel catalog availability
+    
+-   JBang installation
+    
+-   Maven repository connectivity
+    
+-   Docker/Podman availability
+    
+-   Common port conflicts (8080, 8443, 9090)
+    
+-   Disk space in temp directory
+    
+
+## Embedded Shell (F6)
+
+Press **F6** to open an embedded Camel JBang shell at the bottom (or top) of the screen. Any `camel` command can be run there — `camel run`, `camel infra run kafka`, `camel cmd send`, `camel get` and so on — without leaving the dashboard, and the tabs keep updating while the command runs. Press **F6** again to close the panel, **Shift+F6** to cycle its height, **PgUp**/**PgDn** to scroll the output and **↑**/**↓** to recall earlier commands (see [Input history](#_input_history)).
+
+The shell and the AI prompt panel (**F8**) share the same space: opening one closes the other. Both open at the bottom by default; see **Panel Position** in [Settings](#_settings).
+
+## Theme
+
+The TUI ships with 15 color themes defined as CSS stylesheets:
+
+-   **Dark themes** — Dark (default), Dracula, Nord, Solarized Dark, Gruvbox Dark, Catppuccin Mocha, Tokyo Night, Rosé Pine, Kanagawa, Everforest, Monochrome, CRT
+    
+-   **Light themes** — Light, Solarized Light, Catppuccin Latte
+    
+
+Open the **F2** actions menu and choose **Settings…​** to switch themes, or pass `--theme=<name>` on the command line (e.g., `--theme=tokyo-night`). The CLI value overrides the persisted preference from `.camel-cli.properties`; runtime toggles and the config file still apply on later launches when `--theme` is omitted.
+
+The brand orange accent is consistent across all themes; status colors (success, warning, error) and borders adapt for readability on each palette.
+
+Your choice is remembered: it is saved as `camel.tui.theme` in `.camel-cli.properties` and restored the next time you open the TUI.
+
+## Settings
+
+Open the **F2** actions menu and choose **Settings…​** to change TUI preferences in one place:
+
+-   **Theme** — cycle through 15 available themes (applied immediately on save).
+    
+-   **Starting Tab** — the tab shown when the TUI launches; any tab (primary or under **More**) can be chosen. Defaults to **Overview**.
+    
+-   **Select Tab** — the tab to switch to when selecting an integration from the Overview tab. Defaults to **Log**.
+    
+-   **Confirm** — whether destructive actions (quit, stop, restart, stop/start routes) show a confirmation dialog before executing. Defaults to **on**. Kill (**X**) always confirms regardless of this setting.
+    
+-   **Default Folder** — the folder pre-filled in **Run from Folder**. The most recently used folder still takes precedence; this default is used only when there is no remembered folder.
+    
+-   **Panel Position** — where the shell (**F6**) and AI (**F8**) panels open: **bottom** (default) or **top**.
+    
+-   **Panel Space** — whether those panels push the tab content aside (**move**, default) or are drawn on top of it (**overlay**), so the tab keeps its full height underneath.
+    
+
+Use **↑**/**↓** to move between rows, **Space** (or **←**/**→**) to cycle the theme and tab settings, type to edit the default folder, **Enter** to save, and **Esc** to cancel.
+
+Settings are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.selectTab`, `camel.tui.confirmActions`, `camel.tui.defaultFolder`, `camel.tui.panelPosition`, `camel.tui.panelSpace`, `camel.tui.shell.history`, `camel.tui.ai.provider`, `camel.tui.ai.model`, `camel.tui.ai.url`, `camel.tui.ai.tools`, `camel.tui.ai.promptHistory`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` is treated as a project-level override and stays local, while every other key defaults to the global `~/.camel-cli.properties`. This means a project can deliberately pin a starting tab in its local config without redirecting your personal theme into the project file. See [Configuration](camel-jbang-configuration.md) for details on the global and local files.
+
+### Input history
+
+The embedded shell (**F6**) and AI prompt (**F8**) keep a recall list for the command line and prompt respectively. Use **↑**/**↓** on the input line to walk previous entries. Limits are configured with `camel.tui.shell.history` and `camel.tui.ai.promptHistory` in `.camel-cli.properties` (default `100` each; set to `0` to disable recall and persistence). Shell history is stored in `~/.camel/tui-shell.history`; AI prompt history in `~/.camel/tui-ai-prompt.history`.
+
+### Pasting
+
+Both panels accept text pasted from the terminal (for example a model name such as `qwen3.6:35b-a3b` after `/model`). In the AI prompt, line breaks in the pasted text are collapsed to spaces so the paste stays a single prompt you can review before pressing **Enter**. In the shell, line breaks are sent as **Enter**, so a multi-line paste runs line by line as in a regular terminal.
+
+## Keyboard Shortcuts
+
+### Global (All Tabs)
+
+ 
+| Key | Action |
+| --- | --- |
+| **1** - **0** | Jump to tab by number |
+| **Tab** / **Shift+Tab** | Next / previous tab |
+| **F1** / **?** | Context-sensitive help (toggle) |
+| **F2** | Actions menu |
+| **F3** | Switch between integrations (when multiple running) |
+| **Ctrl+F** | Browse the selected integration’s source files (the Overview tab also has plain **f**) |
+| **F6** / **Shift+F6** | Toggle the embedded shell panel / cycle its height |
+| **F8** / **Shift+F8** | Toggle the AI prompt panel / cycle its height |
+| **F10** | Run menu (run, stop, restart, kill) |
+| **Shift+F5** | Take screenshot |
+| **Ctrl+C** / **Q** | Quit |
+| **Esc** | Close popup / go back / return to Overview |
+
+### Source Tab
+
+ 
+| Key | Action |
+| --- | --- |
+| **Up/Down** | Navigate files (left panel) or scroll source (right panel) |
+| **Enter** | Open file or directory |
+| **Backspace** | Go to parent directory |
+| **Tab** | Toggle focus between file list and source viewer |
+| **Space** | Cycle format (YAML/Java/XML) for Camel routes |
+| **i** | Toggle inline Camel documentation |
+| **/** | Search in source |
+| **h** | Highlight text |
+| **n** / **N** | Next / previous search match |
+| **w** | Toggle word wrap |
+| **p** | Toggle plain mode (borderless) |
+| **Ctrl+G** | Go to node (fuzzy search popup) |
+| **Esc** / **c** | Close source viewer |
+| **F4** | Enter edit mode |
+
+#### Edit Mode
+
+ 
+| Key | Action |
+| --- | --- |
+| **Ctrl+Z** | Undo |
+| **Ctrl+Y** | Redo |
+| **Alt+Up/Down** | Move YAML block up/down |
+| **Ctrl+D** | Duplicate block |
+| **Ctrl+K** | Delete current line |
+| **Ctrl+Left/Right** | Word navigation |
+| **Home** | Smart home (content indent / column 0) |
+| **Tab** | Context-aware completion |
+| **F7** | Diff view (unsaved changes) |
+| **F5** | Save and close |
+| **Shift+F5** | Save and continue editing |
+| **Esc** | Cancel (discard prompt if unsaved changes) |
+
+### Diagram Tab
+
+ 
+| Key | Action |
+| --- | --- |
+| **Arrow keys** | Navigate between route boxes (topology) or EIP nodes (drill-down) |
+| **Enter** | Drill down into selected route / jump to linked route |
+| **Esc** | Go back (previous route or topology) |
+| **t** | Jump to topology view |
+| **m** | Toggle metrics overlay |
+| **e** | Cycle external endpoints (off / edges / all) |
+| **n** | Toggle description labels |
+| **c** | View route source code |
+
+### Inspect Tab
+
+ 
+| Key | Action |
+| --- | --- |
+| **Up/Down** | Navigate between steps |
+| **b** / **h** / **p** / **v** | Toggle body / headers / properties / variables |
+| **w** | Toggle word wrap |
+| **g** | Toggle waterfall view |
+| **d** | Toggle diagram replay mode |
+| **n** | Toggle description labels |
+| **F5** | Refresh / clear traces |
+
+## Highlighted Features
+
+Beyond the core tabs described above, the TUI includes several specialized screens worth highlighting.
+
+### CVE Audit
+
+The CVE Audit tab (under More > Project) scans all Maven dependencies on your integration’s classpath against the [OSV.dev](https://osv.dev) vulnerability database. It queries every JAR using the OSV batch API and displays known vulnerabilities grouped by severity (Critical, High, Medium, Low).
+
+Each vulnerability shows the CVE ID, affected artifact, the direct dependency that pulls it in (VIA column), and a summary. Select a CVE to see full details including CVSS vector, published date, fixed versions, and aliases. Results are cached globally — switching integrations that share JARs is instant.
+
+### Kafka
+
+The Kafka tab (under More > Data) provides a dedicated view for Kafka consumers and their connectivity status. It shows consumer group details, topic assignments, partition offsets, and reconnection state. When a broker connection drops, the Recovery Tasks tab shows the reconnection task with its Waiting/Attempting status, retry count, and error details.
+
+### SQL Query and SQL Trace
+
+When your integration includes a DataSource, two SQL tabs appear under More > Data:
+
+-   **SQL Query** — an interactive SQL console where you can write and execute queries against any DataSource in your integration. Results are displayed as a formatted table with column types.
+    
+-   **SQL Trace** — captures and displays SQL statements executed by your routes in real-time, showing query text, execution time, and the route that triggered them.
+    
+
+### Memory Leak Detection
+
+The Memory Leak tab (under More > JVM) uses Java Flight Recorder (JFR) to diagnose memory leaks in your running integration. It runs two sequential recordings and compares object retention trends, classifying each class as growing, stable, shrinking, new, or gone. This is lightweight and safe for production use.
+
+### JFR Runtime Profiling
+
+The JFR tab (under More > Observability) gives you a lightweight profiling view of your running integration using Java Flight Recorder. JFR is built into the JVM with very low overhead, making it suitable for near-production use cases where you need timing data without impacting throughput.
+
+Start your integration with JFR runtime instrumentation enabled:
+
+```bash
+camel run my-route.yaml --jfr
+```
+
+The JFR tab shows the recording status and event configuration. Press **F5** to take a snapshot of the active recording — the TUI aggregates all Camel events and presents them in five views:
+
+-   **Routes** (key **1**) — per-route totals, failure counts, and min/mean/max duration
+    
+-   **Processors** (key **2**) — per-processor statistics with type and owning route, sorted by slowest first
+    
+-   **Endpoints** (key **3**) — per-endpoint send statistics with duration
+    
+-   **Failures** (key **4**) — recent exchange failures with exception type and message
+    
+-   **Redeliveries** (key **5**) — recent redelivery attempts with attempt and max counts
+    
+
+Press **Enter** on a route to drill down into its processors filtered by that route. Press **s** to cycle sort columns, and **Esc** to go back.
+
+Each snapshot is a point-in-time read — the recording keeps running, so you can press **F5** again at any time to see updated statistics as more messages flow through the system.
+
+### Catalog
+
+The Catalog tab (under More > Project) lets you browse the full Camel component catalog from within the TUI. Search for components by name, view their documentation, options, and supported headers — useful when building routes and you need to check what options a component supports.
+
+## AI Integration (MCP)
+
+The TUI includes an embedded [MCP](https://modelcontextprotocol.io/) (Model Context Protocol) server that lets AI coding assistants interact with the dashboard.
+
+The TUI is fully functional on its own — AI integration is entirely optional.
+
+### Choosing an AI provider
+
+Press **F8** to open the built-in AI prompt panel. The panel auto-detects a provider in this order:
+
+1.  `ANTHROPIC_API_KEY` → Anthropic Claude
+    
+2.  `CLOUD_ML_REGION` + `ANTHROPIC_VERTEX_PROJECT_ID` → Vertex AI
+    
+3.  `AZURE_OPENAI_API_KEY` + `AZURE_OPENAI_ENDPOINT` → Azure OpenAI
+    
+4.  `GEMINI_API_KEY` → Google Gemini
+    
+5.  `OPENAI_API_KEY` → OpenAI
+    
+6.  `LLM_API_KEY` + optional `LLM_BASE_URL` → any OpenAI-compatible server
+    
+7.  Ollama at `localhost:11434` → local Ollama (auto-detected, no key needed)
+    
+
+Press **Ctrl+P** inside the AI panel to switch provider or model at any time.
+
+A question can span several lines: **Ctrl+N** starts a new line (terminals deliver **Shift+Enter** and **Alt+Enter** as a plain **Enter**, so they cannot be used), pasted text keeps its line breaks, and **Up** and **Down** move between the lines of the question before they recall earlier prompts. **Enter** sends it.
+
+The same guidance, together with the provider that is currently detected, is available inside the TUI via **F2** → _AI & MCP_ → _Setup AI_. Use **F2** → _Settings_ to pin a provider, model or base URL (`camel.tui.ai.provider`, `camel.tui.ai.model`, `camel.tui.ai.url`) regardless of the environment. `camel.tui.ai.acp.command` sets the command line of the custom ACP agent (`acp:custom`).
+
+#### Using Ollama (local, no API key)
+
+Install Ollama natively for best performance — the native binary uses GPU acceleration (Metal on macOS, CUDA/ROCm on Linux):
+
+```bash
+# macOS
+brew install ollama
+
+# Linux
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Pull a model — then open the TUI and press F8
+ollama pull qwen3.6:35b-a3b
+camel tui
+```
+
+Ollama at `localhost:11434` is auto-detected. No configuration needed.
+
+> **Important**
+> The F8 AI panel works by invoking built-in tools to inspect your running Camel process. Models smaller than ~14B do not reliably call tools and answer from training knowledge instead. Use at least a 14B model. Prefer a mixture-of-experts model such as `qwen3.6:35b-a3b`: with only 3B parameters active per token it processes the tool-heavy prompt many times faster than a dense 27B/32B model, so answers start in seconds instead of a minute.
+
+**Models that work well** (tool-calling capable, ≥14B, default Q4\_K\_M quantization):
+
+  
+| Model | RAM | Notes |
+| --- | --- | --- |
+| `qwen3.6:35b-a3b` | ~23 GB | Recommended: fastest prompt processing, needs 32 GB+ |
+| `qwen2.5:14b` | ~9 GB | Minimum for 16 GB machines |
+| `qwen3.6:27b` | ~18 GB | Strong dense model, several times slower prompt processing |
+| `qwen2.5:32b` | ~20 GB | Good quality, slow prompt processing |
+| `hermes3:70b` | ~43 GB | Excellent tool calling, needs 64 GB+ |
+| `llama3.3:70b` | ~43 GB | Best open model, needs 64 GB+ |
+> **Note**
+> `camel infra run ollama` runs Ollama in Docker and bypasses GPU acceleration, making inference significantly slower. Native install is preferred for development.
+
+> **Note**
+> On Apple Silicon, use the default (GGUF) tags rather than the `-mlx` tags. The Ollama MLX engine cannot yet reuse the cached prompt for Qwen 3.x models, so every question re-processes the whole prompt, while the default engine reuses it and only processes what is new.
+
+#### Tool set for local models
+
+Every question sends the definitions of the `tui_*` tools the model may call, and a local model pays for each of them in prompt-processing time. The panel therefore sends only the core set of tools (state, tables, logs, errors, diagrams, topology, processor details, catalog docs, traces, spans, route control, sending messages, source files, infra services, navigation, log level and filters) to Ollama and to any provider on `localhost`, which roughly halves the prompt. Hosted providers get every tool, including the drawing, animation and automation tools. Use `/tools full` in the panel to send all tools to a local model too, `/tools core` to trim the set for a hosted one, pick **AI Tools** in **F2 → Settings**, or set `camel.tui.ai.tools` in `.camel-cli.properties`. Ollama requests also ask the server to keep the model loaded for 30 minutes and use a 32k context window (`OLLAMA_CONTEXT_LENGTH` overrides it), so follow-up questions reuse the cached prompt instead of reloading the model.
+
+#### Using an OpenAI-compatible local server
+
+Set `LLM_API_KEY` and `LLM_BASE_URL` to connect to any OpenAI-compatible server (LM Studio, vLLM, llama.cpp, GPT4All, …):
+
+```bash
+export LLM_API_KEY=any-value
+export LLM_BASE_URL=http://localhost:1234
+camel tui
+```
+
+`OPENAI_BASE_URL` is also accepted as an alternative to `LLM_BASE_URL`.
+
+The panel uses the first model the server lists on `/v1/models`. To use another one, run `/model <name>` in the panel (`/model` alone lists what the server offers), set **AI Model** in **F2 → Settings**, or set `camel.tui.ai.model`. The model must support tool calling, otherwise the panel answers from training data instead of inspecting your integration. When a request fails, the panel shows the HTTP status and the server’s error message, for example a model that the server does not host.
+
+### Why This Matters
+
+When an AI agent connects to the TUI via MCP, it gains the same level of visibility that you have — and can act on it. The agent can:
+
+-   **Read everything** — route topology, statistics, message traces, errors, logs, source files, health checks, and JVM metrics
+    
+-   **Navigate and control** — switch tabs, select routes, start/stop routes, send test messages, change log levels
+    
+-   **Teach and present** — the AI can control the TUI screen to walk you through concepts, highlight areas of interest, draw annotations, and take screenshots. It can circle a failing route, draw arrows between connected endpoints, and add explanatory text labels — turning the TUI into a live whiteboard for pair-programming
+    
+-   **Self-troubleshoot** — when something fails, the AI can autonomously inspect the error, read the message trace, correlate with route statistics, and produce a diagnostic report with annotated screenshots showing exactly where and why the failure occurred
+    
+
+### Enabling MCP
+
+```bash
+camel tui --mcp
+```
+
+This starts an MCP server on `localhost:8123` (configurable with `--mcp-port`). The server is bound to `127.0.0.1` only — it never listens on external interfaces.
+
+When MCP is active, the TUI footer shows the connection status. Use **F2** → _MCP Info_ to see server details and _MCP Log_ to view the tool call history.
+
+### Status document resources
+
+Every running integration keeps a full status document in `~/.camel/<pid>-status.json`, written once a second by `camel-cli-connector`. The tabs show a digest of it; the MCP server exposes the whole document as resources so an agent can fetch exactly the section it needs instead of paging through tabs:
+
+-   `camel://log/<pid>` — the last 200 lines of the integration’s log (`~/.camel/<pid>.log`); `camel://log/<pid>?lines=<n>` for a different tail length (up to 5000). The Log tab shows only a window of this file, so an agent that needs to know which lines the user is looking at should use the `tui_get_screen` tool instead.
+    
+-   `camel://status/<pid>` — the whole document
+    
+-   `camel://status/<pid>/<section>` — one top-level section, for example `context` (name, version, state, uptime, start timestamp, statistics), `runtime`, `routes`, `endpoints`, `healthChecks`, `properties`, `main-configuration`, `routeController`, `memory`, `threads`, `gc` or `events`
+    
+
+`resources/list` enumerates the log, the document and its sections for every monitored integration, and `resources/templates/list` describes the URI shapes. The same data is available to the F8 AI panel (and as an MCP tool) through `tui_get_status`, which takes a `section` argument and returns that section only; pass `sections` to list what the document contains. Sections such as `events` can be large, so ask for the one you need.
+
+### AI panel slash commands
+
+When the AI panel is open, input that starts with `/` runs a local panel command instead of sending a question to the configured AI provider. `/provider` and `/model` are unavailable while a response or command is already in progress; the panel shows a message asking you to wait.
+
+Press **Tab** to complete a command name. After `/model` **Tab** completes the model name against the models the current provider reports (the list is fetched in the background on the first press, so press **Tab** again once it has arrived), and after ``/tools ` it completes `auto``, `core` or `full`. With several matches **Tab** fills in the common prefix and then cycles through them; **Shift+Tab** cycles backward.
+
+ 
+| Command | Description |
+| --- | --- |
+| `/help` (`/h`) | Show the available slash commands. |
+| `/provider` (`/p`) | Open the provider switcher. |
+| `/model [model-name]` (`/m`) | Show the current model, or switch the session model. |
+| `/write [confirm|auto|live]` (`/w`) | Show or switch how file writes by the model (`camel_write_file`) are handled. `confirm` (default) shows the confirm dialog for every write, whatever the model passes; `auto` lets the model skip the dialog with `confirm=false`; `live` replays the edit in the Source editor so you watch it happen (see below). The mode lasts for the session. |
+| `/tools [auto|core|full]` (`/t`) | Show which tool set is sent to the model, or switch it. `auto` (default) sends the core set to local providers and every tool to hosted ones; the choice is saved as `camel.tui.ai.tools`. |
+| `/context` (`/ctx`) | Show what the next request costs: provider and model, tool set, static prefix size, history size and the session total. Useful with local models, where prompt size is time. |
+| `/compact` | Shrink the conversation history sent to the model right away: older tool results are cut to their first lines and the oldest turns are dropped. With a hosted provider the panel does this automatically after each answer for all but the latest turn. With Ollama or another `localhost` provider it waits until the history grows past roughly 16k tokens, because a local server can reuse its cached prompt only while the conversation is appended to, and rewriting the history would make it process the whole prompt again. |
+| `/retry` | Send the last question again, starting from a clean turn in the model history. |
+| `/usage [reset]` (`/u`) | Print the AI usage so far in the chat: requests, tokens in and out, average latency, one line per model (and per route when GenAI spans are observed), and the last request. **Ctrl+U** opens the full view with the per-question chart. `/usage reset` clears the counters and the chart without touching the conversation; GenAI spans recorded before the reset are hidden from the view as well. |
+| `/copy` (`/y`), `/export` (`/e`) | The same as **Ctrl+Y** (copy the last response) and **Ctrl+E** (export the conversation to Markdown). Copying is code-aware: when the response has one fenced code block only the code is copied (without the fences and the prose, which is what selecting it with the mouse cannot give you because of the panel borders); when it has several, a picker lists the blocks with their language and size plus the whole response; when it has none, the whole response is copied. |
+| `/prompt` | Show the system prompt the panel sends with every request. |
+| `/clear` (`/c`) | Clear the AI conversation, usage counters, and model context without changing the provider or model. |
+| `/close` | Close the AI panel. |
+| `/quit` (`/exit`, `/q`, `/x`) | Exit the TUI. |
+| `/run <camel run args>` (`/r`) | Run `camel run` with the provided arguments. |
+| `/infra <camel infra args>` (`/i`) | Run `camel infra` with the provided arguments. |
+| `/send <endpoint> <message text | @file>` (`/s`) | Send a message through `camel cmd send`. A body that is exactly one `@file` token is sent as `file:<path>`; inline `@file` text is sent literally. |
+
+Submitted prompts (including slash commands) participate in AI prompt history when `camel.tui.ai.promptHistory` is not `0`. Use **↑**/**↓** on the prompt line to recall them.
+
+Press **Ctrl+U** while the AI panel is open to toggle the AI Usage view. It shows token consumption from the embedded AI prompt (**TUI ask**) and from LLM calls made by the monitored integration (**integration**), the latter taken from OpenTelemetry GenAI spans when observability is enabled on the integration. The **Tokens per question** chart has one bar per question you asked, so a question that needed several tool calls shows as a single bar. The summary line splits the session time into **AI time** (waiting for the model) and **Tool time** (running the TUI tools the model called, with the number of calls), the model table has an **AVG** latency column, and the **Time per question** chart next to the token chart shows the two side by side for each question, so you can see whether a slow answer was the model or the tools.
+
+### AI log
+
+Every request the panel makes is recorded in the AI log (**F2** → _AI & MCP_ → _AI Log_, or the `tui_get_ai_log` tool): the question, each tool the model called with its arguments, the result with how long the tool took, and a `Response` line with the elapsed time and the token counts. When the model called tools, the elapsed time is broken down into the time spent waiting for the model and the time spent in tool calls (for example `5.2s, ai 4.1s, tools 1.1s/3`). The `Response` line also shows whether the provider reused its cached prompt. For Ollama it prints the prompt-processing (`prefill`) and generation (`gen`) time reported by the server — a prefill of a fraction of a second on a 10k-token prompt means the cache was hit, while a prefill of several seconds means the whole prompt was processed again. For OpenAI, Anthropic and Gemini it prints the number of `cached` input tokens the provider reported. Use it to check that follow-up questions are cheap before blaming the model for being slow.
+
+### Using a coding agent (ACP)
+
+Instead of talking to a model directly, the AI panel can hand the conversation to an external coding agent that speaks the [Agent Client Protocol](https://agentclientprotocol.com) (ACP). The TUI starts the agent as a subprocess, gives it the TUI’s own MCP server, and shows the agent’s answer, tool calls and questions in the panel. The agent drives the TUI through the same `tui_*` tools that external MCP clients use, and can also read and edit your route sources with its own tools.
+
+Press **Ctrl+P** in the AI panel and pick one of the agents:
+
+  
+| Provider | Command the TUI runs | Before the first question |
+| --- | --- | --- |
+| `acp:claude` | `npx -y @agentclientprotocol/claude-agent-acp` | log in with the `claude` CLI, or set `ANTHROPIC_API_KEY` |
+| `acp:codex` | `npx -y @agentclientprotocol/codex-acp` | `codex login`, or set `OPENAI_API_KEY` |
+| `acp:bob` | `bob acp` | set `BOBSHELL_API_KEY`, or run `bob` once to sign in |
+| `acp:qwen` | `qwen --acp` | set `OPENAI_API_KEY` and `OPENAI_BASE_URL` |
+| `acp:opencode` | `opencode acp` | `opencode auth login` |
+| `acp:dsh` | `npx -y @deepseek-ai/dsh --profile acp` | configure the model key in DeepSeek Harness (developer preview) |
+| `acp:custom` | the value of `camel.tui.ai.acp.command` | depends on the agent |
+
+The `npx` entries need Node.js 22 or newer (the Claude adapter requires it). The agent starts with your first question; the first start can take a while when `npx` has to download the adapter. Once the session is open the panel shows a two-row header with the agent’s coloured glyph, the agent’s name and version, the session id, the working directory and the number of commands it advertises. Use **F2** → _Settings_ to make an agent the default provider or to set the custom command (a plain command line split on whitespace, no quoting).
+
+The MCP server is started automatically on a random localhost port when an agent needs it, so `--mcp` is not required. **F2** → _MCP Info_ shows the port and the tool calls the agent makes. Like the server started with `--mcp`, it is bound to `127.0.0.1` with no authentication, and it rejects requests that carry an `Origin` header (so a web page cannot reach it) or that are not JSON.
+
+Permissions: calls to the TUI’s read-only tools (the `tui_get_*` tools, catalog documentation, expression evaluation, locate, validate) are approved without asking. So is `camel_write_file` while the write mode is `confirm` or `live`, because the TUI itself asks before the file is touched (the diff dialog or the live replay in the Source editor); with `/write auto` the permission popup is the only question and stays. A tool that changes anything else, such as `camel_control`, `tui_send_message` or `tui_execute_sql`, opens the same popup as any other request; answering "Always allow" makes it a one-time question per tool. For anything else the agent wants to do, such as editing a file with its own tools or running a command, a popup shows the agent’s options; **Enter** selects, **Esc** rejects that one call and lets the turn continue, and **Ctrl+C** cancels the whole turn. The preamble tells the agent to edit route sources through `camel_write_file` rather than its own file tools, so that you see the diff or watch the edit; when it still asks to edit a file directly, the popup says so and **Esc** sends it back to `camel_write_file`. "Always allow" choices are remembered by the agent for the session. The model, reasoning settings and any "always allow" rules are configured in the agent, not in the TUI; `/model` only reports the agent in use.
+
+The agent’s own slash commands, for example Claude Code skills, appear as `/agent:<name>` in the `/` completion hints once the session is open; `/agent:` alone lists them. `/agent:<name> …` always reaches the agent, even when the name is also a panel command (`/agent:clear` clears the agent’s context, `/clear` the panel). Anything else starting with `/` that is not a panel command is sent to the agent as is.
+
+The panel’s own `/retry` resends the last question (or `/agent:` command) to the agent. `/context` shows the agent, its session, working directory, MCP server and the size of the preamble instead of a model history, and `/prompt` shows that preamble, sent once per session ahead of the first prompt. `/compact` and `/tools` do not apply while an agent is selected: the agent manages its own history and reaches the camel-tui tools through the MCP server; the panel says so and points to `/agent:compact` when the agent offers that command.
+
+If the agent asks for authentication and can sign you in itself, the TUI triggers that flow once; otherwise the panel shows the login command from the table above.
+
+> **Note**
+> Gemini CLI, Google Antigravity and Pi are not offered as presets. Gemini CLI stopped serving personal Google accounts in June 2026, Antigravity’s CLI has no ACP mode yet, and Pi’s community adapter does not pass MCP servers through. Any ACP agent can still be tried through `acp:custom`.
+
+### Connecting an AI Agent
+
+To connect Claude Code to the TUI, add the MCP server to your project configuration (`.mcp.json` in your project root):
+
+```json
+{
+  "mcpServers": {
+    "camel-tui": {
+      "type": "url",
+      "url": "http://localhost:8123/mcp"
+    }
+  }
+}
+```
+
+### What AI Agents Can Do
+
+The MCP server exposes two kinds of tools. The `camel_` tools are the Camel authoring set shared with the `camel mcp` server (see [Camel MCP Server](camel-jbang-mcp.md)): catalog documentation with the endpoint URI rules and the simple syntax (`camel_catalog_doc`, `camel_catalog_find`), source validation (`camel_validate_source`), reading and writing the source files (`camel_get_files`, `camel_write_file`), running an integration in dev mode and controlling it (`camel_run`, `camel_control`), its log and failed exchanges (`camel_get_log`, `camel_get_errors`), expression evaluation (`camel_eval_expression`) and error diagnosis (`camel_error_diagnose`). They are defined once in the Camel CLI, so an agent gets the same tools, names and answers through either server; in the TUI they work on the selected integration unless a `directory` or `name` argument says otherwise, and a write goes through the TUI’s confirm dialog or live replay. The `tui_` tools are the ones only the TUI can offer, organized by purpose:
+
+-   **Observe** — read the screen, get structured state, query tables/logs/errors/traces/topology/diagram/files, list the running infra services (brokers, databases) and read their logs
+    
+-   **Navigate** — switch tabs, select integrations, select routes, send keystrokes, apply filters
+    
+-   **Act** — send test messages to endpoints, start/stop/restart routes, change log levels, list and launch the bundled examples, start/stop/restart infra services, run any entry of the **F2** actions menu by its label
+    
+-   **Edit** — write a source file in the integration’s source directory (`camel_write_file`), see below
+    
+-   **Annotate** — locate text and diagram nodes by coordinates, draw shapes (boxes, highlights, arrows, underlines, text labels), show captions with typewriter animation
+    
+-   **Present** — take screenshots, record tape sessions, control demo pacing
+    
+
+### Editing source files from an AI agent
+
+The TUI is for prototyping, human and AI together, so an agent (the built-in **F8** panel or an external MCP client) can change the routes it is looking at. `camel_get_files` tells the agent where the sources are, which differs with how the integration was started (plain files, `--source-dir`, an example extracted to a temporary folder, or an exported project), and whether editing makes sense: `devMode` (changes are reloaded automatically), `temporary` (a copy that is lost when the integration stops) and an `editing` hint. `camel_write_file` then writes the complete new content of a file in that directory.
+
+Every write is confirmed in the TUI first: a dialog names the file, the directory and the size of the change (`+3 -1` lines); press **d** to see the change as a unified diff, with removed lines on red and added lines on green like the Source tab’s **F7** diff, and scroll it with the arrow keys; **Enter**, **Esc** or **d** returns to the summary. In the summary **Enter** applies the write and **Esc** rejects it, in which case the agent is told that the file is unchanged and not to retry. The dialog cannot be skipped by the agent on its own: `confirm=false` is honoured only after you switched to `/write auto` in the AI panel (the default `/write confirm` shows the dialog for every write, whatever the agent passes). Only plain file names in the source directory are accepted; the tool cannot write elsewhere, and there is no git integration, so the worst case is a wrong route file in a folder you are watching.
+
+Before writing, an agent can check its content with `camel_validate_source`, which runs the same checks as the Source tab’s save: YAML routes against the Camel YAML DSL schema (a misspelled option such as `logLevel` instead of `loggingLevel` is reported) plus endpoint URIs and simple expressions, and `.properties` files against the catalog of `camel.*` and Spring Boot options. `camel_write_file` runs that validation itself and refuses to write an invalid file, returning the errors instead, so a model fixes them rather than the user finding them in the log after the reload (`validate=false` writes anyway). Both tools are part of the core tool set, so local models (Ollama) get them as well.
+
+Simple expressions get two more helpers, because they are what a small model gets wrong most often (functions belong inside the `${…​}` placeholder, operators between placeholders: `${header.user} ?: 'Guest'`, not `${header.user ?: 'Guest'}`). `camel_catalog_doc` for the `simple` language returns those syntax rules together with the catalog’s functions and operators (their count and names by group, or with `optionsFilter` the matching ones with parameters and examples), and `docPage` serves the operators, functions, OGNL and advanced documentation pages. `camel_eval_expression` evaluates an expression inside the running integration, like `camel cmd eval`, or locally when no integration is selected, and returns the value or the parser error, so the agent can try an expression before it answers or writes it. Component lookups get the same treatment for endpoint URIs: every endpoint option says whether it is part of the URI path or a query parameter, and the result spells out the URI rules for that component (its path options, the `?option=value&option=value` form, the YAML `uri` plus `parameters` form, placeholders, `RAW()`, and that component options belong in `application.properties`). With `endpoint` the same tool checks a URI against the catalog, the way the YAML validator does on a write: unknown options with the closest real names, values that are not among the allowed ones, missing path parts, consumer options on a producer endpoint and the like, plus the options the URI uses with their documentation, so the agent can check an endpoint before it answers or writes it.
+
+#### Watching the AI edit (live mode)
+
+With `/write live` the change is not shown as a diff but replayed in the Source tab’s editor: the AI panel hides so the editor has the whole screen, the file opens in edit mode, the cursor jumps to the first change, removed lines disappear and added lines are typed at a readable pace. The AI panel comes back once you have saved or discarded. This is meant for learning Camel and the YAML DSL: you see the edit land in the full, syntax-highlighted file and can look up what the new lines mean. Every change is its own step, even when changes sit a line apart, and between them the replay pauses: **Enter** continues with the next change, **Esc** stops (what was typed stays in the editor), any other key finishes the current change at once, and **F4** (the editor’s edit key) hands the keyboard to you so you can edit yourself; **F9** then continues with the remaining changes. Those are located by their surrounding lines, so your own edits elsewhere in the file shift them rather than break them; a change whose surroundings you edited is skipped and reported to the agent. When the replay is over you review with **F7** and save with **Ctrl+S** or **F5**, which is the confirmation, or discard with **Esc**. The agent waits until then and is told what was applied, what was skipped, and the content of the saved file if you changed it.
+
+While the replay pauses you can also ask the agent about the change it just made: **F8** opens the AI panel with the question prefilled (`About edit 2 of 3:`), you complete it and press **Enter**. The waiting `camel_write_file` call returns to the agent with the question, the edits applied so far and the editor’s content, and the agent answers in the same turn — nothing is written meanwhile. Close the panel with **F8** (or **Esc** to leave without asking) and the pause continues where it was. If your question makes the agent revise the change, its next `camel_write_file` of the same file continues in the editor from the current content instead of starting over. If you save or discard without the agent being involved again, it is told what became of the edit with your next question.
+
+### Example Workflows
+
+-   _"What routes are failing and why?"_ — The agent reads the errors tab, correlates with route statistics, steps through the failing exchange in the Inspect tab, and explains the root cause with annotated screenshots.
+    
+-   _"Show me how this message flows through the system"_ — The agent navigates to the Inspect tab, opens the diagram replay, steps through each processor, and highlights the path on the topology while explaining what happens at each step.
+    
+-   _"Highlight the bottleneck routes"_ — The agent reads the route statistics, locates the slowest routes on the diagram, draws red boxes around them, and adds labels with the processing times.
+    
+
+See [Camel MCP Server](camel-jbang-mcp.md) for more about MCP and AI integration with Camel.
+
+## Web Browser Access
+
+The TUI can also be reached from a web browser on the same host, using the same dashboard you’d see in a local terminal — useful when you prefer a browser session to a terminal window.
+
+```bash
+camel tui --web
+```
+
+This starts a web terminal server on `localhost:8090` (configurable with `--web-port`). Open `[http://localhost:8090](http://localhost:8090)` in a browser to get a full xterm.js terminal driving the same TUI dashboard, with the same tabs, keyboard shortcuts, and F2 actions menu as a local session.
+
+Like the MCP server, the web server is bound to `127.0.0.1` only — it never listens on external interfaces — and there is no authentication beyond that. Each browser connection gets its own independent TUI session (its own process discovery and navigation state), the same as if you’d run `camel tui` again in a new terminal.
+
+## Recording Demos
+
+The TUI can record terminal sessions for demos and documentation.
+
+### Live Recording
+
+Use the **F2** actions menu and select **Start Tape Recording** to start recording your session as a `.tape` file. Select **Stop Tape Recording** to stop. The tape captures your keystrokes with timing, producing a script that can be replayed or converted to an animated GIF.
+
+### Scripted Recording
+
+Use the `--record` flag to replay a `.tape` file in headless mode and produce an [Asciinema](https://asciinema.org/) `.cast` recording:
+
+```bash
+camel tui --record=demo.tape
+```
+
+The `.cast` file is written next to the tape, with the `.tape` suffix replaced by `.cast`. Recording is headless: the TUI is driven entirely by the tape rather than by your terminal, so no keyboard input is read and nothing is drawn on screen.
+
+The recorded terminal is 200x50 by default, which is wider than a documentation page can display. Use `--record-size` to record at a size that fits, and `--record-fps` or `--record-duration` to control the capture rate and the cut-off:
+
+```bash
+camel tui --record=demo.tape --record-size=160x44 --record-fps=15
+```
+
+`--record` cannot be combined with `--web`. Recording drives a headless TUI from the tape, and the recording configuration applies to the whole process, so every browser session would be recorded into the same `.cast` file. Camel rejects the combination with an error instead.
+
+### Converting to GIF
+
+Convert recordings using [agg](https://github.com/asciinema/agg) (for `.cast` files) or [VHS](https://github.com/charmbracelet/vhs) (for `.tape` files):
+
+```bash
+agg recording.cast out.gif  # .cast -> .gif
+vhs demo.tape               # .tape -> .gif
+```
+
+## Command Line Options
+
+  
+| Option | Description | Default |
+| --- | --- | --- |
+| `[name|pid|directory]` | Name, PID, or directory path of a Camel integration. When a directory is given, the TUI opens it as a project in the Source tab — you can browse the source code and run it with **F10**. When omitted, the TUI auto-discovers running integrations. |  |
+| `--mcp` | Enable the embedded MCP server for AI agent access to the TUI. | `false` |
+| `--mcp-port` | Port for the embedded MCP server. | `8123` |
+| `--web` | Enable the browser-accessible terminal (WebSocket) server. | `false` |
+| `--web-port` | Port for the web terminal server. | `8090` |
+| `--refresh` | Screen refresh interval in milliseconds. | `100` |
+| `--theme` | Color theme for this session (e.g., `dark`, `tokyo-night`, `dracula`). See [Theme](#_theme) for the full list of 15 themes. Overrides the persisted `camel.tui.theme` preference when set. |  |
+| `--record` | Replay a `.tape` file and record the session to an Asciinema `.cast` file. |  |
+| `--record-size` | Size of the recorded terminal for `--record`, as `<cols>x<rows>`. | `200x50` |
+| `--record-fps` | Frames per second captured by `--record`. | `10` |
+| `--record-duration` | Maximum duration in milliseconds captured by `--record`. | `120000` |

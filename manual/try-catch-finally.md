@@ -149,11 +149,9 @@ YAML
                   exception:
                     - java.io.IOException
                     - java.lang.IllegalStateException
+                  onWhen:
+                    simple: "${exception.message} contains 'Damn'"
                   steps:
-                    - onWhen:
-                        expression:
-                          simple:
-                            expression: "${exception.message} contains 'Damn'"
                     - to:
                         uri: mock:catch
               - doCatch:

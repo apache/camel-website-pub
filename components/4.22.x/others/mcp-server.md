@@ -1,0 +1,162 @@
+Camel Components
+
+# MCP Server
+
+**Since Camel 4.22**
+
+The camel-mcp-server module exposes Camel routes registered via the [ai-tool](../ai-tool-component.md) component as tools of a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server, served over MCP streamable HTTP. No route is needed for the server itself: add the dependency, configure which tags to expose, and every matching `ai-tool` route becomes an MCP tool that any MCP client (another Camel application, an IDE, a coding agent) can discover and call.
+
+Maven users will need to add the following dependency to their `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-mcp-server</artifactId>
+    <version>x.x.x</version>
+    <!-- use the same version as your Camel core version -->
+</dependency>
+```
+
+## Architecture
+
+The module is split in two artifacts:
+
+-   `camel-mcp-server-api` — the runtime-agnostic _bridge_ and the small `McpServerEngine` SPI. The bridge owns tool selection (tags), execution via the shared `AiToolExecutor` (per-call timeout, error sanitization) and reacts to `AiToolRegistry` changes when routes start and stop. It has no dependency on the MCP Java SDK.
+    
+-   `camel-mcp-server` — the serving engine for Camel Main and Camel JBang, built on the official MCP Java SDK with a Vert.x streamable HTTP transport. The MCP endpoint is registered on the Camel main HTTP server’s router, so it serves on the main server port (`camel.server.port`) and inherits its lifecycle, authentication and CORS configuration.
+    
+
+Engine resolution mirrors the platform-http engine: a bean of type `McpServerEngine` in the Camel registry wins; otherwise the engine is discovered on the classpath. Other runtimes plug native engines through the same SPI: on Quarkus the `camel-quarkus-mcp-server` extension serves through the Quarkiverse `quarkus-mcp-server` (configured via `quarkus.mcp.server.*`), and on Spring Boot the starter serves through the Spring AI MCP server (configured via `spring.ai.mcp.server.*`). Bridge behavior — tag selection, timeout, sanitization — is identical on every runtime and verified by a shared conformance test kit.
+
+## Usage
+
+Define tools as regular `ai-tool` routes and give them tags:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("ai-tool:query_db?tags=crm" +
+    "&description=Query customer database" +
+    "&parameter.customerId=string" +
+    "&parameter.customerId.description=The customer id" +
+    "&parameter.customerId.required=true")
+    .to("jdbc:dataSource");
+```
+
+```xml
+<route>
+  <from uri="ai-tool:query_db?tags=crm&amp;description=Query customer database&amp;parameter.customerId=string&amp;parameter.customerId.description=The customer id&amp;parameter.customerId.required=true"/>
+  <to uri="jdbc:dataSource"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: ai-tool:query_db
+      parameters:
+        tags: crm
+        description: "Query customer database"
+        parameter.customerId: string
+        parameter.customerId.description: "The customer id"
+        parameter.customerId.required: "true"
+      steps:
+        - to:
+            uri: jdbc:dataSource
+```
+
+### Tool annotation hints
+
+`ai-tool` routes can declare optional MCP `ToolAnnotations` hints (`title`, `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`). The bridge passes them through to the MCP engine. See [MCP Tool Annotation Hints](../ai-tool-component.html#_mcp_tool_annotation_hints) for configuration examples. Hints are advisory UX metadata only — not authorization.
+
+On Camel Main and Camel JBang no code is needed — like Jolokia or Prometheus, the server starts from configuration properties alone:
+
+```properties
+camel.server.enabled = true
+camel.server.mcp-enabled = true
+camel.server.mcp-tags = crm,notify
+camel.server.mcp-server-name = my-integration-app
+```
+
+Tag patterns support wildcards: use `*` to expose all tagged tools, or a prefix pattern like `crm*` to expose all tags starting with `crm`:
+
+On other runtimes, or when wiring programmatically, add the `McpServerBridge` service to the CamelContext instead:
+
+```java
+McpServerConfiguration configuration = new McpServerConfiguration();
+configuration.setTags("crm,notify");
+camelContext.addService(new McpServerBridge(configuration));
+```
+
+The MCP endpoint is then served at `[http://<host>:<port>/mcp](http://\<host\>:\<port\>/mcp)` on the Camel main HTTP server. Any MCP client can connect over streamable HTTP, for example another Camel integration using the [camel-openai](../openai-component.md) MCP client:
+
+```java
+from("direct:agent")
+    .to("openai:chat-completion"
+        + "?model={{llm.model}}"
+        + "&autoToolExecution=true"
+        + "&mcpServer.myCamelTools.transportType=streamableHttp"
+        + "&mcpServer.myCamelTools.url=http://localhost:8080/mcp");
+```
+
+## Options
+
+The options, configurable as `camel.server.mcp-*` properties on Camel Main / JBang (see the [camel-main](main.md) options) or on `McpServerConfiguration` programmatically:
+
+   
+| Option | Description | Default | Owner |
+| --- | --- | --- | --- |
+| `camel.server.mcp-enabled` | Whether to expose ai-tool routes as MCP tools over streamable HTTP. | `false` | bridge |
+| `camel.server.mcp-tags` | Comma-separated list of ai-tool tag patterns to expose as MCP tools. Patterns support exact match, wildcard prefix (`foo*`), and `*` to match all tags. Only tools registered under a matching tag are published; the untagged default pool is never exposed. When not set, no tools are published. |  | bridge |
+| `camel.server.mcp-tool-timeout` | Per-call tool execution timeout in milliseconds. A call exceeding the timeout returns an error result to the MCP client; the underlying route keeps running until it completes on its own. | `20000` | bridge |
+| `camel.server.mcp-path` | HTTP path where the MCP endpoint is served. | `/mcp` | engine |
+| `camel.server.mcp-server-name` | MCP server name advertised to clients. | CamelContext name | engine |
+| `camel.server.mcp-session-keep-alive-interval` | Keep-alive ping interval in milliseconds for MCP sessions on the Vert.x streamable transport. Dead sessions are evicted after consecutive ping failures. `0` disables keep-alive pings. | `30000` | engine |
+| `camel.server.mcp-session-idle-ttl` | Idle TTL in milliseconds for MCP sessions on the Vert.x streamable transport. Sessions with no activity for longer than this interval are evicted. `0` disables idle eviction. | `300000` | engine |
+
+Bridge-owned options are honored identically on every runtime. Engine-owned options are consumed by the Vert.x engine only; on runtimes with a native engine (Quarkus, Spring Boot) the native configuration decides serving concerns and a startup WARN is logged when an ignored option is set.
+
+## Protocol
+
+This section describes the Vert.x engine shipped in `camel-mcp-server`, which serves on Camel Main and Camel JBang. On Quarkus and Spring Boot the transport is owned by the native engine instead — quarkus-mcp-server and the Spring Boot embedded HTTP server (Spring AI MCP server) respectively — and the details below do not apply.
+
+The Vert.x engine implements the MCP streamable HTTP transport:
+
+-   `POST /mcp` answering `application/json` or `text/event-stream` depending on the request,
+    
+-   a long-lived `GET /mcp` SSE channel for server notifications, with `Last-Event-ID` replay,
+    
+-   session management via the `Mcp-Session-Id` header and `DELETE /mcp` for session termination.
+    
+-   active session eviction: keep-alive pings (default every 30 seconds) remove sessions whose ping fails repeatedly, and an idle TTL (default 5 minutes) removes sessions with no traffic. Configure with `camel.server.mcp-session-keep-alive-interval` and `camel.server.mcp-session-idle-ttl` (set either to `0` to disable).
+    
+
+Tools appearing or disappearing (routes starting and stopping) emit `notifications/tools/list_changed` to connected clients.
+
+## Security
+
+External MCP clients are **untrusted senders** under the [Camel security model](../../../manual/security-model.md). The module applies the following rules:
+
+-   **Explicit opt-in per tool**: only tools whose tags match the configured tag patterns are exposed. The untagged default pool is never exposed, even when using the `*` wildcard.
+    
+-   **Flat namespace protection**: a tool whose name collides with an already exposed tool is refused with an ERROR log — never silently replaced.
+    
+-   **Error sanitization**: route exceptions are mapped to a generic error message; the cause is logged server-side and never sent to the client. Argument validation messages (missing or invalid parameters) are returned as-is.
+    
+-   **Bounded execution**: every call is subject to the `toolTimeout`. Note that a timed-out route keeps running server-side until it completes; the timeout bounds the MCP request, not the route.
+    
+-   **Authentication**: the MCP endpoint is served through the main HTTP server router, so platform-http authentication (basic, JWT via `camel.server.authentication*` options) applies to it. The MCP specification’s authorization model is OAuth 2.1; see [camel-oauth](oauth.md) for resource-server style protection. On Quarkus and Spring Boot, authentication is owned by the native runtime security.
+    
+
+## Runtime notes
+
+-   **Camel Main / JBang**: requires the Camel main HTTP server (`camel.server.enabled=true` with `camel-platform-http-main`, automatic with Camel JBang) or a `VertxPlatformHttpServer` service. Serving is fully asynchronous: tool calls are offloaded to the Vert.x worker pool and the long-lived SSE channel does not occupy a worker thread.
+    
+-   **Quarkus**: use the `camel-quarkus-mcp-server` extension (serves through quarkus-mcp-server; the MCP Java SDK is not on the classpath).
+    
+-   **Spring Boot**: use the `camel-mcp-server-starter` (serves through the Spring AI MCP server).

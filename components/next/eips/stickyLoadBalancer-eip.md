@@ -61,11 +61,11 @@ from("direct:start")
       uri: direct:start
       steps:
         - loadBalance:
+            stickyLoadBalancer:
+              correlationExpression:
+                header:
+                  expression: myKey
             steps:
-              - stickyLoadBalancer:
-                  correlationExpression:
-                    header:
-                      expression: myKey
               - to:
                   uri: seda:x
               - to:

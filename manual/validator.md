@@ -200,12 +200,12 @@ from("direct:abc")
 
 ```yaml
 - route:
+    inputType:
+      urn: xml:ABCOrder
+      validate: "true"
     from:
       uri: direct:abc
       steps:
-        - inputType:
-            urn: xml:ABCOrder
-            validate: "true"
         - log:
             message: "${body}"
 ```

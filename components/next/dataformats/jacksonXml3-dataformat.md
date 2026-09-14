@@ -117,7 +117,8 @@ from("direct:back")
       uri: direct:back
       steps:
         - unmarshal:
-            ref: jack
+            custom:
+              ref: jack
         - to:
             uri: mock:reverse
 ```

@@ -145,6 +145,8 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![cassandra source](_images/kamelets/cassandra-source.svg) Cassandra Source](cassandra-source.html)
 
+ [![ceph event based source](_images/kamelets/ceph-event-based-source.svg) Ceph Event Based Source](ceph-event-based-source.html)
+
  [![ceph sink](_images/kamelets/ceph-sink.svg) Ceph Sink](ceph-sink.html)
 
  [![ceph source](_images/kamelets/ceph-source.svg) Ceph Source](ceph-source.html)

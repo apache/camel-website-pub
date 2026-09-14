@@ -278,7 +278,7 @@ from("direct:start")
                            xmlCipherAlgorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"
                            keyCipherAlgorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"
                            recipientKeyAlias="recipient"
-                           keyOrTrustStoreParametersRef="trustStoreParams"/>
+                           keyOrTrustStoreParameters="trustStoreParams"/>
             </marshal>
             ...
 ```
@@ -295,7 +295,7 @@ from("direct:start")
               xmlCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
               keyCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
               recipientKeyAlias: recipient
-              keyOrTrustStoreParametersRef: "#trustStoreParams"
+              keyOrTrustStoreParameters: "#trustStoreParams"
 ```
 
 Spring XML Recipient
@@ -329,7 +329,7 @@ from("direct:encrypted")
                            xmlCipherAlgorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"
                            keyCipherAlgorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"
                            recipientKeyAlias="recipient"
-                           keyOrTrustStoreParametersRef="keyStoreParams"
+                           keyOrTrustStoreParameters="keyStoreParams"
                            keyPassword="privateKeyPassword" />
             </unmarshal>
             ...
@@ -347,7 +347,7 @@ from("direct:encrypted")
               xmlCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
               keyCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
               recipientKeyAlias: recipient
-              keyOrTrustStoreParametersRef: "#keyStoreParams"
+              keyOrTrustStoreParameters: "#keyStoreParams"
               keyPassword: privateKeyPassword
 ```
 

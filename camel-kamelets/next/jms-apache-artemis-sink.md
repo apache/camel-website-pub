@@ -27,7 +27,7 @@ At runtime, the `jms-apache-artemis-sink` Kamelet relies upon the presence of th
     
 -   camel:kamelet
     
--   mvn:org.apache.activemq:artemis-jakarta-client-all:2.56.0
+-   mvn:org.apache.activemq:artemis-jakarta-client-all:2.57.0
     
 
 ## Camel JBang usage

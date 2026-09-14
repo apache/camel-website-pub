@@ -54,8 +54,8 @@ from("direct:start")
       uri: direct:start
       steps:
         - loadBalance:
+            topicLoadBalancer: {}
             steps:
-              - topicLoadBalancer: {}
               - to:
                   uri: seda:x
               - to:

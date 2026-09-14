@@ -167,15 +167,12 @@ Set `storeFullResponse=true` to keep the complete SDK response in the `CamelOpen
 
 ## Moderation Operation
 
-The `moderation` operation checks text against the OpenAI usage policies. It is the canonical pre-filter for untrusted input on a public-facing route: rejecting policy-violating content before spending chat tokens or triggering tool calls.
+The `moderation` operation checks text, or an image, against the OpenAI usage policies. It is the canonical pre-filter for untrusted input on a public-facing route: rejecting policy-violating content before spending chat tokens or triggering tool calls.
 
 The message body is passed through unchanged and the verdict is exposed as headers, so the result can be used for content-based routing while the original content stays available to the rest of the route.
 
 > **Important**
 > Moderation is a policy filter, not a trust boundary. The verdict is probabilistic and its categories are defined by the provider, so it is not a substitute for authentication, authorization, schema validation or defences against prompt injection. The operation only reports a verdict — a flagged body keeps flowing unless the route stops or replaces it, as in the example below.
-
-> **Note**
-> The operation moderates text only. The body, or each element of a list body, is converted to a `String` and sent as text input; the multi-modal inputs of the moderation API are not exposed.
 
 ### Guarding a Route
 
@@ -211,9 +208,62 @@ from("platform-http:/chat")
               - to: openai:chat-completion?model=gpt-5
 ```
 
+### Moderating an Image
+
+An image body is sent to the multi-modal input of the moderation API instead of being converted to text. The body is treated as an image when its MIME type is an image type, detected the same way as for the vision input of `chat-completion`: a `File`, `Path` or `WrappedFile` body from its file name or content-type header, and a `byte[]` or `InputStream` body, as produced by cloud storage components, from its content-type header. Set the `CamelOpenAIMediaType` header when the body carries no content-type metadata. A `byte[]` or `InputStream` body without an image type is still moderated as text.
+
+Text posted together with the image, such as its caption, goes in the `CamelOpenAIModerationText` header. The API scores the text and the image as one input, so they share a single verdict, whose `input` key holds that text, or `null` for an image moderated on its own. The header is ignored when the body is not an image.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("platform-http:/upload")
+    .setHeader(OpenAIConstants.MODERATION_TEXT, header("caption"))
+    .to("openai:moderation?moderationModel=omni-moderation-latest")
+    .choice()
+        .when(header(OpenAIConstants.MODERATION_FLAGGED).isEqualTo(true))
+            .setBody(constant("Your upload violates our usage policy."))
+        .otherwise()
+            .to("aws2-s3:uploads")
+    .end();
+```
+
+```yaml
+- from:
+    uri: platform-http:/upload
+    steps:
+      - setHeader:
+          name: CamelOpenAIModerationText
+          simple: "${header.caption}"
+      - to: openai:moderation?moderationModel=omni-moderation-latest
+      - choice:
+          when:
+            - simple: "${header.CamelOpenAIModerationFlagged} == true"
+              steps:
+                - setBody:
+                    constant: "Your upload violates our usage policy."
+          otherwise:
+            steps:
+              - to: aws2-s3:uploads
+```
+
+The image is still in the body after the operation: a stream-cached body is reset, and a plain `InputStream`, which can be read only once, is replaced by its bytes.
+
+Things to keep in mind when moderating images:
+
+-   The API accepts one image per request. A list body is moderated as text, and fails when it contains an image file; use the [Split](../eips/split-eip.md) EIP to moderate several images.
+    
+-   Images are scored for the `self-harm`, `self-harm/intent`, `self-harm/instructions`, `sexual`, `violence` and `violence/graphic` categories only. The `categoryAppliedInputTypes` key of each verdict lists, per category, the input types the score was computed from, so a category reported as `false` with no `image` entry was not checked against the image.
+    
+-   Put only the content to check in the request. The text and the image are scored together, and unrelated text, such as a prompt meant for a later `chat-completion` call, lowers the scores of the content that matters.
+    
+
 ### Verdicts per Input
 
-`CamelOpenAIModerationResults` always holds one verdict per moderated input, in the order of the inputs. Each entry is a map with the keys `input`, `flagged`, `categories` and `categoryScores`, which makes a batch straightforward to split and route per item:
+`CamelOpenAIModerationResults` always holds one verdict per moderated input, in the order of the inputs. Each entry is a map with the keys `input`, `flagged`, `categories` and `categoryScores`, plus `categoryAppliedInputTypes` when the provider reports it, which makes a batch straightforward to split and route per item:
 
 ```java
 from("direct:moderate-batch")
@@ -250,7 +300,7 @@ The operation is meant to gate untrusted content, so it fails the exchange rathe
 
 -   the API returning a number of results that does not match the number of inputs raises a `CamelExchangeException`, instead of leaving `CamelOpenAIModerationFlagged` as `false`;
     
--   a missing body, an empty list, or a list containing `null` elements raises an `IllegalArgumentException`.
+-   a missing body, an empty list, a list containing `null` elements, or a list containing an image file raises an `IllegalArgumentException`.
     
 
 ### Moderation Output Headers
@@ -261,7 +311,7 @@ The following headers are set after a moderation request:
 | Header | Type | Description |
 | --- | --- | --- |
 | `CamelOpenAIModerationFlagged` | Boolean | Whether the input violates the usage policies. For a batch, `true` when at least one input was flagged |
-| `CamelOpenAIModerationResults` | List | One verdict per input, in input order. Each entry holds `input`, `flagged`, `categories` and `categoryScores` |
+| `CamelOpenAIModerationResults` | List | One verdict per input, in input order. Each entry holds `input`, `flagged`, `categories`, `categoryScores` and, when the provider reports it, `categoryAppliedInputTypes` |
 | `CamelOpenAIModerationCategories` | Map | Category name to violation flag, for a single input. Not set for a list body |
 | `CamelOpenAIModerationCategoryScores` | Map | Category name to confidence score, for a single input. Not set for a list body |
 | `CamelOpenAIModerationResponseModel` | String | The model used for moderation |

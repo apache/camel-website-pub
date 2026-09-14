@@ -186,14 +186,12 @@ onException(MyUserException.class).maximumRedeliveries(2)
 - onException:
     exception:
       - com.foo.MyUserException
+    redeliveryPolicy:
+      maximumRedeliveries: 1
+      redeliveryDelay: 0
+    onWhen:
+      simple: "${header.user} != null"
     steps:
-      - redeliveryPolicy:
-          maximumRedeliveries: 1
-          redeliveryDelay: 0
-      - onWhen:
-          expression:
-            simple:
-              expression: "${header.user} != null"
       - to:
           uri: mock:error
 - onException:

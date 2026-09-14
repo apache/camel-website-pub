@@ -50,7 +50,9 @@ from("direct:startEncode")
 ```xml
 <route>
      <from uri="direct:startEncode" />
-     <marshal ref="base64withLineLength64" />
+     <marshal>
+       <custom ref="base64withLineLength64" />
+     </marshal>
      <to uri="mock:result" />
 </route>
 ```
@@ -61,7 +63,8 @@ from("direct:startEncode")
       uri: direct:startEncode
       steps:
         - marshal:
-            ref: base64withLineLength64
+            custom:
+              ref: base64withLineLength64
         - to:
             uri: mock:result
 ```

@@ -73,11 +73,11 @@ from("direct:marshal")
 - route:
     from:
       uri: direct:marshal
-    steps:
-      - marshal:
-          ubl: {}
-      - to:
-          uri: file:output
+      steps:
+        - marshal:
+            ubl: {}
+        - to:
+            uri: file:output
 ```
 
 ### Unmarshalling (XML to Java object)
@@ -112,11 +112,11 @@ from("file:invoices")
 - route:
     from:
       uri: file:invoices
-    steps:
-      - unmarshal:
-          ubl: {}
-      - to:
-          uri: direct:process
+      steps:
+        - unmarshal:
+            ubl: {}
+        - to:
+            uri: direct:process
 ```
 
 ### With pretty printing
@@ -151,12 +151,12 @@ from("direct:marshal")
 - route:
     from:
       uri: direct:marshal
-    steps:
-      - marshal:
-          ubl:
-            prettyPrint: true
-      - to:
-          uri: file:output
+      steps:
+        - marshal:
+            ubl:
+              prettyPrint: true
+        - to:
+            uri: file:output
 ```
 
 ## Dependencies

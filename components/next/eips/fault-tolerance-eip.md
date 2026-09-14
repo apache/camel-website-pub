@@ -61,12 +61,12 @@ from("direct:start")
             steps:
               - to:
                   uri: http://fooservice.com/faulty
-              - onFallback:
-                  steps:
-                    - transform:
-                        expression:
-                          constant:
-                            expression: Fallback message
+            onFallback:
+              steps:
+                - transform:
+                    expression:
+                      constant:
+                        expression: Fallback message
         - to:
             uri: mock:result
 ```
@@ -122,10 +122,10 @@ from("direct:start")
       uri: direct:start
       steps:
         - circuitBreaker:
+            faultToleranceConfiguration:
+              timeoutDuration: 2000
+              timeoutEnabled: "true"
             steps:
-              - faultToleranceConfiguration:
-                  timeoutDuration: 2000
-                  timeoutEnabled: "true"
               - log:
                   message: "Fault Tolerance processing start: ${threadName}"
               - to:

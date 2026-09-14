@@ -68,7 +68,7 @@ from("direct:in")
 <route>
     <from uri="direct:in"/>
     <marshal>
-        <avro instanceClass="org.apache.camel.dataformat.avro.Message" library="ApacheAvro"/>
+        <avro instanceClassName="org.apache.camel.dataformat.avro.Message" library="ApacheAvro"/>
     </marshal>
     <to uri="log:out"/>
 </route>
@@ -81,7 +81,7 @@ from("direct:in")
       steps:
         - marshal:
             avro:
-              instanceClass: org.apache.camel.dataformat.avro.Message
+              instanceClassName: org.apache.camel.dataformat.avro.Message
               library: ApacheAvro
         - to:
             uri: log:out

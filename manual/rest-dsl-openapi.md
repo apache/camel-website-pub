@@ -389,7 +389,7 @@ restConfiguration().bindingMode(RestBindingMode.json)
 
 ```yaml
 - restConfiguration:
-    bindingMode: true
+    bindingMode: json
     bindingPackageScan: sample.petstore.model
 ```
 

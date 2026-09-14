@@ -221,7 +221,8 @@ from("direct:in").precondition("'{{format}}' == 'xml'")
       uri: "direct:in"
       steps:
         - unmarshal:
-            jaxb: {}
+            jaxb:
+              contextPath: com.foo.model
         - to:
             uri: direct:out
 ```

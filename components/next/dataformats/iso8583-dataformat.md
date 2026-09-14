@@ -88,7 +88,7 @@ You can use this data format to unmarshal a ISO-8853 message such as a 0210 paym
     
 
 ```java
-from("jms:payment:response")
+from("jms:queue:payment:response")
         .unmarshal().iso8583("0210")
         .transform().simple(
             """
@@ -106,7 +106,7 @@ from("jms:payment:response")
 
 ```xml
 <route>
-  <from uri="jms:payment:response"/>
+  <from uri="jms:queue:payment:response"/>
   <unmarshal><iso8583 isoType="0210"/></unmarshal>
   <transform>
     <simple>{
@@ -125,7 +125,7 @@ from("jms:payment:response")
 ```yaml
 - route:
     from:
-      uri: jms:payment:response
+      uri: jms:queue:payment:response
       steps:
         - unmarshal:
             iso8583:
@@ -149,7 +149,7 @@ Instead of simple language you can also use Groovy which has a special support i
 _Java-only: using Groovy language for ISO-8583 field extraction_
 
 ```java
-from("jms:payment:response")
+from("jms:queue:payment:response")
         .unmarshal().iso8583("0210")
         .transform().groovy(
             """

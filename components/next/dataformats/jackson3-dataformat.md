@@ -15,14 +15,14 @@ Jackson 3 is a Data Format that uses the [Jackson 3 Library](https://github.com/
 
 ```java
 from("activemq:My.Queue")
-    .marshal().jackson()
+    .marshal().json(JsonLibrary.Jackson)
     .to("mqseries:Another.Queue");
 ```
 
 ```xml
 <route>
   <from uri="activemq:My.Queue"/>
-  <marshal><jackson/></marshal>
+  <marshal><json library="Jackson"/></marshal>
   <to uri="mqseries:Another.Queue"/>
 </route>
 ```
@@ -33,7 +33,8 @@ from("activemq:My.Queue")
       uri: activemq:My.Queue
       steps:
         - marshal:
-            jackson: {}
+            json:
+              library: Jackson
         - to:
             uri: mqseries:Another.Queue
 ```
@@ -82,7 +83,7 @@ from("activemq:My.Queue")
   .to("mqseries:Another.Queue");
 ```
 
-This is equivalent to using `.jackson()` directly. The `json()` method also supports additional parameters:
+The `json()` method also supports additional parameters:
 
 _Java-only: json() DSL with pretty print and unmarshal type_
 

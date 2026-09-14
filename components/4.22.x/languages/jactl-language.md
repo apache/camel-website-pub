@@ -187,7 +187,7 @@ For example, here are some of the things that are the same:
     
 -   Truthiness: `0`, `null`, `''`, `[]`, and `[:]` are all false, everything else is true.
     
--   List and Map object support `+`, `-`, `<<`, `+=`, and support subscript access as well as null-safe subscript `?[`.
+-   List and Map object support `` `, `-`, `<<`, `= ``, and support subscript access as well as null-safe subscript `?[`.
     
 
 Please see the [Jactl Language Guide](https://jactl.io/docs/language-guide/introduction) for more information about Jactl, the language.

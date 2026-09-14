@@ -1,0 +1,600 @@
+User manual
+
+# Security Model
+
+This page documents Apache Camel’s security model: who is trusted, where the trust boundaries sit, what counts as a framework vulnerability, and what is expected of operators and route authors. It is the reference used by the Camel PMC when triaging security reports and by the project when deciding whether a behaviour should be hardened in the framework or addressed by the deployment.
+
+It complements two existing documents:
+
+-   [Security](security.md) - the user-facing catalog of security features (route, payload, endpoint and configuration security, vaults, JSSE).
+    
+-   The `design/security.adoc` design document in the repository - the annotation-driven security policy enforcement framework that detects insecure configuration at startup time.
+    
+
+For instructions on how to report a vulnerability, see [Apache Camel Security](/security/) and the repository `SECURITY.md` file.
+
+## Audience
+
+This document is written for four audiences:
+
+-   **Security researchers and CVE reporters** who need to know what the Camel PMC will accept as a framework vulnerability before submitting a report.
+    
+-   **Automated triage tooling** (CVE scanners, AI-assisted security review) that needs an authoritative scope statement to distinguish a real framework vulnerability from an intentional, documented design choice.
+    
+-   **Camel committers and component authors** reviewing pull requests and writing new components, who need to know which defaults and patterns are acceptable.
+    
+-   **Operators and deployment owners** who need to know how to deploy Camel applications safely and which hardening responsibilities the framework delegates to them.
+    
+
+## Trust model
+
+Camel is an integration framework that is embedded in someone else’s application, not a multi-tenant managed service. Its trust model reflects that.
+
+### Roles
+
+  
+| Role | Trust level | What this role can do |
+| --- | --- | --- |
+| Camel committers and component authors | Trusted | Define APIs, write components, choose defaults, publish releases. The framework relies on these contributors to ship secure defaults. |
+| Route authors (the people writing Camel routes in Java, XML or YAML DSL) | Fully trusted | Execute arbitrary Java code in `.bean()`, `.process()` and `Class` references; evaluate arbitrary expressions in `simple`, `groovy`, `jexl`, `mvel`, `xpath`, `ognl` and friends; reach any class on the classpath; configure any component option. Code execution by a route author is by design and is not a vulnerability in the framework. |
+| Deployment operators (the people who configure and deploy a Camel application) | Fully trusted | Set configuration properties (including secrets), choose the runtime, decide what to expose on the network, decide whether to enable management endpoints, pick the JVM and OS user, and configure the secrets backend. Operator misconfiguration is not a framework vulnerability unless the framework’s default exposed it. |
+| External message senders (HTTP clients, JMS producers, file droppers, SMTP senders, CoAP peers, AMQP publishers, Kafka producers, mail senders, etc.) | Untrusted | Send messages into a Camel route over the network or filesystem. This is the primary attacker model. The framework must not turn an untrusted message into code execution, file read, request forgery or authentication bypass on its own. |
+| The far side of a component - the remote services, object stores, brokers and AI models a route talks to | Trusted to **hold** the route’s data; untrusted for what they **return** | Return payloads, object and blob names, remote file names, listing entries and other metadata, and - for the AI components - generated text and tool-call arguments. The operator chose to talk to these services, so the connection is trusted; the strings they hand back are attacker-influenced whenever a wider set of principals can write to the store or shape the prompt. See _Adversary model_. |
+
+### Trust boundaries
+
+The fundamental trust boundary in Camel is between **the route** (and everything the operator configured) and **the data flowing through the route**. Anything a route author wrote is trusted code; anything that arrives in an `Exchange` body, header or attachment from a Camel consumer is untrusted data.
+
+The framework’s job is to keep that boundary intact: untrusted data must not become code, must not redirect the route to a different endpoint, must not be deserialised into arbitrary types, and must not be parsed in ways that resolve remote resources, unless the route author explicitly asked for it.
+
+### Adversary model
+
+The adversary the framework defends against is the **External message senders** role from _Roles_ above: a network or filesystem peer who places a message on a transport that a Camel consumer reads from. This subsection states the attacker shape that the in-scope and out-of-scope rules below presume, so a report can be evaluated against the same model the rules were written for.
+
+**What the attacker controls:** the body, headers, attachments and transport metadata of a message arriving on an input the consumer reads, plus the ability to replay or shape that message arbitrarily within the protocol’s limits. The attacker may exploit any combination of those inputs against the framework’s own machinery - expression languages, type converters, the `Exchange` / `Message` model, the header namespace, the EIP processors, the property-placeholder and bean-reference resolution, and any default parser configuration used by a consumer or data format.
+
+**Three further inputs count as attacker-controlled** even though they do not arrive as a message on the transport a consumer reads. Each has produced accepted advisories, and each is easy to mistake for trusted data because it reaches Camel from a service the operator configured rather than from the wire:
+
+-   **Names and metadata a remote backing service reports back.** Object keys, blob and bucket names, remote file names and listing entries are chosen by whoever can write to that store, which is routinely a wider set of principals than the peers who can reach the route. A component that builds a local path, a command argument or a header out of such a name is handling untrusted input (CVE-2026-60093 `camel-azure-storage-datalake`, CVE-2026-66906 `camel-azure-storage-blob`, CVE-2026-66907 `camel-google-storage` - remote object names traversing out of the configured download directory). This is distinct from the **contents** of a state store the operator provisioned for the route’s own use, which the framework does assume are trusted; see the aggregation-repository bullet under _Known limitations_.
+    
+-   **The output of a large language model.** In the AI components a model’s reply - including the field names and arguments of a tool call - is generated from a prompt and a retrieved context that an external party can often influence. Model output is untrusted input, not a trusted control channel, and a component that maps it into the `Exchange` header map or into a dispatch decision is bound by the same rules as any other inbound mapping site (CVE-2026-49042 `camel-langchain4j-tools`, where unfiltered tool-call argument names became arbitrary `Exchange` headers).
+    
+-   **Transport metadata that is not a message header.** Query parameters, path segments, subscription and topic names and connection attributes reach the `Exchange` through the same mapping code as headers do (CVE-2026-55993 `camel-atmosphere-websocket`, WebSocket query parameters mapped without a `HeaderFilterStrategy`).
+    
+
+**What the attacker is trying to do:** break one of the properties listed in _Security properties and violation severity_ or _Core router-engine invariants_ below - turn untrusted input into code execution, an arbitrary file read or write, a request forgery, an unintended endpoint or bean dispatch, a deserialisation gadget, an authentication or authorization bypass, or a disclosure of secrets or `Exchange` state.
+
+**What the attacker is not assumed to have:** code execution inside the JVM running the Camel context (that is route-author territory), the operator’s filesystem, the deployment’s configuration source, the secrets vault, the management network, the connection back to the broker / SDK / endpoint, or the keys and credentials the route author and operator configured. They cannot author or modify route definitions, configuration or the runtime image. They cannot side-step the trust boundary by being a co-tenant in the JVM; Camel is not a sandbox and does not pretend to be one (see _Security properties not provided_ below).
+
+The following actors are **explicitly not** in the adversary model. A report that requires one of them as the attacker is `OUT-OF-MODEL: adversary-not-in-scope` (see _Triage dispositions_).
+
+-   **Route authors.** A route author who evaluates an attacker-controlled header as a `simple`, OGNL, bean or scripting expression has authored trusted code that does exactly what it says. The framework is in scope only when **it** passes untrusted input to an evaluator without the route author asking for it (see the route-author entry in _Out of scope_).
+    
+-   **Deployment operators.** An operator who disables TLS verification, enables Java serialisation, picks a relaxed profile, or exposes a management surface to the public network has signed up for the consequences. Misconfiguration is operator territory unless the framework’s default exposed it.
+    
+-   **Network peers reaching a management surface.** `camel-management`, the developer console, `camel-jolokia` and JMX are administrative APIs whose trust boundary is the management surface itself (JVM JMX authentication, the Jolokia restrictor policy, the network exposure of the management port), not the individual MBean method. See the management-surface entry in _Out of scope_.
+    
+-   **Authors of transitive third-party dependencies.** A CVE in a JAR Camel pulls in but does not reach through any Camel-exposed code path is the upstream project’s vulnerability. See the third-party-dependency entry in _Out of scope_.
+    
+
+## Vulnerability scope
+
+A report is in scope when it demonstrates that the framework, in a default or reasonably-expected configuration, lets untrusted input cross a trust boundary that the model says it should not cross.
+
+**Which artifacts this model covers.** This document describes the artifacts released from the `apache/camel` repository - `camel-core`, the components, the DSLs and the Camel CLI. The sibling subprojects ship on their own release trains and are triaged against their own scope: Camel K, Camel Quarkus, Camel Spring Boot, Camel Kafka Connector and Camel Karaf. They inherit this trust model for the core routing behaviour they embed, but each adds a deployment surface with its own roles and adversaries that this page does not describe - CVE-2026-45760, a cross-namespace build "deputy" attack in Camel K, is an example of a finding whose entire mechanism (Kubernetes namespaces, operator RBAC) lives outside this model. A report against one of those subprojects is triaged by the same PMC on the same private list, but against the subproject’s surface, not this page’s.
+
+### Security properties and violation severity
+
+The trust-boundary statement above commits the framework to a small set of concrete properties. Each one maps to a specific impact an attacker achieves if the framework fails to uphold it, and to an indicative severity tier. The classes in _In-scope vulnerability classes_ below are the **mechanisms** by which these properties are broken; the table here is the **impact** view that triage tooling and reporters can use to gauge how serious a candidate finding is and which protective property it breaks.
+
+  
+| Property the framework upholds for untrusted input (default or reasonably-expected configuration) | What a violation looks like (symptom a reporter or scanner observes) | Indicative severity |
+| --- | --- | --- |
+| Untrusted data is never turned into executed code or OS commands | A crafted message, header or attachment causes a deserialisation gadget chain, a bean / method / command dispatch, an expression/template evaluation the route author never requested, or is spliced into the argument vector of an external process the component launches | Critical (CVSS 9.0-10.0) |
+| Untrusted data cannot redirect the route to a different endpoint, bean, method or command | A control header injected from the wire changes where the exchange is dispatched, which operation runs, or which transport and credentials are used - whether it is spelled inside the internal namespace (`CamelBeanMethodName`, `CamelExecCommandExecutable`, `CamelHttpUri`, `CamelJmsDestinationName`, …​) or outside it (`websocket.connectionKey`, `gridfs.*`, `irc.sendTo`, `operationName`, `mail.smtp.*`, …​) | Critical (CVSS 9.0-9.8) |
+| Untrusted data is never deserialised into arbitrary Java types | A consumer, type converter or persisted-state repository instantiates attacker-chosen classes through `ObjectInputStream` / XStream / Hessian / polymorphic Jackson without an effective filter | Critical when gadget-reachable (9.0-9.8); High otherwise (7.0-8.6) |
+| Untrusted parsing does not resolve external or remote resources | An XML / XSLT / XSD / XPath parse of attacker input reads a local file, performs SSRF, or fetches a remote DTD or stylesheet by default | High (CVSS 7.5-8.6); Critical if it yields RCE or credential theft |
+| Untrusted file names or URI components cannot escape the configured root | A file / mail / FTP / object-store consumer or producer reads or writes a path outside the configured directory via `../` or an absolute path, whether that name arrived in a header or was reported back by the remote store | High (CVSS 7.5-8.8) |
+| Components that advertise authentication or authorization actually enforce it | A request is served without a valid token, with an unvalidated issuer / audience / signature, on a sub-path the auth handler was assumed to cover, because a check was silently skipped when its option was left unconfigured, or because the authorization decision was computed from a differently-normalized value than the dispatch decision | Critical (CVSS 9.0-9.8) |
+| Secrets and internal Exchange state are not disclosed | Credentials, message bodies or configuration values reach a log, an event, a world-readable file, or an HTTP response visible to a lower-privileged party | Medium to High (CVSS 5.3-8.2), depending on what leaks |
+| Untrusted input is not spliced into a back-end query language Camel builds | Camel constructs a Cypher / XSLT-extension / similar query and the attacker alters its structure rather than only its data | High to Critical (CVSS 8.1-9.8) |
+| All of the above hold with zero security configuration | Any of the above is reachable simply by adding the component to a route and sending a message, with no risky option explicitly set | Severity of the underlying class; always in scope |
+
+The tiers above are **indicative**, reflecting how the Camel PMC has historically scored these classes. The PMC assigns the definitive CVSS vector per report based on attack vector, the configuration required to reach the code path, and the concrete impact demonstrated. A finding that needs an unusual non-default configuration, or whose impact is limited, may score lower than the tier suggests; one that chains into full host compromise may score higher.
+
+### Core router-engine invariants
+
+The table above is the cross-component _impact_ view: each property is broken when some component mishandles untrusted input on its way into a route. This subsection states the companion _engine_ view - what `camel-core` itself (the routing engine, the `Exchange` / `Message` model, the EIP processors, the expression, language and property-placeholder resolution, and the type-converter and data-format registries) upholds independently of any one component. It exists so that a candidate located in a `core/camel-*` module, rather than in a component, can be routed to a property and a disposition without re-deriving the trust model.
+
+These are not new commitments. Each invariant is the engine-layer projection of an _In-scope vulnerability class_ below, or of the trust boundary in _Trust model_; it is restated here because a finding against the core is reported against core code, and the triager needs the core-side statement to judge it.
+
+  
+| Invariant the router engine upholds on its own (no component-specific configuration) | What a violation looks like | Indicative severity |
+| --- | --- | --- |
+| The engine never evaluates an `Exchange` body, header or property as a `simple`, OGNL, bean or scripting expression unless a route author placed an expression or predicate at that point in the route | A core processor or language resolves untrusted message content as an expression with no route-author-authored expression referencing it | Critical (CVSS 9.0-9.8) |
+| Untrusted `Exchange` content does not, by the engine’s own action, select the endpoint, bean, method or command dispatched to; the dynamic targets of `toD`, `recipientList`, `routingSlip`, the dynamic router and bean-method resolution are computed from the route-author expression and the documented dispatch headers only | A value the engine itself promoted from a body or attachment into a dispatch header (`CamelBeanMethodName`, `CamelHttpUri`, `CamelJmsDestinationName`, …​) or into a dynamic-target expression input | Critical (CVSS 9.0-9.8) |
+| The core type-converter registry does not instantiate or deserialise attacker-chosen Java types when a route merely declares a target type (`convertBodyTo`, a typed body, expression coercion); a converter that reads external entities or runs an `ObjectInputStream` is the converting component’s responsibility, not an automatic core behaviour | A registered core converter instantiating or deserialising arbitrary types from an untrusted body during automatic conversion (historic instance: CVE-2015-0263, the `camel-core` XML converter) | Critical when gadget-reachable (9.0-9.8); High otherwise (7.0-8.6) |
+| Property-placeholder and bean-reference resolution (`{{…​}}`, `#bean:`, `#class:`, `#type:`, `#property:`) operates on route and configuration text supplied by the route author or operator, never on `Exchange` content | Message body or header content reaches placeholder or `#class:` / `#bean:` resolution and is resolved or instantiated | Critical (CVSS 9.0-9.8) |
+| The engine and the `Exchange` / `Message` model never promote a body field, attachment or transport metadata into the internal `Camel*` header namespace; populating that namespace from untrusted wire input is a _consumer_ responsibility governed by the inbound `HeaderFilterStrategy` (the CVE-2025-27636 family), not an engine action | Core machinery, rather than a specific consumer, copies an untrusted-origin value into the internal header namespace | Critical (CVSS 9.0-9.8) |
+| Error handling, dead-letter routing, redelivery and the in-band trace / debug processors do not, on the in-band route path, evaluate untrusted content as code or expose one \`Exchange’s body, headers or secrets to an unprivileged in-band party | An `onException`, dead-letter or `BacklogTracer` in-band path turns untrusted content into evaluation or cross-`Exchange` disclosure. Exposure or expression evaluation reached through a _management connection_ (JMX, Jolokia, the developer console) is governed by the management-surface item under _Out of scope_, not by this invariant | Medium to Critical, depending on what is reached |
+| The engine makes no unbounded-resource guarantee | Unthrottled routing, unbounded aggregation or recursion under attacker-influenced volume. This is an availability concern the operator bounds (`throttle`, `circuitBreaker`, `resilience4j`, JVM limits); see _Out of scope_. A core finding whose only effect is resource consumption is closed as `not a vulnerability` | Out of scope (no engine guarantee) |
+
+A candidate located in a `core/camel-*` module is judged against these invariants first. If the engine upheld the invariant and the violation arises only because a route author authored an expression or route over untrusted input, or wired an untrusted source straight through without `removeHeaders("Camel*")`, the disposition is the route-author position in _Out of scope_, not a framework vulnerability - the same line the rest of this model draws between the route plus its configuration and the data flowing through it.
+
+### Security properties not provided
+
+The complement of _Security properties and violation severity_ and _Core router-engine invariants_ above: properties the framework does **not** claim, and well-known attack classes it does **not** defend against on its own. Listing them is what lets the in-scope / out-of-scope rules below work as a closed set rather than an "everything else is also a vulnerability" reading. A report whose entire claim is "feature X failed to do Y" can then be routed to "X was not built to do Y" rather than re-argued case by case.
+
+-   **No sandboxing of the route or the JVM running it.** Route authors execute arbitrary Java in `.bean()`, `.process()` and class references; evaluate arbitrary expressions in `simple`, `groovy`, `jexl`, `mvel`, `xpath`, `ognl`; reach any class on the classpath; and configure any component option. Camel does not constrain what route code is allowed to do (see the route-author entry in _Roles_).
+    
+-   **No availability guarantee under attacker-influenced volume or resource cost.** The engine does not throttle, bound aggregation, cap recursion or limit per-`Exchange` memory. Operators apply `throttle`, `circuitBreaker`, `resilience4j` and JVM limits; algorithmic-complexity attacks in third-party parsers (XML billion-laughs, ReDoS in route-author regex, decompression amplification in zip / gzip / brotli inputs) are out of scope unless Camel exposes the parser in a way that bypasses the library’s own limits. See the denial-of-service entry in _Out of scope_ and the unbounded-resource row in _Core router-engine invariants_.
+    
+-   **No automatic sanitisation of application-level semantic headers.** The framework’s automatic header filtering is scoped to the internal `Camel*` namespace only (matched case-insensitively, so `Camel`, `CAMEL` and `caMEL` are all covered). Application-level headers that components consume as part of their documented header contract - `To`, `Cc`, `Bcc`, `Subject`, `From` in `camel-mail`; arbitrary HTTP header names; JMS properties; AMQP, MQTT, CoAP and Kafka headers - are passed through intentionally. Sanitising them against an untrusted upstream is the route author’s responsibility at the trust boundary (`removeHeaders`, normalisation, allow-listing). This disclaimer covers headers a component reads as **payload data**; it does not cover a component’s own **control** headers - those that select a target, an operation, or the transport and its credentials - which are the framework’s responsibility to filter whatever they are named. See the third bullet under _Known limitations_ and the control-header definition under the Camel-header class in _In-scope vulnerability classes_.
+    
+-   **No shield against transitive-dependency CVEs.** A CVE in a JAR Camel pulls in is the upstream project’s vulnerability; Camel fixes CVEs in Camel code, not in third-party JARs. Camel may upgrade the dependency to pick up an upstream fix, but the CVE itself is closed against the upstream project. See the third-party-dependency entry in _Out of scope_.
+    
+-   **No production guarantees under the `dev` or `test` profile.** Under the opt-in `dev` profile the dev console, debug and trace endpoints, the backlog debugger and verbose diagnostics are enabled, and the `insecure:dev` policy is relaxed to `allow`. Camel may reveal configuration, route and `Exchange` detail that it would not reveal in a `prod` deployment. The framework applies no profile by default (security policy `warn`); `prod` must be selected explicitly to escalate the policy to `fail`. See the profile entry in _Out of scope_, _Configuration variants that change the model_ and `design/security.adoc`.
+    
+-   **No production-grade information-hiding guarantees under non-default diagnostic log levels.** DEBUG and TRACE log levels are diagnostic, not production, configurations; they are expected to log internal `Exchange`, route and configuration detail that the default INFO, WARN and ERROR levels do not. The project strives to avoid logging sensitive data even at diagnostic levels where it makes sense, but does not commit to redacting it. The default INFO, WARN and ERROR levels are what the framework commits to keeping clean of sensitive data; see the **Information disclosure of secrets or sensitive Exchange state** class under _In-scope vulnerability classes_.
+    
+-   **No defence against the operator misconfiguring the deployment outside the framework’s defaults.** `trustAllCertificates=true`, `hostnameVerificationEnabled=false`, `allowJavaSerializedObject=true`, `transferException=true`, exposing the management surface on a public network, placing the aggregation-repository store on a writeable share - all are operator decisions. The framework is in scope only when the **default** shipped the risky behaviour. See the explicit-opt-in entry in _Out of scope_.
+    
+-   **No constant-time, side-channel-resistant comparison or cryptographic primitives.** Equality of headers, tokens and identifiers uses general-purpose Java comparison. Route-author code that compares a shared secret against an untrusted input is responsible for using a constant-time comparator; Camel does not provide one.
+    
+
+#### False-friend properties
+
+Features that **look like** a security property and are sometimes mistaken for one. Each is documented here so that a report whose claim rests on the misunderstanding can be closed against the correct contract.
+
+-   **`DefaultHeaderFilterStrategy` is an internal-namespace filter, not an application-header sanitiser.** It filters the `Camel*` namespace case-insensitively (`Camel`, `CAMEL` and `caMEL` alike), which is what contains the internal-dispatch family (the CVE-2025-27636 class). It does not, and cannot, strip the application-level headers a component reads as semantic input. Route authors who need application-header sanitisation must do it explicitly at the trust boundary.
+    
+-   **`removeHeaders("Camel*")` strips the internal-dispatch headers, not every untrusted-origin header.** It is the recommended trust-boundary hygiene against the internal-header dispatch class (see _Deployment hardening_), and it is necessary; it is not, on its own, sufficient to sanitise the application headers a downstream component will trust. It also does not match a control header spelled outside the namespace - `websocket.connectionKey`, `gridfs.*`, `irc.sendTo`, `operationName`, `mail.smtp.*`. Those are the framework’s responsibility to filter and have been fixed as advisories where they were reachable, but a route running against a release that predates the relevant fix needs the namespace stripped explicitly as well.
+    
+-   **The security policy enforcement framework is a configuration linter, not a runtime sandbox.** The four categories (`secret`, `insecure:ssl`, `insecure:serialization`, `insecure:dev`) detect insecure configuration at bootstrap time and emit a warning or fail startup under the `prod` profile. They do not intercept runtime data or enforce a policy on a per-`Exchange` basis. See `design/security.adoc`.
+    
+-   **Component deprecation is not a security boundary.** A `(deprecated)` component still ships in a supported release and remains in limited scope (see _Deprecated and removed components_). Deprecation marks a removal path with a documented migration; it does not by itself reduce the trust boundary or imply the component is unsafe to receive a fix.
+    
+-   **TLS by default is not peer authentication.** Components that default to TLS for transport (HTTP, AMQP, MQTT, Kafka, JMS) protect the wire from passive observers and trivial man-in-the-middle. They do not, on their own, validate that the peer is the one the route intended to talk to; that requires an `SSLContextParameters` with a trust store and hostname verification configured by the operator (see _Deployment hardening_).
+    
+
+### In-scope vulnerability classes
+
+The classes below are grounded in advisories the Apache Camel PMC has accepted in the past. The CVE IDs in each item are representative examples, not an exhaustive list. The full advisory history is at [/security/](/security/).
+
+#### Unsafe deserialization of untrusted input
+
+Any code path where data received from an external producer is passed to `ObjectInputStream.readObject()`, an XStream / Hessian / Castor / SnakeYAML unmarshaller, or a polymorphic Jackson reader without an effective filter or allowlist.
+
+Historical examples:
+
+-   CVE-2015-5344 (`camel-xstream`), CVE-2017-3159 (`camel-snakeyaml`), CVE-2017-12633 (`camel-hessian`), CVE-2017-12634 (`camel-castor`) - data-format components performing untrusted-type deserialisation.
+    
+-   CVE-2016-8749 (`camel-jackson`) - attacker-controlled `CamelJacksonUnmarshalType` header selecting the deserialised type.
+    
+-   CVE-2015-5348 (`camel-jetty`, `camel-servlet`) - HTTP consumer auto-detecting `application/x-java-serialized-object` and deserialising the body.
+    
+-   CVE-2020-11972 (`camel-rabbitmq`), CVE-2020-11973 (`camel-netty`) - Java deserialisation enabled in the default consumer configuration.
+    
+-   CVE-2024-22369 (`camel-sql`), CVE-2024-23114 (`camel-cassandraql`), CVE-2026-25747 (`camel-leveldb`), CVE-2026-27172 (`camel-consul`), CVE-2026-40858 (`camel-infinispan`) - aggregation repositories doing raw `ObjectInputStream.readObject()` on persisted state.
+    
+-   CVE-2026-40048 (`camel-pqc`) - file-backed key store deserialising `.key` files.
+    
+-   CVE-2026-40473 (`camel-mina`) - TCP/UDP type converter wrapping incoming bytes in `ObjectInputStream`.
+    
+-   CVE-2026-40860 (`camel-jms`, `camel-sjms`, `camel-sjms2`, `camel-amqp`) - `JmsBinding.extractBodyFromJms()` calling `ObjectMessage.getObject()` with no filter while `mapJmsMessage=true` (the default).
+    
+-   CVE-2026-43866 (`camel-jms`, `camel-sjms`, `camel-sjms2`) - a forged `DefaultExchangeHolder` carried in a JMS `ObjectMessage` bypassing the `ObjectInputFilter` added for CVE-2026-40860 (a filter-bypass follow-on).
+    
+-   CVE-2026-40859 (`camel-vertx-http`, `camel-netty-http`) - raw `ObjectInputStream` deserialisation of HTTP response bodies.
+    
+-   CVE-2026-43865 (`camel-hazelcast`) - unsafe Java deserialisation in default-configured managed Hazelcast instances (also an insecure-default case).
+    
+-   CVE-2026-46590, CVE-2026-43867 (`camel-pqc`) - HashiCorp Vault and AWS Secrets Manager key-lifecycle managers deserialising persisted key metadata with `ObjectInputStream` (a follow-on to CVE-2026-40048).
+    
+-   CVE-2026-42527 - the **filter itself** being too permissive: the default `ObjectInputFilter` pattern admitted `java.net.**` and so allowed DNS-based information disclosure. A mitigation that is present but under-strength falls in this class in its own right; see the incomplete-fix note under _Triage dispositions_.
+    
+
+Since 4.22 (CAMEL-24296) `CamelObjectInputStream` installs a JEP-290 `ObjectInputFilter` by default - honouring a JVM-wide `jdk.serialFilter` when the operator has set one, and otherwise applying Camel’s own allow-list. This is defence in depth beneath the per-component rules above, not a replacement for them: it constrains the streams that pass through that class, and a component that constructs a raw `ObjectInputStream`, or that reaches JDK serialisation indirectly through a third-party serializer API, is still responsible for its own filter.
+
+#### XML external entity (XXE) and remote DTD/stylesheet resolution
+
+Any XML parser, XSLT engine, XSD validator, XPath evaluator or XML data converter that resolves external entities or fetches remote DTDs / stylesheets from untrusted input by default.
+
+Historical examples: CVE-2014-0002 and CVE-2014-0003 (`camel-xslt`), CVE-2015-0263 (XML converter in `camel-core`), CVE-2015-0264 (XPath language in `camel-core`), CVE-2017-5643 (Validation component), CVE-2018-8027 (XSD validation processor), CVE-2019-0188 (`camel-xmljson` via `json-lib`).
+
+#### Expression or template language injection
+
+Any code path where untrusted input is evaluated as a Camel `simple` expression or a template language (Velocity, Freemarker, Mustache, MVEL, etc.) without an explicit opt-in from the route author.
+
+Historical examples: CVE-2013-4330 (`CamelFileName` header value being passed to `simple` by the producer in `camel-file` / `camel-ftp`), CVE-2020-11994 (template injection plus arbitrary file disclosure in templating components).
+
+> **Note**
+> A route author who writes `.simple("${header.x}")` against an attacker-controlled header _is_ injecting code, but the framework cannot decide on their behalf whether `header.x` is trusted. That case is route-author responsibility, not a framework vulnerability. The in-scope case is when the framework itself passes untrusted input to an evaluator without the route author asking for it.
+
+#### Path traversal
+
+Any consumer or producer that lets an untrusted file name, header or URI component navigate outside the configured root directory.
+
+Historical examples: CVE-2018-8041 (`camel-mail`), CVE-2019-0194 (`camel-file`).
+
+The name does not have to arrive in a message. A cluster of 2026 advisories came from **download** paths that built a local target out of a name the remote store reported back - CVE-2026-66906 (`camel-azure-storage-blob`, `downloadBlobToFile`), CVE-2026-60093 (`camel-azure-storage-datalake`, `downloadToFile`) and CVE-2026-66907 (`camel-google-storage`, where `downloadFileName` was evaluated with the `${file:name}` token, which returns the remote name verbatim, rather than `${file:onlyname}`, which strips the path). In each case the component joined the configured directory with the remote name and passed the result to the SDK with no lexical normalization and no containment check. Object and blob names are attacker-influenced whenever a principal who can write to the store is outside the route’s trust boundary (see _Adversary model_), so a download target must be normalized and verified to resolve inside the configured directory before it is used.
+
+#### SSRF or remote-resource fetch triggered by parsing
+
+Any parser that resolves a URL or DTD reference from untrusted input as part of its default parsing behaviour.
+
+Historical example: CVE-2017-5643 (Validation component fetching remote DTDs).
+
+#### Camel-header / bean-dispatch abuse via untrusted input
+
+Camel uses headers - `CamelBeanMethodName`, `CamelFileName`, `CamelExecCommandExecutable`, `CamelJmsDestinationName`, `CamelHttpUri`, `CamelJacksonUnmarshalType` and others - to drive component behaviour. Any code that maps untrusted input into the `Exchange` header map without a strict, case-insensitive `HeaderFilterStrategy` becomes an injection vector for these headers.
+
+Historical examples: CVE-2025-27636, CVE-2025-29891 (default HTTP `HeaderFilterStrategy` bypass), CVE-2025-30177 (`camel-undertow` inbound filter), CVE-2026-33453 (`camel-coap`), CVE-2026-33454 (`camel-mail`), CVE-2026-40453 (`camel-jms`, `camel-sjms`, `camel-coap`, `camel-google-pubsub` case-variant follow-on). The class recurred throughout 2026 in two shapes - consumers mapping inbound message headers without an effective `HeaderFilterStrategy` (CVE-2026-46456 `camel-aws2-sqs`, CVE-2026-46457 `camel-nats`, CVE-2026-46726 `camel-vertx-websocket`) and components whose non-`Camel`\-prefixed header constants bypass the HTTP header filter (CVE-2026-46585 `camel-lucene`, CVE-2026-48203 `camel-solr`, CVE-2026-48205 `camel-dns`, CVE-2026-48206 `camel-jira`, CVE-2026-49098 `camel-kafka`, CVE-2026-49099 `camel-salesforce`, among others). This recurrence is what motivated centralising the default `Camel*` filter in `DefaultHeaderFilterStrategy` (CAMEL-23543, Camel 4.21) so consumers and producers block the internal namespace without per-component boilerplate.
+
+Three refinements decide how this class is actually applied: which headers count, which code sites count, and whether the filter that is supposed to be in the way is really in the way. Each was learned from an advisory where the narrower reading would have wrongly closed a real finding.
+
+**A control header is defined by what it does, not by its prefix.** The framework’s automatic filter covers the `Camel*` namespace, but the property this class protects is that untrusted input must not steer the exchange - and a component is free to name a steering header anything it likes. A header is a **control** header, and belongs in the component’s inbound filter set whatever it is called, when it selects any of:
+
+-   **the target** - which peer, channel, destination, topic or recipient the message goes to (CVE-2026-71300 `camel-atmosphere-websocket`, `websocket.connectionKey` / `.list` / `sendToAll`; CVE-2026-49097 `camel-irc`, `irc.sendTo`);
+    
+-   **the operation** - which method, verb or command the component performs (CVE-2026-48204 `camel-mongodb-gridfs`, `gridfs.*`, including file deletion; CVE-2026-46592 `camel-cxf`, `operationName` / `operationNamespace`; CVE-2026-46587 `camel-couchbase`, CVE-2026-46588 `camel-couchdb`, CVE-2026-46453 `camel-elasticsearch-rest-client`);
+    
+-   **the transport or its credentials** - which host, protocol, TLS posture or authentication the component uses (CVE-2026-46584 `camel-mail`, where attacker-supplied `mail.smtp.*` / `mail.smtps.*` headers were applied as JavaMail session properties, weakening SMTP transport security and, before 4.19.0, redirecting the connection and disclosing the configured credentials).
+    
+
+By contrast a **semantic** header is one the component reads as payload data - `To`, `Cc`, `Subject`, an HTTP `X-` header, a JMS property. Those are pass-through by contract and sanitising them is route-author work (see _Known limitations_). The two categories are not distinguished by spelling, so "the header has no `Camel` prefix" does not by itself discharge a report; the triager has to ask what the header does. A consumer that copies untrusted input into a header the **producer** side treats as control input is the same finding even though the two sides sit in different components (CVE-2026-49086 `camel-dapr`, where the Pub/Sub consumer copied the inbound CloudEvent’s pub/sub name and topic into producer-direction routing headers, letting anyone who could publish to the subscribed topic redirect the re-published message).
+
+**Every inbound mapping site is in scope, not only the consumer.** The `Exchange` header map is populated from more than one place, and each place needs an effective strategy:
+
+-   **Consumers**, mapping transport headers - the original shape.
+    
+-   **Data formats and unmarshallers**, mapping headers found inside the payload they decode. CVE-2026-59230 (`camel-mail`) is the reference case: the `MimeMultipart` data format with `headersInline=true` copied the MIME headers of the message being unmarshalled onto the `Exchange` with no filter at all. CAMEL-24419 then showed the second half of the lesson - the data format had been given a plain `DefaultHeaderFilterStrategy`, which knows only `Camel*` / `camel*`, so the `mail.smtp.*` namespace that the **consumer** path deliberately filters was still admitted through the unmarshal path. An entry point that filters a narrower namespace than its sibling entry point is a gap, not a difference in configuration.
+    
+-   **Structured content modes**, where fields parsed out of the body become headers. CVE-2026-63621 (`camel-knative`) is the reference case: binary-mode CloudEvent attributes arrived as HTTP headers and went through a `HeaderFilterStrategy`, but in structured mode the event was a JSON document in the body and the sender-chosen extension attributes were mapped onto the message directly. A component that filters one content mode must filter every content mode that reaches the same header map.
+    
+-   **Transport metadata that is not a header** - query parameters, path segments, subscription names (CVE-2026-55993 `camel-atmosphere-websocket`).
+    
+
+**A filter that is never consulted is not a filter.** CVE-2026-78329 (`camel-undertow`) is the reference case: `UndertowEndpoint` defaulted its `headerFilterStrategy` field to the base `HttpHeaderFilterStrategy` and pushed that instance into the HTTP binding it creates lazily, overwriting the component-specific `UndertowHeaderFilterStrategy` that the binding had installed in its own constructor. The correct strategy was constructed and then immediately replaced, so on endpoint-configured routes it never ran - and the earlier hardening it carried (CAMEL-23588) had been inert since it shipped. The same shape appears outside header filtering: in CAMEL-24412 a case-insensitive comparison guarding a `camel-netty-http` security constraint sat behind a case-sensitive `startsWith`, so it could never change the outcome. Presence of a defence in the source is not evidence that it executes; both the reporter and the triager have to establish that the guard is on the live path.
+
+The prefixed headers of the API-based components - `CamelFhir.*`, `CamelBox.*`, `CamelOlingo4.*`, `CamelAs2.*` and the other `camel-api-component` generated producers, which select the API method and its arguments - sit inside the `Camel*` namespace, so they are governed by exactly this rule. The project’s position on a `Camel<Api>.*` header reaching an API producer from an untrusted source is therefore **conditional, and the condition is at the inbound consumer, not at the API producer**; it is not "always out of scope". A consumer that admits a `Camel<Api>.*` header from an untrusted source without an effective case-insensitive `Camel*` `HeaderFilterStrategy` is in scope regardless of which producer ultimately consumes the header - this is the same class as the CVE-2025-27636 family. The API producer honouring a `Camel<Api>.*` header that reached it only because a route author wired an untrusted source straight to the producer without `removeHeaders("Camel*")`, while the inbound filter was in place and effective, is the documented bean-dispatch contract (see _Known limitations_), not a framework vulnerability.
+
+#### Authentication or authorization bypass in security-providing components
+
+Components that explicitly provide authentication, authorization, or tenant isolation (Keycloak, JWT, Shiro, Spring Security, platform-http auth handlers, etc.) must enforce what they claim to enforce.
+
+Historical examples: CVE-2026-23552 (`camel-keycloak` not validating the JWT `iss` claim against the configured realm), CVE-2026-40022 (`camel-platform-http-main` Vert.x sub-router mounted at `<path>*` while the auth handler was at the exact path, exposing subpaths of `/api`, `/admin`, `/observe/info`), CVE-2026-46455 (`camel-keycloak` missing the token `IS_ACTIVE` check, so an expired access token is accepted) and CVE-2026-53913 (`camel-keycloak` fail-open: the bearer token is verified only inside the role and permission checks, so a deployment configuring neither accepts the request unauthenticated).
+
+Two sub-rules have each now produced more than one advisory and are stated explicitly, because a component can satisfy the letter of its option names while breaking either one:
+
+-   **An unconfigured check must fail closed, not disappear.** CVE-2026-66908 (`camel-platform-http-main`) is the reference case: when neither `jwtIssuer` nor `jwtAudience` was configured the code built the `JWTAuth` instance from the keystore alone, so inbound tokens were checked for signature and expiry only and the `iss` and `aud` claims were not validated at all - silently, with the server starting and reporting authentication as enabled. The same shape underlies CVE-2026-53913 above, and CAMEL-24411, where the `camel-oauth` processors returned normally from the paths on which they do **not** authenticate the caller, so the rest of the route ran and overwrote the challenge the processor had just prepared. A security component that cannot perform a check it advertises must refuse to start or refuse the request; leaving the check out is not a neutral default.
+    
+-   **The authorization decision and the action must be computed from the same value.** CVE-2026-40022 (`camel-platform-http-main`) mounted the Vert.x sub-router at `<path>*` while the auth handler sat at the exact path, so sub-paths of `/api`, `/admin` and `/observe/info` were dispatched but not guarded. CAMEL-24412 is the normalization variant: `camel-netty-http` stripped the endpoint context-path with a case-sensitive `startsWith` before evaluating the security constraint, while dispatch matched the path case-insensitively - so a request whose context-path differed only by case reached the route but was evaluated against an unstripped target, matched no inclusion, and an unmatched target counts as unrestricted. Wherever routing and authorization each normalize a path, a host or an identifier, they have to normalize it identically; a divergence between them is an auth bypass even when both sides are individually correct.
+    
+    The same divergence appears away from authorization, and the protocol decides how bad it is. A comparison that is case-sensitive where the protocol is case-insensitive can be defeated by varying the case - and where the protocol normalizes on the wire, the comparison may never match at all: HTTP/2 requires lowercase header names, so a case-sensitive header check is not merely bypassable there but unconditionally absent. Test the same guard under every protocol version the component accepts. The prefix variant is the same error in another shape: selecting a behaviour by testing whether a configured value **starts with** a token means every value sharing that prefix selects it too. Match the exact value unless a prefix is what the feature actually means.
+    
+
+#### Information disclosure of secrets or sensitive Exchange state
+
+Code paths that write secrets, internal Exchange state, file contents or configuration values to a log, an event, a world-readable file, or an HTTP response.
+
+Historical examples: CVE-2023-34442 (`camel-jira` writing attachments to world-readable temp files), CVE-2024-22371 (`EventFactory` exposing sensitive Exchange data via a custom event), CVE-2026-49365 (`camel-netty-http`) and CVE-2026-56139 (`camel-undertow`) - the `muteException` consumer option defaulting to `false`, so a processing error returned the full exception and stack trace to the caller.
+
+That shape is not specific to HTTP. Any consumer with a reply path can hand the route’s failure back to whoever sent the message - as a response body, over a socket, inside a protocol fault, or in a status field that is transmitted to the caller even when the underlying cause stays on the server. Stated generally: **a consumer must not return the route’s exception to the party that sent the message.** A consumer that can reply needs a `muteException` option defaulting to `true`. Faults that the service contract declares are the exception, since clients are written against those and suppressing them breaks the contract rather than protecting anything.
+
+Judged against the default production log levels (INFO, WARN, ERROR); findings whose impact only manifests when the operator has enabled the diagnostic DEBUG or TRACE levels are out of scope, since those levels are operator-enabled diagnostic configurations expected to log internal `Exchange`, route and configuration detail (see the diagnostic-logging entry under _Known non-findings_).
+
+#### State shared between exchanges
+
+A component that holds mutable state outside the Exchange and reuses it across messages lets one message observe or alter what another is doing. The party that sent the earlier message need not be the party that sends the next, so this crosses a trust boundary whenever a route serves more than one sender, tenant or partner.
+
+The state takes several forms: an object a data format unmarshals into and returns as the body; a stateful cryptographic primitive that accumulates input in one call and consumes it in another; key or credential material belonging to one request but stored where the next can reach it; a cache shared across the process.
+
+Two questions decide it:
+
+-   **Is the state per-exchange in fact as well as in name?** Anything reachable from a producer or consumer field, from a static, or from a component-level cache outlives the exchange that wrote it and is shared until shown otherwise. "It is single-threaded in practice" is a property of one deployment, not of the code.
+    
+-   **Does the cache key contain everything that changes the value?** Where the shared object is a cache of something an endpoint is authorised to use, a key that omits a field which alters what the cached value permits is the same defect as having no key at all.
+    
+
+This is not "any race condition is a vulnerability". An interleaving that only corrupts the failing exchange’s own result is a correctness bug. It is in scope when the shared state carries authority, identity, or another party’s data.
+
+#### Insecure defaults
+
+A component shipping with a security-relevant option enabled by default - Java deserialisation, TLS validation disabled, an admin endpoint listening on `0.0.0.0`, a permissive `HeaderFilterStrategy`, an unfiltered `ObjectInputStream` - is in scope independently of the underlying class. The question is what an attacker can do against a component the operator simply added to a route without further configuration.
+
+Historical examples: CVE-2020-11972, CVE-2020-11973, CVE-2026-40860 and CVE-2026-43865 are insecure-default cases that also fall into the deserialisation class; CVE-2026-49365 and CVE-2026-56139 (`muteException` defaulting to `false`) are insecure-default cases in the information-disclosure class.
+
+Two shapes are worth stating on their own, because in both the dangerous state is reached by omission rather than by an opt-in - which is what separates them from the documented opt-ins that are out of scope:
+
+-   **Turning a protection on must not be what turns another one off.** Enabling transport security while leaving the peer-verification material unconfigured must fall back to the platform default trust anchors, never to accepting every peer. An encrypted connection with no peer authentication is worth little against an attacker on the network path, and an operator who asked for TLS has not thereby asked to skip certificate validation. Keep "trust everything" reachable only by naming it.
+    
+-   **Enabling CORS must not grant credentials to an origin nobody named.** Reflecting the request origin is acceptable on its own; reflecting it **and** allowing credentials is not, unless the operator listed that origin. The two together produce the credentialed any-origin policy the fetch specification refuses to express as a literal `*`, which is exactly why reflecting the origin is the usual way around that rule. Send `Vary: Origin` whenever the origin is reflected, so a shared cache cannot serve one origin’s response to another.
+    
+
+#### Injection into back-end queries built by Camel
+
+Components that build a query in another language from inputs they receive must not splice untrusted input directly into that query.
+
+Historical examples: CVE-2025-66169 and its incomplete-fix follow-on CVE-2026-46591 (`camel-neo4j` Cypher injection via JSON property names interpolated into the query), CVE-2014-0003 (`camel-xslt` extension-function invocation from untrusted stylesheet input).
+
+#### Argument injection into an external process Camel launches
+
+Some components do their work by invoking an external binary. Where the component assembles that command line, untrusted input must reach the child process only as data - a value in the argument vector - and must never be able to add or alter an argument. A component that concatenates untrusted input into a command string, or that accepts caller-supplied extra arguments without validating them against a known-safe set, lets an attacker turn a data field into an option the binary acts on: an output-path flag, a configuration-file flag, or anything else the tool exposes.
+
+Historical example: CVE-2026-40047 (`camel-docling`), where insufficient validation of custom CLI arguments passed to the `docling` binary enabled both argument injection and path traversal.
+
+This class sits next to the first row of _Security properties and violation severity_ ("untrusted data is never turned into executed code or OS commands"). It is distinct from the route-author case: a route author who writes an `exec` endpoint with an attacker-controlled command is out of scope per _Out of scope_; the class here is the framework building the argument vector on the route author’s behalf.
+
+### Out of scope
+
+The following are **not** framework vulnerabilities. They are intentional design, operator responsibility, or downstream misuse. Reports in these categories will be closed as `not a vulnerability`.
+
+-   **A route author writing code that does whatever they want.** `.bean()`, `.process()`, `Runtime.exec()`, `simple` / `groovy` / `jexl` / `mvel` evaluation, custom processors and beans are route code, and route code is trusted. If a route author evaluates an attacker-controlled header as a `simple` expression, the route is at fault, not the framework. The framework is in scope only when **it** passes untrusted input to an evaluator without the route author asking for it.
+    
+-   **A route author building a SQL, Cypher, LDAP, XPath or HTTP URI string from untrusted input without parameterisation.** The components offer safe APIs (parameter binding, prepared statements, URI builders); using them is the route author’s responsibility.
+    
+-   **An option whose risk is documented and which must be set explicitly to enable the risky behaviour.** `allowJavaSerializedObject=true`, `transferException=true`, `trustAllCertificates=true`, `hostnameVerificationEnabled=false`, explicit selection of an `ObjectInputStream`\-using data format - these are documented opt-ins and the operator has signed up for the consequences.
+    
+-   **Behaviour that is only present under the `dev` or `test` profile.** The framework applies **no** profile by default; `dev`, `test` and `prod` are all opt-in, set explicitly via `camel.main.profile` (or selected for you by tooling such as Camel CLI, which uses `dev` for local development). The `dev` profile is development-only and deliberately less guarded - it enables the developer console, debug and trace endpoints, the backlog debugger and more verbose diagnostics, and relaxes the `insecure:dev` policy to `allow`. Camel may, by design, reveal configuration, route and `Exchange` detail in these modes that it would not reveal in a production deployment. A report whose impact only manifests under `camel.main.profile = dev` or `test` is out of scope as a development-only configuration. Production deployments are expected to run `camel.main.profile = prod`, under which the security policy escalates from its `warn` default to `fail`; that production posture is the reference against which findings are judged (see _Configuration variants that change the model_, _Deployment hardening_ and the `design/security.adoc` design document for the profile-aware policy defaults).
+    
+-   **Denial of service via resource exhaustion.** Unthrottled routes, unbounded aggregators, an HTTP consumer with no rate limit, a JMS consumer that accepts arbitrarily large messages - operators must apply `throttle`, `circuitBreaker`, `resilience4j`, JVM heap limits, and the relevant component-level options. Algorithmic-complexity attacks in third-party libraries are reported to the upstream project unless Camel exposes the parser in a way that bypasses the library’s own limits.
+    
+-   **A deployer placing `camel-management`, the developer console, `camel-jolokia`, JMX or another management surface on a public network.** These are management surfaces; they assume a trusted network. The operations they expose - including `ManagedCamelContext.sendBody` / `requestBody`, `ManagedBacklogDebugger.evaluateExpressionAtBreakpoint`, `addConditionalBreakpoint` and `BacklogTracer.setTraceFilter` - are intentionally as expressive as a route author’s DSL, because they exist to support operator workflows (Camel CLI, Hawtio, JConsole, monitoring agents). The trust boundary is the management surface itself - JVM JMX authentication (`-Dcom.sun.management.jmxremote.authenticate`), the Jolokia restrictor policy, and the network exposure of the management port - not the individual MBean method. A report that demonstrates "MBean operation X executes code or sends to endpoint Y when invoked from a JMX or Jolokia connection" describes the documented contract, not a framework vulnerability.
+    
+-   **The Camel TUI’s `--mcp` and `--web` servers.** Camel TUI (`dsl/camel-jbang/camel-jbang-plugin-tui`) can optionally expose an MCP server (`--mcp`, for AI-agent access) and a browser-accessible terminal (`--web`, over WebSocket). Both are management surfaces under the same framing as above: opt-in (off unless the flag is passed), bound to `127.0.0.1` only, and - like JMX and Jolokia without an auth layer configured - carry no authentication of their own beyond that loopback bind. Full interactive control of the TUI (including anything it can shell out to, such as `docker`/`podman`/`camel run`) reachable from `127.0.0.1` is the documented contract for both flags, not a framework vulnerability.
+    
+-   **Vulnerabilities in third-party transitive dependencies.** Camel fixes CVEs in Camel code, not in third-party JARs; the report belongs upstream. Camel may upgrade the dependency to pick up an upstream fix, but the CVE itself is closed against the upstream project. See [`SECURITY.md`](https://github.com/apache/camel/blob/main/SECURITY.md) and the upstream project for the actual CVE.
+    
+-   **Features whose documented purpose is prototyping and development.** Some conveniences exist to make a local run or a demo easy, and their contract is breadth rather than confinement. `camel.server.staticEnabled` serves static content by resolving the request against the process working directory and then the class path, so that an `html`/`js` file dropped next to the route, or packaged in the jar, is simply served: loading resources from the class path is the point of the option, not an oversight. Running such a feature on an untrusted network is a deployment decision, and the surface it exposes there is operator responsibility. A report is in scope only if the feature behaves outside its own stated contract - for example serving a path outside a directory the operator explicitly configured. Where a component or option is documented as development-oriented, treat that documentation as the contract when triaging.
+    
+-   **Self-XSS by an authenticated user** of a UI built on top of Camel.
+    
+-   **Reports from automated scanners that do not demonstrate a concrete trust-boundary breach.** "Component X uses class Y that has historically had CVEs" is not, by itself, a finding. The report must show that the code path is reachable from an untrusted source and that the trust boundary is crossed.
+    
+
+### Deprecated and removed components
+
+A component’s position in its lifecycle changes how a report against it is handled. Whether a component is deprecated is mechanically verifiable: it carries the `(deprecated)` suffix in its `pom.xml` name and documentation title, an `@Deprecated` annotation, a `deprecated` flag in the Camel catalog, and an upgrade-guide entry pointing at the replacement or migration.
+
+-   **Deprecated components are in limited scope.** A deprecated component is on a removal path and has a documented replacement or migration. A report against one is still triaged on the private security list, but the **primary remediation is the documented migration**, not necessarily a code change in the deprecated component. Depending on the severity and on how widely the component is still used, the PMC may fix in place, publish an advisory whose remediation is "migrate to the supported replacement", or accelerate removal. Hardening and defence-in-depth work goes to the supported replacement, not the deprecated component.
+    
+-   **Removed components are out of scope.** A component that no longer ships in any supported release cannot receive a fix. A finding must be demonstrated against a component present in a supported release; if the only affected code is one that has been removed, the resolution is to upgrade to a release where it is gone or replaced.
+    
+-   This lifecycle rule does not change the in-scope classes for a **non-deprecated** component that merely depends on a deprecated or end-of-life **third-party** library - that case is governed by the third-party-dependency item under _Out of scope_ above.
+    
+
+### Known limitations
+
+These are framework characteristics that look like vulnerabilities at first glance but are documented design points. They may be tightened over time; if they are, the change is announced through the normal upgrade-guide channel.
+
+-   **Some heritage components default to permissive settings.** FTP, plain SMTP, `mapJmsMessage=true` and similar are kept compatible with how they have always behaved. Where the project has decided to tighten a default, the change ships with an upgrade-guide entry and a corresponding CVE if the prior default was a security risk in a default-installed deployment.
+    
+-   **Bean-based dispatch via internal headers is intentional.** Headers like `CamelBeanMethodName`, `CamelFileName`, `CamelExecCommandExecutable` and `CamelJmsDestinationName` are the public contract for letting a route control component behaviour. Route authors must filter Camel-internal headers from untrusted producers (see _Deployment hardening_ below); on the component side the inbound `Camel*` `HeaderFilterStrategy` is applied by default since 4.21 (CAMEL-23543), and component authors must not opt out of it.
+    
+-   **The framework’s automatic header filtering is scoped to the internal `Camel*` namespace.** Since 4.21 (CAMEL-23543) `DefaultHeaderFilterStrategy` filters that namespace case-insensitively **by default, in both directions, for every consumer and producer that uses it**, with no per-component configuration; it does not, and cannot, filter the non-prefixed application-level headers a component reads as semantic input - `To`, `Cc`, `Bcc`, `Subject`, `From` in `camel-mail`; HTTP header names; JMS properties; and so on. Those headers are part of each component’s documented header contract and are intentionally passed through. There is one uniform rule rather than a per-component policy: protecting a producer’s semantic headers from an untrusted upstream is route-author responsibility - strip or normalise them at the trust boundary, exactly as for a query string built from untrusted input - while the **specific** set of semantic headers a component honours is necessarily component-by-component and is documented on each component page. The framework itself is in scope whenever an **inbound mapping site** - a consumer, a data format, a structured content mode or a transport binding - maps untrusted input into those headers as part of its own default behaviour without an effective inbound `HeaderFilterStrategy` (the same inbound-filter class as the Camel-header item under _In-scope vulnerability classes_, e.g. CVE-2026-33454 in `camel-mail`); the path-traversal class applies independently where such a header navigates outside a configured root (e.g. CVE-2018-8041).
+    
+    This limitation is about **semantic** headers - the ones a component reads as payload data. It does not extend to a component’s own **control** headers, which select a target, an operation, or the transport and its credentials. Those are internal to the component however they are spelled, they belong in its inbound filter set even when they carry no `Camel` prefix, and a report about one is in scope rather than route-author responsibility. See the control-header definition under the Camel-header class in _In-scope vulnerability classes_.
+    
+-   **Aggregation repositories that persist Java objects assume the backing store is trusted.** JDBC, Cassandra, Infinispan, LevelDB, Consul and similar repositories are state stores for routes the operator wrote; the operator is responsible for keeping write access to that store inside the trust boundary. This assumption is about **state the route itself wrote and reads back**. It does not extend to the names and metadata a remote data store reports for objects other principals put there - blob and object keys, remote file names, listing entries - which are untrusted input under _Adversary model_ and have produced accepted path-traversal advisories (CVE-2026-66906, CVE-2026-60093, CVE-2026-66907).
+    
+-   **Many components inherit the security posture of their underlying client.** `camel-jms` inherits JMS-broker client behaviour; `camel-kafka` inherits Kafka-client behaviour; cloud SDK components inherit the SDK’s TLS and auth defaults. A report against Camel must show the Camel framework, not the underlying client, is the cause.
+    
+
+### Known non-findings
+
+Patterns that automated scanners, AI-assisted analysers and human reviewers repeatedly report against Camel that are **not** framework vulnerabilities under this model. Each entry names the recurring claim, cites the section of this document that discharges it, and where appropriate states the suppression shape. This list is the highest-leverage input for an automated triage pass; it can be fed back to a scanner verbatim as a negative prompt or suppression configuration. Disposition is `KNOWN-NON-FINDING` (see _Triage dispositions_).
+
+-   **"Component X depends on a JAR with CVE-Z, therefore Camel is vulnerable."** Out of scope per the transitive-dependency entry in _Out of scope_. Camel fixes CVEs in Camel code, not in third-party JARs; the report belongs upstream. Camel may upgrade the dependency to pick up an upstream fix, but the CVE itself is closed against the upstream project.
+    
+-   **"\`simple(…​)``, `xpath(…​)``, `groovy(…​)`, `jexl(…​)` or `mvel(…​)` evaluates an untrusted expression."** The expression text is route-author code, not untrusted input. The framework is in scope only when **it** passes an `Exchange` body, header or property to an evaluator without the route author placing an expression there - the first invariant under _Core router-engine invariants_. Otherwise this is the route-author entry in _Out of scope_.
+    
+-   **"\`.bean(…​)``, `.process(…​)``, `Runtime.exec(…​)` or a `Class` reference allows RCE."** These are route-author primitives by design. Route code is trusted code; see the route-author entry in _Out of scope_ and the route-author row in _Roles_.
+    
+-   **"A `Camel*` header controls dispatch, therefore the consumer is vulnerable."** Bean-based dispatch via internal headers is the public contract for letting a route control component behaviour; see the second bullet under _Known limitations_. A finding is in scope only when an **inbound mapping site** - a consumer, a data format, a structured content mode or a transport binding - promotes an untrusted-origin value into that namespace without an effective `HeaderFilterStrategy`, the Camel-header / bean-dispatch class under _In-scope vulnerability classes_.
+    
+-   **"Application-level header X (`To`, `Subject`, HTTP `X-…​`, JMS property, AMQP / MQTT / CoAP / Kafka header) is not stripped, therefore the consumer is vulnerable."** Application-level headers are part of each component’s documented header contract and are intentionally passed through; the framework filters only the internal `Camel*` namespace. See the third bullet under _Known limitations_ and the application-headers point under _Security properties not provided_. The route author sanitises at the trust boundary.
+    
+    **This entry applies only to headers the component reads as payload data.** Before using it, check what header X actually does: if it selects a target, an operation, or the transport and its credentials, it is a control header, it is in scope however it is spelled, and the disposition is not `KNOWN-NON-FINDING` - see the control-header definition under the Camel-header class in _In-scope vulnerability classes_, and the advisories cited there for `websocket.*`, `gridfs.*`, `irc.*`, `operationName` and `mail.smtp.*`. The absence of a `Camel` prefix decides nothing on its own.
+    
+-   **"\`DefaultHeaderFilterStrategy\` can be bypassed by changing the case (`caMEL`, `CAMEL`)."** The default strategy is case-insensitive out of the box (`Camel`, `CAMEL` and `caMEL` are filtered identically); see the third bullet under _Known limitations_. A finding here would have to demonstrate a **custom** strategy that does not extend `DefaultHeaderFilterStrategy` and re-implements the matching without case-insensitivity - and the fix lives in that custom strategy.
+    
+-   **"The developer console, the backlog debugger, the `Tracer` / `BacklogTracer`, JMX, Jolokia or `camel-management` exposes operations that execute code or read `Exchange` state."** Management surfaces; the trust boundary is the surface itself (JVM JMX authentication, the Jolokia restrictor, the network exposure of the management port), not the individual MBean method. See the management-surface entry in _Out of scope_ and the error-handling row in _Core router-engine invariants_.
+    
+-   **"A finding only manifests under `camel.main.profile=dev` or `camel.main.profile=test`."** Non-default development-only configuration; out of scope per the profile entry in _Out of scope_.
+    
+-   **"\`camel-FOO\` logs the Exchange body, a header, or a configuration value at DEBUG or TRACE level."** DEBUG and TRACE are diagnostic log levels enabled explicitly by the operator; they are expected to reveal internal `Exchange`, route and configuration detail that the default INFO, WARN and ERROR levels do not. Information-disclosure findings are judged against the default production log levels (see the **Information disclosure of secrets or sensitive Exchange state** class under _In-scope vulnerability classes_, and the diagnostic-log-levels point under _Security properties not provided_). The project strives to avoid logging sensitive data even at diagnostic levels where it makes sense, but does not commit to redacting it.
+    
+-   **"Component `camel-FOO` uses MD5 / SHA-1 / a non-cryptographic hash function."** Camel uses content hashing for non-security purposes such as idempotency keys, content-based routing identifiers, partitioner selection and cache keys. A finding requires the use to be a security primitive (authentication, integrity check, secret derivation, signature), not a routing or identification primitive. See the constant-time-comparison point under _Security properties not provided_.
+    
+-   **"The component declares a `HeaderFilterStrategy`, therefore its inbound headers are filtered."** This is the inverse error, and it is a reason not to close a report rather than a non-finding: a strategy that is constructed and then overwritten, or one that is consulted on one entry point but not on a sibling entry point, filters nothing on the path that matters (CVE-2026-78329, CAMEL-24419). Establishing that the declared strategy is the instance actually consulted on the live path is part of triaging any report in this class - see "a filter that is never consulted is not a filter" under the Camel-header class in _In-scope vulnerability classes_.
+    
+-   **"A deprecated component still ships and has a CVE."** Deprecated components are in limited scope; the primary remediation is the documented migration to the supported replacement, not necessarily a fix in the deprecated component. See _Deprecated and removed components_.
+    
+-   **"An option `allowJavaSerializedObject=true`, `transferException=true`, `mapJmsMessage=true`, `trustAllCertificates=true` or `hostnameVerificationEnabled=false` enables an unsafe behaviour."** Documented opt-ins; the operator has explicitly accepted the consequence. See the explicit-opt-in entry in _Out of scope_.
+    
+-   **"A finding lands in a `core/camel-*` module."** Routed first against _Core router-engine invariants_. If the engine upheld every listed invariant and the violation arises only because a route author authored an expression or route over untrusted input, or wired an untrusted source straight through without `removeHeaders("Camel*")`, the disposition is the route-author position in _Out of scope_.
+    
+
+### Triage dispositions
+
+The closed set of outcomes a vulnerability report, scanner finding or AI-assisted review can receive when judged against this model. Each disposition cites the section that licenses it, so the triage response is "see _Section X_ of this document" rather than ad-hoc prose. A finding that does not fit any of the dispositions below is `MODEL-GAP`, and the correct response is to revise the model (extend _In-scope vulnerability classes_, _Out of scope_, _Known limitations_ or _Security properties not provided_), not to close the report ad hoc.
+
+  
+| Disposition | Meaning | Licensed by |
+| --- | --- | --- |
+| `VALID` | Violates a property the framework claims, via the adversary defined in _Adversary model_ and an input the model marks untrusted. Fixed in a coordinated release; published as a CVE advisory. | _Security properties and violation severity_, _Core router-engine invariants_, _In-scope vulnerability classes_, _Adversary model_ |
+| `VALID-HARDENING` | No claimed property is violated, but a recurring misuse or scanner pattern makes the framework elect to harden the default or add a defence-in-depth check at maintainer discretion. Reported privately; usually shipped without a CVE; documented in the upgrade guide. The PMC may still publish an advisory when a sibling component’s accepted finding would otherwise make the change look like a silent fix - CVE-2026-56140 (`camel-aws2-sns`) documents an inbound filter added to a producer-only component with no reachable injection path, alongside CVE-2026-46456 in `camel-aws2-sqs` where the path was reachable. | _Known limitations_, _Guidance for component authors and reviewers_ |
+| `OUT-OF-MODEL: trusted-input` | Requires control over an input the model marks trusted (route DSL, configuration property, operator-controlled file). | _Trust model_ (_Roles_, _Trust boundaries_) |
+| `OUT-OF-MODEL: adversary-not-in-scope` | Requires an attacker capability the adversary model excludes (route author, deployment operator, management-surface network peer, author of a transitive third-party dependency). | _Adversary model_ |
+| `OUT-OF-MODEL: unsupported-component` | The affected component has been removed in supported releases, or the finding is against example or sample code outside the framework’s shipped surface. | _Deprecated and removed components_ |
+| `OUT-OF-MODEL: non-default-build` | Only manifests under a non-default profile (`camel.main.profile = dev` or `test`), an explicit opt-in option (`allowJavaSerializedObject=true`, `transferException=true`, `trustAllCertificates=true`, `hostnameVerificationEnabled=false`, `mapJmsMessage=true`) or another documented opt-in. | _Out of scope_ (profile and explicit-opt-in entries), `design/security.adoc` |
+| `BY-DESIGN: property-disclaimed` | Concerns a property the framework explicitly does not provide - DoS / resource bounds, JVM sandboxing, application-level header sanitisation, transitive-dependency CVEs, constant-time comparison, protection from operator misconfiguration outside framework defaults. | _Security properties not provided_, _Out of scope_ |
+| `KNOWN-NON-FINDING` | Matches a documented recurring false-positive pattern. | _Known non-findings_ |
+| `MODEL-GAP` | Does not fit any disposition above. Triggers a revision of this document (a new in-scope class, a new out-of-scope entry, a new known limitation or a new disclaimed property) rather than an ad-hoc call on the report. | _Reporting a vulnerability_ (PMC review), upgrade-guide entry |
+
+**An incomplete fix is a new finding, not a re-opening.** Where a published advisory’s remediation turns out to leave a reachable path, the residue is triaged from scratch against this model and, if it lands on `VALID`, gets its own advisory rather than an amendment to the original. This has happened often enough to be a standing rule rather than a case-by-case call, and it takes three recognisable shapes:
+
+-   **The fix was applied to some call sites but not all** - CAMEL-24413 and CAMEL-24420, where the `camel-hazelcast` deserialization filter added for CVE-2026-43865 was not applied to the remaining Camel-built configurations.
+    
+-   **The mitigation is present but under-strength** - CVE-2026-42527, where the default `ObjectInputFilter` pattern itself admitted `java.net.**`.
+    
+-   **The mitigation can be side-stepped by a different route to the same sink** - CVE-2026-43866, where a forged `DefaultExchangeHolder` bypassed the filter added for CVE-2026-40860; and CVE-2026-46591, the incomplete-fix follow-on to CVE-2025-66169 in `camel-neo4j`.
+    
+
+A corollary for reporters and for triage tooling: "this was already fixed in CVE-X" is not a disposition. The claim to check is whether the specific path in the new report is closed, not whether the component was patched once.
+
+## Configuration variants that change the model
+
+The posture described above is not a single fixed setting; a small number of profile selections, policy levels and per-component options move where the trust boundary sits or how strictly the framework reacts to insecure configuration. This section consolidates the knobs that change which properties hold, so a report can be judged against the configuration it actually requires. It restates facts stated elsewhere in this document in one place; it introduces no new commitment.
+
+### Profiles
+
+Camel applies **no profile by default**. A profile is selected explicitly with `camel.main.profile` (or by tooling - the Camel CLI selects `dev` for local development). The profile sets the default security-policy level and, for `dev`, switches on a set of development features.
+
+  
+| `camel.main.profile` | Security-relevant effect | Triage consequence |
+| --- | --- | --- |
+| _unset_ (default) | The security policy framework defaults to `warn`: insecure configuration in the four categories is logged at startup but does not prevent it. No development features (dev console, backlog debugger, trace endpoints) are enabled. | Baseline posture. Insecure **options** remain explicit opt-ins regardless of the policy level (see _Per-option opt-ins_). |
+| `prod` | The security policy framework defaults to `fail`: insecure configuration in the four categories prevents startup. This is the reference posture against which findings are judged. | A finding reachable only because the operator relied on the un-profiled `warn` default rather than `fail` is still triaged on the merits of the underlying option, which is itself an opt-in. |
+| `dev` | Development-only. Enables the developer console, debug and trace endpoints, the backlog debugger and verbose diagnostics, and relaxes the `insecure:dev` policy to `allow`. | A finding that only manifests under `dev` is `OUT-OF-MODEL: non-default-build`. |
+| `test` | Testing profile used by test tooling. Does not relax the security policy and does not enable the developer console. | A finding that only manifests under `test` is `OUT-OF-MODEL: non-default-build`. |
+
+### Security policy levels
+
+Independently of the profile, each of the four categories (`secret`, `insecure:ssl`, `insecure:serialization`, `insecure:dev`) can be set to `allow`, `warn` (the un-profiled default) or `fail` through `camel.security.policy` and the per-category overrides (`camel.security.secretPolicy`, `insecureSslPolicy`, `insecureSerializationPolicy`, `insecureDevPolicy`). The policy framework is a **configuration linter** that detects insecure configuration at startup (see the false-friend note under _Security properties not provided_); it does not intercept runtime data. Lowering a category to `allow`, or exempting a property via `camel.security.allowedProperties`, is an operator decision and does not by itself create a framework vulnerability. See `design/security.adoc` for the enforcement design.
+
+### Per-option opt-ins
+
+A small set of per-component options relaxes a security default when set to a non-default value. Their risk is documented and selecting them is an operator decision; a finding that requires one of them is `OUT-OF-MODEL: non-default-build` (or `BY-DESIGN: property-disclaimed`), per the explicit-opt-in entry under _Out of scope_.
+
+  
+| Option | Default | Effect at the insecure value |
+| --- | --- | --- |
+| `allowJavaSerializedObject=true` | `false` | An HTTP (or similar) consumer accepts and deserialises `application/x-java-serialized-object` request bodies. |
+| `transferException=true` | `false` | Serialised exception objects are transferred over the wire, adding a deserialisation surface on the receiving side. |
+| `mapJmsMessage=true` | `true` (heritage) | A JMS `ObjectMessage` body is materialised via `getObject()`; on an untrusted broker this is a deserialisation surface. This heritage default is guarded by an `ObjectInputFilter` (CVE-2026-40860) and a holder-forgery check (CVE-2026-43866). |
+| `trustAllCertificates=true` | `false` | TLS server-certificate validation is disabled. |
+| `hostnameVerificationEnabled=false` | component-dependent | TLS hostname verification is disabled. |
+
+A machine-readable index of these variants, the entry-point trust levels, the in/out-of-scope component families, the claimed and disclaimed properties, the known non-findings and the triage dispositions is published alongside this page as `security-model.yaml` (an attachment); it is a derived index for automated triage and this prose page remains canonical.
+
+## Deployment hardening
+
+Operators are responsible for the following. None of these are framework vulnerabilities if skipped; all of them reduce the attack surface materially.
+
+-   **Explicitly select the `prod` profile in production.** The framework applies no profile by default, and with no profile the security policy framework defaults to `warn` for the four categories (`secret`, `insecure:ssl`, `insecure:serialization`, `insecure:dev`) - insecure configuration is logged but does not stop startup. Set `camel.main.profile = prod` so the policy escalates to `fail` and insecure configuration prevents startup. Setting `camel.main.profile = dev` or `test` is an explicit opt-in to development-only behaviour (extra services, dev console, debug endpoints) and should not be used in production. Override individual categories explicitly when a deployment genuinely needs a relaxed policy. See _Configuration variants that change the model_ and the `design/security.adoc` design document for details.
+    
+-   **Resolve secrets through a vault.** Use one of the supported backends ([AWS Secrets Manager, Azure Key Vault, Google Secret Manager, HashiCorp Vault, IBM Secrets Manager, CyberArk Conjur](security.md)) rather than plain-text values in property files.
+    
+-   **Configure TLS through the JSSE Utility.** Use [`SSLContextParameters`](camel-configuration-utilities.md) to set the trust store, key store, ciphers and protocols explicitly. Do not use `trustAllCertificates=true` or `hostnameVerificationEnabled=false` in production.
+    
+-   **Strip Camel-internal headers at the trust boundary.** When a consumer receives messages from an untrusted producer, remove Camel-controlled headers before the message reaches any dispatching processor:
+    
+    -   Java
+        
+    -   XML
+        
+    -   YAML
+        
+    
+    ```java
+    from("jetty:http://0.0.0.0:8080/api")
+        .removeHeaders("Camel*")
+        .to("direct:trusted-pipeline");
+    ```
+    
+    ```xml
+    <route>
+        <from uri="jetty:http://0.0.0.0:8080/api"/>
+        <removeHeaders pattern="Camel*"/>
+        <to uri="direct:trusted-pipeline"/>
+    </route>
+    ```
+    
+    ```yaml
+    - route:
+        from:
+          uri: jetty:http://0.0.0.0:8080/api
+          steps:
+            - removeHeaders:
+                pattern: "Camel*"
+            - to:
+                uri: direct:trusted-pipeline
+    ```
+    
+-   **On older releases, also strip the control-header namespaces of the components in the route.** The framework filters the `Camel*` namespace by default and has fixed the non-prefixed control headers it shipped (`websocket.*`, `gridfs.*`, `irc.*`, `operationName`, `mail.smtp.*`) as those were found; each fix names its affected and fixed versions in the corresponding advisory at [/security/](/security/). Where a deployment cannot yet move to a release that carries them, add the relevant prefixes to the `removeHeaders` pattern at the trust boundary alongside `Camel*`.
+    
+-   **Do not enable Java serialisation on consumers exposed to untrusted networks.** In particular, do not set `allowJavaSerializedObject=true`, `transferException=true`, or `mapJmsMessage=true` on a JMS consumer when the upstream broker is not inside the trust boundary. If the option is unavoidable, install an `ObjectInputFilter`.
+    
+-   **Do not expose management surfaces.** `camel-management`, the developer console, `camel-jolokia`, JMX, and Camel TUI’s `--mcp` / `--web` servers should listen on a loopback interface, a sidecar, or a separate network only. The TUI servers already default to `127.0.0.1`; do not front them with a reverse proxy that makes them reachable from a public network.
+    
+-   **Keep components patched.** Pin Camel to a supported version, subscribe to the announce list, and respond to advisories at [/security/](/security/).
+    
+-   **Run with least privilege.** Limit the OS user’s file-system, network and process privileges; in a container deployment, drop unneeded capabilities and mount only the filesystem paths the routes actually need.
+    
+-   **Use the minimal set of dependencies.** Include only the Camel components and third-party JARs the application actually uses. Every extra dependency enlarges the attack surface and the patch responsibility.
+    
+
+## Guidance for component authors and reviewers
+
+When writing a new component or reviewing a pull request that touches an existing one, the following questions decide whether the change is in line with the security model.
+
+-   **Does the component consume untrusted input?** Since 4.21 (CAMEL-23543) `DefaultHeaderFilterStrategy` blocks the `Camel*` namespace by default, in both directions, for every consumer and producer that uses it - case-insensitively (so `Camel`, `CAMEL` and `caMEL` are filtered identically) and with no per-component boilerplate. The remaining responsibilities for a component author are: do not **opt out** of that default (as `ClassicJmsHeaderFilterStrategy` deliberately does for legacy JMS pass-through); when supplying a custom strategy, extend `DefaultHeaderFilterStrategy` (or re-implement the case-insensitive `Camel*` match); and add any of the component’s **own** internal headers that fall outside the `Camel*` namespace to the filter set explicitly.
+    
+    Three follow-up checks decide whether that is actually true of the change in front of you:
+    
+    1.  **Which of the component’s headers are control headers?** Any header that selects a target, an operation, or the transport and its credentials is internal regardless of its spelling and must be in the inbound filter set. Prefer the `Camel` prefix for new header constants so the default filter covers them; where a legacy non-prefixed name has to stay, filter its namespace explicitly. Never place a control header outside the filter and rely on the route author to strip it.
+        
+    2.  **Is the strategy the one actually consulted?** Constructing the right strategy is not enough - check that no endpoint default, binding constructor or setter replaces it before use, and that it is reached on every path, not just the one the test exercises (CVE-2026-78329).
+        
+    3.  **Does every entry point filter the same namespace?** A consumer, a data format’s `unmarshal`, each structured content mode, and any query-parameter or transport-metadata mapping all populate the same header map. When one is hardened, harden the others in the same change (CVE-2026-59230 and CAMEL-24419, CVE-2026-63621).
+        
+    
+-   **Does the component deserialise into a Java object?** If it uses `ObjectInputStream.readObject()`, an XStream-style unmarshaller or a polymorphic Jackson reader on input the operator did not explicitly control, the default must be safe: either an `ObjectInputFilter` is installed, the feature is opt-in only, or the component refuses to deserialise unknown types. Look for the indirect route as well as the direct one: a third-party API that advertises "JDK serialization" reaches `ObjectInputStream.readObject()` on your behalf, and grepping only for `new ObjectInputStream(` will miss it. Where the component can route the stream through `CamelObjectInputStream`, it inherits the default JEP-290 filter added in 4.22 (CAMEL-24296); that is a floor, not a substitute for a filter scoped to the types the component actually expects.
+    
+-   **Does the component build a local path, a URL or a command line out of a name it did not choose?** Remote object and blob names, listing entries and file names reported by a backing service are untrusted (see _Adversary model_). Normalize the result and verify it resolves inside the configured directory before use; in Camel expressions prefer `${file:onlyname}` over `${file:name}`, which returns the remote name verbatim. When passing values to an external binary, put them in the argument vector as data and validate any caller-supplied extra arguments against a known-safe set.
+    
+-   **Does the component map the output of an AI model into the `Exchange`?** Model output - including tool-call field names and arguments - is untrusted input, not a trusted control channel. Filter it into the header map through the same strategy any other inbound mapping site would use, and bind tool arguments to the parameters the tool actually declares (CVE-2026-49042).
+    
+-   **Does a `@UriParam` control a security-relevant default?** Mark it with the appropriate `security = "insecure:*"` attribute so the policy enforcement framework can warn or fail on it. The four categories are `secret`, `insecure:ssl`, `insecure:serialization`, `insecure:dev`. See `design/security.adoc`.
+    
+-   **Does the component persist state?** Aggregation repositories, idempotent repositories and similar must not call `ObjectInputStream.readObject()` without an `ObjectInputFilter`; the project has accepted five sequential advisories (CVE-2024-22369, CVE-2024-23114, CVE-2026-25747, CVE-2026-27172, CVE-2026-40858) for this exact pattern.
+    
+-   **Does the component provide authentication or authorization?** It must enforce what its option names claim - validate token issuers, audiences and signatures; cover every sub-path the matching handler advertises; fail closed. Two specific traps, each behind more than one advisory: a check whose configuration is absent must fail closed or refuse to start, never silently drop out of the validation chain (CVE-2026-66908, CVE-2026-53913, CAMEL-24411); and where the component normalizes a path, host or identifier, the authorization decision must be computed from exactly the same normalized value as the dispatch decision (CVE-2026-40022, CAMEL-24412). A denial path must also stop the exchange, not merely set a response that a later step can overwrite.
+    
+-   **Does the component keep state between exchanges?** Any field on a producer or consumer, any static, any component-level cache outlives the exchange that wrote it. Ask whether a later sender could read or disturb it, and treat a shared unmarshalling target, a stateful cryptographic object, and request-scoped key material stored outside the request as the cases to look for first. Where the shared object is a cache, the key must contain every field that changes what the cached value permits.
+    
+-   **Does the component send a credential somewhere the route did not choose?** Credentials belong to the authority the endpoint was configured with. If the component follows redirects, the destination is chosen by the remote server, so credentials must not be re-attached once the authority changes, and must not be registered against a wildcard host scope. The same holds for any address the peer supplies rather than the operator: a callback URL, a receipt destination, a re-login endpoint.
+    
+-   **Does the component write a reply to the party that sent the message?** If it can return a route failure, it needs a `muteException` option defaulting to `true`. See the information-disclosure class above for the rule and for the declared-fault exception.
+    
+-   **Does the change relax a default?** New defaults err toward "denied unless opted in" for the four `security` categories. If a default must be relaxed, the change requires a corresponding upgrade-guide entry and PMC review.
+    
+
+## Reporting a vulnerability
+
+The Apache Camel project uses the standard ASF vulnerability reporting process:
+
+-   Read [Apache Camel Security](/security/).
+    
+-   Email [private-security@camel.apache.org](mailto:private-security@camel.apache.org) with a description, affected versions, and a proof of concept that demonstrates the trust-boundary breach.
+    
+-   Do not file a public Jira ticket, open a public pull request, post on a mailing list, social media, or any other public channel for an unpublished vulnerability - avoid disclosing anything about the potential issue until a coordinated fix is released. Only contact the [Apache Software Foundation Security team](https://apache.org/security/) to report the issue and follow their instructions.
+    
+
+Reports that match the in-scope classes above will be triaged on the private security list, fixed in a coordinated release, and published as a CVE advisory. Reports that match the out-of-scope categories will be closed with a reference to this document.
+
+## Related documents
+
+-   [Security](security.md) - the user-facing security catalog (route, payload, endpoint, configuration security, vaults).
+    
+-   [Camel Configuration Utilities](camel-configuration-utilities.md) - JSSE Utility for SSL/TLS configuration.
+    
+-   `design/security.adoc` (in the source tree) - design document for the security policy enforcement framework.
+    
+-   [Apache Camel Security](/security/) - the public advisory index and reporting process.
+    
+-   `SECURITY.md` (in the source tree) - the GitHub-rendered security pointer.
+    
+-   `security-model.yaml` (attachment to this page) - a machine-readable index of this model (entry-point trust, in/out-of-scope families, config variants, claimed and disclaimed properties, known non-findings, triage dispositions) for automated triage tooling. The prose page is canonical.

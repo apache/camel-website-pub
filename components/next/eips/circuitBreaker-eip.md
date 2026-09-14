@@ -94,12 +94,12 @@ from("direct:start")
             steps:
               - to:
                   uri: http://fooservice.com/slow
-              - onFallback:
-                  steps:
-                    - transform:
-                        expression:
-                          constant:
-                            expression: Fallback message
+            onFallback:
+              steps:
+                - transform:
+                    expression:
+                      constant:
+                        expression: Fallback message
         - to:
             uri: mock:result
 ```

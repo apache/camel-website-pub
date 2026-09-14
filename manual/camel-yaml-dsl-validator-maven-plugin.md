@@ -6,6 +6,8 @@ The Camel YAML DSL Validator Maven Plugin supports the following goals
 
 -   camel-yaml-dsl-validator:validate - To validate YAML routes are correct according to spec
     
+-   camel-yaml-dsl-validator:generate-doc-samples - Used by the Camel build to generate the YAML samples of the AI tools from the documentation
+    
 
 ## camel-yaml-dsl-validator:validate
 
@@ -131,3 +133,11 @@ If you have a Maven project then you can run the plugin to validate the endpoint
 cd myproject
 mvn org.apache.camel:camel-yaml-dsl-validator:4.18.0:validate -Dcamel.includeTest=true
 ```
+
+## camel-yaml-dsl-validator:generate-doc-samples
+
+This goal is used by the Camel build itself, in `camel-jbang-core`, and is not intended for end users.
+
+It reads the `[source,yaml]` route examples of the EIP documentation and of the user manual, validates every one of them against the YAML DSL JSON Schema, and fails the build when an example does not validate. The examples that pass are written to `eip-samples.json`, keyed by the EIP or file entry they show (`split`, `onException`, `rest`, `beans`, …​), which is what the `camel_catalog_sample` tool of the [Camel JBang MCP server](camel-jbang-mcp.md) (and of the Camel TUI) returns as the fallback when the catalog in use has no documentation for the name.
+
+The pages are configured in the `pom.xml` of `camel-jbang-core`: the user manual pages whose examples are the samples of a file entry (`pages`), the pages whose examples starting with a given entry are its samples (`entryPages`), and the user manual pages that are not validated because they deliberately show old syntax (`excludes`, such as the upgrade guides). Every page of the EIP documentation is read, keyed by its file name.

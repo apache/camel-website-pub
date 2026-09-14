@@ -42,6 +42,7 @@ The jOOR language allows the following variables to be used in the script:
 | `exchange` | `Exchange` | The Camel Exchange |
 | `message` | `Message` | The Camel message |
 | `body` | `Object` | The message body |
+| `optionalBody` | `Optional` | The body wrapped in `java.util.Optional`. |
 
 ### Functions
 

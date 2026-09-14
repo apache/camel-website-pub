@@ -363,7 +363,7 @@ Complete the following steps to create a new Camel-spring-boot release:
         
     -   `<WinGet SHA-512>` is the digest from the vote email. Promotion aborts if the exported candidate does not match it, which is what stops a superseded RC from being promoted by mistake.
         
-    -   After the release is available from `[https://archive.apache.org/dist/camel/apache-camel/<Camel](https://archive.apache.org/dist/camel/apache-camel/<Camel) version>/`, run the JReleaser package preparation. WinGet preparation fails until the archived ZIP is available and byte-identical to the approved local ZIP.
+    -   After the release is available from `[https://archive.apache.org/dist/camel/apache-camel/<Camel](https://archive.apache.org/dist/camel/apache-camel/\<Camel) version>/`, run the JReleaser package preparation. WinGet preparation fails until the archived ZIP is available and byte-identical to the approved local ZIP.
         
     -   Remove the promoted candidate after the release copy is committed:
         

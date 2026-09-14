@@ -1,0 +1,691 @@
+User manual
+
+# Apache Camel 4.x Upgrade Guide
+
+This document is for helping you upgrade your Apache Camel application from Camel 4.x to 4.y. For example, if you are upgrading Camel 4.0 to 4.2, then you should follow the guides from both 4.0 to 4.1 and 4.1 to 4.2.
+
+> **Note**
+> [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
+
+## Upgrading Camel 4.18 to 4.19
+
+### Spring Boot
+
+This is our first release that supports Spring Boot v4.
+
+> **Important**
+> Spring Boot v3 is no longer supported.
+
+This also means Spring Framework v6 is also no longer supported. The Camel Spring component relies on Spring Framework v7 and what else Spring Boot v4 came with.
+
+### camel-bom
+
+The `camel-test` module has been removed from `camel-bom`. This module was included by mistake, as since Camel 4, this is not a JAR but a pom.xml file. Camel end users should use the `camel-test-junit5` / `camel-test-junit6` JARs and the others directly.
+
+### camel-cloud (Removal)
+
+The `camel-cloud` module and the `serviceCall` EIP have been removed. These were deprecated in Camel 3.19 and 4.7. The `camel-service` component has also been removed.
+
+The cloud integration from the following components has been removed: `camel-consul`, `camel-dns`, `camel-http`, `camel-jetty`, `camel-kubernetes`, `camel-netty-http`, and `camel-zookeeper`.
+
+### camel-core
+
+#### PQC TLS Auto-Configuration
+
+When running on a JDK that supports `X25519MLKEM768` (typically JDK 25+), Camel now automatically configures post-quantum hybrid named groups on all `SSLContextParameters` instances. The preferred group ordering is: `X25519MLKEM768`, `x25519`, `secp256r1`, `secp384r1`, followed by the remaining JVM defaults.
+
+This auto-configuration activates only when the user has not explicitly set `namedGroups` or `namedGroupsFilter`. No changes are required for existing applications — the hybrid key exchange is backward-compatible with peers that do not support PQC.
+
+See [JSSE Utility](camel-configuration-utilities.md) for full details on PQC TLS configuration.
+
+The WireTap EIP has removed the `pattern` option from its model (not in use) as wiretap always uses `InOnly` pattern.
+
+Removed 2 deprecated methods in Java DSL for `throttler` EIP.
+
+#### ErrorRegistry
+
+A new `ErrorRegistry` SPI has been added to `CamelContext` for capturing routing errors. See [Error Registry](error-registry.md) for more details.
+
+#### Saga EIP
+
+The Saga EIP has _fixed_ the model for how to configure completion and compensation URIs.
+
+For Java DSL there is no changes, but XML and YAML DSL is affected. Here the `<compensation>` and `<completion>` tags has been changed to be an attribute on `<saga>` instead as shown below:
+
+Before:
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <saga sagaService="mySagaService">
+        <compensation uri="mock:compensation"/>
+        <completion uri="mock:completion"/>
+        <option key="myOptionKey">
+            <constant>myOptionValue</constant>
+        </option>
+        <option key="myOptionKey2">
+            <constant>myOptionValue2</constant>
+        </option>
+    </saga>
+    <choice>
+        <when>
+            <simple>${body} == 'fail'</simple>
+            <throwException exceptionType="java.lang.RuntimeException" message="fail"/>
+        </when>
+    </choice>
+    <to uri="mock:end"/>
+</route>
+```
+
+In YAML DSL the changes are even simpler as the endpoint is moved from `uri` to the value of `completion` or `compensation`.
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - saga:
+            sagaService: mySagaService
+            compensation:
+              uri: mock:compensation
+            completion:
+              uri: mock:completion
+            key: myOptionKey2
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${body} == 'fail'"
+                steps:
+                  - throwException:
+                      message: fail
+                      exceptionType: java.lang.RuntimeException
+        - to:
+            uri: mock:end
+```
+
+After:
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <saga sagaService="mySagaService" compensation="mock:compensation" completion="mock:completion">
+        <option key="myOptionKey">
+            <constant>myOptionValue</constant>
+        </option>
+        <option key="myOptionKey2">
+            <constant>myOptionValue2</constant>
+        </option>
+    </saga>
+    <choice>
+        <when>
+            <simple>${body} == 'fail'</simple>
+            <throwException exceptionType="java.lang.RuntimeException" message="fail"/>
+        </when>
+    </choice>
+    <to uri="mock:end"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - saga:
+            sagaService: mySagaService
+            compensation: mock:compensation
+            completion: mock:completion
+            key: myOptionKey2
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${body} == 'fail'"
+                steps:
+                  - throwException:
+                      message: fail
+                      exceptionType: java.lang.RuntimeException
+        - to:
+            uri: mock:end
+```
+
+### camel-platform-http-main
+
+When `authenticationEnabled` is set to `true` and no explicit `authenticationPath` is configured, the default authentication path is now `/*`. This means all subpaths under the configured context path are protected by authentication.
+
+Previously, the authentication path defaulted to the value of `path` (e.g. `/api`), which only covered that exact path. If you relied on this behavior and need selective path protection, set `authenticationPath` explicitly:
+
+```properties
+camel.server.authenticationPath=/secure/*
+```
+
+### camel-csimple (Deprecation)
+
+The `csimple` (compiled simple) language has been deprecated. Use the `simple` language instead. The `camel-csimple-joor` module is also deprecated. The csimple language and related modules will be removed in a future release.
+
+### camel-simple
+
+In the simple language then init blocks syntax has changed to require that each variable ends with a semicolon and new line (no trailing comments etc is allowed)
+
+For example
+
+```yaml
+    - setBody:
+        simple:
+          expression: |-
+            $init{
+              // this is a java like comment
+              $sum := ${sum(${header.lines},100)}
+
+              $sku := ${iif(${body} contains 'Camel',123,999)}
+            }init$
+            orderId=$sku,total=$sum
+```
+
+Should be changed to have semicolons as shown below:
+
+```yaml
+    - setBody:
+        simple:
+          expression: |-
+            $init{
+              // this is a java like comment
+              $sum := ${sum(${header.lines},100)};
+
+              $sku := ${iif(${body} contains 'Camel',123,999)};
+            }init$
+            orderId=$sku,total=$sum
+```
+
+### camel-test-infra
+
+The test infrastructure modules no longer produce `test-jar` artifacts. All classes (service interfaces, container implementations, JUnit extensions, and service factories) are now packaged in the regular JAR artifact.
+
+If your project depends on `camel-test-infra-*` modules with `<type>test-jar</type>`, remove the `<type>` element:
+
+Before:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-test-infra-kafka</artifactId>
+    <version>${camel.version}</version>
+    <type>test-jar</type>
+    <scope>test</scope>
+</dependency>
+```
+
+After:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-test-infra-kafka</artifactId>
+    <version>${camel.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+This applies to all `camel-test-infra-*` artifacts, including `camel-test-infra-common`.
+
+### camel-yaml-io / camel-xml-io
+
+In the YAML DSL we have renamed `routePolicy` to `routePolicyRef` on the `route` node, as that is the correct name.
+
+When dumping routes in YAML or XML format via `camel-yaml-io` or `camel-xml-io` then the structure of routes and all the EIP options now respect the intended order in the model.
+
+For example `id` is always first, and the following attributes are ordered so the most commonly used at in the top. EIPs such as `circuitBreaker` now has `onFallback` last.
+
+This order is also the same order that UI builders like Camel Karavan and Kaoto do as well.
+
+### Jackson 3 components
+
+Four new components have been added which provide Jackson 3 support - they are named similarly to the previously existing camel-jackson components. Jackson 3 operates under a different package name (tools.jackson.\* vs. com.fasterxml.jackson) and there are a number of API changes between Jackson 2 and Jackson 3 - see the [Jackson Migration Guide](https://github.com/FasterXML/jackson/blob/main/jackson3/MIGRATING_TO_JACKSON_3.md) for details.
+
+.Jackson Components
+\[cols="1,1",options="header"\]
+|===
+|Jackson 2 component |Jackson 3 component
+
+|camel-jackson
+|camel-jackson3
+
+|camel-jackson-avro
+|camel-jackson3-avro
+
+|camel-jackson-protobuf
+|camel-jackson3-protobuf
+
+|camel-jacksonxml
+|camel-jackson3xml
+|===
+
+The camel-jackson3 component shares a unified DSL with the camel-jackson component under the "jackson" name. DefaultDataFormatResolver and DefaultTransformerResolver resolve which Jackson library version is available on the classpath and choose the appropriate data format or transformer. This allows easy migration from the camel-jackson component to the camel-jackson3 component and a consistent interface between the two.
+
+The same detection mechanism and combined interface extends to the other Jackson data formats (avroJackson, protobufJackson, and jacksonXml).
+
+### camel-test-junit6, camel-test-main-junit6, camel-test-spring-junit6
+
+camel-test-junit6 was introduced in 4.17.0 - and in 4.19.0 all of the camel components have moved to using it for testing as part of the upgrade to Spring Boot 4.0. Migration to JUnit 6 camel-test-\* components is optional - the camel-test-junit5 is still available and is pinned to JUnit 5 use. Migrating to camel-test-junit6 has the benefit of better alignment with Spring Boot 4.0 (using camel-spring-boot as a runtime). If you are using camel-test-junit5 and would like to move to camel-test-junit6, you can change from:
+
+Before:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-test-junit5</artifactId>
+    <version>${camel.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+After:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-test-junit6</artifactId>
+    <version>${camel.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+You will also need to change any imports of classes in `org.apache.camel.test.junit5.*` to `import org.apache.camel.test.junit6.*`.
+
+Similarly, for camel-test-main-junit5 you would need to change any imports of classes in `org.apache.camel.test.main.junit5.*` to `org.apache.camel.test.main.junit6.*`, and the dependency in your pom.xml would change from:
+
+Before:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-test-main-junit5</artifactId>
+    <version>${camel.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+After:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-test-main-junit6</artifactId>
+    <version>${camel.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+Finally, for camel-test-spring-junit5 any imports would change from `org.apache.camel.test.spring.junit5.*` to `import org.apache.camel.test.spring.junit6.*` and the dependency change would be :
+
+Before:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-test-spring-junit5</artifactId>
+    <version>${camel.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+After:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-test-spring-junit6</artifactId>
+    <version>${camel.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+### camel-jbang
+
+Support for exporting to use Gradle as build tool has been removed (it was deprecated and not working well) The deprecated options `buildToool` and `gradleWrapper` has been removed.
+
+The `camel-tooling-maven` which is used for downloading JARs from Maven has been refactored to use the new [MIMA](https://github.com/maveniverse/mima) project (jbang is using this also).
+
+### camel-groovy
+
+The Groovy library has been upgraded from 4.0.x to 5.0.x. This is a major version upgrade. If you use Groovy scripts or the Groovy DSL, review the [Groovy 5.0 release notes](https://groovy-lang.org/releasenotes/groovy-5.0.md) for potential breaking changes. The Spock testing framework has also been upgraded to 2.4-groovy-5.0.
+
+### camel-groovy-xml
+
+The `camel-groovy-xml` has been moved into `camel-groovy` and this JAR is no longer shipped. So if you use `camel-groovy-xml` then change the dependency to `camel-groovy`.
+
+### camel-kafka
+
+The Kafka client library has been upgraded from 3.9.1 to 4.2.0. This is a major version upgrade of Apache Kafka with several notable changes:
+
+-   The default value of `lingerMs` (producer `linger.ms`) has been changed from `0` to `5` to align with the Kafka 4.x default. This improves batching efficiency as larger batches typically result in similar or lower producer latency.
+    
+-   Two new consumer configuration options have been added:
+    
+    -   `groupProtocol` — Controls which consumer group protocol to use. Valid values are `classic` (default) and `consumer`. Setting this to `consumer` enables the new KIP-848 consumer rebalance protocol which provides faster and more efficient rebalancing.
+        
+    -   `groupRemoteAssignor` — The name of the server-side assignor to use when `groupProtocol` is set to `consumer`. If not specified, the group coordinator will use the default assignor configured on the broker.
+        
+    
+-   If you had explicitly configured the `partitioner` option to use `org.apache.kafka.clients.producer.internals.DefaultPartitioner` or `org.apache.kafka.clients.producer.UniformStickyPartitioner`, you must remove that configuration as these classes have been removed in Kafka 4.0. The built-in default partitioner (used when no partitioner is set) continues to work.
+    
+
+Camel will now defer starting Kafka consumers during startup of `CamelContext` to after the context is fully started, to ensure that any incoming message from Kafka brokers are only received by Camel when everything is fully started.
+
+### camel-google-pubsub-lite
+
+The `camel-google-pubsub-lite` component has been removed. The component was deprecated in Camel 4.10 following Google Cloud Platform’s deprecation of the underlying Pub/Sub Lite service.
+
+Google recommends migrating your Pub/Sub Lite workloads to either:
+
+-   **Google Cloud Pub/Sub** → use the `camel-google-pubsub` component
+    
+-   **Google Cloud Managed Service for Apache Kafka** → use the `camel-kafka` component
+    
+
+### camel-kafka
+
+The Kafka client library has been upgraded from 3.9.x to 4.2.0. This is a major upgrade with the following notable changes:
+
+-   The `lingerMs` option default value has changed from `0` to `5` to align with the Kafka 4.x client default for `linger.ms`.
+    
+-   Two new consumer options have been added: `groupProtocol` (default `classic`, enums: `classic`, `consumer`) and `groupRemoteAssignor`. These support the KIP-848 consumer rebalance protocol introduced in Kafka 4.0. When `groupProtocol` is set to `consumer`, the classic-only properties (`heartbeatIntervalMs`, `sessionTimeoutMs`, `partitionAssignor`) are automatically excluded from the consumer configuration.
+    
+-   The removed `DefaultPartitioner` and `UniformStickyPartitioner` classes are no longer available. If you were explicitly setting `partitioner` to one of these classes, remove the configuration as Kafka 4.x uses the default partitioner automatically.
+    
+
+The test infrastructure for Kafka has been updated:
+
+-   The `local-kafka3-container` mapping has been renamed to `local-kafka-container`. If you were using `-Dkafka.instance.type=local-kafka3-container`, update to `-Dkafka.instance.type=local-kafka-container`.
+    
+-   The Strimzi test service now runs in KRaft mode (no ZooKeeper). The `ZookeeperContainer` class has been removed.
+    
+
+### camel-json-patch
+
+The `camel-json-patch` is now deprecated - the library it uses is not active maintained and this module does not work with Jackon 3.
+
+### camel-mail
+
+When configured a custom `IdempotentRepository` on `camel-mail` endpoint, then Camel will now auto-start the bean which is similar to what `camel-file` do as well.
+
+### camel-file / camel-aws2-s3 / camel-ibm-cos
+
+The default `inProgressRepository` is now FIFO based instead of LRU as there was no need for LRU behavior, which is lighter in memory overhead.
+
+### camel-openapi-java
+
+When using _code first_ Rest DSL and have configured `base.path` then this will now be exclusively used for the returned server url in the API specification.
+
+For example here we set `base.path=cheese`:
+
+```java
+restConfiguration().component("jetty").host("localhost").port(getPort())
+        .contextPath("myapp")
+        .apiContextPath("/api-doc")
+        .apiProperty("cors", "true").apiProperty("base.path", "cheese")
+        .apiProperty("api.title", "The hello rest thing").apiProperty("api.version", "1.2.3");
+```
+
+Then the generated API specification now returns:
+
+```json
+  "servers" : [ {
+    "url" : "http://localhost:58678/cheese"
+  } ],
+```
+
+Previously the context-path would always be used:
+
+```json
+  "servers" : [ {
+    "url" : "http://localhost:58678/myapp"
+  } ],
+```
+
+The intention is to allow to configure the `base.path` _as is_ in the return API specification.
+
+### camel-arangodb
+
+The ArangoDB Java driver (upgraded to 7.24+) no longer defaults to `localhost:8529` when no host is configured. You must now explicitly set the host and port:
+
+```properties
+camel.component.arangodb.host=localhost
+camel.component.arangodb.port=8529
+```
+
+Or when using the Java API directly:
+
+```java
+ArangoDbConfiguration config = new ArangoDbConfiguration();
+config.setHost("localhost");
+config.setPort(8529);
+```
+
+### camel-as2
+
+Some public constants were deprecated:
+
+```java
+org.apache.camel.component.as2.api.AS2AsynchronousMDNManager.HTTP_REQUEST
+org.apache.camel.component.as2.api.AS2AsynchronousMDNManager.HTTP_RESPONSE
+org.apache.camel.component.as2.api.AS2ClientManager.HTTP_REQUEST
+org.apache.camel.component.as2.api.AS2ClientManager.HTTP_RESPONSE
+org.apache.camel.component.as2.api.AS2Constants.HTTP_CLIENT_CONNECTION
+```
+
+They can be replaced by the getter/setter method of the HttpContext implementation, for example:
+
+```java
+// the deprecated way
+HttpRequest request = context.getAttribute(AS2ClientManager.HTTP_REQUEST, HttpRequest.class);
+
+// new way
+HttpRequest request = context.getRequest();
+```
+
+### camel-couchbase
+
+The `designDocumentName` and `viewName` endpoint options are now deprecated. MapReduce Views were deprecated in Couchbase Server 7.0 and do not work with the Magma storage backend (default since Couchbase Server 8.0).
+
+The consumer now defaults to SQL (N1QL) queries instead of MapReduce Views. A new \`statement\` endpoint option allows providing explicit SQL queries. When no `statement` is set and `useView` is `false` (the default), the consumer auto-generates a SQL++ query from the endpoint options (`bucket`, `collection`, `limit`, `skip`, `descending`, `rangeStartKey`, `rangeEndKey`).
+
+To continue using the deprecated MapReduce Views, set `useView=true` explicitly. See the component documentation for migration guidance.
+
+### camel-debezium
+
+Debezium has been upgraded from 3.4.x to 3.5.0.
+
+### camel-mail
+
+When using a custom `MailSender` implementation then Camel will now configure this instances as well, with the various settings for hostname, protocol, port, etc.
+
+### camel-ftp
+
+The `camel-ftp` component has been refactored to extract shared FTP/SFTP code into a new `camel-ftp-common` module. Classes such as `BaseSftpConfiguration` and `AbstractSftpConsumer` have been moved from `camel-ftp` to `camel-ftp-common`.
+
+This is an internal refactoring that should not affect most users. However, if you extend these classes directly, you will need to add the `camel-ftp-common` dependency to your project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-ftp-common</artifactId>
+    <version>${camel.version}</version>
+</dependency>
+```
+
+#### JSch upgrade
+
+The JSch library used by the SFTP component has been upgraded from 2.27.9 to 2.28.0. This version adds support for OpenSSH certificate authentication.
+
+#### OpenSSH certificate authentication
+
+The SFTP and SCP components now support OpenSSH certificate-based authentication via three new endpoint parameters: `certFile`, `certUri`, and `certBytes`. These allow providing an OpenSSH user certificate (generated with `ssh-keygen -s`) alongside the private key.
+
+A new `caSignatureAlgorithms` parameter (SFTP and SCP only) allows configuring which CA signature algorithms JSch will accept.
+
+When a certificate is loaded, Camel automatically adds its key type to JSch’s `PubkeyAcceptedAlgorithms` if it is not already present. This ensures that RSA certificates (key type `ssh-rsa-cert-v01@openssh.com`) work out of the box, even though JSch’s defaults exclude SHA-1 based algorithms since OpenSSH 8.2+.
+
+See the [SFTP](../components/4.22.x/sftp-component.md) and [SCP](../components/4.22.x/scp-component.md) component documentation for usage examples.
+
+### camel-azure (CredentialType standardization)
+
+The component-specific `CredentialType` enums in all Azure components have been deprecated in favor of a single shared `org.apache.camel.component.azure.common.CredentialType` enum in the new `camel-azure-common` module. This shared enum contains the union of all credential types across all Azure components.
+
+URI-based configuration (e.g., `credentialType=AZURE_IDENTITY`) requires no changes, as the enum value names are identical.
+
+The component configuration classes still use the component-specific enum types for now. A future release will migrate the configuration to use the shared enum, at which point Java API users should update their imports:
+
+Before:
+
+```java
+import org.apache.camel.component.azure.storage.blob.CredentialType;
+```
+
+After:
+
+```java
+import org.apache.camel.component.azure.common.CredentialType;
+```
+
+The deprecated component-specific enums will be removed in a future release. The new `camel-azure-common` module is automatically included as a transitive dependency of all Azure components.
+
+### camel-quickfix
+
+Upgraded QuickFixJ from 2.3.2 to 3.0.0 in `camel-quickfix` component.
+
+### camel-ssh
+
+Five new configuration properties have been added to the SSH endpoint to expose additional Apache MINA SSHD `CoreModuleProperties`:
+
+-   `heartbeatInterval` — interval for SSH keep-alive heartbeats.
+    
+-   `heartbeatReplyMaxWait` — maximum wait time for a heartbeat reply.
+    
+-   `authTimeout` — timeout for the SSH authentication phase.
+    
+-   `connectTimeout` — timeout for establishing the SSH connection.
+    
+-   `channelOpenTimeout` — timeout for opening an SSH channel.
+    
+
+All properties default to `0`, which means the Apache MINA SSHD defaults are used. This is an additive change with no impact on existing configurations.
+
+### camel-json-validator
+
+The JSON validation library `com.networknt:json-schema-validator` used by `camel-json-validator` has been upgraded from 1.x to 2.x.
+
+The `json-schema-validator` [migration guide](https://github.com/networknt/json-schema-validator/blob/master/doc/migration-2.0.0.md) can help to migrate your applications if you refer to types that have been updated or removed in 2.x.
+
+### MDC older logic (Deprecation)
+
+The older logic used for MDC (enabled via `camel.main.useMdcLogging = true`) is deprecated in favor of `camel-mdc` component.
+
+### camel-splunk (Deprecation)
+
+The `camel-splunk` component is deprecated. The Splunk Java SDK it depends on is no longer actively maintained.
+
+Users who only need to **send events to Splunk** can migrate to `camel-splunk-hec`, which uses the Splunk HTTP Event Collector (HEC) over standard HTTPS with no dependency on the Splunk Java SDK.
+
+However, `camel-splunk-hec` is a **producer-only** component. The following `camel-splunk` capabilities have no equivalent in `camel-splunk-hec`:
+
+-   **Consumer (search)**: normal searches, real-time searches, and saved-search execution are not supported.
+    
+-   **TCP streaming**: the `tcp` producer publish type (raw socket streaming to a Splunk TCP input) is not available.
+    
+-   **SUBMIT and STREAM publish types**: only HEC-based ingestion is supported.
+    
+
+If your routes only produce events to Splunk (using the `submit` or `stream` publish types), switching to `camel-splunk-hec` is straightforward — configure the HEC token, index, sourceType, and source on the endpoint. If your routes consume (search) data from Splunk, there is currently no direct replacement within Apache Camel, and you will need to use the Splunk REST API directly or keep using `camel-splunk` until it is removed.
+
+> **Note**
+> `camel-splunk-hec` is NOT deprecated and remains actively maintained.
+
+### camel-tracing (Deprecation)
+
+The `camel-tracing` and related components (`camel-opentelemetry` and `camel-observation`) are now deprecated. You should move your implementation to the newer `camel-telemetry` components (`camel-opentelemetry2` and `camel-micrometer-observability`). We have implemented these new components in order to fix certain design flaws (mainly, span duplications) identified in the older components.
+
+Some minor difference may be expected when moving to the new components, make sure to read the documentation carefully.
+
+### camel-zeebe (Deprecation)
+
+The `camel-zeebe` component has been deprecated and will be removed in a future release. A new camel-camunda component has been added as its replacement.
+
+The `camel-camunda` component uses the new Camunda Java Client (`io.camunda:camunda-client-java`) instead of the legacy Zeebe client, aligning with the Camunda 8 platform rebranding.
+
+#### Dependency Change
+
+Change your dependency from:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-zeebe</artifactId>
+</dependency>
+```
+
+To:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-camunda</artifactId>
+</dependency>
+```
+
+#### Endpoint URI Changes
+
+Update your endpoint URIs from `zeebe:` to `camunda:`. The consumer parameter `jobKey` has been renamed to `jobType` for clarity.
+
+Before:
+
+```none
+zeebe://startProcess
+zeebe://worker?jobKey=myJobType
+```
+
+After:
+
+```none
+camunda://startProcess
+camunda://worker?jobType=myJobType
+```
+
+#### Component Property Changes
+
+The connection properties have changed from host/port pairs to full URIs, and new SaaS properties have been added:
+
+ 
+| camel-zeebe | camel-camunda |
+| --- | --- |
+| `gatewayHost` + `gatewayPort` | `grpcAddress` (e.g. `[http://localhost:26500](http://localhost:26500)`) |
+| _(not available)_ | `restAddress` (e.g. `[http://localhost:8080](http://localhost:8080)`) |
+| _(not available)_ | `clusterId`, `region`, `clientId`, `clientSecret` (SaaS connection) |
+| _(not available)_ | `oAuthAPI` (self-managed OAuth) |
+
+#### Package and Class Changes
+
+ 
+| camel-zeebe | camel-camunda |
+| --- | --- |
+| `org.apache.camel.component.zeebe` | `org.apache.camel.component.camunda` |
+| `ZeebeConstants` | `CamundaConstants` |
+| `org.apache.camel.component.zeebe.model.*` | `org.apache.camel.component.camunda.model.*` |
+| Header prefix: `CamelZeebe` | Header prefix: `CamelCamunda` |
+
+#### Worker Behavior Changes
+
+The `camel-camunda` worker consumer automatically completes jobs on success and fails them on exception (standard job worker pattern). You no longer need to call `completeJob` or `failJob` manually for simple job processing. If the route sets the exchange body to a `Map`, those entries are passed as output variables to the completed job. If you explicitly call `completeJob`, `failJob`, or `throwError` in the route, the auto-complete is skipped.
+
+See the camel-camunda component documentation for full details.
+
+## Removed deprecated components
+
+The following deprecated components has been removed:
+
+-   `camel-nitrite`
+    
+-   `camel-torchserve`
+    
+-   `camel-test-infra-torchserve`

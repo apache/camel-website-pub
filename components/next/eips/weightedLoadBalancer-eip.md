@@ -59,9 +59,9 @@ from("direct:start")
       uri: direct:start
       steps:
         - loadBalance:
+            weightedLoadBalancer:
+              distributionRatio: "4,2,1"
             steps:
-              - weightedLoadBalancer:
-                  distributionRatio: "4,2,1"
               - to:
                   uri: seda:x
               - to:

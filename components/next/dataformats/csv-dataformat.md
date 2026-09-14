@@ -208,11 +208,11 @@ from("file:src/test/resources/?fileName=daltons.csv&noop=true")
       parameters:
         fileName: daltons.csv
         noop: true
-    steps:
-      - unmarshal:
-          csv: {}
-      - to:
-          uri: mock:daltons
+      steps:
+        - unmarshal:
+            csv: {}
+        - to:
+            uri: mock:daltons
 ```
 
 The resulting message will contain a `List<List<String>>` like…​
@@ -342,73 +342,6 @@ Then it will produce:
 
 abc|123
 
-Using autogenColumns, configRef and strategyRef attributes inside XML == DSL
-
-**Since Camel 2.9.2 / 2.10 and deleted for Camel 2.15**
-
-You can customize the CSV Data Format to make use of your own `CSVConfig` and/or `CSVStrategy`. Also note that the default value of the `autogenColumns` option is true. The following example should illustrate this customization.
-
--   Java
-    
--   XML
-    
--   YAML
-    
-
-```java
-CsvDataFormat csv = new CsvDataFormat();
-csv.setDelimiter("|");
-csv.setAutogenColumns(false);
-
-from("direct:start")
-    .marshal(csv)
-    .convertBodyTo(String.class)
-    .to("mock:result");
-```
-
-```xml
-<route>
-  <from uri="direct:start" />
-  <marshal>
-    <!-- make use of a strategy other than the default one which is 'org.apache.commons.csv.CSVStrategy.DEFAULT_STRATEGY' -->
-    <csv autogenColumns="false" delimiter="|" configRef="csvConfig" strategyRef="excelStrategy" />
-  </marshal>
-  <convertBodyTo type="java.lang.String" />
-  <to uri="mock:result" />
-</route>
-
-<bean id="csvConfig" class="org.apache.commons.csv.writer.CSVConfig">
-  <property name="fields">
-    <list>
-      <bean class="org.apache.commons.csv.writer.CSVField">
-        <property name="name" value="orderId" />
-      </bean>
-      <bean class="org.apache.commons.csv.writer.CSVField">
-        <property name="name" value="amount" />
-      </bean>
-    </list>
-  </property>
-</bean>
-
-<bean id="excelStrategy" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-  <property name="staticField" value="org.apache.commons.csv.CSVStrategy.EXCEL_STRATEGY" />
-</bean>
-```
-
-```yaml
-- from:
-    uri: direct:start
-    steps:
-      - marshal:
-          csv:
-            delimiter: "|"
-            autogenColumns: false
-      - convertBodyTo:
-          type: java.lang.String
-      - to:
-          uri: mock:result
-```
-
 ### Collecting header record
 
 You can instruct the CSV Data Format to collect the headers into a message header called CamelCsvHeaderRecord.
@@ -424,9 +357,9 @@ from("direct:start")
   .log("${header[CamelCsvHeaderRecord]}");
 ```
 
-### Using skipFirstLine or skipHeaderRecord option while unmarshaling
+### Skipping the header record while unmarshaling
 
-\*For Camel >= 2.16.5 The instruction for CSV Data format to skip headers or first line is the following. Using the DSL:
+To skip the header record, set the `skipHeaderRecord` option:
 
 -   Java
     
@@ -462,50 +395,6 @@ from("direct:start")
         - unmarshal:
             csv:
               skipHeaderRecord: true
-        - to:
-            uri: bean:myCsvHandler
-            parameters:
-              method: doHandleCsv
-```
-
-**Since Camel 2.10 and deleted for Camel 2.15**
-
-You can instruct the CSV Data Format to skip the first line which contains the CSV headers. Using the Spring/XML DSL:
-
--   Java
-    
--   XML
-    
--   YAML
-    
-
-```java
-CsvDataFormat csv = new CsvDataFormat();
-csv.setSkipFirstLine(true);
-
-from("direct:start")
-  .unmarshal(csv)
-.to("bean:myCsvHandler?method=doHandleCsv");
-```
-
-```xml
-<route>
-  <from uri="direct:start" />
-  <unmarshal>
-    <csv skipFirstLine="true" />
-  </unmarshal>
-  <to uri="bean:myCsvHandler?method=doHandleCsv" />
-</route>
-```
-
-```yaml
-- route:
-    from:
-      uri: direct:start
-      steps:
-        - unmarshal:
-            csv:
-              skipFirstLine: true
         - to:
             uri: bean:myCsvHandler
             parameters:

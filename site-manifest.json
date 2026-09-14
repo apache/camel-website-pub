@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1789279467146,
+  "generated": 1789379140302,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4011,6 +4011,12 @@
               "path": "cassandra-source.adoc",
               "url": "/camel-kamelets/next/cassandra-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/cassandra-source.svg\" alt=\"cassandra source\"></span> Cassandra Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "ceph-event-based-source.adoc",
+              "url": "/camel-kamelets/next/ceph-event-based-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/ceph-event-based-source.svg\" alt=\"ceph event based source\"></span> Ceph Event Based Source"
             },
             {
               "module": "ROOT",

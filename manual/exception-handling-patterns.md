@@ -243,7 +243,7 @@ _YAML-only: handling OrderFailedException with custom response_
 ```yaml
 - beans:
   - name: "orderService"
-    beanType: "org.apache.camel.spring.processor.onexception.OrderService"
+    type: "org.apache.camel.spring.processor.onexception.OrderService"
 - errorHandler:
     deadLetterChannel:
       deadLetterUri: mock:error
@@ -253,9 +253,9 @@ _YAML-only: handling OrderFailedException with custom response_
     handled:
       constant:
         expression: "true"
+    redeliveryPolicy:
+      maximumRedeliveries: 1
     steps:
-      - redeliveryPolicy:
-          maximumRedeliveries: 1
       - bean:
           ref: orderService
           method: orderFailed

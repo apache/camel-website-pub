@@ -150,27 +150,27 @@ from("file:encrypted")
     id: encrypt-route
     from:
       uri: direct:encrypt
-    steps:
-      - marshal:
-          pqc:
-            keyEncapsulationAlgorithm: MLKEM
-            symmetricKeyAlgorithm: AES
-            symmetricKeyLength: 256
-      - to:
-          uri: file:encrypted
+      steps:
+        - marshal:
+            pqc:
+              keyEncapsulationAlgorithm: MLKEM
+              symmetricKeyAlgorithm: AES
+              symmetricKeyLength: 256
+        - to:
+            uri: file:encrypted
 
 - route:
     id: decrypt-route
     from:
       uri: file:encrypted
-    steps:
-      - unmarshal:
-          pqc:
-            keyEncapsulationAlgorithm: MLKEM
-            symmetricKeyAlgorithm: AES
-            symmetricKeyLength: 256
-      - to:
-          uri: direct:decrypted
+      steps:
+        - unmarshal:
+            pqc:
+              keyEncapsulationAlgorithm: MLKEM
+              symmetricKeyAlgorithm: AES
+              symmetricKeyLength: 256
+        - to:
+            uri: direct:decrypted
 ```
 
 ## Configuration Options

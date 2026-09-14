@@ -97,11 +97,11 @@ from("direct:marshal")
 - route:
     from:
       uri: direct:marshal
-    steps:
-      - marshal:
-          toon: {}
-      - to:
-          uri: mock:toon
+      steps:
+        - marshal:
+            toon: {}
+        - to:
+            uri: mock:toon
 ```
 
 ### Unmarshalling (TOON to Java object)
@@ -133,11 +133,11 @@ from("direct:unmarshal")
 - route:
     from:
       uri: direct:unmarshal
-    steps:
-      - unmarshal:
-          toon: {}
-      - to:
-          uri: mock:json
+      steps:
+        - unmarshal:
+            toon: {}
+        - to:
+            uri: mock:json
 ```
 
 ### JSON document to TOON

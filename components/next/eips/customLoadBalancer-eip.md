@@ -63,9 +63,9 @@ from("direct:start")
         name: start
       steps:
         - loadBalance:
+            customLoadBalancer:
+              ref: myBalancer
             steps:
-              - customLoadBalancer:
-                  ref: myBalancer
               - to:
                   uri: seda:x
               - to:

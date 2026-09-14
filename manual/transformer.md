@@ -65,11 +65,11 @@ from("direct:abc")
 
 ```yaml
 - route:
+    inputType:
+      urn: myScheme:myTransformer
     from:
       uri: direct:abc
       steps:
-        - inputType:
-            urn: myScheme:myTransformer
         - to:
             uri: "log:abc"
 ```
@@ -161,9 +161,7 @@ transformer()
 ```yaml
 - transformers:
     endpointTransformer:
-      uri: component:componentPathOptions
-      parameters:
-        mappingFile: myMapping.xml
+      uri: component:componentPathOptions?mappingFile=myMapping.xml
       fromType: xml
       toType: json
 ```
@@ -351,19 +349,19 @@ from("direct:xyz")
 
 ```yaml
 - route:
+    inputType:
+      urn: xml:ABCOrder
     from:
       uri: direct:abc
       steps:
-        - inputType:
-            urn: xml:ABCOrder
         - to:
             uri: direct:xyz
 - route:
+    inputType:
+      urn: xml:XYZOrder
     from:
       uri: direct:xyz
       steps:
-        - inputType:
-            urn: xml:XYZOrder
         - to:
             uri: somewhere:else
 ```

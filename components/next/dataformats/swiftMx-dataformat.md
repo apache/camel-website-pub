@@ -49,7 +49,9 @@ from("direct:startEncode")
 ```xml
 <route>
      <from uri="direct:startEncode" />
-     <marshal ref="swiftInJson" />
+     <marshal>
+       <custom ref="swiftInJson" />
+     </marshal>
      <to uri="mock:result" />
 </route>
 ```
@@ -60,7 +62,8 @@ from("direct:startEncode")
       uri: direct:startEncode
       steps:
         - marshal:
-            ref: swiftInJson
+            custom:
+              ref: swiftInJson
         - to:
             uri: mock:result
 ```

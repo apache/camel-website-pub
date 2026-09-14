@@ -56,8 +56,8 @@ from("direct:start")
       uri: direct:start
       steps:
         - loadBalance:
+            roundRobinLoadBalancer: {}
             steps:
-              - roundRobinLoadBalancer: {}
               - to:
                   uri: seda:x
               - to:

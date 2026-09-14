@@ -51,11 +51,11 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - marshal:
-          tarFile: {}
-      - to:
-          uri: activemq:queue:MY_QUEUE
+      steps:
+        - marshal:
+            tarFile: {}
+        - to:
+            uri: activemq:queue:MY_QUEUE
 ```
 
 The name of the Tar entry inside the created Tar File is based on the incoming `CamelFileName` message header, which is the standard message header used by the file component. Additionally, the outgoing `CamelFileName` message header is automatically set to the value of the incoming `CamelFileName` message header, with the ".tar" suffix. So, for example, if the following route finds a file named "test.txt" in the input directory, the output will be a Tar File named "test.txt.tar" containing a single Tar entry named "test.txt":
@@ -89,11 +89,11 @@ from("file:input/directory?antInclude=*/.txt")
       uri: file:input/directory
       parameters:
         antInclude: "*/.txt"
-    steps:
-      - marshal:
-          tarFile: {}
-      - to:
-          uri: file:output/directory
+      steps:
+        - marshal:
+            tarFile: {}
+        - to:
+            uri: file:output/directory
 ```
 
 If there is no incoming `CamelFileName` message header (for example, if the file component is not the consumer), then the message ID is used by default, and since the message ID is normally a unique generated ID, you will end up with filenames like `ID-MACHINENAME-2443-1211718892437-1-0.tar`. If you want to override this behavior, then you can set the value of the `CamelFileName` header explicitly in your route:
@@ -129,14 +129,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelFileName
-          constant: report.txt
-      - marshal:
-          tarFile: {}
-      - to:
-          uri: file:output/directory
+      steps:
+        - setHeader:
+            name: CamelFileName
+            constant: report.txt
+        - marshal:
+            tarFile: {}
+        - to:
+            uri: file:output/directory
 ```
 
 This route would result in a Tar File named "report.txt.tar" in the output directory, containing a single Tar entry named "report.txt".
