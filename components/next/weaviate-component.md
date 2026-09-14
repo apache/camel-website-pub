@@ -143,7 +143,6 @@ Enum values:
 
  |  | String |
 | **CamelWeaviateTextFieldName** (producer) Constant: [`TEXT_FIELD_NAME`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#TEXT_FIELD_NAME) | Text Field Name for Create/Update/Query operation. |  | String |
-| **CamelweaviateVectorFieldName** (producer) Constant: [`VECTOR_FIELD_NAME`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#VECTOR_FIELD_NAME) | Vector Field Name for Create/Update/Query operation. |  | String |
 | **CamelWeaviateCollectionName** (producer) Constant: [`COLLECTION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#COLLECTION_NAME) | Collection Name for all operations. |  | String |
 | **CamelWeaviateFields** (producer) Constant: [`FIELDS`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#FIELDS) | Weaviate Object fields. |  | HashMap |
 | **CamelWeaviateProperties** (producer) Constant: [`PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#PROPERTIES) | Weaviate Object properties. |  | HashMap |
