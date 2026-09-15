@@ -8,15 +8,15 @@
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            contentInBody: true
-      - process:
-          ref: "markdownProcessor"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_converting_documents_from_urls_using_docling_serve"><a class="anchor" href="#_converting_documents_from_urls_using_docling_serve"></a>Converting documents from URLs using docling-serve</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using docling-serve API mode, you can also process documents from URLs:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("timer:convert?repeatCount=1")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              contentInBody: true
+        - process:
+            ref: "markdownProcessor"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_converting_documents_from_urls_using_docling_serve"><a class="anchor" href="#_converting_documents_from_urls_using_docling_serve"></a>Converting documents from URLs using docling-serve</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using docling-serve API mode, you can also process documents from URLs:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("timer:convert?repeatCount=1")
     .setBody(constant("https://arxiv.org/pdf/2501.17887"))
     .to("docling:CONVERT_TO_MARKDOWN?useDoclingServe=true&amp;contentInBody=true")
     .to("file:///data/output");</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
@@ -24,33 +24,33 @@
       uri: timer:convert
       parameters:
         repeatCount: 1
-    steps:
-      - setBody:
-          constant: "https://arxiv.org/pdf/2501.17887"
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_batch_processing_with_docling_serve"><a class="anchor" href="#_batch_processing_with_docling_serve"></a>Batch processing with docling-serve</h2> <div class="sectionbody"> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.(pdf|docx)")
+      steps:
+        - setBody:
+            constant: "https://arxiv.org/pdf/2501.17887"
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_batch_processing_with_docling_serve"><a class="anchor" href="#_batch_processing_with_docling_serve"></a>Batch processing with docling-serve</h2> <div class="sectionbody"> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.(pdf|docx)")
     .to("docling:CONVERT_TO_HTML?useDoclingServe=true&amp;doclingServeUrl=http://localhost:5001&amp;contentInBody=true")
     .to("file:///data/converted?fileName=${file:name.noext}.html");</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: file:///data/documents
       parameters:
         include: ".*\\.(pdf|docx)"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_HTML
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            contentInBody: true
-      - to:
-          uri: file:///data/converted
-          parameters:
-            fileName: "${file:name.noext}.html"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_authentication_with_docling_serve"><a class="anchor" href="#_authentication_with_docling_serve"></a>Authentication with docling-serve</h2> <div class="sectionbody"> <div class="paragraph"> <p>The component supports multiple authentication mechanisms for secured docling-serve instances.</p> </div> <div class="sect2"> <h3 id="_bearer_token_authentication"><a class="anchor" href="#_bearer_token_authentication"></a>Bearer Token Authentication</h3> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_HTML
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              contentInBody: true
+        - to:
+            uri: file:///data/converted
+            parameters:
+              fileName: "${file:name.noext}.html"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_authentication_with_docling_serve"><a class="anchor" href="#_authentication_with_docling_serve"></a>Authentication with docling-serve</h2> <div class="sectionbody"> <div class="paragraph"> <p>The component supports multiple authentication mechanisms for secured docling-serve instances.</p> </div> <div class="sect2"> <h3 id="_bearer_token_authentication"><a class="anchor" href="#_bearer_token_authentication"></a>Bearer Token Authentication</h3> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_MARKDOWN?" +
         "useDoclingServe=true&amp;" +
         "doclingServeUrl=http://localhost:5001&amp;" +
@@ -62,17 +62,17 @@
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            authenticationScheme: "BEARER"
-            authenticationToken: "your-bearer-token-here"
-            contentInBody: true
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_api_key_authentication"><a class="anchor" href="#_api_key_authentication"></a>API Key Authentication</h3> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              authenticationScheme: "BEARER"
+              authenticationToken: "your-bearer-token-here"
+              contentInBody: true
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_api_key_authentication"><a class="anchor" href="#_api_key_authentication"></a>API Key Authentication</h3> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_MARKDOWN?" +
         "useDoclingServe=true&amp;" +
         "doclingServeUrl=http://localhost:5001&amp;" +
@@ -85,18 +85,18 @@
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            authenticationScheme: "API_KEY"
-            authenticationToken: "your-api-key-here"
-            apiKeyHeader: "X-API-Key"
-            contentInBody: true
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_custom_api_key_header"><a class="anchor" href="#_using_custom_api_key_header"></a>Using Custom API Key Header</h3> <div class="paragraph"> <p>If your docling-serve instance uses a custom header name for API keys:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              authenticationScheme: "API_KEY"
+              authenticationToken: "your-api-key-here"
+              apiKeyHeader: "X-API-Key"
+              contentInBody: true
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_custom_api_key_header"><a class="anchor" href="#_using_custom_api_key_header"></a>Using Custom API Key Header</h3> <div class="paragraph"> <p>If your docling-serve instance uses a custom header name for API keys:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_MARKDOWN?" +
         "useDoclingServe=true&amp;" +
         "doclingServeUrl=http://localhost:5001&amp;" +
@@ -109,18 +109,18 @@
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            authenticationScheme: "API_KEY"
-            authenticationToken: "your-api-key-here"
-            apiKeyHeader: "X-Custom-API-Key"
-            contentInBody: true
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_authentication_token_from_properties"><a class="anchor" href="#_using_authentication_token_from_properties"></a>Using Authentication Token from Properties</h3> <div class="paragraph"> <p>For better security, store authentication tokens in properties or environment variables:</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              authenticationScheme: "API_KEY"
+              authenticationToken: "your-api-key-here"
+              apiKeyHeader: "X-Custom-API-Key"
+              contentInBody: true
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_authentication_token_from_properties"><a class="anchor" href="#_using_authentication_token_from_properties"></a>Using Authentication Token from Properties</h3> <div class="paragraph"> <p>For better security, store authentication tokens in properties or environment variables:</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_MARKDOWN?" +
         "useDoclingServe=true&amp;" +
         "doclingServeUrl={{docling.serve.url}}&amp;" +
@@ -132,17 +132,17 @@
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "{{docling.serve.url}}"
-            authenticationScheme: "BEARER"
-            authenticationToken: "{{docling.serve.token}}"
-            contentInBody: true
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Then define in <code>application.properties</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">docling.serve.url=http://localhost:5001
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "{{docling.serve.url}}"
+              authenticationScheme: "BEARER"
+              authenticationToken: "{{docling.serve.token}}"
+              contentInBody: true
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Then define in <code>application.properties</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">docling.serve.url=http://localhost:5001
 docling.serve.token=your-bearer-token-here</code></pre> </div> </div> </div> <div class="sect2"> <h3 id="_oauth_authentication"><a class="anchor" href="#_oauth_authentication"></a>OAuth Authentication</h3> <div class="paragraph"> <p>When the docling-serve instance is protected by an OAuth identity provider, set the <code>oauthProfile</code> parameter to acquire an access token via the OAuth 2.0 Client Credentials grant. The token is used as the <code>authenticationToken</code> and the <code>authenticationScheme</code> is automatically set to <code>BEARER</code>. This requires <code>camel-oauth</code> on the classpath.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">camel.oauth.docling.client-id=my-client
 camel.oauth.docling.client-secret=my-secret
 camel.oauth.docling.token-endpoint=https://idp.example.com/token</code></pre> </div> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/input")

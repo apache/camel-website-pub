@@ -740,12 +740,13 @@ Control randomness for chat completions with `temperature` (0.0–2.0) and `topP
     
 
 ```yaml
-- to:
-    uri: openai:chat-completion
-    parameters:
-      model: gpt-4o-mini
-      temperature: 0.1
-      topP: 1.0
+steps:
+  - to:
+      uri: openai:chat-completion
+      parameters:
+        model: gpt-4o-mini
+        temperature: 0.1
+        topP: 1.0
 ```
 
 ```java

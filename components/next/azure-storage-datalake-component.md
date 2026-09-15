@@ -560,9 +560,9 @@ from("azure-storage-datalake:camelTesting/filesystem?fileName=test.txt&accountKe
       parameters:
         fileName: test.txt
         accountKey: key
-    steps:
-      - to:
-          uri: file://fileDirectory
+      steps:
+        - to:
+            uri: file://fileDirectory
 ```
 
 ### Automatic detection of a service client
@@ -905,15 +905,15 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: azure-storage-datalake:cameltesting/filesystem
-          parameters:
-            operation: deleteFile
-            fileName: test.txt
-            serviceClient: "#serviceClient"
-      - to:
-          uri: mock:results
+      steps:
+        - to:
+            uri: azure-storage-datalake:cameltesting/filesystem
+            parameters:
+              operation: deleteFile
+              fileName: test.txt
+              serviceClient: "#serviceClient"
+        - to:
+            uri: mock:results
 ```
 
 -   `downloadToFile`
@@ -944,16 +944,16 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: azure-storage-datalake:cameltesting/filesystem
-          parameters:
-            operation: downloadToFile
-            fileName: test.txt
-            fileDir: /test/mydir
-            serviceClient: "#serviceClient"
-      - to:
-          uri: mock:results
+      steps:
+        - to:
+            uri: azure-storage-datalake:cameltesting/filesystem
+            parameters:
+              operation: downloadToFile
+              fileName: test.txt
+              fileDir: /test/mydir
+              serviceClient: "#serviceClient"
+        - to:
+            uri: mock:results
 ```
 
 -   `downloadLink`

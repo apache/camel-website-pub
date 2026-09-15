@@ -47,7 +47,7 @@ policy.setClientSecret("my-client-secret");
             uri: mock:result
 
 # Bean definition in beans configuration
-beans:
+- beans:
   - name: keycloakPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -92,7 +92,7 @@ from("direct:protected")
             uri: mock:result
 
 # Bean definition
-beans:
+- beans:
   - name: audiencePolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -160,7 +160,7 @@ from("direct:admin")
             uri: mock:admin-endpoint
 
 # Bean definition
-beans:
+- beans:
   - name: adminPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -203,7 +203,7 @@ from("direct:documents")
             uri: mock:documents-endpoint
 
 # Bean definition
-beans:
+- beans:
   - name: documentsPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -242,7 +242,7 @@ from("direct:user-flow")
             uri: mock:result
 
 # Bean definition
-beans:
+- beans:
   - name: userFlowPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -315,7 +315,7 @@ from("direct:secure-endpoint")
             uri: mock:result
 
 # Bean definition
-beans:
+- beans:
   - name: introspectionPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -421,7 +421,7 @@ from("rest:get:/api/data")
               method: getData
 
 # Security policies
-beans:
+- beans:
   - name: paymentPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -504,7 +504,7 @@ KeycloakSecurityPolicy adminIntrospection = new KeycloakSecurityPolicy(
               method: listUsers
 
 # Security policies
-beans:
+- beans:
   - name: adminIntrospection
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -582,7 +582,7 @@ from("rest:get:/api/data")
 
 ```yaml
 # Bean definition with Caffeine cache
-beans:
+- beans:
   - name: highPerfPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -707,7 +707,7 @@ from("direct:admin-endpoint")
             uri: mock:admin-result
 
 # Bean definition
-beans:
+- beans:
   - name: keycloakPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -750,7 +750,7 @@ from("direct:user-endpoint")
               method: processUser
 
 # Bean definition
-beans:
+- beans:
   - name: userPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -790,47 +790,71 @@ adminPolicy.setRequiredRoles("admin");
 
 // Configure REST endpoints
 rest("/api")
-    .get("/documents")
-        .route()
-        .policy(readPolicy)
-        .to("bean:documentService?method=listDocuments")
-        .endRest()
-    .post("/documents")
-        .route()
-        .policy(writePolicy)
-        .to("bean:documentService?method=createDocument")
-        .endRest()
-    .delete("/documents/{id}")
-        .route()
-        .policy(adminPolicy)
-        .to("bean:documentService?method=deleteDocument")
-        .endRest();
+    .get("/documents").to("direct:list-documents")
+    .post("/documents").to("direct:create-document")
+    .delete("/documents/{id}").to("direct:delete-document");
+
+from("direct:list-documents")
+    .policy(readPolicy)
+    .to("bean:documentService?method=listDocuments");
+
+from("direct:create-document")
+    .policy(writePolicy)
+    .to("bean:documentService?method=createDocument");
+
+from("direct:delete-document")
+    .policy(adminPolicy)
+    .to("bean:documentService?method=deleteDocument");
 ```
 
 ```yaml
 - rest:
     path: "/api"
     get:
-      - uri: "/documents"
-        to: bean:documentService?method=listDocuments
-        route:
-          policy:
-            ref: readPolicy
+      - path: "/documents"
+        to: direct:list-documents
     post:
-      - uri: "/documents"
-        to: bean:documentService?method=createDocument
-        route:
-          policy:
-            ref: writePolicy
+      - path: "/documents"
+        to: direct:create-document
     delete:
-      - uri: "/documents/{id}"
-        to: bean:documentService?method=deleteDocument
-        route:
-          policy:
+      - path: "/documents/{id}"
+        to: direct:delete-document
+
+- route:
+    from:
+      uri: direct:list-documents
+      steps:
+        - policy:
+            ref: readPolicy
+        - to:
+            uri: bean:documentService
+            parameters:
+              method: listDocuments
+
+- route:
+    from:
+      uri: direct:create-document
+      steps:
+        - policy:
+            ref: writePolicy
+        - to:
+            uri: bean:documentService
+            parameters:
+              method: createDocument
+
+- route:
+    from:
+      uri: direct:delete-document
+      steps:
+        - policy:
             ref: adminPolicy
+        - to:
+            uri: bean:documentService
+            parameters:
+              method: deleteDocument
 
 # Bean definitions for policies
-beans:
+- beans:
   - name: readPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:
@@ -1044,7 +1068,7 @@ from("direct:admin-documents")
               method: adminOperations
 
 # Bean definitions
-beans:
+- beans:
   - name: strictPolicy
     type: org.apache.camel.component.keycloak.security.KeycloakSecurityPolicy
     properties:

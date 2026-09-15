@@ -12,11 +12,11 @@ langchain4j.open-ai.embedding-model.model-name=text-embedding-ada-002</code></pr
     .to("langchain4j-embeddings:test?embeddingModel=#embeddingModel");</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:embeddings
-    steps:
-      - to:
-          uri: langchain4j-embeddings:test
-          parameters:
-            embeddingModel: "#embeddingModel"</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+      steps:
+        - to:
+            uri: langchain4j-embeddings:test
+            parameters:
+              embeddingModel: "#embeddingModel"</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:embeddings"/&gt;
   &lt;to uri="langchain4j-embeddings:test?embeddingModel=#embeddingModel"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> <div class="paragraph"> <p>LangChain4j Spring Boot starters provide auto-configuration for various embedding model providers including:</p> </div> <div class="ulist"> <ul> <li> <p><code>langchain4j-open-ai-spring-boot-starter</code> - OpenAI embeddings</p> </li> <li> <p><code>langchain4j-azure-open-ai-spring-boot-starter</code> - Azure OpenAI embeddings</p> </li> <li> <p><code>langchain4j-ollama-spring-boot-starter</code> - Ollama embeddings</p> </li> <li> <p><code>langchain4j-hugging-face-spring-boot-starter</code> - Hugging Face embeddings</p> </li> <li> <p><code>langchain4j-vertex-ai-spring-boot-starter</code> - Google Vertex AI embeddings</p> </li> </ul> </div> <div class="paragraph"> <p>For a complete list of available starters and their configuration options, refer to the <a href="https://docs.langchain4j.dev/tutorials/spring-boot-integration">LangChain4j Spring Boot Integration documentation</a>.</p> </div> </td> </tr> </table></div> </div> </div> <div class="sect4"> <h5 id="_manual_configuration_alternative"><a class="anchor" href="#_manual_configuration_alternative"></a>Manual Configuration (Alternative)</h5> <div class="paragraph"> <p>Alternatively, you can manually initialize the Embedding Model and add it to the Camel Registry:</p> </div> <div class="paragraph"> <p>Add the dependency for LangChain4j OpenAI support:</p> </div> <div class="listingblock"> <div class="title">pom.xml</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
@@ -32,11 +32,11 @@ context.getRegistry().bind("myEmbeddingModel", embeddingModel);</code></pre> </d
     .to("langchain4j-embeddings:test?embeddingModel=#myEmbeddingModel");</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:embeddings
-    steps:
-      - to:
-          uri: langchain4j-embeddings:test
-          parameters:
-            embeddingModel: "#myEmbeddingModel"</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_integration_with_vector_stores"><a class="anchor" href="#_integration_with_vector_stores"></a>Integration with Vector Stores</h3> <div class="paragraph"> <p>The LangChain4j Embeddings component works seamlessly with vector databases for RAG (Retrieval-Augmented Generation) workflows.</p> </div> <div class="sect3"> <h4 id="_using_with_qdrant"><a class="anchor" href="#_using_with_qdrant"></a>Using with Qdrant</h4> <div class="paragraph"> <p>This example shows how to embed text and store it in Qdrant vector database:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store")
+      steps:
+        - to:
+            uri: langchain4j-embeddings:test
+            parameters:
+              embeddingModel: "#myEmbeddingModel"</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_integration_with_vector_stores"><a class="anchor" href="#_integration_with_vector_stores"></a>Integration with Vector Stores</h3> <div class="paragraph"> <p>The LangChain4j Embeddings component works seamlessly with vector databases for RAG (Retrieval-Augmented Generation) workflows.</p> </div> <div class="sect3"> <h4 id="_using_with_qdrant"><a class="anchor" href="#_using_with_qdrant"></a>Using with Qdrant</h4> <div class="paragraph"> <p>This example shows how to embed text and store it in Qdrant vector database:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store")
     .to("langchain4j-embeddings:embed")
     .setHeader(QdrantHeaders.ACTION).constant(QdrantAction.UPSERT)
     .setHeader(QdrantHeaders.POINT_ID).constant(1)
@@ -44,19 +44,19 @@ context.getRegistry().bind("myEmbeddingModel", embeddingModel);</code></pre> </d
     .to("qdrant:myCollection");</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - setHeader:
-          name: CamelQdrantAction
-          constant: UPSERT
-      - setHeader:
-          name: CamelQdrantPointId
-          constant: 1
-      - transform:
-          dataType: "qdrant:embeddings"
-      - to:
-          uri: qdrant:myCollection</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_similarity_search_for_rag"><a class="anchor" href="#_similarity_search_for_rag"></a>Similarity Search for RAG</h4> <div class="paragraph"> <p>Retrieve relevant content using similarity search:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:search")
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - setHeader:
+            name: CamelQdrantAction
+            constant: UPSERT
+        - setHeader:
+            name: CamelQdrantPointId
+            constant: 1
+        - transformDataType:
+            toType: "qdrant:embeddings"
+        - to:
+            uri: qdrant:myCollection</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_similarity_search_for_rag"><a class="anchor" href="#_similarity_search_for_rag"></a>Similarity Search for RAG</h4> <div class="paragraph"> <p>Retrieve relevant content using similarity search:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:search")
     .to("langchain4j-embeddings:embed")
     .transformDataType(new DataType("qdrant:embeddings"))
     .setHeader(QdrantHeaders.ACTION, constant(QdrantAction.SIMILARITY_SEARCH))
@@ -65,37 +65,37 @@ context.getRegistry().bind("myEmbeddingModel", embeddingModel);</code></pre> </d
     .transformDataType(new DataType("qdrant:rag"));</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - transform:
-          dataType: "qdrant:embeddings"
-      - setHeader:
-          name: CamelQdrantAction
-          constant: SIMILARITY_SEARCH
-      - setHeader:
-          name: CamelQdrantIncludePayload
-          constant: true
-      - to:
-          uri: qdrant:myCollection
-      - transform:
-          dataType: "qdrant:rag"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_using_with_pgvector"><a class="anchor" href="#_using_with_pgvector"></a>Using with PGVector</h4> <div class="paragraph"> <p>This example shows how to embed text and store it in PostgreSQL with pgvector:</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store")
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - transformDataType:
+            toType: "qdrant:embeddings"
+        - setHeader:
+            name: CamelQdrantAction
+            constant: SIMILARITY_SEARCH
+        - setHeader:
+            name: CamelQdrantWithPayload
+            constant: true
+        - to:
+            uri: qdrant:myCollection
+        - transformDataType:
+            toType: "qdrant:rag"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_using_with_pgvector"><a class="anchor" href="#_using_with_pgvector"></a>Using with PGVector</h4> <div class="paragraph"> <p>This example shows how to embed text and store it in PostgreSQL with pgvector:</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store")
     .to("langchain4j-embeddings:embed")
     .setHeader(PgVectorHeaders.ACTION).constant(PgVectorAction.UPSERT)
     .transformDataType(new DataType("pgvector:embeddings"))
     .to("pgvector:myCollection");</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - setHeader:
-          name: CamelPgVectorAction
-          constant: UPSERT
-      - transform:
-          dataType: "pgvector:embeddings"
-      - to:
-          uri: pgvector:myCollection</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Similarity search with PGVector and RAG:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:search")
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - setHeader:
+            name: CamelPgVectorAction
+            constant: UPSERT
+        - transformDataType:
+            toType: "pgvector:embeddings"
+        - to:
+            uri: pgvector:myCollection</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Similarity search with PGVector and RAG:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:search")
     .to("langchain4j-embeddings:embed")
     .transformDataType(new DataType("pgvector:embeddings"))
     .setHeader(PgVectorHeaders.ACTION, constant(PgVectorAction.SIMILARITY_SEARCH))
@@ -103,18 +103,18 @@ context.getRegistry().bind("myEmbeddingModel", embeddingModel);</code></pre> </d
     .transformDataType(new DataType("pgvector:rag"));</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - transform:
-          dataType: "pgvector:embeddings"
-      - setHeader:
-          name: CamelPgVectorAction
-          constant: SIMILARITY_SEARCH
-      - to:
-          uri: pgvector:myCollection
-      - transform:
-          dataType: "pgvector:rag"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_using_with_langchain4j_embedding_store_component"><a class="anchor" href="#_using_with_langchain4j_embedding_store_component"></a>Using with LangChain4j Embedding Store Component</h4> <div class="paragraph"> <p>For a simpler integration, use the <code>langchain4j-embeddingstore</code> component which provides a unified interface:</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store")
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - transformDataType:
+            toType: "pgvector:embeddings"
+        - setHeader:
+            name: CamelPgVectorAction
+            constant: SIMILARITY_SEARCH
+        - to:
+            uri: pgvector:myCollection
+        - transformDataType:
+            toType: "pgvector:rag"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_using_with_langchain4j_embedding_store_component"><a class="anchor" href="#_using_with_langchain4j_embedding_store_component"></a>Using with LangChain4j Embedding Store Component</h4> <div class="paragraph"> <p>For a simpler integration, use the <code>langchain4j-embeddingstore</code> component which provides a unified interface:</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store")
     .to("langchain4j-embeddings:embed")
     .to("langchain4j-embeddingstore:myStore?action=ADD");
 
@@ -123,23 +123,23 @@ from("direct:search")
     .to("langchain4j-embeddingstore:myStore?action=SEARCH&amp;maxResults=5&amp;returnTextContent=true");</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: ADD
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: ADD
 
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: SEARCH
-            maxResults: 5
-            returnTextContent: true</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_structured_error_exchange_properties"><a class="anchor" href="#_structured_error_exchange_properties"></a>Structured error exchange properties</h3> <div class="paragraph"> <p>When a LangChain4j embeddings call fails, Camel sets structured metadata on the exchange <strong>before</strong> the model exception propagates. This works even when GenAI observability is disabled.</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Exchange property</th> <th class="tableblock halign-left valign-top">Meaning</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelAiErrorCategory</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Coarse category derived from the LangChain4j exception: <code>RATE_LIMIT</code>, <code>SERVER_ERROR</code>, <code>VALIDATION</code>, <code>AUTH</code>, or <code>UNKNOWN</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelAiRetryAfterMillis</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Not populated for LangChain4j providers (OpenAI-only today)</p></td> </tr> </tbody> </table></div> <div class="paragraph"> <p>Use categories when a route should branch on failure type without matching every LangChain4j exception class. See <a href="langchain4j-chat-component.html#_structured_error_exchange_properties" class="xref page">LangChain4j Chat structured error properties</a> and <a href="ai-llm-integration-guide.html#_structured_error_exchange_properties" class="xref page">AI LLM integration guide</a> for related detail.</p> </div> </div> </div> </div> </article> <aside class="toc sidebar" aria-label="Table of contents" data-title="Contents" data-levels="2"> <div class="toc-menu"></div> </aside> </div> </main> </div> <footer> <div class="footer-tools"> <a href="#top" title="Reach the top of the page">Back to top</a> </div> <div class="footer"> <div class="footer-brand"> <img class="footer-logo" src="../../_/img/logo-d-a567cee6fa.svg" alt="Apache Camel Logo" aria-label="white silhouette of a camel in front of a sand dune"> <span class="footer-wordmark">Apache Camel</span> <p class="footer-blurb">Open source integration framework. An Apache Software Foundation project, available under the Apache v2 license.</p> </div> <dl class="footer-column"> <dt><span class="footer-column-title">Overview</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../blog/">Blog</a></dd> <dd><a href="../../docs/">Documentation</a></dd> <dd><a href="../../tooling/">Tooling</a></dd> <dd><a href="../../community/">Community</a></dd> <dd><a href="../../download/">Download</a></dd> <dd><a href="../../projects/">All projects</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Documentation</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../manual/">User Manual</a></dd> <dd><a href="../../components/next/index.html">Components</a></dd> <dd><a href="../../camel-k/next/">Camel-K</a></dd> <dd><a href="../../camel-kafka-connector/next/">Camel Kafka Connector</a></dd> <dd><a href="../../camel-quarkus/next/">Camel Quarkus</a></dd> <dd><a href="../../camel-spring-boot/next/">Camel Spring Boot</a></dd> <dd><a href="../../camel-karaf/latest/">Camel Karaf</a></dd> <dd><a href="../../manual/faq/index.html">FAQ</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Community</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../community/support/">Support</a></dd> <dd><a href="../../community/contributing/">Contributing</a></dd> <dd><a href="../../community/mailing-list/">Mailing Lists</a></dd> <dd><a href="../../community/user-stories/">Who Uses Camel</a></dd> <dd><a href="../../community/articles/">Articles</a></dd> <dd><a href="../../community/books/">Books</a></dd> <dd><a href="../../community/team/">Team</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">About</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../acknowledgments/">Acknowledgments</a></dd> <dd><a href="https://www.apache.org/events/current-event.html" target="_blank" rel="noopener noreferrer nofollow" title="Apache Events">Apache Events</a></dd> <dd><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer nofollow" title="License">License</a></dd> <dd><a href="https://www.apache.org/security/" target="_blank" rel="noopener noreferrer nofollow" title="Security">Security</a></dd> <dd><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noopener noreferrer nofollow" title="Sponsorship">Sponsorship</a></dd> <dd><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noopener noreferrer nofollow" title="Thanks">Thanks</a></dd> <dd><a href="../../trust/">Trust</a></dd> </dl> <p class="remark"> &copy; 2004-2026 The <a href="https://apache.org">Apache Software Foundation</a>.<br> Apache Camel, Camel, Apache, the Apache feather logo, and the Apache Camel project logo are trademarks of The Apache Software Foundation. All other marks mentioned may be trademarks or registered trademarks of their respective owners. </p> <div class="resources"> <div class="context"> <a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noopener noreferrer nofollow">Privacy Policy</a> </div> <div class="context"> <a href="https://www.apache.org/foundation/policies/conduct" target="_blank" rel="noopener noreferrer nofollow">Code of Conduct</a> </div> <div class="context"> <a href="../../sitemap/">Sitemap</a> </div> </div> <div class="footer-icons"> <a href="https://github.com/apache/camel/" rel="noopener noreferrer nofollow" title="Collaborate on GitHub"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#github"/></svg></a> <a href="https://camel.zulipchat.com" rel="noopener noreferrer nofollow" title="Chat on Zulip"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#zulip"/></svg></a> <a href="https://twitter.com/ApacheCamel" rel="noopener noreferrer nofollow" title="Follow Apache Camel on Twitter"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#twitter"/></svg></a> <a href="https://www.linkedin.com/groups/2447439/" rel="noopener noreferrer nofollow" title="Apache Camel group on Linkedin"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#linkedin"/></svg></a> <a href="../../blog/index.xml" title="Subscribe to RSS Feed"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#rss"/></svg></a> </div> </div> </footer> <script src="../../_/js/vendor/docsearch-5c0cf4ef3a.js"></script> <script src="../../_/js/site-2aad2f7ea4.js"></script> <script async src="../../_/js/vendor/highlight-34ee5f32ef.js"></script> <script async src="../../_/js/vendor/svg4everybody-8ce71b89ac.js"></script> <script async src="../../_/js/vendor/tabs-3496628f2d.js" data-sync-storage-key="preferred-tab"></script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "Organization", "name": "Apache Camel", "url": "https://camel.apache.org", "sameAs": [ "https://twitter.com/ApacheCamel" ], "logo": "../../_/img/logo-d-a567cee6fa.svg", "description": "Apache Camel ™ is a versatile open-source integration framework based on known Enterprise Integration Patterns. Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL." } </script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Apache Camel", "item": "https://camel.apache.org/" }, { "@type": "ListItem", "position": 2, "name": "Camel Components", "item": "https://camel.apache.org/components/4.22.x/index.html" }, { "@type": "ListItem", "position": 3, "name": "Next (Pre-release)", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 4, "name": "Components", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 5, "name": "AI", "item": "https://camel.apache.org/components/next/ai-summary.html" }, { "@type": "ListItem", "position": 6, "name": "LangChain4j Embeddings", "item": "https://camel.apache.org/components/next/langchain4j-embeddings-component.html" }] } </script> </body> </html> 
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: SEARCH
+              maxResults: 5
+              returnTextContent: true</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_structured_error_exchange_properties"><a class="anchor" href="#_structured_error_exchange_properties"></a>Structured error exchange properties</h3> <div class="paragraph"> <p>When a LangChain4j embeddings call fails, Camel sets structured metadata on the exchange <strong>before</strong> the model exception propagates. This works even when GenAI observability is disabled.</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Exchange property</th> <th class="tableblock halign-left valign-top">Meaning</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelAiErrorCategory</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Coarse category derived from the LangChain4j exception: <code>RATE_LIMIT</code>, <code>SERVER_ERROR</code>, <code>VALIDATION</code>, <code>AUTH</code>, or <code>UNKNOWN</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelAiRetryAfterMillis</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Not populated for LangChain4j providers (OpenAI-only today)</p></td> </tr> </tbody> </table></div> <div class="paragraph"> <p>Use categories when a route should branch on failure type without matching every LangChain4j exception class. See <a href="langchain4j-chat-component.html#_structured_error_exchange_properties" class="xref page">LangChain4j Chat structured error properties</a> and <a href="ai-llm-integration-guide.html#_structured_error_exchange_properties" class="xref page">AI LLM integration guide</a> for related detail.</p> </div> </div> </div> </div> </article> <aside class="toc sidebar" aria-label="Table of contents" data-title="Contents" data-levels="2"> <div class="toc-menu"></div> </aside> </div> </main> </div> <footer> <div class="footer-tools"> <a href="#top" title="Reach the top of the page">Back to top</a> </div> <div class="footer"> <div class="footer-brand"> <img class="footer-logo" src="../../_/img/logo-d-a567cee6fa.svg" alt="Apache Camel Logo" aria-label="white silhouette of a camel in front of a sand dune"> <span class="footer-wordmark">Apache Camel</span> <p class="footer-blurb">Open source integration framework. An Apache Software Foundation project, available under the Apache v2 license.</p> </div> <dl class="footer-column"> <dt><span class="footer-column-title">Overview</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../blog/">Blog</a></dd> <dd><a href="../../docs/">Documentation</a></dd> <dd><a href="../../tooling/">Tooling</a></dd> <dd><a href="../../community/">Community</a></dd> <dd><a href="../../download/">Download</a></dd> <dd><a href="../../projects/">All projects</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Documentation</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../manual/">User Manual</a></dd> <dd><a href="../../components/next/index.html">Components</a></dd> <dd><a href="../../camel-k/next/">Camel-K</a></dd> <dd><a href="../../camel-kafka-connector/next/">Camel Kafka Connector</a></dd> <dd><a href="../../camel-quarkus/next/">Camel Quarkus</a></dd> <dd><a href="../../camel-spring-boot/next/">Camel Spring Boot</a></dd> <dd><a href="../../camel-karaf/latest/">Camel Karaf</a></dd> <dd><a href="../../manual/faq/index.html">FAQ</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Community</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../community/support/">Support</a></dd> <dd><a href="../../community/contributing/">Contributing</a></dd> <dd><a href="../../community/mailing-list/">Mailing Lists</a></dd> <dd><a href="../../community/user-stories/">Who Uses Camel</a></dd> <dd><a href="../../community/articles/">Articles</a></dd> <dd><a href="../../community/books/">Books</a></dd> <dd><a href="../../community/team/">Team</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">About</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../acknowledgments/">Acknowledgments</a></dd> <dd><a href="https://www.apache.org/events/current-event.html" target="_blank" rel="noopener noreferrer nofollow" title="Apache Events">Apache Events</a></dd> <dd><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer nofollow" title="License">License</a></dd> <dd><a href="https://www.apache.org/security/" target="_blank" rel="noopener noreferrer nofollow" title="Security">Security</a></dd> <dd><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noopener noreferrer nofollow" title="Sponsorship">Sponsorship</a></dd> <dd><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noopener noreferrer nofollow" title="Thanks">Thanks</a></dd> <dd><a href="../../trust/">Trust</a></dd> </dl> <p class="remark"> &copy; 2004-2026 The <a href="https://apache.org">Apache Software Foundation</a>.<br> Apache Camel, Camel, Apache, the Apache feather logo, and the Apache Camel project logo are trademarks of The Apache Software Foundation. All other marks mentioned may be trademarks or registered trademarks of their respective owners. </p> <div class="resources"> <div class="context"> <a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noopener noreferrer nofollow">Privacy Policy</a> </div> <div class="context"> <a href="https://www.apache.org/foundation/policies/conduct" target="_blank" rel="noopener noreferrer nofollow">Code of Conduct</a> </div> <div class="context"> <a href="../../sitemap/">Sitemap</a> </div> </div> <div class="footer-icons"> <a href="https://github.com/apache/camel/" rel="noopener noreferrer nofollow" title="Collaborate on GitHub"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#github"/></svg></a> <a href="https://camel.zulipchat.com" rel="noopener noreferrer nofollow" title="Chat on Zulip"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#zulip"/></svg></a> <a href="https://twitter.com/ApacheCamel" rel="noopener noreferrer nofollow" title="Follow Apache Camel on Twitter"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#twitter"/></svg></a> <a href="https://www.linkedin.com/groups/2447439/" rel="noopener noreferrer nofollow" title="Apache Camel group on Linkedin"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#linkedin"/></svg></a> <a href="../../blog/index.xml" title="Subscribe to RSS Feed"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#rss"/></svg></a> </div> </div> </footer> <script src="../../_/js/vendor/docsearch-5c0cf4ef3a.js"></script> <script src="../../_/js/site-2aad2f7ea4.js"></script> <script async src="../../_/js/vendor/highlight-34ee5f32ef.js"></script> <script async src="../../_/js/vendor/svg4everybody-8ce71b89ac.js"></script> <script async src="../../_/js/vendor/tabs-3496628f2d.js" data-sync-storage-key="preferred-tab"></script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "Organization", "name": "Apache Camel", "url": "https://camel.apache.org", "sameAs": [ "https://twitter.com/ApacheCamel" ], "logo": "../../_/img/logo-d-a567cee6fa.svg", "description": "Apache Camel ™ is a versatile open-source integration framework based on known Enterprise Integration Patterns. Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL." } </script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Apache Camel", "item": "https://camel.apache.org/" }, { "@type": "ListItem", "position": 2, "name": "Camel Components", "item": "https://camel.apache.org/components/4.22.x/index.html" }, { "@type": "ListItem", "position": 3, "name": "Next (Pre-release)", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 4, "name": "Components", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 5, "name": "AI", "item": "https://camel.apache.org/components/next/ai-summary.html" }, { "@type": "ListItem", "position": 6, "name": "LangChain4j Embeddings", "item": "https://camel.apache.org/components/next/langchain4j-embeddings-component.html" }] } </script> </body> </html> 

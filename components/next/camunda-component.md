@@ -526,11 +526,11 @@ from("camunda://worker?jobType=myJobType&timeout=20")
       parameters:
         jobType: myJobType
         timeout: 20
-    steps:
-      - setBody:
-          simple: "${map('approved',true)}"
-      - to:
-          uri: camunda://completeJob
+      steps:
+        - setBody:
+            simple: "${map('approved',true)}"
+        - to:
+            uri: camunda://completeJob
 ```
 
 #### Advanced Worker Flow Examples

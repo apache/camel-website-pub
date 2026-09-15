@@ -323,9 +323,9 @@ An example of consuming messages using camel avro consumers via netty:
 ```java
 from("avro:netty:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol")
     .choice()
-        .when().el("${in.headers.CamelAvroMessageName == 'put'}")
+        .when(simple("${header.CamelAvroMessageName} == 'put'"))
             .process("putProcessor")
-        .when().el("${in.headers.CamelAvroMessageName == 'get'}")
+        .when(simple("${header.CamelAvroMessageName} == 'get'"))
             .process("getProcessor");
 ```
 
@@ -334,11 +334,11 @@ from("avro:netty:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.
             <from uri="avro:netty:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol"/>
             <choice>
                 <when>
-                    <el>${in.headers.CamelAvroMessageName == 'put'}</el>
+                    <simple>${header.CamelAvroMessageName} == 'put'</simple>
                     <process ref="putProcessor"/>
                 </when>
                 <when>
-                    <el>${in.headers.CamelAvroMessageName == 'get'}</el>
+                    <simple>${header.CamelAvroMessageName} == 'get'</simple>
                     <process ref="getProcessor"/>
                 </when>
             </choice>
@@ -354,11 +354,11 @@ from("avro:netty:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.
       steps:
         - choice:
             when:
-              - el: "${in.headers.CamelAvroMessageName == 'put'}"
+              - simple: "${header.CamelAvroMessageName} == 'put'"
                 steps:
                   - process:
                       ref: putProcessor
-              - el: "${in.headers.CamelAvroMessageName == 'get'}"
+              - simple: "${header.CamelAvroMessageName} == 'get'"
                 steps:
                   - process:
                       ref: getProcessor

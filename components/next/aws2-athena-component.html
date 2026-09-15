@@ -68,16 +68,20 @@
               operation: getQueryResults
               outputType: S3Pointer
         - to:
-            uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_static_credentials_default_credential_provider_and_profile_credentials_provider"><a class="anchor" href="#_static_credentials_default_credential_provider_and_profile_credentials_provider"></a>Static credentials, Default Credential Provider and Profile Credentials Provider</h3> <div class="paragraph"> <p>You have the possibility of avoiding the usage of explicit static credentials by specifying the useDefaultCredentialsProvider option and set it to true.</p> </div> <div class="paragraph"> <p>The order of evaluation for Default Credentials Provider is the following:</p> </div> <div class="ulist"> <ul> <li> <p>Java system properties - <code>aws.accessKeyId</code> and <code>aws.secretKey</code>.</p> </li> <li> <p>Environment variables - <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code>.</p> </li> <li> <p>Web Identity Token from AWS STS.</p> </li> <li> <p>The shared credentials and config files.</p> </li> <li> <p>Amazon ECS container credentials - loaded from the Amazon ECS if the environment variable <code>AWS_CONTAINER_CREDENTIALS_RELATIVE_URI</code> is set.</p> </li> <li> <p>Amazon EC2 Instance profile credentials.</p> </li> </ul> </div> <div class="paragraph"> <p>You have also the possibility of using Profile Credentials Provider, by specifying the useProfileCredentialsProvider option to true and profileCredentialsName to the profile name.</p> </div> <div class="paragraph"> <p>Only one of static, default and profile credentials could be used at the same time.</p> </div> <div class="paragraph"> <p>For more information about this you can look at <a href="https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.html">AWS credentials documentation</a></p> </div> </div> <div class="sect2"> <h3 id="_athena_producer_operations"><a class="anchor" href="#_athena_producer_operations"></a>Athena Producer operations</h3> <div class="paragraph"> <p>The Camel-AWS Athena component provides the following operation on the producer side:</p> </div> <div class="ulist"> <ul> <li> <p>getQueryExecution</p> </li> <li> <p>getQueryResults</p> </li> <li> <p>listQueryExecutions</p> </li> <li> <p>startQueryExecution</p> </li> </ul> </div> </div> <div class="sect2"> <h3 id="_advanced_amazonathena_configuration"><a class="anchor" href="#_advanced_amazonathena_configuration"></a>Advanced AmazonAthena configuration</h3> <div class="paragraph"> <p>If your Camel Application is running behind a firewall or if you need to have more control over the <code>AthenaClient</code> instance configuration, you can create your own instance and refer to it in your Camel aws2-athena component configuration:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("aws2-athena://MyQuery?amazonAthenaClient=#client")
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_static_credentials_default_credential_provider_and_profile_credentials_provider"><a class="anchor" href="#_static_credentials_default_credential_provider_and_profile_credentials_provider"></a>Static credentials, Default Credential Provider and Profile Credentials Provider</h3> <div class="paragraph"> <p>You have the possibility of avoiding the usage of explicit static credentials by specifying the useDefaultCredentialsProvider option and set it to true.</p> </div> <div class="paragraph"> <p>The order of evaluation for Default Credentials Provider is the following:</p> </div> <div class="ulist"> <ul> <li> <p>Java system properties - <code>aws.accessKeyId</code> and <code>aws.secretKey</code>.</p> </li> <li> <p>Environment variables - <code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code>.</p> </li> <li> <p>Web Identity Token from AWS STS.</p> </li> <li> <p>The shared credentials and config files.</p> </li> <li> <p>Amazon ECS container credentials - loaded from the Amazon ECS if the environment variable <code>AWS_CONTAINER_CREDENTIALS_RELATIVE_URI</code> is set.</p> </li> <li> <p>Amazon EC2 Instance profile credentials.</p> </li> </ul> </div> <div class="paragraph"> <p>You have also the possibility of using Profile Credentials Provider, by specifying the useProfileCredentialsProvider option to true and profileCredentialsName to the profile name.</p> </div> <div class="paragraph"> <p>Only one of static, default and profile credentials could be used at the same time.</p> </div> <div class="paragraph"> <p>For more information about this you can look at <a href="https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.html">AWS credentials documentation</a></p> </div> </div> <div class="sect2"> <h3 id="_athena_producer_operations"><a class="anchor" href="#_athena_producer_operations"></a>Athena Producer operations</h3> <div class="paragraph"> <p>The Camel-AWS Athena component provides the following operation on the producer side:</p> </div> <div class="ulist"> <ul> <li> <p>getQueryExecution</p> </li> <li> <p>getQueryResults</p> </li> <li> <p>listQueryExecutions</p> </li> <li> <p>startQueryExecution</p> </li> </ul> </div> </div> <div class="sect2"> <h3 id="_advanced_amazonathena_configuration"><a class="anchor" href="#_advanced_amazonathena_configuration"></a>Advanced AmazonAthena configuration</h3> <div class="paragraph"> <p>If your Camel Application is running behind a firewall or if you need to have more control over the <code>AthenaClient</code> instance configuration, you can create your own instance and refer to it in your Camel aws2-athena component configuration:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+    .to("aws2-athena://MyQuery?amazonAthenaClient=#client")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
-  &lt;from uri="aws2-athena://MyQuery?amazonAthenaClient=#client"/&gt;
+  &lt;from uri="direct:start"/&gt;
+  &lt;to uri="aws2-athena://MyQuery?amazonAthenaClient=#client"/&gt;
   &lt;to uri="mock:result"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
-      uri: aws2-athena://MyQuery
-      parameters:
-        amazonAthenaClient: "#client"
+      uri: direct:start
       steps:
+        - to:
+            uri: aws2-athena://MyQuery
+            parameters:
+              amazonAthenaClient: "#client"
         - to:
             uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_overriding_query_parameters_with_message_headers"><a class="anchor" href="#_overriding_query_parameters_with_message_headers"></a>Overriding query parameters with message headers</h3> <div class="paragraph"> <p>Message headers listed in "Message headers evaluated by the Athena producer" override the corresponding query parameters listed in "Query Parameters".</p> </div> <div class="paragraph"> <p>For example:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
      .setHeader(Athena2Constants.OUTPUT_LOCATION, constant("s3://other/location/"))
@@ -110,14 +114,14 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: aws2-athena://label
-          parameters:
-            operation: getQueryExecution
-            queryExecutionId: 11111111-1111-1111-1111-111111111111
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The preceding example will yield an <a href="https://docs.aws.amazon.com/athena/latest/APIReference/API_QueryExecution.html">Athena QueryExecution</a> in the body.</p> </div> <div class="paragraph"> <p>The getQueryExecution operation also supports retrieving the query execution ID from a header (<code>CamelAwsAthenaQueryExecutionId</code>), and since startQueryExecution sets the same header, upon starting a query, these operations can be used together:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryExecution
+              queryExecutionId: 11111111-1111-1111-1111-111111111111
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The preceding example will yield an <a href="https://docs.aws.amazon.com/athena/latest/APIReference/API_QueryExecution.html">Athena QueryExecution</a> in the body.</p> </div> <div class="paragraph"> <p>The getQueryExecution operation also supports retrieving the query execution ID from a header (<code>CamelAwsAthenaQueryExecutionId</code>), and since startQueryExecution sets the same header, upon starting a query, these operations can be used together:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .setBody(constant("SELECT 1"))
     .to("aws2-athena://label?operation=startQueryExecution&amp;outputLocation=s3://bucket/path/")
     .to("aws2-athena://label?operation=getQueryExecution")
@@ -258,13 +262,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_10_yaml--panel" class="tabpanel" aria-labelledby="_tabs_10_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: aws2-athena://label
-          parameters:
-            operation: listQueryExecutions
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The preceding example will return a list of query executions in the body, plus the NextToken value as a header (<code>CamelAwsAthenaNextToken</code>) than can be used for manual pagination of results.</p> </div> <div class="ulist"> <ul> <li> <p>startQueryExecution: this operation starts the execution of a query. It supports waiting for the query to complete before proceeding, and retrying the query based on a set of configurable failure conditions:</p> </li> </ul> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: listQueryExecutions
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The preceding example will return a list of query executions in the body, plus the NextToken value as a header (<code>CamelAwsAthenaNextToken</code>) than can be used for manual pagination of results.</p> </div> <div class="ulist"> <ul> <li> <p>startQueryExecution: this operation starts the execution of a query. It supports waiting for the query to complete before proceeding, and retrying the query based on a set of configurable failure conditions:</p> </li> </ul> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .setBody(constant("SELECT 1"))
     .to("aws2-athena://label?operation=startQueryExecution&amp;outputLocation=s3://bucket/path/")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_11_xml--panel" class="tabpanel" aria-labelledby="_tabs_11_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -277,16 +281,16 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_11_yaml--panel" class="tabpanel" aria-labelledby="_tabs_11_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - setBody:
-          constant: SELECT 1
-      - to:
-          uri: aws2-athena://label
-          parameters:
-            operation: startQueryExecution
-            outputLocation: "s3://bucket/path/"
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The preceding example will start the query <code>SELECT 1</code> and configure the results to be saved to <code>s3://bucket/path/</code>, but will not wait for the query to complete.</p> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              outputLocation: "s3://bucket/path/"
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The preceding example will start the query <code>SELECT 1</code> and configure the results to be saved to <code>s3://bucket/path/</code>, but will not wait for the query to complete.</p> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .setBody(constant("SELECT 1"))
     .to("aws2-athena://label?operation=startQueryExecution&amp;waitTimeout=60000&amp;outputLocation=s3://bucket/path/")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_12_xml--panel" class="tabpanel" aria-labelledby="_tabs_12_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;

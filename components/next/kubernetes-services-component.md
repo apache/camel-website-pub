@@ -215,14 +215,14 @@ from("direct:list")
 - route:
     from:
       uri: direct:list
-    steps:
-      - to:
-          uri: kubernetes-services:///
-          parameters:
-            kubernetesClient: "#kubernetesClient"
-            operation: listServices
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: kubernetes-services:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listServices
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a List of services from your cluster
@@ -271,9 +271,9 @@ from("kubernetes-services://{{kubernetes-host}}?oauthToken={{kubernetes-token}}"
       uri: kubernetes-services://{{kubernetes-host}}
       parameters:
         oauthToken: "{{kubernetes-token}}"
-    steps:
-      - to:
-          uri: log:result
+      steps:
+        - to:
+            uri: log:result
 ```
 
 This consumer returns a message per event received for all Services from all namespaces in the cluster.

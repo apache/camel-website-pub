@@ -338,11 +338,11 @@ Here is a basic route that you can use to listen to Debezium events from MongoDB
     
 
 ```java
-from("debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&mongodbHosts=rs0/localhost:27017&mongodbUser=debezium&mongodbPassword=dbz&mongodbName=dbserver1&databaseHistoryFileFilename=/usr/history-file-1.dat")
+from("debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&mongodbConnectionString=RAW(mongodb://localhost:27017/?replicaSet=rs0)&mongodbUser=debezium&mongodbPassword=dbz&topicPrefix=dbserver1&schemaHistoryInternalFileFilename=/usr/history-file-1.dat")
     .log("Event received from Debezium : ${body}")
     .log("    with this identifier ${headers.CamelDebeziumIdentifier}")
     .log("    with these source metadata ${headers.CamelDebeziumSourceMetadata}")
-    .log("    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'")
+    .log("    the event occurred upon this operation '${headers.CamelDebeziumOperation}'")
     .log("    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'")
     .log("    with the key ${headers.CamelDebeziumKey}")
     .choice()
@@ -355,16 +355,16 @@ from("debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&m
 
 ```xml
 <route>
-  <from uri="debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&amp;mongodbHosts=rs0/localhost:27017&amp;mongodbUser=debezium&amp;mongodbPassword=dbz&amp;mongodbName=dbserver1&amp;databaseHistoryFileFilename=/usr/history-file-1.dat"/>
+  <from uri="debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&amp;mongodbConnectionString=RAW(mongodb://localhost:27017/?replicaSet=rs0)&amp;mongodbUser=debezium&amp;mongodbPassword=dbz&amp;topicPrefix=dbserver1&amp;schemaHistoryInternalFileFilename=/usr/history-file-1.dat"/>
   <log message="Event received from Debezium : ${body}"/>
   <log message="    with this identifier ${headers.CamelDebeziumIdentifier}"/>
   <log message="    with these source metadata ${headers.CamelDebeziumSourceMetadata}"/>
-  <log message="    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'"/>
+  <log message="    the event occurred upon this operation '${headers.CamelDebeziumOperation}'"/>
   <log message="    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'"/>
   <log message="    with the key ${headers.CamelDebeziumKey}"/>
   <choice>
     <when>
-      <simple>${headers.CamelDebeziumSourceOperation} in 'c,u,r'</simple>
+      <simple>${headers.CamelDebeziumOperation} in 'c,u,r'</simple>
       <unmarshal><json/></unmarshal>
       <log message="Event received from Debezium : ${body}"/>
     </when>
@@ -378,11 +378,11 @@ from("debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&m
       uri: debezium-mongodb:dbz-test-1
       parameters:
         offsetStorageFileName: /usr/offset-file-1.dat
-        mongodbHosts: rs0/localhost:27017
+        mongodbConnectionString: "mongodb://localhost:27017/?replicaSet=rs0"
         mongodbUser: debezium
         mongodbPassword: dbz
-        mongodbName: dbserver1
-        databaseHistoryFileFilename: /usr/history-file-1.dat
+        topicPrefix: dbserver1
+        schemaHistoryInternalFileFilename: /usr/history-file-1.dat
       steps:
         - log:
             message: "Event received from Debezium : ${body}"
@@ -391,14 +391,14 @@ from("debezium-mongodb:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&m
         - log:
             message: "    with these source metadata ${headers.CamelDebeziumSourceMetadata}"
         - log:
-            message: "    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'"
+            message: "    the event occurred upon this operation '${headers.CamelDebeziumOperation}'"
         - log:
             message: "    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'"
         - log:
             message: "    with the key ${headers.CamelDebeziumKey}"
         - choice:
             when:
-              - simple: "${headers.CamelDebeziumSourceOperation} in 'c,u,r'"
+              - simple: "${headers.CamelDebeziumOperation} in 'c,u,r'"
                 steps:
                   - unmarshal:
                       json: {}

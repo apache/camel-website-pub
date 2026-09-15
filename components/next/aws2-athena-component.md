@@ -814,13 +814,15 @@ If your Camel Application is running behind a firewall or if you need to have mo
     
 
 ```java
-from("aws2-athena://MyQuery?amazonAthenaClient=#client")
+from("direct:start")
+    .to("aws2-athena://MyQuery?amazonAthenaClient=#client")
     .to("mock:result");
 ```
 
 ```xml
 <route>
-  <from uri="aws2-athena://MyQuery?amazonAthenaClient=#client"/>
+  <from uri="direct:start"/>
+  <to uri="aws2-athena://MyQuery?amazonAthenaClient=#client"/>
   <to uri="mock:result"/>
 </route>
 ```
@@ -828,10 +830,12 @@ from("aws2-athena://MyQuery?amazonAthenaClient=#client")
 ```yaml
 - route:
     from:
-      uri: aws2-athena://MyQuery
-      parameters:
-        amazonAthenaClient: "#client"
+      uri: direct:start
       steps:
+        - to:
+            uri: aws2-athena://MyQuery
+            parameters:
+              amazonAthenaClient: "#client"
         - to:
             uri: mock:result
 ```
@@ -915,14 +919,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: aws2-athena://label
-          parameters:
-            operation: getQueryExecution
-            queryExecutionId: 11111111-1111-1111-1111-111111111111
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: getQueryExecution
+              queryExecutionId: 11111111-1111-1111-1111-111111111111
+        - to:
+            uri: mock:result
 ```
 
 The preceding example will yield an [Athena QueryExecution](https://docs.aws.amazon.com/athena/latest/APIReference/API_QueryExecution.md) in the body.
@@ -1190,13 +1194,13 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: aws2-athena://label
-          parameters:
-            operation: listQueryExecutions
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: listQueryExecutions
+        - to:
+            uri: mock:result
 ```
 
 The preceding example will return a list of query executions in the body, plus the NextToken value as a header (`CamelAwsAthenaNextToken`) than can be used for manual pagination of results.
@@ -1233,16 +1237,16 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setBody:
-          constant: SELECT 1
-      - to:
-          uri: aws2-athena://label
-          parameters:
-            operation: startQueryExecution
-            outputLocation: "s3://bucket/path/"
-      - to:
-          uri: mock:result
+      steps:
+        - setBody:
+            constant: SELECT 1
+        - to:
+            uri: aws2-athena://label
+            parameters:
+              operation: startQueryExecution
+              outputLocation: "s3://bucket/path/"
+        - to:
+            uri: mock:result
 ```
 
 The preceding example will start the query `SELECT 1` and configure the results to be saved to `s3://bucket/path/`, but will not wait for the query to complete.

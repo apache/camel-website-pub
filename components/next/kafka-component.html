@@ -249,11 +249,11 @@ from("kafka:topic?groupId=myGroup&amp;pollTimeoutMs=1000&amp;batching=true&amp;m
         maxPollRecords: 10
         breakOnFirstError: true
         autoCommitEnable: true
-    steps:
-      - process:
-          ref: batchProcessor
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> <div id="_tabs_8_processor_implementation--panel" class="tabpanel" aria-labelledby="_tabs_8_processor_implementation"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component("batchProcessor")
+      steps:
+        - process:
+            ref: batchProcessor
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> <div id="_tabs_8_processor_implementation--panel" class="tabpanel" aria-labelledby="_tabs_8_processor_implementation"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component("batchProcessor")
 public class BatchProcessor implements Processor {
     private static final Logger LOG = LoggerFactory.getLogger(BatchProcessor.class);
 
@@ -309,13 +309,16 @@ from("kafka:topic?groupId=myGroup&amp;batching=true&amp;breakOnFirstError=true&a
             .getHeader("CamelKafkaManualCommit", KafkaManualCommit.class);
         manual.commit();
     })
-    .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_9_yaml--panel" class="tabpanel" aria-labelledby="_tabs_9_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
-    on-exception:
-      - exception: java.lang.Exception
-        handled: false
-        steps:
-          - process:
-              ref: errorCommitProcessor
+    .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_9_yaml--panel" class="tabpanel" aria-labelledby="_tabs_9_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant:
+        expression: "false"
+    steps:
+      - process:
+          ref: errorCommitProcessor
+- route:
     from:
       uri: kafka:topic
       parameters:
@@ -324,13 +327,13 @@ from("kafka:topic?groupId=myGroup&amp;batching=true&amp;breakOnFirstError=true&a
         breakOnFirstError: true
         autoCommitEnable: false
         allowManualCommit: true
-    steps:
-      - process:
-          ref: batchProcessorManual
-      - process:
-          ref: successCommitProcessor
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> <div id="_tabs_9_processor_implementations--panel" class="tabpanel" aria-labelledby="_tabs_9_processor_implementations"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component("batchProcessorManual")
+      steps:
+        - process:
+            ref: batchProcessorManual
+        - process:
+            ref: successCommitProcessor
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> <div id="_tabs_9_processor_implementations--panel" class="tabpanel" aria-labelledby="_tabs_9_processor_implementations"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component("batchProcessorManual")
 public class BatchProcessorManual implements Processor {
     private static final Logger LOG = LoggerFactory.getLogger(BatchProcessorManual.class);
 
@@ -434,9 +437,11 @@ public class SuccessCommitProcessor implements Processor {
         - to:
             uri: direct:process</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_producer_performance"><a class="anchor" href="#_producer_performance"></a>Producer Performance</h3> <div class="paragraph"> <p>If the producer is performing too slowly for your needs, you may want to aggregate the exchanges before sending.</p> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .aggregate(constant(true), new GroupedExchangeAggregationStrategy())
+        .completionSize(100)
+        .completionTimeout(1000)
     .to("kafka:my-topic");</code></pre> </div> </div> </div> <div id="_tabs_11_xml--panel" class="tabpanel" aria-labelledby="_tabs_11_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:start"/&gt;
-  &lt;aggregate aggregationStrategy="#groupedExchange"&gt;
+  &lt;aggregate aggregationStrategy="#groupedExchange" completionSize="100" completionTimeout="1000"&gt;
     &lt;correlationExpression&gt;
       &lt;constant&gt;true&lt;/constant&gt;
     &lt;/correlationExpression&gt;
@@ -448,6 +453,8 @@ public class SuccessCommitProcessor implements Processor {
       steps:
         - aggregate:
             aggregationStrategy: "#groupedExchange"
+            completionSize: 100
+            completionTimeout: 1000
             correlationExpression:
               constant: "true"
             steps:

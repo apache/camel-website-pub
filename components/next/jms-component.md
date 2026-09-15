@@ -1387,7 +1387,7 @@ from("activemq:queue:in")
 <route>
   <from uri="activemq:queue:in"/>
   <to uri="bean:validateOrder"/>
-  <inOnly uri="activemq:topic:order"/>
+  <to uri="activemq:topic:order" pattern="InOnly"/>
   <to uri="bean:handleOrder"/>
 </route>
 ```
@@ -1399,8 +1399,9 @@ from("activemq:queue:in")
       steps:
         - to:
             uri: bean:validateOrder
-        - inOnly:
+        - to:
             uri: activemq:topic:order
+            pattern: InOnly
         - to:
             uri: bean:handleOrder
 ```

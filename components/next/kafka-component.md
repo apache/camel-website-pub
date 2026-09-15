@@ -1435,11 +1435,11 @@ from("kafka:topic?groupId=myGroup&pollTimeoutMs=1000&batching=true&maxPollRecord
         maxPollRecords: 10
         breakOnFirstError: true
         autoCommitEnable: true
-    steps:
-      - process:
-          ref: batchProcessor
-      - to:
-          uri: mock:result
+      steps:
+        - process:
+            ref: batchProcessor
+        - to:
+            uri: mock:result
 ```
 
 ```java
@@ -1516,13 +1516,16 @@ from("kafka:topic?groupId=myGroup&batching=true&breakOnFirstError=true&autoCommi
 ```
 
 ```yaml
+- onException:
+    exception:
+      - java.lang.Exception
+    handled:
+      constant:
+        expression: "false"
+    steps:
+      - process:
+          ref: errorCommitProcessor
 - route:
-    on-exception:
-      - exception: java.lang.Exception
-        handled: false
-        steps:
-          - process:
-              ref: errorCommitProcessor
     from:
       uri: kafka:topic
       parameters:
@@ -1531,13 +1534,13 @@ from("kafka:topic?groupId=myGroup&batching=true&breakOnFirstError=true&autoCommi
         breakOnFirstError: true
         autoCommitEnable: false
         allowManualCommit: true
-    steps:
-      - process:
-          ref: batchProcessorManual
-      - process:
-          ref: successCommitProcessor
-      - to:
-          uri: mock:result
+      steps:
+        - process:
+            ref: batchProcessorManual
+        - process:
+            ref: successCommitProcessor
+        - to:
+            uri: mock:result
 ```
 
 ```java
@@ -1743,13 +1746,15 @@ If the producer is performing too slowly for your needs, you may want to aggrega
 ```java
 from("direct:start")
     .aggregate(constant(true), new GroupedExchangeAggregationStrategy())
+        .completionSize(100)
+        .completionTimeout(1000)
     .to("kafka:my-topic");
 ```
 
 ```xml
 <route>
   <from uri="direct:start"/>
-  <aggregate aggregationStrategy="#groupedExchange">
+  <aggregate aggregationStrategy="#groupedExchange" completionSize="100" completionTimeout="1000">
     <correlationExpression>
       <constant>true</constant>
     </correlationExpression>
@@ -1765,6 +1770,8 @@ from("direct:start")
       steps:
         - aggregate:
             aggregationStrategy: "#groupedExchange"
+            completionSize: 100
+            completionTimeout: 1000
             correlationExpression:
               constant: "true"
             steps:

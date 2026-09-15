@@ -121,7 +121,7 @@ from("direct:querySalesforce")
     .to("salesforce:limits")
     .choice()
         .when(spel("#{1.0 * body.dailyApiRequests.remaining / body.dailyApiRequests.max < 0.1}"))
-            .to("salesforce:query?...")
+            .to("salesforce:query?sObjectQuery=SELECT Id, Name FROM Account")
         .otherwise()
             .setBody(constant("Used up Salesforce API limits, leaving 10% for critical routes"))
     .endChoice();
@@ -134,7 +134,7 @@ from("direct:querySalesforce")
   <choice>
     <when>
       <spel>#{1.0 * body.dailyApiRequests.remaining / body.dailyApiRequests.max &lt; 0.1}</spel>
-      <to uri="salesforce:query?..."/>
+      <to uri="salesforce:query?sObjectQuery=SELECT Id, Name FROM Account"/>
     </when>
     <otherwise>
       <setBody>
@@ -157,7 +157,9 @@ from("direct:querySalesforce")
               - spel: "#{1.0 * body.dailyApiRequests.remaining / body.dailyApiRequests.max < 0.1}"
                 steps:
                   - to:
-                      uri: "salesforce:query?..."
+                      uri: salesforce:query
+                      parameters:
+                        sObjectQuery: "SELECT Id, Name FROM Account"
             otherwise:
               steps:
                 - setBody:
@@ -202,7 +204,7 @@ from("direct:fetchRecentItems")
   <from uri="direct:fetchRecentItems"/>
   <to uri="salesforce:recent"/>
   <split>
-    <body/>
+    <simple>${body}</simple>
     <log message="${body.name} at ${body.attributes.url}"/>
   </split>
 </route>
@@ -216,8 +218,7 @@ from("direct:fetchRecentItems")
         - to:
             uri: salesforce:recent
         - split:
-            expression:
-              body: {}
+            simple: "${body}"
             steps:
               - log: "${body.name} at ${body.attributes.url}"
 ```

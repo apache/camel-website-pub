@@ -217,14 +217,14 @@ from("direct:list")
 - route:
     from:
       uri: direct:list
-    steps:
-      - to:
-          uri: kubernetes-hpa:///
-          parameters:
-            kubernetesClient: "#kubernetesClient"
-            operation: listHPA
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: kubernetes-hpa:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listHPA
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of HPAs from your cluster
@@ -273,9 +273,9 @@ from("kubernetes-hpa://{{kubernetes-host}}?oauthToken={{kubernetes-token}}")
       uri: kubernetes-hpa://{{kubernetes-host}}
       parameters:
         oauthToken: "{{kubernetes-token}}"
-    steps:
-      - to:
-          uri: log:result
+      steps:
+        - to:
+            uri: log:result
 ```
 
 This consumer returns a message per event received for all HorizontalPodAutoscalers from all namespaces in the cluster.

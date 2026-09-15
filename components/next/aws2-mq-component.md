@@ -557,15 +557,15 @@ from("direct:deleteBroker")
 - route:
     from:
       uri: direct:deleteBroker
-    steps:
-      - setHeader:
-          name: CamelAwsMQBrokerID
-          constant: "123"
-      - to:
-          uri: aws2-mq://test
-          parameters:
-            amazonMqClient: "#amazonMqClient"
-            operation: deleteBroker
+      steps:
+        - setHeader:
+            name: CamelAwsMQBrokerID
+            constant: "123"
+        - to:
+            uri: aws2-mq://test
+            parameters:
+              amazonMqClient: "#amazonMqClient"
+              operation: deleteBroker
 ```
 
 -   rebootBroker: this operation will reboot an MQ Broker in AWS
@@ -598,15 +598,15 @@ from("direct:rebootBroker")
 - route:
     from:
       uri: direct:rebootBroker
-    steps:
-      - setHeader:
-          name: CamelAwsMQBrokerID
-          constant: "123"
-      - to:
-          uri: aws2-mq://test
-          parameters:
-            amazonMqClient: "#amazonMqClient"
-            operation: rebootBroker
+      steps:
+        - setHeader:
+            name: CamelAwsMQBrokerID
+            constant: "123"
+        - to:
+            uri: aws2-mq://test
+            parameters:
+              amazonMqClient: "#amazonMqClient"
+              operation: rebootBroker
 ```
 
 ### Using a POJO as body

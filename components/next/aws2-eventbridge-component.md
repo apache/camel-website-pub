@@ -1144,11 +1144,11 @@ from("aws2-eventbridge://default?ruleName=my-rule&delay=5000")
       parameters:
         ruleName: my-rule
         delay: 5000
-    steps:
-      - log:
-          message: "Received EventBridge event: ${body}"
-      - to:
-          uri: direct:process
+      steps:
+        - log:
+            message: "Received EventBridge event: ${body}"
+        - to:
+            uri: direct:process
 ```
 
 The consumer auto-creates an SQS queue, wires it to the `my-rule` EventBridge rule, and polls every 5 seconds.

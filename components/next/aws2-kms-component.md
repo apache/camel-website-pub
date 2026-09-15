@@ -564,15 +564,15 @@ from("direct:disableKey")
 - route:
     from:
       uri: direct:disableKey
-    steps:
-      - setHeader:
-          name: CamelAwsKMSKeyId
-          constant: "123"
-      - to:
-          uri: aws2-kms://test
-          parameters:
-            kmsClient: "#amazonKmsClient"
-            operation: disableKey
+      steps:
+        - setHeader:
+            name: CamelAwsKMSKeyId
+            constant: "123"
+        - to:
+            uri: aws2-kms://test
+            parameters:
+              kmsClient: "#amazonKmsClient"
+              operation: disableKey
 ```
 
 -   enableKey: this operation will enable a key in KMS
@@ -605,15 +605,15 @@ from("direct:enableKey")
 - route:
     from:
       uri: direct:enableKey
-    steps:
-      - setHeader:
-          name: CamelAwsKMSKeyId
-          constant: "123"
-      - to:
-          uri: aws2-kms://test
-          parameters:
-            kmsClient: "#amazonKmsClient"
-            operation: enableKey
+      steps:
+        - setHeader:
+            name: CamelAwsKMSKeyId
+            constant: "123"
+        - to:
+            uri: aws2-kms://test
+            parameters:
+              kmsClient: "#amazonKmsClient"
+              operation: enableKey
 ```
 
 ### Using a POJO as body

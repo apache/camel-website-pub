@@ -35,9 +35,9 @@ In addition to deleteAfterRead, it has been added another option, moveAfterRead.
         amazonS3Client: "#amazonS3Client"
         moveAfterRead: true
         destinationBucket: myothercamelbucket
-    steps:
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 In this case, the objects consumed will be moved to _myothercamelbucket_ bucket and deleted from the original one (because of deleteAfterRead set to true as default).
@@ -152,9 +152,9 @@ You can configure the consumer to only process objects with a specific prefix:
         amazonS3Client: "#amazonS3Client"
         prefix: processed/
         delay: 30000
-    steps:
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 This will only consume objects that start with "processed/" prefix from the _mycamelbucket_ bucket, with a 30-second polling delay.
@@ -191,9 +191,9 @@ Configure custom polling intervals and batch sizes:
         delay: 60000
         maxMessagesPerPoll: 5
         includeBody: false
-    steps:
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 This consumer polls every 60 seconds, processes up to 5 objects per poll, and doesn’t include the object body in the message (only metadata).
@@ -229,9 +229,9 @@ Configure the consumer to not delete files after reading and include specific fi
         amazonS3Client: "#amazonS3Client"
         deleteAfterRead: false
         fileName: "*.pdf"
-    steps:
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 This consumer will read PDF files but won’t delete them after processing.
@@ -266,9 +266,9 @@ Use a done file pattern to ensure files are completely uploaded before processin
       parameters:
         amazonS3Client: "#amazonS3Client"
         doneFileName: "*.done"
-    steps:
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 This consumer will only process files when a corresponding .done file exists in the bucket.

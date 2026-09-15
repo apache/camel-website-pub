@@ -175,19 +175,19 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelNetWeaverCommand
-          constant: "FlightCollection(carrid='AA',connid='0017',fldate=datetime'2016-04-20T00%3A00%3A00')"
-      - to:
-          uri: sap-netweaver:https://sapes4.sapdevcenter.com/sap/opu/odata/IWFND/RMTSAMPLEFLIGHT
-          parameters:
-            username: P1909969254
-            password: TODO
-      - to:
-          uri: log:response
-      - to:
-          uri: velocity:flight-info.vm
+      steps:
+        - setHeader:
+            name: CamelNetWeaverCommand
+            constant: "FlightCollection(carrid='AA',connid='0017',fldate=datetime'2016-04-20T00%3A00%3A00')"
+        - to:
+            uri: sap-netweaver:https://sapes4.sapdevcenter.com/sap/opu/odata/IWFND/RMTSAMPLEFLIGHT
+            parameters:
+              username: P1909969254
+              password: TODO
+        - to:
+            uri: log:response
+        - to:
+            uri: velocity:flight-info.vm
 ```
 
 The password is invalid. You would need to create an account at SAP first to run the demo.

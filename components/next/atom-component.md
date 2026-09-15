@@ -242,12 +242,12 @@ Camel supports Idempotent Consumer directly within the component, so it will ski
     
 
 ```java
-from("file://inbox?idempotent=false").to("...");
+from("atom://http://macstrac.blogspot.com/feeds/posts/default?idempotent=false").to("...");
 ```
 
 ```xml
 <route>
-  <from uri="file://inbox?idempotent=false"/>
+  <from uri="atom://http://macstrac.blogspot.com/feeds/posts/default?idempotent=false"/>
   <to uri="..."/>
 </route>
 ```
@@ -255,7 +255,7 @@ from("file://inbox?idempotent=false").to("...");
 ```yaml
 - route:
     from:
-      uri: file://inbox
+      uri: atom://http://macstrac.blogspot.com/feeds/posts/default
       parameters:
         idempotent: false
       steps:
@@ -275,12 +275,12 @@ The idempotency strategy can be changed by setting the `idempotentStrategy` opti
     
 
 ```java
-from("file://inbox?idempotentStrategy=#myIdempotentStrategy").to("...");
+from("atom://http://macstrac.blogspot.com/feeds/posts/default?idempotentStrategy=#myIdempotentStrategy").to("...");
 ```
 
 ```xml
 <route>
-  <from uri="file://inbox?idempotentStrategy=#myIdempotentStrategy"/>
+  <from uri="atom://http://macstrac.blogspot.com/feeds/posts/default?idempotentStrategy=#myIdempotentStrategy"/>
   <to uri="..."/>
 </route>
 ```
@@ -288,7 +288,7 @@ from("file://inbox?idempotentStrategy=#myIdempotentStrategy").to("...");
 ```yaml
 - route:
     from:
-      uri: file://inbox
+      uri: atom://http://macstrac.blogspot.com/feeds/posts/default
       parameters:
         idempotentStrategy: "#myIdempotentStrategy"
       steps:
@@ -308,12 +308,12 @@ As an alternative to the default idempotent strategy, a repository based strateg
     
 
 ```java
-from("file://inbox?idempotentStrategy=repository").to("...");
+from("atom://http://macstrac.blogspot.com/feeds/posts/default?idempotentStrategy=repository").to("...");
 ```
 
 ```xml
 <route>
-  <from uri="file://inbox?idempotentStrategy=repository"/>
+  <from uri="atom://http://macstrac.blogspot.com/feeds/posts/default?idempotentStrategy=repository"/>
   <to uri="..."/>
 </route>
 ```
@@ -321,7 +321,7 @@ from("file://inbox?idempotentStrategy=repository").to("...");
 ```yaml
 - route:
     from:
-      uri: file://inbox
+      uri: atom://http://macstrac.blogspot.com/feeds/posts/default
       parameters:
         idempotentStrategy: repository
       steps:

@@ -513,9 +513,9 @@ from("direct:...")
 - route:
     from:
       uri: direct:...
-    steps:
-      - to:
-          uri: olingo4://create/People
+      steps:
+        - to:
+            uri: olingo4://create/People
 ```
 
 The following route calls an odata action using the **ClientEntity** in the body message. The body message may be null for actions that don’t expect an input.
@@ -543,7 +543,7 @@ from("direct:...")
 - route:
     from:
       uri: direct:...
-    steps:
-      - to:
-          uri: olingo4://action/People
+      steps:
+        - to:
+            uri: olingo4://action/People
 ```

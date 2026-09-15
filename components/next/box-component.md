@@ -1723,13 +1723,17 @@ The following route uploads new files to the user’s root folder:
 
 ```java
 from("file:...")
-    .to("box://files/upload/inBody=fileUploadRequest");
+    .setHeader("CamelBox.fileName", header("CamelFileName"))
+    .to("box://files/upload?inBody=content&parentFolderId=0");
 ```
 
 ```xml
 <route>
     <from uri="file:..."/>
-    <to uri="box://files/upload/inBody=fileUploadRequest"/>
+    <setHeader name="CamelBox.fileName">
+        <header>CamelFileName</header>
+    </setHeader>
+    <to uri="box://files/upload?inBody=content&amp;parentFolderId=0"/>
 </route>
 ```
 
@@ -1737,9 +1741,15 @@ from("file:...")
 - route:
     from:
       uri: file:...
-    steps:
-      - to:
-          uri: box://files/upload/inBody=fileUploadRequest
+      steps:
+        - setHeader:
+            name: CamelBox.fileName
+            header: CamelFileName
+        - to:
+            uri: box://files/upload
+            parameters:
+              inBody: content
+              parentFolderId: "0"
 ```
 
 The following route polls user’s account for updates:
@@ -1769,9 +1779,9 @@ from("box://events/listen?startingPosition=-1")
       uri: box://events/listen
       parameters:
         startingPosition: -1
-    steps:
-      - to:
-          uri: bean:blah
+      steps:
+        - to:
+            uri: bean:blah
 ```
 
 The following route uses a producer with dynamic header options. The **fileId** property has the Box file id and the **output** property has the output stream of the file contents, so they are assigned to the **CamelBox.fileId** header and **CamelBox.output** header respectively as follows:

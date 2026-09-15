@@ -51,10 +51,11 @@ The producer:
 #### OIDC (Client Credentials)
 
 ```yaml
-- to:
-    uri: a2a:http://remote-agent:8080
-    parameters:
-      oauthProfile: my-profile
+steps:
+  - to:
+      uri: a2a:http://remote-agent:8080
+      parameters:
+        oauthProfile: my-profile
 ```
 
 Acquires a token via client-credentials grant, caches it, and refreshes on expiry.
@@ -62,29 +63,32 @@ Acquires a token via client-credentials grant, caches it, and refreshes on expir
 #### API Key
 
 ```yaml
-- to:
-    uri: a2a:http://remote-agent:8082
-    parameters:
-      apiKey: "{{my.api.key}}"
-      apiKeyHeader: X-API-Key
+steps:
+  - to:
+      uri: a2a:http://remote-agent:8082
+      parameters:
+        apiKey: "{{my.api.key}}"
+        apiKeyHeader: X-API-Key
 ```
 
 #### Bearer Token
 
 ```yaml
-- to:
-    uri: a2a:http://remote-agent:8080
-    parameters:
-      bearerToken: "{{my.token}}"
+steps:
+  - to:
+      uri: a2a:http://remote-agent:8080
+      parameters:
+        bearerToken: "{{my.token}}"
 ```
 
 ### JSON-RPC Producer
 
 ```yaml
-- to:
-    uri: a2a:http://remote-agent:8081
-    parameters:
-      protocolBinding: JSONRPC
+steps:
+  - to:
+      uri: a2a:http://remote-agent:8081
+      parameters:
+        protocolBinding: JSONRPC
 ```
 
 ### Producer Streaming
@@ -101,24 +105,25 @@ The exchange body is a `SseEventIterator` (implements `Iterator<StreamResponse>`
     
 
 ```yaml
-- setHeader:
-    name: CamelA2AOperation
-    constant: MESSAGE_STREAM
-- to: a2a:https://agent.example.com
-- split:
-    simple: "${body}"
-    streaming: true
-    steps:
-      - choice:
-          when:
-            - simple: "${body.statusUpdate} != null"
-              steps:
-                - log:
-                    message: "Progress: ${body.statusUpdate.status.state}"
-            - simple: "${body.message} != null"
-              steps:
-                - log:
-                    message: "Final message received"
+steps:
+  - setHeader:
+      name: CamelA2AOperation
+      constant: MESSAGE_STREAM
+  - to: a2a:https://agent.example.com
+  - split:
+      simple: "${body}"
+      streaming: true
+      steps:
+        - choice:
+            when:
+              - simple: "${body.statusUpdate} != null"
+                steps:
+                  - log:
+                      message: "Progress: ${body.statusUpdate.status.state}"
+              - simple: "${body.message} != null"
+                steps:
+                  - log:
+                      message: "Final message received"
 ```
 
 ```java
@@ -135,9 +140,10 @@ The iterator implements `Closeable`, so Camel’s Split EIP automatically releas
 To buffer all events into a `List<StreamResponse>`:
 
 ```yaml
-- to: a2a:https://agent.example.com
-- convertBodyTo:
-    type: java.util.List
+steps:
+  - to: a2a:https://agent.example.com
+  - convertBodyTo:
+      type: java.util.List
 ```
 
 #### Raw Passthrough (RAW mode)
@@ -150,13 +156,14 @@ With `dataFormat=RAW`, the exchange body is the raw `InputStream` from the remot
     
 
 ```yaml
-- to:
-    uri: a2a:https://agent.example.com?dataFormat=RAW
-    parameters:
-      operation: MESSAGE_STREAM
-- setHeader:
-    name: Content-Type
-    constant: text/event-stream
+steps:
+  - to:
+      uri: a2a:https://agent.example.com?dataFormat=RAW
+      parameters:
+        operation: MESSAGE_STREAM
+  - setHeader:
+      name: Content-Type
+      constant: text/event-stream
 ```
 
 ```java
@@ -170,19 +177,20 @@ from("platform-http:/stream")
 Subscribe to ongoing task updates from a remote agent:
 
 ```yaml
-- setHeader:
-    name: CamelA2AOperation
-    constant: TASK_SUBSCRIBE
-- setHeader:
-    name: CamelA2ATaskId
-    simple: "${exchangeProperty.taskId}"
-- to: a2a:https://agent.example.com
-- split:
-    simple: "${body}"
-    streaming: true
-    steps:
-      - log:
-          message: "Task update: ${body.statusUpdate.status.state}"
+steps:
+  - setHeader:
+      name: CamelA2AOperation
+      constant: TASK_SUBSCRIBE
+  - setHeader:
+      name: CamelA2ATaskId
+      simple: "${exchangeProperty.taskId}"
+  - to: a2a:https://agent.example.com
+  - split:
+      simple: "${body}"
+      streaming: true
+      steps:
+        - log:
+            message: "Task update: ${body.statusUpdate.status.state}"
 ```
 
 Streaming requests use `asyncTimeout` (default 5 minutes) instead of the standard 60-second request timeout. SSE heartbeat comments from the remote agent are automatically filtered during parsing.
@@ -290,13 +298,17 @@ The full push notification config CRUD is also available. `PUSH_CONFIG_GET` and 
 Call multiple agents concurrently using Camel’s `multicast` EIP:
 
 ```yaml
-- multicast:
-    parallelProcessing: true
-    aggregationStrategy: "#class:MyAggregator"
-    steps:
-      - to: direct:call-weather
-      - to: direct:call-news
-      - to: direct:call-fortune
+- route:
+    from:
+      uri: direct:ask-agents
+      steps:
+        - multicast:
+            parallelProcessing: true
+            aggregationStrategy: "#class:MyAggregator"
+            steps:
+              - to: direct:call-weather
+              - to: direct:call-news
+              - to: direct:call-fortune
 
 - route:
     id: call-weather
@@ -321,7 +333,8 @@ Call multiple agents concurrently using Camel’s `multicast` EIP:
 Override the remote agent’s URL from the card using `host`/`port`/`basePath` config:
 
 ```yaml
-- to: a2a:https://agent.example.com?host=http://localhost&port=8080
+steps:
+  - to: a2a:https://agent.example.com?host=http://localhost&port=8080
 ```
 
 Priority without producer credentials: `host` config > card’s `supportedInterfaces` URL > `agentCardSource` URL. When producer credentials are configured (`apiKey`, `bearerToken`, or `oauthProfile`) and `host` is not set, the producer sends credentialed requests only to the HTTP(S) `agentCardSource` origin. This avoids sending credentials to a URL supplied by the remote card’s `supportedInterfaces` field. The `port` and `basePath` producer overrides are applied when `host` is configured. A `host` value without a scheme is treated as HTTPS.
@@ -334,7 +347,8 @@ Priority without producer credentials: `host` config > card’s `supportedInterf
 By default, the producer does not follow HTTP redirects to prevent credential leakage on cross-origin redirects. Enable only when the remote agent is known to issue redirects:
 
 ```yaml
-- to: a2a:https://agent.example.com?followRedirects=true
+steps:
+  - to: a2a:https://agent.example.com?followRedirects=true
 ```
 
 > **Note**

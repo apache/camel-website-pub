@@ -31,35 +31,35 @@
     id: batch-convert
     from:
       uri: direct:documents
-    steps:
-      - to:
-          uri: docling:convert
-          parameters:
-            operation: "BATCH_CONVERT_TO_MARKDOWN"
-            useDoclingServe: true
-            batchParallelism: 4
-            batchFailOnFirstError: true
-      - log:
-          message: "Processed ${header.CamelDoclingBatchSuccessCount}/${header.CamelDoclingBatchTotalDocuments} documents successfully"
-      - split:
-          expression:
-            simple:
-              expression: "${body.results}"
-          steps:
-            - choice:
-                when:
-                  - expression:
-                      simple:
-                        expression: "${body.success}"
+      steps:
+        - to:
+            uri: docling:convert
+            parameters:
+              operation: "BATCH_CONVERT_TO_MARKDOWN"
+              useDoclingServe: true
+              batchParallelism: 4
+              batchFailOnFirstError: true
+        - log:
+            message: "Processed ${header.CamelDoclingBatchSuccessCount}/${header.CamelDoclingBatchTotalDocuments} documents successfully"
+        - split:
+            expression:
+              simple:
+                expression: "${body.results}"
+            steps:
+              - choice:
+                  when:
+                    - expression:
+                        simple:
+                          expression: "${body.success}"
+                      steps:
+                        - to:
+                            uri: file:///data/output
+                            parameters:
+                              fileName: "${body.documentId}.md"
+                  otherwise:
                     steps:
-                      - to:
-                          uri: file:///data/output
-                          parameters:
-                            fileName: "${body.documentId}.md"
-                otherwise:
-                  steps:
-                    - log:
-                        message: "Failed: ${body.originalPath} - ${body.errorMessage}"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_queue_based_batch_processing"><a class="anchor" href="#_queue_based_batch_processing"></a>Queue-Based Batch Processing</h2> <div class="sectionbody"> <div class="paragraph"> <p>This example shows a queue-based batch processing workflow:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Route 1: Collect documents from file system and send to queue
+                      - log:
+                          message: "Failed: ${body.originalPath} - ${body.errorMessage}"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_queue_based_batch_processing"><a class="anchor" href="#_queue_based_batch_processing"></a>Queue-Based Batch Processing</h2> <div class="sectionbody"> <div class="paragraph"> <p>This example shows a queue-based batch processing workflow:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Route 1: Collect documents from file system and send to queue
 from("file:///data/incoming?noop=true&amp;maxMessagesPerPoll=50")
     .convertBodyTo(String.class)
     .setHeader("documentPath", simple("${body}"))
@@ -112,18 +112,18 @@ from("direct:batch-process")
       parameters:
         noop: true
         maxMessagesPerPoll: 50
-    steps:
-      - convertBodyTo:
-          type: "java.lang.String"
-      - setHeader:
-          name: "documentPath"
-          expression:
-            simple:
-              expression: "${body}"
-      - to:
-          uri: seda:document-queue
-          parameters:
-            waitForTaskToComplete: "Never"
+      steps:
+        - convertBodyTo:
+            type: "java.lang.String"
+        - setHeader:
+            name: "documentPath"
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: seda:document-queue
+            parameters:
+              waitForTaskToComplete: "Never"
 
 # Route 2: Aggregate into batches
 - route:
@@ -131,50 +131,50 @@ from("direct:batch-process")
       uri: seda:document-queue
       parameters:
         concurrentConsumers: 1
-    steps:
-      - aggregate:
-          aggregationStrategy:
-            bean: "documentListProcessor"
-          correlationExpression:
-            constant: true
-          completionSize: 10
-          completionTimeout: 5000
-      - to:
-          uri: direct:batch-process
+      steps:
+        - aggregate:
+            aggregationStrategy:
+              bean: "documentListProcessor"
+            correlationExpression:
+              constant: true
+            completionSize: 10
+            completionTimeout: 5000
+        - to:
+            uri: direct:batch-process
 
 # Route 3: Process batch
 - route:
     from:
       uri: direct:batch-process
-    steps:
-      - to:
-          uri: docling:convert
-          parameters:
-            operation: "BATCH_CONVERT_TO_MARKDOWN"
-            useDoclingServe: true
-            batchParallelism: 5
-            batchFailOnFirstError: false
-      - split:
-          expression:
-            simple:
-              expression: "${body.results}"
-          steps:
-            - choice:
-                when:
-                  - expression:
-                      simple:
-                        expression: "${body.success}"
+      steps:
+        - to:
+            uri: docling:convert
+            parameters:
+              operation: "BATCH_CONVERT_TO_MARKDOWN"
+              useDoclingServe: true
+              batchParallelism: 5
+              batchFailOnFirstError: false
+        - split:
+            expression:
+              simple:
+                expression: "${body.results}"
+            steps:
+              - choice:
+                  when:
+                    - expression:
+                        simple:
+                          expression: "${body.success}"
+                      steps:
+                        - to:
+                            uri: file:///data/output
+                            parameters:
+                              fileName: "${body.documentId}.md"
+                  otherwise:
                     steps:
                       - to:
-                          uri: file:///data/output
+                          uri: file:///data/failed
                           parameters:
-                            fileName: "${body.documentId}.md"
-                otherwise:
-                  steps:
-                    - to:
-                        uri: file:///data/failed
-                        parameters:
-                          fileName: "${body.documentId}.error"</code></pre> </div> </div> </div> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> For the aggregation example above, you can also use a custom processor. Create a Java class: </td> </tr> </table></div> </div> <div class="listingblock"> <div class="title"><em>Java-only: Processor implementation</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class DocumentListProcessor implements Processor {
+                            fileName: "${body.documentId}.error"</code></pre> </div> </div> </div> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> For the aggregation example above, you can also use a custom processor. Create a Java class: </td> </tr> </table></div> </div> <div class="listingblock"> <div class="title"><em>Java-only: Processor implementation</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">public class DocumentListProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         @SuppressWarnings("unchecked")
@@ -218,51 +218,51 @@ from("direct:batch-lenient")
     id: batch-strict
     from:
       uri: direct:batch-strict
-    steps:
-      - to:
-          uri: docling:convert
-          parameters:
-            operation: "BATCH_CONVERT_TO_MARKDOWN"
-            useDoclingServe: true
-            batchFailOnFirstError: true
-      - log:
-          message: "All documents converted successfully"
+      steps:
+        - to:
+            uri: docling:convert
+            parameters:
+              operation: "BATCH_CONVERT_TO_MARKDOWN"
+              useDoclingServe: true
+              batchFailOnFirstError: true
+        - log:
+            message: "All documents converted successfully"
 
 # Continue on errors and process failures
 - route:
     id: batch-lenient
     from:
       uri: direct:batch-lenient
-    steps:
-      - to:
-          uri: docling:convert
-          parameters:
-            operation: "BATCH_CONVERT_TO_MARKDOWN"
-            useDoclingServe: true
-            batchFailOnFirstError: false
-      - log:
-          message: "Batch completed: ${header.CamelDoclingBatchSuccessCount} succeeded, ${header.CamelDoclingBatchFailureCount} failed"
-      - choice:
-          when:
-            - expression:
-                simple:
-                  expression: "${header.CamelDoclingBatchFailureCount} &gt; 0"
+      steps:
+        - to:
+            uri: docling:convert
+            parameters:
+              operation: "BATCH_CONVERT_TO_MARKDOWN"
+              useDoclingServe: true
+              batchFailOnFirstError: false
+        - log:
+            message: "Batch completed: ${header.CamelDoclingBatchSuccessCount} succeeded, ${header.CamelDoclingBatchFailureCount} failed"
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelDoclingBatchFailureCount} &gt; 0"
+                steps:
+                  - split:
+                      expression:
+                        simple:
+                          expression: "${body.failed}"
+                      steps:
+                        - log:
+                            message: "Failed document: ${body.originalPath} - ${body.errorMessage}"
+                        - to:
+                            uri: file:///data/failed
+                            parameters:
+                              fileName: "${body.documentId}.error"
+            otherwise:
               steps:
-                - split:
-                    expression:
-                      simple:
-                        expression: "${body.failed}"
-                    steps:
-                      - log:
-                          message: "Failed document: ${body.originalPath} - ${body.errorMessage}"
-                      - to:
-                          uri: file:///data/failed
-                          parameters:
-                            fileName: "${body.documentId}.error"
-          otherwise:
-            steps:
-              - log:
-                  message: "All documents processed successfully"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_batch_configuration_parameters"><a class="anchor" href="#_batch_configuration_parameters"></a>Batch Configuration Parameters</h2> <div class="sectionbody"> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>batchSize</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of documents in a single batch</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>batchParallelism</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Number of parallel threads for processing documents</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>batchFailOnFirstError</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">If true, fail entire batch on first error; if false, continue processing</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>batchTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">300000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time to wait for batch completion in milliseconds</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>splitBatchResults</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Split batch results into individual exchanges (List) instead of single BatchProcessingResults object</p></td> </tr> </tbody> </table></div> </div> </div> <div class="sect1"> <h2 id="_batch_processing_headers"><a class="anchor" href="#_batch_processing_headers"></a>Batch Processing Headers</h2> <div class="sectionbody"> <div class="paragraph"> <p>Headers can be used to override batch configuration per-message:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Header</th> <th class="tableblock halign-left valign-top">Type</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchSize</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override batch size for this operation</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchParallelism</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override parallelism for this operation</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchFailOnFirstError</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override fail-on-first-error setting</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override batch timeout in milliseconds</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchTotalDocuments</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Total documents in batch (output header)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchSuccessCount</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Number of successful conversions (output header)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchFailureCount</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Number of failed conversions (output header)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchProcessingTime</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Total processing time in milliseconds (output header)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchSplitResults</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override splitBatchResults setting for this operation</p></td> </tr> </tbody> </table></div> </div> </div> <div class="sect1"> <h2 id="_input_formats_for_batch_processing"><a class="anchor" href="#_input_formats_for_batch_processing"></a>Input Formats for Batch Processing</h2> <div class="sectionbody"> <div class="paragraph"> <p>The batch operations accept multiple input formats:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java collection types</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// List of file paths
+                - log:
+                    message: "All documents processed successfully"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_batch_configuration_parameters"><a class="anchor" href="#_batch_configuration_parameters"></a>Batch Configuration Parameters</h2> <div class="sectionbody"> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>batchSize</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of documents in a single batch</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>batchParallelism</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Number of parallel threads for processing documents</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>batchFailOnFirstError</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">If true, fail entire batch on first error; if false, continue processing</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>batchTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">300000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time to wait for batch completion in milliseconds</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>splitBatchResults</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Split batch results into individual exchanges (List) instead of single BatchProcessingResults object</p></td> </tr> </tbody> </table></div> </div> </div> <div class="sect1"> <h2 id="_batch_processing_headers"><a class="anchor" href="#_batch_processing_headers"></a>Batch Processing Headers</h2> <div class="sectionbody"> <div class="paragraph"> <p>Headers can be used to override batch configuration per-message:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Header</th> <th class="tableblock halign-left valign-top">Type</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchSize</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override batch size for this operation</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchParallelism</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override parallelism for this operation</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchFailOnFirstError</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override fail-on-first-error setting</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override batch timeout in milliseconds</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchTotalDocuments</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Total documents in batch (output header)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchSuccessCount</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Number of successful conversions (output header)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchFailureCount</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Integer</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Number of failed conversions (output header)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchProcessingTime</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Total processing time in milliseconds (output header)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelDoclingBatchSplitResults</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Override splitBatchResults setting for this operation</p></td> </tr> </tbody> </table></div> </div> </div> <div class="sect1"> <h2 id="_input_formats_for_batch_processing"><a class="anchor" href="#_input_formats_for_batch_processing"></a>Input Formats for Batch Processing</h2> <div class="sectionbody"> <div class="paragraph"> <p>The batch operations accept multiple input formats:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java collection types</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// List of file paths
 List&lt;String&gt; paths = Arrays.asList("/data/doc1.pdf", "/data/doc2.pdf");
 
 // List of File objects
@@ -337,79 +337,79 @@ from("direct:batch-parallel-individual")
 - route:
     from:
       uri: direct:batch-with-split
-    steps:
-      - to:
-          uri: docling:convert
-          parameters:
-            operation: "BATCH_CONVERT_TO_MARKDOWN"
-            useDoclingServe: true
-            splitBatchResults: true
-            contentInBody: true
-      - split:
-          expression:
-            simple:
-              expression: "${body}"
-          steps:
-            - choice:
-                when:
-                  - expression:
-                      simple:
-                        expression: "${body.success}"
+      steps:
+        - to:
+            uri: docling:convert
+            parameters:
+              operation: "BATCH_CONVERT_TO_MARKDOWN"
+              useDoclingServe: true
+              splitBatchResults: true
+              contentInBody: true
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - choice:
+                  when:
+                    - expression:
+                        simple:
+                          expression: "${body.success}"
+                      steps:
+                        - log:
+                            message: "Success: ${body.documentId}"
+                        - to:
+                            uri: file:///data/success
+                            parameters:
+                              fileName: "${body.documentId}.md"
+                  otherwise:
                     steps:
                       - log:
-                          message: "Success: ${body.documentId}"
+                          message: "Failed: ${body.documentId}"
                       - to:
-                          uri: file:///data/success
+                          uri: file:///data/failed
                           parameters:
-                            fileName: "${body.documentId}.md"
-                otherwise:
-                  steps:
-                    - log:
-                        message: "Failed: ${body.documentId}"
-                    - to:
-                        uri: file:///data/failed
-                        parameters:
-                          fileName: "${body.documentId}.error"
+                            fileName: "${body.documentId}.error"
 
 # Example 2: Split with parallel processing
 - route:
     id: batch-split-parallel
     from:
       uri: direct:batch-parallel
-    steps:
-      - to:
-          uri: docling:convert
-          parameters:
-            operation: "BATCH_CONVERT_TO_MARKDOWN"
-            useDoclingServe: true
-            splitBatchResults: true
-            batchParallelism: 4
-            contentInBody: true
-      - split:
-          expression:
-            simple:
-              expression: "${body}"
-          parallelProcessing: true
-          steps:
-            - log:
-                message: "Processing document ${body.documentId} (index ${body.batchIndex})"
-            - choice:
-                when:
-                  - expression:
-                      simple:
-                        expression: "${body.success}"
+      steps:
+        - to:
+            uri: docling:convert
+            parameters:
+              operation: "BATCH_CONVERT_TO_MARKDOWN"
+              useDoclingServe: true
+              splitBatchResults: true
+              batchParallelism: 4
+              contentInBody: true
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            parallelProcessing: true
+            steps:
+              - log:
+                  message: "Processing document ${body.documentId} (index ${body.batchIndex})"
+              - choice:
+                  when:
+                    - expression:
+                        simple:
+                          expression: "${body.success}"
+                      steps:
+                        - log:
+                            message: "Successfully converted ${body.documentId}"
+                        - to:
+                            uri: file:///data/processed
+                            parameters:
+                              fileName: "${body.documentId}.md"
+                  otherwise:
                     steps:
                       - log:
-                          message: "Successfully converted ${body.documentId}"
+                          message: "Failed to convert ${body.documentId}: ${body.errorMessage}"
                       - to:
-                          uri: file:///data/processed
+                          uri: file:///data/errors
                           parameters:
-                            fileName: "${body.documentId}.md"
-                otherwise:
-                  steps:
-                    - log:
-                        message: "Failed to convert ${body.documentId}: ${body.errorMessage}"
-                    - to:
-                        uri: file:///data/errors
-                        parameters:
-                          fileName: "${body.documentId}.error"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p><strong>Comparison: BatchProcessingResults vs Split Results</strong></p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Scenario</th> <th class="tableblock halign-left valign-top">splitBatchResults=false</th> <th class="tableblock halign-left valign-top">splitBatchResults=true</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Return type</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>BatchProcessingResults</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>List&lt;BatchConversionResult&gt;</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Number of exchanges</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">1 exchange with all results</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Use <code>.split(body())</code> to create 1 exchange per document</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Use case</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Aggregate statistics, batch-level processing</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Individual document processing, routing per result</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Access to batch stats</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Direct via object methods</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Via headers (CamelDoclingBatch*)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Camel pattern</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Process entire batch together</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Split and process individually</p></td> </tr> </tbody> </table></div> <div class="paragraph"> <p><strong>Note:</strong> When using <code>splitBatchResults=true</code>, batch statistics are still available via headers: - <code>CamelDoclingBatchTotalDocuments</code> - <code>CamelDoclingBatchSuccessCount</code> - <code>CamelDoclingBatchFailureCount</code> - <code>CamelDoclingBatchProcessingTime</code></p> </div> </div> </div> </article> <aside class="toc sidebar" aria-label="Table of contents" data-title="Contents" data-levels="2"> <div class="toc-menu"></div> </aside> </div> </main> </div> <footer> <div class="footer-tools"> <a href="#top" title="Reach the top of the page">Back to top</a> </div> <div class="footer"> <div class="footer-brand"> <img class="footer-logo" src="../../../_/img/logo-d-a567cee6fa.svg" alt="Apache Camel Logo" aria-label="white silhouette of a camel in front of a sand dune"> <span class="footer-wordmark">Apache Camel</span> <p class="footer-blurb">Open source integration framework. An Apache Software Foundation project, available under the Apache v2 license.</p> </div> <dl class="footer-column"> <dt><span class="footer-column-title">Overview</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../../blog/">Blog</a></dd> <dd><a href="../../../docs/">Documentation</a></dd> <dd><a href="../../../tooling/">Tooling</a></dd> <dd><a href="../../../community/">Community</a></dd> <dd><a href="../../../download/">Download</a></dd> <dd><a href="../../../projects/">All projects</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Documentation</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../../manual/">User Manual</a></dd> <dd><a href="../../../components/next/index.html">Components</a></dd> <dd><a href="../../../camel-k/next/">Camel-K</a></dd> <dd><a href="../../../camel-kafka-connector/next/">Camel Kafka Connector</a></dd> <dd><a href="../../../camel-quarkus/next/">Camel Quarkus</a></dd> <dd><a href="../../../camel-spring-boot/next/">Camel Spring Boot</a></dd> <dd><a href="../../../camel-karaf/latest/">Camel Karaf</a></dd> <dd><a href="../../../manual/faq/index.html">FAQ</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Community</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../../community/support/">Support</a></dd> <dd><a href="../../../community/contributing/">Contributing</a></dd> <dd><a href="../../../community/mailing-list/">Mailing Lists</a></dd> <dd><a href="../../../community/user-stories/">Who Uses Camel</a></dd> <dd><a href="../../../community/articles/">Articles</a></dd> <dd><a href="../../../community/books/">Books</a></dd> <dd><a href="../../../community/team/">Team</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">About</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../../acknowledgments/">Acknowledgments</a></dd> <dd><a href="https://www.apache.org/events/current-event.html" target="_blank" rel="noopener noreferrer nofollow" title="Apache Events">Apache Events</a></dd> <dd><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer nofollow" title="License">License</a></dd> <dd><a href="https://www.apache.org/security/" target="_blank" rel="noopener noreferrer nofollow" title="Security">Security</a></dd> <dd><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noopener noreferrer nofollow" title="Sponsorship">Sponsorship</a></dd> <dd><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noopener noreferrer nofollow" title="Thanks">Thanks</a></dd> <dd><a href="../../../trust/">Trust</a></dd> </dl> <p class="remark"> &copy; 2004-2026 The <a href="https://apache.org">Apache Software Foundation</a>.<br> Apache Camel, Camel, Apache, the Apache feather logo, and the Apache Camel project logo are trademarks of The Apache Software Foundation. All other marks mentioned may be trademarks or registered trademarks of their respective owners. </p> <div class="resources"> <div class="context"> <a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noopener noreferrer nofollow">Privacy Policy</a> </div> <div class="context"> <a href="https://www.apache.org/foundation/policies/conduct" target="_blank" rel="noopener noreferrer nofollow">Code of Conduct</a> </div> <div class="context"> <a href="../../../sitemap/">Sitemap</a> </div> </div> <div class="footer-icons"> <a href="https://github.com/apache/camel/" rel="noopener noreferrer nofollow" title="Collaborate on GitHub"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#github"/></svg></a> <a href="https://camel.zulipchat.com" rel="noopener noreferrer nofollow" title="Chat on Zulip"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#zulip"/></svg></a> <a href="https://twitter.com/ApacheCamel" rel="noopener noreferrer nofollow" title="Follow Apache Camel on Twitter"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#twitter"/></svg></a> <a href="https://www.linkedin.com/groups/2447439/" rel="noopener noreferrer nofollow" title="Apache Camel group on Linkedin"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#linkedin"/></svg></a> <a href="../../../blog/index.xml" title="Subscribe to RSS Feed"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#rss"/></svg></a> </div> </div> </footer> <script src="../../../_/js/vendor/docsearch-5c0cf4ef3a.js"></script> <script src="../../../_/js/site-2aad2f7ea4.js"></script> <script async src="../../../_/js/vendor/highlight-34ee5f32ef.js"></script> <script async src="../../../_/js/vendor/svg4everybody-8ce71b89ac.js"></script> <script async src="../../../_/js/vendor/tabs-3496628f2d.js" data-sync-storage-key="preferred-tab"></script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "Organization", "name": "Apache Camel", "url": "https://camel.apache.org", "sameAs": [ "https://twitter.com/ApacheCamel" ], "logo": "../../../_/img/logo-d-a567cee6fa.svg", "description": "Apache Camel ™ is a versatile open-source integration framework based on known Enterprise Integration Patterns. Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL." } </script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Apache Camel", "item": "https://camel.apache.org/" }, { "@type": "ListItem", "position": 2, "name": "Camel Components", "item": "https://camel.apache.org/components/4.22.x/index.html" }, { "@type": "ListItem", "position": 3, "name": "Next (Pre-release)", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 4, "name": "Miscellaneous Components", "item": "https://camel.apache.org/components/next/others/index.html" }, { "@type": "ListItem", "position": 5, "name": "Docling - Batch Processing", "item": "https://camel.apache.org/components/next/others/docling-batch-processing.html" }] } </script> </body> </html> 
+                            fileName: "${body.documentId}.error"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p><strong>Comparison: BatchProcessingResults vs Split Results</strong></p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Scenario</th> <th class="tableblock halign-left valign-top">splitBatchResults=false</th> <th class="tableblock halign-left valign-top">splitBatchResults=true</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Return type</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>BatchProcessingResults</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>List&lt;BatchConversionResult&gt;</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Number of exchanges</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">1 exchange with all results</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Use <code>.split(body())</code> to create 1 exchange per document</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Use case</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Aggregate statistics, batch-level processing</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Individual document processing, routing per result</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Access to batch stats</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Direct via object methods</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Via headers (CamelDoclingBatch*)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Camel pattern</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Process entire batch together</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Split and process individually</p></td> </tr> </tbody> </table></div> <div class="paragraph"> <p><strong>Note:</strong> When using <code>splitBatchResults=true</code>, batch statistics are still available via headers: - <code>CamelDoclingBatchTotalDocuments</code> - <code>CamelDoclingBatchSuccessCount</code> - <code>CamelDoclingBatchFailureCount</code> - <code>CamelDoclingBatchProcessingTime</code></p> </div> </div> </div> </article> <aside class="toc sidebar" aria-label="Table of contents" data-title="Contents" data-levels="2"> <div class="toc-menu"></div> </aside> </div> </main> </div> <footer> <div class="footer-tools"> <a href="#top" title="Reach the top of the page">Back to top</a> </div> <div class="footer"> <div class="footer-brand"> <img class="footer-logo" src="../../../_/img/logo-d-a567cee6fa.svg" alt="Apache Camel Logo" aria-label="white silhouette of a camel in front of a sand dune"> <span class="footer-wordmark">Apache Camel</span> <p class="footer-blurb">Open source integration framework. An Apache Software Foundation project, available under the Apache v2 license.</p> </div> <dl class="footer-column"> <dt><span class="footer-column-title">Overview</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../../blog/">Blog</a></dd> <dd><a href="../../../docs/">Documentation</a></dd> <dd><a href="../../../tooling/">Tooling</a></dd> <dd><a href="../../../community/">Community</a></dd> <dd><a href="../../../download/">Download</a></dd> <dd><a href="../../../projects/">All projects</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Documentation</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../../manual/">User Manual</a></dd> <dd><a href="../../../components/next/index.html">Components</a></dd> <dd><a href="../../../camel-k/next/">Camel-K</a></dd> <dd><a href="../../../camel-kafka-connector/next/">Camel Kafka Connector</a></dd> <dd><a href="../../../camel-quarkus/next/">Camel Quarkus</a></dd> <dd><a href="../../../camel-spring-boot/next/">Camel Spring Boot</a></dd> <dd><a href="../../../camel-karaf/latest/">Camel Karaf</a></dd> <dd><a href="../../../manual/faq/index.html">FAQ</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Community</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../../community/support/">Support</a></dd> <dd><a href="../../../community/contributing/">Contributing</a></dd> <dd><a href="../../../community/mailing-list/">Mailing Lists</a></dd> <dd><a href="../../../community/user-stories/">Who Uses Camel</a></dd> <dd><a href="../../../community/articles/">Articles</a></dd> <dd><a href="../../../community/books/">Books</a></dd> <dd><a href="../../../community/team/">Team</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">About</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../../acknowledgments/">Acknowledgments</a></dd> <dd><a href="https://www.apache.org/events/current-event.html" target="_blank" rel="noopener noreferrer nofollow" title="Apache Events">Apache Events</a></dd> <dd><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer nofollow" title="License">License</a></dd> <dd><a href="https://www.apache.org/security/" target="_blank" rel="noopener noreferrer nofollow" title="Security">Security</a></dd> <dd><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noopener noreferrer nofollow" title="Sponsorship">Sponsorship</a></dd> <dd><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noopener noreferrer nofollow" title="Thanks">Thanks</a></dd> <dd><a href="../../../trust/">Trust</a></dd> </dl> <p class="remark"> &copy; 2004-2026 The <a href="https://apache.org">Apache Software Foundation</a>.<br> Apache Camel, Camel, Apache, the Apache feather logo, and the Apache Camel project logo are trademarks of The Apache Software Foundation. All other marks mentioned may be trademarks or registered trademarks of their respective owners. </p> <div class="resources"> <div class="context"> <a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noopener noreferrer nofollow">Privacy Policy</a> </div> <div class="context"> <a href="https://www.apache.org/foundation/policies/conduct" target="_blank" rel="noopener noreferrer nofollow">Code of Conduct</a> </div> <div class="context"> <a href="../../../sitemap/">Sitemap</a> </div> </div> <div class="footer-icons"> <a href="https://github.com/apache/camel/" rel="noopener noreferrer nofollow" title="Collaborate on GitHub"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#github"/></svg></a> <a href="https://camel.zulipchat.com" rel="noopener noreferrer nofollow" title="Chat on Zulip"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#zulip"/></svg></a> <a href="https://twitter.com/ApacheCamel" rel="noopener noreferrer nofollow" title="Follow Apache Camel on Twitter"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#twitter"/></svg></a> <a href="https://www.linkedin.com/groups/2447439/" rel="noopener noreferrer nofollow" title="Apache Camel group on Linkedin"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#linkedin"/></svg></a> <a href="../../../blog/index.xml" title="Subscribe to RSS Feed"><svg class="brand-icon" focusable="false"><use xlink:href="../../../_/img/brand-logos-a2b35bbdec.svg#rss"/></svg></a> </div> </div> </footer> <script src="../../../_/js/vendor/docsearch-5c0cf4ef3a.js"></script> <script src="../../../_/js/site-2aad2f7ea4.js"></script> <script async src="../../../_/js/vendor/highlight-34ee5f32ef.js"></script> <script async src="../../../_/js/vendor/svg4everybody-8ce71b89ac.js"></script> <script async src="../../../_/js/vendor/tabs-3496628f2d.js" data-sync-storage-key="preferred-tab"></script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "Organization", "name": "Apache Camel", "url": "https://camel.apache.org", "sameAs": [ "https://twitter.com/ApacheCamel" ], "logo": "../../../_/img/logo-d-a567cee6fa.svg", "description": "Apache Camel ™ is a versatile open-source integration framework based on known Enterprise Integration Patterns. Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL." } </script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Apache Camel", "item": "https://camel.apache.org/" }, { "@type": "ListItem", "position": 2, "name": "Camel Components", "item": "https://camel.apache.org/components/4.22.x/index.html" }, { "@type": "ListItem", "position": 3, "name": "Next (Pre-release)", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 4, "name": "Miscellaneous Components", "item": "https://camel.apache.org/components/next/others/index.html" }, { "@type": "ListItem", "position": 5, "name": "Docling - Batch Processing", "item": "https://camel.apache.org/components/next/others/docling-batch-processing.html" }] } </script> </body> </html> 

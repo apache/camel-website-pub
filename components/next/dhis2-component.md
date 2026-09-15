@@ -529,17 +529,17 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:getResource
-        steps:
-          - to:
-              uri: dhis2:get/resource
-              parameters:
-                path: organisationUnits/O6uvpzGd5pu
-                username: admin
-                password: district
-                baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-          - unmarshal:
-              json:
-                unmarshalType: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
+          steps:
+            - to:
+                uri: dhis2:get/resource
+                parameters:
+                  path: organisationUnits/O6uvpzGd5pu
+                  username: admin
+                  password: district
+                  baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+            - unmarshal:
+                json:
+                  unmarshalType: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
     ```
     
 -   Fetch all organisation units:
@@ -560,24 +560,24 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:getCollection
-        steps:
-          - to:
-              uri: dhis2:get/collection
-              parameters:
-                path: organisationUnits
-                arrayName: organisationUnits
-                username: admin
-                password: district
-                baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-          - split:
-              expression:
-                simple:
-                  expression: ${body}
-              steps:
-                - convertBodyTo:
-                    type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
-                - log:
-                    message: ${body}
+          steps:
+            - to:
+                uri: dhis2:get/collection
+                parameters:
+                  path: organisationUnits
+                  arrayName: organisationUnits
+                  username: admin
+                  password: district
+                  baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+            - split:
+                expression:
+                  simple:
+                    expression: ${body}
+                steps:
+                  - convertBodyTo:
+                      type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
+                  - log:
+                      message: ${body}
     ```
     
 -   Fetch all organisation unit codes:
@@ -598,25 +598,25 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:getCollection
-        steps:
-          - to:
-              uri: dhis2:get/collection
-              parameters:
-                path: organisationUnits
-                arrayName: organisationUnits
-                username: admin
-                password: district
-                baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-                fields: code
-          - split:
-              expression:
-                simple:
-                  expression: ${body}
-              steps:
-                - convertBodyTo:
-                    type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
-                - log:
-                    message: ${body}
+          steps:
+            - to:
+                uri: dhis2:get/collection
+                parameters:
+                  path: organisationUnits
+                  arrayName: organisationUnits
+                  username: admin
+                  password: district
+                  baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+                  fields: code
+            - split:
+                expression:
+                  simple:
+                    expression: ${body}
+                steps:
+                  - convertBodyTo:
+                      type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
+                  - log:
+                      message: ${body}
     ```
     
 -   Fetch users with a phone number:
@@ -638,25 +638,25 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:getCollection
-        steps:
-          - to:
-              uri: dhis2:get/collection
-              parameters:
-                path: users
-                arrayName: users
-                username: admin
-                password: district
-                baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-                filter: "phoneNumber:!null:"
-          - split:
-              expression:
-                simple:
-                  expression: ${body}
-              steps:
-                - convertBodyTo:
-                    type: org.hisp.dhis.api.model.v40_2_2.User
-                - log:
-                    message: ${body}
+          steps:
+            - to:
+                uri: dhis2:get/collection
+                parameters:
+                  path: users
+                  arrayName: users
+                  username: admin
+                  password: district
+                  baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+                  filter: "phoneNumber:!null:"
+            - split:
+                expression:
+                  simple:
+                    expression: ${body}
+                steps:
+                  - convertBodyTo:
+                      type: org.hisp.dhis.api.model.v40_2_2.User
+                  - log:
+                      message: ${body}
     ```
     
 -   Save a data value set
@@ -686,31 +686,31 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:postResource
-        steps:
-          - setBody:
-              groovy: |
-                new org.hisp.dhis.api.model.v40_2_2.DataValueSet()
-                  .withCompleteDate(java.time.ZonedDateTime.now(java.time.ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE))
-                  .withOrgUnit('O6uvpzGd5pu')
-                  .withDataSet('lyLU2wR22tC')
-                  .withPeriod(org.hisp.dhis.integration.sdk.support.period.PeriodBuilder.monthOf(new Date(), -1))
-                  .withDataValues([new org.hisp.dhis.api.model.v40_2_2.DataValue().withDataElement('aIJZ2d2QgVV').withValue('20')])
-          - to:
-              uri: dhis2:post/resource
-              parameters:
-                path: dataValueSets
-                username: admin
-                password: district
-                baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-          - unmarshal:
-              json: {}
-          - choice:
-              when:
-                - groovy: body.status != 'OK'
-                  steps:
-                    - log:
-                        loggingLevel: ERROR
-                        message: Import error from DHIS2 while saving data value set => ${body}
+          steps:
+            - setBody:
+                groovy: |
+                  new org.hisp.dhis.api.model.v40_2_2.DataValueSet()
+                    .withCompleteDate(java.time.ZonedDateTime.now(java.time.ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE))
+                    .withOrgUnit('O6uvpzGd5pu')
+                    .withDataSet('lyLU2wR22tC')
+                    .withPeriod(org.hisp.dhis.integration.sdk.support.period.PeriodBuilder.monthOf(new Date(), -1))
+                    .withDataValues([new org.hisp.dhis.api.model.v40_2_2.DataValue().withDataElement('aIJZ2d2QgVV').withValue('20')])
+            - to:
+                uri: dhis2:post/resource
+                parameters:
+                  path: dataValueSets
+                  username: admin
+                  password: district
+                  baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+            - unmarshal:
+                json: {}
+            - choice:
+                when:
+                  - groovy: body.status != 'OK'
+                    steps:
+                      - log:
+                          loggingLevel: ERROR
+                          message: Import error from DHIS2 while saving data value set => ${body}
     ```
     
 -   Update an organisation unit
@@ -735,29 +735,29 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:putResource
-        steps:
-          - setBody:
-              groovy: |
-                new org.hisp.dhis.api.model.v40_2_2.OrganisationUnit()
-                  .withName('Acme')
-                  .withShortName('Acme')
-                  .withOpeningDate(new Date())
-          - to:
-              uri: dhis2:put/resource
-              parameters:
-                path: organisationUnits/jUb8gELQApl
-                username: admin
-                password: district
-                baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-          - unmarshal:
-              json: {}
-          - choice:
-              when:
-                - groovy: body.status != 'OK'
-                  steps:
-                    - log:
-                        loggingLevel: ERROR
-                        message: Import error from DHIS2 while updating org unit => ${body}
+          steps:
+            - setBody:
+                groovy: |
+                  new org.hisp.dhis.api.model.v40_2_2.OrganisationUnit()
+                    .withName('Acme')
+                    .withShortName('Acme')
+                    .withOpeningDate(new Date())
+            - to:
+                uri: dhis2:put/resource
+                parameters:
+                  path: organisationUnits/jUb8gELQApl
+                  username: admin
+                  password: district
+                  baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+            - unmarshal:
+                json: {}
+            - choice:
+                when:
+                  - groovy: body.status != 'OK'
+                    steps:
+                      - log:
+                          loggingLevel: ERROR
+                          message: Import error from DHIS2 while updating org unit => ${body}
     ```
     
 -   Delete an organisation unit
@@ -781,23 +781,23 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:deleteResource
-        steps:
-          - to:
-              uri: dhis2:delete/resource
-              parameters:
-                path: organisationUnits/jUb8gELQApl
-                username: admin
-                password: district
-                baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-          - unmarshal:
-              json: {}
-          - choice:
-              when:
-                - groovy: body.status != 'OK'
-                  steps:
-                    - log:
-                        loggingLevel: ERROR
-                        message: Import error from DHIS2 while deleting org unit => ${body}
+          steps:
+            - to:
+                uri: dhis2:delete/resource
+                parameters:
+                  path: organisationUnits/jUb8gELQApl
+                  username: admin
+                  password: district
+                  baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+            - unmarshal:
+                json: {}
+            - choice:
+                when:
+                  - groovy: body.status != 'OK'
+                    steps:
+                      - log:
+                          loggingLevel: ERROR
+                          message: Import error from DHIS2 while deleting org unit => ${body}
     ```
     
 -   Run analytics
@@ -816,16 +816,16 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:resourceTablesAnalytics
-        steps:
-          - to:
-              uri: dhis2:resourceTables/analytics
-              parameters:
-                skipAggregate: false
-                skipEvents: true
-                lastYears: 1
-                username: admin
-                password: district
-                baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+          steps:
+            - to:
+                uri: dhis2:resourceTables/analytics
+                parameters:
+                  skipAggregate: false
+                  skipEvents: true
+                  lastYears: 1
+                  username: admin
+                  password: district
+                  baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
     ```
     
 -   Reference DHIS2 client
@@ -854,14 +854,14 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:resourceTablesAnalytics
-        steps:
-          - to:
-              uri: dhis2:resourceTables/analytics
-              parameters:
-                skipAggregate: true
-                skipEvents: true
-                lastYears: 1
-                client: "#dhis2Client"
+          steps:
+            - to:
+                uri: dhis2:resourceTables/analytics
+                parameters:
+                  skipAggregate: true
+                  skipEvents: true
+                  lastYears: 1
+                  client: "#dhis2Client"
     ```
     
 -   Set custom query parameters
@@ -881,13 +881,13 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
     - route:
         from:
           uri: direct:clearCache
-        steps:
-          - setHeader:
-              name: CamelDhis2.queryParams
-              groovy: "['cacheClear':'true']"
-          - to:
-              uri: dhis2:post/resource
-              parameters:
-                path: maintenance
-                client: "#dhis2Client"
+          steps:
+            - setHeader:
+                name: CamelDhis2.queryParams
+                groovy: "['cacheClear':'true']"
+            - to:
+                uri: dhis2:post/resource
+                parameters:
+                  path: maintenance
+                  client: "#dhis2Client"
     ```

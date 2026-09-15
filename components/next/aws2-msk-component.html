@@ -29,15 +29,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteCluster
-    steps:
-      - setHeader:
-          name: CamelAwsMSKClusterArn
-          constant: test-kafka
-      - to:
-          uri: aws2-msk://test
-          parameters:
-            mskClient: "#amazonMskClient"
-            operation: deleteCluster</code></pre> </div> </div> </div> </div> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses AWS SDK <code>BrokerNodeGroupInfo</code> builder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteCluster")
+      steps:
+        - setHeader:
+            name: CamelAwsMSKClusterArn
+            constant: test-kafka
+        - to:
+            uri: aws2-msk://test
+            parameters:
+              mskClient: "#amazonMskClient"
+              operation: deleteCluster</code></pre> </div> </div> </div> </div> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses AWS SDK <code>BrokerNodeGroupInfo</code> builder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteCluster")
     .process(exchange -&gt; {
         exchange.getIn().setHeader("CamelAwsMSKClusterName", "test-kafka");
         exchange.getIn().setHeader("CamelAwsMSKClusterKafkaVersion", "2.1.1");

@@ -375,10 +375,10 @@ from("direct:test")
 - route:
     from:
       uri: direct:test
-    steps:
-      - setHeader:
-          name: CamelPahoMqtt5OverrideTopic
-          simple: "${header.customerId}"
-      - to:
-          uri: paho-mqtt5:some/target/queue
+      steps:
+        - setHeader:
+            name: CamelPahoMqtt5OverrideTopic
+            simple: "${header.customerId}"
+        - to:
+            uri: paho-mqtt5:some/target/queue
 ```

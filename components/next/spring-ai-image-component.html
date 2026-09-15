@@ -33,15 +33,15 @@ from("direct:generate")
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:generate
-    steps:
-      - to:
-          uri: spring-ai-image:gen
-          parameters:
-            imageModel: "#imageModel"
-            width: 512
-            height: 512
-      - to:
-          uri: file:output?fileName=generated.png</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The <code>Image</code> → <code>byte[]</code> conversion decodes the base64 data automatically.</p> </div> </div> <div class="sect2"> <h3 id="_using_with_ollama_local_image_generation"><a class="anchor" href="#_using_with_ollama_local_image_generation"></a>Using with Ollama (Local Image Generation)</h3> <div class="paragraph"> <p>Ollama supports image generation models via its OpenAI-compatible API. Configure the Spring AI OpenAI <code>ImageModel</code> to point at Ollama:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java Spring AI SDK configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Ollama returns application/x-ndjson — register a converter that handles it
+      steps:
+        - to:
+            uri: spring-ai-image:gen
+            parameters:
+              imageModel: "#imageModel"
+              width: 512
+              height: 512
+        - to:
+            uri: file:output?fileName=generated.png</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The <code>Image</code> → <code>byte[]</code> conversion decodes the base64 data automatically.</p> </div> </div> <div class="sect2"> <h3 id="_using_with_ollama_local_image_generation"><a class="anchor" href="#_using_with_ollama_local_image_generation"></a>Using with Ollama (Local Image Generation)</h3> <div class="paragraph"> <p>Ollama supports image generation models via its OpenAI-compatible API. Configure the Spring AI OpenAI <code>ImageModel</code> to point at Ollama:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java Spring AI SDK configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Ollama returns application/x-ndjson — register a converter that handles it
 MappingJackson2HttpMessageConverter ndjsonConverter = new MappingJackson2HttpMessageConverter();
 ndjsonConverter.setSupportedMediaTypes(
     List.of(MediaType.APPLICATION_JSON, MediaType.valueOf("application/x-ndjson")));
@@ -69,15 +69,15 @@ ImageModel imageModel = new OpenAiImageModel(imageApi, defaultOptions,
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:generate
-    steps:
-      - to:
-          uri: spring-ai-image:gen
-          parameters:
-            imageModel: "#imageModel"
-            width: 512
-            height: 512
-      - to:
-          uri: file:output?fileName=camel-image.png</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_multiple_image_generation"><a class="anchor" href="#_multiple_image_generation"></a>Multiple Image Generation</h3> <div class="paragraph"> <p>Set the <code>n</code> parameter to generate multiple images. When <code>n &gt; 1</code>, the body contains a <code>List&lt;Image&gt;</code> instead of a single <code>Image</code>:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java test API (ProducerTemplate)</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:batch")
+      steps:
+        - to:
+            uri: spring-ai-image:gen
+            parameters:
+              imageModel: "#imageModel"
+              width: 512
+              height: 512
+        - to:
+            uri: file:output?fileName=camel-image.png</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_multiple_image_generation"><a class="anchor" href="#_multiple_image_generation"></a>Multiple Image Generation</h3> <div class="paragraph"> <p>Set the <code>n</code> parameter to generate multiple images. When <code>n &gt; 1</code>, the body contains a <code>List&lt;Image&gt;</code> instead of a single <code>Image</code>:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java test API (ProducerTemplate)</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:batch")
     .to("spring-ai-image:gen?imageModel=#imageModel&amp;n=3");
 
 // Usage:

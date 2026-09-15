@@ -321,20 +321,20 @@ from("rocketmq:FROM?consumerGroup=consumer")
       uri: rocketmq:FROM
       parameters:
         consumerGroup: consumer
-    steps:
-      - setHeader:
-          name: CamelRockerMQOverrideTopicName
-          constant: ACTUAL_TARGET
-      - setHeader:
-          name: CamelRockerMQOverrideTag
-          constant: OVERRIDE_TAG
-      - setHeader:
-          name: CamelRockerMQOverrideMessageKey
-          constant: OVERRIDE_MESSAGE_KEY
-      - to:
-          uri: rocketmq:ORIGIN_TARGET
-          parameters:
-            producerGroup: producer
-      - to:
-          uri: log:RocketRoute?showAll=true
+      steps:
+        - setHeader:
+            name: CamelRockerMQOverrideTopicName
+            constant: ACTUAL_TARGET
+        - setHeader:
+            name: CamelRockerMQOverrideTag
+            constant: OVERRIDE_TAG
+        - setHeader:
+            name: CamelRockerMQOverrideMessageKey
+            constant: OVERRIDE_MESSAGE_KEY
+        - to:
+            uri: rocketmq:ORIGIN_TARGET
+            parameters:
+              producerGroup: producer
+        - to:
+            uri: log:RocketRoute?showAll=true
 ```

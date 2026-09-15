@@ -762,16 +762,16 @@ from("direct:createFunctionUrl")
 - route:
     from:
       uri: direct:createFunctionUrl
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaFunctionUrlAuthType
-          constant: NONE
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: createFunctionUrlConfig
-      - to:
-          uri: mock:result
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaFunctionUrlAuthType
+            constant: NONE
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: createFunctionUrlConfig
+        - to:
+            uri: mock:result
 ```
 
 The `FUNCTION_URL_AUTH_TYPE` can be either `NONE` (public access) or `AWS_IAM` (authenticated access).
@@ -804,13 +804,13 @@ from("direct:getFunctionUrl")
 - route:
     from:
       uri: direct:getFunctionUrl
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: getFunctionUrlConfig
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: getFunctionUrlConfig
+        - to:
+            uri: mock:result
 ```
 
 -   updateFunctionUrlConfig: this operation will update the function URL configuration
@@ -845,16 +845,16 @@ from("direct:updateFunctionUrl")
 - route:
     from:
       uri: direct:updateFunctionUrl
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaFunctionUrlAuthType
-          constant: AWS_IAM
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: updateFunctionUrlConfig
-      - to:
-          uri: mock:result
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaFunctionUrlAuthType
+            constant: AWS_IAM
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: updateFunctionUrlConfig
+        - to:
+            uri: mock:result
 ```
 
 -   deleteFunctionUrlConfig: this operation will delete the function URL
@@ -885,13 +885,13 @@ from("direct:deleteFunctionUrl")
 - route:
     from:
       uri: direct:deleteFunctionUrl
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: deleteFunctionUrlConfig
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: deleteFunctionUrlConfig
+        - to:
+            uri: mock:result
 ```
 
 -   listFunctionUrlConfigs: this operation will list all function URLs for a function
@@ -922,13 +922,13 @@ from("direct:listFunctionUrls")
 - route:
     from:
       uri: direct:listFunctionUrls
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: listFunctionUrlConfigs
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: listFunctionUrlConfigs
+        - to:
+            uri: mock:result
 ```
 
 ### Function Configuration Operations
@@ -963,13 +963,13 @@ from("direct:getFunctionConfiguration")
 - route:
     from:
       uri: direct:getFunctionConfiguration
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: getFunctionConfiguration
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: getFunctionConfiguration
+        - to:
+            uri: mock:result
 ```
 
 -   updateFunctionConfiguration: this operation will update the configuration of a function
@@ -1012,22 +1012,22 @@ from("direct:updateFunctionConfiguration")
 - route:
     from:
       uri: direct:updateFunctionConfiguration
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaFunctionMemorySize
-          constant: 512
-      - setHeader:
-          name: CamelAwsLambdaFunctionTimeout
-          constant: 60
-      - setHeader:
-          name: CamelAwsLambdaDescription
-          constant: Updated function description
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: updateFunctionConfiguration
-      - to:
-          uri: mock:result
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaFunctionMemorySize
+            constant: 512
+        - setHeader:
+            name: CamelAwsLambdaFunctionTimeout
+            constant: 60
+        - setHeader:
+            name: CamelAwsLambdaDescription
+            constant: Updated function description
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: updateFunctionConfiguration
+        - to:
+            uri: mock:result
 ```
 
 ### Concurrency Operations
@@ -1066,16 +1066,16 @@ from("direct:putFunctionConcurrency")
 - route:
     from:
       uri: direct:putFunctionConcurrency
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaReservedConcurrentExecutions
-          constant: "100"
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: putFunctionConcurrency
-      - to:
-          uri: mock:result
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaReservedConcurrentExecutions
+            constant: "100"
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: putFunctionConcurrency
+        - to:
+            uri: mock:result
 ```
 
 -   deleteFunctionConcurrency: this operation will remove reserved concurrency from a function
@@ -1106,13 +1106,13 @@ from("direct:deleteFunctionConcurrency")
 - route:
     from:
       uri: direct:deleteFunctionConcurrency
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: deleteFunctionConcurrency
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: deleteFunctionConcurrency
+        - to:
+            uri: mock:result
 ```
 
 -   getFunctionConcurrency: this operation will retrieve the reserved concurrency for a function
@@ -1143,13 +1143,13 @@ from("direct:getFunctionConcurrency")
 - route:
     from:
       uri: direct:getFunctionConcurrency
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: getFunctionConcurrency
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: getFunctionConcurrency
+        - to:
+            uri: mock:result
 ```
 
 ### Permission Operations
@@ -1200,25 +1200,25 @@ from("direct:addPermission")
 - route:
     from:
       uri: direct:addPermission
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaStatementId
-          constant: s3-invoke
-      - setHeader:
-          name: CamelAwsLambdaAction
-          constant: "lambda:InvokeFunction"
-      - setHeader:
-          name: CamelAwsLambdaPrincipal
-          constant: s3.amazonaws.com
-      - setHeader:
-          name: CamelAwsLambdaSourceArn
-          constant: "arn:aws:s3:::my-bucket"
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: addPermission
-      - to:
-          uri: mock:result
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaStatementId
+            constant: s3-invoke
+        - setHeader:
+            name: CamelAwsLambdaAction
+            constant: "lambda:InvokeFunction"
+        - setHeader:
+            name: CamelAwsLambdaPrincipal
+            constant: s3.amazonaws.com
+        - setHeader:
+            name: CamelAwsLambdaSourceArn
+            constant: "arn:aws:s3:::my-bucket"
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: addPermission
+        - to:
+            uri: mock:result
 ```
 
 -   removePermission: this operation will remove a permission from the function’s resource-based policy
@@ -1253,16 +1253,16 @@ from("direct:removePermission")
 - route:
     from:
       uri: direct:removePermission
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaStatementId
-          constant: s3-invoke
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: removePermission
-      - to:
-          uri: mock:result
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaStatementId
+            constant: s3-invoke
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: removePermission
+        - to:
+            uri: mock:result
 ```
 
 -   getPolicy: this operation will retrieve the resource-based policy for a function
@@ -1293,13 +1293,13 @@ from("direct:getPolicy")
 - route:
     from:
       uri: direct:getPolicy
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: getPolicy
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: getPolicy
+        - to:
+            uri: mock:result
 ```
 
 You can also configure CORS settings for function URLs:

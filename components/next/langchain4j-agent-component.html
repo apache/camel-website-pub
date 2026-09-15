@@ -52,14 +52,18 @@ from("platform-http:/support/chat")
 
 // When created through langchain4j-agent (agentConfiguration on the endpoint),
 // Camel registers a managed thread pool from ExecutorServiceManager automatically.
-// Pass your own Executor with withExecuteToolsConcurrently(executor) to override.</code></pre> </div> </div> <div class="paragraph"> <p>Tool-route header side-effects are not merged back onto the main exchange when tools run concurrently; only the tool result text is returned to the LLM.</p> </div> <div class="paragraph"> <p>The same tool-calling options can also be set directly on the endpoint URI when using inline agent creation mode (<code>agentConfiguration</code> without <code>agent</code> or <code>agentFactory</code>). URI values override the same options on the <code>AgentConfiguration</code> bean:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- to:
-    uri: "langchain4j-agent:assistant"
-    parameters:
-      agentConfiguration: "#myConfig"
-      tags: "orders"
-      maxToolCallingRoundTrips: 5
-      compensateOnToolErrors: true
-      executeToolsConcurrently: true</code></pre> </div> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+// Pass your own Executor with withExecuteToolsConcurrently(executor) to override.</code></pre> </div> </div> <div class="paragraph"> <p>Tool-route header side-effects are not merged back onto the main exchange when tools run concurrently; only the tool result text is returned to the LLM.</p> </div> <div class="paragraph"> <p>The same tool-calling options can also be set directly on the endpoint URI when using inline agent creation mode (<code>agentConfiguration</code> without <code>agent</code> or <code>agentFactory</code>). URI values override the same options on the <code>AgentConfiguration</code> bean:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "langchain4j-agent:assistant"
+            parameters:
+              agentConfiguration: "#myConfig"
+              tags: "orders"
+              maxToolCallingRoundTrips: 5
+              compensateOnToolErrors: true
+              executeToolsConcurrently: true</code></pre> </div> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .to("langchain4j-agent:assistant?agentConfiguration=#myConfig&amp;tags=orders"
         + "&amp;maxToolCallingRoundTrips=5&amp;compensateOnToolErrors=true&amp;executeToolsConcurrently=true");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_creating_an_agent_without_memory"><a class="anchor" href="#_creating_an_agent_without_memory"></a>Creating an Agent without Memory</h4> <div class="listingblock"> <div class="title"><em>Java-only: LangChain4j <code>AgentConfiguration</code> and programmatic bean registration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Create and configure the chat model
 ChatModel chatModel = OpenAiChatModel.builder()

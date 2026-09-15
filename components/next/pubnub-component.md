@@ -330,46 +330,6 @@ from("direct:control")
             uri: mock:result
 ```
 
--   `wherenow`: obtain information about the current list of channels to which a uuid is subscribed:
-    
-
--   Java
-    
--   XML
-    
--   YAML
-    
-
-```java
-from("direct:control")
-    .to("pubnub:myChannel?publishKey=mypublishKey&subscribeKey=mySubscribeKey&operation=wherenow&uuid=spyonme")
-    .to("mock:result");
-```
-
-```xml
-<route>
-  <from uri="direct:control"/>
-  <to uri="pubnub:myChannel?publishKey=mypublishKey&amp;subscribeKey=mySubscribeKey&amp;operation=wherenow&amp;uuid=spyonme"/>
-  <to uri="mock:result"/>
-</route>
-```
-
-```yaml
-- route:
-    from:
-      uri: direct:control
-      steps:
-        - to:
-            uri: pubnub:myChannel
-            parameters:
-              publishKey: mypublishKey
-              subscribeKey: mySubscribeKey
-              operation: wherenow
-              uuid: spyonme
-        - to:
-            uri: mock:result
-```
-
 -   `setstate`: used to set key/value pairs specific to a subscriber uuid:
     
 

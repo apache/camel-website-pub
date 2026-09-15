@@ -40,14 +40,14 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: myQuery
-          constant: "{books{id name}}"
-      - to:
-          uri: graphql://http://example.com/graphql
-          parameters:
-            queryHeader: myQuery</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>More complex queries can be stored in a file and referenced in the URI:</p> </div> <div class="paragraph"> <p>booksQuery.graphql file:</p> </div> <div class="listingblock"> <div class="content"> <pre>query Books {
+      steps:
+        - setHeader:
+            name: myQuery
+            constant: "{books{id name}}"
+        - to:
+            uri: graphql://http://example.com/graphql
+            parameters:
+              queryHeader: myQuery</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>More complex queries can be stored in a file and referenced in the URI:</p> </div> <div class="paragraph"> <p>booksQuery.graphql file:</p> </div> <div class="listingblock"> <div class="content"> <pre>query Books {
   books {
     id
     name

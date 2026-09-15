@@ -519,14 +519,18 @@ All four default to `true` so existing behaviour is preserved. Example:
 ```
 
 ```yaml
-- to:
-    uri: smtp://relay@mailhost
-    parameters:
-      to: "safe@mycompany.com"
-      from: "noreply@mycompany.com"
-      useHeaderRecipients: false
-      useHeaderFrom: false
-      useHeaderReplyTo: false
+- route:
+    from:
+      uri: direct:send
+      steps:
+        - to:
+            uri: smtp://relay@mailhost
+            parameters:
+              to: "safe@mycompany.com"
+              from: "noreply@mycompany.com"
+              useHeaderRecipients: false
+              useHeaderFrom: false
+              useHeaderReplyTo: false
 ```
 
 > **Note**

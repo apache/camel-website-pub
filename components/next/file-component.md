@@ -952,6 +952,9 @@ from("file:bar?doneFileName=done");
     uri: file:bar
     parameters:
       doneFileName: done
+    steps:
+      - log:
+          message: "${header.CamelFileName}"
 ```
 
 It will only consume files from the _bar_ folder if a _done file_ exists in the same directory as the target files. Camel will automatically delete the _done file_ when it’s done consuming the files.
@@ -1008,10 +1011,14 @@ After you have written a file, you may want to write an additional _done file_ a
 ```
 
 ```yaml
-- to:
-    uri: file:bar
-    parameters:
-      doneFileName: done
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: file:bar
+            parameters:
+              doneFileName: done
 ```
 
 This will create a file named `done` in the same directory as the target file.
@@ -1100,13 +1107,15 @@ Using a single route, it is possible to write a file to any number of subdirecto
     
 
 ```java
-from("bean:myBean")
+from("seda:reports")
+    .to("bean:myBean")
     .to("file:/rootDirectory");
 ```
 
 ```xml
 <route>
-  <from uri="bean:myBean"/>
+  <from uri="seda:reports"/>
+  <to uri="bean:myBean"/>
   <to uri="file:/rootDirectory"/>
 </route>
 ```
@@ -1114,8 +1123,10 @@ from("bean:myBean")
 ```yaml
 - route:
     from:
-      uri: bean:myBean
+      uri: seda:reports
       steps:
+        - to:
+            uri: bean:myBean
         - to:
             uri: file:/rootDirectory
 ```
@@ -1185,6 +1196,9 @@ from("file://inbox?idempotent=true").to("...");
     uri: file://inbox
     parameters:
       idempotent: true
+    steps:
+      - log:
+          message: "${header.CamelFileName}"
 ```
 
 Camel uses the absolute file name as the idempotent key, to detect duplicate files. You can customize this key by using an expression in the idempotentKey option. For example, to use both the name and the file size as the key
@@ -1431,6 +1445,9 @@ from("file://inbox?antInclude=**/*.txt").to("...");
     uri: file://inbox
     parameters:
       antInclude: "**/*.txt"
+    steps:
+      - log:
+          message: "${header.CamelFileName}"
 ```
 
 ### Sorting Strategies

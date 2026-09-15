@@ -134,12 +134,12 @@ from("direct:createPod")
 - route:
     from:
       uri: direct:createPod
-    steps:
-      - to:
-          uri: kubernetes-pods://{{kubernetes-host}}
-          parameters:
-            oauthToken: "{{kubernetes-token}}"
-            operation: createPod
+      steps:
+        - to:
+            uri: kubernetes-pods://{{kubernetes-host}}
+            parameters:
+              oauthToken: "{{kubernetes-token}}"
+              operation: createPod
 ```
 
 By using the `CamelKubernetesPodSpec` header, you can specify your PodSpec and pass it to this operation.
@@ -169,12 +169,12 @@ from("direct:deletePod")
 - route:
     from:
       uri: direct:deletePod
-    steps:
-      - to:
-          uri: kubernetes-pods://{{kubernetes-host}}
-          parameters:
-            oauthToken: "{{kubernetes-token}}"
-            operation: deletePod
+      steps:
+        - to:
+            uri: kubernetes-pods://{{kubernetes-host}}
+            parameters:
+              oauthToken: "{{kubernetes-token}}"
+              operation: deletePod
 ```
 
 By using the `CamelKubernetesPodName` header, you can specify your Pod name and pass it to this operation.

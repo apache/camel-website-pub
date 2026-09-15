@@ -90,43 +90,43 @@ from("direct:search")
 - route:
     from:
       uri: direct:index
-    steps:
-      - setVariable:
-          name: text
-          expression:
-            simple:
-              expression: "${body}"
-      - to:
-          uri: openai:embeddings
-          parameters:
-            embeddingModel: nomic-embed-text
-      - setHeader:
-          name: CamelPgVectorAction
-          constant: UPSERT
-      - setHeader:
-          name: CamelPgVectorTextContent
-          expression:
-            simple:
-              expression: "${variable.text}"
-      - to:
-          uri: pgvector:documents
+      steps:
+        - setVariable:
+            name: text
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: openai:embeddings
+            parameters:
+              embeddingModel: nomic-embed-text
+        - setHeader:
+            name: CamelPgVectorAction
+            constant: UPSERT
+        - setHeader:
+            name: CamelPgVectorTextContent
+            expression:
+              simple:
+                expression: "${variable.text}"
+        - to:
+            uri: pgvector:documents
 
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: openai:embeddings
-          parameters:
-            embeddingModel: nomic-embed-text
-      - setHeader:
-          name: CamelPgVectorAction
-          constant: SIMILARITY_SEARCH
-      - setHeader:
-          name: CamelPgVectorQueryTopK
-          constant: 5
-      - to:
-          uri: pgvector:documents
+      steps:
+        - to:
+            uri: openai:embeddings
+            parameters:
+              embeddingModel: nomic-embed-text
+        - setHeader:
+            name: CamelPgVectorAction
+            constant: SIMILARITY_SEARCH
+        - setHeader:
+            name: CamelPgVectorQueryTopK
+            constant: 5
+        - to:
+            uri: pgvector:documents
 ```
 
 ## LangChain4j Integration
@@ -164,32 +164,32 @@ from("direct:search")
 - route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - setHeader:
-          name: CamelPgVectorAction
-          constant: UPSERT
-      - transform:
-          dataType: "pgvector:embeddings"
-      - to:
-          uri: pgvector:myCollection
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - setHeader:
+            name: CamelPgVectorAction
+            constant: UPSERT
+        - transformDataType:
+            toType: "pgvector:embeddings"
+        - to:
+            uri: pgvector:myCollection
 
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - transform:
-          dataType: "pgvector:embeddings"
-      - setHeader:
-          name: CamelPgVectorAction
-          constant: SIMILARITY_SEARCH
-      - to:
-          uri: pgvector:myCollection
-      - transform:
-          dataType: "pgvector:rag"
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - transformDataType:
+            toType: "pgvector:embeddings"
+        - setHeader:
+            name: CamelPgVectorAction
+            constant: SIMILARITY_SEARCH
+        - to:
+            uri: pgvector:myCollection
+        - transformDataType:
+            toType: "pgvector:rag"
 ```
 
 ## Configuring Options

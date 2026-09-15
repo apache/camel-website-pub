@@ -10,7 +10,9 @@
     + "&amp;mimeType=application/json")
     .pollEnrich("file:config?fileName=app.json&amp;noop=true&amp;idempotent=false", 5000);</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="ai-resource:app_config?resourceUri=camel:///config/app.json&amp;amp;tags=crm&amp;amp;description=Current application configuration&amp;amp;mimeType=application/json"/&gt;
-  &lt;pollEnrich uri="file:config?fileName=app.json&amp;amp;noop=true&amp;amp;idempotent=false" timeout="5000"/&gt;
+  &lt;pollEnrich timeout="5000"&gt;
+    &lt;constant&gt;file:config?fileName=app.json&amp;amp;noop=true&amp;amp;idempotent=false&lt;/constant&gt;
+  &lt;/pollEnrich&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: ai-resource:app_config
@@ -20,9 +22,11 @@
         description: "Current application configuration"
         mimeType: application/json
       steps:
-        - poll-enrich:
-            uri: "file:config?fileName=app.json&amp;noop=true&amp;idempotent=false"
-            timeout: 5000</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_binary_resource"><a class="anchor" href="#_binary_resource"></a>Binary resource</h3> <div class="paragraph"> <p>The <code>mimeType</code> decides how the route body is read. Types denoting text, such as any <code>text</code> subtype, <code>application/json</code>, and any subtype ending in <code>json</code>, <code>xml</code> or <code>yaml</code>, are converted to a string. Every other type is read as <code>byte[]</code> and delivered to the client as a binary blob.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("ai-resource:latest_report"
+        - pollEnrich:
+            timeout: 5000
+            expression:
+              constant:
+                expression: "file:config?fileName=app.json&amp;noop=true&amp;idempotent=false"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_binary_resource"><a class="anchor" href="#_binary_resource"></a>Binary resource</h3> <div class="paragraph"> <p>The <code>mimeType</code> decides how the route body is read. Types denoting text, such as any <code>text</code> subtype, <code>application/json</code>, and any subtype ending in <code>json</code>, <code>xml</code> or <code>yaml</code>, are converted to a string. Every other type is read as <code>byte[]</code> and delivered to the client as a binary blob.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("ai-resource:latest_report"
     + "?resourceUri=s3://reports/latest.pdf"
     + "&amp;tags=crm"
     + "&amp;description=Latest sales report"

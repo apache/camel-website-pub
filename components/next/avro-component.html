@@ -72,18 +72,18 @@ class Value {
         - to:
             uri: log:avro</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>An example of consuming messages using camel avro consumers via netty:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("avro:netty:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol")
     .choice()
-        .when().el("${in.headers.CamelAvroMessageName == 'put'}")
+        .when(simple("${header.CamelAvroMessageName} == 'put'"))
             .process("putProcessor")
-        .when().el("${in.headers.CamelAvroMessageName == 'get'}")
+        .when(simple("${header.CamelAvroMessageName} == 'get'"))
             .process("getProcessor");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">        &lt;route&gt;
             &lt;from uri="avro:netty:localhost:{{avroport}}?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol"/&gt;
             &lt;choice&gt;
                 &lt;when&gt;
-                    &lt;el&gt;${in.headers.CamelAvroMessageName == 'put'}&lt;/el&gt;
+                    &lt;simple&gt;${header.CamelAvroMessageName} == 'put'&lt;/simple&gt;
                     &lt;process ref="putProcessor"/&gt;
                 &lt;/when&gt;
                 &lt;when&gt;
-                    &lt;el&gt;${in.headers.CamelAvroMessageName == 'get'}&lt;/el&gt;
+                    &lt;simple&gt;${header.CamelAvroMessageName} == 'get'&lt;/simple&gt;
                     &lt;process ref="getProcessor"/&gt;
                 &lt;/when&gt;
             &lt;/choice&gt;
@@ -95,11 +95,11 @@ class Value {
       steps:
         - choice:
             when:
-              - el: "${in.headers.CamelAvroMessageName == 'put'}"
+              - simple: "${header.CamelAvroMessageName} == 'put'"
                 steps:
                   - process:
                       ref: putProcessor
-              - el: "${in.headers.CamelAvroMessageName == 'get'}"
+              - simple: "${header.CamelAvroMessageName} == 'get'"
                 steps:
                   - process:
                       ref: getProcessor</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>You can set up two distinct routes to perform the same task:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("avro:netty:localhost:{{avroport}}/put?protocolClassName=org.apache.camel.avro.generated.KeyValueProtocol")

@@ -86,7 +86,7 @@ from("seda:dead").transform(exceptionMessage()).to("jms:queue:dead");</code></pr
    .to("bean:handleOrder");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="activemq:queue:in"/&gt;
   &lt;to uri="bean:validateOrder"/&gt;
-  &lt;inOnly uri="activemq:topic:order"/&gt;
+  &lt;to uri="activemq:topic:order" pattern="InOnly"/&gt;
   &lt;to uri="bean:handleOrder"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
@@ -94,8 +94,9 @@ from("seda:dead").transform(exceptionMessage()).to("jms:queue:dead");</code></pr
       steps:
         - to:
             uri: bean:validateOrder
-        - inOnly:
+        - to:
             uri: activemq:topic:order
+            pattern: InOnly
         - to:
             uri: bean:handleOrder</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_reuse_endpoint_and_send_to_different_destinations_computed_at_runtime"><a class="anchor" href="#_reuse_endpoint_and_send_to_different_destinations_computed_at_runtime"></a>Reuse endpoint and send to different destinations computed at runtime</h3> <div class="paragraph"> <p>If you need to send messages to a lot of different JMS destinations, it makes sense to reuse a JMS endpoint and specify the real destination in a message header. This allows Camel to reuse the same endpoint, but send to different destinations. This greatly reduces the number of endpoints created and economizes on memory and thread resources.</p> </div> <div class="paragraph"> <p>You can specify the destination in the following headers:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Header</th> <th class="tableblock halign-left valign-top">Type</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelJmsDestination</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>jakarta.jms.Destination</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">A destination object.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>CamelJmsDestinationName</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">The destination name.</p></td> </tr> </tbody> </table></div> <div class="paragraph"> <p>For example, the following route shows how you can compute a destination at run time and use it to override the destination appearing in the JMS URL:</p> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file://inbox")
   .to("bean:computeDestination")

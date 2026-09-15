@@ -248,11 +248,11 @@
       parameters:
         ruleName: my-rule
         delay: 5000
-    steps:
-      - log:
-          message: "Received EventBridge event: ${body}"
-      - to:
-          uri: direct:process</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The consumer auto-creates an SQS queue, wires it to the <code>my-rule</code> EventBridge rule, and polls every 5 seconds.</p> </div> </div> <div class="sect2"> <h3 id="_consumer_example_user_provided_queue"><a class="anchor" href="#_consumer_example_user_provided_queue"></a>Consumer Example — User-Provided Queue</h3> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("aws2-eventbridge://default?ruleName=my-rule&amp;autoCreateQueue=false&amp;queueUrl=https://sqs.us-east-1.amazonaws.com/123456789012/my-queue")
+      steps:
+        - log:
+            message: "Received EventBridge event: ${body}"
+        - to:
+            uri: direct:process</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The consumer auto-creates an SQS queue, wires it to the <code>my-rule</code> EventBridge rule, and polls every 5 seconds.</p> </div> </div> <div class="sect2"> <h3 id="_consumer_example_user_provided_queue"><a class="anchor" href="#_consumer_example_user_provided_queue"></a>Consumer Example — User-Provided Queue</h3> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("aws2-eventbridge://default?ruleName=my-rule&amp;autoCreateQueue=false&amp;queueUrl=https://sqs.us-east-1.amazonaws.com/123456789012/my-queue")
     .log("Received: ${body}")
     .to("direct:process");</code></pre> </div> </div> </div> <div id="_tabs_11_xml--panel" class="tabpanel" aria-labelledby="_tabs_11_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="aws2-eventbridge://default?ruleName=my-rule&amp;amp;autoCreateQueue=false&amp;amp;queueUrl=https://sqs.us-east-1.amazonaws.com/123456789012/my-queue"/&gt;

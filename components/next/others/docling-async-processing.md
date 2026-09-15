@@ -30,17 +30,17 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            useAsyncMode: true
-            asyncPollInterval: 2000
-            asyncTimeout: 300000
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              useAsyncMode: true
+              asyncPollInterval: 2000
+              asyncTimeout: 300000
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ## Async Processing with Custom Timeout
@@ -69,17 +69,17 @@ from("file:///data/large-documents?include=.*\\.pdf")
       uri: file:///data/large-documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            useAsyncMode: true
-            asyncPollInterval: 5000
-            asyncTimeout: 600000
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              useAsyncMode: true
+              asyncPollInterval: 5000
+              asyncTimeout: 600000
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ## Using Headers to Control Async Behavior
@@ -111,16 +111,16 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - process:
-          ref: "asyncDecisionProcessor"
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - process:
+            ref: "asyncDecisionProcessor"
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ## Custom Async Workflows
@@ -267,26 +267,26 @@ public class MyPollingHelper {
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - log:
-          message: "Starting async conversion for: ${header.CamelFileName}"
-      - to:
-          uri: docling:convert
-          parameters:
-            operation: "SUBMIT_ASYNC_CONVERSION"
-            useDoclingServe: true
-      - log:
-          message: "Submitted conversion with task ID: ${body}"
-      - setHeader:
-          name: "taskId"
-          expression:
-            simple:
-              expression: "${body}"
-      # For YAML, simpler to use Java processor bean or built-in async mode
-      - to:
-          uri: bean:asyncPollingProcessor
-      - to:
-          uri: file:///data/output
+      steps:
+        - log:
+            message: "Starting async conversion for: ${header.CamelFileName}"
+        - to:
+            uri: docling:convert
+            parameters:
+              operation: "SUBMIT_ASYNC_CONVERSION"
+              useDoclingServe: true
+        - log:
+            message: "Submitted conversion with task ID: ${body}"
+        - setHeader:
+            name: "taskId"
+            expression:
+              simple:
+                expression: "${body}"
+        # For YAML, simpler to use Java processor bean or built-in async mode
+        - to:
+            uri: bean:asyncPollingProcessor
+        - to:
+            uri: file:///data/output
 ```
 
 ### ConversionStatus Object
@@ -370,20 +370,20 @@ from("seda:task-queue?concurrentConsumers=5")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:convert
-          parameters:
-            operation: "CONVERT_TO_MARKDOWN"
-            useDoclingServe: true
-            useAsyncMode: true
-            asyncPollInterval: 1000
-            asyncTimeout: 120000
-            contentInBody: true
-      - to:
-          uri: file:///data/output
-          parameters:
-            fileName: "${header.CamelFileName}"
+      steps:
+        - to:
+            uri: docling:convert
+            parameters:
+              operation: "CONVERT_TO_MARKDOWN"
+              useDoclingServe: true
+              useAsyncMode: true
+              asyncPollInterval: 1000
+              asyncTimeout: 120000
+              contentInBody: true
+        - to:
+            uri: file:///data/output
+            parameters:
+              fileName: "${header.CamelFileName}"
 ```
 
 > **Tip**

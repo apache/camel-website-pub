@@ -380,11 +380,11 @@ from("github2:commit/main?repoOwner=apache&repoName=camel&oauthToken=mytoken")
         repoOwner: apache
         repoName: camel
         oauthToken: mytoken
-    steps:
-      - log:
-          message: "New commit: ${header.CamelGitHubCommitSha} by ${header.CamelGitHubCommitAuthor}"
-      - to:
-          uri: direct:processCommit
+      steps:
+        - log:
+            message: "New commit: ${header.CamelGitHubCommitSha} by ${header.CamelGitHubCommitAuthor}"
+        - to:
+            uri: direct:processCommit
 ```
 
 ### Example: Creating an issue
@@ -420,16 +420,16 @@ from("direct:createIssue")
 - route:
     from:
       uri: direct:createIssue
-    steps:
-      - setHeader:
-          name: CamelGitHubIssueTitle
-          constant: Bug Report
-      - setBody:
-          constant: This is the issue description
-      - to:
-          uri: github2:createIssue
-          parameters:
-            repoOwner: apache
-            repoName: camel
-            oauthToken: mytoken
+      steps:
+        - setHeader:
+            name: CamelGitHubIssueTitle
+            constant: Bug Report
+        - setBody:
+            constant: This is the issue description
+        - to:
+            uri: github2:createIssue
+            parameters:
+              repoOwner: apache
+              repoName: camel
+              oauthToken: mytoken
 ```

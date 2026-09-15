@@ -669,13 +669,13 @@ To enable this feature you’ll need to set three different parameter in your en
     
 
 ```java
-from("aws2-kinesis://mykinesisstream?asyncClient=true&useDefaultCredentialsProvider=true&useKclConsumers=true&region=myregion")
+from("aws2-kinesis://mykinesisstream?asyncClient=true&useDefaultCredentialsProvider=true&useKclConsumers=true&region=eu-west-1")
     .to("log:out?showAll=true");
 ```
 
 ```xml
 <route>
-  <from uri="aws2-kinesis://mykinesisstream?asyncClient=true&amp;useDefaultCredentialsProvider=true&amp;useKclConsumers=true&amp;region=myregion"/>
+  <from uri="aws2-kinesis://mykinesisstream?asyncClient=true&amp;useDefaultCredentialsProvider=true&amp;useKclConsumers=true&amp;region=eu-west-1"/>
   <to uri="log:out?showAll=true"/>
 </route>
 ```
@@ -688,7 +688,7 @@ from("aws2-kinesis://mykinesisstream?asyncClient=true&useDefaultCredentialsProvi
         asyncClient: true
         useDefaultCredentialsProvider: true
         useKclConsumers: true
-        region: myregion
+        region: eu-west-1
       steps:
         - to:
             uri: log:out

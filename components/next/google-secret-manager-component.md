@@ -51,27 +51,27 @@ For example, in order to call the function `myCamelFunction` from the project `m
     
 
 ```java
-from("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=createSecret")
-    .to("direct:test");
+from("direct:test")
+    .to("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=createSecret");
 ```
 
 ```xml
 <route>
-  <from uri="google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=createSecret"/>
-  <to uri="direct:test"/>
+  <from uri="direct:test"/>
+  <to uri="google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=createSecret"/>
 </route>
 ```
 
 ```yaml
 - route:
     from:
-      uri: google-secret-manager://myProject
-      parameters:
-        serviceAccountKey: /home/user/Downloads/my-key.json
-        operation: createSecret
+      uri: direct:test
       steps:
         - to:
-            uri: direct:test
+            uri: google-secret-manager://myProject
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: createSecret
 ```
 
 ## Configuring Options

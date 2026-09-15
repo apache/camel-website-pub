@@ -223,18 +223,18 @@ The topic producer provides only one operation (publish).
     
 
 ```java
-from(“direct:add”)
-    .setHeader(“CamelHazelcastOperationType”, constant(“publish”))
-    .to(“hazelcast-topic:bar”);
+from("direct:add")
+    .setHeader("CamelHazelcastOperationType", constant("publish"))
+    .to("hazelcast-topic:bar");
 ```
 
 ```xml
 <route>
-  <from uri=”direct:add”/>
-  <setHeader name=”CamelHazelcastOperationType”>
+  <from uri="direct:add"/>
+  <setHeader name="CamelHazelcastOperationType">
     <constant>publish</constant>
   </setHeader>
-  <to uri=”hazelcast-topic:bar”/>
+  <to uri="hazelcast-topic:bar"/>
 </route>
 ```
 
@@ -262,24 +262,24 @@ The topic consumer provides only one operation (received). This component is sup
     
 
 ```java
-from(“hazelcast-topic:foo”)
+from("hazelcast-topic:foo")
     .choice()
-        .when(header(“CamelHazelcastListenerAction”).isEqualTo(“received”))
-            .log(“...message received”)
+        .when(header("CamelHazelcastListenerAction").isEqualTo("received"))
+            .log("...message received")
         .otherwise()
-            .log(“...this should never have happened”);
+            .log("...this should never have happened");
 ```
 
 ```xml
 <route>
-  <from uri=”hazelcast-topic:foo”/>
+  <from uri="hazelcast-topic:foo"/>
   <choice>
     <when>
       <simple>${header.CamelHazelcastListenerAction} == 'received'</simple>
-      <log message=”...message received”/>
+      <log message="...message received"/>
     </when>
     <otherwise>
-      <log message=”...this should never have happened”/>
+      <log message="...this should never have happened"/>
     </otherwise>
   </choice>
 </route>
@@ -292,12 +292,12 @@ from(“hazelcast-topic:foo”)
       steps:
         - choice:
             when:
-              - simple: “${header.CamelHazelcastListenerAction} == 'received'”
+              - simple: "${header.CamelHazelcastListenerAction} == 'received'"
                 steps:
                   - log:
-                      message: “...message received”
+                      message: "...message received"
             otherwise:
               steps:
                 - log:
-                    message: “...this should never have happened”
+                    message: "...this should never have happened"
 ```

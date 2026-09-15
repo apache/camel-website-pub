@@ -354,16 +354,16 @@ from(“jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ”).to
 - route:
     from:
       uri: direct:george
-    steps:
-      - to:
-          uri: jt400://GEORGE:EGROEG@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ
+      steps:
+        - to:
+            uri: jt400://GEORGE:EGROEG@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ
 
 - route:
     from:
       uri: jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ
-    steps:
-      - to:
-          uri: mock:ringo
+      steps:
+        - to:
+            uri: mock:ringo
 ```
 
 ### Program call examples
@@ -378,14 +378,14 @@ In the snippet below, the data Exchange sent to the direct:work endpoint will co
     
 
 ```java
-from(“direct:work”).to(“jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM?fieldsLength=10,10,512&ouputFieldsIdx=2,3”).to(“direct:play”);
+from("direct:work").to("jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM?fieldsLength=10,10,512&outputFieldsIdx=2,3").to("direct:play");
 ```
 
 ```xml
 <route>
-  <from uri=”direct:work”/>
-  <to uri=”jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM?fieldsLength=10,10,512&amp;ouputFieldsIdx=2,3”/>
-  <to uri=”direct:play”/>
+  <from uri="direct:work"/>
+  <to uri="jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM?fieldsLength=10,10,512&amp;outputFieldsIdx=2,3"/>
+  <to uri="direct:play"/>
 </route>
 ```
 
@@ -393,14 +393,14 @@ from(“direct:work”).to(“jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/co
 - route:
     from:
       uri: direct:work
-    steps:
-      - to:
-          uri: jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM
-          parameters:
-            fieldsLength: “10,10,512”
-            ouputFieldsIdx: “2,3”
-      - to:
-          uri: direct:play
+      steps:
+        - to:
+            uri: jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM
+            parameters:
+              fieldsLength: "10,10,512"
+              outputFieldsIdx: "2,3"
+        - to:
+            uri: direct:play
 ```
 
 In this example, the camel route will call the QUSRTVUS API to retrieve 16 bytes from data area “MYUSRSPACE” in the “MYLIB” library.
@@ -449,11 +449,11 @@ from("jms:queue:input")
 - route:
     from:
       uri: jms:queue:input
-    steps:
-      - to:
-          uri: jt400://username:password@system/lib.lib/MSGINDQ.DTAQ
-          parameters:
-            keyed: true
+      steps:
+        - to:
+            uri: jt400://username:password@system/lib.lib/MSGINDQ.DTAQ
+            parameters:
+              keyed: true
 ```
 
 ### Reading from keyed data queues
@@ -485,9 +485,9 @@ from("jt400://username:password@system/lib.lib/MSGOUTDQ.DTAQ?keyed=true&searchKe
         keyed: true
         searchKey: MYKEY
         searchType: GE
-    steps:
-      - to:
-          uri: jms:queue:output
+      steps:
+        - to:
+            uri: jms:queue:output
 ```
 
 ### Writing to message queues
@@ -515,9 +515,9 @@ from("jms:queue:input")
 - route:
     from:
       uri: jms:queue:input
-    steps:
-      - to:
-          uri: jt400://username:password@system/lib.lib/MSGINQ.MSGQ
+      steps:
+        - to:
+            uri: jt400://username:password@system/lib.lib/MSGINQ.MSGQ
 ```
 
 ### Reading from a message queue
@@ -545,9 +545,9 @@ from("jt400://username:password@system/lib.lib/MSGOUTQ.MSGQ")
 - route:
     from:
       uri: jt400://username:password@system/lib.lib/MSGOUTQ.MSGQ
-    steps:
-      - to:
-          uri: jms:queue:output
+      steps:
+        - to:
+            uri: jms:queue:output
 ```
 
 ### Replying to an inquiry message on a message queue

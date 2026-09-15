@@ -473,18 +473,18 @@ from("direct:assumeRole")
 - route:
     from:
       uri: direct:assumeRole
-    steps:
-      - setHeader:
-          name: CamelAwsStsRoleArn
-          constant: "arn:123"
-      - setHeader:
-          name: CamelAwsStsRoleSessionName
-          constant: groot
-      - to:
-          uri: aws2-sts://test
-          parameters:
-            stsClient: "#amazonSTSClient"
-            operation: assumeRole
+      steps:
+        - setHeader:
+            name: CamelAwsStsRoleArn
+            constant: "arn:123"
+        - setHeader:
+            name: CamelAwsStsRoleSessionName
+            constant: groot
+        - to:
+            uri: aws2-sts://test
+            parameters:
+              stsClient: "#amazonSTSClient"
+              operation: assumeRole
 ```
 
 -   getSessionToken: this operation will return a temporary session token
@@ -551,15 +551,15 @@ from("direct:getFederationToken")
 - route:
     from:
       uri: direct:getFederationToken
-    steps:
-      - setHeader:
-          name: CamelAwsStsFederatedName
-          constant: federation-account
-      - to:
-          uri: aws2-sts://test
-          parameters:
-            stsClient: "#amazonSTSClient"
-            operation: getFederationToken
+      steps:
+        - setHeader:
+            name: CamelAwsStsFederatedName
+            constant: federation-account
+        - to:
+            uri: aws2-sts://test
+            parameters:
+              stsClient: "#amazonSTSClient"
+              operation: getFederationToken
 ```
 
 ### Using a POJO as body

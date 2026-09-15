@@ -123,14 +123,14 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: google-storage://myCamelBucket
-          parameters:
-            serviceAccountKey: /home/user/Downloads/my-key.json
-            operation: listBuckets
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation will list the buckets for this account.</p> </div> <div class="ulist"> <ul> <li> <p><code>DeleteBucket</code>: this operation deletes the bucket specified as URI parameter or header</p> </li> </ul> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - to:
+            uri: google-storage://myCamelBucket
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: listBuckets
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation will list the buckets for this account.</p> </div> <div class="ulist"> <ul> <li> <p><code>DeleteBucket</code>: this operation deletes the bucket specified as URI parameter or header</p> </li> </ul> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .to("google-storage://myCamelBucket?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=deleteBucket")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:start"/&gt;
@@ -139,14 +139,14 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: google-storage://myCamelBucket
-          parameters:
-            serviceAccountKey: /home/user/Downloads/my-key.json
-            operation: deleteBucket
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation will delete the bucket myCamelBucket.</p> </div> <div class="ulist"> <ul> <li> <p><code>ListObjects</code>: this operation list object in a specific bucket</p> </li> </ul> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - to:
+            uri: google-storage://myCamelBucket
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: deleteBucket
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation will delete the bucket myCamelBucket.</p> </div> <div class="ulist"> <ul> <li> <p><code>ListObjects</code>: this operation list object in a specific bucket</p> </li> </ul> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .to("google-storage://myCamelBucket?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=listObjects")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_8_xml--panel" class="tabpanel" aria-labelledby="_tabs_8_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:start"/&gt;
@@ -155,14 +155,14 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_8_yaml--panel" class="tabpanel" aria-labelledby="_tabs_8_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: google-storage://myCamelBucket
-          parameters:
-            serviceAccountKey: /home/user/Downloads/my-key.json
-            operation: listObjects
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation will list the objects in the myCamelBucket bucket.</p> </div> <div class="ulist"> <ul> <li> <p><code>GetObject</code>: this operation gets a single object in a specific bucket</p> </li> </ul> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - to:
+            uri: google-storage://myCamelBucket
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: listObjects
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This operation will list the objects in the myCamelBucket bucket.</p> </div> <div class="ulist"> <ul> <li> <p><code>GetObject</code>: this operation gets a single object in a specific bucket</p> </li> </ul> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .setHeader("CamelGoogleCloudStorageObjectName").constant("camel.txt")
     .to("google-storage://myCamelBucket?serviceAccountKey=/home/user/Downloads/my-key.json&amp;operation=getObject")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_9_xml--panel" class="tabpanel" aria-labelledby="_tabs_9_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;

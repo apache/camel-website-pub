@@ -559,13 +559,13 @@ Camel-AWS Step Functions component provides the following operation on the produ
 
 ```java
 from("direct:createStateMachine")
-    .to("aws2-step-functions://test?awsSfnClient=#awsSfnClient&operation=createMachine");
+    .to("aws2-step-functions://test?awsSfnClient=#awsSfnClient&operation=createStateMachine");
 ```
 
 ```xml
 <route>
   <from uri="direct:createStateMachine"/>
-  <to uri="aws2-step-functions://test?awsSfnClient=#awsSfnClient&amp;operation=createMachine"/>
+  <to uri="aws2-step-functions://test?awsSfnClient=#awsSfnClient&amp;operation=createStateMachine"/>
 </route>
 ```
 
@@ -578,7 +578,7 @@ from("direct:createStateMachine")
             uri: aws2-step-functions://test
             parameters:
               awsSfnClient: "#awsSfnClient"
-              operation: createMachine
+              operation: createStateMachine
 ```
 
 ### Using a POJO as body

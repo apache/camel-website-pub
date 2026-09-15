@@ -224,15 +224,15 @@ from("direct:generate")
 - route:
     from:
       uri: direct:generate
-    steps:
-      - to:
-          uri: spring-ai-image:gen
-          parameters:
-            imageModel: "#imageModel"
-            width: 512
-            height: 512
-      - to:
-          uri: file:output?fileName=generated.png
+      steps:
+        - to:
+            uri: spring-ai-image:gen
+            parameters:
+              imageModel: "#imageModel"
+              width: 512
+              height: 512
+        - to:
+            uri: file:output?fileName=generated.png
 ```
 
 The `Image` → `byte[]` conversion decodes the base64 data automatically.
@@ -293,15 +293,15 @@ from("direct:generate")
 - route:
     from:
       uri: direct:generate
-    steps:
-      - to:
-          uri: spring-ai-image:gen
-          parameters:
-            imageModel: "#imageModel"
-            width: 512
-            height: 512
-      - to:
-          uri: file:output?fileName=camel-image.png
+      steps:
+        - to:
+            uri: spring-ai-image:gen
+            parameters:
+              imageModel: "#imageModel"
+              width: 512
+              height: 512
+        - to:
+            uri: file:output?fileName=camel-image.png
 ```
 
 ### Multiple Image Generation

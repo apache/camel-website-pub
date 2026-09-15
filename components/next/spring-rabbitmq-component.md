@@ -402,10 +402,14 @@ to("spring-rabbitmq:default?routingKey=foo")
 ```
 
 ```yaml
-- to:
-    uri: spring-rabbitmq:default
-    parameters:
-      routingKey: foo
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: spring-rabbitmq:default
+            parameters:
+              routingKey: foo
 ```
 
 ### Auto declare exchanges, queues and bindings

@@ -480,7 +480,7 @@ from("direct:search")
   <from uri="direct:search"/>
   <to uri="elasticsearch://elasticsearch?operation=Search&amp;indexName=twitter&amp;useScroll=true&amp;scrollKeepAliveMs=30000"/>
   <split streaming="true">
-    <body/>
+    <simple>${body}</simple>
     <to uri="mock:output"/>
   </split>
 </route>
@@ -500,7 +500,8 @@ from("direct:search")
               scrollKeepAliveMs: 30000
         - split:
             expression:
-              body: {}
+              simple:
+                expression: "${body}"
             streaming: true
             steps:
               - to:

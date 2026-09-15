@@ -13,9 +13,9 @@
       steps:
         - to:
             uri: spring-batch:myJob</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Triggering the Spring Batch job execution with the <code>JobLauncher</code> set explicitly.</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:startBatch")
-    .to("spring-batch:myJob?jobLauncherRef=myJobLauncher");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    .to("spring-batch:myJob?jobLauncher=#myJobLauncher");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:startBatch"/&gt;
-  &lt;to uri="spring-batch:myJob?jobLauncherRef=myJobLauncher"/&gt;
+  &lt;to uri="spring-batch:myJob?jobLauncher=#myJobLauncher"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:startBatch
@@ -23,7 +23,7 @@
         - to:
             uri: spring-batch:myJob
             parameters:
-              jobLauncherRef: myJobLauncher</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>A <code>JobExecution</code> instance returned by the <code>JobLauncher</code> is forwarded by the <code>SpringBatchProducer</code> as the output message. You can use the <code>JobExecution</code> instance to perform some operations using the Spring Batch API directly.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: accessing JobExecution from MockEndpoint</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:startBatch").to("spring-batch:myJob").to("mock:JobExecutions");
+              jobLauncher: "#myJobLauncher"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>A <code>JobExecution</code> instance returned by the <code>JobLauncher</code> is forwarded by the <code>SpringBatchProducer</code> as the output message. You can use the <code>JobExecution</code> instance to perform some operations using the Spring Batch API directly.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: accessing JobExecution from MockEndpoint</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:startBatch").to("spring-batch:myJob").to("mock:JobExecutions");
 ...
 MockEndpoint mockEndpoint = ...;
 JobExecution jobExecution = mockEndpoint.getExchanges().get(0).getIn().getBody(JobExecution.class);

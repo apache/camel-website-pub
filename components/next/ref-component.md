@@ -176,7 +176,7 @@ from("ref:endpoint1")
 - route:
     from:
       uri: ref:endpoint1
-    steps:
-      - to:
-          uri: ref:endpoint2
+      steps:
+        - to:
+            uri: ref:endpoint2
 ```

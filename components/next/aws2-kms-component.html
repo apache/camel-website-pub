@@ -33,15 +33,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:disableKey
-    steps:
-      - setHeader:
-          name: CamelAwsKMSKeyId
-          constant: "123"
-      - to:
-          uri: aws2-kms://test
-          parameters:
-            kmsClient: "#amazonKmsClient"
-            operation: disableKey</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>enableKey: this operation will enable a key in KMS</p> </li> </ul> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:enableKey")
+      steps:
+        - setHeader:
+            name: CamelAwsKMSKeyId
+            constant: "123"
+        - to:
+            uri: aws2-kms://test
+            parameters:
+              kmsClient: "#amazonKmsClient"
+              operation: disableKey</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>enableKey: this operation will enable a key in KMS</p> </li> </ul> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:enableKey")
     .setHeader(KMS2Constants.KEY_ID, constant("123"))
     .to("aws2-kms://test?kmsClient=#amazonKmsClient&amp;operation=enableKey");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:enableKey"/&gt;
@@ -52,15 +52,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:enableKey
-    steps:
-      - setHeader:
-          name: CamelAwsKMSKeyId
-          constant: "123"
-      - to:
-          uri: aws2-kms://test
-          parameters:
-            kmsClient: "#amazonKmsClient"
-            operation: enableKey</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_pojo_as_body"><a class="anchor" href="#_using_a_pojo_as_body"></a>Using a POJO as body</h3> <div class="paragraph"> <p>Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS KMS there are multiple operations you can submit, as an example for List keys request, you can do something like:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a POJO request body with the AWS SDK builder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createUser")
+      steps:
+        - setHeader:
+            name: CamelAwsKMSKeyId
+            constant: "123"
+        - to:
+            uri: aws2-kms://test
+            parameters:
+              kmsClient: "#amazonKmsClient"
+              operation: enableKey</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_pojo_as_body"><a class="anchor" href="#_using_a_pojo_as_body"></a>Using a POJO as body</h3> <div class="paragraph"> <p>Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS KMS there are multiple operations you can submit, as an example for List keys request, you can do something like:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a POJO request body with the AWS SDK builder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createUser")
      .setBody(ListKeysRequest.builder().limit(10).build())
      .to("aws2-kms://test?kmsClient=#amazonKmsClient&amp;operation=listKeys&amp;pojoRequest=true")</code></pre> </div> </div> <div class="paragraph"> <p>In this way, you&#8217;ll pass the request directly without the need of passing headers and options specifically related to this operation.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>Maven users will need to add the following dependency to their pom.xml.</p> </div> <div class="paragraph"> <p><strong>pom.xml</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;

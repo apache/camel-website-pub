@@ -250,14 +250,14 @@ To get the address for a latitude and longitude we can do:
 ```java
 from("direct:start")
     .to("geocoder:latlng:40.714224,-73.961452")
-    .log("Location ${header.CamelGeocoderAddress} is at lat/lng: ${header.CamelGeocoderLatlng} and in country ${header.CamelGeoCoderCountryShort}");
+    .log("Location ${header.CamelGeoCoderAddress} is at lat/lng: ${header.CamelGeoCoderLatlng} and in country ${header.CamelGeoCoderCountryShort}");
 ```
 
 ```xml
 <route>
   <from uri="direct:start"/>
   <to uri="geocoder:latlng:40.714224,-73.961452"/>
-  <log message="Location ${header.CamelGeocoderAddress} is at lat/lng: ${header.CamelGeocoderLatlng} and in country ${header.CamelGeoCoderCountryShort}"/>
+  <log message="Location ${header.CamelGeoCoderAddress} is at lat/lng: ${header.CamelGeoCoderLatlng} and in country ${header.CamelGeoCoderCountryShort}"/>
 </route>
 ```
 
@@ -269,7 +269,7 @@ from("direct:start")
         - to:
             uri: "geocoder:latlng:40.714224,-73.961452"
         - log:
-            message: "Location ${header.CamelGeocoderAddress} is at lat/lng: ${header.CamelGeocoderLatlng} and in country ${header.CamelGeoCoderCountryShort}"
+            message: "Location ${header.CamelGeoCoderAddress} is at lat/lng: ${header.CamelGeoCoderLatlng} and in country ${header.CamelGeoCoderCountryShort}"
 ```
 
 Which will log

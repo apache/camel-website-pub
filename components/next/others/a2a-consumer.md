@@ -364,8 +364,9 @@ Each `${a2a:emit('message')}` emits an SSE status event with `TASK_STATE_WORKING
 You can also emit with an explicit state:
 
 ```yaml
-- script:
-    simple: "${a2a:emit(INPUT_REQUIRED, 'Please provide your address')}"
+steps:
+  - script:
+      simple: "${a2a:emit(INPUT_REQUIRED, 'Please provide your address')}"
 ```
 
 > **Note**
@@ -574,6 +575,9 @@ The consumer enforces `maxPayloadSize` (default 6,291,456 bytes / 6 MiB) on inco
       uri: a2a:classpath:agent-card.json
       parameters:
         maxPayloadSize: 10485760
+      steps:
+        - setBody:
+            constant: "final response"
 ```
 
 ### CORS Support

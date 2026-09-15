@@ -107,14 +107,14 @@ order by
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:projects
-    steps:
-      - setBody:
-          constant: ASF
-      - setProperty:
-          name: min
-          constant: "123"
-      - to:
-          uri: "sql:select * from projects where license = :#${body} and id &gt; :#${exchangeProperty.min} order by id"</code></pre> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_using_expression_parameters_in_consumers"><a class="anchor" href="#_using_expression_parameters_in_consumers"></a>Using expression parameters in consumers</h4> <div class="paragraph"> <p>When using the SQL component as consumer, you can now also use expression parameters (simple language) to build dynamic query parameters, such as calling a method on a bean to retrieve an id, date or something.</p> </div> <div class="paragraph"> <p>For example, in the sample below we call the nextId method on the bean myIdGenerator:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("sql:select * from projects where id = :#${bean:myIdGenerator.nextId}")
+      steps:
+        - setBody:
+            constant: ASF
+        - setProperty:
+            name: min
+            constant: "123"
+        - to:
+            uri: "sql:select * from projects where license = :#${body} and id &gt; :#${exchangeProperty.min} order by id"</code></pre> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_using_expression_parameters_in_consumers"><a class="anchor" href="#_using_expression_parameters_in_consumers"></a>Using expression parameters in consumers</h4> <div class="paragraph"> <p>When using the SQL component as consumer, you can now also use expression parameters (simple language) to build dynamic query parameters, such as calling a method on a bean to retrieve an id, date or something.</p> </div> <div class="paragraph"> <p>For example, in the sample below we call the nextId method on the bean myIdGenerator:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("sql:select * from projects where id = :#${bean:myIdGenerator.nextId}")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="sql:select * from projects where id = :#${bean:myIdGenerator.nextId}"/&gt;
   &lt;to uri="mock:result"/&gt;

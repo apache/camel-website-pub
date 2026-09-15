@@ -243,12 +243,12 @@ from("direct:store")
 - route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: spring-ai-vector-store:myStore
-          parameters:
-            operation: ADD
-            vectorStore: "#vectorStore"
+      steps:
+        - to:
+            uri: spring-ai-vector-store:myStore
+            parameters:
+              operation: ADD
+              vectorStore: "#vectorStore"
 ```
 
 When you send plain text to this route, the component automatically: 1. Generates embeddings using the embedding model configured in the vector store 2. Creates a Document object 3. Stores it in the vector store
@@ -284,15 +284,15 @@ from("direct:embedAndStore")
 - route:
     from:
       uri: direct:embedAndStore
-    steps:
-      - to:
-          uri: spring-ai-embeddings:test
-          parameters:
-            embeddingModel: "#embeddingModel"
-      - to:
-          uri: spring-ai-vector-store:test
-          parameters:
-            vectorStore: "#vectorStore"
+      steps:
+        - to:
+            uri: spring-ai-embeddings:test
+            parameters:
+              embeddingModel: "#embeddingModel"
+        - to:
+            uri: spring-ai-vector-store:test
+            parameters:
+              vectorStore: "#vectorStore"
 ```
 
 > **Note**
@@ -329,19 +329,19 @@ from("direct:search")
 - route:
     from:
       uri: direct:search
-    steps:
-      - setBody:
-          constant: "What is AI?"
-      - to:
-          uri: spring-ai-vector-store:myStore
-          parameters:
-            operation: SIMILARITY_SEARCH
-            topK: 5
-            similarityThreshold: 0.7
-      - log:
-          message: "Found ${header.CamelSpringAiVectorStoreSimilarDocuments.size()} similar documents"
-      - log:
-          message: "Document IDs: ${header.CamelSpringAiVectorStoreDocumentIds}"
+      steps:
+        - setBody:
+            constant: "What is AI?"
+        - to:
+            uri: spring-ai-vector-store:myStore
+            parameters:
+              operation: SIMILARITY_SEARCH
+              topK: 5
+              similarityThreshold: 0.7
+        - log:
+            message: "Found ${header.CamelSpringAiVectorStoreSimilarDocuments.size()} similar documents"
+        - log:
+            message: "Document IDs: ${header.CamelSpringAiVectorStoreDocumentIds}"
 ```
 
 ### Delete Documents

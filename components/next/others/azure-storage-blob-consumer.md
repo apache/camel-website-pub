@@ -35,9 +35,9 @@ from("azure-storage-blob://camelazure/container1?blobName=hello.txt&accountName=
         blobName: hello.txt
         accountName: yourAccountName
         accessKey: yourAccessKey
-    steps:
-      - to:
-          uri: file://blobdirectory
+      steps:
+        - to:
+            uri: file://blobdirectory
 ```
 
 However, you can also write to file directly without using the file component, you will need to specify `fileDir` folder path to save your blob in your machine.
@@ -70,9 +70,9 @@ from("azure-storage-blob://camelazure/container1?blobName=hello.txt&accountName=
         accountName: yourAccountName
         accessKey: yourAccessKey
         fileDir: /var/to/awesome/dir
-    steps:
-      - to:
-          uri: mock:results
+      steps:
+        - to:
+            uri: mock:results
 ```
 
 Also, the component supports batch consumer, hence you can consume multiple blobs with only specifying the container name, the consumer will return multiple exchanges depending on the number of the blobs in the container. Example:
@@ -104,9 +104,9 @@ from("azure-storage-blob://camelazure/container1?accountName=yourAccountName&acc
         accountName: yourAccountName
         accessKey: yourAccessKey
         fileDir: /var/to/awesome/dir
-    steps:
-      - to:
-          uri: mock:results
+      steps:
+        - to:
+            uri: mock:results
 ```
 
 ### Delete After Read

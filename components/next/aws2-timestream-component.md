@@ -697,18 +697,18 @@ from("direct:createDatabase")
 - route:
     from:
       uri: direct:createDatabase
-    steps:
-      - setHeader:
-          name: CamelAwsTimestreamDatabaseName
-          constant: testDb
-      - setHeader:
-          name: CamelAwsTimestreamKmsKeyId
-          constant: testKmsKey
-      - to:
-          uri: aws2-timestream://write:test
-          parameters:
-            awsTimestreamWriteClient: "#awsTimestreamWriteClient"
-            operation: createDatabase
+      steps:
+        - setHeader:
+            name: CamelAwsTimestreamDatabaseName
+            constant: testDb
+        - setHeader:
+            name: CamelAwsTimestreamKmsKeyId
+            constant: testKmsKey
+        - to:
+            uri: aws2-timestream://write:test
+            parameters:
+              awsTimestreamWriteClient: "#awsTimestreamWriteClient"
+              operation: createDatabase
 ```
 
 -   Query Operation
@@ -744,15 +744,15 @@ from("direct:query")
 - route:
     from:
       uri: direct:query
-    steps:
-      - setHeader:
-          name: CamelAwsTimestreamQueryString
-          constant: "SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10"
-      - to:
-          uri: aws2-timestream://query:test
-          parameters:
-            awsTimestreamQueryClient: "#awsTimestreamQueryClient"
-            operation: query
+      steps:
+        - setHeader:
+            name: CamelAwsTimestreamQueryString
+            constant: "SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10"
+        - to:
+            uri: aws2-timestream://query:test
+            parameters:
+              awsTimestreamQueryClient: "#awsTimestreamQueryClient"
+              operation: query
 ```
 
 ### Using a POJO as body

@@ -1066,13 +1066,14 @@ from("rest:get:/api/documents")
         - to:
             uri: mock:user
 
-- rest:
-    get:
-      - uri: /api/documents
-        to: direct:list-documents
-        route:
-          policy:
+- route:
+    from:
+      uri: rest:get:/api/documents
+      steps:
+        - policy:
             ref: documentsPolicy
+        - to:
+            uri: direct:list-documents
 ```
 
 ### Federated Identity Operations
@@ -1197,7 +1198,9 @@ onException(CamelAuthorizationException.class)
 - onException:
     exception:
       - "org.apache.camel.CamelAuthorizationException"
-    handled: true
+    handled:
+      constant:
+        expression: "true"
     steps:
       - setHeader:
           name: "CamelHttpResponseCode"

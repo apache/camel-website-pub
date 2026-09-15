@@ -169,14 +169,14 @@ from("direct:list")
 - route:
     from:
       uri: direct:list
-    steps:
-      - to:
-          uri: kubernetes-job:///
-          parameters:
-            kubernetesClient: "#kubernetesClient"
-            operation: listJob
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: kubernetes-job:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listJob
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of jobs from your cluster

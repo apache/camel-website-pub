@@ -241,20 +241,20 @@ from("direct:search")
 - route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: ADD
+      steps:
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: ADD
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: SEARCH
-            returnTextContent: true
+      steps:
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: SEARCH
+              returnTextContent: true
 ```
 
 This eliminates the need for a separate `langchain4j-embeddings:embed` step in the route.
@@ -278,13 +278,13 @@ from("direct:store")
 - route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: ADD
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: ADD
 ```
 
 The response body contains the generated embedding ID.
@@ -340,15 +340,15 @@ from("direct:search")
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: SEARCH
-            maxResults: 5
-            minScore: 0.7
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: SEARCH
+              maxResults: 5
+              minScore: 0.7
 ```
 
 The response contains a list of `EmbeddingMatch` objects with the matching text segments and scores.
@@ -373,17 +373,17 @@ from("direct:search")
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: SEARCH
-            maxResults: 5
-            returnTextContent: true
-      - log:
-          message: "Found texts: ${body}"
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: SEARCH
+              maxResults: 5
+              returnTextContent: true
+        - log:
+            message: "Found texts: ${body}"
 ```
 
 ### Removing Embeddings (REMOVE Operation)
@@ -409,15 +409,15 @@ from("direct:remove")
 - route:
     from:
       uri: direct:remove
-    steps:
-      - setBody:
-          expression:
-            simple:
-              expression: "${header.embeddingId}"
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: REMOVE
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "${header.embeddingId}"
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: REMOVE
 ```
 
 #### Remove by Collection of IDs

@@ -26,15 +26,15 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            contentInBody: true
-      - process:
-          ref: "markdownProcessor"
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              contentInBody: true
+        - process:
+            ref: "markdownProcessor"
 ```
 
 ## Converting documents from URLs using docling-serve
@@ -59,16 +59,16 @@ from("timer:convert?repeatCount=1")
       uri: timer:convert
       parameters:
         repeatCount: 1
-    steps:
-      - setBody:
-          constant: "https://arxiv.org/pdf/2501.17887"
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - setBody:
+            constant: "https://arxiv.org/pdf/2501.17887"
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ## Batch processing with docling-serve
@@ -90,17 +90,17 @@ from("file:///data/documents?include=.*\\.(pdf|docx)")
       uri: file:///data/documents
       parameters:
         include: ".*\\.(pdf|docx)"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_HTML
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            contentInBody: true
-      - to:
-          uri: file:///data/converted
-          parameters:
-            fileName: "${file:name.noext}.html"
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_HTML
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              contentInBody: true
+        - to:
+            uri: file:///data/converted
+            parameters:
+              fileName: "${file:name.noext}.html"
 ```
 
 ## Authentication with docling-serve
@@ -131,17 +131,17 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            authenticationScheme: "BEARER"
-            authenticationToken: "your-bearer-token-here"
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              authenticationScheme: "BEARER"
+              authenticationToken: "your-bearer-token-here"
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ### API Key Authentication
@@ -169,18 +169,18 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            authenticationScheme: "API_KEY"
-            authenticationToken: "your-api-key-here"
-            apiKeyHeader: "X-API-Key"
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              authenticationScheme: "API_KEY"
+              authenticationToken: "your-api-key-here"
+              apiKeyHeader: "X-API-Key"
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ### Using Custom API Key Header
@@ -210,18 +210,18 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "http://localhost:5001"
-            authenticationScheme: "API_KEY"
-            authenticationToken: "your-api-key-here"
-            apiKeyHeader: "X-Custom-API-Key"
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "http://localhost:5001"
+              authenticationScheme: "API_KEY"
+              authenticationToken: "your-api-key-here"
+              apiKeyHeader: "X-Custom-API-Key"
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ### Using Authentication Token from Properties
@@ -250,17 +250,17 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doclingServeUrl: "{{docling.serve.url}}"
-            authenticationScheme: "BEARER"
-            authenticationToken: "{{docling.serve.token}}"
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doclingServeUrl: "{{docling.serve.url}}"
+              authenticationScheme: "BEARER"
+              authenticationToken: "{{docling.serve.token}}"
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 Then define in `application.properties`:

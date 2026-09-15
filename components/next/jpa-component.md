@@ -418,9 +418,9 @@ from("jpa://org.apache.camel.examples.MultiSteps?query=select o from org.apache.
       uri: jpa://org.apache.camel.examples.MultiSteps
       parameters:
         query: "select o from org.apache.camel.examples.MultiSteps o where o.step = 1"
-    steps:
-      - to:
-          uri: bean:myBusinessLogic
+      steps:
+        - to:
+            uri: bean:myBusinessLogic
 ```
 
 ### Using a consumer with a native query
@@ -452,9 +452,9 @@ from("jpa://org.apache.camel.examples.MultiSteps?nativeQuery=select * from Multi
       uri: jpa://org.apache.camel.examples.MultiSteps
       parameters:
         nativeQuery: "select * from MultiSteps where step = 1"
-    steps:
-      - to:
-          uri: bean:myBusinessLogic
+      steps:
+        - to:
+            uri: bean:myBusinessLogic
 ```
 
 If you use the native query option, you will receive an object array in the message body.
@@ -534,11 +534,11 @@ from("direct:query")
 - route:
     from:
       uri: direct:query
-    steps:
-      - to:
-          uri: jpa://org.apache.camel.examples.MultiSteps
-          parameters:
-            query: "select o from org.apache.camel.examples.MultiSteps o where o.step = 1"
+      steps:
+        - to:
+            uri: jpa://org.apache.camel.examples.MultiSteps
+            parameters:
+              query: "select o from org.apache.camel.examples.MultiSteps o where o.step = 1"
 ```
 
 ### Using a producer with a native query
@@ -568,12 +568,12 @@ from("direct:nativeQuery")
 - route:
     from:
       uri: direct:nativeQuery
-    steps:
-      - to:
-          uri: jpa://org.apache.camel.examples.MultiSteps
-          parameters:
-            resultClass: org.apache.camel.examples.MultiSteps
-            nativeQuery: "select * from MultiSteps where step = 1"
+      steps:
+        - to:
+            uri: jpa://org.apache.camel.examples.MultiSteps
+            parameters:
+              resultClass: org.apache.camel.examples.MultiSteps
+              nativeQuery: "select * from MultiSteps where step = 1"
 ```
 
 If you use the native query option without specifying `resultClass`, you will receive an object array in the message body.

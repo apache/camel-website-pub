@@ -10,11 +10,11 @@
       uri: file:inputDir
       parameters:
         noop: true
-    steps:
-      - to:
-          uri: smooks:smooks-config.xml
-      - to:
-          uri: jms:queue:order</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The Smooks component is configured with a mandatory configuration file, which is <code>smooks-config.xml</code> in the example above. It is not clear what type of output the component is producing from looking at the above route. By default, the message body output is a stream but the type of output can be changed by configuring <code>{https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd}exports</code> in the Smooks configuration as shown next:</p> </div> <div class="listingblock"> <div class="title">smooks-config.xml</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
+      steps:
+        - to:
+            uri: smooks:smooks-config.xml
+        - to:
+            uri: jms:queue:order</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The Smooks component is configured with a mandatory configuration file, which is <code>smooks-config.xml</code> in the example above. It is not clear what type of output the component is producing from looking at the above route. By default, the message body output is a stream but the type of output can be changed by configuring <code>{https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd}exports</code> in the Smooks configuration as shown next:</p> </div> <div class="listingblock"> <div class="title">smooks-config.xml</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;smooks-resource-list xmlns="https://www.smooks.org/xsd/smooks-2.0.xsd"
         xmlns:edi="https://www.smooks.org/xsd/smooks/edi-2.0.xsd"
         xmlns:core="https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd"&gt;
 

@@ -376,14 +376,14 @@ In order this to work, a route like the following should be defined in the Camel
 
 ```java
 from("reactive-streams:readAndMarshal")
-    .marshal() // ... other details
+    .marshal().base64();
 ```
 
 ```xml
 <route>
   <from uri="reactive-streams:readAndMarshal"/>
   <marshal>
-    <!-- ... other details -->
+    <base64/>
   </marshal>
 </route>
 ```
@@ -393,7 +393,8 @@ from("reactive-streams:readAndMarshal")
     from:
       uri: reactive-streams:readAndMarshal
       steps:
-        - marshal: {}
+        - marshal:
+            base64: {}
 ```
 
 #### Request a transformation to Camel using the direct API
@@ -426,14 +427,14 @@ In this case, the Camel transformation can be just:
 
 ```java
 from("direct:process")
-    .marshal() // ... other details
+    .marshal().base64();
 ```
 
 ```xml
 <route>
   <from uri="direct:process"/>
   <marshal>
-    <!-- ... other details -->
+    <base64/>
   </marshal>
 </route>
 ```
@@ -443,7 +444,8 @@ from("direct:process")
     from:
       uri: direct:process
       steps:
-        - marshal: {}
+        - marshal:
+            base64: {}
 ```
 
 ### Process Camel data into the reactive framework

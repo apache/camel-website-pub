@@ -480,11 +480,11 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+        - to:
+            uri: file:///data/output
 ```
 
 ### Convert to HTML with content in body
@@ -509,13 +509,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_HTML
-          parameters:
-            contentInBody: true
-      - process:
-          ref: "htmlProcessor"
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_HTML
+            parameters:
+              contentInBody: true
+        - process:
+            ref: "htmlProcessor"
 ```
 
 ### Extract structured data from documents
@@ -548,14 +548,14 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_STRUCTURED_DATA
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - process:
-          ref: "structuredDataProcessor"
+      steps:
+        - to:
+            uri: docling:EXTRACT_STRUCTURED_DATA
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - process:
+            ref: "structuredDataProcessor"
 ```
 
 ### Convert with OCR disabled
@@ -586,13 +586,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            enableOCR: false
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              enableOCR: false
+        - to:
+            uri: file:///data/output
 
 # API mode
 - route:
@@ -600,15 +600,15 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doOcr: false
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doOcr: false
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ### OCR and page headers/footers
@@ -639,20 +639,20 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - setHeader:
-          name: "CamelDoclingOperation"
-          constant: "CONVERT_TO_HTML"
-      - setHeader:
-          name: "CamelDoclingEnableOCR"
-          constant: true
-      - setHeader:
-          name: "CamelDoclingOCRLanguage"
-          constant: "es"
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN  # Operation will be overridden by header
-      - to:
-          uri: file:///data/output
+      steps:
+        - setHeader:
+            name: "CamelDoclingOperation"
+            constant: "CONVERT_TO_HTML"
+        - setHeader:
+            name: "CamelDoclingEnableOCR"
+            constant: true
+        - setHeader:
+            name: "CamelDoclingOCRLanguage"
+            constant: "es"
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN  # Operation will be overridden by header
+        - to:
+            uri: file:///data/output
 ```
 
 ### Processing with custom arguments
@@ -678,17 +678,17 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - setHeader:
-          name: "CamelDoclingCustomArguments"
-          expression:
-            method:
-              ref: "customArgsBean"
-              method: "createCustomArgs"
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-      - to:
-          uri: file:///data/output
+      steps:
+        - setHeader:
+            name: "CamelDoclingCustomArguments"
+            expression:
+              method:
+                ref: "customArgsBean"
+                method: "createCustomArgs"
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+        - to:
+            uri: file:///data/output
 ```
 
 ### Custom argument validation
@@ -754,15 +754,15 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_METADATA
-      - log:
-          message: "Document: ${header.CamelDoclingMetadataTitle} (${header.CamelDoclingMetadataDocumentType})"
-      - log:
-          message: "Pages: ${header.CamelDoclingMetadataPageCount}"
-      - process:
-          ref: "metadataProcessor"
+      steps:
+        - to:
+            uri: docling:EXTRACT_METADATA
+        - log:
+            message: "Document: ${header.CamelDoclingMetadataTitle} (${header.CamelDoclingMetadataDocumentType})"
+        - log:
+            message: "Pages: ${header.CamelDoclingMetadataPageCount}"
+        - process:
+            ref: "metadataProcessor"
 ```
 
 ### Extract metadata with all fields
@@ -792,13 +792,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_METADATA
-          parameters:
-            includeRawMetadata: true
-      - process:
-          ref: "fullMetadataProcessor"
+      steps:
+        - to:
+            uri: docling:EXTRACT_METADATA
+            parameters:
+              includeRawMetadata: true
+        - process:
+            ref: "fullMetadataProcessor"
 ```
 
 ### Route documents based on metadata
@@ -818,9 +818,6 @@ from("file:///data/documents?include=.*\\.pdf")
         .when(simple("${header.CamelDoclingMetadataLanguage} == 'fr'"))
             .log("French document")
             .to("file:///data/french-docs")
-        .when(simple("${header.CamelDoclingMetadataAuthor} contains 'Smith'"))
-            .log("Document by Smith")
-            .to("file:///data/smith-docs")
         .otherwise()
             .to("file:///data/other-docs")
     .end();
@@ -832,39 +829,31 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_METADATA
-      - choice:
-          when:
-            - expression:
-                simple:
-                  expression: "${header.CamelDoclingMetadataPageCount} > 100"
+      steps:
+        - to:
+            uri: docling:EXTRACT_METADATA
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelDoclingMetadataPageCount} > 100"
+                steps:
+                  - log:
+                      message: "Large document with ${header.CamelDoclingMetadataPageCount} pages"
+                  - to:
+                      uri: file:///data/large-docs
+              - expression:
+                  simple:
+                    expression: "${header.CamelDoclingMetadataLanguage} == 'fr'"
+                steps:
+                  - log:
+                      message: "French document"
+                  - to:
+                      uri: file:///data/french-docs
+            otherwise:
               steps:
-                - log:
-                    message: "Large document with ${header.CamelDoclingMetadataPageCount} pages"
                 - to:
-                    uri: file:///data/large-docs
-            - expression:
-                simple:
-                  expression: "${header.CamelDoclingMetadataLanguage} == 'fr'"
-              steps:
-                - log:
-                    message: "French document"
-                - to:
-                    uri: file:///data/french-docs
-            - expression:
-                simple:
-                  expression: "${header.CamelDoclingMetadataAuthor} contains 'Smith'"
-              steps:
-                - log:
-                    message: "Document by Smith"
-                - to:
-                    uri: file:///data/smith-docs
-          otherwise:
-            steps:
-              - to:
-                  uri: file:///data/other-docs
+                    uri: file:///data/other-docs
 ```
 
 ### Extract metadata without headers
@@ -892,13 +881,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_METADATA
-          parameters:
-            includeMetadataInHeaders: false
-      - process:
-          ref: "metadataBodyProcessor"
+      steps:
+        - to:
+            uri: docling:EXTRACT_METADATA
+            parameters:
+              includeMetadataInHeaders: false
+        - process:
+            ref: "metadataBodyProcessor"
 ```
 
 ### Content in body vs file path output
@@ -933,13 +922,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            contentInBody: true
-      - process:
-          ref: "contentProcessor"
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              contentInBody: true
+        - process:
+            ref: "contentProcessor"
 
 # Get file path (file is preserved)
 - route:
@@ -947,13 +936,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            contentInBody: false
-      - process:
-          ref: "filePathProcessor"
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              contentInBody: false
+        - process:
+            ref: "filePathProcessor"
 ```
 
 ### Processor Bean Examples
@@ -1071,27 +1060,27 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - setHeader:
-          name: CamelDoclingInputFilePath
-          expression:
-            simple:
-              expression: "${file:absolute.path}"
-      - to:
-          uri: docling:CHUNK_HYBRID
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-            chunkingTokenizer: "sentence-transformers/all-MiniLM-L6-v2"
-            chunkingMaxTokens: 128
-            chunkingMergePeers: true
-      - split:
-          expression:
-            simple:
-              expression: "${body}"
-          steps:
-            - log:
-                message: "Chunk ${body.chunkIndex}: ${body.text}"
+      steps:
+        - setHeader:
+            name: CamelDoclingInputFilePath
+            expression:
+              simple:
+                expression: "${file:absolute.path}"
+        - to:
+            uri: docling:CHUNK_HYBRID
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+              chunkingTokenizer: "sentence-transformers/all-MiniLM-L6-v2"
+              chunkingMaxTokens: 128
+              chunkingMergePeers: true
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - log:
+                  message: "Chunk ${body.chunkIndex}: ${body.text}"
 ```
 
 ### Chunking for RAG Pipelines
@@ -1125,35 +1114,35 @@ from("direct:ingest-pdf")
     id: ingest-pdf
     from:
       uri: direct:ingest-pdf
-    steps:
-      - setHeader:
-          name: CamelDoclingInputFilePath
-          expression:
-            simple:
-              expression: "${header.pdfFilePath}"
-      - to:
-          uri: docling:CHUNK_HYBRID
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-            chunkingTokenizer: "{{embedding.tokenizer}}"
-            chunkingMaxTokens: "{{embedding.max-tokens}}"
-            chunkingMergePeers: true
-      - split:
-          expression:
-            simple:
-              expression: "${body}"
-          steps:
-            - setBody:
-                expression:
-                  simple:
-                    expression: "${body.text}"
-            - to:
-                uri: openai:embeddings
-                parameters:
-                  embeddingModel: "{{embedding.model}}"
-            - to:
-                uri: direct:store-embedding
+      steps:
+        - setHeader:
+            name: CamelDoclingInputFilePath
+            expression:
+              simple:
+                expression: "${header.pdfFilePath}"
+        - to:
+            uri: docling:CHUNK_HYBRID
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+              chunkingTokenizer: "{{embedding.tokenizer}}"
+              chunkingMaxTokens: "{{embedding.max-tokens}}"
+              chunkingMergePeers: true
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - setBody:
+                  expression:
+                    simple:
+                      expression: "${body.text}"
+              - to:
+                  uri: openai:embeddings
+                  parameters:
+                    embeddingModel: "{{embedding.model}}"
+              - to:
+                  uri: direct:store-embedding
 ```
 
 ### Hierarchical Chunking
@@ -1182,24 +1171,24 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - setHeader:
-          name: CamelDoclingInputFilePath
-          expression:
-            simple:
-              expression: "${file:absolute.path}"
-      - to:
-          uri: docling:CHUNK_HIERARCHICAL
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - split:
-          expression:
-            simple:
-              expression: "${body}"
-          steps:
-            - log:
-                message: "Section [${body.headings}] page ${body.pageNumbers}: ${body.text}"
+      steps:
+        - setHeader:
+            name: CamelDoclingInputFilePath
+            expression:
+              simple:
+                expression: "${file:absolute.path}"
+        - to:
+            uri: docling:CHUNK_HIERARCHICAL
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - log:
+                  message: "Section [${body.headings}] page ${body.pageNumbers}: ${body.text}"
 ```
 
 ## Advanced Processing Options (API Mode)
@@ -1281,21 +1270,21 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_STRUCTURED_DATA
-          parameters:
-            useDoclingServe: true
-            doOcr: true
-            ocrEngine: "TESSERACT"
-            doTableStructure: true
-            tableMode: "ACCURATE"
-            doCodeEnrichment: true
-            pdfBackend: "DLPARSE_V4"
-            processTimeout: 120000
-            contentInBody: true
-      - process:
-          ref: "structuredDataProcessor"
+      steps:
+        - to:
+            uri: docling:EXTRACT_STRUCTURED_DATA
+            parameters:
+              useDoclingServe: true
+              doOcr: true
+              ocrEngine: "TESSERACT"
+              doTableStructure: true
+              tableMode: "ACCURATE"
+              doCodeEnrichment: true
+              pdfBackend: "DLPARSE_V4"
+              processTimeout: 120000
+              contentInBody: true
+        - process:
+            ref: "structuredDataProcessor"
 ```
 
 ## DoclingDocument Return Type
@@ -1339,14 +1328,14 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_JSON
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - process:
-          ref: "doclingDocumentProcessor"
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_JSON
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - process:
+            ref: "doclingDocumentProcessor"
 ```
 
 ## Error Handling
@@ -1442,17 +1431,17 @@ from("file:///data/large-documents?include=.*\\.pdf")
       uri: file:///data/large-documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            useAsyncMode: true
-            asyncPollInterval: 5000
-            asyncTimeout: 600000
-            contentInBody: true
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              useAsyncMode: true
+              asyncPollInterval: 5000
+              asyncTimeout: 600000
+              contentInBody: true
+        - to:
+            uri: file:///data/output
 ```
 
 ### Best Practices

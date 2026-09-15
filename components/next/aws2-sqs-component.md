@@ -903,19 +903,19 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelAwsSqsOperation
-          constant: deleteMessage
-      - setHeader:
-          name: CamelAwsSqsReceiptHandle
-          constant: "123456"
-      - to:
-          uri: aws2-sqs://camel-1
-          parameters:
-            accessKey: RAW(xxx)
-            secretKey: RAW(xxx)
-            region: eu-west-1
+      steps:
+        - setHeader:
+            name: CamelAwsSqsOperation
+            constant: deleteMessage
+        - setHeader:
+            name: CamelAwsSqsReceiptHandle
+            constant: "123456"
+        - to:
+            uri: aws2-sqs://camel-1
+            parameters:
+              accessKey: RAW(xxx)
+              secretKey: RAW(xxx)
+              region: eu-west-1
 ```
 
 As result, you’ll get an exchange containing a `DeleteMessageResponse` instance, that you can use to check if the message was deleted or not.
@@ -951,16 +951,16 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelAwsSqsOperation
-          constant: listQueues
-      - to:
-          uri: aws2-sqs://camel-1
-          parameters:
-            accessKey: RAW(xxx)
-            secretKey: RAW(xxx)
-            region: eu-west-1
+      steps:
+        - setHeader:
+            name: CamelAwsSqsOperation
+            constant: listQueues
+        - to:
+            uri: aws2-sqs://camel-1
+            parameters:
+              accessKey: RAW(xxx)
+              secretKey: RAW(xxx)
+              region: eu-west-1
 ```
 
 As result, you’ll get an exchange containing a `ListQueuesResponse` instance, that you can examine to check the actual queues.
@@ -996,16 +996,16 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelAwsSqsOperation
-          constant: purgeQueue
-      - to:
-          uri: aws2-sqs://camel-1
-          parameters:
-            accessKey: RAW(xxx)
-            secretKey: RAW(xxx)
-            region: eu-west-1
+      steps:
+        - setHeader:
+            name: CamelAwsSqsOperation
+            constant: purgeQueue
+        - to:
+            uri: aws2-sqs://camel-1
+            parameters:
+              accessKey: RAW(xxx)
+              secretKey: RAW(xxx)
+              region: eu-west-1
 ```
 
 As result you’ll get an exchange containing a `PurgeQueueResponse` instance.

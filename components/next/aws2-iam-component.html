@@ -9,15 +9,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:createUser
-    steps:
-      - setHeader:
-          name: CamelAwsIAMUsername
-          constant: camel
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: createUser</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteUser: this operation will delete a user in IAM</p> </li> </ul> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteUser")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMUsername
+            constant: camel
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: createUser</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteUser: this operation will delete a user in IAM</p> </li> </ul> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteUser")
     .setHeader("CamelAwsIAMUsername", constant("camel"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deleteUser");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deleteUser"/&gt;
@@ -28,27 +28,27 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteUser
-    steps:
-      - setHeader:
-          name: CamelAwsIAMUsername
-          constant: camel
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: deleteUser</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listUsers: this operation will list the users in IAM</p> </li> </ul> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listUsers")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMUsername
+            constant: camel
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: deleteUser</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listUsers: this operation will list the users in IAM</p> </li> </ul> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listUsers")
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listUsers");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:listUsers"/&gt;
     &lt;to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;amp;operation=listUsers"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:listUsers
-    steps:
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: listUsers</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>createGroup: this operation will add a group in IAM</p> </li> </ul> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createGroup")
+      steps:
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: listUsers</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>createGroup: this operation will add a group in IAM</p> </li> </ul> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createGroup")
     .setHeader("CamelAwsIAMGroupName", constant("camel"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createGroup");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:createGroup"/&gt;
@@ -59,15 +59,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:createGroup
-    steps:
-      - setHeader:
-          name: CamelAwsIAMGroupName
-          constant: camel
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: createGroup</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteGroup: this operation will delete a group in IAM</p> </li> </ul> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteGroup")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMGroupName
+            constant: camel
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: createGroup</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteGroup: this operation will delete a group in IAM</p> </li> </ul> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteGroup")
     .setHeader("CamelAwsIAMGroupName", constant("camel"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deleteGroup");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deleteGroup"/&gt;
@@ -78,27 +78,27 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteGroup
-    steps:
-      - setHeader:
-          name: CamelAwsIAMGroupName
-          constant: camel
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: deleteGroup</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listGroups: this operation will list the groups in IAM</p> </li> </ul> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listGroups")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMGroupName
+            constant: camel
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: deleteGroup</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listGroups: this operation will list the groups in IAM</p> </li> </ul> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listGroups")
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listGroups");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:listGroups"/&gt;
     &lt;to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;amp;operation=listGroups"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:listGroups
-    steps:
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: listGroups</code></pre> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_role_operations"><a class="anchor" href="#_role_operations"></a>Role Operations</h4> <div class="ulist"> <ul> <li> <p>createRole: this operation will create a role in IAM</p> </li> </ul> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createRole")
+      steps:
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: listGroups</code></pre> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_role_operations"><a class="anchor" href="#_role_operations"></a>Role Operations</h4> <div class="ulist"> <ul> <li> <p>createRole: this operation will create a role in IAM</p> </li> </ul> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createRole")
     .setHeader("CamelAwsIAMRoleName", constant("myRole"))
     .setHeader("CamelAwsIAMAssumeRolePolicyDocument", constant("{...}"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createRole");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -113,18 +113,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:createRole
-    steps:
-      - setHeader:
-          name: CamelAwsIAMRoleName
-          constant: myRole
-      - setHeader:
-          name: CamelAwsIAMAssumeRolePolicyDocument
-          constant: "{...}"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: createRole</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteRole: this operation will delete a role in IAM</p> </li> </ul> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteRole")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMRoleName
+            constant: myRole
+        - setHeader:
+            name: CamelAwsIAMAssumeRolePolicyDocument
+            constant: "{...}"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: createRole</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteRole: this operation will delete a role in IAM</p> </li> </ul> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteRole")
     .setHeader("CamelAwsIAMRoleName", constant("myRole"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deleteRole");</code></pre> </div> </div> </div> <div id="_tabs_8_xml--panel" class="tabpanel" aria-labelledby="_tabs_8_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deleteRole"/&gt;
@@ -135,15 +135,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_8_yaml--panel" class="tabpanel" aria-labelledby="_tabs_8_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteRole
-    steps:
-      - setHeader:
-          name: CamelAwsIAMRoleName
-          constant: myRole
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: deleteRole</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getRole: this operation will get a role in IAM</p> </li> </ul> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getRole")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMRoleName
+            constant: myRole
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: deleteRole</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getRole: this operation will get a role in IAM</p> </li> </ul> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getRole")
     .setHeader("CamelAwsIAMRoleName", constant("myRole"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=getRole");</code></pre> </div> </div> </div> <div id="_tabs_9_xml--panel" class="tabpanel" aria-labelledby="_tabs_9_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getRole"/&gt;
@@ -154,27 +154,27 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_9_yaml--panel" class="tabpanel" aria-labelledby="_tabs_9_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getRole
-    steps:
-      - setHeader:
-          name: CamelAwsIAMRoleName
-          constant: myRole
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: getRole</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listRoles: this operation will list the roles in IAM</p> </li> </ul> </div> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listRoles")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMRoleName
+            constant: myRole
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: getRole</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listRoles: this operation will list the roles in IAM</p> </li> </ul> </div> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listRoles")
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listRoles");</code></pre> </div> </div> </div> <div id="_tabs_10_xml--panel" class="tabpanel" aria-labelledby="_tabs_10_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:listRoles"/&gt;
     &lt;to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;amp;operation=listRoles"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_10_yaml--panel" class="tabpanel" aria-labelledby="_tabs_10_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:listRoles
-    steps:
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: listRoles</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_policy_operations"><a class="anchor" href="#_policy_operations"></a>Policy Operations</h4> <div class="ulist"> <ul> <li> <p>createPolicy: this operation will create a policy in IAM</p> </li> </ul> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createPolicy")
+      steps:
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: listRoles</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_policy_operations"><a class="anchor" href="#_policy_operations"></a>Policy Operations</h4> <div class="ulist"> <ul> <li> <p>createPolicy: this operation will create a policy in IAM</p> </li> </ul> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createPolicy")
     .setHeader("CamelAwsIAMPolicyName", constant("myPolicy"))
     .setHeader("CamelAwsIAMPolicyDocument", constant("{...}"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createPolicy");</code></pre> </div> </div> </div> <div id="_tabs_11_xml--panel" class="tabpanel" aria-labelledby="_tabs_11_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -189,18 +189,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_11_yaml--panel" class="tabpanel" aria-labelledby="_tabs_11_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:createPolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMPolicyName
-          constant: myPolicy
-      - setHeader:
-          name: CamelAwsIAMPolicyDocument
-          constant: "{...}"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: createPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deletePolicy: this operation will delete a policy in IAM</p> </li> </ul> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deletePolicy")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMPolicyName
+            constant: myPolicy
+        - setHeader:
+            name: CamelAwsIAMPolicyDocument
+            constant: "{...}"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: createPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deletePolicy: this operation will delete a policy in IAM</p> </li> </ul> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deletePolicy")
     .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deletePolicy");</code></pre> </div> </div> </div> <div id="_tabs_12_xml--panel" class="tabpanel" aria-labelledby="_tabs_12_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deletePolicy"/&gt;
@@ -211,15 +211,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_12_yaml--panel" class="tabpanel" aria-labelledby="_tabs_12_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deletePolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMPolicyArn
-          constant: "arn:aws:iam::123456789012:policy/myPolicy"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: deletePolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getPolicy: this operation will get a policy in IAM</p> </li> </ul> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getPolicy")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMPolicyArn
+            constant: "arn:aws:iam::123456789012:policy/myPolicy"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: deletePolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getPolicy: this operation will get a policy in IAM</p> </li> </ul> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getPolicy")
     .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=getPolicy");</code></pre> </div> </div> </div> <div id="_tabs_13_xml--panel" class="tabpanel" aria-labelledby="_tabs_13_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getPolicy"/&gt;
@@ -230,27 +230,27 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_13_yaml--panel" class="tabpanel" aria-labelledby="_tabs_13_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getPolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMPolicyArn
-          constant: "arn:aws:iam::123456789012:policy/myPolicy"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: getPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listPolicies: this operation will list the policies in IAM</p> </li> </ul> </div> <div id="_tabs_14" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_14_java" class="tab"> <p>Java</p> </li> <li id="_tabs_14_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_14_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_14_java--panel" class="tabpanel" aria-labelledby="_tabs_14_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listPolicies")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMPolicyArn
+            constant: "arn:aws:iam::123456789012:policy/myPolicy"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: getPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listPolicies: this operation will list the policies in IAM</p> </li> </ul> </div> <div id="_tabs_14" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_14_java" class="tab"> <p>Java</p> </li> <li id="_tabs_14_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_14_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_14_java--panel" class="tabpanel" aria-labelledby="_tabs_14_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listPolicies")
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listPolicies");</code></pre> </div> </div> </div> <div id="_tabs_14_xml--panel" class="tabpanel" aria-labelledby="_tabs_14_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:listPolicies"/&gt;
     &lt;to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;amp;operation=listPolicies"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_14_yaml--panel" class="tabpanel" aria-labelledby="_tabs_14_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:listPolicies
-    steps:
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: listPolicies</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_policy_attachment_operations"><a class="anchor" href="#_policy_attachment_operations"></a>Policy Attachment Operations</h4> <div class="ulist"> <ul> <li> <p>attachUserPolicy: this operation will attach a policy to a user</p> </li> </ul> </div> <div id="_tabs_15" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_15_java" class="tab"> <p>Java</p> </li> <li id="_tabs_15_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_15_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_15_java--panel" class="tabpanel" aria-labelledby="_tabs_15_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:attachUserPolicy")
+      steps:
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: listPolicies</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_policy_attachment_operations"><a class="anchor" href="#_policy_attachment_operations"></a>Policy Attachment Operations</h4> <div class="ulist"> <ul> <li> <p>attachUserPolicy: this operation will attach a policy to a user</p> </li> </ul> </div> <div id="_tabs_15" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_15_java" class="tab"> <p>Java</p> </li> <li id="_tabs_15_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_15_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_15_java--panel" class="tabpanel" aria-labelledby="_tabs_15_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:attachUserPolicy")
     .setHeader("CamelAwsIAMUsername", constant("camel"))
     .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=attachUserPolicy");</code></pre> </div> </div> </div> <div id="_tabs_15_xml--panel" class="tabpanel" aria-labelledby="_tabs_15_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -265,18 +265,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_15_yaml--panel" class="tabpanel" aria-labelledby="_tabs_15_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:attachUserPolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMUsername
-          constant: camel
-      - setHeader:
-          name: CamelAwsIAMPolicyArn
-          constant: "arn:aws:iam::123456789012:policy/myPolicy"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: attachUserPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>detachUserPolicy: this operation will detach a policy from a user</p> </li> </ul> </div> <div id="_tabs_16" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_16_java" class="tab"> <p>Java</p> </li> <li id="_tabs_16_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_16_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_16_java--panel" class="tabpanel" aria-labelledby="_tabs_16_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:detachUserPolicy")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMUsername
+            constant: camel
+        - setHeader:
+            name: CamelAwsIAMPolicyArn
+            constant: "arn:aws:iam::123456789012:policy/myPolicy"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: attachUserPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>detachUserPolicy: this operation will detach a policy from a user</p> </li> </ul> </div> <div id="_tabs_16" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_16_java" class="tab"> <p>Java</p> </li> <li id="_tabs_16_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_16_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_16_java--panel" class="tabpanel" aria-labelledby="_tabs_16_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:detachUserPolicy")
     .setHeader("CamelAwsIAMUsername", constant("camel"))
     .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=detachUserPolicy");</code></pre> </div> </div> </div> <div id="_tabs_16_xml--panel" class="tabpanel" aria-labelledby="_tabs_16_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -291,18 +291,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_16_yaml--panel" class="tabpanel" aria-labelledby="_tabs_16_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:detachUserPolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMUsername
-          constant: camel
-      - setHeader:
-          name: CamelAwsIAMPolicyArn
-          constant: "arn:aws:iam::123456789012:policy/myPolicy"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: detachUserPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>attachGroupPolicy: this operation will attach a policy to a group</p> </li> </ul> </div> <div id="_tabs_17" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_17_java" class="tab"> <p>Java</p> </li> <li id="_tabs_17_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_17_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_17_java--panel" class="tabpanel" aria-labelledby="_tabs_17_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:attachGroupPolicy")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMUsername
+            constant: camel
+        - setHeader:
+            name: CamelAwsIAMPolicyArn
+            constant: "arn:aws:iam::123456789012:policy/myPolicy"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: detachUserPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>attachGroupPolicy: this operation will attach a policy to a group</p> </li> </ul> </div> <div id="_tabs_17" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_17_java" class="tab"> <p>Java</p> </li> <li id="_tabs_17_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_17_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_17_java--panel" class="tabpanel" aria-labelledby="_tabs_17_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:attachGroupPolicy")
     .setHeader("CamelAwsIAMGroupName", constant("myGroup"))
     .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=attachGroupPolicy");</code></pre> </div> </div> </div> <div id="_tabs_17_xml--panel" class="tabpanel" aria-labelledby="_tabs_17_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -317,18 +317,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_17_yaml--panel" class="tabpanel" aria-labelledby="_tabs_17_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:attachGroupPolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMGroupName
-          constant: myGroup
-      - setHeader:
-          name: CamelAwsIAMPolicyArn
-          constant: "arn:aws:iam::123456789012:policy/myPolicy"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: attachGroupPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>detachGroupPolicy: this operation will detach a policy from a group</p> </li> </ul> </div> <div id="_tabs_18" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_18_java" class="tab"> <p>Java</p> </li> <li id="_tabs_18_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_18_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_18_java--panel" class="tabpanel" aria-labelledby="_tabs_18_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:detachGroupPolicy")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMGroupName
+            constant: myGroup
+        - setHeader:
+            name: CamelAwsIAMPolicyArn
+            constant: "arn:aws:iam::123456789012:policy/myPolicy"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: attachGroupPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>detachGroupPolicy: this operation will detach a policy from a group</p> </li> </ul> </div> <div id="_tabs_18" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_18_java" class="tab"> <p>Java</p> </li> <li id="_tabs_18_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_18_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_18_java--panel" class="tabpanel" aria-labelledby="_tabs_18_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:detachGroupPolicy")
     .setHeader("CamelAwsIAMGroupName", constant("myGroup"))
     .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=detachGroupPolicy");</code></pre> </div> </div> </div> <div id="_tabs_18_xml--panel" class="tabpanel" aria-labelledby="_tabs_18_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -343,18 +343,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_18_yaml--panel" class="tabpanel" aria-labelledby="_tabs_18_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:detachGroupPolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMGroupName
-          constant: myGroup
-      - setHeader:
-          name: CamelAwsIAMPolicyArn
-          constant: "arn:aws:iam::123456789012:policy/myPolicy"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: detachGroupPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>attachRolePolicy: this operation will attach a policy to a role</p> </li> </ul> </div> <div id="_tabs_19" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_19_java" class="tab"> <p>Java</p> </li> <li id="_tabs_19_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_19_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_19_java--panel" class="tabpanel" aria-labelledby="_tabs_19_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:attachRolePolicy")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMGroupName
+            constant: myGroup
+        - setHeader:
+            name: CamelAwsIAMPolicyArn
+            constant: "arn:aws:iam::123456789012:policy/myPolicy"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: detachGroupPolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>attachRolePolicy: this operation will attach a policy to a role</p> </li> </ul> </div> <div id="_tabs_19" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_19_java" class="tab"> <p>Java</p> </li> <li id="_tabs_19_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_19_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_19_java--panel" class="tabpanel" aria-labelledby="_tabs_19_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:attachRolePolicy")
     .setHeader("CamelAwsIAMRoleName", constant("myRole"))
     .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=attachRolePolicy");</code></pre> </div> </div> </div> <div id="_tabs_19_xml--panel" class="tabpanel" aria-labelledby="_tabs_19_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -369,18 +369,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_19_yaml--panel" class="tabpanel" aria-labelledby="_tabs_19_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:attachRolePolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMRoleName
-          constant: myRole
-      - setHeader:
-          name: CamelAwsIAMPolicyArn
-          constant: "arn:aws:iam::123456789012:policy/myPolicy"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: attachRolePolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>detachRolePolicy: this operation will detach a policy from a role</p> </li> </ul> </div> <div id="_tabs_20" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_20_java" class="tab"> <p>Java</p> </li> <li id="_tabs_20_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_20_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_20_java--panel" class="tabpanel" aria-labelledby="_tabs_20_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:detachRolePolicy")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMRoleName
+            constant: myRole
+        - setHeader:
+            name: CamelAwsIAMPolicyArn
+            constant: "arn:aws:iam::123456789012:policy/myPolicy"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: attachRolePolicy</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>detachRolePolicy: this operation will detach a policy from a role</p> </li> </ul> </div> <div id="_tabs_20" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_20_java" class="tab"> <p>Java</p> </li> <li id="_tabs_20_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_20_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_20_java--panel" class="tabpanel" aria-labelledby="_tabs_20_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:detachRolePolicy")
     .setHeader("CamelAwsIAMRoleName", constant("myRole"))
     .setHeader("CamelAwsIAMPolicyArn", constant("arn:aws:iam::123456789012:policy/myPolicy"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=detachRolePolicy");</code></pre> </div> </div> </div> <div id="_tabs_20_xml--panel" class="tabpanel" aria-labelledby="_tabs_20_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -395,18 +395,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_20_yaml--panel" class="tabpanel" aria-labelledby="_tabs_20_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:detachRolePolicy
-    steps:
-      - setHeader:
-          name: CamelAwsIAMRoleName
-          constant: myRole
-      - setHeader:
-          name: CamelAwsIAMPolicyArn
-          constant: "arn:aws:iam::123456789012:policy/myPolicy"
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: detachRolePolicy</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_instance_profile_operations"><a class="anchor" href="#_instance_profile_operations"></a>Instance Profile Operations</h4> <div class="ulist"> <ul> <li> <p>createInstanceProfile: this operation will create an instance profile in IAM</p> </li> </ul> </div> <div id="_tabs_21" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_21_java" class="tab"> <p>Java</p> </li> <li id="_tabs_21_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_21_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_21_java--panel" class="tabpanel" aria-labelledby="_tabs_21_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createInstanceProfile")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMRoleName
+            constant: myRole
+        - setHeader:
+            name: CamelAwsIAMPolicyArn
+            constant: "arn:aws:iam::123456789012:policy/myPolicy"
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: detachRolePolicy</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_instance_profile_operations"><a class="anchor" href="#_instance_profile_operations"></a>Instance Profile Operations</h4> <div class="ulist"> <ul> <li> <p>createInstanceProfile: this operation will create an instance profile in IAM</p> </li> </ul> </div> <div id="_tabs_21" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_21_java" class="tab"> <p>Java</p> </li> <li id="_tabs_21_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_21_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_21_java--panel" class="tabpanel" aria-labelledby="_tabs_21_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createInstanceProfile")
     .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createInstanceProfile");</code></pre> </div> </div> </div> <div id="_tabs_21_xml--panel" class="tabpanel" aria-labelledby="_tabs_21_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:createInstanceProfile"/&gt;
@@ -417,15 +417,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_21_yaml--panel" class="tabpanel" aria-labelledby="_tabs_21_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:createInstanceProfile
-    steps:
-      - setHeader:
-          name: CamelAwsIAMInstanceProfileName
-          constant: myInstanceProfile
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: createInstanceProfile</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteInstanceProfile: this operation will delete an instance profile in IAM</p> </li> </ul> </div> <div id="_tabs_22" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_22_java" class="tab"> <p>Java</p> </li> <li id="_tabs_22_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_22_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_22_java--panel" class="tabpanel" aria-labelledby="_tabs_22_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteInstanceProfile")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMInstanceProfileName
+            constant: myInstanceProfile
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: createInstanceProfile</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteInstanceProfile: this operation will delete an instance profile in IAM</p> </li> </ul> </div> <div id="_tabs_22" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_22_java" class="tab"> <p>Java</p> </li> <li id="_tabs_22_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_22_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_22_java--panel" class="tabpanel" aria-labelledby="_tabs_22_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteInstanceProfile")
     .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=deleteInstanceProfile");</code></pre> </div> </div> </div> <div id="_tabs_22_xml--panel" class="tabpanel" aria-labelledby="_tabs_22_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deleteInstanceProfile"/&gt;
@@ -436,15 +436,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_22_yaml--panel" class="tabpanel" aria-labelledby="_tabs_22_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteInstanceProfile
-    steps:
-      - setHeader:
-          name: CamelAwsIAMInstanceProfileName
-          constant: myInstanceProfile
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: deleteInstanceProfile</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getInstanceProfile: this operation will get an instance profile in IAM</p> </li> </ul> </div> <div id="_tabs_23" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_23_java" class="tab"> <p>Java</p> </li> <li id="_tabs_23_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_23_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_23_java--panel" class="tabpanel" aria-labelledby="_tabs_23_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getInstanceProfile")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMInstanceProfileName
+            constant: myInstanceProfile
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: deleteInstanceProfile</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getInstanceProfile: this operation will get an instance profile in IAM</p> </li> </ul> </div> <div id="_tabs_23" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_23_java" class="tab"> <p>Java</p> </li> <li id="_tabs_23_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_23_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_23_java--panel" class="tabpanel" aria-labelledby="_tabs_23_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getInstanceProfile")
     .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=getInstanceProfile");</code></pre> </div> </div> </div> <div id="_tabs_23_xml--panel" class="tabpanel" aria-labelledby="_tabs_23_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getInstanceProfile"/&gt;
@@ -455,27 +455,27 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_23_yaml--panel" class="tabpanel" aria-labelledby="_tabs_23_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getInstanceProfile
-    steps:
-      - setHeader:
-          name: CamelAwsIAMInstanceProfileName
-          constant: myInstanceProfile
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: getInstanceProfile</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listInstanceProfiles: this operation will list the instance profiles in IAM</p> </li> </ul> </div> <div id="_tabs_24" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_24_java" class="tab"> <p>Java</p> </li> <li id="_tabs_24_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_24_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_24_java--panel" class="tabpanel" aria-labelledby="_tabs_24_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listInstanceProfiles")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMInstanceProfileName
+            constant: myInstanceProfile
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: getInstanceProfile</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listInstanceProfiles: this operation will list the instance profiles in IAM</p> </li> </ul> </div> <div id="_tabs_24" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_24_java" class="tab"> <p>Java</p> </li> <li id="_tabs_24_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_24_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_24_java--panel" class="tabpanel" aria-labelledby="_tabs_24_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listInstanceProfiles")
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=listInstanceProfiles");</code></pre> </div> </div> </div> <div id="_tabs_24_xml--panel" class="tabpanel" aria-labelledby="_tabs_24_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:listInstanceProfiles"/&gt;
     &lt;to uri="aws2-iam://test?iamClient=#amazonIAMClient&amp;amp;operation=listInstanceProfiles"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_24_yaml--panel" class="tabpanel" aria-labelledby="_tabs_24_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:listInstanceProfiles
-    steps:
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: listInstanceProfiles</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>addRoleToInstanceProfile: this operation will add a role to an instance profile</p> </li> </ul> </div> <div id="_tabs_25" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_25_java" class="tab"> <p>Java</p> </li> <li id="_tabs_25_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_25_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_25_java--panel" class="tabpanel" aria-labelledby="_tabs_25_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:addRoleToInstanceProfile")
+      steps:
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: listInstanceProfiles</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>addRoleToInstanceProfile: this operation will add a role to an instance profile</p> </li> </ul> </div> <div id="_tabs_25" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_25_java" class="tab"> <p>Java</p> </li> <li id="_tabs_25_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_25_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_25_java--panel" class="tabpanel" aria-labelledby="_tabs_25_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:addRoleToInstanceProfile")
     .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
     .setHeader("CamelAwsIAMRoleName", constant("myRole"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=addRoleToInstanceProfile");</code></pre> </div> </div> </div> <div id="_tabs_25_xml--panel" class="tabpanel" aria-labelledby="_tabs_25_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -490,18 +490,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_25_yaml--panel" class="tabpanel" aria-labelledby="_tabs_25_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:addRoleToInstanceProfile
-    steps:
-      - setHeader:
-          name: CamelAwsIAMInstanceProfileName
-          constant: myInstanceProfile
-      - setHeader:
-          name: CamelAwsIAMRoleName
-          constant: myRole
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: addRoleToInstanceProfile</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>removeRoleFromInstanceProfile: this operation will remove a role from an instance profile</p> </li> </ul> </div> <div id="_tabs_26" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_26_java" class="tab"> <p>Java</p> </li> <li id="_tabs_26_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_26_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_26_java--panel" class="tabpanel" aria-labelledby="_tabs_26_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:removeRoleFromInstanceProfile")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMInstanceProfileName
+            constant: myInstanceProfile
+        - setHeader:
+            name: CamelAwsIAMRoleName
+            constant: myRole
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: addRoleToInstanceProfile</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>removeRoleFromInstanceProfile: this operation will remove a role from an instance profile</p> </li> </ul> </div> <div id="_tabs_26" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_26_java" class="tab"> <p>Java</p> </li> <li id="_tabs_26_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_26_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_26_java--panel" class="tabpanel" aria-labelledby="_tabs_26_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:removeRoleFromInstanceProfile")
     .setHeader("CamelAwsIAMInstanceProfileName", constant("myInstanceProfile"))
     .setHeader("CamelAwsIAMRoleName", constant("myRole"))
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=removeRoleFromInstanceProfile");</code></pre> </div> </div> </div> <div id="_tabs_26_xml--panel" class="tabpanel" aria-labelledby="_tabs_26_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -516,18 +516,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_26_yaml--panel" class="tabpanel" aria-labelledby="_tabs_26_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:removeRoleFromInstanceProfile
-    steps:
-      - setHeader:
-          name: CamelAwsIAMInstanceProfileName
-          constant: myInstanceProfile
-      - setHeader:
-          name: CamelAwsIAMRoleName
-          constant: myRole
-      - to:
-          uri: aws2-iam://test
-          parameters:
-            iamClient: "#amazonIAMClient"
-            operation: removeRoleFromInstanceProfile</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_pojo_as_body"><a class="anchor" href="#_using_a_pojo_as_body"></a>Using a POJO as body</h3> <div class="paragraph"> <p>Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as a body. In AWS IAM, there are multiple operations you can submit, as an example for Create User request, you can do something like:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires AWS SDK builder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createUser")
+      steps:
+        - setHeader:
+            name: CamelAwsIAMInstanceProfileName
+            constant: myInstanceProfile
+        - setHeader:
+            name: CamelAwsIAMRoleName
+            constant: myRole
+        - to:
+            uri: aws2-iam://test
+            parameters:
+              iamClient: "#amazonIAMClient"
+              operation: removeRoleFromInstanceProfile</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_pojo_as_body"><a class="anchor" href="#_using_a_pojo_as_body"></a>Using a POJO as body</h3> <div class="paragraph"> <p>Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as a body. In AWS IAM, there are multiple operations you can submit, as an example for Create User request, you can do something like:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires AWS SDK builder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createUser")
      .setBody(CreateUserRequest.builder().userName("camel").build())
     .to("aws2-iam://test?iamClient=#amazonIAMClient&amp;operation=createUser&amp;pojoRequest=true")</code></pre> </div> </div> <div class="paragraph"> <p>In this way, you&#8217;ll pass the request directly without the need of passing headers and options specifically related to this operation.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>Maven users will need to add the following dependency to their pom.xml.</p> </div> <div class="paragraph"> <p><strong>pom.xml</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;

@@ -456,13 +456,15 @@ You then have to reference the FirehoseClient in the `amazonKinesisFirehoseClien
     
 
 ```java
-from("aws2-kinesis-firehose://mykinesisdeliverystream?amazonKinesisFirehoseClient=#kinesisClient")
+from("direct:start")
+    .to("aws2-kinesis-firehose://mykinesisdeliverystream?amazonKinesisFirehoseClient=#kinesisClient")
     .to("log:out?showAll=true");
 ```
 
 ```xml
 <route>
-  <from uri="aws2-kinesis-firehose://mykinesisdeliverystream?amazonKinesisFirehoseClient=#kinesisClient"/>
+  <from uri="direct:start"/>
+  <to uri="aws2-kinesis-firehose://mykinesisdeliverystream?amazonKinesisFirehoseClient=#kinesisClient"/>
   <to uri="log:out?showAll=true"/>
 </route>
 ```
@@ -470,10 +472,12 @@ from("aws2-kinesis-firehose://mykinesisdeliverystream?amazonKinesisFirehoseClien
 ```yaml
 - route:
     from:
-      uri: aws2-kinesis-firehose://mykinesisdeliverystream
-      parameters:
-        amazonKinesisFirehoseClient: "#kinesisClient"
+      uri: direct:start
       steps:
+        - to:
+            uri: aws2-kinesis-firehose://mykinesisdeliverystream
+            parameters:
+              amazonKinesisFirehoseClient: "#kinesisClient"
         - to:
             uri: log:out
             parameters:

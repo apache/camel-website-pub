@@ -217,14 +217,14 @@ from("direct:list")
 - route:
     from:
       uri: direct:list
-    steps:
-      - to:
-          uri: kubernetes-pods:///
-          parameters:
-            kubernetesClient: "#kubernetesClient"
-            operation: listPods
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: kubernetes-pods:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listPods
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of pods from your cluster
@@ -273,9 +273,9 @@ from("kubernetes-pods://{{kubernetes-host}}?oauthToken={{kubernetes-token}}")
       uri: kubernetes-pods://{{kubernetes-host}}
       parameters:
         oauthToken: "{{kubernetes-token}}"
-    steps:
-      - to:
-          uri: log:result
+      steps:
+        - to:
+            uri: log:result
 ```
 
 This consumer returns a message per event received for all Pods from all namespaces in the cluster.

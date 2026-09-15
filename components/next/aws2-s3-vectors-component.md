@@ -648,6 +648,8 @@ The consumer polls for vectors using similarity search. It tracks processed vect
 
 ## Examples
 
+The vector in the message body is a `List` of numbers, a `float[]` or a `double[]`. The YAML DSL has no way to write such a list as a constant, so the YAML examples build it with a Groovy expression and need `camel-groovy` on the classpath.
+
 ### Insert Vectors
 
 -   Java
@@ -671,10 +673,7 @@ from("direct:insert")
             name: CamelAwsS3VectorsVectorId
             constant: doc-001
         - setBody:
-            constant:
-              - 0.1
-              - 0.2
-              - 0.3
+            groovy: "[0.1, 0.2, 0.3]"
         - to:
             uri: aws2-s3-vectors://my-bucket
             parameters:
@@ -703,10 +702,7 @@ from("direct:search")
       uri: direct:search
       steps:
         - setBody:
-            constant:
-              - 0.15
-              - 0.25
-              - 0.35
+            groovy: "[0.15, 0.25, 0.35]"
         - setHeader:
             name: CamelAwsS3VectorsTopK
             constant: 5

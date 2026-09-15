@@ -195,11 +195,11 @@ from("direct:embeddings")
 - route:
     from:
       uri: direct:embeddings
-    steps:
-      - to:
-          uri: langchain4j-embeddings:test
-          parameters:
-            embeddingModel: "#embeddingModel"
+      steps:
+        - to:
+            uri: langchain4j-embeddings:test
+            parameters:
+              embeddingModel: "#embeddingModel"
 ```
 
 ```xml
@@ -270,11 +270,11 @@ from("direct:embeddings")
 - route:
     from:
       uri: direct:embeddings
-    steps:
-      - to:
-          uri: langchain4j-embeddings:test
-          parameters:
-            embeddingModel: "#myEmbeddingModel"
+      steps:
+        - to:
+            uri: langchain4j-embeddings:test
+            parameters:
+              embeddingModel: "#myEmbeddingModel"
 ```
 
 ### Integration with Vector Stores
@@ -303,19 +303,19 @@ from("direct:store")
 - route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - setHeader:
-          name: CamelQdrantAction
-          constant: UPSERT
-      - setHeader:
-          name: CamelQdrantPointId
-          constant: 1
-      - transform:
-          dataType: "qdrant:embeddings"
-      - to:
-          uri: qdrant:myCollection
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - setHeader:
+            name: CamelQdrantAction
+            constant: UPSERT
+        - setHeader:
+            name: CamelQdrantPointId
+            constant: 1
+        - transformDataType:
+            toType: "qdrant:embeddings"
+        - to:
+            uri: qdrant:myCollection
 ```
 
 #### Similarity Search for RAG
@@ -341,21 +341,21 @@ from("direct:search")
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - transform:
-          dataType: "qdrant:embeddings"
-      - setHeader:
-          name: CamelQdrantAction
-          constant: SIMILARITY_SEARCH
-      - setHeader:
-          name: CamelQdrantIncludePayload
-          constant: true
-      - to:
-          uri: qdrant:myCollection
-      - transform:
-          dataType: "qdrant:rag"
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - transformDataType:
+            toType: "qdrant:embeddings"
+        - setHeader:
+            name: CamelQdrantAction
+            constant: SIMILARITY_SEARCH
+        - setHeader:
+            name: CamelQdrantWithPayload
+            constant: true
+        - to:
+            uri: qdrant:myCollection
+        - transformDataType:
+            toType: "qdrant:rag"
 ```
 
 #### Using with PGVector
@@ -379,16 +379,16 @@ from("direct:store")
 - route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - setHeader:
-          name: CamelPgVectorAction
-          constant: UPSERT
-      - transform:
-          dataType: "pgvector:embeddings"
-      - to:
-          uri: pgvector:myCollection
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - setHeader:
+            name: CamelPgVectorAction
+            constant: UPSERT
+        - transformDataType:
+            toType: "pgvector:embeddings"
+        - to:
+            uri: pgvector:myCollection
 ```
 
 Similarity search with PGVector and RAG:
@@ -411,18 +411,18 @@ from("direct:search")
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - transform:
-          dataType: "pgvector:embeddings"
-      - setHeader:
-          name: CamelPgVectorAction
-          constant: SIMILARITY_SEARCH
-      - to:
-          uri: pgvector:myCollection
-      - transform:
-          dataType: "pgvector:rag"
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - transformDataType:
+            toType: "pgvector:embeddings"
+        - setHeader:
+            name: CamelPgVectorAction
+            constant: SIMILARITY_SEARCH
+        - to:
+            uri: pgvector:myCollection
+        - transformDataType:
+            toType: "pgvector:rag"
 ```
 
 #### Using with LangChain4j Embedding Store Component
@@ -448,26 +448,26 @@ from("direct:search")
 - route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: ADD
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: ADD
 
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: SEARCH
-            maxResults: 5
-            returnTextContent: true
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: SEARCH
+              maxResults: 5
+              returnTextContent: true
 ```
 
 ### Structured error exchange properties

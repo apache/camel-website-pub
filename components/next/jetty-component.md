@@ -497,6 +497,9 @@ from("jetty:https://0.0.0.0/myapp/myservice/");
 ```yaml
 - from:
     uri: jetty:https://0.0.0.0/myapp/myservice/
+    steps:
+      - log:
+          message: "${body}"
 ```
 
 Jetty also needs to know where to load your keystore from and what passwords to use to load the correct SSL certificate. Set the following JVM System Properties:
@@ -742,8 +745,9 @@ from("jetty:http://0.0.0.0:9080/myservice?handlers=securityHandler");
       uri: jetty:http://0.0.0.0:9080/myservice
       parameters:
         handlers: securityHandler
-    steps:
-      # ...
+      steps:
+        - log:
+            message: "${body}"
 ```
 
 If you need more handlers, set the `handlers` option equal to a comma-separated list of bean IDs.
@@ -780,6 +784,9 @@ from("jetty:https://0.0.0.0/myapp/myservice1/?enableJmx=true");
     uri: jetty:https://0.0.0.0/myapp/myservice1/
     parameters:
       enableJmx: true
+    steps:
+      - log:
+          message: "${body}"
 ```
 
 -   Java
@@ -802,6 +809,9 @@ from("jetty:https://0.0.0.0/myapp/myservice2/?enableJmx=false");
     uri: jetty:https://0.0.0.0/myapp/myservice2/
     parameters:
       enableJmx: false
+    steps:
+      - log:
+          message: "${body}"
 ```
 
 The camel-jetty component also provides for direct configuration of the Jetty MBeanContainer. Jetty creates MBean names dynamically. If you are running another instance of Jetty outside of the Camel context and sharing the same MBeanServer between the instances, you can provide both instances with a reference to the same MBeanContainer to avoid name collisions when registering Jetty MBeans.

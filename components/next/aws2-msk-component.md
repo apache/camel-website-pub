@@ -532,15 +532,15 @@ from("direct:deleteCluster")
 - route:
     from:
       uri: direct:deleteCluster
-    steps:
-      - setHeader:
-          name: CamelAwsMSKClusterArn
-          constant: test-kafka
-      - to:
-          uri: aws2-msk://test
-          parameters:
-            mskClient: "#amazonMskClient"
-            operation: deleteCluster
+      steps:
+        - setHeader:
+            name: CamelAwsMSKClusterArn
+            constant: test-kafka
+        - to:
+            uri: aws2-msk://test
+            parameters:
+              mskClient: "#amazonMskClient"
+              operation: deleteCluster
 ```
 
 _Java-only: uses AWS SDK `BrokerNodeGroupInfo` builder_

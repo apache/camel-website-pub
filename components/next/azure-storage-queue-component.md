@@ -409,9 +409,9 @@ from("azure-storage-queue://storageAccount/messageQueue?accessKey=yourAccessKey"
       uri: azure-storage-queue://storageAccount/messageQueue
       parameters:
         accessKey: yourAccessKey
-    steps:
-      - to:
-          uri: file://queuedirectory
+      steps:
+        - to:
+            uri: file://queuedirectory
 ```
 
 ### Advanced Azure Storage Queue configuration
@@ -534,12 +534,12 @@ from("azure-storage-queue://cameldev/queue1?serviceClient=#client&maxMessages=5"
       parameters:
         serviceClient: "#client"
         maxMessages: 5
-    steps:
-      - to:
-          uri: file://outputFolder
-          parameters:
-            fileName: output.txt
-            fileExist: Append
+      steps:
+        - to:
+            uri: file://outputFolder
+            parameters:
+              fileName: output.txt
+              fileExist: Append
 ```
 
 ### Producer Operations Examples

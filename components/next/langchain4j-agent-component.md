@@ -384,14 +384,18 @@ Tool-route header side-effects are not merged back onto the main exchange when t
 The same tool-calling options can also be set directly on the endpoint URI when using inline agent creation mode (`agentConfiguration` without `agent` or `agentFactory`). URI values override the same options on the `AgentConfiguration` bean:
 
 ```yaml
-- to:
-    uri: "langchain4j-agent:assistant"
-    parameters:
-      agentConfiguration: "#myConfig"
-      tags: "orders"
-      maxToolCallingRoundTrips: 5
-      compensateOnToolErrors: true
-      executeToolsConcurrently: true
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "langchain4j-agent:assistant"
+            parameters:
+              agentConfiguration: "#myConfig"
+              tags: "orders"
+              maxToolCallingRoundTrips: 5
+              compensateOnToolErrors: true
+              executeToolsConcurrently: true
 ```
 
 ```java

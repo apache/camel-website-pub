@@ -16,13 +16,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: aws2-sns://test-camel-sns1
-          parameters:
-            amazonSNSClient: "#amazonSNSClient"
-            subscribeSNStoSQS: true
-            queueArn: "arn:aws:sqs:eu-central-1:123456789012:test_camel"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The <code>#amazonSNSClient</code> refers to a <code>SnsClient</code> in the Registry. By specifying <code>subscribeSNStoSQS</code> to true and a <code>queueArn</code> of an existing SQS Queue, you&#8217;ll be able to subscribe your SQS Queue to your SNS Topic.</p> </div> <div class="paragraph"> <p>At this point, you can consume messages coming from SNS Topic through your SQS Queue</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("aws2-sqs://test-camel?amazonSQSClient=#amazonSQSClient&amp;delay=50&amp;maxMessagesPerPoll=5")
+      steps:
+        - to:
+            uri: aws2-sns://test-camel-sns1
+            parameters:
+              amazonSNSClient: "#amazonSNSClient"
+              subscribeSNStoSQS: true
+              queueArn: "arn:aws:sqs:eu-central-1:123456789012:test_camel"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The <code>#amazonSNSClient</code> refers to a <code>SnsClient</code> in the Registry. By specifying <code>subscribeSNStoSQS</code> to true and a <code>queueArn</code> of an existing SQS Queue, you&#8217;ll be able to subscribe your SQS Queue to your SNS Topic.</p> </div> <div class="paragraph"> <p>At this point, you can consume messages coming from SNS Topic through your SQS Queue</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("aws2-sqs://test-camel?amazonSQSClient=#amazonSQSClient&amp;delay=50&amp;maxMessagesPerPoll=5")
     .to("...");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="aws2-sqs://test-camel?amazonSQSClient=#amazonSQSClient&amp;amp;delay=50&amp;amp;maxMessagesPerPoll=5"/&gt;
   &lt;to uri="..."/&gt;
@@ -69,12 +69,12 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: aws2-sns://camel-topic
-          parameters:
-            subject: "The+subject+message"
-            autoCreateTopic: true</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Sending batch to a topic</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires constructing <code>PublishBatchRequestEntry</code> objects programmatically</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - to:
+            uri: aws2-sns://camel-topic
+            parameters:
+              subject: "The+subject+message"
+              autoCreateTopic: true</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Sending batch to a topic</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires constructing <code>PublishBatchRequestEntry</code> objects programmatically</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
      .process(exchange -&gt; {
           List&lt;PublishBatchRequestEntry&gt; pubList = List.of(
                PublishBatchRequestEntry.builder().id("message1").message("This is message 1").build(),

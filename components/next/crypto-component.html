@@ -142,29 +142,29 @@ from("direct:verify")
     id: sign-route
     from:
       uri: direct:sign
-    steps:
-      - to:
-          uri: crypto:sign:pqc
-          parameters:
-            algorithm: ML-DSA
-            provider: BC
-            privateKeyName: "#mlDsaPrivateKey"
-      - to:
-          uri: direct:verify
+      steps:
+        - to:
+            uri: crypto:sign:pqc
+            parameters:
+              algorithm: ML-DSA
+              provider: BC
+              privateKeyName: "#mlDsaPrivateKey"
+        - to:
+            uri: direct:verify
 
 - route:
     id: verify-route
     from:
       uri: direct:verify
-    steps:
-      - to:
-          uri: crypto:verify:pqc
-          parameters:
-            algorithm: ML-DSA
-            provider: BC
-            publicKeyName: "#mlDsaPublicKey"
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_ml_dsa_parameter_sets"><a class="anchor" href="#_ml_dsa_parameter_sets"></a>ML-DSA parameter sets</h4> <div class="paragraph"> <p>The following ML-DSA parameter sets are available:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter Set</th> <th class="tableblock halign-left valign-top">Security Level</th> <th class="tableblock halign-left valign-top">Signature Size</th> <th class="tableblock halign-left valign-top">Use Case</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ml_dsa_44</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">NIST Level 2</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">~2,420 bytes</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">General-purpose signing</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ml_dsa_65</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">NIST Level 3</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">~3,309 bytes</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Recommended default</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ml_dsa_87</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">NIST Level 5</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">~4,627 bytes</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Highest security</p></td> </tr> </tbody> </table></div> </div> </div> <div class="sect2"> <h3 id="_slh_dsa_nist_fips_205"><a class="anchor" href="#_slh_dsa_nist_fips_205"></a>SLH-DSA (NIST FIPS 205)</h3> <div class="paragraph"> <p>SLH-DSA (Stateless Hash-Based Digital Signature Algorithm, formerly SPHINCS+) is the secondary NIST-standardized PQC signature algorithm, based on hash functions.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires Java KeyPair and registry binding</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private KeyPair slhDsaKeyPair;
+      steps:
+        - to:
+            uri: crypto:verify:pqc
+            parameters:
+              algorithm: ML-DSA
+              provider: BC
+              publicKeyName: "#mlDsaPublicKey"
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_ml_dsa_parameter_sets"><a class="anchor" href="#_ml_dsa_parameter_sets"></a>ML-DSA parameter sets</h4> <div class="paragraph"> <p>The following ML-DSA parameter sets are available:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter Set</th> <th class="tableblock halign-left valign-top">Security Level</th> <th class="tableblock halign-left valign-top">Signature Size</th> <th class="tableblock halign-left valign-top">Use Case</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ml_dsa_44</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">NIST Level 2</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">~2,420 bytes</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">General-purpose signing</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ml_dsa_65</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">NIST Level 3</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">~3,309 bytes</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Recommended default</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ml_dsa_87</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">NIST Level 5</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">~4,627 bytes</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Highest security</p></td> </tr> </tbody> </table></div> </div> </div> <div class="sect2"> <h3 id="_slh_dsa_nist_fips_205"><a class="anchor" href="#_slh_dsa_nist_fips_205"></a>SLH-DSA (NIST FIPS 205)</h3> <div class="paragraph"> <p>SLH-DSA (Stateless Hash-Based Digital Signature Algorithm, formerly SPHINCS+) is the secondary NIST-standardized PQC signature algorithm, based on hash functions.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires Java KeyPair and registry binding</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">private KeyPair slhDsaKeyPair;
 
 private KeyPair getSlhDsaKeyPair() throws Exception {
     if (slhDsaKeyPair == null) {
@@ -205,29 +205,29 @@ from("direct:verify")
     id: hybrid-sign-route
     from:
       uri: direct:sign
-    steps:
-      - to:
-          uri: pqc:hybrid
-          parameters:
-            operation: hybridSign
-            signatureAlgorithm: MLDSA
-            classicalSignatureAlgorithm: ECDSA_P256
-      - to:
-          uri: direct:verify
+      steps:
+        - to:
+            uri: pqc:hybrid
+            parameters:
+              operation: hybridSign
+              signatureAlgorithm: MLDSA
+              classicalSignatureAlgorithm: ECDSA_P256
+        - to:
+            uri: direct:verify
 
 - route:
     id: hybrid-verify-route
     from:
       uri: direct:verify
-    steps:
-      - to:
-          uri: pqc:hybrid
-          parameters:
-            operation: hybridVerify
-            signatureAlgorithm: MLDSA
-            classicalSignatureAlgorithm: ECDSA_P256
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Other hybrid combinations include:</p> </div> <div class="ulist"> <ul> <li> <p><code>ED25519</code> + <code>MLDSA</code> — Edwards curve + ML-DSA</p> </li> <li> <p><code>RSA_3072</code> + <code>MLDSA</code> — RSA 3072-bit + ML-DSA</p> </li> <li> <p><code>ECDSA_P384</code> + <code>SLHDSA</code> — ECDSA P-384 + SLH-DSA</p> </li> </ul> </div> <div class="paragraph"> <p>See the <a href="../4.22.x/pqc-component.html" class="xref page">PQC component</a> for the full list of supported classical algorithms and details on the hybrid wire format.</p> </div> </div> <div class="sect3"> <h4 id="_chaining_crypto_endpoints_manual_approach"><a class="anchor" href="#_chaining_crypto_endpoints_manual_approach"></a>Chaining crypto: endpoints (manual approach)</h4> <div class="paragraph"> <p>Alternatively, you can chain two <code>crypto:sign</code> / <code>crypto:verify</code> endpoints to produce both a classical and a PQC signature, storing each in a separate header:</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:sign")
+      steps:
+        - to:
+            uri: pqc:hybrid
+            parameters:
+              operation: hybridVerify
+              signatureAlgorithm: MLDSA
+              classicalSignatureAlgorithm: ECDSA_P256
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Other hybrid combinations include:</p> </div> <div class="ulist"> <ul> <li> <p><code>ED25519</code> + <code>MLDSA</code> — Edwards curve + ML-DSA</p> </li> <li> <p><code>RSA_3072</code> + <code>MLDSA</code> — RSA 3072-bit + ML-DSA</p> </li> <li> <p><code>ECDSA_P384</code> + <code>SLHDSA</code> — ECDSA P-384 + SLH-DSA</p> </li> </ul> </div> <div class="paragraph"> <p>See the <a href="../4.22.x/pqc-component.html" class="xref page">PQC component</a> for the full list of supported classical algorithms and details on the hybrid wire format.</p> </div> </div> <div class="sect3"> <h4 id="_chaining_crypto_endpoints_manual_approach"><a class="anchor" href="#_chaining_crypto_endpoints_manual_approach"></a>Chaining crypto: endpoints (manual approach)</h4> <div class="paragraph"> <p>Alternatively, you can chain two <code>crypto:sign</code> / <code>crypto:verify</code> endpoints to produce both a classical and a PQC signature, storing each in a separate header:</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:sign")
     .to("crypto:sign:classical?algorithm=SHA256withECDSA&amp;privateKeyName=#ecPrivateKey&amp;signatureHeaderName=ClassicalSignature")
     .to("crypto:sign:pqc?algorithm=ML-DSA&amp;provider=BC&amp;privateKeyName=#mlDsaPrivateKey&amp;signatureHeaderName=PQCSignature")
     .to("direct:verify");

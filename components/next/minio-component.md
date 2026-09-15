@@ -632,14 +632,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: minio://mycamelbucket
-          parameters:
-            minioClient: "#minioClient"
-            operation: listBuckets
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: minio://mycamelbucket
+            parameters:
+              minioClient: "#minioClient"
+              operation: listBuckets
+        - to:
+            uri: mock:result
 ```
 
 This operation will list the buckets for this account
@@ -672,14 +672,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: minio://mycamelbucket
-          parameters:
-            minioClient: "#minioClient"
-            operation: deleteBucket
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: minio://mycamelbucket
+            parameters:
+              minioClient: "#minioClient"
+              operation: deleteBucket
+        - to:
+            uri: mock:result
 ```
 
 This operation will delete the bucket mycamelbucket
@@ -712,14 +712,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: minio://mycamelbucket
-          parameters:
-            minioClient: "#minioClient"
-            operation: listObjects
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: minio://mycamelbucket
+            parameters:
+              minioClient: "#minioClient"
+              operation: listObjects
+        - to:
+            uri: mock:result
 ```
 
 This operation will list the objects in the mycamelbucket bucket

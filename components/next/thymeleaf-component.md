@@ -210,7 +210,7 @@ exchange.getIn().setHeader("CamelThymeleafContext", engineContext);
 
 ### Hot reloading
 
-The Thymeleaf template resource is, by default, hot reloadable for both file and classpath resources (expanded jar). If you set `contentCache=true`, Camel will only load the resource once, and thus hot reloading is not possible. This scenario can be used in production when the resource never changes.
+The Thymeleaf template resource is, by default, hot reloadable for both file and classpath resources (expanded jar). If you set `cacheable=true`, the template is only loaded once, and thus hot reloading is not possible. This scenario can be used in production when the resource never changes.
 
 ### Dynamic templates
 
@@ -301,14 +301,14 @@ And to use the content cache, e.g., for use in production, where the `.html` tem
 
 ```java
 from("activemq:My.Queue")
-    .to("thymeleaf:com/acme/MyResponse.html?contentCache=true")
+    .to("thymeleaf:com/acme/MyResponse.html?cacheable=true")
     .to("activemq:Another.Queue");
 ```
 
 ```xml
 <route>
   <from uri="activemq:My.Queue"/>
-  <to uri="thymeleaf:com/acme/MyResponse.html?contentCache=true"/>
+  <to uri="thymeleaf:com/acme/MyResponse.html?cacheable=true"/>
   <to uri="activemq:Another.Queue"/>
 </route>
 ```
@@ -321,7 +321,7 @@ from("activemq:My.Queue")
         - to:
             uri: thymeleaf:com/acme/MyResponse.html
             parameters:
-              contentCache: true
+              cacheable: true
         - to:
             uri: activemq:Another.Queue
 ```
@@ -337,14 +337,14 @@ And a file-based resource:
 
 ```java
 from("activemq:My.Queue")
-    .to("thymeleaf:file://myfolder/MyResponse.html?contentCache=true")
+    .to("thymeleaf:file://myfolder/MyResponse.html?cacheable=true")
     .to("activemq:Another.Queue");
 ```
 
 ```xml
 <route>
   <from uri="activemq:My.Queue"/>
-  <to uri="thymeleaf:file://myfolder/MyResponse.html?contentCache=true"/>
+  <to uri="thymeleaf:file://myfolder/MyResponse.html?cacheable=true"/>
   <to uri="activemq:Another.Queue"/>
 </route>
 ```
@@ -357,7 +357,7 @@ from("activemq:My.Queue")
         - to:
             uri: thymeleaf:file://myfolder/MyResponse.html
             parameters:
-              contentCache: true
+              cacheable: true
         - to:
             uri: activemq:Another.Queue
 ```

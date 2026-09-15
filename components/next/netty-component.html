@@ -124,9 +124,9 @@ from("netty:tcp://0.0.0.0:5150?serverInitializerFactory=#spf")
 &lt;!-- the shared worker thread pool --&gt;
 &lt;bean id="sharedPool" class="org.jboss.netty.channel.socket.nio.WorkerPool"
       factory-bean="poolBuilder" factory-method="build" destroy-method="shutdown"&gt;
-&lt;/bean&gt;</code></pre> </div> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> <div class="paragraph"> <p>For boss thread pool there is a <code>org.apache.camel.component.netty.NettyServerBossPoolBuilder</code> builder for Netty consumers, and a <code>org.apache.camel.component.netty.NettyClientBossPoolBuilder</code> for the Netty producers.</p> </div> </td> </tr> </table></div> </div> <div class="paragraph"> <p>Then in the Camel routes we can refer to this worker pools by configuring the <code>workerPool</code> option in the URI as shown below:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5021?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false")
+&lt;/bean&gt;</code></pre> </div> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> <div class="paragraph"> <p>For boss thread pool there is a <code>org.apache.camel.component.netty.NettyServerBossPoolBuilder</code> builder for Netty consumers, and a <code>org.apache.camel.component.netty.NettyClientBossPoolBuilder</code> for the Netty producers.</p> </div> </td> </tr> </table></div> </div> <div class="paragraph"> <p>Then in the Camel routes we can refer to this worker pools by configuring the <code>workerGroup</code> option in the URI as shown below:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5021?textline=true&amp;sync=true&amp;workerGroup=#sharedPool&amp;usingExecutorService=false")
     .to("log:result");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
-  &lt;from uri="netty:tcp://0.0.0.0:5021?textline=true&amp;amp;sync=true&amp;amp;workerPool=#sharedPool&amp;amp;usingExecutorService=false"/&gt;
+  &lt;from uri="netty:tcp://0.0.0.0:5021?textline=true&amp;amp;sync=true&amp;amp;workerGroup=#sharedPool&amp;amp;usingExecutorService=false"/&gt;
   &lt;to uri="log:result"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
@@ -134,13 +134,13 @@ from("netty:tcp://0.0.0.0:5150?serverInitializerFactory=#spf")
       parameters:
         textline: true
         sync: true
-        workerPool: "#sharedPool"
+        workerGroup: "#sharedPool"
         usingExecutorService: false
       steps:
         - to:
-            uri: log:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>And if we have another route, we can refer to the shared worker pool:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5022?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false")
+            uri: log:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>And if we have another route, we can refer to the shared worker pool:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("netty:tcp://0.0.0.0:5022?textline=true&amp;sync=true&amp;workerGroup=#sharedPool&amp;usingExecutorService=false")
     .to("log:result");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
-  &lt;from uri="netty:tcp://0.0.0.0:5022?textline=true&amp;amp;sync=true&amp;amp;workerPool=#sharedPool&amp;amp;usingExecutorService=false"/&gt;
+  &lt;from uri="netty:tcp://0.0.0.0:5022?textline=true&amp;amp;sync=true&amp;amp;workerGroup=#sharedPool&amp;amp;usingExecutorService=false"/&gt;
   &lt;to uri="log:result"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
@@ -148,7 +148,7 @@ from("netty:tcp://0.0.0.0:5150?serverInitializerFactory=#spf")
       parameters:
         textline: true
         sync: true
-        workerPool: "#sharedPool"
+        workerGroup: "#sharedPool"
         usingExecutorService: false
       steps:
         - to:
@@ -183,9 +183,9 @@ from("netty:udp://0.0.0.0:5155?sync=true&amp;decoders=#decoder")
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: netty:tcp://0.0.0.0:5150
-    steps:
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_an_ssltcp_based_netty_consumer_endpoint_using_request_reply_communication"><a class="anchor" href="#_an_ssltcp_based_netty_consumer_endpoint_using_request_reply_communication"></a>An SSL/TCP-based Netty consumer endpoint using Request-Reply communication</h3> <div id="Netty-UsingtheJSSEConfigurationUtility" class="paragraph"> <p>Using the JSSE Configuration Utility</p> </div> <div class="paragraph"> <p>The Netty component supports SSL/TLS configuration through the <a href="../../manual/camel-configuration-utilities.html" class="xref page">Camel JSSE Configuration Utility</a>. This utility greatly decreases the amount of component-specific code you need to write and is configurable at the endpoint and component levels. The following examples demonstrate how to use the utility with the Netty component.</p> </div> <div id="Netty-Programmaticconfigurationofthecomponent" class="paragraph"> <p>Programmatic configuration of the component</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java programmatic SSL configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">KeyStoreParameters ksp = new KeyStoreParameters();
+      steps:
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_an_ssltcp_based_netty_consumer_endpoint_using_request_reply_communication"><a class="anchor" href="#_an_ssltcp_based_netty_consumer_endpoint_using_request_reply_communication"></a>An SSL/TCP-based Netty consumer endpoint using Request-Reply communication</h3> <div id="Netty-UsingtheJSSEConfigurationUtility" class="paragraph"> <p>Using the JSSE Configuration Utility</p> </div> <div class="paragraph"> <p>The Netty component supports SSL/TLS configuration through the <a href="../../manual/camel-configuration-utilities.html" class="xref page">Camel JSSE Configuration Utility</a>. This utility greatly decreases the amount of component-specific code you need to write and is configurable at the endpoint and component levels. The following examples demonstrate how to use the utility with the Netty component.</p> </div> <div id="Netty-Programmaticconfigurationofthecomponent" class="paragraph"> <p>Programmatic configuration of the component</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java programmatic SSL configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">KeyStoreParameters ksp = new KeyStoreParameters();
 ksp.setResource("/users/home/server/keystore.jks");
 ksp.setPassword("keystorePassword");
 

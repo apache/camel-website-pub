@@ -190,15 +190,15 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: lucene:whitespaceQuotesIndex:insert
-          parameters:
-            analyzer: "#whitespaceAnalyzer"
-            indexDir: "#whitespace"
-            srcDir: "#load_dir"
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: lucene:whitespaceQuotesIndex:insert
+            parameters:
+              analyzer: "#whitespaceAnalyzer"
+              indexDir: "#whitespace"
+              srcDir: "#load_dir"
+        - to:
+            uri: mock:result
 ```
 
 ### Example 2: Loading properties into the JNDI registry in the Camel Context
@@ -254,27 +254,27 @@ from("direct:next")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelLuceneQuery
-          constant: Seinfeld
-      - to:
-          uri: lucene:searchIndex:query
-          parameters:
-            analyzer: "#whitespaceAnalyzer"
-            indexDir: "#whitespace"
-            maxHits: 20
-      - to:
-          uri: direct:next
+      steps:
+        - setHeader:
+            name: CamelLuceneQuery
+            constant: Seinfeld
+        - to:
+            uri: lucene:searchIndex:query
+            parameters:
+              analyzer: "#whitespaceAnalyzer"
+              indexDir: "#whitespace"
+              maxHits: 20
+        - to:
+            uri: direct:next
 
 - route:
     from:
       uri: direct:next
-    steps:
-      - to:
-          uri: bean:searchResultProcessor
-      - to:
-          uri: mock:searchResult
+      steps:
+        - to:
+            uri: bean:searchResultProcessor
+        - to:
+            uri: mock:searchResult
 ```
 
 ### Example 3: Performing searches using a Query Processor

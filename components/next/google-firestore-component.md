@@ -738,16 +738,16 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelGoogleFirestoreDocumentId
-          constant: user123
-      - to:
-          uri: google-firestore://users
-          parameters:
-            operation: getDocumentById
-      - log:
-          message: "Document data: ${body}"
+      steps:
+        - setHeader:
+            name: CamelGoogleFirestoreDocumentId
+            constant: user123
+        - to:
+            uri: google-firestore://users
+            parameters:
+              operation: getDocumentById
+        - log:
+            message: "Document data: ${body}"
 ```
 
 The response body will contain a `Map<String, Object>` with the document data, or `null` if the document doesn’t exist.
@@ -836,16 +836,16 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelGoogleFirestoreDocumentId
-          constant: user123
-      - to:
-          uri: google-firestore://users
-          parameters:
-            operation: deleteDocument
-      - log:
-          message: "Document deleted: ${body}"
+      steps:
+        - setHeader:
+            name: CamelGoogleFirestoreDocumentId
+            constant: user123
+        - to:
+            uri: google-firestore://users
+            parameters:
+              operation: deleteDocument
+        - log:
+            message: "Document deleted: ${body}"
 ```
 
 ### List Documents
@@ -936,28 +936,28 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelGoogleFirestoreQueryField
-          constant: age
-      - setHeader:
-          name: CamelGoogleFirestoreQueryOperator
-          constant: ">="
-      - setHeader:
-          name: CamelGoogleFirestoreQueryValue
-          constant: "21"
-      - setHeader:
-          name: CamelGoogleFirestoreQueryLimit
-          constant: "10"
-      - setHeader:
-          name: CamelGoogleFirestoreQueryOrderBy
-          constant: age
-      - to:
-          uri: google-firestore://users
-          parameters:
-            operation: queryCollection
-      - log:
-          message: "Found ${body.size()} matching documents"
+      steps:
+        - setHeader:
+            name: CamelGoogleFirestoreQueryField
+            constant: age
+        - setHeader:
+            name: CamelGoogleFirestoreQueryOperator
+            constant: ">="
+        - setHeader:
+            name: CamelGoogleFirestoreQueryValue
+            constant: "21"
+        - setHeader:
+            name: CamelGoogleFirestoreQueryLimit
+            constant: "10"
+        - setHeader:
+            name: CamelGoogleFirestoreQueryOrderBy
+            constant: age
+        - to:
+            uri: google-firestore://users
+            parameters:
+              operation: queryCollection
+        - log:
+            message: "Found ${body.size()} matching documents"
 ```
 
 Supported query operators:

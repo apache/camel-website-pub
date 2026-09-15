@@ -220,13 +220,13 @@ The usage of this Kamelet into a Camel route is going to be the same as any othe
       uri: timer:yaml
       parameters:
         period: "5000"
-    steps:
-      - setBody:
-          simple: "Hello Camel from ${routeId}"
-      - to:
-          uri: kamelet:nested-sink
-          parameters:
-            log-level: INFO
+      steps:
+        - setBody:
+            simple: "Hello Camel from ${routeId}"
+        - to:
+            uri: kamelet:nested-sink
+            parameters:
+              log-level: INFO
 ```
 
 > **Warning**

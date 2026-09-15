@@ -9,89 +9,89 @@
     .json(org.hisp.dhis.api.model.v40_2_2.OrganisationUnit.class);</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getResource
-    steps:
-      - to:
-          uri: dhis2:get/resource
-          parameters:
-            path: organisationUnits/O6uvpzGd5pu
-            username: admin
-            password: district
-            baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-      - unmarshal:
-          json:
-            unmarshalType: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Fetch all organisation units:</p> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getCollection")
+      steps:
+        - to:
+            uri: dhis2:get/resource
+            parameters:
+              path: organisationUnits/O6uvpzGd5pu
+              username: admin
+              password: district
+              baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+        - unmarshal:
+            json:
+              unmarshalType: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Fetch all organisation units:</p> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getCollection")
     .to("dhis2:get/collection?path=organisationUnits&amp;arrayName=organisationUnits&amp;username=admin&amp;password=district&amp;baseApiUrl=https://play.im.dhis2.org/stable-2-40-5/api")
     .split().body()
     .convertBodyTo(org.hisp.dhis.api.model.v40_2_2.OrganisationUnit.class).log("${body}");</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getCollection
-    steps:
-      - to:
-          uri: dhis2:get/collection
-          parameters:
-            path: organisationUnits
-            arrayName: organisationUnits
-            username: admin
-            password: district
-            baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-      - split:
-          expression:
-            simple:
-              expression: ${body}
-          steps:
-            - convertBodyTo:
-                type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
-            - log:
-                message: ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Fetch all organisation unit codes:</p> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getCollection")
+      steps:
+        - to:
+            uri: dhis2:get/collection
+            parameters:
+              path: organisationUnits
+              arrayName: organisationUnits
+              username: admin
+              password: district
+              baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+        - split:
+            expression:
+              simple:
+                expression: ${body}
+            steps:
+              - convertBodyTo:
+                  type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
+              - log:
+                  message: ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Fetch all organisation unit codes:</p> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getCollection")
     .to("dhis2:get/collection?path=organisationUnits&amp;arrayName=organisationUnits&amp;username=admin&amp;password=district&amp;baseApiUrl=https://play.im.dhis2.org/stable-2-40-5/api")
     .split().body()
     .convertBodyTo(org.hisp.dhis.api.model.v40_2_2.OrganisationUnit.class).log("${body}");</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getCollection
-    steps:
-      - to:
-          uri: dhis2:get/collection
-          parameters:
-            path: organisationUnits
-            arrayName: organisationUnits
-            username: admin
-            password: district
-            baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-            fields: code
-      - split:
-          expression:
-            simple:
-              expression: ${body}
-          steps:
-            - convertBodyTo:
-                type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
-            - log:
-                message: ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Fetch users with a phone number:</p> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getCollection")
+      steps:
+        - to:
+            uri: dhis2:get/collection
+            parameters:
+              path: organisationUnits
+              arrayName: organisationUnits
+              username: admin
+              password: district
+              baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+              fields: code
+        - split:
+            expression:
+              simple:
+                expression: ${body}
+            steps:
+              - convertBodyTo:
+                  type: org.hisp.dhis.api.model.v40_2_2.OrganisationUnit
+              - log:
+                  message: ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Fetch users with a phone number:</p> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getCollection")
     .to("dhis2://get/collection?path=users&amp;filter=phoneNumber:!null:&amp;arrayName=users&amp;username=admin&amp;password=district&amp;baseApiUrl=https://play.im.dhis2.org/stable-2-40-5/api")
     .split().body()
     .convertBodyTo(org.hisp.dhis.api.model.v40_2_2.User.class)
     .log("${body}");</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getCollection
-    steps:
-      - to:
-          uri: dhis2:get/collection
-          parameters:
-            path: users
-            arrayName: users
-            username: admin
-            password: district
-            baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-            filter: "phoneNumber:!null:"
-      - split:
-          expression:
-            simple:
-              expression: ${body}
-          steps:
-            - convertBodyTo:
-                type: org.hisp.dhis.api.model.v40_2_2.User
-            - log:
-                message: ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Save a data value set</p> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:postResource")
+      steps:
+        - to:
+            uri: dhis2:get/collection
+            parameters:
+              path: users
+              arrayName: users
+              username: admin
+              password: district
+              baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+              filter: "phoneNumber:!null:"
+        - split:
+            expression:
+              simple:
+                expression: ${body}
+            steps:
+              - convertBodyTo:
+                  type: org.hisp.dhis.api.model.v40_2_2.User
+              - log:
+                  message: ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Save a data value set</p> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:postResource")
     .setBody(exchange -&gt; new DataValueSet().withCompleteDate(
             ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_LOCAL_DATE))
         .withOrgUnit("O6uvpzGd5pu")
@@ -106,31 +106,31 @@
     .end();</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:postResource
-    steps:
-      - setBody:
-          groovy: |
-            new org.hisp.dhis.api.model.v40_2_2.DataValueSet()
-              .withCompleteDate(java.time.ZonedDateTime.now(java.time.ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE))
-              .withOrgUnit('O6uvpzGd5pu')
-              .withDataSet('lyLU2wR22tC')
-              .withPeriod(org.hisp.dhis.integration.sdk.support.period.PeriodBuilder.monthOf(new Date(), -1))
-              .withDataValues([new org.hisp.dhis.api.model.v40_2_2.DataValue().withDataElement('aIJZ2d2QgVV').withValue('20')])
-      - to:
-          uri: dhis2:post/resource
-          parameters:
-            path: dataValueSets
-            username: admin
-            password: district
-            baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-      - unmarshal:
-          json: {}
-      - choice:
-          when:
-            - groovy: body.status != 'OK'
-              steps:
-                - log:
-                    loggingLevel: ERROR
-                    message: Import error from DHIS2 while saving data value set =&gt; ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Update an organisation unit</p> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:putResource")
+      steps:
+        - setBody:
+            groovy: |
+              new org.hisp.dhis.api.model.v40_2_2.DataValueSet()
+                .withCompleteDate(java.time.ZonedDateTime.now(java.time.ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE))
+                .withOrgUnit('O6uvpzGd5pu')
+                .withDataSet('lyLU2wR22tC')
+                .withPeriod(org.hisp.dhis.integration.sdk.support.period.PeriodBuilder.monthOf(new Date(), -1))
+                .withDataValues([new org.hisp.dhis.api.model.v40_2_2.DataValue().withDataElement('aIJZ2d2QgVV').withValue('20')])
+        - to:
+            uri: dhis2:post/resource
+            parameters:
+              path: dataValueSets
+              username: admin
+              password: district
+              baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+        - unmarshal:
+            json: {}
+        - choice:
+            when:
+              - groovy: body.status != 'OK'
+                steps:
+                  - log:
+                      loggingLevel: ERROR
+                      message: Import error from DHIS2 while saving data value set =&gt; ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Update an organisation unit</p> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:putResource")
     .setBody(exchange -&gt; new OrganisationUnit().withName("Acme").withShortName("Acme").withOpeningDate(new Date()))
     .to("dhis2://put/resource?path=organisationUnits/jUb8gELQApl&amp;username=admin&amp;password=district&amp;baseApiUrl=https://play.im.dhis2.org/stable-2-40-5/api")
     .unmarshal().json()
@@ -140,29 +140,29 @@
     .end();</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:putResource
-    steps:
-      - setBody:
-          groovy: |
-            new org.hisp.dhis.api.model.v40_2_2.OrganisationUnit()
-              .withName('Acme')
-              .withShortName('Acme')
-              .withOpeningDate(new Date())
-      - to:
-          uri: dhis2:put/resource
-          parameters:
-            path: organisationUnits/jUb8gELQApl
-            username: admin
-            password: district
-            baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-      - unmarshal:
-          json: {}
-      - choice:
-          when:
-            - groovy: body.status != 'OK'
-              steps:
-                - log:
-                    loggingLevel: ERROR
-                    message: Import error from DHIS2 while updating org unit =&gt; ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Delete an organisation unit</p> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteResource")
+      steps:
+        - setBody:
+            groovy: |
+              new org.hisp.dhis.api.model.v40_2_2.OrganisationUnit()
+                .withName('Acme')
+                .withShortName('Acme')
+                .withOpeningDate(new Date())
+        - to:
+            uri: dhis2:put/resource
+            parameters:
+              path: organisationUnits/jUb8gELQApl
+              username: admin
+              password: district
+              baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+        - unmarshal:
+            json: {}
+        - choice:
+            when:
+              - groovy: body.status != 'OK'
+                steps:
+                  - log:
+                      loggingLevel: ERROR
+                      message: Import error from DHIS2 while updating org unit =&gt; ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Delete an organisation unit</p> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteResource")
     .to("dhis2://delete/resource?path=organisationUnits/jUb8gELQApl&amp;username=admin&amp;password=district&amp;baseApiUrl=https://play.im.dhis2.org/stable-2-40-5/api")
     .unmarshal().json()
     .choice()
@@ -171,36 +171,36 @@
     .end();</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteResource
-    steps:
-      - to:
-          uri: dhis2:delete/resource
-          parameters:
-            path: organisationUnits/jUb8gELQApl
-            username: admin
-            password: district
-            baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
-      - unmarshal:
-          json: {}
-      - choice:
-          when:
-            - groovy: body.status != 'OK'
-              steps:
-                - log:
-                    loggingLevel: ERROR
-                    message: Import error from DHIS2 while deleting org unit =&gt; ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Run analytics</p> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:resourceTablesAnalytics")
+      steps:
+        - to:
+            uri: dhis2:delete/resource
+            parameters:
+              path: organisationUnits/jUb8gELQApl
+              username: admin
+              password: district
+              baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api
+        - unmarshal:
+            json: {}
+        - choice:
+            when:
+              - groovy: body.status != 'OK'
+                steps:
+                  - log:
+                      loggingLevel: ERROR
+                      message: Import error from DHIS2 while deleting org unit =&gt; ${body}</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Run analytics</p> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:resourceTablesAnalytics")
     .to("dhis2://resourceTables/analytics?skipAggregate=false&amp;skipEvents=true&amp;lastYears=1&amp;username=admin&amp;password=district&amp;baseApiUrl=https://play.im.dhis2.org/stable-2-40-5/api");</code></pre> </div> </div> </div> <div id="_tabs_8_yaml--panel" class="tabpanel" aria-labelledby="_tabs_8_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:resourceTablesAnalytics
-    steps:
-      - to:
-          uri: dhis2:resourceTables/analytics
-          parameters:
-            skipAggregate: false
-            skipEvents: true
-            lastYears: 1
-            username: admin
-            password: district
-            baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Reference DHIS2 client</p> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Dhis2Client dhis2Client = Dhis2ClientBuilder.newClient("https://play.im.dhis2.org/stable-2-40-5/api", "admin", "district").build();
+      steps:
+        - to:
+            uri: dhis2:resourceTables/analytics
+            parameters:
+              skipAggregate: false
+              skipEvents: true
+              lastYears: 1
+              username: admin
+              password: district
+              baseApiUrl: https://play.im.dhis2.org/stable-2-40-5/api</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Reference DHIS2 client</p> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">Dhis2Client dhis2Client = Dhis2ClientBuilder.newClient("https://play.im.dhis2.org/stable-2-40-5/api", "admin", "district").build();
 getCamelContext().getRegistry().bind("dhis2Client", dhis2Client);
 
 from("direct:resourceTablesAnalytics")
@@ -214,24 +214,24 @@ from("direct:resourceTablesAnalytics")
 - route:
     from:
       uri: direct:resourceTablesAnalytics
-    steps:
-      - to:
-          uri: dhis2:resourceTables/analytics
-          parameters:
-            skipAggregate: true
-            skipEvents: true
-            lastYears: 1
-            client: "#dhis2Client"</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Set custom query parameters</p> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:clearCache")
+      steps:
+        - to:
+            uri: dhis2:resourceTables/analytics
+            parameters:
+              skipAggregate: true
+              skipEvents: true
+              lastYears: 1
+              client: "#dhis2Client"</code></pre> </div> </div> </div> </div> </div> </li> <li> <p>Set custom query parameters</p> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:clearCache")
     .setHeader("CamelDhis2.queryParams", constant(Map.of("cacheClear", "true")))
     .to("dhis2://post/resource?path=maintenance&amp;client=#dhis2Client");</code></pre> </div> </div> </div> <div id="_tabs_10_yaml--panel" class="tabpanel" aria-labelledby="_tabs_10_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:clearCache
-    steps:
-      - setHeader:
-          name: CamelDhis2.queryParams
-          groovy: "['cacheClear':'true']"
-      - to:
-          uri: dhis2:post/resource
-          parameters:
-            path: maintenance
-            client: "#dhis2Client"</code></pre> </div> </div> </div> </div> </div> </li> </ul> </div> </div> </div> </article> <aside class="toc sidebar" aria-label="Table of contents" data-title="Contents" data-levels="2"> <div class="toc-menu"></div> </aside> </div> </main> </div> <footer> <div class="footer-tools"> <a href="#top" title="Reach the top of the page">Back to top</a> </div> <div class="footer"> <div class="footer-brand"> <img class="footer-logo" src="../../_/img/logo-d-a567cee6fa.svg" alt="Apache Camel Logo" aria-label="white silhouette of a camel in front of a sand dune"> <span class="footer-wordmark">Apache Camel</span> <p class="footer-blurb">Open source integration framework. An Apache Software Foundation project, available under the Apache v2 license.</p> </div> <dl class="footer-column"> <dt><span class="footer-column-title">Overview</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../blog/">Blog</a></dd> <dd><a href="../../docs/">Documentation</a></dd> <dd><a href="../../tooling/">Tooling</a></dd> <dd><a href="../../community/">Community</a></dd> <dd><a href="../../download/">Download</a></dd> <dd><a href="../../projects/">All projects</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Documentation</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../manual/">User Manual</a></dd> <dd><a href="../../components/next/index.html">Components</a></dd> <dd><a href="../../camel-k/next/">Camel-K</a></dd> <dd><a href="../../camel-kafka-connector/next/">Camel Kafka Connector</a></dd> <dd><a href="../../camel-quarkus/next/">Camel Quarkus</a></dd> <dd><a href="../../camel-spring-boot/next/">Camel Spring Boot</a></dd> <dd><a href="../../camel-karaf/latest/">Camel Karaf</a></dd> <dd><a href="../../manual/faq/index.html">FAQ</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Community</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../community/support/">Support</a></dd> <dd><a href="../../community/contributing/">Contributing</a></dd> <dd><a href="../../community/mailing-list/">Mailing Lists</a></dd> <dd><a href="../../community/user-stories/">Who Uses Camel</a></dd> <dd><a href="../../community/articles/">Articles</a></dd> <dd><a href="../../community/books/">Books</a></dd> <dd><a href="../../community/team/">Team</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">About</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../acknowledgments/">Acknowledgments</a></dd> <dd><a href="https://www.apache.org/events/current-event.html" target="_blank" rel="noopener noreferrer nofollow" title="Apache Events">Apache Events</a></dd> <dd><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer nofollow" title="License">License</a></dd> <dd><a href="https://www.apache.org/security/" target="_blank" rel="noopener noreferrer nofollow" title="Security">Security</a></dd> <dd><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noopener noreferrer nofollow" title="Sponsorship">Sponsorship</a></dd> <dd><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noopener noreferrer nofollow" title="Thanks">Thanks</a></dd> <dd><a href="../../trust/">Trust</a></dd> </dl> <p class="remark"> &copy; 2004-2026 The <a href="https://apache.org">Apache Software Foundation</a>.<br> Apache Camel, Camel, Apache, the Apache feather logo, and the Apache Camel project logo are trademarks of The Apache Software Foundation. All other marks mentioned may be trademarks or registered trademarks of their respective owners. </p> <div class="resources"> <div class="context"> <a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noopener noreferrer nofollow">Privacy Policy</a> </div> <div class="context"> <a href="https://www.apache.org/foundation/policies/conduct" target="_blank" rel="noopener noreferrer nofollow">Code of Conduct</a> </div> <div class="context"> <a href="../../sitemap/">Sitemap</a> </div> </div> <div class="footer-icons"> <a href="https://github.com/apache/camel/" rel="noopener noreferrer nofollow" title="Collaborate on GitHub"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#github"/></svg></a> <a href="https://camel.zulipchat.com" rel="noopener noreferrer nofollow" title="Chat on Zulip"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#zulip"/></svg></a> <a href="https://twitter.com/ApacheCamel" rel="noopener noreferrer nofollow" title="Follow Apache Camel on Twitter"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#twitter"/></svg></a> <a href="https://www.linkedin.com/groups/2447439/" rel="noopener noreferrer nofollow" title="Apache Camel group on Linkedin"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#linkedin"/></svg></a> <a href="../../blog/index.xml" title="Subscribe to RSS Feed"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#rss"/></svg></a> </div> </div> </footer> <script src="../../_/js/vendor/docsearch-5c0cf4ef3a.js"></script> <script src="../../_/js/site-2aad2f7ea4.js"></script> <script async src="../../_/js/vendor/highlight-34ee5f32ef.js"></script> <script async src="../../_/js/vendor/svg4everybody-8ce71b89ac.js"></script> <script async src="../../_/js/vendor/tabs-3496628f2d.js" data-sync-storage-key="preferred-tab"></script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "Organization", "name": "Apache Camel", "url": "https://camel.apache.org", "sameAs": [ "https://twitter.com/ApacheCamel" ], "logo": "../../_/img/logo-d-a567cee6fa.svg", "description": "Apache Camel ™ is a versatile open-source integration framework based on known Enterprise Integration Patterns. Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL." } </script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Apache Camel", "item": "https://camel.apache.org/" }, { "@type": "ListItem", "position": 2, "name": "Camel Components", "item": "https://camel.apache.org/components/4.22.x/index.html" }, { "@type": "ListItem", "position": 3, "name": "Next (Pre-release)", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 4, "name": "Components", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 5, "name": "DHIS2", "item": "https://camel.apache.org/components/next/dhis2-component.html" }] } </script> </body> </html> 
+      steps:
+        - setHeader:
+            name: CamelDhis2.queryParams
+            groovy: "['cacheClear':'true']"
+        - to:
+            uri: dhis2:post/resource
+            parameters:
+              path: maintenance
+              client: "#dhis2Client"</code></pre> </div> </div> </div> </div> </div> </li> </ul> </div> </div> </div> </article> <aside class="toc sidebar" aria-label="Table of contents" data-title="Contents" data-levels="2"> <div class="toc-menu"></div> </aside> </div> </main> </div> <footer> <div class="footer-tools"> <a href="#top" title="Reach the top of the page">Back to top</a> </div> <div class="footer"> <div class="footer-brand"> <img class="footer-logo" src="../../_/img/logo-d-a567cee6fa.svg" alt="Apache Camel Logo" aria-label="white silhouette of a camel in front of a sand dune"> <span class="footer-wordmark">Apache Camel</span> <p class="footer-blurb">Open source integration framework. An Apache Software Foundation project, available under the Apache v2 license.</p> </div> <dl class="footer-column"> <dt><span class="footer-column-title">Overview</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../blog/">Blog</a></dd> <dd><a href="../../docs/">Documentation</a></dd> <dd><a href="../../tooling/">Tooling</a></dd> <dd><a href="../../community/">Community</a></dd> <dd><a href="../../download/">Download</a></dd> <dd><a href="../../projects/">All projects</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Documentation</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../manual/">User Manual</a></dd> <dd><a href="../../components/next/index.html">Components</a></dd> <dd><a href="../../camel-k/next/">Camel-K</a></dd> <dd><a href="../../camel-kafka-connector/next/">Camel Kafka Connector</a></dd> <dd><a href="../../camel-quarkus/next/">Camel Quarkus</a></dd> <dd><a href="../../camel-spring-boot/next/">Camel Spring Boot</a></dd> <dd><a href="../../camel-karaf/latest/">Camel Karaf</a></dd> <dd><a href="../../manual/faq/index.html">FAQ</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Community</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../community/support/">Support</a></dd> <dd><a href="../../community/contributing/">Contributing</a></dd> <dd><a href="../../community/mailing-list/">Mailing Lists</a></dd> <dd><a href="../../community/user-stories/">Who Uses Camel</a></dd> <dd><a href="../../community/articles/">Articles</a></dd> <dd><a href="../../community/books/">Books</a></dd> <dd><a href="../../community/team/">Team</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">About</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../acknowledgments/">Acknowledgments</a></dd> <dd><a href="https://www.apache.org/events/current-event.html" target="_blank" rel="noopener noreferrer nofollow" title="Apache Events">Apache Events</a></dd> <dd><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer nofollow" title="License">License</a></dd> <dd><a href="https://www.apache.org/security/" target="_blank" rel="noopener noreferrer nofollow" title="Security">Security</a></dd> <dd><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noopener noreferrer nofollow" title="Sponsorship">Sponsorship</a></dd> <dd><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noopener noreferrer nofollow" title="Thanks">Thanks</a></dd> <dd><a href="../../trust/">Trust</a></dd> </dl> <p class="remark"> &copy; 2004-2026 The <a href="https://apache.org">Apache Software Foundation</a>.<br> Apache Camel, Camel, Apache, the Apache feather logo, and the Apache Camel project logo are trademarks of The Apache Software Foundation. All other marks mentioned may be trademarks or registered trademarks of their respective owners. </p> <div class="resources"> <div class="context"> <a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noopener noreferrer nofollow">Privacy Policy</a> </div> <div class="context"> <a href="https://www.apache.org/foundation/policies/conduct" target="_blank" rel="noopener noreferrer nofollow">Code of Conduct</a> </div> <div class="context"> <a href="../../sitemap/">Sitemap</a> </div> </div> <div class="footer-icons"> <a href="https://github.com/apache/camel/" rel="noopener noreferrer nofollow" title="Collaborate on GitHub"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#github"/></svg></a> <a href="https://camel.zulipchat.com" rel="noopener noreferrer nofollow" title="Chat on Zulip"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#zulip"/></svg></a> <a href="https://twitter.com/ApacheCamel" rel="noopener noreferrer nofollow" title="Follow Apache Camel on Twitter"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#twitter"/></svg></a> <a href="https://www.linkedin.com/groups/2447439/" rel="noopener noreferrer nofollow" title="Apache Camel group on Linkedin"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#linkedin"/></svg></a> <a href="../../blog/index.xml" title="Subscribe to RSS Feed"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#rss"/></svg></a> </div> </div> </footer> <script src="../../_/js/vendor/docsearch-5c0cf4ef3a.js"></script> <script src="../../_/js/site-2aad2f7ea4.js"></script> <script async src="../../_/js/vendor/highlight-34ee5f32ef.js"></script> <script async src="../../_/js/vendor/svg4everybody-8ce71b89ac.js"></script> <script async src="../../_/js/vendor/tabs-3496628f2d.js" data-sync-storage-key="preferred-tab"></script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "Organization", "name": "Apache Camel", "url": "https://camel.apache.org", "sameAs": [ "https://twitter.com/ApacheCamel" ], "logo": "../../_/img/logo-d-a567cee6fa.svg", "description": "Apache Camel ™ is a versatile open-source integration framework based on known Enterprise Integration Patterns. Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL." } </script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Apache Camel", "item": "https://camel.apache.org/" }, { "@type": "ListItem", "position": 2, "name": "Camel Components", "item": "https://camel.apache.org/components/4.22.x/index.html" }, { "@type": "ListItem", "position": 3, "name": "Next (Pre-release)", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 4, "name": "Components", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 5, "name": "DHIS2", "item": "https://camel.apache.org/components/next/dhis2-component.html" }] } </script> </body> </html> 

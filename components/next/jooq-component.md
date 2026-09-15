@@ -250,13 +250,15 @@ SQL could be executed using JOOQ’s objects "Query" or "ResultQuery". Also, the
     
 
 ```java
-from("jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?query=select * from book_store x where x.name = 'test'")
+from("direct:start")
+    .to("jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?operation=fetch&query=select * from book_store x where x.name = 'test'")
     .to("bean:myBusinessLogic");
 ```
 
 ```xml
 <route>
-    <from uri="jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?query=select * from book_store x where x.name = 'test'"/>
+    <from uri="direct:start"/>
+    <to uri="jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?operation=fetch&amp;query=select * from book_store x where x.name = 'test'"/>
     <to uri="bean:myBusinessLogic"/>
 </route>
 ```
@@ -264,12 +266,15 @@ from("jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?q
 ```yaml
 - route:
     from:
-      uri: jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord
-      parameters:
-        query: "select * from book_store x where x.name = 'test'"
-    steps:
-      - to:
-          uri: bean:myBusinessLogic
+      uri: direct:start
+      steps:
+        - to:
+            uri: jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord
+            parameters:
+              operation: fetch
+              query: "select * from book_store x where x.name = 'test'"
+        - to:
+            uri: bean:myBusinessLogic
 ```
 
 See the examples below.

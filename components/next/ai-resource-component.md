@@ -158,7 +158,9 @@ from("ai-resource:app_config"
 ```xml
 <route>
   <from uri="ai-resource:app_config?resourceUri=camel:///config/app.json&amp;tags=crm&amp;description=Current application configuration&amp;mimeType=application/json"/>
-  <pollEnrich uri="file:config?fileName=app.json&amp;noop=true&amp;idempotent=false" timeout="5000"/>
+  <pollEnrich timeout="5000">
+    <constant>file:config?fileName=app.json&amp;noop=true&amp;idempotent=false</constant>
+  </pollEnrich>
 </route>
 ```
 
@@ -172,9 +174,11 @@ from("ai-resource:app_config"
         description: "Current application configuration"
         mimeType: application/json
       steps:
-        - poll-enrich:
-            uri: "file:config?fileName=app.json&noop=true&idempotent=false"
+        - pollEnrich:
             timeout: 5000
+            expression:
+              constant:
+                expression: "file:config?fileName=app.json&noop=true&idempotent=false"
 ```
 
 ### Binary resource

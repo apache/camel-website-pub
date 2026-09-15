@@ -216,14 +216,14 @@ from("direct:list")
 - route:
     from:
       uri: direct:list
-    steps:
-      - to:
-          uri: kubernetes-namespaces:///
-          parameters:
-            kubernetesClient: "#kubernetesClient"
-            operation: listNamespaces
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: kubernetes-namespaces:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listNamespaces
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of namespaces from your cluster
@@ -272,9 +272,9 @@ from("kubernetes-namespaces://{{kubernetes-host}}?oauthToken={{kubernetes-token}
       uri: kubernetes-namespaces://{{kubernetes-host}}
       parameters:
         oauthToken: "{{kubernetes-token}}"
-    steps:
-      - to:
-          uri: log:result
+      steps:
+        - to:
+            uri: log:result
 ```
 
 This consumer returns a message per event received for all Namespaces in the cluster.

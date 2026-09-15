@@ -206,19 +206,19 @@ from("direct:projects")
 - route:
     from:
       uri: direct:projects
-    steps:
-      - setHeader:
-          name: lic
-          constant: ASF
-      - setHeader:
-          name: min
-          constant: "123"
-      - setBody:
-          constant: "select * from projects where license = :?lic and id > :?min order by id"
-      - to:
-          uri: jdbc:myDataSource
-          parameters:
-            useHeadersAsParameters: true
+      steps:
+        - setHeader:
+            name: lic
+            constant: ASF
+        - setHeader:
+            name: min
+            constant: "123"
+        - setBody:
+            constant: "select * from projects where license = :?lic and id > :?min order by id"
+        - to:
+            uri: jdbc:myDataSource
+            parameters:
+              useHeadersAsParameters: true
 ```
 
 You can also store the header values in a `java.util.Map` and store the map on the headers with the key `CamelJdbcParameters`.
@@ -305,7 +305,7 @@ from("direct:hello")
   <from uri="direct:hello"/>
   <to uri="jdbc:testdb?outputType=StreamList"/>
   <split streaming="true">
-    <body/>
+    <simple>${body}</simple>
     <to uri="mock:result"/>
   </split>
 </route>
@@ -315,18 +315,19 @@ from("direct:hello")
 - route:
     from:
       uri: direct:hello
-    steps:
-      - to:
-          uri: jdbc:testdb
-          parameters:
-            outputType: StreamList
-      - split:
-          expression:
-            body: {}
-          streaming: true
-          steps:
-            - to:
-                uri: mock:result
+      steps:
+        - to:
+            uri: jdbc:testdb
+            parameters:
+              outputType: StreamList
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            streaming: true
+            steps:
+              - to:
+                  uri: mock:result
 ```
 
 ### Polling the database every minute
@@ -364,13 +365,13 @@ from("timer://foo?period=60000")
       uri: timer://foo
       parameters:
         period: "60000"
-    steps:
-      - setBody:
-          constant: "select * from customer"
-      - to:
-          uri: jdbc:testdb
-      - to:
-          uri: activemq:queue:customers
+      steps:
+        - setBody:
+            constant: "select * from customer"
+        - to:
+            uri: jdbc:testdb
+        - to:
+            uri: activemq:queue:customers
 ```
 
 ### Move Data Between Data Sources

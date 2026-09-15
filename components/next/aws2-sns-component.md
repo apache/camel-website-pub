@@ -547,13 +547,13 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: aws2-sns://test-camel-sns1
-          parameters:
-            amazonSNSClient: "#amazonSNSClient"
-            subscribeSNStoSQS: true
-            queueArn: "arn:aws:sqs:eu-central-1:123456789012:test_camel"
+      steps:
+        - to:
+            uri: aws2-sns://test-camel-sns1
+            parameters:
+              amazonSNSClient: "#amazonSNSClient"
+              subscribeSNStoSQS: true
+              queueArn: "arn:aws:sqs:eu-central-1:123456789012:test_camel"
 ```
 
 The `#amazonSNSClient` refers to a `SnsClient` in the Registry. By specifying `subscribeSNStoSQS` to true and a `queueArn` of an existing SQS Queue, you’ll be able to subscribe your SQS Queue to your SNS Topic.
@@ -680,12 +680,12 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: aws2-sns://camel-topic
-          parameters:
-            subject: "The+subject+message"
-            autoCreateTopic: true
+      steps:
+        - to:
+            uri: aws2-sns://camel-topic
+            parameters:
+              subject: "The+subject+message"
+              autoCreateTopic: true
 ```
 
 Sending batch to a topic

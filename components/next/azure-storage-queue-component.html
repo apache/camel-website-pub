@@ -12,9 +12,9 @@
       uri: azure-storage-queue://storageAccount/messageQueue
       parameters:
         accessKey: yourAccessKey
-    steps:
-      - to:
-          uri: file://queuedirectory</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_advanced_azure_storage_queue_configuration"><a class="anchor" href="#_advanced_azure_storage_queue_configuration"></a>Advanced Azure Storage Queue configuration</h3> <div class="paragraph"> <p>If your Camel Application is running behind a firewall or if you need to have more control over the <code>QueueServiceClient</code> instance configuration, you can create your own instance:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic Azure SDK client configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">StorageSharedKeyCredential credential = new StorageSharedKeyCredential("yourAccountName", "yourAccessKey");
+      steps:
+        - to:
+            uri: file://queuedirectory</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_advanced_azure_storage_queue_configuration"><a class="anchor" href="#_advanced_azure_storage_queue_configuration"></a>Advanced Azure Storage Queue configuration</h3> <div class="paragraph"> <p>If your Camel Application is running behind a firewall or if you need to have more control over the <code>QueueServiceClient</code> instance configuration, you can create your own instance:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic Azure SDK client configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">StorageSharedKeyCredential credential = new StorageSharedKeyCredential("yourAccountName", "yourAccessKey");
 String uri = String.format("https://%s.queue.core.windows.net", "yourAccountName");
 
 QueueServiceClient client = new QueueServiceClientBuilder()
@@ -46,12 +46,12 @@ context.getRegistry().bind("client", client);</code></pre> </div> </div> <div cl
       parameters:
         serviceClient: "#client"
         maxMessages: 5
-    steps:
-      - to:
-          uri: file://outputFolder
-          parameters:
-            fileName: output.txt
-            fileExist: Append</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_producer_operations_examples"><a class="anchor" href="#_producer_operations_examples"></a>Producer Operations Examples</h3> <div class="ulist"> <ul> <li> <p><code>listQueues</code>:</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires SDK QueuesSegmentOptions object</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - to:
+            uri: file://outputFolder
+            parameters:
+              fileName: output.txt
+              fileExist: Append</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_producer_operations_examples"><a class="anchor" href="#_producer_operations_examples"></a>Producer Operations Examples</h3> <div class="ulist"> <ul> <li> <p><code>listQueues</code>:</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires SDK QueuesSegmentOptions object</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .process(exchange -&gt; {
         exchange.getIn().setHeader("CamelAzureStorageQueueSegmentOptions",
                 new QueuesSegmentOptions().setPrefix("awesome"));

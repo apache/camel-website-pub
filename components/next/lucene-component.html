@@ -13,15 +13,15 @@ lucene:searcherName:query[?options]</pre> </div> </div> </div> </div> <div class
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: lucene:whitespaceQuotesIndex:insert
-          parameters:
-            analyzer: "#whitespaceAnalyzer"
-            indexDir: "#whitespace"
-            srcDir: "#load_dir"
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_example_2_loading_properties_into_the_jndi_registry_in_the_camel_context"><a class="anchor" href="#_example_2_loading_properties_into_the_jndi_registry_in_the_camel_context"></a>Example 2: Loading properties into the JNDI registry in the Camel Context</h3> <div class="listingblock"> <div class="title"><em>Java-only: programmatic CamelContext and registry configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CamelContext context = new DefaultCamelContext(createRegistry());
+      steps:
+        - to:
+            uri: lucene:whitespaceQuotesIndex:insert
+            parameters:
+              analyzer: "#whitespaceAnalyzer"
+              indexDir: "#whitespace"
+              srcDir: "#load_dir"
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_example_2_loading_properties_into_the_jndi_registry_in_the_camel_context"><a class="anchor" href="#_example_2_loading_properties_into_the_jndi_registry_in_the_camel_context"></a>Example 2: Loading properties into the JNDI registry in the Camel Context</h3> <div class="listingblock"> <div class="title"><em>Java-only: programmatic CamelContext and registry configuration</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">CamelContext context = new DefaultCamelContext(createRegistry());
 Registry registry = context.getRegistry();
 registry.bind("whitespace", new File("./whitespaceIndexDir"));
 registry.bind("load_dir", new File("src/test/resources/sources"));
@@ -48,27 +48,27 @@ from("direct:next")
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: CamelLuceneQuery
-          constant: Seinfeld
-      - to:
-          uri: lucene:searchIndex:query
-          parameters:
-            analyzer: "#whitespaceAnalyzer"
-            indexDir: "#whitespace"
-            maxHits: 20
-      - to:
-          uri: direct:next
+      steps:
+        - setHeader:
+            name: CamelLuceneQuery
+            constant: Seinfeld
+        - to:
+            uri: lucene:searchIndex:query
+            parameters:
+              analyzer: "#whitespaceAnalyzer"
+              indexDir: "#whitespace"
+              maxHits: 20
+        - to:
+            uri: direct:next
 
 - route:
     from:
       uri: direct:next
-    steps:
-      - to:
-          uri: bean:searchResultProcessor
-      - to:
-          uri: mock:searchResult</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_example_3_performing_searches_using_a_query_processor"><a class="anchor" href="#_example_3_performing_searches_using_a_query_processor"></a>Example 3: Performing searches using a Query Processor</h3> <div class="listingblock"> <div class="title"><em>Java-only: uses LuceneQueryProcessor</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - to:
+            uri: bean:searchResultProcessor
+        - to:
+            uri: mock:searchResult</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_example_3_performing_searches_using_a_query_processor"><a class="anchor" href="#_example_3_performing_searches_using_a_query_processor"></a>Example 3: Performing searches using a Query Processor</h3> <div class="listingblock"> <div class="title"><em>Java-only: uses LuceneQueryProcessor</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
     .setHeader("CamelLuceneQuery", constant("Rodney Dangerfield"))
     .process(new LuceneQueryProcessor("target/stdindexDir", analyzer, null, 20))
     .to("direct:next");

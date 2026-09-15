@@ -218,14 +218,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - setHeader:
-          name: myQuery
-          constant: "{books{id name}}"
-      - to:
-          uri: graphql://http://example.com/graphql
-          parameters:
-            queryHeader: myQuery
+      steps:
+        - setHeader:
+            name: myQuery
+            constant: "{books{id name}}"
+        - to:
+            uri: graphql://http://example.com/graphql
+            parameters:
+              queryHeader: myQuery
 ```
 
 More complex queries can be stored in a file and referenced in the URI:

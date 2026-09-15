@@ -177,13 +177,13 @@ Triggering the Spring Batch job execution with the `JobLauncher` set explicitly.
 
 ```java
 from("direct:startBatch")
-    .to("spring-batch:myJob?jobLauncherRef=myJobLauncher");
+    .to("spring-batch:myJob?jobLauncher=#myJobLauncher");
 ```
 
 ```xml
 <route>
   <from uri="direct:startBatch"/>
-  <to uri="spring-batch:myJob?jobLauncherRef=myJobLauncher"/>
+  <to uri="spring-batch:myJob?jobLauncher=#myJobLauncher"/>
 </route>
 ```
 
@@ -195,7 +195,7 @@ from("direct:startBatch")
         - to:
             uri: spring-batch:myJob
             parameters:
-              jobLauncherRef: myJobLauncher
+              jobLauncher: "#myJobLauncher"
 ```
 
 A `JobExecution` instance returned by the `JobLauncher` is forwarded by the `SpringBatchProducer` as the output message. You can use the `JobExecution` instance to perform some operations using the Spring Batch API directly.

@@ -40,12 +40,13 @@ from("direct:chat")
 ```
 
 ```yaml
-- to:
-    uri: openai:chat-completion
-    parameters:
-      baseUrl: http://localhost:11434/v1
-      model: llama3.2
-      userMessage: What is Apache Camel?
+steps:
+  - to:
+      uri: openai:chat-completion
+      parameters:
+        baseUrl: http://localhost:11434/v1
+        model: llama3.2
+        userMessage: What is Apache Camel?
 ```
 
 For local embeddings, use an embedding model such as `nomic-embed-text` (see the **Embedding Models by Provider** table below).
@@ -176,13 +177,14 @@ from("direct:chat")
 OpenRouter accepts a `provider` object in the request body to control routing order and fallbacks. Pass it through the `additionalBodyProperty` option as a JSON value — the component parses JSON-valued properties and adds them to the request body:
 
 ```yaml
-- to:
-    uri: openai:chat-completion
-    parameters:
-      baseUrl: https://openrouter.ai/api/v1
-      apiKey: "{{openrouter.api.key}}"
-      model: anthropic/claude-sonnet-4-20250514
-      additionalBodyProperty.provider: '{"order":["anthropic","google"],"allow_fallbacks":false}'
+steps:
+  - to:
+      uri: openai:chat-completion
+      parameters:
+        baseUrl: https://openrouter.ai/api/v1
+        apiKey: "{{openrouter.api.key}}"
+        model: anthropic/claude-sonnet-4-20250514
+        additionalBodyProperty.provider: '{"order":["anthropic","google"],"allow_fallbacks":false}'
 ```
 
 > **Note**
@@ -202,9 +204,10 @@ OpenRouter accepts a `provider` object in the request body to control routing or
 Example using Ollama for local embeddings:
 
 ```yaml
-- to:
-    uri: openai:embeddings
-    parameters:
-      baseUrl: http://localhost:11434/v1
-      embeddingModel: nomic-embed-text
+steps:
+  - to:
+      uri: openai:embeddings
+      parameters:
+        baseUrl: http://localhost:11434/v1
+        embeddingModel: nomic-embed-text
 ```

@@ -13,18 +13,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:createDatabase
-    steps:
-      - setHeader:
-          name: CamelAwsTimestreamDatabaseName
-          constant: testDb
-      - setHeader:
-          name: CamelAwsTimestreamKmsKeyId
-          constant: testKmsKey
-      - to:
-          uri: aws2-timestream://write:test
-          parameters:
-            awsTimestreamWriteClient: "#awsTimestreamWriteClient"
-            operation: createDatabase</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>Query Operation</p> <div class="ulist"> <ul> <li> <p>query: this operation will execute a timestream query</p> </li> </ul> </div> </li> </ul> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:query")
+      steps:
+        - setHeader:
+            name: CamelAwsTimestreamDatabaseName
+            constant: testDb
+        - setHeader:
+            name: CamelAwsTimestreamKmsKeyId
+            constant: testKmsKey
+        - to:
+            uri: aws2-timestream://write:test
+            parameters:
+              awsTimestreamWriteClient: "#awsTimestreamWriteClient"
+              operation: createDatabase</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>Query Operation</p> <div class="ulist"> <ul> <li> <p>query: this operation will execute a timestream query</p> </li> </ul> </div> </li> </ul> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:query")
     .setHeader(Timestream2Constants.QUERY_STRING, constant("SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10"))
     .to("aws2-timestream://query:test?awsTimestreamQueryClient=#awsTimestreamQueryClient&amp;operation=query");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:query"/&gt;
@@ -35,15 +35,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:query
-    steps:
-      - setHeader:
-          name: CamelAwsTimestreamQueryString
-          constant: "SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10"
-      - to:
-          uri: aws2-timestream://query:test
-          parameters:
-            awsTimestreamQueryClient: "#awsTimestreamQueryClient"
-            operation: query</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_pojo_as_body"><a class="anchor" href="#_using_a_pojo_as_body"></a>Using a POJO as body</h3> <div class="paragraph"> <p>Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS Timestream there are multiple operations you can submit, as an example for Create state machine request, you can do something like:</p> </div> <div class="ulist"> <ul> <li> <p>Write Operation</p> <div class="ulist"> <ul> <li> <p>createDatabase: this operation will create a timestream database</p> </li> </ul> </div> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses AWS SDK POJO request builder as message body</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+      steps:
+        - setHeader:
+            name: CamelAwsTimestreamQueryString
+            constant: "SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10"
+        - to:
+            uri: aws2-timestream://query:test
+            parameters:
+              awsTimestreamQueryClient: "#awsTimestreamQueryClient"
+              operation: query</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_pojo_as_body"><a class="anchor" href="#_using_a_pojo_as_body"></a>Using a POJO as body</h3> <div class="paragraph"> <p>Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS Timestream there are multiple operations you can submit, as an example for Create state machine request, you can do something like:</p> </div> <div class="ulist"> <ul> <li> <p>Write Operation</p> <div class="ulist"> <ul> <li> <p>createDatabase: this operation will create a timestream database</p> </li> </ul> </div> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses AWS SDK POJO request builder as message body</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
   .setBody(CreateDatabaseRequest.builder().database(Database.builder().databaseName("testDb").kmsKeyId("testKmsKey").build()).build())
   .to("aws2-timestream://write:test?awsTimestreamWriteClient=#awsTimestreamWriteClient&amp;operation=createDatabase&amp;pojoRequest=true")</code></pre> </div> </div> <div class="ulist"> <ul> <li> <p>Query Operation</p> <div class="ulist"> <ul> <li> <p>query: this operation will execute a timestream query</p> </li> </ul> </div> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses AWS SDK POJO request builder as message body</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:query")
     .setBody(QueryRequest.builder().queryString("SELECT * FROM testDb.testTable ORDER BY time DESC LIMIT 10").build())

@@ -20,11 +20,11 @@ from("direct:paths")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_convert_to_html_with_content_in_body"><a class="anchor" href="#_convert_to_html_with_content_in_body"></a>Convert to HTML with content in body</h3> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_convert_to_html_with_content_in_body"><a class="anchor" href="#_convert_to_html_with_content_in_body"></a>Convert to HTML with content in body</h3> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_HTML?contentInBody=true")
     .process(exchange -&gt; {
         String htmlContent = exchange.getIn().getBody(String.class);
@@ -34,13 +34,13 @@ from("direct:paths")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_HTML
-          parameters:
-            contentInBody: true
-      - process:
-          ref: "htmlProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_extract_structured_data_from_documents"><a class="anchor" href="#_extract_structured_data_from_documents"></a>Extract structured data from documents</h3> <div class="paragraph"> <p>When using docling-serve API mode, <code>EXTRACT_STRUCTURED_DATA</code> returns a <code>DoclingDocument</code> object with table structure recognition enabled by default. In CLI mode, the JSON output is parsed into a <code>DoclingDocument</code>.</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_HTML
+            parameters:
+              contentInBody: true
+        - process:
+            ref: "htmlProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_extract_structured_data_from_documents"><a class="anchor" href="#_extract_structured_data_from_documents"></a>Extract structured data from documents</h3> <div class="paragraph"> <p>When using docling-serve API mode, <code>EXTRACT_STRUCTURED_DATA</code> returns a <code>DoclingDocument</code> object with table structure recognition enabled by default. In CLI mode, the JSON output is parsed into a <code>DoclingDocument</code>.</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:EXTRACT_STRUCTURED_DATA?useDoclingServe=true&amp;contentInBody=true")
     .process(exchange -&gt; {
         DoclingDocument doc = exchange.getIn().getBody(DoclingDocument.class);
@@ -56,14 +56,14 @@ from("direct:paths")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_STRUCTURED_DATA
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - process:
-          ref: "structuredDataProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_convert_with_ocr_disabled"><a class="anchor" href="#_convert_with_ocr_disabled"></a>Convert with OCR disabled</h3> <div class="paragraph"> <p>In CLI mode, use <code>enableOCR=false</code>. In API mode, setting <code>enableOCR=false</code> sends <code>doOcr(false)</code> to the server. You can also use the <code>doOcr</code> property directly for API mode control.</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// CLI mode
+      steps:
+        - to:
+            uri: docling:EXTRACT_STRUCTURED_DATA
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - process:
+            ref: "structuredDataProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_convert_with_ocr_disabled"><a class="anchor" href="#_convert_with_ocr_disabled"></a>Convert with OCR disabled</h3> <div class="paragraph"> <p>In CLI mode, use <code>enableOCR=false</code>. In API mode, setting <code>enableOCR=false</code> sends <code>doOcr(false)</code> to the server. You can also use the <code>doOcr</code> property directly for API mode control.</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// CLI mode
 from("file:///data/documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_MARKDOWN?enableOCR=false")
     .to("file:///data/output");
@@ -77,13 +77,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            enableOCR: false
-      - to:
-          uri: file:///data/output
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              enableOCR: false
+        - to:
+            uri: file:///data/output
 
 # API mode
 - route:
@@ -91,15 +91,15 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            doOcr: false
-            contentInBody: true
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_ocr_and_page_headersfooters"><a class="anchor" href="#_ocr_and_page_headersfooters"></a>OCR and page headers/footers</h3> <div class="paragraph"> <p>Docling recognizes page headers and footers (page numbers, copyright lines, running titles, footnotes, and similar content) during OCR, classifying them as page <em>furniture</em> in docling&#8217;s <code>FURNITURE</code> content layer.</p> </div> <div class="paragraph"> <p>Docling&#8217;s Markdown, text and HTML exports include only the <code>BODY</code> layer by default, so header and footer text is omitted from the converted output even though the OCR engine read it correctly. When using <code>useDoclingServe=true</code>, the component cannot currently include the <code>FURNITURE</code> layer because docling-serve does not expose a content-layer selection option. This is tracked in <a href="https://github.com/docling-project/docling-serve/issues/271">docling-serve#271</a>.</p> </div> </div> <div class="sect2"> <h3 id="_using_headers_to_control_processing"><a class="anchor" href="#_using_headers_to_control_processing"></a>Using headers to control processing</h3> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              doOcr: false
+              contentInBody: true
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_ocr_and_page_headersfooters"><a class="anchor" href="#_ocr_and_page_headersfooters"></a>OCR and page headers/footers</h3> <div class="paragraph"> <p>Docling recognizes page headers and footers (page numbers, copyright lines, running titles, footnotes, and similar content) during OCR, classifying them as page <em>furniture</em> in docling&#8217;s <code>FURNITURE</code> content layer.</p> </div> <div class="paragraph"> <p>Docling&#8217;s Markdown, text and HTML exports include only the <code>BODY</code> layer by default, so header and footer text is omitted from the converted output even though the OCR engine read it correctly. When using <code>useDoclingServe=true</code>, the component cannot currently include the <code>FURNITURE</code> layer because docling-serve does not expose a content-layer selection option. This is tracked in <a href="https://github.com/docling-project/docling-serve/issues/271">docling-serve#271</a>.</p> </div> </div> <div class="sect2"> <h3 id="_using_headers_to_control_processing"><a class="anchor" href="#_using_headers_to_control_processing"></a>Using headers to control processing</h3> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .setHeader("CamelDoclingOperation", constant(DoclingOperations.CONVERT_TO_HTML))
     .setHeader("CamelDoclingEnableOCR", constant(true))
     .setHeader("CamelDoclingOCRLanguage", constant("es"))
@@ -109,20 +109,20 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - setHeader:
-          name: "CamelDoclingOperation"
-          constant: "CONVERT_TO_HTML"
-      - setHeader:
-          name: "CamelDoclingEnableOCR"
-          constant: true
-      - setHeader:
-          name: "CamelDoclingOCRLanguage"
-          constant: "es"
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN  # Operation will be overridden by header
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_processing_with_custom_arguments"><a class="anchor" href="#_processing_with_custom_arguments"></a>Processing with custom arguments</h3> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - setHeader:
+            name: "CamelDoclingOperation"
+            constant: "CONVERT_TO_HTML"
+        - setHeader:
+            name: "CamelDoclingEnableOCR"
+            constant: true
+        - setHeader:
+            name: "CamelDoclingOCRLanguage"
+            constant: "es"
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN  # Operation will be overridden by header
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_processing_with_custom_arguments"><a class="anchor" href="#_processing_with_custom_arguments"></a>Processing with custom arguments</h3> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .process(exchange -&gt; {
         List&lt;String&gt; customArgs = Arrays.asList("--verbose", "--preserve-tables");
         exchange.getIn().setHeader("CamelDoclingCustomArguments", customArgs);
@@ -133,17 +133,17 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - setHeader:
-          name: "CamelDoclingCustomArguments"
-          expression:
-            method:
-              ref: "customArgsBean"
-              method: "createCustomArgs"
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_custom_argument_validation"><a class="anchor" href="#_custom_argument_validation"></a>Custom argument validation</h3> <div class="paragraph"> <p>When passing custom CLI arguments via the <code>CamelDoclingCustomArguments</code> header, the component enforces an <strong>allowlist</strong> of recognized docling CLI flags. Only the following flags are permitted:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Category</th> <th class="tableblock halign-left valign-top">Allowed flags</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Input/output format</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--from</code>, <code>--to</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Pipeline</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--pipeline</code>, <code>--vlm-model</code>, <code>--asr-model</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">OCR</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--ocr</code>, <code>--no-ocr</code>, <code>--force-ocr</code>, <code>--no-force-ocr</code>, <code>--ocr-engine</code>, <code>--ocr-lang</code>, <code>--psm</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Tables</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--tables</code>, <code>--no-tables</code>, <code>--table-mode</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">PDF</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--pdf-backend</code>, <code>--pdf-password</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Enrichment</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--enrich-code</code>, <code>--no-enrich-code</code>, <code>--enrich-formula</code>, <code>--no-enrich-formula</code>, <code>--enrich-picture-classes</code>, <code>--no-enrich-picture-classes</code>, <code>--enrich-picture-description</code>, <code>--no-enrich-picture-description</code>, <code>--enrich-chart-extraction</code>, <code>--no-enrich-chart-extraction</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Output formatting</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--image-export-mode</code>, <code>--show-layout</code>, <code>--no-show-layout</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Advanced</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--headers</code>, <code>--artifacts-path</code>, <code>--enable-remote-services</code>, <code>--no-enable-remote-services</code>, <code>--allow-external-plugins</code>, <code>--no-allow-external-plugins</code>, <code>--show-external-plugins</code>, <code>--no-show-external-plugins</code>, <code>--document-timeout</code>, <code>--device</code>, <code>--num-threads</code>, <code>--page-batch-size</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Debug</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--verbose</code>, <code>-v</code> / <code>-vv</code> / <code>-vvv</code>, <code>--debug-visualize-cells</code>, <code>--no-debug-visualize-cells</code>, <code>--debug-visualize-ocr</code>, <code>--no-debug-visualize-ocr</code>, <code>--debug-visualize-layout</code>, <code>--no-debug-visualize-layout</code>, <code>--debug-visualize-tables</code>, <code>--no-debug-visualize-tables</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Performance</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--abort-on-error</code>, <code>--no-abort-on-error</code>, <code>--profiling</code>, <code>--no-profiling</code>, <code>--save-profiling</code>, <code>--no-save-profiling</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Info</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--version</code>, <code>--help</code>, <code>--logo</code></p></td> </tr> </tbody> </table></div> <div class="paragraph"> <p>The <code>--output</code> (<code>-o</code>) flag is <strong>not permitted</strong> because the output directory is managed by the producer. Use the <code>CamelDoclingOutputFilePath</code> header or endpoint configuration instead.</p> </div> <div class="paragraph"> <p>Additionally, the following are rejected:</p> </div> <div class="ulist"> <ul> <li> <p><strong>Shell metacharacters</strong>: <code>;</code>, <code>|</code>, <code> ` </code>, <code>$()</code> — blocked as defense-in-depth even though ProcessBuilder does not interpret them.</p> </li> <li> <p><strong>Path traversal</strong>: <code>../</code>, <code>..\</code>, and paths that resolve to traversal after normalization.</p> </li> <li> <p><strong>Unknown flags</strong>: any flag not in the allowlist above.</p> </li> </ul> </div> </div> <div class="sect2"> <h3 id="_extracting_document_metadata"><a class="anchor" href="#_extracting_document_metadata"></a>Extracting document metadata</h3> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - setHeader:
+            name: "CamelDoclingCustomArguments"
+            expression:
+              method:
+                ref: "customArgsBean"
+                method: "createCustomArgs"
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_custom_argument_validation"><a class="anchor" href="#_custom_argument_validation"></a>Custom argument validation</h3> <div class="paragraph"> <p>When passing custom CLI arguments via the <code>CamelDoclingCustomArguments</code> header, the component enforces an <strong>allowlist</strong> of recognized docling CLI flags. Only the following flags are permitted:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Category</th> <th class="tableblock halign-left valign-top">Allowed flags</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Input/output format</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--from</code>, <code>--to</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Pipeline</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--pipeline</code>, <code>--vlm-model</code>, <code>--asr-model</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">OCR</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--ocr</code>, <code>--no-ocr</code>, <code>--force-ocr</code>, <code>--no-force-ocr</code>, <code>--ocr-engine</code>, <code>--ocr-lang</code>, <code>--psm</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Tables</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--tables</code>, <code>--no-tables</code>, <code>--table-mode</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">PDF</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--pdf-backend</code>, <code>--pdf-password</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Enrichment</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--enrich-code</code>, <code>--no-enrich-code</code>, <code>--enrich-formula</code>, <code>--no-enrich-formula</code>, <code>--enrich-picture-classes</code>, <code>--no-enrich-picture-classes</code>, <code>--enrich-picture-description</code>, <code>--no-enrich-picture-description</code>, <code>--enrich-chart-extraction</code>, <code>--no-enrich-chart-extraction</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Output formatting</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--image-export-mode</code>, <code>--show-layout</code>, <code>--no-show-layout</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Advanced</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--headers</code>, <code>--artifacts-path</code>, <code>--enable-remote-services</code>, <code>--no-enable-remote-services</code>, <code>--allow-external-plugins</code>, <code>--no-allow-external-plugins</code>, <code>--show-external-plugins</code>, <code>--no-show-external-plugins</code>, <code>--document-timeout</code>, <code>--device</code>, <code>--num-threads</code>, <code>--page-batch-size</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Debug</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--verbose</code>, <code>-v</code> / <code>-vv</code> / <code>-vvv</code>, <code>--debug-visualize-cells</code>, <code>--no-debug-visualize-cells</code>, <code>--debug-visualize-ocr</code>, <code>--no-debug-visualize-ocr</code>, <code>--debug-visualize-layout</code>, <code>--no-debug-visualize-layout</code>, <code>--debug-visualize-tables</code>, <code>--no-debug-visualize-tables</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Performance</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--abort-on-error</code>, <code>--no-abort-on-error</code>, <code>--profiling</code>, <code>--no-profiling</code>, <code>--save-profiling</code>, <code>--no-save-profiling</code></p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">Info</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>--version</code>, <code>--help</code>, <code>--logo</code></p></td> </tr> </tbody> </table></div> <div class="paragraph"> <p>The <code>--output</code> (<code>-o</code>) flag is <strong>not permitted</strong> because the output directory is managed by the producer. Use the <code>CamelDoclingOutputFilePath</code> header or endpoint configuration instead.</p> </div> <div class="paragraph"> <p>Additionally, the following are rejected:</p> </div> <div class="ulist"> <ul> <li> <p><strong>Shell metacharacters</strong>: <code>;</code>, <code>|</code>, <code> ` </code>, <code>$()</code> — blocked as defense-in-depth even though ProcessBuilder does not interpret them.</p> </li> <li> <p><strong>Path traversal</strong>: <code>../</code>, <code>..\</code>, and paths that resolve to traversal after normalization.</p> </li> <li> <p><strong>Unknown flags</strong>: any flag not in the allowlist above.</p> </li> </ul> </div> </div> <div class="sect2"> <h3 id="_extracting_document_metadata"><a class="anchor" href="#_extracting_document_metadata"></a>Extracting document metadata</h3> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:EXTRACT_METADATA")
     .process(exchange -&gt; {
         DocumentMetadata metadata = exchange.getIn().getBody(DocumentMetadata.class);
@@ -164,15 +164,15 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_METADATA
-      - log:
-          message: "Document: ${header.CamelDoclingMetadataTitle} (${header.CamelDoclingMetadataDocumentType})"
-      - log:
-          message: "Pages: ${header.CamelDoclingMetadataPageCount}"
-      - process:
-          ref: "metadataProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_extract_metadata_with_all_fields"><a class="anchor" href="#_extract_metadata_with_all_fields"></a>Extract metadata with all fields</h3> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:EXTRACT_METADATA
+        - log:
+            message: "Document: ${header.CamelDoclingMetadataTitle} (${header.CamelDoclingMetadataDocumentType})"
+        - log:
+            message: "Pages: ${header.CamelDoclingMetadataPageCount}"
+        - process:
+            ref: "metadataProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_extract_metadata_with_all_fields"><a class="anchor" href="#_extract_metadata_with_all_fields"></a>Extract metadata with all fields</h3> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:EXTRACT_METADATA?includeRawMetadata=true")
     .process(exchange -&gt; {
         DocumentMetadata metadata = exchange.getIn().getBody(DocumentMetadata.class);
@@ -187,13 +187,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_METADATA
-          parameters:
-            includeRawMetadata: true
-      - process:
-          ref: "fullMetadataProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_route_documents_based_on_metadata"><a class="anchor" href="#_route_documents_based_on_metadata"></a>Route documents based on metadata</h3> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:EXTRACT_METADATA
+            parameters:
+              includeRawMetadata: true
+        - process:
+            ref: "fullMetadataProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_route_documents_based_on_metadata"><a class="anchor" href="#_route_documents_based_on_metadata"></a>Route documents based on metadata</h3> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:EXTRACT_METADATA")
     .choice()
         .when(simple("${header.CamelDoclingMetadataPageCount} &gt; 100"))
@@ -202,9 +202,6 @@ from("file:///data/documents?include=.*\\.pdf")
         .when(simple("${header.CamelDoclingMetadataLanguage} == 'fr'"))
             .log("French document")
             .to("file:///data/french-docs")
-        .when(simple("${header.CamelDoclingMetadataAuthor} contains 'Smith'"))
-            .log("Document by Smith")
-            .to("file:///data/smith-docs")
         .otherwise()
             .to("file:///data/other-docs")
     .end();</code></pre> </div> </div> </div> <div id="_tabs_9_yaml--panel" class="tabpanel" aria-labelledby="_tabs_9_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
@@ -212,39 +209,31 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_METADATA
-      - choice:
-          when:
-            - expression:
-                simple:
-                  expression: "${header.CamelDoclingMetadataPageCount} &gt; 100"
+      steps:
+        - to:
+            uri: docling:EXTRACT_METADATA
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelDoclingMetadataPageCount} &gt; 100"
+                steps:
+                  - log:
+                      message: "Large document with ${header.CamelDoclingMetadataPageCount} pages"
+                  - to:
+                      uri: file:///data/large-docs
+              - expression:
+                  simple:
+                    expression: "${header.CamelDoclingMetadataLanguage} == 'fr'"
+                steps:
+                  - log:
+                      message: "French document"
+                  - to:
+                      uri: file:///data/french-docs
+            otherwise:
               steps:
-                - log:
-                    message: "Large document with ${header.CamelDoclingMetadataPageCount} pages"
                 - to:
-                    uri: file:///data/large-docs
-            - expression:
-                simple:
-                  expression: "${header.CamelDoclingMetadataLanguage} == 'fr'"
-              steps:
-                - log:
-                    message: "French document"
-                - to:
-                    uri: file:///data/french-docs
-            - expression:
-                simple:
-                  expression: "${header.CamelDoclingMetadataAuthor} contains 'Smith'"
-              steps:
-                - log:
-                    message: "Document by Smith"
-                - to:
-                    uri: file:///data/smith-docs
-          otherwise:
-            steps:
-              - to:
-                  uri: file:///data/other-docs</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_extract_metadata_without_headers"><a class="anchor" href="#_extract_metadata_without_headers"></a>Extract metadata without headers</h3> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+                    uri: file:///data/other-docs</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_extract_metadata_without_headers"><a class="anchor" href="#_extract_metadata_without_headers"></a>Extract metadata without headers</h3> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:EXTRACT_METADATA?includeMetadataInHeaders=false")
     .process(exchange -&gt; {
         DocumentMetadata metadata = exchange.getIn().getBody(DocumentMetadata.class);
@@ -257,13 +246,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_METADATA
-          parameters:
-            includeMetadataInHeaders: false
-      - process:
-          ref: "metadataBodyProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_content_in_body_vs_file_path_output"><a class="anchor" href="#_content_in_body_vs_file_path_output"></a>Content in body vs file path output</h3> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Get content directly in body (file is automatically deleted)
+      steps:
+        - to:
+            uri: docling:EXTRACT_METADATA
+            parameters:
+              includeMetadataInHeaders: false
+        - process:
+            ref: "metadataBodyProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_content_in_body_vs_file_path_output"><a class="anchor" href="#_content_in_body_vs_file_path_output"></a>Content in body vs file path output</h3> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Get content directly in body (file is automatically deleted)
 from("file:///data/documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_MARKDOWN?contentInBody=true")
     .process(exchange -&gt; {
@@ -283,13 +272,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            contentInBody: true
-      - process:
-          ref: "contentProcessor"
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              contentInBody: true
+        - process:
+            ref: "contentProcessor"
 
 # Get file path (file is preserved)
 - route:
@@ -297,13 +286,13 @@ from("file:///data/documents?include=.*\\.pdf")
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            contentInBody: false
-      - process:
-          ref: "filePathProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_processor_bean_examples"><a class="anchor" href="#_processor_bean_examples"></a>Processor Bean Examples</h3> <div class="paragraph"> <p>When using YAML DSL, the processor references used in the examples above would be implemented as Spring beans:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Spring bean Processor implementation</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component("htmlProcessor")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              contentInBody: false
+        - process:
+            ref: "filePathProcessor"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_processor_bean_examples"><a class="anchor" href="#_processor_bean_examples"></a>Processor Bean Examples</h3> <div class="paragraph"> <p>When using YAML DSL, the processor references used in the examples above would be implemented as Spring beans:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Spring bean Processor implementation</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Component("htmlProcessor")
 public class HtmlProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
@@ -366,27 +355,27 @@ public class CustomArgsBean {
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - setHeader:
-          name: CamelDoclingInputFilePath
-          expression:
-            simple:
-              expression: "${file:absolute.path}"
-      - to:
-          uri: docling:CHUNK_HYBRID
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-            chunkingTokenizer: "sentence-transformers/all-MiniLM-L6-v2"
-            chunkingMaxTokens: 128
-            chunkingMergePeers: true
-      - split:
-          expression:
-            simple:
-              expression: "${body}"
-          steps:
-            - log:
-                message: "Chunk ${body.chunkIndex}: ${body.text}"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_chunking_for_rag_pipelines"><a class="anchor" href="#_chunking_for_rag_pipelines"></a>Chunking for RAG Pipelines</h3> <div class="paragraph"> <p>A common use case is to chunk documents, generate embeddings, and store them in a vector database:</p> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:ingest-pdf")
+      steps:
+        - setHeader:
+            name: CamelDoclingInputFilePath
+            expression:
+              simple:
+                expression: "${file:absolute.path}"
+        - to:
+            uri: docling:CHUNK_HYBRID
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+              chunkingTokenizer: "sentence-transformers/all-MiniLM-L6-v2"
+              chunkingMaxTokens: 128
+              chunkingMergePeers: true
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - log:
+                  message: "Chunk ${body.chunkIndex}: ${body.text}"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_chunking_for_rag_pipelines"><a class="anchor" href="#_chunking_for_rag_pipelines"></a>Chunking for RAG Pipelines</h3> <div class="paragraph"> <p>A common use case is to chunk documents, generate embeddings, and store them in a vector database:</p> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:ingest-pdf")
     .setHeader("CamelDoclingInputFilePath", header("pdfFilePath"))
     .to("docling:CHUNK_HYBRID?" +
         "useDoclingServe=true&amp;" +
@@ -403,35 +392,35 @@ public class CustomArgsBean {
     id: ingest-pdf
     from:
       uri: direct:ingest-pdf
-    steps:
-      - setHeader:
-          name: CamelDoclingInputFilePath
-          expression:
-            simple:
-              expression: "${header.pdfFilePath}"
-      - to:
-          uri: docling:CHUNK_HYBRID
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-            chunkingTokenizer: "{{embedding.tokenizer}}"
-            chunkingMaxTokens: "{{embedding.max-tokens}}"
-            chunkingMergePeers: true
-      - split:
-          expression:
-            simple:
-              expression: "${body}"
-          steps:
-            - setBody:
-                expression:
-                  simple:
-                    expression: "${body.text}"
-            - to:
-                uri: openai:embeddings
-                parameters:
-                  embeddingModel: "{{embedding.model}}"
-            - to:
-                uri: direct:store-embedding</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_hierarchical_chunking"><a class="anchor" href="#_hierarchical_chunking"></a>Hierarchical Chunking</h3> <div class="paragraph"> <p>Use hierarchical chunking when you want to preserve complete structural units without token limits:</p> </div> <div id="_tabs_14" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_14_java" class="tab"> <p>Java</p> </li> <li id="_tabs_14_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_14_java--panel" class="tabpanel" aria-labelledby="_tabs_14_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - setHeader:
+            name: CamelDoclingInputFilePath
+            expression:
+              simple:
+                expression: "${header.pdfFilePath}"
+        - to:
+            uri: docling:CHUNK_HYBRID
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+              chunkingTokenizer: "{{embedding.tokenizer}}"
+              chunkingMaxTokens: "{{embedding.max-tokens}}"
+              chunkingMergePeers: true
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - setBody:
+                  expression:
+                    simple:
+                      expression: "${body.text}"
+              - to:
+                  uri: openai:embeddings
+                  parameters:
+                    embeddingModel: "{{embedding.model}}"
+              - to:
+                  uri: direct:store-embedding</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_hierarchical_chunking"><a class="anchor" href="#_hierarchical_chunking"></a>Hierarchical Chunking</h3> <div class="paragraph"> <p>Use hierarchical chunking when you want to preserve complete structural units without token limits:</p> </div> <div id="_tabs_14" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_14_java" class="tab"> <p>Java</p> </li> <li id="_tabs_14_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_14_java--panel" class="tabpanel" aria-labelledby="_tabs_14_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .setHeader("CamelDoclingInputFilePath", simple("${file:absolute.path}"))
     .to("docling:CHUNK_HIERARCHICAL?" +
         "useDoclingServe=true&amp;" +
@@ -443,24 +432,24 @@ public class CustomArgsBean {
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - setHeader:
-          name: CamelDoclingInputFilePath
-          expression:
-            simple:
-              expression: "${file:absolute.path}"
-      - to:
-          uri: docling:CHUNK_HIERARCHICAL
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - split:
-          expression:
-            simple:
-              expression: "${body}"
-          steps:
-            - log:
-                message: "Section [${body.headings}] page ${body.pageNumbers}: ${body.text}"</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_advanced_processing_options_api_mode"><a class="anchor" href="#_advanced_processing_options_api_mode"></a>Advanced Processing Options (API Mode)</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using docling-serve API mode (<code>useDoclingServe=true</code>), the component exposes advanced processing options that control how the server processes documents. These options are passed directly to the docling-serve API and provide fine-grained control over OCR, table recognition, enrichment features, and output formatting.</p> </div> <div class="sect2"> <h3 id="_ocr_options"><a class="anchor" href="#_ocr_options"></a>OCR Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doOcr</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set <code>enableOCR</code> to <code>false</code> to explicitly disable OCR.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>forceOcr</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Force OCR processing even for digital documents (documents with selectable text).</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ocrEngine</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">OCR engine to use. Supported values: <code>AUTO</code>, <code>EASYOCR</code>, <code>OCRMAC</code>, <code>RAPIDOCR</code>, <code>TESSEROCR</code>, <code>TESSERACT</code>.</p></td> </tr> </tbody> </table></div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> The <code>enableOCR</code> and <code>ocrLanguage</code> settings are primarily for CLI mode. In API mode, use <code>doOcr</code> to explicitly control OCR behavior. When <code>doOcr</code> is not set, the server uses its own defaults. Setting <code>enableOCR=false</code> will send <code>doOcr(false)</code> to the server to disable OCR. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_table_and_structure_options"><a class="anchor" href="#_table_and_structure_options"></a>Table and Structure Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doTableStructure</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable table structure recognition. Automatically enabled for <code>EXTRACT_STRUCTURED_DATA</code> operations.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tableMode</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Table structure recognition mode. Supported values: <code>ACCURATE</code>, <code>FAST</code>.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tableCellMatching</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable table cell matching post-processing for better cell boundary detection.</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_enrichment_options"><a class="anchor" href="#_enrichment_options"></a>Enrichment Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doCodeEnrichment</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable code enrichment in document processing. Identifies and annotates code blocks.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doFormulaEnrichment</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable formula enrichment in document processing. Detects and processes mathematical formulas.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doPictureClassification</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable picture classification (e.g., chart, photo, diagram). May require additional ML models on the server.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doPictureDescription</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable picture description generation. May require a Vision Language Model (VLM) on the server.</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_pipeline_and_output_options"><a class="anchor" href="#_pipeline_and_output_options"></a>Pipeline and Output Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>pipeline</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Processing pipeline to use. Supported values: <code>ASR</code>, <code>STANDARD</code>, <code>VLM</code>.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>pdfBackend</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">PDF parsing backend. Supported values: <code>DLPARSE_V1</code>, <code>DLPARSE_V2</code>, <code>DLPARSE_V4</code>, <code>PYPDFIUM2</code>.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>includeImages</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Include images in the conversion output.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageExportMode</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Image export mode for referenced images. Supported values: <code>EMBEDDED</code>, <code>PLACEHOLDER</code>, <code>REFERENCED</code>.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>imagesScale</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Scale factor for exported images (e.g., <code>2.0</code> for double resolution).</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mdPageBreakPlaceholder</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Placeholder string for page breaks in markdown output.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>abortOnError</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Abort processing on error instead of continuing with partial results.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>documentTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Document processing timeout in seconds (server-side timeout).</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_example_advanced_processing_configuration"><a class="anchor" href="#_example_advanced_processing_configuration"></a>Example: Advanced Processing Configuration</h3> <div id="_tabs_15" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_15_java" class="tab"> <p>Java</p> </li> <li id="_tabs_15_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_15_java--panel" class="tabpanel" aria-labelledby="_tabs_15_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - setHeader:
+            name: CamelDoclingInputFilePath
+            expression:
+              simple:
+                expression: "${file:absolute.path}"
+        - to:
+            uri: docling:CHUNK_HIERARCHICAL
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - log:
+                  message: "Section [${body.headings}] page ${body.pageNumbers}: ${body.text}"</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_advanced_processing_options_api_mode"><a class="anchor" href="#_advanced_processing_options_api_mode"></a>Advanced Processing Options (API Mode)</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using docling-serve API mode (<code>useDoclingServe=true</code>), the component exposes advanced processing options that control how the server processes documents. These options are passed directly to the docling-serve API and provide fine-grained control over OCR, table recognition, enrichment features, and output formatting.</p> </div> <div class="sect2"> <h3 id="_ocr_options"><a class="anchor" href="#_ocr_options"></a>OCR Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doOcr</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set <code>enableOCR</code> to <code>false</code> to explicitly disable OCR.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>forceOcr</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Force OCR processing even for digital documents (documents with selectable text).</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>ocrEngine</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">OCR engine to use. Supported values: <code>AUTO</code>, <code>EASYOCR</code>, <code>OCRMAC</code>, <code>RAPIDOCR</code>, <code>TESSEROCR</code>, <code>TESSERACT</code>.</p></td> </tr> </tbody> </table></div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> The <code>enableOCR</code> and <code>ocrLanguage</code> settings are primarily for CLI mode. In API mode, use <code>doOcr</code> to explicitly control OCR behavior. When <code>doOcr</code> is not set, the server uses its own defaults. Setting <code>enableOCR=false</code> will send <code>doOcr(false)</code> to the server to disable OCR. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_table_and_structure_options"><a class="anchor" href="#_table_and_structure_options"></a>Table and Structure Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doTableStructure</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable table structure recognition. Automatically enabled for <code>EXTRACT_STRUCTURED_DATA</code> operations.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tableMode</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Table structure recognition mode. Supported values: <code>ACCURATE</code>, <code>FAST</code>.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>tableCellMatching</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable table cell matching post-processing for better cell boundary detection.</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_enrichment_options"><a class="anchor" href="#_enrichment_options"></a>Enrichment Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doCodeEnrichment</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable code enrichment in document processing. Identifies and annotates code blocks.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doFormulaEnrichment</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable formula enrichment in document processing. Detects and processes mathematical formulas.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doPictureClassification</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable picture classification (e.g., chart, photo, diagram). May require additional ML models on the server.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>doPictureDescription</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Enable picture description generation. May require a Vision Language Model (VLM) on the server.</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_pipeline_and_output_options"><a class="anchor" href="#_pipeline_and_output_options"></a>Pipeline and Output Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>pipeline</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Processing pipeline to use. Supported values: <code>ASR</code>, <code>STANDARD</code>, <code>VLM</code>.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>pdfBackend</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">PDF parsing backend. Supported values: <code>DLPARSE_V1</code>, <code>DLPARSE_V2</code>, <code>DLPARSE_V4</code>, <code>PYPDFIUM2</code>.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>includeImages</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Include images in the conversion output.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageExportMode</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Image export mode for referenced images. Supported values: <code>EMBEDDED</code>, <code>PLACEHOLDER</code>, <code>REFERENCED</code>.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>imagesScale</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Scale factor for exported images (e.g., <code>2.0</code> for double resolution).</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mdPageBreakPlaceholder</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Placeholder string for page breaks in markdown output.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>abortOnError</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Abort processing on error instead of continuing with partial results.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>documentTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock"><em>not set</em></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Document processing timeout in seconds (server-side timeout).</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_example_advanced_processing_configuration"><a class="anchor" href="#_example_advanced_processing_configuration"></a>Example: Advanced Processing Configuration</h3> <div id="_tabs_15" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_15_java" class="tab"> <p>Java</p> </li> <li id="_tabs_15_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_15_java--panel" class="tabpanel" aria-labelledby="_tabs_15_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:EXTRACT_STRUCTURED_DATA?" +
         "useDoclingServe=true&amp;" +
         "doOcr=true&amp;" +
@@ -479,21 +468,21 @@ public class CustomArgsBean {
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:EXTRACT_STRUCTURED_DATA
-          parameters:
-            useDoclingServe: true
-            doOcr: true
-            ocrEngine: "TESSERACT"
-            doTableStructure: true
-            tableMode: "ACCURATE"
-            doCodeEnrichment: true
-            pdfBackend: "DLPARSE_V4"
-            processTimeout: 120000
-            contentInBody: true
-      - process:
-          ref: "structuredDataProcessor"</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_doclingdocument_return_type"><a class="anchor" href="#_doclingdocument_return_type"></a>DoclingDocument Return Type</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using docling-serve API mode, the <code>CONVERT_TO_JSON</code> and <code>EXTRACT_STRUCTURED_DATA</code> operations return a <code>DoclingDocument</code> object (from the <code>ai.docling.core</code> package) instead of a raw JSON string. This object provides type-safe access to the document structure.</p> </div> <div id="_tabs_16" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_16_java" class="tab"> <p>Java</p> </li> <li id="_tabs_16_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_16_java--panel" class="tabpanel" aria-labelledby="_tabs_16_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:EXTRACT_STRUCTURED_DATA
+            parameters:
+              useDoclingServe: true
+              doOcr: true
+              ocrEngine: "TESSERACT"
+              doTableStructure: true
+              tableMode: "ACCURATE"
+              doCodeEnrichment: true
+              pdfBackend: "DLPARSE_V4"
+              processTimeout: 120000
+              contentInBody: true
+        - process:
+            ref: "structuredDataProcessor"</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_doclingdocument_return_type"><a class="anchor" href="#_doclingdocument_return_type"></a>DoclingDocument Return Type</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using docling-serve API mode, the <code>CONVERT_TO_JSON</code> and <code>EXTRACT_STRUCTURED_DATA</code> operations return a <code>DoclingDocument</code> object (from the <code>ai.docling.core</code> package) instead of a raw JSON string. This object provides type-safe access to the document structure.</p> </div> <div id="_tabs_16" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_16_java" class="tab"> <p>Java</p> </li> <li id="_tabs_16_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_16_java--panel" class="tabpanel" aria-labelledby="_tabs_16_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_JSON?" +
         "useDoclingServe=true&amp;" +
         "contentInBody=true")
@@ -520,14 +509,14 @@ public class CustomArgsBean {
       uri: file:///data/documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_JSON
-          parameters:
-            useDoclingServe: true
-            contentInBody: true
-      - process:
-          ref: "doclingDocumentProcessor"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_error_handling"><a class="anchor" href="#_error_handling"></a>Error Handling</h2> <div class="sectionbody"> <div class="paragraph"> <p>The component handles various error scenarios:</p> </div> <div class="ulist"> <ul> <li> <p><strong>File size limit exceeded</strong>: Files larger than <code>maxFileSize</code> are rejected</p> </li> <li> <p><strong>Process timeout</strong>: Long-running conversions are terminated after <code>processTimeout</code> milliseconds</p> </li> <li> <p><strong>Invalid file formats</strong>: Unsupported file formats result in processing errors</p> </li> <li> <p><strong>Docling not found</strong>: Missing Docling installation causes startup failures (CLI mode)</p> </li> <li> <p><strong>Connection errors</strong>: When using docling-serve API mode, connection failures to the API endpoint will result in errors</p> </li> <li> <p><strong>Authentication errors</strong>: Invalid or missing authentication credentials will result in 401 Unauthorized errors from the docling-serve API</p> </li> </ul> </div> </div> </div> <div class="sect1"> <h2 id="_performance_considerations"><a class="anchor" href="#_performance_considerations"></a>Performance Considerations</h2> <div class="sectionbody"> <div class="ulist"> <ul> <li> <p><strong>Process Timeout</strong>: The <code>processTimeout</code> setting (default: 30000ms / 30 seconds) controls both the CLI subprocess timeout and the HTTP read timeout for docling-serve API mode. For complex PDF documents that require OCR or enrichment processing, increase this value (e.g., <code>processTimeout=120000</code> for 2 minutes).</p> </li> <li> <p>OCR processing significantly increases processing time for scanned documents.</p> </li> <li> <p>Consider using <code>contentInBody=true</code> when using docling-serve API mode to get results directly in the body.</p> </li> <li> <p>The <code>maxFileSize</code> setting helps prevent resource exhaustion.</p> </li> <li> <p><strong>API Mode vs CLI Mode</strong>: The docling-serve API mode typically offers better performance and resource utilization for high-volume document processing, as it maintains a persistent server instance.</p> </li> <li> <p><strong>Async Mode</strong>: For large documents or high-volume processing, enable <code>useAsyncMode=true</code> to prevent blocking the Camel thread pool. The component will poll the docling-serve API for completion status while freeing up processing threads.</p> </li> <li> <p><strong>Async Configuration</strong>: Adjust <code>asyncPollInterval</code> (default 2000ms) and <code>asyncTimeout</code> (default 300000ms/5 minutes) based on your document size and processing requirements.</p> </li> <li> <p><strong>Batch Processing</strong>: When processing multiple documents, async mode allows better parallelization as the docling-serve instance can process multiple documents concurrently while Camel polls for results.</p> </li> <li> <p><strong>Enrichment Features</strong>: Enabling advanced options like <code>doPictureClassification</code> or <code>doPictureDescription</code> may require additional ML models on the server and can increase processing time.</p> </li> </ul> </div> </div> </div> <div class="sect1"> <h2 id="_sub_pages"><a class="anchor" href="#_sub_pages"></a>Sub-Pages</h2> <div class="sectionbody"> <div class="paragraph"> <p>For more details on specific features, see:</p> </div> <div class="ulist"> <ul> <li> <p><a href="others/docling-batch-processing.html" class="xref page">Batch Processing</a> - Batch operations, queue-based processing, error handling, and result splitting</p> </li> <li> <p><a href="others/docling-async-processing.html" class="xref page">Asynchronous Processing</a> - Async mode, custom timeouts, polling patterns, and parallel processing</p> </li> <li> <p><a href="others/docling-serve.html" class="xref page">Using Docling-Serve API</a> - Remote API usage, URL processing, and authentication methods</p> </li> </ul> </div> </div> </div> <div class="sect1"> <h2 id="_http_client_configuration"><a class="anchor" href="#_http_client_configuration"></a>HTTP Client Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using docling-serve API mode, the component uses the <a href="https://github.com/docling-project/docling-java">docling-java</a> library which internally uses Java&#8217;s built-in <code>HttpClient</code>. The HTTP client is configured with sensible defaults and connection management is handled automatically by the library.</p> </div> <div class="sect2"> <h3 id="_timeout_configuration"><a class="anchor" href="#_timeout_configuration"></a>Timeout Configuration</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>processTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">30000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">HTTP read timeout in milliseconds for synchronous API calls. Also used as the CLI subprocess timeout. Increase this for large or complex documents (e.g., 120000 for 2 minutes).</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>asyncPollInterval</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">2000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Poll interval in milliseconds when checking async task status.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>asyncTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">300000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time to wait for async conversion completion in milliseconds (5 minutes).</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>asyncTaskTtl</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">86400000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Time-to-live for pending async conversion tasks in milliseconds (24 hours). Tasks older than this will be automatically evicted from memory to prevent leaks. A background cleanup task runs periodically to remove expired entries.</p></td> </tr> </tbody> </table></div> <div class="admonitionblock important"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-important" title="Important"></i> </td> <td class="content"> The default <code>processTimeout</code> of 30 seconds may not be sufficient for complex PDF documents, especially when OCR or enrichment options are enabled. For production use with PDF files, consider increasing <code>processTimeout</code> to at least 120000 (2 minutes). </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_configuration_examples"><a class="anchor" href="#_configuration_examples"></a>Configuration Examples</h3> <div class="sect3"> <h4 id="_long_running_document_processing"><a class="anchor" href="#_long_running_document_processing"></a>Long-Running Document Processing</h4> <div class="paragraph"> <p>For large documents that take a long time to process, increase the async timeout:</p> </div> <div id="_tabs_17" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_17_java" class="tab"> <p>Java</p> </li> <li id="_tabs_17_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_17_java--panel" class="tabpanel" aria-labelledby="_tabs_17_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/large-documents?include=.*\\.pdf")
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_JSON
+            parameters:
+              useDoclingServe: true
+              contentInBody: true
+        - process:
+            ref: "doclingDocumentProcessor"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_error_handling"><a class="anchor" href="#_error_handling"></a>Error Handling</h2> <div class="sectionbody"> <div class="paragraph"> <p>The component handles various error scenarios:</p> </div> <div class="ulist"> <ul> <li> <p><strong>File size limit exceeded</strong>: Files larger than <code>maxFileSize</code> are rejected</p> </li> <li> <p><strong>Process timeout</strong>: Long-running conversions are terminated after <code>processTimeout</code> milliseconds</p> </li> <li> <p><strong>Invalid file formats</strong>: Unsupported file formats result in processing errors</p> </li> <li> <p><strong>Docling not found</strong>: Missing Docling installation causes startup failures (CLI mode)</p> </li> <li> <p><strong>Connection errors</strong>: When using docling-serve API mode, connection failures to the API endpoint will result in errors</p> </li> <li> <p><strong>Authentication errors</strong>: Invalid or missing authentication credentials will result in 401 Unauthorized errors from the docling-serve API</p> </li> </ul> </div> </div> </div> <div class="sect1"> <h2 id="_performance_considerations"><a class="anchor" href="#_performance_considerations"></a>Performance Considerations</h2> <div class="sectionbody"> <div class="ulist"> <ul> <li> <p><strong>Process Timeout</strong>: The <code>processTimeout</code> setting (default: 30000ms / 30 seconds) controls both the CLI subprocess timeout and the HTTP read timeout for docling-serve API mode. For complex PDF documents that require OCR or enrichment processing, increase this value (e.g., <code>processTimeout=120000</code> for 2 minutes).</p> </li> <li> <p>OCR processing significantly increases processing time for scanned documents.</p> </li> <li> <p>Consider using <code>contentInBody=true</code> when using docling-serve API mode to get results directly in the body.</p> </li> <li> <p>The <code>maxFileSize</code> setting helps prevent resource exhaustion.</p> </li> <li> <p><strong>API Mode vs CLI Mode</strong>: The docling-serve API mode typically offers better performance and resource utilization for high-volume document processing, as it maintains a persistent server instance.</p> </li> <li> <p><strong>Async Mode</strong>: For large documents or high-volume processing, enable <code>useAsyncMode=true</code> to prevent blocking the Camel thread pool. The component will poll the docling-serve API for completion status while freeing up processing threads.</p> </li> <li> <p><strong>Async Configuration</strong>: Adjust <code>asyncPollInterval</code> (default 2000ms) and <code>asyncTimeout</code> (default 300000ms/5 minutes) based on your document size and processing requirements.</p> </li> <li> <p><strong>Batch Processing</strong>: When processing multiple documents, async mode allows better parallelization as the docling-serve instance can process multiple documents concurrently while Camel polls for results.</p> </li> <li> <p><strong>Enrichment Features</strong>: Enabling advanced options like <code>doPictureClassification</code> or <code>doPictureDescription</code> may require additional ML models on the server and can increase processing time.</p> </li> </ul> </div> </div> </div> <div class="sect1"> <h2 id="_sub_pages"><a class="anchor" href="#_sub_pages"></a>Sub-Pages</h2> <div class="sectionbody"> <div class="paragraph"> <p>For more details on specific features, see:</p> </div> <div class="ulist"> <ul> <li> <p><a href="others/docling-batch-processing.html" class="xref page">Batch Processing</a> - Batch operations, queue-based processing, error handling, and result splitting</p> </li> <li> <p><a href="others/docling-async-processing.html" class="xref page">Asynchronous Processing</a> - Async mode, custom timeouts, polling patterns, and parallel processing</p> </li> <li> <p><a href="others/docling-serve.html" class="xref page">Using Docling-Serve API</a> - Remote API usage, URL processing, and authentication methods</p> </li> </ul> </div> </div> </div> <div class="sect1"> <h2 id="_http_client_configuration"><a class="anchor" href="#_http_client_configuration"></a>HTTP Client Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using docling-serve API mode, the component uses the <a href="https://github.com/docling-project/docling-java">docling-java</a> library which internally uses Java&#8217;s built-in <code>HttpClient</code>. The HTTP client is configured with sensible defaults and connection management is handled automatically by the library.</p> </div> <div class="sect2"> <h3 id="_timeout_configuration"><a class="anchor" href="#_timeout_configuration"></a>Timeout Configuration</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Parameter</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>processTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">30000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">HTTP read timeout in milliseconds for synchronous API calls. Also used as the CLI subprocess timeout. Increase this for large or complex documents (e.g., 120000 for 2 minutes).</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>asyncPollInterval</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">2000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Poll interval in milliseconds when checking async task status.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>asyncTimeout</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">300000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time to wait for async conversion completion in milliseconds (5 minutes).</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock"><code>asyncTaskTtl</code></p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">86400000</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Time-to-live for pending async conversion tasks in milliseconds (24 hours). Tasks older than this will be automatically evicted from memory to prevent leaks. A background cleanup task runs periodically to remove expired entries.</p></td> </tr> </tbody> </table></div> <div class="admonitionblock important"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-important" title="Important"></i> </td> <td class="content"> The default <code>processTimeout</code> of 30 seconds may not be sufficient for complex PDF documents, especially when OCR or enrichment options are enabled. For production use with PDF files, consider increasing <code>processTimeout</code> to at least 120000 (2 minutes). </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_configuration_examples"><a class="anchor" href="#_configuration_examples"></a>Configuration Examples</h3> <div class="sect3"> <h4 id="_long_running_document_processing"><a class="anchor" href="#_long_running_document_processing"></a>Long-Running Document Processing</h4> <div class="paragraph"> <p>For large documents that take a long time to process, increase the async timeout:</p> </div> <div id="_tabs_17" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_17_java" class="tab"> <p>Java</p> </li> <li id="_tabs_17_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_17_java--panel" class="tabpanel" aria-labelledby="_tabs_17_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("file:///data/large-documents?include=.*\\.pdf")
     .to("docling:CONVERT_TO_MARKDOWN?" +
         "useDoclingServe=true&amp;" +
         "useAsyncMode=true&amp;" +
@@ -539,14 +528,14 @@ public class CustomArgsBean {
       uri: file:///data/large-documents
       parameters:
         include: ".*\\.pdf"
-    steps:
-      - to:
-          uri: docling:CONVERT_TO_MARKDOWN
-          parameters:
-            useDoclingServe: true
-            useAsyncMode: true
-            asyncPollInterval: 5000
-            asyncTimeout: 600000
-            contentInBody: true
-      - to:
-          uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_best_practices"><a class="anchor" href="#_best_practices"></a>Best Practices</h3> <div class="olist arabic"> <ol class="arabic"> <li> <p><strong>Use async mode for large documents</strong>: Enable <code>useAsyncMode=true</code> for documents that may take longer to process. The docling-java library handles polling automatically.</p> </li> <li> <p><strong>Adjust poll interval appropriately</strong>: For high-volume scenarios, increase <code>asyncPollInterval</code> to reduce polling overhead. For interactive use cases, a shorter interval provides faster feedback.</p> </li> <li> <p><strong>Set appropriate timeouts</strong>: Adjust <code>asyncTimeout</code> based on your largest expected document size. The default 5 minutes is suitable for most documents.</p> </li> <li> <p><strong>Monitor with logging</strong>: Use DEBUG level logging to monitor API calls and async task status.</p> </li> </ol> </div> </div> </div> </div> </article> <aside class="toc sidebar" aria-label="Table of contents" data-title="Contents" data-levels="2"> <div class="toc-menu"></div> </aside> </div> </main> </div> <footer> <div class="footer-tools"> <a href="#top" title="Reach the top of the page">Back to top</a> </div> <div class="footer"> <div class="footer-brand"> <img class="footer-logo" src="../../_/img/logo-d-a567cee6fa.svg" alt="Apache Camel Logo" aria-label="white silhouette of a camel in front of a sand dune"> <span class="footer-wordmark">Apache Camel</span> <p class="footer-blurb">Open source integration framework. An Apache Software Foundation project, available under the Apache v2 license.</p> </div> <dl class="footer-column"> <dt><span class="footer-column-title">Overview</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../blog/">Blog</a></dd> <dd><a href="../../docs/">Documentation</a></dd> <dd><a href="../../tooling/">Tooling</a></dd> <dd><a href="../../community/">Community</a></dd> <dd><a href="../../download/">Download</a></dd> <dd><a href="../../projects/">All projects</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Documentation</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../manual/">User Manual</a></dd> <dd><a href="../../components/next/index.html">Components</a></dd> <dd><a href="../../camel-k/next/">Camel-K</a></dd> <dd><a href="../../camel-kafka-connector/next/">Camel Kafka Connector</a></dd> <dd><a href="../../camel-quarkus/next/">Camel Quarkus</a></dd> <dd><a href="../../camel-spring-boot/next/">Camel Spring Boot</a></dd> <dd><a href="../../camel-karaf/latest/">Camel Karaf</a></dd> <dd><a href="../../manual/faq/index.html">FAQ</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Community</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../community/support/">Support</a></dd> <dd><a href="../../community/contributing/">Contributing</a></dd> <dd><a href="../../community/mailing-list/">Mailing Lists</a></dd> <dd><a href="../../community/user-stories/">Who Uses Camel</a></dd> <dd><a href="../../community/articles/">Articles</a></dd> <dd><a href="../../community/books/">Books</a></dd> <dd><a href="../../community/team/">Team</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">About</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../acknowledgments/">Acknowledgments</a></dd> <dd><a href="https://www.apache.org/events/current-event.html" target="_blank" rel="noopener noreferrer nofollow" title="Apache Events">Apache Events</a></dd> <dd><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer nofollow" title="License">License</a></dd> <dd><a href="https://www.apache.org/security/" target="_blank" rel="noopener noreferrer nofollow" title="Security">Security</a></dd> <dd><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noopener noreferrer nofollow" title="Sponsorship">Sponsorship</a></dd> <dd><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noopener noreferrer nofollow" title="Thanks">Thanks</a></dd> <dd><a href="../../trust/">Trust</a></dd> </dl> <p class="remark"> &copy; 2004-2026 The <a href="https://apache.org">Apache Software Foundation</a>.<br> Apache Camel, Camel, Apache, the Apache feather logo, and the Apache Camel project logo are trademarks of The Apache Software Foundation. All other marks mentioned may be trademarks or registered trademarks of their respective owners. </p> <div class="resources"> <div class="context"> <a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noopener noreferrer nofollow">Privacy Policy</a> </div> <div class="context"> <a href="https://www.apache.org/foundation/policies/conduct" target="_blank" rel="noopener noreferrer nofollow">Code of Conduct</a> </div> <div class="context"> <a href="../../sitemap/">Sitemap</a> </div> </div> <div class="footer-icons"> <a href="https://github.com/apache/camel/" rel="noopener noreferrer nofollow" title="Collaborate on GitHub"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#github"/></svg></a> <a href="https://camel.zulipchat.com" rel="noopener noreferrer nofollow" title="Chat on Zulip"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#zulip"/></svg></a> <a href="https://twitter.com/ApacheCamel" rel="noopener noreferrer nofollow" title="Follow Apache Camel on Twitter"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#twitter"/></svg></a> <a href="https://www.linkedin.com/groups/2447439/" rel="noopener noreferrer nofollow" title="Apache Camel group on Linkedin"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#linkedin"/></svg></a> <a href="../../blog/index.xml" title="Subscribe to RSS Feed"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#rss"/></svg></a> </div> </div> </footer> <script src="../../_/js/vendor/docsearch-5c0cf4ef3a.js"></script> <script src="../../_/js/site-2aad2f7ea4.js"></script> <script async src="../../_/js/vendor/highlight-34ee5f32ef.js"></script> <script async src="../../_/js/vendor/svg4everybody-8ce71b89ac.js"></script> <script async src="../../_/js/vendor/tabs-3496628f2d.js" data-sync-storage-key="preferred-tab"></script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "Organization", "name": "Apache Camel", "url": "https://camel.apache.org", "sameAs": [ "https://twitter.com/ApacheCamel" ], "logo": "../../_/img/logo-d-a567cee6fa.svg", "description": "Apache Camel ™ is a versatile open-source integration framework based on known Enterprise Integration Patterns. Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL." } </script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Apache Camel", "item": "https://camel.apache.org/" }, { "@type": "ListItem", "position": 2, "name": "Camel Components", "item": "https://camel.apache.org/components/4.22.x/index.html" }, { "@type": "ListItem", "position": 3, "name": "Next (Pre-release)", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 4, "name": "Components", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 5, "name": "AI", "item": "https://camel.apache.org/components/next/ai-summary.html" }, { "@type": "ListItem", "position": 6, "name": "Docling", "item": "https://camel.apache.org/components/next/docling-component.html" }] } </script> </body> </html> 
+      steps:
+        - to:
+            uri: docling:CONVERT_TO_MARKDOWN
+            parameters:
+              useDoclingServe: true
+              useAsyncMode: true
+              asyncPollInterval: 5000
+              asyncTimeout: 600000
+              contentInBody: true
+        - to:
+            uri: file:///data/output</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_best_practices"><a class="anchor" href="#_best_practices"></a>Best Practices</h3> <div class="olist arabic"> <ol class="arabic"> <li> <p><strong>Use async mode for large documents</strong>: Enable <code>useAsyncMode=true</code> for documents that may take longer to process. The docling-java library handles polling automatically.</p> </li> <li> <p><strong>Adjust poll interval appropriately</strong>: For high-volume scenarios, increase <code>asyncPollInterval</code> to reduce polling overhead. For interactive use cases, a shorter interval provides faster feedback.</p> </li> <li> <p><strong>Set appropriate timeouts</strong>: Adjust <code>asyncTimeout</code> based on your largest expected document size. The default 5 minutes is suitable for most documents.</p> </li> <li> <p><strong>Monitor with logging</strong>: Use DEBUG level logging to monitor API calls and async task status.</p> </li> </ol> </div> </div> </div> </div> </article> <aside class="toc sidebar" aria-label="Table of contents" data-title="Contents" data-levels="2"> <div class="toc-menu"></div> </aside> </div> </main> </div> <footer> <div class="footer-tools"> <a href="#top" title="Reach the top of the page">Back to top</a> </div> <div class="footer"> <div class="footer-brand"> <img class="footer-logo" src="../../_/img/logo-d-a567cee6fa.svg" alt="Apache Camel Logo" aria-label="white silhouette of a camel in front of a sand dune"> <span class="footer-wordmark">Apache Camel</span> <p class="footer-blurb">Open source integration framework. An Apache Software Foundation project, available under the Apache v2 license.</p> </div> <dl class="footer-column"> <dt><span class="footer-column-title">Overview</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../blog/">Blog</a></dd> <dd><a href="../../docs/">Documentation</a></dd> <dd><a href="../../tooling/">Tooling</a></dd> <dd><a href="../../community/">Community</a></dd> <dd><a href="../../download/">Download</a></dd> <dd><a href="../../projects/">All projects</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Documentation</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../manual/">User Manual</a></dd> <dd><a href="../../components/next/index.html">Components</a></dd> <dd><a href="../../camel-k/next/">Camel-K</a></dd> <dd><a href="../../camel-kafka-connector/next/">Camel Kafka Connector</a></dd> <dd><a href="../../camel-quarkus/next/">Camel Quarkus</a></dd> <dd><a href="../../camel-spring-boot/next/">Camel Spring Boot</a></dd> <dd><a href="../../camel-karaf/latest/">Camel Karaf</a></dd> <dd><a href="../../manual/faq/index.html">FAQ</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">Community</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../community/support/">Support</a></dd> <dd><a href="../../community/contributing/">Contributing</a></dd> <dd><a href="../../community/mailing-list/">Mailing Lists</a></dd> <dd><a href="../../community/user-stories/">Who Uses Camel</a></dd> <dd><a href="../../community/articles/">Articles</a></dd> <dd><a href="../../community/books/">Books</a></dd> <dd><a href="../../community/team/">Team</a></dd> </dl> <dl class="footer-column"> <dt><span class="footer-column-title">About</span><span class="footer-column-plus" aria-hidden="true">&#65291;</span></dt> <dd><a href="../../acknowledgments/">Acknowledgments</a></dd> <dd><a href="https://www.apache.org/events/current-event.html" target="_blank" rel="noopener noreferrer nofollow" title="Apache Events">Apache Events</a></dd> <dd><a href="https://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer nofollow" title="License">License</a></dd> <dd><a href="https://www.apache.org/security/" target="_blank" rel="noopener noreferrer nofollow" title="Security">Security</a></dd> <dd><a href="https://www.apache.org/foundation/sponsorship.html" target="_blank" rel="noopener noreferrer nofollow" title="Sponsorship">Sponsorship</a></dd> <dd><a href="https://www.apache.org/foundation/thanks.html" target="_blank" rel="noopener noreferrer nofollow" title="Thanks">Thanks</a></dd> <dd><a href="../../trust/">Trust</a></dd> </dl> <p class="remark"> &copy; 2004-2026 The <a href="https://apache.org">Apache Software Foundation</a>.<br> Apache Camel, Camel, Apache, the Apache feather logo, and the Apache Camel project logo are trademarks of The Apache Software Foundation. All other marks mentioned may be trademarks or registered trademarks of their respective owners. </p> <div class="resources"> <div class="context"> <a href="https://privacy.apache.org/policies/privacy-policy-public.html" target="_blank" rel="noopener noreferrer nofollow">Privacy Policy</a> </div> <div class="context"> <a href="https://www.apache.org/foundation/policies/conduct" target="_blank" rel="noopener noreferrer nofollow">Code of Conduct</a> </div> <div class="context"> <a href="../../sitemap/">Sitemap</a> </div> </div> <div class="footer-icons"> <a href="https://github.com/apache/camel/" rel="noopener noreferrer nofollow" title="Collaborate on GitHub"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#github"/></svg></a> <a href="https://camel.zulipchat.com" rel="noopener noreferrer nofollow" title="Chat on Zulip"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#zulip"/></svg></a> <a href="https://twitter.com/ApacheCamel" rel="noopener noreferrer nofollow" title="Follow Apache Camel on Twitter"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#twitter"/></svg></a> <a href="https://www.linkedin.com/groups/2447439/" rel="noopener noreferrer nofollow" title="Apache Camel group on Linkedin"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#linkedin"/></svg></a> <a href="../../blog/index.xml" title="Subscribe to RSS Feed"><svg class="brand-icon" focusable="false"><use xlink:href="../../_/img/brand-logos-a2b35bbdec.svg#rss"/></svg></a> </div> </div> </footer> <script src="../../_/js/vendor/docsearch-5c0cf4ef3a.js"></script> <script src="../../_/js/site-2aad2f7ea4.js"></script> <script async src="../../_/js/vendor/highlight-34ee5f32ef.js"></script> <script async src="../../_/js/vendor/svg4everybody-8ce71b89ac.js"></script> <script async src="../../_/js/vendor/tabs-3496628f2d.js" data-sync-storage-key="preferred-tab"></script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "Organization", "name": "Apache Camel", "url": "https://camel.apache.org", "sameAs": [ "https://twitter.com/ApacheCamel" ], "logo": "../../_/img/logo-d-a567cee6fa.svg", "description": "Apache Camel ™ is a versatile open-source integration framework based on known Enterprise Integration Patterns. Camel empowers you to define routing and mediation rules in a variety of domain-specific languages, including a Java-based Fluent API, Spring or Blueprint XML Configuration files, and a Scala DSL." } </script> <script type="application/ld+json"> { "@context": "http://schema.org", "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Apache Camel", "item": "https://camel.apache.org/" }, { "@type": "ListItem", "position": 2, "name": "Camel Components", "item": "https://camel.apache.org/components/4.22.x/index.html" }, { "@type": "ListItem", "position": 3, "name": "Next (Pre-release)", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 4, "name": "Components", "item": "https://camel.apache.org/components/next/index.html" }, { "@type": "ListItem", "position": 5, "name": "AI", "item": "https://camel.apache.org/components/next/ai-summary.html" }, { "@type": "ListItem", "position": 6, "name": "Docling", "item": "https://camel.apache.org/components/next/docling-component.html" }] } </script> </body> </html> 

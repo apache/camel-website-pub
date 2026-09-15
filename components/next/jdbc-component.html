@@ -22,19 +22,19 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:projects
-    steps:
-      - setHeader:
-          name: lic
-          constant: ASF
-      - setHeader:
-          name: min
-          constant: "123"
-      - setBody:
-          constant: "select * from projects where license = :?lic and id &gt; :?min order by id"
-      - to:
-          uri: jdbc:myDataSource
-          parameters:
-            useHeadersAsParameters: true</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>You can also store the header values in a <code>java.util.Map</code> and store the map on the headers with the key <code>CamelJdbcParameters</code>.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2> <div class="sectionbody"> <div class="paragraph"> <p>In the following example, we set up the DataSource that camel-jdbc requires. First we register our datasource in the Camel registry as <code>testdb</code>:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic DataSource registration using EmbeddedDatabaseBuilder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
+      steps:
+        - setHeader:
+            name: lic
+            constant: ASF
+        - setHeader:
+            name: min
+            constant: "123"
+        - setBody:
+            constant: "select * from projects where license = :?lic and id &gt; :?min order by id"
+        - to:
+            uri: jdbc:myDataSource
+            parameters:
+              useHeadersAsParameters: true</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>You can also store the header values in a <code>java.util.Map</code> and store the map on the headers with the key <code>CamelJdbcParameters</code>.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_examples"><a class="anchor" href="#_examples"></a>Examples</h2> <div class="sectionbody"> <div class="paragraph"> <p>In the following example, we set up the DataSource that camel-jdbc requires. First we register our datasource in the Camel registry as <code>testdb</code>:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: programmatic DataSource registration using EmbeddedDatabaseBuilder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
       .setType(EmbeddedDatabaseType.H2).addScript("sql/init.sql").build();
 
 CamelContext context = ...
@@ -63,24 +63,25 @@ Exchange out = template.send(endpoint, exchange);</code></pre> </div> </div> <di
   &lt;from uri="direct:hello"/&gt;
   &lt;to uri="jdbc:testdb?outputType=StreamList"/&gt;
   &lt;split streaming="true"&gt;
-    &lt;body/&gt;
+    &lt;simple&gt;${body}&lt;/simple&gt;
     &lt;to uri="mock:result"/&gt;
   &lt;/split&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:hello
-    steps:
-      - to:
-          uri: jdbc:testdb
-          parameters:
-            outputType: StreamList
-      - split:
-          expression:
-            body: {}
-          streaming: true
-          steps:
-            - to:
-                uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_polling_the_database_every_minute"><a class="anchor" href="#_polling_the_database_every_minute"></a>Polling the database every minute</h3> <div class="paragraph"> <p>If we want to poll a database using the JDBC component, we need to combine it with a polling scheduler such as the <a href="timer-component.html" class="xref page">Timer</a> or <a href="quartz-component.html" class="xref page">Quartz</a> etc. In the following example, we retrieve data from the database every 60 seconds:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("timer://foo?period=60000")
+      steps:
+        - to:
+            uri: jdbc:testdb
+            parameters:
+              outputType: StreamList
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            streaming: true
+            steps:
+              - to:
+                  uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_polling_the_database_every_minute"><a class="anchor" href="#_polling_the_database_every_minute"></a>Polling the database every minute</h3> <div class="paragraph"> <p>If we want to poll a database using the JDBC component, we need to combine it with a polling scheduler such as the <a href="timer-component.html" class="xref page">Timer</a> or <a href="quartz-component.html" class="xref page">Quartz</a> etc. In the following example, we retrieve data from the database every 60 seconds:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("timer://foo?period=60000")
     .setBody(constant("select * from customer"))
     .to("jdbc:testdb")
     .to("activemq:queue:customers");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -95,13 +96,13 @@ Exchange out = template.send(endpoint, exchange);</code></pre> </div> </div> <di
       uri: timer://foo
       parameters:
         period: "60000"
-    steps:
-      - setBody:
-          constant: "select * from customer"
-      - to:
-          uri: jdbc:testdb
-      - to:
-          uri: activemq:queue:customers</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_move_data_between_data_sources"><a class="anchor" href="#_move_data_between_data_sources"></a>Move Data Between Data Sources</h3> <div class="paragraph"> <p>A common use case is to query for data, process it and move it to another data source (ETL operations). In the following example, we retrieve new customer records from the source table every hour, filter/transform them and move them to a destination table:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: ETL route using inline Processor to filter and transform results</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("timer://MoveNewCustomersEveryHour?period=3600000")
+      steps:
+        - setBody:
+            constant: "select * from customer"
+        - to:
+            uri: jdbc:testdb
+        - to:
+            uri: activemq:queue:customers</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_move_data_between_data_sources"><a class="anchor" href="#_move_data_between_data_sources"></a>Move Data Between Data Sources</h3> <div class="paragraph"> <p>A common use case is to query for data, process it and move it to another data source (ETL operations). In the following example, we retrieve new customer records from the source table every hour, filter/transform them and move them to a destination table:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: ETL route using inline Processor to filter and transform results</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("timer://MoveNewCustomersEveryHour?period=3600000")
     .setBody(constant("select * from customer where create_time &gt; (sysdate-1/24)"))
     .to("jdbc:testdb")
     .split(body())

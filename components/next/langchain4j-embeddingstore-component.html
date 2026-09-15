@@ -15,31 +15,31 @@ from("direct:search")
     .to("langchain4j-embeddingstore:myStore?action=SEARCH&amp;returnTextContent=true");</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: ADD
+      steps:
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: ADD
 - route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: SEARCH
-            returnTextContent: true</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This eliminates the need for a separate <code>langchain4j-embeddings:embed</code> step in the route.</p> </div> </div> <div class="sect2"> <h3 id="_storing_embeddings_add_operation"><a class="anchor" href="#_storing_embeddings_add_operation"></a>Storing Embeddings (ADD Operation)</h3> <div class="paragraph"> <p>Store embeddings with optional text segments. Without <code>embeddingModel</code>, a pre-computed embedding must be provided via the <code>langchain4j-embeddings</code> component:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store")
+      steps:
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: SEARCH
+              returnTextContent: true</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>This eliminates the need for a separate <code>langchain4j-embeddings:embed</code> step in the route.</p> </div> </div> <div class="sect2"> <h3 id="_storing_embeddings_add_operation"><a class="anchor" href="#_storing_embeddings_add_operation"></a>Storing Embeddings (ADD Operation)</h3> <div class="paragraph"> <p>Store embeddings with optional text segments. Without <code>embeddingModel</code>, a pre-computed embedding must be provided via the <code>langchain4j-embeddings</code> component:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store")
     .to("langchain4j-embeddings:embed")
     .to("langchain4j-embeddingstore:myStore?action=ADD");</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: ADD</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The response body contains the generated embedding ID.</p> </div> <div class="sect3"> <h4 id="_add_with_caller_supplied_id"><a class="anchor" href="#_add_with_caller_supplied_id"></a>ADD with Caller-Supplied ID</h4> <div class="paragraph"> <p>You can provide your own embedding ID using the <code>CamelLangchain4jEmbeddingStoreEmbeddingId</code> header:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store-with-id")
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: ADD</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The response body contains the generated embedding ID.</p> </div> <div class="sect3"> <h4 id="_add_with_caller_supplied_id"><a class="anchor" href="#_add_with_caller_supplied_id"></a>ADD with Caller-Supplied ID</h4> <div class="paragraph"> <p>You can provide your own embedding ID using the <code>CamelLangchain4jEmbeddingStoreEmbeddingId</code> header:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:store-with-id")
     .to("langchain4j-embeddings:embed")
     .setHeader("CamelLangchain4jEmbeddingStoreEmbeddingId", constant("my-custom-id"))
     .to("langchain4j-embeddingstore:myStore?action=ADD");</code></pre> </div> </div> <div class="paragraph"> <p>When both a caller-supplied ID and a text segment are present, the component preserves both using <code>addAll</code> with singleton lists.</p> </div> </div> <div class="sect3"> <h4 id="_batch_add_addall"><a class="anchor" href="#_batch_add_addall"></a>Batch ADD (addAll)</h4> <div class="paragraph"> <p>For RAG ingestion pipelines, batch adding is significantly more efficient. Send a <code>List&lt;String&gt;</code> or <code>List&lt;TextSegment&gt;</code> as the body to the <code>langchain4j-embeddings</code> component to produce batch embeddings:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:batch-store")
@@ -53,44 +53,44 @@ from("direct:search")
     .to("langchain4j-embeddingstore:myStore?action=SEARCH&amp;maxResults=5&amp;minScore=0.7");</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: SEARCH
-            maxResults: 5
-            minScore: 0.7</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The response contains a list of <code>EmbeddingMatch</code> objects with the matching text segments and scores.</p> </div> <div class="sect3"> <h4 id="_returning_text_content_directly"><a class="anchor" href="#_returning_text_content_directly"></a>Returning Text Content Directly</h4> <div class="paragraph"> <p>Use the <code>returnTextContent</code> option to get a list of strings instead of <code>EmbeddingMatch</code> objects:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:search")
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: SEARCH
+              maxResults: 5
+              minScore: 0.7</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The response contains a list of <code>EmbeddingMatch</code> objects with the matching text segments and scores.</p> </div> <div class="sect3"> <h4 id="_returning_text_content_directly"><a class="anchor" href="#_returning_text_content_directly"></a>Returning Text Content Directly</h4> <div class="paragraph"> <p>Use the <code>returnTextContent</code> option to get a list of strings instead of <code>EmbeddingMatch</code> objects:</p> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:search")
     .to("langchain4j-embeddings:embed")
     .to("langchain4j-embeddingstore:myStore?action=SEARCH&amp;maxResults=5&amp;returnTextContent=true")
     .log("Found texts: ${body}");</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:search
-    steps:
-      - to:
-          uri: langchain4j-embeddings:embed
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: SEARCH
-            maxResults: 5
-            returnTextContent: true
-      - log:
-          message: "Found texts: ${body}"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_removing_embeddings_remove_operation"><a class="anchor" href="#_removing_embeddings_remove_operation"></a>Removing Embeddings (REMOVE Operation)</h3> <div class="paragraph"> <p>The REMOVE operation supports multiple strategies:</p> </div> <div class="sect3"> <h4 id="_remove_by_single_id"><a class="anchor" href="#_remove_by_single_id"></a>Remove by Single ID</h4> <div class="paragraph"> <p>Delete a single embedding by its ID (body is a <code>String</code>):</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:remove")
+      steps:
+        - to:
+            uri: langchain4j-embeddings:embed
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: SEARCH
+              maxResults: 5
+              returnTextContent: true
+        - log:
+            message: "Found texts: ${body}"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_removing_embeddings_remove_operation"><a class="anchor" href="#_removing_embeddings_remove_operation"></a>Removing Embeddings (REMOVE Operation)</h3> <div class="paragraph"> <p>The REMOVE operation supports multiple strategies:</p> </div> <div class="sect3"> <h4 id="_remove_by_single_id"><a class="anchor" href="#_remove_by_single_id"></a>Remove by Single ID</h4> <div class="paragraph"> <p>Delete a single embedding by its ID (body is a <code>String</code>):</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:remove")
     .setBody(simple("${header.embeddingId}"))
     .to("langchain4j-embeddingstore:myStore?action=REMOVE");</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:remove
-    steps:
-      - setBody:
-          expression:
-            simple:
-              expression: "${header.embeddingId}"
-      - to:
-          uri: langchain4j-embeddingstore:myStore
-          parameters:
-            action: REMOVE</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_remove_by_collection_of_ids"><a class="anchor" href="#_remove_by_collection_of_ids"></a>Remove by Collection of IDs</h4> <div class="paragraph"> <p>Delete multiple embeddings by passing a <code>Collection&lt;String&gt;</code> as the body:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:remove-batch")
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "${header.embeddingId}"
+        - to:
+            uri: langchain4j-embeddingstore:myStore
+            parameters:
+              action: REMOVE</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_remove_by_collection_of_ids"><a class="anchor" href="#_remove_by_collection_of_ids"></a>Remove by Collection of IDs</h4> <div class="paragraph"> <p>Delete multiple embeddings by passing a <code>Collection&lt;String&gt;</code> as the body:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:remove-batch")
     .setBody(constant(List.of("id-1", "id-2", "id-3")))
     .to("langchain4j-embeddingstore:myStore?action=REMOVE");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_remove_by_metadata_filter"><a class="anchor" href="#_remove_by_metadata_filter"></a>Remove by Metadata Filter</h4> <div class="paragraph"> <p>Delete all embeddings matching a metadata filter using the <code>CamelLangchain4jEmbeddingStoreFilter</code> header:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:remove-by-filter")
     .setHeader("CamelLangchain4jEmbeddingStoreFilter", constant(metadataFilter))

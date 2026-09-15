@@ -850,19 +850,19 @@ from("direct:sign").to("pqc:sign?operation=sign").to("mock:sign").to("pqc:verify
 - route:
     from:
       uri: direct:sign
-    steps:
-      - to:
-          uri: pqc:sign
-          parameters:
-            operation: sign
-      - to:
-          uri: mock:sign
-      - to:
-          uri: pqc:verify
-          parameters:
-            operation: verify
-      - to:
-          uri: mock:verify
+      steps:
+        - to:
+            uri: pqc:sign
+            parameters:
+              operation: sign
+        - to:
+            uri: mock:sign
+        - to:
+            uri: pqc:verify
+            parameters:
+              operation: verify
+        - to:
+            uri: mock:verify
 ```
 
 With the following beans registered in the Registry
@@ -914,21 +914,21 @@ from("direct:sign").to("pqc:sign?operation=sign&signatureAlgorithm=MLDSA").to("m
 - route:
     from:
       uri: direct:sign
-    steps:
-      - to:
-          uri: pqc:sign
-          parameters:
-            operation: sign
-            signatureAlgorithm: MLDSA
-      - to:
-          uri: mock:sign
-      - to:
-          uri: pqc:verify
-          parameters:
-            operation: verify
-            signatureAlgorithm: MLDSA
-      - to:
-          uri: mock:verify
+      steps:
+        - to:
+            uri: pqc:sign
+            parameters:
+              operation: sign
+              signatureAlgorithm: MLDSA
+        - to:
+            uri: mock:sign
+        - to:
+            uri: pqc:verify
+            parameters:
+              operation: verify
+              signatureAlgorithm: MLDSA
+        - to:
+            uri: mock:verify
 ```
 
 With this approach the component will use the class `org.apache.camel.component.pqc.crypto.PQCDefaultMLDSAMaterial`, which will create the Signature and KeyPair objects to be used.
@@ -1037,21 +1037,21 @@ from("direct:encapsulate").to("pqc:keyenc?operation=generateSecretKeyEncapsulati
 - route:
     from:
       uri: direct:encapsulate
-    steps:
-      - to:
-          uri: pqc:keyenc
-          parameters:
-            operation: generateSecretKeyEncapsulation
-            symmetricKeyAlgorithm: AES
-      - to:
-          uri: mock:encapsulate
-      - to:
-          uri: pqc:keyenc
-          parameters:
-            operation: extractSecretKeyEncapsulation
-            symmetricKeyAlgorithm: AES
-      - to:
-          uri: mock:extract
+      steps:
+        - to:
+            uri: pqc:keyenc
+            parameters:
+              operation: generateSecretKeyEncapsulation
+              symmetricKeyAlgorithm: AES
+        - to:
+            uri: mock:encapsulate
+        - to:
+            uri: pqc:keyenc
+            parameters:
+              operation: extractSecretKeyEncapsulation
+              symmetricKeyAlgorithm: AES
+        - to:
+            uri: mock:extract
 ```
 
 With the following beans registered in the Registry
@@ -1108,23 +1108,23 @@ from("direct:encapsulate").to(
 - route:
     from:
       uri: direct:encapsulate
-    steps:
-      - to:
-          uri: pqc:keyenc
-          parameters:
-            operation: generateSecretKeyEncapsulation
-            symmetricKeyAlgorithm: AES
-            keyEncapsulationAlgorithm: MLKEM
-      - to:
-          uri: mock:encapsulate
-      - to:
-          uri: pqc:keyenc
-          parameters:
-            operation: extractSecretKeyEncapsulation
-            symmetricKeyAlgorithm: AES
-            keyEncapsulationAlgorithm: MLKEM
-      - to:
-          uri: mock:extract
+      steps:
+        - to:
+            uri: pqc:keyenc
+            parameters:
+              operation: generateSecretKeyEncapsulation
+              symmetricKeyAlgorithm: AES
+              keyEncapsulationAlgorithm: MLKEM
+        - to:
+            uri: mock:encapsulate
+        - to:
+            uri: pqc:keyenc
+            parameters:
+              operation: extractSecretKeyEncapsulation
+              symmetricKeyAlgorithm: AES
+              keyEncapsulationAlgorithm: MLKEM
+        - to:
+            uri: mock:extract
 ```
 
 With this approach the component will use the class `org.apache.camel.component.pqc.crypto.kem.PQCDefaultMLKEMMaterial`, which will create the KeyGenerator and KeyPair objects to be used.

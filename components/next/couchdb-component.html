@@ -9,9 +9,9 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: couchdb:http://localhost:9999
-    steps:
-      - process:
-          ref: someProcessor</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you were only interested in deleting, then you could use the following:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("couchdb:http://localhost:9999?updates=false").process(someProcessor);</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+      steps:
+        - process:
+            ref: someProcessor</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you were only interested in deleting, then you could use the following:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("couchdb:http://localhost:9999?updates=false").process(someProcessor);</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="couchdb:http://localhost:9999?updates=false"/&gt;
     &lt;process ref="someProcessor"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
@@ -19,20 +19,20 @@
       uri: couchdb:http://localhost:9999
       parameters:
         updates: false
-    steps:
-      - process:
-          ref: someProcessor</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you want to insert a message as a document, then the body of the exchange is used:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("someProducingEndpoint").process(someProcessor).to("couchdb:http://localhost:9999")</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+      steps:
+        - process:
+            ref: someProcessor</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you want to insert a message as a document, then the body of the exchange is used:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("someProducingEndpoint").process(someProcessor).to("couchdb:http://localhost:9999")</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="someProducingEndpoint"/&gt;
     &lt;process ref="someProcessor"/&gt;
     &lt;to uri="couchdb:http://localhost:9999"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: someProducingEndpoint
-    steps:
-      - process:
-          ref: someProcessor
-      - to:
-          uri: couchdb:http://localhost:9999</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>To start tracking the changes immediately after an update sequence, implement a custom resume strategy. To do so, it is necessary to implement a CouchDbResumeStrategy and use the resumable to set the last (update) offset to start tracking the changes:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-none hljs">public class CustomSequenceResumeStrategy implements CouchDbResumeStrategy {
+      steps:
+        - process:
+            ref: someProcessor
+        - to:
+            uri: couchdb:http://localhost:9999</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>To start tracking the changes immediately after an update sequence, implement a custom resume strategy. To do so, it is necessary to implement a CouchDbResumeStrategy and use the resumable to set the last (update) offset to start tracking the changes:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-none hljs">public class CustomSequenceResumeStrategy implements CouchDbResumeStrategy {
     @Override
     public void resume(CouchDbResumable resumable) {
         resumable.setLastOffset("custom-last-update");

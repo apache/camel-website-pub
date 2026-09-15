@@ -624,14 +624,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: google-storage://myCamelBucket
-          parameters:
-            serviceAccountKey: /home/user/Downloads/my-key.json
-            operation: listBuckets
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: google-storage://myCamelBucket
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: listBuckets
+        - to:
+            uri: mock:result
 ```
 
 This operation will list the buckets for this account.
@@ -664,14 +664,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: google-storage://myCamelBucket
-          parameters:
-            serviceAccountKey: /home/user/Downloads/my-key.json
-            operation: deleteBucket
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: google-storage://myCamelBucket
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: deleteBucket
+        - to:
+            uri: mock:result
 ```
 
 This operation will delete the bucket myCamelBucket.
@@ -704,14 +704,14 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: google-storage://myCamelBucket
-          parameters:
-            serviceAccountKey: /home/user/Downloads/my-key.json
-            operation: listObjects
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: google-storage://myCamelBucket
+            parameters:
+              serviceAccountKey: /home/user/Downloads/my-key.json
+              operation: listObjects
+        - to:
+            uri: mock:result
 ```
 
 This operation will list the objects in the myCamelBucket bucket.

@@ -46,9 +46,9 @@ public class MultiSteps {
       uri: jpa://org.apache.camel.examples.MultiSteps
       parameters:
         query: "select o from org.apache.camel.examples.MultiSteps o where o.step = 1"
-    steps:
-      - to:
-          uri: bean:myBusinessLogic</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_consumer_with_a_native_query"><a class="anchor" href="#_using_a_consumer_with_a_native_query"></a>Using a consumer with a native query</h3> <div class="paragraph"> <p>For consuming only selected entities, you can use the <code>nativeQuery</code> URI query option. You only have to define the native query option:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jpa://org.apache.camel.examples.MultiSteps?nativeQuery=select * from MultiSteps where step = 1")
+      steps:
+        - to:
+            uri: bean:myBusinessLogic</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_consumer_with_a_native_query"><a class="anchor" href="#_using_a_consumer_with_a_native_query"></a>Using a consumer with a native query</h3> <div class="paragraph"> <p>For consuming only selected entities, you can use the <code>nativeQuery</code> URI query option. You only have to define the native query option:</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jpa://org.apache.camel.examples.MultiSteps?nativeQuery=select * from MultiSteps where step = 1")
     .to("bean:myBusinessLogic");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="jpa://org.apache.camel.examples.MultiSteps?nativeQuery=select * from MultiSteps where step = 1"/&gt;
     &lt;to uri="bean:myBusinessLogic"/&gt;
@@ -57,9 +57,9 @@ public class MultiSteps {
       uri: jpa://org.apache.camel.examples.MultiSteps
       parameters:
         nativeQuery: "select * from MultiSteps where step = 1"
-    steps:
-      - to:
-          uri: bean:myBusinessLogic</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you use the native query option, you will receive an object array in the message body.</p> </div> </div> <div class="sect2"> <h3 id="_using_a_producer_with_a_named_query"><a class="anchor" href="#_using_a_producer_with_a_named_query"></a>Using a producer with a named query</h3> <div class="paragraph"> <p>For retrieving selected entities or execute bulk update/delete, you can use the <code>namedQuery</code> URI query option. First, you have to define the named query in the JPA Entity class:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: JPA entity class definition with @NamedQuery annotation</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Entity
+      steps:
+        - to:
+            uri: bean:myBusinessLogic</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you use the native query option, you will receive an object array in the message body.</p> </div> </div> <div class="sect2"> <h3 id="_using_a_producer_with_a_named_query"><a class="anchor" href="#_using_a_producer_with_a_named_query"></a>Using a producer with a named query</h3> <div class="paragraph"> <p>For retrieving selected entities or execute bulk update/delete, you can use the <code>namedQuery</code> URI query option. First, you have to define the named query in the JPA Entity class:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: JPA entity class definition with @NamedQuery annotation</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Entity
 @NamedQuery(name = "step1", query = "select x from MultiSteps x where x.step = 1")
 public class MultiSteps {
    ...
@@ -81,23 +81,23 @@ public class MultiSteps {
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:query
-    steps:
-      - to:
-          uri: jpa://org.apache.camel.examples.MultiSteps
-          parameters:
-            query: "select o from org.apache.camel.examples.MultiSteps o where o.step = 1"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_producer_with_a_native_query"><a class="anchor" href="#_using_a_producer_with_a_native_query"></a>Using a producer with a native query</h3> <div class="paragraph"> <p>For retrieving selected entities or execute bulk update/delete, you can use the <code>nativeQuery</code> URI query option. You only have to define the native query option:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:nativeQuery")
+      steps:
+        - to:
+            uri: jpa://org.apache.camel.examples.MultiSteps
+            parameters:
+              query: "select o from org.apache.camel.examples.MultiSteps o where o.step = 1"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_producer_with_a_native_query"><a class="anchor" href="#_using_a_producer_with_a_native_query"></a>Using a producer with a native query</h3> <div class="paragraph"> <p>For retrieving selected entities or execute bulk update/delete, you can use the <code>nativeQuery</code> URI query option. You only have to define the native query option:</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:nativeQuery")
     .to("jpa://org.apache.camel.examples.MultiSteps?resultClass=org.apache.camel.examples.MultiSteps&amp;nativeQuery=select * from MultiSteps where step = 1");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:nativeQuery"/&gt;
     &lt;to uri="jpa://org.apache.camel.examples.MultiSteps?resultClass=org.apache.camel.examples.MultiSteps&amp;amp;nativeQuery=select * from MultiSteps where step = 1"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:nativeQuery
-    steps:
-      - to:
-          uri: jpa://org.apache.camel.examples.MultiSteps
-          parameters:
-            resultClass: org.apache.camel.examples.MultiSteps
-            nativeQuery: "select * from MultiSteps where step = 1"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you use the native query option without specifying <code>resultClass</code>, you will receive an object array in the message body.</p> </div> </div> <div class="sect2"> <h3 id="_using_the_jpa_based_idempotent_repository"><a class="anchor" href="#_using_the_jpa_based_idempotent_repository"></a>Using the JPA-Based Idempotent Repository</h3> <div class="paragraph"> <p>Camel supports the Idempotent Consumer EIP, which is used to filter out duplicate messages. A JPA-based idempotent repository is provided.</p> </div> <div class="paragraph"> <p>To use the JPA based idempotent repository.</p> </div> <div class="olist arabic"> <div class="title">Procedure</div> <ol class="arabic"> <li> <p>Set up a <code>persistence-unit</code> in the persistence.xml file:</p> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;persistence-unit name="idempotentDb" transaction-type="RESOURCE_LOCAL"&gt;
+      steps:
+        - to:
+            uri: jpa://org.apache.camel.examples.MultiSteps
+            parameters:
+              resultClass: org.apache.camel.examples.MultiSteps
+              nativeQuery: "select * from MultiSteps where step = 1"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>If you use the native query option without specifying <code>resultClass</code>, you will receive an object array in the message body.</p> </div> </div> <div class="sect2"> <h3 id="_using_the_jpa_based_idempotent_repository"><a class="anchor" href="#_using_the_jpa_based_idempotent_repository"></a>Using the JPA-Based Idempotent Repository</h3> <div class="paragraph"> <p>Camel supports the Idempotent Consumer EIP, which is used to filter out duplicate messages. A JPA-based idempotent repository is provided.</p> </div> <div class="paragraph"> <p>To use the JPA based idempotent repository.</p> </div> <div class="olist arabic"> <div class="title">Procedure</div> <ol class="arabic"> <li> <p>Set up a <code>persistence-unit</code> in the persistence.xml file:</p> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;persistence-unit name="idempotentDb" transaction-type="RESOURCE_LOCAL"&gt;
     &lt;class&gt;org.apache.camel.processor.idempotent.jpa.MessageProcessed&lt;/class&gt;
 
     &lt;properties&gt;

@@ -254,36 +254,7 @@ from("zookeeper://localhost:39913/somepath/somenode").to("mock:result");
             uri: mock:result
 ```
 
-If the node does not yet exist, then a flag can be supplied to have the endpoint await its creation:
-
--   Java
-    
--   XML
-    
--   YAML
-    
-
-```java
-from("zookeeper://localhost:39913/somepath/somenode?awaitCreation=true").to("mock:result");
-```
-
-```xml
-<route>
-  <from uri="zookeeper://localhost:39913/somepath/somenode?awaitCreation=true"/>
-  <to uri="mock:result"/>
-</route>
-```
-
-```yaml
-- route:
-    from:
-      uri: zookeeper://localhost:39913/somepath/somenode
-      parameters:
-        awaitCreation: true
-      steps:
-        - to:
-            uri: mock:result
-```
+If the node does not exist yet, the consumer waits for it to be created before reading it.
 
 ### Reading from a _znode_
 
@@ -394,12 +365,12 @@ from("direct:delete-znode")
 - route:
     from:
       uri: direct:delete-znode
-    steps:
-      - setHeader:
-          name: CamelZookeeperOperation
-          constant: DELETE
-      - to:
-          uri: zookeeper://localhost:39913/somepath/somenode
+      steps:
+        - setHeader:
+            name: CamelZookeeperOperation
+            constant: DELETE
+        - to:
+            uri: zookeeper://localhost:39913/somepath/somenode
 ```
 
 ZooKeeper’s nodes can have different types; they can be 'Ephemeral' or 'Persistent' and 'Sequenced' or 'Unsequenced'. For further information of each type, you can check [here](http://zookeeper.apache.org/doc/trunk/zookeeperProgrammers.html#Ephemeral+Nodes). By default, endpoints will create unsequenced, ephemeral nodes, but the type can be easily manipulated via an URI config parameter or via a special message header. The values expected for the create mode are simply the names from the `CreateMode` enumeration:

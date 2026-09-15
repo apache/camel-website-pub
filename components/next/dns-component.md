@@ -300,7 +300,7 @@ from("direct:start")
     routePolicyRef: dnsActivationPolicy
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: "..."
+      steps:
+        - to:
+            uri: "..."
 ```

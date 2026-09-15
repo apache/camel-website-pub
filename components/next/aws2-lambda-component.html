@@ -39,16 +39,16 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:createFunctionUrl
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaFunctionUrlAuthType
-          constant: NONE
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: createFunctionUrlConfig
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The <code>FUNCTION_URL_AUTH_TYPE</code> can be either <code>NONE</code> (public access) or <code>AWS_IAM</code> (authenticated access).</p> </div> <div class="ulist"> <ul> <li> <p>getFunctionUrlConfig: this operation will retrieve the function URL configuration</p> </li> </ul> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getFunctionUrl")
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaFunctionUrlAuthType
+            constant: NONE
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: createFunctionUrlConfig
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The <code>FUNCTION_URL_AUTH_TYPE</code> can be either <code>NONE</code> (public access) or <code>AWS_IAM</code> (authenticated access).</p> </div> <div class="ulist"> <ul> <li> <p>getFunctionUrlConfig: this operation will retrieve the function URL configuration</p> </li> </ul> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getFunctionUrl")
     .to("aws2-lambda://myFunction?operation=getFunctionUrlConfig")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getFunctionUrl"/&gt;
@@ -57,13 +57,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getFunctionUrl
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: getFunctionUrlConfig
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>updateFunctionUrlConfig: this operation will update the function URL configuration</p> </li> </ul> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:updateFunctionUrl")
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: getFunctionUrlConfig
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>updateFunctionUrlConfig: this operation will update the function URL configuration</p> </li> </ul> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:updateFunctionUrl")
     .setHeader("CamelAwsLambdaFunctionUrlAuthType", constant("AWS_IAM"))
     .to("aws2-lambda://myFunction?operation=updateFunctionUrlConfig")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -76,16 +76,16 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:updateFunctionUrl
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaFunctionUrlAuthType
-          constant: AWS_IAM
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: updateFunctionUrlConfig
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteFunctionUrlConfig: this operation will delete the function URL</p> </li> </ul> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteFunctionUrl")
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaFunctionUrlAuthType
+            constant: AWS_IAM
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: updateFunctionUrlConfig
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteFunctionUrlConfig: this operation will delete the function URL</p> </li> </ul> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteFunctionUrl")
     .to("aws2-lambda://myFunction?operation=deleteFunctionUrlConfig")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deleteFunctionUrl"/&gt;
@@ -94,13 +94,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteFunctionUrl
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: deleteFunctionUrlConfig
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listFunctionUrlConfigs: this operation will list all function URLs for a function</p> </li> </ul> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listFunctionUrls")
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: deleteFunctionUrlConfig
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>listFunctionUrlConfigs: this operation will list all function URLs for a function</p> </li> </ul> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:listFunctionUrls")
     .to("aws2-lambda://myFunction?operation=listFunctionUrlConfigs")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:listFunctionUrls"/&gt;
@@ -109,13 +109,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:listFunctionUrls
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: listFunctionUrlConfigs
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_function_configuration_operations"><a class="anchor" href="#_function_configuration_operations"></a>Function Configuration Operations</h3> <div class="paragraph"> <p>Function Configuration operations allow you to view and modify your Lambda function&#8217;s runtime settings.</p> </div> <div class="ulist"> <ul> <li> <p>getFunctionConfiguration: this operation will retrieve the configuration details of a function</p> </li> </ul> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getFunctionConfiguration")
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: listFunctionUrlConfigs
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_function_configuration_operations"><a class="anchor" href="#_function_configuration_operations"></a>Function Configuration Operations</h3> <div class="paragraph"> <p>Function Configuration operations allow you to view and modify your Lambda function&#8217;s runtime settings.</p> </div> <div class="ulist"> <ul> <li> <p>getFunctionConfiguration: this operation will retrieve the configuration details of a function</p> </li> </ul> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getFunctionConfiguration")
     .to("aws2-lambda://myFunction?operation=getFunctionConfiguration")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getFunctionConfiguration"/&gt;
@@ -124,13 +124,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getFunctionConfiguration
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: getFunctionConfiguration
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>updateFunctionConfiguration: this operation will update the configuration of a function</p> </li> </ul> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:updateFunctionConfiguration")
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: getFunctionConfiguration
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>updateFunctionConfiguration: this operation will update the configuration of a function</p> </li> </ul> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:updateFunctionConfiguration")
     .setHeader("CamelAwsLambdaFunctionMemorySize", constant(512))
     .setHeader("CamelAwsLambdaFunctionTimeout", constant(60))
     .setHeader("CamelAwsLambdaDescription", constant("Updated function description"))
@@ -151,22 +151,22 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_8_yaml--panel" class="tabpanel" aria-labelledby="_tabs_8_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:updateFunctionConfiguration
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaFunctionMemorySize
-          constant: 512
-      - setHeader:
-          name: CamelAwsLambdaFunctionTimeout
-          constant: 60
-      - setHeader:
-          name: CamelAwsLambdaDescription
-          constant: Updated function description
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: updateFunctionConfiguration
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_concurrency_operations"><a class="anchor" href="#_concurrency_operations"></a>Concurrency Operations</h3> <div class="paragraph"> <p>Concurrency operations allow you to manage reserved concurrency for your Lambda functions.</p> </div> <div class="ulist"> <ul> <li> <p>putFunctionConcurrency: this operation will set the reserved concurrency for a function</p> </li> </ul> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:putFunctionConcurrency")
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaFunctionMemorySize
+            constant: 512
+        - setHeader:
+            name: CamelAwsLambdaFunctionTimeout
+            constant: 60
+        - setHeader:
+            name: CamelAwsLambdaDescription
+            constant: Updated function description
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: updateFunctionConfiguration
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_concurrency_operations"><a class="anchor" href="#_concurrency_operations"></a>Concurrency Operations</h3> <div class="paragraph"> <p>Concurrency operations allow you to manage reserved concurrency for your Lambda functions.</p> </div> <div class="ulist"> <ul> <li> <p>putFunctionConcurrency: this operation will set the reserved concurrency for a function</p> </li> </ul> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:putFunctionConcurrency")
     .setHeader("CamelAwsLambdaReservedConcurrentExecutions", constant(100))
     .to("aws2-lambda://myFunction?operation=putFunctionConcurrency")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_9_xml--panel" class="tabpanel" aria-labelledby="_tabs_9_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -179,16 +179,16 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_9_yaml--panel" class="tabpanel" aria-labelledby="_tabs_9_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:putFunctionConcurrency
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaReservedConcurrentExecutions
-          constant: "100"
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: putFunctionConcurrency
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteFunctionConcurrency: this operation will remove reserved concurrency from a function</p> </li> </ul> </div> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteFunctionConcurrency")
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaReservedConcurrentExecutions
+            constant: "100"
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: putFunctionConcurrency
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>deleteFunctionConcurrency: this operation will remove reserved concurrency from a function</p> </li> </ul> </div> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteFunctionConcurrency")
     .to("aws2-lambda://myFunction?operation=deleteFunctionConcurrency")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_10_xml--panel" class="tabpanel" aria-labelledby="_tabs_10_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deleteFunctionConcurrency"/&gt;
@@ -197,13 +197,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_10_yaml--panel" class="tabpanel" aria-labelledby="_tabs_10_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteFunctionConcurrency
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: deleteFunctionConcurrency
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getFunctionConcurrency: this operation will retrieve the reserved concurrency for a function</p> </li> </ul> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getFunctionConcurrency")
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: deleteFunctionConcurrency
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getFunctionConcurrency: this operation will retrieve the reserved concurrency for a function</p> </li> </ul> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getFunctionConcurrency")
     .to("aws2-lambda://myFunction?operation=getFunctionConcurrency")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_11_xml--panel" class="tabpanel" aria-labelledby="_tabs_11_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getFunctionConcurrency"/&gt;
@@ -212,13 +212,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_11_yaml--panel" class="tabpanel" aria-labelledby="_tabs_11_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getFunctionConcurrency
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: getFunctionConcurrency
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_permission_operations"><a class="anchor" href="#_permission_operations"></a>Permission Operations</h3> <div class="paragraph"> <p>Permission operations allow you to manage the resource-based policy for your Lambda functions.</p> </div> <div class="ulist"> <ul> <li> <p>addPermission: this operation will add a permission to the function&#8217;s resource-based policy</p> </li> </ul> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:addPermission")
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: getFunctionConcurrency
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_permission_operations"><a class="anchor" href="#_permission_operations"></a>Permission Operations</h3> <div class="paragraph"> <p>Permission operations allow you to manage the resource-based policy for your Lambda functions.</p> </div> <div class="ulist"> <ul> <li> <p>addPermission: this operation will add a permission to the function&#8217;s resource-based policy</p> </li> </ul> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:addPermission")
     .setHeader("CamelAwsLambdaStatementId", constant("s3-invoke"))
     .setHeader("CamelAwsLambdaAction", constant("lambda:InvokeFunction"))
     .setHeader("CamelAwsLambdaPrincipal", constant("s3.amazonaws.com"))
@@ -243,25 +243,25 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_12_yaml--panel" class="tabpanel" aria-labelledby="_tabs_12_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:addPermission
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaStatementId
-          constant: s3-invoke
-      - setHeader:
-          name: CamelAwsLambdaAction
-          constant: "lambda:InvokeFunction"
-      - setHeader:
-          name: CamelAwsLambdaPrincipal
-          constant: s3.amazonaws.com
-      - setHeader:
-          name: CamelAwsLambdaSourceArn
-          constant: "arn:aws:s3:::my-bucket"
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: addPermission
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>removePermission: this operation will remove a permission from the function&#8217;s resource-based policy</p> </li> </ul> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:removePermission")
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaStatementId
+            constant: s3-invoke
+        - setHeader:
+            name: CamelAwsLambdaAction
+            constant: "lambda:InvokeFunction"
+        - setHeader:
+            name: CamelAwsLambdaPrincipal
+            constant: s3.amazonaws.com
+        - setHeader:
+            name: CamelAwsLambdaSourceArn
+            constant: "arn:aws:s3:::my-bucket"
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: addPermission
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>removePermission: this operation will remove a permission from the function&#8217;s resource-based policy</p> </li> </ul> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:removePermission")
     .setHeader("CamelAwsLambdaStatementId", constant("s3-invoke"))
     .to("aws2-lambda://myFunction?operation=removePermission")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_13_xml--panel" class="tabpanel" aria-labelledby="_tabs_13_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -274,16 +274,16 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_13_yaml--panel" class="tabpanel" aria-labelledby="_tabs_13_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:removePermission
-    steps:
-      - setHeader:
-          name: CamelAwsLambdaStatementId
-          constant: s3-invoke
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: removePermission
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getPolicy: this operation will retrieve the resource-based policy for a function</p> </li> </ul> </div> <div id="_tabs_14" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_14_java" class="tab"> <p>Java</p> </li> <li id="_tabs_14_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_14_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_14_java--panel" class="tabpanel" aria-labelledby="_tabs_14_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getPolicy")
+      steps:
+        - setHeader:
+            name: CamelAwsLambdaStatementId
+            constant: s3-invoke
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: removePermission
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getPolicy: this operation will retrieve the resource-based policy for a function</p> </li> </ul> </div> <div id="_tabs_14" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_14_java" class="tab"> <p>Java</p> </li> <li id="_tabs_14_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_14_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_14_java--panel" class="tabpanel" aria-labelledby="_tabs_14_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getPolicy")
     .to("aws2-lambda://myFunction?operation=getPolicy")
     .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_14_xml--panel" class="tabpanel" aria-labelledby="_tabs_14_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getPolicy"/&gt;
@@ -292,13 +292,13 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_14_yaml--panel" class="tabpanel" aria-labelledby="_tabs_14_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getPolicy
-    steps:
-      - to:
-          uri: aws2-lambda://myFunction
-          parameters:
-            operation: getPolicy
-      - to:
-          uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>You can also configure CORS settings for function URLs:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires List values for CORS headers</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createFunctionUrlWithCors")
+      steps:
+        - to:
+            uri: aws2-lambda://myFunction
+            parameters:
+              operation: getPolicy
+        - to:
+            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>You can also configure CORS settings for function URLs:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: requires List values for CORS headers</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createFunctionUrlWithCors")
     .process(exchange -&gt; {
         exchange.getIn().setHeader("CamelAwsLambdaFunctionUrlAuthType", "NONE");
         exchange.getIn().setHeader("CamelAwsLambdaFunctionUrlCorsAllowOrigins",

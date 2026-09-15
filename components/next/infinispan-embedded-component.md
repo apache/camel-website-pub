@@ -674,9 +674,9 @@ Table 11. Query Operation
           parameters:
             cacheContainer: "#cacheManager"
             customListener: "#myCustomListener"
-        steps:
-          - to:
-              uri: mock:result
+          steps:
+            - to:
+                uri: mock:result
     ```
     
     The instance of `myCustomListener` must exist and Camel should be able to look it up from the `Registry`. Users are encouraged to extend the `org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedCustomListener` class and annotate the resulting class with `@Listener` which can be found in the package `org.infinispan.notifications`.

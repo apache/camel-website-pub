@@ -476,9 +476,9 @@ from("azure-cosmosdb://camelDb/myContainer?accountKey=MyaccountKey&databaseEndpo
         leaseDatabaseName: myLeaseDB
         createLeaseDatabaseIfNotExists: true
         createLeaseContainerIfNotExists: true
-    steps:
-      - to:
-          uri: file://directory
+      steps:
+        - to:
+            uri: file://directory
 ```
 
 ### Operations
@@ -1104,9 +1104,9 @@ from("azure-cosmosdb://myDb/myContainer?leaseDatabaseName=myLeaseDb&createLeaseD
         leaseDatabaseName: myLeaseDb
         createLeaseDatabaseIfNotExists: true
         createLeaseContainerIfNotExists: true
-    steps:
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ## Important Development Notes

@@ -313,7 +313,8 @@ from("flatpack:foo")
     from:
       uri: flatpack:foo
       steps:
-        - ...
+        - log:
+            message: "${body}"
 ```
 
 You can also convert the payload of each message created to a `Map` for easy Bean Integration

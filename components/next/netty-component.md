@@ -763,7 +763,7 @@ For example, using Spring XML we can create a shared worker thread pool using th
 > **Tip**
 > For boss thread pool there is a `org.apache.camel.component.netty.NettyServerBossPoolBuilder` builder for Netty consumers, and a `org.apache.camel.component.netty.NettyClientBossPoolBuilder` for the Netty producers.
 
-Then in the Camel routes we can refer to this worker pools by configuring the `workerPool` option in the URI as shown below:
+Then in the Camel routes we can refer to this worker pools by configuring the `workerGroup` option in the URI as shown below:
 
 -   Java
     
@@ -773,13 +773,13 @@ Then in the Camel routes we can refer to this worker pools by configuring the `w
     
 
 ```java
-from("netty:tcp://0.0.0.0:5021?textline=true&sync=true&workerPool=#sharedPool&usingExecutorService=false")
+from("netty:tcp://0.0.0.0:5021?textline=true&sync=true&workerGroup=#sharedPool&usingExecutorService=false")
     .to("log:result");
 ```
 
 ```xml
 <route>
-  <from uri="netty:tcp://0.0.0.0:5021?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false"/>
+  <from uri="netty:tcp://0.0.0.0:5021?textline=true&amp;sync=true&amp;workerGroup=#sharedPool&amp;usingExecutorService=false"/>
   <to uri="log:result"/>
 </route>
 ```
@@ -791,7 +791,7 @@ from("netty:tcp://0.0.0.0:5021?textline=true&sync=true&workerPool=#sharedPool&us
       parameters:
         textline: true
         sync: true
-        workerPool: "#sharedPool"
+        workerGroup: "#sharedPool"
         usingExecutorService: false
       steps:
         - to:
@@ -808,13 +808,13 @@ And if we have another route, we can refer to the shared worker pool:
     
 
 ```java
-from("netty:tcp://0.0.0.0:5022?textline=true&sync=true&workerPool=#sharedPool&usingExecutorService=false")
+from("netty:tcp://0.0.0.0:5022?textline=true&sync=true&workerGroup=#sharedPool&usingExecutorService=false")
     .to("log:result");
 ```
 
 ```xml
 <route>
-  <from uri="netty:tcp://0.0.0.0:5022?textline=true&amp;sync=true&amp;workerPool=#sharedPool&amp;usingExecutorService=false"/>
+  <from uri="netty:tcp://0.0.0.0:5022?textline=true&amp;sync=true&amp;workerGroup=#sharedPool&amp;usingExecutorService=false"/>
   <to uri="log:result"/>
 </route>
 ```
@@ -826,7 +826,7 @@ from("netty:tcp://0.0.0.0:5022?textline=true&sync=true&workerPool=#sharedPool&us
       parameters:
         textline: true
         sync: true
-        workerPool: "#sharedPool"
+        workerGroup: "#sharedPool"
         usingExecutorService: false
       steps:
         - to:
@@ -939,9 +939,9 @@ from("netty:tcp://0.0.0.0:5150")
 - route:
     from:
       uri: netty:tcp://0.0.0.0:5150
-    steps:
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ### An SSL/TCP-based Netty consumer endpoint using Request-Reply communication

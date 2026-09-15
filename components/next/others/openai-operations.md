@@ -112,8 +112,9 @@ The pgvector component handles table creation, HNSW indexing, upsert with confli
 For custom table schemas, complex queries (joins, CTEs), or integration with existing PostgreSQL tables, you can use `camel-sql` directly with the pgvector extension:
 
 ```yaml
-- to:
-    uri: sql:INSERT INTO documents (content, embedding) VALUES (:#text, :#embedding::vector)
+steps:
+  - to:
+      uri: sql:INSERT INTO documents (content, embedding) VALUES (:#text, :#embedding::vector)
 ```
 
 #### Alternative: Dedicated Vector Databases

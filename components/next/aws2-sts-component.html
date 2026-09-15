@@ -13,18 +13,18 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:assumeRole
-    steps:
-      - setHeader:
-          name: CamelAwsStsRoleArn
-          constant: "arn:123"
-      - setHeader:
-          name: CamelAwsStsRoleSessionName
-          constant: groot
-      - to:
-          uri: aws2-sts://test
-          parameters:
-            stsClient: "#amazonSTSClient"
-            operation: assumeRole</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getSessionToken: this operation will return a temporary session token</p> </li> </ul> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getSessionToken")
+      steps:
+        - setHeader:
+            name: CamelAwsStsRoleArn
+            constant: "arn:123"
+        - setHeader:
+            name: CamelAwsStsRoleSessionName
+            constant: groot
+        - to:
+            uri: aws2-sts://test
+            parameters:
+              stsClient: "#amazonSTSClient"
+              operation: assumeRole</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p>getSessionToken: this operation will return a temporary session token</p> </li> </ul> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getSessionToken")
     .to("aws2-sts://test?stsClient=#amazonSTSClient&amp;operation=getSessionToken");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:getSessionToken"/&gt;
   &lt;to uri="aws2-sts://test?stsClient=#amazonSTSClient&amp;amp;operation=getSessionToken"/&gt;
@@ -47,15 +47,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getFederationToken
-    steps:
-      - setHeader:
-          name: CamelAwsStsFederatedName
-          constant: federation-account
-      - to:
-          uri: aws2-sts://test
-          parameters:
-            stsClient: "#amazonSTSClient"
-            operation: getFederationToken</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_pojo_as_body"><a class="anchor" href="#_using_a_pojo_as_body"></a>Using a POJO as body</h3> <div class="paragraph"> <p>Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS STS, as an example for Assume Role request, you can do something like:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a POJO request body with the AWS SDK builder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createUser")
+      steps:
+        - setHeader:
+            name: CamelAwsStsFederatedName
+            constant: federation-account
+        - to:
+            uri: aws2-sts://test
+            parameters:
+              stsClient: "#amazonSTSClient"
+              operation: getFederationToken</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_using_a_pojo_as_body"><a class="anchor" href="#_using_a_pojo_as_body"></a>Using a POJO as body</h3> <div class="paragraph"> <p>Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS STS, as an example for Assume Role request, you can do something like:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: using a POJO request body with the AWS SDK builder</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:createUser")
      .setBody(AssumeRoleRequest.builder().roleArn("arn:123").roleSessionName("groot").build())
     .to("aws2-sts://test?stsClient=#amazonSTSClient&amp;operation=assumeRole&amp;pojoRequest=true")</code></pre> </div> </div> <div class="paragraph"> <p>In this way, you&#8217;ll pass the request directly without the need of passing headers and options specifically related to this operation.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>Maven users will need to add the following dependency to their pom.xml.</p> </div> <div class="paragraph"> <p><strong>pom.xml</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;

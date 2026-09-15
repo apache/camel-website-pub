@@ -246,11 +246,11 @@ from("direct:chat")
 - route:
     from:
       uri: "direct:chat"
-    steps:
-      - to:
-          uri: "langchain4j-chat:test"
-          parameters:
-            chatModel: "#chatLanguageModel"
+      steps:
+        - to:
+            uri: "langchain4j-chat:test"
+            parameters:
+              chatModel: "#chatLanguageModel"
 ```
 
 ```xml
@@ -327,11 +327,11 @@ from("direct:chat")
 - route:
     from:
       uri: "direct:chat"
-    steps:
-      - to:
-          uri: "langchain4j-chat:test"
-          parameters:
-            chatModel: "#myChatModel"
+      steps:
+        - to:
+            uri: "langchain4j-chat:test"
+            parameters:
+              chatModel: "#myChatModel"
 ```
 
 > **Note**

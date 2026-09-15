@@ -80,7 +80,7 @@ try (ElasticsearchScrollRequestIterator response = template.requestBody("direct:
   &lt;from uri="direct:search"/&gt;
   &lt;to uri="elasticsearch://elasticsearch?operation=Search&amp;amp;indexName=twitter&amp;amp;useScroll=true&amp;amp;scrollKeepAliveMs=30000"/&gt;
   &lt;split streaming="true"&gt;
-    &lt;body/&gt;
+    &lt;simple&gt;${body}&lt;/simple&gt;
     &lt;to uri="mock:output"/&gt;
   &lt;/split&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
@@ -96,7 +96,8 @@ try (ElasticsearchScrollRequestIterator response = template.requestBody("direct:
               scrollKeepAliveMs: 30000
         - split:
             expression:
-              body: {}
+              simple:
+                expression: "${body}"
             streaming: true
             steps:
               - to:

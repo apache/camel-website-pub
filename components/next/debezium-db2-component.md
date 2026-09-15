@@ -354,11 +354,11 @@ Here is a basic route that you can use to listen to Debezium events from the db2
     
 
 ```java
-from("debezium-db2:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&databaseHostname=localhost&databaseUser=debezium&databasePassword=dbz&databaseServerName=my-app-connector&databaseHistoryFileFilename=/usr/history-file-1.dat")
+from("debezium-db2:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&databaseHostname=localhost&databaseUser=debezium&databasePassword=dbz&topicPrefix=my-app-connector&schemaHistoryInternalFileFilename=/usr/history-file-1.dat")
     .log("Event received from Debezium : ${body}")
     .log("    with this identifier ${headers.CamelDebeziumIdentifier}")
     .log("    with these source metadata ${headers.CamelDebeziumSourceMetadata}")
-    .log("    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'")
+    .log("    the event occurred upon this operation '${headers.CamelDebeziumOperation}'")
     .log("    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'")
     .log("    with the key ${headers.CamelDebeziumKey}")
     .log("    the previous value is ${headers.CamelDebeziumBefore}");
@@ -366,11 +366,11 @@ from("debezium-db2:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&datab
 
 ```xml
 <route>
-  <from uri="debezium-db2:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&amp;databaseHostname=localhost&amp;databaseUser=debezium&amp;databasePassword=dbz&amp;databaseServerName=my-app-connector&amp;databaseHistoryFileFilename=/usr/history-file-1.dat"/>
+  <from uri="debezium-db2:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&amp;databaseHostname=localhost&amp;databaseUser=debezium&amp;databasePassword=dbz&amp;topicPrefix=my-app-connector&amp;schemaHistoryInternalFileFilename=/usr/history-file-1.dat"/>
   <log message="Event received from Debezium : ${body}"/>
   <log message="    with this identifier ${headers.CamelDebeziumIdentifier}"/>
   <log message="    with these source metadata ${headers.CamelDebeziumSourceMetadata}"/>
-  <log message="    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'"/>
+  <log message="    the event occurred upon this operation '${headers.CamelDebeziumOperation}'"/>
   <log message="    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'"/>
   <log message="    with the key ${headers.CamelDebeziumKey}"/>
   <log message="    the previous value is ${headers.CamelDebeziumBefore}"/>
@@ -386,8 +386,8 @@ from("debezium-db2:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&datab
         databaseHostname: localhost
         databaseUser: debezium
         databasePassword: dbz
-        databaseServerName: my-app-connector
-        databaseHistoryFileFilename: /usr/history-file-1.dat
+        topicPrefix: my-app-connector
+        schemaHistoryInternalFileFilename: /usr/history-file-1.dat
       steps:
         - log:
             message: "Event received from Debezium : ${body}"
@@ -396,7 +396,7 @@ from("debezium-db2:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&datab
         - log:
             message: "    with these source metadata ${headers.CamelDebeziumSourceMetadata}"
         - log:
-            message: "    the event occurred upon this operation '${headers.CamelDebeziumSourceOperation}'"
+            message: "    the event occurred upon this operation '${headers.CamelDebeziumOperation}'"
         - log:
             message: "    on this database '${headers.CamelDebeziumSourceMetadata[db]}' and this table '${headers.CamelDebeziumSourceMetadata[table]}'"
         - log:

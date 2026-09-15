@@ -15,30 +15,30 @@ from(“jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ”).to
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:george
-    steps:
-      - to:
-          uri: jt400://GEORGE:EGROEG@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ
+      steps:
+        - to:
+            uri: jt400://GEORGE:EGROEG@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ
 
 - route:
     from:
       uri: jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ
-    steps:
-      - to:
-          uri: mock:ringo</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_program_call_examples"><a class="anchor" href="#_program_call_examples"></a>Program call examples</h3> <div class="paragraph"> <p>In the snippet below, the data Exchange sent to the direct:work endpoint will contain three strings that will be used as the arguments for the program “compute” in the library “assets”. This program will write the output values in the second and third parameters. All the parameters will be sent to the direct:play endpoint.</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from(“direct:work”).to(“jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM?fieldsLength=10,10,512&amp;ouputFieldsIdx=2,3”).to(“direct:play”);</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
-  &lt;from uri=”direct:work”/&gt;
-  &lt;to uri=”jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM?fieldsLength=10,10,512&amp;amp;ouputFieldsIdx=2,3”/&gt;
-  &lt;to uri=”direct:play”/&gt;
+      steps:
+        - to:
+            uri: mock:ringo</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_program_call_examples"><a class="anchor" href="#_program_call_examples"></a>Program call examples</h3> <div class="paragraph"> <p>In the snippet below, the data Exchange sent to the direct:work endpoint will contain three strings that will be used as the arguments for the program “compute” in the library “assets”. This program will write the output values in the second and third parameters. All the parameters will be sent to the direct:play endpoint.</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:work").to("jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM?fieldsLength=10,10,512&amp;outputFieldsIdx=2,3").to("direct:play");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+  &lt;from uri="direct:work"/&gt;
+  &lt;to uri="jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM?fieldsLength=10,10,512&amp;amp;outputFieldsIdx=2,3"/&gt;
+  &lt;to uri="direct:play"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:work
-    steps:
-      - to:
-          uri: jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM
-          parameters:
-            fieldsLength: “10,10,512”
-            ouputFieldsIdx: “2,3”
-      - to:
-          uri: direct:play</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>In this example, the camel route will call the QUSRTVUS API to retrieve 16 bytes from data area “MYUSRSPACE” in the “MYLIB” library.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses lambda Processor to set program call parameters</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from(“timer://foo?period=60000”)
+      steps:
+        - to:
+            uri: jt400://GRUPO:ATWORK@server/QSYS.LIB/assets.LIB/compute.PGM
+            parameters:
+              fieldsLength: "10,10,512"
+              outputFieldsIdx: "2,3"
+        - to:
+            uri: direct:play</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>In this example, the camel route will call the QUSRTVUS API to retrieve 16 bytes from data area “MYUSRSPACE” in the “MYLIB” library.</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses lambda Processor to set program call parameters</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from(“timer://foo?period=60000”)
     .process( exchange -&gt; {
         String usrSpc = “MYUSRSPACEMYLIB     “;
         Object[] parms = new Object[] {
@@ -58,11 +58,11 @@ from(“jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ”).to
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: jms:queue:input
-    steps:
-      - to:
-          uri: jt400://username:password@system/lib.lib/MSGINDQ.DTAQ
-          parameters:
-            keyed: true</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_reading_from_keyed_data_queues"><a class="anchor" href="#_reading_from_keyed_data_queues"></a>Reading from keyed data queues</h3> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jt400://username:password@system/lib.lib/MSGOUTDQ.DTAQ?keyed=true&amp;searchKey=MYKEY&amp;searchType=GE")
+      steps:
+        - to:
+            uri: jt400://username:password@system/lib.lib/MSGINDQ.DTAQ
+            parameters:
+              keyed: true</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_reading_from_keyed_data_queues"><a class="anchor" href="#_reading_from_keyed_data_queues"></a>Reading from keyed data queues</h3> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jt400://username:password@system/lib.lib/MSGOUTDQ.DTAQ?keyed=true&amp;searchKey=MYKEY&amp;searchType=GE")
     .to("jms:queue:output");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="jt400://username:password@system/lib.lib/MSGOUTDQ.DTAQ?keyed=true&amp;amp;searchKey=MYKEY&amp;amp;searchType=GE"/&gt;
     &lt;to uri="jms:queue:output"/&gt;
@@ -73,27 +73,27 @@ from(“jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ”).to
         keyed: true
         searchKey: MYKEY
         searchType: GE
-    steps:
-      - to:
-          uri: jms:queue:output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_writing_to_message_queues"><a class="anchor" href="#_writing_to_message_queues"></a>Writing to message queues</h3> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jms:queue:input")
+      steps:
+        - to:
+            uri: jms:queue:output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_writing_to_message_queues"><a class="anchor" href="#_writing_to_message_queues"></a>Writing to message queues</h3> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jms:queue:input")
     .to("jt400://username:password@system/lib.lib/MSGINQ.MSGQ");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="jms:queue:input"/&gt;
     &lt;to uri="jt400://username:password@system/lib.lib/MSGINQ.MSGQ"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: jms:queue:input
-    steps:
-      - to:
-          uri: jt400://username:password@system/lib.lib/MSGINQ.MSGQ</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_reading_from_a_message_queue"><a class="anchor" href="#_reading_from_a_message_queue"></a>Reading from a message queue</h3> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jt400://username:password@system/lib.lib/MSGOUTQ.MSGQ")
+      steps:
+        - to:
+            uri: jt400://username:password@system/lib.lib/MSGINQ.MSGQ</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_reading_from_a_message_queue"><a class="anchor" href="#_reading_from_a_message_queue"></a>Reading from a message queue</h3> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jt400://username:password@system/lib.lib/MSGOUTQ.MSGQ")
     .to("jms:queue:output");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="jt400://username:password@system/lib.lib/MSGOUTQ.MSGQ"/&gt;
     &lt;to uri="jms:queue:output"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: jt400://username:password@system/lib.lib/MSGOUTQ.MSGQ
-    steps:
-      - to:
-          uri: jms:queue:output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_replying_to_an_inquiry_message_on_a_message_queue"><a class="anchor" href="#_replying_to_an_inquiry_message_on_a_message_queue"></a>Replying to an inquiry message on a message queue</h3> <div class="listingblock"> <div class="title"><em>Java-only: uses Java constants, lambda expression, and choice with header() predicate</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jt400://username:password@localhost/qsys.lib/qusrsys.lib/myq.msgq?sendingReply=true")
+      steps:
+        - to:
+            uri: jms:queue:output</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_replying_to_an_inquiry_message_on_a_message_queue"><a class="anchor" href="#_replying_to_an_inquiry_message_on_a_message_queue"></a>Replying to an inquiry message on a message queue</h3> <div class="listingblock"> <div class="title"><em>Java-only: uses Java constants, lambda expression, and choice with header() predicate</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("jt400://username:password@localhost/qsys.lib/qusrsys.lib/myq.msgq?sendingReply=true")
 .choice()
     .when(header("CamelJt400MessageType").isEqualTo(AS400Message.INQUIRY))
         .process((exchange) -&gt; {

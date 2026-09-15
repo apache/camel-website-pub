@@ -220,14 +220,14 @@ from("direct:list")
 - route:
     from:
       uri: direct:list
-    steps:
-      - to:
-          uri: kubernetes-replication-controllers:///
-          parameters:
-            kubernetesClient: "#kubernetesClient"
-            operation: listReplicationControllers
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: kubernetes-replication-controllers:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listReplicationControllers
+        - to:
+            uri: mock:result
 ```
 
 This operation returns a list of RCs from your cluster
@@ -276,9 +276,9 @@ from("kubernetes-replication-controllers://{{kubernetes-host}}?oauthToken={{kube
       uri: kubernetes-replication-controllers://{{kubernetes-host}}
       parameters:
         oauthToken: "{{kubernetes-token}}"
-    steps:
-      - to:
-          uri: log:result
+      steps:
+        - to:
+            uri: log:result
 ```
 
 This consumer returns a message per event received for all ReplicationControllers from all namespaces in the cluster.

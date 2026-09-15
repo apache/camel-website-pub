@@ -521,14 +521,14 @@ from("timer:tick")
 - route:
     from:
       uri: timer:tick
-    steps:
-      - setBody:
-          constant: Hello
-      - to:
-          uri: telegram:bots
-          parameters:
-            authorizationToken: "123456789:insertYourAuthorizationTokenHere"
-            chatId: "123456"
+      steps:
+        - setBody:
+            constant: Hello
+        - to:
+            uri: telegram:bots
+            parameters:
+              authorizationToken: "123456789:insertYourAuthorizationTokenHere"
+              chatId: "123456"
 ```
 
 Note that the corresponding URI parameter is simply `chatId`.
@@ -636,9 +636,9 @@ from("webhook:telegram:bots?authorizationToken=123456789:insertYourAuthorization
       uri: webhook:telegram:bots
       parameters:
         authorizationToken: "123456789:insertYourAuthorizationTokenHere"
-    steps:
-      - to:
-          uri: log:info
+      steps:
+        - to:
+            uri: log:info
 ```
 
 Some endpoints will be exposed by your application and Telegram will be configured to send messages to them. You need to ensure that your server is exposed to the internet and to pass the right value of the **camel.component.webhook.configuration.webhook-external-url** property.

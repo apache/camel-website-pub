@@ -104,6 +104,7 @@ Enum values:
  | fetchX509Svid | SpiffeOperation |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **workloadApiClient** (advanced) | **Autowired** An existing WorkloadApiClient to use. When set, the component does not create or close its own client and spiffeSocketPath is ignored. |  | WorkloadApiClient |
+| **allowOperationHeader** (security) | Whether the CamelSpiffeOperation header may override the configured operation. Disabled by default: the operation decides whether this endpoint validates a token or mints one, so a message that can set it can turn a validator into an endpoint that hands out this workload’s own JWT-SVID. Enable it only on routes whose input is trusted. | false | boolean |
 | **spiffeSocketPath** (security) | The address of the SPIFFE Workload API endpoint (for example \\{code unix:///tmp/agent.sock} or \\{code tcp://127.0.0.1:8082}). When not set, the SPIFFE\_ENDPOINT\_SOCKET environment variable is used. |  | String |
 
 ## Endpoint Options
@@ -146,6 +147,7 @@ Enum values:
  | fetchX509Svid | SpiffeOperation |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **workloadApiClient** (advanced) | **Autowired** An existing WorkloadApiClient to use. When set, the component does not create or close its own client and spiffeSocketPath is ignored. |  | WorkloadApiClient |
+| **allowOperationHeader** (security) | Whether the CamelSpiffeOperation header may override the configured operation. Disabled by default: the operation decides whether this endpoint validates a token or mints one, so a message that can set it can turn a validator into an endpoint that hands out this workload’s own JWT-SVID. Enable it only on routes whose input is trusted. | false | boolean |
 | **spiffeSocketPath** (security) | The address of the SPIFFE Workload API endpoint (for example \\{code unix:///tmp/agent.sock} or \\{code tcp://127.0.0.1:8082}). When not set, the SPIFFE\_ENDPOINT\_SOCKET environment variable is used. |  | String |
 
 ## Message Headers
@@ -155,8 +157,8 @@ The SPIFFE component supports the following message header(s), which is/are list
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelSpiffeOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#OPERATION) | Overrides the operation to be used by the producer. |  | SpiffeOperation or String |
-| **CamelSpiffeAudience** (producer) Constant: [`AUDIENCE`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#AUDIENCE) | The comma-separated audience(s) for the fetchJwtSvid and validateJwtSvid operations. |  | String |
+| **CamelSpiffeOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#OPERATION) | Overrides the operation to be used by the producer. Ignored unless the endpoint sets allowOperationHeader=true, because the operation decides whether the endpoint validates a token or mints one. |  | SpiffeOperation or String |
+| **CamelSpiffeAudience** (producer) Constant: [`AUDIENCE`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#AUDIENCE) | The comma-separated audience(s) for the fetchJwtSvid operation. Ignored by validateJwtSvid, which always validates against the configured audience: there the audience is the check that binds the token to this workload, not a parameter. |  | String |
 | **CamelSpiffeToken** (producer) Constant: [`TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#TOKEN) | The JWT-SVID token to validate, for the validateJwtSvid operation. |  | String |
 | **CamelSpiffeSpiffeId** (producer) Constant: [`SPIFFE_ID`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#SPIFFE_ID) | The SPIFFE ID of the returned SVID. |  | String |
 | **CamelSpiffeExpiry** (producer) Constant: [`EXPIRY`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#EXPIRY) | The expiry of the returned JWT-SVID. |  | Date |
@@ -207,3 +209,15 @@ getCamelContext().getRegistry().bind("spiffeSsl", ssl);
 from("direct:start")
     .to("https://backend.example.org/api?sslContextParameters=#spiffeSsl");
 ```
+
+## Security notes
+
+-   **The operation comes from the endpoint.** `CamelSpiffeOperation` is ignored unless the endpoint sets `allowOperationHeader=true`. The operation decides whether this endpoint **validates** a token or **mints** one, so a message able to set it could turn a validator into an endpoint that hands out this workload’s own JWT-SVID.
+    
+-   **A validation always uses the configured audience.** `CamelSpiffeAudience` is honoured by `fetchJwtSvid`, where the audience is a genuine per-message parameter ("mint me a token for X"), and ignored by `validateJwtSvid`, where the audience is the check that binds the token to this workload. Letting a message choose it would allow a JWT-SVID minted for a different service to validate successfully.
+    
+-   **Strip the component’s headers on untrusted ingress.** As with any Camel component, a consumer that does not apply a `HeaderFilterStrategy` blocking `Camel*` lets a sender populate the header map. Call `removeHeaders("CamelSpiffe*")` before the `spiffe:` endpoint when the message comes from an untrusted producer.
+    
+-   **Key material reaches the message.** `fetchX509Svid` places an `X509Svid` - which carries the private key - on the body, and `fetchJwtSvid` places the bearer token. Do not log or trace the body for those operations.
+    
+-   **Constrain the peer.** `SpiffeSSLContextParameters` requires either an `acceptedSpiffeIds` allow-list or `acceptAnySpiffeId=true`; it fails closed when neither is given. Prefer the allow-list - `acceptAnySpiffeId` accepts any SVID that chains to the trust bundle, which authenticates the trust domain but not the peer.

@@ -44,31 +44,13 @@ from("pubnub:eon-map-geolocation-output?subscribeKey=mysubkey)
               subscribeKey: mySubscribeKey
               operation: herenow
         - to:
-            uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p><code>wherenow</code>: obtain information about the current list of channels to which a uuid is subscribed:</p> </li> </ul> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:control")
-    .to("pubnub:myChannel?publishKey=mypublishKey&amp;subscribeKey=mySubscribeKey&amp;operation=wherenow&amp;uuid=spyonme")
-    .to("mock:result");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
-  &lt;from uri="direct:control"/&gt;
-  &lt;to uri="pubnub:myChannel?publishKey=mypublishKey&amp;amp;subscribeKey=mySubscribeKey&amp;amp;operation=wherenow&amp;amp;uuid=spyonme"/&gt;
-  &lt;to uri="mock:result"/&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
-    from:
-      uri: direct:control
-      steps:
-        - to:
-            uri: pubnub:myChannel
-            parameters:
-              publishKey: mypublishKey
-              subscribeKey: mySubscribeKey
-              operation: wherenow
-              uuid: spyonme
-        - to:
             uri: mock:result</code></pre> </div> </div> </div> </div> </div> <div class="ulist"> <ul> <li> <p><code>setstate</code>: used to set key/value pairs specific to a subscriber uuid:</p> </li> </ul> </div> <div class="listingblock"> <div class="title"><em>Java-only: setting state with a bean processor</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:control")
     .bean(StateGenerator.class)
-    .to("pubnub:myChannel?publishKey=mypublishKey&amp;subscribeKey=mySubscribeKey&amp;operation=setstate&amp;uuid=myuuid");</code></pre> </div> </div> <div class="ulist"> <ul> <li> <p><code>gethistory</code>: Fetches historical messages of a channel:</p> </li> </ul> </div> <div id="_tabs_4" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_4_java" class="tab"> <p>Java</p> </li> <li id="_tabs_4_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_4_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_4_java--panel" class="tabpanel" aria-labelledby="_tabs_4_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:control")
-    .to("pubnub:myChannel?publishKey=mypublishKey&amp;subscribeKey=mySubscribeKey&amp;operation=gethistory");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
+    .to("pubnub:myChannel?publishKey=mypublishKey&amp;subscribeKey=mySubscribeKey&amp;operation=setstate&amp;uuid=myuuid");</code></pre> </div> </div> <div class="ulist"> <ul> <li> <p><code>gethistory</code>: Fetches historical messages of a channel:</p> </li> </ul> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:control")
+    .to("pubnub:myChannel?publishKey=mypublishKey&amp;subscribeKey=mySubscribeKey&amp;operation=gethistory");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:control"/&gt;
   &lt;to uri="pubnub:myChannel?publishKey=mypublishKey&amp;amp;subscribeKey=mySubscribeKey&amp;amp;operation=gethistory"/&gt;
-&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_4_yaml--panel" class="tabpanel" aria-labelledby="_tabs_4_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:control
       steps:

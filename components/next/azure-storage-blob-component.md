@@ -869,9 +869,9 @@ from("azure-storage-blob://camelazure/container1?blobName=hello.txt&credentialTy
         blobName: hello.txt
         credentialType: SHARED_ACCOUNT_KEY
         accessKey: RAW(yourAccessKey)
-    steps:
-      - to:
-          uri: file://blobdirectory
+      steps:
+        - to:
+            uri: file://blobdirectory
 ```
 
 ### Advanced Azure Storage Blob configuration
@@ -920,9 +920,9 @@ from("azure-storage-blob://cameldev/container1?blobName=myblob&serviceClient=#cl
       parameters:
         blobName: myblob
         serviceClient: "#client"
-    steps:
-      - to:
-          uri: mock:result
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ### Automatic detection of BlobServiceClient client in registry

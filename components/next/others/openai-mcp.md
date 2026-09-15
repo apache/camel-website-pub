@@ -388,7 +388,8 @@ from("direct:chat")
               storeFullResponse: true
               mcpServer.api.transportType: streamableHttp
               mcpServer.api.url: http://localhost:9090/mcp
-        - loopDoWhile:
+        - loop:
+            doWhile: true
             expression:
               simple:
                 expression: "${header.CamelOpenAIFinishReason} == 'tool_calls'"

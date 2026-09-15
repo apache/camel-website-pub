@@ -328,17 +328,19 @@ The `${a2a:card}` functions resolve the agent card from the exchange context. On
 Example — including remote agent skills in an LLM prompt:
 
 ```yaml
-- setBody:
-    simple: |
-      Generate a plan using these available skills:
-      ${a2a:card.skills}
+steps:
+  - setBody:
+      simple: |
+        Generate a plan using these available skills:
+        ${a2a:card.skills}
 ```
 
 For the full text of all parts combined, use the TypeConverter:
 
 ```yaml
-- convertBodyTo:
-    type: String
+steps:
+  - convertBodyTo:
+      type: String
 ```
 
 ## Exchange Headers
@@ -528,6 +530,9 @@ Bean reference example — useful when the card needs programmatic construction 
       uri: a2a:classpath:agent-card.json
       parameters:
         agentCard: "#myCardBean"
+      steps:
+        - setBody:
+            constant: "final response"
 ```
 
 URI parameter overrides — customize base cards per environment via properties:
@@ -539,6 +544,9 @@ URI parameter overrides — customize base cards per environment via properties:
       parameters:
         name: "{{agent.name}}"
         version: "{{agent.version}}"
+      steps:
+        - setBody:
+            constant: "final response"
 ```
 
 Security schemes from the card drive auth handler selection. Config parameters (`oauthProfile`, `bearerToken`, `apiKey`) provide the runtime credentials and influence scheme priority.

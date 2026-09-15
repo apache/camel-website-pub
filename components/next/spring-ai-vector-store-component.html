@@ -5,12 +5,12 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:store
-    steps:
-      - to:
-          uri: spring-ai-vector-store:myStore
-          parameters:
-            operation: ADD
-            vectorStore: "#vectorStore"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>When you send plain text to this route, the component automatically: 1. Generates embeddings using the embedding model configured in the vector store 2. Creates a Document object 3. Stores it in the vector store</p> </div> <div class="paragraph"> <p>This single-step approach is simpler and more efficient than manually chaining the embeddings component.</p> </div> </div> <div class="sect2"> <h3 id="_add_from_embeddings_component_alternative"><a class="anchor" href="#_add_from_embeddings_component_alternative"></a>Add from Embeddings Component (Alternative)</h3> <div class="paragraph"> <p>If you need explicit control over the embedding process or want to manipulate embeddings before storing, you can chain the components:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:embedAndStore")
+      steps:
+        - to:
+            uri: spring-ai-vector-store:myStore
+            parameters:
+              operation: ADD
+              vectorStore: "#vectorStore"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>When you send plain text to this route, the component automatically: 1. Generates embeddings using the embedding model configured in the vector store 2. Creates a Document object 3. Stores it in the vector store</p> </div> <div class="paragraph"> <p>This single-step approach is simpler and more efficient than manually chaining the embeddings component.</p> </div> </div> <div class="sect2"> <h3 id="_add_from_embeddings_component_alternative"><a class="anchor" href="#_add_from_embeddings_component_alternative"></a>Add from Embeddings Component (Alternative)</h3> <div class="paragraph"> <p>If you need explicit control over the embedding process or want to manipulate embeddings before storing, you can chain the components:</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:embedAndStore")
     .to("spring-ai-embeddings:test?embeddingModel=#embeddingModel")
     .to("spring-ai-vector-store:test?vectorStore=#vectorStore");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
   &lt;from uri="direct:embedAndStore"/&gt;
@@ -19,15 +19,15 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:embedAndStore
-    steps:
-      - to:
-          uri: spring-ai-embeddings:test
-          parameters:
-            embeddingModel: "#embeddingModel"
-      - to:
-          uri: spring-ai-vector-store:test
-          parameters:
-            vectorStore: "#vectorStore"</code></pre> </div> </div> </div> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> This approach is only necessary when you need to access or modify the embeddings between generation and storage. For most use cases, the direct ADD operation (shown above) is preferred. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_similarity_search"><a class="anchor" href="#_similarity_search"></a>Similarity Search</h3> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:search")
+      steps:
+        - to:
+            uri: spring-ai-embeddings:test
+            parameters:
+              embeddingModel: "#embeddingModel"
+        - to:
+            uri: spring-ai-vector-store:test
+            parameters:
+              vectorStore: "#vectorStore"</code></pre> </div> </div> </div> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> This approach is only necessary when you need to access or modify the embeddings between generation and storage. For most use cases, the direct ADD operation (shown above) is preferred. </td> </tr> </table></div> </div> </div> <div class="sect2"> <h3 id="_similarity_search"><a class="anchor" href="#_similarity_search"></a>Similarity Search</h3> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:search")
     .setBody(constant("What is AI?"))
     .to("spring-ai-vector-store:myStore?operation=SIMILARITY_SEARCH&amp;topK=5&amp;similarityThreshold=0.7")
     .log("Found ${header.CamelSpringAiVectorStoreSimilarDocuments.size()} similar documents")
@@ -40,19 +40,19 @@
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:search
-    steps:
-      - setBody:
-          constant: "What is AI?"
-      - to:
-          uri: spring-ai-vector-store:myStore
-          parameters:
-            operation: SIMILARITY_SEARCH
-            topK: 5
-            similarityThreshold: 0.7
-      - log:
-          message: "Found ${header.CamelSpringAiVectorStoreSimilarDocuments.size()} similar documents"
-      - log:
-          message: "Document IDs: ${header.CamelSpringAiVectorStoreDocumentIds}"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_delete_documents"><a class="anchor" href="#_delete_documents"></a>Delete Documents</h3> <div class="paragraph"> <p>Delete documents by specifying their IDs:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java constants and Arrays.asList()</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:delete")
+      steps:
+        - setBody:
+            constant: "What is AI?"
+        - to:
+            uri: spring-ai-vector-store:myStore
+            parameters:
+              operation: SIMILARITY_SEARCH
+              topK: 5
+              similarityThreshold: 0.7
+        - log:
+            message: "Found ${header.CamelSpringAiVectorStoreSimilarDocuments.size()} similar documents"
+        - log:
+            message: "Document IDs: ${header.CamelSpringAiVectorStoreDocumentIds}"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_delete_documents"><a class="anchor" href="#_delete_documents"></a>Delete Documents</h3> <div class="paragraph"> <p>Delete documents by specifying their IDs:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java constants and Arrays.asList()</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:delete")
     .setHeader(SpringAiVectorStoreHeaders.DOCUMENT_IDS, constant(Arrays.asList("doc1", "doc2")))
     .to("spring-ai-vector-store:myStore?operation=DELETE");</code></pre> </div> </div> <div class="paragraph"> <p>You can also chain operations to search for documents and then delete them using the returned IDs:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: Java constants and enum values</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:searchAndDelete")
     .setBody(constant("outdated content"))
