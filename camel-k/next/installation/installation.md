@@ -9,10 +9,16 @@ Camel K allows us to run Camel integrations directly on a Kubernetes cluster. To
 You will need a container registry available in order to push and pull the generated Camel applications. The easiest way to configure it is to store the configuration on a Configmap which will be used by the operator:
 
 ```none
-kubectl create configmap camel-k-operator-configmap-configuration \
+$ kubectl create ns camel-k
+
+$ kubectl create configmap camel-k-operator-configmap-configuration \
   --from-literal=REGISTRY_ADDRESS="docker.io" \
   --from-literal=REGISTRY_SECRET="my-docker-secret"
+  -n camel-k
 ```
+
+> **Note**
+> the configuration needs to be available in the namespace where the operator will run.
 
 Have a further look at the [production ready registry configuration documentation](registry.md).
 
@@ -22,7 +28,6 @@ You can now install and run the Camel K operator. You can do it via any of the f
 
 [Kustomize](https://kustomize.io) provides a declarative approach to the configuration customization of a Camel-K installation. Kustomize works either with a standalone executable or as a built-in to `kubectl`. The [/install](https://github.com/apache/camel-k/tree/main/install) directory provides a series of base and overlays configuration that you can use. You can create your own overlays or customize the one available in the repository to accommodate your need.
 
-$ kubectl create ns camel-k
 $ kubectl apply -k github.com/apache/camel-k/install/overlays/all-namespaces?ref=v2.11.0 --server-side
 
 You can specify as `ref` parameter the version you’re willing to install (ie, `v2.11.0`). The command above will install a descoped (global) operator in the camel-k namespace. This is the suggested configuration in order to manage Integrations in all namespaces.

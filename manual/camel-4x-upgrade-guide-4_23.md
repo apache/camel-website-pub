@@ -1227,6 +1227,31 @@ The accessors changed accordingly:
 
 The fluent builder `ParamDefinition.required(Boolean)` is unchanged, and a `required(String)` overload was added for placeholders. Routes written in XML, YAML or the Java DSL do not need any change.
 
+### camel-core - the inheritErrorHandler attribute on circuitBreaker and failoverLoadBalancer is now a String
+
+`CircuitBreakerDefinition.inheritErrorHandler` and `FailoverLoadBalancerDefinition.inheritErrorHandler` are now declared as `String` instead of `Boolean`, the same way nearly every other scalar attribute in the Camel model is declared. This allows a property placeholder to be used, which is resolved when the route starts:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - circuitBreaker:
+            inheritErrorHandler: "{{myInheritFlag}}"
+            steps:
+              - to:
+                  uri: mock:a
+```
+
+Before this change the value was converted to a `Boolean` while the route was being loaded, so `inheritErrorHandler: "{{myInheritFlag}}"` silently evaluated to `false` instead of resolving the placeholder.
+
+The accessors changed accordingly:
+
+-   `ProcessorDefinition.getInheritErrorHandler()` and `setInheritErrorHandler(…​)` now use `String` instead of `Boolean`, and so do the overrides on `CircuitBreakerDefinition` and the accessors on `FailoverLoadBalancerDefinition`. Use `CamelContextHelper.parseBoolean(camelContext, getInheritErrorHandler())` where a `CamelContext` is available to resolve the value.
+    
+
+The fluent builder `CircuitBreakerDefinition.inheritErrorHandler(boolean)` and the `failover(…​)` methods on `LoadBalanceDefinition` are unchanged, and a `CircuitBreakerDefinition.inheritErrorHandler(String)` overload was added for placeholders. Routes written in XML, YAML or the Java DSL do not need any change; the `inheritErrorHandler` attribute in the XML schema is now `xs:string` so a placeholder validates.
+
 ### camel-weaviate - removed the unused vector field name header
 
 The `CamelweaviateVectorFieldName` header (`WeaviateVectorDbHeaders.VECTOR_FIELD_NAME`) has been removed. It was read by the Weaviate embeddings data-type transformer but its value was never used — the embedding vector is always sent as the object vector, so a "vector field name" had no effect (Weaviate has no named vector-field concept in this producer). Routes that set this header can simply drop it; behaviour is unchanged.

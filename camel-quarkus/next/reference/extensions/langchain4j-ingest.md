@@ -99,7 +99,7 @@ IngestPipeline events() {
 
 Typing `dsl.` lists a factory for every component, each completing its own typed options. The method runs once at startup; it must return `IngestPipeline`, take no parameters and use a name no configured pipeline uses. `enabled=false` in configuration switches a Java-declared pipeline off. A component missing from the classpath fails at startup with an error naming the extension artifact that provides it — the DSL compiles regardless, since its factories all ship in one artifact.
 
-Ingestion needs a stable id per document, and where it lives is the consumer’s business: `documentId` names the header — the record key `CamelKafkaKey` above, `CamelAwsS3Key` for S3 — or gives a simple-language expression. Without it, the pipeline expects the `CamelIngestDocumentId` header and fails the exchange when it is absent. Mind each component’s own defaults, too: the `aws2-s3` consumer **deletes objects after reading them** unless `deleteAfterRead(false)` is set — a knowledge base reads its source, it does not consume it.
+Ingestion needs a stable id per document, and where it lives is the consumer’s business: `documentId` names the header — the record key `CamelKafkaKey` above, `CamelAwsS3Key` for S3 — or gives a simple-language expression. Without it, the pipeline expects the `CamelLangChain4jIngestDocumentId` header — the `camel-langchain4j-ingest` component’s convention; the 3.39 name `CamelIngestDocumentId` is still read as a fallback, see the migration guide — and fails the exchange when both are absent. Mind each component’s own defaults, too: the `aws2-s3` consumer **deletes objects after reading them** unless `deleteAfterRead(false)` is set — a knowledge base reads its source, it does not consume it.
 
 After such a pipeline ingests a document, the exchange body is replaced with the `IngestResult`, so a request-reply caller receives the outcome of its call.
 
@@ -198,7 +198,7 @@ When `true`, an in-memory register (100 000 keys) is created and bound under the
  | `boolean` | `false` |
 | `[quarkus.camel.langchain4j.ingest."pipeline-name".source.document-id](#quarkus-camel-langchain4j-ingest-pipeline-name-source-document-id)`
 
-Where the document id lives in the exchange the consumer delivers: normally the name of a header, such as `CamelAwsS3Key` for an S3 consumer or `CamelKafkaKey` for a Kafka one. For an id that is not a plain header, write a simple-language expression in the `$simple{...}` form — MicroProfile Config passes it through untouched, while a `${...}` in a properties file would be consumed as a config expansion before Camel ever saw it. When not set, a pipeline reading a directory uses the file name, and one consuming from a component uses the `CamelIngestDocumentId` header.
+Where the document id lives in the exchange the consumer delivers: normally the name of a header, such as `CamelAwsS3Key` for an S3 consumer or `CamelKafkaKey` for a Kafka one. For an id that is not a plain header, write a simple-language expression in the `$simple{...}` form — MicroProfile Config passes it through untouched, while a `${...}` in a properties file would be consumed as a config expansion before Camel ever saw it. When not set, a pipeline reading a directory uses the file name, and one consuming from a component uses the `CamelLangChain4jIngestDocumentId` header (the deprecated 3.39 name `CamelIngestDocumentId` is still read as a fallback).
 
  | `string` |  |
 
