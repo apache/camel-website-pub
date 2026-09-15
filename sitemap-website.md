@@ -855,7 +855,7 @@ urls[860]{loc,lastmod}:
   https://camel.apache.org/community/support/,
   https://camel.apache.org/community/team/,
   https://camel.apache.org/tooling/,
-  https://camel.apache.org/trust/,
   https://camel.apache.org/what-is-apache-camel/,
   https://camel.apache.org/when-to-use/,
   https://camel.apache.org/community/user-stories/,
+  https://camel.apache.org/trust/,

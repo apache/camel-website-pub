@@ -2,6 +2,9 @@ Camel Components
 
 # Minio
 
+> **Warning**
+> **Deprecated:** This minio is deprecated and may be removed in a future release.
+
 **Since Camel 3.5**
 
 **Both producer and consumer are supported**

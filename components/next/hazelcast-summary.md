@@ -10,10 +10,6 @@ The **hazelcast-** component allows you to work with the [Hazelcast](http://www.
 
 See the following for usage of each component:
 
-[Hazelcast Atomic Number](hazelcast-atomicvalue-component.md)
-
-Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number).
-
 [Hazelcast Instance](hazelcast-instance-component.md)
 
 Consume join/leave events of a cache instance in a Hazelcast cluster.

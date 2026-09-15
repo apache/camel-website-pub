@@ -2549,12 +2549,12 @@
   </url><url>
     <loc>https://camel.apache.org/tooling/</loc>
   </url><url>
-    <loc>https://camel.apache.org/trust/</loc>
-  </url><url>
     <loc>https://camel.apache.org/what-is-apache-camel/</loc>
   </url><url>
     <loc>https://camel.apache.org/when-to-use/</loc>
   </url><url>
     <loc>https://camel.apache.org/community/user-stories/</loc>
+  </url><url>
+    <loc>https://camel.apache.org/trust/</loc>
   </url>
 </urlset>

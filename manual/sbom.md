@@ -67,4 +67,66 @@ This generates a distribution SBOM automatically every time you build. You can a
 
 ## Analyzing SBOMs
 
-Once generated, an SBOM can be fed into vulnerability scanners and compliance tools. For example, [OWASP Dependency-Track](https://dependencytrack.org/) can ingest CycloneDX SBOMs and continuously monitor for known CVEs across your dependency tree.
+Once you have a CycloneDX SBOM — a released Camel SBOM from the [download page](/download/), the aggregate SBOM kept in the source tree under `camel-sbom/`, or one you generated for your own application — you can feed it into vulnerability scanners, license and policy tools, and continuous-monitoring platforms. Because the SBOM already captures the resolved dependency graph, these tools work from the file alone: no rebuild or re-resolution of the project is required.
+
+The examples below assume a CycloneDX JSON file named `camel-sbom.json`; substitute the file you actually have (for a release, e.g. `camel-4.23.0-sbom.json`).
+
+### Scanning for known vulnerabilities
+
+Several open source scanners read a CycloneDX SBOM directly and match its components against vulnerability databases:
+
+```bash
+# Anchore Grype
+grype sbom:camel-sbom.json
+
+# Aqua Trivy
+trivy sbom camel-sbom.json
+
+# Google OSV-Scanner (v2)
+osv-scanner scan source -L camel-sbom.json
+```
+
+> **Tip**
+> OSV-Scanner auto-detects CycloneDX files whose name is `bom.json` / `bom.xml` or ends in `.cdx.json` / `.cdx.xml`. For any other name, point it at the file explicitly with `-L` as above.
+
+### Inspecting, validating and converting
+
+The [CycloneDX CLI](https://github.com/CycloneDX/cyclonedx-cli) validates, converts and diffs BOMs. Camel’s SBOMs use CycloneDX specification version 1.6, and the CLI’s `validate` defaults to a newer schema version, so pass `--input-version v1_6` explicitly:
+
+```bash
+# Validate against the CycloneDX 1.6 schema
+cyclonedx validate --input-file camel-sbom.json --input-format json --input-version v1_6 --fail-on-errors
+
+# Convert JSON to XML (use --output-format spdxjson to convert to SPDX)
+cyclonedx convert --input-file camel-sbom.json --output-format xml --output-file camel-sbom.xml
+
+# Diff two SBOMs — e.g. what dependencies changed between two Camel releases
+cyclonedx diff camel-4.22.0-sbom.json camel-4.23.0-sbom.json --component-versions
+```
+
+For quick, ad-hoc queries no dedicated tool is needed — the JSON can be sliced with [`jq`](https://jqlang.github.io/jq/):
+
+```bash
+# List every component as group:name:version
+jq -r '.components[] | "\(.group // ""):\(.name):\(.version)"' camel-sbom.json
+
+# Find the version of a specific library across the whole graph
+jq -r '.components[] | select(.name | test("jackson")) | "\(.name) \(.version)"' camel-sbom.json
+```
+
+### Continuous monitoring with OWASP Dependency-Track
+
+[OWASP Dependency-Track](https://dependencytrack.org/) ingests CycloneDX SBOMs and continuously re-evaluates them as new CVEs are disclosed, so a component that is clean today but vulnerable next week surfaces without re-scanning. Upload the SBOM through the UI (**Projects** → your project → **Upload BOM**), or automate it from CI through the REST API:
+
+```bash
+curl -X POST "https://<dependency-track-host>/api/v1/bom" \
+  -H "X-Api-Key: $DTRACK_API_KEY" \
+  -F "projectName=apache-camel" \
+  -F "projectVersion=4.23.0" \
+  -F "autoCreate=true" \
+  -F "bom=@camel-sbom.json"
+```
+
+The `/api/v1/bom` endpoint expects `multipart/form-data`. Use `autoCreate=true` together with `projectName`/`projectVersion` to create the project on first upload, or target an existing one with `-F "project=<project-uuid>"` instead. See the [Dependency-Track CI/CD guide](https://docs.dependencytrack.org/usage/cicd/) for the maintained GitHub Action, Jenkins plugin and CLI wrappers.
+
+Alongside each SBOM, Camel also publishes a CycloneDX VEX file (`camel-sbom.vex.json`). A [VEX](https://cyclonedx.org/capabilities/vex/) (Vulnerability Exploitability eXchange) document records which known vulnerabilities in the dependency graph are **not** exploitable as Camel ships them, so tools such as Dependency-Track can apply it to suppress those findings and reduce false-positive noise.

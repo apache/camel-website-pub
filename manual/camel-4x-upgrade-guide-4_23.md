@@ -112,6 +112,12 @@ The maven plugin was deprecated in 4.12. The catalog now has built-in suggestion
 
 The component camel-digitalocean was deprecated in 4.21. The java library used has been unmaintained for several years and there is no replacement.
 
+#### camel-hazelcast-atomicvalue
+
+The component `camel-hazelcast-atomicvalue` was deprecated in 4.19.0.
+
+In hazelcast 5.5+, the CP subsystem is only available in the enterprise edition of hazelcast. `hazelcast-pncounter` is a partial replacement.
+
 #### camel-headersmap
 
 The component camel-headersmap was deprecated in 4.21. The default `CaseInsensitiveMap` in camel-core uses a custom O(1) hash table with zero-allocation lookups and header key deduplication, making the external cedarsoftware `java-util` dependency unnecessary. Simply remove the `camel-headersmap` dependency from your project — the core implementation now provides equivalent or better performance.
@@ -311,6 +317,14 @@ Like `toD` and `enrich`, `pollEnrich` resolves its static endpoint URI at build 
 It previously set only `FEATURE_SECURE_PROCESSING` and `external-general-entities=false`, while `createDocumentBuilderFactory()` in the same class already blocked external resource resolution more thoroughly. Both factories are reachable from a converted message body — `toSAXSource` is a registered converter, and the SAXSource route is tried first for bodies reaching camel-xslt — so the two should not disagree.
 
 Documents carrying an internal DTD subset still parse: `disallow-doctype-decl` is deliberately not set here, because that would reject input that parses today. Routes that genuinely need to resolve an external DTD or parameter entity through this converter must supply their own `SAXParserFactory`.
+
+### Component deprecation
+
+#### camel-minio
+
+The Minio GitHub repository has been archived on the 25th April 2026. The container images were removed from Docker Hub on September 2026.
+
+MinIO is S3-compatible, so existing deployments can migrate to the `camel-aws2-s3` component by pointing it at the MinIO server, for example: `aws2-s3://mybucket?overrideEndpoint=true&uriEndpointOverride=http://localhost:9000&forcePathStyle=true&accessKey=…​&secretKey=…​`
 
 ### camel-tika
 
@@ -1233,17 +1247,19 @@ A message header could override the endpoint-configured SQL by default, letting 
 
 -   `camel-sql`: the `CamelSqlQuery` header replaced the endpoint query.
     
--   `camel-sql-stored`: the `CamelSqlStoredTemplate` header replaced the endpoint template, and its value was resolved through `SqlHelper.resolveQuery`, which resolves `file:` / `http:` / `classpath:` resources.
+-   `camel-sql-stored`: the `CamelSqlStoredTemplate` header replaced the endpoint template, and its value was resolved through `SqlHelper.resolveQuery`, which resolves `file:`, `http:`, `https:` and `classpath:` resources.
     
 
 Both overrides are now disabled by default and must be opted into, matching the `allowTemplateFromHeader` convention already used by the template components (camel-freemarker, camel-velocity, camel-xslt, …​):
 
 -   `camel-sql`: set `allowQueryFromHeader=true` to honour the `CamelSqlQuery` header again.
     
--   `camel-sql-stored`: set `allowTemplateFromHeader=true` to honour the `CamelSqlStoredTemplate` header again; a header-supplied template is now resolved with property placeholders only, never as a `file:` / `http:` resource.
+-   `camel-sql-stored`: set `allowTemplateFromHeader=true` to honour the `CamelSqlStoredTemplate` header again; a header-supplied template is now resolved with property placeholders only, never as a `file:`, `http:`, `https:` or `classpath:` resource.
     
 
 A route that relied on either header must set the corresponding option on the endpoint.
+
+Opting back in is not quite the previous behaviour. `SqlHelper.resolveQuery` applied placeholder resolution only to a value that had a scheme, so a schemeless header template used to reach the database untouched; it now always goes through `SqlHelper.resolvePlaceholders`, which drops `--` comment lines and blank lines and re-joins the rest with newlines. That is immaterial for the single-line call syntax a stored-procedure template normally uses, but a route passing a multi-line commented template through the header will see the comments stripped.
 
 Additionally, `camel-sql-stored` with `useMessageBodyForTemplate=true` now uses the message body verbatim as the stored-procedure template text and no longer resolves it through `SqlHelper.resolveQuery`. A body beginning with `file:`, `http:`, `https:` or `classpath:` is therefore treated as literal template text instead of being fetched as a resource, consistent with how `camel-sql` already treats the body under `useMessageBodyForSql=true`. A route that relied on the body being a resource location must resolve it to the template text before the `sql-stored` endpoint. === camel-core - the inheritErrorHandler attribute on circuitBreaker and failoverLoadBalancer is now a String
 

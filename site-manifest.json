@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1789465738155,
+  "generated": 1789496822905,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -14112,6 +14112,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/ai-resource.adoc",
+              "url": "/camel-spring-boot/next/starters/ai-resource.html",
+              "title": "AI Resource"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/ai-tool.adoc",
               "url": "/camel-spring-boot/next/starters/ai-tool.html",
               "title": "AI Tool"
@@ -14550,6 +14556,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/camunda.adoc",
+              "url": "/camel-spring-boot/next/starters/camunda.html",
+              "title": "Camunda"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/cassandraql.adoc",
               "url": "/camel-spring-boot/next/starters/cassandraql.html",
               "title": "Cassandra CQL"
@@ -14862,6 +14874,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/event.adoc",
+              "url": "/camel-spring-boot/next/starters/event.html",
+              "title": "Event"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/exec.adoc",
               "url": "/camel-spring-boot/next/starters/exec.html",
               "title": "Exec"
@@ -15080,7 +15098,7 @@
               "module": "ROOT",
               "path": "starters/hazelcast.adoc",
               "url": "/camel-spring-boot/next/starters/hazelcast.html",
-              "title": "Hazelcast Atomic Number"
+              "title": "Hazelcast Instance"
             },
             {
               "module": "ROOT",
@@ -15189,6 +15207,12 @@
               "path": "starters/ibm-watsonx-ai.adoc",
               "url": "/camel-spring-boot/next/starters/ibm-watsonx-ai.html",
               "title": "IBM watsonx.ai"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/ibm-watsonx-data.adoc",
+              "url": "/camel-spring-boot/next/starters/ibm-watsonx-data.html",
+              "title": "IBM watsonx.data"
             },
             {
               "module": "ROOT",
@@ -15558,6 +15582,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/langchain4j-ingest.adoc",
+              "url": "/camel-spring-boot/next/starters/langchain4j-ingest.html",
+              "title": "LangChain4j Ingest"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/langchain4j-tokenizer.adoc",
               "url": "/camel-spring-boot/next/starters/langchain4j-tokenizer.html",
               "title": "Langchain4j Tokenizer"
@@ -15918,6 +15948,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/pgvector.adoc",
+              "url": "/camel-spring-boot/next/starters/pgvector.html",
+              "title": "PGVector"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/pinecone.adoc",
               "url": "/camel-spring-boot/next/starters/pinecone.html",
               "title": "Pinecone"
@@ -16128,6 +16164,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/shell.adoc",
+              "url": "/camel-spring-boot/next/starters/shell.html",
+              "title": "Shell"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/shiro.adoc",
               "url": "/camel-spring-boot/next/starters/shiro.html",
               "title": "Shiro"
@@ -16191,6 +16233,12 @@
               "path": "starters/solr.adoc",
               "url": "/camel-spring-boot/next/starters/solr.html",
               "title": "Solr"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/spiffe.adoc",
+              "url": "/camel-spring-boot/next/starters/spiffe.html",
+              "title": "SPIFFE"
             },
             {
               "module": "ROOT",
@@ -16293,6 +16341,12 @@
               "path": "starters/ssh.adoc",
               "url": "/camel-spring-boot/next/starters/ssh.html",
               "title": "SSH"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/state-store.adoc",
+              "url": "/camel-spring-boot/next/starters/state-store.html",
+              "title": "State Store"
             },
             {
               "module": "ROOT",
@@ -22117,12 +22171,6 @@
               "path": "hashicorp-vault-component.adoc",
               "url": "/components/next/hashicorp-vault-component.html",
               "title": "HashiCorp Vault"
-            },
-            {
-              "module": "ROOT",
-              "path": "hazelcast-atomicvalue-component.adoc",
-              "url": "/components/next/hazelcast-atomicvalue-component.html",
-              "title": "Hazelcast Atomic Number"
             },
             {
               "module": "ROOT",

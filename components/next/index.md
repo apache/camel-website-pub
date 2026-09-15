@@ -49,7 +49,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 385 in 311 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 384 in 311 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -206,7 +206,6 @@ Number of Non-Core Components: 385 in 311 JAR artifacts (4 deprecated)
 | [gRPC](grpc-component.md) | camel-grpc | Stable | 2.19 | Expose gRPC endpoints and access external gRPC endpoints. |
 | [HashiCorp Vault](hashicorp-vault-component.md) | camel-hashicorp-vault | Stable | 3.18 | Manage secrets in HashiCorp Vault Service |
 | [Hazelcast](hazelcast-summary.md) | camel-hazelcast |  | 2.7 |  |
-| [Hazelcast Atomic Number](hazelcast-atomicvalue-component.md) | camel-hazelcast | Stable-deprecated | 2.7 | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
 | [Hazelcast Instance](hazelcast-instance-component.md) | camel-hazelcast | Stable | 2.7 | Consume join/leave events of a cache instance in a Hazelcast cluster. |
 | [Hazelcast List](hazelcast-list-component.md) | camel-hazelcast | Stable | 2.7 | Perform operations on Hazelcast distributed list. |
 | [Hazelcast Map](hazelcast-map-component.md) | camel-hazelcast | Stable | 2.7 | Perform operations on Hazelcast distributed map. |
@@ -311,7 +310,7 @@ Number of Non-Core Components: 385 in 311 JAR artifacts (4 deprecated)
 | [Milvus](milvus-component.md) | camel-milvus | Stable | 4.5 | Perform operations on the Milvus Vector Database. |
 | [Mina](mina-component.md) | camel-mina | Stable | 2.10 | Socket level networking using TCP or UDP with Apache Mina 2.x. |
 | [MINA SFTP](mina-sftp-component.md) | camel-mina-sftp | Stable | 4.18 | Upload and download files to/from SFTP servers using Apache MINA SSHD. |
-| [Minio](minio-component.md) | camel-minio | Stable | 3.5 | Store and retrieve objects from Minio Storage Service using Minio SDK. |
+| [Minio](minio-component.md) | camel-minio | Stable-deprecated | 3.5 | Store and retrieve objects from Minio Storage Service using Minio SDK. |
 | [MLLP](mllp-component.md) | camel-mllp | Stable | 2.17 | Communicate with external systems using the MLLP protocol. |
 | [MongoDB](mongodb-component.md) | camel-mongodb | Stable | 2.19 | Perform operations on MongoDB documents and collections. |
 | [MongoDB GridFS](mongodb-gridfs-component.md) | camel-mongodb-gridfs | Stable | 2.18 | Interact with MongoDB GridFS. |

@@ -12,7 +12,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 405 spring boot starter json files.
+There are 414 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -28,6 +28,8 @@ activemq
 activemq6
 
 ai-observability
+
+ai-resource
 
 ai-tool
 
@@ -175,6 +177,8 @@ browse
 
 caffeine
 
+camunda
+
 cassandraql
 
 cbor
@@ -272,6 +276,8 @@ ehcache
 elasticsearch-rest-client
 
 elasticsearch
+
+event
 
 exec
 
@@ -382,6 +388,8 @@ ibm-watson-speech-to-text
 ibm-watson-text-to-speech
 
 ibm-watsonx-ai
+
+ibm-watsonx-data
 
 ical
 
@@ -499,6 +507,8 @@ langchain4j-embeddings
 
 langchain4j-embeddingstore
 
+langchain4j-ingest
+
 langchain4j-web-search
 
 language
@@ -609,6 +619,8 @@ pg-replication-slot
 
 pgevent
 
+pgvector
+
 pinecone
 
 platform-http
@@ -677,6 +689,8 @@ servicenow
 
 servlet
 
+shell
+
 shiro
 
 sjms
@@ -698,6 +712,8 @@ snmp
 soap
 
 solr
+
+spiffe
 
 splunk-hec
 
@@ -730,6 +746,8 @@ springdoc
 sql
 
 ssh
+
+state-store
 
 stax
 
@@ -1006,7 +1024,6 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [GraphQL](../../components/next/graphql-component.md) | camel-graphql-starter | Stable | 3.0 | Send GraphQL queries and mutations to external systems. |
 | [gRPC](../../components/next/grpc-component.md) | camel-grpc-starter | Stable | 2.19 | Expose gRPC endpoints and access external gRPC endpoints. |
 | [HashiCorp Vault](../../components/next/hashicorp-vault-component.md) | camel-hashicorp-vault-starter | Stable | 3.18 | Manage secrets in HashiCorp Vault Service |
-| [Hazelcast Atomic Number](../../components/next/hazelcast-atomicvalue-component.md) | camel-hazelcast-starter | Stable-deprecated | 2.7 | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
 | [Hazelcast Instance](../../components/next/hazelcast-instance-component.md) | camel-hazelcast-starter | Stable | 2.7 | Consume join/leave events of a cache instance in a Hazelcast cluster. |
 | [Hazelcast List](../../components/next/hazelcast-list-component.md) | camel-hazelcast-starter | Stable | 2.7 | Perform operations on Hazelcast distributed list. |
 | [Hazelcast Map](../../components/next/hazelcast-map-component.md) | camel-hazelcast-starter | Stable | 2.7 | Perform operations on Hazelcast distributed map. |
@@ -1110,7 +1127,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Milvus](../../components/next/milvus-component.md) | camel-milvus-starter | Stable | 4.5 | Perform operations on the Milvus Vector Database. |
 | [Mina](../../components/next/mina-component.md) | camel-mina-starter | Stable | 2.10 | Socket level networking using TCP or UDP with Apache Mina 2.x. |
 | [MINA SFTP](../../components/next/mina-sftp-component.md) | camel-mina-sftp-starter | Stable | 4.18 | Upload and download files to/from SFTP servers using Apache MINA SSHD. |
-| [Minio](../../components/next/minio-component.md) | camel-minio-starter | Stable | 3.5 | Store and retrieve objects from Minio Storage Service using Minio SDK. |
+| [Minio](../../components/next/minio-component.md) | camel-minio-starter | Stable-deprecated | 3.5 | Store and retrieve objects from Minio Storage Service using Minio SDK. |
 | [MLLP](../../components/next/mllp-component.md) | camel-mllp-starter | Stable | 2.17 | Communicate with external systems using the MLLP protocol. |
 | [Mock](../../components/next/mock-component.md) | camel-mock-starter | Stable | 1.0 | Test routes and mediation rules using mocks. |
 | [MongoDB](../../components/next/mongodb-component.md) | camel-mongodb-starter | Stable | 2.19 | Perform operations on MongoDB documents and collections. |
