@@ -150,6 +150,7 @@ The SQL component supports the following options which are listed below.
 | **usePlaceholder** (advanced) | Sets whether to use placeholder and replace all placeholder characters with sign in the SQL queries. This option is default true. | true | boolean |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
+| **allowQueryFromHeader** (security) | Whether to allow overriding the endpoint-configured SQL query with the CamelSqlQuery header. Disabled by default; enable it only when the header source is trusted, since it lets a message choose the executed SQL. This is the default for all sql endpoints and can be overridden per endpoint. | false | boolean |
 
 ## Endpoint Options
 
@@ -298,6 +299,7 @@ Enum values:
 
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
+| **allowQueryFromHeader** (security) | Whether to allow overriding the endpoint-configured SQL query with the CamelSqlQuery header. Disabled by default; enable it only when the header source is trusted, since it lets a message choose the executed SQL. | false | boolean |
 
 ## Message Headers
 
@@ -306,7 +308,7 @@ The SQL component supports the following message header(s), which is/are listed 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelSqlQuery** (producer) Constant: [`SQL_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_QUERY) | Query to execute. This query takes precedence over the query specified in the endpoint URI. Note that query parameters in the header are represented by a instead of a pass:# symbol. |  | String |
+| **CamelSqlQuery** (producer) Constant: [`SQL_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_QUERY) | Query to execute. This header is ignored unless the endpoint enables allowQueryFromHeader=true (disabled by default); when enabled it takes precedence over the query specified in the endpoint URI. Note that query parameters in the header are represented by a instead of a pass:# symbol. |  | String |
 | **CamelSqlUpdateCount** (producer) Constant: [`SQL_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_UPDATE_COUNT) | The number of rows updated for update operations, returned as an Integer object. This header is not provided when using outputType=StreamList. |  | Integer |
 | **CamelSqlRowCount** (producer) Constant: [`SQL_ROW_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_ROW_COUNT) | The number of rows returned for select operations, returned as an Integer object. This header is not provided when using outputType=StreamList. |  | Integer |
 | **CamelSqlRetrieveGeneratedKeys** (producer) Constant: [`SQL_RETRIEVE_GENERATED_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_RETRIEVE_GENERATED_KEYS) | Set its value to true to retrieve generated keys. | false | Boolean |

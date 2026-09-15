@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1789458207884,
+  "generated": 1789465738155,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4134,6 +4134,12 @@
             },
             {
               "module": "ROOT",
+              "path": "docling-convert-action.adoc",
+              "url": "/camel-kamelets/next/docling-convert-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/docling-convert-action.svg\" alt=\"docling convert action\"></span> Docling Convert Action"
+            },
+            {
+              "module": "ROOT",
               "path": "drop-field-action.adoc",
               "url": "/camel-kamelets/next/drop-field-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/drop-field-action.svg\" alt=\"drop field action\"></span> Drop Field Action"
@@ -4680,6 +4686,18 @@
             },
             {
               "module": "ROOT",
+              "path": "langchain4j-ingest-file-source.adoc",
+              "url": "/camel-kamelets/next/langchain4j-ingest-file-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/langchain4j-ingest-file-source.svg\" alt=\"langchain4j ingest file source\"></span> LangChain4j Ingest File Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "langchain4j-ingest-sink.adoc",
+              "url": "/camel-kamelets/next/langchain4j-ingest-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/langchain4j-ingest-sink.svg\" alt=\"langchain4j ingest sink\"></span> LangChain4j Ingest Sink"
+            },
+            {
+              "module": "ROOT",
               "path": "log-action.adoc",
               "url": "/camel-kamelets/next/log-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/log-action.svg\" alt=\"log action\"></span> Log Action"
@@ -5169,6 +5187,12 @@
               "path": "throttle-action.adoc",
               "url": "/camel-kamelets/next/throttle-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/throttle-action.svg\" alt=\"throttle action\"></span> Throttle Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "tika-extract-text-action.adoc",
+              "url": "/camel-kamelets/next/tika-extract-text-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/tika-extract-text-action.svg\" alt=\"tika extract text action\"></span> Tika Extract Text Action"
             },
             {
               "module": "ROOT",

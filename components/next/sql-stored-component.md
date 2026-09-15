@@ -100,6 +100,7 @@ The SQL Stored Procedure component supports the following options which are list
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **serviceLocationEnabled** (advanced) | Whether to detect the network address location of the database on startup. This information is gathered via reflection on the DataSource, and is vendor specific. This option can be used to turn this off. | true | boolean |
+| **allowTemplateFromHeader** (security) | Whether to allow overriding the endpoint-configured stored-procedure template with the CamelSqlStoredTemplate header. Disabled by default; a header-supplied template is resolved with placeholders only, never as a file:/http: resource. This is the default for all sql-stored endpoints and can be overridden per endpoint. | false | boolean |
 
 ## Endpoint Options
 
@@ -129,6 +130,7 @@ With the following _path_ and _query_ parameters:
 | **useMessageBodyForTemplate** (producer) | Whether to use the message body as the stored procedure template and then headers for parameters. If this option is enabled then the template in the uri is not used. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **templateOptions** (advanced) | Configures the Spring JdbcTemplate with the key/values from the Map. This is a multi-value option with prefix: template. |  | Map |
+| **allowTemplateFromHeader** (security) | Whether to allow overriding the endpoint-configured stored-procedure template with the CamelSqlStoredTemplate header. Disabled by default; a header-supplied template is resolved with placeholders only, never as a file:/http: resource. | false | boolean |
 
 ## Message Headers
 
@@ -137,7 +139,7 @@ The SQL Stored Procedure component supports the following message header(s), whi
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelSqlStoredTemplate** (producer) Constant: [`SQL_STORED_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_TEMPLATE) | The template. |  | String |
+| **CamelSqlStoredTemplate** (producer) Constant: [`SQL_STORED_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_TEMPLATE) | The stored-procedure template to execute. This header is ignored unless the endpoint enables allowTemplateFromHeader=true (disabled by default); when enabled it overrides the endpoint-configured template. |  | String |
 | **CamelSqlStoredParameters** (producer) Constant: [`SQL_STORED_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_PARAMETERS) | The parameters. |  | Iterator |
 | **CamelSqlStoredUpdateCount** (producer) Constant: [`SQL_STORED_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_UPDATE_COUNT) | The update count. |  | Integer |
 

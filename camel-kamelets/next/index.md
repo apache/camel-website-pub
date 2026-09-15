@@ -183,6 +183,8 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![dns lookup action](_images/kamelets/dns-lookup-action.svg) DNS Lookup Action](dns-lookup-action.html)
 
+ [![docling convert action](_images/kamelets/docling-convert-action.svg) Docling Convert Action](docling-convert-action.html)
+
  [![drop field action](_images/kamelets/drop-field-action.svg) Drop Field Action](drop-field-action.html)
 
  [![drop header action](_images/kamelets/drop-header-action.svg) Drop Header Action](drop-header-action.html)
@@ -363,6 +365,10 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![kubernetes pods source](_images/kamelets/kubernetes-pods-source.svg) Kubernetes Pods Source](kubernetes-pods-source.html)
 
+ [![langchain4j ingest file source](_images/kamelets/langchain4j-ingest-file-source.svg) LangChain4j Ingest File Source](langchain4j-ingest-file-source.html)
+
+ [![langchain4j ingest sink](_images/kamelets/langchain4j-ingest-sink.svg) LangChain4j Ingest Sink](langchain4j-ingest-sink.html)
+
  [![log action](_images/kamelets/log-action.svg) Log Action](log-action.html)
 
  [![log sink](_images/kamelets/log-sink.svg) Log Sink](log-sink.html)
@@ -524,6 +530,8 @@ Consult the Kamelets User Guide for information about how to use these.
  [![telegram source](_images/kamelets/telegram-source.svg) Telegram Source](telegram-source.html)
 
  [![throttle action](_images/kamelets/throttle-action.svg) Throttle Action](throttle-action.html)
+
+ [![tika extract text action](_images/kamelets/tika-extract-text-action.svg) Tika Extract Text Action](tika-extract-text-action.html)
 
  [![timer source](_images/kamelets/timer-source.svg) Timer Source](timer-source.html)
 
