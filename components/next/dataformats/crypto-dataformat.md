@@ -53,9 +53,9 @@ _XML-only: Spring XML data format configuration_
     ...
   <route>
     <from uri="direct:basic-encryption" />
-    <marshal ref="basic" />
+    <marshal><custom ref="basic"/></marshal>
     <to uri="mock:encrypted" />
-    <unmarshal ref="basic" />
+    <unmarshal><custom ref="basic"/></unmarshal>
     <to uri="mock:unencrypted" />
   </route>
 </camelContext>

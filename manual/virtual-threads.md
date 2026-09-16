@@ -153,9 +153,8 @@ from("platform-http:/api/orders")
 ```xml
 <route>
     <from uri="platform-http:/api/orders"/>
-    <threads>
-        <to uri="jpa:Order"/>
-    </threads>
+    <threads/>
+    <to uri="jpa:Order"/>
 </route>
 ```
 
@@ -1013,7 +1012,7 @@ public class TenantAwareRoute extends RouteBuilder {
                 String tenant = exchange.getMessage().getHeader("tenant", String.class);
                 exchange.setProperty("tenantId", tenant);
             })
-            .to("seda:process?virtualThreadPerTask=true");
+            .to("seda:process");
 
         from("seda:process?virtualThreadPerTask=true&concurrentConsumers=500")
             .process(exchange -> {

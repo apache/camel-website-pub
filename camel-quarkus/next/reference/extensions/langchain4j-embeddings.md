@@ -40,7 +40,7 @@ In order to ensure alignment across all Quarkus and LangChain4j related dependen
     <dependency>
       <groupId>dev.langchain4j</groupId>
       <artifactId>langchain4j-bom</artifactId>
-      <version>1.19.0</version>
+      <version>1.19.3</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
@@ -53,5 +53,4 @@ Note that the import order is paramount when using maven `dependencyManagement`.
 
 ### Quarkus LangChain4j support
 
-> **Warning**
-> At present, this extension is neither tested with nor intended to be used in conjunction with any Quarkus LangChain4j extensions. Consequently, both JVM and native modes may exhibit unexpected behaviour or fail to function correctly in such configurations.
+This extension is designed and tested to work together with [Quarkus LangChain4j](https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.md).

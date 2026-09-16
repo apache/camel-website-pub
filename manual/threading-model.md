@@ -69,7 +69,7 @@ camel.threadpool.max-pool-size = 5
 
 ### Using thread pool profiles
 
-Suppose you want to use a custom thread pool profile for a Multicast EIP pattern in a Camel route you can do it using the `executorServiceRef` attribute as shown in Spring XML:
+Suppose you want to use a custom thread pool profile for a Multicast EIP pattern in a Camel route you can do it using the `executorService` attribute as shown in Spring XML:
 
 -   Java
     
@@ -100,7 +100,7 @@ from("direct:start")
                        poolSize="20" maxPoolSize="50" maxQueueSize="-1"/>
 
     <route>
-       <multicast aggregationStrategy="myStrategy" executorServiceRef="fooProfile">
+       <multicast aggregationStrategy="myStrategy" executorService="fooProfile">
           ...
        </multicast>
     </route>
@@ -142,10 +142,11 @@ Spring XML
 ```xml
 <camelContext>
 
-    <threadPool id="nyPool" poolSize="20" maxPoolSize="50"/>
+    <threadPool id="myPool" threadName="myPool" poolSize="20" maxPoolSize="50"/>
 
     <route>
-       <multicast aggregationStrategy="myStrategy" executorServiceRef="myPool">
+       <from uri="direct:start"/>
+       <multicast aggregationStrategy="myStrategy" executorService="myPool">
           ...
        </multicast>
     </route>

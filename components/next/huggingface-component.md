@@ -168,7 +168,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **task** (producer) | 
-**Required** The Hugging Face task to perform (e.g., TEXT\_CLASSIFICATION).
+**Required** The Hugging Face task to perform (e.g., TEXT\_CLASSIFICATION). CUSTOM, or any other name, runs the predictor bean given by predictorBean.
 
 Enum values:
 
@@ -191,6 +191,8 @@ Enum values:
 -   TEXT\_TO\_SPEECH
     
 -   CHAT
+    
+-   CUSTOM
     
 
 

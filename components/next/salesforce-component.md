@@ -296,6 +296,7 @@ Enum values:
 | **initialReplyIdTimeout** (consumer (advanced)) | Timeout in seconds to validate when a custom pubSubReplayId has been configured, when starting the Camel Salesforce consumer. | 30 | int |
 | **allOrNone** (producer) | Composite API option to indicate to rollback all records if any are not successful. | false | boolean |
 | **apexUrl** (producer) | Path of the Apex REST resource to invoke, appended to /services/apexrest/ on the instance URL, for example MyApexClass/. The apexCall operation needs this value, which can be given as this option, in the endpoint path as apexCall/MyApexClass/, or in the CamelSalesforceApexUrl header. Placeholders written in curly braces are resolved from message headers of the same name. |  | String |
+| **approval** (producer) | The approval request for the Salesforce Approval API. Options approval.actionType, approval.comments, approval.contextActorId, approval.contextId, approval.nextApproverIds, approval.processDefinitionNameOrId, approval.skipEntryCriteria are bound as nested properties. |  | ApprovalRequest |
 | **compositeMethod** (producer) | Composite (raw) method. |  | String |
 | **eventName** (producer) | Name of Platform Event, Change Data Capture Event, custom event, etc. |  | String |
 | **eventSchemaFormat** (producer) | 
@@ -743,6 +744,7 @@ Enum values:
  |  | ExchangePattern |
 | **allOrNone** (producer) | Composite API option to indicate to rollback all records if any are not successful. | false | boolean |
 | **apexUrl** (producer) | Path of the Apex REST resource to invoke, appended to /services/apexrest/ on the instance URL, for example MyApexClass/. The apexCall operation needs this value, which can be given as this option, in the endpoint path as apexCall/MyApexClass/, or in the CamelSalesforceApexUrl header. Placeholders written in curly braces are resolved from message headers of the same name. |  | String |
+| **approval** (producer) | The approval request for the Salesforce Approval API. Options approval.actionType, approval.comments, approval.contextActorId, approval.contextId, approval.nextApproverIds, approval.processDefinitionNameOrId, approval.skipEntryCriteria are bound as nested properties. |  | ApprovalRequest |
 | **compositeMethod** (producer) | Composite (raw) method. |  | String |
 | **eventName** (producer) | Name of Platform Event, Change Data Capture Event, custom event, etc. |  | String |
 | **eventSchemaFormat** (producer) | 

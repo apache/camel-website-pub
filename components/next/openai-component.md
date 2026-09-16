@@ -172,7 +172,7 @@ Enum values:
 | --- | --- | --- | --- |
 | **additionalBodyProperty** (producer) | Additional JSON properties to include in the request body (e.g. additionalBodyProperty.traceId=123). This is a multi-value option with prefix: additionalBodyProperty. |  | Map |
 | **additionalHeader** (producer) | Additional HTTP request headers to send with every API call (e.g. additionalHeader.OpenAI-Organization=my-org or additionalHeader.api-key=secret). Values may contain secrets. This is a multi-value option with prefix: additionalHeader. |  | Map |
-| **additionalResponseHeader** (producer) | Map additional fields from the response message to Camel headers. The key is the field name in the API response, the value is the Camel header name (e.g. additionalResponseHeader.reasoning\_content=CamelMyReasoningHeader). This is a multi-value option with prefix: additionalResponseHeader. |  | Map |
+| **additionalResponseHeader** (producer) | Map additional fields from the response message to Camel headers. The key is the field name in the API response, the value is the Camel header name (e.g. additionalResponseHeader.reasoning\_content=MyReasoningHeader). This is a multi-value option with prefix: additionalResponseHeader. |  | Map |
 | **apiKey** (producer) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. |  | String |
 | **audioLanguage** (producer) | The language of the input audio in ISO-639-1 format (e.g., 'en'). Improves accuracy and latency. |  | String |
 | **audioModel** (producer) | The model to use for audio transcription (e.g., whisper-1, gpt-4o-transcribe). |  | String |
@@ -1486,16 +1486,16 @@ The key is the field name in the API response, and the value is the Camel header
 ```java
 from("direct:chat")
     .to("openai:chat-completion?model=qwen3"
-        + "&additionalResponseHeader.reasoning_content=CamelMyReasoning"
-        + "&additionalResponseHeader.custom_field=CamelMyCustomField")
-    .log("Custom reasoning: ${header.CamelMyReasoning}");
+        + "&additionalResponseHeader.reasoning_content=MyReasoning"
+        + "&additionalResponseHeader.custom_field=MyCustomField")
+    .log("Custom reasoning: ${header.MyReasoning}");
 ```
 
 ```xml
 <route>
   <from uri="direct:chat"/>
-  <to uri="openai:chat-completion?model=qwen3&amp;additionalResponseHeader.reasoning_content=CamelMyReasoning&amp;additionalResponseHeader.custom_field=CamelMyCustomField"/>
-  <log message="Custom reasoning: ${header.CamelMyReasoning}"/>
+  <to uri="openai:chat-completion?model=qwen3&amp;additionalResponseHeader.reasoning_content=MyReasoning&amp;additionalResponseHeader.custom_field=MyCustomField"/>
+  <log message="Custom reasoning: ${header.MyReasoning}"/>
 </route>
 ```
 
@@ -1508,10 +1508,10 @@ from("direct:chat")
             uri: openai:chat-completion
             parameters:
               model: qwen3
-              additionalResponseHeader.reasoning_content: CamelMyReasoning
-              additionalResponseHeader.custom_field: CamelMyCustomField
+              additionalResponseHeader.reasoning_content: MyReasoning
+              additionalResponseHeader.custom_field: MyCustomField
         - log:
-            message: "Custom reasoning: ${header.CamelMyReasoning}"
+            message: "Custom reasoning: ${header.MyReasoning}"
 ```
 
 String-valued fields are set directly. Non-string fields (numbers, booleans, objects) are converted using `toString()`.

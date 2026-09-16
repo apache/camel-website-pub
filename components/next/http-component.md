@@ -755,10 +755,10 @@ _XML-only: Spring XML global options configuration (deprecated)_
 
 ```xml
 <camelContext>
-    <properties>
-        <property key="http.proxyHost" value="172.168.18.9"/>
-        <property key="http.proxyPort" value="8080"/>
-   </properties>
+    <globalOptions>
+        <globalOption key="http.proxyHost" value="172.168.18.9"/>
+        <globalOption key="http.proxyPort" value="8080"/>
+    </globalOptions>
 </camelContext>
 ```
 
@@ -1072,7 +1072,7 @@ _XML-only: Spring bean and endpoint reference for \`HttpClientConfigurer\`_
  class="my.https.HttpClientConfigurer">
 </bean>
 
-<to uri="https://myhostname.com:443/myURL?httpClientConfigurer=myHttpClientConfigurer"/>
+<to uri="https://myhostname.com:443/myURL?httpClientConfigurer=#myHttpClientConfigurer"/>
 ```
 
 As long as you implement the `HttpClientConfigurer` and configure your keystore and truststore as described above, it will work fine.
@@ -1131,7 +1131,7 @@ _XML-only: Spring bean declaration for `HttpContext` factory_
 _XML-only: endpoint URI referencing the `HttpContext` bean_
 
 ```xml
-<to uri="https://myhostname.com:443/myURL?httpContext=myHttpContext"/>
+<to uri="https://myhostname.com:443/myURL?httpContext=#myHttpContext"/>
 ```
 
 Using different SSLContextParameters

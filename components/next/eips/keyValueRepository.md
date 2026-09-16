@@ -84,7 +84,7 @@ Optional property:
     
 
 ```java
-import org.apache.camel.component.caffeine.cache.CaffeineKeyValueRepository;
+import org.apache.camel.component.caffeine.processor.CaffeineKeyValueRepository;
 
 @BindToRegistry("caffeineKvr")
 public KeyValueRepository caffeineKvr() {
@@ -129,7 +129,7 @@ Optional property:
     
 
 ```java
-import org.apache.camel.component.ehcache.EhcacheKeyValueRepository;
+import org.apache.camel.component.ehcache.processor.EhcacheKeyValueRepository;
 import org.ehcache.CacheManager;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
@@ -198,7 +198,7 @@ Optional properties:
     
 
 ```java
-import org.apache.camel.component.jcache.JCacheKeyValueRepository;
+import org.apache.camel.component.jcache.processor.JCacheKeyValueRepository;
 import javax.cache.configuration.MutableConfiguration;
 import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
@@ -459,7 +459,7 @@ CREATE TABLE camel_kvr (
     
 
 ```java
-import org.apache.camel.component.sql.JdbcKeyValueRepository;
+import org.apache.camel.processor.keyvalue.jdbc.JdbcKeyValueRepository;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
@@ -523,7 +523,7 @@ Optional properties:
     
 
 ```java
-import org.apache.camel.component.jpa.JpaKeyValueRepository;
+import org.apache.camel.processor.keyvalue.jpa.JpaKeyValueRepository;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -582,7 +582,7 @@ Optional properties:
     
 
 ```java
-import org.apache.camel.component.cassandra.CassandraKeyValueRepository;
+import org.apache.camel.processor.keyvalue.cassandra.CassandraKeyValueRepository;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.ConsistencyLevel;
 import java.net.InetSocketAddress;
@@ -655,7 +655,7 @@ Optional properties:
     
 
 ```java
-import org.apache.camel.component.kafka.KafkaKeyValueRepository;
+import org.apache.camel.processor.keyvalue.kafka.KafkaKeyValueRepository;
 
 @BindToRegistry("kafkaKvr")
 public KeyValueRepository kafkaKvr() {

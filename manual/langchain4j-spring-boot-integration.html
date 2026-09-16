@@ -104,7 +104,7 @@ public class ChatRoute extends RouteBuilder {
       endpoint: ${AZURE_OPENAI_ENDPOINT}
       api-key: ${AZURE_OPENAI_API_KEY}
       deployment-name: text-embedding-ada-002</code></pre> </div> </div> <div class="listingblock"> <div class="title"><em>Java-only: Spring Boot RagRoute with Azure OpenAI</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.langchain4j.chat.LangChain4jRagAggregatorStrategy;
+import org.apache.camel.component.langchain4j.chat.rag.LangChain4jRagAggregatorStrategy;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -48,6 +48,8 @@ The primary output format is PDF, but other output [formats](http://xmlgraphics.
 
 The complete list of valid output formats can be found in the `MimeConstants.java` source file.
 
+The endpoint URI takes either the name in lower case (`fop:pdf`) or the output format (`fop:application/pdf`).
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -204,7 +206,7 @@ Below is an example route that renders PDFs from XML data and XSLT template and 
 ```java
 from("file:source/data/xml")
     .to("xslt:xslt/template.xsl")
-    .to("fop:application/pdf")
+    .to("fop:pdf")
     .to("file:target/data");
 ```
 
@@ -212,7 +214,7 @@ from("file:source/data/xml")
 <route>
   <from uri="file:source/data/xml"/>
   <to uri="xslt:xslt/template.xsl"/>
-  <to uri="fop:application/pdf"/>
+  <to uri="fop:pdf"/>
   <to uri="file:target/data"/>
 </route>
 ```
@@ -225,7 +227,7 @@ from("file:source/data/xml")
         - to:
             uri: xslt:xslt/template.xsl
         - to:
-            uri: fop:application/pdf
+            uri: fop:pdf
         - to:
             uri: file:target/data
 ```

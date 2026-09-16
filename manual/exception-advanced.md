@@ -168,10 +168,10 @@ onException(MyUserException.class).maximumRedeliveries(2)
 ```xml
 <onException>
     <exception>com.foo.MyUserException</exception>
-    <redeliveryPolicy maximumRedeliveries="1" redeliveryDelay="0"/>
     <onWhen>
         <simple>${header.user} != null</simple>
     </onWhen>
+    <redeliveryPolicy maximumRedeliveries="1" redeliveryDelay="0"/>
     <to uri="mock:error"/>
 </onException>
 
@@ -237,8 +237,8 @@ In XML then you refer to the redelivery process using `onRedeliveryRef` which is
 
 ```xml
 <onException onRedeliveryRef="myIORedeliverProcessor">
-    <redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="0"/>
     <exception>java.io.IOException</exception>
+    <redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="0"/>
 </onException>
 ```
 

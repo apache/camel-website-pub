@@ -8,7 +8,7 @@ Camel Components
 
 Below is the list of expression languages that are provided by Apache Camel.
 
-Number of Languages: 32 in 21 JAR artifacts (2 deprecated)
+Number of Languages: 31 in 21 JAR artifacts (1 deprecated)
 
     
 | Language | Artifact | Support Level | Since | Description |
@@ -24,7 +24,6 @@ Number of Languages: 32 in 21 JAR artifacts (2 deprecated)
 | [Jactl](jactl-language.md) | camel-jactl | Preview | 4.22 | Evaluates a Jactl script |
 | [Java](java-language.md) | camel-joor | Stable | 4.3 | Evaluates a Java (Java compiled once at runtime) expression |
 | [JavaScript](js-language.md) | camel-javascript | Stable | 3.20 | Evaluates a JavaScript expression |
-| [jOOR](joor-language.md) | camel-joor | Stable-deprecated | 3.7 | Evaluates a jOOR (Java compiled once at runtime) expression |
 | [JQ](jq-language.md) | camel-jq | Stable | 3.18 | Evaluates a JQ expression against a JSON message body |
 | [JSONPath](jsonpath-language.md) | camel-jsonpath | Stable | 2.13 | Evaluates a JSONPath expression against a JSON message body |
 | [MVEL](mvel-language.md) | camel-mvel | Stable | 2.0 | Evaluates a MVEL template |

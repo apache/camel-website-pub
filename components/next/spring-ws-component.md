@@ -316,8 +316,8 @@ Spring WS Camel supports propagation of the headers and attachments into Spring-
 _Java-only: programmatic header and attachment manipulation_
 
 ```java
-exchange.getOut().getHeaders().put("myCustom", "myHeaderValue");
-exchange.getIn().addAttachment("myAttachment", new DataHandler(...));
+exchange.getMessage().setHeader("myCustom", "myHeaderValue");
+exchange.getMessage(AttachmentMessage.class).addAttachment("myAttachment", new DataHandler(...));
 ```
 
 > **Note**

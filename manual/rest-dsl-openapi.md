@@ -136,7 +136,7 @@ public void configure() throws Exception {
 </rest>
 <route>
   <from uri="direct:getUserByName"/>
-  // do something here
+  <!-- do something here -->
 </route>
 ```
 
@@ -384,7 +384,7 @@ restConfiguration().bindingMode(RestBindingMode.json)
 ```
 
 ```xml
-<restConfiguration bindingMode="true" bindingPackageScan="sample.petstore.model"/>
+<restConfiguration bindingMode="json" bindingPackageScan="sample.petstore.model"/>
 ```
 
 ```yaml

@@ -590,16 +590,16 @@ If `mark` is not set then `meter.mark()` is called without argument.
     
 
 ```java
-// marks simple.meter without value
+// marks the simple.meter meter without value
 from("direct:in")
-    .to("metrics:simple.meter")
+    .to("metrics:meter:simple.meter")
     .to("direct:out");
 ```
 
 ```xml
 <route>
   <from uri="direct:in"/>
-  <to uri="metrics:simple.meter"/>
+  <to uri="metrics:meter:simple.meter"/>
   <to uri="direct:out"/>
 </route>
 ```
@@ -610,7 +610,7 @@ from("direct:in")
       uri: direct:in
       steps:
         - to:
-            uri: metrics:simple.meter
+            uri: metrics:meter:simple.meter
         - to:
             uri: direct:out
 ```

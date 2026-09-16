@@ -134,7 +134,7 @@ With Spring XML, you could have a list of endpoints defined in the Registry such
 _XML-only: Spring XML endpoint registry definitions_
 
 ```xml
-<camelContext id="camel" xmlns="http://activemq.apache.org/camel/schema/spring">
+<camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
     <endpoint id="normalOrder" uri="activemq:order.slow"/>
     <endpoint id="bigspenderOrder" uri="activemq:order.high"/>
 </camelContext>

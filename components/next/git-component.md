@@ -151,6 +151,8 @@ Enum values:
 
 -   add
     
+-   checkout
+    
 -   cherryPick
     
 -   clean
@@ -175,9 +177,13 @@ Enum values:
     
 -   log
     
+-   merge
+    
 -   pull
     
 -   push
+    
+-   pushTag
     
 -   remoteAdd
     

@@ -160,7 +160,7 @@ from("direct:payload")
 ```
 
 ```xml
-<rest path="/report" desription="Report REST API">
+<rest path="/report" description="Report REST API">
     <get path="/{id}/payload">
         <to uri="direct:payload"/>
     </get>

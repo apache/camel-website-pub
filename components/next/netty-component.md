@@ -295,6 +295,7 @@ Enum values:
 | **reconnect** (consumer) | Used only in clientMode in consumer, the consumer will attempt to reconnect on disconnection if this is enabled. | true | boolean |
 | **reconnectInterval** (consumer) | Used if reconnect and clientMode is enabled. The interval in milli seconds to attempt reconnection. | 10000 | int |
 | **backlog** (consumer (advanced)) | Allows to configure a backlog for netty consumer (server). Note the backlog is just a best effort depending on the OS. Setting this option to a value such as 200, 500 or 1000, tells the TCP stack how long the accept queue can be If this option is not configured, then the backlog depends on OS setting. |  | int |
+| **bootstrapConfiguration** (consumer (advanced)) | To use a custom configured NettyServerBootstrapConfiguration for configuring this endpoint. When set via URI (e.g. \\{code bootstrapConfiguration=#myBean}), its properties are merged into the endpoint configuration by NettyComponent.createEndpoint(). Note: this parameter is URI-resolved by the component and is not applied when set programmatically via this setter. |  | NettyServerBootstrapConfiguration |
 | **bossCount** (consumer (advanced)) | When netty works on nio mode, it uses default bossCount parameter from Netty, which is 1. User can use this option to override the default bossCount from Netty. | 1 | int |
 | **bossGroup** (consumer (advanced)) | Set the BossGroup which could be used for handling the new connection of the server side across the NettyEndpoint. |  | EventLoopGroup |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -984,7 +985,7 @@ Spring DSL based configuration of endpoint
     </camel:keyManagers>
   </camel:sslContextParameters>...
 ...
-  <to uri="netty:tcp://0.0.0.0:5150?sync=true&ssl=true&sslContextParameters=#sslContextParameters"/>
+  <to uri="netty:tcp://0.0.0.0:5150?sync=true&amp;ssl=true&amp;sslContextParameters=#sslContextParameters"/>
 ...
 ```
 

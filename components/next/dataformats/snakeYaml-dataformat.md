@@ -130,12 +130,9 @@ _XML-only: Spring XML data format definitions with type filters_
   <!--
     here we define a YAML data format with the id snake-safe which restricts the
     classes to be loaded from YAML to TestPojo and those belonging to package
-    com.mycompany
+    com.mycompany (comma-separated names, wildcards or regular expressions)
   -->
-  <yaml id="snake-safe">
-    <typeFilter value="org.apache.camel.component.yaml.model.TestPojo"/>
-    <typeFilter value="com.mycompany\..*" type="regexp"/>
-  </yaml>
+  <yaml id="snake-safe" typeFilter="org.apache.camel.component.yaml.model.TestPojo,com.mycompany.*"/>
 </dataFormats>
 ```
 

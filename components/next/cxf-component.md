@@ -797,7 +797,7 @@ SOAP headers are not available in RAW mode as SOAP processing is skipped.
 ### How to throw a SOAP Fault from Camel
 
 If you are using a Camel CXF endpoint to consume the SOAP request, you may need to throw the SOAP Fault from the camel context.  
-Basically, you can use the `throwFault` DSL to do that; it works for `POJO`, `PAYLOAD` and `RAW` data format.  
+Basically, you set the `SoapFault` as the message body to do that; it works for `POJO`, `PAYLOAD` and `RAW` data format.  
 You can define the soap fault as shown in [CxfCustomizedExceptionTest](https://github.com/apache/camel/blob/main/components/camel-cxf/camel-cxf-soap/src/test/java/org/apache/camel/component/cxf/jaxws/CxfCustomizedExceptionTest.java#L65):
 
 _Java-only: creating a `SoapFault` with detail text_
@@ -812,10 +812,10 @@ detail.appendChild(tn);
 
 Then throw it as you like:
 
-_Java-only: setting a SOAP fault on the route using \`setFaultBody\`_
+_Java-only: setting a SOAP fault as the message body_
 
 ```java
-from(routerEndpointURI).setFaultBody(constant(SOAP_FAULT));
+from(routerEndpointURI).process(exchange -> exchange.getMessage().setBody(SOAP_FAULT));
 ```
 
 If your CXF endpoint is working in the `RAW` data format, you could set the SOAP Fault message in the message body and set the response code in the message header as demonstrated by [CxfMessageStreamExceptionTest](https://github.com/apache/camel/blob/main/components/camel-cxf/camel-cxf-soap/src/test/java/org/apache/camel/component/cxf/jaxws/CxfMessageStreamExceptionTest.java#L43):

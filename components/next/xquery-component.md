@@ -295,7 +295,7 @@ from("activemq:MyQueue")
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-  <camelContext id="camel" xmlns="http://activemq.apache.org/camel/schema/spring">
+  <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
     <route>
       <from uri="activemq:MyQueue"/>
       <filter>

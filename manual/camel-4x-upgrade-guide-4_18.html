@@ -64,7 +64,15 @@ template.sendBodyAndHeader("irc:bot@irc.server.org/#chan", "hello",
               uri: mock:compensation
             completion:
               uri: mock:completion
-            key: myOptionKey2
+            option:
+              - key: myOptionKey
+                expression:
+                  constant:
+                    expression: myOptionValue
+              - key: myOptionKey2
+                expression:
+                  constant:
+                    expression: myOptionValue2
         - choice:
             when:
               - expression:
@@ -100,7 +108,15 @@ template.sendBodyAndHeader("irc:bot@irc.server.org/#chan", "hello",
             sagaService: mySagaService
             compensation: mock:compensation
             completion: mock:completion
-            key: myOptionKey2
+            option:
+              - key: myOptionKey
+                expression:
+                  constant:
+                    expression: myOptionValue
+              - key: myOptionKey2
+                expression:
+                  constant:
+                    expression: myOptionValue2
         - choice:
             when:
               - expression:

@@ -225,7 +225,7 @@ Generate a presigned download URL. Parameters `accessKey`, `secretKey`, and `reg
 ```java
 from("direct:start")
     .setHeader("CamelAwsS3Key", constant("camelKey"))
-    .to("aws2-s3://mycamelbucket?accessKey=xxx&secretKey=yyy&region=region&operation=createDownloadLink")
+    .to("aws2-s3://mycamelbucket?accessKey=xxx&secretKey=yyy&region=eu-west-1&operation=createDownloadLink")
     .to("mock:result");
 ```
 

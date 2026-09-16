@@ -84,7 +84,7 @@ from("file:inbox/xml")
 <route>
     <from uri="file:inbox/xml"/>
     <unmarshal allowNullBody="true">
-        <jaxb/>
+        <jaxb contextPath="com.acme.model"/>
     </unmarshal>
     <to uri="bean:validateOrder"/>
 </route>

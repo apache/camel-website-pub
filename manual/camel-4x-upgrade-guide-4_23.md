@@ -70,6 +70,12 @@ A `GroovyShellFactory` is now looked up in the registry once per `CamelContext`,
 
 The `exchangeProperties`, `exchangeProperty`, `variables`, `variable` and `attachments` script variables are now read from the exchange the first time the script uses them instead of being copied before the script runs. A script that changes a property or variable through `exchange` and then reads one of these variables for the first time now sees its own change where it previously saw the state from before the script ran.
 
+Groovy scripts now have a `message` variable for the current message (`exchange.getMessage()`), the name the other script languages and the Camel 4 API use; `request` and `in` stay as its older names. A `GroovyShellFactory` that provided its own global variable named `message` is now hidden by the exchange variable, like the other exchange variable names.
+
+### camel-djl (Breaking change)
+
+DJL library dependency has been upgraded to 0.37+ Object detection with this version is now reporting coordinates of spotted elements with absolute values instead of a value fraction between 0 and 1. If you do not manipulate the result directly you will be fine as the internal DJL Image converter has been updated. you are impacted if you use the provided result in your own code.
+
 ### camel-dynamic-router
 
 The `dynamic-router-control` endpoint no longer takes the subscription `predicate`, or the `expressionLanguage` used to compile it, from the incoming control message. A control message that supplies either is now rejected with an `IllegalArgumentException`.
@@ -133,6 +139,10 @@ The component camel-irc was deprecated in 4.21. The library used had no stable r
 #### camel-ironmq
 
 The component camel-ironmq was deprecated in 4.21. The official library used has been unmaintained since 2017 All the other client libraries (in other languages) are unmaintained since the same amount of time. The whole iron-io GitHub organization has almost no activity.
+
+#### camel-joor
+
+The language `joor` was deprecated in 4.3. The language `java` can be used in-place. It was a renaming. Joor is used underneath for `java` expression.
 
 #### camel-json-patch
 
@@ -318,6 +328,12 @@ It previously set only `FEATURE_SECURE_PROCESSING` and `external-general-entitie
 
 Documents carrying an internal DTD subset still parse: `disallow-doctype-decl` is deliberately not set here, because that would reject input that parses today. Routes that genuinely need to resolve an external DTD or parameter entity through this converter must supply their own `SAXParserFactory`.
 
+### camel-core - the type of a bean created by a script or a builder is optional
+
+The `type` (class name) of a bean definition — `bean` under `beans`, `templateBean` of a route template, `bean` of a templated route — is no longer declared as required. It was required since the attribute also selected how the bean is created; that moved to `scriptLanguage` in Camel 4.1, and a bean created by a script (`scriptLanguage` and `script`) or a builder (`builderClass`) needs no class name: the runtime registers it as the type of the object the script or builder returns, as the Java DSL `templateBean(name, language, script)` always did.
+
+The XML schemas (`camel-spring.xsd`, `camel-xml-io.xsd`) and the YAML schema no longer require `type`, so Spring XML and the YAML validator (`camel validate`) now accept what the runtime already ran. A bean that is neither scripted nor built still needs a `type`, and the error for a missing one is now an `IllegalArgumentException` naming the bean instead of a `NullPointerException`.
+
 ### Component deprecation
 
 #### camel-minio
@@ -488,6 +504,21 @@ In `camel mcp` the `camel_catalog_doc` tool changed: it now takes the artifact `
 
 `camel-jbang-core` now depends on `camel-yaml-dsl-validator` for the source validation behind these tools.
 
+The older `camel mcp` tools that asked the same questions as the shared tools were removed, so a client no longer has two near-identical tools to pick from. Update MCP clients and prompts that name them:
+
+ 
+| Removed tool | Use instead |
+| --- | --- |
+| `camel_catalog_component_doc`, `camel_catalog_dataformat_doc`, `camel_catalog_language_doc`, `camel_catalog_eip_doc` | `camel_catalog_doc` with the `kind` (`optionsFilter`, `includeOptions`, `includeHeaders`, `includeDoc`) |
+| `camel_catalog_component_maven` | `camel_catalog_doc`, which returns the Maven coordinates |
+| `camel_catalog_components`, `camel_catalog_dataformats`, `camel_catalog_languages`, `camel_catalog_eips` | `camel_catalog_find` with the `kind` (the EIP aliases such as `fan-out` and `dedup` match) |
+| `camel_validate_yaml_dsl`, `camel_validate_route` | `camel_validate_source`; an endpoint URI alone is checked by `camel_catalog_doc` with `endpoint` |
+| `camel_runtime_eval` | `camel_eval_expression` |
+| `camel_runtime_errors` | `camel_get_errors` |
+| `camel_runtime_stop` | `camel_control` with `action=stop` |
+
+The shared catalog tools answer for the Camel version in use, or the `camelVersion` given; the `runtime` (`spring-boot`, `quarkus`) and `platformBom` arguments of the removed tools have no equivalent there. The `camel_build_integration` prompt names the shared tools now.
+
 ### camel-jbang (TUI)
 
 The F8 AI panel now sends only a core subset of its `tui_*` tools to local providers (Ollama, or any provider on `localhost`); the drawing, animation and automation tools are left out to keep the prompt small for local models. Hosted providers are unaffected. Use `/tools full` in the panel, or set `camel.tui.ai.tools=full`, to restore the previous behaviour. Requests to Ollama now also set `keep_alive` to 30 minutes and `num_ctx` to 32768 (or `OLLAMA_CONTEXT_LENGTH` when that is set in the environment), which can cause a one-time model reload if the model was loaded with a different context size.
@@ -628,6 +659,18 @@ Setting `camel.knative.client.ssl.enabled=true` without also configuring `camel.
 The client now leaves the trust options unset in that case, which means the JVM default trust anchors apply — the same fallback `SSLContextParameters` and the rest of Camel use. Accepting any certificate is still available, but has to be asked for with the new `camel.knative.client.ssl.trust.all=true` property.
 
 Deployments that relied on the previous behaviour — a development cluster with a self-signed certificate, for example — must either configure a truststore or set `camel.knative.client.ssl.trust.all` explicitly. `KnativeOidcClientOptions` extends this class and is affected the same way.
+
+### camel-paho
+
+When `automaticReconnect=true` and the MQTT broker reconnects, the consumer now restarts the route if the post-reconnect `subscribe()` call fails. Previously a failed resubscription (for example, when the broker does not send a SUBACK and the Paho keepAlive timer triggers `MqttException 32000`) was only logged at ERROR level with no recovery action, leaving the route in `Started` state while silently consuming no messages (zombie state).
+
+If the resubscribe fails and the consumer owns the MQTT client (the default), it automatically stops and restarts the route to force a clean reconnect. If the restart also fails (for example, the broker is still unavailable), the route is left in `Stopped` state. With `cleanSession=true`, the consumer unsubscribes before disconnecting; with `cleanSession=false`, it keeps the durable subscription. Routes using a user-provided client are not affected by this change. Configuring Camel’s `SupervisingRouteController` allows the framework to keep retrying with exponential backoff until the broker recovers:
+
+```properties
+camel.routeController.enabled = true
+camel.routeController.backOffDelay = 2000
+camel.routeController.backOffMaxDelay = 60000
+```
 
 ### camel-paho-mqtt5
 
@@ -1099,6 +1142,10 @@ Local downloads configured with `fileDir` now resolve existing filesystem path s
 
 Local downloads configured with a plain `downloadFileName` directory now resolve existing filesystem path segments before checking that the destination remains inside that directory. Downloads through a symbolic link that resolves outside the configured directory are rejected. Valid object names using `/` as a pseudo-directory separator continue to work.
 
+### camel-jt400
+
+The endpoint syntax in the component metadata is now `jt400:userID:password@systemName/objectPath`, which is what the component always parsed: `objectPath` is the whole path of the URI (`QSYS.LIB/MYLIB.LIB/MYQUEUE.DTAQ`, the `QSYS.LIB` prefix is not required), and the object suffix (`.DTAQ`, `.MSGQ`, `.PGM`, `.SRVPGM`) selects what the endpoint works with. The `type` path option has been removed from the metadata (catalog, documentation and the endpoint URI factory); it was never an option of its own, the component derives it from the object suffix. Endpoint URIs are unchanged. Tooling that built jt400 URIs from the `type` path option should put the suffix on the object path instead.
+
 ### camel-alibaba-eventbridge
 
 #### CloudEvents 1.0 specification validation enabled by default
@@ -1224,10 +1271,16 @@ To restore the previous behaviour and allow external entity resolution, set the 
 `ParamDefinition.required` (the rest DSL `param`) and `RouteTemplateParameterDefinition.required` (the `templateParameter` of a route template) are now declared as `String` instead of `Boolean`, the same way nearly every other scalar attribute in the Camel model is declared. This allows a property placeholder to be used, which is resolved when the route starts:
 
 ```yaml
-- route:
-    templateParameters:
+- routeTemplate:
+    id: myTemplate
+    parameters:
       - name: greeting
         required: "{{myRequiredFlag}}"
+    from:
+      uri: direct:start
+      steps:
+        - log:
+            message: "{{greeting}}"
 ```
 
 Before this change the value was converted to a `Boolean` while the route was being loaded, so `required: "{{myRequiredFlag}}"` silently evaluated to `false` instead of resolving the placeholder.

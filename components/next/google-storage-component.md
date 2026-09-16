@@ -130,6 +130,7 @@ The Google Storage component supports the following options which are listed bel
 | --- | --- | --- | --- |
 | **autoCreateBucket** (common) | Setting the autocreation of the bucket bucketName. | true | boolean |
 | **configuration** (common) | The component configuration. |  | GoogleCloudStorageConfiguration |
+| **objectName** (common) | The Object name inside the bucket. |  | String |
 | **serviceAccountKey** (common) | The Service account key that can be used as credentials for the Storage client. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
 | **storageClass** (common) | The Cloud Storage class to use when creating the new buckets. | STANDARD | StorageClass |
 | **storageClient** (common) | **Autowired** The storage client. |  | Storage |
@@ -144,7 +145,6 @@ The Google Storage component supports the following options which are listed bel
 | **moveAfterRead** (consumer) | Move objects from the origin bucket to a different bucket after they have been retrieved. To accomplish the operation the destinationBucket option must be set. The copy bucket operation is only performed if the Exchange is committed. If a rollback occurs, the object is not moved. | false | boolean |
 | **prefix** (consumer) | The prefix which is used in the BlobListOptions to only consume objects we are interested in. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **objectName** (producer) | The Object name inside the bucket. |  | String |
 | **operation** (producer) | 
 Set the operation for the producer.
 
@@ -195,6 +195,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **autoCreateBucket** (common) | Setting the autocreation of the bucket bucketName. | true | boolean |
+| **objectName** (common) | The Object name inside the bucket. |  | String |
 | **serviceAccountKey** (common) | The Service account key that can be used as credentials for the Storage client. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
 | **storageClass** (common) | The Cloud Storage class to use when creating the new buckets. | STANDARD | StorageClass |
 | **storageClient** (common) | **Autowired** The storage client. |  | Storage |
@@ -226,7 +227,6 @@ Enum values:
 
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
-| **objectName** (producer) | The Object name inside the bucket. |  | String |
 | **operation** (producer) | 
 
 Set the operation for the producer.

@@ -43,7 +43,8 @@ Camel will provide exchange information in the Groovy context (just a `Map`). Th
 | `exchange` | The `Exchange` itself. |
 | `camelContext` | The Camel Context. |
 | `exception` | If the exchange failed then this is the caused exception. |
-| `request` | The message. |
+| `message` | The message (`exchange.getMessage()`). |
+| `request` | The message (the older name of `message`). |
 | `response` | **Deprecated** The Out message (only for InOut message exchange pattern). |
 | `attachments` | A `Map<String,jakarta.activation.DataHandler>` containing file attachments such as from HTTP file uploads, or emails containing files. |
 | `log` | Can be used for logging purposes such as `log.info('Using body: {}', body)`. |

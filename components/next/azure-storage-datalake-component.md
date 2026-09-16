@@ -142,7 +142,33 @@ Enum values:
 
 -   listFileSystem
     
--   listFiles
+-   createFileSystem
+    
+-   deleteFileSystem
+    
+-   listPaths
+    
+-   getFile
+    
+-   downloadToFile
+    
+-   downloadLink
+    
+-   deleteFile
+    
+-   appendToFile
+    
+-   flushToFile
+    
+-   uploadFromFile
+    
+-   upload
+    
+-   openQueryInputStream
+    
+-   createFile
+    
+-   deleteDirectory
     
 
 
@@ -255,7 +281,33 @@ Enum values:
 
 -   listFileSystem
     
--   listFiles
+-   createFileSystem
+    
+-   deleteFileSystem
+    
+-   listPaths
+    
+-   getFile
+    
+-   downloadToFile
+    
+-   downloadLink
+    
+-   deleteFile
+    
+-   appendToFile
+    
+-   flushToFile
+    
+-   uploadFromFile
+    
+-   upload
+    
+-   openQueryInputStream
+    
+-   createFile
+    
+-   deleteDirectory
     
 
 

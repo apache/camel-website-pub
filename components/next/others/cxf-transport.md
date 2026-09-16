@@ -98,7 +98,7 @@ _XML-only: CXF transport destination configuration with embedded Camel route_
 ```xml
 ...
   <camel:destination name="{http://widgets/widgetvendor.net}widgetSOAPPort.http-destination>
-    <camelContext id="context" xmlns="http://activemq.apache.org/camel/schema/spring">
+    <camelContext id="context" xmlns="http://camel.apache.org/schema/spring">
          <route>
            <from uri="direct:EndpointC" />
            <to uri="direct:EndpointD" />
@@ -135,7 +135,7 @@ _XML-only: CXF transport conduit configuration with embedded Camel route_
 
 ```xml
 ...
-  <camelContext id="conduit_context" xmlns="http://activemq.apache.org/camel/schema/spring">
+  <camelContext id="conduit_context" xmlns="http://camel.apache.org/schema/spring">
        <route>
            <from uri="direct:EndpointA" />
            <to uri="direct:EndpointB" />

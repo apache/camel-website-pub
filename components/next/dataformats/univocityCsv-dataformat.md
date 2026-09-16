@@ -86,7 +86,7 @@ from("direct:input")
 <route>
     <from uri="direct:input"/>
     <marshal>
-        <univocity-csv/>
+        <univocityCsv/>
     </marshal>
     <to uri="mock:result"/>
 </route>
@@ -122,11 +122,11 @@ from("direct:input")
 <route>
     <from uri="direct:input"/>
     <marshal>
-        <univocity-fixed padding="_">
-            <univocity-header length="5"/>
-            <univocity-header length="5"/>
-            <univocity-header length="5"/>
-        </univocity-fixed>
+        <univocityFixed padding="_">
+            <univocityHeader length="5"/>
+            <univocityHeader length="5"/>
+            <univocityHeader length="5"/>
+        </univocityFixed>
     </marshal>
     <to uri="mock:result"/>
 </route>
@@ -163,7 +163,7 @@ from("direct:input")
 <route>
     <from uri="direct:input"/>
     <marshal>
-        <univocity-tsv/>
+        <univocityTsv/>
     </marshal>
     <to uri="mock:result"/>
 </route>
@@ -220,7 +220,7 @@ from("direct:input")
 <route>
     <from uri="direct:input"/>
     <unmarshal>
-        <univocity-csv headerExtractionEnabled="true" asMap="true"/>
+        <univocityCsv headerExtractionEnabled="true" asMap="true"/>
     </unmarshal>
     <to uri="mock:result"/>
 </route>
@@ -258,11 +258,11 @@ from("direct:input")
 <route>
     <from uri="direct:input"/>
     <unmarshal>
-        <univocity-fixed>
-            <univocity-header length="5"/>
-            <univocity-header length="5"/>
-            <univocity-header length="5"/>
-        </univocity-fixed>
+        <univocityFixed>
+            <univocityHeader length="5"/>
+            <univocityHeader length="5"/>
+            <univocityHeader length="5"/>
+        </univocityFixed>
     </unmarshal>
     <to uri="mock:result"/>
 </route>

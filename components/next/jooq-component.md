@@ -412,12 +412,6 @@ Camel context configuration:
             <to uri="jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord/execute?query=delete from book_store x where x.name = 'test'"/>
             <log message="Fetched ${body}"/>
         </route>
-
-        <!-- SQL: consume -->
-        <route id="sql-consume">
-            <from uri="jooq://org.apache.camel.component.jooq.db.tables.records.BookStoreRecord?query=select * from book_store x where x.name = 'test'"/>
-            <log message="Fetched ${body}"/>
-        </route>
     </camelContext>
 </beans>
 ```

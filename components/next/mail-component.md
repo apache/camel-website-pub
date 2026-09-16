@@ -408,7 +408,7 @@ Spring DSL based configuration of endpoint
   </camel:trustManagers>
 </camel:sslContextParameters>...
 ...
-<to uri="smtps://smtp.google.com?username=user@gmail.com&password=password&sslContextParameters=#sslContextParameters"/>...
+<to uri="smtps://smtp.google.com?username=user@gmail.com&amp;password=password&amp;sslContextParameters=#sslContextParameters"/>...
 ```
 
 #### Configuring JavaMail Directly
@@ -819,7 +819,7 @@ from("imaps://mymailseerver?username=foo&password=secret&searchTerm.subjectOrBod
 
 ```xml
 <route>
-  <from uri="imaps://mymailseerver?username=foo&password=secret&searchTerm.subjectOrBody=Camel"/>
+  <from uri="imaps://mymailseerver?username=foo&amp;password=secret&amp;searchTerm.subjectOrBody=Camel"/>
   <to uri="bean:myBean"/>
 </route>
 ```
@@ -856,7 +856,7 @@ from("imaps://mymailseerver?username=foo&password=secret&searchTerm.fromSentDate
 
 ```xml
 <route>
-  <from uri="imaps://mymailseerver?username=foo&password=secret&searchTerm.fromSentDate=now-24h"/>
+  <from uri="imaps://mymailseerver?username=foo&amp;password=secret&amp;searchTerm.fromSentDate=now-24h"/>
   <to uri="bean:myBean"/>
 </route>
 ```
@@ -890,7 +890,7 @@ from("imaps://mymailseerver?username=foo&password=secret&searchTerm.subject=Came
 
 ```xml
 <route>
-  <from uri="imaps://mymailseerver?username=foo&password=secret&searchTerm.subject=Camel&searchTerm.fromSentDate=now-24h"/>
+  <from uri="imaps://mymailseerver?username=foo&amp;password=secret&amp;searchTerm.subject=Camel&amp;searchTerm.fromSentDate=now-24h"/>
   <to uri="bean:myBean"/>
 </route>
 ```
@@ -937,7 +937,7 @@ from("imaps://mymailseerver?username=foo&password=secret&searchTerm=#mySearchTer
 
 ```xml
 <route>
-  <from uri="imaps://mymailseerver?username=foo&password=secret&searchTerm=#mySearchTerm"/>
+  <from uri="imaps://mymailseerver?username=foo&amp;password=secret&amp;searchTerm=#mySearchTerm"/>
   <to uri="bean:myBean"/>
 </route>
 ```

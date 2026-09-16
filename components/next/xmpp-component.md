@@ -96,7 +96,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **host** (common) | **Required** Hostname for the chat server. |  | String |
-| **port** (common) | **Required** Port number for the chat server. |  | int |
+| **port** (common) | Port number for the chat server. | 5222 | int |
 | **participant** (common) | JID (Jabber ID) of person to receive messages. room parameter has precedence over participant. |  | String |
 
 ### Query Parameters

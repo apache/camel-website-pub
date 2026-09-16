@@ -238,9 +238,9 @@ from("jms:queue:order")
   <intercept>
       <onWhen>
         <simple>${body} contains 'Hello'</simple>
-        <to uri="log:test"/>
-        <stop/> <!-- stop continue routing -->
       </onWhen>
+      <to uri="log:test"/>
+      <stop/> <!-- stop continue routing -->
   </intercept>
 
   <route>
@@ -345,7 +345,7 @@ from("file:inbox")
 ```xml
   <interceptFrom uri="jms*">
     <to uri="log:incoming"/>
-  </intercept>
+  </interceptFrom>
 
   <route>
     <from uri="jms:queue:order"/>

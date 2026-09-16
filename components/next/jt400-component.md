@@ -23,15 +23,21 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 To send or receive data from a data queue
 
-jt400://user:password/system/QSYS.LIB/library.LIB/queue.DTAQ\[?options\]
+jt400://user:password@system/QSYS.LIB/library.LIB/queue.DTAQ\[?options\]
 
 To send or receive messages from a message queue
 
-jt400://user:password/system/QSYS.LIB/library.LIB/queue.MSGQ\[?options\]
+jt400://user:password@system/QSYS.LIB/library.LIB/queue.MSGQ\[?options\]
 
-To call program
+To call a program
 
-jt400://user:password/system/QSYS.LIB/library.LIB/program.PGM\[?options\]
+jt400://user:password@system/QSYS.LIB/library.LIB/program.PGM\[?options\]
+
+To call a service program
+
+jt400://user:password@system/QSYS.LIB/library.LIB/program.SRVPGM\[?options\]
+
+The suffix of the object path (`.DTAQ`, `.MSGQ`, `.PGM` or `.SRVPGM`) selects what the endpoint works with.
 
 ## Configuring Options
 
@@ -96,7 +102,7 @@ The JT400 component supports the following options which are listed below.
 
 The JT400 endpoint is configured using URI syntax:
 
-jt400:userID:password@systemName/QSYS.LIB/objectPath.type
+jt400:userID:password@systemName/objectPath
 
 With the following _path_ and _query_ parameters:
 
@@ -108,26 +114,7 @@ With the following _path_ and _query_ parameters:
 | **userID** (security) | **Required** Returns the ID of the IBM i user. |  | String |
 | **password** (security) | **Required** Returns the password of the IBM i user. |  | String |
 | **systemName** (security) | **Required** Returns the name of the IBM i system. |  | String |
-| **objectPath** (common) | **Required** Returns the fully qualified integrated file system path name of the target object of this endpoint. |  | String |
-| **type** (common) | 
-**Required** Whether to work with data queues or remote program call.
-
-Enum values:
-
--   DTAQ
-    
--   PGM
-    
--   SRVPGM
-    
--   MSGQ
-    
-
-
-
-
-
- |  | Jt400Type |
+| **objectPath** (common) | **Required** The integrated file system path of the target object, such as QSYS.LIB/MYLIB.LIB/MYQUEUE.DTAQ. The suffix of the object selects what the endpoint works with: .DTAQ a data queue, .MSGQ a message queue, .PGM a program call and .SRVPGM a service program call. |  | String |
 
 ### Query Parameters
 
@@ -218,8 +205,8 @@ Enum values:
 
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
-| **outputFieldsIdxArray** (producer) | Specifies which fields (program parameters) are output parameters. |  | Integer\[\] |
-| **outputFieldsLengthArray** (producer) | Specifies the fields (program parameters) length as in the IBM i program definition. |  | Integer\[\] |
+| **fieldsLength** (producer) | Specifies the fields (program parameters) length as in the IBM i program definition, as a comma-separated list. |  | String |
+| **outputFieldsIdx** (producer) | Specifies which fields (program parameters) are output parameters, as a comma-separated list of 0-based indexes. |  | String |
 | **procedureName** (producer) | Procedure name from a service program to call. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |
@@ -334,19 +321,19 @@ Another user connects to the same data queue to receive the information from the
     
 
 ```java
-from(“direct:george”).to(“jt400://GEORGE:EGROEG@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ”);
-from(“jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ”).to(“mock:ringo”);
+from("direct:george").to("jt400://GEORGE:EGROEG@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ");
+from("jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ").to("mock:ringo");
 ```
 
 ```xml
 <route>
-  <from uri=”direct:george”/>
-  <to uri=”jt400://GEORGE:EGROEG@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ”/>
+  <from uri="direct:george"/>
+  <to uri="jt400://GEORGE:EGROEG@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ"/>
 </route>
 
 <route>
-  <from uri=”jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ”/>
-  <to uri=”mock:ringo”/>
+  <from uri="jt400://RINGO:OGNIR@LIVERPOOL/QSYS.LIB/BEATLES.LIB/PENNYLANE.DTAQ"/>
+  <to uri="mock:ringo"/>
 </route>
 ```
 
@@ -408,20 +395,20 @@ In this example, the camel route will call the QUSRTVUS API to retrieve 16 bytes
 _Java-only: uses lambda Processor to set program call parameters_
 
 ```java
-from(“timer://foo?period=60000”)
+from("timer://foo?period=60000")
     .process( exchange -> {
-        String usrSpc = “MYUSRSPACEMYLIB     “;
+        String usrSpc = "MYUSRSPACEMYLIB     ";
         Object[] parms = new Object[] {
             usrSpc, // Qualified user space name
             1,      // starting position
             16,     // length of data
-            “” // output
+            "" // output
         };
         exchange.getIn().setBody(parms);
     })
-    .to(“jt400://*CURRENT:*CURRENt@localhost/qsys.lib/QUSRTVUS.PGM?fieldsLength=20,4,4,16&outputFieldsIdx=3”)
-    .setBody(simple(“${body[3]}”))
-    .to(“direct:foo”);
+    .to("jt400://*CURRENT:*CURRENT@localhost/qsys.lib/QUSRTVUS.PGM?fieldsLength=20,4,4,16&outputFieldsIdx=3")
+    .setBody(simple("${body[3]}"))
+    .to("direct:foo");
 ```
 
 ### Writing to keyed data queues

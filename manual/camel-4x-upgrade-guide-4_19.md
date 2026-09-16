@@ -90,7 +90,15 @@ In YAML DSL the changes are even simpler as the endpoint is moved from `uri` to 
               uri: mock:compensation
             completion:
               uri: mock:completion
-            key: myOptionKey2
+            option:
+              - key: myOptionKey
+                expression:
+                  constant:
+                    expression: myOptionValue
+              - key: myOptionKey2
+                expression:
+                  constant:
+                    expression: myOptionValue2
         - choice:
             when:
               - expression:
@@ -136,7 +144,15 @@ After:
             sagaService: mySagaService
             compensation: mock:compensation
             completion: mock:completion
-            key: myOptionKey2
+            option:
+              - key: myOptionKey
+                expression:
+                  constant:
+                    expression: myOptionValue
+              - key: myOptionKey2
+                expression:
+                  constant:
+                    expression: myOptionValue2
         - choice:
             when:
               - expression:

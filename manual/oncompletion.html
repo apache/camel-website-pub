@@ -153,7 +153,7 @@ from("direct:start")
   &lt;to uri="mock:before"/&gt;
   &lt;delay&gt;&lt;constant&gt;1000&lt;/constant&gt;&lt;/delay&gt;
   &lt;setBody&gt;&lt;simple&gt;OnComplete:${body}&lt;/simple&gt;&lt;/setBody&gt;
-&lt;/onCompletion&gt;</code></pre> </div> </div> <div class="paragraph"> <p>You can also refer to a specific thread pool to be used, using the <code>executorServiceRef</code> option</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;onCompletion executorServiceRef="myThreadPool"&gt;
+&lt;/onCompletion&gt;</code></pre> </div> </div> <div class="paragraph"> <p>You can also refer to a specific thread pool to be used, using the <code>executorService</code> option</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;onCompletion executorService="myThreadPool"&gt;
   &lt;to uri="mock:before"/&gt;
   &lt;delay&gt;&lt;constant&gt;1000&lt;/constant&gt;&lt;/delay&gt;
   &lt;setBody&gt;&lt;simple&gt;OnComplete:${body}&lt;/simple&gt;&lt;/setBody&gt;

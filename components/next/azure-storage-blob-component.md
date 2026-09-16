@@ -195,6 +195,8 @@ Enum values:
     
 -   listBlobs
     
+-   listBlobVersions
+    
 -   getBlob
     
 -   deleteBlob
@@ -236,6 +238,10 @@ Enum values:
 -   setBlobTags
     
 -   getBlobTags
+    
+-   setBlobLegalHold
+    
+-   setBlobImmutabilityPolicy
     
 -   undeleteBlob
     
@@ -405,6 +411,8 @@ Enum values:
     
 -   listBlobs
     
+-   listBlobVersions
+    
 -   getBlob
     
 -   deleteBlob
@@ -446,6 +454,10 @@ Enum values:
 -   setBlobTags
     
 -   getBlobTags
+    
+-   setBlobLegalHold
+    
+-   setBlobImmutabilityPolicy
     
 -   undeleteBlob
     

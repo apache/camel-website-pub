@@ -310,7 +310,7 @@ from("hivemq:some/topic?host=mqtt.example.com&port=1883")
 
 ```xml
 <route>
-  <from uri="hivemq:some/topic?host=mqtt.example.com&port=1883"/>
+  <from uri="hivemq:some/topic?host=mqtt.example.com&amp;port=1883"/>
   <to uri="mock:test"/>
 </route>
 ```

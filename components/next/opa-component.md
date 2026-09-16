@@ -79,15 +79,34 @@ The OPA component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **allowKey** (producer) | The key to read the allow/deny verdict from when the policy returns an object rather than a plain boolean. For a policy returning \\{allow: true, reasons: } the default value of allow is what you want. | allow | String |
+| **allowKey** (producer) | The key to read the allow/deny verdict from when the policy returns an object rather than a plain boolean. For a policy returning \\{allow: true, reasons: } the default value of allow is what you want. A dotted path reaches a verdict nested inside the document: \\{code allowKey=result.allow} reads \\{result: \\{allow: true}}. A key with no dot is looked up directly at the top level. | allow | String |
 | **configuration** (producer) | The component configuration. |  | OpaConfiguration |
+| **entrypoint** (producer) | The compiled entrypoint to evaluate in wasm mode. This is not the same thing as the policy path: an entrypoint is fixed when the bundle is built, with \\{code opa build -e}. Defaults to the endpoint’s policy path, which is the name \\{code opa build} gives it. |  | String |
+| **evaluationMode** (producer) | 
+How the policy is evaluated. rest (the default) calls a running OPA server over its Data API. wasm evaluates a WebAssembly bundle in-process, with no server involved - so there is no network hop and no unreachable decision point, at the cost of the policy being a build-time artefact rather than something a server distributes and updates. serverUrl, bearerToken and failOpen do not apply in wasm mode.
+
+Enum values:
+
+-   rest
+    
+-   wasm
+    
+
+
+
+
+
+ | rest | String |
 | **includeBody** (producer) | Whether to send the message body to OPA as part of the input document. Disabled by default: bodies can be large or streaming, and most authorization decisions only need headers. When enabled on a streaming body, enable stream caching so that the body is still readable by the rest of the route. | false | boolean |
 | **includeHeaders** (producer) | Comma-separated list of message header names to send to OPA in the input document. The default of \\{code } sends every header except those that carry a caller credential verbatim - Authorization, \\{code Proxy-Authorization}, Cookie and \\{code Set-Cookie} - which are withheld because OPA’s decision logging ships the whole input document, often off the box. A policy that genuinely needs one can still have it by naming the header here. Narrow the list when the policy only needs a few headers. | \* | String |
 | **includeProperties** (producer) | Comma-separated list of exchange property names to send to OPA in the input document, or \\{code } for all of them. Empty by default, so no properties are sent unless asked for. This is where the authentication components put the identity they verified: \\{code camel-keycloak} stores the access token and its subject as exchange properties and prefers them over the equivalent headers, precisely because headers can be set by the caller. List those property names here to let a policy authorize the identity an earlier step established, instead of copying it into a header first. Only custom properties are sent; Camel’s own internal exchange properties are never included. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **policyBundle** (producer) | The WebAssembly policy to evaluate in wasm mode, as produced by \\{code opa build -t wasm}. Accepts a \\{code file:}, \\{code classpath:} or \\{code http:} location holding either the bundle.tar.gz that \\{code opa build} emits or a bare .wasm module. Required when \\{code evaluationMode=wasm}. Prefer the bundle: it also carries the data document the policy reads as \\{code data.}, which a bare module does not. |  | String |
 | **serverUrl** (producer) | The base URL of the OPA server, without the \\{code /v1/data} suffix. The default assumes OPA running as a sidecar on the standard port. | [http://localhost:8181](http://localhost:8181) | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **borrowTimeout** (advanced) | How long an exchange waits for a free WebAssembly policy instance in wasm mode before the evaluation fails. An exchange that cannot get an instance is not denied by a policy, so it is reported as an evaluation failure and handled like any other: failing closed, or proceeding if failOpen is set. Raise it, or poolSize, for a route whose concurrency exceeds the pool. | 30000 | long |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
+| **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
 | **bearerToken** (security) | Bearer token sent to the OPA server in the Authorization header, for an OPA instance that has its API authentication enabled. |  | String |
@@ -113,13 +132,32 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **allowKey** (producer) | The key to read the allow/deny verdict from when the policy returns an object rather than a plain boolean. For a policy returning \\{allow: true, reasons: } the default value of allow is what you want. | allow | String |
+| **allowKey** (producer) | The key to read the allow/deny verdict from when the policy returns an object rather than a plain boolean. For a policy returning \\{allow: true, reasons: } the default value of allow is what you want. A dotted path reaches a verdict nested inside the document: \\{code allowKey=result.allow} reads \\{result: \\{allow: true}}. A key with no dot is looked up directly at the top level. | allow | String |
+| **entrypoint** (producer) | The compiled entrypoint to evaluate in wasm mode. This is not the same thing as the policy path: an entrypoint is fixed when the bundle is built, with \\{code opa build -e}. Defaults to the endpoint’s policy path, which is the name \\{code opa build} gives it. |  | String |
+| **evaluationMode** (producer) | 
+How the policy is evaluated. rest (the default) calls a running OPA server over its Data API. wasm evaluates a WebAssembly bundle in-process, with no server involved - so there is no network hop and no unreachable decision point, at the cost of the policy being a build-time artefact rather than something a server distributes and updates. serverUrl, bearerToken and failOpen do not apply in wasm mode.
+
+Enum values:
+
+-   rest
+    
+-   wasm
+    
+
+
+
+
+
+ | rest | String |
 | **includeBody** (producer) | Whether to send the message body to OPA as part of the input document. Disabled by default: bodies can be large or streaming, and most authorization decisions only need headers. When enabled on a streaming body, enable stream caching so that the body is still readable by the rest of the route. | false | boolean |
 | **includeHeaders** (producer) | Comma-separated list of message header names to send to OPA in the input document. The default of \\{code } sends every header except those that carry a caller credential verbatim - Authorization, \\{code Proxy-Authorization}, Cookie and \\{code Set-Cookie} - which are withheld because OPA’s decision logging ships the whole input document, often off the box. A policy that genuinely needs one can still have it by naming the header here. Narrow the list when the policy only needs a few headers. | \* | String |
 | **includeProperties** (producer) | Comma-separated list of exchange property names to send to OPA in the input document, or \\{code } for all of them. Empty by default, so no properties are sent unless asked for. This is where the authentication components put the identity they verified: \\{code camel-keycloak} stores the access token and its subject as exchange properties and prefers them over the equivalent headers, precisely because headers can be set by the caller. List those property names here to let a policy authorize the identity an earlier step established, instead of copying it into a header first. Only custom properties are sent; Camel’s own internal exchange properties are never included. |  | String |
+| **policyBundle** (producer) | The WebAssembly policy to evaluate in wasm mode, as produced by \\{code opa build -t wasm}. Accepts a \\{code file:}, \\{code classpath:} or \\{code http:} location holding either the bundle.tar.gz that \\{code opa build} emits or a bare .wasm module. Required when \\{code evaluationMode=wasm}. Prefer the bundle: it also carries the data document the policy reads as \\{code data.}, which a bare module does not. |  | String |
 | **serverUrl** (producer) | The base URL of the OPA server, without the \\{code /v1/data} suffix. The default assumes OPA running as a sidecar on the standard port. | [http://localhost:8181](http://localhost:8181) | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **borrowTimeout** (advanced) | How long an exchange waits for a free WebAssembly policy instance in wasm mode before the evaluation fails. An exchange that cannot get an instance is not denied by a policy, so it is reported as an evaluation failure and handled like any other: failing closed, or proceeding if failOpen is set. Raise it, or poolSize, for a route whose concurrency exceeds the pool. | 30000 | long |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
+| **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **bearerToken** (security) | Bearer token sent to the OPA server in the Authorization header, for an OPA instance that has its API authentication enabled. |  | String |
 | **failOpen** (security) | Whether to allow the exchange to proceed when the policy cannot be evaluated at all, for example because the OPA server is unreachable. Disabled by default so that an unreachable policy decision point denies rather than grants access. Do not enable this in production. | false | boolean |
 
@@ -211,9 +249,9 @@ The component’s own `CamelOpa*` decision headers are never sent back to OPA, s
 
 -   a decision that **is** a boolean is the verdict;
     
--   a decision that is an object is searched for the `allowKey` entry (`allow` by default), which must itself be a boolean;
+-   a decision that is an object is searched for the `allowKey` entry (`allow` by default), which must itself be a boolean. `allowKey` accepts a dotted path, so `allowKey=result.allow` reads a verdict nested inside the document as `{"result": {"allow": true}}`;
     
--   anything else cannot be read as a verdict and counts as a deny, with the raw document still available for the route to inspect.
+-   anything else cannot be read as a verdict and counts as a deny, with the raw document still available for the route to inspect. That case is logged at WARN rather than DEBUG: a document that arrived but could not be read is a configuration problem, and from `CamelOpaDecisionAllow` alone it is indistinguishable from a genuine denial.
     
 
 Both headers are written on every evaluation, so a verdict set by an inbound message never survives into the route.
@@ -248,6 +286,53 @@ Prefer this over copying the identity into a header before the `opa:` endpoint. 
 
 `OpaSecurityPolicy` takes the same option through `setIncludeProperties`.
 
+## Evaluation modes
+
+By default the component calls a running OPA server over its Data API (`evaluationMode=rest`). It can instead evaluate a WebAssembly bundle in-process:
+
+```java
+from("platform-http:/orders")
+    .to("opa:authz/orders/allow?evaluationMode=wasm&policyBundle=classpath:bundle.tar.gz")
+```
+
+Build the bundle with OPA’s compiler — note that `-e` names an **entrypoint**, which is fixed at build time and is not the same thing as a data path:
+
+```sh
+opa build -t wasm -e authz/orders/allow policy.rego
+```
+
+`policyBundle` accepts a `file:`, `classpath:` or `http:` location holding either the `bundle.tar.gz` that `opa build` emits or a bare `.wasm`. `entrypoint` defaults to the endpoint’s policy path, which is the name `opa build` gives it. `evaluationMode` accepts only `rest` and `wasm`; anything else is rejected when the endpoint is created, rather than quietly falling back to a server call that ignores `policyBundle`.
+
+Prefer the `bundle.tar.gz`. A policy that reads `data.` **decides from the \*data document**, and `opa build` packs that beside the module as `data.json` — a bare `.wasm` carries the rules but not the data, so such a policy evaluates against an empty data document and typically denies everything. Given the bundle, the component applies its data to every evaluation, so the decision matches what a server loading the same bundle would return:
+
+```sh
+# roles.rego reads data.admins, which lives in data.json next to it
+opa build -t wasm -e authz/orders/allow roles.rego data.json
+```
+
+Data that is **not** part of the bundle — what a server would receive through its Data API at runtime — has no equivalent in `wasm` mode. A policy depending on it needs `evaluationMode=rest`.
+
+Prefer `classpath:` or `file:` for a bundle shipped with the application, which is what a build-time artefact usually is. The bundle is fetched when the endpoint starts, and Camel resolves an `http:` resource with no connect or read timeout (CAMEL-24756), so a policy server that accepts the connection and then does not answer stalls `CamelContext` startup rather than failing the one route.
+
+Which to choose:
+
+  
+|  | `rest` | `wasm` |
+| --- | --- | --- |
+| Policy source | a server, centrally managed | a bundle built with your application |
+| Updates | bundle polling, live | rebuild and redeploy |
+| Decision logs | yes | none |
+| Latency | a network round-trip per exchange | in-process |
+| Unreachable decision point | a real failure mode | cannot happen |
+
+`serverUrl`, `bearerToken` and `failOpen` have no meaning in `wasm` mode — there is no server to address, authenticate to, or fail to reach — and no health check is registered, because there is nothing to probe. An absent health check is not a healthy one.
+
+The decision contract is identical in both modes: the same headers, the same `allowKey` handling, and an undefined decision fails closed the same way. A route does not need to know which engine evaluated it.
+
+Evaluation instances carry mutable state and are not thread-safe, so `wasm` mode pools them; `poolSize` (default 8) bounds how many exchanges evaluate at once. An exchange that arrives when all of them are busy waits for one, up to `borrowTimeout` (default 30s), and then fails rather than waiting indefinitely — an authorization decision that never arrives is not better than one that is denied, and it is much harder to diagnose. That failure is an evaluation failure, not a deny, so it fails closed or proceeds under `failOpen` like any other.
+
+Size `poolSize` for the concurrency the route actually sees. A policy that takes a long time to evaluate holds its instance for that whole time, so the two options trade against each other: raise `poolSize` when many exchanges evaluate at once, and `borrowTimeout` when a single evaluation is legitimately slow. A policy that can run long enough to matter is usually better served by `evaluationMode=rest`, where the decision point is a separate process that a timeout can abandon.
+
 ## Failure handling
 
 The component fails closed. If the policy cannot be evaluated at all — the OPA server is unreachable, times out, or answers with an error — the producer throws an `OpaPolicyEvaluationException` and `OpaSecurityPolicy` throws a `CamelAuthorizationException`; in neither case does the message proceed as allowed. This is deliberately different from a deny, which is a decision rather than a failure, so a route can tell "denied" from "no policy decision point available".
@@ -262,7 +347,9 @@ Because the component fails closed, an OPA server that cannot be reached fails *
 
 Camel disables producer health checks by default; turn them on with `camel.health.producersEnabled=true`, or per component with `healthCheckProducerEnabled`. The check reports DOWN with the underlying reason — an unreachable server and a server answering its health endpoint with an error are reported differently, so a deny is never confused with an outage.
 
-The check is only registered when the endpoint was given a `serverUrl`. An injected `opaClient` may point anywhere and the endpoint has no way to ask it where, so no probe is registered in that case.
+`OpaSecurityPolicy` registers an equivalent check, under an id starting `security-policy:opa-`. It is arguably the more important of the two: a denied producer merely records a verdict the route can inspect, while the policy throws `CamelAuthorizationException` and stops the exchange, so an unreachable server there fails every message outright. That is why the policy’s check is on by default rather than opt-in like the producer’s. Set `healthCheckEnabled=false` on the policy for a route that should stay ready regardless — one running `failOpen`, say — in preference to hiding the check with `camel.health.exclude-pattern`.
+
+Neither check is registered when an `opaClient` was injected: that client may point anywhere and neither the endpoint nor the policy has a way to ask it where, so probing the configured `serverUrl` would report on a server they may never talk to. The endpoint check is also skipped when no `serverUrl` was given.
 
 ## Security notes
 

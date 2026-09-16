@@ -65,7 +65,7 @@ The following table lists all available producer operations. Operations marked *
 | `uploadBlockBlob` | Upload a block blob. The body is used as the blob content. |  |
 | `uploadBlockBlobChunked` | Upload a large file using chunked parallel uploads. | See [uploadBlockBlobChunked](#uploadBlockBlobChunked) |
 | `stageBlockBlobList` | Stage a list of blocks for later commit. | Java-only (requires `List<BlobBlock>` body) |
-| `commitBlockBlobList` | Commit a list of previously staged blocks. | Java-only (requires `List<Block>` body) |
+| `commitBlobBlockList` | Commit a list of previously staged blocks. | Java-only (requires `List<Block>` body) |
 | `getBlobBlockList` | Get the list of committed and uncommitted blocks for a block blob. |  |
 | `createAppendBlob` | Create an append blob. |  |
 | `commitAppendBlob` | Append content to an append blob. The body is used as the content to append. |  |
@@ -163,7 +163,7 @@ The `blockSize` and `maxConcurrency` options control memory usage and upload spe
 -   Memory usage is approximately `blockSize × maxConcurrency`.
     
 
-### stageBlockBlobList and commitBlockBlobList
+### stageBlockBlobList and commitBlobBlockList
 
 These two operations work together for multi-block uploads. Both require Java-specific objects in the body.
 
@@ -193,7 +193,7 @@ from("direct:start")
         blockIds.add(new Block().setName("id-3"));
         exchange.getIn().setBody(blockIds);
     })
-    .to("azure-storage-blob://camelazure/container1?blobName=blob&operation=commitBlockBlobList&serviceClient=#client")
+    .to("azure-storage-blob://camelazure/container1?blobName=blob&operation=commitBlobBlockList&serviceClient=#client")
     .to("mock:result");
 ```
 

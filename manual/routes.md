@@ -209,7 +209,7 @@ from("direct:in").precondition("'{{format}}' == 'xml'")
 ```xml
 <route precondition="'{{format}}' == 'xml'">
   <from uri="direct:in"/>
-  <unmarshal><jaxb/></unmarshal>
+  <unmarshal><jaxb contextPath="com.foo.model"/></unmarshal>
   <to uri="direct:out"/>
 </route>
 ```

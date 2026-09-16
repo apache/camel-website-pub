@@ -147,7 +147,7 @@ Application Properties
 camel.main.streamCachingSpoolEnabled = true
 camel.main.streamCachingSpoolDirectory = /tmp/cachedir
 camel.main.streamCachingSpoolThreshold = 65536
-camel.main.streamCachingBufferSize = 16384;
+camel.main.streamCachingBufferSize = 16384
 ```
 
 > **Tip**

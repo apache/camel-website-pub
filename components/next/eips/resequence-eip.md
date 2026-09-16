@@ -348,8 +348,8 @@ from("jms:queue:foo")
 <route>
     <from uri="jms:queue:foo"/>
     <resequence>
-        <header>JMSPriority</header>
         <batchConfig reverse="true" allowDuplicates="true" batchTimeout="3000"/>
+        <header>JMSPriority</header>
         <to uri="mock:result"/>
     </resequence>
 </route>
@@ -520,8 +520,8 @@ from("direct:start")
 <route>
     <from uri="direct:start"/>
     <resequence>
-        <method beanType="com.foo.MyFileNameExpression"/>
         <streamConfig timeout="2000"/>
+        <method beanType="com.foo.MyFileNameExpression"/>
         <to uri="mock:result"/>
     </resequence>
 </route>

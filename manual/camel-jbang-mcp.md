@@ -143,9 +143,11 @@ Here are example prompts you can give your AI assistant. The assistant automatic
 
 ### Catalog exploration
 
--   _"List all Camel components in the messaging category"_ — uses `camel_catalog_components`
+-   _"Which component talks MQTT?"_ — uses `camel_catalog_find`
     
--   _"Show me the Kafka component documentation with all options"_ — uses `camel_catalog_component_doc`
+-   _"Show me the Kafka component documentation with all options"_ — uses `camel_catalog_doc`
+    
+-   _"Which EIP fans a message out to several endpoints?"_ — uses `camel_catalog_find` with `kind=eip` (the EIP aliases such as `fan-out`, `dedup` and `rate-limit` match)
     
 -   _"Show me all AWS source kamelets"_ — uses `camel_catalog_kamelets`
     
@@ -161,7 +163,7 @@ Ask the assistant to build a route from requirements:
 Build me a Camel route that generates a message every 5 seconds with a random number,
 logs it, and sends it to a SEDA queue called "numbers".
 
-The assistant discovers components, looks up documentation, builds a YAML route, and validates it with `camel_validate_yaml_dsl`. Use the `camel_build_integration` prompt for a structured multi-step workflow.
+The assistant discovers components, looks up documentation, builds a YAML route, and validates it with `camel_validate_source`. Use the `camel_build_integration` prompt for a structured multi-step workflow.
 
 ### Validation
 
@@ -256,10 +258,10 @@ The tools an agent needs to build and edit an integration are defined once, in t
  
 | Tool | Description |
 | --- | --- |
-| `camel_catalog_doc` | Catalog documentation of a component, data format, language or EIP: description, options (with a keyword filter), Maven coordinates, and for a component the rules of its endpoint URI spelled out (which options are path parts, the YAML `uri` plus `parameters` form, placeholders, `RAW()`). For the `simple` language the syntax rules, functions and operators (their count and names by group, or with `optionsFilter` the matching ones with parameters and examples), and `docPage` serves the functions, operators, OGNL and advanced pages. With `endpoint` it checks a URI against the catalog: unknown options with the closest real names, invalid values, missing path parts, consumer options on a producer endpoint. `includeDoc=true` adds the AsciiDoc page. |
-| `camel_catalog_find` | Finds components, data formats and languages by a protocol, product or other term that is not the exact name (`mqtt`, `s3`, `snowflake`, `csv`), best match first with title and description. |
-| `camel_catalog_sample` | Validated YAML DSL samples of an EIP or file entry (`onException`, `aggregate`, `split`, `rest`, `beans`) taken from the documentation examples, with where it goes: a top-level entry next to the route, or a step inside it. The name can be kebab-case, a part of another EIP (`doCatch`, `when`, `onFallback` show the whole construct) or what to do (`read file`, `call service`, `retry`, `batch`). The EIP samples come from the documentation of the catalog in use, so they follow its Camel version; the file entries come from the user manual examples that the build validates (`generate-doc-samples` in [Camel YAML DSL Validator Maven Plugin](camel-yaml-dsl-validator-maven-plugin.md)). `limit` is 2 by default, at most 5. Use it before writing an EIP the first time, or after a `not defined in the schema` validation error. |
-| `camel_validate_source` | Validates Camel YAML DSL or `.properties` source without writing: the YAML DSL schema (a misspelled option such as `logLevel` instead of `loggingLevel`), endpoint URIs, simple expressions, and `camel.*` options. Takes the content, or reads the file from the project directory. |
+| `camel_catalog_doc` | Catalog documentation of a component, data format, language, EIP or built-in bean: description, options, Maven coordinates, and for a component the rules of its endpoint URI spelled out (which options are path parts, the YAML `uri` plus `parameters` form, placeholders, `RAW()`). For the `simple` language the syntax rules, functions and operators (their count and names by group, or with `optionsFilter` the matching ones with parameters and examples), and `docPage` serves the functions, operators, OGNL and advanced pages. With `endpoint` it checks a URI against the catalog: unknown options with the closest real names, invalid values, missing path parts, consumer options on a producer endpoint. `includeHeaders=true` adds the message headers of a component (the `CamelXxx` names, their constants, types and consumer or producer group), `includeDoc=true` the AsciiDoc page. An EIP alias (`fan-out`, `dedup`, `rate-limit`) or a word of its title finds the EIP; the answer then names the `matchedTerm`. `includeOptions` picks the options listed: `common` (the default) leaves out the deprecated and advanced ones and says how many with `omittedOptions`, `required` lists the required ones, `all` everything, `false` none; `optionsFilter` matches a keyword in the option names, descriptions and groups and searches all options. With `kind=api` (or a class name such as `Exchange`) it answers with the compact API reference of the core classes a bean or script calls: `Exchange`, `Message`, `CamelContext`, `Registry`, `ProducerTemplate`, `Processor`, `AggregationStrategy`, `Predicate`, `Expression` and `TypeConverter`, one line per method with the signatures, an example and the common mistakes (the first call of an aggregation strategy has a `null` `oldExchange`, a `Map` body has no `${body.type}`, a bean name is not a Groovy variable, there is no `getOut()` in Camel 4). The reference is generated from the `@Metadata(label = "api")` annotations on the real methods in `camel-api` and shipped in `camel-catalog` (`org/apache/camel/catalog/apis/`), so it cannot drift. The name of a script language (`groovy`, `js`, `python`, `python3`, `quickjs`, `java`) or `template` returns the variables that script sees and how to reach the Camel API from them; the language documentation of those languages carries the same `scriptVariables`. |
+| `camel_catalog_find` | Finds components, data formats, languages and EIPs by a protocol, product, alias or other term that is not the exact name (`mqtt`, `s3`, `snowflake`, `csv`, `fan-out`, `dedup`), best match first with title and description; `kind` narrows it to one of them, and `bean` with an interface name such as `AggregationStrategy` lists the built-in implementations. |
+| `camel_catalog_sample` | Validated YAML DSL samples of an EIP or file entry (`onException`, `aggregate`, `split`, `rest`, `beans`) taken from the documentation examples, with where it goes: a top-level entry next to the route, or a step inside it. The name can be kebab-case, a part of another EIP (`doCatch`, `when`, `onFallback` show the whole construct), an alias of the EIP (`fan-out`, `rate-limit`, from the catalog’s EIP models) or what to do (`read file`, `call service`, `retry`, `batch`). The EIP samples come from the documentation of the catalog in use, so they follow its Camel version; the file entries come from the user manual examples that the build validates (`generate-doc-samples` in [Camel YAML DSL Validator Maven Plugin](camel-yaml-dsl-validator-maven-plugin.md)). `limit` is 2 by default, at most 5. Use it before writing an EIP the first time, or after a `not defined in the schema` validation error. |
+| `camel_validate_source` | Validates Camel YAML DSL or `.properties` source without writing: the YAML DSL schema (a misspelled option such as `logLevel` instead of `loggingLevel`), endpoint URIs, simple expressions, and `camel.*` options. Takes the content, or reads the file from the project directory. With `camelVersion` (or the version of the selected integration in the TUI) the catalog and the YAML DSL schema of that Camel version answer, the schema read from its `camel-yaml-dsl` jar; without it the CLI’s own, with nothing to download. |
 | `camel_get_files` | The source files of a project directory (name, size, type), or the content of one of them. |
 | `camel_write_file` | Writes the complete content of a file in the project directory. YAML and `.properties` content is validated first; invalid content is not written and the errors are returned (`validate=false` writes anyway). Only a plain file name in the directory is accepted. Nobody is asked before the write: the MCP client (Claude Code, Cursor and the others ask before a tool that is not read-only runs) is where the human sits, and the `read-only` access level of the security layer hides the tool altogether. |
 | `camel_run` | Starts an integration from a project directory with `camel run` in a separate process, in dev mode by default so route files reload when written. Returns the pid, name and log file once the integration is up. |
@@ -274,15 +276,7 @@ The tools an agent needs to build and edit an integration are defined once, in t
  
 | Tool | Description |
 | --- | --- |
-| `camel_catalog_components` | List available Camel components with filtering by name, label (e.g., `messaging`, `cloud`, `database`), and runtime type (`main`, `spring-boot`, `quarkus`). Supports querying specific Camel versions. |
-| `camel_catalog_component_doc` | Get documentation for a specific component: URI syntax, component-level and endpoint options. Supports `optionsFilter` (case-insensitive substring on option name) and `includeOptions` (`required`, `common`, or `all`; default `common`, which excludes deprecated and advanced options) to control payload size. |
-| `camel_catalog_component_maven` | Get the Maven coordinates (`groupId`, `artifactId`, `version`) of a specific component, for adding it as a project dependency. |
-| `camel_catalog_dataformats` | List available data formats (JSON, XML, CSV, Avro, Protobuf, and others). |
-| `camel_catalog_dataformat_doc` | Get detailed documentation for a specific data format including all configuration options, Maven coordinates, and model information. |
-| `camel_catalog_languages` | List expression languages (Simple, JsonPath, XPath, JQ, Groovy, and others). |
-| `camel_catalog_language_doc` | Get detailed documentation for a specific expression language including all configuration options and Maven coordinates. |
-| `camel_catalog_eips` | List Enterprise Integration Patterns with filtering by category. |
-| `camel_catalog_eip_doc` | Get detailed documentation for a specific EIP including all its options. |
+| `camel_catalog_docs` | List the AsciiDoc documentation page names of the catalog (`kafka-component`, `split-eip`, …​), with a substring filter; `camel_catalog_doc` with `includeDoc=true` returns a page. |
 | `camel_component_properties` | List valid configuration property keys for a Camel component in `camel.component.<scheme>.<name>` form, including option name, type, default value, and description. |
 
 ### Kamelet Catalog
@@ -346,8 +340,6 @@ The advisory data ships with the Camel catalog bundled in the MCP server, where 
  
 | Tool | Description |
 | --- | --- |
-| `camel_validate_route` | Validates Camel endpoint URIs against the catalog schema. Catches unknown options, missing required parameters, invalid enum values, and type mismatches. Also provides suggestions for misspelled option names. |
-| `camel_validate_yaml_dsl` | Validates a YAML DSL route definition against the Camel YAML DSL JSON schema. Checks for valid DSL elements, correct route structure, and returns detailed schema validation errors including instance path, error type, and schema path. `camel_validate_source` (above) runs the same schema check plus the endpoint URI and simple expression checks in one call, with the messages by line. |
 | `camel_transform_route` | Assists with route DSL format transformation between YAML and XML. |
 | `camel_configuration_validate` | Validate Camel configuration property lines (e.g., from `application.properties`). Detects misspelled option names, invalid values, and returns suggestions. |
 | `camel_properties_translate` | Translate Camel configuration properties between runtimes (`main`, `spring-boot`, `quarkus`). Handles runtime-specific keys like HTTP server and management endpoint configuration. |
@@ -426,7 +418,6 @@ Since Camel 4.6, the recommended approach for building REST APIs from OpenAPI sp
 | `camel_runtime_memory` | Show JVM memory usage (heap/non-heap), garbage collection stats, and thread counts. |
 | `camel_runtime_heap_histogram` | Get a class-level heap histogram showing instance counts and byte usage per class. Useful for diagnosing memory leaks and understanding which classes dominate heap usage. |
 | `camel_runtime_memory_leak` | Diagnose memory leaks in a running Camel integration using Java Flight Recorder (JFR). Use command 'start' to begin recording, 'stop' to get results, 'status' to check state, and 'query' to retrieve cached results. Supports dual-recording mode for trend comparison. |
-| `camel_runtime_errors` | Get captured routing errors from the running application. Returns error details including exception, exchange context, and route information. |
 | `camel_runtime_history` | Get the message history trace of the last completed exchange. Shows the route path, processors visited, headers, body, and timing. |
 | `camel_runtime_thread_dump` | Get a JVM thread dump showing thread names, states, and stack traces. |
 
@@ -447,10 +438,8 @@ Since Camel 4.6, the recommended approach for building REST APIs from OpenAPI sp
 | --- | --- |
 | `camel_runtime_send` | Send a test message to a Camel endpoint in the running application. |
 | `camel_runtime_trace` | Enable, disable, or dump message tracing for the running Camel application. |
-| `camel_runtime_eval` | Evaluate an expression in the given language (e.g., simple, jsonpath, xpath) against the Camel context. |
 | `camel_runtime_browse` | Browse messages in a Camel endpoint (e.g., messages queued in a SEDA endpoint). |
 | `camel_runtime_receive` | Receive (poll) a message from a Camel endpoint in the running application. Consumes one message from the endpoint. |
-| `camel_runtime_stop` | Initiate graceful shutdown of a running Camel application. Finishes processing in-flight exchanges before stopping. |
 
 ## Available Prompts
 

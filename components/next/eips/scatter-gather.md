@@ -177,7 +177,7 @@ And are loaded up in Spring XML like this:
 _XML-only: Spring XML bean definitions for vendor and aggregation strategy_
 
 ```xml
-<camelContext>
+<beans>
 
     <bean id="aggregatorStrategy" class="org.apache.camel.spring.processor.scattergather.LowestQuoteAggregationStrategy"/>
 
@@ -193,7 +193,7 @@ _XML-only: Spring XML bean definitions for vendor and aggregation strategy_
       <constructor-arg><value>3</value></constructor-arg>
     </bean>
 
-</camelContext>
+</beans>
 ```
 
 Each bean is loaded with a different price for beer. When the message is sent to each bean endpoint, it will arrive at the `MyVendor.quote` method. This method does a simple check whether this quote request is for beer and then sets the price of beer on the exchange for retrieval at a later step. The message is forwarded on to the next step using [POJO Producing](../../../manual/pojo-producing.md) (see the `@Produce` annotation).

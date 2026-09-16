@@ -91,6 +91,7 @@ _XML-only:_
       resolver = "classpath"
       path     = "com/my/company/something/my-properties-2.properties"
       optional = "false"/>
+  </propertyPlaceholder>
 </camelContext>
 ```
 

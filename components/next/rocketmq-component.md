@@ -230,7 +230,7 @@ If `requestTimeoutMillis` elapsed and no reply received, an exception will be th
 _Java-only: uses ExchangePattern.InOut enum and string concatenation for the URI_
 
 ```java
-from("rocketmq:START_TOPIC?producerGroup=p1&consumerGroup=c1")
+from("rocketmq:START_TOPIC?consumerGroup=c1")
 
 .to(ExchangePattern.InOut, "rocketmq:INTERMEDIATE_TOPIC" +
         "?producerGroup=intermediaProducer" +

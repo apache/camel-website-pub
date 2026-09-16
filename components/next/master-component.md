@@ -218,13 +218,13 @@ The master component leverages CamelClusterService you can configure using
     </beans>
     ```
     
--   **Spring boot**
+-   **Camel Main / Spring Boot**
     
     ```properties
-    camel.component.zookeeper.cluster.service.enabled   = true
-    camel.component.zookeeper.cluster.service.id        = camel-node-1
-    camel.component.zookeeper.cluster.service.base-path = /camel/cluster
-    camel.component.zookeeper.cluster.service.nodes     = myzk:2181
+    camel.cluster.zookeeper.enabled  = true
+    camel.cluster.zookeeper.id       = camel-node-1
+    camel.cluster.zookeeper.basePath = /camel/cluster
+    camel.cluster.zookeeper.nodes    = myzk:2181
     ```
     
 

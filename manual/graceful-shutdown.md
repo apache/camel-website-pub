@@ -73,7 +73,7 @@ fromRouteId=route1, routeId=route1, nodeId=delay1, elapsed=2007,
 duration=2017]
 ```
 
-If you do not want to see these logs, you can turn this off by setting the option logInflightExchangesOnTimeout to false.
+If you do not want to see these logs, you can turn this off by setting the option `shutdownLogInflightExchangesOnTimeout` to false.
 
 -   Java
     
@@ -87,7 +87,7 @@ context.getShutdownStrategy().setLogInflightExchangesOnTimeout(false);
 Or in `application.properties`:
 
 ```properties
-camel.main.logInflightExchangesOnTimeout = false
+camel.main.shutdownLogInflightExchangesOnTimeout = false
 ```
 
 ### JMX managed

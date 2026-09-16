@@ -293,7 +293,6 @@ from("jms:queue:cheese").routeId("cheesy")
       steps:
         - to:
             uri: log:foo
-        ...
 ```
 
 ### Generating route coverage report

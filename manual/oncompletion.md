@@ -302,10 +302,10 @@ onCompletion().parallelProcessing()
 </onCompletion>
 ```
 
-You can also refer to a specific thread pool to be used, using the `executorServiceRef` option
+You can also refer to a specific thread pool to be used, using the `executorService` option
 
 ```xml
-<onCompletion executorServiceRef="myThreadPool">
+<onCompletion executorService="myThreadPool">
   <to uri="mock:before"/>
   <delay><constant>1000</constant></delay>
   <setBody><simple>OnComplete:${body}</simple></setBody>

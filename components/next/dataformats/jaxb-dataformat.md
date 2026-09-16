@@ -186,11 +186,11 @@ For example, in Spring XML we can define a `Map` with the mapping. In the mappin
  </util:map>
 ```
 
-To use this in JAXB or SOAP data formats, you refer to this map, using the `namespacePrefixRef` attribute as shown below. Then Camel will look up in the Registry a `java.util.Map` with the id `myMap`, which was what we defined above.
+To use this in JAXB or SOAP data formats, you refer to this map, using the `namespacePrefix` attribute as shown below. Then Camel will look up in the Registry a `java.util.Map` with the id `myMap`, which was what we defined above.
 
 ```xml
  <marshal>
-    <soap version="1.2" contextPath="com.mycompany.foo" namespacePrefixRef="myMap"/>
+    <soap version="1.2" contextPath="com.mycompany.foo" namespacePrefix="myMap"/>
  </marshal>
 ```
 
@@ -216,7 +216,7 @@ You can do the same using the XML DSL:
 
 ```xml
 <marshal>
-    <jaxb id="jaxb" schema="classpath:person.xsd,classpath:address.xsd"
+    <jaxb id="jaxb" contextPath="com.acme.model" schema="classpath:person.xsd,classpath:address.xsd"
           accessExternalSchemaProtocols="file"/>
 </marshal>
 ```
@@ -239,7 +239,7 @@ You can do the same using the XML DSL:
 
 ```xml
 <marshal>
-    <jaxb id="jaxb" schemaLocation="schema/person.xsd"/>
+    <jaxb id="jaxb" contextPath="com.acme.model" schemaLocation="schema/person.xsd"/>
 </marshal>
 ```
 

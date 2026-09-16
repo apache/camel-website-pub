@@ -20,7 +20,7 @@ The XML Security dataformat supports the following options which are listed belo
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **xmlCipherAlgorithm** (common) | `AES-256-GCM` | `Enum` | 
+| **xmlCipherAlgorithm** (common) | `AES_256_GCM` | `Enum` | 
 The cipher algorithm to be used for encryption/decryption of the XML message content.
 
 Enum values:
@@ -259,7 +259,7 @@ Spring XML Sender
 ```java
 from("direct:start")
     .marshal().xmlSecurity("//cheese:cheesesites/italy", namespaces, true,
-            "recipient", XMLCipher.AES_128_CBC, XMLCipher.RSA_v1dot5, trustStoreParams)
+            "recipient", XMLCipher.AES_128, XMLCipher.RSA_v1dot5, trustStoreParams)
     .to("...");
 ```
 
@@ -275,8 +275,8 @@ from("direct:start")
             <marshal>
                 <xmlSecurity secureTag="//cheese:cheesesites/italy"
                            secureTagContents="true"
-                           xmlCipherAlgorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"
-                           keyCipherAlgorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"
+                           xmlCipherAlgorithm="AES_128"
+                           keyCipherAlgorithm="RSA_v1dot5"
                            recipientKeyAlias="recipient"
                            keyOrTrustStoreParameters="trustStoreParams"/>
             </marshal>
@@ -292,8 +292,8 @@ from("direct:start")
             xmlSecurity:
               secureTag: "//cheese:cheesesites/italy"
               secureTagContents: true
-              xmlCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
-              keyCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
+              xmlCipherAlgorithm: AES_128
+              keyCipherAlgorithm: RSA_v1dot5
               recipientKeyAlias: recipient
               keyOrTrustStoreParameters: "#trustStoreParams"
 ```
@@ -310,7 +310,7 @@ Spring XML Recipient
 ```java
 from("direct:encrypted")
     .unmarshal().xmlSecurity("//cheese:cheesesites/italy", namespaces, true,
-            "recipient", XMLCipher.AES_128_CBC, XMLCipher.RSA_v1dot5, keyStoreParams)
+            "recipient", XMLCipher.AES_128, XMLCipher.RSA_v1dot5, keyStoreParams)
     .to("...");
 ```
 
@@ -326,8 +326,8 @@ from("direct:encrypted")
             <unmarshal>
                 <xmlSecurity secureTag="//cheese:cheesesites/italy"
                            secureTagContents="true"
-                           xmlCipherAlgorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"
-                           keyCipherAlgorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"
+                           xmlCipherAlgorithm="AES_128"
+                           keyCipherAlgorithm="RSA_v1dot5"
                            recipientKeyAlias="recipient"
                            keyOrTrustStoreParameters="keyStoreParams"
                            keyPassword="privateKeyPassword" />
@@ -344,8 +344,8 @@ from("direct:encrypted")
             xmlSecurity:
               secureTag: "//cheese:cheesesites/italy"
               secureTagContents: true
-              xmlCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#aes128-cbc"
-              keyCipherAlgorithm: "http://www.w3.org/2001/04/xmlenc#rsa-1_5"
+              xmlCipherAlgorithm: AES_128
+              keyCipherAlgorithm: RSA_v1dot5
               recipientKeyAlias: recipient
               keyOrTrustStoreParameters: "#keyStoreParams"
               keyPassword: privateKeyPassword

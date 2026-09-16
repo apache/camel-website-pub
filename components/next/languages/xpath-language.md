@@ -166,7 +166,7 @@ You can combine headers, properties, body and variables in an XPath expression a
 _Java-only: uses Document.class type conversion in setVariable/setHeader_
 
 ```java
-from("timer:java?period=1000,repeatCount=1")
+from("timer:java?period=1000&repeatCount=1")
     .setBody()
         .simple("<dummy>YES</dummy>")
     .setVariable("Foo", simple("<hello><id>123</id></hello>", Document.class))
@@ -225,7 +225,7 @@ from("activemq:MyQueue")
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-  <camelContext id="camel" xmlns="http://activemq.apache.org/camel/schema/spring"
+  <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring"
                 xmlns:foo="http://example.com/person">
     <route>
       <from uri="activemq:MyQueue"/>
@@ -377,18 +377,18 @@ Where we use the xpath function concat to prefix the order name with `foo-`. In 
 
 ## Using XPath on Headers
 
-Some users may have XML stored in a header. To apply an XPath to a header’s value, you can do this by defining the 'headerName' attribute.
+Some users may have XML stored in a header. To apply an XPath to a header’s value, you can do this by defining the `source` attribute with the `header:` prefix (`variable:` and `property:` work the same way for an exchange variable or property).
 
 ```xml
-<xpath headerName="invoiceDetails">/invoice/@orderType = 'premium'</xpath>
+<xpath source="header:invoiceDetails">/invoice/@orderType = 'premium'</xpath>
 ```
 
-And in Java DSL you specify the headerName as the second parameter as shown:
+And in Java DSL you specify the source with the fluent expression builder as shown:
 
 _Java-only: XPath expression builder API_
 
 ```java
-xpath("/invoice/@orderType = 'premium'", "invoiceDetails")
+expression().xpath("/invoice/@orderType = 'premium'").source("header:invoiceDetails").end()
 ```
 
 ## Example

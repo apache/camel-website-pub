@@ -974,7 +974,7 @@ from("sftp://localhost:9999/root?username=admin&password=admin&proxy=#proxy")
 </bean>
 
 <route>
-  <from uri="sftp://localhost:9999/root?username=admin&password=admin&proxy=#proxy"/>
+  <from uri="sftp://localhost:9999/root?username=admin&amp;password=admin&amp;proxy=#proxy"/>
   <to uri="bean:processFile"/>
 </route>
 ```

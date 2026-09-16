@@ -78,7 +78,7 @@ from("seda:colors")
 <route>
     <from uri="seda:colors"/>
     <filter>
-        <simple>${header.color} == 'red'</xpath>
+        <simple>${header.color} == 'red'</simple>
         <to uri="bean:red"/>
     </filter>
 </route>

@@ -1592,11 +1592,11 @@ Camel will automatically set up a consumer that listens to on the reply queue, s
 This consumer is a Spring `DefaultMessageListenerContainer` which listen for replies. However, it’s fixed to one concurrent consumer.  
 That means replies will be processed in sequence as there is only one thread to process the replies. You can configure the listener to use concurrent threads using the `concurrentConsumers` and `maxConcurrentConsumers` options. This allows you to easier configure this in Camel as shown below:
 
-_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
+_Java-only: uses `to(ExchangePattern.InOut, …​)` for the request-reply pattern_
 
 ```java
 from(xxx)
-.inOut().to("activemq:queue:foo?concurrentConsumers=5")
+.to(ExchangePattern.InOut, "activemq:queue:foo?concurrentConsumers=5")
 .to(yyy)
 .to(zzz);
 ```
@@ -1607,21 +1607,21 @@ In this route, we instruct Camel to route replies asynchronously using a thread 
 
 If you use a fixed reply queue when doing Request Reply over JMS as shown in the example below, then pay attention.
 
-_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
+_Java-only: uses `to(ExchangePattern.InOut, …​)` for the request-reply pattern_
 
 ```java
 from(xxx)
-.inOut().to("activemq:queue:foo?replyTo=bar")
+.to(ExchangePattern.InOut, "activemq:queue:foo?replyTo=bar")
 .to(yyy)
 ```
 
 In this example, the fixed reply queue named "bar" is used. By default, Camel assumes the queue is shared when using fixed reply queues, and therefore it uses a `JMSSelector` to only pick up the expected reply messages (e.g., based on the `JMSCorrelationID`). See the next section for exclusive fixed reply queues. That means it’s not as fast as temporary queues. You can speed up how often Camel will pull for reply messages using the `receiveTimeout` option. By default, its 1000 milliseconds. So to make it faster, you can set it to 250 millis to pull 4 times per second as shown:
 
-_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
+_Java-only: uses `to(ExchangePattern.InOut, …​)` for the request-reply pattern_
 
 ```java
 from(xxx)
-.inOut().to("activemq:queue:foo?replyTo=bar&receiveTimeout=250")
+.to(ExchangePattern.InOut, "activemq:queue:foo?replyTo=bar&receiveTimeout=250")
 .to(yyy)
 ```
 
@@ -1633,25 +1633,25 @@ It is generally recommended to use temporary queues if possible.
 In the previous example, Camel would anticipate the fixed reply queue named "bar" was shared, and thus it uses a `JMSSelector` to only consume reply messages which it expects. However, there is a drawback to doing this as the JMS selector is slower. Also, the consumer on the reply queue is slower to update with new JMS selector ids. In fact, it only updates when the `receiveTimeout` option times out, which by default is 1 second. So in theory, the reply messages could take up till about 1 sec to be detected. On the other hand, if the fixed reply queue is exclusive to the Camel reply consumer, then we can avoid using the JMS selectors, and thus be more performant. In fact, as fast as using temporary queues. There is the `ReplyToType` option which you can configure to `Exclusive`  
 to tell Camel that the reply queue is exclusive as shown in the example below:
 
-_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
+_Java-only: uses `to(ExchangePattern.InOut, …​)` for the request-reply pattern_
 
 ```java
 from(xxx)
-.inOut().to("activemq:queue:foo?replyTo=bar&replyToType=Exclusive")
+.to(ExchangePattern.InOut, "activemq:queue:foo?replyTo=bar&replyToType=Exclusive")
 .to(yyy)
 ```
 
 Mind that the queue must be exclusive to each and every endpoint. So if you have two routes, then they each need a unique reply queue as shown in the next example:
 
-_Java-only: uses `inOut()` Java DSL method for request-reply pattern_
+_Java-only: uses `to(ExchangePattern.InOut, …​)` for the request-reply pattern_
 
 ```java
 from(xxx)
-.inOut().to("activemq:queue:foo?replyTo=bar&replyToType=Exclusive")
+.to(ExchangePattern.InOut, "activemq:queue:foo?replyTo=bar&replyToType=Exclusive")
 .to(yyy)
 
 from(aaa)
-.inOut().to("activemq:queue:order?replyTo=order.reply&replyToType=Exclusive")
+.to(ExchangePattern.InOut, "activemq:queue:order?replyTo=order.reply&replyToType=Exclusive")
 .to(bbb)
 ```
 

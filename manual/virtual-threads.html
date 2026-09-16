@@ -15,9 +15,8 @@ jetty.setThreadPool(virtualThreadPool);</code></pre> </div> </div> <div class="p
     .threads()  // Offload to virtual thread pool
     .to("jpa:Order");  // Blocking JPA operation</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="platform-http:/api/orders"/&gt;
-    &lt;threads&gt;
-        &lt;to uri="jpa:Order"/&gt;
-    &lt;/threads&gt;
+    &lt;threads/&gt;
+    &lt;to uri="jpa:Order"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: platform-http:/api/orders
@@ -354,7 +353,7 @@ java -Djdk.tracePinnedThreads=short \
                 String tenant = exchange.getMessage().getHeader("tenant", String.class);
                 exchange.setProperty("tenantId", tenant);
             })
-            .to("seda:process?virtualThreadPerTask=true");
+            .to("seda:process");
 
         from("seda:process?virtualThreadPerTask=true&amp;concurrentConsumers=500")
             .process(exchange -&gt; {

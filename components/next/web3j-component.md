@@ -90,6 +90,7 @@ The Web3j Ethereum Blockchain component supports the following options which are
 | **fromBlock** (common) | The block number, or the string latest for the last mined block or pending, earliest for not yet mined transactions. | latest | String |
 | **fullTransactionObjects** (common) | If true it returns the full transaction objects, if false only the hashes of the transactions. | false | boolean |
 | **gasLimit** (common) | The maximum gas allowed in this block. |  | BigInteger |
+| **operation** (common) | Operation to use. | transaction | String |
 | **privateFor** (common) | A comma separated transaction privateFor nodes with public keys in a Quorum network. |  | String |
 | **quorumAPI** (common) | If true, this will support Quorum API. | false | boolean |
 | **toAddress** (common) | The address the transaction is directed to. |  | String |
@@ -112,7 +113,6 @@ The Web3j Ethereum Blockchain component supports the following options which are
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **mixDigest** (producer) | The mix digest (256 bits) used for submitting a proof-of-work solution. |  | String |
 | **nonce** (producer) | The nonce found (64 bits) used for submitting a proof-of-work solution. |  | String |
-| **operation** (producer) | Operation to use. | transaction | String |
 | **position** (producer) | The transaction index position withing a block. |  | BigInteger |
 | **priority** (producer) | The priority of a whisper message. |  | BigInteger |
 | **sha3HashOfDataToSign** (producer) | Message to sign by calculating an Ethereum specific signature. |  | String |
@@ -148,6 +148,7 @@ With the following _path_ and _query_ parameters:
 | **fromBlock** (common) | The block number, or the string latest for the last mined block or pending, earliest for not yet mined transactions. | latest | String |
 | **fullTransactionObjects** (common) | If true it returns the full transaction objects, if false only the hashes of the transactions. | false | boolean |
 | **gasLimit** (common) | The maximum gas allowed in this block. |  | BigInteger |
+| **operation** (common) | Operation to use. | transaction | String |
 | **privateFor** (common) | A comma separated transaction privateFor nodes with public keys in a Quorum network. |  | String |
 | **quorumAPI** (common) | If true, this will support Quorum API. | false | boolean |
 | **toAddress** (common) | The address the transaction is directed to. |  | String |
@@ -185,7 +186,6 @@ Enum values:
 | **keyName** (producer) | The key name in the database. |  | String |
 | **mixDigest** (producer) | The mix digest (256 bits) used for submitting a proof-of-work solution. |  | String |
 | **nonce** (producer) | The nonce found (64 bits) used for submitting a proof-of-work solution. |  | String |
-| **operation** (producer) | Operation to use. | transaction | String |
 | **position** (producer) | The transaction index position withing a block. |  | BigInteger |
 | **priority** (producer) | The priority of a whisper message. |  | BigInteger |
 | **sha3HashOfDataToSign** (producer) | Message to sign by calculating an Ethereum specific signature. |  | String |

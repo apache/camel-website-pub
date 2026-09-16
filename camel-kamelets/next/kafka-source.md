@@ -86,30 +86,68 @@ camel run route.yaml
 
 ### Authentication
 
-This Kamelet requires SASL/PLAIN authentication to connect to Kafka through a Plain Login Module. The credentials are configured through the `user` and `password` properties.
+Authentication is selected with `saslAuthType`, which defaults to `NONE`, so out of the box the Kamelet connects to an unauthenticated broker. The accepted values are `NONE`, `PLAIN`, `SCRAM_SHA_256`, `SCRAM_SHA_512`, `SSL`, `OAUTH`, `AWS_MSK_IAM` and `KERBEROS`.
+
+Which other properties are needed depends on that choice:
+
+-   `PLAIN`, `SCRAM_SHA_256` and `SCRAM_SHA_512` take `saslUsername` and `saslPassword`.
+    
+-   `OAUTH` takes `oauthClientId`, `oauthClientSecret`, `oauthTokenEndpointUri` and `oauthScope`.
+    
+-   `SSL` takes the keystore and truststore properties below.
+    
+-   `AWS_MSK_IAM` and `KERBEROS` rely on the surrounding environment rather than on Kamelet properties.
+    
+
+Resolve credentials through a Camel vault rather than plaintext properties wherever the deployment allows it.
 
 ### Configuration
 
-The Kafka Source Kamelet supports the following configurations:
+Only `topic` and `bootstrapServers` are required. The Kamelet supports:
 
--   **Topic**: Comma-separated list of Kafka topic names to consume from (required)
+-   **topic**: Comma-separated list of Kafka topic names to consume from (required)
     
--   **Bootstrap Servers**: Comma-separated list of Kafka bootstrap servers (required)
+-   **bootstrapServers**: Comma-separated list of Kafka bootstrap servers (required)
     
--   **User**: Username for SASL/PLAIN authentication (required)
+-   **saslAuthType**: Authentication mechanism, default `NONE`
     
--   **Password**: Password for SASL/PLAIN authentication (required)
+-   **saslUsername** / **saslPassword**: Credentials for the username and password mechanisms
     
--   **Consumer Group**: Kafka consumer group ID for managing offsets
+-   **oauthClientId** / **oauthClientSecret** / **oauthTokenEndpointUri** / **oauthScope**: OAuth 2.0 settings
     
--   **Auto Offset Reset**: What to do when there is no initial offset (earliest, latest, none)
+-   **sslTruststoreLocation** / **sslTruststorePassword** / **sslKeystoreLocation** / **sslKeystorePassword** / **sslKeyPassword**: TLS material
     
--   **Allow Manual Commit**: Enable manual commit for better control over message processing
+-   **consumerGroup**: Kafka consumer group ID for managing offsets
+    
+-   **autoOffsetReset**: What to do when there is no initial offset - `earliest`, `latest` or `none`, default `latest`
+    
+-   **autoCommitEnable**: Commit offsets automatically, default `true`
+    
+-   **allowManualCommit**: Enable manual commit for control over when offsets advance, default `false`
+    
+-   **pollOnError**: What to do when polling fails, default `ERROR_HANDLER`
+    
+-   **deserializeHeaders**: Deserialize the Kafka record headers onto the exchange, default `true`
+    
+-   **topicIsPattern**: Treat `topic` as a regular expression rather than a literal list, default `false`
     
 
 ### Output Format
 
-The Kamelet outputs Kafka message content and includes Kafka headers and metadata such as topic, partition, offset, and timestamp.
+The body is the Kafka record value. The record metadata is surfaced as headers under names that are not Camel internals, so a downstream consumer does not have to read the `CamelKafka*` headers directly. Each has a `ce-` prefixed CloudEvents counterpart as well.
+
+-   `kafka-topic` from `CamelKafkaTopic` - the topic the record was consumed from, which is worth having when the Kamelet subscribes to several topics or to a pattern.
+    
+-   `kafka-key` from `CamelKafkaKey` - the record key, absent for records produced without one.
+    
+-   `kafka-partition` from `CamelKafkaPartition` - the partition the record came from.
+    
+-   `kafka-offset` from `CamelKafkaOffset` - the offset within that partition.
+    
+-   `kafka-timestamp` from `CamelKafkaTimestamp` - the record timestamp, in milliseconds since the epoch.
+    
+
+The `CamelKafka*` headers are left on the exchange as well, so consumers already reading them keep working. The Kafka record headers are passed through separately, controlled by the `deserializeHeaders` property.
 
 ### Usage Example
 
@@ -120,8 +158,9 @@ The Kamelet outputs Kafka message content and includes Kafka headers and metadat
       parameters:
         topic: "orders,payments"
         bootstrapServers: "kafka.example.com:9092"
-        user: "kafka-user"
-        password: "kafka-password"
+        saslAuthType: "PLAIN"
+        saslUsername: "kafka-user"
+        saslPassword: "kafka-password"
       steps:
         - to:
             uri: "kamelet:log-sink"
@@ -136,8 +175,9 @@ The Kamelet outputs Kafka message content and includes Kafka headers and metadat
       parameters:
         topic: "user-events"
         bootstrapServers: "kafka1.example.com:9092,kafka2.example.com:9092"
-        user: "kafka-user"
-        password: "kafka-password"
+        saslAuthType: "PLAIN"
+        saslUsername: "kafka-user"
+        saslPassword: "kafka-password"
         consumerGroup: "my-consumer-group"
         autoOffsetReset: "earliest"
       steps:
@@ -147,7 +187,7 @@ The Kamelet outputs Kafka message content and includes Kafka headers and metadat
 
 ### Security
 
-This kamelet uses SASL/PLAIN authentication mechanism with TLS encryption enabled for secure communication with Kafka brokers.
+Nothing is enabled by default: `saslAuthType` is `NONE` and no TLS material is configured, so an unconfigured binding talks to the broker in the clear. Set `saslAuthType` and the matching properties for the mechanism the broker expects, and supply the truststore and keystore properties for a TLS listener.
 
 ### Error Handling
 

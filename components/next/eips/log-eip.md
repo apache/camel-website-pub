@@ -369,9 +369,9 @@ camelContext.getGlobalOptions().put(Exchange.LOG_EIP_NAME, "com.foo.myapp");
 
 ```xml
 <camelContext>
-  <properties>
-    <property key="CamelLogEipName" value="com.foo.myapp"/>
-  </properties>
+  <globalOptions>
+    <globalOption key="CamelLogEipName" value="com.foo.myapp"/>
+  </globalOptions>
 </camelContext>
 ```
 

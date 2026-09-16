@@ -1652,14 +1652,14 @@ The second route will extract the pojos from the queue and marshal the content t
 
         <route>
             <from uri="file://src/data/csv/?noop=true" />
-            <unmarshal ref="bindyDataformat" />
+            <unmarshal><custom ref="bindyDataformat"/></unmarshal>
             <to uri="bean:csv" />
             <to uri="activemq:queue:in" />
         </route>
 
         <route>
             <from uri="activemq:queue:in" />
-            <marshal ref="bindyDataformat" />
+            <marshal><custom ref="bindyDataformat"/></marshal>
             <to uri="file://src/data/csv/out/" />
         </route>
     </camelContext>

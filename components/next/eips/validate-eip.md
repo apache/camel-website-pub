@@ -98,7 +98,7 @@ from("file:inbox")
   <validate>
     <simple>${header.bar} &gt; 100</simple>
   </validate>
-  <to uri="bean:myServiceBean" method="processLine"/>
+  <to uri="bean:myServiceBean?method=processLine"/>
 </route>
 ```
 

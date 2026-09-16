@@ -57,7 +57,7 @@ public class MyRoute extends RouteBuilder {
    .unmarshal().jaxb()
    .to("direct:out");</code></pre> </div> </div> </div> <div id="_tabs_5_xml--panel" class="tabpanel" aria-labelledby="_tabs_5_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route precondition="'{{format}}' == 'xml'"&gt;
   &lt;from uri="direct:in"/&gt;
-  &lt;unmarshal&gt;&lt;jaxb/&gt;&lt;/unmarshal&gt;
+  &lt;unmarshal&gt;&lt;jaxb contextPath="com.foo.model"/&gt;&lt;/unmarshal&gt;
   &lt;to uri="direct:out"/&gt;
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     precondition: "'{{format}}' == 'xml'"

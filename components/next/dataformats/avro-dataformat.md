@@ -94,7 +94,7 @@ _XML-only: Spring XML data format configuration_
 ```xml
 <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
      <dataFormats>
-        <avro id="avro" instanceClass="org.apache.camel.dataformat.avro.Message" library="ApacheAvro"/>
+        <avro id="avro" instanceClassName="org.apache.camel.dataformat.avro.Message" library="ApacheAvro"/>
     </dataFormats>
     <route>
         <from uri="direct:in"/>

@@ -228,7 +228,7 @@ from("direct:in")
 <route>
     <from uri="direct:in"/>
     <setBody>
-        <datasonnet resultTypeName="java.lang.String">'hello, ' + cml.properties('toGreet')</datasonnet>
+        <datasonnet resultType="java.lang.String">'hello, ' + cml.properties('toGreet')</datasonnet>
     </setBody>
     <to uri="mock:camel"/>
 </route>
@@ -320,7 +320,7 @@ from("queue:foo")
 <route>
     <from uri="queue:foo"/>
     <filter>
-        <datasonnet bodyMediaType="application/xml" outputMediaType="application/json" resultTypeName="java.lang.String" >
+        <datasonnet bodyMediaType="application/xml" outputMediaType="application/json" resultType="java.lang.String" >
             ds.filter(body.lineItems, function(item) item > 100)
         </datasonnet>
         <to uri="queue:bar"/>
@@ -394,7 +394,7 @@ from("direct:in")
 <route>
     <from uri="direct:in"/>
     <transform>
-        <datasonnet resultTypeName="java.lang.String">resource:classpath:transform.dwl</datasonnet>
+        <datasonnet resultType="java.lang.String">resource:classpath:transform.dwl</datasonnet>
     </transform>
     <to uri="mock:result"/>
 </route>

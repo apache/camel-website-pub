@@ -235,7 +235,7 @@ rest("/customers/")
 ```xml
 <rest path="/customers/">
     <get path="/{id}">
-        <param name="id"/>
+        <param name="id" type="path"/>
         <to uri="direct:customerDetail"/>
     </get>
     <get path="/{id}/orders">

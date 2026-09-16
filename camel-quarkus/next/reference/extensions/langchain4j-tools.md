@@ -40,7 +40,7 @@ In order to ensure alignment across all Quarkus and LangChain4j related dependen
     <dependency>
       <groupId>dev.langchain4j</groupId>
       <artifactId>langchain4j-bom</artifactId>
-      <version>1.19.0</version>
+      <version>1.19.3</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>

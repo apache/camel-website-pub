@@ -82,7 +82,7 @@ The SPIFFE component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **audience** (producer) | The comma-separated audience(s) to request for a JWT-SVID (fetchJwtSvid) or to validate against (validateJwtSvid). Can be overridden per-message with the CamelSpiffeAudience header. Note that validateJwtSvid validates against a single audience, so when several comma-separated audiences are given only the first one is used for validation; fetchJwtSvid requests all of them. |  | String |
+| **audience** (producer) | The comma-separated audience(s) to request for a JWT-SVID (fetchJwtSvid) or to validate against (validateJwtSvid). fetchJwtSvid requests all of them and can be overridden per-message with the CamelSpiffeAudience header; validateJwtSvid ignores that header and uses this configuration only, accepting the token if it matches any of the configured audiences, trying each in turn. |  | String |
 | **configuration** (producer) | The component configuration. |  | SpiffeConfiguration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
@@ -127,7 +127,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **audience** (producer) | The comma-separated audience(s) to request for a JWT-SVID (fetchJwtSvid) or to validate against (validateJwtSvid). Can be overridden per-message with the CamelSpiffeAudience header. Note that validateJwtSvid validates against a single audience, so when several comma-separated audiences are given only the first one is used for validation; fetchJwtSvid requests all of them. |  | String |
+| **audience** (producer) | The comma-separated audience(s) to request for a JWT-SVID (fetchJwtSvid) or to validate against (validateJwtSvid). fetchJwtSvid requests all of them and can be overridden per-message with the CamelSpiffeAudience header; validateJwtSvid ignores that header and uses this configuration only, accepting the token if it matches any of the configured audiences, trying each in turn. |  | String |
 | **operation** (producer) | 
 The operation to perform on the SPIFFE Workload API.
 
@@ -175,7 +175,7 @@ The component supports the following producer operations:
     
 -   `fetchJwtSvid` — fetches a JWT-SVID for the configured `audience` (or the `CamelSpiffeAudience` header). The message body is set to the JWT token string, with the `CamelSpiffeSpiffeId` and `CamelSpiffeExpiry` headers.
     
--   `validateJwtSvid` — validates the JWT-SVID passed in the `CamelSpiffeToken` header (or the body) against the `audience`. The message body is set to the validated `io.spiffe.svid.jwtsvid.JwtSvid`.
+-   `validateJwtSvid` — validates the JWT-SVID passed in the `CamelSpiffeToken` header (or the body) against the `audience`. When several audiences are configured the token is accepted if it matches **any** of them — the Workload API validates one audience at a time, so each is tried in turn. The message body is set to the validated `io.spiffe.svid.jwtsvid.JwtSvid`.
     
 
 > **Note**

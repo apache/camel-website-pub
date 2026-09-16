@@ -91,10 +91,10 @@ onException(MyUserException.class).maximumRedeliveries(2)
     // setting delay to zero is just to make unit testing faster
     .redeliveryDelay(0).to(ERROR_QUEUE);</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;onException&gt;
     &lt;exception&gt;com.foo.MyUserException&lt;/exception&gt;
-    &lt;redeliveryPolicy maximumRedeliveries="1" redeliveryDelay="0"/&gt;
     &lt;onWhen&gt;
         &lt;simple&gt;${header.user} != null&lt;/simple&gt;
     &lt;/onWhen&gt;
+    &lt;redeliveryPolicy maximumRedeliveries="1" redeliveryDelay="0"/&gt;
     &lt;to uri="mock:error"/&gt;
 &lt;/onException&gt;
 
@@ -128,8 +128,8 @@ onException(IOException.class)
     .maximumRedeliveries(3)
     // setting delay to zero is just to make unit testing faster
     .redeliveryDelay(0).onRedelivery(new MyIORedeliverProcessor());</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="paragraph"> <p>In XML then you refer to the redelivery process using <code>onRedeliveryRef</code> which is configured on <code>onException</code>.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;onException onRedeliveryRef="myIORedeliverProcessor"&gt;
-    &lt;redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="0"/&gt;
     &lt;exception&gt;java.io.IOException&lt;/exception&gt;
+    &lt;redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="0"/&gt;
 &lt;/onException&gt;</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="paragraph"> <p>In YAML then you refer to the redelivery process using <code>onRedeliveryRef</code> which is configured on <code>onException</code>.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- onException:
     exception:
       - java.io.IOException

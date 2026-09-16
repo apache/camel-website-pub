@@ -25,7 +25,7 @@ context.setTracing(true);
 ```
 
 ```xml
-<camelContext trace="true" xmlns="http://activemq.apache.org/camel/schema/spring">
+<camelContext trace="true" xmlns="http://camel.apache.org/schema/spring">
 ...
 </camelContext>
 ```
@@ -57,7 +57,7 @@ context.setTracingStandby(true);
 ```
 
 ```xml
-<camelContext trace="standby" xmlns="http://activemq.apache.org/camel/schema/spring">
+<camelContext trace="standby" xmlns="http://camel.apache.org/schema/spring">
 ...
 </camelContext>
 ```

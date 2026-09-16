@@ -174,7 +174,7 @@ _XML-only: Spring bean definition for custom BlockingQueue_
 </bean>
 
 <!-- ... and later -->
-<from>seda:array?queue=#arrayQueue</from>
+<from uri="seda:array?queue=#arrayQueue"/>
 ```
 
 You can also reference a `BlockingQueueFactory` implementation. Three implementations are provided:
@@ -196,7 +196,7 @@ _XML-only: Spring bean definition for custom BlockingQueueFactory_
 </bean>
 
 <!-- ... and later -->
-<from>seda:priority?queueFactory=#priorityQueueFactory&size=100</from>
+<from uri="seda:priority?queueFactory=#priorityQueueFactory&amp;size=100"/>
 ```
 
 ### Use of Request Reply

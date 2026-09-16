@@ -165,7 +165,7 @@ passwordHeaders.put("CamelKeycloakUsername", "john.doe");
 passwordHeaders.put("CamelKeycloakUserPassword", "secure-password");
 passwordHeaders.put("CamelKeycloakUserPasswordTemporary", false);
 
-template.sendBodyAndHeaders("keycloak:admin?operation=setUserPassword", null, passwordHeaders);
+template.sendBodyAndHeaders("keycloak:admin?operation=resetUserPassword", null, passwordHeaders);
 
 // List all users in realm
 template.sendBodyAndHeader("keycloak:admin?operation=listUsers", null,
@@ -709,7 +709,7 @@ from("direct:setup-user-environment")
 
     // Step 5: Set password and assign role
     .setHeader("CamelKeycloakUserPassword", constant("admin123"))
-    .to("keycloak:admin?operation=setUserPassword")
+    .to("keycloak:admin?operation=resetUserPassword")
     .setHeader("CamelKeycloakRoleName", constant("admin"))
     .to("keycloak:admin?operation=assignRoleToUser")
 

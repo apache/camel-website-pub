@@ -6,7 +6,7 @@ Camel Components
 
 **Only producer is supported**
 
-The KServe component provides the ability to access various AI model servers using the [KServe Open Inference Protocl V2](https://kserve.github.io/website/latest/modelserving/data_plane/v2_protocol/). This allows Camel to remotely perform inference with AI models on various model servers that support the KServe V2 protocol.
+The KServe component provides the ability to access various AI model servers using the [KServe Open Inference Protocol V2](https://kserve.github.io/website/latest/modelserving/data_plane/v2_protocol/). This allows Camel to remotely perform inference with AI models on various model servers that support the KServe V2 protocol.
 
 > **Note**
 > Currently, this component only supports [GRPC API](https://kserve.github.io/website/latest/reference/swagger-ui/#grpc).

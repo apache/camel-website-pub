@@ -298,12 +298,13 @@ As the XML DSL does not have all the power as the Java DSL with all its various 
 _XML-only:_
 
 ```xml
-<from uri="seda:orders">
-   <filter>
-       <simple>${header.type} == 'widget'</simple>
-       <to uri="bean:orderService?method=handleWidget"/>
-   </filter>
-</from>
+<route>
+  <from uri="seda:orders"/>
+  <filter>
+    <simple>${header.type} == 'widget'</simple>
+    <to uri="bean:orderService?method=handleWidget"/>
+  </filter>
+</route>
 ```
 
 ### Combining multiple expression using AND / OR Operator

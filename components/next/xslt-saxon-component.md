@@ -341,7 +341,7 @@ from("activemq:My.Queue")
 ```
 
 ```xml
-<camelContext xmlns="http://activemq.apache.org/camel/schema/spring">
+<camelContext xmlns="http://camel.apache.org/schema/spring">
   <route>
     <from uri="activemq:My.Queue"/>
     <to uri="xslt-saxon:org/apache/camel/spring/processor/example.xsl"/>

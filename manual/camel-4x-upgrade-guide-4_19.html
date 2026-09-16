@@ -27,7 +27,15 @@
               uri: mock:compensation
             completion:
               uri: mock:completion
-            key: myOptionKey2
+            option:
+              - key: myOptionKey
+                expression:
+                  constant:
+                    expression: myOptionValue
+              - key: myOptionKey2
+                expression:
+                  constant:
+                    expression: myOptionValue2
         - choice:
             when:
               - expression:
@@ -63,7 +71,15 @@
             sagaService: mySagaService
             compensation: mock:compensation
             completion: mock:completion
-            key: myOptionKey2
+            option:
+              - key: myOptionKey
+                expression:
+                  constant:
+                    expression: myOptionValue
+              - key: myOptionKey2
+                expression:
+                  constant:
+                    expression: myOptionValue2
         - choice:
             when:
               - expression:

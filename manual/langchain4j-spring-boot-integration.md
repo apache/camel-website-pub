@@ -238,7 +238,7 @@ _Java-only: Spring Boot RagRoute with Azure OpenAI_
 
 ```java
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.langchain4j.chat.LangChain4jRagAggregatorStrategy;
+import org.apache.camel.component.langchain4j.chat.rag.LangChain4jRagAggregatorStrategy;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1363,7 +1363,6 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [Jactl](../../components/next/languages/jactl-language.md) | camel-jactl-starter | Preview | 4.22 | Evaluates a Jactl script |
 | [Java](../../components/next/languages/java-language.md) | camel-joor-starter | Stable | 4.3 | Evaluates a Java (Java compiled once at runtime) expression |
 | [JavaScript](../../components/next/languages/js-language.md) | camel-javascript-starter | Stable | 3.20 | Evaluates a JavaScript expression |
-| [jOOR](../../components/next/languages/joor-language.md) | camel-joor-starter | Stable-deprecated | 3.7 | Evaluates a jOOR (Java compiled once at runtime) expression |
 | [JQ](../../components/next/languages/jq-language.md) | camel-jq-starter | Stable | 3.18 | Evaluates a JQ expression against a JSON message body |
 | [JSONPath](../../components/next/languages/jsonpath-language.md) | camel-jsonpath-starter | Stable | 2.13 | Evaluates a JSONPath expression against a JSON message body |
 | [MVEL](../../components/next/languages/mvel-language.md) | camel-mvel-starter | Stable | 2.0 | Evaluates a MVEL template |

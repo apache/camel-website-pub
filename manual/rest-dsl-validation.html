@@ -138,7 +138,7 @@ from("direct:users-lives")
         .to("direct:customerOrders")
     .post("/neworder").to("direct:customerNewOrder");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;rest path="/customers/"&gt;
     &lt;get path="/{id}"&gt;
-        &lt;param name="id"/&gt;
+        &lt;param name="id" type="path"/&gt;
         &lt;to uri="direct:customerDetail"/&gt;
     &lt;/get&gt;
     &lt;get path="/{id}/orders"&gt;

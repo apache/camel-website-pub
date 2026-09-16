@@ -163,6 +163,8 @@ The Solr component supports the following message header(s), which is/are listed
 | **CamelSolrParams** (producer) Constant: [`PARAM_SOLR_PARAMS`](https://javadoc.io/doc/org.apache.camel/camel-solr/latest/org/apache/camel/component/solr/SolrConstants.html#PARAM_SOLR_PARAMS) | The solr parameters to use for the request. |  | SolrParams |
 | **CamelSolrDeleteByQuery** (producer) Constant: [`PARAM_DELETE_BY_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-solr/latest/org/apache/camel/component/solr/SolrConstants.html#PARAM_DELETE_BY_QUERY) | For the delete instruction, interpret body as query/queries instead of id/ids. | false | boolean |
 | **Content-Type** (producer) Constant: [`PARAM_CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-solr/latest/org/apache/camel/component/solr/SolrConstants.html#PARAM_CONTENT_TYPE) | The content type is used to identify the type when inserting files. |  | String |
+| **CamelSolrField.** (producer) Constant: [`HEADER_FIELD_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-solr/latest/org/apache/camel/component/solr/SolrConstants.html#HEADER_FIELD_PREFIX) | The prefix of the headers that carry the fields of the document to insert: the header CamelSolrField.id holds the id field. |  | Object |
+| **CamelSolrParam.** (producer) Constant: [`HEADER_PARAM_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-solr/latest/org/apache/camel/component/solr/SolrConstants.html#HEADER_PARAM_PREFIX) | The prefix of the headers that carry extra request parameters: the header CamelSolrParam.commit holds the commit parameter. |  | String |
 
 ## Usage
 

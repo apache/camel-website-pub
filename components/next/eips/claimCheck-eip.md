@@ -415,7 +415,7 @@ from("direct:start")
   <setHeader name="foo">
     <constant>456</constant>
   </setHeader>
-  <removeHeader headerName="bar"/>
+  <removeHeader name="bar"/>
   <to uri="mock:b"/>
   <!-- only merge in the message headers foo or bar -->
   <claimCheck operation="Pop" filter="header:(foo|bar)"/>
