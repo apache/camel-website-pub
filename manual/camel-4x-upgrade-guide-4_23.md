@@ -58,6 +58,12 @@ Custom `CamelEvent` implementations continue to compile without changes. Overrid
 
 The Event developer console now exposes the full structured JSON payload in the `details` field of each event entry, while keeping the existing flat `type`, `timestamp`, `exchangeId`, and `message` fields for backwards compatibility.
 
+### camel-aws2-ddb
+
+The `aws2-ddb:application-json` data type transformer no longer overwrites a `CamelAwsDdbReturnValues` header that is already set on the message. Previously the transformer always replaced it with its own default (`ALL_OLD` for `PutItem` and `DeleteItem`, `ALL_NEW` for `UpdateItem`), so there was no way to select a different `ReturnValue` through the transformer. The defaults are unchanged when the header is absent.
+
+If a route sets `CamelAwsDdbReturnValues` before the transformer runs and relies on it being discarded, remove the header instead.
+
 ### camel-console
 
 The `context` developer console no longer counts routes created by Kamelets in its `routesTotal` and `routesStarted` statistics (nor in the `Routes:` line of its text output). A Kamelet is implemented as a route inside the Kamelet, and such routes are not registered with JMX by default, so the `route` developer console never listed them; the counts now agree with that list. This affects consumers of the context status, such as the Camel JBang status document (`~/.camel/<pid>-status.json`) and the Camel TUI. If the management agent is configured to register Kamelet routes (`registerRoutesCreateByKamelet=true`), they are counted as before. The JMX `ManagedCamelContext` MBean attributes `TotalRoutes` and `StartedRoutes` are unchanged and still count every route.
