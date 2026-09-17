@@ -105,12 +105,16 @@ Enum values:
 | **serverUrl** (producer) | The base URL of the OPA server, without the \\{code /v1/data} suffix. The default assumes OPA running as a sidecar on the standard port. | [http://localhost:8181](http://localhost:8181) | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **borrowTimeout** (advanced) | How long an exchange waits for a free WebAssembly policy instance in wasm mode before the evaluation fails. An exchange that cannot get an instance is not denied by a policy, so it is reported as an evaluation failure and handled like any other: failing closed, or proceeding if failOpen is set. Raise it, or poolSize, for a route whose concurrency exceeds the pool. | 30000 | long |
+| **connectionTimeout** (advanced) | How long to wait for the connection to the OPA server to be established, in rest mode. The SDK’s own transport applies no timeout at all, so a server that never answers would otherwise park the calling thread indefinitely rather than letting the component fail closed. | 10000 | long |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
+| **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
 | **bearerToken** (security) | Bearer token sent to the OPA server in the Authorization header, for an OPA instance that has its API authentication enabled. |  | String |
 | **failOpen** (security) | Whether to allow the exchange to proceed when the policy cannot be evaluated at all, for example because the OPA server is unreachable. Disabled by default so that an unreachable policy decision point denies rather than grants access. Do not enable this in production. | false | boolean |
+| **sslContextParameters** (security) | TLS configuration for the connection to the OPA server in rest mode. Needed to trust a server whose certificate comes from a private CA, and to present a client certificate to a server that requires mutual TLS - a SPIFFE X.509-SVID, for instance, so the workload authenticates to the policy decision point as itself. |  | SSLContextParameters |
+| **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 
 ## Endpoint Options
 
@@ -156,10 +160,13 @@ Enum values:
 | **serverUrl** (producer) | The base URL of the OPA server, without the \\{code /v1/data} suffix. The default assumes OPA running as a sidecar on the standard port. | [http://localhost:8181](http://localhost:8181) | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **borrowTimeout** (advanced) | How long an exchange waits for a free WebAssembly policy instance in wasm mode before the evaluation fails. An exchange that cannot get an instance is not denied by a policy, so it is reported as an evaluation failure and handled like any other: failing closed, or proceeding if failOpen is set. Raise it, or poolSize, for a route whose concurrency exceeds the pool. | 30000 | long |
+| **connectionTimeout** (advanced) | How long to wait for the connection to the OPA server to be established, in rest mode. The SDK’s own transport applies no timeout at all, so a server that never answers would otherwise park the calling thread indefinitely rather than letting the component fail closed. | 10000 | long |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
+| **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
 | **bearerToken** (security) | Bearer token sent to the OPA server in the Authorization header, for an OPA instance that has its API authentication enabled. |  | String |
 | **failOpen** (security) | Whether to allow the exchange to proceed when the policy cannot be evaluated at all, for example because the OPA server is unreachable. Disabled by default so that an unreachable policy decision point denies rather than grants access. Do not enable this in production. | false | boolean |
+| **sslContextParameters** (security) | TLS configuration for the connection to the OPA server in rest mode. Needed to trust a server whose certificate comes from a private CA, and to present a client certificate to a server that requires mutual TLS - a SPIFFE X.509-SVID, for instance, so the workload authenticates to the policy decision point as itself. |  | SSLContextParameters |
 
 ## Message Headers
 
@@ -332,6 +339,36 @@ The decision contract is identical in both modes: the same headers, the same `al
 Evaluation instances carry mutable state and are not thread-safe, so `wasm` mode pools them; `poolSize` (default 8) bounds how many exchanges evaluate at once. An exchange that arrives when all of them are busy waits for one, up to `borrowTimeout` (default 30s), and then fails rather than waiting indefinitely — an authorization decision that never arrives is not better than one that is denied, and it is much harder to diagnose. That failure is an evaluation failure, not a deny, so it fails closed or proceeds under `failOpen` like any other.
 
 Size `poolSize` for the concurrency the route actually sees. A policy that takes a long time to evaluate holds its instance for that whole time, so the two options trade against each other: raise `poolSize` when many exchanges evaluate at once, and `borrowTimeout` when a single evaluation is legitimately slow. A policy that can run long enough to matter is usually better served by `evaluationMode=rest`, where the decision point is a separate process that a timeout can abandon.
+
+## Connecting to the server
+
+In `rest` mode the component talks to OPA over HTTP, and both waits are bounded:
+
+-   `connectionTimeout` (default 10s) — establishing the connection.
+    
+-   `requestTimeout` (default 30s) — waiting for the decision once connected.
+    
+
+Neither is optional in practice. A refused connection fails immediately, but a server that **accepts** and then stops answering — wedged, mid-restart, or behind a load balancer holding the socket — would otherwise park the routing thread indefinitely. For a component that fails closed that is worse than a denial: it never reaches the point of deciding. A timeout is treated as a failure to reach a verdict, so it denies, or proceeds if `failOpen` is set, like any other such failure.
+
+TLS is configured with `sslContextParameters`, the usual [JSSE utility](../../manual/camel-configuration-utilities.md):
+
+```java
+from("platform-http:/orders")
+    .to("opa:authz/orders/allow?serverUrl=https://opa:8181&sslContextParameters=#opaTls")
+```
+
+Set `useGlobalSslContextParameters=true` on the component to pick up the context-wide configuration instead.
+
+That is what lets a workload present a client certificate to an OPA server requiring mutual TLS — a SPIFFE X.509-SVID, for example, so the application authenticates to the policy decision point as itself rather than relying on network position:
+
+```java
+SpiffeSSLContextParameters spiffe = new SpiffeSSLContextParameters();
+spiffe.setCamelContext(context);
+context.getRegistry().bind("opaTls", spiffe);
+```
+
+None of this applies in `wasm` mode, where there is no server to reach.
 
 ## Failure handling
 

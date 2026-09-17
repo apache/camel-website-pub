@@ -231,6 +231,8 @@ camel run foo.camel.yaml --runtime=quarkus
 
 This does an export to a temporary folder (the same as `camel export`), builds the project with Maven, and runs it in a new JVM. Camel Main runs the packaged runner JAR with plain `java`, Spring Boot runs via `spring-boot:run`, and Quarkus via `quarkus:dev` (or `quarkus:run`). This is the same JVM you would get from `camel export`, and is what the Camel TUI uses when launching examples and folders.
 
+The options `--profile`, `--port`, `--prop`, `--max-seconds`, `--max-messages`, `--max-idle-seconds`, `--jvm-args` and `--jfr` are passed to the application on all three runtimes. The application logs to a file in `~/.camel` so `camel log` and the TUI can read the logs: `<pid>.log` for Spring Boot, and `<name>.log` for Quarkus and Camel Main (`<name>` is the name the application reports, from `--name` or else the first route file).
+
 Limitations compared to the `jbang` runtime:
 
 -   Startup is slower, as the project must be built with Maven first (the first run also downloads the Maven wrapper and plugins).
@@ -253,7 +255,7 @@ camel run foo.camel.yaml --runtime=spring-boot --spring-boot-version=3.2.3 --cam
 camel run foo.camel.yaml --runtime=quarkus --quarkus-version=3.9.4
 ```
 
-When running an existing Maven project (`camel run pom.xml`) the runtime is detected from the `pom.xml`, as such a project cannot run in-process.
+When running an existing Maven project (`camel run pom.xml`) the runtime is detected from the `pom.xml`, as such a project cannot run in-process. The application logs to a file in `~/.camel` so `camel log` and the TUI can read the logs; see [Running a Maven based project](camel-jbang-tips.html#_running_a_maven_based_project).
 
 ## Running local Kamelets
 

@@ -80,7 +80,7 @@ camel run route.yaml
 
 The Kamelet is able to understand the following headers to be set:
 
--   `key` / `ce-key`: as message key
+-   `key` / `kafka-key` / `ce-key` / `ce-kafkakey`: as message key
     
 -   `partition-key` / `ce-partitionkey`: as message partition key
     

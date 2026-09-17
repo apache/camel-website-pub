@@ -65,7 +65,7 @@ camel tui .
 camel tui /path/to/my-project
 ```
 
-The TUI opens the directory in the Source tab so you can browse the project files immediately. When a `pom.xml` is present, the runtime is auto-detected (Spring Boot, Quarkus, or Camel Main). Press **F10** to run the project — Maven projects are launched with the appropriate goal (`spring-boot:run`, `quarkus:dev`, or `camel:run`), and plain directories are run with `camel run`.
+The TUI opens the directory in the Source tab so you can browse the project files immediately. When a `pom.xml` is present, the runtime is auto-detected (Spring Boot, Quarkus, or Camel Main). Press **F10** to run the project — Maven projects are run with `camel run pom.xml`, which launches them with the appropriate goal (`spring-boot:run`, `quarkus:dev`, or `camel:run`), and plain directories are run with `camel run`. Either way the application logs to `~/.camel` so the Log tab shows its logs.
 
 This is a quick way to explore and run any Camel project without starting it separately first.
 
@@ -94,7 +94,7 @@ Quarkus:
 Once added, start your application normally and the TUI will discover it automatically. No additional configuration is needed — the connector auto-detects on the classpath and registers the application with the local Camel CLI.
 
 > **Tip**
-> When you open a Spring Boot project via **F2 > Open Project** and run it with **F10**, the TUI automatically injects the `camel-cli-connector-starter` dependency if it’s not already in your `pom.xml`. This means the TUI can monitor the application without modifying your project.
+> When you open a Spring Boot, Quarkus or Camel Main project via **F2 > Open Project** and run it with **F10**, the CLI connector dependency is automatically injected if it’s not already in your `pom.xml`. This means the TUI can monitor the application without modifying your project.
 
 See [Managing Integrations](camel-jbang-managing.md) for more details.
 

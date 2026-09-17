@@ -7,7 +7,7 @@ Camel Components
 
 **Since Camel 1.1**
 
-Camel allows [OGNL](https://en.wikipedia.org/wiki/OGNL), supported by [(Apache Commons OGNL)](http://commons.apache.org/proper/commons-ognl/), to be used as an [Expression](../../../manual/expression.md) or [Predicate](../../../manual/predicate.md) in Camel routes.
+Camel allows [OGNL](https://en.wikipedia.org/wiki/OGNL), supported by [(Apache Commons OGNL)](https://commons.apache.org/dormant/commons-ognl/), to be used as an [Expression](../../../manual/expression.md) or [Predicate](../../../manual/predicate.md) in Camel routes.
 
 For example, you can use MVEL in a [Predicate](../../../manual/predicate.md) with the [Content-Based Router](../eips/choice-eip.md) EIP.
 

@@ -21,6 +21,6 @@ Below you can find a list of the main dependencies and APIs used by Camel K and 
 Kubernetes and other dependencies      
 | Camel K Version | Kubernetes API | Operator Framework API | Knative API | Prometheus Operator | Kustomize version |
 | --- | --- | --- | --- | --- | --- |
-| [Next (Pre-release)](../../next/index.md) | 0.36.3 | 0.45.0 | 0.50.0 | 0.93.1 | 5.7.1 |
+| [Next (Pre-release)](../../next/index.md) | 0.37.0 | 0.45.0 | 0.50.0 | 0.93.1 | 5.7.1 |
 | [2.11.x](../../2.11.x/index.md) | 0.36.3 | 0.45.0 | 0.50.0 | 0.93.1 | 5.7.1 |
 | [2.10.x](../index.md) | 0.35.3 | 0.42.0 | 0.48.1 | 0.90.1 | 5.7.1 |
