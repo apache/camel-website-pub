@@ -1,10 +1,14 @@
-urls[862]{loc,lastmod}:
+urls[865]{loc,lastmod}:
   https://camel.apache.org/blog/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/releases/q-3.33.3/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/categories/Community/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.22.1/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/releases/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/camel-website-rebuilt/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-09-15T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-09-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark/,2026-09-15T00:00:00+00:00
@@ -49,7 +53,6 @@ urls[862]{loc,lastmod}:
   https://camel.apache.org/releases/q-3.38.0/,2026-07-29T00:00:00+00:00
   https://camel.apache.org/categories/Features/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-tui/,2026-07-27T00:00:00+00:00
-  https://camel.apache.org/categories/Community/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/categories/Usecases/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/,2026-07-20T00:00:00+00:00

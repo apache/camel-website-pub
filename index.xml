@@ -9,6 +9,20 @@
     <lastBuildDate>Thu, 17 Sep 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Camel Quarkus 3.33.3 Released</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/</link>
+      <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/</guid>
+      <description>Camel Quarkus 3.33.3 release</description>
+    </item>
+    <item>
+      <title>Camel Quarkus release 3.33.3</title>
+      <link>https://camel.apache.org/releases/q-3.33.3/</link>
+      <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/q-3.33.3/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Release 4.22.1</title>
       <link>https://camel.apache.org/releases/release-4.22.1/</link>
       <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
@@ -21,6 +35,13 @@
       <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/</guid>
       <description>The Camel community announces the immediate availability of the Camel 4.22.1 LTS release with 120 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
+    <item>
+      <title>The Camel website, rebuilt for humans and for AI</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-website-rebuilt/</link>
+      <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-website-rebuilt/</guid>
+      <description>The Camel website has needed a modern design for years. Its front page said that Camel &amp;ldquo;is an Open Source integration framework that empowers you to quickly and easily integrate various systems&amp;rdquo;, showed a picture of gears, and left the rest to you.&#xA;The front page as it was until September 2026.&#xA;True, but it could describe any integration product, and it did not tell a first-time visitor how to start.</description>
     </item>
     <item>
       <title>We had a frontier AI coach a small local model through Camel. It found 99 things wrong for humans too</title>
@@ -5774,7 +5795,7 @@
       <link>https://camel.apache.org/community/books/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/books/</guid>
-      <description>This page lists the known books about Apache Camel. If you happen to know a book which is not listed, then please contact us (i.e., using the Mailing Lists).&#xA;Recommended Enterprise Integration Patterns Camel in Action 2nd edition Camel Design Patterns Other Books Cloud Native Integration with Apache Camel Mastering Apache Camel Apache Camel Developer&amp;rsquo;s Cookbook Camel in Action Instant Apache Camel Message Routing Instant Apache Camel Messaging System Enterprise Integration Patterns Enterprise Integration Patterns by Gregor Hohpe and Bobby Woolf.</description>
+      <description>This page lists the known books about Apache Camel. If you happen to know a book which is not listed, then please contact us (i.e., using the Mailing Lists).&#xA;Recommended Enterprise Integration Patterns Camel in Action 2nd edition Camel Design Patterns Other Books Ultimate Apache Camel for Enterprise AI Integrations Cloud Native Integration with Apache Camel Mastering Apache Camel Apache Camel Developer&amp;rsquo;s Cookbook Camel in Action Instant Apache Camel Message Routing Instant Apache Camel Messaging System Enterprise Integration Patterns Enterprise Integration Patterns by Gregor Hohpe and Bobby Woolf.</description>
     </item>
     <item>
       <title>Building</title>

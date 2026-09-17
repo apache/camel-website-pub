@@ -5,6 +5,15 @@
     <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/</loc>
+    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.33.3/</loc>
+    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Community/</loc>
+    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
@@ -18,6 +27,9 @@
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/09/camel-website-rebuilt/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/AI/</loc>
@@ -151,9 +163,6 @@
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/camel-tui/</loc>
     <lastmod>2026-07-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Community/</loc>
-    <lastmod>2026-07-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/</loc>
     <lastmod>2026-07-24T00:00:00+00:00</lastmod>

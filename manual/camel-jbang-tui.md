@@ -122,6 +122,8 @@ The **More** menu (key **0**) opens a popup with tabs organized into groups:
     
 -   **Observability** — Circuit Breaker, Health, JFR, Metrics, Network Services, Exchange Events, Recovery Tasks, OpenTelemetry Spans
     
+-   **AI** — Ollama (listed when an Ollama server is detected)
+    
 -   **Data** — JDBC DataSource, Kafka, SQL Query, SQL Trace
     
 -   **JVM** — Classpath, Heap Memory Histogram, Memory Usage, Memory Leak, Process, Startup, Threads
@@ -371,6 +373,27 @@ Features:
 
 This is especially useful for understanding latency in multi-route integrations and for correlating Camel processing with external service calls (HTTP, database, messaging).
 
+## Ollama
+
+The Ollama tab (under More, in the **AI** group) shows how the model served by a local [Ollama](https://ollama.com) is performing, in the spirit of an LLM dashboard. It works with or without a running integration: it finds Ollama at `localhost:11434`, at the address of `camel infra run ollama`, or at the endpoint the AI panel (**F8**) is using. The tab is listed only while an Ollama server answers; the TUI checks every ten seconds, so it appears shortly after `ollama serve` starts.
+
+-   **Model** — the loaded model with its family, parameters, quantization, layers, experts (and how many are active per token for a mixture-of-experts model), how much of it sits in GPU memory, the allocated context length and when Ollama will unload it. With no model loaded, the installed models are listed instead.
+    
+-   **Throughput** — decode and prefill tokens per second, **live** while the model is generating and otherwise from the last request; time to first token and load time (a load of a second or more is a cold start); session averages and a sparkline of the decode rate.
+    
+-   **Context** — how full the context window is, the share of the prompt served from Ollama’s cache, whether the model is working or idle, the speculative decoding method in use, and a per-turn trend of how much of the window each AI panel prompt filled, with the session peak and the compactions seen.
+    
+-   **Host** — GPU utilization and memory (Apple silicon through `ioreg`, NVIDIA through `nvidia-smi`), and CPU and memory of the Ollama server and its model runner.
+    
+-   **Requests** — one line per question asked in the AI panel (a question with tool calls costs one request per step; **Enter** unfolds the steps) with the question text, prompt and generated tokens, cache hit, the share of the context window reached, prefill and decode tokens per second, time to first token, the time you waited and the stop reason. Calls made by Camel routes are listed as their own lines.
+    
+
+Two kinds of requests appear in the log. Questions asked in the AI panel with Ollama as the provider come with the timings Ollama reports for each request (prompt evaluation, generation, model load, total). Calls made by Camel routes through `camel-langchain4j-chat`, `camel-openai` or `camel-spring-ai-chat` appear when the integration runs with GenAI observability (`--observe`, or `--dep=camel:ai-observability`), tagged with the route id; Camel records tokens and duration for those, not the phase split.
+
+The live figures, the context panel and the host panel need the model runner on the same machine: Ollama starts a `llama-server` process per loaded model and the tab reads its slot state a few times a second. Against a remote or containerised Ollama the tab keeps the model, per-request and session data and says which panels are unavailable.
+
+Press **r** to reset the request log and the session totals, **F5** to refresh immediately. The same data is available to AI agents through the `tui_get_ollama` MCP tool. For what the figures mean for the AI panel and which knobs to turn, see [Working with a local Ollama model](#_working_with_a_local_ollama_model).
+
 ## Process Information
 
 The Process tab (under More, shortcut **p**) shows JVM process details for the selected integration: Java version, PID, uptime, command-line arguments, and system properties.
@@ -492,16 +515,16 @@ The shell and the AI prompt panel (**F8**) share the same space: opening one clo
 
 ## Theme
 
-The TUI ships with 15 color themes defined as CSS stylesheets:
+The TUI ships with 21 color themes defined as CSS stylesheets:
 
--   **Dark themes** — Dark (default), Dracula, Nord, Solarized Dark, Gruvbox Dark, Catppuccin Mocha, Tokyo Night, Rosé Pine, Kanagawa, Everforest, Monochrome, CRT
+-   **Dark themes** — Dark (default), Dracula, Nord, Solarized Dark, Gruvbox Dark, Catppuccin Mocha, Catppuccin Frappé, Tokyo Night, Rosé Pine, Rosé Pine Moon, Kanagawa, Everforest, Monochrome, CRT, Turbo Pascal
     
--   **Light themes** — Light, Solarized Light, Catppuccin Latte
+-   **Light themes** — Light, Nord Light, Solarized Light, Gruvbox Light, Catppuccin Latte, Everforest Light
     
 
 Open the **F2** actions menu and choose **Settings…​** to switch themes, or pass `--theme=<name>` on the command line (e.g., `--theme=tokyo-night`). The CLI value overrides the persisted preference from `.camel-cli.properties`; runtime toggles and the config file still apply on later launches when `--theme` is omitted.
 
-The brand orange accent is consistent across all themes; status colors (success, warning, error) and borders adapt for readability on each palette.
+The brand orange accent is consistent across most themes; status colors (success, warning, error) and borders adapt for readability on each palette. A few themes trade the brand accent for their own identity: Monochrome, CRT and Turbo Pascal. The Turbo Pascal theme recreates Borland’s IDE (yellow text on the blue editor field, cyan window frames, grey menu bar) and also restyles source code the way that editor did: reserved words in white, code in yellow, comments in grey. Other themes highlight code with a fixed Monokai (dark) or GitHub-inspired (light) palette.
 
 Your choice is remembered: it is saved as `camel.tui.theme` in `.camel-cli.properties` and restored the next time you open the TUI.
 
@@ -509,7 +532,7 @@ Your choice is remembered: it is saved as `camel.tui.theme` in `.camel-cli.prope
 
 Open the **F2** actions menu and choose **Settings…​** to change TUI preferences in one place:
 
--   **Theme** — cycle through 15 available themes (applied immediately on save).
+-   **Theme** — cycle through 21 available themes (applied immediately on save).
     
 -   **Starting Tab** — the tab shown when the TUI launches; any tab (primary or under **More**) can be chosen. Defaults to **Overview**.
     
@@ -752,6 +775,38 @@ Ollama at `localhost:11434` is auto-detected. No configuration needed.
 
 Every question sends the definitions of the `tui_*` tools the model may call, and a local model pays for each of them in prompt-processing time. The panel therefore sends only the core set of tools (state, tables, logs, errors, diagrams, topology, processor details, catalog docs, traces, spans, route control, sending messages, source files, infra services, navigation, log level and filters) to Ollama and to any provider on `localhost`, which roughly halves the prompt. Hosted providers get every tool, including the drawing, animation and automation tools. Use `/tools full` in the panel to send all tools to a local model too, `/tools core` to trim the set for a hosted one, pick **AI Tools** in **F2 → Settings**, or set `camel.tui.ai.tools` in `.camel-cli.properties`. Ollama requests also ask the server to keep the model loaded for 30 minutes and use a 32k context window (`OLLAMA_CONTEXT_LENGTH` overrides it), so follow-up questions reuse the cached prompt instead of reloading the model.
 
+#### Working with a local Ollama model
+
+A local model is not a slower version of a hosted one; it spends its time differently, and the TUI shows you where. This section explains what a question costs with Ollama and which knobs matter, with figures measured on an Apple M4 Pro (64 GB) running `qwen3.6:35b-a3b`.
+
+**How a question is spent.** Ollama answers in three phases, and every timing the TUI shows maps to one of them:
+
+1.  **Load**: if the model is not in memory (first question, the keep-alive expired, or a request asked for a different context size) Ollama starts a runner and loads the weights: 10 to 20 seconds for a 22 GB model. The TUI asks Ollama to keep the model loaded for 30 minutes after each request.
+    
+2.  **Prefill**: the prompt (system prompt, tool definitions, conversation history, your question) is processed in one batch, at roughly 600 to 700 tokens per second when nothing is cached.
+    
+3.  **Decode**: the answer is generated token by token, at 50 to 60 tokens per second for this model.
+    
+
+The wait before anything appears, the time to first token, is load plus prefill. A cold first question therefore takes 20 seconds before the first word; a warm one under a second.
+
+**One question, many requests.** The panel answers by calling the `tui_*` tools, and every tool call the model makes costs a new request that sends the whole prompt again. A simple question can take 3 to 13 requests. This is affordable only because Ollama caches the prompt prefix: the system prompt, the tool definitions and the history are identical from one step to the next, so each step prefills only the new tokens and takes about half a second. Across a session the cache hit is typically above 90%. The Ollama tab shows the request count per question as `×N` and the cache hit per question; a question with a high count and a short answer is the model exploring, which a smaller, sharper tool set reduces (see [Tool set for local models](#_tool_set_for_local_models)).
+
+**The context window.** The TUI asks Ollama for a 32k context window; `OLLAMA_CONTEXT_LENGTH` overrides it. The static prefix of system prompt and core tools is about 4.5k tokens, 14% of the window, and each question with tool calls adds another 2k to 4k of history. The panel compacts the history once it grows past roughly 16k tokens (see `/compact` under [AI panel slash commands](#_ai_panel_slash_commands)). Compacting rewrites the history, which invalidates Ollama’s prompt cache, so the request after a compaction prefills the whole prompt again: about 40 seconds for a 21k-token prompt. That is why the panel compacts local history late and rarely rather than a little on every turn. Two practical rules follow:
+
+-   Keep every Ollama client on the same context size. A request with a different `num_ctx` makes Ollama reload the model, which costs a cold start. The TUI’s AI panel, `camel ask` and your own routes should agree on the value.
+    
+-   A bigger window is cheap in memory for mixture-of-experts models with hybrid attention (this model grows from 22.5 GB at 32k to 23.6 GB at 262k) but every token in it is prefill time after a compaction or a reload, so raise it with a purpose.
+    
+
+**Choosing the model.** With no `camel.tui.ai.model` set the panel takes `llama3.2` when it is installed, otherwise the first installed model; run `/model <name>` in the panel or set **AI Model** in **F2 → Settings** to pin one. The model must support tool calling and should have at least 14B parameters; a mixture-of-experts model such as `qwen3.6:35b-a3b` prefills several times faster than a dense model of similar quality, which is what matters for a tool-heavy prompt. **F2 → Run Doctor** shows whether Ollama was found, which models are installed and whether they are large enough.
+
+**Where to look.** The [Ollama](#_ollama) tab is the instrument for all of the above: tokens per second live and per request, time to first token with cold starts marked, cache hit, how full the context window is and how it grows per question, GPU and process load, and one line per question with the requests it took. In the AI panel, `/context` prints what the next request will cost, `/usage` and **Ctrl+U** the session totals per question.
+
+**Remote and containerised Ollama.** Everything above applies to an Ollama on another host or inside `camel infra run ollama` as well, with two differences: the container runs without GPU acceleration, and the live runner state and host load on the Ollama tab need the server on the same machine.
+
+For the wider picture see the blog posts [We had a frontier AI coach a small local model through Camel](/blog/2026/09/camel-local-model-benchmark/) on what a local model can do with Camel and what was changed to help it, and [Observe Your Camel AI Routes with GenAI OpenTelemetry](/blog/2026/09/camel-genai-observability-jbang/) on observing routes that call Ollama.
+
 #### Using an OpenAI-compatible local server
 
 Set `LLM_API_KEY` and `LLM_BASE_URL` to connect to any OpenAI-compatible server (LM Studio, vLLM, llama.cpp, GPT4All, …):
@@ -888,7 +943,7 @@ To connect Claude Code to the TUI, add the MCP server to your project configurat
 
 The MCP server exposes two kinds of tools. The `camel_` tools are the Camel authoring set shared with the `camel mcp` server (see [Camel MCP Server](camel-jbang-mcp.md)): catalog documentation with the endpoint URI rules and the simple syntax (`camel_catalog_doc`, `camel_catalog_find`), source validation (`camel_validate_source`), reading and writing the source files (`camel_get_files`, `camel_write_file`), running an integration in dev mode and controlling it (`camel_run`, `camel_control`), its log and failed exchanges (`camel_get_log`, `camel_get_errors`), expression evaluation (`camel_eval_expression`) and error diagnosis (`camel_error_diagnose`). They are defined once in the Camel CLI, so an agent gets the same tools, names and answers through either server; in the TUI they work on the selected integration unless a `directory` or `name` argument says otherwise, and a write goes through the TUI’s confirm dialog or live replay. The `tui_` tools are the ones only the TUI can offer, organized by purpose:
 
--   **Observe** — read the screen, get structured state, query tables/logs/errors/traces/topology/diagram/files, list the running infra services (brokers, databases) and read their logs
+-   **Observe** — read the screen, get structured state, query tables/logs/errors/traces/topology/diagram/files, list the running infra services (brokers, databases) and read their logs, read the performance of the local Ollama server (`tui_get_ollama`: loaded model, tokens per second, context fill, host load, request log)
     
 -   **Navigate** — switch tabs, select integrations, select routes, send keystrokes, apply filters
     
@@ -986,7 +1041,7 @@ vhs demo.tape               # .tape -> .gif
 | `--web` | Enable the browser-accessible terminal (WebSocket) server. | `false` |
 | `--web-port` | Port for the web terminal server. | `8090` |
 | `--refresh` | Screen refresh interval in milliseconds. | `100` |
-| `--theme` | Color theme for this session (e.g., `dark`, `tokyo-night`, `dracula`). See [Theme](#_theme) for the full list of 15 themes. Overrides the persisted `camel.tui.theme` preference when set. |  |
+| `--theme` | Color theme for this session (e.g., `dark`, `tokyo-night`, `dracula`). See [Theme](#_theme) for the full list of 21 themes. Overrides the persisted `camel.tui.theme` preference when set. |  |
 | `--record` | Replay a `.tape` file and record the session to an Asciinema `.cast` file. |  |
 | `--record-size` | Size of the recorded terminal for `--record`, as `<cols>x<rows>`. | `200x50` |
 | `--record-fps` | Frames per second captured by `--record`. | `10` |

@@ -231,7 +231,7 @@ camel run foo.camel.yaml --runtime=quarkus
 
 This does an export to a temporary folder (the same as `camel export`), builds the project with Maven, and runs it in a new JVM. Camel Main runs the packaged runner JAR with plain `java`, Spring Boot runs via `spring-boot:run`, and Quarkus via `quarkus:dev` (or `quarkus:run`). This is the same JVM you would get from `camel export`, and is what the Camel TUI uses when launching examples and folders.
 
-The options `--profile`, `--port`, `--prop`, `--max-seconds`, `--max-messages`, `--max-idle-seconds`, `--jvm-args` and `--jfr` are passed to the application on all three runtimes. The application logs to a file in `~/.camel` so `camel log` and the TUI can read the logs: `<pid>.log` for Spring Boot, and `<name>.log` for Quarkus and Camel Main (`<name>` is the name the application reports, from `--name` or else the first route file).
+The options `--profile`, `--port`, `--prop`, `--max-seconds`, `--max-messages`, `--max-idle-seconds`, `--jvm-args`, `--jfr`, `--observe` and `--console` are passed to the application on all three runtimes (each runtime serves the developer console on its own path, see [Developer Console](camel-jbang-managing.html#_developer_console)). The application logs to a file in `~/.camel` so `camel log` and the TUI can read the logs: `<pid>.log` for Spring Boot, and `<name>.log` for Quarkus and Camel Main (`<name>` is the name the application reports, from `--name` or else the first route file).
 
 Limitations compared to the `jbang` runtime:
 
@@ -239,7 +239,7 @@ Limitations compared to the `jbang` runtime:
     
 -   New components cannot be auto-detected while running (stop and run again to update dependencies).
     
--   `--console` is supported with Camel Main (the exported project enables the developer console, health, info and Jolokia), but not yet with Spring Boot and Quarkus. The deprecated `--health` and `--metrics` options are not supported in a separate JVM; use `--observe` instead.
+-   The deprecated `--health` and `--metrics` options are not supported in a separate JVM; use `--observe` instead.
     
 -   Options that only work in-process are not supported: `--background`, `--code`, `--open-api`, `--empty` and `--mcp-stdio`.
     
