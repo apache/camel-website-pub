@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[240]{title,link,pubDate,description}:
+posts[241]{title,link,pubDate,description}:
+  RELEASE 4.22.1|https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/index.md|Thu, 17 Sep 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.22.1 LTS release with 120 bug fixes and improvements. The artifacts are published and ready for you to download from the Central
   We had a frontier AI coach a small local model through Camel. It found 99 things wrong for humans too|https://camel.apache.org/blog/2026/09/camel-local-model-benchmark/index.md|Tue, 15 Sep 2026 00:00:00 +0000|Everyone claims their tool &ldquo;works with any LLM&rdquo;. We wanted a number instead of a claim, so we measured two very different models on the same Camel tasks, on one laptop, with the same tooli
   Camel Karaf 4.18.4 Released|https://camel.apache.org/blog/2026/09/camel-karaf-4.18.4/index.md|Wed, 09 Sep 2026 00:00:00 +0000|Camel Karaf 4.18.4 release
   Camel K 2.11.0|https://camel.apache.org/blog/2026/09/camel-k-2-11/index.md|Tue, 08 Sep 2026 00:00:00 +0000|*© National Gallery of Art (nga.gov) We&rsquo;re happy to announce the availability of Apache Camel K version 2.11.0. This is a special release as we have decided to move to a new runtime provider, pl

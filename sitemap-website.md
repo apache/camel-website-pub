@@ -1,13 +1,15 @@
-urls[860]{loc,lastmod}:
+urls[862]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.22.1/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-09-17T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-09-15T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-09-15T00:00:00+00:00
-  https://camel.apache.org/,2026-09-15T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-09-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark/,2026-09-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-karaf-4.18.4/,2026-09-09T00:00:00+00:00
   https://camel.apache.org/releases/karaf-4.18.4/,2026-09-09T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-09-09T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-09-09T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-80351.md,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-80352.md,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-80354.md,2026-09-08T11:00:00+02:00
