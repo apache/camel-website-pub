@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # AWS Bedrock
 
 JVM since3.10.0 Native since3.10.0

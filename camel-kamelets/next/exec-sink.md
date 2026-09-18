@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![exec sink](_images/kamelets/exec-sink.svg) Exec Sink
 
 **Provided by: "Apache Software Foundation"**

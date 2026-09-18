@@ -1,5 +1,3 @@
-User manual
-
 # Apache Camel 3.x Upgrade Guide
 
 > **Important**

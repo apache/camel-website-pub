@@ -1,5 +1,3 @@
-Camel Components
-
 # CSV
 
 **Since Camel 1.3**

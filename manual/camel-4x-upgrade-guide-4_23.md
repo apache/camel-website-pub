@@ -1,5 +1,3 @@
-User manual
-
 # Apache Camel 4.x Upgrade Guide
 
 This document is for helping you upgrade your Apache Camel application from Camel 4.x to 4.y. For example, if you are upgrading Camel 4.0 to 4.2, then you should follow the guides from both 4.0 to 4.1 and 4.1 to 4.2.
@@ -1373,3 +1371,7 @@ Components that override `useRawUri()` to return `true` (such as `kamelet`, `mas
 Before this change, `toD` passed the URL-encoded (normalised) form to such components, causing parameter values containing special characters (`%`, `+`, `?`, `=`, `@`, `|`) to arrive double-encoded at the component.
 
 This is a bug fix (CAMEL-24747). Routes that relied on `toD` passing the encoded form to a `useRawUri()` component will now see the original raw value instead. For all other components (`useRawUri()` returns `false`), behaviour is unchanged.
+
+### camel-elasticsearch, camel-opensearch - the maxRetryTimeout option is deprecated
+
+The `maxRetryTimeout` endpoint and component option is deprecated in both `camel-elasticsearch` and `camel-opensearch`. It was a leftover from the old low-level Elasticsearch REST client (`setMaxRetryTimeoutMillis`), which no longer exists in the client these components use today, so setting it had no effect. The option is kept for backward compatibility of existing endpoint URIs but is marked deprecated and will be removed in a future release. Routes that set `maxRetryTimeout` can simply drop it; behaviour is unchanged.

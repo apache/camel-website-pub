@@ -1,5 +1,3 @@
-Camel Components
-
 # XML Security Sign
 
 **Since Camel 2.12**

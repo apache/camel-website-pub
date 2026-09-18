@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jms pooled apache artemis source](_images/kamelets/jms-pooled-apache-artemis-source.svg) JMS Pooled - Apache Artemis Source
 
 **Provided by: "Apache Software Foundation"**

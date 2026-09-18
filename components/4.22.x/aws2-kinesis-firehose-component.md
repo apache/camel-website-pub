@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Kinesis Firehose
 
 **Since Camel 3.2**

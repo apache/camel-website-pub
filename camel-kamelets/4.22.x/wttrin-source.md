@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![wttrin source](_images/kamelets/wttrin-source.svg) wttr.in Source
 
 **Provided by: "Apache Software Foundation"**

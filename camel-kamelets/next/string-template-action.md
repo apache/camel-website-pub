@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![string template action](_images/kamelets/string-template-action.svg) String Template Action
 
 **Provided by: "Apache Software Foundation"**

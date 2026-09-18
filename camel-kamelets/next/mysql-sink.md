@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mysql sink](_images/kamelets/mysql-sink.svg) MySQL Sink
 
 **Provided by: "Apache Software Foundation"**

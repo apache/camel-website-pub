@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Google Storage
 
 Store and retrieve objects from Google Cloud Storage Service using the google-cloud-storage library.

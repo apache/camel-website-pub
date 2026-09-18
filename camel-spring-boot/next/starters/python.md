@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Python
 
 Evaluates a Python expression

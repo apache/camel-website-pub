@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![pulsar source](_images/kamelets/pulsar-source.svg) Pulsar Source
 
 **Provided by: "Apache Software Foundation"**

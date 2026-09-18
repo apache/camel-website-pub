@@ -1,5 +1,3 @@
-Camel Components
-
 # Spring
 
 ## Spring components

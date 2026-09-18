@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Bindy CSV
 
 Marshal and unmarshal between POJOs and Comma separated values (CSV) format using Camel Bindy

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Azure Storage Blob Service
 
 JVM since1.1.0 Native since1.6.0

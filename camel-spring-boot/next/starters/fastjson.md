@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JSON Fastjson
 
 Marshal POJOs to JSON and back using Fastjson

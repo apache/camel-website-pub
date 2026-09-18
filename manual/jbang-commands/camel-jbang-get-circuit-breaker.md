@@ -1,5 +1,3 @@
-User manual
-
 # camel get circuit-breaker
 
 Get status of Circuit Breaker EIPs

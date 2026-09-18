@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # SMB
 
 Read and write files to Server Message Block (SMB) file shares.

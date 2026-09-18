@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Web3j Ethereum Blockchain
 
 JVM since1.1.0 Nativeunsupported

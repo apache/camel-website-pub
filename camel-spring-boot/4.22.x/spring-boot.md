@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Spring Boot
 
 Spring Boot component provides auto-configuration for Apache Camel. Our opinionated auto-configuration of the Camel context auto-detects Camel routes available in the Spring context and registers the key Camel utilities (like producer template, consumer template and the type converter) as beans.

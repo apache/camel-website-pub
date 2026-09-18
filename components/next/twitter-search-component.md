@@ -1,5 +1,3 @@
-Camel Components
-
 # Twitter Search
 
 **Since Camel 2.10**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # LDAP
 
 Perform searches on LDAP servers.

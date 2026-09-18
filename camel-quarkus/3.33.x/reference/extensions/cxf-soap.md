@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # CXF
 
 JVM since2.12.0 Native since2.12.0

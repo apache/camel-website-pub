@@ -1,5 +1,3 @@
-Camel Components
-
 # IronMQ
 
 **Since Camel 2.17**

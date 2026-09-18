@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-webhook-source-kafka-connector source configuration
 
 Connector Description: Creates an HTTP endpoint that can be used as a bridge to forward data to the Kamelet sink.

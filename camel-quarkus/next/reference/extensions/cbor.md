@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # CBOR
 
 JVM since1.1.0 Native since1.7.0

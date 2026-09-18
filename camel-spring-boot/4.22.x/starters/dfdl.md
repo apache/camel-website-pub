@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # DFDL
 
 Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL).

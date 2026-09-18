@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-mail-sink-kafka-connector sink configuration
 
 Connector Description: Send mails to given SMTP server.

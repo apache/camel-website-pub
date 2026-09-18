@@ -1,5 +1,3 @@
-User manual
-
 # camel get health
 
 Get health check status of running Camel integrations

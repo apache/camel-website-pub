@@ -1,5 +1,3 @@
-Camel Components
-
 # Tahu Edge Node / Device
 
 **Since Camel 4.8**

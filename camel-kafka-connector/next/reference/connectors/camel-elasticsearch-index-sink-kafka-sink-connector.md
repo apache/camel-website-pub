@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-elasticsearch-index-sink-kafka-connector sink configuration
 
 Connector Description: Stores JSON-formatted data into ElasticSearch.

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Alibaba Message Service (MNS)
 
 Send and receive messages to/from Alibaba Cloud Message Service (MNS).

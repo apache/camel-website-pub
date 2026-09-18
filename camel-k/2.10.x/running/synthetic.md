@@ -1,5 +1,3 @@
-Camel K
-
 # Synthetic Integrations
 
 > **Warning**

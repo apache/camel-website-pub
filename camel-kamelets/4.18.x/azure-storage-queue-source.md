@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![azure storage queue source](_images/kamelets/azure-storage-queue-source.svg) Azure Storage Queue Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel K
-
 # Camel K Integration Scaling
 
 ## Manual Scaling

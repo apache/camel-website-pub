@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # LDIF
 
 Perform updates on an LDAP server from an LDIF body content.

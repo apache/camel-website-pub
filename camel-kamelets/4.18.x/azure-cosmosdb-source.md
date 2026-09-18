@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![azure cosmosdb source](_images/kamelets/azure-cosmosdb-source.svg) Azure CosmosDB Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenAI
 
 **Since Camel 4.17**

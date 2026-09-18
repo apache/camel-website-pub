@@ -1,5 +1,3 @@
-Camel Components
-
 # Docling
 
 **Since Camel 4.15**

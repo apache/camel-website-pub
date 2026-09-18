@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-ftp-sink-kafka-connector sink configuration
 
 Connector Description: Send data to an FTP server.

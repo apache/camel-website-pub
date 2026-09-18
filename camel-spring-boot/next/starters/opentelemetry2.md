@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Opentelemetry2
 
 Spring Boot auto-configuration for Camel OpenTelemetry2.

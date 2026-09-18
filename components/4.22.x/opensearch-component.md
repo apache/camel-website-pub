@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenSearch
 
 **Since Camel 4.0**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Elastic Compute Cloud (EC2)
 
 Manage AWS EC2 instances.

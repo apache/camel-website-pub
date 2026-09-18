@@ -1,5 +1,3 @@
-Camel Components
-
 # Timer
 
 **Since Camel 1.0**

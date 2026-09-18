@@ -1,5 +1,3 @@
-Camel Components
-
 # Return Address
 
 Camel supports the [Return Address](http://www.enterpriseintegrationpatterns.com/ReturnAddress.md) from the [EIP patterns](enterprise-integration-patterns.md).

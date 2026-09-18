@@ -1,5 +1,3 @@
-Camel Components
-
 # Avro RPC
 
 **Since Camel 2.10**

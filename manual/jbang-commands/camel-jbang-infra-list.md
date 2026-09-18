@@ -1,5 +1,3 @@
-User manual
-
 # camel infra list
 
 Displays available external services

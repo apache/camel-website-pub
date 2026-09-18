@@ -1,5 +1,3 @@
-Camel Components
-
 # JSonApi
 
 **Since Camel 3.0**

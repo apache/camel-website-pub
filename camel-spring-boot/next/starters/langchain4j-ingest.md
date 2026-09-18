@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # LangChain4j Ingest
 
 Ingest documents into a LangChain4j EmbeddingStore: split, embed and store the message body.

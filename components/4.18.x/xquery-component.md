@@ -1,5 +1,3 @@
-Camel Components
-
 # XQuery
 
 **Since Camel 1.0**

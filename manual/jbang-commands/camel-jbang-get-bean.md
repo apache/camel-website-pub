@@ -1,5 +1,3 @@
-User manual
-
 # camel get bean
 
 List beans in a running Camel integration

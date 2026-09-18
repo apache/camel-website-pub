@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Barcode
 
 JVM since1.1.0 Nativeunsupported

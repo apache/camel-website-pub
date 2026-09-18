@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Language
 
 JVM since1.1.0 Native since2.2.0

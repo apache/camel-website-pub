@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Stitch
 
 Stitch is a cloud ETL service that integrates various data sources into a central data warehouse through various integrations.

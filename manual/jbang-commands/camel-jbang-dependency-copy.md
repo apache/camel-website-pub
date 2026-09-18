@@ -1,5 +1,3 @@
-User manual
-
 # camel dependency copy
 
 Copies all Camel dependencies required to run to a specific directory

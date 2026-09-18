@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # TLS Registry
 
 JVM since3.36.0 Native since3.36.0 🧪Experimental

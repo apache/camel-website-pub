@@ -1,5 +1,3 @@
-User manual
-
 # camel plugin add
 
 Add new plugin

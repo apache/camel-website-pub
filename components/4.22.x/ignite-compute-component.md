@@ -1,5 +1,3 @@
-Camel Components
-
 # Ignite Compute
 
 **Since Camel 2.17**

@@ -1,5 +1,3 @@
-Camel Components
-
 # JSON Jackson 2
 
 **Since Camel 2.0**

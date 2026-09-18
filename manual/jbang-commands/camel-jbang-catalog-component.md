@@ -1,5 +1,3 @@
-User manual
-
 # camel catalog component
 
 List components from the Camel Catalog

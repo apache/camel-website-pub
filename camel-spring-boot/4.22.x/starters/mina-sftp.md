@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # MINA SFTP
 
 Upload and download files to/from SFTP servers using Apache MINA SSHD.

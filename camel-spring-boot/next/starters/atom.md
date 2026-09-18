@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Atom
 
 Poll Atom RSS feeds.

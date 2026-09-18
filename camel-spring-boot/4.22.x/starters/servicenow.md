@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # ServiceNow
 
 Interact with ServiceNow via its REST API.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Enrich
 
 Camel supports the [Content Enricher](http://www.enterpriseintegrationpatterns.com/DataEnricher.md) from the [EIP patterns](enterprise-integration-patterns.md).

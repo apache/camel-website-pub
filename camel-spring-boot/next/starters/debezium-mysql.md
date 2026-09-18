@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Debezium MySQL Connector
 
 Capture changes from a MySQL database.

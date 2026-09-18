@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Spring Redis
 
 Send and receive messages from Redis.

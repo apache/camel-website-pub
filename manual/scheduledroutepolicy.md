@@ -1,5 +1,3 @@
-User manual
-
 # ScheduledRoutePolicy
 
 A scheduled [Route Policy](route-policy.md) `org.apache.camel.routepolicy.quartz.ScheduledRoutePolicy` is an extensible abstract policy that is used to provide Camel routes scheduling capabilities at runtime.

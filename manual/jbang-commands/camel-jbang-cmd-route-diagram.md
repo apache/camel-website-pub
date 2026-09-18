@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd route-diagram
 
 Display Camel route diagram in the terminal

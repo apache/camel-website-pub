@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![regex router action](_images/kamelets/regex-router-action.svg) Regex Router Action
 
 **Provided by: "Apache Software Foundation"**

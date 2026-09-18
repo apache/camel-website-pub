@@ -1,5 +1,3 @@
-Camel Components
-
 # State Store
 
 **Since Camel 4.23**

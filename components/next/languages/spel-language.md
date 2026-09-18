@@ -1,5 +1,3 @@
-Camel Components
-
 # SpEL
 
 **Since Camel 2.7**

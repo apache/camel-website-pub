@@ -1,5 +1,3 @@
-Camel K
-
 # Multiple Operators and Selective Upgrades
 
 > **Warning**

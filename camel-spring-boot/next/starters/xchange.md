@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # XChange
 
 Access market data and trade on Bitcoin and Altcoin exchanges.

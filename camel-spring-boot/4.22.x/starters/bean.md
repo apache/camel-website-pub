@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Bean
 
 Invoke methods of Java beans stored in Camel registry.

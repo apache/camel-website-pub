@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Kubernetes ConfigMap
 
 Perform operations on Kubernetes ConfigMaps and get notified on ConfigMaps changes.

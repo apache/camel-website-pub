@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # MapStruct
 
 JVM since3.2.0 Native since3.2.0

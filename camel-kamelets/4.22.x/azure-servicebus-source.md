@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![azure servicebus source](_images/kamelets/azure-servicebus-source.svg) Azure Servicebus Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![scp sink](_images/kamelets/scp-sink.svg) SCP Sink
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Diagram
 
 ## Maven coordinates

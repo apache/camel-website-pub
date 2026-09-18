@@ -1,5 +1,3 @@
-Camel Components
-
 # Docling - Asynchronous Processing
 
 [Back to Docling Component](../docling-component.md)

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # DHIS2
 
 Leverages the DHIS2 Java SDK to integrate Apache Camel with the DHIS2 Web API.

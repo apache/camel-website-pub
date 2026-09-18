@@ -1,5 +1,3 @@
-User manual
-
 # Endpoints
 
 Camel supports the [Message Endpoint](../components/4.22.x/eips/message-endpoint.md) pattern using the [Endpoint](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Endpoint.md) interface.

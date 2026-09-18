@@ -1,5 +1,3 @@
-Camel Components
-
 # Jasypt
 
 **Since Camel 2.5**

@@ -1,5 +1,3 @@
-Camel Components
-
 # Spring JDBC
 
 **Since Camel 3.10**

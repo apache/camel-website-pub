@@ -1,5 +1,3 @@
-Camel Components
-
 # Reactor
 
 **Since Camel 2.20**

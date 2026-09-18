@@ -1,5 +1,3 @@
-Camel Components
-
 # Simple
 
 **Since Camel 1.1**

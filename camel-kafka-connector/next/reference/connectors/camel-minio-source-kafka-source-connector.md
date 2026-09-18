@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-minio-source-kafka-connector source configuration
 
 Connector Description: Receive data from MinIO.

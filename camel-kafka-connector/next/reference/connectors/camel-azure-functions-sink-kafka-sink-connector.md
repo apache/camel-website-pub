@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-functions-sink-kafka-connector sink configuration
 
 Connector Description: Forward data to an Azure Function.

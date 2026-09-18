@@ -1,5 +1,3 @@
-Camel Components
-
 # Kudu
 
 **Since Camel 3.0**

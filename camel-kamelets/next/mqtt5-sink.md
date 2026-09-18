@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mqtt5 sink](_images/kamelets/mqtt5-sink.svg) MQTT v5 Sink
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # LangChain4j Agent
 
 LangChain4j Agent component

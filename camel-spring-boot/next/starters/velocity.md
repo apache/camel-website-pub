@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Velocity
 
 Transform messages using a Velocity template.

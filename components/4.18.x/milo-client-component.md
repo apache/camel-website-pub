@@ -1,5 +1,3 @@
-Camel Components
-
 # OPC UA Client
 
 **Since Camel 2.19**

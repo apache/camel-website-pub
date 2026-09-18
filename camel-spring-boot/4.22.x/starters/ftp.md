@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # FTP
 
 Upload and download files to/from FTP servers.

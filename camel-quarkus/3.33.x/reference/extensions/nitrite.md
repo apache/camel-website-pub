@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Nitrite
 
 JVM since1.0.0 Native since1.8.0 ⚠️Deprecated

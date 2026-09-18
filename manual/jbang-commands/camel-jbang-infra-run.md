@@ -1,5 +1,3 @@
-User manual
-
 # camel infra run
 
 Run an external service

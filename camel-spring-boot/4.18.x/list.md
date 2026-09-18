@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Component Starters
 
 There are unused json files.

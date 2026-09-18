@@ -1,5 +1,3 @@
-Camel K
-
 # Logging Trait
 
 Deprecated since2.9.0

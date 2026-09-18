@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mvel template action](_images/kamelets/mvel-template-action.svg) Mvel Template Action
 
 **Provided by: "Apache Software Foundation"**

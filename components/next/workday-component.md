@@ -1,5 +1,3 @@
-Camel Components
-
 # Workday
 
 **Since Camel 3.1**

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![couchbase sink](_images/kamelets/couchbase-sink.svg) Couchbase Sink
 
 **Provided by: "Apache Software Foundation"**

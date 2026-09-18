@@ -1,5 +1,3 @@
-Camel Components
-
 # Ignite Events
 
 **Since Camel 2.17**

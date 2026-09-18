@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![google calendar source](_images/kamelets/google-calendar-source.svg) Google Calendar Source
 
 **Provided by: "Apache Software Foundation"**

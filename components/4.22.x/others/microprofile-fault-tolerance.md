@@ -1,5 +1,3 @@
-Camel Components
-
 # Microprofile Fault Tolerance
 
 **Since Camel 3.3**

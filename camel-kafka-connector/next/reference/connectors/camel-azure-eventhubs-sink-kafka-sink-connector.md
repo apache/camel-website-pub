@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-eventhubs-sink-kafka-connector sink configuration
 
 Connector Description: Send events to Azure Event Hubs.

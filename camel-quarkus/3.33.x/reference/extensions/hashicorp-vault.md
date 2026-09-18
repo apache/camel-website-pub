@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Hashicorp Vault
 
 JVM since2.11.0 Native since3.15.0

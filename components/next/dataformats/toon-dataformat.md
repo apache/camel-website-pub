@@ -1,5 +1,3 @@
-Camel Components
-
 # TOON
 
 **Since Camel 4.23**

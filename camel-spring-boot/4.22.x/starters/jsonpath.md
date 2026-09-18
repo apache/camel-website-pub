@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JSONPath
 
 Evaluates a JSONPath expression against a JSON message body

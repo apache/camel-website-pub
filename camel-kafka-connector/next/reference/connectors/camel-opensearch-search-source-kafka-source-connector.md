@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-opensearch-search-source-kafka-connector source configuration
 
 Connector Description: Search data on OpenSearch.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes Event
 
 **Since Camel 3.20**

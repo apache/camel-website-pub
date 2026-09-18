@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure Storage Queue Service
 
 **Since Camel 3.3**

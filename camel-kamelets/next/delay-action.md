@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![delay action](_images/kamelets/delay-action.svg) Delay Action
 
 **Provided by: "Apache Software Foundation"**

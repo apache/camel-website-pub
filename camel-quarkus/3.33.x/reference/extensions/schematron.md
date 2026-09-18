@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Schematron
 
 JVM since1.1.0 Nativeunsupported

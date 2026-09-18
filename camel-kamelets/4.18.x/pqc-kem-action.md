@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![pqc kem action](_images/kamelets/pqc-kem-action.svg) PQC Key Encapsulation/Decapsulation Action
 
 **Provided by: "Apache Software Foundation"**

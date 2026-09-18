@@ -1,5 +1,3 @@
-Camel Components
-
 # Vert.x
 
 **Since Camel 2.12**

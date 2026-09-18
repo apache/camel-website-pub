@@ -1,5 +1,3 @@
-Camel Components
-
 # Simple JMS2
 
 **Since Camel 2.19**

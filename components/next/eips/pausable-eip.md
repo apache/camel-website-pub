@@ -1,5 +1,3 @@
-Camel Components
-
 # Pausable
 
 The Pausable EIP provides pause and resume features for supported consumers. With this EIP, it is possible to implement logic that controls the behavior of the consumer based on conditions that are external to the component. For instance, it makes it possible to pause the consumer if an external system becomes unavailable.

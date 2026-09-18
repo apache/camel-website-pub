@@ -1,5 +1,3 @@
-Camel Components
-
 # IBM watsonx.data
 
 **Since Camel 4.19**

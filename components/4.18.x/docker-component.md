@@ -1,5 +1,3 @@
-Camel Components
-
 # Docker
 
 **Since Camel 2.15**

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws eventbridge sink](_images/kamelets/aws-eventbridge-sink.svg) AWS Eventbridge Sink
 
 **Provided by: "Apache Software Foundation"**

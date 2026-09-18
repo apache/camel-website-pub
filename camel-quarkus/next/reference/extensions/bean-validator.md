@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Bean Validator
 
 JVM since1.0.0 Native since1.0.0

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # DuckDB
 
 Interact with DuckDB, the in-process analytical SQL database, for embedded analytics workloads.

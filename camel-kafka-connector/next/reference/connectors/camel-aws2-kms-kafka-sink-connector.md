@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws2-kms-kafka-connector sink configuration
 
 Connector Description: Manage keys stored in AWS KMS instances.

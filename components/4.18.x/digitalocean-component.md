@@ -1,5 +1,3 @@
-Camel Components
-
 # DigitalOcean
 
 **Since Camel 2.19**

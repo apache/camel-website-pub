@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenSearch
 
 **Since Camel 4.0**
@@ -78,7 +76,7 @@ The OpenSearch component supports the following options which are listed below.
 | **connectionTimeout** (producer) | The time in ms to wait before connection will time out. | 30000 | int |
 | **hostAddresses** (producer) | Comma separated list with ip:port formatted remote transport addresses to use. The ip and port options must be left blank for hostAddresses to be considered instead. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **maxRetryTimeout** (producer) | The time in ms before retry. | 30000 | int |
+| **maxRetryTimeout** (producer) | **Deprecated** The time in ms before retry. | 30000 | int |
 | **socketTimeout** (producer) | The timeout in ms to wait before the socket will time out. | 30000 | int |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **client** (advanced) | **Autowired** To use an existing configured OpenSearch client, instead of creating a client per endpoint. This allows customizing the client with specific settings. |  | RestClient |
@@ -117,7 +115,7 @@ With the following _path_ and _query_ parameters:
 | **from** (producer) | Starting index of the response. |  | Integer |
 | **hostAddresses** (producer) | Comma separated list with ip:port formatted remote transport addresses to use. |  | String |
 | **indexName** (producer) | The name of the index to act against. |  | String |
-| **maxRetryTimeout** (producer) | The time in ms before retry. | 30000 | int |
+| **maxRetryTimeout** (producer) | **Deprecated** Deprecated: this option has no effect. It was used by the old low-level REST client and is ignored by the current client. | 30000 | int |
 | **operation** (producer) | 
 What operation to perform.
 
@@ -210,7 +208,7 @@ Enum values:
 | **CamelOpensearchIndexName** (producer) Constant: [`PARAM_INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_INDEX_NAME) | The name of the index to act against. |  | String |
 | **CamelOpensearchDocumentClass** (producer) Constant: [`PARAM_DOCUMENT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_DOCUMENT_CLASS) | The full qualified name of the class of the document to unmarshall. | ObjectNode | Class |
 | **CamelOpensearchWaitForActiveShards** (producer) Constant: [`PARAM_WAIT_FOR_ACTIVE_SHARDS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_WAIT_FOR_ACTIVE_SHARDS) | The index creation waits for the write consistency number of shards to be available. |  | Integer |
-| **CamelOpensearchScrollKeepAliveMs** (producer) Constant: [`PARAM_SCROLL_KEEP_ALIVE_MS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SCROLL_KEEP_ALIVE_MS) | The starting index of the response. |  | Integer |
+| **CamelOpensearchScrollKeepAliveMs** (producer) Constant: [`PARAM_SCROLL_KEEP_ALIVE_MS`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SCROLL_KEEP_ALIVE_MS) | Time in ms during which OpenSearch will keep the search context alive. |  | Integer |
 | **CamelOpensearchUseScroll** (producer) Constant: [`PARAM_SCROLL`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SCROLL) | Set to true to enable scroll usage. When enabled, the body is returned as a OpensearchScrollRequestIterator. Make sure to use the stream and close it accordingly to avoid potential resource leaks. |  | Boolean |
 | **CamelOpensearchSize** (producer) Constant: [`PARAM_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_SIZE) | The size of the response. |  | Integer |
 | **CamelOpensearchFrom** (producer) Constant: [`PARAM_FROM`](https://javadoc.io/doc/org.apache.camel/camel-opensearch/latest/org/apache/camel/component/opensearch/OpensearchConstants.html#PARAM_FROM) | The starting index of the response. |  | Integer |

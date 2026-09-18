@@ -1,5 +1,3 @@
-Camel Components
-
 # UBL
 
 **Since Camel 4.23**

@@ -1,5 +1,3 @@
-User manual
-
 # camel get datasource
 
 Get status of DataSource connection pools

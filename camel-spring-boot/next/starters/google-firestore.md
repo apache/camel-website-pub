@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Google Firestore
 
 Store and retrieve data from Google Cloud Firestore NoSQL database.

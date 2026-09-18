@@ -1,5 +1,3 @@
-Camel K
-
 # Environment Trait
 
 The environment trait is used internally to inject standard environment variables in the integration container, such as `NAMESPACE`, `POD_NAME` and others.

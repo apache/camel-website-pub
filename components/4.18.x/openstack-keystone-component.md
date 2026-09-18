@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenStack Keystone
 
 **Since Camel 2.19**

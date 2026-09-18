@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![google sheets sink](_images/kamelets/google-sheets-sink.svg) Google Sheets Sink
 
 **Provided by: "Apache Software Foundation"**

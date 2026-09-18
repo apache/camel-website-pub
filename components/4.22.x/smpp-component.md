@@ -1,5 +1,3 @@
-Camel Components
-
 # SMPP
 
 **Since Camel 2.2**

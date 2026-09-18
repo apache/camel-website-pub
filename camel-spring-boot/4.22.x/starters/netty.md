@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Netty
 
 Socket level networking using TCP or UDP with Netty 4.x.

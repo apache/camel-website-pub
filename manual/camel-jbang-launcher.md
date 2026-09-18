@@ -1,5 +1,3 @@
-User manual
-
 # Camel CLI Launcher
 
 **Available as of Camel 4.13**

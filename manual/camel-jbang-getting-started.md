@@ -1,5 +1,3 @@
-User manual
-
 # Camel CLI - Getting Started
 
 Three commands. That is all it takes to go from zero to a running integration.

@@ -1,5 +1,3 @@
-Camel Components
-
 # File Watch
 
 **Since Camel 3.0**

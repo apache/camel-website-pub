@@ -1,5 +1,3 @@
-Camel Components
-
 # Splunk HEC
 
 **Since Camel 3.3**

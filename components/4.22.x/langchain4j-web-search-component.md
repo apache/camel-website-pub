@@ -1,5 +1,3 @@
-Camel Components
-
 # LangChain4j Web Search
 
 **Since Camel 4.8**

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # JSLT
 
 JVM since1.1.0 Native since1.4.0

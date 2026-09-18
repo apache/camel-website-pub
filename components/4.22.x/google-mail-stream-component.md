@@ -1,5 +1,3 @@
-Camel Components
-
 # Google Mail Stream
 
 **Since Camel 2.22**

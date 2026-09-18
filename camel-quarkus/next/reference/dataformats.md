@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Camel data formats supported on Quarkus
 
 There are 51 data formats (0 deprecated, 7 JVM only)

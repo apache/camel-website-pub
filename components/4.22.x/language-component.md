@@ -1,5 +1,3 @@
-Camel Components
-
 # Language
 
 **Since Camel 2.5**

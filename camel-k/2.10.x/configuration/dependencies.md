@@ -1,5 +1,3 @@
-Camel K
-
 # Dependencies and Component Resolution
 
 Camel K tries to resolve automatically a wide range of dependencies that are required to run your integration code.

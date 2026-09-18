@@ -1,5 +1,3 @@
-Camel Components
-
 # Fory
 
 **Since Camel 4.9**

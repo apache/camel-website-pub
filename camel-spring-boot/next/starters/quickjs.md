@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # QuickJS
 
 Evaluates a JavaScript expression using QuickJS4J

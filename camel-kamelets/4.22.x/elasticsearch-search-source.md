@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![elasticsearch search source](_images/kamelets/elasticsearch-search-source.svg) ElasticSearch Search Source
 
 **Provided by: "Apache Software Foundation"**

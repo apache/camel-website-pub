@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Athena
 
 Access AWS Athena.

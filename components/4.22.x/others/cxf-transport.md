@@ -1,5 +1,3 @@
-Camel Components
-
 # CXF Transport
 
 **Since Camel 2.8**

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-infinispan-sink-kafka-connector sink configuration
 
 Connector Description: Write object to an Infinispan cache.

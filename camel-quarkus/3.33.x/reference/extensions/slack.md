@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Slack
 
 JVM since0.3.0 Native since0.3.0

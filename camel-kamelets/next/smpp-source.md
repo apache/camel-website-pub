@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![smpp source](_images/kamelets/smpp-source.svg) SMPP Source
 
 **Provided by: "Apache Software Foundation"**

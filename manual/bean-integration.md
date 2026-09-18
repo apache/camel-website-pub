@@ -1,5 +1,3 @@
-User manual
-
 # Bean Integration
 
 Camel supports the integration of beans and POJOs in a number of ways.

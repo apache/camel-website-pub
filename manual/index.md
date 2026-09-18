@@ -2,8 +2,6 @@
 
 Index of Apache Camel user manual pages.
 
-User manual
-
 # Apache Camel user manual
 
 Apache Camel™ is a versatile open-source integration framework based on known [Enterprise Integration Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md).

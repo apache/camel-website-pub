@@ -1,5 +1,3 @@
-Camel Components
-
 # LangChain4j Chat
 
 **Since Camel 4.5**

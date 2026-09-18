@@ -1,5 +1,3 @@
-User manual
-
 # camel get source
 
 Display Camel route source code

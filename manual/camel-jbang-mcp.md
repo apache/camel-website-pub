@@ -1,5 +1,3 @@
-User manual
-
 # Camel MCP Server
 
 The Camel MCP Server gives AI coding assistants deep knowledge of Apache Camel. It exposes the full Camel Catalog — components, EIPs, data formats, Kamelets, examples — plus runtime introspection tools for live Camel applications, all through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/).
@@ -198,6 +196,8 @@ The assistant uses `camel_error_diagnose` to identify the exception chain, extra
     
 -   _"What are the latest LTS versions for Spring Boot?"_ — uses `camel_version_list`
     
+-   _"Which dependency do I need for org.postgresql.ds.PGSimpleDataSource, and how do I add it on Quarkus?"_ — uses `camel_dependency_for_class`
+    
 
 ### Migration
 
@@ -269,6 +269,7 @@ The tools an agent needs to build and edit an integration are defined once, in t
 | `camel_get_log` | Recent log records of a running integration, newest first, filtered by level or text; a stack trace comes as one record with a `detail` block. |
 | `camel_get_errors` | The failed exchanges of a running integration: route, exchange, exception with stack trace, body and headers. |
 | `camel_eval_expression` | Evaluates an expression (simple by default) in the running integration, or locally when none is named, and returns the value (true/false for a predicate) or the syntax error, so an agent can check a simple expression before writing it into a route. |
+| `camel_dependency_for_class` | Which Maven dependency provides a class, and how to declare it. Local first: the known dependencies `camel run` downloads by itself (nothing to declare there), then a Camel component’s artifact for each runtime. Only with `mavenCentral=true` it searches Maven Central by class name, groups the hits by artifact, takes the newest version, and marks the answer as a guess. Returns `camel.jbang.dependencies`, `--dep`, and the `pom.xml` dependency for Camel Main, Spring Boot and Quarkus, or one runtime with `runtime`. Uses the JVM proxy settings for the search. |
 | `camel_error_diagnose` | See [Error Diagnosis](#_error_diagnosis); the same shared tool. |
 
 ### Catalog Exploration

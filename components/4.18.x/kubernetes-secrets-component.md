@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes Secrets
 
 **Since Camel 2.17**

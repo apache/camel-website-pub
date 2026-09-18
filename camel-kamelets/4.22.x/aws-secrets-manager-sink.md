@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws secrets manager sink](_images/kamelets/aws-secrets-manager-sink.svg) AWS Secrets Manager Sink
 
 **Provided by: "Apache Software Foundation"**

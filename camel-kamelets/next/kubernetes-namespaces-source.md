@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kubernetes namespaces source](_images/kamelets/kubernetes-namespaces-source.svg) Kubernetes Namespaces Source
 
 **Provided by: "Apache Software Foundation"**

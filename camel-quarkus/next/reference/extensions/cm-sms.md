@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # CM SMS Gateway
 
 JVM since1.1.0 Nativeunsupported

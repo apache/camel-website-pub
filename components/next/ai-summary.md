@@ -1,5 +1,3 @@
-Camel Components
-
 # AI
 
 The Camel AI components are a group of components for applying Apache Camel to various AI-related technologies.

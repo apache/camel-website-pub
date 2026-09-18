@@ -1,5 +1,3 @@
-User manual
-
 # HTTP Session Handling
 
 Several Camel components can use HTTP as the underlying transport protocol.

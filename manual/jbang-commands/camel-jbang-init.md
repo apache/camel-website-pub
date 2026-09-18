@@ -1,5 +1,3 @@
-User manual
-
 # camel init
 
 Creates a new Camel integration

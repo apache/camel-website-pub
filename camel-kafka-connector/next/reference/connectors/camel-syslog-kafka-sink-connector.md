@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-syslog-kafka-connector sink configuration
 
 When using camel-syslog-kafka-connector as sink make sure to use the following Maven dependency to have support for the connector:

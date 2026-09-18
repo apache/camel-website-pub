@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Kinesis
 
 Consume and produce records from and to AWS Kinesis Streams.

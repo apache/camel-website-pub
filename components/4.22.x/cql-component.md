@@ -1,5 +1,3 @@
-Camel Components
-
 # Cassandra CQL
 
 **Since Camel 2.15**

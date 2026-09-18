@@ -1,5 +1,3 @@
-User manual
-
 # camel get producer
 
 Get status of Camel producers

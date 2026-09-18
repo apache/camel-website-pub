@@ -1,5 +1,3 @@
-Camel Components
-
 # IBM watsonx.ai - Examples
 
 [Back to IBM watsonx.ai Component](../ibm-watsonx-ai-component.md)

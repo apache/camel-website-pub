@@ -1,5 +1,3 @@
-Camel Components
-
 # Process
 
 The [Processor](http://javadoc.io/doc/org.apache.camel/camel-api/latest/org/apache/camel/Processor.md) is used for processing message [Exchanges](../../../manual/exchange.md).

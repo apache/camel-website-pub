@@ -1,5 +1,3 @@
-Camel Components
-
 # IBM Watson Speech to Text
 
 **Since Camel 4.17**

@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes
 
 **Since Camel 2.17**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Huawei Object Storage Service (OBS)
 
 To provide stable, secure, efficient, and easy-to-use cloud storage service on Huawei Cloud

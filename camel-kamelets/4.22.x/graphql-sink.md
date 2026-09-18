@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![graphql sink](_images/kamelets/graphql-sink.svg) GraphQL Sink
 
 **Provided by: "Apache Software Foundation"**

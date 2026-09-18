@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # BeanIO
 
 JVM since3.8.0 Native since3.16.0

@@ -1,5 +1,3 @@
-User manual
-
 # Improving the documentation
 
 The Apache Camel project loves your help with improving the documentation, whether its a tiny typo fix, or adding more details to an existing component, etc.

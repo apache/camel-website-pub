@@ -1,5 +1,3 @@
-Camel Components
-
 # Mustache
 
 **Since Camel 2.12**

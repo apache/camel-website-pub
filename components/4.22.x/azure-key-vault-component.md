@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure Key Vault
 
 **Since Camel 3.17**

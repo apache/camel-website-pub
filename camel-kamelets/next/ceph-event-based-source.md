@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![ceph event based source](_images/kamelets/ceph-event-based-source.svg) Ceph Event Based Source
 
 **Provided by: "Apache Software Foundation"**

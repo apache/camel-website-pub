@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Xml Jaxb
 
 ## Maven coordinates

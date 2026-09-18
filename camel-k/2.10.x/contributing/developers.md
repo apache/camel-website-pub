@@ -1,5 +1,3 @@
-Camel K
-
 # Contributing to Camel K
 
 We love contributions!

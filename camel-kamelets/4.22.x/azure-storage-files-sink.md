@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![azure storage files sink](_images/kamelets/azure-storage-files-sink.svg) Azure Storage Files Sink
 
 **Provided by: "Apache Software Foundation"**

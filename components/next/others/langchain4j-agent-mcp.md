@@ -1,5 +1,3 @@
-Camel Components
-
 # LangChain4j Agent - MCP Tools Integration
 
 [Back to LangChain4j Agent Component](../langchain4j-agent-component.md)

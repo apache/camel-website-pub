@@ -1,5 +1,3 @@
-Camel Components
-
 # Smooks
 
 **Since Camel 4.7**

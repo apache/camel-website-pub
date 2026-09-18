@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-earthquake-source-kafka-connector source configuration
 
 Connector Description: Get data about current earthquake events happening in the world using the USGS API

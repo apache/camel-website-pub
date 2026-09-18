@@ -1,5 +1,3 @@
-Camel Components
-
 # Set Headers
 
 The SetHeaders EIP is used for setting multiple [message](message.md) headers at the same time.

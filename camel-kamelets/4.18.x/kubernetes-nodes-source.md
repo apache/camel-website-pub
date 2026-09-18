@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kubernetes nodes source](_images/kamelets/kubernetes-nodes-source.svg) Kubernetes Nodes Source
 
 **Provided by: "Apache Software Foundation"**

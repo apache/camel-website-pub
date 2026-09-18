@@ -1,5 +1,3 @@
-User manual
-
 # camel get context
 
 Get status of Camel integrations

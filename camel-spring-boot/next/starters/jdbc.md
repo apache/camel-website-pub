@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JDBC
 
 Access databases through SQL and JDBC.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure Storage Blob - Producer Operations
 
 [Back to Azure Storage Blob Component](../azure-storage-blob-component.md)

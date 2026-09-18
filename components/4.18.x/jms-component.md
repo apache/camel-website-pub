@@ -1,5 +1,3 @@
-Camel Components
-
 # JMS
 
 **Since Camel 1.0**

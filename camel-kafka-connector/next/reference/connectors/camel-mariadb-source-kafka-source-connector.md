@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-mariadb-source-kafka-connector source configuration
 
 Connector Description: Query data from a MariaDB Database.

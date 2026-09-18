@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JSONata
 
 Transforms JSON payload using JSONata transformation.

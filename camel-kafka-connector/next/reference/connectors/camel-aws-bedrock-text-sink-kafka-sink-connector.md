@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-bedrock-text-sink-kafka-connector sink configuration
 
 Connector Description: Send data for invoking a text model of Amazon Bedrock.

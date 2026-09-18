@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # SMB
 
 JVM since3.7.0 Native since3.7.0

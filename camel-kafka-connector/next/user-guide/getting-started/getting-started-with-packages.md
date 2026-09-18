@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # Getting started with packages
 
 The Camel-Kafka-connector connectors can be used also as packages to unpack in your Kafka-connect Plugin path.

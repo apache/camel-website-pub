@@ -1,5 +1,3 @@
-User manual
-
 # camel run
 
 Run as local Camel integration

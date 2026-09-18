@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Openapi Java
 
 Spring Boot auto-configuration for Camel OpenAPI support.

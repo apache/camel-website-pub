@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Jasypt
 
 Spring Boot auto-configuration for Camel Jasypt encrypted properties.

@@ -1,5 +1,3 @@
-User manual
-
 # Release Guide
 
 This guide covers how to create and announce a Camel release. Instructions on updating the website to include the new documentation version are [here](release-guide-website.md).

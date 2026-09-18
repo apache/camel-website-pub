@@ -1,5 +1,3 @@
-Camel Components
-
 # RxJava
 
 **Since Camel 2.22**

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # GoogleCloudFunctions
 
 JVM since2.0.0 Nativeunsupported

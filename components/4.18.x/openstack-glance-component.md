@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenStack Glance
 
 **Since Camel 2.19**

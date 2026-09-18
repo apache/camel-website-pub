@@ -1,5 +1,3 @@
-Camel Components
-
 # Sticky Load Balancer
 
 Sticky mode for the [Load Balancer](loadBalance-eip.md) EIP.

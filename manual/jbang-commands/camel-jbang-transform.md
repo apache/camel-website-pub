@@ -1,5 +1,3 @@
-User manual
-
 # camel transform
 
 Transform message or Camel routes

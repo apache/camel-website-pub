@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # IBM Watson Discovery
 
 Perform document understanding and search using IBM Watson Discovery

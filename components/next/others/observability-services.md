@@ -1,5 +1,3 @@
-Camel Components
-
 # Observability Services
 
 **Since Camel 4.9**

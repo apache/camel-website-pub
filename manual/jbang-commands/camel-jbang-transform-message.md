@@ -1,5 +1,3 @@
-User manual
-
 # camel transform message
 
 Transform message from one format to another via an existing running Camel integration

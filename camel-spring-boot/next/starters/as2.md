@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AS2
 
 Transfer data securely and reliably using the AS2 protocol (RFC4130).

@@ -1,5 +1,3 @@
-Camel Components
-
 # CLI Connector
 
 **Since Camel 3.19**

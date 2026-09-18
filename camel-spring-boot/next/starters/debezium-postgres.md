@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Debezium PostgreSQL Connector
 
 Capture changes from a PostgreSQL database.

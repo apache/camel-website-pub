@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes Replication Controller
 
 **Since Camel 2.17**

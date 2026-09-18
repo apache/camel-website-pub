@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![azure storage blob event based source](_images/kamelets/azure-storage-blob-event-based-source.svg) Azure Storage Blob Event-based Source
 
 **Provided by: "Apache Software Foundation"**

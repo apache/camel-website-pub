@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # LangChain4j Agent
 
 JVM since3.26.0 Native since3.27.0

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![drop field action](_images/kamelets/drop-field-action.svg) Drop Field Action
 
 **Provided by: "Apache Software Foundation"**

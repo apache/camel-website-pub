@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Flowable
 
 Send and receive messages from the Flowable BPMN and CMMN engines.

@@ -1,5 +1,3 @@
-Camel Components
-
 # MLLP
 
 **Since Camel 2.17**

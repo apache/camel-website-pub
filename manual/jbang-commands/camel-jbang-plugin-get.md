@@ -1,5 +1,3 @@
-User manual
-
 # camel plugin get
 
 Get installed plugins

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # WhatsApp
 
 Send messages to WhatsApp.

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Docker
 
 Manage Docker containers.

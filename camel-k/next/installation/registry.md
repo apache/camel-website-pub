@@ -1,5 +1,3 @@
-Camel K
-
 # Configuring Registry
 
 Every Camel K installation needs a container registry that will be used to host integration container images. This is required to host the images that will be used by Kubernetes to execute the Camel application you’ve built.

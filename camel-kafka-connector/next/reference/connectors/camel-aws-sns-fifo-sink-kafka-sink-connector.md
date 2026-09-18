@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-sns-fifo-sink-kafka-connector sink configuration
 
 Connector Description: Send message to an AWS SNS FIFO Topic.

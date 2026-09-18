@@ -1,5 +1,3 @@
-Camel Components
-
 # Simple - Built-in Functions
 
 [Back to Simple Language](simple-language.md)

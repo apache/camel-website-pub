@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # IBM Watson Text to Speech
 
 Convert text to natural-sounding speech using IBM Watson Text to Speech

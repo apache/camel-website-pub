@@ -1,5 +1,3 @@
-Camel Components
-
 # Slack
 
 **Since Camel 2.16**

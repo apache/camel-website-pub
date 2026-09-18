@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes Persistent Volume
 
 **Since Camel 2.17**

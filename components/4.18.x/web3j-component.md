@@ -1,5 +1,3 @@
-Camel Components
-
 # Web3j Ethereum Blockchain
 
 **Since Camel 2.22**

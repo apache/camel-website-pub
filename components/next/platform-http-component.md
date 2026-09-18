@@ -1,5 +1,3 @@
-Camel Components
-
 # Platform HTTP
 
 **Since Camel 3.0**

@@ -1,5 +1,3 @@
-User manual
-
 # camel version get
 
 Displays current Camel version

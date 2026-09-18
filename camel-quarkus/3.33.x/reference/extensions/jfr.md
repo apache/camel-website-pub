@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Jfr
 
 JVM since1.7.0 Native since2.6.0

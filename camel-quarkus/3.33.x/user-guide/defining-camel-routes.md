@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Defining Camel routes
 
 Camel Quarkus supports several domain specific languages (DSLs) to define Camel Routes.

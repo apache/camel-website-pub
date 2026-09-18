@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws s3 event based source](_images/kamelets/aws-s3-event-based-source.svg) AWS S3 Event Based Source
 
 **Provided by: "Apache Software Foundation"**

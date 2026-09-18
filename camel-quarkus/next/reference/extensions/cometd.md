@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # CometD
 
 JVM since1.1.0 Nativeunsupported

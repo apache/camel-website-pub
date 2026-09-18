@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Timestream
 
 **Since Camel 4.1**

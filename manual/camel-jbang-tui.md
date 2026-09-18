@@ -1,5 +1,3 @@
-User manual
-
 # Camel TUI
 
 **Available as of Camel 4.21**

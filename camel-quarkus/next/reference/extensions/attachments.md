@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Attachments
 
 JVM since0.3.0 Native since0.3.0

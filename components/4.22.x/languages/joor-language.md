@@ -1,5 +1,3 @@
-Camel Components
-
 # jOOR
 
 > **Warning**

@@ -1,5 +1,3 @@
-Camel Components
-
 # Crypto (Java Cryptographic Extension)
 
 **Since Camel 2.3**

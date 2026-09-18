@@ -1,5 +1,3 @@
-Camel Components
-
 # Recipient List
 
 Camel supports the [Recipient List](https://www.enterpriseintegrationpatterns.com/RecipientList.md) from the [EIP patterns](enterprise-integration-patterns.md).

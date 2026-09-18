@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Security Token Service (STS)
 
 **Since Camel 3.5**

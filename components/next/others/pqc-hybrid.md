@@ -1,5 +1,3 @@
-Camel Components
-
 # PQC Hybrid Cryptography
 
 [Back to PQC Component](../pqc-component.md)

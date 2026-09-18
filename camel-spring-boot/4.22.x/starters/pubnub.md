@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # PubNub
 
 Send and receive messages to/from PubNub data stream network for connected devices.

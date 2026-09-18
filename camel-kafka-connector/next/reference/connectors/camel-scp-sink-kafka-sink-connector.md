@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-scp-sink-kafka-connector sink configuration
 
 Connector Description: Send file to an FTP Server through Secure Copy Protocol

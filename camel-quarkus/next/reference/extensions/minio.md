@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Minio
 
 JVM since1.5.0 Native since1.6.0

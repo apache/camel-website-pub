@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # IBM watsonx.ai
 
 Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more.

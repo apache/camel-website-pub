@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![sqlserver source](_images/kamelets/sqlserver-source.svg) Microsoft SQL Server Source
 
 **Provided by: "Apache Software Foundation"**

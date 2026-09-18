@@ -1,5 +1,3 @@
-Camel Components
-
 # Bean Validator
 
 **Since Camel 2.3**

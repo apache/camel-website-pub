@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes ConfigMap
 
 **Since Camel 2.17**

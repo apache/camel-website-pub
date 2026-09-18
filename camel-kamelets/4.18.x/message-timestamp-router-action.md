@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![message timestamp router action](_images/kamelets/message-timestamp-router-action.svg) Message Timestamp Router Action
 
 **Provided by: "Apache Software Foundation"**

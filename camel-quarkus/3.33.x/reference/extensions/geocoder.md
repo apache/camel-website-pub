@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Geocoder
 
 JVM since1.1.0 Native since1.2.0

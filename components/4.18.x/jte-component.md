@@ -1,5 +1,3 @@
-Camel Components
-
 # JTE
 
 **Since Camel 4.4**

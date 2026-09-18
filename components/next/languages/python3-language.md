@@ -1,5 +1,3 @@
-Camel Components
-
 # Python 3
 
 **Since Camel 4.23**

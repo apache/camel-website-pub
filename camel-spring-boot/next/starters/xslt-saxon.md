@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # XSLT Saxon
 
 Transform XML payloads using an XSLT template using Saxon.

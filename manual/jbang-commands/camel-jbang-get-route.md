@@ -1,5 +1,3 @@
-User manual
-
 # camel get route
 
 Get status of Camel routes

@@ -1,5 +1,3 @@
-User manual
-
 # Exception Clause - Handling Patterns
 
 [Back to Exception Clause](exception-clause.md)

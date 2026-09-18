@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Scheduler
 
 Generate messages in specified intervals using java.util.concurrent.ScheduledExecutorService.

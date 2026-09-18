@@ -1,5 +1,3 @@
-Camel Components
-
 # Zeebe
 
 **Since Camel 3.21**

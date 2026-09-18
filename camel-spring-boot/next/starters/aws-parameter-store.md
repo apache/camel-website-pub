@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Parameter Store
 
 Manage parameters using AWS Systems Manager (SSM) Parameter Store.

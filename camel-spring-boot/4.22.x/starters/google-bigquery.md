@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Google BigQuery
 
 Google BigQuery data warehouse for analytics.

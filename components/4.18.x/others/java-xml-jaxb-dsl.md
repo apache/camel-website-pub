@@ -1,5 +1,3 @@
-Camel Components
-
 # Jaxb XML Dsl
 
 **Since Camel 3.9**

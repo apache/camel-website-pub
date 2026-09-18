@@ -1,5 +1,3 @@
-Camel Components
-
 # BatchConfig
 
 Configuring for [Resequence EIP](resequence-eip.md) in batching mode.

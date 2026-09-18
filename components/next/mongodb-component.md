@@ -1,5 +1,3 @@
-Camel Components
-
 # MongoDB
 
 **Since Camel 2.19**

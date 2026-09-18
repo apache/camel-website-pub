@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![cassandra source](_images/kamelets/cassandra-source.svg) Cassandra Source
 
 **Provided by: "Apache Software Foundation"**

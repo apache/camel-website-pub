@@ -1,5 +1,3 @@
-Camel Components
-
 # Google PubSub Lite
 
 > **Warning**

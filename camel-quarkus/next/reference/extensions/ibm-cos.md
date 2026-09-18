@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # IBM Cloud Object Storage
 
 JVM since3.30.0 Native since3.31.0

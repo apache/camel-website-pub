@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![spring rabbitmq source](_images/kamelets/spring-rabbitmq-source.svg) RabbitMQ Source
 
 **Provided by: "Apache Software Foundation"**

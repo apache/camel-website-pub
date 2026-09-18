@@ -1,5 +1,3 @@
-User manual
-
 # camel shell
 
 Interactive Camel CLI shell.

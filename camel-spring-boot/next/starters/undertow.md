@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Undertow
 
 Expose HTTP and WebSocket endpoints and access external HTTP/WebSocket servers.

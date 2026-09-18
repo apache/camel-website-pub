@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Docling
 
 Process documents using Docling library for parsing and conversion.

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Netty HTTP
 
 JVM since0.2.0 Native since0.2.0

@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd send
 
 Send messages to endpoints

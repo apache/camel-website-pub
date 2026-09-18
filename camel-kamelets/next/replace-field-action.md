@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![replace field action](_images/kamelets/replace-field-action.svg) Replace Field Action
 
 **Provided by: "Apache Software Foundation"**

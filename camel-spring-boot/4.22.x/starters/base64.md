@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Base64
 
 Encode and decode data using Base64

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Textract
 
 Extract text and data from documents using AWS Textract and AWS SDK version 2.x.

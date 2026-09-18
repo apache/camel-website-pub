@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-chuck-norris-source-kafka-connector source configuration
 
 Connector Description: Gets periodically Chuck Norris jokes

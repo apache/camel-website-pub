@@ -1,5 +1,3 @@
-User manual
-
 # camel get service
 
 Get services of Camel integrations

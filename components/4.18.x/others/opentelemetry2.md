@@ -1,5 +1,3 @@
-Camel Components
-
 # Opentelemetry2
 
 **Since Camel 4.11**

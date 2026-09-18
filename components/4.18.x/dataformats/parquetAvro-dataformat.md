@@ -1,5 +1,3 @@
-Camel Components
-
 # Parquet File
 
 **Since Camel 4.0**

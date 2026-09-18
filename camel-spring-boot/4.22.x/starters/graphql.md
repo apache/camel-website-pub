@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # GraphQL
 
 Send GraphQL queries and mutations to external systems.

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-salesforce-source-kafka-connector source configuration
 
 Connector Description: Receive updates from Salesforce.

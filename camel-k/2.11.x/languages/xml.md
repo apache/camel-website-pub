@@ -1,5 +1,3 @@
-Camel K
-
 # Writing Integrations in XML
 
 Camel K support the classic XML DSL available in Camel:

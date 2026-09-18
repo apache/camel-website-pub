@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # TensorFlow Serving
 
 Provide access to TensorFlow Serving model servers to run inference with TensorFlow saved models remotely

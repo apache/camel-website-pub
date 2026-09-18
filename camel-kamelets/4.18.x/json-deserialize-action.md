@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![json deserialize action](_images/kamelets/json-deserialize-action.svg) Json Deserialize Action
 
 **Provided by: "Apache Software Foundation"**

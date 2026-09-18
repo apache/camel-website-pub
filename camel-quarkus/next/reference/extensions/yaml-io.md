@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # YAML IO
 
 JVM since3.2.0 Native since3.2.0

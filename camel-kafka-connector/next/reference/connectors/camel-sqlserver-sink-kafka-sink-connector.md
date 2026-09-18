@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-sqlserver-sink-kafka-connector sink configuration
 
 Connector Description: Send data to a Microsoft SQL Server Database. This Kamelet expects a JSON-formatted body. Use key:value pairs to map the JSON fields and parameters.

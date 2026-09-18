@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Thymeleaf
 
 Transform messages using a Thymeleaf template.

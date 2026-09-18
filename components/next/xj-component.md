@@ -1,5 +1,3 @@
-Camel Components
-
 # XJ
 
 **Since Camel 3.0**

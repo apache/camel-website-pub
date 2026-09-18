@@ -1,5 +1,3 @@
-Camel Components
-
 # JPA
 
 **Since Camel 1.0**

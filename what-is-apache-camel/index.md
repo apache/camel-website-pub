@@ -1,0 +1,184 @@
+# What is Apache Camel?
+
+## Apache Camel is an integration framework
+
+It connects your applications, services, APIs, and data — whether they live in the cloud, on-premise, or both. You describe what should happen — read from Kafka, transform the data, write to a database — and Camel handles the protocols, formats, and error handling. With 350+ ready-made connectors and 65+ proven integration patterns, you write the logic once and run it on Spring Boot, Quarkus, or standalone. Routes can be written in Java, YAML, or XML — or designed visually with Kaoto or Karavan.
+
+## Why should I care?
+
+### You probably already have this problem
+
+Every application eventually needs to talk to other systems — databases, message brokers, cloud services, SaaS APIs, legacy systems, files, emails. The question is how.
+
+You can write custom integration code for each connection. Or you can use Camel and focus on the _what_, not the plumbing.
+
+### What it looks like
+
+You write a **route** that says: _take data from here, transform it, and send it there._
+
+**YAML:**
+
+```yaml
+- route:
+    from:
+      uri: kafka:incoming-orders
+      steps:
+        - log:
+            message: "Received order ${body}"
+        - to:
+            uri: sql:INSERT INTO orders(data) VALUES(:#${body})
+```
+
+**Java:**
+
+```java
+from("kafka:incoming-orders")
+    .log("Received order ${body}")
+    .to("sql:INSERT INTO orders(data) VALUES(:#${body})");
+```
+
+Read from Kafka, log each order, insert into a database. A few lines that describe _what_ should happen — not _how_. It reads like an architecture diagram written as code. Camel handles the Kafka consumer, the JDBC connection, and the error handling.
+
+This declarative style also means AI coding assistants generate reliable Camel routes — the intent is clear, and the [Camel MCP server](#works-with-ai-coding-assistants) provides first-class coding assistance to the AI.
+
+### It runs where you already run
+
+Camel is a library, not a server. It embeds in your application:
+
+-   **Spring Boot** — `camel-spring-boot-starter`, auto-configuration, Spring beans, dependency injection. The most popular choice for running Camel in production.
+-   **Quarkus** — cloud-native, GraalVM-optimized, sub-second startup, low memory footprint. Ideal for serverless, Kubernetes, and resource-constrained environments.
+-   **Standalone** — the Camel CLI for lightweight deployments and rapid prototyping.
+
+You deploy Camel the same way you deploy any Java application — as a JAR, a container image, on Kubernetes, or on bare metal. No separate server to manage.
+
+Start lightweight with the CLI, then run `camel export` to produce a standard Spring Boot or Quarkus Maven project — ready for your CI/CD pipeline. No rewrite, same routes, production-ready.
+
+### You don’t need to be a Java developer
+
+Camel supports multiple ways to work:
+
+-   **Java** — full IDE support, type safety, refactoring
+-   **YAML** — write routes without writing Java code
+-   **XML** — supported for compatibility and existing projects
+-   **Visual** — [Kaoto](https://kaoto.io) and [Karavan](https://github.com/apache/camel-karavan), open-source visual designers for drag-and-drop route design
+-   **CLI** — `camel run hello.yaml` to prototype in seconds
+
+Pick the style that fits your team. Mix them in the same project if you want.
+
+### 350+ connectors — included, not extra
+
+Kafka, AWS (S3, SQS, Lambda, DynamoDB), Azure, GCP, Salesforce, ServiceNow, Slack, databases (JDBC, MongoDB, Cassandra), messaging (JMS, AMQP, MQTT), file protocols (FTP, SFTP), AI services, and hundreds more.
+
+All open source. All included. No premium tiers, no per-connector fees.
+
+[Browse the full catalog →](../components/next/index.md)
+
+### Integration patterns built in
+
+Camel implements the [Enterprise Integration Patterns](https://www.enterpriseintegrationpatterns.com/) — a proven vocabulary for solving integration problems:
+
+-   **Content-Based Router** — route messages to different systems based on content
+-   **Splitter** — break a batch into individual items and process each one
+-   **Aggregator** — collect related messages and combine them
+-   **Circuit Breaker** — protect against failing downstream services
+-   **Saga** — coordinate distributed transactions across services
+-   **Dead Letter Channel** — handle failures gracefully
+
+These aren’t theoretical — they’re production-tested patterns used by thousands of companies.
+
+[See all patterns →](../components/next/eips/enterprise-integration-patterns.md)
+
+## The origin story
+
+The very first Camel route ever written was `from("jms:queue:test.queue").to("file://test")` — one line, June 2007. Nearly two decades later, that same idea powers every Camel route: take data from here, send it there. The framework grew from 19 components to 350+, from a handful of contributors to 1,500+ — but the DNA never changed.
+
+**[Read the full origin story — Camel DNA →](../camel-dna/index.md)**
+
+## Trusted in production
+
+Apache Camel has been running in production for nearly two decades. Thousands of companies worldwide rely on it — from startups to governments, across financial services, healthcare, aviation, energy, logistics, telecom, and every industry in between. Processing billions of messages daily.
+
+[See who uses Apache Camel →](../community/user-stories/index.md)
+
+## Works with AI coding assistants
+
+Apache Camel’s entire source code, documentation, tests, examples, and two decades of commit history are open source on apache.org — making it well-represented in AI training data. AI coding assistants can generate routes, explain components, troubleshoot errors, and suggest patterns.
+
+Camel also provides an **MCP server** (Model Context Protocol) that connects AI assistants directly to Camel’s component catalog — giving tools like Claude Code, GitHub Copilot, and Cursor full context awareness when helping you build integrations.
+
+## The numbers
+
+| Metric | Value |
+| --- | --- |
+| **Connectors** | 350+ |
+| **Integration patterns** | 65+ |
+| **Contributors** | 1,500+ |
+| **Commits** | 100,000+ |
+| **Years in production** | Nearly two decades |
+| **Median bug fix time** | 1–2 days |
+| **Open bugs** | Typically 10 or fewer (across 350+ connectors) |
+| **License** | Apache License 2.0 — free, no cost, forever |
+
+## Try it in 60 seconds
+
+```bash
+# Create a route
+camel init hello.yaml
+
+# Run it
+camel run hello.yaml
+
+# Monitor it — live route visualization, tracing, and diagnostics
+camel tui
+```
+
+Or if you already use Spring Boot or Quarkus, just add the dependency to your `pom.xml`:
+
+**Spring Boot:**
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.springboot</groupId>
+    <artifactId>camel-spring-boot-starter</artifactId>
+</dependency>
+```
+
+**Quarkus:**
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-core</artifactId>
+</dependency>
+```
+
+Then write a route — Camel auto-discovers it on startup. No CLI needed.
+
+Or design visually: [Kaoto](https://kaoto.io) | [Karavan](https://github.com/apache/camel-karavan)
+
+[Install the Camel CLI →](../manual/camel-jbang.md)
+
+## Go deeper
+
+-   [When to use Apache Camel](../when-to-use/index.md) — common use cases and when Camel is the right fit
+-   [Getting Started Guide](../manual/getting-started.md) — build your first integration
+-   [Component Catalog](../components/next/index.md) — browse 350+ connectors
+-   [Enterprise Integration Patterns](../components/next/eips/enterprise-integration-patterns.md) — the pattern library
+-   [Camel on Spring Boot](../camel-spring-boot/latest/) — the most popular runtime
+-   [Camel on Quarkus](../camel-quarkus/latest/) — cloud-native, fast startup
+-   [Camel CLI](../manual/camel-jbang.md) — rapid prototyping from the command line
+-   [Kaoto Visual Designer](https://kaoto.io) — drag-and-drop route design
+-   [Karavan Visual Designer](https://github.com/apache/camel-karavan) — drag-and-drop route design
+
+**Examples:**
+
+-   [CLI Examples](https://github.com/apache/camel-jbang-examples) — ready-to-run YAML and script examples
+-   [Standalone Examples](https://github.com/apache/camel-examples) — Camel Standalone integration examples
+-   [Spring Boot Examples](https://github.com/apache/camel-spring-boot-examples) — Spring Boot integration examples
+-   [Quarkus Examples](https://github.com/apache/camel-quarkus-examples) — Quarkus integration examples
+
+## Commercial support
+
+Apache Camel is free and open source. Commercial support with SLAs is available from multiple vendors — you choose your vendor, you’re never locked in.
+
+[See companies offering commercial Camel support →](../manual/commercial-camel-offerings.md)

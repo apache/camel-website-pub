@@ -1,5 +1,3 @@
-Camel Components
-
 # Disruptor VM
 
 **Since Camel 2.12**

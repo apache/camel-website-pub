@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mongodb sink](_images/kamelets/mongodb-sink.svg) MongoDB Sink
 
 **Provided by: "Apache Software Foundation"**

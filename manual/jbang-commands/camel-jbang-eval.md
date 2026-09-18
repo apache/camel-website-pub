@@ -1,5 +1,3 @@
-User manual
-
 # camel eval
 
 Evaluate Camel expressions and scripts

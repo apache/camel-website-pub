@@ -1,5 +1,3 @@
-Camel Components
-
 # QuickJS
 
 **Since Camel 4.23**

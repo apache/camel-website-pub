@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Shiro
 
 ## Maven coordinates

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # PGP
 
 JVM since3.13.0 Native since3.13.0

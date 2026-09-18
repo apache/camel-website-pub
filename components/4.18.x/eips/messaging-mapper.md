@@ -1,5 +1,3 @@
-Camel Components
-
 # Messaging Mapper
 
 Camel supports the [Messaging Mapper](https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessagingMapper.md) from the [EIP patterns](enterprise-integration-patterns.md) book.

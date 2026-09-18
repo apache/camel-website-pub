@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JSLT
 
 Query or transform JSON payloads using JSLT.

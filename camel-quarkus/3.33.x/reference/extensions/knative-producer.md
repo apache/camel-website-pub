@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Knative Producer
 
 JVM since2.14.0 Native since2.14.0

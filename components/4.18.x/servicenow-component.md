@@ -1,5 +1,3 @@
-Camel Components
-
 # ServiceNow
 
 **Since Camel 2.18**

@@ -1,5 +1,3 @@
-Camel K
-
 # Traits
 
 ![traits](../_images/architecture/camel-k-traits.jpg)

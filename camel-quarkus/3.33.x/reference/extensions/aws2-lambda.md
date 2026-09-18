@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # AWS 2 Lambda
 
 JVM since1.1.0 Native since1.1.0

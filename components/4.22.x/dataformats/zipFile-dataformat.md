@@ -1,5 +1,3 @@
-Camel Components
-
 # Zip File
 
 **Since Camel 2.11**

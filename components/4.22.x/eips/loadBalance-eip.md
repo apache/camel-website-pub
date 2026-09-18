@@ -1,5 +1,3 @@
-Camel Components
-
 # Load Balance
 
 The Load Balancer Pattern allows you to delegate to one of a number of endpoints using a variety of different load balancing policies.

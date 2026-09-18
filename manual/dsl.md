@@ -1,5 +1,3 @@
-User manual
-
 # DSL
 
 Camel uses a Java _Domain Specific Language_ or DSL for creating [Enterprise Integration Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md) or [Routes](routes.md) in a variety of domain-specific languages (DSL) as listed below:

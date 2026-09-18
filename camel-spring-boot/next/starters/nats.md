@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Nats
 
 Send and receive messages from NATS messaging system.

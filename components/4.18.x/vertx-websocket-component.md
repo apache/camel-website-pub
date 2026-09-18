@@ -1,5 +1,3 @@
-Camel Components
-
 # Vert.x WebSocket
 
 **Since Camel 3.5**

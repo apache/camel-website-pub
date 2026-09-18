@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-jms-apache-artemis-source-kafka-connector source configuration
 
 Connector Description: Receive data from an Apache Artemis message broker by using JMS.

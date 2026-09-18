@@ -1,5 +1,3 @@
-Camel Components
-
 # Base64
 
 **Since Camel 2.11**

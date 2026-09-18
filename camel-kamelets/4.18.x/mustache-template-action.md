@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mustache template action](_images/kamelets/mustache-template-action.svg) Mustache Template Action
 
 **Provided by: "Apache Software Foundation"**

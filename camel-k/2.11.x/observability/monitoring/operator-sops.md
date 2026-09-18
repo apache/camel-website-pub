@@ -1,5 +1,3 @@
-Camel K
-
 # Standard Operating Procedures
 
 > **Note**

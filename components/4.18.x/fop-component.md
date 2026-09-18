@@ -1,5 +1,3 @@
-Camel Components
-
 # FOP
 
 **Since Camel 2.10**

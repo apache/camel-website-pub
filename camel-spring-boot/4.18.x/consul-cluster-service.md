@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Consul Cluster Service
 
 The Consul Cluster Service starter provides a cluster service implementation using [HashiCorp Consul](https://www.consul.io/) for distributed coordination and leader election in Camel Spring Boot applications.

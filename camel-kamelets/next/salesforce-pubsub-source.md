@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![salesforce pubsub source](_images/kamelets/salesforce-pubsub-source.svg) Salesforce Pub/Sub Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Components
-
 # JCR
 
 **Since Camel 1.3**

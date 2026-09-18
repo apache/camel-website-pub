@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # XML Security
 
 Encrypt and decrypt XML payloads using Apache Santuario

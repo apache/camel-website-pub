@@ -1,5 +1,3 @@
-User manual
-
 # camel top group
 
 Top performing route groups

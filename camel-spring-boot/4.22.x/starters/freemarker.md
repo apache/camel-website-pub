@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Freemarker
 
 Transform messages using FreeMarker templates.

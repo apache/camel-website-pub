@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![dns ip action](_images/kamelets/dns-ip-action.svg) DNS IP Action
 
 **Provided by: "Apache Software Foundation"**

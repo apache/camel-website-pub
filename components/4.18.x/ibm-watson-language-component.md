@@ -1,5 +1,3 @@
-Camel Components
-
 # IBM Watson Language
 
 **Since Camel 4.16**

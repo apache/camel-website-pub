@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Solr
 
 Perform operations against Apache Lucene Solr.

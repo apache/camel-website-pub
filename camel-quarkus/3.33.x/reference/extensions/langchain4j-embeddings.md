@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # LangChain4j Embeddings
 
 JVM since3.10.0 Native since3.29.0

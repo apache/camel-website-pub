@@ -1,5 +1,3 @@
-Camel Components
-
 # PGP
 
 **Since Camel 2.9**

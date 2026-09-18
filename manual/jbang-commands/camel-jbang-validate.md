@@ -1,5 +1,3 @@
-User manual
-
 # camel validate
 
 Validate Camel source code

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Scheduler
 
 JVM since0.4.0 Native since0.4.0

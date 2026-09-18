@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Disruptor
 
 Provides asynchronous SEDA behavior using LMAX Disruptor.

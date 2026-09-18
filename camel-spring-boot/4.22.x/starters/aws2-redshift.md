@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS RedshiftData
 
 Perform operations on AWS Redshift using Redshift Data API.

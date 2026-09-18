@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![webhook source](_images/kamelets/webhook-source.svg) Webhook Source
 
 **Provided by: "Apache Software Foundation"**

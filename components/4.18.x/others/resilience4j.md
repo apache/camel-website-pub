@@ -1,5 +1,3 @@
-Camel Components
-
 # Resilience4j
 
 **Since Camel 3.0**

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![drop header action](_images/kamelets/drop-header-action.svg) Drop Header Action
 
 **Provided by: "Apache Software Foundation"**

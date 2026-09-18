@@ -1,5 +1,3 @@
-Camel Components
-
 # Debezium DB2 Connector
 
 **Since Camel 3.17**

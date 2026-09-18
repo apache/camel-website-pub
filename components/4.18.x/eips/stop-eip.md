@@ -1,5 +1,3 @@
-Camel Components
-
 # Stop
 
 How can I stop routing a message?

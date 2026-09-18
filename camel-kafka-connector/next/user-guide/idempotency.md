@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # Idempotency
 
 ## What is Idempotency?

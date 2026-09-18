@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![github commit source](_images/kamelets/github-commit-source.svg) GitHub Commit Source
 
 **Provided by: "Apache Software Foundation"**

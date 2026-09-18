@@ -1,5 +1,3 @@
-Camel Components
-
 # Groovy XML
 
 **Since Camel 4.15**

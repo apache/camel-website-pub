@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-cosmosdb-source-kafka-connector source configuration
 
 Connector Description: Consume Changes from a CosmosDB instance.

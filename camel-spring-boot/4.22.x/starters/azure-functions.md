@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Azure Functions
 
 Invoke and manage Azure Functions.

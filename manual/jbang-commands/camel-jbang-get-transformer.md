@@ -1,5 +1,3 @@
-User manual
-
 # camel get transformer
 
 Get list of data type transformers

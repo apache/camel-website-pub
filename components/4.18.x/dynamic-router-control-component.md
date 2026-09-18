@@ -1,5 +1,3 @@
-Camel Components
-
 # Dynamic Router Control
 
 **Since Camel 4.4**

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![google storage sink](_images/kamelets/google-storage-sink.svg) Google Storage Sink
 
 **Provided by: "Apache Software Foundation"**

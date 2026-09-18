@@ -1,5 +1,3 @@
-User manual
-
 # camel dirty
 
 Check if there are dirty files from previous Camel runs that did not terminate gracefully

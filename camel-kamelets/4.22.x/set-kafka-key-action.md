@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![set kafka key action](_images/kamelets/set-kafka-key-action.svg) Set Kafka Key Action
 
 **Provided by: "Apache Software Foundation"**

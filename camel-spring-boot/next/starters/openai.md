@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # OpenAI
 
 OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech.

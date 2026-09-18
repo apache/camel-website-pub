@@ -1,5 +1,3 @@
-Camel Components
-
 # Alibaba Tablestore (OTS)
 
 **Since Camel 4.23**

@@ -1,5 +1,3 @@
-User manual
-
 # camel dev
 
 Run in dev mode with live reload

@@ -1,5 +1,3 @@
-Camel Components
-
 # Iggy
 
 **Since Camel 4.17**

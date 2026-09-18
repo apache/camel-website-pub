@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Robot Framework
 
 Pass camel exchanges to acceptance test written in Robot DSL.

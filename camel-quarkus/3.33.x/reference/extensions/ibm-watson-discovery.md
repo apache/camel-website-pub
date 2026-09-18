@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # IBM Watson Discovery
 
 JVM since3.30.0 Nativeunsupported

@@ -1,5 +1,3 @@
-Camel Components
-
 # Failover Load Balancer
 
 This EIP allows using fail-over (in case of failures, the exchange will be tried on the next endpoint) with the [Load Balancer](loadBalance-eip.md) EIP.

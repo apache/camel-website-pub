@@ -1,5 +1,3 @@
-User manual
-
 # Endpoint DSL
 
 Endpoint-DSL is a builder API that allows using type-safe endpoint [URL](uris.md) configurations.

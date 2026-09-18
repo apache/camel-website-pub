@@ -1,5 +1,3 @@
-User manual
-
 # camel update list
 
 List available update versions for Camel and its runtime variants

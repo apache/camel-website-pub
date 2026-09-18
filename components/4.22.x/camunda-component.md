@@ -1,5 +1,3 @@
-Camel Components
-
 # Camunda
 
 **Since Camel 4.19**

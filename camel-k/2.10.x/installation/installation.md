@@ -1,5 +1,3 @@
-Camel K
-
 # Installation
 
 Camel K allows us to run Camel integrations directly on a Kubernetes cluster. To use it, you need to be connected to a cloud environment or to a local cluster created for development purposes (ie, Minikube or Kind).

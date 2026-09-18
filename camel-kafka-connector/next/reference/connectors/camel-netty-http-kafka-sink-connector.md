@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-netty-http-kafka-connector sink configuration
 
 Connector Description: Netty HTTP server and client using the Netty 4.x.

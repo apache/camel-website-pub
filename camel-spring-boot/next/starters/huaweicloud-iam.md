@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Huawei Identity and Access Management (IAM)
 
 To securely manage users on Huawei Cloud

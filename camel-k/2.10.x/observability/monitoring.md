@@ -1,5 +1,3 @@
-Camel K
-
 # Camel K Monitoring
 
 The Camel K monitoring architecture relies on [Prometheus](https://prometheus.io) and the eponymous operator.

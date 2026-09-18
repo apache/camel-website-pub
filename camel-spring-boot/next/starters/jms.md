@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JMS
 
 Send and receive messages to/from JMS message brokers.

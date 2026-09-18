@@ -1,5 +1,3 @@
-User manual
-
 # Why did you choose the name Camel?
 
 -   it stands for Concise Application Message Exchange Language (i.e. the Java [DSL](../dsl.md) for routing)

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![tika extract text action](_images/kamelets/tika-extract-text-action.svg) Tika Extract Text Action
 
 **Provided by: "Apache Software Foundation"**

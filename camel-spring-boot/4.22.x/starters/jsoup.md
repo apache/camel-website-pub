@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Jsoup
 
 ## Maven coordinates

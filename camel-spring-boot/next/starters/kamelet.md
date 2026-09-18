@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Kamelet
 
 To call Kamelets

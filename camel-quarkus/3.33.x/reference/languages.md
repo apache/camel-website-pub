@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Camel languages supported on Quarkus
 
 There are 25 languages (3 deprecated, 3 JVM only)

@@ -1,5 +1,3 @@
-User manual
-
 # camel get group
 
 Get status of Camel route groups

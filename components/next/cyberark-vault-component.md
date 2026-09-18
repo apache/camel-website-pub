@@ -1,5 +1,3 @@
-Camel Components
-
 # CyberArk Vault
 
 **Since Camel 4.17**

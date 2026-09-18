@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![opensearch search source](_images/kamelets/opensearch-search-source.svg) OpenSearch Search Source
 
 **Provided by: "Apache Software Foundation"**

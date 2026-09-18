@@ -1,5 +1,3 @@
-User manual
-
 # Type Converter
 
 Converting body payloads from one type to another is common when routing messages between endpoints. Conversions regularly occur between the following types:

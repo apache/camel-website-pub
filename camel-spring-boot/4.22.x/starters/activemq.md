@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # ActiveMQ 5.x
 
 Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component.

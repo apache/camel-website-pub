@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-cassandra-source-kafka-connector source configuration
 
 Connector Description: Send a query to an Apache Cassandra cluster table.

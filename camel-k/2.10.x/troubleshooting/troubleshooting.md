@@ -1,5 +1,3 @@
-Camel K
-
 # Troubleshooting Camel K Integrations
 
 As soon as you start using Camel K in complex integration, you may have failures in the Integrations that you need to resolve. Most of the time, the first level of troubleshooting is to check the the log or the Custom Resources which are bound to a Camel application.

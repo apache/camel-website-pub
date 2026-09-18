@@ -1,5 +1,3 @@
-Camel Components
-
 # Micrometer Observability
 
 > **Warning**

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![sftp source](_images/kamelets/sftp-source.svg) SFTP Source
 
 **Provided by: "Apache Software Foundation"**

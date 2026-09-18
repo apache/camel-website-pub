@@ -1,5 +1,3 @@
-Camel Components
-
 # Choice
 
 The [Content-Based Router](http://www.enterpriseintegrationpatterns.com/ContentBasedRouter.md) from the [EIP patterns](enterprise-integration-patterns.md) allows you to route messages to the correct destination based on the contents of the message exchanges.

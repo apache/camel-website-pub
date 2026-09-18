@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # JGroups raft
 
 JVM since1.1.0 Nativeunsupported

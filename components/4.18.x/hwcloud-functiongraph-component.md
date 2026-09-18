@@ -1,5 +1,3 @@
-Camel Components
-
 # Huawei FunctionGraph
 
 **Since Camel 3.11**

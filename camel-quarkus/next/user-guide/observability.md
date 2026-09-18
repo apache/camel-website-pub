@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Observability
 
 ## Health & liveness checks

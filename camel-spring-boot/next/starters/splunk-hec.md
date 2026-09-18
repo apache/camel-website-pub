@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Splunk HEC
 
 The splunk component allows publishing events in Splunk using the HTTP Event Collector.

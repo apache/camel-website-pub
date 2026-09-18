@@ -1,5 +1,3 @@
-User manual
-
 # Camel Maven Archetypes
 
 Camel is distributed with the following archetypes for Maven end users.

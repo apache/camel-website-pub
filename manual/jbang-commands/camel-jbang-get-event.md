@@ -1,5 +1,3 @@
-User manual
-
 # camel get event
 
 Get latest events of Camel integrations

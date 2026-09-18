@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Azure Key Vault
 
 Manage secrets and keys in Azure Key Vault Service

@@ -1,5 +1,3 @@
-Camel Components
-
 # ISO-8583
 
 **Since Camel 4.14**

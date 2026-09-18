@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![postgresql source](_images/kamelets/postgresql-source.svg) PostgreSQL Source
 
 **Provided by: "Apache Software Foundation"**

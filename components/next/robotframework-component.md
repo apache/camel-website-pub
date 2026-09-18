@@ -1,5 +1,3 @@
-Camel Components
-
 # Robot Framework
 
 **Since Camel 3.0**

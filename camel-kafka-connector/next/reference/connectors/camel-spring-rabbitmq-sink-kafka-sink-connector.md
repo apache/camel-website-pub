@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-spring-rabbitmq-sink-kafka-connector sink configuration
 
 Connector Description: Send data to a RabbitMQ Broker.

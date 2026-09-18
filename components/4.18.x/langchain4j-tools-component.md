@@ -1,5 +1,3 @@
-Camel Components
-
 # LangChain4j Tools
 
 **Since Camel 4.8**

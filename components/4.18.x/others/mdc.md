@@ -1,5 +1,3 @@
-Camel Components
-
 # MDC Logging
 
 **Since Camel 4.15**

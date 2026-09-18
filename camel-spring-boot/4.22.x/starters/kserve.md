@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # KServe
 
 Provide access to AI model servers with the KServe standard to run inference with remote models

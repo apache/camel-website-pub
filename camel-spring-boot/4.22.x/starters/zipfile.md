@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Zip File
 
 Compression and decompress streams using java.util.zip.Zip\*Stream

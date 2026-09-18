@@ -1,5 +1,3 @@
-User manual
-
 # camel get route-controller
 
 List status of route controller

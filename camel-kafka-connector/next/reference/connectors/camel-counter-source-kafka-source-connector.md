@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-counter-source-kafka-connector source configuration
 
 Connector Description: Generates sequential number events starting from a configurable value, incrementing by a specified step. Useful for testing, scheduled tasks, or creating ordered event sequences.

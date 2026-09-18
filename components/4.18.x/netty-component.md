@@ -1,5 +1,3 @@
-Camel Components
-
 # Netty
 
 **Since Camel 2.14**

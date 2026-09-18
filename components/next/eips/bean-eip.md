@@ -1,5 +1,3 @@
-Camel Components
-
 # Bean
 
 The Bean EIP is used for invoking a method on a bean, and the returned value is the new message body.

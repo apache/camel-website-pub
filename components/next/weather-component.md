@@ -1,5 +1,3 @@
-Camel Components
-
 # Weather
 
 **Since Camel 2.12**

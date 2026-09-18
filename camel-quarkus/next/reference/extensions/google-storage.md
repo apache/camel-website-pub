@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Google Storage
 
 JVM since2.0.0 Native since2.0.0

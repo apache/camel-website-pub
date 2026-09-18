@@ -1,5 +1,3 @@
-User manual
-
 # camel top context
 
 Top status of Camel integrations

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # LRA
 
 JVM since1.2.0 Native since1.8.0

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Hazelcast Instance
 
 Consume join/leave events of a cache instance in a Hazelcast cluster.

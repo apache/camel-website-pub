@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![throttle action](_images/kamelets/throttle-action.svg) Throttle Action
 
 **Provided by: "Apache Software Foundation"**

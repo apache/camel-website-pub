@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # Archetypes
 
 In camel-kafka-connector we provide the camel-kafka-connector-extensible-archetype for extending the features of a connector and make it extensible.

@@ -1,5 +1,3 @@
-Camel Components
-
 # MVEL
 
 **Since Camel 2.12**

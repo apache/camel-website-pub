@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kafka sink](_images/kamelets/kafka-sink.svg) Kafka Sink
 
 **Provided by: "Apache Software Foundation"**

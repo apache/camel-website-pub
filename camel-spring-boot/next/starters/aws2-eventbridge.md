@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Eventbridge
 
 Manage AWS EventBridge cluster instances and consume events via SQS-backed polling.

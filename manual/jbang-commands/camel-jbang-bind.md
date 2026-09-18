@@ -1,5 +1,3 @@
-User manual
-
 # camel bind
 
 DEPRECATED: Bind source and sink Kamelets as a new Camel integration

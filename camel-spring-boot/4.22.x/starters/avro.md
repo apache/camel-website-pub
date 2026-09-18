@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Avro
 
 Serialize and deserialize messages using Apache Avro binary data format

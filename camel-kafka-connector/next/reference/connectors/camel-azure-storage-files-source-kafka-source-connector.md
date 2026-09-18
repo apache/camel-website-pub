@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-storage-files-source-kafka-connector source configuration
 
 Connector Description: Consume files from Azure Storage File Shares.

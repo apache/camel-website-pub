@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # OpenStack Cinder
 
 Access data in OpenStack Cinder block storage.

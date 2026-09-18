@@ -1,5 +1,3 @@
-Camel K
-
 # Knative Service Trait
 
 The Knative Service trait allows configuring options when running the Integration as a Knative service, instead of a standard Kubernetes Deployment.

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![crypto encrypt action](_images/kamelets/crypto-encrypt-action.svg) Crypto Encrypt Action
 
 **Provided by: "Apache Software Foundation"**

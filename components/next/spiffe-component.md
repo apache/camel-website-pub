@@ -1,5 +1,3 @@
-Camel Components
-
 # SPIFFE
 
 **Since Camel 4.23**

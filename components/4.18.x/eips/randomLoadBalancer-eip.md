@@ -1,5 +1,3 @@
-Camel Components
-
 # Random Load Balancer
 
 Random mode for the [Load Balancer](loadBalance-eip.md) EIP.

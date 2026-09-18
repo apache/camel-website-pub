@@ -1,5 +1,3 @@
-Camel Components
-
 # Google Calendar Stream
 
 **Since Camel 2.23**

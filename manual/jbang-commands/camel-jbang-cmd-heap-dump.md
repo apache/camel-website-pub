@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd heap-dump
 
 Write a heap dump (.hprof) file for deep memory analysis

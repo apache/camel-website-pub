@@ -1,5 +1,3 @@
-Camel Components
-
 # XSLT Saxon
 
 **Since Camel 3.0**

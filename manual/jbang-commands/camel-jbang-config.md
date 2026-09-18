@@ -1,5 +1,3 @@
-User manual
-
 # camel config
 
 Get and set user configuration values

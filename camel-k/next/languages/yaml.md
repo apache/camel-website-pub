@@ -1,5 +1,3 @@
-Camel K
-
 # Writing Integrations in YAML
 
 ## Defining a route

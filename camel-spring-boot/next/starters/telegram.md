@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Telegram
 
 Send and receive messages using the Telegram Bot API.

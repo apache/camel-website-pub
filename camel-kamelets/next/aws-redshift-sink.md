@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws redshift sink](_images/kamelets/aws-redshift-sink.svg) AWS Redshift Sink
 
 **Provided by: "Apache Software Foundation"**

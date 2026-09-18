@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS XRay
 
 > **Warning**

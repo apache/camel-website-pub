@@ -1,5 +1,3 @@
-User manual
-
 # REST DSL
 
 Apache Camel offers a REST styled DSL.

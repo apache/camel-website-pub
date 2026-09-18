@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # LangChain4j Tools
 
 LangChain4j Tools and Function Calling Features

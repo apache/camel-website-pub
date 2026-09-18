@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kafka apicurio registry not secured sink](_images/kamelets/kafka-apicurio-registry-not-secured-sink.svg) Kafka Not Secured with Apicurio Registry Sink
 
 **Provided by: "Apache Software Foundation"**

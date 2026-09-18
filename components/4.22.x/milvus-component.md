@@ -1,5 +1,3 @@
-Camel Components
-
 # Milvus
 
 **Since Camel 4.5**

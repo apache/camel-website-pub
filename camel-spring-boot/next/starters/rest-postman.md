@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # REST Postman
 
 To call and expose REST services using a Postman Collection as contract.

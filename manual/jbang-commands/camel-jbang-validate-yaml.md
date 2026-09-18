@@ -1,5 +1,3 @@
-User manual
-
 # camel validate yaml
 
 Parse and validate YAML routes against the Camel YAML DSL schema.

@@ -1,5 +1,3 @@
-User manual
-
 # camel dependency runtime
 
 Display Camel runtime and version for given Maven project

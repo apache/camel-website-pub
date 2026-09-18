@@ -1,5 +1,3 @@
-Camel Components
-
 # Micrometer Observability 2
 
 **Since Camel 4.15**

@@ -1,5 +1,3 @@
-Camel Components
-
 # JSON Schema Validator
 
 **Since Camel 2.20**

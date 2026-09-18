@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![snmp source](_images/kamelets/snmp-source.svg) SNMP Source
 
 **Provided by: "Apache Software Foundation"**

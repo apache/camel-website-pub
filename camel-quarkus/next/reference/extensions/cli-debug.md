@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # CLI Debug
 
 JVM since3.31.0 Nativeunsupported

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-ddb-sink-kafka-connector sink configuration
 
 Connector Description: Send data to Amazon DynamoDB. The sent data inserts, updates, or deletes an item on the specified AWS DynamoDB table.

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jms amqp 10 sink](_images/kamelets/jms-amqp-10-sink.svg) JMS - AMQP 1.0 Sink
 
 **Provided by: "Apache Software Foundation"**

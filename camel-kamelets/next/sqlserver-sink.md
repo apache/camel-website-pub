@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![sqlserver sink](_images/kamelets/sqlserver-sink.svg) Microsoft SQL Server Sink
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-User manual
-
 # camel infra stop
 
 Shuts down running external services

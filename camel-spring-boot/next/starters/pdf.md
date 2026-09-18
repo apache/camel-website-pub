@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # PDF
 
 Create, modify or extract content from PDF documents.

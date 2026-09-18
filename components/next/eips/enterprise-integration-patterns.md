@@ -1,5 +1,3 @@
-Camel Components
-
 # EIPs
 
 Camel supports most of the [Enterprise Integration Patterns](http://www.eaipatterns.com/toc.md) from the excellent book by Gregor Hohpe and Bobby Woolf.

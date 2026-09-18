@@ -1,5 +1,3 @@
-Camel Components
-
 # OPA
 
 **Since Camel 4.23**

@@ -1,5 +1,3 @@
-Camel Components
-
 # IBM Watson Discovery
 
 **Since Camel 4.16**

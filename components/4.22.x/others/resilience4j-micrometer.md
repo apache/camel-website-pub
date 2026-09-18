@@ -1,5 +1,3 @@
-Camel Components
-
 # Resilience4j Micrometer
 
 **Since Camel 4.15**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # LZF Deflate Compression
 
 Compress and decompress streams using LZF deflate algorithm

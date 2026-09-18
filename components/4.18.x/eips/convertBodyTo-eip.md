@@ -1,5 +1,3 @@
-Camel Components
-
 # Convert Body To
 
 The ConvertBodyTo EIP allows you to transform the message body to a different type.

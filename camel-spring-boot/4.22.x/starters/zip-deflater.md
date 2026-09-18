@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # GZip Deflater
 
 Compress and decompress messages using java.util.zip.GZIP\*Stream

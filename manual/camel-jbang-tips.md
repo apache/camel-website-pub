@@ -1,5 +1,3 @@
-User manual
-
 # Camel CLI - Tips and Recipes
 
 A collection of productivity shortcuts and advanced techniques for working with the Camel CLI.

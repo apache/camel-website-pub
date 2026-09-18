@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Azure storage datalake service
 
 JVM since1.8.0 Native since3.24.0

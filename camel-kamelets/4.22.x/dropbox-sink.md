@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![dropbox sink](_images/kamelets/dropbox-sink.svg) Dropbox Sink
 
 **Provided by: "Apache Software Foundation"**

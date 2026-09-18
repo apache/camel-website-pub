@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS CloudWatch
 
 Sending metrics to AWS CloudWatch.

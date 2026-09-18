@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Elastic Kubernetes Service (EKS)
 
 Manage AWS EKS cluster instances.

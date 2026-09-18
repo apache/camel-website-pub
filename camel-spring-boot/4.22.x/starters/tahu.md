@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Tahu Edge Node / Device
 
 Sparkplug B Edge Node and Device support over MQTT using Eclipse Tahu

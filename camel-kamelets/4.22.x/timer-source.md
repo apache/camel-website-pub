@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![timer source](_images/kamelets/timer-source.svg) Timer Source
 
 **Provided by: "Apache Software Foundation"**

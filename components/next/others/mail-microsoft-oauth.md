@@ -1,5 +1,3 @@
-Camel Components
-
 # Mail Microsoft Oauth
 
 **Since Camel 3.18.4**

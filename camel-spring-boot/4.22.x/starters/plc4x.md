@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # PLC4X
 
 Read and write to PLC devices

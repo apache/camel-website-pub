@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Camel components supported on Quarkus
 
 There are 312 components (21 deprecated, 57 JVM only)

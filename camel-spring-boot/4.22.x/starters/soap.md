@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # SOAP
 
 Marshal Java objects to SOAP messages and back

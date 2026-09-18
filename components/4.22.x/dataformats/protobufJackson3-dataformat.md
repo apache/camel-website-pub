@@ -1,5 +1,3 @@
-Camel Components
-
 # Protobuf Jackson 3
 
 **Since Camel 4.19**

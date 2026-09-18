@@ -1,5 +1,3 @@
-User manual
-
 # Languages
 
 To support flexible and powerful [Enterprise Integration Patterns](../components/4.22.x/eips/enterprise-integration-patterns.md), Camel supports various Languages to create an [Expression](expression.md) or [Predicate](predicate.md) within the [Routes](routes.md) and [DSL](dsl.md)..

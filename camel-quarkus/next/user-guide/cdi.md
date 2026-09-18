@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Contexts and Dependency Injection (CDI) in Camel Quarkus
 
 CDI plays a central role in Quarkus and Camel Quarkus offers a first class support for it too.

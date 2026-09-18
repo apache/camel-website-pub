@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Spring Redis
 
 JVM since3.6.0 Nativeunsupported

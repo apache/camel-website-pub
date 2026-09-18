@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![caffeine action](_images/kamelets/caffeine-action.svg) Caffeine Action
 
 **Provided by: "Apache Software Foundation"**

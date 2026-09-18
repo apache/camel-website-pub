@@ -1,5 +1,3 @@
-Camel Components
-
 # Atom
 
 **Since Camel 1.2**

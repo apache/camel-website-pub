@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # File
 
 Read and write files.

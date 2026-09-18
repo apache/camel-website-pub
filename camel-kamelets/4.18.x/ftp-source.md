@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![ftp source](_images/kamelets/ftp-source.svg) FTP Source
 
 **Provided by: "Apache Software Foundation"**

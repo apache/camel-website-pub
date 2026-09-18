@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Jactl
 
 Evaluates a Jactl script

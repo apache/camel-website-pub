@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Kudu
 
 Interact with Apache Kudu, a free and open source column-oriented data store of the Apache Hadoop ecosystem.

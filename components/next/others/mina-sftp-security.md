@@ -1,5 +1,3 @@
-Camel Components
-
 # MINA SFTP SSH Security
 
 [Back to MINA SFTP Component](../mina-sftp-component.md)

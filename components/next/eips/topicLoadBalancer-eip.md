@@ -1,5 +1,3 @@
-Camel Components
-
 # Topic Load Balancer
 
 Topic mode for the [Load Balancer](loadBalance-eip.md) EIP. With this policy, then all destinations are selected.

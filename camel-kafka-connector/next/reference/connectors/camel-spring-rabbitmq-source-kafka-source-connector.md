@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-spring-rabbitmq-source-kafka-connector source configuration
 
 Connector Description: Receive data from a RabbitMQ Broker.

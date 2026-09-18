@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Micrometer
 
 Collect various metrics directly from Camel routes using the Micrometer library.

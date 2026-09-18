@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # Security Model
 
 This page documents the Camel Kafka Connector (CKC) security model: who is trusted, where the trust boundaries sit, what counts as a CKC vulnerability, what is inherited from Apache Camel, and what is expected of the Kafka Connect operator. It is the reference used by the Apache Camel PMC when triaging security reports against this repository and by the project when deciding whether a behaviour should be hardened in CKC, fixed upstream in Camel, or addressed by the deployment.

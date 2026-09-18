@@ -1,5 +1,3 @@
-Camel Components
-
 # Metrics
 
 **Since Camel 2.14**

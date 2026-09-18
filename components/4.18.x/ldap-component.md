@@ -1,5 +1,3 @@
-Camel Components
-
 # LDAP
 
 **Since Camel 1.5**

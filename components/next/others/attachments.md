@@ -1,5 +1,3 @@
-Camel Components
-
 # Attachments
 
 **Since Camel 3.0**

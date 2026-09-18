@@ -1,5 +1,3 @@
-User manual
-
 # Camel CLI - Configuration
 
 This page covers configuring the Camel CLI — available options, configuration commands, and how to set up your environment.

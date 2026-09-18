@@ -1,5 +1,3 @@
-Camel Components
-
 # IRC
 
 **Since Camel 1.1**

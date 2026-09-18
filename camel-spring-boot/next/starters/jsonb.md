@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JSON JSON-B
 
 Marshal POJOs to JSON and back using JSON-B.

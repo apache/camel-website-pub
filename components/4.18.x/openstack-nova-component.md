@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenStack Nova
 
 **Since Camel 2.19**

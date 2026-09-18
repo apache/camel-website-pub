@@ -1,5 +1,3 @@
-Camel Components
-
 # Knative Http
 
 **Since Camel 3.15**

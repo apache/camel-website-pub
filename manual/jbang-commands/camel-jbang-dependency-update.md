@@ -1,5 +1,3 @@
-User manual
-
 # camel dependency update
 
 Updates dependencies in Maven pom.xml or Java source files (JBang style)

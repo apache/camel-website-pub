@@ -1,5 +1,3 @@
-Camel Components
-
 # Message
 
 Camel supports the [Message](http://www.enterpriseintegrationpatterns.com/Message.md) from the [EIP patterns](enterprise-integration-patterns.md) using the [Message](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Message.md) interface.

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-cxfrs-kafka-connector source configuration
 
 Connector Description: Expose JAX-RS REST services using Apache CXF or connect to external REST services using CXF REST client.

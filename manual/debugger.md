@@ -1,5 +1,3 @@
-User manual
-
 # Debugger
 
 The Camel Debugger is intended for third party tooling to make it possible to debug routes, trace messages and to use breakpoints with the EIP patterns in the Camel routes.

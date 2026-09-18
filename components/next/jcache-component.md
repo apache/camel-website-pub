@@ -1,5 +1,3 @@
-Camel Components
-
 # JCache
 
 **Since Camel 2.17**

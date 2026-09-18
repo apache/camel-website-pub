@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS S3 Storage Service
 
 **Since Camel 3.2**

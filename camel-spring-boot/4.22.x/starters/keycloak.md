@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Keycloak
 
 Manage Keycloak instances via Admin API.

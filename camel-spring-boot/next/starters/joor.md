@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Java
 
 Evaluates a Java (Java compiled once at runtime) expression

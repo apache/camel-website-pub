@@ -1,5 +1,3 @@
-Camel Components
-
 # Servlet
 
 **Since Camel 2.0**

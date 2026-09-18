@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # IBM watsonx.data
 
 Interact with IBM watsonx.data lakehouse for catalog, schema, table, and engine management.

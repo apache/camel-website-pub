@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![azure storage blob changefeed source](_images/kamelets/azure-storage-blob-changefeed-source.svg) Azure Storage Blob Changefeed Source
 
 **Provided by: "Apache Software Foundation"**

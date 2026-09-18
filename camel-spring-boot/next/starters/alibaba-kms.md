@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Alibaba Key Management Service (KMS)
 
 Encrypt and decrypt data using Alibaba Cloud Key Management Service (KMS).

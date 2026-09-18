@@ -1,5 +1,3 @@
-Camel Components
-
 # Freemarker
 
 **Since Camel 2.10**

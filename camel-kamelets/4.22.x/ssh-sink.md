@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![ssh sink](_images/kamelets/ssh-sink.svg) SSH Sink
 
 **Provided by: "Apache Software Foundation"**

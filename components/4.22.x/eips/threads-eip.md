@@ -1,5 +1,3 @@
-Camel Components
-
 # Threads
 
 How can I decouple the continued routing of a message from the current thread?

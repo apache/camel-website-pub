@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Alibaba EventBridge
 
 Publish events to Alibaba Cloud EventBridge.

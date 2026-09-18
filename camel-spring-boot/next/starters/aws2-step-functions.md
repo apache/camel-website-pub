@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS StepFunctions
 
 Manage and invoke AWS Step functions.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Test JUnit5
 
 **Since Camel 3.0**

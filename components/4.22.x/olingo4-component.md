@@ -1,5 +1,3 @@
-Camel Components
-
 # Olingo4
 
 > **Warning**

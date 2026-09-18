@@ -1,5 +1,3 @@
-Camel Components
-
 # Micrometer Prometheus
 
 **Since Camel 4.3**

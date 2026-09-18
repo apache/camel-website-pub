@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Alibaba Object Storage Service (OSS)
 
 Alibaba Cloud Object Storage Service (OSS) component

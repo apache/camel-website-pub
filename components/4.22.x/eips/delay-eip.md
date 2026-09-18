@@ -1,5 +1,3 @@
-Camel Components
-
 # Delay
 
 The Delay EIP is used for delaying messages during routing.

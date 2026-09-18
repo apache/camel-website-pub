@@ -1,5 +1,3 @@
-Camel Components
-
 # Hazelcast
 
 **Since Camel 2.7**

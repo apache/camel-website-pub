@@ -1,5 +1,3 @@
-Camel Components
-
 # AI Tool
 
 **Since Camel 4.22**

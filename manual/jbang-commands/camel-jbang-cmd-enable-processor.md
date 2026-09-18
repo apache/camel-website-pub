@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd enable-processor
 
 Enable Camel processor

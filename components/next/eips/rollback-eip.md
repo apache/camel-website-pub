@@ -1,5 +1,3 @@
-Camel Components
-
 # Rollback
 
 The Rollback EIP is used for marking an [Exchange](../../../manual/exchange.md) to rollback and stop continue routing the message.

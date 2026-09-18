@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jira oauth source](_images/kamelets/jira-oauth-source.svg) Jira oauth Source
 
 **Provided by: "Apache Software Foundation"**

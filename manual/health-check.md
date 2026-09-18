@@ -1,5 +1,3 @@
-User manual
-
 # Health Checks
 
 Camel provides support to probe the state of an integration via a pluggable Health Check strategy based on the following concepts:

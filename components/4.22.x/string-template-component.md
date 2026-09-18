@@ -1,5 +1,3 @@
-Camel Components
-
 # String Template
 
 **Since Camel 1.2**

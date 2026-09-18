@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Security Token Service (STS)
 
 Manage AWS STS cluster instances.

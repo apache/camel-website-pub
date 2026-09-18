@@ -1,5 +1,3 @@
-User manual
-
 # camel get sql-trace
 
 Get SQL query trace data

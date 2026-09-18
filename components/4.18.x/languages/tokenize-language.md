@@ -1,5 +1,3 @@
-Camel Components
-
 # Tokenize
 
 **Since Camel 2.0**

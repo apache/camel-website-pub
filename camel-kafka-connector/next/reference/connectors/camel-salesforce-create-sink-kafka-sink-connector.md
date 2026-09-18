@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-salesforce-create-sink-kafka-connector sink configuration
 
 Connector Description: Create an object in Salesforce.

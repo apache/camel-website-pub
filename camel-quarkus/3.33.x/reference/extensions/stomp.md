@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Stomp
 
 JVM since1.1.0 Nativeunsupported ⚠️Deprecated

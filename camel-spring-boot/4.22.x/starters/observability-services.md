@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Observability Services
 
 ## Maven coordinates

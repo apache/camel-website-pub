@@ -1,5 +1,3 @@
-Camel Components
-
 # Simple - Built-in Operators
 
 [Back to Simple Language](simple-language.md)

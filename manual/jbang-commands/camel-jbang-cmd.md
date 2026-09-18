@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd
 
 Performs commands in the running Camel integrations, such as start/stop route, or change logging levels.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Grok
 
 **Since Camel 3.0**

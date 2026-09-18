@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Tar File
 
 JVM since0.3.0 Native since0.3.0

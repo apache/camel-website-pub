@@ -1,5 +1,3 @@
-Camel Components
-
 # Ignite Queues
 
 **Since Camel 2.17**

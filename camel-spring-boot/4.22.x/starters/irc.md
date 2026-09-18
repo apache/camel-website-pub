@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # IRC
 
 Send and receive messages to/from an IRC chat.

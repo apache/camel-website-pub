@@ -1,5 +1,3 @@
-User manual
-
 # camel get metric
 
 Get metrics (micrometer) of running Camel integrations

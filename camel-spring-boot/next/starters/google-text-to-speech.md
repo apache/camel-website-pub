@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Google Cloud Text To Speech
 
 Synthesize speech from text using the Google Cloud Text-to-Speech API

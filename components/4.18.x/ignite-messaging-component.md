@@ -1,5 +1,3 @@
-Camel Components
-
 # Ignite Messaging
 
 **Since Camel 2.17**

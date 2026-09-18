@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Eventbridge
 
 **Since Camel 3.6**

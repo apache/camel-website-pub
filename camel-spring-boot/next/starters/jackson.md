@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JSON Jackson
 
 Marshal POJOs to JSON and back using Jackson.

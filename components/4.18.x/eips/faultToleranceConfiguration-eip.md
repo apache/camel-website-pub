@@ -1,5 +1,3 @@
-Camel Components
-
 # Fault Tolerance Configuration
 
 This page documents all the specific options for the [Fault Tolerance](fault-tolerance-eip.md) EIP.

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kafka batch apicurio registry source](_images/kamelets/kafka-batch-apicurio-registry-source.svg) Kafka Batch with Apicurio Registry secured with Keycloak Source
 
 **Provided by: "Apache Software Foundation"**

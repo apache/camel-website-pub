@@ -1,5 +1,3 @@
-Camel Components
-
 # PQC Algorithms
 
 **Since Camel 4.12**

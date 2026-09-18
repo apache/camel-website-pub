@@ -1,5 +1,3 @@
-Camel Components
-
 # Solr
 
 **Since Camel 4.8**

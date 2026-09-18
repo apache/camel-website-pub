@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-telegram-source-kafka-connector source configuration
 
 Connector Description: Receive all messages that people send to your Telegram bot.

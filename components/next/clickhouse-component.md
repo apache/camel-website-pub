@@ -1,5 +1,3 @@
-Camel Components
-
 # ClickHouse
 
 **Since Camel 4.22**

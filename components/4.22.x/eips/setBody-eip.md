@@ -1,5 +1,3 @@
-Camel Components
-
 # Set Body
 
 Camel supports the [Message Translator](http://www.enterpriseintegrationpatterns.com/MessageTranslator.md) from the [EIP patterns](enterprise-integration-patterns.md).

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![twitter directmessage source](_images/kamelets/twitter-directmessage-source.svg) Twitter Direct Message Source
 
 **Provided by: "Apache Software Foundation"**

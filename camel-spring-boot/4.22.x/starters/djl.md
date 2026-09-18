@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Deep Java Library
 
 Infer Deep Learning models from message exchanges data using Deep Java Library (DJL).

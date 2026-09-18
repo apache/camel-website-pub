@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-jms-ibm-mq-sink-kafka-connector sink configuration
 
 Connector Description: A Kamelet that can produce events to an IBM MQ message queue using JMS.

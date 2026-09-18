@@ -1,5 +1,3 @@
-Camel Components
-
 # TensorFlow Serving
 
 **Since Camel 4.10**

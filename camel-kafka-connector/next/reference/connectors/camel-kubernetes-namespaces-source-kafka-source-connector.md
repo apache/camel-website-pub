@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-kubernetes-namespaces-source-kafka-connector source configuration
 
 Connector Description: Consume Events from Kubernetes Namespaces

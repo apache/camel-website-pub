@@ -1,5 +1,3 @@
-Camel K
-
 # Builder Trait
 
 The builder trait is internally used to determine the best strategy to build and configure IntegrationKits.

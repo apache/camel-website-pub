@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws bedrock text sink](_images/kamelets/aws-bedrock-text-sink.svg) AWS Bedrock Text Sink
 
 **Provided by: "Apache Software Foundation"**

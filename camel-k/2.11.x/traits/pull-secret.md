@@ -1,5 +1,3 @@
-Camel K
-
 # Pull Secret Trait
 
 The Pull Secret trait sets a pull secret on the pod to allow Kubernetes to retrieve the container image from an external registry.

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![ibm cos source](_images/kamelets/ibm-cos-source.svg) IBM Cloud Object Storage Source
 
 **Provided by: "Apache Software Foundation"**

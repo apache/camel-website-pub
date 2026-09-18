@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # langChain4j Chat
 
 JVM since3.11.0 Native since3.12.0

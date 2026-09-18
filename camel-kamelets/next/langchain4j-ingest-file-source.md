@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![langchain4j ingest file source](_images/kamelets/langchain4j-ingest-file-source.svg) LangChain4j Ingest File Source
 
 **Provided by: "Apache Software Foundation"**

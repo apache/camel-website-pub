@@ -1,5 +1,3 @@
-User manual
-
 # JMX
 
 Camel has optional support for JMX management, which is part of the `camel-management` and `camel-management-api` JARs.

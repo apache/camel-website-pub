@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Zendesk
 
 Manage Zendesk tickets, users, organizations, etc.

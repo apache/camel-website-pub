@@ -1,5 +1,3 @@
-Camel K
-
 # Quarkus Trait
 
 The Quarkus trait configures the Quarkus runtime.

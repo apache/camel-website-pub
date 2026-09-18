@@ -1,5 +1,3 @@
-Camel Components
-
 # Test Spring JUnit5
 
 **Since Camel 3.0**

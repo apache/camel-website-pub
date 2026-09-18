@@ -1,5 +1,3 @@
-User manual
-
 # CamelContext Auto Configuration
 
 The [CamelContext](camelcontext.md) is autoconfigured when running Camel with either [Camel Main](../components/4.22.x/others/main.md), Camel Spring Boot, Camel Quarkus.

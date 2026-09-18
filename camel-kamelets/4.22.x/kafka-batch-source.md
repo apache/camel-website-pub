@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kafka batch source](_images/kamelets/kafka-batch-source.svg) Kafka Batch Source
 
 **Provided by: "Apache Software Foundation"**

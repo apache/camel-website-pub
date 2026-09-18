@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Pulsar
 
 Send and receive messages from/to Apache Pulsar messaging system.

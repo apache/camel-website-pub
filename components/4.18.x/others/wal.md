@@ -1,5 +1,3 @@
-Camel Components
-
 # Write Ahead Log Strategy for Resume API
 
 **Since Camel 3.20**

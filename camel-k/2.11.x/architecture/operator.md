@@ -1,5 +1,3 @@
-Camel K
-
 # Operator
 
 ![overview](../_images/architecture/camel-k-operator.jpg)

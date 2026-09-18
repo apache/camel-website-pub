@@ -1,5 +1,3 @@
-Camel Components
-
 # MINA SFTP Authentication
 
 [Back to MINA SFTP Component](../mina-sftp-component.md)

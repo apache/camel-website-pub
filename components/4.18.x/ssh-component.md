@@ -1,5 +1,3 @@
-Camel Components
-
 # SSH
 
 **Since Camel 2.10**

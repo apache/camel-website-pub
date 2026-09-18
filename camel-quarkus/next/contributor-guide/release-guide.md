@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Apache Camel Quarkus release process
 
 > **Note**

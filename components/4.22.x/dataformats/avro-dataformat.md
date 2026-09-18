@@ -1,5 +1,3 @@
-Camel Components
-
 # Avro
 
 **Since Camel 2.14**

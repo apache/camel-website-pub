@@ -1,5 +1,3 @@
-Camel Components
-
 # Hazelcast Ringbuffer
 
 **Since Camel 2.16**

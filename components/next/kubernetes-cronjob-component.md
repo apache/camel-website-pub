@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes Cronjob
 
 **Since Camel 4.3**

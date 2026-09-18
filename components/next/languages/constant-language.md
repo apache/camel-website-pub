@@ -1,5 +1,3 @@
-Camel Components
-
 # Constant
 
 **Since Camel 1.5**

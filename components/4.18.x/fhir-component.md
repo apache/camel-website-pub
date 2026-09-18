@@ -1,5 +1,3 @@
-Camel Components
-
 # FHIR
 
 **Since Camel 2.23**

@@ -1,5 +1,3 @@
-Camel Components
-
 # Kamelet
 
 Kamelets (Kamel route snippets) allow users to connect to external systems via a simplified interface, hiding all the low-level details about how those connections are implemented.

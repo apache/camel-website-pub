@@ -1,5 +1,3 @@
-Camel Components
-
 # REST OpenApi
 
 **Since Camel 3.1**

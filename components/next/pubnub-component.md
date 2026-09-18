@@ -1,5 +1,3 @@
-Camel Components
-
 # PubNub
 
 **Since Camel 2.19**

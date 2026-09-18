@@ -1,5 +1,3 @@
-Camel Components
-
 # Reactive Executor Tomcat
 
 > **Warning**

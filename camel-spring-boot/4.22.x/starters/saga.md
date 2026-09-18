@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Saga
 
 Execute custom actions within a route using the Saga EIP.

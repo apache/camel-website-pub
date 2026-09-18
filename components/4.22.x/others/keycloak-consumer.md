@@ -1,5 +1,3 @@
-Camel Components
-
 # Keycloak Consumer Operations
 
 The Keycloak consumer allows you to poll and consume events from a Keycloak instance. This is useful for monitoring user activities, admin actions, and implementing event-driven workflows based on Keycloak events.

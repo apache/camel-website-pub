@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure Event Grid
 
 **Since Camel 4.17**

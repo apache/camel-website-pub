@@ -1,5 +1,3 @@
-Camel Components
-
 # Google Sheets Stream
 
 **Since Camel 2.23**

@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Comprehend
 
 **Since Camel 4.18**

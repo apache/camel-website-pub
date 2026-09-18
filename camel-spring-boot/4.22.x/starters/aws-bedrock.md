@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Bedrock
 
 Invoke Model of AWS Bedrock service.

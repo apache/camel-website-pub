@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # CM SMS Gateway
 
 Send SMS messages via CM SMS Gateway.

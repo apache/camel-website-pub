@@ -91,7 +91,7 @@ git checkout camel-4.22.1
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (84)
+### Bug (85)
 
 [CAMEL-24776](https://issues.apache.org/jira/browse/CAMEL-24776)
 
@@ -412,6 +412,10 @@ boolean zen not working with logical operator
 [CAMEL-24375](https://issues.apache.org/jira/browse/CAMEL-24375)
 
 parseDuration should handle plain millis value without relying on type converter
+
+[CAMEL-24371](https://issues.apache.org/jira/browse/CAMEL-24371)
+
+camel-a2a - fix WebhookUrlValidator address classification and host matching
 
 [CAMEL-24350](https://issues.apache.org/jira/browse/CAMEL-24350)
 

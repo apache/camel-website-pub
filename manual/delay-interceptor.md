@@ -1,5 +1,3 @@
-User manual
-
 # Delayer
 
 The Delayer is used for slowing processing of messages.

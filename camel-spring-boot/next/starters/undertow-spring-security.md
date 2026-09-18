@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Undertow Spring Security
 
 Spring Boot auto-configuration for Camel Undertow with Spring Security.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Huawei Distributed Message Service (DMS)
 
 **Since Camel 3.12**

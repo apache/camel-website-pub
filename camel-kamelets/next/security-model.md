@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # Security Model
 
 This page documents the security model of the **Apache Camel Kamelet Catalog**: who is trusted, where the trust boundaries sit, what counts as a catalog vulnerability, and what is left to the route author and the deployment operator. It is the reference used by the Apache Camel PMC when triaging security reports against the Kamelet Catalog and when deciding whether a behaviour should be hardened in a Kamelet template or addressed by the deployment.

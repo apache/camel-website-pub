@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Timer
 
 Generate messages in specified intervals using java.util.Timer.

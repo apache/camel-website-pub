@@ -1,5 +1,3 @@
-Camel Components
-
 # Google Mail
 
 **Since Camel 2.15**

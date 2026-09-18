@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-slack-sink-kafka-connector sink configuration
 
 Connector Description: Send messages to a Slack channel.

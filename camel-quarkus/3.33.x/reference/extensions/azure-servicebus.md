@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Azure ServiceBus
 
 JVM since2.8.0 Native since3.19.0

@@ -1,5 +1,3 @@
-Camel Components
-
 # uniVocity CSV
 
 **Since Camel 2.15**

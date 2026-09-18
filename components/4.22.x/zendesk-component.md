@@ -1,5 +1,3 @@
-Camel Components
-
 # Zendesk
 
 **Since Camel 2.19**

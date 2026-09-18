@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # OPC UA Browser
 
 Connect to OPC UA servers using the binary protocol for browsing the node tree.

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws kinesis firehose sink](_images/kamelets/aws-kinesis-firehose-sink.svg) AWS Kinesis Firehose Sink
 
 **Provided by: "Apache Software Foundation"**

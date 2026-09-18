@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Zookeeper Cluster Service
 
 Spring Boot auto-configuration for the Camel ZooKeeper Cluster Service.

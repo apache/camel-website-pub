@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AI Resource
 
 Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry.

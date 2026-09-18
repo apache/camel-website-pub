@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # IBM Secrets Manager
 
 Manage secrets in IBM Secrets Manager Service

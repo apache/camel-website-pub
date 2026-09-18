@@ -1,5 +1,3 @@
-Camel Components
-
 # Redis
 
 **Since Camel 3.5**

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Stitch
 
 JVM since1.8.0 Nativeunsupported

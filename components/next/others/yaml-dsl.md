@@ -1,5 +1,3 @@
-Camel Components
-
 # YAML DSL
 
 **Since Camel 3.9**

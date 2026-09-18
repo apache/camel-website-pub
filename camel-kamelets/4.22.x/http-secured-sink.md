@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![http secured sink](_images/kamelets/http-secured-sink.svg) Secured HTTP Sink
 
 **Provided by: "Apache Software Foundation"**

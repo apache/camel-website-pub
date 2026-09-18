@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # XSLT
 
 Transforms XML payload using an XSLT template.

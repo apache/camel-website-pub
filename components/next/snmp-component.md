@@ -1,5 +1,3 @@
-Camel Components
-
 # SNMP
 
 **Since Camel 2.1**

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-exec-sink-kafka-connector sink configuration
 
 Connector Description: Execute system commands

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-infinispan-source-kafka-connector source configuration
 
 Connector Description: Get Events from an Infinispan cache

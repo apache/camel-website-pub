@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-snowflake-source-kafka-connector source configuration
 
 Connector Description: Query data from a Snowflake Database.

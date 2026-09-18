@@ -1,5 +1,3 @@
-Camel Components
-
 # Bonita
 
 **Since Camel 2.19**

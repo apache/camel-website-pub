@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Lumberjack
 
 Receive logs messages using the Lumberjack protocol.

@@ -1,5 +1,3 @@
-User manual
-
 # JSON
 
 JSON is a [Data Format](data-format.md) to marshal and unmarshal Java objects to and from [JSON](http://www.json.org/).

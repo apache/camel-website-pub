@@ -1,5 +1,3 @@
-User manual
-
 # Security Model
 
 This page documents Apache Camel’s security model: who is trusted, where the trust boundaries sit, what counts as a framework vulnerability, and what is expected of operators and route authors. It is the reference used by the Camel PMC when triaging security reports and by the project when deciding whether a behaviour should be hardened in the framework or addressed by the deployment.

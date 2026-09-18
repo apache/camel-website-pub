@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-google-bigquery-sink-kafka-connector sink configuration
 
 Connector Description: Send data to a Google Big Query table.

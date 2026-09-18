@@ -1,5 +1,3 @@
-Camel Components
-
 # Salesforce
 
 **Since Camel 2.12**

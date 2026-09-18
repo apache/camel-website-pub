@@ -1,5 +1,3 @@
-Camel Components
-
 # Validator
 
 **Since Camel 1.1**

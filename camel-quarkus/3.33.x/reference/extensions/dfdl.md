@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # DFDL
 
 JVM since3.22.0 Nativeunsupported

@@ -1,5 +1,3 @@
-Camel Components
-
 # Ignite ID Generator
 
 **Since Camel 2.17**

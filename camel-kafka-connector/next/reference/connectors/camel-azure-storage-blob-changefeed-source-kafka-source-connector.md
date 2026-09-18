@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-storage-blob-changefeed-source-kafka-connector source configuration
 
 Connector Description: Consume events from an Azure Storage Blob change feed.

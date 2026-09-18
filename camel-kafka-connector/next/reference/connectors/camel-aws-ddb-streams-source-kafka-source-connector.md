@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-ddb-streams-source-kafka-connector source configuration
 
 Connector Description: Receive events from Amazon DynamoDB Streams.

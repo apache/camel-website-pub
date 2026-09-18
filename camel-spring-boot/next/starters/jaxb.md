@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JAXB
 
 Unmarshal XML payloads to POJOs and back using JAXB2 XML marshalling standard

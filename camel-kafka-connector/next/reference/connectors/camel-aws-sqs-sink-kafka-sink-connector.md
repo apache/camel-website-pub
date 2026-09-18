@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-sqs-sink-kafka-connector sink configuration
 
 Connector Description: Send messages to an Amazon Simple Queue Service (SQS) queue.

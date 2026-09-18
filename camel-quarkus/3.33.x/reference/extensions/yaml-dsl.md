@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # YAML DSL
 
 JVM since1.8.0 Native since1.8.0

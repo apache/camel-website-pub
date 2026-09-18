@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![azure storage files source](_images/kamelets/azure-storage-files-source.svg) Azure Storage File Source
 
 **Provided by: "Apache Software Foundation"**

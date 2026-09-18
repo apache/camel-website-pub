@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jira transition issue sink](_images/kamelets/jira-transition-issue-sink.svg) Jira Transition Issue Sink
 
 **Provided by: "Apache Software Foundation"**

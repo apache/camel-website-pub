@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-ssh-sink-kafka-connector sink configuration
 
 Connector Description: Send command through SSH session.

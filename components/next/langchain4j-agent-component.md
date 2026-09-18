@@ -1,5 +1,3 @@
-Camel Components
-
 # LangChain4j Agent
 
 **Since Camel 4.14**

@@ -1,5 +1,3 @@
-Camel Components
-
 # JavaScript
 
 **Since Camel 3.20**

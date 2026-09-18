@@ -1,5 +1,3 @@
-Camel Components
-
 # Spring AI Tools
 
 **Since Camel 4.17**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # SPIFFE
 
 Fetch and validate SPIFFE workload identity (X.509-SVID and JWT-SVID) from the SPIFFE Workload API.

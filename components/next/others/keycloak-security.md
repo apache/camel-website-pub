@@ -1,5 +1,3 @@
-Camel Components
-
 # Keycloak Security Policies
 
 The Keycloak security policy provides route-level authorization using Keycloak authentication and authorization services.

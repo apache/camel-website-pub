@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # MongoDB
 
 Perform operations on MongoDB documents and collections.

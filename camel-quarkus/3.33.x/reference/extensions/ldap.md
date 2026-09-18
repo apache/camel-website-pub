@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # LDAP
 
 JVM since1.1.0 Native since3.2.0

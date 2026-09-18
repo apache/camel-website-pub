@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jolt transformation action](_images/kamelets/jolt-transformation-action.svg) Jolt Transformation Action
 
 **Provided by: "Apache Software Foundation"**

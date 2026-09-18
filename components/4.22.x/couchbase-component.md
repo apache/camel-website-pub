@@ -1,5 +1,3 @@
-Camel Components
-
 # Couchbase
 
 **Since Camel 2.19**

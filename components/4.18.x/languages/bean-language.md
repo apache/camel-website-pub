@@ -1,5 +1,3 @@
-Camel Components
-
 # Bean Method
 
 **Since Camel 1.3**

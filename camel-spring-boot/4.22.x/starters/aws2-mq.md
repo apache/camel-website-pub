@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS MQ
 
 Send messages to AWS MQ.

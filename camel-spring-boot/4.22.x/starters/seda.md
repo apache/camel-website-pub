@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # SEDA
 
 Asynchronously call another endpoint from any Camel Context in the same JVM.

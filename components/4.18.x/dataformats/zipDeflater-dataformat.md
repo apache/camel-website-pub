@@ -1,5 +1,3 @@
-Camel Components
-
 # Zip Deflater
 
 **Since Camel 2.12**

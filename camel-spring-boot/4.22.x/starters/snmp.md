@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # SNMP
 
 Receive traps and poll SNMP (Simple Network Management Protocol) capable devices.

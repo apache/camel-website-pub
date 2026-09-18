@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![djl image to text action](_images/kamelets/djl-image-to-text-action.svg) Image-to-Text Action
 
 **Provided by: "Apache Software Foundation"**

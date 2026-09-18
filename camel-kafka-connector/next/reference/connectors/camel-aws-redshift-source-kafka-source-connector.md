@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-redshift-source-kafka-connector source configuration
 
 Connector Description: Query data from an AWS Redshift Database.

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kafka azure schema registry sink](_images/kamelets/kafka-azure-schema-registry-sink.svg) Azure Kafka through Eventhubs with Azure Schema Registry Sink
 
 **Provided by: "Apache Software Foundation"**

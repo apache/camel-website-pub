@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # QuickFix
 
 Open a Financial Interchange (FIX) session using an embedded QuickFix/J engine.

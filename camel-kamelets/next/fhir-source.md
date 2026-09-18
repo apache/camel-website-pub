@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![fhir source](_images/kamelets/fhir-source.svg) FHIR Source
 
 **Provided by: "Apache Software Foundation"**

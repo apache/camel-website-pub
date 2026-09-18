@@ -1,5 +1,3 @@
-Camel Components
-
 # Elasticsearch
 
 **Since Camel 3.19**

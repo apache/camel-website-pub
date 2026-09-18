@@ -1,5 +1,3 @@
-Camel Components
-
 # Google Sheets
 
 **Since Camel 2.23**

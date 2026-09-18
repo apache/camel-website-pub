@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Splunk HEC
 
 JVM since1.1.0 Native since3.8.0

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Printer
 
 Send print jobs to printers.

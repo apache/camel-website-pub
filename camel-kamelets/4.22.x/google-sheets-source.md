@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![google sheets source](_images/kamelets/google-sheets-source.svg) Google Sheets Source
 
 **Provided by: "Apache Software Foundation"**

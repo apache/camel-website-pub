@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Parquet File
 
 Parquet Avro serialization and de-serialization

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS DynamoDB
 
 Store and retrieve data from AWS DynamoDB.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure CosmosDB
 
 **Since Camel 3.10**

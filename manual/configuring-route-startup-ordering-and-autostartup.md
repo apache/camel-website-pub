@@ -1,5 +1,3 @@
-User manual
-
 # Configuring Routes Startup Ordering and Auto-startup
 
 Camel supports configuring two aspects:

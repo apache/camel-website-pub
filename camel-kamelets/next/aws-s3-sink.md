@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws s3 sink](_images/kamelets/aws-s3-sink.svg) AWS S3 Sink
 
 **Provided by: "Apache Software Foundation"**

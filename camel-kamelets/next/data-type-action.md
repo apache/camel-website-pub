@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![data type action](_images/kamelets/data-type-action.svg) Data Type Action
 
 **Provided by: "Apache Software Foundation"**

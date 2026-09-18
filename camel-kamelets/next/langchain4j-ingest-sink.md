@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![langchain4j ingest sink](_images/kamelets/langchain4j-ingest-sink.svg) LangChain4j Ingest Sink
 
 **Provided by: "Apache Software Foundation"**

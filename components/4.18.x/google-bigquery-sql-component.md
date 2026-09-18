@@ -1,5 +1,3 @@
-Camel Components
-
 # Google BigQuery Standard SQL
 
 **Since Camel 2.23**

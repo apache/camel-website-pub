@@ -1,5 +1,3 @@
-Camel Components
-
 # Knative
 
 **Since Camel 3.15**

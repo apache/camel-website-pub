@@ -1,5 +1,3 @@
-Camel Components
-
 # Ehcache
 
 **Since Camel 2.18**

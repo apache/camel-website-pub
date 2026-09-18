@@ -1,5 +1,3 @@
-Camel Components
-
 # PGVector
 
 **Since Camel 4.19**

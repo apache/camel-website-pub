@@ -1,5 +1,3 @@
-User manual
-
 # camel get history
 
 History of latest completed exchange

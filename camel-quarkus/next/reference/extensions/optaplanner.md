@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # OptaPlanner
 
 JVM since1.1.0 Nativeunsupported

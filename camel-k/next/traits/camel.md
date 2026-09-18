@@ -1,5 +1,3 @@
-Camel K
-
 # Camel Trait
 
 The Camel trait can be used to configure versions of Camel runtime and related libraries, it cannot be disabled.

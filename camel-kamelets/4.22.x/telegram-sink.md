@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![telegram sink](_images/kamelets/telegram-sink.svg) Telegram Sink
 
 **Provided by: "Apache Software Foundation"**

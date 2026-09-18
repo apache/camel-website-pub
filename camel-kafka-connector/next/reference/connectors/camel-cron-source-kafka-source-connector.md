@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-cron-source-kafka-connector source configuration
 
 Connector Description: Send events at specific time.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure Storage Data Lake Service
 
 **Since Camel 3.8**

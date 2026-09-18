@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Comprehend
 
 Perform natural language processing using AWS Comprehend and AWS SDK version 2.x.

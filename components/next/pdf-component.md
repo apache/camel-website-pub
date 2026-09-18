@@ -1,5 +1,3 @@
-Camel Components
-
 # PDF
 
 **Since Camel 2.16**

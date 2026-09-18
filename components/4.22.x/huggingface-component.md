@@ -1,5 +1,3 @@
-Camel Components
-
 # Hugging Face
 
 **Since Camel 4.19**

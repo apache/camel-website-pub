@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Google Vertex AI
 
 Interact with Google Cloud Vertex AI generative models.

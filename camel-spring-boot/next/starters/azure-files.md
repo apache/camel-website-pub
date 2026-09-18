@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Azure Files
 
 Send and receive files to Azure storage file share

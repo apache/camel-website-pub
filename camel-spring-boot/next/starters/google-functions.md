@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Google Cloud Functions
 
 Manage and invoke Google Cloud Functions

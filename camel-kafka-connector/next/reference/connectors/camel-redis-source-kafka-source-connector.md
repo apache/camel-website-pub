@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-redis-source-kafka-connector source configuration
 
 Connector Description: Get Events from a Redis cache.

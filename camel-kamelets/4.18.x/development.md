@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # Kamelets Developer Guide
 
 ## Introduction

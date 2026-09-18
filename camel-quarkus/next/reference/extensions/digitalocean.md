@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # DigitalOcean
 
 JVM since1.1.0 Native since2.0.0 ⚠️Deprecated

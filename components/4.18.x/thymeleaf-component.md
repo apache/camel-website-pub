@@ -1,5 +1,3 @@
-Camel Components
-
 # Thymeleaf
 
 **Since Camel 4.1**

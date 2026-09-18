@@ -1,5 +1,3 @@
-Camel Components
-
 # Event Driven Consumer
 
 Camel supports the [Event Driven Consumer](http://www.enterpriseintegrationpatterns.com/EventDrivenConsumer.md) from the [EIP patterns](enterprise-integration-patterns.md).

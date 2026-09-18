@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-solr-source-kafka-connector source configuration
 
 Connector Description: Query for documents to Solr Collection.

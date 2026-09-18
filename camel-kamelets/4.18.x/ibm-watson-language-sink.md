@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![ibm watson language sink](_images/kamelets/ibm-watson-language-sink.svg) IBM Watson Natural Language Understanding Sink
 
 **Provided by: "Apache Software Foundation"**

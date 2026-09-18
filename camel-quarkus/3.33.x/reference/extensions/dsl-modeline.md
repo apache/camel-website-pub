@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # DSL Modeline
 
 JVM since2.14.0 Nativeunsupported

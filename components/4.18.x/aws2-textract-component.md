@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Textract
 
 **Since Camel 4.15**

@@ -1,5 +1,3 @@
-Camel Components
-
 # Neo4j
 
 **Since Camel 4.10**

@@ -1,5 +1,3 @@
-User manual
-
 # camel version set
 
 Set/change current Camel version

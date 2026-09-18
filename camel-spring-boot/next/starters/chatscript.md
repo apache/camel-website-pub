@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # ChatScript
 
 Chat with a ChatScript Server.

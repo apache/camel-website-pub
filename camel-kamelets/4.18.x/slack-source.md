@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![slack source](_images/kamelets/slack-source.svg) Slack Source
 
 **Provided by: "Apache Software Foundation"**

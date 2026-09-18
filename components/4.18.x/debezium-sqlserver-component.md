@@ -1,5 +1,3 @@
-Camel Components
-
 # Debezium SQL Server Connector
 
 **Since Camel 3.0**

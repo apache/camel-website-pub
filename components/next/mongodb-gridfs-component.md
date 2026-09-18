@@ -1,5 +1,3 @@
-Camel Components
-
 # MongoDB GridFS
 
 **Since Camel 2.18**

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # AWS 2 S3 Storage Service
 
 JVM since1.0.0 Native since1.0.0

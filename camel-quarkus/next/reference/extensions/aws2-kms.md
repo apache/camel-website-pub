@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # AWS 2 Key Management Service (KMS)
 
 JVM since1.0.0 Native since1.0.0

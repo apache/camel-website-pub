@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Key Management Service (KMS)
 
 **Since Camel 3.1**

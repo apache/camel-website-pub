@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Translate
 
 Translate texts using AWS Translate and AWS SDK version 2.x.

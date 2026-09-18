@@ -1,5 +1,3 @@
-Camel Components
-
 # ClickUp
 
 **Since Camel 4.9**

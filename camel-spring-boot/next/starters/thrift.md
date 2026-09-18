@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Thrift
 
 Call and expose remote procedures (RPC) with Apache Thrift data format and serialization mechanism.

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Polly
 
 Synthesize speech using AWS Polly and AWS SDK version 2.x.

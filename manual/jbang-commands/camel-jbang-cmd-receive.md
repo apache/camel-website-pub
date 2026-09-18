@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd receive
 
 Receive and dump messages from remote endpoints

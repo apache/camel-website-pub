@@ -1,5 +1,3 @@
-Camel Components
-
 # Stomp
 
 > **Warning**

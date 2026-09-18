@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![couchbase source](_images/kamelets/couchbase-source.svg) Couchbase Source
 
 **Provided by: "Apache Software Foundation"**

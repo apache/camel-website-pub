@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Braintree
 
 Process payments using Braintree Payments.

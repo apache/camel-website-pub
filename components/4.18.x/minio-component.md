@@ -1,5 +1,3 @@
-Camel Components
-
 # Minio
 
 **Since Camel 3.5**

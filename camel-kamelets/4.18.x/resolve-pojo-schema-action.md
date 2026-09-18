@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![resolve pojo schema action](_images/kamelets/resolve-pojo-schema-action.svg) Resolve Schema Action
 
 **Provided by: "Apache Software Foundation"**

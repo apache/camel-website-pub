@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd reset-stats
 
 Reset performance statistics

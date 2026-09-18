@@ -1,5 +1,3 @@
-Camel Components
-
 # Hazelcast Atomic Number
 
 > **Warning**

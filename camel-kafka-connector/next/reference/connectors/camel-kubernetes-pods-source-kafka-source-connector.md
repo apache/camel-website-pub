@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-kubernetes-pods-source-kafka-connector source configuration
 
 Connector Description: Consume Events from Kubernetes Pods

@@ -1,5 +1,3 @@
-User manual
-
 # Exchange Pooling
 
 The routing engine keeps the state of each message, tracking the message flow, and where the messages are going next. The routing engine also handles complex tasks such as error handling, capturing metrics, and many other things. A small number of Java objects are allocated on the heap for each processing step during routing.

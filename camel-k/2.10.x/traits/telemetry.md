@@ -1,5 +1,3 @@
-Camel K
-
 # Telemetry Trait
 
 Deprecated since2.9.0

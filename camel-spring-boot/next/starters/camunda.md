@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Camunda
 
 Interact with Camunda 8 Orchestration Clusters using the Camunda Java Client.

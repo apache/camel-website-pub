@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![http secured source](_images/kamelets/http-secured-source.svg) HTTP Secured Source
 
 **Provided by: "Apache Software Foundation"**

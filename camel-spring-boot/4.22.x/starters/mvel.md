@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # MVEL
 
 Transform messages using an MVEL template.

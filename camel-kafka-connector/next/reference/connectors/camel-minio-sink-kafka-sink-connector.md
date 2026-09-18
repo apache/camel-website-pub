@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-minio-sink-kafka-connector sink configuration
 
 Connector Description: Upload data to MinIO.

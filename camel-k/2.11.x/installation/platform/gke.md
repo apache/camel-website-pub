@@ -1,5 +1,3 @@
-Camel K
-
 # Installing Camel K on Google Kubernetes Engine (GKE)
 
 This guide assumes you’ve already created a Kubernetes Engine cluster on [https://console.cloud.google.com](https://console.cloud.google.com).

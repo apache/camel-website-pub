@@ -1,5 +1,3 @@
-Camel Components
-
 # FHIR XML
 
 **Since Camel 2.21**

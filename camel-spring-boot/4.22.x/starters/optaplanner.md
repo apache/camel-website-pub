@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # OptaPlanner
 
 Solve planning problems with OptaPlanner.

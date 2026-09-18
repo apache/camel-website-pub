@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # AWS XRay
 
 JVM since1.2.0 Nativeunsupported ⚠️Deprecated

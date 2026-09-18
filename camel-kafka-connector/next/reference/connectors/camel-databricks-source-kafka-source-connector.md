@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-databricks-source-kafka-connector source configuration
 
 Connector Description: Query data from a Databricks Database. For Unity Catalog workspaces, specify catalog and schema parameters.

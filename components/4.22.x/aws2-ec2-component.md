@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Elastic Compute Cloud (EC2)
 
 **Since Camel 3.1**

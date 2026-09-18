@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Stub
 
 Stub out any physical endpoints while in development or testing.

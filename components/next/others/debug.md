@@ -1,5 +1,3 @@
-Camel Components
-
 # Debug
 
 **Since Camel 3.15**

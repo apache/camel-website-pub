@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Reactor
 
 ## Maven coordinates

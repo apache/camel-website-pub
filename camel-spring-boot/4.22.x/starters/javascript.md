@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JavaScript
 
 Evaluates a JavaScript expression

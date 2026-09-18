@@ -1,5 +1,3 @@
-User manual
-
 # camel jolokia
 
 Attach Jolokia JVM Agent to a running Camel integration

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-jdbc-kafka-connector sink configuration
 
 Connector Description: Access databases through SQL and JDBC.

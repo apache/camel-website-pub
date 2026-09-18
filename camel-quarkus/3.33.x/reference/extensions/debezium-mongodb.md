@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Debezium MongoDB Connector
 
 JVM since1.0.0 Native since1.6.0

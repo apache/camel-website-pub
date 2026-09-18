@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure ServiceBus
 
 **Since Camel 3.12**

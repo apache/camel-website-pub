@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Jetty
 
 Expose HTTP endpoints using Jetty 12.

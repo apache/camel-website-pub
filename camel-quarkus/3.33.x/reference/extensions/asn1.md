@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # ASN.1 File
 
 JVM since1.1.0 Nativeunsupported

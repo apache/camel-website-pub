@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Salesforce
 
 JVM since0.2.0 Native since0.0.2

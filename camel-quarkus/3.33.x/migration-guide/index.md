@@ -1,0 +1,46 @@
+# Camel Quarkus Migration And Upgrade Guides
+
+We do frequent releases, a release almost every month, and even though we strive to maintain backward compatibility, we may on occasion include a breaking change in the interest of the long-term evolution of the project.
+
+Listed here are guides on how to migrate between major versions and anything of significance to watch for when upgrading from minor versions.
+
+-   [Camel Quarkus 3.33.2 to Camel Quarkus 3.33.3 migration guide](3.33.3.md)
+    
+-   [Camel Quarkus 3.32.x to Camel Quarkus 3.33.0 migration guide](3.33.0.md)
+    
+-   [Camel Quarkus 3.30.x to Camel Quarkus 3.31.0 migration guide](3.31.0.md)
+    
+-   [Camel Quarkus 3.26.x to Camel Quarkus 3.27.0 migration guide](3.27.0.md)
+    
+-   [Camel Quarkus 3.25.x to Camel Quarkus 3.26.0 migration guide](3.26.0.md)
+    
+-   [Camel Quarkus 3.22.x to Camel Quarkus 3.23.0 migration guide](3.23.0.md)
+    
+-   [Camel Quarkus 3.17.x to Camel Quarkus 3.18.0 migration guide](3.18.0.md)
+    
+-   [Camel Quarkus 3.16.x to Camel Quarkus 3.17.0 migration guide](3.17.0.md)
+    
+-   [Camel Quarkus 3.14.x to Camel Quarkus 3.15.0 migration guide](3.15.0.md)
+    
+-   [Camel Quarkus 2.x to Camel Quarkus 3.2.0 migration guide](3.2.0.md)
+    
+-   [Camel Quarkus 2.10.0 to Camel Quarkus 2.11.0 migration guide](2.11.0.md)
+    
+-   [Camel Quarkus 2.9.0 to Camel Quarkus 2.10.0 migration guide](2.10.0.md)
+    
+-   [Camel Quarkus 2.7.0 to Camel Quarkus 2.8.0 migration guide](2.8.0.md)
+    
+-   [Camel Quarkus 2.6.0 to Camel Quarkus 2.7.0 migration guide](2.7.0.md)
+    
+-   [Camel Quarkus 2.5.0 to Camel Quarkus 2.6.0 migration guide](2.6.0.md)
+    
+-   [Camel Quarkus 2.1.0 to Camel Quarkus 2.2.0 migration guide](2.2.0.md)
+    
+-   [Camel Quarkus 2.0.0 to Camel Quarkus 2.1.0 migration guide](2.1.0.md)
+    
+-   [Camel Quarkus 1.x to Camel Quarkus 2.0.0 migration guide](2.0.0.md)
+    
+
+There is also a guide for Camel Spring Boot to Camel Quarkus migration:
+
+-   [Camel Spring Boot to Camel Quarkus migration](camel-spring-boot-to-camel-quarkus.md)

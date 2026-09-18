@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Neo4j
 
 Perform operations on the Neo4j Graph Database

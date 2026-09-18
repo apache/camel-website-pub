@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Springdoc
 
 Spring Boot auto-configuration for Camel Springdoc integration.

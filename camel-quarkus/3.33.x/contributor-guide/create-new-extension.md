@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Create a new extension
 
 1.  You should know [how to build](index.html#how-to-build).

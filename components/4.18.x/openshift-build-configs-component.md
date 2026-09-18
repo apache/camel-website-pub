@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenShift Build Config
 
 **Since Camel 2.17**

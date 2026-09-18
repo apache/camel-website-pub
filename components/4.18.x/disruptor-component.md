@@ -1,5 +1,3 @@
-Camel Components
-
 # Disruptor
 
 **Since Camel 2.12**

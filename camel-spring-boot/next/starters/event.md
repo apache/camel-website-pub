@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Event
 
 Subscribe to Camel internal events such as route started/stopped and exchange completed/failed.

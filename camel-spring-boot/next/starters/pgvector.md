@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # PGVector
 
 Perform operations on the PostgreSQL pgvector Vector Database.

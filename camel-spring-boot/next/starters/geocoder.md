@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Geocoder
 
 Find geocodes (latitude and longitude) for a given address or the other way round.

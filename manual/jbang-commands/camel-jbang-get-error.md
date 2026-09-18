@@ -1,5 +1,3 @@
-User manual
-
 # camel get error
 
 Get captured routing errors of Camel integrations

@@ -1,5 +1,3 @@
-User manual
-
 # Architecture
 
 The following diagram shows a high-level view of the main concepts that make up Camel’s architecture.

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # State Store
 
 Perform key-value operations against a pluggable KeyValueRepository backend.

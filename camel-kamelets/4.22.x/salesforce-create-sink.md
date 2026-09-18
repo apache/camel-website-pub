@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![salesforce create sink](_images/kamelets/salesforce-create-sink.svg) Salesforce Create Sink
 
 **Provided by: "Apache Software Foundation"**

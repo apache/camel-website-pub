@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Infinispan Cluster Service
 
 JVM since3.32.0 Native since3.32.0

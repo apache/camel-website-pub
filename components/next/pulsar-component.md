@@ -1,5 +1,3 @@
-Camel Components
-
 # Pulsar
 
 **Since Camel 2.24**

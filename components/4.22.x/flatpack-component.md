@@ -1,5 +1,3 @@
-Camel Components
-
 # Flatpack
 
 **Since Camel 1.4**

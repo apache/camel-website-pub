@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenAI - Responses API Operation
 
 [Back to OpenAI Component](../openai-component.md)

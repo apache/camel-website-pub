@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Azure Event Hubs
 
 JVM since1.7.0 Native since1.7.0

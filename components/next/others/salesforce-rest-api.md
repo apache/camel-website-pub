@@ -1,5 +1,3 @@
-Camel Components
-
 # Salesforce - REST API
 
 [Back to Salesforce Component](../salesforce-component.md)

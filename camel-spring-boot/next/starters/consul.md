@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Consul
 
 Integrate with Consul service discovery and configuration store.

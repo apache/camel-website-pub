@@ -1,5 +1,3 @@
-Camel Components
-
 # weaviate
 
 **Since Camel 4.12**

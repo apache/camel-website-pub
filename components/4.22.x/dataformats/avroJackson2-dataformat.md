@@ -1,5 +1,3 @@
-Camel Components
-
 # Avro Jackson 2
 
 **Since Camel 3.10**

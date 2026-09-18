@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Shell
 
 Camel Shell component

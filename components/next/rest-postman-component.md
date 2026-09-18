@@ -1,5 +1,3 @@
-Camel Components
-
 # REST Postman
 
 **Since Camel 4.23**

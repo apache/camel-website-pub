@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JsonPatch
 
 Transforms JSON using JSON patch (RFC 6902).

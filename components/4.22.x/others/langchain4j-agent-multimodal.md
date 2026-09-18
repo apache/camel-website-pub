@@ -1,5 +1,3 @@
-Camel Components
-
 # LangChain4j Agent - Multimodal Content Support
 
 [Back to LangChain4j Agent Component](../langchain4j-agent-component.md)

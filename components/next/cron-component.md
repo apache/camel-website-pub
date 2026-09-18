@@ -1,5 +1,3 @@
-Camel Components
-
 # Cron
 
 **Since Camel 3.1**

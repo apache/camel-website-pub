@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![google vertexai sink](_images/kamelets/google-vertexai-sink.svg) Google Vertex AI Sink
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Once
 
 JVM since3.31.0 Native since3.31.0

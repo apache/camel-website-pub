@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Hugging Face
 
 Integration with Hugging Face’s Model Hub by using the Deep Java Library (DJL) Python bridge

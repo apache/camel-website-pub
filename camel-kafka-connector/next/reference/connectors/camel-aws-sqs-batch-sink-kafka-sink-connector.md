@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-sqs-batch-sink-kafka-connector sink configuration
 
 Connector Description: Send Batch message to an AWS SQS Queue.

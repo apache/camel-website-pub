@@ -1,5 +1,3 @@
-Camel Components
-
 # Ref
 
 **Since Camel 2.8**

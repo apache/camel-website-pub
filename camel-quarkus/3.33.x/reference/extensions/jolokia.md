@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Jolokia
 
 JVM since3.19.0 Native since3.20.0

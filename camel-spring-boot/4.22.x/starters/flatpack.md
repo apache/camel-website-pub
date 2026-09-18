@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Flatpack
 
 Parse fixed width and delimited files using the FlatPack library.

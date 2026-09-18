@@ -1,5 +1,3 @@
-Camel Components
-
 # HiveMQ
 
 **Since Camel 4.23**

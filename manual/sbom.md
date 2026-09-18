@@ -1,5 +1,3 @@
-User manual
-
 # Generating SBOMs
 
 A Software Bill of Materials (SBOM) is a machine-readable inventory of every component in your software: direct dependencies, transitive dependencies, and their versions. SBOMs have become a key building block in supply chain security, enabling automated vulnerability scanning and license compliance analysis.

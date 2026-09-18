@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-secrets-manager-sink-kafka-connector sink configuration
 
 Connector Description: Create a secret in AWS Secrets Manager.

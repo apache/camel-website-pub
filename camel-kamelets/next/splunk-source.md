@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![splunk source](_images/kamelets/splunk-source.svg) Splunk Source
 
 **Provided by: "Apache Software Foundation"**

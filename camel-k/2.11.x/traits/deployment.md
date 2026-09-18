@@ -1,5 +1,3 @@
-Camel K
-
 # Deployment Trait
 
 The Deployment trait is responsible for generating the Kubernetes deployment that will make sure the integration will run in the cluster.

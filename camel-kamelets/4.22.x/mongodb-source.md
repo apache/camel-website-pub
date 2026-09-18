@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mongodb source](_images/kamelets/mongodb-source.svg) MongoDB Source
 
 **Provided by: "Apache Software Foundation"**

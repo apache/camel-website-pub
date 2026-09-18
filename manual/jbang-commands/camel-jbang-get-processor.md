@@ -1,5 +1,3 @@
-User manual
-
 # camel get processor
 
 Get status of Camel processors

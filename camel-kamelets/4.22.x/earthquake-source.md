@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![earthquake source](_images/kamelets/earthquake-source.svg) Earthquake Source
 
 **Provided by: "Apache Software Foundation"**

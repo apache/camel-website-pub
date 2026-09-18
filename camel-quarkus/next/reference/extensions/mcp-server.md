@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # MCP Server
 
 JVM since3.39.0 Native since3.39.0

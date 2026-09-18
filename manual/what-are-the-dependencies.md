@@ -1,5 +1,3 @@
-User manual
-
 # What are the dependencies?
 
 ## JDK support

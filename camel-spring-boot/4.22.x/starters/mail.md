@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # IMAP
 
 Send and receive emails using imap, pop3 and smtp protocols.

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-redis-sink-kafka-connector sink configuration
 
 Connector Description: Write object to a Redis cache.

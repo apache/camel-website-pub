@@ -1,5 +1,3 @@
-Camel Components
-
 # Simple - Advanced Features
 
 [Back to Simple Language](simple-language.md)

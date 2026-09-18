@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # ArangoDb
 
 Perform operations on ArangoDb when used as a Document Database, or as a Graph Database

@@ -1,0 +1,10 @@
+# Single Message Transformations
+
+Single Message Transforms (SMTs) is a Kafka API that provides a simple interface for manipulating records as they flow through both the source and sink side of your data pipeline. It operates on every single message in your data pipeline as it passes through the Kafka Connect connector. Single Message Transformations are applied to messages as they flow through Connect. SMTs transform inbound messages after a source connector has produced them, but before they are written to Kafka. SMTs transform outbound messages before they are sent to a sink connector. The following SMTs are available for use with Kafka Connect.
+
+In addition to the [prebuilt transformations](https://kafka.apache.org/documentation/#connect_transforms), Camel Kafka Connector provides additional SMTs:
+
+ 
+| Transform | Description |
+| --- | --- |
+| [FieldsToHeaders](fieldsToHeaders.md) | Extract fields from a kafka connect record’s value or key and copy the value in configured headers (struct + schema, map or copy the whole value/key are the supported options) |

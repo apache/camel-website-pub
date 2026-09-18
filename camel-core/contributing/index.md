@@ -1,0 +1,360 @@
+# Contributing
+
+## Contributing to Apache Camel
+
+Thank you for your interest in contributing to Apache Camel.
+
+Our community encourages and welcomes everyone to participate.
+
+The [Contributing expectations document](expectations.md) describes how to contribute and what our expectations are.
+
+## Getting in touch
+
+Apache Camel is an Apache Software Foundation project. We do all communication in the open on the project mailing lists. You can [read more on the reasoning behind this](https://www.apache.org/foundation/mailinglists.md) to get a better understanding of this.
+
+> **Note**
+> All communication is subject to the [ASF Code of Conduct](https://www.apache.org/foundation/policies/conduct.md).
+
+There are various ways of communicating with the Camel community.
+
+Subscribe to the developer’s mailing list for questions and guidance about how to contribute. To subscribe to the developer’s mailing list, you can send an e-mail to [dev-subscribe@camel.apache.org](mailto:dev-subscribe@camel.apache.org).
+
+You can check the [mailing-list](/community/mailing-list/index.md) page for more information about Camel mailing lists and information about how to subscribe to each of them.
+
+You can also reach us on the [Zulip chat](https://camel.zulipchat.com).
+
+## Reporting a bug or problem
+
+The Camel Core project uses the [Apache Foundation Jira instance](https://issues.apache.org/jira/browse/CAMEL) for tracking issues, tasks, and feature requests.
+
+When creating a ticket on our issue tracker, please try to follow these guidelines:
+
+-   Please describe the bug/issue clearly.
+    
+-   Be as specific as possible.
+    
+-   Provide as much information as you have.
+    
+-   Attach any files containing details about your problem: logs, pictures, and screenshots are welcome.
+    
+-   When reporting a bug, provide a reproducer or describe the steps to reproduce the problem.
+    
+
+### Providing a reproducer
+
+Providing a reproducer can greatly increase the chances of your request being handled quickly.
+
+There are few ways you can provide a reproducer:
+
+-   Create a JUnit test case that reproduces the problem. You can look at some of the existing [unit test cases](https://github.com/apache/camel/tree/main/core/camel-core/src/test/java/org/apache/camel) to learn about how to create one.
+    
+-   Create a sample project that reproduces the issue.
+    
+-   Provide route files, Kamelets or any other file we can run with Camel CLI.
+    
+
+#### Providing a good reproducer
+
+We appreciate all reproducers, but there are a few tips that can make us appreciate it even more!
+
+-   Reproducers provided as tests to Camel Core code base are easier for the community to work with than external applications.
+    
+    -   Make sure to check the "Making a good contribution" section below for more details.
+        
+    
+-   When an external application is required, reduce debugging friction:
+    
+    -   Use the plain Camel Core (i.e.: if it’s a problem on Camel Core, avoid creating a reproducer based on Camel Quarkus, Camel Spring Boot and others).
+        
+    -   Use Java: the Camel Core is written in Java and that’s the language the community is most familiar with.
+        
+    
+-   Reproducers using Camel CLI are also highly helpful.
+    
+
+> **Note**
+> You can easily create an external reproducer using the following command:
+>
+> ```bash
+> mvn archetype:generate -B \
+>     -DarchetypeGroupId=org.apache.camel.archetypes \
+>     -DarchetypeArtifactId=camel-archetype-java \
+>     -DarchetypeVersion=4.0.0 \
+>     -Dpackage=org.apache.camel \
+>     -DgroupId=org.apache.camel.reproducer \
+>     -DartifactId=reproducer-for-my-issue \
+>     -Dversion=1.0.0-SNAPSHOT
+> ```
+>
+> Make sure to replace the camel version in `-DarchetypeVersion=4.0.0` with the version of Camel you are reporting the bug.
+
+> **Note**
+> You will need an account to create or comment on JIRA issues. ASF JIRA does not allow self-registration. You can request an account at [ASF’s self-serve portal](https://selfserve.apache.org/jira-account.md).
+
+## Working on the documentation
+
+Documentation is extremely important to help users make the most of Apache Camel, and it’s probably the area that needs the most help!
+
+If you are interested in helping the documentation effort, whether it’s just to fix a page here or there, correct a link or even write a tutorial or improve existing documentation, please do dive in and help! Most of the documentation is managed in the same repositories as the related source code, so the process is similar to working on the code.
+
+For more details, please refer to [Improving the Documentation Guide](../../manual/improving-the-documentation.md) in the User Manual.
+
+## Working on the code
+
+We recommend forking the code from the [camel GitHub repository](https://github.com/apache/camel/).
+
+```bash
+git clone https://github.com/your-github/camel.git
+cd camel
+git remote add upstream https://github.com/apache/camel.git
+```
+
+Alternatively, if you are using the [GitHub CLI](https://cli.github.com):
+
+```bash
+gh repo fork apache/camel
+cd camel
+```
+
+Then, create a branch to work on your changes:
+
+```bash
+git branch my-new-feature
+git checkout my-new-feature
+```
+
+> **Note**
+> If you are an Apache Camel committer, then you may also clone the [ASF git repo](https://gitbox.apache.org/repos/asf/camel.git).
+
+## Building the code
+
+To build the project, you need [Apache Maven](http://maven.apache.org/download.md).
+
+-   To build Camel 4, you need Java 21 and Apache Maven version 3.9.6 or higher.
+    
+
+### Building Camel 4
+
+The following command will do a fast build.
+
+```bash
+mvn clean install -Dquickly
+```
+
+> **Note**
+> On Camel 4, you can also use `-Pfastinstall` to trigger a fast build, but we encourage contributors to switch to the new command.
+
+> **Note**
+> On Camel 4, Virtual Threads can only be enabled by compiling with JDK 21 or greater and adding the system property `-Dcamel.threads.virtual.enabled=true` to your build command.
+
+You can find more details about building Camel on the [Building Camel](building.md) page.
+
+**Tips**: if you aren’t able to build a component after adding some new URI parameters due to `Empty doc for option: [OPTION], parent options: <null>` please make sure that you either added properly javadoc for get/set method or description in `@UriPath` annotation.
+
+## Testing the changes
+
+If you need to implement tests for your changes (highly recommended!), you will probably need to handle 3 separate things: - simulate the infrastructure required for the test (i.e.; JMS brokers, Kafka, etc), - writing testable code, - the test logic itself.
+
+Naturally, there is no rule of thumb for how the code changes, and test logic should be written. The [Testing](../../manual/testing.md) page in the User Manual provides detailed information and examples for writing Camel unit tests.
+
+Concerning simulating the test infrastructure, Camel has a growing library of reusable components that can be helpful: the [test infra components](../../manual/test-infra.md). These components are located in the test-infra module and provide support for simulating message brokers, cloud environments, databases, and much more.
+
+Using these components is usually as simple as registering them as JUnit 5 extensions:
+
+```java
+@RegisterExtension
+static NatsService service = NatsServiceFactory.createService();
+```
+
+Then you can access the service by using the methods and properties provided by the services. This varies according to each service.
+
+If you need to implement a new test-infra service, check the [readme on the test-infra module](https://github.com/apache/camel/tree/main/test-infra#readme) for additional details.
+
+## Formatting the code
+
+Apache Camel source code uses a coding style/format that can be verified for compliance using the "checkstyle" plugin.
+
+You could run the following commands to format the code
+
+```bash
+mvn formatter:format
+```
+
+And to sort the imports, you can run:
+
+```bash
+mvn impsort:sort
+```
+
+## Verifying the coding style
+
+To enable source style checking, build Camel with the `-Psourcecheck` profile:
+
+```bash
+mvn clean install -Psourcecheck
+```
+
+Please remember to run this check on your code changes before submitting a patch or GitHub PR. You do not need to run this against the entire project, but only in the modules you modified.
+
+For instance, if you do some code changes in the camel-ftp component, following which you can run the check from within this directory:
+
+```bash
+cd camel-ftp
+mvn clean install -Psourcecheck
+```
+
+## Submitting your contribution
+
+We gladly accept patches if you can find ways to improve, tune, or fix Camel in some way.
+
+Make sure you have followed the steps and guidelines outlined in this document. For larger changes, make sure that you have discussed them on the developer’s mailing list or in the Jira issue tracker beforehand.
+
+To get the best response from the team, make sure that the reasoning behind the contribution you wish to make is clear: outline the problem and explain your solution for it. Describe any changes you have made for which you are unaware or unsure of any consequences or side effects.
+
+Be mindful of the source checks, formatting, and structure of the git commit message we abide by. In particular, if there is a JIRA issue, reference it in the first line of your commit message, for example:
+
+```bash
+CAMEL-9999: Some message goes here
+```
+
+### Making a good contribution
+
+-   Less is more:
+    
+    -   Avoid creating unnecessary Maven profiles (i.e.; to enable/disable tests)
+        
+    -   Avoid creating custom surefire/failsafe configurations (use defaults as much as possible)
+        
+    
+-   Ensure that the unit tests include proper assertions.
+    
+-   Avoid simply outputting changes to the standard output/error or just logging (tests **must** have assertions).
+    
+-   Please also avoid unnecessary changes, like reordering methods and fields, which will make your PR harder to review.
+    
+-   When submitting a performance improvement, providing JMH test data as evidence or adding a JMH-based test on the [camel-performance-tests](https://github.com/apache/camel-performance-tests/) repository is strongly recommended.
+    
+-   Be responsive, assume good intent and respect the [Code of Conduct](https://www.apache.org/foundation/policies/conduct.md)
+    
+-   When contributing components, please make sure that their dependencies are available in the [Maven Central](https://search.maven.org). We do not accept contributions if the dependencies are not publicly available.
+    
+-   Do read the [Testing Camel](testing-camel.md) page to learn about naming convention and other practices that may be required
+    
+
+Following these guidelines will help you in getting your contribution accepted.
+
+### Submitting your changes via Pull Request
+
+The preferred way to submit your changes is by opening a pull request (PR) on GitHub.
+
+You can open a pull request via GitHub website or using the [GitHub CLI](https://cli.github.com/manual/gh_pr_create). You can find many resources online explaining how to work on GitHub projects and how to submit work to these projects.
+
+After your PR is opened, it will be reviewed by one or more of the [Camel committers](/community/team/index.md). They will evaluate if the code complies with ASF guidelines, appropriateness and correctness of the code. Eventually, they may ask questions, raise concerns and provide comments.
+
+To open a PR using the CLI, you can use a command similar to the following:
+
+```bash
+gh pr create --title "CAMEL-9999: My new awesome Camel feature" --body "This introduces the new awesome feature described on CAMEL-9999"
+```
+
+The code will be tested automatically. The access to the build and test logs is restricted, but you can ask the committers to provide them for you in case of test failures.
+
+### Submitting your changes via Patches
+
+#### Manual patch files
+
+For smaller patches, you may also submit a patch file instead of using a Pull Request. To do this:
+
+-   [Create a new JIRA issue](https://issues.apache.org/jira/browse/CAMEL)
+    
+-   Attach the patch or tarball as an attachment
+    
+-   **Tick the Patch Attached** button on the issue
+    
+
+Most IDEs can create nice patches now very easily. Then save the patch as a file and attach it to the corresponding JIRA issue.
+
+If you prefer working on the command line, try the following to create the patch:
+
+```bash
+diff -u Main.java.orig Main.java >> patchfile.txt
+```
+
+or,
+
+```bash
+git diff --no-prefix > patchfile.txt
+```
+
+### Adjusting your contribution
+
+The Apache Camel project uses Git to track changes and control the versions. Although it is a rather complex versioning system, there is a vast amount of [material available on the web](https://git-scm.com/book/en/v2). Some basic understanding of Git is necessary for contributing with Apache Camel.
+
+In some cases, the reviewers may ask for certain things involving Git to be done prior to merging your code.
+
+The sections below describe how to use the git command-line perform some of the tasks that reviewers may ask.
+
+> **Note**
+> Some operations may also be done using the user interfaces provided by IDEs such as IntelliJ.
+
+#### Rebase the code
+
+A common request is for the user to rebase the code. Reviewers typically ask for this when the HEAD (last commit) used for creating the contribution (i.e.; the code on your fork) is too outdated compared to the current version in the Camel upstream repository.
+
+You can usually do this by running the following set of commands:
+
+```bash
+# Checkout to the main branch
+git checkout main
+
+# Fetch the latest changes from main (make sure you have the upstream remote - check using the command git remote -v)
+git pull --rebase upstream main
+
+# Checkout the branch where you have your changes (replace your-branch with the branch you are working on)
+git rebase main your-branch
+```
+
+#### Edit the commit message
+
+```bash
+# Amend the commit. This opens the default text editor (usually vim) so you can write the commit message.
+git commit --amend
+
+# After saving the changes, push them to the repository (replace your-branch with the branch you are working on)
+git push -f origin your-branch
+```
+
+## Watching your Contribution
+
+### Continuous Integration
+
+After the code was integrated into the Camel repository, you can watch the [Apache Continuous Integration](https://ci-builds.apache.org/job/Camel/) instance to double-check that it worked and no side effects were introduced. You can watch the following jobs:
+
+-   [Camel Core (Build and test)](https://ci-builds.apache.org/job/Camel/job/Camel%20Core%20\(Build%20and%20test\)/)
+    
+
+Our CI has many other jobs, covering different JDKs, platforms (x86, PowerPC, s390x, etc,) and projects. If in doubt, ask.
+
+### Automated Code Analysis
+
+As part of our [Continuous Integration](https://ci-builds.apache.org/job/Camel/), the code is automatically analyzed for issues using a [SonarQube instance](https://sonarcloud.io/project/overview?id=apache_camel) managed by the ASF Infra.
+
+Apache Camel Committers and contributors are encouraged to analyze the quality reports and suggest fixes and improvements.
+
+## AI-assisted contributions
+
+Contributors using AI coding assistants (such as [Claude Code](https://github.com/anthropics/claude-code) or similar tools) can take advantage of the project rules in the `.oss-ai-helper-rules/` directory and the `CLAUDE.md` file at the repository root.
+
+These files provide AI agents with project-specific context such as build commands, code style restrictions, branching conventions, issue tracker details, and contribution guidelines. They are maintained as part of the repository so that AI-assisted contributions follow the same standards as manual ones.
+
+The `.oss-ai-helper-rules/` files are designed for use with the [OSS Helper](https://github.com/Open-Harness-Engineering/ai-agents-oss-helper) toolset, which provides ready-made skills for common contribution tasks (fixing issues, creating PRs, running CI checks, and more).
+
+### Attribution
+
+Pull requests that include AI-generated code **must** provide proper attribution. AI coding agents should be configured to add co-authorship trailers to commits (e.g., `Co-authored-by`). For example, Claude Code supports this via its [attribution settings](https://code.claude.com/docs/en/settings#attribution-settings).
+
+PR descriptions for AI-assisted contributions should also clearly identify the AI tool used.
+
+## Becoming a committer
+
+Once you have become sufficiently involved with the community, we may well invite you to be a committer. See [How do I become a committer](../../manual/faq/how-do-i-become-a-committer.md) for more details.

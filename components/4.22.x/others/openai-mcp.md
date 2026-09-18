@@ -1,5 +1,3 @@
-Camel Components
-
 # OpenAI - MCP Tool Calling
 
 [Back to OpenAI Component](../openai-component.md)

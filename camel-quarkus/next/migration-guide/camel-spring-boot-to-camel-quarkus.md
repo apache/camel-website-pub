@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Camel Spring Boot to Camel Quarkus Migration Guide
 
 This guide helps to migrate from Camel on Spring Boot to Camel on Quarkus.

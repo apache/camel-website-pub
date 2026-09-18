@@ -1,5 +1,3 @@
-Camel Components
-
 # Logger
 
 How can I log the processing of a [Message](message.md)?

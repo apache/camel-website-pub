@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-google-storage-event-based-source-kafka-connector source configuration
 
 Connector Description: Receive data from Google Pubsub reporting events related to a Google Storage bucket.

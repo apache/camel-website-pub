@@ -1,5 +1,3 @@
-Camel Components
-
 # gRPC
 
 **Since Camel 2.19**

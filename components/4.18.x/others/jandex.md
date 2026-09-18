@@ -1,5 +1,3 @@
-Camel Components
-
 # Jandex
 
 **Since Camel 4.12**

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-mongodb-changes-stream-source-kafka-connector source configuration
 
 Connector Description: Consume Changes from MongoDB Collection in streaming mode.

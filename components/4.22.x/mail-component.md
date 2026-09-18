@@ -1,5 +1,3 @@
-Camel Components
-
 # Mail
 
 **Since Camel 1.0**

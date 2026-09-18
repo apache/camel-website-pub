@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-bedrock-agent-runtime-sink-kafka-connector sink configuration
 
 Connector Description: Send data for invoking a knowledge base from AWS Bedrock.

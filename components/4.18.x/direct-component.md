@@ -1,5 +1,3 @@
-Camel Components
-
 # Direct
 
 **Since Camel 1.0**

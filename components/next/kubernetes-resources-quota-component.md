@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes Resources Quota
 
 **Since Camel 2.17**

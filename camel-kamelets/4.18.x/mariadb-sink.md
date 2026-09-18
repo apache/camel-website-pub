@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mariadb sink](_images/kamelets/mariadb-sink.svg) MariaDB Sink
 
 **Provided by: "Apache Software Foundation"**

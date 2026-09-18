@@ -1,5 +1,3 @@
-Camel Components
-
 # Atmosphere Websocket
 
 **Since Camel 2.14**

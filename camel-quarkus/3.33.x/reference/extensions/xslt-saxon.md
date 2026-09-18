@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # XSLT Saxon
 
 JVM since1.1.0 Native since3.2.0

@@ -1,5 +1,3 @@
-User manual
-
 # Installing the Camel CLI Launcher
 
 **Available as of Camel 4.22**

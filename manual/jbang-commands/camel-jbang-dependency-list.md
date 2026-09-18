@@ -1,5 +1,3 @@
-User manual
-
 # camel dependency list
 
 Displays all Camel dependencies required to run

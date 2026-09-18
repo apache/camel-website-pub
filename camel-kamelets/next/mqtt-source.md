@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mqtt source](_images/kamelets/mqtt-source.svg) MQTT Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Components
-
 # Custom Load Balancer
 
 This EIP allows you to use your own [Load Balancer](loadBalance-eip.md) implementation.

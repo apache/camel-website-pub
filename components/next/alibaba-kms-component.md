@@ -1,5 +1,3 @@
-Camel Components
-
 # Alibaba Key Management Service (KMS)
 
 **Since Camel 4.23**

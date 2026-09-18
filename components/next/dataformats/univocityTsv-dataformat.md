@@ -1,5 +1,3 @@
-Camel Components
-
 # uniVocity TSV
 
 **Since Camel 2.15**

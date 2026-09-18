@@ -1,5 +1,3 @@
-Camel Components
-
 # Docling - Batch Processing
 
 [Back to Docling Component](../docling-component.md)

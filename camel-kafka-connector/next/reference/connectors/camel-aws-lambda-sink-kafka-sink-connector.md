@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-lambda-sink-kafka-connector sink configuration
 
 Connector Description: Send a payload to an AWS Lambda function.

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-storage-files-sink-kafka-connector sink configuration
 
 Connector Description: Upload data to Azure Storage Files Share.

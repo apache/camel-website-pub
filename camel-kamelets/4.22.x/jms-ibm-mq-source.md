@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jms ibm mq source](_images/kamelets/jms-ibm-mq-source.svg) JMS - IBM MQ Source
 
 **Provided by: "Apache Software Foundation"**

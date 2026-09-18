@@ -1,5 +1,3 @@
-Camel Components
-
 # Google Cloud Text To Speech
 
 **Since Camel 4.19**

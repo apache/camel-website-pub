@@ -1,5 +1,3 @@
-Camel Components
-
 # Hashicorp Vault
 
 **Since Camel 3.18**

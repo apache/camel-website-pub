@@ -1,5 +1,3 @@
-Camel Components
-
 # DNS
 
 **Since Camel 2.7**

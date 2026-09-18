@@ -1,5 +1,3 @@
-User manual
-
 # camel infra log
 
 Displays external service logs

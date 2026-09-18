@@ -1,5 +1,3 @@
-Camel Components
-
 # PLC4X
 
 **Since Camel 3.20**

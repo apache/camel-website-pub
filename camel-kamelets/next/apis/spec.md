@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # Camel Kamelets API
 
 ## camel.apache.org/v1

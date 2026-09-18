@@ -1,5 +1,3 @@
-User manual
-
 # Route Template Bean Binding
 
 [Back to Route Templates](route-template.md)

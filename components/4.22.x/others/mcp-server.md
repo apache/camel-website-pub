@@ -1,5 +1,3 @@
-Camel Components
-
 # MCP Server
 
 **Since Camel 4.22**

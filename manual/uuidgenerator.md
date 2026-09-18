@@ -1,5 +1,3 @@
-User manual
-
 # UUID Generator
 
 Camel supports third-party UUID generator(s).

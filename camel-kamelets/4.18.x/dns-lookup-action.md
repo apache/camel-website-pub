@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![dns lookup action](_images/kamelets/dns-lookup-action.svg) DNS Lookup Action
 
 **Provided by: "Apache Software Foundation"**

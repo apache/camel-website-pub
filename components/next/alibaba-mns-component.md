@@ -1,5 +1,3 @@
-Camel Components
-
 # Alibaba Message Service (MNS)
 
 **Since Camel 4.23**

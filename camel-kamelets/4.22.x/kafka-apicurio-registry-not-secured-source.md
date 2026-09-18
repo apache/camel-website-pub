@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kafka apicurio registry not secured source](_images/kamelets/kafka-apicurio-registry-not-secured-source.svg) Kafka Not Secured with Apicurio Registry Source
 
 **Provided by: "Apache Software Foundation"**

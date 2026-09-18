@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Debug
 
 JVM since2.10.0 Native since3.2.0

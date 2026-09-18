@@ -1,5 +1,3 @@
-Camel Components
-
 # Set Property
 
 The SetProperty EIP is used for setting an [Exchange](../../../manual/exchange.md) property.

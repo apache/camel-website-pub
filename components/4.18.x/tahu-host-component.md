@@ -1,5 +1,3 @@
-Camel Components
-
 # Tahu Host Application
 
 **Since Camel 4.8**

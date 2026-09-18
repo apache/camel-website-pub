@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-mqtt-sink-kafka-connector sink configuration
 
 Connector Description: Allows sending messages to any endpoint that supports the MQTT protocol, such as a message broker.

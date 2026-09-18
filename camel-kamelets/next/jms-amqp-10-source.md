@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jms amqp 10 source](_images/kamelets/jms-amqp-10-source.svg) JMS - AMQP 1.0 Source
 
 **Provided by: "Apache Software Foundation"**

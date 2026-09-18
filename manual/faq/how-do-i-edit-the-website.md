@@ -1,5 +1,3 @@
-User manual
-
 # How do I edit the website?
 
 There are two ways to edit the website:

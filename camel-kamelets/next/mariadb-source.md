@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mariadb source](_images/kamelets/mariadb-source.svg) MariaDB Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Bedrock Agent
 
 **Since Camel 4.5**

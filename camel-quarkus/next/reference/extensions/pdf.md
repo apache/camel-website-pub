@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # PDF
 
 JVM since0.3.1 Native since0.3.1

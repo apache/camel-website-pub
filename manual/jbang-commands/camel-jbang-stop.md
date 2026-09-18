@@ -1,5 +1,3 @@
-User manual
-
 # camel stop
 
 Shuts down running Camel integrations

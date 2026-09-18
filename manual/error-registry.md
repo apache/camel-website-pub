@@ -1,5 +1,3 @@
-User manual
-
 # Error Registry
 
 The `ErrorRegistry` SPI captures snapshots of exceptions that occur during message routing, including the exception, exchange data (headers, body, properties, variables), and message history.

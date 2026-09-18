@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jsonata action](_images/kamelets/jsonata-action.svg) Jsonata Action
 
 **Provided by: "Apache Software Foundation"**

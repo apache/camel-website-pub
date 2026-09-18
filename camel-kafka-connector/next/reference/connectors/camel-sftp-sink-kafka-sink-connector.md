@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-sftp-sink-kafka-connector sink configuration
 
 Connector Description: Send data to an SFTP Server.

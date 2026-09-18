@@ -1,5 +1,3 @@
-User manual
-
 # camel completion
 
 Generate completion script for bash/zsh

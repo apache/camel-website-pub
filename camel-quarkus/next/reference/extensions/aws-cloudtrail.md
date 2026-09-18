@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # AWS Cloudtrail
 
 JVM since3.38.0 Native since3.38.0

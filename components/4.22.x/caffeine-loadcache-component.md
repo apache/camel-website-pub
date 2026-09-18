@@ -1,5 +1,3 @@
-Camel Components
-
 # Caffeine LoadCache
 
 **Since Camel 2.20**

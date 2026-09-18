@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![snowflake source](_images/kamelets/snowflake-source.svg) Snowflake Source
 
 **Provided by: "Apache Software Foundation"**

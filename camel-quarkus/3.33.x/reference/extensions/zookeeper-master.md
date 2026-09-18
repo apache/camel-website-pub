@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # ZooKeeper Master
 
 JVM since1.1.0 Nativeunsupported

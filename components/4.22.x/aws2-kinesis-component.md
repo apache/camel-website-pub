@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Kinesis
 
 **Since Camel 3.2**

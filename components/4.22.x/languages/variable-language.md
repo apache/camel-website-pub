@@ -1,5 +1,3 @@
-Camel Components
-
 # Variable
 
 **Since Camel 4.4**

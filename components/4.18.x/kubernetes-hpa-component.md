@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes HPA
 
 **Since Camel 2.23**

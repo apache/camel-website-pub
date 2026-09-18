@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Spring Cloud Config
 
 Spring Boot auto-configuration for Camel Spring Cloud Config integration.

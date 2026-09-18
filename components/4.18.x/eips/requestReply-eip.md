@@ -1,5 +1,3 @@
-Camel Components
-
 # Request Reply
 
 Camel supports the [Request Reply](http://www.enterpriseintegrationpatterns.com/RequestReply.md) from the [EIP patterns](enterprise-integration-patterns.md).

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-polly-sink-kafka-connector sink configuration
 
 Connector Description: Synthesize speech from text using AWS Polly.

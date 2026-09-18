@@ -1,5 +1,3 @@
-Camel Components
-
 # Openapi Validator
 
 **Since Camel 4.7**

@@ -1,5 +1,3 @@
-Camel Components
-
 # Alibaba Object Storage Service (OSS)
 
 **Since Camel 4.23**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Stream
 
 Read from system-in and write to system-out and system-err streams.

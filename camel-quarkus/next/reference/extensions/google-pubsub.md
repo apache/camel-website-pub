@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Google Pubsub
 
 JVM since1.0.0 Native since1.5.0

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Jandex
 
 ## Maven coordinates

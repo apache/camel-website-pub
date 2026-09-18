@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure Files
 
 **Since Camel 3.22**

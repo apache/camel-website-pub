@@ -1,5 +1,3 @@
-Camel Components
-
 # Dataset
 
 **Since Camel 1.3**

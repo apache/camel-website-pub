@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS S3 - Streaming Upload
 
 [Back to AWS S3 Component](../aws2-s3-component.md)

@@ -1,5 +1,3 @@
-User manual
-
 # camel infra ps
 
 Displays running services

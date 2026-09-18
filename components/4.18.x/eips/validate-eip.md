@@ -1,5 +1,3 @@
-Camel Components
-
 # Validate
 
 The Validate EIP uses an [Expression](../../../manual/expression.md) or a [Predicate](../../../manual/predicate.md) to validate the contents of a message.

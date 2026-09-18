@@ -1,5 +1,3 @@
-User manual
-
 # camel doc
 
 Shows documentation for kamelet, component, and other Camel resources

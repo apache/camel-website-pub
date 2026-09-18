@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![docling convert action](_images/kamelets/docling-convert-action.svg) Docling Convert Action
 
 **Provided by: "Apache Software Foundation"**

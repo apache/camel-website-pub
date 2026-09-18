@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # IBM Watson Language
 
 JVM since3.30.0 Native since3.35.0

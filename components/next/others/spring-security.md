@@ -1,5 +1,3 @@
-Camel Components
-
 # Spring Security
 
 **Since Camel 2.3**

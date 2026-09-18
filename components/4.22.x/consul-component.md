@@ -1,5 +1,3 @@
-Camel Components
-
 # Consul
 
 **Since Camel 2.18**

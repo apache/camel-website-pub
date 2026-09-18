@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Splunk
 
 Publish or search for events in Splunk.

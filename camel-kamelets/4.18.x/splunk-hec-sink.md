@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![splunk hec sink](_images/kamelets/splunk-hec-sink.svg) Splunk HEC Sink
 
 **Provided by: "Apache Software Foundation"**

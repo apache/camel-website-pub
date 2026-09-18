@@ -1,5 +1,3 @@
-Camel Components
-
 # JT400
 
 **Since Camel 1.5**

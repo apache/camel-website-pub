@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # AWS 2 Eventbridge
 
 JVM since1.4.0 Native since1.7.0

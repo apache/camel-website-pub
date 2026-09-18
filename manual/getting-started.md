@@ -1,5 +1,3 @@
-User manual
-
 # Getting Started
 
 You can get started with Apache Camel in a variety of ways, such as:

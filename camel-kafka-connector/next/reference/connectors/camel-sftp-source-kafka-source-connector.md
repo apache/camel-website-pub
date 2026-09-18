@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-sftp-source-kafka-connector source configuration
 
 Connector Description: Receive data from an SFTP server.

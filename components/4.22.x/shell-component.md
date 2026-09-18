@@ -1,5 +1,3 @@
-Camel Components
-
 # Shell
 
 **Since Camel 4.21**

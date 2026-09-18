@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![oracle database sink](_images/kamelets/oracle-database-sink.svg) Oracle Database Sink
 
 **Provided by: "Apache Software Foundation"**

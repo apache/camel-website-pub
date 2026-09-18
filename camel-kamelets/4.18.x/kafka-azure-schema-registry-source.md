@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kafka azure schema registry source](_images/kamelets/kafka-azure-schema-registry-source.svg) Azure Kafka through Eventhubs with Azure Schema Registry Source
 
 **Provided by: "Apache Software Foundation"**

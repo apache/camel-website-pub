@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws sns fifo sink](_images/kamelets/aws-sns-fifo-sink.svg) AWS SNS FIFO Sink
 
 **Provided by: "Apache Software Foundation"**

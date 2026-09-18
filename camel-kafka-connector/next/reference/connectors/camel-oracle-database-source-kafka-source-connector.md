@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-oracle-database-source-kafka-connector source configuration
 
 Connector Description: Query data from an Oracle Database.

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Openapi Validator
 
 ## Maven coordinates

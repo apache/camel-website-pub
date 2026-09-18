@@ -1,5 +1,3 @@
-Camel Components
-
 # SWIFT MT
 
 **Since Camel 3.20**

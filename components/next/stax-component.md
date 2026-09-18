@@ -1,5 +1,3 @@
-Camel Components
-
 # StAX
 
 **Since Camel 2.9**

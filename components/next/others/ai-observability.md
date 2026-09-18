@@ -1,5 +1,3 @@
-Camel Components
-
 # AI Observability
 
 **Since Camel 4.23**

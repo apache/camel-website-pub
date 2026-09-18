@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Bedrock
 
 **Since Camel 4.5**

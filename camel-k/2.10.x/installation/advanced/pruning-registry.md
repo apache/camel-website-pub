@@ -1,5 +1,3 @@
-Camel K
-
 # Pruning unused images from container registry
 
 > **Warning**

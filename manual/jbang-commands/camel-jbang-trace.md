@@ -1,5 +1,3 @@
-User manual
-
 # camel trace
 
 Tail message traces from running Camel integrations

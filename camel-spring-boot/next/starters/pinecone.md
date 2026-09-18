@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Pinecone
 
 Perform operations on the Pinecone Vector Database.

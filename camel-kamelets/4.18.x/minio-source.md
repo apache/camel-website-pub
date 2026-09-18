@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![minio source](_images/kamelets/minio-source.svg) Minio Source
 
 **Provided by: "Apache Software Foundation"**

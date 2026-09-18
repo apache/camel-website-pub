@@ -1,5 +1,3 @@
-Camel K
-
 # Deployer Trait
 
 The deployer trait is responsible for deploying the resources owned by the integration, and can be used to explicitly select the underlying controller that will manage the integration pods.

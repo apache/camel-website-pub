@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-twitter-search-source-kafka-connector source configuration
 
 Connector Description: Allows to get all tweets on particular keywords from Twitter.

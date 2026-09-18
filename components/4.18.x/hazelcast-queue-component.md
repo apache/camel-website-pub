@@ -1,5 +1,3 @@
-Camel Components
-
 # Hazelcast Queue
 
 **Since Camel 2.7**

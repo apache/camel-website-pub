@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # LangChain4j Chat
 
 LangChain4j Chat component

@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Dataset
 
 JVM since2.11.0 Native since2.11.0

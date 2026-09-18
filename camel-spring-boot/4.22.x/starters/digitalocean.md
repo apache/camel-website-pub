@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # DigitalOcean
 
 Manage Droplets and resources within the DigitalOcean cloud.

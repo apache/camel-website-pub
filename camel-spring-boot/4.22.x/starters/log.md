@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Log Data
 
 Prints data from the routed message (such as body and headers) to the logger.

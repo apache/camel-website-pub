@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mail sink](_images/kamelets/mail-sink.svg) Mail Sink
 
 **Provided by: "Apache Software Foundation"**

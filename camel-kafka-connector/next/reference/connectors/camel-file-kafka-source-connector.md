@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-file-kafka-connector source configuration
 
 Connector Description: Read and write files.

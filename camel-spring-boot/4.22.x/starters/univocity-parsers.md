@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # uniVocity CSV
 
 Marshal and unmarshal Java objects from and to CSV (Comma Separated Values) using UniVocity Parsers

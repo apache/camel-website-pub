@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Lra
 
 Spring Boot auto-configuration for the Camel LRA (Long Running Actions) Saga Service.

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-storage-queue-source-kafka-connector source configuration
 
 Connector Description: Receive events from Azure Storage queues.

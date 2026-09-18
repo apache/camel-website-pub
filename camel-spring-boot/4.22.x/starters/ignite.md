@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Ignite Cache
 
 Perform cache operations on an Ignite cache or consume changes from a continuous query.

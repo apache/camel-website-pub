@@ -1,5 +1,3 @@
-Camel Components
-
 # Alibaba EventBridge
 
 **Since Camel 4.23**

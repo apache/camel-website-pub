@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![redis source](_images/kamelets/redis-source.svg) Redis Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Components
-
 # KServe
 
 **Since Camel 4.10**

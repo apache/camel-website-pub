@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # AWS Secrets Manager
 
 Manage secrets using AWS Secrets Manager.

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # CXF
 
 Expose SOAP WebServices using Apache CXF or connect to external WebServices using CXF WS client.

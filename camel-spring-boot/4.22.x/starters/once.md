@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Once
 
 Trigger a single message only once at startup (useful for development and testing purposes).

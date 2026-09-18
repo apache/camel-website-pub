@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # First steps
 
 This guide outlines various ways to create a new Camel Quarkus application.

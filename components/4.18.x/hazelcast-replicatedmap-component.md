@@ -1,5 +1,3 @@
-Camel Components
-
 # Hazelcast Replicated Map
 
 **Since Camel 2.16**

@@ -1,5 +1,3 @@
-User manual
-
 # camel get inflight
 
 Get inflight messages of Camel integrations

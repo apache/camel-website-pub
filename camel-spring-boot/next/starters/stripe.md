@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Stripe
 
 Interact with the Stripe payment platform.

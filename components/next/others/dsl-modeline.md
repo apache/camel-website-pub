@@ -1,5 +1,3 @@
-Camel Components
-
 # DSL Modeline
 
 **Since Camel 3.16**

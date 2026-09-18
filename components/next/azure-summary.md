@@ -1,5 +1,3 @@
-Camel Components
-
 # Azure
 
 The Camel Components for [Microsoft Azure Services](https://azure.microsoft.com/) provide connectivity to Azure services from Camel.

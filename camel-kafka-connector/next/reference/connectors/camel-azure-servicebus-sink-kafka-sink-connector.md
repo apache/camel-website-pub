@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-servicebus-sink-kafka-connector sink configuration
 
 Connector Description: Send Messages to Azure Servicebus.

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Control Bus
 
 Manage and monitor Camel routes.

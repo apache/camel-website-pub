@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Mina
 
 Socket level networking using TCP or UDP with Apache Mina 2.x.

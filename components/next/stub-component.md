@@ -1,5 +1,3 @@
-Camel Components
-
 # Stub
 
 **Since Camel 2.10**

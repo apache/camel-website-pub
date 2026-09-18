@@ -1,5 +1,3 @@
-User manual
-
 # camel catalog
 
 List artifacts from Camel Catalog

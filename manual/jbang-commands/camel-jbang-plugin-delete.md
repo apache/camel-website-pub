@@ -1,5 +1,3 @@
-User manual
-
 # camel plugin delete
 
 Removes a plugin

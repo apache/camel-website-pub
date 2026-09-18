@@ -1,5 +1,3 @@
-User manual
-
 # camel catalog language
 
 List expression languages from the Camel Catalog

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Git
 
 Perform operations on git repositories.

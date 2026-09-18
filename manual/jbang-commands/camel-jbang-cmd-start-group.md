@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd start-group
 
 Start Camel route groups

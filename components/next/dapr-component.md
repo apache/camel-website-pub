@@ -1,5 +1,3 @@
-Camel Components
-
 # Dapr
 
 **Since Camel 4.12**

@@ -1,5 +1,3 @@
-User manual
-
 # camel plugin
 
 Manage plugins that add sub-commands to this CLI

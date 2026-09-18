@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![xj template action](_images/kamelets/xj-template-action.svg) XJ Template Action
 
 **Provided by: "Apache Software Foundation"**

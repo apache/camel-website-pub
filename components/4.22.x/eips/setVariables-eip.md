@@ -1,5 +1,3 @@
-Camel Components
-
 # Set Variables
 
 The SetVariables EIP is used for setting multiple [Exchange](../../../manual/exchange.md) variables at the same time.

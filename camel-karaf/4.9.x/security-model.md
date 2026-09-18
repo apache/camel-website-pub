@@ -1,5 +1,3 @@
-Camel Karaf
-
 # Security Model
 
 This page documents the Apache Camel Karaf security model: who is trusted, where the trust boundaries sit, what counts as a camel-karaf vulnerability, and what is left to the Karaf operator and the bundle/route author. It is the reference used when triaging security reports against camel-karaf and when deciding whether a behaviour should be hardened here or addressed by the deployment.

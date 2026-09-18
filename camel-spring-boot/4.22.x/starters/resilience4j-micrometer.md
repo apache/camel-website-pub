@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Resilience4j Micrometer
 
 Spring Boot auto-configuration for Resilience4j Micrometer metrics in Camel.

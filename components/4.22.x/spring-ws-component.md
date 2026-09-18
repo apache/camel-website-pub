@@ -1,5 +1,3 @@
-Camel Components
-
 # Spring WebService
 
 **Since Camel 2.6**

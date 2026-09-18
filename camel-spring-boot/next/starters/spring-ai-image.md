@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Spring AI Image
 
 Spring AI Image Generation

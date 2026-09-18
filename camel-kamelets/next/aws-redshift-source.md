@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws redshift source](_images/kamelets/aws-redshift-source.svg) AWS Redshift Source
 
 **Provided by: "Apache Software Foundation"**

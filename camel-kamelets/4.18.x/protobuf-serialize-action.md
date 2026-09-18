@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![protobuf serialize action](_images/kamelets/protobuf-serialize-action.svg) Protobuf Serialize Action
 
 **Provided by: "Apache Software Foundation"**

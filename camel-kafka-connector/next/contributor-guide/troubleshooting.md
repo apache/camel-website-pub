@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # Troubleshooting the Camel Kafka Connector
 
 This page describes some common pitfalls when deploying the connectors.

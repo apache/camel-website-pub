@@ -1,5 +1,3 @@
-Camel Components
-
 # Reactive Executor Vert.x
 
 > **Warning**

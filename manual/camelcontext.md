@@ -1,5 +1,3 @@
-User manual
-
 # CamelContext
 
 The [`CamelContext`](https://www.javadoc.io/doc/org.apache.camel/camel-api/latest/org/apache/camel/CamelContext.md) is the runtime system, which holds together all the fundamental concepts of Apache Camel (routes, endpoints, components, etc).

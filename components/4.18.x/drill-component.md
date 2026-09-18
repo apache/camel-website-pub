@@ -1,5 +1,3 @@
-Camel Components
-
 # Drill
 
 **Since Camel 2.19**

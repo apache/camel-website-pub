@@ -1,5 +1,3 @@
-User manual
-
 # camel cmd disable-processor
 
 Disable Camel processor

@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-cxf-kafka-connector source configuration
 
 Connector Description: Expose SOAP WebServices using Apache CXF or connect to external WebServices using CXF WS client.

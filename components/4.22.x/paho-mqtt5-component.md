@@ -1,5 +1,3 @@
-Camel Components
-
 # Paho MQTT 5
 
 **Since Camel 3.8**

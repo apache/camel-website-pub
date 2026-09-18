@@ -1,5 +1,3 @@
-Camel K
-
 # Camel K Operator Monitoring
 
 > **Note**

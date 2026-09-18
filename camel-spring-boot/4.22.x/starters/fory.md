@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Fory
 
 Serialize and deserialize messages using Apache Fory

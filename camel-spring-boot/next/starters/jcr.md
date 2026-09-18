@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # JCR
 
 Read and write nodes to/from a JCR compliant content repository.

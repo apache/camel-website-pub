@@ -1,5 +1,3 @@
-Camel Core
-
 # Contributing expectations
 
 Thank you for your interest in contributing to Apache Camel.

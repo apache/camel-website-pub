@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-kafka-batch-azure-schema-registry-source-kafka-connector source configuration
 
 Connector Description: Receive data from Kafka topics in batch on Azure Eventhubs combined with Azure Schema Registry and commit them manually through KafkaManualCommit or auto commit.

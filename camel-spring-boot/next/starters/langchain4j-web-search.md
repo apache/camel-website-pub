@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # LangChain4j Web Search
 
 LangChain4j Web Search Engine

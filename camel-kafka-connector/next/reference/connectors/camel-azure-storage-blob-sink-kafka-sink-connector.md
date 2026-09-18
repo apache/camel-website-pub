@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-azure-storage-blob-sink-kafka-connector sink configuration
 
 Connector Description: Upload data to Azure Storage Blob.

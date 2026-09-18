@@ -1,5 +1,3 @@
-Camel Components
-
 # SAP NetWeaver
 
 **Since Camel 2.12**

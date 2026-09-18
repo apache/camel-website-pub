@@ -1,5 +1,3 @@
-Camel Components
-
 # AWS Bedrock - Examples
 
 [Back to AWS Bedrock Component](../aws-bedrock-component.md)

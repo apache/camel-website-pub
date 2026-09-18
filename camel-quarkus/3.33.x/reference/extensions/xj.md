@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # XJ
 
 JVM since1.1.0 Native since3.7.0

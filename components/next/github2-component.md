@@ -1,5 +1,3 @@
-Camel Components
-
 # GitHub2
 
 **Since Camel 4.18**

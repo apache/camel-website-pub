@@ -1,5 +1,3 @@
-Camel Components
-
 # Huawei Object Storage Service (OBS)
 
 **Since Camel 3.12**

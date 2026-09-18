@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Infinispan Cluster Service
 
 The Infinispan Cluster Service starter provides a cluster service implementation using [Infinispan](https://infinispan.org/) distributed cache for clustering in Camel Spring Boot applications.

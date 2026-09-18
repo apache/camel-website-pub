@@ -1,5 +1,3 @@
-Camel Components
-
 # OCSF
 
 **Since Camel 4.18**

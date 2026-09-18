@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # CSV
 
 Handle CSV (Comma Separated Values) payloads

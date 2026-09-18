@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # IBM Secrets Manager
 
 JVM since3.22.0 Nativeunsupported

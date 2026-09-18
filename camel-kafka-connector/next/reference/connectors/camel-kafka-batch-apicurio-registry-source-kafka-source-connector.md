@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-kafka-batch-apicurio-registry-source-kafka-connector source configuration
 
 Connector Description: Receive data from Kafka topics in batch on an insecure broker combined with Apicurio Registry secured with Keycloak and commit them manually through KafkaManualCommit or auto commit.

@@ -1,5 +1,3 @@
-Camel Components
-
 # Once
 
 **Since Camel 4.17**
@@ -122,7 +120,7 @@ Enum values:
 
 ## Example
 
-To set up a route that generates an event every 60 seconds:
+To set up a route that generates a single event once when Camel starts:
 
 -   Java
     

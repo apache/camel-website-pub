@@ -1,5 +1,3 @@
-User manual
-
 # Camel CLI - Export to Maven
 
 Export your Camel CLI integrations to production-ready Maven projects, manage dependencies, and upgrade Camel versions.

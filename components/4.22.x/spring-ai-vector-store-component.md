@@ -1,5 +1,3 @@
-Camel Components
-
 # Spring AI Vector Store
 
 **Since Camel 4.17**

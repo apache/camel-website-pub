@@ -1,5 +1,3 @@
-Camel Components
-
 # Remove Properties
 
 The Remove Properties EIP allows you to remove one or more `Exchange` properties, based on pattern syntax.

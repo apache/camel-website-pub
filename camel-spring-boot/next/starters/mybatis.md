@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # MyBatis
 
 Performs a query, poll, insert, update or delete in a relational database using MyBatis.

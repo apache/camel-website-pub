@@ -1,5 +1,3 @@
-Camel Components
-
 # JSON JSON-B
 
 **Since Camel 3.7**

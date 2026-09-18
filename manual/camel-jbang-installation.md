@@ -1,5 +1,3 @@
-User manual
-
 # Camel CLI - Installation Options
 
 Alternative ways to install the Camel CLI — pinning a specific version, offline-safe setups, and running from a container image.

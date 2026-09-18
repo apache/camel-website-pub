@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # JacksonXML
 
 JVM since1.0.0 Native since1.0.0

@@ -1,5 +1,3 @@
-Camel Components
-
 # PostgresSQL Event
 
 **Since Camel 2.15**

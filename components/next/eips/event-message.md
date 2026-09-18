@@ -1,5 +1,3 @@
-Camel Components
-
 # Event Message
 
 Camel supports the [Event Message](http://www.enterpriseintegrationpatterns.com/EventMessage.md) from the [EIP patterns](enterprise-integration-patterns.md).

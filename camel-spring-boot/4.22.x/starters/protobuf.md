@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Protobuf
 
 Serialize and deserialize Java objects using Google’s Protocol buffers

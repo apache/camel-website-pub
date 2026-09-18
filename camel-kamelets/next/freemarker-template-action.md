@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![freemarker template action](_images/kamelets/freemarker-template-action.svg) Freemarker Template Action
 
 **Provided by: "Apache Software Foundation"**

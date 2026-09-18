@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![solr source](_images/kamelets/solr-source.svg) Solr Source
 
 **Provided by: "Apache Software Foundation"**

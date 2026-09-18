@@ -1,5 +1,3 @@
-Camel Components
-
 # On Fallback
 
 If you are using **onFallback** then that is intended to be local processing only where you can do a message transformation or call a bean or something as the fallback.

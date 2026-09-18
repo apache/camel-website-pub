@@ -1,5 +1,3 @@
-Camel Components
-
 # Ignite Cache
 
 **Since Camel 2.17**

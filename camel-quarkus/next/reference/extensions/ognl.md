@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # OGNL
 
 JVM since1.0.0 Native since3.2.0 ⚠️Deprecated

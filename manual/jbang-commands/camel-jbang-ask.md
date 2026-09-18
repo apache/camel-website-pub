@@ -1,5 +1,3 @@
-User manual
-
 # camel ask
 
 Ask a question about a running Camel application using AI

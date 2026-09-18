@@ -1,5 +1,3 @@
-Camel Components
-
 # Scheduler
 
 **Since Camel 2.15**

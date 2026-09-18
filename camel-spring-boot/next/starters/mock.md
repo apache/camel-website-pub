@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Mock
 
 Test routes and mediation rules using mocks.

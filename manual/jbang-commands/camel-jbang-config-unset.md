@@ -1,5 +1,3 @@
-User manual
-
 # camel config unset
 
 Remove user configuration value

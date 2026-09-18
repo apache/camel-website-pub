@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-https-kafka-connector sink configuration
 
 Connector Description: Send requests to external HTTP servers using Apache HTTP Client 5.x.

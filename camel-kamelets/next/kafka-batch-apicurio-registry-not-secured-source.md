@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![kafka batch apicurio registry not secured source](_images/kamelets/kafka-batch-apicurio-registry-not-secured-source.svg) Kafka Batch Not Secured with Apicurio Registry Source
 
 **Provided by: "Apache Software Foundation"**

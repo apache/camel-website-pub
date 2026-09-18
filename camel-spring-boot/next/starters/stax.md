@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # StAX
 
 Process XML payloads by a SAX ContentHandler.

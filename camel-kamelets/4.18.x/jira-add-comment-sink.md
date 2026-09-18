@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![jira add comment sink](_images/kamelets/jira-add-comment-sink.svg) Jira Add Comment Sink
 
 **Provided by: "Apache Software Foundation"**

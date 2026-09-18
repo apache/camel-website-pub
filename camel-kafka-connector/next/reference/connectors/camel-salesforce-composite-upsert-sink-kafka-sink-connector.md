@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-salesforce-composite-upsert-sink-kafka-connector sink configuration
 
 Connector Description: Upsert Composite List of sObjects in Salesforce.

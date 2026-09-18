@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # camel-aws-s3-source-kafka-connector source configuration
 
 Connector Description: Receive data from an Amazon S3 Bucket.

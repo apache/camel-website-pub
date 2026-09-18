@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![mail imap source](_images/kamelets/mail-imap-source.svg) Mail IMAP Source
 
 **Provided by: "Apache Software Foundation"**

@@ -1,5 +1,3 @@
-Camel Components
-
 # IBM Secrets Manager
 
 **Since Camel 4.11**

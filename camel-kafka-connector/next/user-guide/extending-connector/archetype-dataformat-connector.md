@@ -1,5 +1,3 @@
-Camel Kafka Connector
-
 # Dataformat connector Archetypes
 
 In camel-kafka-connector we provide the camel-kafka-connector-extensible-dataformat-archetype for extending the features of a connector with a dataformat and make it extensible.

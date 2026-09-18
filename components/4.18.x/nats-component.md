@@ -1,5 +1,3 @@
-Camel Components
-
 # Nats
 
 **Since Camel 2.17**

@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Barcode
 
 Transform strings to various 1D/2D barcode bitmap formats and back

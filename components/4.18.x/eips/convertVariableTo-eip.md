@@ -1,5 +1,3 @@
-Camel Components
-
 # Convert Variable To
 
 The ConvertVariableTo EIP allows you to convert a variable to a different type.

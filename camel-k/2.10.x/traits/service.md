@@ -1,5 +1,3 @@
-Camel K
-
 # Service Trait
 
 The Service trait exposes the Integration with a Service resource so that it can be accessed by other applications (or Integrations) in the same namespace.

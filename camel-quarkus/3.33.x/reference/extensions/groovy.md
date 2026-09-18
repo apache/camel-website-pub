@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Groovy
 
 JVM since1.0.0 Native since3.2.0

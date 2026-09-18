@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # weaviate
 
 JVM since3.24.0 Native since3.24.0

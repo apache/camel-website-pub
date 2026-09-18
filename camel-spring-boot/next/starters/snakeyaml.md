@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # YAML SnakeYAML
 
 Marshal and unmarshal Java objects to and from YAML using SnakeYAML

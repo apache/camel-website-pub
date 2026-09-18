@@ -1,5 +1,3 @@
-Camel Components
-
 # Oauth
 
 **Since Camel 4.12**

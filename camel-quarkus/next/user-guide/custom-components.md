@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Using custom Camel components
 
 Guidelines for integrating custom or third-party Apache Camel components with Camel Quarkus.

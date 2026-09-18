@@ -1,5 +1,3 @@
-Camel Components
-
 # XML Security
 
 **Since Camel 2.0**

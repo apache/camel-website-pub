@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # PQC Algorithms
 
 JVM since3.24.0 Nativeunsupported

@@ -1,5 +1,3 @@
-Camel Components
-
 # MapStruct
 
 **Since Camel 3.19**

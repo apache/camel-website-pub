@@ -1,5 +1,3 @@
-Camel Components
-
 # Saga
 
 **Since Camel 2.21**

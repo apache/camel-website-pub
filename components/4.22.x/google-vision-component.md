@@ -1,5 +1,3 @@
-Camel Components
-
 # Google Cloud Vision
 
 **Since Camel 4.19**

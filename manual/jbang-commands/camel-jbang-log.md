@@ -1,5 +1,3 @@
-User manual
-
 # camel log
 
 Tail logs from running Camel integrations

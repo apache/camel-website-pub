@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Alibaba Short Message Service (SMS)
 
 Send SMS messages using Alibaba Cloud Short Message Service (SMS).

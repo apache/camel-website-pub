@@ -1,5 +1,3 @@
-Camel K
-
 # Openapi Trait
 
 Deprecated since2.5.0 The OpenAPI DSL trait is internally used to allow creating integrations from a OpenAPI specs.

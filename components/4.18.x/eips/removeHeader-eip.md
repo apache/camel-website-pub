@@ -1,5 +1,3 @@
-Camel Components
-
 # Remove Header
 
 The Remove Header EIP allows you to remove a single header from the [Message](message.md).

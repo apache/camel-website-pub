@@ -1,5 +1,3 @@
-Camel Components
-
 # CometD
 
 **Since Camel 2.0**

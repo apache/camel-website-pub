@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Ehcache
 
 JVM since1.1.0 Nativeunsupported

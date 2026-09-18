@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![salesforce delete sink](_images/kamelets/salesforce-delete-sink.svg) Salesforce Delete Sink
 
 **Provided by: "Apache Software Foundation"**

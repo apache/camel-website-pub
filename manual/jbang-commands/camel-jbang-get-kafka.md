@@ -1,5 +1,3 @@
-User manual
-
 # camel get kafka
 
 List Kafka consumers of Camel integrations

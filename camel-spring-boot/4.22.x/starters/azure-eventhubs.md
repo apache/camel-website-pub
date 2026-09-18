@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Azure Event Hubs
 
 Send and receive events to/from Azure Event Hubs using AMQP protocol.

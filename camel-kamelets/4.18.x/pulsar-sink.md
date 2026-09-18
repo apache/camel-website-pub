@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![pulsar sink](_images/kamelets/pulsar-sink.svg) Pulsar Sink
 
 **Provided by: "Apache Software Foundation"**

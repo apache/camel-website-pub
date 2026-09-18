@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # LangChain4j Ingest
 
 JVM since3.39.0 Native since3.39.0 🧪Experimental

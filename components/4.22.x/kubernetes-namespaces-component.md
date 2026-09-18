@@ -1,5 +1,3 @@
-Camel Components
-
 # Kubernetes Namespaces
 
 **Since Camel 2.17**

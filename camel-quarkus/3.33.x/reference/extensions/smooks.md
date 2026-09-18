@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Smooks
 
 JVM since3.18.0 Nativeunsupported

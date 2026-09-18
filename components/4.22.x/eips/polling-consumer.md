@@ -1,5 +1,3 @@
-Camel Components
-
 # Polling Consumer
 
 Camel supports implementing the [Polling Consumer](http://www.enterpriseintegrationpatterns.com/PollingConsumer.md) from the [EIP patterns](enterprise-integration-patterns.md).

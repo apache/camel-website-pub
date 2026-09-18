@@ -1,5 +1,3 @@
-Camel Quarkus
-
 # Solr
 
 JVM since3.19.0 Native since3.19.0

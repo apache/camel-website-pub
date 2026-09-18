@@ -1,5 +1,3 @@
-Camel Components
-
 # REST API
 
 **Since Camel 2.16**

@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![aws sqs fifo sink](_images/kamelets/aws-sqs-fifo-sink.svg) AWS SQS FIFO Sink
 
 **Provided by: "Apache Software Foundation"**

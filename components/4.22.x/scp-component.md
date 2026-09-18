@@ -1,5 +1,3 @@
-Camel Components
-
 # SCP
 
 **Since Camel 2.10**

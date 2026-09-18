@@ -1,5 +1,3 @@
-Camel Components
-
 # Stitch
 
 **Since Camel 3.8**

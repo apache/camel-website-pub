@@ -2,8 +2,6 @@
 
 Index of Camel Quarkus documentation pages.
 
-Camel Quarkus
-
 # Apache Camel extensions for Quarkus
 
 > **Note**

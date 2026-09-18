@@ -1,5 +1,3 @@
-Camel Components
-
 # Docling - Using Docling-Serve API
 
 [Back to Docling Component](../docling-component.md)

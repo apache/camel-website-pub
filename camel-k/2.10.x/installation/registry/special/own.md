@@ -1,5 +1,3 @@
-Camel K
-
 # Run your own container registry
 
 > **Warning**

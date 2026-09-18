@@ -1,5 +1,3 @@
-Camel Components
-
 # Elytron
 
 > **Warning**

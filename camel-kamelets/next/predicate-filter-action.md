@@ -1,5 +1,3 @@
-Kamelet Catalog
-
 # ![predicate filter action](_images/kamelets/predicate-filter-action.svg) Predicate Filter Action
 
 **Provided by: "Apache Software Foundation"**

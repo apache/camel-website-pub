@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # Google Cloud Vision
 
 Detect labels, text, faces, logos and more on images through Google Cloud Vision API

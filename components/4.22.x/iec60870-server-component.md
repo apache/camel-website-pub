@@ -1,5 +1,3 @@
-Camel Components
-
 # IEC 60870 Server
 
 > **Warning**

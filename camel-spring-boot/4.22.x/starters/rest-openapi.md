@@ -1,5 +1,3 @@
-Camel Spring Boot
-
 # REST OpenApi
 
 To call and expose REST services using OpenAPI specification as contract.

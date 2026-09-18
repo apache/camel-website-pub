@@ -1,5 +1,3 @@
-Camel K
-
 # Configuring a Github Packages Registry
 
 You can use a Github Packages registry to host your container images.
