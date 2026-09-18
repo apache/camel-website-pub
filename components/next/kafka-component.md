@@ -1315,15 +1315,15 @@ Notice the `pollTimeoutMs` should not be set to a high value, as it’s used dir
 
 #### Batch Headers
 
-The exchange carrying the batch also exposes the record metadata headers that every record in the batch agrees on: `CamelKafkaTopic` and `CamelKafkaPartition`. This makes it possible to read them before splitting the batch, for example to store the topic in a variable and reuse it after the split:
+The exchange carrying the batch also exposes the record metadata headers that every record in the batch agrees on: `CamelKafkaTopic` and `CamelKafkaPartition`. This makes it possible to read them on the batch itself, before splitting it. When the batch is split, each child exchange carries the body and the headers of its own record:
 
-_Java-only: reading the topic from the batch before splitting_
+_Java-only: reading the topic from the batch and the offset from each record_
 
 ```java
 from("kafka:topic?groupId=myGroup&batching=true&maxPollRecords=10")
-    .setVariable("topic", header(KafkaConstants.TOPIC))
+    .log("Received a batch of ${body.size} records from ${header.CamelKafkaTopic}")
     .split(body())
-        .log("Record from ${variable.topic}")
+        .log("Record ${body} at offset ${header.CamelKafkaOffset}")
     .end();
 ```
 

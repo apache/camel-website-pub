@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1789655139734,
+  "generated": 1789730181147,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -323,6 +323,12 @@
               "path": "installation/builds.adoc",
               "url": "/camel-k/next/installation/builds.html",
               "title": "Configuring Maven Builds"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/cert-manager.adoc",
+              "url": "/camel-k/next/installation/cert-manager.html",
+              "title": "Cert-Manager configuration"
             },
             {
               "module": "ROOT",

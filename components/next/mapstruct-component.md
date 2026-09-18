@@ -147,6 +147,42 @@ from("direct:foo")
 
 Where `MyFooDto` is a POJO that MapStruct is able to convert to/from.
 
+### Using the mapstruct endpoint
+
+The same conversion can be a step of the route with the `mapstruct` endpoint, whose path is the fully qualified class name of the POJO to convert the message body to. This makes the mapping visible in the route, and with `mandatory=false` a body that no mapper can convert passes through unchanged instead of failing:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:foo")
+    .to("mapstruct:com.foo.MyFooDto")
+    .to("direct:process");
+```
+
+```xml
+<route>
+  <from uri="direct:foo"/>
+  <to uri="mapstruct:com.foo.MyFooDto"/>
+  <to uri="direct:process"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:foo
+      steps:
+        - to:
+            uri: mapstruct:com.foo.MyFooDto
+        - to:
+            uri: direct:process
+```
+
 > **Note**
 > Camel does not support mapper methods defined with a `void` return type such as those used with `@MappingTarget`.
 

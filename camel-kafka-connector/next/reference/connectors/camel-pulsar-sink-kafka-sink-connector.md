@@ -21,7 +21,7 @@ To use this sink connector in Kafka connect you’ll need to set the following c
 connector.class=org.apache.camel.kafkaconnector.pulsarsink.CamelPulsarsinkSinkConnector
 ```
 
-The camel-pulsar-sink sink connector supports 19 options, which are listed below.
+The camel-pulsar-sink sink connector supports 18 options, which are listed below.
 
    
 | Name | Description | Default | Priority |
@@ -41,7 +41,6 @@ The camel-pulsar-sink sink connector supports 19 options, which are listed below
 | **camel.kamelet.pulsar-sink.initialSequenceId** | The first message published will have a sequence Id of initialSequenceId 1. | \-1 | MEDIUM |
 | **camel.kamelet.pulsar-sink.lazyStartProducer** | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | MEDIUM |
 | **camel.kamelet.pulsar-sink.maxPendingMessages** | Size of the pending massages queue. When the queue is full, by default, any further sends will fail unless blockIfQueueFull=true. | 1000 | MEDIUM |
-| **camel.kamelet.pulsar-sink.maxPendingMessagesAcrossPartitions** | The maximum number of pending messages for partitioned topics. The `maxPendingMessages` value is reduced if (number of partitions `maxPendingMessages`) exceeds this value. Partitioned topics have a pending message queue for each partition. | 50000 | MEDIUM |
 | **camel.kamelet.pulsar-sink.messageRoutingMode** | Message Routing Mode to use. | "RoundRobinPartition" | MEDIUM |
 | **camel.kamelet.pulsar-sink.producerName** | Name of the producer. If unset, lets Pulsar select a unique identifier. |  | MEDIUM |
 | **camel.kamelet.pulsar-sink.sendTimeoutMs** | Send timeout in milliseconds. | 30000 | MEDIUM |

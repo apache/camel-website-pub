@@ -3984,6 +3984,12 @@ bool | To automatically add an ingress whenever the integration uses an HTTP end
 \[\]string | To configure tls hosts |
 | `tlsSecretName`  
 string | To configure tls secret name |
+| `tlsCertManagerAuto`  
+bool | To automatically discover and configure a cert-manager Issuer or ClusterIssuer for TLS certificate issuance, in place of manually providing a secret. |
+| `tlsIssuerName`  
+string | The name of the cert-manager Issuer or ClusterIssuer to use for automatic TLS certificate issuance. If set, cert-manager availability and the issuer’s existence are verified, bypassing auto-discovery. |
+| `tlsIssuerKind`  
+string | The kind of the cert-manager issuer to use: `Issuer` (namespaced) or `ClusterIssuer` (cluster-scoped). Defaults to `ClusterIssuer` when tlsIssuerName is set without a kind. |
 
 ### InitContainersTrait
 

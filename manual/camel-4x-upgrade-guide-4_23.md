@@ -340,6 +340,23 @@ The `type` (class name) of a bean definition — `bean` under `beans`, `template
 
 The XML schemas (`camel-spring.xsd`, `camel-xml-io.xsd`) and the YAML schema no longer require `type`, so Spring XML and the YAML validator (`camel validate`) now accept what the runtime already ran. A bean that is neither scripted nor built still needs a `type`, and the error for a missing one is now an `IllegalArgumentException` naming the bean instead of a `NullPointerException`.
 
+### camel-core - Splitter unwraps Exchange parts
+
+The Splitter EIP now unwraps parts of type `org.apache.camel.Exchange`, the same way it already unwrapped parts of type `org.apache.camel.Message`. When splitting a body of type `List<Exchange>`, as produced by the camel-kafka batching consumer (`batching=true`) and by the grouped exchange aggregation strategy, each child exchange now carries the body and the headers of the corresponding part. Previously the child body was the part `Exchange` itself, with no headers.
+
+Code that read the part from the child body must be updated, for example when performing a Kafka manual commit after a split:
+
+```java
+// before
+KafkaManualCommit manual = exchange.getMessage().getBody(Exchange.class)
+        .getMessage().getHeader(KafkaConstants.MANUAL_COMMIT, KafkaManualCommit.class);
+
+// now
+KafkaManualCommit manual = exchange.getMessage().getHeader(KafkaConstants.MANUAL_COMMIT, KafkaManualCommit.class);
+```
+
+The message of the part is copied into the child exchange, so the exchanges in the original list are left untouched and remain usable after the split, for example by the batching consumer that owns them. Exchange properties of the part are not carried over to the child exchange, as is already the case for `Message` parts.
+
 ### Component deprecation
 
 #### camel-minio
@@ -527,7 +544,7 @@ The shared catalog tools answer for the Camel version in use, or the `camelVersi
 
 ### camel-jbang (TUI)
 
-The F8 AI panel now sends only a core subset of its `tui_*` tools to local providers (Ollama, or any provider on `localhost`); the drawing, animation and automation tools are left out to keep the prompt small for local models. Hosted providers are unaffected. Use `/tools full` in the panel, or set `camel.tui.ai.tools=full`, to restore the previous behaviour. Requests to Ollama now also set `keep_alive` to 30 minutes and `num_ctx` to 32768 (or `OLLAMA_CONTEXT_LENGTH` when that is set in the environment), which can cause a one-time model reload if the model was loaded with a different context size.
+The F8 AI panel now sends only a core subset of its `tui_*` tools to local providers (Ollama, or any provider on `localhost`); the drawing, animation and automation tools are left out to keep the prompt small for local models. Hosted providers are unaffected. Use `/tools full` in the panel, or set `camel.tui.ai.tools=full`, to restore the previous behaviour. Requests to Ollama now also set `keep_alive` to 30 minutes and a `num_ctx` chosen once per model: `OLLAMA_CONTEXT_LENGTH` when set in the environment, else the window of the model when Ollama already has it loaded (raised to 32768 when smaller), else 65536 when the model’s weights plus the KV cache of that window fit the machine’s memory and 32768 otherwise. The same rule applies to `camel ask` and the other CLI commands that use Ollama. Asking for a window Ollama does not have loaded causes a one-time model reload. The AI panel compacts its conversation history for a local provider once the prompt Ollama measured passes half that window (at most half of 65536) and prints a line saying so, instead of the earlier estimate-based threshold.
 
 `camel tui --record` is now rejected when combined with `--web`. The recording configuration applies to the whole process, so a browser session served by `--web` would be recorded into the same `.cast` file as the local session. Previously the combination was accepted, but recording never produced any output, so run the two modes in separate processes instead.
 

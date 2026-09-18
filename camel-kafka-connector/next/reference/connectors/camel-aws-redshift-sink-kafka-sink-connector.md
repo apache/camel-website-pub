@@ -31,7 +31,7 @@ The camel-aws-redshift-sink sink connector supports 6 options, which are listed 
 | **camel.kamelet.aws-redshift-sink.username** | **Required** The username to access a secured AWS Redshift Database. |  | HIGH |
 | **camel.kamelet.aws-redshift-sink.password** | **Required** The password to access a secured AWS Redshift Database. |  | HIGH |
 | **camel.kamelet.aws-redshift-sink.query** | **Required** The query to execute against the AWS Redshift Database. Example: INSERT INTO accounts (username,city) VALUES (:#username,:#city). |  | HIGH |
-| **camel.kamelet.aws-redshift-sink.databaseName** | **Required** The name of the AWS RedShift Database. |  | HIGH |
+| **camel.kamelet.aws-redshift-sink.databaseName** | **Required** The name of the AWS Redshift Database. |  | HIGH |
 
 The camel-aws-redshift-sink sink connector has no converters out of the box.
 

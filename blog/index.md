@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[243]{title,link,pubDate,description}:
+posts[244]{title,link,pubDate,description}:
+  Authorizing what an AI agent may do in Apache Camel|https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/index.md|Thu, 17 Sep 2026 00:00:00 +0000|Camel can expose a route as a tool an AI agent can call, and it can run the agent that calls it. Camel 4.22 added camel-ai-tool, a way to register a route as a tool once and use it from LangChain4j, S
   Camel Quarkus 3.33.3 Released|https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/index.md|Thu, 17 Sep 2026 00:00:00 +0000|Camel Quarkus 3.33.3 release
   RELEASE 4.22.1|https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/index.md|Thu, 17 Sep 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.22.1 LTS release with 120 bug fixes and improvements. The artifacts are published and ready for you to download from the Central
   The Camel website, rebuilt for humans and for AI|https://camel.apache.org/blog/2026/09/camel-website-rebuilt/index.md|Thu, 17 Sep 2026 00:00:00 +0000|The Camel website has needed a modern design for years. Its front page said that Camel &ldquo;is an Open Source integration framework that empowers you to quickly and easily integrate various systems&

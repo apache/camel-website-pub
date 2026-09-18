@@ -168,6 +168,133 @@ The JCache component supports the following message header(s), which is/are list
 
 ## Usage
 
+### Producer operations
+
+The producer performs one cache operation per message: the `action` option sets the default, and the `CamelJCacheAction` header overrides it per message. The operations are `PUT`, `PUTALL`, `PUTIFABSENT`, `GET`, `GETALL`, `GETANDREMOVE`, `GETANDREPLACE`, `GETANDPUT`, `REPLACE`, `REMOVE`, `REMOVEALL`, `CLEAR` and `INVOKE`. The `CamelJCacheKey` header names the entry (`CamelJCacheKeys`, a set of keys, for the `ALL` operations), the message body is the value to store, and a `GET` puts the value found in the body.
+
+Storing a value under a key:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:put")
+    .setHeader(JCacheConstants.KEY, constant("123"))
+    .to("jcache:orders?action=PUT");
+```
+
+```xml
+<route>
+    <from uri="direct:put"/>
+    <setHeader name="CamelJCacheKey">
+        <constant>123</constant>
+    </setHeader>
+    <to uri="jcache:orders?action=PUT"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:put
+      steps:
+        - setHeader:
+            name: CamelJCacheKey
+            expression:
+              constant:
+                expression: "123"
+        - to:
+            uri: jcache:orders?action=PUT
+```
+
+Reading a value back, the operation chosen by the header:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:get")
+    .setHeader(JCacheConstants.ACTION, constant("GET"))
+    .setHeader(JCacheConstants.KEY, constant("123"))
+    .to("jcache:orders")
+    .log("Order 123 is ${body}");
+```
+
+```xml
+<route>
+    <from uri="direct:get"/>
+    <setHeader name="CamelJCacheAction">
+        <constant>GET</constant>
+    </setHeader>
+    <setHeader name="CamelJCacheKey">
+        <constant>123</constant>
+    </setHeader>
+    <to uri="jcache:orders"/>
+    <log message="Order 123 is ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:get
+      steps:
+        - setHeader:
+            name: CamelJCacheAction
+            expression:
+              constant:
+                expression: GET
+        - setHeader:
+            name: CamelJCacheKey
+            expression:
+              constant:
+                expression: "123"
+        - to:
+            uri: jcache:orders
+        - log:
+            message: "Order 123 is ${body}"
+```
+
+### Consuming cache events
+
+The consumer receives the events of the cache: the `CamelJCacheEventType` header is `CREATED`, `UPDATED`, `REMOVED` or `EXPIRED`, `CamelJCacheKey` is the key, the body is the value, and with `oldValueRequired=true` the `CamelJCacheOldValue` header is the previous value. The `filteredEvents` option names the events to leave out:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jcache:orders?filteredEvents=EXPIRED")
+    .log("Order ${header.CamelJCacheKey} was ${header.CamelJCacheEventType}: ${body}");
+```
+
+```xml
+<route>
+    <from uri="jcache:orders?filteredEvents=EXPIRED"/>
+    <log message="Order ${header.CamelJCacheKey} was ${header.CamelJCacheEventType}: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jcache:orders?filteredEvents=EXPIRED
+      steps:
+        - log:
+            message: "Order ${header.CamelJCacheKey} was ${header.CamelJCacheEventType}: ${body}"
+```
+
 ### JCache Policy
 
 The JCachePolicy is an interceptor around a route that caches the "result of the route" (the message body) after the route is completed. If the next time the route is called with a "similar" Exchange, the cached value is used on the Exchange instead of executing the route. The policy uses the JSR107/JCache API of a cache implementation, so it’s required to add one (e.g., Hazelcast, Ehcache) to the classpath.

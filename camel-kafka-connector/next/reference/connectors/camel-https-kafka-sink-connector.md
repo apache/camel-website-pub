@@ -21,7 +21,7 @@ To use this sink connector in Kafka connect you’ll need to set the following c
 connector.class=org.apache.camel.kafkaconnector.https.CamelHttpsSinkConnector
 ```
 
-The camel-https sink connector supports 116 options, which are listed below.
+The camel-https sink connector supports 119 options, which are listed below.
 
    
 | Name | Description | Default | Priority |
@@ -157,6 +157,24 @@ Enum values:
  |  | MEDIUM |
 | **camel.sink.endpoint.authPassword** | Authentication password. |  | MEDIUM |
 | **camel.sink.endpoint.authUsername** | Authentication username. |  | MEDIUM |
+| **camel.sink.endpoint.hostnameVerificationPolicy** | 
+
+Controls how hostname verification is performed during the TLS handshake. CLIENT (default) delegates entirely to the configured x509HostnameVerifier, preserving the behaviour of httpclient 5.5 and earlier a NoopHostnameVerifier will disable verification. BUILTIN uses the JDK SSLParameters hostname check only, ignoring the configured verifier. BOTH runs the JDK built-in check first and then the configured verifier; a NoopHostnameVerifier cannot bypass the built-in check under BUILTIN or BOTH. Prefer BOTH when no custom verifier semantics are needed for stronger out-of-the-box security. One of: \[CLIENT\] \[BUILTIN\] \[BOTH\].
+
+Enum values:
+
+-   CLIENT
+    
+-   BUILTIN
+    
+-   BOTH
+    
+
+
+
+
+
+ | "CLIENT" | MEDIUM |
 | **camel.sink.endpoint.oauth2BodyAuthentication** | Whether to use OAuth2 body authentication. | false | MEDIUM |
 | **camel.sink.endpoint.oauth2CachedTokensDefaultExpirySeconds** | Default expiration time for cached OAuth2 tokens, in seconds. Used if token response does not contain 'expires\_in' field. | 3600L | MEDIUM |
 | **camel.sink.endpoint.oauth2CachedTokensExpirationMarginSeconds** | Amount of time which is deducted from OAuth2 tokens expiry time to compensate for the time it takes OAuth2 Token Endpoint to send the token over http, in seconds. Set this parameter to high value if you OAuth2 Token Endpoint answers slowly or you tokens expire quickly. If you set this parameter to too small value, you can get 4xx http errors because camel will think that the received token is still valid, while in reality the token is expired for the Authentication server. | 5L | MEDIUM |
@@ -242,6 +260,25 @@ Enum values:
 | **camel.component.https.proxyAuthUsername** | Proxy server username. |  | MEDIUM |
 | **camel.component.https.proxyHost** | Proxy server host. |  | MEDIUM |
 | **camel.component.https.proxyPort** | Proxy server port. |  | MEDIUM |
+| **camel.component.https.deserializationFilter** | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied when deserializing Java objects from requests or responses with Content-Type application/x-java-serialized-object (only used when allowJavaSerializedObject or transferException is enabled). When not set, the JVM-wide jdk.serialFilter is used if present; otherwise a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. packages is applied. |  | MEDIUM |
+| **camel.component.https.hostnameVerificationPolicy** | 
+
+Controls how hostname verification is performed during the TLS handshake. CLIENT (default) delegates entirely to the configured x509HostnameVerifier, preserving the behaviour of httpclient 5.5 and earlier a NoopHostnameVerifier will disable verification. BUILTIN uses the JDK SSLParameters hostname check only, ignoring the configured verifier. BOTH runs the JDK built-in check first and then the configured verifier; a NoopHostnameVerifier cannot bypass the built-in check under BUILTIN or BOTH. Prefer BOTH when no custom verifier semantics are needed for stronger out-of-the-box security. One of: \[CLIENT\] \[BUILTIN\] \[BOTH\].
+
+Enum values:
+
+-   CLIENT
+    
+-   BUILTIN
+    
+-   BOTH
+    
+
+
+
+
+
+ | "CLIENT" | MEDIUM |
 | **camel.component.https.sslContextParameters** | To configure security using SSLContextParameters. Important: Only one instance of org.apache.camel.support.jsse.SSLContextParameters is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. |  | MEDIUM |
 | **camel.component.https.useGlobalSslContextParameters** | Enable usage of global SSL context parameters. | false | MEDIUM |
 | **camel.component.https.x509HostnameVerifier** | To use a custom X509HostnameVerifier such as DefaultHostnameVerifier or NoopHostnameVerifier. |  | MEDIUM |

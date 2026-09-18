@@ -175,6 +175,8 @@ Type name is optional and must be given between quotes(').
 
 Value source is required. Value source populates the parameter value from the Exchange. It can be either a Simple expression or header location i.e. `:#<header name>`. For example, the Simple expression `${header.val}` would mean that parameter value will be read from the header `val`. Header location expression `:#val` would have identical effect.
 
+The Simple expression may use functions with a single argument, such as `${val(1)}` or `${bodyAs(String)}`. However, the template is not a full Simple expression: functions with multiple, comma-separated arguments (such as `${replace(a,b)}`) and nested functions are not supported, as the comma is used to separate the parameters of the stored procedure. If you need such expressions, then compute the value beforehand, for example into a header, and refer to it with `${header.name}`.
+
 When using named parameters, Camel will look up the names in the given precedence:
 
 1.  from a [Simple](languages/simple-language.md) expressions

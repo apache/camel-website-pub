@@ -610,7 +610,7 @@ Table 11. Query Operation
     from("direct:start")
         .setHeader(InfinispanConstants.OPERATION).constant(InfinispanOperation.PUT) (1)
         .setHeader(InfinispanConstants.KEY).constant("123") (2)
-        .to("infinispan:myCacheName&cacheContainer=#cacheContainer"); (3)
+        .to("infinispan-embedded:myCacheName?cacheContainer=#cacheContainer"); (3)
     ```
     
     <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the operation to perform</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the key used to identify the element in the cache</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Use the configured cache manager <code>cacheContainer</code> from the registry to put an element to the cache named <code>myCacheName</code></td></tr></tbody></table>
@@ -625,7 +625,7 @@ Table 11. Query Operation
         .setHeader(InfinispanConstants.KEY).constant("123")
         .setHeader(InfinispanConstants.LIFESPAN_TIME).constant(100L) (1)
         .setHeader(InfinispanConstants.LIFESPAN_TIME_UNIT).constant(TimeUnit.MILLISECONDS.toString()) (2)
-        .to("infinispan:myCacheName");
+        .to("infinispan-embedded:myCacheName");
     ```
     
     <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the lifespan of the entry</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the time unit for the lifespan</td></tr></tbody></table>
@@ -643,7 +643,7 @@ Table 11. Query Operation
                 return qf.from(User.class).having("name").like("%abc%").build();
             }
         })
-        .to("infinispan:myCacheName?cacheContainer=#cacheManager") ;
+        .to("infinispan-embedded:myCacheName?cacheContainer=#cacheManager") ;
     ```
     
 -   Custom Listeners
@@ -656,13 +656,13 @@ Table 11. Query Operation
         
     
     ```java
-    from("infinispan://?cacheContainer=#cacheManager&customListener=#myCustomListener")
+    from("infinispan-embedded:myCacheName?cacheContainer=#cacheManager&customListener=#myCustomListener")
       .to("mock:result");
     ```
     
     ```xml
     <route>
-      <from uri="infinispan://?cacheContainer=#cacheManager&amp;customListener=#myCustomListener"/>
+      <from uri="infinispan-embedded:myCacheName?cacheContainer=#cacheManager&amp;customListener=#myCustomListener"/>
       <to uri="mock:result"/>
     </route>
     ```
@@ -670,7 +670,7 @@ Table 11. Query Operation
     ```yaml
     - route:
         from:
-          uri: "infinispan://"
+          uri: infinispan-embedded:myCacheName
           parameters:
             cacheContainer: "#cacheManager"
             customListener: "#myCustomListener"

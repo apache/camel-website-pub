@@ -21,7 +21,7 @@ To use this source connector in Kafka connect you’ll need to set the following
 connector.class=org.apache.camel.kafkaconnector.file.CamelFileSourceConnector
 ```
 
-The camel-file source connector supports 88 options, which are listed below.
+The camel-file source connector supports 89 options, which are listed below.
 
    
 | Name | Description | Default | Priority |
@@ -30,17 +30,45 @@ The camel-file source connector supports 88 options, which are listed below.
 | **camel.source.endpoint.charset** | This option is used to specify the encoding of the file. You can use this on the consumer, to specify the encodings of the files, which allow Camel to know the charset it should load the file content in case the file content is being accessed. Likewise when writing a file, you can use this option to specify which charset to write the file as well. Do mind that when writing the file Camel may have to read the message content into memory to be able to convert the data into the configured charset, so do not use this if you have big messages. |  | MEDIUM |
 | **camel.source.endpoint.doneFileName** | Producer: If provided, then Camel will write a 2nd done file when the original file has been written. The done file will be empty. This option configures what file name to use. Either you can specify a fixed name. Or you can use dynamic placeholders. The done file will always be written in the same folder as the original file. Consumer: If provided, Camel will only consume files if a done file exists. This option configures what file name to use. Either you can specify a fixed name. Or you can use dynamic placeholders.The done file is always expected in the same folder as the original file. Only $\\{file.name} and $\\{file.name.next} is supported as dynamic placeholders. |  | MEDIUM |
 | **camel.source.endpoint.fileName** | Use Expression such as File Language to dynamically set the filename. For consumers, it’s used as a filename filter. For producers, it’s used to evaluate the filename to write. If an expression is set, it take precedence over the CamelFileName header. (Note: The header itself can also be an Expression). The expression options support both String and Expression types. If the expression is a String type, it is always evaluated using the File Language. If the expression is an Expression type, the specified Expression type is used - this allows you, for instance, to use OGNL expressions. For the consumer, you can use it to filter filenames, so you can for instance consume today’s file using the File Language syntax: mydata-$\\{date:now:yyyyMMdd}.txt. The producers support the CamelOverruleFileName header which takes precedence over any existing CamelFileName header; the CamelOverruleFileName is a header that is used only once, and makes it easier as this avoids to temporary store CamelFileName and have to restore it afterwards. |  | MEDIUM |
+| **camel.source.endpoint.jailStartingDirectory** | Used for jailing (restricting) writing files to the starting directory (and sub) only. This is enabled by default to not allow Camel to write files to outside directories (to be more secured out of the box). You can turn this off to allow writing files to directories outside the starting directory, such as parent or root folders. For consumers that use a localWorkDirectory, this also restricts the downloaded files to stay within the configured localWorkDirectory. | true | MEDIUM |
 | **camel.source.endpoint.delete** | If true, the file will be deleted after it is processed successfully. | false | MEDIUM |
 | **camel.source.endpoint.moveFailed** | Sets the move failure expression based on Simple language. For example, to move files into a .error subdirectory use: .error. Note: When moving the files to the fail location Camel will handle the error and will not pick up the file again. |  | MEDIUM |
 | **camel.source.endpoint.noop** | If true, the file is not moved or deleted in any way. This option is good for readonly data, or for ETL type requirements. If noop=true, Camel will set idempotent=true as well, to avoid consuming the same files over and over again. | false | MEDIUM |
 | **camel.source.endpoint.preMove** | Expression (such as File Language) used to dynamically set the filename when moving it before processing. For example to move in-progress files into the order directory set this value to order. |  | MEDIUM |
-| **camel.source.endpoint.preSort** | When pre-sort is enabled then the consumer will sort the file and directory names during polling, that was retrieved from the file system. You may want to do this in case you need to operate on the files in a sorted order. The pre-sort is executed before the consumer starts to filter, and accept files to process by Camel. This option is default=false meaning disabled. | false | MEDIUM |
+| **camel.source.endpoint.preSort** | 
+When pre-sort is enabled then the consumer will sort the file and directory names during polling, that was retrieved from the file system. You may want to do this in case you need to operate on the files in a sorted order. The pre-sort is executed before the consumer starts to filter, and accept files to process by Camel. This option is default=false meaning disabled. The following values are supported: name (sort by file name), modified (sort by last-modified timestamp), size (sort by file size). To sort in descending (reverse) order, prefix the value with a minus sign (e.g., -modified to sort newest first). The value true is an alias for name (backward compatible). One of: \[true\] \[false\] \[name\] \[-name\] \[modified\] \[-modified\] \[size\] \[-size\].
+
+Enum values:
+
+-   true
+    
+-   false
+    
+-   name
+    
+-   \-name
+    
+-   modified
+    
+-   \-modified
+    
+-   size
+    
+-   \-size
+    
+
+
+
+
+
+ |  | MEDIUM |
 | **camel.source.endpoint.recursive** | If a directory, will look for files in all the sub-directories as well. | false | MEDIUM |
 | **camel.source.endpoint.sendEmptyMessageWhenIdle** | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | MEDIUM |
 | **camel.source.endpoint.bridgeErrorHandler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | MEDIUM |
 | **camel.source.endpoint.directoryMustExist** | Similar to the startingDirectoryMustExist option, but this applies during polling (after starting the consumer). | false | MEDIUM |
 | **camel.source.endpoint.exceptionHandler** | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | MEDIUM |
 | **camel.source.endpoint.exchangePattern** | 
+
 Sets the exchange pattern when the consumer creates an exchange. One of: \[InOnly\] \[InOut\].
 
 Enum values:

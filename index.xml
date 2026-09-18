@@ -9,6 +9,13 @@
     <lastBuildDate>Thu, 17 Sep 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Authorizing what an AI agent may do in Apache Camel</title>
+      <link>https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/</link>
+      <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/</guid>
+      <description>Camel can expose a route as a tool an AI agent can call, and it can run the agent that calls it. Camel 4.22 added camel-ai-tool, a way to register a route as a tool once and use it from LangChain4j, Spring AI or OpenAI, and over MCP (see Camel Routes as AI Tools). The agent reads a request, picks the tools it needs and calls them.&#xA;That last part is the one I want to talk about.</description>
+    </item>
+    <item>
       <title>Camel Quarkus 3.33.3 Released</title>
       <link>https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/</link>
       <pubDate>Thu, 17 Sep 2026 00:00:00 +0000</pubDate>

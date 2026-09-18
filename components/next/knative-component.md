@@ -366,6 +366,48 @@ RouteBuilder.addRoutes(context, b -> {
 
 <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>configure the Knative component to use the <code>Knative Environment</code> file</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>transform data to proper Http CloudEvents format</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>push event to the broker that gets resolved via the <code>Knative Environment</code></td></tr></tbody></table>
 
+The same route in the DSLs, with the component configured through `camel.component.knative.environmentPath` as shown above:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("timer:tick")
+    .setBody().simple("Hello Knative!")
+    .transformDataType("http:application-cloudevents")
+    .to("knative:event/default?kind=Broker&name=default");
+```
+
+```xml
+<route>
+    <from uri="timer:tick"/>
+    <setBody>
+        <simple>Hello Knative!</simple>
+    </setBody>
+    <transformDataType toType="http:application-cloudevents"/>
+    <to uri="knative:event/default?kind=Broker&amp;name=default"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:tick
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: Hello Knative!
+        - transformDataType:
+            toType: http:application-cloudevents
+        - to:
+            uri: knative:event/default?kind=Broker&name=default
+```
+
 The Knative eventing broker uses CloudEvents data format by default. This is why we transform the data with the given data type before sending the request to the broker. The data type will set proper CloudEvent attributes like event type, id, source, subject and so on.
 
 You can customize the CloudEvent attributes by setting specific message headers (e.g. `CamelCloudEventID=myEventId` or `CamelCloudEventType=myEventType`).
@@ -486,6 +528,36 @@ RouteBuilder.addRoutes(context, b -> {
 });
 ```
 
+The same route in the DSLs; the body is the data of the CloudEvent and its attributes are message headers such as `CamelCloudEventType` and `CamelCloudEventSource`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("knative:event/default?kind=Broker&name=default")
+    .log("Received event: ${body}");
+```
+
+```xml
+<route>
+    <from uri="knative:event/default?kind=Broker&amp;name=default"/>
+    <log message="Received event: ${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: knative:event/default?kind=Broker&name=default
+      steps:
+        - log:
+            message: "Received event: ${body}"
+```
+
 The according `Knative Environment` configuration that specifies the Http service looks like this:
 
 knative.json
@@ -508,3 +580,43 @@ knative.json
 ```
 
 This will create a proper Http service with the right resource path routing so that all incoming event requests will be consumed by the Camel route. Once again the Knative broker will use CloudEvent data format by default, so you can access the CloudEvent attributes such as event type, id, source, subject in the Camel route.
+
+### Bridging channels
+
+The `channel` resource type works the same way with [Knative channels](https://knative.dev/docs/eventing/channels/): a route consumes the messages of one channel and produces to another, with both channels declared in the `Knative Environment` as `channel` resources, the consumed one with `"endpointKind": "source"` and the produced one with `"endpointKind": "sink"`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("knative:channel/messages")
+    .transform().simple("transformed ${body}")
+    .to("knative:channel/words");
+```
+
+```xml
+<route>
+    <from uri="knative:channel/messages"/>
+    <transform>
+        <simple>transformed ${body}</simple>
+    </transform>
+    <to uri="knative:channel/words"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: knative:channel/messages
+      steps:
+        - transform:
+            expression:
+              simple:
+                expression: transformed ${body}
+        - to:
+            uri: knative:channel/words
+```

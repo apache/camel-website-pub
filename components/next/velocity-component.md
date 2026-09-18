@@ -161,6 +161,75 @@ VelocityContext velocityContext = new VelocityContext(variableMap);
 exchange.getIn().setHeader("CamelVelocityContext", velocityContext);
 ```
 
+### Using Velocity Tools such as EscapeTool
+
+Anything you store in an exchange variable is available to the template via `$variables`. This makes it easy to hand [Velocity Tools](https://velocity.apache.org/tools/devel/apidocs/org/apache/velocity/tools/generic/EscapeTool.md) such as `EscapeTool` to the template, so special characters can be escaped for HTML, XML, JSON, SQL, or URLs directly in the template, instead of pre-processing the message before calling the template.
+
+First, add the Velocity Tools dependency to your project (Camel does not ship it):
+
+```xml
+<dependency>
+    <groupId>org.apache.velocity.tools</groupId>
+    <artifactId>velocity-tools-generic</artifactId>
+    <version>x.x.x</version>
+</dependency>
+```
+
+Then register an `EscapeTool` as a bean, pass it to the template in an exchange variable, and call it from the template:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:order")
+    .setVariable("esc", constant(new EscapeTool()))
+    .to("velocity:com/acme/order.vm");
+```
+
+```xml
+<bean id="esc" class="org.apache.velocity.tools.generic.EscapeTool"/>
+
+<route>
+  <from uri="direct:order"/>
+  <setVariable name="esc">
+    <simple>${ref:esc}</simple>
+  </setVariable>
+  <to uri="velocity:com/acme/order.vm"/>
+</route>
+```
+
+```yaml
+- beans:
+    - name: esc
+      type: org.apache.velocity.tools.generic.EscapeTool
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - setVariable:
+            name: esc
+            expression:
+              simple:
+                expression: ${ref:esc}
+        - to:
+            uri: velocity:com/acme/order.vm
+```
+
+order.vm
+
+```text
+Dear ${headers.name}. You ordered item $variables.esc.xml(${headers.item}) on $variables.esc.xml(${body}).
+```
+
+With a body of `Monday & Tuesday` the template renders `Monday & Tuesday`. The same works with `$variables.esc.html(…​)`, `$variables.esc.json(…​)`, `$variables.esc.sql(…​)`, and `$variables.esc.url(…​)`.
+
+> **Tip**
+> A message header works the same way (`setHeader("esc", constant(new EscapeTool()))` and `$headers.esc` in the template), but a variable keeps the tool out of the message, so it is not sent along to the next endpoint.
+
 ### Hot reloading
 
 The Velocity template resource is, by default, hot reloadable for both file and classpath resources (expanded jar). If you set `contentCache=true`, Camel will only load the resource once, and thus hot reloading is not possible. This scenario can be used in production when the resource never changes.

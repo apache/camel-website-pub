@@ -30,8 +30,8 @@ The camel-scp-sink sink connector supports 8 options, which are listed below.
 | **camel.kamelet.scp-sink.serverPort** | **Required** The port of the FTP server. |  | HIGH |
 | **camel.kamelet.scp-sink.username** | Username for accessing FTP Server. |  | MEDIUM |
 | **camel.kamelet.scp-sink.password** | Password for accessing FTP Server. |  | MEDIUM |
-| **camel.kamelet.scp-sink.privateKeyFile** | Set the private key file so that the SFTP endpoint can do private key verification. |  | MEDIUM |
-| **camel.kamelet.scp-sink.privateKeyPassphrase** | Set the private key file passphrase so that the SFTP endpoint can do private key verification. |  | MEDIUM |
+| **camel.kamelet.scp-sink.privateKeyFile** | Set the private key file so that the SCP endpoint can do private key verification. |  | MEDIUM |
+| **camel.kamelet.scp-sink.privateKeyPassphrase** | Set the private key file passphrase so that the SCP endpoint can do private key verification. |  | MEDIUM |
 | **camel.kamelet.scp-sink.strictHostKeyChecking** | Sets whether to use strict host key checking. | "false" | MEDIUM |
 | **camel.kamelet.scp-sink.useUserKnownHostsFile** | If knownHostFile has not been explicit configured then use the host file from System.getProperty(user.home)/.ssh/known\_hosts. | true | MEDIUM |
 

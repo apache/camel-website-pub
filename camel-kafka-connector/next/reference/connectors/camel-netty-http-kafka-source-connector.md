@@ -21,7 +21,7 @@ To use this source connector in Kafka connect you’ll need to set the following
 connector.class=org.apache.camel.kafkaconnector.nettyhttp.CamelNettyhttpSourceConnector
 ```
 
-The camel-netty-http source connector supports 137 options, which are listed below.
+The camel-netty-http source connector supports 138 options, which are listed below.
 
    
 | Name | Description | Default | Priority |
@@ -54,7 +54,7 @@ Enum values:
 | **camel.source.endpoint.sync** | Setting to set endpoint as one-way (false) or request-response (true). | true | MEDIUM |
 | **camel.source.endpoint.tcpNoDelay** | Setting to improve TCP protocol performance. | true | MEDIUM |
 | **camel.source.endpoint.matchOnUriPrefix** | Whether or not Camel should try to find a target consumer by matching the URI prefix if no exact match is found. | false | MEDIUM |
-| **camel.source.endpoint.muteException** | If enabled and an Exchange failed processing on the consumer side the response’s body won’t contain the exception’s stack trace. | false | MEDIUM |
+| **camel.source.endpoint.muteException** | If enabled and an Exchange failed processing on the consumer side the response’s body won’t contain the exception’s stack trace. | true | MEDIUM |
 | **camel.source.endpoint.send503whenSuspended** | Whether to send back HTTP status code 503 when the consumer has been suspended. If the option is false then the Netty Acceptor is unbound when the consumer is suspended, so clients cannot connect anymore. | true | MEDIUM |
 | **camel.source.endpoint.backlog** | Allows to configure a backlog for netty consumer (server). Note the backlog is just a best effort depending on the OS. Setting this option to a value such as 200, 500 or 1000, tells the TCP stack how long the accept queue can be If this option is not configured, then the backlog depends on OS setting. |  | MEDIUM |
 | **camel.source.endpoint.bossCount** | When netty works on nio mode, it uses default bossCount parameter from Netty, which is 1. User can use this option to override the default bossCount from Netty. | 1 | MEDIUM |
@@ -190,6 +190,7 @@ Enum values:
 | **camel.source.endpoint.keyStoreFormat** | Keystore format to be used for payload encryption. Defaults to JKS if not set. |  | MEDIUM |
 | **camel.source.endpoint.keyStoreResource** | Client side certificate keystore to be used for encryption. Is loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | MEDIUM |
 | **camel.source.endpoint.needClientAuth** | Configures whether the server needs client authentication when using SSL. | false | MEDIUM |
+| **camel.source.endpoint.oauthProfile** | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. Requires usingExecutorService=true and sync=true (the defaults), and is not supported with nettySharedHttpServer. |  | MEDIUM |
 | **camel.source.endpoint.passphrase** | Password to use for the keyStore and trustStore. The same password must be configured for both resources. |  | MEDIUM |
 | **camel.source.endpoint.securityConfiguration** | Refers to a org.apache.camel.component.netty.http.NettyHttpSecurityConfiguration for configuring secure web resources. |  | MEDIUM |
 | **camel.source.endpoint.securityOptions** | To configure NettyHttpSecurityConfiguration using key/value pairs from the map. This is a multi-value option with prefix: securityConfiguration. |  | MEDIUM |
@@ -209,7 +210,7 @@ Enum values:
 | **camel.component.netty-http.networkInterface** | When using UDP then this option can be used to specify a network interface by its name, such as eth0 to join a multicast group. |  | MEDIUM |
 | **camel.component.netty-http.bridgeErrorHandler** | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | MEDIUM |
 | **camel.component.netty-http.clientMode** | If the clientMode is true, netty consumer will connect the address as a TCP client. | false | MEDIUM |
-| **camel.component.netty-http.muteException** | If enabled and an Exchange failed processing on the consumer side the response’s body won’t contain the exception’s stack trace. | false | MEDIUM |
+| **camel.component.netty-http.muteException** | If enabled and an Exchange failed processing on the consumer side the response’s body won’t contain the exception’s stack trace. | true | MEDIUM |
 | **camel.component.netty-http.reconnect** | Used only in clientMode in consumer, the consumer will attempt to reconnect on disconnection if this is enabled. | true | MEDIUM |
 | **camel.component.netty-http.reconnectInterval** | Used if reconnect and clientMode is enabled. The interval in milli seconds to attempt reconnection. | 10000 | MEDIUM |
 | **camel.component.netty-http.backlog** | Allows to configure a backlog for netty consumer (server). Note the backlog is just a best effort depending on the OS. Setting this option to a value such as 200, 500 or 1000, tells the TCP stack how long the accept queue can be If this option is not configured, then the backlog depends on OS setting. |  | MEDIUM |
