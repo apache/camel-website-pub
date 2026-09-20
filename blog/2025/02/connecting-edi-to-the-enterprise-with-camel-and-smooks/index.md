@@ -111,7 +111,7 @@ The following route receives the purchase order from the customer:
                 groovy: |
                   httpContext = exchangeProperties['CamelAs2.interchange']
                   httpContext.setAttribute(org.apache.camel.component.as2.api.AS2Header.DISPOSITION_TYPE,
-                                           org.apache.camel.component.as2.api.entity.AS2DispositionType.FAILED)                  
+                                           org.apache.camel.component.as2.api.entity.AS2DispositionType.FAILED)
 
 - route:
     id: receivePurchaseOrder

@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 20 Sep 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Extending Apache Camel Simple with Your Own Functions</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-simple-customfunction/</link>
+      <pubDate>Sun, 20 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-simple-customfunction/</guid>
+      <description>Apache Camel&amp;rsquo;s Simple language is surprisingly powerful. It can access message bodies, headers, variables and exchange properties, work with strings and numbers, evaluate conditions, process dates, access JSON and XML data, and combine multiple functions into transformation pipelines. (Apache Camel – Simple Language)&#xA;For a large part of the logic required inside an integration route, this means that no Java code is necessary. Simple goes another step further: existing functions can even be composed into local custom functions directly inside an expression.</description>
+    </item>
     <item>
       <title>Authorizing what an AI agent may do in Apache Camel</title>
       <link>https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/</link>
@@ -69,7 +76,7 @@
       <link>https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/</link>
       <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/09/camel-genai-observability-spring-boot/</guid>
-      <description>In Part 1 we prototyped GenAI observability with the Camel CLI and TUI. This follow-up — Phase 3 (Operate) — shows the same gen_ai.* telemetry in a Spring Boot application wired to the observability stack Camel ships for local development: Prometheus, VictoriaTraces, and Perses.&#xA;The runnable sample lives in the camel-spring-boot-examples repository at genai-observability (reworked in PR #192).&#xA;Architecture Terminal 1: ollama serve Terminal 2: camel infra run observability Terminal 3: mvn spring-boot:run ┌─────────────────┐ scrape :9876/observe/metrics ┌──────────────┐ │ Spring Boot │ ───────────────────────────────► │ Prometheus │ │ Camel + 2 LLMs │ │ :9090 │ │ app :8080 │ └──────┬───────┘ │ mgmt :9876 │ │ └────────┬────────┘ ▼ │ OTLP (Micrometer Tracing) ┌──────────────┐ ▼ │ Perses │ ┌─────────────────┐ dashboards │ :3000 │ │ VictoriaTraces │ ◄────────────────────────────────└──────────────┘ │ :10428 │ └─────────────────┘ Two timer routes call two small Ollama models (llama3.</description>
+      <description>In Part 1 we prototyped GenAI observability with the Camel CLI and TUI. This follow-up — Phase 3 (Operate) — shows the same gen_ai.* telemetry in a Spring Boot application wired to the observability stack Camel ships for local development: Prometheus, VictoriaTraces, and Perses.&#xA;The runnable sample lives in the camel-spring-boot-examples repository at genai-observability (reworked in PR #192).&#xA;Architecture Terminal 1: ollama serve Terminal 2: camel infra run observability Terminal 3: mvn spring-boot:run ┌─────────────────┐ scrape :9876/observe/metrics ┌──────────────┐ │ Spring Boot │ ───────────────────────────────► │ Prometheus │ │ Camel + 2 LLMs │ │ :9090 │ │ app :8080 │ └──────┬───────┘ │ mgmt :9876 │ │ └────────┬────────┘ ▼ │ OTLP (Micrometer Tracing) ┌──────────────┐ ▼ │ Perses │ ┌─────────────────┐ dashboards │ :3000 │ │ VictoriaTraces │ ◄────────────────────────────────└──────────────┘ │ :10428 │ └─────────────────┘Two timer routes call two small Ollama models (llama3.</description>
     </item>
     <item>
       <title>Observe Your Camel AI Routes with GenAI OpenTelemetry</title>
@@ -174,7 +181,7 @@
       <link>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</link>
       <pubDate>Mon, 20 Jul 2026 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/</guid>
-      <description>Getting started with the Camel CLI used to mean installing a JDK, then jbang, then finally running jbang camel@apache/camel init for the first time. That friction is gone. install.sh and install.ps1 get the Camel CLI Launcher running on your machine with a single command, no package manager and no separate jbang install required.&#xA;One-line install On macOS and Linux:&#xA;curl -fsSL https://camel.apache.org/install.sh | sh On Windows, in PowerShell:&#xA;irm https://camel.apache.org/install.ps1 | iex Update (2026-07-25): A server configuration issue was briefly returning a 403 for the install.</description>
+      <description>Getting started with the Camel CLI used to mean installing a JDK, then jbang, then finally running jbang camel@apache/camel init for the first time. That friction is gone. install.sh and install.ps1 get the Camel CLI Launcher running on your machine with a single command, no package manager and no separate jbang install required.&#xA;One-line install On macOS and Linux:&#xA;curl -fsSL https://camel.apache.org/install.sh | shOn Windows, in PowerShell:&#xA;irm https://camel.apache.org/install.ps1 | iexUpdate (2026-07-25): A server configuration issue was briefly returning a 403 for the install.</description>
     </item>
     <item>
       <title>Camel Quarkus 3.27.5 Released</title>
@@ -860,7 +867,7 @@
       <link>https://camel.apache.org/blog/2025/02/camel410-whatsnew/</link>
       <pubDate>Wed, 12 Feb 2025 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2025/02/camel410-whatsnew/</guid>
-      <description>Apache Camel 4.10 LTS has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Added customize to RouteBuilder to make it easier to configure a specific Camel component / dataformat, service in a Java lambda style, such as follows:&#xA;@Override public void configure() throws Exception { customize(KServeComponent.class, k -&amp;gt; { k.getConfiguration().setTarget(&amp;#34;localhost:8888&amp;#34;); }); from(&amp;#34;timer:kserve?repeatCount=1&amp;#34;) .to(&amp;#34;kserve:model/metadata?modelName=myModel&amp;#34;) .log(&amp;#34;${body}&amp;#34;); } This makes it possible for low-code users that want to have a single Java file with the Camel route and all the Java based configuration done entirely from the same configure method.</description>
+      <description>Apache Camel 4.10 LTS has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Added customize to RouteBuilder to make it easier to configure a specific Camel component / dataformat, service in a Java lambda style, such as follows:&#xA;@Override public void configure() throws Exception { customize(KServeComponent.class, k -&amp;gt; { k.getConfiguration().setTarget(&amp;#34;localhost:8888&amp;#34;); }); from(&amp;#34;timer:kserve?repeatCount=1&amp;#34;) .to(&amp;#34;kserve:model/metadata?modelName=myModel&amp;#34;) .log(&amp;#34;${body}&amp;#34;); }This makes it possible for low-code users that want to have a single Java file with the Camel route and all the Java based configuration done entirely from the same configure method.</description>
     </item>
     <item>
       <title>Resolving LangChain4j AI services by name</title>
@@ -1462,7 +1469,7 @@
       <link>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</link>
       <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2021/11/camel-karavan-release-0.0.8/</guid>
-      <description>Karavan Serverless What&amp;rsquo;s new in Karavan preview release 0.0.8? In addition to VSCode extension and Standalone application, Karavan could be deployed in Serverless mode alongside Camel-K on Kubernetes. Karavan Serverless gets and applies Integration Custom Resources directly from/to Kubernetes.&#xA;Try Karavan Serverless mode on Minikube Install Minikube&#xA;Install Camel-K&#xA;Install Karavan serverless&#xA;git clone --depth 1 https://github.com/apache/camel-karavan cd camel-karavan/karavan-demo/serverless kubectl apply -k karavan -n default Get Karavan URL&#xA;minikube service camel-karavan --url The output should be like the following:</description>
+      <description>Karavan Serverless What&amp;rsquo;s new in Karavan preview release 0.0.8? In addition to VSCode extension and Standalone application, Karavan could be deployed in Serverless mode alongside Camel-K on Kubernetes. Karavan Serverless gets and applies Integration Custom Resources directly from/to Kubernetes.&#xA;Try Karavan Serverless mode on Minikube Install Minikube&#xA;Install Camel-K&#xA;Install Karavan serverless&#xA;git clone --depth 1 https://github.com/apache/camel-karavan cd camel-karavan/karavan-demo/serverless kubectl apply -k karavan -n default Get Karavan URL&#xA;minikube service camel-karavan --urlThe output should be like the following:</description>
     </item>
     <item>
       <title>Upcoming changes to the consumer on Kafka component</title>

@@ -16,20 +16,17 @@
       .removeHeader(...) //remove some core headers
       .process(metricsProcessor) //process metrics
       .end()
-      .setId(routeID);
-</code></pre><p>The <em>toEndpoint</em> contains the default configuration:</p> <pre tabindex="0"><code>throwExceptionOnFailure=false //we will catch the exceptions
+      .setId(routeID);</code></pre><p>The <em>toEndpoint</em> contains the default configuration:</p> <pre tabindex="0"><code>throwExceptionOnFailure=false //we will catch the exceptions
 connectTimeout=...
 bridgeEndpoint=true
 copyHeaders=true
-connectionClose=true
-</code></pre><p>Since we want to be able to catch Network, IO exceptions we also do this on the route definition:</p> <pre tabindex="0"><code>routeDefinition
+connectionClose=true</code></pre><p>Since we want to be able to catch Network, IO exceptions we also do this on the route definition:</p> <pre tabindex="0"><code>routeDefinition
   .onException(exceptionClass)
   .continued(continued)
   .setHeader(...) //exception headers
   .toF(apiGatewayErrorEndpoint) //proxy to default error endpoint
   .removeHeader(...) //remove some core headers
-  .end();
-</code></pre><p>All information about a running API can be found in the shared cache. This allows the component that manages APIs to know if an API must be suspended or temporarily blocked (due to failed attempts and/or many calls exceeding the defined threshold.) Information about a running API includes:</p> <ul> <li>Route ID</li> <li>Secured</li> <li>Zipkin Service Name and Prometheus Metrics Name</li> <li>Context</li> <li>Path</li> <li>Verb</li> <li>Failed calls</li> <li>Max allowed failed calls</li> <li>Disabled (temporarily disabled, a candidate to be removed)</li> <li>Removed (removed Route)</li> <li>Suspended info (type [ERROR, THROTTLING] and reason)</li> </ul> <p>Main components Managing enabled Routes:</p> <ul> <li>@Component @Scheduled <em>ThrottlingInspector</em> - Periodically checks the traffic on the deployed API Path level</li> <li>@Component @Scheduled <em>Running API&rsquo;s</em> - Periodically checks for API errors, candidates routes to suspend.</li> </ul> <h2 id="example-of-an-api-definition">Example of an API definition</h2> <pre tabindex="0"><code>{
+  .end();</code></pre><p>All information about a running API can be found in the shared cache. This allows the component that manages APIs to know if an API must be suspended or temporarily blocked (due to failed attempts and/or many calls exceeding the defined threshold.) Information about a running API includes:</p> <ul> <li>Route ID</li> <li>Secured</li> <li>Zipkin Service Name and Prometheus Metrics Name</li> <li>Context</li> <li>Path</li> <li>Verb</li> <li>Failed calls</li> <li>Max allowed failed calls</li> <li>Disabled (temporarily disabled, a candidate to be removed)</li> <li>Removed (removed Route)</li> <li>Suspended info (type [ERROR, THROTTLING] and reason)</li> </ul> <p>Main components Managing enabled Routes:</p> <ul> <li>@Component @Scheduled <em>ThrottlingInspector</em> - Periodically checks the traffic on the deployed API Path level</li> <li>@Component @Scheduled <em>Running API&rsquo;s</em> - Periodically checks for API errors, candidates routes to suspend.</li> </ul> <h2 id="example-of-an-api-definition">Example of an API definition</h2> <pre tabindex="0"><code>{
     &#34;_id&#34; : &#34;XXX-XXX-XXX-XXX&#34;,
     &#34;endpoint&#34; : &#34;remote.domain.com:8080&#34;,
     &#34;endpointType&#34; : &#34;HTTPS&#34;,
@@ -48,9 +45,7 @@ connectionClose=true
         &#34;periodForMaxCalls&#34; : &#34;60000&#34;,
         &#34;applyPerPath&#34; : true
     }
-}
-</code></pre><p>With the following configuration your service will be available at:</p> <pre tabindex="0"><code>https://localhost:8380/gateway/context-name/
-</code></pre><p>The following configuration will be applied:</p> <ul> <li>secured: true - Meaning, that the CAPI Gateway expects a Bearer token sign by the authorization server (currently integrating with Keycloak) provided by the CAPI Rest Server.</li> <li>blockIfInError: true - Means that for instance if you send more than 10 times (maxAllowedFailedCalls) the wrong token your API will be suspended for 2 minutes (unblockAfterMinutes).</li> <li>throttlingPolicy.maxCallsAllowed: 100 / throttlingPolicy.periodForMaxCalls - You can only call your API/Path 100 times per minute.</li> <li>throttlingPolicy.applyPerPath: true - If true the policy will be applied by the path and NOT the total amount for the API.</li> </ul> <h2 id="optional-configuration">Optional Configuration</h2> <p>You can define custom paths, in case you don&rsquo;t have a Swagger Endpoint (Swagger 2/Open API), so if swagger: false, then CAPI will look for a list of PATH like the below example:</p> <pre tabindex="0"><code> {
+}</code></pre><p>With the following configuration your service will be available at:</p> <pre tabindex="0"><code>https://localhost:8380/gateway/context-name/</code></pre><p>The following configuration will be applied:</p> <ul> <li>secured: true - Meaning, that the CAPI Gateway expects a Bearer token sign by the authorization server (currently integrating with Keycloak) provided by the CAPI Rest Server.</li> <li>blockIfInError: true - Means that for instance if you send more than 10 times (maxAllowedFailedCalls) the wrong token your API will be suspended for 2 minutes (unblockAfterMinutes).</li> <li>throttlingPolicy.maxCallsAllowed: 100 / throttlingPolicy.periodForMaxCalls - You can only call your API/Path 100 times per minute.</li> <li>throttlingPolicy.applyPerPath: true - If true the policy will be applied by the path and NOT the total amount for the API.</li> </ul> <h2 id="optional-configuration">Optional Configuration</h2> <p>You can define custom paths, in case you don&rsquo;t have a Swagger Endpoint (Swagger 2/Open API), so if swagger: false, then CAPI will look for a list of PATH like the below example:</p> <pre tabindex="0"><code> {
      &#34;_id&#34; : &#34;XXX-XXX-XXX-XXX&#34;,
      &#34;endpoint&#34; : &#34;remote.domain.com:8080&#34;,
      &#34;endpointType&#34; : &#34;HTTPS&#34;,
@@ -71,8 +66,7 @@ connectionClose=true
          &#34;path&#34; : &#34;/services/path&#34;
          }
      ]
- }
-</code></pre><h2 id="client-consumer-object">Client (consumer) object</h2> <p>This will change after the integration with Keycloak. Example of a client (with the password: web-client-secret)</p> <pre tabindex="0"><code>{
+ }</code></pre><h2 id="client-consumer-object">Client (consumer) object</h2> <p>This will change after the integration with Keycloak. Example of a client (with the password: web-client-secret)</p> <pre tabindex="0"><code>{
     &#34;_id&#34; : &#34;XXX-XXX-XXX-XXX&#34;,
     &#34;clientId&#34; : &#34;web-publisher&#34;,
     &#34;resourceIds&#34; : [],
@@ -101,8 +95,7 @@ connectionClose=true
     &#34;accessTokenValiditySeconds&#34; : 60,
     &#34;refreshTokenValiditySeconds&#34; : 14400,
     &#34;autoApprove&#34; : false
-}
-</code></pre><h2 id="consuming-your-api">Consuming your API</h2> <p>If you wish to enable security for your API (api.secured = true), then you will need to define a <em>client</em>. Your API ID will be added as an authority in the authorities list of your client.</p> <pre tabindex="0"><code>&#34;authorities&#34; : [
+}</code></pre><h2 id="consuming-your-api">Consuming your API</h2> <p>If you wish to enable security for your API (api.secured = true), then you will need to define a <em>client</em>. Your API ID will be added as an authority in the authorities list of your client.</p> <pre tabindex="0"><code>&#34;authorities&#34; : [
     {
         &#34;role&#34; : &#34;ROLE_USER&#34;,
         &#34;_class&#34; : &#34;org.springframework.security.core.authority.SimpleGrantedAuthority&#34;
@@ -115,14 +108,9 @@ connectionClose=true
         &#34;role&#34; : &#34;YOUR API ID&#34;,
         &#34;_class&#34; : &#34;org.springframework.security.core.authority.SimpleGrantedAuthority&#34;
     }
-]
-</code></pre><h2 id="play-with-capi-gateway">Play with CAPI Gateway</h2> <ul> <li>Clone the project.</li> <li>Execute</li> </ul> <pre tabindex="0"><code>$ sudo docker-compose up -d
-</code></pre><ul> <li>If you are starting a new MongoDB instance, a default CAPI Client will be created for you.</li> <li>Request your first access token:</li> </ul> <pre tabindex="0"><code>$ curl -X POST https://localhost:8080/oauth/token -H &#39;Authorization: Basic d2ViLXB1Ymxpc2hlcjp3ZWItY2xpZW50LXNlY3JldA==&#39; -H &#39;Content-Type: multipart/form-data;&#39; -F grant_type=client_credentials -F &#39;response_type=access_token&#39;
-</code></pre><ul> <li>Go to http://localhost:8080/swagger-ui.html</li> <li>Authenticate with the token you obtained from the previous step. (Don&rsquo;t forget to specify: Bearer <em>the token</em>)</li> <li>Publish your first API:</li> </ul> <pre tabindex="0"><code>$ curl -X POST &#34;http://localhost:8080/route/simple-rest&#34; -H &#34;accept: application/json&#34; -H &#34;Content-Type: application/json&#34; -d &#34;&lt;your-api&gt;&#34; (see Example of an API definition)
-</code></pre><ul> <li>Imagine that your context was: test and one of your GET path was /user you can then test: http://localhost:8380/gateway/test/user</li> </ul> <p>Docker Compose will create instances of Grafana, Prometheus and Zipkin, but if you wish to use already existing instances you just need to change this environment variables:</p> <pre tabindex="0"><code>api.gateway.prometheus.endpoint=http://prometheus:9090
+]</code></pre><h2 id="play-with-capi-gateway">Play with CAPI Gateway</h2> <ul> <li>Clone the project.</li> <li>Execute</li> </ul> <pre tabindex="0"><code>$ sudo docker-compose up -d</code></pre><ul> <li>If you are starting a new MongoDB instance, a default CAPI Client will be created for you.</li> <li>Request your first access token:</li> </ul> <pre tabindex="0"><code>$ curl -X POST https://localhost:8080/oauth/token -H &#39;Authorization: Basic d2ViLXB1Ymxpc2hlcjp3ZWItY2xpZW50LXNlY3JldA==&#39; -H &#39;Content-Type: multipart/form-data;&#39; -F grant_type=client_credentials -F &#39;response_type=access_token&#39;</code></pre><ul> <li>Go to http://localhost:8080/swagger-ui.html</li> <li>Authenticate with the token you obtained from the previous step. (Don&rsquo;t forget to specify: Bearer <em>the token</em>)</li> <li>Publish your first API:</li> </ul> <pre tabindex="0"><code>$ curl -X POST &#34;http://localhost:8080/route/simple-rest&#34; -H &#34;accept: application/json&#34; -H &#34;Content-Type: application/json&#34; -d &#34;&lt;your-api&gt;&#34; (see Example of an API definition)</code></pre><ul> <li>Imagine that your context was: test and one of your GET path was /user you can then test: http://localhost:8380/gateway/test/user</li> </ul> <p>Docker Compose will create instances of Grafana, Prometheus and Zipkin, but if you wish to use already existing instances you just need to change this environment variables:</p> <pre tabindex="0"><code>api.gateway.prometheus.endpoint=http://prometheus:9090
 api.gateway.zipkin.endpoint=http://zipkin:9411/api/v2/spans
-api.gateway.grafana.endpoint=http://localhost:8080/grafana
-</code></pre><h2 id="some-load-results-calling-a-protected-service">Some load results (Calling a protected service)</h2> <h4 id="using-apache-benchmark-on-a-1-node-docker-container-with-ssl">Using apache benchmark on a 1 node docker container with SSL</h4> <pre><code>Results for 20k calls 1000 concurrency level:
+api.gateway.grafana.endpoint=http://localhost:8080/grafana</code></pre><h2 id="some-load-results-calling-a-protected-service">Some load results (Calling a protected service)</h2> <h4 id="using-apache-benchmark-on-a-1-node-docker-container-with-ssl">Using apache benchmark on a 1 node docker container with SSL</h4> <pre><code>Results for 20k calls 1000 concurrency level:
 Server Hostname:        localhost
 Server Port:            8380
 SSL/TLS Protocol:       TLSv1.2,ECDHE-RSA-AES256-GCM-SHA384,2048,256
