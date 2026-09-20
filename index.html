@@ -10,24 +10,26 @@ cd camel-app &amp;&amp; ./mvnw spring-boot:run" aria-label="Copy the Spring Boot
 <span class="home-path-prompt">$ </span>cd camel-app &amp;&amp; ./mvnw spring-boot:run
 </pre> <a class="home-path-link" href="./camel-spring-boot/latest/">Start with Spring Boot &rarr;</a> </div> <div class="home-path-panel" role="tabpanel" id="home-path-panel-2" aria-labelledby="home-path-tab-2" tabindex="0" hidden> <div class="home-path-bar"> <span class="home-path-dots" aria-hidden="true"><span></span><span></span><span></span></span> <span class="home-path-title">Quarkus</span> <button class="home-tab-copy home-path-copy" type="button" data-copy-value="quarkus ext add camel-quarkus-kafka" aria-label="Copy the Quarkus commands">Copy</button> </div> <pre class="home-path-code"><span class="home-path-prompt">$ </span>quarkus ext add camel-quarkus-kafka
 </pre> <a class="home-path-link" href="./camel-quarkus/latest/">Start with Quarkus &rarr;</a> </div> </section> <section class="home-stats" aria-label="Project activity"> <div class="home-stats-inner"> <p class="home-stats-label"><a href="./community/user-stories/">Used by thousands of companies worldwide</a></p> <ul class="home-stats-list"> <li> <span class="home-stat-num">83,000&#43;</span> <span class="home-stat-label">commits</span> </li> <li> <span class="home-stat-num">1,500&#43;</span> <span class="home-stat-label">contributors</span> </li> <li> <span class="home-stat-num">350&#43;</span> <span class="home-stat-label">components</span> </li> <li> <span class="home-stat-num">300&#43;</span> <span class="home-stat-label">releases</span> </li> </ul> </div> </section> <div class="home-band"> <section class="home-section" aria-labelledby="home-example-title"> <div class="home-section-head"> <p class="home-eyebrow">See it in action</p> <h2 id="home-example-title">Route messages from Kafka to a database</h2> <p class="home-section-sub">The same route, in your choice of syntax. No boilerplate.</p> </div> <div class="home-example"> <div class="home-tablist" role="tablist" aria-label="Route syntax"> <button class="home-tab" type="button" role="tab" id="home-tab-yaml" aria-controls="home-panel-yaml" aria-selected="true" tabindex="0">YAML</button> <button class="home-tab" type="button" role="tab" id="home-tab-java" aria-controls="home-panel-java" aria-selected="false" tabindex="-1">Java</button> <button class="home-tab" type="button" role="tab" id="home-tab-xml" aria-controls="home-panel-xml" aria-selected="false" tabindex="-1">XML</button> </div> <div class="home-tabpanel" role="tabpanel" id="home-panel-yaml" aria-labelledby="home-tab-yaml" tabindex="0"><button class="home-tab-copy" type="button" data-copy-value="# Route messages from Kafka into a database
-- from:
-    uri: kafka:orders
-    steps:
-      - unmarshal:
-          json: {}
-      - to:
-          uri: &gt;-
-            sql:INSERT INTO orders (id, amount)
-            VALUES (:#id, :#amount)" aria-label="Copy the YAML example">Copy</button><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># Route messages from Kafka into a database</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">from</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l">kafka:orders</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">unmarshal</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">json</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">to</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="p">&gt;-</span><span class="sd">
-</span></span></span><span class="line"><span class="cl"><span class="sd">            sql:INSERT INTO orders (id, amount)
-</span></span></span><span class="line"><span class="cl"><span class="sd">            VALUES (:#id, :#amount)</span><span class="w">            </span></span></span></code></pre></div> <p class="home-example-run"> <span class="home-example-prompt">$</span> <span class="home-example-command">camel run kafka-to-db.yaml</span> </p> </div> <div class="home-tabpanel" role="tabpanel" id="home-panel-java" aria-labelledby="home-tab-java" tabindex="0" hidden><button class="home-tab-copy" type="button" data-copy-value="from(&#34;kafka:orders&#34;)
+- route:
+    from:
+      uri: kafka:orders
+      steps:
+        - unmarshal:
+            json: {}
+        - to:
+            uri: &gt;-
+              sql:INSERT INTO orders (id, amount)
+              VALUES (:#id, :#amount)" aria-label="Copy the YAML example">Copy</button><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># Route messages from Kafka into a database</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">route</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">from</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l">kafka:orders</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">steps</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">unmarshal</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">json</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">to</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="p">&gt;-</span><span class="sd">
+</span></span></span><span class="line"><span class="cl"><span class="sd">              sql:INSERT INTO orders (id, amount)
+</span></span></span><span class="line"><span class="cl"><span class="sd">              VALUES (:#id, :#amount)</span><span class="w">              </span></span></span></code></pre></div> <p class="home-example-run"> <span class="home-example-prompt">$</span> <span class="home-example-command">camel run kafka-to-db.yaml</span> </p> </div> <div class="home-tabpanel" role="tabpanel" id="home-panel-java" aria-labelledby="home-tab-java" tabindex="0" hidden><button class="home-tab-copy" type="button" data-copy-value="from(&#34;kafka:orders&#34;)
     .unmarshal().json()
     .to(&#34;sql:INSERT INTO orders (id, amount) &#34;
       &#43; &#34;VALUES (:#id, :#amount)&#34;);" aria-label="Copy the Java example">Copy</button><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">from</span><span class="p">(</span><span class="s">&#34;kafka:orders&#34;</span><span class="p">)</span><span class="w">
