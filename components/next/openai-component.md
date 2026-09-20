@@ -33,8 +33,18 @@ Supported operations:
     
 -   `responses-cancel` - Cancel a Responses API response still running in background mode
     
+-   `batch` - Upload the requests of a batch as a JSONL file and create the batch that runs them offline
+    
+-   `batch-retrieve` - Report the status and request counts of a batch
+    
+-   `batch-cancel` - Cancel a batch that is still running
+    
+-   `batch-results` - Download the output or error file of a finished batch
+    
 
 See [Responses API operation](others/openai-responses.md) for usage (`previousResponseId`, builtin tools, MCP pass-through, background mode).
+
+See [Batch API operations](others/openai-batch.md) for usage (building the input, polling, reading the results).
 
 -   `embeddings` - Generate vector embeddings from text for semantic search and RAG applications
     
@@ -128,7 +138,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform: 'chat-completion', 'responses', 'responses-retrieve', 'responses-cancel', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', or 'image-edit'.
+**Required** The operation to perform: 'chat-completion', 'responses', 'responses-retrieve', 'responses-cancel', 'batch', 'batch-retrieve', 'batch-cancel', 'batch-results', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', or 'image-edit'.
 
 Enum values:
 
@@ -139,6 +149,14 @@ Enum values:
 -   responses-retrieve
     
 -   responses-cancel
+    
+-   batch
+    
+-   batch-retrieve
+    
+-   batch-cancel
+    
+-   batch-results
     
 -   embeddings
     
@@ -201,6 +219,51 @@ Enum values:
 | **autoToolExecution** (producer) | When true and MCP servers are configured, automatically execute tool calls and loop back to the model. When false, tool calls are returned as the message body for manual handling. | true | boolean |
 | **background** (producer) | Run the model response in the background (Responses API only). The exchange completes as soon as the response is queued, with an empty body and the CamelOpenAIResponseStatus header, and the response is stored so that it can be retrieved later. Cannot be combined with automatic tool execution. | false | boolean |
 | **baseUrl** (producer) | Base URL for OpenAI API. Defaults to OpenAI’s official endpoint. Can be used for local or third-party providers. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
+| **batchEndpoint** (producer) | 
+
+The endpoint every request in a batch calls. Required by the batch operation, which validates it against the endpoints the Batch API supports.
+
+Enum values:
+
+-   /v1/responses
+    
+-   /v1/chat/completions
+    
+-   /v1/embeddings
+    
+-   /v1/completions
+    
+-   /v1/moderations
+    
+-   /v1/images/generations
+    
+-   /v1/images/edits
+    
+-   /v1/videos
+    
+
+
+
+
+
+ |  | String |
+| **batchMetadata** (producer) | Metadata to attach to a batch, used to find it again later (e.g. batchMetadata.job=nightly-enrichment). This is a multi-value option with prefix: batchMetadata. |  | Map |
+| **batchResultsFile** (producer) | 
+
+Which result file the batch-results operation downloads: the output file holding the results of the successful requests, or the error file holding the failed ones.
+
+Enum values:
+
+-   output
+    
+-   error
+    
+
+
+
+
+
+ | output | String |
 | **builtinTools** (producer) | Comma-separated hosted tools for the Responses API: web\_search, file\_search, code\_interpreter. |  | String |
 | **connectTimeout** (producer) | Timeout in milliseconds for establishing the TCP connection to the API. A connect timeout means the endpoint was unreachable, so the request never ran and is safe to retry. When 0 or negative, the SDK default (1 minute) is used. | 0 | long |
 | **conversationHistoryProperty** (producer) | Exchange property name for storing conversation history. | CamelOpenAIConversationHistory | String |
@@ -504,6 +567,20 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIEmbeddingsResponse** (producer) Constant: [`EMBEDDINGS_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDINGS_RESPONSE) | The complete OpenAI embeddings response object. |  | CreateEmbeddingResponse |
 | **CamelOpenAIAudioTranscriptionResponse** (producer) Constant: [`AUDIO_TRANSCRIPTION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TRANSCRIPTION_RESPONSE) | The complete OpenAI audio transcription response object. |  | TranscriptionCreateResponse |
 | **CamelOpenAIAudioTranslationResponse** (producer) Constant: [`AUDIO_TRANSLATION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TRANSLATION_RESPONSE) | The complete OpenAI audio translation response object. |  | TranslationCreateResponse |
+| **CamelOpenAIBatchId** (producer) Constant: [`BATCH_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ID) | The id of the batch to act on. Set by the batch operation, and read by batch-retrieve, batch-cancel and batch-results. |  | String |
+| **CamelOpenAIBatchEndpoint** (producer) Constant: [`BATCH_ENDPOINT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ENDPOINT) | The endpoint every request in the batch calls, such as /v1/chat/completions. Overrides the batchEndpoint option. |  | String |
+| **CamelOpenAIBatchMetadata** (producer) Constant: [`BATCH_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_METADATA) | Metadata to attach to the batch. Overrides the batchMetadata option. |  | Map |
+| **CamelOpenAIBatchCustomId** (producer) Constant: [`BATCH_CUSTOM_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_CUSTOM_ID) | The custom\_id of the request that OpenAIBatchAggregationStrategy builds from this message. Defaults to the message id. |  | String |
+| **CamelOpenAIBatchResultsFile** (producer) Constant: [`BATCH_RESULTS_FILE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_RESULTS_FILE) | Which result file the batch-results operation downloads: 'output' or 'error'. Overrides the batchResultsFile option. |  | String |
+| **CamelOpenAIBatchStatus** (producer) Constant: [`BATCH_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_STATUS) | The status of the batch: validating, failed, in\_progress, finalizing, completed, expired, cancelling or cancelled. |  | String |
+| **CamelOpenAIBatchInputFileId** (producer) Constant: [`BATCH_INPUT_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_INPUT_FILE_ID) | The id of the uploaded input file of the batch. |  | String |
+| **CamelOpenAIBatchOutputFileId** (producer) Constant: [`BATCH_OUTPUT_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_OUTPUT_FILE_ID) | The id of the file holding the results of the successful requests. |  | String |
+| **CamelOpenAIBatchErrorFileId** (producer) Constant: [`BATCH_ERROR_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ERROR_FILE_ID) | The id of the file holding the results of the failed requests. |  | String |
+| **CamelOpenAIBatchRequestCountTotal** (producer) Constant: [`BATCH_REQUEST_COUNT_TOTAL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_TOTAL) | Total number of requests in the batch. |  | Long |
+| **CamelOpenAIBatchRequestCountCompleted** (producer) Constant: [`BATCH_REQUEST_COUNT_COMPLETED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_COMPLETED) | Number of requests in the batch that completed successfully. |  | Long |
+| **CamelOpenAIBatchRequestCountFailed** (producer) Constant: [`BATCH_REQUEST_COUNT_FAILED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_FAILED) | Number of requests in the batch that failed. |  | Long |
+| **CamelOpenAIBatchErrors** (producer) Constant: [`BATCH_ERRORS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ERRORS) | The errors that made the batch fail validation, each a map of the code, message, param and line fields of the API. |  | List |
+| **CamelOpenAIBatchResponse** (producer) Constant: [`BATCH_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_RESPONSE) | The complete OpenAI batch object. |  | Batch |
 | **CamelOpenAIEmbeddingModel** (producer) Constant: [`EMBEDDING_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_MODEL) | The model to use for embeddings. |  | String |
 | **CamelOpenAIEmbeddingDimensions** (producer) Constant: [`EMBEDDING_DIMENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_DIMENSIONS) | Number of output dimensions. |  | Integer |
 | **CamelOpenAIEmbeddingResponseModel** (producer) Constant: [`EMBEDDING_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_RESPONSE_MODEL) | The embedding model used in the response. |  | String |
@@ -1705,6 +1782,8 @@ For more details on specific features, see:
 -   [LLM Integration Guide](ai-llm-integration-guide.md) - Choosing components, structured output, streaming, dynamic prompts
     
 -   [Responses API operation](others/openai-responses.md) - OpenAI Responses API, hosted tools, and server-side conversation state
+    
+-   [Batch API operations](others/openai-batch.md) - Offline batches at half the price: input files, polling, and result files
     
 -   [MCP Tool Calling](others/openai-mcp.md) - Model Context Protocol server configuration, agentic loop, streaming, and connection recovery
     

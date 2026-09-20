@@ -579,9 +579,11 @@ View the state of [Circuit Breakers](../components/4.22.x/eips/circuitBreaker-ei
 
 ```bash
 camel get circuit-breaker
-  PID   NAME  COMPONENT     ROUTE   ID               STATE      PENDING  SUCCESS  FAIL  REJECT
- 56033  mycb  resilience4j  route1  circuitBreaker1  HALF_OPEN        5        2     3       0
+  PID   NAME  COMPONENT     ROUTE   ID               STATE      PENDING  SUCCESS  FAIL  REJECT  FALLBACK  TIMEOUT
+ 56033  mycb  resilience4j  route1  circuitBreaker1  HALF_OPEN        5        2     3       0         3        1
 ```
+
+REJECT counts the calls the open breaker refused without calling the service, FALLBACK the calls the `onFallback` answered (failed, timed out and rejected calls alike), and TIMEOUT the calls that hit the configured timeout, which the breaker otherwise counts as plain failures. A BULKHEAD column with the calls rejected by a full bulkhead is shown when a bulkhead is configured.
 
 > **Tip**
 > Use `camel get circuit-breaker --watch` for continuous updates.

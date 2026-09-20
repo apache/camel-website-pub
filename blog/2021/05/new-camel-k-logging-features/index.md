@@ -6,7 +6,7 @@ New Camel K Logging Features
 
 As part of our continuous work to improve Camel K and improve its stability, features and usefulness to our community, we recently worked on logging improvements for different parts of Camel K and the integrations it generated.
 
-During the 1.5 development release we dedicated some time to review the logging capabilities of Camel K. This version introduces a new [logging trait](../../../../camel-k/next/traits/logging.md) that simplifies access to the logging configuration available on the runtime.
+During the 1.5 development release we dedicated some time to review the logging capabilities of Camel K. This version introduces a new [logging trait](../../../../camel-k/2.11.x/traits/logging.md) that simplifies access to the logging configuration available on the runtime.
 
 ## Colorized logs
 

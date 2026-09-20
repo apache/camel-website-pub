@@ -1452,6 +1452,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [MINA SFTP SSH Security](../../components/next/others/mina-sftp-security.md) | undefined-starter |  |  |  |
 | [Oauth](../../components/next/others/oauth.md) | camel-oauth-starter | Preview | 4.12 | Camel OAuth (Preview) |
 | [Observability Services](../../components/next/others/observability-services.md) | camel-observability-services-starter | Preview | 4.9 | Camel Observability Services |
+| [OpenAI - Batch API Operations](../../components/next/others/openai-batch.md) | undefined-starter |  |  |  |
 | [OpenAI - Compatible Providers](../../components/next/others/openai-providers.md) | undefined-starter |  |  |  |
 | [OpenAI - Embeddings, Moderation, Audio and Image Operations](../../components/next/others/openai-operations.md) | undefined-starter |  |  |  |
 | [OpenAI - MCP Tool Calling](../../components/next/others/openai-mcp.md) | undefined-starter |  |  |  |

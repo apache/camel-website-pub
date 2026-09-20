@@ -65,9 +65,47 @@ The LangChain4j Embeddings component supports the following options which are li
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **configuration** (producer) | The configuration. |  | LangChain4jEmbeddingsConfiguration |
-| **embeddingModel** (producer) | **Autowired** **Required** The EmbeddingModel engine to use. |  | EmbeddingModel |
+| **embeddingModel** (producer) | **Autowired** The EmbeddingModel engine to use. Either this or a provider is required. |  | EmbeddingModel |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **baseUrl** (model) | The URL of the provider’s API ([http://localhost:11434](http://localhost:11434) for a local Ollama), when the model is created from the provider. The provider’s default when not set. |  | String |
+| **modelName** (model) | The name of the model at the provider (qwen2.5, gpt-4o-mini, …​), when the model is created from the provider. |  | String |
+| **provider** (model) | 
+The LangChain4j provider of the embedding model, to create the model from the options here (modelName, baseUrl, apiKey, temperature, timeout, and provider-specific model. properties) instead of a EmbeddingModel bean. The LangChain4j module of the provider (dev.langchain4j:langchain4j-ollama, …​) must be on the classpath; Camel JBang downloads it. Ignored when a EmbeddingModel is configured. For a provider not listed, set customProvider instead.
+
+Enum values:
+
+-   ollama
+    
+-   openai
+    
+-   anthropic
+    
+-   azure-openai
+    
+-   mistral
+    
+-   gemini
+    
+-   vertex-ai
+    
+-   github
+    
+-   hugging-face
+    
+-   bedrock
+    
+
+
+
+
+
+ |  | String |
+| **temperature** (model) | The sampling temperature of the model, when the model is created from the provider. |  | Double |
+| **timeout** (model) | The request timeout of the model (30s, 2m), when the model is created from the provider. |  | Duration |
+| **customProvider** (model (advanced)) | The fully qualified class name of the LangChain4j model class of a provider that is not listed in provider (dev.langchain4j.model.jlama.JlamaChatModel), created from the options here through its builder() as a listed provider is. Set either provider or customProvider. |  | String |
+| **modelProperties** (model (advanced)) | Provider-specific properties of the model, set on the model’s builder as they are (model.numPredict=512 for Ollama, model.maxTokens=1024 for OpenAI), when the model is created from the provider. This is a multi-value option with prefix: model. |  | Map |
+| **apiKey** (security) | The API key or access token of the provider, when the model is created from the provider. |  | String |
 
 ## Endpoint Options
 
@@ -89,8 +127,46 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **embeddingModel** (producer) | **Autowired** **Required** The EmbeddingModel engine to use. |  | EmbeddingModel |
+| **embeddingModel** (producer) | **Autowired** The EmbeddingModel engine to use. Either this or a provider is required. |  | EmbeddingModel |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **baseUrl** (model) | The URL of the provider’s API ([http://localhost:11434](http://localhost:11434) for a local Ollama), when the model is created from the provider. The provider’s default when not set. |  | String |
+| **modelName** (model) | The name of the model at the provider (qwen2.5, gpt-4o-mini, …​), when the model is created from the provider. |  | String |
+| **provider** (model) | 
+The LangChain4j provider of the embedding model, to create the model from the options here (modelName, baseUrl, apiKey, temperature, timeout, and provider-specific model. properties) instead of a EmbeddingModel bean. The LangChain4j module of the provider (dev.langchain4j:langchain4j-ollama, …​) must be on the classpath; Camel JBang downloads it. Ignored when a EmbeddingModel is configured. For a provider not listed, set customProvider instead.
+
+Enum values:
+
+-   ollama
+    
+-   openai
+    
+-   anthropic
+    
+-   azure-openai
+    
+-   mistral
+    
+-   gemini
+    
+-   vertex-ai
+    
+-   github
+    
+-   hugging-face
+    
+-   bedrock
+    
+
+
+
+
+
+ |  | String |
+| **temperature** (model) | The sampling temperature of the model, when the model is created from the provider. |  | Double |
+| **timeout** (model) | The request timeout of the model (30s, 2m), when the model is created from the provider. |  | Duration |
+| **customProvider** (model (advanced)) | The fully qualified class name of the LangChain4j model class of a provider that is not listed in provider (dev.langchain4j.model.jlama.JlamaChatModel), created from the options here through its builder() as a listed provider is. Set either provider or customProvider. |  | String |
+| **modelProperties** (model (advanced)) | Provider-specific properties of the model, set on the model’s builder as they are (model.numPredict=512 for Ollama, model.maxTokens=1024 for OpenAI), when the model is created from the provider. This is a multi-value option with prefix: model. |  | Map |
+| **apiKey** (security) | The API key or access token of the provider, when the model is created from the provider. |  | String |
 
 ## Message Headers
 
@@ -132,6 +208,36 @@ Enum values:
 | **CamelLangChain4jEmbeddingsTextSegments** (producer) Constant: [`TEXT_SEGMENTS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddings/latest/org/apache/camel/component/langchain4j/embeddings/LangChain4jEmbeddingsHeaders.html#TEXT_SEGMENTS) | List of text segments from a batch embedAll operation. |  | List |
 
 ## Usage
+
+### Configuring the model by provider
+
+The embedding model can be declared by its provider and the options every provider has, without a bean of the provider’s model class (since Camel 4.23). In `application.properties`, for every endpoint of the component:
+
+```properties
+camel.component.langchain4j-embeddings.provider = ollama
+camel.component.langchain4j-embeddings.model-name = nomic-embed-text
+camel.component.langchain4j-embeddings.base-url = http://localhost:11434
+```
+
+Or on the endpoint, where `model.` prefixes a provider-specific option of the model’s builder:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: langchain4j-embeddings:documents
+            parameters:
+              provider: openai
+              apiKey: "{{openai.api.key}}"
+              modelName: text-embedding-3-small
+              timeout: 30s
+```
+
+The provider is one of `ollama`, `openai`, `anthropic`, `azure-openai`, `mistral`, `gemini`, `vertex-ai`, `github`, `hugging-face`, `bedrock`; a provider not in the list is set as `customProvider`, the fully qualified class name of its LangChain4j model class (any class with a `builder()`, such as `dev.langchain4j.model.jlama.JlamaChatModel`). The LangChain4j module of the provider (`dev.langchain4j:langchain4j-ollama`, `dev.langchain4j:langchain4j-open-ai`, …​) must be on the classpath; Camel JBang downloads it for the listed providers. Ollama, LocalAI, vLLM, LM Studio and the other servers that speak the OpenAI API can also be used through `provider: openai` with their `baseUrl`, which needs no module of their own. The common options are `modelName`, `baseUrl`, `apiKey`, `temperature` and `timeout`, set under the name the provider’s builder uses for them (`apiKey` is the access token of Hugging Face, `modelName` the deployment name of Azure OpenAI); an option the provider does not have (an `apiKey` for Ollama), or a `model.` property its builder does not have, is an error naming what the builder accepts.
+
+Endpoints with the same provider options share one model instance. The provider is ignored when a model bean is configured (`embeddingModel`).
 
 ### Using Embedding Models
 

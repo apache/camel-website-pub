@@ -234,10 +234,7 @@ from("rss:http://someserver.com/feeds/posts/default?alt=rss&splitEntries=false&d
 ```yaml
 - route:
     from:
-      uri: "rss:http://someserver.com/feeds/posts/default?alt=rss"
-      parameters:
-        splitEntries: false
-        delay: 1000
+      uri: "rss:http://someserver.com/feeds/posts/default?alt=rss&splitEntries=false&delay=1000"
       steps:
         - to:
             uri: bean:rss

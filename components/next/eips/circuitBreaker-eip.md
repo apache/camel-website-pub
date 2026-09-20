@@ -39,11 +39,53 @@ The exchange properties are set on the `Exchange` by the EIP, unless otherwise s
 | --- | --- | --- | --- |
 | **CamelResponseSuccessfulExecution** | Whether the exchange was processed successfully by the circuit breaker. |  | boolean |
 | **CamelResponseFromFallback** | Whether the exchange was processed by the onFallback by the circuit breaker. |  | boolean |
-| **CamelResponseShortCircuited** | Whether the exchange was short circuited by the breaker. |  | boolean |
+| **CamelResponseShortCircuited** | Whether the call did not complete normally and the circuit breaker short circuited the exchange, to the onFallback if there is one. This is true for a failed call, a timeout and a rejected call alike; use CamelCircuitBreakerResponseRejected to know whether the call was attempted. |  | boolean |
 | **CamelResponseTimedOut** | Whether the exchange timed out during processing by the circuit breaker. |  | boolean |
-| **CamelResponseRejected** | Whether the circuit breaker rejected processing the exchange. |  | boolean |
+| **CamelResponseRejected** | Whether the circuit breaker rejected the call without attempting it, because the breaker is open or the bulkhead is full. Also set inside the onFallback, where it tells a dead service apart from a single failed call. |  | boolean |
 | **CamelResponseIgnored** | Whether the circuit breaker ignored an exception during processing. |  | boolean |
 | **CamelResponseState** | The state of the circuit breaker. |  | String |
+
+Inside the `onFallback` these properties tell why the fallback runs. `CamelCircuitBreakerResponseFromFallback` and `CamelCircuitBreakerResponseShortCircuited` are `true` whenever the fallback runs, whatever the cause. To know what happened to the call itself:
+
+  
+| What happened | `CamelCircuitBreakerResponseRejected` | `CamelCircuitBreakerResponseTimedOut` |
+| --- | --- | --- |
+| The call was made and failed | `false` | not set |
+| The call was made and timed out | `false` | `true` |
+| The call was not attempted: the breaker is open, or the bulkhead is full | `true` | not set |
+
+`CamelCircuitBreakerState` is the state of the breaker after the call was recorded, so the call that opens the breaker reports `OPEN` although it was attempted; use the rejected property to know whether a call was made. The caught exception is available in the fallback, for example as `${exception.message}` in the Simple language.
+
+For example, a fallback that answers differently when the service is down rather than failing once:
+
+```yaml
+- route:
+    from:
+      uri: timer:stock?period=1000
+      steps:
+        - circuitBreaker:
+            steps:
+              - to:
+                  uri: direct:supplier
+            onFallback:
+              steps:
+                - choice:
+                    when:
+                      - expression:
+                          simple:
+                            expression: "${exchangeProperty.CamelCircuitBreakerResponseRejected} == true"
+                        steps:
+                          - setBody:
+                              expression:
+                                constant:
+                                  expression: "supplier is down, using the last known stock"
+                    otherwise:
+                      steps:
+                        - setBody:
+                            expression:
+                              constant:
+                                expression: "stock check failed, will try again"
+```
 
 ## Example
 

@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 99 in 66 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 100 in 66 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -66,6 +66,7 @@ Number of Miscellaneous Components: 99 in 66 JAR artifacts (3 deprecated)
 | [MINA SFTP SSH Security](mina-sftp-security.md) |  |  |  |  |
 | [Oauth](oauth.md) | camel-oauth | Preview | 4.12 | Camel OAuth (Preview) |
 | [Observability Services](observability-services.md) | camel-observability-services | Preview | 4.9 | Camel Observability Services |
+| [OpenAI - Batch API Operations](openai-batch.md) |  |  |  |  |
 | [OpenAI - Compatible Providers](openai-providers.md) |  |  |  |  |
 | [OpenAI - Embeddings, Moderation, Audio and Image Operations](openai-operations.md) |  |  |  |  |
 | [OpenAI - MCP Tool Calling](openai-mcp.md) |  |  |  |  |

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1789757078346,
+  "generated": 1789902255072,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -734,18 +734,6 @@
             },
             {
               "module": "traits",
-              "path": "logging.adoc",
-              "url": "/camel-k/next/traits/logging.html",
-              "title": "Logging Trait"
-            },
-            {
-              "module": "traits",
-              "path": "master.adoc",
-              "url": "/camel-k/next/traits/master.html",
-              "title": "Master Trait"
-            },
-            {
-              "module": "traits",
               "path": "mount.adoc",
               "url": "/camel-k/next/traits/mount.html",
               "title": "Mount Trait"
@@ -797,12 +785,6 @@
               "path": "service.adoc",
               "url": "/camel-k/next/traits/service.html",
               "title": "Service Trait"
-            },
-            {
-              "module": "traits",
-              "path": "telemetry.adoc",
-              "url": "/camel-k/next/traits/telemetry.html",
-              "title": "Telemetry Trait"
             },
             {
               "module": "traits",
@@ -20941,6 +20923,12 @@
               "path": "observation.adoc",
               "url": "/components/next/others/observation.html",
               "title": "Micrometer Observability"
+            },
+            {
+              "module": "others",
+              "path": "openai-batch.adoc",
+              "url": "/components/next/others/openai-batch.html",
+              "title": "OpenAI - Batch API Operations"
             },
             {
               "module": "others",

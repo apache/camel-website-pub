@@ -91,11 +91,7 @@ git checkout camel-4.22.0
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (221)
-
-[CAMEL-24371](https://issues.apache.org/jira/browse/CAMEL-24371)
-
-camel-a2a - fix WebhookUrlValidator address classification and host matching
+### Bug (220)
 
 [CAMEL-24365](https://issues.apache.org/jira/browse/CAMEL-24365)
 

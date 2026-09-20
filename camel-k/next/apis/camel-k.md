@@ -3277,9 +3277,17 @@ Deprecated: no longer in use.
 | `knative-service`  
 **[KnativeServiceTrait](#_camel_apache_org_v1_trait_KnativeServiceTrait)** | The configuration of Knative Service trait |
 | `logging`  
-**[LoggingTrait](#_camel_apache_org_v1_trait_LoggingTrait)** | The configuration of Logging trait |
+**[LoggingTrait](#_camel_apache_org_v1_trait_LoggingTrait)** | The configuration of Logging trait.
+
+Deprecated: no longer in use.
+
+ |
 | `master`  
-**[MasterTrait](#_camel_apache_org_v1_trait_MasterTrait)** | The configuration of Master trait |
+**[MasterTrait](#_camel_apache_org_v1_trait_MasterTrait)** | The configuration of Master trait.
+
+Deprecated: no longer in use.
+
+ |
 | `mount`  
 **[MountTrait](#_camel_apache_org_v1_trait_MountTrait)** | The configuration of Mount trait |
 | `openapi`  
@@ -3325,7 +3333,11 @@ Deprecated: no longer in use.
 
  |
 | `telemetry`  
-**[TelemetryTrait](#_camel_apache_org_v1_trait_TelemetryTrait)** | The configuration of Telemetry trait |
+**[TelemetryTrait](#_camel_apache_org_v1_trait_TelemetryTrait)** | The configuration of Telemetry trait.
+
+Deprecated: no longer in use.
+
+ |
 | `toleration`  
 **[TolerationTrait](#_camel_apache_org_v1_trait_TolerationTrait)** | The configuration of Toleration trait |
 | `addons`  
@@ -4339,10 +4351,12 @@ bool | Enables the default filtering for the Knative trigger using the event typ
 -   [Traits](#_camel_apache_org_v1_Traits)
     
 
+> **Warning**
+> This trait is no longer in use.
+
 The Logging trait is used to configure Integration runtime logging options (such as color and format). The logging backend is provided by Quarkus, whose configuration is documented at [https://quarkus.io/guides/logging](https://quarkus.io/guides/logging).
 
-> **Warning**
-> The Logging trait is **deprecated** and will be removed in future release versions: use Quarkus logging properties directly instead.
+The Logging trait was removed: use Quarkus logging properties directly instead.
 
 Migration example:
 
@@ -4372,6 +4386,9 @@ bool | Enable "pretty printing" of the JSON logs |
 -   [Traits](#_camel_apache_org_v1_Traits)
     
 
+> **Warning**
+> This trait is no longer in use.
+
 The Master trait allows to configure the integration to automatically leverage Kubernetes resources for doing leader election and starting **master** routes only on certain instances.
 
 It’s activated automatically when using the master endpoint in a route, e.g. `from("master:lockname:telegram:bots")…​`.
@@ -4379,8 +4396,7 @@ It’s activated automatically when using the master endpoint in a route, e.g. `
 > **Note**
 > this trait adds special permissions to the integration service account in order to read/write configmaps and read pods. It’s recommended to use a different service account than "default" when running the integration.
 
-> **Warning**
-> The Master trait is **deprecated** and will be removed in future release versions. This trait requires the operator to manage RBAC explicitly, which should be avoided for security and simplicity reasons. Users should manually create the required Role and RoleBinding, then configure Quarkus properties directly:
+The Master trait was removed: it required the operator to manage RBAC explicitly, which should be avoided for security and simplicity reasons. Users should manually create the required Role and RoleBinding, then configure Quarkus properties directly:
 
 \-p quarkus.camel.cluster.kubernetes.resource-name=<integration>-lock
 -p quarkus.camel.cluster.kubernetes.resource-type=Lease
@@ -4886,22 +4902,21 @@ map\[string\]string | The labels added to the Service object. |
 -   [Traits](#_camel_apache_org_v1_Traits)
     
 
+> **Warning**
+> This trait is no longer in use.
+
 The Telemetry trait can be used to automatically publish tracing information to an OTLP compatible collector.
 
 The trait is able to automatically discover the telemetry OTLP endpoint available in the namespace (supports **Jaerger** in version 1.35+).
 
 The Telemetry trait is disabled by default.
 
-> **Warning**
-> The Telemetry trait is **deprecated** and will be removed in future release versions. The same behavior can be achieved via properties and dependencies configuration.
+The Telemetry trait was removed: the same behavior can be achieved via properties and dependencies configuration.
 
 Migration example:
 
 Before: --trait telemetry.endpoint=http://jaeger:4317
 After:  -p quarkus.otel.exporter.otlp.traces.endpoint=http://jaeger:4317
-
-> **Warning**
-> The Telemetry trait can’t be enabled at the same time as the Tracing trait.
 
  
 | Field | Description |

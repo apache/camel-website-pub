@@ -50,7 +50,7 @@ The `.spec.traits` holds an array of traits, identified by their id (`jvm`, in t
 
 ## List of available traits
 
-There are 32 traits. See each trait description page for more information on a specific trait:
+There are 29 traits. See each trait description page for more information on a specific trait:
 
 -   [Affinity Trait](affinity.md)
     
@@ -90,10 +90,6 @@ There are 32 traits. See each trait description page for more information on a s
     
 -   [Knative Trait](knative.md)
     
--   [Logging Trait](logging.md)
-    
--   [Master Trait](master.md)
-    
 -   [Mount Trait](mount.md)
     
 -   [Owner Trait](owner.md)
@@ -111,7 +107,5 @@ There are 32 traits. See each trait description page for more information on a s
 -   [Security Context Trait](security-context.md)
     
 -   [Service Trait](service.md)
-    
--   [Telemetry Trait](telemetry.md)
     
 -   [Toleration Trait](toleration.md)

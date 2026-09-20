@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.22 to 4.23
 
+### Circuit Breaker EIP
+
+The exchange property `CamelCircuitBreakerResponseRejected` is now also set inside the `onFallback`, in both `camel-resilience4j` and `camel-microprofile-fault-tolerance`: `true` when the call was not attempted because the breaker was open or the bulkhead was full, `false` when the call was made and failed or timed out. Prior to Camel 4.23 the property was only set when there was no fallback and was absent inside the fallback, so a fallback that tested it for `null` must now test for `true` or `false` instead. `CamelCircuitBreakerResponseShortCircuited` is unchanged and remains `true` whenever the fallback runs, whatever the cause.
+
 ### Context reload now re-applies placeholder based component options
 
 When a context reload is triggered, for example by one of the vault components detecting that a secret was rotated, Camel now also re-applies the `camel.component.`, `camel.dataformat.` and `camel.language.` options whose configured value is a property placeholder, and notifies any bean implementing the new `org.apache.camel.spi.SecretRotationAware` SPI. Previously only the property placeholders and the routes were reloaded, so a rotated secret never reached a component option that had been resolved at bootstrap.
@@ -338,6 +342,16 @@ The `type` (class name) of a bean definition — `bean` under `beans`, `template
 
 The XML schemas (`camel-spring.xsd`, `camel-xml-io.xsd`) and the YAML schema no longer require `type`, so Spring XML and the YAML validator (`camel validate`) now accept what the runtime already ran. A bean that is neither scripted nor built still needs a `type`, and the error for a missing one is now an `IllegalArgumentException` naming the bean instead of a `NullPointerException`.
 
+### camel-core - a bean whose class has a builder() method is created via the builder
+
+A bean declaration (`bean` under `beans` in YAML and XML, `templateBean` of a route template, `camel.beans.` in Camel Main, and a `#class:` value in property binding) whose class has no public no-arg constructor but a public static `builder()` or `newBuilder()` method is now created via that builder: the properties are set on the builder and the bean is created with the builder’s `build()` method (or its single public no-arg method that returns the type). This makes a class built by Lombok, Immutables, LangChain4j, the AWS SDK v2 or protobuf declarable with only its `type` and `properties`, where `builderClass` and `builderMethod` had to be given before.
+
+Such a declaration previously failed, as there was no constructor to call, so no working declaration changes behaviour: a class that has a public no-arg constructor is still created with the constructor, and `builderClass`, `factoryMethod` and `constructors` are used when given. `builderMethod` can now be set without `builderClass`, to name the method of an inferred builder.
+
+A bean whose class has neither a public no-arg constructor nor a builder now fails with a message naming the ways it can be created (its constructors for `constructors`, its static factory methods for `factoryMethod`, or a builder class of its own), instead of the `NoSuchMethodException` or `IllegalAccessException` of the reflection call, and an unknown property of a bean created through its builder names the properties the builder and the bean accept. `camel validate` and the `camel_validate_source` MCP tool report the same for the classes they can load.
+
+`PropertyBindingSupport.setPropertiesOnTarget` now reports an unknown property with the property name and value, as it rethrew the `PropertyBindingException` with its null cause since 4.21, which surfaced as `NullPointerException: e`.
+
 ### camel-core - Splitter unwraps Exchange parts
 
 The Splitter EIP now unwraps parts of type `org.apache.camel.Exchange`, the same way it already unwrapped parts of type `org.apache.camel.Message`. When splitting a body of type `List<Exchange>`, as produced by the camel-kafka batching consumer (`batching=true`) and by the grouped exchange aggregation strategy, each child exchange now carries the body and the headers of the corresponding part. Previously the child body was the part `Exchange` itself, with no headers.
@@ -506,6 +520,10 @@ The `js` language now shares one GraalJS `Engine` per language instance (a `Cont
 Values returned by a script are now converted to plain Java objects before the script’s `Context` is closed. Previously a JavaScript object, array, `Map`, `Set` or `Date` came back as a polyglot `Value` bound to a `Context` that had already been closed, and reading it failed. A script now returns a `LinkedHashMap` for an object or a JavaScript `Map`, an `ArrayList` for an array, a `LinkedHashSet` for a `Set` and a `java.time.Instant` for a `Date`. Code that handled the polyglot `Value` itself needs to work with these types instead.
 
 `JavaScriptHelper.newContext()` is deprecated: contexts are created by the language from its shared engine.
+
+### camel-rest, camel-rest-openapi, camel-jbang - camel-http is the default REST client
+
+When a REST producer (`rest:` in producer mode, or `rest-openapi` calling an operation of a contract) has no `componentName` (`producerComponentName`) and no `RestProducerFactory` component exists in the context or the registry yet, the default components are tried in the order `http`, `vertx-http`, `undertow`, `netty-http`; before, `vertx-http` came first. An application with both camel-http and camel-vertx-http on the classpath now calls through camel-http; set `componentName=vertx-http` to keep the Vert.x client. An application with only one of them is not affected. The Camel CLI (`camel run`) now adds camel-http, not camel-vertx-http, for a rest-openapi producer without `componentName`.
 
 ### camel-jbang
 
