@@ -91,7 +91,7 @@ git checkout camel-4.22.1
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (84)
+### Bug (85)
 
 [CAMEL-24776](https://issues.apache.org/jira/browse/CAMEL-24776)
 
@@ -180,6 +180,10 @@ Camel Shutdown Locked State With ZookeeprCluster Service
 [CAMEL-24542](https://issues.apache.org/jira/browse/CAMEL-24542)
 
 camel-qdrant: the PayloadSelector header is declared and advertised but never read
+
+[CAMEL-24540](https://issues.apache.org/jira/browse/CAMEL-24540)
+
+camel-huggingface: revision is ignored by two task predictors and TextToImage never sets the OUTPUT header
 
 [CAMEL-24539](https://issues.apache.org/jira/browse/CAMEL-24539)
 

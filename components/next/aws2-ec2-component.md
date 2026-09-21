@@ -3239,6 +3239,52 @@ Enum values:
     
 -   c9gd.metal-48xl
     
+-   r9g.medium
+    
+-   r9g.large
+    
+-   r9g.xlarge
+    
+-   r9g.2xlarge
+    
+-   r9g.4xlarge
+    
+-   r9g.8xlarge
+    
+-   r9g.12xlarge
+    
+-   r9g.16xlarge
+    
+-   r9g.24xlarge
+    
+-   r9g.48xlarge
+    
+-   r9g.metal-48xl
+    
+-   r9gd.medium
+    
+-   r9gd.large
+    
+-   r9gd.xlarge
+    
+-   r9gd.2xlarge
+    
+-   r9gd.4xlarge
+    
+-   r9gd.8xlarge
+    
+-   r9gd.12xlarge
+    
+-   r9gd.16xlarge
+    
+-   r9gd.24xlarge
+    
+-   r9gd.48xlarge
+    
+-   r9gd.metal-48xl
+    
+-   m9g.medium
+    
 -   null
     
 

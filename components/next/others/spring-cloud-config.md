@@ -77,31 +77,31 @@ camel.vault.spring-config.label=latest
     
 
 ```java
-from("direct")
+from("direct:start")
   .setHeader("MyHeader", simple("{{spring-config:custom.property}}"))
-  .to("log");
+  .to("log:info");
 ```
 
 ```xml
 <route>
-  <from uri="direct"/>
+  <from uri="direct:start"/>
   <setHeader name="MyHeader">
     <simple>{{spring-config:custom.property}}</simple>
   </setHeader>
-  <to uri="log"/>
+  <to uri="log:info"/>
 </route>
 ```
 
 ```yaml
 - route:
     from:
-      uri: direct
+      uri: direct:start
       steps:
         - setHeader:
             name: MyHeader
             simple: "{{spring-config:custom.property}}"
         - to:
-            uri: log
+            uri: log:info
 ```
 
 ## Automatic Configuration Reload

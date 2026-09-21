@@ -1805,7 +1805,7 @@ camel-aws2-sts: throw when pojoRequest=true and the body is the wrong type
 
 Camel-PQC: Add Azure Key Vault Lifecycle Manager
 
-### Task (35)
+### Task (36)
 
 [CAMEL-24381](https://issues.apache.org/jira/browse/CAMEL-24381)
 
@@ -1910,6 +1910,10 @@ Remove deprecated component-specific CredentialType enums and migrate to shared 
 [CAMEL-23135](https://issues.apache.org/jira/browse/CAMEL-23135)
 
 camel-spring-boot-examples - Upgrade examples to use camel-jackson3-starter
+
+[CAMEL-22887](https://issues.apache.org/jira/browse/CAMEL-22887)
+
+camel-cyberark-vault: Add test-infra for automated testing
 
 [CAMEL-21955](https://issues.apache.org/jira/browse/CAMEL-21955)
 

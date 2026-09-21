@@ -3,12 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-09-20T00:00:00+00:00</lastmod>
+    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/blog/2026/09/camel-simple-customfunction/</loc>
-    <lastmod>2026-09-20T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/blog/2026/09/camelbee-route-observability/</loc>
+    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Community/</loc>
+    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Tooling/</loc>
+    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/09/camel-simple-customfunction/</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Howtos/</loc>
@@ -29,9 +38,6 @@
     <loc>https://camel.apache.org/releases/q-3.33.3/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Community/</loc>
-    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/releases/release-4.22.1/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
@@ -49,9 +55,6 @@
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camel-website-rebuilt/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Tooling/</loc>
-    <lastmod>2026-09-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camel-local-model-benchmark/</loc>
     <lastmod>2026-09-15T00:00:00+00:00</lastmod>

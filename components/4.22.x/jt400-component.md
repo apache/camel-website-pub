@@ -216,8 +216,8 @@ Enum values:
 
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
-| **outputFieldsIdxArray** (producer) | Specifies which fields (program parameters) are output parameters. |  | Integer\[\] |
-| **outputFieldsLengthArray** (producer) | Specifies the fields (program parameters) length as in the IBM i program definition. |  | Integer\[\] |
+| **fieldsLength** (producer) | Specifies the fields (program parameters) length as in the IBM i program definition, as a comma-separated list. |  | String |
+| **outputFieldsIdx** (producer) | Specifies which fields (program parameters) are output parameters, as a comma-separated list of 0-based indexes. |  | String |
 | **procedureName** (producer) | Procedure name from a service program to call. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |

@@ -9,20 +9,21 @@ The YAML DSL provides the capability to define your Camel routes, route template
 A route is collection of elements defined as follows:
 
 ```yaml
-- from: (1)
-    uri: "direct:start"
-    steps: (2)
-      - filter:
-          expression:
-            simple: "${in.header.continue} == true"
-          steps: (2)
-            - to:
-                uri: "log:filtered"
-      - to:
-          uri: "log:original"
+- route: (1)
+    from:
+      uri: "direct:start"
+      steps: (2)
+        - filter:
+            expression:
+              simple: "${in.header.continue} == true"
+            steps: (2)
+              - to:
+                  uri: "log:filtered"
+        - to:
+            uri: "log:original"
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>route entry point, by default <code>from</code> and <code>rest</code> are supported</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>processing steps</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>a route, with the <code>from</code> endpoint it consumes from (<code>rest</code>, <code>beans</code>, <code>onException</code> and more are the other top-level entries)</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>processing steps</td></tr></tbody></table>
 
 > **Note**
 > Each step is represented by a YAML map that has a single entry where the field name is the EIP name
@@ -161,14 +162,15 @@ final class MyStepDeserializer extends YamlDeserializerBase<StepDefinition> {
 This allows YAML such as:
 
 ```yaml
-- from:
-    uri: "direct:start"
-    steps:
-      - myStep:
-          id: "custom-step"
-          steps:
-            - to:
-                uri: "mock:result"
+- route:
+    from:
+      uri: "direct:start"
+      steps:
+        - myStep:
+            id: "custom-step"
+            steps:
+              - to:
+                  uri: "mock:result"
 ```
 
 Resolvers are discovered when YAML routes are parsed. Camel starts with the built-in YAML DSL resolvers, then adds the resolvers returned by the active `YamlDeserializerResolverProvider` and any `YamlDeserializerResolver` beans found in the Camel registry. When no custom provider is registered as a Camel context plugin, the default provider discovers resolver class names from `META-INF/services/org/apache/camel/YamlDeserializerResolver`. It looks for resolver resources through the Camel class resolver, the application context classloader, and any classloaders registered with the Camel class resolver. Runtime integrations that perform build-time discovery, such as native-image runtimes, can register their own `YamlDeserializerResolverProvider` as a Camel context plugin to supply the automatically available resolvers instead of using the default runtime classpath resource scanning provider.
@@ -218,25 +220,27 @@ To define an endpoint with the YAML dsl you have two options:
 1.  Using a classic Camel URI:
     
     ```yaml
-    - from:
-        uri: "timer:tick?period=1s"
-        steps:
-          - to:
-              uri: "telegram:bots?authorizationToken=XXX"
+    - route:
+        from:
+          uri: "timer:tick?period=1s"
+          steps:
+            - to:
+                uri: "telegram:bots?authorizationToken=XXX"
     ```
     
 2.  Using URI and parameters:
     
     ```yaml
-    - from:
-        uri: "timer://tick"
-        parameters:
-          period: "1s"
-        steps:
-          - to:
-              uri: "telegram:bots"
-              parameters:
-                authorizationToken: "XXX"
+    - route:
+        from:
+          uri: "timer://tick"
+          parameters:
+            period: "1s"
+          steps:
+            - to:
+                uri: "telegram:bots"
+                parameters:
+                  authorizationToken: "XXX"
     ```
     
 
@@ -247,16 +251,17 @@ To define an endpoint with the YAML dsl you have two options:
 It is now possible to inline Maps in the `parameters` section. However Camel components rarely have options that are Map based, but when they do this makes it easier to use. For example the plc4x component allow to configure _tags_ as a Map:
 
 ```yaml
-- from:
-    uri: "plc4x"
-    parameters:
-      driver: "some driver url here"
-      tags:
-        "tags_2": "XXX"
-        "tags_6": "YYY"
-    steps:
-      - to:
-          uri: "log:plc"
+- route:
+    from:
+      uri: "plc4x"
+      parameters:
+        driver: "some driver url here"
+        tags:
+          "tags_2": "XXX"
+          "tags_6": "YYY"
+      steps:
+        - to:
+            uri: "log:plc"
 ```
 
 In this example the _tags_ options is of Map type and can be configured using YAML map syntax. Because the keys use underscore, then they are quoted.
@@ -548,27 +553,28 @@ Some [Languages](../../4.22.x/languages/index.md) have additional configurations
 For example, the [JSONPath](../../4.22.x/languages/jsonpath-language.md) can be configured to ignore JSon parsing errors. This is intended when you use a [Content Based Router](../../4.22.x/eips/choice-eip.md) and want to route the message to different endpoints. But the JSon payload of the message can be in different forms; meaning that the JSonPath expressions in some cases would fail with an exception, and other times not. In this situation, you need to set `suppress-exception` to true, as shown below:
 
 ```yaml
-- from:
-    uri: "direct:start"
-    steps:
-      - choice:
-          when:
-          - jsonpath:
-              expression: "person.middlename"
-              suppressExceptions: true
-            steps:
-            - to:
-                uri: mock:middle
-          - jsonpath:
-              expression: "person.lastname"
-              suppressExceptions: true
-            steps:
-            - to:
-                uri: mock:last
-          otherwise:
-            steps:
+- route:
+    from:
+      uri: "direct:start"
+      steps:
+        - choice:
+            when:
+            - jsonpath:
+                expression: "person.middlename"
+                suppressExceptions: true
+              steps:
               - to:
-                  uri: mock:other
+                  uri: mock:middle
+            - jsonpath:
+                expression: "person.lastname"
+                suppressExceptions: true
+              steps:
+              - to:
+                  uri: mock:last
+            otherwise:
+              steps:
+                - to:
+                    uri: mock:other
 ```
 
 In the route above, the following message
@@ -608,6 +614,8 @@ The canonical schema removes all implicit patterns:
 -   No implicit expressions: Expression-aware EIPs require the `expression` wrapper.
     
 -   No `oneOf`/`anyOf`/`not` constructs: The schema uses only simple `type: object` with `properties`.
+    
+-   A route is written under `route:`: a top-level `from:` is the compact notation of a route.
     
 
 This results in a schema that is approximately 25% smaller and significantly easier for tooling to process.
@@ -771,7 +779,7 @@ camel validate normalize --output normalized/ myroute.yaml
 
 ### Compact notation warning
 
-Camel logs a WARN message when YAML routes use compact (shorthand) notation instead of the canonical (explicit) form: a step written as a string (`log: "…​"`), a language written as a string (`simple: "…​"`), or a language key directly on the EIP (`setBody: {simple: …​}`) instead of under `expression:`. This is to encourage adopting the canonical style which is more friendly for tooling and AI assistants.
+Camel logs a WARN message when YAML routes use compact (shorthand) notation instead of the canonical (explicit) form: a step written as a string (`log: "…​"`), a language written as a string (`simple: "…​"`), or a language key directly on the EIP (`setBody: {simple: …​}`) instead of under `expression:`. A top-level `- from:` without `- route:` is compact notation as well: a route is written under `route:`, as an XML route is always a `<route>`. This is to encourage adopting the canonical style which is more friendly for tooling and AI assistants.
 
 The warning is logged once per resource file and looks like:
 
@@ -797,6 +805,7 @@ This reports each use of the compact notation with the canonical form to write, 
 
 /0/route/from/steps/0/setBody: setBody: {simple: ...} is the deprecated compact notation: an expression is written under expression: (setBody: {expression: {simple: {expression: "..."}}}); camel validate normalize rewrites a file in the canonical format
 /0/route/from/steps/1/log: log: "..." is the deprecated compact notation: write log: {message: "..."}; camel validate normalize rewrites a file in the canonical format
+/1: a top-level from: is the deprecated compact notation: a route is written under route: (- route: {from: {uri: "...", steps: \[...\]}}); camel validate normalize rewrites a file in the canonical format
 
 The `YamlValidator` class supports both schemas programmatically:
 

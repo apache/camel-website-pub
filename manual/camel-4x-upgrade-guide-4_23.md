@@ -336,6 +336,18 @@ It previously set only `FEATURE_SECURE_PROCESSING` and `external-general-entitie
 
 Documents carrying an internal DTD subset still parse: `disallow-doctype-decl` is deliberately not set here, because that would reject input that parses today. Routes that genuinely need to resolve an external DTD or parameter entity through this converter must supply their own `SAXParserFactory`.
 
+### camel-core - a failed route reload restores the previous routes
+
+When a route file is reloaded in dev mode (`camel run --dev`, or the route watcher reload strategy in general) and the new content fails to load, the routes that ran before are restored right away, without the routes of the failed file, and a WARN says so. Before, the previous routes stayed stopped until the next successful reload, so a mistake in one file left the application without routes. The failed file loads again on its next save. The `CamelContextReloadFailure` event and the reload error log line are unchanged.
+
+### camel-core - the recursive file watcher watches directories created while it runs
+
+The file watcher reload strategy (`camel run --dev`, the route watcher reload strategy with a recursive directory) registered the directory tree once at start: a directory created afterwards, such as `src/main/java/com/acme` for a Java class added to a running project, was never watched and its files never reloaded. A directory created under a watched one is now registered as it appears, with the files already in it reloaded. The watcher also ignores the compile work directory (`camel.main.compileWorkDir`, `.camel-jbang/compile` for the CLI), where the runtime writes the class files it compiles, so a compiled source no longer triggers a reload of its own.
+
+### camel-core, camel-resilience4j - a failure the circuit breaker’s fallback recovered from is recorded as handled
+
+The error registry (`camel get errors`, the error dev console) recorded a call that failed inside a `circuitBreaker` and was answered by its `onFallback` as an error that was not handled, one per call, since the breaker runs the call on a copy of the exchange whose failure is reported before the fallback runs, and the breaker did not report the recovery. The breaker now emits the failure-handling and failure-handled events around the fallback, as `doCatch` does, and the registry marks the copy’s entry as handled when the original reports the failure as handled, keeping the entry that names the node that failed. `camel get errors --handled=false` no longer lists such calls. The `handled` field of the entries is unchanged in shape.
+
 ### camel-core - the type of a bean created by a script or a builder is optional
 
 The `type` (class name) of a bean definition — `bean` under `beans`, `templateBean` of a route template, `bean` of a templated route — is no longer declared as required. It was required since the attribute also selected how the bean is created; that moved to `scriptLanguage` in Camel 4.1, and a bean created by a script (`scriptLanguage` and `script`) or a builder (`builderClass`) needs no class name: the runtime registers it as the type of the object the script or builder returns, as the Java DSL `templateBean(name, language, script)` always did.
@@ -531,11 +543,19 @@ The `--runtime` option of `camel run` has a new default value `jbang`, which is 
 
 Running an existing Maven project (`camel run pom.xml`) is unchanged, and still detects the runtime from the `pom.xml`. The other commands that take `--runtime` (such as `camel export`, `camel dependency list` and `camel version list`) accept `jbang` as an alias for `main`.
 
+The file watcher reload strategy (camel-support) now emits the `CamelContextReloadFailure` event when a single file fails to reload, with the file name as the event’s action; before, only a failed reload of the whole context emitted it. A listener of that event fires for these failures too. `camel run` uses it to print the report of `camel validate yaml` when a YAML route file does not load, at start and on a reload in `--dev` mode.
+
 The YAML that `camel init` writes (`camel init foo.yaml`, and the Integration and Kamelet templates), the bundled examples (`camel init --example`) and the routes the `camel_ai_pipeline_scaffold` and `camel_openapi_scaffold` MCP tools generate are now written in the canonical YAML DSL format, with an expression under `expression:` and a step as a map of its options (`setBody: {expression: {simple: {expression: "…​"}}}`, `log: {message: "…​"}`, `to: {uri: "…​"}`). The compact notation they used to be written in (`setBody: {simple: "…​"}`, `log: "…​"`) is deprecated: `camel run` warns about it, `camel validate yaml --canonical` reports it, and `camel validate normalize` rewrites a file in the canonical format. Existing files keep working; only the generated starting point changed. Scripts that post-process the generated YAML by matching the old text need to be updated.
+
+`camel export` keeps a Groovy script that a route references as a resource (`resource:classpath:mapping.groovy` or `resource:file:mapping.groovy`, a mapping script used as the body of an expression) at the resources root, where the reference resolves in the exported project. Other Groovy files go to `src/main/resources/camel-groovy` as before, where they are compiled as scripts at startup.
+
+`camel run` now looks up a `classpath:` or `file:` resource that is not found in the directories of the route files (the working directory first), the way it already did under `--source-dir`. A script next to the route is found as `resource:classpath:mapping.groovy`, the reference that also works in the project `camel export` writes, where before only `resource:file:mapping.groovy` worked in the CLI. A resource that exists nowhere fails as before, named as written.
 
 ### camel-jbang (MCP servers)
 
 The Camel authoring tools for AI agents are now defined once, in `camel-jbang-core`, and exposed under the same `camel_` names by both MCP servers, `camel mcp` and `camel tui --mcp`: `camel_catalog_doc`, `camel_catalog_find`, `camel_validate_source`, `camel_get_files`, `camel_write_file`, `camel_run`, `camel_control`, `camel_get_log`, `camel_get_errors`, `camel_eval_expression` and `camel_error_diagnose`.
+
+The `camel_write_file` tool, when an integration of the project is selected and runs in dev mode, waits up to eight seconds for the reload of the written file and answers with its outcome (`reload.status` reloaded, failed with the cause and the validator’s report, properties, or unknown), so an agent does not go on with a route that did not load. A write with no selected integration answers as before.
 
 In the TUI MCP server the tools `tui_catalog_doc`, `tui_validate_source`, `tui_write_file`, `tui_get_files`, `tui_control`, `tui_get_log`, `tui_get_errors` and `tui_eval_expression` were renamed to the `camel_` names above; the `tui_` prefix is now reserved for the tools that only make sense in front of the screen. Update MCP clients, prompts and ACP permission lists that name them. `camel_eval_expression` no longer fails when no integration is selected but evaluates the expression in a local scratch context, and `camel_get_errors` reads the integration’s error file rather than the Errors tab.
 
@@ -563,6 +583,10 @@ The shared catalog tools answer for the Camel version in use, or the `camelVersi
 The F8 AI panel now sends only a core subset of its `tui_*` tools to local providers (Ollama, or any provider on `localhost`); the drawing, animation and automation tools are left out to keep the prompt small for local models. Hosted providers are unaffected. Use `/tools full` in the panel, or set `camel.tui.ai.tools=full`, to restore the previous behaviour. Requests to Ollama now also set `keep_alive` to 30 minutes and a `num_ctx` chosen once per model: `OLLAMA_CONTEXT_LENGTH` when set in the environment, else the window of the model when Ollama already has it loaded (raised to 32768 when smaller), else 65536 when the model’s weights plus the KV cache of that window fit the machine’s memory and 32768 otherwise. The same rule applies to `camel ask` and the other CLI commands that use Ollama. Asking for a window Ollama does not have loaded causes a one-time model reload. The AI panel compacts its conversation history for a local provider once the prompt Ollama measured passes half that window (at most half of 65536) and prints a line saying so, instead of the earlier estimate-based threshold.
 
 `camel tui --record` is now rejected when combined with `--web`. The recording configuration applies to the whole process, so a browser session served by `--web` would be recorded into the same `.cast` file as the local session. Previously the combination was accepted, but recording never produced any output, so run the two modes in separate processes instead.
+
+### camel-yaml-dsl - the canonical schema requires route:
+
+A top-level `- from:` without `- route:` is the compact notation of a route, and the canonical schema (`camelYamlDsl-canonical.json`) no longer lists `from` among its top-level entries: a route is written under `route:`, as an XML route is always a `<route>`, and as Kaoto and Karavan write it. `camel validate yaml --canonical` now reports a top-level `from:` with the form to write, the way it reports the other compact shapes, and `camel validate normalize` rewrites it. The Integration template of `camel init` writes its flows in the `- route:` form as well; a Kamelet’s `template:` keeps its `from:`, which is the Kamelet spec’s shape. The classic schema and `camel run` are unchanged: the file keeps working, with the compact notation warning `camel run` already logged for it.
 
 ### camel-mail
 
@@ -914,6 +938,14 @@ Two changes:
     
 
 Deployments that relied on credentialed cross-origin requests must list the permitted origins in `camel.server.cors.origins`.
+
+### camel-platform-http-vertx - response write failures are no longer silent
+
+A streaming response body (any `InputStream` payload) was written to the client with the deprecated Vert.x `Pump`, which discards the result of every `write()`. Failures were therefore invisible: the response write was always reported as successful, even when nothing reached the client. Writing now uses `pipe()`, which propagates those failures.
+
+This is a bug fix (CAMEL-24864). A client that disconnects part way through a streaming response is now noticed, so the body stream is closed and the exchange completes. Previously neither happened, which leaked an exchange per aborted response — and, for a stream that only ends on an explicit marker, such as the Server-Sent Events stream produced by `camel-a2a`, also leaked the subscriber that the stream’s `close()` was responsible for removing.
+
+A lost client connection is logged at DEBUG and is not reported through the consumer’s `ExceptionHandler`, since a client going away is not a route failure. A failure raised while **producing** the body is still reported as before. Routes using `handleWriteResponseError=true` now see an exception on the exchange when a response write fails, including when the cause is the client disconnecting; routes that need to distinguish the two can inspect the exception cause.
 
 ### camel-tika
 

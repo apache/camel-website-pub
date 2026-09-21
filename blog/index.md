@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[245]{title,link,pubDate,description}:
+posts[246]{title,link,pubDate,description}:
+  CamelBee: Route Topology and Message Tracing for Deployed Camel Applications|https://camel.apache.org/blog/2026/09/camelbee-route-observability/index.md|Mon, 21 Sep 2026 00:00:00 +0000|Apache Camel keeps raising the floor of what ships in the box. Route topology diagrams and the Camel TUI both arrived in 4.21, and both are very good at what they are for: understanding a route while 
   Extending Apache Camel Simple with Your Own Functions|https://camel.apache.org/blog/2026/09/camel-simple-customfunction/index.md|Sun, 20 Sep 2026 00:00:00 +0000|Apache Camel&rsquo;s Simple language is surprisingly powerful. It can access message bodies, headers, variables and exchange properties, work with strings and numbers, evaluate conditions, process dat
   Authorizing what an AI agent may do in Apache Camel|https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/index.md|Thu, 17 Sep 2026 00:00:00 +0000|Camel can expose a route as a tool an AI agent can call, and it can run the agent that calls it. Camel 4.22 added camel-ai-tool, a way to register a route as a tool once and use it from LangChain4j, S
   Camel Quarkus 3.33.3 Released|https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/index.md|Thu, 17 Sep 2026 00:00:00 +0000|Camel Quarkus 3.33.3 release

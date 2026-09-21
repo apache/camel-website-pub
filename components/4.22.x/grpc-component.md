@@ -100,6 +100,8 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **flowControlWindow** (common) | The HTTP/2 flow control window size (MiB). | 1048576 | int |
+| **forwardOnCompleted** (common) | Determines if onCompleted events should be pushed to the Camel route. | false | boolean |
+| **forwardOnError** (common) | Determines if onError events should be pushed to the Camel route. Exceptions will be set as message body. | false | boolean |
 | **maxMessageSize** (common) | The maximum message size allowed to be received/sent (MiB). | 4194304 | int |
 | **autoDiscoverServerInterceptors** (consumer) | Setting the autoDiscoverServerInterceptors mechanism, if true, the component will look for a ServerInterceptor instance in the registry automatically otherwise it will skip that checking. | true | boolean |
 | **consumerStrategy** (consumer) | 
@@ -119,8 +121,6 @@ Enum values:
 
 
  | PROPAGATION | GrpcConsumerStrategy |
-| **forwardOnCompleted** (consumer) | Determines if onCompleted events should be pushed to the Camel route. | false | boolean |
-| **forwardOnError** (consumer) | Determines if onError events should be pushed to the Camel route. Exceptions will be set as message body. | false | boolean |
 | **initialFlowControlWindow** (consumer) | Sets the initial flow control window in bytes. | 1048576 | int |
 | **keepAliveTime** (consumer) | Sets a custom keepalive time in milliseconds, the delay time for sending next keepalive ping. A value of Long.MAX\_VALUE or a value greater or equal to NettyServerBuilder.AS\_LARGE\_AS\_INFINITE will disable keepalive. | 7200000 | long |
 | **keepAliveTimeout** (consumer) | Sets a custom keepalive timeout in milliseconds, the timeout for keepalive ping requests. | 20000 | long |

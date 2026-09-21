@@ -284,7 +284,7 @@ The following route defined in Spring XML executes the operation [**findOne**](#
 
 ```java
 from("direct:start")
-    .to("mongodb-gridfs:mongoBean?database=${mongodb.database}&operation=findOne")
+    .to("mongodb-gridfs:mongoBean?database={{mongodb.database}}&operation=findOne")
     .to("direct:result");
 ```
 
@@ -292,7 +292,7 @@ from("direct:start")
 <route>
   <from uri="direct:start" />
   <!-- using bean 'mongoBean' defined above -->
-  <to uri="mongodb-gridfs:mongoBean?database=${mongodb.database}&amp;operation=findOne" />
+  <to uri="mongodb-gridfs:mongoBean?database={{mongodb.database}}&amp;operation=findOne" />
   <to uri="direct:result" />
 </route>
 ```
@@ -305,7 +305,7 @@ from("direct:start")
         - to:
             uri: mongodb-gridfs:mongoBean
             parameters:
-              database: "${mongodb.database}"
+              database: "{{mongodb.database}}"
               operation: findOne
         - to:
             uri: direct:result

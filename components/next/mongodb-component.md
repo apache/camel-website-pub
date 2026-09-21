@@ -1345,7 +1345,7 @@ The following route defined in Spring XML executes the operation [getDbStats](#_
 
 ```java
 from("direct:start")
-    .to("mongodb:mongoBean?database=${mongodb.database}&collection=${mongodb.collection}&operation=getDbStats")
+    .to("mongodb:mongoBean?database={{mongodb.database}}&collection={{mongodb.collection}}&operation=getDbStats")
     .to("direct:result");
 ```
 
@@ -1353,7 +1353,7 @@ from("direct:start")
 <route>
   <from uri="direct:start" />
   <!-- using bean 'mongoBean' defined above -->
-  <to uri="mongodb:mongoBean?database=${mongodb.database}&amp;collection=${mongodb.collection}&amp;operation=getDbStats" />
+  <to uri="mongodb:mongoBean?database={{mongodb.database}}&amp;collection={{mongodb.collection}}&amp;operation=getDbStats" />
   <to uri="direct:result" />
 </route>
 ```
@@ -1366,8 +1366,8 @@ from("direct:start")
         - to:
             uri: mongodb:mongoBean
             parameters:
-              database: "${mongodb.database}"
-              collection: "${mongodb.collection}"
+              database: "{{mongodb.database}}"
+              collection: "{{mongodb.collection}}"
               operation: getDbStats
         - to:
             uri: direct:result

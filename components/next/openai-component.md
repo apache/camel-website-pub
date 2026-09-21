@@ -190,10 +190,31 @@ Enum values:
 | **additionalHeader** (producer) | Additional HTTP request headers to send with every API call (e.g. additionalHeader.OpenAI-Organization=my-org or additionalHeader.api-key=secret). Values may contain secrets. This is a multi-value option with prefix: additionalHeader. |  | Map |
 | **additionalResponseHeader** (producer) | Map additional fields from the response message to Camel headers. The key is the field name in the API response, the value is the Camel header name (e.g. additionalResponseHeader.reasoning\_content=MyReasoningHeader). This is a multi-value option with prefix: additionalResponseHeader. |  | Map |
 | **apiKey** (producer) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. |  | String |
+| **audioChunkingStrategy** (producer) | 
+Chunking strategy for diarized transcription models such as gpt-4o-transcribe-diarize.
+
+Enum values:
+
+-   auto
+    
+-   vad
+    
+
+
+
+
+
+ |  | String |
+| **audioInclude** (producer) | Comma-separated extra response fields to include (e.g. logprobs). |  | String |
+| **audioKeywords** (producer) | Comma-separated keywords to improve transcription accuracy. |  | String |
+| **audioKnownSpeakerNames** (producer) | Comma-separated known speaker names for diarized transcription. |  | String |
+| **audioKnownSpeakerReferences** (producer) | Comma-separated known speaker reference audio file ids for diarized transcription. |  | String |
 | **audioLanguage** (producer) | The language of the input audio in ISO-639-1 format (e.g., 'en'). Improves accuracy and latency. |  | String |
+| **audioLanguages** (producer) | Comma-separated input audio languages (ISO-639-1 or ISO-639-3). |  | String |
 | **audioModel** (producer) | The model to use for audio transcription (e.g., whisper-1, gpt-4o-transcribe). |  | String |
 | **audioPrompt** (producer) | Optional text to guide the model’s style or continue a previous audio segment. |  | String |
 | **audioResponseFormat** (producer) | 
+
 The format of the transcription output.
 
 Enum values:
@@ -207,6 +228,8 @@ Enum values:
 -   verbose\_json
     
 -   vtt
+    
+-   diarized\_json
     
 
 
@@ -598,11 +621,18 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIModerationResponseModel** (producer) Constant: [`MODERATION_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE_MODEL) | The moderation model used in the response. |  | String |
 | **CamelOpenAIAudioModel** (producer) Constant: [`AUDIO_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_MODEL) | The model to use for audio transcription. |  | String |
 | **CamelOpenAIAudioLanguage** (producer) Constant: [`AUDIO_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_LANGUAGE) | The language of the input audio (ISO-639-1). |  | String |
-| **CamelOpenAIAudioResponseFormat** (producer) Constant: [`AUDIO_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_RESPONSE_FORMAT) | The response format for audio transcription (json, text, srt, verbose\_json, vtt). |  | String |
+| **CamelOpenAIAudioResponseFormat** (producer) Constant: [`AUDIO_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_RESPONSE_FORMAT) | The response format for audio transcription (json, text, srt, verbose\_json, vtt, diarized\_json). |  | String |
 | **CamelOpenAIAudioTemperature** (producer) Constant: [`AUDIO_TEMPERATURE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TEMPERATURE) | Sampling temperature for audio transcription (0.0 to 1.0). |  | Double |
 | **CamelOpenAIAudioPrompt** (producer) Constant: [`AUDIO_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_PROMPT) | Optional text to guide the model’s style or continue a previous audio segment. |  | String |
 | **CamelOpenAIAudioTimestampGranularities** (producer) Constant: [`AUDIO_TIMESTAMP_GRANULARITIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TIMESTAMP_GRANULARITIES) | Comma-separated timestamp granularities: word, segment, or word,segment (verbose\_json only). |  | String |
-| **CamelOpenAIAudioDuration** (producer) Constant: [`AUDIO_DURATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DURATION) | Duration of the audio in seconds (verbose\_json only). |  | Double |
+| **CamelOpenAIAudioChunkingStrategy** (producer) Constant: [`AUDIO_CHUNKING_STRATEGY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_CHUNKING_STRATEGY) | Chunking strategy for diarized transcription models: auto or vad. |  | String |
+| **CamelOpenAIAudioKnownSpeakerNames** (producer) Constant: [`AUDIO_KNOWN_SPEAKER_NAMES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KNOWN_SPEAKER_NAMES) | Comma-separated known speaker names for diarized transcription. |  | String |
+| **CamelOpenAIAudioKnownSpeakerReferences** (producer) Constant: [`AUDIO_KNOWN_SPEAKER_REFERENCES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KNOWN_SPEAKER_REFERENCES) | Comma-separated known speaker reference audio file ids for diarized transcription. |  | String |
+| **CamelOpenAIAudioKeywords** (producer) Constant: [`AUDIO_KEYWORDS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KEYWORDS) | Comma-separated keywords to improve transcription accuracy. |  | String |
+| **CamelOpenAIAudioLanguages** (producer) Constant: [`AUDIO_LANGUAGES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_LANGUAGES) | Comma-separated input audio languages (ISO-639-1 or ISO-639-3). |  | String |
+| **CamelOpenAIAudioInclude** (producer) Constant: [`AUDIO_INCLUDE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_INCLUDE) | Comma-separated extra response fields to include (e.g. logprobs). |  | String |
+| **CamelOpenAIAudioDuration** (producer) Constant: [`AUDIO_DURATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DURATION) | Duration of the audio in seconds (verbose\_json or diarized\_json). |  | Double |
+| **CamelOpenAIAudioDiarizedSegments** (producer) Constant: [`AUDIO_DIARIZED_SEGMENTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DIARIZED_SEGMENTS) | Speaker-labelled segments from diarized\_json transcription. |  | List |
 | **CamelOpenAIAudioDetectedLanguage** (producer) Constant: [`AUDIO_DETECTED_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DETECTED_LANGUAGE) | Language detected in the audio (verbose\_json only). |  | String |
 | **CamelOpenAISpeechModel** (producer) Constant: [`SPEECH_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_MODEL) | The model to use for text-to-speech (e.g., gpt-4o-mini-tts, tts-1, tts-1-hd). |  | String |
 | **CamelOpenAISpeechVoice** (producer) Constant: [`SPEECH_VOICE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_VOICE) | The voice to use for the generated audio (e.g., alloy, echo, fable, onyx, nova, shimmer). |  | String |
@@ -992,6 +1022,30 @@ from("direct:image")
 
 > **Note**
 > When using image input, the userMessage is required. Supported image formats are detected by MIME type (e.g., `image/png`, `image/jpeg`, `image/gif`, `image/webp`).
+
+### PDF and Audio File Input with Chat Completion
+
+The `chat-completion` operation also accepts PDF documents and short audio clips (WAV or MP3) as the message body. Set `userMessage` to the prompt that accompanies the file, and provide a MIME type through `CamelOpenAIMediaType`, `Content-Type`, or a file name extension when needed:
+
+```java
+from("direct:pdf-summary")
+    .setHeader("CamelOpenAIMediaType", constant("application/pdf"))
+    .setHeader("CamelOpenAIUserMessage", constant("Summarize this document"))
+    .to("openai:chat-completion?model=gpt-4o")
+    .log("Response: ${body}");
+```
+
+For audio input, supported MIME types are `audio/wav` and `audio/mpeg` (MP3).
+
+### Diarized Audio Transcription
+
+Speaker-labelled transcription is available through the `audio-transcription` operation with `audioResponseFormat=diarized_json` and diarization models such as `gpt-4o-transcribe-diarize`. Optional tuning parameters include `audioChunkingStrategy`, `audioKnownSpeakerNames`, `audioKnownSpeakerReferences`, `audioKeywords`, `audioLanguages` and `audioInclude`.
+
+```java
+from("file:recordings?noop=true")
+    .to("openai:audio-transcription?audioModel=gpt-4o-transcribe-diarize&audioResponseFormat=diarized_json")
+    .log("Transcript: ${body}");
+```
 
 ### Streaming Response
 

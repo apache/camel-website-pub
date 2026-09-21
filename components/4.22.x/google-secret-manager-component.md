@@ -155,6 +155,12 @@ Enum values:
 
 -   createSecret
     
+-   getSecretVersion
+    
+-   deleteSecret
+    
+-   listSecrets
+    
 
 
 
