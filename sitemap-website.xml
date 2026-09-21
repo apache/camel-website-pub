@@ -14,6 +14,12 @@
     <loc>https://camel.apache.org/</loc>
     <lastmod>2026-09-21T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/releases/kamelets-4.22.1/</loc>
+    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/categories/Tooling/</loc>
     <lastmod>2026-09-21T00:00:00+00:00</lastmod>
   </url><url>
@@ -45,9 +51,6 @@
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Releases/</loc>
-    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Security/</loc>

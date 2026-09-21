@@ -118,10 +118,10 @@ The Mail component supports the following options which are listed below.
 | **replyTo** (producer) | The Reply-To recipients (the receivers of the response mail). Separate multiple email addresses with a comma. |  | String |
 | **subject** (producer) | The Subject of the message being sent. Note: Setting the subject in the header takes precedence over this option. |  | String |
 | **to** (producer) | Sets the destination email address. Separate multiple email addresses with comma. |  | String |
-| **useHeaderFrom** (producer) | Whether message headers From and Sender override the sender pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI sender, ignoring any From or Sender headers from the message. | false | boolean |
-| **useHeaderRecipients** (producer) | Whether message headers To, CC, and BCC override the recipients pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI recipients, ignoring any recipient headers from the message. | false | boolean |
-| **useHeaderReplyTo** (producer) | Whether message header Reply-To overrides the replyTo pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI replyTo, ignoring any Reply-To header from the message. | false | boolean |
-| **useHeaderSubject** (producer) | Whether message header Subject overrides the subject pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI subject, ignoring any Subject header from the message. | false | boolean |
+| **useHeaderFrom** (producer) | Whether message headers From and Sender override the sender pre-configured in the endpoint URI. Defaults to false. Set to true to let message headers From and Sender override the endpoint URI sender. | false | boolean |
+| **useHeaderRecipients** (producer) | Whether message headers To, CC, and BCC override the recipients pre-configured in the endpoint URI. Defaults to false. Set to true to let message headers override the endpoint URI recipients. | false | boolean |
+| **useHeaderReplyTo** (producer) | Whether message header Reply-To overrides the replyTo pre-configured in the endpoint URI. Defaults to false. Set to true to let the message Reply-To header override the endpoint URI replyTo. | false | boolean |
+| **useHeaderSubject** (producer) | Whether message header Subject overrides the subject pre-configured in the endpoint URI. Defaults to false. Set to true to let the message Subject header override the endpoint URI subject. | false | boolean |
 | **javaMailSender** (producer (advanced)) | To use a custom org.apache.camel.component.mail.JavaMailSender for sending emails. |  | JavaMailSender |
 | **additionalJavaMailProperties** (advanced) | Sets additional java mail properties, that will append/override any default properties that are set based on all the other options. This is useful if you need to add some special options but want to keep the others as is. This is a multi-value option with prefix: mail. |  | Properties |
 | **alternativeBodyHeader** (advanced) | Specifies the key to an IN message header that contains an alternative email body. For example, if you send emails in text/html format and want to provide an alternative mail body for non-HTML email clients, set the alternative mail body with this key as a header. | CamelMailAlternativeBody | String |
@@ -213,10 +213,10 @@ Enum values:
 | **replyTo** (producer) | The Reply-To recipients (the receivers of the response mail). Separate multiple email addresses with a comma. |  | String |
 | **subject** (producer) | The Subject of the message being sent. Note: Setting the subject in the header takes precedence over this option. |  | String |
 | **to** (producer) | Sets the destination email address. Separate multiple email addresses with comma. |  | String |
-| **useHeaderFrom** (producer) | Whether message headers From and Sender override the sender pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI sender, ignoring any From or Sender headers from the message. | false | boolean |
-| **useHeaderRecipients** (producer) | Whether message headers To, CC, and BCC override the recipients pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI recipients, ignoring any recipient headers from the message. | false | boolean |
-| **useHeaderReplyTo** (producer) | Whether message header Reply-To overrides the replyTo pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI replyTo, ignoring any Reply-To header from the message. | false | boolean |
-| **useHeaderSubject** (producer) | Whether message header Subject overrides the subject pre-configured in the endpoint URI. Defaults to true. Set to false to always use the endpoint URI subject, ignoring any Subject header from the message. | false | boolean |
+| **useHeaderFrom** (producer) | Whether message headers From and Sender override the sender pre-configured in the endpoint URI. Defaults to false. Set to true to let message headers From and Sender override the endpoint URI sender. | false | boolean |
+| **useHeaderRecipients** (producer) | Whether message headers To, CC, and BCC override the recipients pre-configured in the endpoint URI. Defaults to false. Set to true to let message headers override the endpoint URI recipients. | false | boolean |
+| **useHeaderReplyTo** (producer) | Whether message header Reply-To overrides the replyTo pre-configured in the endpoint URI. Defaults to false. Set to true to let the message Reply-To header override the endpoint URI replyTo. | false | boolean |
+| **useHeaderSubject** (producer) | Whether message header Subject overrides the subject pre-configured in the endpoint URI. Defaults to false. Set to true to let the message Subject header override the endpoint URI subject. | false | boolean |
 | **javaMailSender** (producer (advanced)) | To use a custom org.apache.camel.component.mail.JavaMailSender for sending emails. |  | JavaMailSender |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **additionalJavaMailProperties** (advanced) | Sets additional java mail properties, that will append/override any default properties that are set based on all the other options. This is useful if you need to add some special options but want to keep the others as is. This is a multi-value option with prefix: mail. |  | Properties |
@@ -492,14 +492,16 @@ template.sendBodyAndHeaders("smtp://admin@localhost?to=info@mycompany.com", "Hel
 For routes where message headers originate from an untrusted source (for example messages bridged from an HTTP endpoint, a JMS queue, or a Kafka topic), allowing inbound headers to override recipients, sender, subject, or reply-to addresses can enable an attacker to redirect mail, intercept replies, forge the sender address, or inject arbitrary subjects. Four opt-in `@UriParam` options let you lock the endpoint configuration so it cannot be overridden by message headers:
 
   
-| Option | Default | Effect when set to `false` |
+| Option | Default | Effect when set to `true` |
 | --- | --- | --- |
-| `useHeaderRecipients` | `true` | Endpoint URI to/cc/bcc always used; To/CC/BCC headers ignored. |
-| `useHeaderFrom` | `true` | Endpoint URI from always used; From/Sender headers ignored. |
-| `useHeaderSubject` | `true` | Endpoint URI subject always used; Subject header ignored. |
-| `useHeaderReplyTo` | `true` | Endpoint URI replyTo always used; Reply-To header ignored. |
+| `useHeaderRecipients` | `false` | Message To/CC/BCC headers can override the endpoint URI recipients. |
+| `useHeaderFrom` | `false` | Message From/Sender headers can override the endpoint URI sender. |
+| `useHeaderSubject` | `false` | Message Subject header can override the endpoint URI subject. |
+| `useHeaderReplyTo` | `false` | Message Reply-To header can override the endpoint URI replyTo. |
 
-All four default to `true` so existing behaviour is preserved. Example:
+All four default to `false`. Set to `true` to let message headers override the endpoint configuration.
+
+Example:
 
 -   Java
     

@@ -16,6 +16,13 @@
       <description>Apache Camel keeps raising the floor of what ships in the box. Route topology diagrams and the Camel TUI both arrived in 4.21, and both are very good at what they are for: understanding a route while you write it, on the machine you write it on. As the TUI announcement puts it, it is &amp;ldquo;a development and troubleshooting tool, not a production monitoring solution.&amp;rdquo;&#xA;CamelBee is an open-source (Apache-2.0) library for the other side of that line: after a route has been deployed somewhere you cannot attach a terminal to.</description>
     </item>
     <item>
+      <title>Kamelets 4.22.1</title>
+      <link>https://camel.apache.org/releases/kamelets-4.22.1/</link>
+      <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/kamelets-4.22.1/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>Extending Apache Camel Simple with Your Own Functions</title>
       <link>https://camel.apache.org/blog/2026/09/camel-simple-customfunction/</link>
       <pubDate>Sun, 20 Sep 2026 00:00:00 +0000</pubDate>
